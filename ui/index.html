@@ -1,10 +1,105 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Yeah</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+<title>&#160;</title>
+
+<style type="text/css">
+/* prevent white flicker */
+html, body { background-color: #fff; margin: 0; padding; 0; overflow: hidden; }
+#background_loader {
+    position: absolute; top: 0px; left: 0px;
+    width: 100%; height: 100%; background-color: #fff; z-index: 65300;
+}
+</style>
+
+<link rel="stylesheet" href="themes/login/login.css" id="initial-css"/>
+
 </head>
 <body>
-Hello World!
+
+<!-- Visual overlays -->
+<div id="background_loader"></div>
+
+<!-- Login screen -->
+<div id="io-ox-login-screen" style="display: none">
+
+    <!-- Background decoraton -->
+    <div class="gradient"></div>
+
+    <div id="io-ox-login-blocker" style="display: none"></div>
+
+    <div id="io-ox-login-container">
+
+        <!-- Product name -->
+        <div id="io-ox-login-header"></div>
+
+        <!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials -->
+        <div id="login-box-content">
+            <form action="." name="oxlogin" method="post" id="io-ox-login-form" novalidate="novalidate">
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <label for="io-ox-login-user" class="login-label" data-i18n="User name" >User name</label><br />
+                                <input type="text" tabindex="1" id="io-ox-login-username" 
+                                    class="login-credential" name="username" value="" maxlength="1000"
+                                    autocorrect="off" autocapitalize="off"/>
+                            </td>
+                            <td>
+                                <label for="io-ox-login-password" class="login-label" data-i18n="Password">Password</label><br />
+                                <input type="password" tabindex="2" id="io-ox-login-password"
+                                    class="login-credential" name="password" value="" maxlength="100"
+                                    autocorrect="off" autocapitalize="off"/>
+                            </td>
+                            <td>
+                                <label class="login-label">&nbsp;</label><br/>
+                                <input type="submit" tabindex="3" data-i18n="Sign in" value="Sign in" id="login-button" class="login-button" name="submit"/>
+                            </td>
+                        </tr>
+                        <tr><td colspan="3" style="height: 5px"></td></tr>
+                        <tr>
+                            <td>
+                                <div id="io-ox-login-store">
+                                    <input type="checkbox" tabindex="4" id="io-ox-login-store-box" checked="checked" name="store" value="1"/>
+                                    <label for="io-ox-login-store-box" data-i18n="Stay signed in">Stay signed in</label>
+                                </div>
+                            </td>
+                            <td>
+                                <div id="io-ox-forgot-password"><a href="#" target="_blank" tabindex="5" data-i18n="Forgot your password?">Forgot your password?</a></div>
+                            </td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+
+        <!-- Feedback area -->
+        <div id="io-ox-login-feedback"></div>
+        
+        <!-- Footer -->
+        <div id="io-ox-login-footer">
+            <div id="io-ox-languages"><b data-i18n="Languages">Languages</b>:&nbsp; <span id="io-ox-language-list"></span></div>
+            <div id="io-ox-copyright"></div>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+// core namespace
+window.ox = {
+    ajaxRoot: "/ajax",
+    api: {},
+    session: "",
+    ui: {},
+    util: {}
+};
+</script>
+
+<script src="login.js"></script>
+
 </body>
 </html>

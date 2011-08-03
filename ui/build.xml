@@ -1,0 +1,54 @@
+<!-- 
+
+	All content on this website (including text, images, source
+	code and any other original works), unless otherwise noted,
+	is licensed under a Creative Commons License.
+
+	http://creativecommons.org/licenses/by-nc-sa/2.5/
+
+	Copyright (C) Open-Xchange Inc., 2011
+	Mail: info@open-xchange.com
+
+	@author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+
+ -->
+
+<project name="ui" default="all" basedir=".">
+
+	<!-- Adjust that to your document root, e.g. /var/www/ox7 -->
+	<property name="build" value="/Library/WebServer/Documents/ox7"/>
+	
+    <target name="prepare">
+    </target>
+	
+	<target name="all" depends="prepare">
+		
+		<concat destfile="${build}/login.js" fixlastline="yes">
+			<filelist dir=".">
+				<file name="lib/jquery.min.js"/>
+                <file name="lib/jquery-ui-1.8.14.custom.min.js"/>
+				<file name="lib/require.js"/>
+                <file name="src/jquery.plugins.js"/>
+				<file name="src/login.js"/>
+			</filelist>
+		</concat>
+		
+		<copy overwrite="true" todir="${build}">
+			<fileset dir=".">
+			    <include name="index.html"/>
+				<include name="index.html"/>
+			</fileset>
+		</copy>
+		
+		<copy overwrite="true" todir="${build}/themes/login">
+            <fileset dir="themes/login" includes="*.*"/>
+        </copy>
+		
+		<!-- copy src -->
+		<copy overwrite="true" todir="${build}/src">
+		    <fileset dir="src" includes="**"/>
+		</copy>
+			
+	</target>
+		
+</project>
