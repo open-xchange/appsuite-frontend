@@ -33,6 +33,12 @@ body {
     overflow: hidden;
 
     background-color: #fff;
+
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    
+    cursor: default;
 }
 
 a, a:visited {
@@ -128,11 +134,12 @@ a:hover {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px 5px 5px 5px;
-    -moz-user-select: text;
     font-size: 12pt;
     padding: 7px;
     margin-top: 5px;
     outline: none;
+    -moz-user-select: text;
+    -webkit-user-select: text;
 }
 
 .login-credential:focus {
