@@ -16,7 +16,7 @@
 <project name="ui" default="all" basedir=".">
 
 	<!-- Adjust that to your document root, e.g. /var/www/ox7 -->
-	<property name="build" value="/Library/WebServer/Documents/ox7"/>
+	<property name="build" value="${basedir}/build"/>
 	
     <target name="prepare">
     </target>
