@@ -407,6 +407,7 @@ ox.api.session = (function () {
                 appendColumns: false,
                 appendSession: false,
                 processData: false,
+                timeout: 3000, // just try that for 3 secs
                 params: {
                     action: "autologin",
                     client: "com.openexchange.ox.gui.dhtml"

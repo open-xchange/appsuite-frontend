@@ -16,16 +16,29 @@ html, body { background-color: #fff; margin: 0; padding; 0; overflow: hidden; }
 
 <link rel="stylesheet" href="themes/login/login.css" id="initial-css"/>
 
+<script>
+// core namespace
+window.ox = {
+    ajaxRoot: "/ajax",
+    api: {},
+    session: "",
+    ui: {},
+    util: {}
+};
+</script>
+
+<script src="login.js"></script>
+
 </head>
 <body>
 
 <!-- Visual overlays -->
-<div id="background_loader"></div>
+<div id="background_loader" class="busy"></div>
 
 <!-- Login screen -->
 <div id="io-ox-login-screen" style="display: none">
 
-    <!-- Background decoraton -->
+    <!-- Background decoration -->
     <div class="gradient"></div>
 
     <div id="io-ox-login-blocker" style="display: none"></div>
@@ -87,19 +100,6 @@ html, body { background-color: #fff; margin: 0; padding; 0; overflow: hidden; }
         
     </div>
 </div>
-
-<script>
-// core namespace
-window.ox = {
-    ajaxRoot: "/ajax",
-    api: {},
-    session: "",
-    ui: {},
-    util: {}
-};
-</script>
-
-<script src="login.js"></script>
 
 </body>
 </html>

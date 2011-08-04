@@ -82,6 +82,7 @@ a:hover {
         #888 100%
     );
     border-bottom: 1px solid #f0f0f0;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#f5f5f5');
 }
 
 #io-ox-login-container {
@@ -96,15 +97,16 @@ a:hover {
 
 #io-ox-login-header {
     position: absolute;
+    top: 25%;
+    left: 0;
+    margin-top: -1.25em;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 24pt;
     font-weight: normal;
     color: white;
-    top: 20%;
-    left: 0;
+    text-align: left;
     text-shadow: 0px 1px 1px black;
     z-index: 1;
-    text-align: left;
 }
 
 #login-box-content {
@@ -175,6 +177,7 @@ a:hover {
 	    rgb(97,96,97) 0%,
 	    rgb(0,0,0) 100%
 	);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#000000');
 }
 
 .login-button:focus, .login-button:hover {
@@ -206,12 +209,13 @@ a:hover {
 
 #io-ox-login-feedback {
 	position: absolute;
-	top: 60%;
-	bottom: 5em;
+	top: 50%;
+    margin-top: 40px;
+    bottom: 60px;
     right: 0;
     left: 0;
     font-size: 18pt;
-    padding-top: 0.5em;
+    padding-top: 1em;
     color: #aaa;
 }
 

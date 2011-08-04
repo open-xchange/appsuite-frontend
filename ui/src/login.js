@@ -13,30 +13,48 @@
  * 
  */
 
+
+/*jslint bitwise: false, nomen: false, onevar: false, plusplus: false, regexp: false, white: true, browser: true, devel: true, evil: true, forin: true, undef: true, eqeqeq: true, immed: true */
+
+/*global $, ox, require */
+
 $(document).ready(function () {
 
+    "use strict";
+    
     // server config
-    var serverConfig = {};
+    var serverConfig = {},
+        // functions
+        cont,
+        cleanUp,
+        loadCore,
+        fnSubmit,
+        fnChangeLanguage,
+        changeLanguage,
+        setDefaultLanguage,
+        autoLogin,
+        initialize;
 
     // continuation
-    var cont = function () {
+    cont = function () {
         $("#io-ox-login-username").focus();
     };
     
-    var cleanUp = function () {
+    cleanUp = function () {
         // remove dom nodes
         $("#io-ox-login-header, #io-ox-login-feedback, #io-ox-login-footer").remove();
         // clear form
         $("#io-ox-login-username").val("");
         $("#io-ox-login-password").val("");
         // free closures
-        cleanUp = fnSubmit = fnChangeLanguage =  initialize = serverConfig = null;
+        cleanUp = fnSubmit = fnChangeLanguage = 
+            changeLanguage = initialize = serverConfig = null;
     };
     
     /**
      * Load core
      */
-    var loadCore = function () {
+    loadCore = function () {
         // remove unnecessary stuff
         cleanUp();
         // show loader
@@ -52,7 +70,7 @@ $(document).ready(function () {
     /**
      * Handler for form submit
      */
-    var fnSubmit = function (e) {
+    fnSubmit = function (e) {
         // stop
         e.preventDefault();
         // be busy
@@ -93,7 +111,7 @@ $(document).ready(function () {
         });
     };
     
-    var changeLanguage = function (id) {
+    changeLanguage = function (id) {
         // change language
         var cont = function (data) {
             // clear feedback area
@@ -127,7 +145,7 @@ $(document).ready(function () {
         }
     };
     
-    var fnChangeLanguage = function (e) {
+    fnChangeLanguage = function (e) {
         // stop event
         e.preventDefault();
         // change language
@@ -137,9 +155,10 @@ $(document).ready(function () {
     /**
      * Set default language
      */
-    var setDefaultLanguage = function () {
+    setDefaultLanguage = function () {
         // look at navigator.language with en_US as fallback
-        var navLang = navigator.language.substr(0, 2), lang = "en_US";
+        var navLang = (navigator.language || navigator.userLanguage).substr(0, 2),
+            lang = "en_US", id;
         for (id in serverConfig.languages) {
             // match?
             if (id.substr(0, 2) === navLang) {
@@ -153,7 +172,7 @@ $(document).ready(function () {
     /**
      * Try auto login
      */
-    var autoLogin = function () {
+    autoLogin = function () {
         ox.api.session.autoLogin()
         .done(loadCore)
         .fail(initialize);
@@ -162,12 +181,13 @@ $(document).ready(function () {
     /**
      * Initialize login screen
      */
-    var initialize = function () {
+    initialize = function () {
         // shortcut
-        var sc = serverConfig;
+        var sc = serverConfig, lang = sc.languages, node, id = "",
+            header = "", footer = "";
         // show languages
-        if (sc.languages !== false) {
-            var lang = sc.languages, node = $("#io-ox-language-list"), id = "";
+        if (lang !== false) {
+            node = $("#io-ox-language-list");
             for (id in lang) {
                 node.append(
                     $("<a/>", { href: "#" })
@@ -180,10 +200,10 @@ $(document).ready(function () {
             $("#io-ox-languages").remove();
         }
         // update header
-        var header = sc.pageHeader || "open xchange server 7";
+        header = sc.pageHeader || "open xchange server 7";
         $("#io-ox-login-header").html(header);
         // update footer
-        var footer = sc.copyright ? sc.copyright + " " : "";
+        footer = sc.copyright ? sc.copyright + " " : "";
         footer += sc.version ? "Version: " + sc.version + " " : "";
         footer += sc.buildDate ? "(" + sc.buildDate + ")" : "";
         $("#io-ox-copyright").html(footer);
@@ -204,7 +224,7 @@ $(document).ready(function () {
             $("#io-ox-login-form").bind("submit", fnSubmit);
             $("#io-ox-login-screen").show();
             $("#io-ox-login-username").focus();
-            $("#background_loader").fadeOut(500, cont);
+            $("#background_loader").removeClass("busy").fadeOut(500, cont);
         });
     };
 
@@ -222,7 +242,7 @@ $(document).ready(function () {
         // store server config
         serverConfig = data;
         // set page title now
-        $("title").text(serverConfig.pageTitle || "ox7");
+        document.title = serverConfig.pageTitle || "ox7";
         // auto login?
         var cont = function () {
             if (serverConfig.autoLogin === true) {
@@ -230,9 +250,9 @@ $(document).ready(function () {
             } else {
                 initialize();
             }
-        }
+        };
         // get basic modules
         require(["api/base", "api/http"], cont);
     });
 
-}());
+});

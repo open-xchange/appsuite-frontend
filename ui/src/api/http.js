@@ -462,22 +462,28 @@ define("api/http", function () {
             return;
         }
         // ajax (return Deferred)
-        var def = $.Deferred();
-        $.ajax({
-            // type (GET, POST, PUT, ...)
-            type: type,
-            // url
-            url: o.url,
-            // data
-            data: o.data,
-            dataType: o.dataType,
-            contentType: o.contentType || "application/x-www-form-urlencoded"
-        })
+        var def = $.Deferred(),
+            opt = {
+                // type (GET, POST, PUT, ...)
+                type: type,
+                // url
+                url: o.url,
+                // data
+                data: o.data,
+                dataType: o.dataType,
+                contentType: o.contentType || "application/x-www-form-urlencoded"
+            };
+        // use timeout?
+        if (typeof o.timeout === "number") {
+            opt.timeout = o.timeout;
+        }
+        // go!
+        $.ajax(opt)
         .done(function (data) {
             processResponse(def, data, o);
         })
-        .fail(function (xhr) {
-            def.reject({}, xhr);
+        .fail(function (xhr, textStatus, errorThrown) {
+            def.reject({ error: xhr.status + " " + errorThrown }, xhr);
         });
         return def;
     };
