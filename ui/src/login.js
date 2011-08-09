@@ -89,7 +89,8 @@ $(document).ready(function () {
             $("#io-ox-login-blocker").hide();
             $("#io-ox-login-feedback").removeClass("busy");
         };
-	var fail = function(error) {
+        // fail handler
+        var fail = function (error) {
             // fail
             $("#io-ox-login-feedback").removeClass("busy");
             // shake it!
@@ -107,19 +108,18 @@ $(document).ready(function () {
                 // reset focus
                 $("#io-ox-login-" + (relogin ? "password" : "username")).focus();
             });
-	}
+        };
         // be busy
         $("#io-ox-login-feedback").addClass("busy");
         $("#io-ox-login-blocker").show();
         $("#io-ox-login-feedback").empty();
-
-	var username = $("#io-ox-login-username").val();
-	var password = $("#io-ox-login-password").val();
-	// username and password shouldn't be empty
-	if ($.trim(username).length === 0 || $.trim(password).length === 0) {
+        // get username / password
+        var username = $("#io-ox-login-username").val(),
+            password = $("#io-ox-login-password").val();
+        // username and password shouldn't be empty
+        if ($.trim(username).length === 0 || $.trim(password).length === 0) {
             return (fail({ error: "Please enter your credentials.", code: "UI-0001" }));
-	}
-
+        }
         // login
         ox.api.session.login(
             username,
