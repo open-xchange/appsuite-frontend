@@ -71,7 +71,7 @@ define("io.ox/core/main", function () {
         })
         .appendTo(core);
  
-    addLauncher("Sign off", PATH + "/images/logout.png", function (e) {
+    addLauncher("Sign out", PATH + "/images/logout.png", function (e) {
         logout();
     });
     
