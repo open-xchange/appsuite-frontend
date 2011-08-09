@@ -33,12 +33,14 @@ body {
     overflow: hidden;
 
     background-color: #fff;
-
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
     
     cursor: default;
+}
+
+.unselectable {
+	-moz-user-select: -moz-none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 a, a:visited {
@@ -124,7 +126,7 @@ a:hover {
     background-image: -moz-linear-gradient(
         center bottom,
         #f5f5f5 0%,
-        #888 100%
+        #666 100%
     );
     border-bottom: 1px solid #f0f0f0;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#f5f5f5');

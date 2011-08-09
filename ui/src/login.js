@@ -70,7 +70,7 @@ $(document).ready(function () {
             $("#io-ox-login-screen").hide();
             $(this).addClass("busy");
             // load core
-            require(["core"]);
+            require(["io.ox/core/main"]);
         });
     };
     
@@ -83,6 +83,12 @@ $(document).ready(function () {
     fnSubmit = function (e) {
         // stop
         e.preventDefault();
+        // restore form
+        var restore = function () {
+            // stop being busy
+            $("#io-ox-login-blocker").hide();
+            $("#io-ox-login-feedback").removeClass("busy");
+        };
         // be busy
         $("#io-ox-login-feedback").addClass("busy");
         $("#io-ox-login-blocker").show();
@@ -93,20 +99,16 @@ $(document).ready(function () {
             $("#io-ox-login-password").val(),
             $("#io-ox-login-store-box").prop("checked")
         )
-        .always(function () {
-            // stop being busy
-            $("#io-ox-login-blocker").hide();
-            $("#io-ox-login-feedback").removeClass("busy");
-        })
         .done(function () {
             // success
+            restore();
             loginSuccess();
         })
         .fail(function (error) {
             // fail
             $("#io-ox-login-feedback").removeClass("busy");
             // shake it!
-            $("#login-box-content").effect("shake", {
+            $("#login-box-content").stop().effect("shake", {
                 direction: "left",
                 times: 4,
                 distance: 10
@@ -115,6 +117,8 @@ $(document).ready(function () {
                 $("#io-ox-login-feedback").text(
                     ox.util.formatError(error, "%1$s")
                 );
+                // restore form
+                restore();
                 // reset focus
                 $("#io-ox-login-" + (relogin ? "password" : "username")).focus();
             });
@@ -190,6 +194,7 @@ $(document).ready(function () {
         );
         // bind
         $("#io-ox-login-form").bind("submit", fnSubmit);
+        $("#io-ox-login-password").val("");
         // set success handler
         loginSuccess = function () {
             $("#io-ox-login-screen").fadeOut(DURATION, function () {
@@ -236,7 +241,7 @@ $(document).ready(function () {
             $("#io-ox-languages").remove();
         }
         // update header
-        header = sc.pageHeader || "open xchange server 7";
+        header = sc.pageHeader || "open xchange 7";
         $("#io-ox-login-header").html(header);
         // update footer
         footer = sc.copyright ? sc.copyright + " " : "";
@@ -266,7 +271,7 @@ $(document).ready(function () {
 
     // init require.js
     require({
-        baseUrl: "src"
+        baseUrl: "apps"
     });
 
     // get server config
@@ -288,7 +293,15 @@ $(document).ready(function () {
             }
         };
         // get basic modules
-        require(["api/base", "api/http"], cont);
+        require(["io.ox/core/base", "io.ox/core/http"], cont);
     });
 
+    // prevent text selection
+//    if (ox.browser.IE) {
+//        $(document).bind("selectstart", function (e) {
+//            if (!(this.tagName === "input" || this.tagName === "TEXTAREA")) {
+//                return false;
+//            }
+//        });
+//    }
 });

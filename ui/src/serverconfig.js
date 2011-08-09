@@ -1,6 +1,6 @@
 {
     "pageTitle": "OX7",
-    "pageHeader": "open xchange server 7",
+    "pageHeader": "open xchange 7",
     
     "autoLogin": true,
     "forgotPassword": "https://iforgot.apple.com",

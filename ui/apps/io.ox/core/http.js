@@ -18,7 +18,7 @@
  * @name ox.api.http
  */
 
-define("api/http", function () {
+define("io.ox/core/http", function () {
         
     // default columns for each module
     var idMapping = {
