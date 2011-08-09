@@ -17,5 +17,12 @@ define("io.ox/contacts/core", function () {
     
     var win = ox.ui.getWindow();
     
+    win.css({
+        textAlign: "center",
+        color: "white",
+        fontSize: "24pt",
+        padding: "1em"
+    })
+    .text("Hello World!");
     
 });

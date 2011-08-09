@@ -484,8 +484,7 @@ define("io.ox/core/base", function () {
                 right: "150px",
                 bottom: "20px",
                 left: "150px",
-                border: "5px solid #ccc",
-                backgroundColor: "white"
+                backgroundColor: "rgba(0, 0, 0, 0.25)"
             })
             .appendTo("#io-ox-core");
     };
