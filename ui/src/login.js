@@ -89,22 +89,7 @@ $(document).ready(function () {
             $("#io-ox-login-blocker").hide();
             $("#io-ox-login-feedback").removeClass("busy");
         };
-        // be busy
-        $("#io-ox-login-feedback").addClass("busy");
-        $("#io-ox-login-blocker").show();
-        $("#io-ox-login-feedback").empty();
-        // login
-        ox.api.session.login(
-            $("#io-ox-login-username").val(),
-            $("#io-ox-login-password").val(),
-            $("#io-ox-login-store-box").prop("checked")
-        )
-        .done(function () {
-            // success
-            restore();
-            loginSuccess();
-        })
-        .fail(function (error) {
+	var fail = function(error) {
             // fail
             $("#io-ox-login-feedback").removeClass("busy");
             // shake it!
@@ -122,7 +107,31 @@ $(document).ready(function () {
                 // reset focus
                 $("#io-ox-login-" + (relogin ? "password" : "username")).focus();
             });
-        });
+	}
+        // be busy
+        $("#io-ox-login-feedback").addClass("busy");
+        $("#io-ox-login-blocker").show();
+        $("#io-ox-login-feedback").empty();
+
+	var username = $("#io-ox-login-username").val();
+	var password = $("#io-ox-login-password").val();
+	// username and password shouldn't be empty
+	if ($.trim(username).length === 0 || $.trim(password).length === 0) {
+            return (fail({ error: "Please enter your credentials.", code: "UI-0001" }));
+	}
+
+        // login
+        ox.api.session.login(
+            username,
+            password,
+            $("#io-ox-login-store-box").prop("checked")
+        )
+        .done(function () {
+            // success
+            restore();
+            loginSuccess();
+        })
+        .fail(fail);
     };
     
     changeLanguage = function (id) {
