@@ -264,7 +264,7 @@ $(document).ready(function () {
             $("#io-ox-login-blocker").bind("mousedown", false);
             $("#io-ox-login-form").bind("submit", fnSubmit);
             $("#io-ox-login-screen").show();
-            $("#io-ox-login-username").focus();
+            $("#io-ox-login-username").removeAttr("disabled").focus();
             $("#background_loader").removeClass("busy").fadeOut(DURATION, cont);
         });
     };
