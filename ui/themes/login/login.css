@@ -59,13 +59,52 @@ a:hover {
     z-index: 65000;
 }
 
-#io-ox-login-screen {
+#io-ox-core {
+	position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    background-color: #111;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, #000),
+        color-stop(1, #555)
+    );
+    background-image: -moz-linear-gradient(
+        center bottom,
+        #000 0%,
+        #555 100%
+    );
+    color: black;
+}
+
+#io-ox-login-screen, #io-ox-login-screen-decorator {
     position: absolute;
 	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
-	z-index: 64000;
+	z-index: 64002;
+	background-color: white;
+}
+
+#io-ox-login-screen-decorator {
+	background-color: black;
+	z-index: 64001;
+	opacity: 0.40;
+}
+
+#io-ox-login-screen.relogin {
+	right: auto;
+	left: 50%;
+	width: 760px;
+	margin-left: -380px;
+	border-left: 1px solid #000;
+	border-right: 1px solid #000;
 }
 
 .gradient {

@@ -20,14 +20,13 @@ define("core", function () {
         ox.api.session.logout()
         .done(function () {
             $("#background_loader").fadeIn(500, function () {
-                $("body").css("backgroundColor", "");
+                $("#io-ox-core").hide();
                 window.location.href = "index.html";
             });
         });
     };
     
-    $("body")
-    .css("backgroundColor", "#111")
+    $("#io-ox-core")
     .append(
         $("<div/>", { id: "desktop" })
         .css({
@@ -54,8 +53,11 @@ define("core", function () {
                 click: logout
             })
         )
-    );
+    )
+    .show();
     
-    $("#background_loader").removeClass("busy").fadeOut(500);
+    $("#background_loader").removeClass("busy").fadeOut(500, function () {
+        // foo
+    });
 
 });

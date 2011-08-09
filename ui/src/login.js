@@ -24,10 +24,15 @@ $(document).ready(function () {
     
     // server config
     var serverConfig = {},
+        // animations
+        DURATION = 500,
+        // flags
+        relogin = false,
         // functions
         cont,
         cleanUp,
         loadCore,
+        loginSuccess,
         fnSubmit,
         fnChangeLanguage,
         changeLanguage,
@@ -42,12 +47,14 @@ $(document).ready(function () {
     
     cleanUp = function () {
         // remove dom nodes
-        $("#io-ox-login-header, #io-ox-login-feedback, #io-ox-login-footer").remove();
-        // clear form
-        $("#io-ox-login-username").val("");
+        $("#io-ox-login-footer").remove();
+        // update form
+        $("#io-ox-login-username").attr("disabled", "disabled");
         $("#io-ox-login-password").val("");
+        // unbind
+        $("#io-ox-login-form").unbind("submit");
         // free closures
-        cleanUp = fnSubmit = fnChangeLanguage = 
+        cleanUp = fnChangeLanguage = 
             changeLanguage = initialize = serverConfig = null;
     };
     
@@ -58,7 +65,7 @@ $(document).ready(function () {
         // remove unnecessary stuff
         cleanUp();
         // show loader
-        $("#background_loader").fadeIn(500, function () {
+        $("#background_loader").fadeIn(DURATION, function () {
             // hide login dialog
             $("#io-ox-login-screen").hide();
             $(this).addClass("busy");
@@ -66,6 +73,9 @@ $(document).ready(function () {
             require(["core"]);
         });
     };
+    
+    // default success handler
+    loginSuccess = loadCore;
 
     /**
      * Handler for form submit
@@ -89,8 +99,8 @@ $(document).ready(function () {
             $("#io-ox-login-feedback").removeClass("busy");
         })
         .done(function () {
-            // success: load core
-            loadCore();
+            // success
+            loginSuccess();
         })
         .fail(function (error) {
             // fail
@@ -106,7 +116,7 @@ $(document).ready(function () {
                     ox.util.formatError(error, "%1$s")
                 );
                 // reset focus
-                $("#io-ox-login-username").focus();
+                $("#io-ox-login-" + (relogin ? "password" : "username")).focus();
             });
         });
     };
@@ -158,7 +168,7 @@ $(document).ready(function () {
     setDefaultLanguage = function () {
         // look at navigator.language with en_US as fallback
         var navLang = (navigator.language || navigator.userLanguage).substr(0, 2),
-            lang = "en_US", id;
+            lang = "en_US", id = "";
         for (id in serverConfig.languages) {
             // match?
             if (id.substr(0, 2) === navLang) {
@@ -167,6 +177,32 @@ $(document).ready(function () {
             }
         }
         return changeLanguage(lang);
+    };
+    
+    /**
+     * Relogin
+     */
+    ox.ui.session.relogin = function () {
+        // set header
+        $("#io-ox-login-header").html(
+            "Your session is expired." + "<br/>" + 
+            "<small>Please sign in again to continue.</small>"
+        );
+        // bind
+        $("#io-ox-login-form").bind("submit", fnSubmit);
+        // set success handler
+        loginSuccess = function () {
+            $("#io-ox-login-screen").fadeOut(DURATION, function () {
+                $("#io-ox-login-screen-decorator").hide();
+            });
+        };
+        // set flag
+        relogin = true;
+        // show login dialog
+        $("#io-ox-login-screen-decorator").show();
+        $("#io-ox-login-screen").addClass("relogin").fadeIn(DURATION, function () {
+            $("#io-ox-login-password").focus();
+        });
     };
     
     /**
@@ -224,7 +260,7 @@ $(document).ready(function () {
             $("#io-ox-login-form").bind("submit", fnSubmit);
             $("#io-ox-login-screen").show();
             $("#io-ox-login-username").focus();
-            $("#background_loader").removeClass("busy").fadeOut(500, cont);
+            $("#background_loader").removeClass("busy").fadeOut(DURATION, cont);
         });
     };
 

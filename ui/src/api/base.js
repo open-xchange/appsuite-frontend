@@ -395,7 +395,9 @@ ox.util = (function () {
     
 }());
 
-
+/**
+ * API: session
+ */
 ox.api.session = (function () {
     
     return {

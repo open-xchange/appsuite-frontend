@@ -22,7 +22,7 @@ window.ox = {
     ajaxRoot: "/ajax",
     api: {},
     session: "",
-    ui: {},
+    ui: { session: {} },
     util: {}
 };
 </script>
@@ -35,7 +35,11 @@ window.ox = {
 <!-- Visual overlays -->
 <div id="background_loader" class="busy"></div>
 
+<!-- Core Panel -->
+<div id="io-ox-core" style="display: none"></div>
+
 <!-- Login screen -->
+<div id="io-ox-login-screen-decorator" style="display: none"></div>
 <div id="io-ox-login-screen" style="display: none">
 
     <!-- Background decoration -->
@@ -50,7 +54,7 @@ window.ox = {
 
         <!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials -->
         <div id="login-box-content">
-            <form action="." name="oxlogin" method="post" id="io-ox-login-form" novalidate="novalidate">
+            <form action="/lolololol" name="oxlogin" method="post" id="io-ox-login-form" novalidate="novalidate">
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr>

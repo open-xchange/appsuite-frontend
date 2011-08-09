@@ -16,7 +16,7 @@
 <project name="ui" default="all" basedir=".">
 
 	<!-- Adjust that to your document root, e.g. /var/www/ox7 -->
-	<property name="build" value="/Library/WebServer/Documents/ox7"/>
+	<property name="build" value=""/>
 	
     <target name="prepare">
     </target>
@@ -36,7 +36,6 @@
 		<copy overwrite="true" todir="${build}">
 			<fileset dir=".">
 			    <include name="index.html"/>
-				<include name="index.html"/>
 			</fileset>
 		</copy>
 		
