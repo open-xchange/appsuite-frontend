@@ -13,7 +13,7 @@
  * 
  */
 
-define("io.ox/contacts/core", function () {
+define("io.ox/contacts/main", function () {
     
     var win = ox.ui.getWindow();
     
