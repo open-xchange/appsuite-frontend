@@ -286,3 +286,11 @@ a:hover {
 	color: #aaa;
 	text-align: right;
 }
+
+/* ----------- */
+
+.vgrid-cell {
+	position: absolute;
+	right: 0;
+	left: 0;
+}

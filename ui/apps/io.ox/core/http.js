@@ -28,11 +28,11 @@ define("io.ox/core/http", function () {
             "3" : "modified_by",
             "4" : "creation_date",
             "5" : "last_modified",
+            "20" : "folder_id",
             "100" : "categories",
             "101" : "private_flag",
             "102" : "color_label",
-            "104" : "number_of_attachments",
-            "20" : "folder_id"
+            "104" : "number_of_attachments"
         },
         "mail" : {
             "102" : "color_label",
@@ -365,6 +365,10 @@ define("io.ox/core/http", function () {
         if (o.appendColumns === true && o.params.columns === undefined) {
             o.params.columns = getAllColumns(o.module).join(",");
         }
+        // remove white space from columns (otherwise evil to debug)
+        if (o.params.columns) {
+            o.params.columns.replace(/\s/g, "");
+        }
         // data & body
         if (type === "GET" || type === "POST") {
             // GET & POST
@@ -374,8 +378,6 @@ define("io.ox/core/http", function () {
             o.url += "?" + ox.util.serialize(o.params);
             o.original = o.data;
             o.data = JSON.stringify(o.data);
-            o.processData = false;
-            o.contentType = "text/javascript";
         }
         // done
         return o;

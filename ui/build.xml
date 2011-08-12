@@ -30,6 +30,8 @@
                 <file name="lib/jquery-ui-1.8.14.custom.min.js"/>
 				<file name="lib/require.js"/>
                 <file name="src/jquery.plugins.js"/>
+				<file name="src/tk/grid.js"/>
+				<file name="src/tk/selection.js"/>
 				<file name="src/login.js"/>
 			</filelist>
 		</concat>

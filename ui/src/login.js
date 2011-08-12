@@ -302,7 +302,7 @@ $(document).ready(function () {
             }
         };
         // get basic modules
-        require(["io.ox/core/base", "io.ox/core/http"], cont);
+        require(["io.ox/core/base", "io.ox/core/http", "io.ox/core/event"], cont);
     });
 
     // prevent text selection
