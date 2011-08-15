@@ -24,13 +24,14 @@ ox.ui.tk.VGrid = function (target) {
      * Private Template class
      * @returns {Template}
      */
-    function Template() {
+    function Template(grid) {
 
         var template = [],
-            tagName = "div",
-            rowTemplate = $("<" + tagName + "/>")
-                .addClass("vgrid-cell").css("top", "-1000px");
+            tagName = "div";
 
+        this.node = $("<" + tagName + "/>")
+            .addClass("vgrid-cell").css("top", "-1000px");
+        
         this.add = function (obj) {
             if (obj && obj.build) {
                 template.push(obj);
@@ -56,7 +57,7 @@ ox.ui.tk.VGrid = function (target) {
         this.getClone = function () {
             var i = 0, $i = template.length, tmpl,
                 row = {
-                    node: rowTemplate.clone(),
+                    node: this.node.clone(),
                     fields: {},
                     set: []
                 };
@@ -88,7 +89,7 @@ ox.ui.tk.VGrid = function (target) {
                     row.set[i].call(row.node, data, row.fields, index);
                 }
                 // set id for selection
-                row.node.get(0).oxID = String(data);
+                row.node.attr("data-id", grid.getID(data));
             };
             return row;
         };
@@ -99,15 +100,16 @@ ox.ui.tk.VGrid = function (target) {
         // inner container
         container = $("<div/>").appendTo(node),
         // item template
-        template = new Template(),
+        template = new Template(this),
         // label template
-        label = new Template(),
+        label = new Template(this),
         // item pool
         pool = [],
         // heights
         itemHeight = 0,
         labelHeight = 0,
         // counters
+        minRows = 0,
         numVisible = 0,
         numRows = 0,
         numLabels = 0,
@@ -122,7 +124,10 @@ ox.ui.tk.VGrid = function (target) {
         mult = 4,
         // reference for private functions
         self = this;
-
+    
+    // add label class
+    label.node.addClass("vgrid-label");
+    
     // selection
     this.selection = new ox.ui.tk.Selection().observe(container.get(0));
 
@@ -135,9 +140,13 @@ ox.ui.tk.VGrid = function (target) {
         for (index in labelIndexes) {
             // draw
             clone = label.getClone();
-            labels = labels.add(clone.node.css({
-                top: i * labelHeight + index * itemHeight + "px"
-            }).appendTo(container));
+            labels = labels.add(
+                clone.node.css({
+                    top: i * labelHeight + index * itemHeight + "px"
+                })
+                .addClass("vgrid-label")
+                .appendTo(container)
+            );
             clone.update(all[index], index);
             i++;
         }
@@ -161,7 +170,7 @@ ox.ui.tk.VGrid = function (target) {
     var paint = function (offset, cont) {
         // keep positive
         offset = Math.max(0, offset);
-        // get items
+        // get item
         self.fetch(all.slice(offset, offset + numRows), function (data) {
             // vars
             var i, $i, shift = 0, j = "", row,
@@ -180,14 +189,14 @@ ox.ui.tk.VGrid = function (target) {
                 }
                 row = pool[i];
                 row.update(data[i], offset + i);
-                row.node.css("top", shift * labelHeight + (offset + i) * itemHeight + "px")
-                    .removeClass(classSelected);
+                row.node.removeClass(classSelected)
+                    .get(0).style.top = shift * labelHeight + (offset + i) * itemHeight + "px";
             }
             if ($i < numRows) {
                 for (; i < numRows; i++) {
                     pool[i].node.css("top", "-1000px")
                         .removeClass(classSelected);
-                    delete pool[i].node.get(0).oxID;
+                    pool[i].node.removeAttr("data-id");
                 }
             }
             // update selection
@@ -203,7 +212,7 @@ ox.ui.tk.VGrid = function (target) {
     var resize = function () {
         // get num of rows
         numVisible = Math.max(1, ((node.height() / itemHeight) >> 0) + 2);
-        numRows = numVisible * mult;
+        numRows = Math.max(numVisible * mult, minRows);
         // prepare pool
         var  i = 0, clone;
         for (; i < numRows; i++) {
@@ -307,5 +316,9 @@ ox.ui.tk.VGrid = function (target) {
 
     this.refresh = function (cont) {
         loadAll(cont);
+    };
+    
+    this.getID = function (data) {
+        return data;
     };
 };

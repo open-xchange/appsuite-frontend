@@ -71,3 +71,38 @@ $.button = function (options) {
     
     return button;
 };
+
+$.fn.intoViewport = function (node) {
+
+    if (!node) {
+        return this;
+    }
+    
+    // IE sometimes crashes so...
+    try {
+        
+        var pane = $(node);
+        var height = pane.height();
+        
+        // get visible area
+        var y1 = pane.scrollTop();
+        var y2 = y1 + height;
+        
+        // get position
+        var pos = this.position();
+        var top = pos.top + y1;
+        
+        // out of visible area?
+        if (top < y1) {
+            top = top < 50 ? 0 : top;
+            pane.scrollTop(top);
+        } else if (top > y2) {
+            pane.scrollTop(top);
+        }
+        
+    } catch (e) {
+        console.error(e);
+    }
+    
+    return this;
+};

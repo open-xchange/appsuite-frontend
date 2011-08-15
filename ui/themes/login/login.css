@@ -289,8 +289,30 @@ a:hover {
 
 /* ----------- */
 
+.email-address {
+	color: #08c;
+}
+
 .vgrid-cell {
 	position: absolute;
 	right: 0;
 	left: 0;
+	padding: 2px 10px 2px 10px;
+    border-bottom: 1px solid #ccc;
+    color: black;
+}
+
+.vgrid-cell.vgrid-label {
+    background-color: #eee;
+    color: black;
+    padding: 10px;
+    border-bottom: 1px solid #aaa;
+}
+
+.vgrid-cell.selected {
+	background-color: #08c;
+}
+
+.vgrid-cell.selected * {
+	color: white !important;
 }

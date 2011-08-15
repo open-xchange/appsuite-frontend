@@ -36,23 +36,29 @@ define("io.ox/contacts/main", function () {
         bottom: "20px",
         overflow: "auto"
     }).appendTo("body");
+    
+    // get full name
+    var getFullName = function (data) {
+        return $.trim((data.title || "") + " " + [data.last_name, data.first_name].join(", "));
+    };
 
     // Grid test
     var vg = window.vg = new ox.ui.tk.VGrid(lgn);
+    // get ID
+    vg.getID = function (data) {
+        return data.folder_id + "." + data.id;
+    };
     // add template
     vg.addTemplate({
         build: function () {
             var name, email;
-            this.css({
-                padding: "2px 10px 2px 10px",
-                borderBottom: "1px solid #ccc"
-            })
-            .append(name = $("<div/>"))
-            .append(email = $("<div/>"));
+            this
+                .append(name = $("<div/>"))
+                .append(email = $("<div/>"));
             return { name: name, email: email };
         },
         set: function (data, fields, index) {
-            fields.name.text(data.last_name + ", " + data.first_name);
+            fields.name.text(getFullName(data));
             fields.email.text(data.email1 || data.email2 || data.email3);
             this.addClass(index % 2 ? "even" : "odd");
         }
@@ -60,7 +66,7 @@ define("io.ox/contacts/main", function () {
     // extend template
     vg.addTemplate({
         build: function () {
-            return { yeah: $("<div/>").css("color", "#08c").appendTo(this) };
+            return { yeah: $("<div/>").addClass("email-address").appendTo(this) };
         },
         set: function (data, fields, index) {
             fields.yeah.text(index % 2 ? "odd" : "even" + " (via template extension)");
@@ -69,13 +75,6 @@ define("io.ox/contacts/main", function () {
     // add label
     vg.addLabel({
         build: function () {
-            this.css({
-                backgroundColor: "#08c",
-                color: "white",
-                padding: "10px",
-                borderTop: "2px solid #57a",
-                borderBottom: "2px solid #057"
-            });
         },
         set: function (data, fields, index) {
             this.text(data.last_name.substr(0,1));

@@ -1,6 +1,11 @@
 
 define("io.ox/contacts/api", function () {
     
+    var cache = {
+        all: new ox.api.cache.FlatCache("", false),
+        list: new ox.api.cache.FlatCache("", false)
+    };
+    
     return ox.api.contacts = {
         
         getAll: function (options) {
@@ -14,7 +19,7 @@ define("io.ox/contacts/api", function () {
                 params: {
                     action: "all",
                     folder: String(o.folder),
-                    columns: "1,20,502",
+                    columns: "20,1,502",
                     sort: "502",
                     order: "asc"
                 }
@@ -23,22 +28,26 @@ define("io.ox/contacts/api", function () {
         
         getList: function (ids) {
             
-            var i = 0, item;
-            for (; item = ids[i]; i++) {
-                if (item.folder_id !== undefined) {
-                    item.folder = item.folder_id;
-                    delete item.folder_id;
-                }
+            // contains?
+            if (!cache.list.contains(ids)) {
+                // cache miss
+                return ox.api.http.fixList(ids, ox.api.http.PUT({
+                    module: "contacts",
+                    params: {
+                        action: "list",
+                        columns: "20,1,500,501,502,505,555,556,557"
+                    },
+                    data: ox.api.http.simplify(ids)
+                }))
+                .done(function (data) {
+                    cache.list.addArray(data);
+                });
+            } else {
+                // cache hit
+                return $.Deferred().resolve(cache.list.get(ids));
             }
-
-            return ox.api.http.PUT({
-                module: "contacts",
-                params: {
-                    action: "list",
-                    columns: "1,20,502,501,555,556,557"
-                },
-                data: ids
-            });
-        }
+        },
+        
+        cache: cache
     };
 });

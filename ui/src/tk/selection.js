@@ -36,8 +36,8 @@ ox.ui.tk.Selection = function () {
     this.focusIndex = 0;
     this.container = null;
 
-    this.classFocus = "oxFocus";
-    this.classSelected = "oxSelected";
+    this.classFocus = "focussed";
+    this.classSelected = "selected";
 
     this.dispatcher = new ox.api.event.Dispatcher();
 };
@@ -104,7 +104,7 @@ $.extend(ox.ui.tk.Selection.prototype, {
                 // climb up and look for oxID
                 try {
                     while (node) {
-                        id = ox.util.firstOf(node.oxID, $(node).attr("oxid"));
+                        id = ox.util.firstOf(node.oxID, $(node).attr("data-id"));
                         selectable = ox.util.firstOf(node.oxSelectable, true);
                         if (id !== undefined) {
                             break;
@@ -215,7 +215,7 @@ $.extend(ox.ui.tk.Selection.prototype, {
         var nodes = this.findNodes(), $l = nodes.length, node, id, foundLastItem = false;
         for (var i = 0; i < $l; i++) {
             node = nodes[i];
-            id = ox.util.firstOf(node.oxID, $(node).attr("oxid"));
+            id = ox.util.firstOf(node.oxID, $(node).attr("data-id"));
             // add to observation list
             if (id !== undefined && this.observedItemsIndex[id] === undefined) {
                 var index = this.observedItemsIndex[id] = this.observedItems.length;
