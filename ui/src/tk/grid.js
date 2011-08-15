@@ -166,12 +166,34 @@ ox.ui.tk.VGrid = function (target) {
             }
         }
     };
+    
+    // pending fetch
+    var pending = false;
 
     var paint = function (offset, cont) {
         // keep positive
         offset = Math.max(0, offset);
+        // pending?
+        if (pending) {
+            // enqueue latest paint
+            pending = [offset, cont];
+            return;
+        } else {
+            pending = true;
+        }
         // get item
         self.fetch(all.slice(offset, offset + numRows), function (data) {
+            // pending?
+            if (ox.util.isArray(pending)) {
+                // process latest paint
+                offset = pending[0];
+                cont = pending[1];
+                pending = false;
+                paint(offset, cont);
+                return;
+            } else {
+                pending = false;
+            }
             // vars
             var i, $i, shift = 0, j = "", row,
                 classSelected = self.selection.classSelected;
@@ -189,14 +211,17 @@ ox.ui.tk.VGrid = function (target) {
                 }
                 row = pool[i];
                 row.update(data[i], offset + i);
-                row.node.removeClass(classSelected)
+                row.node
+                    .removeClass("odd even " + classSelected)
+                    .addClass((offset + i) % 2 ? "odd" : "even")
                     .get(0).style.top = shift * labelHeight + (offset + i) * itemHeight + "px";
             }
             if ($i < numRows) {
                 for (; i < numRows; i++) {
-                    pool[i].node.css("top", "-1000px")
-                        .removeClass(classSelected);
-                    pool[i].node.removeAttr("data-id");
+                    pool[i].node
+                        .css("top", "-1000px")
+                        .removeClass("odd even " + classSelected)
+                        .removeAttr("data-id");
                 }
             }
             // update selection

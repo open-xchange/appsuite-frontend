@@ -35,7 +35,7 @@ define("io.ox/contacts/api", function () {
                     module: "contacts",
                     params: {
                         action: "list",
-                        columns: "20,1,500,501,502,505,555,556,557"
+                        columns: "20,1,500,501,502,505,555,556,557,569,606"
                     },
                     data: ox.api.http.simplify(ids)
                 }))

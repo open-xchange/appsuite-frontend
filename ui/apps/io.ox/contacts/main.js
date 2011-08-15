@@ -28,9 +28,9 @@ define("io.ox/contacts/main", function () {
     var lgn = $("<div/>").css({
         position: "absolute",
         zIndex: 1000,
-        width: "400px",
+        width: "350px",
         backgroundColor: "white",
-        border: "3px solid #fc0",
+        border: "1px solid #555",
         top: "20px",
         left: "120px",
         bottom: "20px",
@@ -53,23 +53,20 @@ define("io.ox/contacts/main", function () {
         build: function () {
             var name, email;
             this
-                .append(name = $("<div/>"))
-                .append(email = $("<div/>"));
-            return { name: name, email: email };
+                .append(image = $("<div/>").addClass("contact-image"))
+                .append(name = $("<div/>").css("fontSize", "12pt"))
+                .append(company = $("<div/>").css("color", "#888"))
+                .append(email = $("<div/>").addClass("email-address"));
+            return { image: image, name: name, company: company, email: email };
         },
         set: function (data, fields, index) {
+            fields.image.css(
+                "backgroundImage", data.image1_url ? 
+                    "url(" + data.image1_url + ")" : "url(themes/login/dummypicture.png)"
+            );
             fields.name.text(getFullName(data));
-            fields.email.text(data.email1 || data.email2 || data.email3);
-            this.addClass(index % 2 ? "even" : "odd");
-        }
-    });
-    // extend template
-    vg.addTemplate({
-        build: function () {
-            return { yeah: $("<div/>").addClass("email-address").appendTo(this) };
-        },
-        set: function (data, fields, index) {
-            fields.yeah.text(index % 2 ? "odd" : "even" + " (via template extension)");
+            fields.company.text(data.company || "");
+            fields.email.text(data.email1 || data.email2 || data.email3 || "");
         }
     });
     // add label

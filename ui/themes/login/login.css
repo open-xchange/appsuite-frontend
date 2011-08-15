@@ -38,18 +38,18 @@ body {
 }
 
 .unselectable {
-	-moz-user-select: -moz-none;
+    -moz-user-select: -moz-none;
     -webkit-user-select: none;
     user-select: none;
 }
 
 a, a:visited {
-	color: #08c;
-	text-decoration: none;
+    color: #08c;
+    text-decoration: none;
 }
 
 a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 #background_loader {
@@ -62,7 +62,7 @@ a:hover {
 }
 
 #io-ox-core {
-	position: absolute;
+    position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
@@ -86,27 +86,27 @@ a:hover {
 
 #io-ox-login-screen, #io-ox-login-screen-decorator {
     position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	z-index: 64002;
-	background-color: white;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 64002;
+    background-color: white;
 }
 
 #io-ox-login-screen-decorator {
-	background-color: black;
-	z-index: 64001;
-	opacity: 0.40;
+    background-color: black;
+    z-index: 64001;
+    opacity: 0.40;
 }
 
 #io-ox-login-screen.relogin {
-	right: auto;
-	left: 50%;
-	width: 760px;
-	margin-left: -380px;
-	border-left: 1px solid #000;
-	border-right: 1px solid #000;
+    right: auto;
+    left: 50%;
+    width: 760px;
+    margin-left: -380px;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
 }
 
 .gradient {
@@ -184,22 +184,22 @@ a:hover {
 }
 
 .login-credential:focus {
-	border-color: #ccc;
-	-webkit-box-shadow: 0px 0px 10px 0px #aaa;
-	-moz-box-shadow: 0px 0px 10px 0px #aaa;
-	box-shadow: 0px 0px 10px 0px #aaa;
+    border-color: #ccc;
+    -webkit-box-shadow: 0px 0px 10px 0px #aaa;
+    -moz-box-shadow: 0px 0px 10px 0px #aaa;
+    box-shadow: 0px 0px 10px 0px #aaa;
 }
 
 .login-credential[type="password"] {
-	width: 200px;
+    width: 200px;
 }
 
 .login-button {
-	
-	font-size: 10pt;
-	font-weight: normal;
-	line-height: 12pt;
-	padding: 7px;
+    
+    font-size: 10pt;
+    font-weight: normal;
+    line-height: 12pt;
+    padding: 7px;
     color: white;
     text-align: center;
     width: 120px;
@@ -214,36 +214,36 @@ a:hover {
     cursor: pointer;
     
     background-image: -webkit-gradient(
-	    linear,
-	    left top,
-	    right bottom,
-	    color-stop(0, rgb(97,96,97)),
+        linear,
+        left top,
+        right bottom,
+        color-stop(0, rgb(97,96,97)),
         color-stop(1, rgb(0,0,0))
-	);
-	background-image: -moz-linear-gradient(
-	    left top,
-	    rgb(97,96,97) 0%,
-	    rgb(0,0,0) 100%
-	);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#000000');
+    );
+    background-image: -moz-linear-gradient(
+        left top,
+        rgb(97,96,97) 0%,
+        rgb(0,0,0) 100%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#000000');
 }
 
 .login-button:focus, .login-button:hover {
-	-webkit-box-shadow: 0px 0px 10px 1px #555;
-	-moz-box-shadow: 0px 0px 10px 1px #555;
-	box-shadow: 0px 0px 10px 1px #555;
+    -webkit-box-shadow: 0px 0px 10px 1px #555;
+    -moz-box-shadow: 0px 0px 10px 1px #555;
+    box-shadow: 0px 0px 10px 1px #555;
 }
 
 .login-button:active {
-	background-image: none;
-	background-color: #555;
-	-webkit-box-shadow: 1px 1px 10px 0px #888;
+    background-image: none;
+    background-color: #555;
+    -webkit-box-shadow: 1px 1px 10px 0px #888;
     -moz-box-shadow: 1px 1px 10px 0px #888;
     box-shadow: 1px 1px 10px 0px #888;
 }
 
 .login-label {
-	color: #777;
+    color: #777;
 }
 
 #io-ox-login-blocker {
@@ -256,8 +256,8 @@ a:hover {
 }
 
 #io-ox-login-feedback {
-	position: absolute;
-	top: 50%;
+    position: absolute;
+    top: 50%;
     margin-top: 40px;
     bottom: 60px;
     right: 0;
@@ -268,51 +268,80 @@ a:hover {
 }
 
 #io-ox-login-feedback.busy, #background_loader.busy {
-	background-image: url(spinner.gif);
-	background-repeat: no-repeat;
+    background-image: url(spinner.gif);
+    background-repeat: no-repeat;
     background-position: center center;
 }
 
 #io-ox-login-footer {
-	position: absolute;
-	right: 0;
-	bottom: 1em;
-	left: 0;
-	color: black;
+    position: absolute;
+    right: 0;
+    bottom: 1em;
+    left: 0;
+    color: black;
 }
 
 #io-ox-copyright {
-	line-height: 1.5em;
-	color: #aaa;
-	text-align: right;
+    line-height: 1.5em;
+    color: #aaa;
+    text-align: right;
 }
 
 /* ----------- */
 
 .email-address {
-	color: #08c;
+    color: #08c;
+}
+
+.contact-image {
+    background-repeat: no-repeat;
+    background-position: center center;
+    float: left;
+    height: 5em;
+    width: 5em;
+    margin: -0.5em 1em -0.5em 0em;
 }
 
 .vgrid-cell {
-	position: absolute;
-	right: 0;
-	left: 0;
-	padding: 2px 10px 2px 10px;
+    position: absolute;
+    right: 0;
+    left: 0;
+    padding: 8px 10px 8px 10px;
     border-bottom: 1px solid #ccc;
     color: black;
 }
 
+.vgrid-cell * {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vgrid-cell.odd {
+    background-color: #f5f5f5;
+}
+
 .vgrid-cell.vgrid-label {
-    background-color: #eee;
+    font-size: 11pt;
+    font-weight: bold;
     color: black;
-    padding: 10px;
+    padding: 8px 10px 8px 10px;
+    background-color: #eee;
     border-bottom: 1px solid #aaa;
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.07, rgb(230,230,230)), color-stop(0.54, rgb(255,255,255)));
 }
 
 .vgrid-cell.selected {
-	background-color: #08c;
+    background-color: #08c;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(2,96,168)),
+        color-stop(1, rgb(84,198,255))
+    );
 }
 
 .vgrid-cell.selected * {
-	color: white !important;
+    color: white !important;
 }
