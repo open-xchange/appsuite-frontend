@@ -53,6 +53,9 @@
 		<copy overwrite="true" todir="${build}/apps">
             <fileset dir="apps" includes="**"/>
         </copy>
+        <copy overwrite="true" todir="${build}">
+            <fileset dir="lib" includes="order.js"/>
+        </copy>
 			
 	</target>
 		

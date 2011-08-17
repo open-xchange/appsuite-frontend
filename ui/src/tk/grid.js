@@ -109,7 +109,7 @@ ox.ui.tk.VGrid = function (target) {
         itemHeight = 0,
         labelHeight = 0,
         // counters
-        minRows = 0,
+        minRows = 100,
         numVisible = 0,
         numRows = 0,
         numLabels = 0,

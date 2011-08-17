@@ -13,7 +13,7 @@
  * 
  */
 
-define("io.ox/contacts/main", function () {
+define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api"], function (base, api) {
     
     var win = ox.ui.getWindow();
     
@@ -25,17 +25,10 @@ define("io.ox/contacts/main", function () {
     }).appendTo(win);
     
     var right = $("<div/>")
-        .css({ left: "340px", textAlign: "right", padding: "1em" })
+        .css({ left: "340px" })
         .addClass("rightside")
-        .text("Address book prototype")
         .appendTo(win);
     
-    // get full name
-    var getFullName = function (data) {
-        var title = (data.title || "").length > 10 ? "" : data.title || "";
-        return $.trim(title + " " + [data.last_name, data.first_name].join(", "));
-    };
-
     // Grid test
     var vg = window.vg = new ox.ui.tk.VGrid(left);
     // get ID
@@ -50,18 +43,15 @@ define("io.ox/contacts/main", function () {
                 .addClass("contact")
                 .append(image = $("<div/>").addClass("contact-image"))
                 .append(name = $("<div/>").addClass("fullname"))
-                .append(company = $("<div/>").css("color", "#888"))
+                .append(job = $("<div/>").css("color", "#888"))
                 .append(email = $("<div/>").addClass("email-address"));
-            return { image: image, name: name, company: company, email: email };
+            return { image: image, name: name, job: job, email: email };
         },
         set: function (data, fields, index) {
-            fields.image.css(
-                "backgroundImage", data.image1_url ? 
-                    "url(" + data.image1_url + ")" : "url(themes/login/dummypicture.png)"
-            );
-            fields.name.text(getFullName(data));
-            fields.company.text(data.company || "");
-            fields.email.text(data.email1 || data.email2 || data.email3 || "");
+            fields.image.css("backgroundImage", "url(" + base.getImage(data) + ")");
+            fields.name.text(base.getFullName(data));
+            fields.job.text(base.getJob(data));
+            fields.email.text(base.getMail(data));
         }
     });
     // add label
@@ -83,16 +73,34 @@ define("io.ox/contacts/main", function () {
     };
     // get all IDs
     vg.all = function (cont) {
-        ox.api.contacts.getAll()
+        api.getAll()
             .done(cont);
     };
     // fetch list of items
     vg.fetch = function (ids, cont) {
-        ox.api.contacts.getList(ids)
+        api.getList(ids)
             .done(cont);
     };
     // go!
     vg.paint();
+    
+    vg.selection.onChange(function (selection) {
+        if (selection.length) {
+            // get id
+            var key = selection[0].id.split(/\./);
+            // get contact
+            api.get({
+                folder: key[0],
+                id: key[1]
+            })
+            .done(function (data) {
+                // draw contact
+                right.empty().append(base.draw(data));
+            });
+        }
+    });
+
+
     
     return {};
 });

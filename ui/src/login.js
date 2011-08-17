@@ -304,10 +304,12 @@ $(document).ready(function () {
         // get basic modules
         require(
             ["io.ox/core/base", "io.ox/core/http", "io.ox/core/event"],
-            function () {
-                require(["io.ox/core/cache"], cont);
-            }
+            cont
         );
+//            function () {
+//                require(["io.ox/core/cache"], cont);
+//            }
+//        );
     });
 
     // prevent text selection

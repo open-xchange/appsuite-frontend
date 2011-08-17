@@ -77,9 +77,7 @@ define("io.ox/core/main", function () {
     
     core.show();
 
-    require(["io.ox/contacts/api"], function () {
-        require(["io.ox/contacts/main"]);
-    });
+    require(["io.ox/contacts/main"]);
 
     $("#background_loader").removeClass("busy").fadeOut(500);
 });
