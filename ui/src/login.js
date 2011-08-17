@@ -25,7 +25,7 @@ $(document).ready(function () {
     // server config
     var serverConfig = {},
         // animations
-        DURATION = 500,
+        DURATION = 250,
         // flags
         relogin = false,
         // functions
@@ -64,13 +64,13 @@ $(document).ready(function () {
     loadCore = function () {
         // remove unnecessary stuff
         cleanUp();
+        // load core
+        require(["io.ox/core/main"]);
         // show loader
         $("#background_loader").fadeIn(DURATION, function () {
             // hide login dialog
             $("#io-ox-login-screen").hide();
             $(this).addClass("busy");
-            // load core
-            require(["io.ox/core/main"]);
         });
     };
     

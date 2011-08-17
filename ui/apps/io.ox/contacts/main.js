@@ -17,33 +17,27 @@ define("io.ox/contacts/main", function () {
     
     var win = ox.ui.getWindow();
     
-    win.css({
-        textAlign: "right",
-        color: "white",
-        fontSize: "24pt",
-        padding: "1em"
-    })
-    .text("Hello World!");
-
-    var lgn = $("<div/>").css({
-        position: "absolute",
-        zIndex: 1000,
-        width: "350px",
-        backgroundColor: "white",
-        border: "1px solid #555",
-        top: "20px",
-        left: "120px",
-        bottom: "20px",
+    // left side
+    var left = $("<div/>").addClass("leftside").css({
+        width: "339px",
+        borderRight: "1px solid #ccc",
         overflow: "auto"
-    }).appendTo("body");
+    }).appendTo(win);
+    
+    var right = $("<div/>")
+        .css({ left: "340px", textAlign: "right", padding: "1em" })
+        .addClass("rightside")
+        .text("Address book prototype")
+        .appendTo(win);
     
     // get full name
     var getFullName = function (data) {
-        return $.trim((data.title || "") + " " + [data.last_name, data.first_name].join(", "));
+        var title = (data.title || "").length > 10 ? "" : data.title || "";
+        return $.trim(title + " " + [data.last_name, data.first_name].join(", "));
     };
 
     // Grid test
-    var vg = window.vg = new ox.ui.tk.VGrid(lgn);
+    var vg = window.vg = new ox.ui.tk.VGrid(left);
     // get ID
     vg.getID = function (data) {
         return data.folder_id + "." + data.id;
@@ -53,8 +47,9 @@ define("io.ox/contacts/main", function () {
         build: function () {
             var name, email;
             this
+                .addClass("contact")
                 .append(image = $("<div/>").addClass("contact-image"))
-                .append(name = $("<div/>").css("fontSize", "12pt"))
+                .append(name = $("<div/>").addClass("fullname"))
                 .append(company = $("<div/>").css("color", "#888"))
                 .append(email = $("<div/>").addClass("email-address"));
             return { image: image, name: name, company: company, email: email };
@@ -98,4 +93,6 @@ define("io.ox/contacts/main", function () {
     };
     // go!
     vg.paint();
+    
+    return {};
 });

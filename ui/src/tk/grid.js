@@ -118,33 +118,47 @@ ox.ui.tk.VGrid = function (target) {
         // labels
         labels = $(),
         labelIndexes = {},
+        labelOffsets = [],
         // bounds of currently visible area
         bounds = { top: 0, bottom: 0 },
         // multiplier defines how much detailed data is loaded
         mult = 4,
         // reference for private functions
-        self = this;
+        self = this,
+        // shortcut
+        isArray = ox.util.isArray;
     
     // add label class
     label.node.addClass("vgrid-label");
     
     // selection
     this.selection = new ox.ui.tk.Selection().observe(container.get(0));
-
+    
+    var scrollToLabel = function (e) {
+        var top = labelOffsets[e.data] || 0;
+        node.stop().animate({
+            scrollTop: top
+        }, 250);
+    };
+    
     var paintLabels = function () {
         // remove existing labels
         labels.remove();
         labels = $();
+        labelOffsets = [];
         // loop
-        var index = "", i = 0, clone = null;
+        var index = "", i = 0, clone = null, top = 0;
         for (index in labelIndexes) {
             // draw
             clone = label.getClone();
+            labelOffsets.push(top = i * labelHeight + index * itemHeight);
             labels = labels.add(
                 clone.node.css({
-                    top: i * labelHeight + index * itemHeight + "px"
+                    top: top + "px"
                 })
                 .addClass("vgrid-label")
+                .bind("click", labelOffsets.length - 1, scrollToLabel)
+                .bind("dblclick", labelOffsets.length, scrollToLabel)
                 .appendTo(container)
             );
             clone.update(all[index], index);
@@ -156,6 +170,7 @@ ox.ui.tk.VGrid = function (target) {
     var getLabels = function () {
         // reset
         labelIndexes = {};
+        labelTops = [];
         numLabels = 0;
         // loop
         var i = 0, $i = all.length;
@@ -184,7 +199,7 @@ ox.ui.tk.VGrid = function (target) {
         // get item
         self.fetch(all.slice(offset, offset + numRows), function (data) {
             // pending?
-            if (ox.util.isArray(pending)) {
+            if (isArray(pending)) {
                 // process latest paint
                 offset = pending[0];
                 cont = pending[1];
@@ -261,7 +276,7 @@ ox.ui.tk.VGrid = function (target) {
     var loadAll = function (cont) {
         // get all items
         self.all(function (list) {
-            if (ox.util.isArray(list)) {
+            if (isArray(list)) {
                 // store
                 all = list;
                 // get labels

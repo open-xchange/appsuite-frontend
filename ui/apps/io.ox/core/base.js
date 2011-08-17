@@ -478,14 +478,7 @@ define("io.ox/core/base", function () {
      */
     ox.ui.getWindow = function () {
         return $("<div/>")
-            .css({
-                position: "absolute",
-                top: "20px",
-                right: "150px",
-                bottom: "20px",
-                left: "150px",
-                backgroundColor: "rgba(0, 0, 0, 0.25)"
-            })
+            .addClass("app-window")
             .appendTo("#io-ox-core");
     };
     

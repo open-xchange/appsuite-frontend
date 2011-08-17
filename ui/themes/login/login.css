@@ -26,14 +26,11 @@ body {
     padding: 0px;
     border: 0px none;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 10pt;
-
+    font-size: 9pt;
     color: black;
     height: 100%;
     overflow: hidden;
-
     background-color: #fff;
-    
     cursor: default;
 }
 
@@ -293,15 +290,6 @@ a:hover {
     color: #08c;
 }
 
-.contact-image {
-    background-repeat: no-repeat;
-    background-position: center center;
-    float: left;
-    height: 5em;
-    width: 5em;
-    margin: -0.5em 1em -0.5em 0em;
-}
-
 .vgrid-cell {
     position: absolute;
     right: 0;
@@ -322,13 +310,28 @@ a:hover {
 }
 
 .vgrid-cell.vgrid-label {
-    font-size: 11pt;
+    font-size: 12pt;
     font-weight: bold;
+    text-align: center;
     color: black;
-    padding: 8px 10px 8px 10px;
+    line-height: 1em;
+    padding: 8px 10px 7px 10px;
     background-color: #eee;
     border-bottom: 1px solid #aaa;
-    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.07, rgb(230,230,230)), color-stop(0.54, rgb(255,255,255)));
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.00, #e0e0e0),
+        color-stop(0.50, #ffffff)
+    );
+    background-image: -moz-linear-gradient(
+        center bottom,
+        #e0e0e0 0%,
+        #ffffff 50%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd');
+    cursor: pointer;
 }
 
 .vgrid-cell.selected {
@@ -337,11 +340,70 @@ a:hover {
         linear,
         left bottom,
         left top,
-        color-stop(0, rgb(2,96,168)),
-        color-stop(1, rgb(84,198,255))
+        color-stop(0, #0260A8),
+        color-stop(1, #54A7FF)
     );
+    background-image: -moz-linear-gradient(
+        center bottom,
+        #0260A8 0%,
+        #54A7FF 100%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#54A7FF', endColorstr='#0260A8');
+    border-bottom-color: black;
 }
 
 .vgrid-cell.selected * {
     color: white !important;
+}
+
+/* contacts */
+
+.vgrid-cell.contact {
+    height: 4em;
+    padding: 0.75em 0.5em 0.75em 0.5em;
+}
+
+.vgrid-cell.contact .contact-image {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    float: left;
+    height: 4em;
+    width: 4em;
+    margin: 0em 0.75em 0em 0em;
+}
+
+.vgrid-cell.contact .fullname {
+    font-size: 12pt;
+}
+
+.vgrid-cell.selected.contact .fullname {
+    font-weight: bold;
+}
+
+/* ---- */
+
+.app-window {
+    position: absolute;
+    top: 10px;
+    right: 140px;
+    bottom: 10px;
+    left: 140px;
+    background-color: white;
+}
+
+.leftside {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    width: 200px;
+}
+
+.rightside {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 200px;
 }

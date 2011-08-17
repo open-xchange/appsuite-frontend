@@ -63,10 +63,10 @@ define("io.ox/core/main", function () {
     launchBar = $("<div/>")
         .css({
             position: "absolute",
-            top: "20px",
-            width: "130px",
+            top: "10px",
+            width: "120px",
             left: "10px",
-            bottom: "20px",
+            bottom: "10px",
             overflow: "hidden"
         })
         .appendTo(core);
