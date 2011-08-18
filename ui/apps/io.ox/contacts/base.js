@@ -70,24 +70,27 @@ define("io.ox/contacts/base", function () {
                 .addClass("contact-detail")
                 .append(tbody = $("<tbody/>"));
                 
-            img = $("<img/>", { src: this.getImage(obj), alt: "photo" })
-                .css("float", "right");
-            
             tbody.append(
                 $("<tr/>")
                 .append(
                     $("<td/>")
-                    .css({ paddingBottom: "2em", width: "10em" })
-                    .append(img)
+                    .css({ paddingBottom: "2em", width: "150px" })
+                    .append(
+                        $("<div/>").addClass("picture")
+                        .css({ backgroundImage: "url(" + this.getImage(obj) + ")" })
+                    )
                 )
                 .append(
                     $("<td/>")
-                    .css({ paddingBottom: "2em" })
+                    .css({ paddingTop: "2em", verticalAlign: "top" })
                     .append(
                         $("<div/>").addClass("name").text(this.getFullName(obj))
                     )
                     .append(
-                        $("<div/>").addClass("job").text(join(", ", obj.company, obj.department, obj.position, obj.profession))
+                        $("<div/>").addClass("job").text(
+                            join(", ", obj.company, obj.position, obj.profession) +
+                            "\u00a0"
+                        )
                     )
                 )
             );

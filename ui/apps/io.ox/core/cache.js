@@ -36,6 +36,7 @@ define("io.ox/core/cache", function () {
             // supported by browser and explicitly activated?
             hasLocalStorage = ox.util.getParam("persistence") === "true" && "localStorage" in window && window.localStorage !== null;
         } catch (e) {
+            // pssst
         }
         
         return function (name, persistent) {
@@ -138,14 +139,10 @@ define("io.ox/core/cache", function () {
         var index = new CacheStorage(name + ".index", persistent);
         var isComplete = new CacheStorage(name + ".isComplete", persistent);
         
-        // dispatcher
-        var dispatcher = this.dispatcher = new ox.api.event.Dispatcher(this);
-        
         // clear cache
         this.clear = function () {
             index.clear();
             isComplete.clear();
-            dispatcher.trigger("clear *", {});
         };
         
         this.add = function (key, data, timestamp) {
@@ -157,12 +154,6 @@ define("io.ox/core/cache", function () {
                 var type = !index.contains(key) ? "add modify *" : "update modify *";
                 // set
                 index.set(key, {
-                    data: data,
-                    timestamp: timestamp
-                });
-                // trigger
-                dispatcher.trigger(type, {
-                    key: key,
                     data: data,
                     timestamp: timestamp
                 });
@@ -185,11 +176,6 @@ define("io.ox/core/cache", function () {
             if (index.contains(key)) {
                 var o = index.get(key);
                 index.remove(key);
-                dispatcher.trigger("remove modify *", {
-                    key: key,
-                    data: o.data,
-                    timestamp: o.timestamp
-                });
             }
         };
         

@@ -29,7 +29,7 @@
 				<file name="lib/jquery.min.js"/>
                 <file name="lib/jquery-ui-1.8.14.custom.min.js"/>
 				<file name="lib/require.js"/>
-                <file name="src/jquery.plugins.js"/>
+                <file name="lib/jquery.plugins.js"/>
 				<file name="src/tk/grid.js"/>
 				<file name="src/tk/selection.js"/>
 				<file name="src/login.js"/>
@@ -53,8 +53,8 @@
 		<copy overwrite="true" todir="${build}/apps">
             <fileset dir="apps" includes="**"/>
         </copy>
-        <copy overwrite="true" todir="${build}">
-            <fileset dir="lib" includes="order.js"/>
+        <copy overwrite="true" todir="${build}/apps">
+            <fileset dir="lib" includes="css.js"/>
         </copy>
 			
 	</target>

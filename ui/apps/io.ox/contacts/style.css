@@ -1,0 +1,106 @@
+
+/* VGrid elements */
+
+.vgrid-cell.contact {
+    height: 3.5em;
+    padding: 0.75em 1em 0.75em 1em;
+}
+
+.vgrid-cell.contact .contact-picture {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    float: left;
+    height: 4em;
+    width: 4em;
+    margin: 0em 0.75em 0em 0em;
+}
+
+.vgrid-cell.contact .fullname {
+    font-size: 10pt;
+    font-weight: bold;
+}
+
+/* Tabs */
+
+.contact-grid-index {
+    overflow: hidden;
+}
+
+.contact-grid-index .thumb-index {
+    font-size: 8pt;
+    line-height: 10pt;
+    padding: 6px 10px 5px 10px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #eee;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.00, #eee),
+        color-stop(0.80, #fff)
+    );
+    background-image: -moz-linear-gradient(
+        center bottom,
+        #eee 0%,
+        #fff 80%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eee');
+    cursor: pointer;
+}
+
+.contact-grid-index .thumb-index:hover {
+    color: white;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.00, #111),
+        color-stop(0.80, #555)
+    );
+    background-image: -moz-linear-gradient(
+        center bottom,
+        #ddd 0%,
+        #eee 80%
+    );
+}
+
+/* Detail view */
+
+.contact-detail {
+    margin: 2em;
+}
+
+.contact-detail td {
+    padding: 0 3em 1em 0;
+}
+
+.contact-detail td.label {
+    padding-top: 0.2em;
+    color: #aaa;
+    font-weight: normal;
+    text-align: right;
+    vertical-align: top;
+}
+
+.contact-detail .value {
+    font-size: 1.2em;
+    font-weight: normal;
+    vertical-align: top;
+}
+
+.contact-detail .name {
+    font-size: 2em;
+}
+
+.contact-detail .job {
+    font-size: 1.35em;
+    color: #aaa;
+}
+
+.contact-detail .picture {
+    height: 100px;
+    background-position: right center;
+    background-repeat: no-repeat;
+}

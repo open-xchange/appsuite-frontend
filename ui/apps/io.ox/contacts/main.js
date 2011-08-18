@@ -13,94 +13,114 @@
  * 
  */
 
-define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api"], function (base, api) {
+define("io.ox/contacts/main",
+    ["io.ox/contacts/base", "io.ox/contacts/api", "css!io.ox/contacts/style.css"], function (base, api) {
     
     var win = ox.ui.getWindow();
-    
+
     // left side
-    var left = $("<div/>").addClass("leftside").css({
-        width: "339px",
-        borderRight: "1px solid #ccc",
-        overflow: "auto"
-    }).appendTo(win);
-    
+    var left = $("<div/>").addClass("leftside border-right")
+        .css({
+            width: "309px",
+            overflow: "auto"
+        })
+        .appendTo(win);
+
+    var thumbs = $("<div/>").addClass("atb contact-grid-index border-left border-right")
+        .css({
+            left: "312px",
+            width: "34px"
+        })
+        .appendTo(win);
+
     var right = $("<div/>")
-        .css({ left: "340px" })
+        .css({ left: "347px", overflow: "auto" })
         .addClass("rightside")
         .appendTo(win);
-    
+
     // Grid test
     var vg = window.vg = new ox.ui.tk.VGrid(left);
-    // get ID
-    vg.getID = function (data) {
-        return data.folder_id + "." + data.id;
-    };
     // add template
     vg.addTemplate({
         build: function () {
             var name, email;
             this
                 .addClass("contact")
-                .append(image = $("<div/>").addClass("contact-image"))
                 .append(name = $("<div/>").addClass("fullname"))
-                .append(job = $("<div/>").css("color", "#888"))
-                .append(email = $("<div/>").addClass("email-address"));
-            return { image: image, name: name, job: job, email: email };
+                .append(email = $("<div/>"))
+                .append(job = $("<div/>").addClass("bright-text"));
+            return { name: name, job: job, email: email };
         },
         set: function (data, fields, index) {
-            fields.image.css("backgroundImage", "url(" + base.getImage(data) + ")");
             fields.name.text(base.getFullName(data));
             fields.job.text(base.getJob(data));
             fields.email.text(base.getMail(data));
         }
     });
-    // add label
-    vg.addLabel({
+    // add label template
+    vg.addLabelTemplate({
         build: function () {
         },
         set: function (data, fields, index) {
             this.text(data.last_name.substr(0,1));
         }
     });
-    // find labels
-    var current = undefined;
-    vg.grepLabel = function (i, data) {
+    // requires new label?
+    vg.requiresLabel = function (i, data, current) {
         var prefix = data.last_name.substr(0,1);
-        if (i === 0 || prefix !== current) {
-            current = prefix;
-            return true;
-        }
+        return (i === 0 || prefix !== current) ? prefix : false;
     };
     // get all IDs
-    vg.all = function (cont) {
+    vg.loadIds = function (cont) {
         api.getAll()
             .done(cont);
     };
-    // fetch list of items
-    vg.fetch = function (ids, cont) {
+    // get header data
+    vg.loadData = function (ids, cont) {
         api.getList(ids)
             .done(cont);
     };
     // go!
-    vg.paint();
+    vg.paint(function () {
+        // select first item
+        vg.selection.selectFirst();
+    });
     
-    vg.selection.onChange(function (selection) {
-        if (selection.length) {
-            // get id
-            var key = selection[0].id.split(/\./);
+    vg.selection.bind("change", function (selection) {
+        if (selection.length === 1) {
             // get contact
             api.get({
-                folder: key[0],
-                id: key[1]
+                folder: selection[0].folder_id,
+                id: selection[0].id
             })
             .done(function (data) {
                 // draw contact
                 right.empty().append(base.draw(data));
             });
+        } else {
+            right.empty();
         }
     });
 
-
+    /**
+     * Thumb index
+     */
+    
+    function drawThumb(char) {
+        return $("<div/>").addClass("thumb-index border-bottom")
+            .text(char)
+            .bind("click", char, vg.scrollToLabelText);
+    };
+    
+    // draw thumb index
+    vg.bind("ids-loaded", function () {
+        // get labels
+        var textIndex = vg.getLabels().textIndex, char = "";
+        for (char in textIndex) {
+            // add thumb
+            thumbs.append(drawThumb(char));
+        }
+    });
     
     return {};
 });

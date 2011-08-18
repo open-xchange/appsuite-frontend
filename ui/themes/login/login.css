@@ -74,7 +74,7 @@ a:hover {
         color-stop(1, #555)
     );
     background-image: -moz-linear-gradient(
-        center bottom,
+        center top,
         #000 0%,
         #555 100%
     );
@@ -286,10 +286,6 @@ a:hover {
 
 /* ----------- */
 
-.email-address {
-    color: #08c;
-}
-
 .vgrid-cell {
     position: absolute;
     right: 0;
@@ -310,27 +306,27 @@ a:hover {
 }
 
 .vgrid-cell.vgrid-label {
-    font-size: 12pt;
+    font-size: 10pt;
     font-weight: bold;
     text-align: center;
     color: black;
     line-height: 1em;
-    padding: 8px 10px 7px 10px;
+    padding: 6px 10px 5px 10px;
     background-color: #eee;
     border-bottom: 1px solid #aaa;
     background-image: -webkit-gradient(
         linear,
         left bottom,
         left top,
-        color-stop(0.00, #e0e0e0),
-        color-stop(0.50, #ffffff)
+        color-stop(0.00, #ccc),
+        color-stop(0.80, #fff)
     );
     background-image: -moz-linear-gradient(
         center bottom,
-        #e0e0e0 0%,
-        #ffffff 50%
+        #ccc 0%,
+        #fff 80%
     );
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd');
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ccc');
     cursor: pointer;
 }
 
@@ -354,31 +350,6 @@ a:hover {
 
 .vgrid-cell.selected * {
     color: white !important;
-}
-
-/* contacts */
-
-.vgrid-cell.contact {
-    height: 4em;
-    padding: 0.75em 0.5em 0.75em 0.5em;
-}
-
-.vgrid-cell.contact .contact-image {
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    float: left;
-    height: 4em;
-    width: 4em;
-    margin: 0em 0.75em 0em 0em;
-}
-
-.vgrid-cell.contact .fullname {
-    font-size: 12pt;
-}
-
-.vgrid-cell.selected.contact .fullname {
-    font-weight: bold;
 }
 
 /* ---- */
@@ -408,9 +379,18 @@ a:hover {
     left: 200px;
 }
 
+.atb { 
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+}
+
 /* ---- */
 
-.blue {
+.bright-text {
+    color: #888;
+}
+.email-address, .blue {
     color: #08C;
 }
 
@@ -419,33 +399,18 @@ a.nolink {
     text-decoration: none;
 }
 
-.contact-detail {
-    margin: 2em;
+.border-top {
+    border-top: 1px solid #ccc;
 }
 
-.contact-detail td {
-    padding: 0 3em 1em 0;
+.border-right {
+    border-right: 1px solid #ccc;
 }
 
-.contact-detail td.label {
-    padding-top: 0.2em;
-    color: #aaa;
-    font-weight: normal;
-    text-align: right;
-    vertical-align: top;
+.border-bottom {
+    border-bottom: 1px solid #ccc;
 }
 
-.contact-detail .value {
-    font-size: 1.2em;
-    font-weight: normal;
-    vertical-align: top;
-}
-
-.contact-detail .name {
-    font-size: 2em;
-}
-
-.contact-detail .job {
-    font-size: 1.35em;
-    color: #aaa;
+.border-left {
+    border-left: 1px solid #ccc;
 }

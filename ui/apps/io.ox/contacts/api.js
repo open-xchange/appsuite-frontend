@@ -2,27 +2,40 @@
 define("io.ox/contacts/api", ["io.ox/core/cache"], function (cache) {
     
     var cache = {
-        all: new cache.FlatCache("", false),
-        list: new cache.FlatCache("", false)
+        all: new cache.FlatCache("", true),
+        list: new cache.FlatCache("", true),
+        full: new cache.FlatCache("", true)
     };
-    
+
     return ox.api.contacts = {
-        
+
         get: function (options) {
-            
+
             var o = $.extend({
                 folder: "6",
                 id: 0
             }, options);
             
-            return ox.api.http.GET({
-                module: "contacts",
-                params: {
-                    action: "get",
-                    folder: o.folder,
-                    id: o.id
-                }
-            });
+            var key = { folder_id: o.folder, id: o.id };
+
+            // contains?
+            if (!cache.full.contains(key)) {
+                // cache miss
+                return ox.api.http.GET({
+                    module: "contacts",
+                    params: {
+                        action: "get",
+                        folder: o.folder,
+                        id: o.id
+                    }
+                })
+                .done(function (data) {
+                    cache.full.add(data);
+                });
+            } else {
+                // cache hit
+                return $.Deferred().resolve(cache.full.get(key));
+            }
         },
         
         getAll: function (options) {
@@ -52,7 +65,7 @@ define("io.ox/contacts/api", ["io.ox/core/cache"], function (cache) {
                     module: "contacts",
                     params: {
                         action: "list",
-                        columns: "20,1,500,501,502,505,520,555,556,557,569,606"
+                        columns: "20,1,500,501,502,505,520,555,556,557,569"
                     },
                     data: ox.api.http.simplify(ids)
                 }))
