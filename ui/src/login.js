@@ -303,7 +303,7 @@ $(document).ready(function () {
         };
         // get basic modules
         require(
-            ["io.ox/core/base", "io.ox/core/http", "io.ox/core/event"],
+            ["io.ox/core/base", "io.ox/core/http", "io.ox/core/event", "io.ox/core/extensions"],
             cont
         );
 //            function () {
