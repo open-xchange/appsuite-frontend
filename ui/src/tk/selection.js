@@ -13,7 +13,12 @@
  * @ignore
  */
 
+/*jslint bitwise: true, nomen: false, onevar: false, plusplus: true, regexp: false, white: true, browser: true, devel: true, evil: true, forin: true, undef: true, eqeqeq: true, immed: true */
+/*global $, ox, require */
+
 (function () {
+    
+    "use strict";
     
     ox.ui.tk.Selection = function () {
 
@@ -31,6 +36,7 @@
             observedItemsIndex = {},
             last = {},
             prev = {},
+            apply,
             click,
             clear,
             isSelected,
@@ -186,11 +192,11 @@
          */
         this.update = function () {
             // get nodes
-            var nodes = container.find(".selectable");
-            // loop
-            var i = 0, tmp = null, node = null;
-            for (; tmp = nodes[i]; i++) {
-                node = $(tmp);
+            var nodes = container.find(".selectable"),
+                // loop
+                i = 0, $i = nodes.length, node = null;
+            for (; i < $i; i++) {
+                node = $(nodes[i]);
                 // bind click
                 node.unbind("click").bind("click", click);
                 // is selected?
@@ -789,4 +795,4 @@
 //        }
 //    });
     
-})();
+}());
