@@ -343,23 +343,18 @@ define("io.ox/core/base", function () {
             },
             
             /**
-             * CSSStyleDeclaration selector. Returns the class object.
-             * @param className the ClassName you will select
-             * @return {Object} CSSStyleDeclaration
+             * "Lastest function only
+             * Works with non-anonymous functions only
              */
-            modifyCSSClass: function(className) {
-                var stylesheet = document.styleSheets[0];
-                for (var i = 0; i < document.styleSheets.length; i++) {
-                    var stylesheet = document.styleSheets[i];
-                    var rules = stylesheet.cssRules || stylesheet.rules;
-                    for (var ia = 0; ia < rules.length; ia++) {
-                        var cssClass = rules[ia];
-                        if ((cssClass.selectorText || "").match(className)) {
-                            return cssClass;
-                        }
-                    };
+            lfo: function (fn) {
+                // call counter
+                var count = (fn.count = (fn.count || 0) + 1);
+                // wrap
+                return function () {
+                    if (count === fn.count) {
+                        fn.apply(fn, arguments);
+                    }
                 };
-                return {};
             },
             
             /**
@@ -639,8 +634,11 @@ define("io.ox/core/base", function () {
                     .bind("keypress", function (e) {
                         e.stopPropagation();
                     })
-                    .bind("click", function (e) {
+                    .bind("search", function (e) {
                         e.stopPropagation();
+                        if ($(this).val() === "") {
+                            $(this).blur();
+                        }
                     })
                     .bind("change", function (e) {
                         e.stopPropagation();

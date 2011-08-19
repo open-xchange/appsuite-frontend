@@ -55,14 +55,7 @@ define("io.ox/core/main", function () {
     
     // add launch bar
     launchBar = $("<div/>")
-        .css({
-            position: "absolute",
-            top: "10px",
-            width: "120px",
-            left: "10px",
-            bottom: "10px",
-            overflow: "hidden"
-        })
+        .addClass("launchbar")
         .appendTo(core);
  
     addLauncher("Sign out", PATH + "/images/logout.png", function (e) {

@@ -69,7 +69,7 @@ $(document).ready(function () {
         $("#background_loader").fadeIn(DURATION, function () {
             // hide login dialog
             $("#io-ox-login-screen").hide();
-            $(this).addClass("busy");
+            $(this).busy();
         });
     };
     
@@ -86,12 +86,12 @@ $(document).ready(function () {
         var restore = function () {
                 // stop being busy
                 $("#io-ox-login-blocker").hide();
-                $("#io-ox-login-feedback").removeClass("busy");
+                $("#io-ox-login-feedback").idle();
             },
             // fail handler
             fail = function (error) {
                 // fail
-                $("#io-ox-login-feedback").removeClass("busy");
+                $("#io-ox-login-feedback").idle();
                 // shake it!
                 $("#login-box-content").stop().effect("shake", {
                     direction: "left",
@@ -112,9 +112,8 @@ $(document).ready(function () {
             username = $("#io-ox-login-username").val(),
             password = $("#io-ox-login-password").val();
         // be busy
-        $("#io-ox-login-feedback").addClass("busy");
         $("#io-ox-login-blocker").show();
-        $("#io-ox-login-feedback").empty();
+        $("#io-ox-login-feedback").busy().empty();
         // user name and password shouldn't be empty
         if ($.trim(username).length === 0 || $.trim(password).length === 0) {
             fail({
@@ -277,7 +276,7 @@ $(document).ready(function () {
             $("#io-ox-login-form").bind("submit", fnSubmit);
             $("#io-ox-login-screen").show();
             $("#io-ox-login-username").removeAttr("disabled").focus();
-            $("#background_loader").removeClass("busy").fadeOut(DURATION, cont);
+            $("#background_loader").idle().fadeOut(DURATION, cont);
         });
     };
 

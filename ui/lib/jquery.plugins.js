@@ -72,6 +72,23 @@ $.button = function (options) {
     return button;
 };
 
+$.fn.busy = function () {
+    return this.each(function () {
+        var self = $(this);
+        self.data("busy-timeout", setTimeout(function () {
+            self.addClass("io-ox-busy");
+        }, 200));
+    });
+};
+
+$.fn.idle = function () {
+    return this.each(function () {
+        var self = $(this);
+        clearTimeout(self.data("busy-timeout"));
+        self.removeClass("io-ox-busy");
+    });
+};
+
 $.fn.intoViewport = function (node) {
 
     if (!node || this.length === 0) {

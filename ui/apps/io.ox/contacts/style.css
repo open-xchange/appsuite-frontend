@@ -32,7 +32,7 @@
 .contact-grid-index .thumb-index {
     font-size: 8pt;
     line-height: 10pt;
-    padding: 6px 10px 5px 10px;
+    padding: 5px 10px 4px 10px;
     font-weight: bold;
     text-align: center;
     background-color: #eee;
@@ -79,15 +79,16 @@
 }
 
 .contact-detail td.label {
-    padding-top: 0.2em;
-    color: #aaa;
+    font-size: 9pt;
+    line-height: 10pt;
+    color: #888;
     font-weight: normal;
     text-align: right;
     vertical-align: top;
 }
 
 .contact-detail .value {
-    font-size: 1.2em;
+    font-size: 10pt;
     font-weight: normal;
     vertical-align: top;
 }

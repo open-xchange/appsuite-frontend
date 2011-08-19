@@ -104,20 +104,23 @@ define("io.ox/contacts/main",
         vg.refresh("all");
     });
     
+    // LFO callback
+    function drawContact(data) {
+        right.idle().append(base.draw(data));
+    }
+    
     /*
      * Selection handling
      */
     vg.selection.bind("change", function (selection) {
         if (selection.length === 1) {
             // get contact
+            right.empty().busy();
             api.get({
                 folder: selection[0].folder_id,
                 id: selection[0].id
             })
-            .done(function (data) {
-                // draw contact
-                right.empty().append(base.draw(data));
-            });
+            .done(ox.util.lfo(drawContact));
         } else {
             right.empty();
         }

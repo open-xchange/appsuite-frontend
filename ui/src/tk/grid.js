@@ -324,13 +324,14 @@ ox.ui.tk.VGrid = function (target) {
                 all = list;
                 // initialize selection
                 self.selection.init(all, node);
+                // adjust container height
+                container.css({
+                    height: (numLabels * labelHeight + all.length * itemHeight) + "px",
+                    visibility: "hidden"
+                }).parent().busy();
                 // process labels
                 processLabels();
                 paintLabels();
-                // adjust container height
-                container.css({
-                    height: (numLabels * labelHeight + all.length * itemHeight) + "px"
-                });
                 // trigger event
                 self.trigger("ids-loaded");
                 // paint items
@@ -338,6 +339,7 @@ ox.ui.tk.VGrid = function (target) {
                 paint(offset, function () {
                     // select first
                     self.selection.selectFirst();
+                    container.css({ visibility: "" }).parent().idle();
                     ox.util.call(cont);
                 });
             } else {
