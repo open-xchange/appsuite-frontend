@@ -16,7 +16,7 @@
 define("io.ox/contacts/main",
     ["io.ox/contacts/base", "io.ox/contacts/api", "css!io.ox/contacts/style.css"], function (base, api) {
     
-    var win = ox.ui.getWindow();
+    var win = ox.ui.getWindow({ title: "Address Book" });
 
     // left side
     var left = $("<div/>").addClass("leftside border-right")

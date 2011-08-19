@@ -52,10 +52,6 @@
 			<fileset dir="." includes=".htaccess"/>
 		</copy>
 		
-		<copy overwrite="true" todir="${build}/themes/login">
-            <fileset dir="themes/login" includes="*.*"/>
-        </copy>
-		
 		<!-- copy dirs -->
 		<copy overwrite="true" todir="${build}/src">
 		    <fileset dir="src" includes="**"/>

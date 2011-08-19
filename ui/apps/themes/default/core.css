@@ -1,0 +1,326 @@
+/**
+ * 
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ * 
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * 
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com 
+ * 
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * 
+ */
+
+#io-ox-core {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    background-color: #111;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, #222),
+        color-stop(1, #555)
+    );
+    background-image: -moz-linear-gradient(
+        center top,
+        #222 0%,
+        #555 100%
+    );
+    color: black;
+}
+
+#io-ox-windowmanager {
+    position: absolute;
+    top: 10px;
+    right: 140px;
+    bottom: 10px;
+    left: 140px;
+}
+
+.window-container {
+    cursor: default;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    display: inline-block;
+    top: 0px;
+    left: 0px;
+    margin: 0 5px 0px 0px;
+}
+
+.window-container-center {
+    position: relative;
+    margin: 0px auto 0px auto;
+    max-width: 100%;
+    height: 100%;
+    -moz-border-radius: 8px 8px 0px 0px;
+    -webkit-border-radius: 8px 8px 0px 0px;
+    border-radius: 8px 8px 0px 0px;
+}
+
+.window-container-center.shadow {
+    -moz-box-shadow: 5px 15px 25px -5px black;
+    -webkit-box-shadow: 5px 15px 25px -5px black;
+    box-shadow: 5px 15px 25px -5px black;
+}
+
+.window-head {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 26px;
+    left: 0px;
+    -moz-border-radius: 8px 8px 0px 0px;
+    -webkit-border-radius: 8px 8px 0px 0px;
+    border-radius: 8px 8px 0px 0px;
+    border: 1px solid #333;
+    border-width: 1px;
+    border-bottom-color: #333;
+    background-color: rgba(0, 0, 0, 0.50);
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(50,50,50)),
+        color-stop(1, rgb(110,110,110))
+    );
+    background-image: -moz-linear-gradient(
+        center bottom,
+        rgb(50,50,50) 0%,
+        rgb(110,110,110) 100%
+    );
+    color: black;
+    font-family: Lucida Grande, Arial;
+    font-size: 9pt;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+.window-title {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 18px;
+    left: 0px;
+    padding: 4px 10px 4px 10px;
+    color: white;
+    line-height: 18px;
+    text-align: center;
+}
+
+.window-toolbar {
+    position: absolute;
+    top: 20px;
+    right: 0px;
+    height: 0px;
+    left: 0px;
+    padding: 5px 7px 5px 10px;
+}
+
+.window-controls {
+    position: absolute;
+    top: 4px;
+    right: 7px;
+}
+
+.window-control {
+    color: white;
+    font-weight: normal;
+    background-color: #555;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px 10px 10px 10px;
+    font-size: 12px;
+    line-height: 18px;
+    height: 18px;
+    width: 18px;
+    text-align: center;
+    margin-left: 5px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.window-body {
+    position: absolute;
+    top: 28px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    border: 1px solid #333;
+    border-width: 0px 1px 1px 1px;
+    background-color: white;
+    white-space: normal;
+}
+
+.window-settings {
+    position: absolute;
+    top: 0px;
+    right: -1px !important;
+    left: -1px !important;
+    z-index: 1;
+    padding: 10px 15px 10px 15px;
+    color: white;
+    background-color: #444;
+    background-image: -moz-linear-gradient(center top, #111, #555);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#111), to(#555));
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#111111', endColorstr='#555555');
+}
+
+.window-content {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    z-index: 2;
+    background-color: white;
+    padding: 10px 15px 10px 15px;
+    overflow: hidden;
+}
+
+.window-content.plain h1 {
+    font-family: Lucida Grande, Arial;
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+.window-content.plain p {
+    font-family: Lucida Grande, Arial;
+    font-size: 10pt;
+}
+
+.window-content textarea {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+}
+
+/* ----------- */
+
+.vgrid-cell {
+    position: absolute;
+    right: 0;
+    left: 0;
+    padding: 8px 10px 8px 10px;
+    border-bottom: 1px solid #ccc;
+    color: black;
+}
+
+.vgrid-cell * {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vgrid-cell.odd {
+    /*background-color: #f5f5f5;*/
+}
+
+.vgrid-cell.vgrid-label {
+    font-size: 10pt;
+    font-weight: bold;
+    text-align: center;
+    color: black;
+    line-height: 1em;
+    padding: 6px 10px 5px 10px;
+    background-color: #eee;
+    border-bottom: 1px solid #aaa;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.00, #ddd),
+        color-stop(0.50, #fff)
+    );
+    background-image: -moz-linear-gradient(
+        center bottom,
+        #ddd 0%,
+        #fff 50%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ccc');
+    cursor: pointer;
+}
+
+.vgrid-cell.selected {
+    background-color: #08c;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, #026ABA),
+        color-stop(1, #3F9EFC)
+    );
+    background-image: -moz-linear-gradient(
+        center bottom,
+        #026ABA 0%,
+        #3F9EFC 100%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#54A7FF', endColorstr='#0260A8');
+    border-bottom-color: #82c1ff;
+}
+
+.vgrid-cell.selected * {
+    color: white !important;
+}
+
+/* ---- */
+
+.leftside {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    width: 200px;
+}
+
+.rightside {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 200px;
+}
+
+.atb { 
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+}
+
+/* ---- */
+
+.bright-text {
+    color: #888;
+}
+.email-address, .blue {
+    color: #08C;
+}
+
+a.nolink {
+    color: black;
+    text-decoration: none;
+}
+
+.border-top {
+    border-top: 1px solid #ccc;
+}
+
+.border-right {
+    border-right: 1px solid #ccc;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #ccc;
+}
+
+.border-left {
+    border-left: 1px solid #ccc;
+}

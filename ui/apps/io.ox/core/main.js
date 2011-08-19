@@ -52,7 +52,7 @@ define("io.ox/core/main", function () {
                 .css({
                     color: "white",
                     fontWeight: "bold",
-                    textShadow: "white 0px 3px 8px white"
+                    textShadow: "white 0px 2px 5px white"
                 })
                 .text(label)
             )

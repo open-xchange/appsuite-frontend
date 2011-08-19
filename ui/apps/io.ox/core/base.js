@@ -474,13 +474,163 @@ define("io.ox/core/base", function () {
     }());
     
     /**
+     * Quick settings for application windows
+     */
+    $.quickSettings = (function () {
+        
+        return function (containerSelector, configSelector, link) {
+            
+            var container = $(containerSelector);
+            var config = $(configSelector);
+            
+            link = $(link);
+            
+            if (!config.hasClass("quick-settings")) {
+                // adjust container
+                container.css({
+                    position: "absolute",
+                    zIndex: 2
+                });
+                // remember top position
+                container.data("top", parseInt(container.css("top") || 0, 10));
+                // adjust settings area
+                config.addClass("quick-settings").css({
+                    position: "absolute",
+                    zIndex: 1,
+                    top: (config.css("top") || 0) + "px",
+                    right: "0px",
+                    height: "auto",
+                    left: "0px",
+                    minHeight: "100px"
+                });
+            }
+            
+            // rebind events
+            link.unbind("click")
+                .bind("dblclick", false)
+                .bind("click", function (e) {
+                    window.container = container;
+                    window.config = config;
+                    // open
+                    var top = container.data("top");
+                    if (link.data("open") !== true) {
+                        link.data("open", true);
+                        config.show();
+                        var h = Math.max(config.outerHeight(), 25);
+                        container.stop().animate({ top: (top + h) + "px" }, 250);
+                    } else {
+                        link.data("open", false);
+                        container.stop().animate({ top: top + "px" }, 250, function () {
+                            config.hide();
+                        });
+                    }
+                    return false;
+                });
+        };
+    }());
+    
+    /**
      * Core UI
      */
-    ox.ui.getWindow = function () {
-        return $("<div/>")
-            .addClass("app-window")
-            .appendTo("#io-ox-core");
-    };
+    ox.ui.getWindow = (function () {
+
+        var guid = 0;
+
+        return function (options) {
+            
+            var opt = $.extend({
+                id: "window-" + guid,
+                width: 0,
+                title: "Window #" + guid
+            }, options);
+
+            // get width
+            var meta = (String(opt.width).match(/^(\d+)(px|%)$/) || ["", "100", "%"]).splice(1),
+                width = meta[0],
+                unit = meta[1],
+                win, head, toolbar, body, settingsControl, settings, content;
+
+            // window container
+            win = $("<div/>")
+                .attr({
+                    id: opt.id,
+                    "data-window-nr": guid
+                })
+                .addClass("window-container")
+                .append(
+                    $("<div/>")
+                        //.hide()
+                        .addClass("window-container-center")
+                        .data({
+                            width: width + unit
+                        })
+                        .css({
+                            width: width + unit
+                        })
+                        .append(
+                            // window HEAD
+                            head = $("<div/>")
+                                .addClass("window-head")
+                                .append(
+                                    // title
+                                    $("<div/>")
+                                        .addClass("window-title")
+                                        .text(opt.title)
+                                )
+                                .append(
+                                    // toolbar
+                                    toolbar = $("<div/>").addClass("window-toolbar")
+                                )
+                                .append(
+                                    // controls
+                                    $("<div/>")
+                                        .addClass("window-controls")
+                                        .append(
+                                            // settings
+                                            settingsControl = $("<div/>")
+                                                .addClass("window-control")
+                                                .text("\u270E")
+                                        )
+                                        .append(
+                                            // close
+                                            $("<div/>")
+                                                .addClass("window-control")
+                                                .text("\u2715")
+                                        )
+                                )
+                        )
+                        .append(
+                            // window BODY
+                            body = $("<div/>")
+                                .addClass("window-body")
+                                .append(
+                                    // quick settings
+                                    settings = $("<div/>")
+                                        .hide()
+                                        .addClass("window-settings")
+                                        .html("<h2>Each window can have a quick settings area</h2>")
+                                )
+                                .append(
+                                    // content
+                                    content = $("<div/>").addClass("window-content")
+                                )
+                        )
+                );
+            
+            // inc
+            guid++;
+            
+            // quick settings
+            $.quickSettings(content, settings, settingsControl);
+            
+            // add to DOM
+            win.appendTo("#io-ox-windowmanager").show();
+            
+            // return window object
+            return content;
+        };
+        
+    }());
     
     return {};
     

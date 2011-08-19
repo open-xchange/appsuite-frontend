@@ -64,7 +64,7 @@ $(document).ready(function () {
         // remove unnecessary stuff
         cleanUp();
         // load core
-        require(["io.ox/core/main"]);
+        require(["css!themes/default/core.css", "io.ox/core/main"]);
         // show loader
         $("#background_loader").fadeIn(DURATION, function () {
             // hide login dialog
