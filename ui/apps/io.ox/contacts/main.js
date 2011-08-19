@@ -91,10 +91,7 @@ define("io.ox/contacts/main",
         api.getList(ids).done(cont);
     });
     // go!
-    vg.paint(function () {
-        // select first item
-        //vg.selection.selectFirst();
-    });
+    vg.paint();
     
     /*
      * Search handling
