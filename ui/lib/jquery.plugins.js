@@ -75,6 +75,7 @@ $.button = function (options) {
 $.fn.busy = function () {
     return this.each(function () {
         var self = $(this);
+        clearTimeout(self.data("busy-timeout"));
         self.data("busy-timeout", setTimeout(function () {
             self.addClass("io-ox-busy");
         }, 200));
