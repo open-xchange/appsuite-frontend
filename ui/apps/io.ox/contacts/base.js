@@ -66,6 +66,11 @@ define("io.ox/contacts/base", function () {
             
             var table, tbody, img;
             
+            // is defined?
+            function d(val) {
+                return typeof val === "string" && val !== "";
+            }
+            
             table = $("<table/>", { border: 0, cellpadding: 0, cellspacing: 0 })
                 .addClass("contact-detail")
                 .append(tbody = $("<tbody/>"));
@@ -145,23 +150,23 @@ define("io.ox/contacts/base", function () {
                             href: "http://www.google.de/maps?q=" + encodeURIComponent(join(", ", street, join(" ", code, city))),
                             target: "_blank"
                         }).addClass("nolink");
-                    if (street !== "") {
+                    if (street) {
                         a.append($("<span/>").text(street));
                         if (city) {
                             a.append($("<br/>"));
                         }
                     }
-                    if (code !== "") {
+                    if (code) {
                         a.append($("<span/>").text(code + " "));
                     }
-                    if (city !== "") {
+                    if (city) {
                         a.append($("<span/>").text(city));
                     }
-                    if (country !== "") {
+                    if (country) {
                         a.append($("<br/>"));
                         a.append($("<span/>").text(country));
                     }
-                    a.append($(" <small class='blue'>(Google Maps&trade;)</small>"));
+                    a.append($("<br/><small class='blue'>(Google Maps&trade;)</small>"));
                     node.append(a);
                 });
             }
