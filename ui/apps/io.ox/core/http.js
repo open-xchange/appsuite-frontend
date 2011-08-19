@@ -401,11 +401,9 @@ define("io.ox/core/http", function () {
     };
     
     var processResponse = function (deferred, response, o) {
-        // process response
+        // server error?
         if (response && response.error !== undefined && response.data === undefined) {
-            // server error
             // session expired?
-            console.log("mmh", response.code);
             if (response.code === "SES-0203") {
                 // relogin dialog
                 ox.ui.session.relogin();

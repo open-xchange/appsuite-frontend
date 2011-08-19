@@ -94,16 +94,17 @@ a:hover {
 #io-ox-login-screen-decorator {
     background-color: black;
     z-index: 64001;
-    opacity: 0.40;
+    opacity: 0.25;
 }
 
 #io-ox-login-screen.relogin {
     right: auto;
     left: 50%;
-    width: 760px;
-    margin-left: -380px;
-    border-left: 1px solid #000;
-    border-right: 1px solid #000;
+    width: 800px;
+    margin-left: -400px;
+    -webkit-box-shadow: 0px 0px 70px 5px #000;
+    -moz-box-shadow: 0px 0px 70px 5px #000;
+    box-shadow: 0px 0px 70px 5px #000;
 }
 
 .gradient {
