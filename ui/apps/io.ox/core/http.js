@@ -401,14 +401,18 @@ define("io.ox/core/http", function () {
     };
     
     var processResponse = function (deferred, response, o) {
-        // process response
+        // server error?
         if (response && response.error !== undefined && response.data === undefined) {
-            // server error
+            // session expired?
+            if (response.code === "SES-0203") {
+                // relogin dialog
+                ox.ui.session.relogin();
+            }
             deferred.reject(response);
         } else {
             // handle warnings
             if (response && response.error !== undefined) {
-                ox.UINotifier.warn(formatError(response));
+                console.warn("TODO: warning");
             }
             // success
             if (o.dataType === "json" && o.processData === true) {
@@ -429,7 +433,7 @@ define("io.ox/core/http", function () {
                                 data.push({ data: tmp, timestamp: timestamp });
                                 // handle warnings within multiple
                                 if (response[i].error !== undefined) {
-                                    newServerError(response[i]);
+                                    console.warn("TODO: warning");
                                 }
                             } else {
                                 // error

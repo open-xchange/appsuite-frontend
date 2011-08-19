@@ -58,29 +58,6 @@ a:hover {
     z-index: 65000;
 }
 
-#io-ox-core {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1;
-    background-color: #111;
-    background-image: -webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0, #000),
-        color-stop(1, #555)
-    );
-    background-image: -moz-linear-gradient(
-        center bottom,
-        #000 0%,
-        #555 100%
-    );
-    color: black;
-}
-
 #io-ox-login-screen, #io-ox-login-screen-decorator {
     position: absolute;
     top: 0;
@@ -94,16 +71,17 @@ a:hover {
 #io-ox-login-screen-decorator {
     background-color: black;
     z-index: 64001;
-    opacity: 0.40;
+    opacity: 0.25;
 }
 
 #io-ox-login-screen.relogin {
     right: auto;
     left: 50%;
-    width: 760px;
-    margin-left: -380px;
-    border-left: 1px solid #000;
-    border-right: 1px solid #000;
+    width: 800px;
+    margin-left: -400px;
+    -webkit-box-shadow: 0px 0px 70px 5px #000;
+    -moz-box-shadow: 0px 0px 70px 5px #000;
+    box-shadow: 0px 0px 70px 5px #000;
 }
 
 .gradient {
@@ -284,168 +262,3 @@ a:hover {
     text-align: right;
 }
 
-/* ----------- */
-
-.email-address {
-    color: #08c;
-}
-
-.vgrid-cell {
-    position: absolute;
-    right: 0;
-    left: 0;
-    padding: 8px 10px 8px 10px;
-    border-bottom: 1px solid #ccc;
-    color: black;
-}
-
-.vgrid-cell * {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.vgrid-cell.odd {
-    background-color: #f5f5f5;
-}
-
-.vgrid-cell.vgrid-label {
-    font-size: 12pt;
-    font-weight: bold;
-    text-align: center;
-    color: black;
-    line-height: 1em;
-    padding: 8px 10px 7px 10px;
-    background-color: #eee;
-    border-bottom: 1px solid #aaa;
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0.00, #e0e0e0),
-        color-stop(0.50, #ffffff)
-    );
-    background-image: -moz-linear-gradient(
-        center bottom,
-        #e0e0e0 0%,
-        #ffffff 50%
-    );
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd');
-    cursor: pointer;
-}
-
-.vgrid-cell.selected {
-    background-color: #08c;
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, #0260A8),
-        color-stop(1, #54A7FF)
-    );
-    background-image: -moz-linear-gradient(
-        center bottom,
-        #0260A8 0%,
-        #54A7FF 100%
-    );
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#54A7FF', endColorstr='#0260A8');
-    border-bottom-color: black;
-}
-
-.vgrid-cell.selected * {
-    color: white !important;
-}
-
-/* contacts */
-
-.vgrid-cell.contact {
-    height: 4em;
-    padding: 0.75em 0.5em 0.75em 0.5em;
-}
-
-.vgrid-cell.contact .contact-image {
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    float: left;
-    height: 4em;
-    width: 4em;
-    margin: 0em 0.75em 0em 0em;
-}
-
-.vgrid-cell.contact .fullname {
-    font-size: 12pt;
-}
-
-.vgrid-cell.selected.contact .fullname {
-    font-weight: bold;
-}
-
-/* ---- */
-
-.app-window {
-    position: absolute;
-    top: 10px;
-    right: 140px;
-    bottom: 10px;
-    left: 140px;
-    background-color: white;
-}
-
-.leftside {
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    width: 200px;
-}
-
-.rightside {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 200px;
-}
-
-/* ---- */
-
-.blue {
-    color: #08C;
-}
-
-a.nolink {
-    color: black;
-    text-decoration: none;
-}
-
-.contact-detail {
-    margin: 2em;
-}
-
-.contact-detail td {
-    padding: 0 3em 1em 0;
-}
-
-.contact-detail td.label {
-    padding-top: 0.2em;
-    color: #aaa;
-    font-weight: normal;
-    text-align: right;
-    vertical-align: top;
-}
-
-.contact-detail .value {
-    font-size: 1.2em;
-    font-weight: normal;
-    vertical-align: top;
-}
-
-.contact-detail .name {
-    font-size: 2em;
-}
-
-.contact-detail .job {
-    font-size: 1.35em;
-    color: #aaa;
-}

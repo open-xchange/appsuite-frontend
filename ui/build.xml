@@ -17,9 +17,20 @@
 
 	<!-- Adjust that to your document root, e.g. /var/www/ox7 -->
 	<property name="build" value="${basedir}/build"/>
+	<property file="./build.properties"/>
 	
     <target name="prepare">
+    	
     	<mkdir dir="${build}"/>
+    	
+    	<propertyfile file="./build.properties">
+    		<entry key="version.build" type="int" operation="+" value="1" pattern="0000"/>
+    	</propertyfile>
+
+    	<property name="version" value="${version.generation}.${version.major}.${version.minor}.${version.build}" />
+    	
+    	<echo message= "Build ${version}"/>
+    	
     </target>
 	
 	<target name="all" depends="prepare">
@@ -29,7 +40,7 @@
 				<file name="lib/jquery.min.js"/>
                 <file name="lib/jquery-ui-1.8.14.custom.min.js"/>
 				<file name="lib/require.js"/>
-                <file name="src/jquery.plugins.js"/>
+                <file name="lib/jquery.plugins.js"/>
 				<file name="src/tk/grid.js"/>
 				<file name="src/tk/selection.js"/>
 				<file name="src/login.js"/>
@@ -37,14 +48,9 @@
 		</concat>
 		
 		<copy overwrite="true" todir="${build}">
-			<fileset dir=".">
-			    <include name="index.html"/>
-			</fileset>
+			<fileset dir="." includes="index.html"/>
+			<fileset dir="." includes=".htaccess"/>
 		</copy>
-		
-		<copy overwrite="true" todir="${build}/themes/login">
-            <fileset dir="themes/login" includes="*.*"/>
-        </copy>
 		
 		<!-- copy dirs -->
 		<copy overwrite="true" todir="${build}/src">
@@ -53,9 +59,14 @@
 		<copy overwrite="true" todir="${build}/apps">
             <fileset dir="apps" includes="**"/>
         </copy>
-        <copy overwrite="true" todir="${build}">
-            <fileset dir="lib" includes="order.js"/>
+        <copy overwrite="true" todir="${build}/apps">
+            <fileset dir="lib" includes="css.js"/>
         </copy>
+		
+		<!-- Replace version token -->
+		<replace file="${build}/index.html">
+			<replacefilter token="@ version @" value="${version}"/>
+		</replace>
 			
 	</target>
 		

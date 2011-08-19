@@ -13,45 +13,46 @@
  * 
  */
 
-
-/*jslint bitwise: false, nomen: false, onevar: false, plusplus: false, regexp: false, white: true, browser: true, devel: true, evil: true, forin: true, undef: true, eqeqeq: true, immed: true */
-
+/*jslint bitwise: true, nomen: false, onevar: false, plusplus: true, regexp: false, white: true, browser: true, devel: true, evil: true, forin: true, undef: true, eqeqeq: true, immed: true */
 /*global $, ox, require */
 
 ox.ui.tk.VGrid = function (target) {
 
+    "use strict";
+    
     /**
      * Private Template class
      * @returns {Template}
      */
-    function Template(grid) {
+    function Template() {
 
         var template = [],
-            tagName = "div";
+            tagName = "div",
+            defaultClassName = "vgrid-cell",
 
-        this.node = $("<" + tagName + "/>")
-            .addClass("vgrid-cell").css("top", "-1000px");
+            getHeight = function (node) {
+                node.css("visibility", "hidden").show()
+                    .appendTo(document.body);
+                var height = Math.max(1, node.outerHeight(true));
+                node.remove();
+                return height;
+            };
         
+        this.node = $("<" + tagName + "/>")
+            .addClass(defaultClassName).css("top", "-1000px");
+
         this.add = function (obj) {
             if (obj && obj.build) {
                 template.push(obj);
             }
         };
 
-        var getHeight = function (node) {
-            node.css("visibility", "hidden").show()
-                .appendTo(document.body);
-            var height = Math.max(1, node.outerHeight(true));
-            node.remove();
-            return height;
-        };
-
         this.getHeight = function () {
             return getHeight(this.getClone().node);
         };
-
-        var emptySet = function () {
-            return $();
+        
+        this.getDefaultClassName = function () {
+            return defaultClassName;
         };
 
         this.getClone = function () {
@@ -88,9 +89,10 @@ ox.ui.tk.VGrid = function (target) {
                 for (; i < $i; i++) {
                     row.set[i].call(row.node, data, row.fields, index);
                 }
-                // set id for selection
-                row.node.attr("data-id", grid.getID(data));
             };
+            // remember class name
+            defaultClassName = row.node[0].className;
+            // return row
             return row;
         };
     }
@@ -100,9 +102,9 @@ ox.ui.tk.VGrid = function (target) {
         // inner container
         container = $("<div/>").appendTo(node),
         // item template
-        template = new Template(this),
+        template = new Template(),
         // label template
-        label = new Template(this),
+        label = new Template(),
         // item pool
         pool = [],
         // heights
@@ -117,75 +119,100 @@ ox.ui.tk.VGrid = function (target) {
         all = [],
         // labels
         labels = $(),
-        labelIndexes = {},
-        labelOffsets = [],
         // bounds of currently visible area
         bounds = { top: 0, bottom: 0 },
         // multiplier defines how much detailed data is loaded
-        mult = 4,
+        mult = 3,
         // reference for private functions
         self = this,
         // shortcut
-        isArray = ox.util.isArray;
-    
+        isArray = ox.util.isArray,
+        // pending fetch
+        pending = false,
+        // private methods
+        scrollToLabel,
+        paintLabels,
+        processLabels,
+        paint,
+        resize,
+        loadAll,
+        init,
+        getIndex,
+        fnScroll;
+
     // add label class
+    template.node.addClass("selectable");
     label.node.addClass("vgrid-label");
     
-    // selection
-    this.selection = new ox.ui.tk.Selection().observe(container.get(0));
+    // add dispatcher
+    ox.api.event.Dispatcher.extend(this);
     
-    var scrollToLabel = function (e) {
-        var top = labelOffsets[e.data] || 0;
-        node.stop().animate({
-            scrollTop: top
-        }, 250);
+    // selection
+    ox.ui.tk.Selection.extend(this);
+    
+    scrollToLabel = function (e) {
+        var obj = labels.list[e.data || e];
+        if (obj !== undefined) {
+            node.stop().animate({
+                scrollTop: obj.top
+            }, 250);
+        }
     };
     
-    var paintLabels = function () {
+    paintLabels = function () {
         // remove existing labels
-        labels.remove();
-        labels = $();
-        labelOffsets = [];
+        labels.nodes.remove();
+        labels.nodes = $();
         // loop
-        var index = "", i = 0, clone = null, top = 0;
-        for (index in labelIndexes) {
+        var i = 0, $i = labels.list.length, clone = null, obj, text = "";
+        for (; i < $i; i++) {
+            // get
+            obj = labels.list[i];
             // draw
             clone = label.getClone();
-            labelOffsets.push(top = i * labelHeight + index * itemHeight);
-            labels = labels.add(
+            clone.update(all[obj.pos], obj.pos);
+            text = clone.node.text();
+            // meta data
+            obj.top = i * labelHeight + obj.pos * itemHeight;
+            obj.text = text;
+            labels.index[obj.pos] = i;
+            labels.textIndex[text] = i;
+            // add node
+            labels.nodes = labels.nodes.add(
                 clone.node.css({
-                    top: top + "px"
+                    top: obj.top + "px"
                 })
                 .addClass("vgrid-label")
-                .bind("click", labelOffsets.length - 1, scrollToLabel)
-                .bind("dblclick", labelOffsets.length, scrollToLabel)
-                .appendTo(container)
+                .bind("click", i, scrollToLabel)
+                .bind("dblclick", i + 1, scrollToLabel)
             );
-            clone.update(all[index], index);
-            i++;
+            clone.node.appendTo(container);
         }
         clone = null;
     };
 
-    var getLabels = function () {
+    processLabels = function () {
         // reset
-        labelIndexes = {};
-        labelTops = [];
+        labels = {
+            nodes: $(),
+            list: [],
+            index: {},
+            textIndex: {}
+        };
         numLabels = 0;
         // loop
-        var i = 0, $i = all.length;
+        var i = 0, $i = all.length, current, tmp = "";
         for (; i < $i; i++) {
-            if (self.grepLabel(i, all[i]) === true) {
-                labelIndexes[i] = true;
+            tmp = self.requiresLabel(i, all[i], current);
+            if (tmp !== false) {
+                labels.list.push({ top: 0, text: "", pos: i });
                 numLabels++;
+                current = tmp;
             }
         }
     };
-    
-    // pending fetch
-    var pending = false;
 
-    var paint = function (offset, cont) {
+    paint = function (offset, cont) {
         // keep positive
         offset = Math.max(0, offset);
         // pending?
@@ -197,7 +224,7 @@ ox.ui.tk.VGrid = function (target) {
             pending = true;
         }
         // get item
-        self.fetch(all.slice(offset, offset + numRows), function (data) {
+        self.loadData(all.slice(offset, offset + numRows), function (data) {
             // pending?
             if (isArray(pending)) {
                 // process latest paint
@@ -211,9 +238,11 @@ ox.ui.tk.VGrid = function (target) {
             }
             // vars
             var i, $i, shift = 0, j = "", row,
-                classSelected = self.selection.classSelected;
+                defaultClassName = template.getDefaultClassName(),
+                tmp = new Array(data.length),
+                node;
             // get shift (top down)
-            for (j in labelIndexes) {
+            for (j in labels.index) {
                 if (offset > j) {
                     shift++;
                 }
@@ -221,26 +250,30 @@ ox.ui.tk.VGrid = function (target) {
             // loop
             for (i = 0, $i = data.length; i < $i; i++) {
                 // shift?
-                if (labelIndexes[offset + i]) {
+                if (labels.index[offset + i] !== undefined) {
                     shift++;
                 }
                 row = pool[i];
+                // update fields
                 row.update(data[i], offset + i);
-                row.node
-                    .removeClass("odd even " + classSelected)
-                    .addClass((offset + i) % 2 ? "odd" : "even")
-                    .get(0).style.top = shift * labelHeight + (offset + i) * itemHeight + "px";
+                // polish row
+                node = row.node[0];
+                node.setAttribute("data-ox-id", self.selection.serialize(data[i]));
+                node.className = defaultClassName + " " + ((offset + i) % 2 ? "odd" : "even");
+                node.style.top = shift * labelHeight + (offset + i) * itemHeight + "px";
+                tmp[i] = row.node;
             }
             if ($i < numRows) {
                 for (; i < numRows; i++) {
-                    pool[i].node
-                        .css("top", "-1000px")
-                        .removeClass("odd even " + classSelected)
-                        .removeAttr("data-id");
+                    node = pool[i].node[0];
+                    node.style.top = "-1000px";
+                    node.removeAttribute("data-ox-id");
+                    node.className = defaultClassName;
                 }
             }
             // update selection
             self.selection.update();
+            tmp = null;
             // remember bounds
             bounds.top = offset;
             bounds.bottom = offset + numRows - numVisible;
@@ -249,7 +282,7 @@ ox.ui.tk.VGrid = function (target) {
         });
     };
 
-    var resize = function () {
+    resize = function () {
         // get num of rows
         numVisible = Math.max(1, ((node.height() / itemHeight) >> 0) + 2);
         numRows = Math.max(numVisible * mult, minRows);
@@ -273,19 +306,23 @@ ox.ui.tk.VGrid = function (target) {
         }
     };
 
-    var loadAll = function (cont) {
-        // get all items
-        self.all(function (list) {
+    loadAll = function (cont) {
+        // get all ids
+        self.loadIds(function (list) {
             if (isArray(list)) {
                 // store
                 all = list;
-                // get labels
-                getLabels();
+                // initialize selection
+                self.selection.init(all, node);
+                // process labels
+                processLabels();
                 paintLabels();
                 // adjust container height
                 container.css({
                     height: (numLabels * labelHeight + all.length * itemHeight) + "px"
                 });
+                // trigger event
+                self.trigger("ids-loaded");
                 // paint items
                 var offset = getIndex(node.scrollTop()) - (numRows - numVisible);
                 paint(offset, cont);
@@ -295,7 +332,7 @@ ox.ui.tk.VGrid = function (target) {
         });
     };
 
-    var init = function (cont) {
+    init = function (cont) {
         // get sizes
         itemHeight = template.getHeight();
         labelHeight = label.getHeight();
@@ -305,10 +342,10 @@ ox.ui.tk.VGrid = function (target) {
         loadAll(cont);
     };
 
-    var getIndex = function (top) {
+    getIndex = function (top) {
         var i = 0, $i = all.length, y = 0;
         for (; i < $i && y < top; i++) {
-            if (labelIndexes[i]) {
+            if (labels.index[i] !== undefined) {
                 y += labelHeight;
             }
             y += itemHeight;
@@ -316,24 +353,26 @@ ox.ui.tk.VGrid = function (target) {
         return i;
     };
 
-    var fnScroll = function (e) {
+    fnScroll = function () {
         var top = node.scrollTop(),
             index = getIndex(top);
         // checks bounds
-        if (index >= bounds.bottom) {
+        if (index >= bounds.bottom - 2) {
             // below bottom
-            paint(index);
-        } else if (index < bounds.top) {
+            paint(index - (numVisible / 2 >> 0));
+        } else if (index < bounds.top + 2) {
             // above top
-            paint(index - (numRows - numVisible));
+            paint(index - numVisible);
         }
     };
 
-    this.all = function (cont) {
+    // public methods
+
+    this.loadIds = function (cont) {
         ox.util.call(cont, []);
     };
 
-    this.fetch = function (ids, cont) {
+    this.loadData = function (ids, cont) {
         ox.util.call(cont, ids);
     };
 
@@ -341,11 +380,11 @@ ox.ui.tk.VGrid = function (target) {
         template.add(obj);
     };
 
-    this.addLabel = function (obj) {
+    this.addLabelTemplate = function (obj) {
         label.add(obj);
     };
     
-    this.grepLabel = function (data) {
+    this.requiresLabel = function (/* data */) {
         return false;
     };
 
@@ -358,7 +397,24 @@ ox.ui.tk.VGrid = function (target) {
         loadAll(cont);
     };
     
-    this.getID = function (data) {
-        return data;
+    this.getId = function (data) {
+        // default id
+        return { folder_id: data.folder_id, id: data.id };
+    };
+    
+    this.getData = function (index) {
+        return index !== undefined ? all[index] : all;
+    };
+    
+    this.getLabels = function () {
+        return labels;
+    };
+
+    this.scrollToLabelText = function (e) {
+        // get via text index
+        var obj = labels.textIndex[e.data || e];
+        if (obj !== undefined) {
+            scrollToLabel(obj);
+        }
     };
 };

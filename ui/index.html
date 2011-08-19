@@ -16,7 +16,7 @@ html, body { background-color: #fff; margin: 0; padding; 0; overflow: hidden; }
 }
 </style>
 
-<link rel="stylesheet" href="themes/login/login.css" id="initial-css"/>
+<link rel="stylesheet" href="apps/themes/login/login.css" id="initial-css"/>
 
 <script>
 // core namespace
@@ -25,7 +25,8 @@ window.ox = {
     api: {},
     session: "",
     ui: { session: {}, tk: {} },
-    util: {}
+    util: {},
+    version: "@ version @"
 };
 </script>
 
@@ -38,7 +39,9 @@ window.ox = {
 <div id="background_loader" class="busy"></div>
 
 <!-- Core Panel -->
-<div id="io-ox-core" class="unselectable" style="display: none"></div>
+<div id="io-ox-core" class="unselectable" style="display: none">
+    <div id="io-ox-windowmanager"></div>
+</div>
 
 <!-- Login screen -->
 <div id="io-ox-login-screen-decorator" style="display: none"></div>

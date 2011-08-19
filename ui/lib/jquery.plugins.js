@@ -74,34 +74,42 @@ $.button = function (options) {
 
 $.fn.intoViewport = function (node) {
 
-    if (!node) {
+    if (!node || this.length === 0) {
         return this;
     }
     
-    // IE sometimes crashes so...
     try {
         
-        var pane = $(node);
-        var height = pane.height();
-        
-        // get visible area
-        var y1 = pane.scrollTop();
-        var y2 = y1 + height;
-        
-        // get position
-        var pos = this.position();
-        var top = pos.top + y1;
+        // get pane
+        var pane = $(node),
+            // get pane height
+            height = 0,
+            // get visible area
+            y1 = pane.scrollTop(),
+            y2 = 0,
+            // get position
+            pos = this.position(),
+            top = pos.top + y1,
+            h = 0;
         
         // out of visible area?
         if (top < y1) {
+            // scroll up!
             top = top < 50 ? 0 : top;
             pane.scrollTop(top);
-        } else if (top > y2) {
-            pane.scrollTop(top);
+        } else {
+            // scroll down!
+            y2 = y1 + pane.height();
+            h = this.outerHeight();
+            if (top + h > y2) {
+                pane.scrollTop(y1 + top + h - y2);
+            }
         }
         
     } catch (e) {
-        console.error(e);
+        // IE sometimes crashes
+        // even Chrome might get in trouble during ultra fast scrolling
+        console.error("$.fn.intoViewport", this, e);
     }
     
     return this;

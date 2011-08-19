@@ -66,28 +66,36 @@ define("io.ox/contacts/base", function () {
             
             var table, tbody, img;
             
+            // is defined?
+            function d(val) {
+                return typeof val === "string" && val !== "";
+            }
+            
             table = $("<table/>", { border: 0, cellpadding: 0, cellspacing: 0 })
                 .addClass("contact-detail")
                 .append(tbody = $("<tbody/>"));
                 
-            img = $("<img/>", { src: this.getImage(obj), alt: "photo" })
-                .css("float", "right");
-            
             tbody.append(
                 $("<tr/>")
                 .append(
                     $("<td/>")
-                    .css({ paddingBottom: "2em", width: "10em" })
-                    .append(img)
+                    .css({ paddingBottom: "2em", width: "150px" })
+                    .append(
+                        $("<div/>").addClass("picture")
+                        .css({ backgroundImage: "url(" + this.getImage(obj) + ")" })
+                    )
                 )
                 .append(
                     $("<td/>")
-                    .css({ paddingBottom: "2em" })
+                    .css({ paddingTop: "2em", verticalAlign: "top" })
                     .append(
                         $("<div/>").addClass("name").text(this.getFullName(obj))
                     )
                     .append(
-                        $("<div/>").addClass("job").text(join(", ", obj.company, obj.department, obj.position, obj.profession))
+                        $("<div/>").addClass("job").text(
+                            join(", ", obj.company, obj.position, obj.profession) +
+                            "\u00a0"
+                        )
                     )
                 )
             );
@@ -142,23 +150,23 @@ define("io.ox/contacts/base", function () {
                             href: "http://www.google.de/maps?q=" + encodeURIComponent(join(", ", street, join(" ", code, city))),
                             target: "_blank"
                         }).addClass("nolink");
-                    if (street !== "") {
+                    if (street) {
                         a.append($("<span/>").text(street));
                         if (city) {
                             a.append($("<br/>"));
                         }
                     }
-                    if (code !== "") {
+                    if (code) {
                         a.append($("<span/>").text(code + " "));
                     }
-                    if (city !== "") {
+                    if (city) {
                         a.append($("<span/>").text(city));
                     }
-                    if (country !== "") {
+                    if (country) {
                         a.append($("<br/>"));
                         a.append($("<span/>").text(country));
                     }
-                    a.append($(" <small class='blue'>(Google Maps&trade;)</small>"));
+                    a.append($("<br/><small class='blue'>(Google Maps&trade;)</small>"));
                     node.append(a);
                 });
             }
