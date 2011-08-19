@@ -318,13 +318,13 @@ a:hover {
         linear,
         left bottom,
         left top,
-        color-stop(0.00, #ccc),
-        color-stop(0.80, #fff)
+        color-stop(0.00, #ddd),
+        color-stop(0.50, #fff)
     );
     background-image: -moz-linear-gradient(
         center bottom,
-        #ccc 0%,
-        #fff 80%
+        #ddd 0%,
+        #fff 50%
     );
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ccc');
     cursor: pointer;
@@ -336,16 +336,16 @@ a:hover {
         linear,
         left bottom,
         left top,
-        color-stop(0, #0260A8),
-        color-stop(1, #54A7FF)
+        color-stop(0, #026ABA),
+        color-stop(1, #3F9EFC)
     );
     background-image: -moz-linear-gradient(
         center bottom,
-        #0260A8 0%,
-        #54A7FF 100%
+        #026ABA 0%,
+        #3F9EFC 100%
     );
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#54A7FF', endColorstr='#0260A8');
-    border-bottom-color: black;
+    border-bottom-color: #82c1ff;
 }
 
 .vgrid-cell.selected * {

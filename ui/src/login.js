@@ -15,7 +15,6 @@
 
 
 /*jslint bitwise: false, nomen: false, onevar: false, plusplus: false, regexp: false, white: true, browser: true, devel: true, evil: true, forin: true, undef: true, eqeqeq: true, immed: true */
-
 /*global $, ox, require */
 
 $(document).ready(function () {
@@ -85,40 +84,44 @@ $(document).ready(function () {
         e.preventDefault();
         // restore form
         var restore = function () {
-            // stop being busy
-            $("#io-ox-login-blocker").hide();
-            $("#io-ox-login-feedback").removeClass("busy");
-        };
-        // fail handler
-        var fail = function (error) {
-            // fail
-            $("#io-ox-login-feedback").removeClass("busy");
-            // shake it!
-            $("#login-box-content").stop().effect("shake", {
-                direction: "left",
-                times: 4,
-                distance: 10
-            }, 50, function () {
-                // show error
-                $("#io-ox-login-feedback").text(
-                    ox.util.formatError(error, "%1$s")
-                );
-                // restore form
-                restore();
-                // reset focus
-                $("#io-ox-login-" + (relogin ? "password" : "username")).focus();
-            });
-        };
+                // stop being busy
+                $("#io-ox-login-blocker").hide();
+                $("#io-ox-login-feedback").removeClass("busy");
+            },
+            // fail handler
+            fail = function (error) {
+                // fail
+                $("#io-ox-login-feedback").removeClass("busy");
+                // shake it!
+                $("#login-box-content").stop().effect("shake", {
+                    direction: "left",
+                    times: 4,
+                    distance: 10
+                }, 50, function () {
+                    // show error
+                    $("#io-ox-login-feedback").text(
+                        ox.util.formatError(error, "%1$s")
+                    );
+                    // restore form
+                    restore();
+                    // reset focus
+                    $("#io-ox-login-" + (relogin ? "password" : "username")).focus();
+                });
+            },
+            // get user name / password
+            username = $("#io-ox-login-username").val(),
+            password = $("#io-ox-login-password").val();
         // be busy
         $("#io-ox-login-feedback").addClass("busy");
         $("#io-ox-login-blocker").show();
         $("#io-ox-login-feedback").empty();
-        // get username / password
-        var username = $("#io-ox-login-username").val(),
-            password = $("#io-ox-login-password").val();
-        // username and password shouldn't be empty
+        // user name and password shouldn't be empty
         if ($.trim(username).length === 0 || $.trim(password).length === 0) {
-            return (fail({ error: "Please enter your credentials.", code: "UI-0001" }));
+            fail({
+                error: "Please enter your credentials.",
+                code: "UI-0001"
+            });
+            return;
         }
         // login
         ox.api.session.login(
@@ -280,7 +283,8 @@ $(document).ready(function () {
 
     // init require.js
     require({
-        baseUrl: "apps"
+        // inject version
+        baseUrl: ox.version + "/apps"
     });
 
     // get server config
@@ -306,18 +310,6 @@ $(document).ready(function () {
             ["io.ox/core/base", "io.ox/core/http", "io.ox/core/event"],
             cont
         );
-//            function () {
-//                require(["io.ox/core/cache"], cont);
-//            }
-//        );
     });
 
-    // prevent text selection
-//    if (ox.browser.IE) {
-//        $(document).bind("selectstart", function (e) {
-//            if (!(this.tagName === "input" || this.tagName === "TEXTAREA")) {
-//                return false;
-//            }
-//        });
-//    }
 });

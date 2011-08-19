@@ -34,7 +34,7 @@
                 $("<style/>", { type: "text/css" })
                     .attr("data-require-src", def)
                     .text(css)
-                    .appendTo("head");
+                    .insertBefore($("script").eq(0)); // append before first script tag
                 // continue
                 cont();
             });

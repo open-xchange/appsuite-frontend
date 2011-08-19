@@ -42,8 +42,9 @@ define("io.ox/core/main", function () {
             .append(
                 $("<img/>", { src: icon })
                 .css({
-                    border: "0px none",
-                    margin: "0 0 0.25em 0"
+                    marginBottom: "0.25em",
+                    width: "64px",
+                    height: "64px"
                 })
             )
             .append(

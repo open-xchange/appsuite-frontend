@@ -34,7 +34,7 @@ define("io.ox/core/cache", function () {
         var hasLocalStorage = false;
         try {
             // supported by browser and explicitly activated?
-            hasLocalStorage = ox.util.getParam("persistence") === "true" && "localStorage" in window && window.localStorage !== null;
+            hasLocalStorage = (ox.util.getParam("persistence") === "true") && "localStorage" in window && window.localStorage !== null;
         } catch (e) {
             // pssst
         }
