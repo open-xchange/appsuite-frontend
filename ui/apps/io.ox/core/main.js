@@ -49,11 +49,7 @@ define("io.ox/core/main", function () {
             )
             .append(
                 $("<div/>")
-                .css({
-                    color: "white",
-                    fontWeight: "bold",
-                    textShadow: "white 0px 2px 5px white"
-                })
+                .addClass("launchbar-label")
                 .text(label)
             )
             .bind("click", fn)
