@@ -175,6 +175,7 @@
          */
         this.init = function (all, node) {
             // clear list
+            this.clear();
             container = node;
             observedItems = all;
             observedItemsIndex = {};
@@ -228,6 +229,7 @@
          * Clear selection
          */
         this.clear = function (quiet) {
+            // internal clear
             clear();
             // trigger event
             if (quiet !== true) {

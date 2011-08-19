@@ -49,8 +49,8 @@ define("io.ox/contacts/api", ["io.ox/core/cache"], function (cache) {
                 params: {
                     action: "all",
                     folder: o.folder,
-                    columns: "20,1,502",
-                    sort: "502",
+                    columns: "20,1,500,502",
+                    sort: "607", // magic field
                     order: "asc"
                 }
             });
@@ -65,7 +65,7 @@ define("io.ox/contacts/api", ["io.ox/core/cache"], function (cache) {
                     module: "contacts",
                     params: {
                         action: "list",
-                        columns: "20,1,500,501,502,505,520,555,556,557,569"
+                        columns: "20,1,500,501,502,505,520,555,556,557,569,602"
                     },
                     data: ox.api.http.simplify(ids)
                 }))
@@ -76,6 +76,27 @@ define("io.ox/contacts/api", ["io.ox/core/cache"], function (cache) {
                 // cache hit
                 return $.Deferred().resolve(cache.list.get(ids));
             }
+        },
+        
+        search: function (query) {
+            // search via pattern
+            return ox.api.http.PUT({
+                module: "contacts",
+                params: {
+                    action: "search",
+                    columns: "20,1,500,502,602",
+                    sort: "607",
+                    order: "asc"
+                },
+                data: {
+                    first_name: query,
+                    last_name: query,
+                    email1: query,
+                    email2: query,
+                    email3: query,
+                    orSearch: true
+                }
+            });
         },
         
         cache: cache

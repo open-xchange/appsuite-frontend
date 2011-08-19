@@ -34,25 +34,22 @@ define("io.ox/core/main", function () {
     var addLauncher = function (label, icon, fn) {
         
         launchBar.append(
-            $("<div/>").css({
-                textAlign: "center",
-                margin: "0 0 1em 0",
-                cursor: "pointer"
-            })
-            .append(
-                $("<img/>", { src: icon })
+            $("<div/>")
                 .css({
-                    marginBottom: "0.25em",
-                    width: "64px",
-                    height: "64px"
+                    textAlign: "center",
+                    margin: "0 0 1em 0",
+                    cursor: "pointer"
                 })
-            )
-            .append(
-                $("<div/>")
-                .addClass("launchbar-label")
-                .text(label)
-            )
-            .bind("click", fn)
+                .append(
+                    $("<img/>", { src: icon })
+                        .addClass("launchbar-icon")
+                )
+                .append(
+                    $("<div/>")
+                        .addClass("launchbar-label")
+                        .text(label)
+                )
+                .bind("click", fn)
         );
     };
     

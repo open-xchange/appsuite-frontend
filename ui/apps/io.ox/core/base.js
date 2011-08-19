@@ -541,17 +541,25 @@ define("io.ox/core/base", function () {
             var opt = $.extend({
                 id: "window-" + guid,
                 width: 0,
-                title: "Window #" + guid
+                title: "Window #" + guid,
+                search: false,
+                toolbar: false
             }, options);
 
             // get width
             var meta = (String(opt.width).match(/^(\d+)(px|%)$/) || ["", "100", "%"]).splice(1),
                 width = meta[0],
                 unit = meta[1],
-                win, head, toolbar, body, settingsControl, settings, content;
+                win = {
+                    id: opt.id,
+                    nodes: {},
+                    search: {
+                        query: ""
+                    }
+                };
 
             // window container
-            win = $("<div/>")
+            win.nodes.outer = $("<div/>")
                 .attr({
                     id: opt.id,
                     "data-window-nr": guid
@@ -569,17 +577,18 @@ define("io.ox/core/base", function () {
                         })
                         .append(
                             // window HEAD
-                            head = $("<div/>")
+                            win.nodes.head = $("<div/>")
                                 .addClass("window-head")
                                 .append(
                                     // title
-                                    $("<div/>")
+                                    win.nodes.title = $("<div/>")
                                         .addClass("window-title")
                                         .text(opt.title)
                                 )
                                 .append(
                                     // toolbar
-                                    toolbar = $("<div/>").addClass("window-toolbar")
+                                    win.nodes.toolbar = $("<div/>")
+                                        .addClass("window-toolbar")
                                 )
                                 .append(
                                     // controls
@@ -587,13 +596,13 @@ define("io.ox/core/base", function () {
                                         .addClass("window-controls")
                                         .append(
                                             // settings
-                                            settingsControl = $("<div/>")
+                                            win.nodes.settingsButton = $("<div/>")
                                                 .addClass("window-control")
                                                 .text("\u270E")
                                         )
                                         .append(
                                             // close
-                                            $("<div/>")
+                                            win.nodes.closeButton = $("<div/>")
                                                 .addClass("window-control")
                                                 .text("\u2715")
                                         )
@@ -601,33 +610,72 @@ define("io.ox/core/base", function () {
                         )
                         .append(
                             // window BODY
-                            body = $("<div/>")
+                            win.nodes.body = $("<div/>")
                                 .addClass("window-body")
                                 .append(
                                     // quick settings
-                                    settings = $("<div/>")
+                                    win.nodes.settings = $("<div/>")
                                         .hide()
                                         .addClass("window-settings")
                                         .html("<h2>Each window can have a quick settings area</h2>")
                                 )
                                 .append(
                                     // content
-                                    content = $("<div/>").addClass("window-content")
+                                    win.nodes.content = $("<div/>")
+                                        .addClass("window-content")
                                 )
                         )
                 );
+            
+            // add dispatcher
+            ox.api.event.Dispatcher.extend(win);
+            
+            // search?
+            if (opt.search) {
+                // search
+                var lastSearch = "";
+                $("<input/>", { type: "search", placeholder: "Search...", size: "40" })
+                    .css({ "float": "right", marginTop: "5px" })
+                    .bind("keypress", function (e) {
+                        e.stopPropagation();
+                    })
+                    .bind("click", function (e) {
+                        e.stopPropagation();
+                    })
+                    .bind("change", function (e) {
+                        e.stopPropagation();
+                        win.search.query = $(this).val();
+                        // trigger search?
+                        if (win.search.query !== "") {
+                            if (win.search.query !== lastSearch) {
+                                win.trigger("search", lastSearch = win.search.query);
+                            }
+                        } else if (lastSearch !== "") {
+                            win.trigger("cancel-search", lastSearch = "");
+                        }
+                    })
+                    .prependTo(win.nodes.toolbar);
+            }
+            
+            // fix height/position
+            if (opt.toolbar || opt.search) {
+                var th = 28;
+                win.nodes.head.css("height", th + 30 + "px");
+                win.nodes.toolbar.css("height", th + 10 + "px");
+                win.nodes.body.css("top", th + 32 + "px");
+            }
             
             // inc
             guid++;
             
             // quick settings
-            $.quickSettings(content, settings, settingsControl);
+            $.quickSettings(win.nodes.content, win.nodes.settings, win.nodes.settingsButton);
             
             // add to DOM
-            win.appendTo("#io-ox-windowmanager").show();
+            win.nodes.outer.appendTo("#io-ox-windowmanager").show();
             
             // return window object
-            return content;
+            return win;
         };
         
     }());

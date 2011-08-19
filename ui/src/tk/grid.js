@@ -115,10 +115,21 @@ ox.ui.tk.VGrid = function (target) {
         numVisible = 0,
         numRows = 0,
         numLabels = 0,
+        // current mode
+        currentMode = "all",
+        // default all & list request
+        loadIds = {
+            all: function (cont) {
+                ox.util.call(cont, []);
+            }
+        },
+        loadData = function (ids, cont) {
+            ox.util.call(cont, ids);
+        },
         // data index (contains ALL ids)
         all = [],
         // labels
-        labels = $(),
+        labels = { nodes: $() },
         // bounds of currently visible area
         bounds = { top: 0, bottom: 0 },
         // multiplier defines how much detailed data is loaded
@@ -160,9 +171,6 @@ ox.ui.tk.VGrid = function (target) {
     };
     
     paintLabels = function () {
-        // remove existing labels
-        labels.nodes.remove();
-        labels.nodes = $();
         // loop
         var i = 0, $i = labels.list.length, clone = null, obj, text = "";
         for (; i < $i; i++) {
@@ -192,6 +200,8 @@ ox.ui.tk.VGrid = function (target) {
     };
 
     processLabels = function () {
+        // remove existing labels
+        labels.nodes.remove();
         // reset
         labels = {
             nodes: $(),
@@ -224,7 +234,7 @@ ox.ui.tk.VGrid = function (target) {
             pending = true;
         }
         // get item
-        self.loadData(all.slice(offset, offset + numRows), function (data) {
+        loadData(all.slice(offset, offset + numRows), function (data) {
             // pending?
             if (isArray(pending)) {
                 // process latest paint
@@ -281,7 +291,7 @@ ox.ui.tk.VGrid = function (target) {
             ox.util.call(cont);
         });
     };
-
+    
     resize = function () {
         // get num of rows
         numVisible = Math.max(1, ((node.height() / itemHeight) >> 0) + 2);
@@ -307,8 +317,8 @@ ox.ui.tk.VGrid = function (target) {
     };
 
     loadAll = function (cont) {
-        // get all ids
-        self.loadIds(function (list) {
+        // get all IDs
+        loadIds[currentMode](function (list) {
             if (isArray(list)) {
                 // store
                 all = list;
@@ -325,7 +335,11 @@ ox.ui.tk.VGrid = function (target) {
                 self.trigger("ids-loaded");
                 // paint items
                 var offset = getIndex(node.scrollTop()) - (numRows - numVisible);
-                paint(offset, cont);
+                paint(offset, function () {
+                    // select first
+                    self.selection.selectFirst();
+                    ox.util.call(cont);
+                });
             } else {
                 console.warn("VGrid.all(cont) must provide an array!");
             }
@@ -368,12 +382,17 @@ ox.ui.tk.VGrid = function (target) {
 
     // public methods
 
-    this.loadIds = function (cont) {
-        ox.util.call(cont, []);
+    this.setAllRequest = function (mode, fn) {
+        // parameter shift?
+        if (ox.util.isFunction(mode)) {
+            fn = mode;
+            mode = "all";
+        }
+        loadIds[mode] = fn;
     };
-
-    this.loadData = function (ids, cont) {
-        ox.util.call(cont, ids);
+    
+    this.setListRequest = function (fn) {
+        loadData = fn;
     };
 
     this.addTemplate = function (obj) {
@@ -393,7 +412,17 @@ ox.ui.tk.VGrid = function (target) {
         init(cont);
     };
 
-    this.refresh = function (cont) {
+    this.refresh = function (mode, cont) {
+        // set mode
+        if (typeof mode === "string") {
+            currentMode = mode;
+        } else {
+            currentMode = "all";
+            cont = mode;
+        }
+        // scroll to top
+        node.unbind("scroll").scrollTop(0).bind("scroll", fnScroll);
+        // load all
         loadAll(cont);
     };
     

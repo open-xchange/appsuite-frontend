@@ -16,27 +16,30 @@
 define("io.ox/contacts/main",
     ["io.ox/contacts/base", "io.ox/contacts/api", "css!io.ox/contacts/style.css"], function (base, api) {
     
-    var win = ox.ui.getWindow({ title: "Address Book" });
-
+    var win = ox.ui.getWindow({
+        title: "Address Book",
+        search: true
+    });
+    
     // left side
     var left = $("<div/>").addClass("leftside border-right")
         .css({
             width: "309px",
             overflow: "auto"
         })
-        .appendTo(win);
+        .appendTo(win.nodes.content);
 
     var thumbs = $("<div/>").addClass("atb contact-grid-index border-left border-right")
         .css({
             left: "312px",
             width: "34px"
         })
-        .appendTo(win);
+        .appendTo(win.nodes.content);
 
     var right = $("<div/>")
         .css({ left: "347px", overflow: "auto" })
         .addClass("rightside")
-        .appendTo(win);
+        .appendTo(win.nodes.content);
 
     // Grid test
     var vg = window.vg = new ox.ui.tk.VGrid(left);
@@ -52,9 +55,15 @@ define("io.ox/contacts/main",
             return { name: name, job: job, email: email };
         },
         set: function (data, fields, index) {
-            fields.name.text(base.getFullName(data));
-            fields.job.text(base.getJob(data));
-            fields.email.text(base.getMail(data));
+            if (data.mark_as_distributionlist === true) {
+                fields.name.text(data.display_name || "");
+                fields.email.text("");
+                fields.job.text("Distribution list");
+            } else {
+                fields.name.text(base.getFullName(data));
+                fields.email.text(base.getMail(data));
+                fields.job.text(base.getJob(data));
+            }
         }
     });
     // add label template
@@ -62,30 +71,45 @@ define("io.ox/contacts/main",
         build: function () {
         },
         set: function (data, fields, index) {
-            this.text(data.last_name.substr(0,1));
+            this.text((data.last_name || data.display_name || "#").substr(0,1).toUpperCase());
         }
     });
     // requires new label?
     vg.requiresLabel = function (i, data, current) {
-        var prefix = data.last_name.substr(0,1);
+        var prefix = (data.last_name || data.display_name || "#").substr(0,1).toUpperCase();
         return (i === 0 || prefix !== current) ? prefix : false;
     };
     // get all IDs
-    vg.loadIds = function (cont) {
-        api.getAll()
-            .done(cont);
-    };
+    vg.setAllRequest(function (cont) {
+        api.getAll().done(cont);
+    });
+    vg.setAllRequest("search", function (cont) {
+        api.search(win.search.query).done(cont);
+    });
     // get header data
-    vg.loadData = function (ids, cont) {
-        api.getList(ids)
-            .done(cont);
-    };
+    vg.setListRequest(function (ids, cont) {
+        api.getList(ids).done(cont);
+    });
     // go!
     vg.paint(function () {
         // select first item
-        vg.selection.selectFirst();
+        //vg.selection.selectFirst();
     });
     
+    /*
+     * Search handling
+     */
+    win.bind("search", function (q) {
+        vg.refresh("search");
+    });
+    
+    win.bind("cancel-search", function () {
+        vg.refresh("all");
+    });
+    
+    /*
+     * Selection handling
+     */
     vg.selection.bind("change", function (selection) {
         if (selection.length === 1) {
             // get contact
@@ -115,6 +139,7 @@ define("io.ox/contacts/main",
     // draw thumb index
     vg.bind("ids-loaded", function () {
         // get labels
+        thumbs.empty();
         var textIndex = vg.getLabels().textIndex, char = "";
         for (char in textIndex) {
             // add thumb

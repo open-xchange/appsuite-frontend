@@ -37,6 +37,12 @@
     color: black;
 }
 
+.launchbar-icon {
+    margin-bottom: 0.25em;
+    width: 32px;
+    height: 32px;
+}
+
 .launchbar-label {
     color: white;
     font-weight: bold;
