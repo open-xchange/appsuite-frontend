@@ -72,12 +72,15 @@ $.button = function (options) {
     return button;
 };
 
-$.fn.busy = function () {
+$.fn.busy = function (empty) {
     return this.each(function () {
         var self = $(this);
         clearTimeout(self.data("busy-timeout"));
         self.data("busy-timeout", setTimeout(function () {
             self.addClass("io-ox-busy");
+            if (empty) {
+                self.empty();
+            }
         }, 200));
     });
 };

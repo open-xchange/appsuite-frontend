@@ -45,23 +45,24 @@
         linear,
         left top,
         left bottom,
-        color-stop(0.00, #ddd),
-        color-stop(0.80, #eee)
+        color-stop(0.00, #ccc),
+        color-stop(0.30, #eee)
     );
     background-image: -moz-linear-gradient(
         center top,
-        #eee 0%,
-        #aaa 80%
+        #ccc 0%,
+        #eee 30%
     );
-    padding: 20px;
 }
 
 .mail-detail {
     background-color: white;
     border: 1px solid #aaa;
-    padding: 10px;
-    min-height: 300px;
+    padding: 20px;
+    margin: 20px;
+    min-height: 200px;
     -moz-box-shadow: 0px 8px 15px -5px black;
     -webkit-box-shadow: 0px 8px 15px -5px black;
-    box-shadow: 0px 8px 15px -5px black;
+    box-shadow: 0px 5px 15px -7px black;
+    overflow-y: visible;
 }

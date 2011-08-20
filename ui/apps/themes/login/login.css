@@ -243,7 +243,7 @@ a:hover {
 }
 
 .io-ox-busy {
-    background-image: url(spinner.gif);
+    background-image: url(busy.gif);
     background-repeat: no-repeat;
     background-position: center center;
 }

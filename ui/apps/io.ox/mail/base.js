@@ -60,14 +60,40 @@ define("io.ox/mail/base", function () {
         
         draw: function (data) {
             
+            var mailtext = data.attachments.length ? data.attachments[0].content : "";
+            
             return $("<div/>")
                 .addClass("abs mail-detail-pane")
                 .append(
                     $("<div/>")
                         .addClass("mail-detail")
                         .append(
-                            $("<h2/>").text(data.subject + " <under construction/>")
+                            $("<h2/>").css({
+                                lineHeight: "1em",
+                                marginTop: "0"
+                            })
+                            .text(data.subject)
                         )
+                        .append(
+                            $("<h3/>").css({
+                                lineHeight: "1.5em",
+                                borderBottom: "1px solid #ccc",
+                                marginBottom: "1em"
+                            })
+                            .text("From: " + this.serializeList(data.from))
+                        )
+                        .append(
+                            $("<div/>").css({
+                                fontFamily: "monospace, 'Courier New'",
+                                fontSize: "12px",
+                                lineHeight: "1.4em"
+                            })
+                            .html(mailtext)
+                        )
+                )
+                // just for bottom space
+                .append(
+                    $("<div/>").css("height", "1px")
                 );
         }
         

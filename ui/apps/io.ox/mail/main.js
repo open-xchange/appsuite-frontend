@@ -49,9 +49,12 @@ define("io.ox/mail/main",
             .appendTo(win.nodes.content);
         
         // right panel
-        right = $("<div/>")
+        $("<div/>")
             .css({ left: gridWidth + 1 + "px", overflow: "auto" })
             .addClass("rightside mail-detail-pane")
+            .append(
+                right = $("<div/>").addClass("abs")
+            )
             .appendTo(win.nodes.content);
         
         // grid
@@ -92,14 +95,31 @@ define("io.ox/mail/main",
             api.getAll().done(cont);
         });
         
+        // search request
+        grid.setAllRequest("search", function (cont) {
+            api.search(win.search.query).done(cont);
+        });
+        
         // list request
         grid.setListRequest(function (ids, cont) {
             api.getList(ids).done(cont);
         });
         
+        /*
+         * Search handling
+         */
+        win.bind("search", function (q) {
+            grid.refresh("search");
+        });
+        
+        win.bind("cancel-search", function () {
+            grid.refresh("all");
+        });
+        
         // LFO callback
         function drawMail(data) {
-            right.idle().empty().append(base.draw(data));
+            var mail = base.draw(data);
+            right.idle().empty().append(mail);
         }
         
         /*
@@ -108,7 +128,7 @@ define("io.ox/mail/main",
         grid.selection.bind("change", function (selection) {
             if (selection.length === 1) {
                 // get mail
-                right.busy();
+                right.busy(true);
                 api.get({
                     folder: selection[0].folder_id,
                     id: selection[0].id
