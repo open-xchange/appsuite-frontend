@@ -58,6 +58,15 @@ define("io.ox/mail/base", function () {
             }
         },
         
+        isUnread: function (data) {
+            return (data.flags & 32) !== 32;
+        },
+        
+        isMe: function (data) {
+            // hard wired
+            return data.from && data.from.length && data.from[0][1] === "matthias.biggeleben@open-xchange.com";
+        },
+        
         draw: function (data) {
             
             var mailtext = data.attachments.length ? data.attachments[0].content : "";
@@ -68,27 +77,22 @@ define("io.ox/mail/base", function () {
                     $("<div/>")
                         .addClass("mail-detail")
                         .append(
-                            $("<h2/>").css({
-                                lineHeight: "1em",
-                                marginTop: "0"
-                            })
-                            .text(data.subject)
+                            $("<div/>")
+                                .addClass("subject")
+                                .text(data.subject)
                         )
                         .append(
-                            $("<h3/>").css({
-                                lineHeight: "1.5em",
-                                borderBottom: "1px solid #ccc",
-                                marginBottom: "1em"
-                            })
-                            .text("From: " + this.serializeList(data.from))
+                            $("<div/>")
+                                .addClass("from person")
+                                .text(this.serializeList(data.from))
                         )
                         .append(
-                            $("<div/>").css({
-                                fontFamily: "monospace, 'Courier New'",
-                                fontSize: "12px",
-                                lineHeight: "1.4em"
-                            })
-                            .html(mailtext)
+                            $("<div/>").text("\u00a0").addClass("spacer")
+                        )
+                        .append(
+                            $("<div/>")
+                                .addClass("content")
+                                .html(mailtext)
                         )
                 )
                 // just for bottom space

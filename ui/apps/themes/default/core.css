@@ -333,19 +333,19 @@
 }
 
 .vgrid-cell.selected {
-    background-color: #08c;
+    background-color: #08c !important;
     background-image: -webkit-gradient(
         linear,
         left bottom,
         left top,
         color-stop(0, #026ABA),
         color-stop(1, #3F9EFC)
-    );
+    ) !important;
     background-image: -moz-linear-gradient(
         center bottom,
         #026ABA 0%,
         #3F9EFC 100%
-    );
+    ) !important;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#54A7FF', endColorstr='#0260A8');
     border-bottom-color: black;
 }
@@ -388,7 +388,7 @@
 .bright-text {
     color: #888;
 }
-.email-address, .blue {
+.email-address, .blue, .person {
     color: #08C;
 }
 

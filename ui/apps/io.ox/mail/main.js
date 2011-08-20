@@ -64,29 +64,45 @@ define("io.ox/mail/main",
         grid.addTemplate({
             build: function () {
                 var from, date, subject;
-                this.addClass("mail").append(
-                    $("<table/>", { border: 0, cellpadding: 0, cellspacing: 0 })
-                    .css({ tableLayout: "fixed", width: "100%" })
+                this.addClass("mail")
                     .append(
-                        $("<tbody/>")
-                            .append(
-                                $("<tr/>")
-                                    .append(from = $("<td/>").addClass("from"))
-                                    .append(date = $("<td/>").addClass("date"))
-                                )
-                            )
-                            .append(
-                                $("<tr/>").append(
-                                    subject = $("<td/>", { colspan: 2}).addClass("subject")
-                                )
-                            )
-                        );
+                        subject = $("<div/>").addClass("subject")
+                    )
+                    .append(
+                        from = $("<div/>").addClass("from")
+                    )
+                    .append(
+                        date = $("<div/>").addClass("date")
+                    );
+//                    $("<table/>", { border: 0, cellpadding: 0, cellspacing: 0 })
+//                    .css({ tableLayout: "fixed", width: "100%" })
+//                    .append(
+//                        $("<tbody/>")
+//                            .append(
+//                                $("<tr/>").append(
+//                                    
+//                                )
+//                            )
+//                            .append(
+//                                $("<tr/>")
+//                                    .append(from = $("<td/>").addClass("from"))
+//                                    .append(date = $("<td/>").addClass("date"))
+//                                )
+//                            )
+//                            
+//                        );
                 return { from: from, date: date, subject: subject };
             },
             set: function (data, fields, index) {
                 fields.from.text(base.serializeList(data.from));
                 fields.date.text(base.getTime(data.received_date));
                 fields.subject.text(data.subject);
+                if (base.isUnread(data)) {
+                    this.addClass("unread");
+                }
+                if (base.isMe(data)) {
+                    this.addClass("me");
+                }
             }
         });
         

@@ -264,12 +264,13 @@ ox.ui.tk.VGrid = function (target) {
                     shift++;
                 }
                 row = pool[i];
+                // reset class name
+                node = row.node[0];
+                node.className = defaultClassName + " " + ((offset + i) % 2 ? "odd" : "even");
                 // update fields
                 row.update(data[i], offset + i);
                 // polish row
-                node = row.node[0];
                 node.setAttribute("data-ox-id", self.selection.serialize(data[i]));
-                node.className = defaultClassName + " " + ((offset + i) % 2 ? "odd" : "even");
                 node.style.top = shift * labelHeight + (offset + i) * itemHeight + "px";
                 tmp[i] = row.node;
             }

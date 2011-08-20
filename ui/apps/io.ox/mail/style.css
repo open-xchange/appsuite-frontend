@@ -16,25 +16,37 @@
 /* VGrid elements */
 
 .vgrid-cell.mail {
-    padding: 0.75em 1em 0.75em 1em;
+    padding: 0.5em 1em 0.5em 1em;
+    line-height: 1.5em;
+}
+
+.vgrid-cell.mail.unread {
+    background-color: #f5f5f5;
+}
+
+.vgrid-cell.mail.unread .subject {
+    font-weight: bold;
 }
 
 .vgrid-cell.mail .from {
-    font-size: 10pt;
-    font-weight: bold;
+    color: #08c;
+    display: inline-block;
     width: 70%;
-    padding-right: 0.5em;
+}
+
+.vgrid-cell.mail.me .from {
+    color: #aaa;
+    font-weight: normal;
 }
 
 .vgrid-cell.mail .date {
-    color: #aaa;
+    color: #888;
     text-align: right;
-    white-space: nowrap;
-    overflow: visible;
+    display: inline-block;
+    width: 30%;
 }
 
 .vgrid-cell.mail .subject {
-    line-height: 1.5em;
 }
 
 /* Detail view */
@@ -60,9 +72,33 @@
     border: 1px solid #aaa;
     padding: 20px;
     margin: 20px;
-    min-height: 200px;
+    min-height: 50%;
     -moz-box-shadow: 0px 8px 15px -5px black;
     -webkit-box-shadow: 0px 8px 15px -5px black;
     box-shadow: 0px 5px 15px -7px black;
     overflow-y: visible;
+}
+
+.mail-detail .from {
+    font-size: 10pt;
+    line-height: 1.5em;
+}
+
+.mail-detail .subject {
+    font-size: 12pt;
+    font-weight: bold;
+    line-height: 1.5em;
+}
+
+.mail-detail .spacer {
+    font-size: 5px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 1em;
+}
+
+.mail-detail .content {
+    font-family: monospace, 'Courier New';
+    font-size: 12px;
+    line-height: 1.33333em;
+    white-space: pre-wrap;
 }

@@ -27,7 +27,8 @@ define("io.ox/mail/api", ["io.ox/core/cache"], function (cache) {
                         action: "get",
                         folder: o.folder,
                         id: o.id,
-                        view: "text"
+                        view: "text",
+                        unseen: true
                     }
                 })
                 .done(function (data) {
@@ -66,7 +67,7 @@ define("io.ox/mail/api", ["io.ox/core/cache"], function (cache) {
                     module: "mail",
                     params: {
                         action: "list",
-                        columns: "601,600,603,607,610"
+                        columns: "601,600,603,607,610,611"
                     },
                     data: ox.api.http.simplify(ids)
                 }))
