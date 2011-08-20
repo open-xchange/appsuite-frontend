@@ -194,7 +194,9 @@
 }
 
 .window-title .subtitle {
-    color: #fc0;
+    color: #ddd;
+    font-weight: bold;
+    text-shadow: 0px 0px 1px #333;
 }
 
 .window-toolbar {
@@ -370,10 +372,15 @@
     left: 200px;
 }
 
-.atb { 
+.atb, .abs {
     position: absolute;
     top: 0px;
     bottom: 0px;
+}
+
+.abs {
+    left: 0px;
+    right: 0px;
 }
 
 /* ---- */
