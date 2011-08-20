@@ -74,23 +74,6 @@ define("io.ox/mail/main",
                     .append(
                         date = $("<div/>").addClass("date")
                     );
-//                    $("<table/>", { border: 0, cellpadding: 0, cellspacing: 0 })
-//                    .css({ tableLayout: "fixed", width: "100%" })
-//                    .append(
-//                        $("<tbody/>")
-//                            .append(
-//                                $("<tr/>").append(
-//                                    
-//                                )
-//                            )
-//                            .append(
-//                                $("<tr/>")
-//                                    .append(from = $("<td/>").addClass("from"))
-//                                    .append(date = $("<td/>").addClass("date"))
-//                                )
-//                            )
-//                            
-//                        );
                 return { from: from, date: date, subject: subject };
             },
             set: function (data, fields, index) {
@@ -136,6 +119,7 @@ define("io.ox/mail/main",
         function drawMail(data) {
             var mail = base.draw(data);
             right.idle().empty().append(mail);
+            right.parent().scrollTop(0);
         }
         
         /*

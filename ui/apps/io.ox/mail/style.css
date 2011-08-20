@@ -65,6 +65,7 @@
         #ccc 0%,
         #eee 30%
     );
+    background-attachment: fixed;
 }
 
 .mail-detail {
