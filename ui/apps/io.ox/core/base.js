@@ -527,16 +527,169 @@ define("io.ox/core/base", function () {
     /**
      * Core UI
      */
-    ox.ui.getWindow = (function () {
+    
+    ox.ui.createApp = (function (fn) {
+        
+        function App() {
+            
+            // launcher
+            var launcher = $.noop,
+                // app main window
+                win = null,
+                // running
+                running = false;
+            
+            this.setLauncher = function (fn) {
+                launcher = fn;
+            };
+            
+            this.setWindow = function (w) {
+                win = w;
+            };
+            
+            this.launch = function () {
+                if (!running) {
+                    running = true;
+                    launcher();
+                } else if (win) {
+                    win.toggle();
+                }
+            };
+        }
+        
+        return function () {
+            return new App();
+        };
+    }());
+    
+    // ref to core screen
+    var core = $("#io-ox-core"),
+        // window bar
+        windowBar = $("<div/>", { id: "io-ox-windowbar" }),
+        // launch bar
+        launchBar = $("<div/>", { id: "io-ox-launchbar" }),
+        // add launcher
+        addLauncher = function (label, icon, fn) {
+            launchBar.append(
+                $("<div/>")
+                    .addClass("launcher")
+                    .append(
+                        $("<img/>", { src: icon })
+                            .addClass("icon")
+                    )
+                    .append(
+                        $("<div/>")
+                            .addClass("label")
+                            .text(label)
+                    )
+                    .bind("click", fn)
+            );
+        },
+        // add window
+        addWindow = function (label, icon, fn) {
+            windowBar.append(
+                $("<div/>")
+                    .addClass("window")
+                    .append(
+                        $("<div/>")
+                            .addClass("icon")
+                    )
+                    .append(
+                        $("<div/>")
+                            .addClass("label")
+                            .text(label)
+                    )
+                    .bind("click", fn)
+            );
+        };
+        
+    // add bars and show
+    core.append(windowBar).append(launchBar).show();
+        
+    ox.ui.createWindow = (function () {
 
-        var guid = 0;
-
+        // window guid
+        var guid = 0,
+        
+            // fullscreen mode
+            fullscreen = false,
+            
+            // toggle fullscreen mode
+            toggleFullscreen = function () {
+                if (!fullscreen) {
+                    // grow
+                    $("#io-ox-launchbar, #io-ox-windowbar").hide();
+                    $("#io-ox-windowmanager").addClass("fullscreen");
+                } else {
+                    // shrink
+                    $("#io-ox-windowmanager").removeClass("fullscreen");
+                    $("#io-ox-launchbar, #io-ox-windowbar").show();
+                }
+                fullscreen = !fullscreen;
+            },
+            
+            // current window
+            current = null,
+            
+            // window class
+            Window = function (id) {
+                
+                this.id = id;
+                this.nodes = {};
+                this.search = { query: "" };
+                
+                this.show = function () {
+                    if (current !== this) {
+                        // show
+                        if (current) {
+                            current.hide();
+                        }
+                        this.nodes.outer.appendTo("#io-ox-windowmanager");
+                        current = this;
+                    }
+                };
+                
+                this.hide = function () {
+                    this.nodes.outer.detach();
+                    current = null;
+                };
+                
+                this.toggle = function () {
+                    if (current === this) {
+                        this.hide();
+                    } else {
+                        this.show();
+                    }
+                };
+                
+                var self = this, title = "", subtitle = "";
+                
+                function applyTitle () {
+                    var spans = self.nodes.title.find("span");
+                    spans.eq(0).text(
+                        title + (subtitle === "" ? "" : " - ")
+                    );
+                    spans.eq(1).text(subtitle);
+                }
+                
+                this.setTitle = function (str) {
+                    title = String(str);
+                    applyTitle();
+                };
+                
+                this.setSubTitle = function (str) {
+                    subtitle = String(str);
+                    applyTitle();
+                };
+            };
+        
         return function (options) {
             
             var opt = $.extend({
                 id: "window-" + guid,
                 width: 0,
                 title: "Window #" + guid,
+                subtitle: "",
                 search: false,
                 toolbar: false
             }, options);
@@ -545,12 +698,11 @@ define("io.ox/core/base", function () {
             var meta = (String(opt.width).match(/^(\d+)(px|%)$/) || ["", "100", "%"]).splice(1),
                 width = meta[0],
                 unit = meta[1],
-                win = {
-                    id: opt.id,
-                    nodes: {},
-                    search: {
-                        query: ""
-                    }
+                // create new window instance
+                win = new Window(opt.id),
+                // hide
+                hide = function () {
+                    win.hide();
                 };
 
             // window container
@@ -562,7 +714,6 @@ define("io.ox/core/base", function () {
                 .addClass("window-container")
                 .append(
                     $("<div/>")
-                        //.hide()
                         .addClass("window-container-center")
                         .data({
                             width: width + unit
@@ -578,7 +729,8 @@ define("io.ox/core/base", function () {
                                     // title
                                     win.nodes.title = $("<div/>")
                                         .addClass("window-title")
-                                        .text(opt.title)
+                                        .append($("<span/>"))
+                                        .append($("<span/>").addClass("subtitle"))
                                 )
                                 .append(
                                     // toolbar
@@ -663,14 +815,21 @@ define("io.ox/core/base", function () {
                 win.nodes.body.css("top", th + 32 + "px");
             }
             
+            // add fullscreen handler
+            win.nodes.title.bind("dblclick", toggleFullscreen);
+            
+            // add close handler
+            win.nodes.closeButton.bind("click", hide);
+            
+            // set subtitle & title
+            win.setSubTitle(opt.subtitle);
+            win.setTitle(opt.title);
+            
             // inc
             guid++;
             
             // quick settings
             $.quickSettings(win.nodes.content, win.nodes.settings, win.nodes.settingsButton);
-            
-            // add to DOM
-            win.nodes.outer.appendTo("#io-ox-windowmanager").show();
             
             // return window object
             return win;
@@ -678,6 +837,9 @@ define("io.ox/core/base", function () {
         
     }());
     
-    return {};
+    return {
+        addWindow: addWindow,
+        addLauncher: addLauncher
+    };
     
 });

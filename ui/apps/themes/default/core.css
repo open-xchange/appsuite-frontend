@@ -40,7 +40,7 @@
     color: black;
 }
 
-.launchbar {
+#io-ox-windowbar {
     position: absolute;
     top: 10px;
     width: 100px;
@@ -49,16 +49,46 @@
     overflow: hidden;
 }
 
-.launchbar-icon {
-    margin-bottom: 0.25em;
-    width: 48px;
-    height: 48px;
+#io-ox-windowbar .window, #io-ox-launchbar .launcher {
+    text-align: center;
+    margin: 0 0 1em 0;
+    cursor: pointer;
 }
 
-.launchbar-label {
+#io-ox-windowbar .icon {
+    width: 48px;
+    height: 48px;
+    background-color: white;
+    opacity: 0.40;
+    margin: 0 auto 0.25em auto;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+
+#io-ox-windowbar .icon:hover {
+    opacity: 0.60;
+}
+
+#io-ox-windowbar .label, #io-ox-launchbar .label {
     color: white;
     font-weight: bold;
     text-shadow: 0px 2px 5px black;
+}
+
+#io-ox-launchbar {
+    position: absolute;
+    top: 10px;
+    width: 100px;
+    right: 10px;
+    bottom: 10px;
+    overflow: hidden;
+}
+
+#io-ox-launchbar .icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.25em;
 }
 
 #io-ox-windowmanager {
@@ -68,6 +98,15 @@
     bottom: 0px;
     left: 100px;
     padding: 5px 20px 5px 20px;
+}
+
+#io-ox-windowmanager.fullscreen {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    padding: 0px;
 }
 
 .window-container {
@@ -83,6 +122,12 @@
     -moz-box-shadow: 0px 10px 25px 5px black;
     -webkit-box-shadow: 0px 10px 25px 5px black;
     box-shadow: 0px 10px 25px 5px black;
+}
+
+#io-ox-windowmanager.fullscreen .window-container {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 .window-container-center {
@@ -146,6 +191,10 @@
     color: white;
     line-height: 18px;
     text-align: center;
+}
+
+.window-title .subtitle {
+    color: #fc0;
 }
 
 .window-toolbar {
@@ -296,7 +345,7 @@
         #3F9EFC 100%
     );
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#54A7FF', endColorstr='#0260A8');
-    border-bottom-color: #82c1ff;
+    border-bottom-color: black;
 }
 
 .vgrid-cell.selected * {
