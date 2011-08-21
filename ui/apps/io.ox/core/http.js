@@ -18,7 +18,7 @@
  * @name ox.api.http
  */
 
-define("io.ox/core/http", function () {
+define("io.ox/core/http", ["io.ox/core/base"], function () {
         
     // default columns for each module
     var idMapping = {
@@ -459,6 +459,7 @@ define("io.ox/core/http", function () {
     // internal queue
     var paused = false;
     var queue = [];
+    var slow = ox.util.getHash("slow");
     
     var ajax = function (options, type) {
         // process options
@@ -484,14 +485,23 @@ define("io.ox/core/http", function () {
         if (typeof o.timeout === "number") {
             opt.timeout = o.timeout;
         }
-        // go!
-        $.ajax(opt)
-        .done(function (data) {
-            processResponse(def, data, o);
-        })
-        .fail(function (xhr, textStatus, errorThrown) {
-            def.reject({ error: xhr.status + " " + errorThrown }, xhr);
-        });
+        // continuation
+        function cont () {
+            // go!
+            $.ajax(opt)
+            .done(function (data) {
+                processResponse(def, data, o);
+            })
+            .fail(function (xhr, textStatus, errorThrown) {
+                def.reject({ error: xhr.status + " " + errorThrown }, xhr);
+            });
+        }
+        if (slow) {
+            // simulate slow connection
+            setTimeout(cont, 200 + (Math.random() * 800 >> 0));
+        } else {
+            cont();
+        }
         return def;
     };
     

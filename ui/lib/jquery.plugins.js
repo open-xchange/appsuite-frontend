@@ -17,7 +17,7 @@ $.button = function (options) {
     
     // options
     var opt = $.extend({
-        title: "",
+        label: "",
         click: $.noop,
         enabled: true,
         data: {},
@@ -28,7 +28,7 @@ $.button = function (options) {
     }, options || {});
     
     // class name
-    var className = "ox-button" + (!opt.enabled ? " ox-button-disabled" : "");
+    var className = "io-ox-button" + (!opt.enabled ? " disabled" : "");
     
     if (opt.theme === "dark") {
         // dark theme
@@ -45,11 +45,11 @@ $.button = function (options) {
     
     // create text node
     var text;
-    if (opt.title.nodeType === 3) {
+    if (opt.label.nodeType === 3) {
         // is text node!
-        text = opt.title;
+        text = opt.label;
     } else {
-        text = document.createTextNode(opt.title);
+        text = document.createTextNode(opt.label);
     }
     
     // create button
@@ -70,6 +70,27 @@ $.button = function (options) {
     }
     
     return button;
+};
+
+$.fn.busy = function (empty) {
+    return this.each(function () {
+        var self = $(this);
+        clearTimeout(self.data("busy-timeout"));
+        self.data("busy-timeout", setTimeout(function () {
+            self.addClass("io-ox-busy");
+            if (empty) {
+                self.empty();
+            }
+        }, 200));
+    });
+};
+
+$.fn.idle = function () {
+    return this.each(function () {
+        var self = $(this);
+        clearTimeout(self.data("busy-timeout"));
+        self.removeClass("io-ox-busy");
+    });
 };
 
 $.fn.intoViewport = function (node) {

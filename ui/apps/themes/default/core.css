@@ -21,6 +21,7 @@
     left: 0;
     z-index: 1;
     background-color: #222;
+    /*
     background-image: -webkit-gradient(
         linear,
         left top,
@@ -33,23 +34,76 @@
         #222 0%,
         #555 100%
     );
-    background-image: url(wallpaper.jpg);
+    */
+    background: url(wallpaper.jpg) no-repeat;
+    background-size: cover;
     color: black;
 }
 
-.launchbar-label {
+/* launch bars */
+
+.io-ox-launchbar {
+    position: absolute;
+    top: 10px;
+    width: 100px;
+    bottom: 10px;
+    overflow: hidden;
+}
+
+#io-ox-leftbar { left: 10px; }
+#io-ox-rightbar { right: 10px; }
+
+.io-ox-launchbar .launcher {
+    text-align: center;
+    margin: 0 0 1em 0;
+    cursor: pointer;
+}
+
+.io-ox-launchbar img.icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.25em;
+}
+
+.io-ox-launchbar div.icon {
+    width: 48px;
+    height: 48px;
+    background-color: white;
+    opacity: 0.40;
+    margin: 0 auto 0.25em auto;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.io-ox-launchbar div.icon:hover {
+    opacity: 0.60;
+}
+
+.io-ox-launchbar .label {
     color: white;
     font-weight: bold;
-    text-shadow: 0px 2px 5px black;
+    text-shadow: 0px 2px 8px black;
 }
+
+/* window manager */
 
 #io-ox-windowmanager {
     position: absolute;
     top: 0px;
-    right: 120px;
+    right: 100px;
     bottom: 0px;
-    left: 120px;
-    padding: 10px 20px 10px 20px;
+    left: 100px;
+    padding: 5px 20px 5px 20px;
+}
+
+#io-ox-windowmanager.fullscreen {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    padding: 0px;
 }
 
 .window-container {
@@ -62,9 +116,15 @@
     left: 0px;
     margin: 0 5px 0px 0px;
     /* TODO: fix to proper position */
-    -moz-box-shadow: 0px 10px 25px 0px black;
-    -webkit-box-shadow: 0px 10px 25px 0px black;
-    box-shadow: 0px 10px 25px 0px black;
+    -moz-box-shadow: 0px 10px 25px 5px black;
+    -webkit-box-shadow: 0px 10px 25px 5px black;
+    box-shadow: 0px 10px 25px 5px black;
+}
+
+#io-ox-windowmanager.fullscreen .window-container {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 .window-container-center {
@@ -79,9 +139,9 @@
 
 .window-container-center.shadow {
  /* TODO: see above
-    -moz-box-shadow: 5px 15px 25px -5px black;
-    -webkit-box-shadow: 5px 15px 25px -5px black;
-    box-shadow: 5px 15px 25px -5px black;
+    -moz-box-shadow: 0px 10px 25px 5px black;
+    -webkit-box-shadow: 0px 10px 25px 5px black;
+    box-shadow: 0px 10px 25px 5px black;
     */
 }
 
@@ -97,7 +157,7 @@
     border: 1px solid #333;
     border-width: 1px;
     border-bottom-color: #333;
-    background-color: rgb(50,50,50);
+    background-color: #555;
     background-image: -webkit-gradient(
         linear,
         left bottom,
@@ -130,13 +190,19 @@
     text-align: center;
 }
 
+.window-title .subtitle {
+    color: #ddd;
+    font-weight: bold;
+    text-shadow: 0px 0px 1px #333;
+}
+
 .window-toolbar {
     position: absolute;
     top: 20px;
     right: 0px;
     height: 0px;
     left: 0px;
-    padding: 5px 7px 5px 10px;
+    padding: 2px 7px 5px 8px;
 }
 
 .window-controls {
@@ -217,7 +283,7 @@
     user-select: text;
 }
 
-/* ----------- */
+/* vGrid */
 
 .vgrid-cell {
     position: absolute;
@@ -244,41 +310,41 @@
     text-align: center;
     color: black;
     line-height: 1em;
-    padding: 6px 10px 5px 10px;
+    padding: 5px 10px 4px 10px;
     background-color: #eee;
-    border-bottom: 1px solid #aaa;
+    border-bottom: 1px solid #888;
     background-image: -webkit-gradient(
         linear,
         left bottom,
         left top,
-        color-stop(0.00, #ddd),
-        color-stop(0.50, #fff)
+        color-stop(0.00, #ccc),
+        color-stop(0.80, #fff)
     );
     background-image: -moz-linear-gradient(
         center bottom,
-        #ddd 0%,
-        #fff 50%
+        #ccc 0%,
+        #fff 80%
     );
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ccc');
     cursor: pointer;
 }
 
 .vgrid-cell.selected {
-    background-color: #08c;
+    background-color: #08c !important;
     background-image: -webkit-gradient(
         linear,
         left bottom,
         left top,
         color-stop(0, #026ABA),
         color-stop(1, #3F9EFC)
-    );
+    ) !important;
     background-image: -moz-linear-gradient(
         center bottom,
         #026ABA 0%,
         #3F9EFC 100%
-    );
+    ) !important;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#54A7FF', endColorstr='#0260A8');
-    border-bottom-color: #82c1ff;
+    border-bottom-color: black;
 }
 
 .vgrid-cell.selected * {
@@ -303,10 +369,15 @@
     left: 200px;
 }
 
-.atb { 
+.atb, .abs {
     position: absolute;
     top: 0px;
     bottom: 0px;
+}
+
+.abs {
+    left: 0px;
+    right: 0px;
 }
 
 /* ---- */
@@ -314,7 +385,7 @@
 .bright-text {
     color: #888;
 }
-.email-address, .blue {
+.email-address, .blue, .person {
     color: #08C;
 }
 
@@ -338,3 +409,37 @@ a.nolink {
 .border-left {
     border-left: 1px solid #ccc;
 }
+
+/* buttons */
+
+.io-ox-button {
+    font-size: 8pt;
+    line-height: 1.5em;
+    border-radius: 5px 5px 5px 5px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    color: black;
+    cursor: pointer;
+    padding: 5px 1em 5px 1em;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: middle;
+    outline: none;
+}
+
+.window-toolbar .io-ox-button {
+    background-color: #444;
+    border: 1px solid #222;
+    color: white;
+}
+
+.window-toolbar .io-ox-button {
+    background-image: -moz-linear-gradient(center top, #555, #333);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#555), to(#333));
+}
+
+.window-toolbar .io-ox-button:hover {
+    background-image: -moz-linear-gradient(center top, #666, #444);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#666), to(#444));
+}
+

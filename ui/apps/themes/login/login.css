@@ -242,8 +242,8 @@ a:hover {
     color: #aaa;
 }
 
-#io-ox-login-feedback.busy, #background_loader.busy {
-    background-image: url(spinner.gif);
+.io-ox-busy {
+    background-image: url(busy.gif);
     background-repeat: no-repeat;
     background-position: center center;
 }

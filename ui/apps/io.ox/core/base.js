@@ -343,23 +343,18 @@ define("io.ox/core/base", function () {
             },
             
             /**
-             * CSSStyleDeclaration selector. Returns the class object.
-             * @param className the ClassName you will select
-             * @return {Object} CSSStyleDeclaration
+             * "Lastest function only
+             * Works with non-anonymous functions only
              */
-            modifyCSSClass: function(className) {
-                var stylesheet = document.styleSheets[0];
-                for (var i = 0; i < document.styleSheets.length; i++) {
-                    var stylesheet = document.styleSheets[i];
-                    var rules = stylesheet.cssRules || stylesheet.rules;
-                    for (var ia = 0; ia < rules.length; ia++) {
-                        var cssClass = rules[ia];
-                        if ((cssClass.selectorText || "").match(className)) {
-                            return cssClass;
-                        }
-                    };
+            lfo: function (fn) {
+                // call counter
+                var count = (fn.count = (fn.count || 0) + 1);
+                // wrap
+                return function () {
+                    if (count === fn.count) {
+                        fn.apply(fn, arguments);
+                    }
                 };
-                return {};
             },
             
             /**
@@ -532,26 +527,301 @@ define("io.ox/core/base", function () {
     /**
      * Core UI
      */
-    ox.ui.getWindow = (function () {
+    
+    // current window
+    var currentWindow = null;
+    
+    // ref to core screen
+    var core = $("#io-ox-core"),
+        // left bar
+        leftBar = $("<div/>", { id: "io-ox-leftbar" }).addClass("io-ox-launchbar"),
+        // right bar
+        rightBar = $("<div/>", { id: "io-ox-rightbar" }).addClass("io-ox-launchbar"),
+        // add launcher
+        addLauncher = function (side, label, icon, fn) {
+            // construct
+            var node = $("<div/>").addClass("launcher")
+                .append(
+                    $("<div/>")
+                        .addClass("label")
+                        .text(label)
+                )
+                .bind("click", fn);
+            // has icon?
+            if (icon) {
+                // add icon
+                node.prepend(
+                    $("<img/>", { src: icon }).addClass("icon")
+                );
+            } else {
+                // add placeholder
+                node.prepend(
+                    $("<div/>").addClass("icon")
+                );
+            }
+            // add
+            var c = currentWindow, target;
+            if (side === "left" && c && c.app && (target = c.app.getLaunchBarIcon())) {
+                // animate space
+                node.hide().insertAfter(target).fadeIn(1000);
+            } else {
+                // just add
+                (side === "left" ? leftBar : rightBar).append(node);
+            }
+            return node;
+        };
+        
+    // add bars and show
+    core.append(leftBar).append(rightBar).show();
+    
+    /**
+     * Create app
+     */
+    ox.ui.createApp = (function () {
+        
+        function App(options) {
+            
+            var opt = $.extend({
+                title: "",
+                icon: null
+            }, options || {});
+            
+            // dummy function
+            var dummyFn = function () {
+                    return $.Deferred().resolve();
+                },
+                // launcher function
+                launchFn = dummyFn,
+                // launchbar icon
+                launchbarIcon = null,
+                // quit function
+                quitFn = dummyFn,
+                // app main window
+                win = null,
+                // running
+                running = false,
+                // self
+                self = this;
+            
+            this.getInstance = function () {
+                return self; // not this!
+            };
+            
+            this.setLaunchBarIcon = function (node) {
+                launchbarIcon = node;
+                return this;
+            };
+            
+            this.getLaunchBarIcon = function () {
+                return launchbarIcon;
+            };
+            
+            this.setLauncher = function (fn) {
+                launchFn = fn;
+                return this;
+            };
+            
+            this.setQuit = function (fn) {
+                quitFn = fn;
+                return this;
+            };
+            
+            this.setWindow = function (w) {
+                win = w;
+                win.app = this;
+                return this;
+            };
+            
+            this.launch = function () {
+                if (!running) {
+                    // mark as running
+                    running = true;
+                    // needs launch bar icon?
+                    if (!launchbarIcon) {
+                        launchbarIcon = addLauncher(
+                            "left", opt.title, opt.icon, self.launch
+                        );
+                    }
+                    // go!
+                    return (launchFn() || $.Deferred().resolve());
+                    
+                } else if (win) {
+                    // toggle app window
+                    win.toggle();
+                    return $.Deferred().resolve();
+                }
+            };
+            
+            this.quit = function () {
+                // call quit function
+                var def = quitFn() || $.Deferred().resolve();
+                def.done(function () {
+                    // mark as not running
+                    running = false;
+                    // destroy launchbar icon
+                    if (launchbarIcon) {
+                        launchbarIcon.fadeOut(500, function () {
+                            launchbarIcon.remove();
+                            launchbarIcon = null;
+                        });
+                    }
+                    // destroy window
+                    if (win) {
+                        win.destroy();
+                    }
+                    // don't leak
+                    self = win = launchFn = quitFn = null;
+                });
+            };
+        }
+        
+        return function (options) {
+            return new App(options);
+        };
+        
+    }());
+    
+    /**
+     * Create window
+     */
+    ox.ui.createWindow = (function () {
 
-        var guid = 0;
-
+        // window guid
+        var guid = 0,
+        
+            // fullscreen mode
+            fullscreen = false,
+            
+            // toggle fullscreen mode
+            toggleFullscreen = function () {
+                if (!fullscreen) {
+                    // grow
+                    $("#io-ox-leftbar, #io-ox-rightbar").hide();
+                    $("#io-ox-windowmanager").addClass("fullscreen");
+                } else {
+                    // shrink
+                    $("#io-ox-windowmanager").removeClass("fullscreen");
+                    $("#io-ox-leftbar, #io-ox-rightbar").show();
+                }
+                fullscreen = !fullscreen;
+            },
+            
+            // window class
+            Window = function (id) {
+                
+                this.id = id;
+                this.nodes = {};
+                this.search = { query: "" };
+                this.app = null;
+                
+                var quitOnClose = false;
+                
+                this.show = function () {
+                    if (currentWindow !== this) {
+                        // show
+                        if (currentWindow) {
+                            currentWindow.hide();
+                        }
+                        this.nodes.outer.appendTo("#io-ox-windowmanager");
+                        currentWindow = this;
+                    }
+                };
+                
+                this.hide = function () {
+                    this.nodes.outer.detach();
+                    currentWindow = null;
+                };
+                
+                this.toggle = function () {
+                    if (currentWindow === this) {
+                        this.hide();
+                    } else {
+                        this.show();
+                    }
+                };
+                
+                this.close = function () {
+                    if (quitOnClose && this.app !== null) {
+                        this.app.quit();
+                    } else {
+                        this.hide();
+                    }
+                };
+                
+                this.destroy = function () {
+                    if (currentWindow === this) {
+                        currentWindow = null;
+                    }
+                    this.nodes.outer.remove();
+                    this.app.win = null;
+                    this.app = null;
+                    this.nodes = null;
+                };
+                
+                this.setQuitOnClose = function (flag) {
+                    quitOnClose = !!flag;
+                };
+                
+                var self = this, title = "", subtitle = "";
+                
+                function applyTitle () {
+                    var spans = self.nodes.title.find("span");
+                    spans.eq(0).text(
+                        title + (subtitle === "" ? "" : " - ")
+                    );
+                    spans.eq(1).text(subtitle);
+                }
+                
+                this.setTitle = function (str) {
+                    title = String(str);
+                    applyTitle();
+                };
+                
+                this.setSubTitle = function (str) {
+                    subtitle = String(str);
+                    applyTitle();
+                };
+                
+                this.addButton = function (options) {
+                    
+                    var opt = $.extend({
+                        label: "Action",
+                        action: $.noop
+                    }, options || {});
+                    
+                    return $.button({
+                        label: opt.label,
+                        click: opt.action
+                    })
+                    .appendTo(this.nodes.toolbar);
+                };
+            };
+        
         return function (options) {
             
             var opt = $.extend({
                 id: "window-" + guid,
                 width: 0,
-                title: "Window #" + guid
+                title: "Window #" + guid,
+                subtitle: "",
+                search: false,
+                toolbar: false,
+                settings: false
             }, options);
 
             // get width
             var meta = (String(opt.width).match(/^(\d+)(px|%)$/) || ["", "100", "%"]).splice(1),
                 width = meta[0],
                 unit = meta[1],
-                win, head, toolbar, body, settingsControl, settings, content;
+                // create new window instance
+                win = new Window(opt.id),
+                // close window
+                close = function () {
+                    win.close();
+                };
 
             // window container
-            win = $("<div/>")
+            win.nodes.outer = $("<div/>")
                 .attr({
                     id: opt.id,
                     "data-window-nr": guid
@@ -559,7 +829,6 @@ define("io.ox/core/base", function () {
                 .addClass("window-container")
                 .append(
                     $("<div/>")
-                        //.hide()
                         .addClass("window-container-center")
                         .data({
                             width: width + unit
@@ -569,17 +838,19 @@ define("io.ox/core/base", function () {
                         })
                         .append(
                             // window HEAD
-                            head = $("<div/>")
+                            win.nodes.head = $("<div/>")
                                 .addClass("window-head")
                                 .append(
                                     // title
-                                    $("<div/>")
+                                    win.nodes.title = $("<div/>")
                                         .addClass("window-title")
-                                        .text(opt.title)
+                                        .append($("<span/>"))
+                                        .append($("<span/>").addClass("subtitle"))
                                 )
                                 .append(
                                     // toolbar
-                                    toolbar = $("<div/>").addClass("window-toolbar")
+                                    win.nodes.toolbar = $("<div/>")
+                                        .addClass("window-toolbar")
                                 )
                                 .append(
                                     // controls
@@ -587,13 +858,13 @@ define("io.ox/core/base", function () {
                                         .addClass("window-controls")
                                         .append(
                                             // settings
-                                            settingsControl = $("<div/>")
+                                            win.nodes.settingsButton = $("<div/>")
                                                 .addClass("window-control")
                                                 .text("\u270E")
                                         )
                                         .append(
                                             // close
-                                            $("<div/>")
+                                            win.nodes.closeButton = $("<div/>")
                                                 .addClass("window-control")
                                                 .text("\u2715")
                                         )
@@ -601,37 +872,92 @@ define("io.ox/core/base", function () {
                         )
                         .append(
                             // window BODY
-                            body = $("<div/>")
+                            win.nodes.body = $("<div/>")
                                 .addClass("window-body")
                                 .append(
                                     // quick settings
-                                    settings = $("<div/>")
+                                    win.nodes.settings = $("<div/>")
                                         .hide()
                                         .addClass("window-settings")
                                         .html("<h2>Each window can have a quick settings area</h2>")
                                 )
                                 .append(
                                     // content
-                                    content = $("<div/>").addClass("window-content")
+                                    win.nodes.content = $("<div/>")
+                                        .addClass("window-content")
                                 )
                         )
                 );
             
+            // add dispatcher
+            ox.api.event.Dispatcher.extend(win);
+            
+            // search?
+            if (opt.search) {
+                // search
+                var lastSearch = "";
+                $("<input/>", { type: "search", placeholder: "Search...", size: "40" })
+                    .css({ "float": "right", marginTop: "9px" })
+                    .bind("keypress", function (e) {
+                        e.stopPropagation();
+                    })
+                    .bind("search", function (e) {
+                        e.stopPropagation();
+                        if ($(this).val() === "") {
+                            $(this).blur();
+                        }
+                    })
+                    .bind("change", function (e) {
+                        e.stopPropagation();
+                        win.search.query = $(this).val();
+                        // trigger search?
+                        if (win.search.query !== "") {
+                            if (win.search.query !== lastSearch) {
+                                win.trigger("search", lastSearch = win.search.query);
+                            }
+                        } else if (lastSearch !== "") {
+                            win.trigger("cancel-search", lastSearch = "");
+                        }
+                    })
+                    .prependTo(win.nodes.toolbar);
+            }
+            
+            // fix height/position
+            if (opt.toolbar || opt.search) {
+                var th = 28;
+                win.nodes.head.css("height", th + 30 + "px");
+                win.nodes.toolbar.css("height", th + 10 + "px");
+                win.nodes.body.css("top", th + 32 + "px");
+            }
+            
+            // add fullscreen handler
+            win.nodes.title.bind("dblclick", toggleFullscreen);
+            
+            // add close handler
+            win.nodes.closeButton.bind("click", close);
+            
+            // set subtitle & title
+            win.setSubTitle(opt.subtitle);
+            win.setTitle(opt.title);
+            
             // inc
             guid++;
             
-            // quick settings
-            $.quickSettings(content, settings, settingsControl);
-            
-            // add to DOM
-            win.appendTo("#io-ox-windowmanager").show();
+            // quick settings?
+            if (opt.settings) {
+                $.quickSettings(win.nodes.content, win.nodes.settings, win.nodes.settingsButton);
+            } else {
+                win.nodes.settingsButton.hide();
+            }
             
             // return window object
-            return content;
+            return win;
         };
         
     }());
     
-    return {};
+    return {
+        addLauncher: addLauncher
+    };
     
 });

@@ -1,5 +1,5 @@
 
-define("io.ox/contacts/api", ["io.ox/core/cache"], function (cache) {
+define("io.ox/mail/api", ["io.ox/core/cache"], function (cache) {
     
     var cache = {
         all: new cache.FlatCache("", true),
@@ -7,7 +7,7 @@ define("io.ox/contacts/api", ["io.ox/core/cache"], function (cache) {
         full: new cache.FlatCache("", true)
     };
 
-    return ox.api.contacts = {
+    return ox.api.mail = {
 
         get: function (options) {
 
@@ -22,11 +22,13 @@ define("io.ox/contacts/api", ["io.ox/core/cache"], function (cache) {
             if (!cache.full.contains(key)) {
                 // cache miss
                 return ox.api.http.GET({
-                    module: "contacts",
+                    module: "mail",
                     params: {
                         action: "get",
                         folder: o.folder,
-                        id: o.id
+                        id: o.id,
+                        view: "text",
+                        unseen: true
                     }
                 })
                 .done(function (data) {
@@ -41,17 +43,17 @@ define("io.ox/contacts/api", ["io.ox/core/cache"], function (cache) {
         getAll: function (options) {
             
             var o = $.extend({
-                folder: "6"
+                folder: "default0/INBOX"
             }, options);
             
             return ox.api.http.GET({
-                module: "contacts",
+                module: "mail",
                 params: {
                     action: "all",
                     folder: o.folder,
-                    columns: "20,1,500,502",
-                    sort: "607", // magic field
-                    order: "asc"
+                    columns: "601,600",
+                    sort: "610", // received_date
+                    order: "desc"
                 }
             });
         },
@@ -62,10 +64,10 @@ define("io.ox/contacts/api", ["io.ox/core/cache"], function (cache) {
             if (!cache.list.contains(ids)) {
                 // cache miss
                 return ox.api.http.fixList(ids, ox.api.http.PUT({
-                    module: "contacts",
+                    module: "mail",
                     params: {
                         action: "list",
-                        columns: "20,1,500,501,502,505,520,555,556,557,569,602"
+                        columns: "601,600,603,607,610,611"
                     },
                     data: ox.api.http.simplify(ids)
                 }))
@@ -81,21 +83,18 @@ define("io.ox/contacts/api", ["io.ox/core/cache"], function (cache) {
         search: function (query) {
             // search via pattern
             return ox.api.http.PUT({
-                module: "contacts",
+                module: "mail",
                 params: {
                     action: "search",
-                    columns: "20,1,500,502,602",
-                    sort: "607",
-                    order: "asc"
+                    folder: "default0/INBOX",
+                    columns: "601,600",
+                    sort: "610",
+                    order: "desc"
                 },
-                data: {
-                    first_name: query,
-                    last_name: query,
-                    email1: query,
-                    email2: query,
-                    email3: query,
-                    orSearch: true
-                }
+                data: [
+                    { col: 603, pattern: query }, // from
+                    { col: 607, pattern: query } // subject
+                ]
             });
         },
         
