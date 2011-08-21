@@ -25,9 +25,12 @@ define("io.ox/core/extensions", function () {
         this.id = options.id;
         this.description = options.description;
         var extensions = [];
+        ox.api.event.Dispatcher.extend(this);
         
         this.register = function (extension) {
-            this.extensions.push(extension);
+            extensions.push(extension);
+            extensions = extensions.sort(function (a,b) { return (a.index || 1000000000 ) - (b.index || 1000000000); });
+            this.trigger("register", this);
             return this;
         };
         
@@ -35,26 +38,23 @@ define("io.ox/core/extensions", function () {
             return extensions;
         };
         
+        this.each = function(cb) {
+            return $.each(extensions, cb);
+        };
+
         this.map = function(cb) {
             return $.map(extensions, cb);
         };
         
-        this.execute = function(name, context) {
-            var args = Array.prototype.slice.call(arguments, 2)
-            return this.map(function (extension) {
-                var toExecute = name ? extension[name] : extension;
-                if (!context) {
-                    context = extension;
-                }
-                return toExecute.call(context, extension);
-            });
+        this.dump = function () {
+            console.log(this, extensions);
         }
     }
     
     var Registry = function () {
         var extensionPoints = {};
         
-        this.point : function (id) {
+        this.point = function (id) {
             if (id instanceof ExtensionPoint) {
                 return id;
             }
@@ -63,10 +63,14 @@ define("io.ox/core/extensions", function () {
                 return point;
             }
             return extensionPoints[id] = new ExtensionPoint({id: id});
-        }
+        };
+        
+        this.dump = function () {
+            console.log(extensionPoints);
+        };
     };
     
     return ox.api.extensions = {
-        registry: new Registry();
+        registry: new Registry()
     };
 });
