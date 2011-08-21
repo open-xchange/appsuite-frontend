@@ -24,15 +24,12 @@
     
     // launcher
     app.setLauncher(function () {
-
         // get window
         win = ox.ui.createWindow({
             title: "Files",
             search: true
         });
-        
         app.setWindow(win);
-        
         
         var currentFolder = null;
 
@@ -42,12 +39,12 @@
                 width: "309px",
                 overflow: "auto"
             })
-            .appendTo(win);
+            .appendTo(win.nodes.content);
 
         var right = $("<div/>")
             .css({ left: "347px", overflow: "auto" })
             .addClass("rightside")
-            .appendTo(win);
+            .appendTo(win.nodes.content);
 
         // Grid
         var vg = window.vg = new ox.ui.tk.VGrid(left);
@@ -96,16 +93,16 @@
                 right.empty();
             }
         });
-        vg.loadIds = function (cont) {
+        vg.setAllRequest(function (cont) {
             currentFolder.getAll()
                 .done(cont);
-        };
+        });
 
         // get header data
-        vg.loadData = function (ids, cont) {
+        vg.setListRequest(function (ids, cont) {
             currentFolder.getList(ids)
                 .done(cont);
-        };
+        });
         // go!
         api.defaultFolder().done(function (folder) {
             currentFolder = folder;
@@ -128,7 +125,6 @@
                 right.empty();
             }
         });
-        
     });
     
     return {
