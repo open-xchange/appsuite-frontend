@@ -30,13 +30,6 @@ define("io.ox/files/main",
         })
         .appendTo(win);
 
-    var thumbs = $("<div/>").addClass("atb contact-grid-index border-left border-right")
-        .css({
-            left: "312px",
-            width: "34px"
-        })
-        .appendTo(win);
-
     var right = $("<div/>")
         .css({ left: "347px", overflow: "auto" })
         .addClass("rightside")
@@ -54,17 +47,17 @@ define("io.ox/files/main",
             return { name: name };
         },
         set: function (data, fields, index) {
-            fields.name.text(fields.title);
+            fields.name.text(data.title);
         }
     });
     // get all IDs
     vg.loadIds = function (cont) {
-        api.getAll()
+        currentFolder.getAll()
             .done(cont);
     };
     // get header data
     vg.loadData = function (ids, cont) {
-        api.getList(ids)
+        currentFolder.getList(ids)
             .done(cont);
     };
     // go!
@@ -79,13 +72,10 @@ define("io.ox/files/main",
     vg.selection.bind("change", function (selection) {
         if (selection.length === 1) {
             // get file
-            api.get({
-                folder: selection[0].folder_id,
-                id: selection[0].id
-            })
+            currentFolder.get(selection[0].id)
             .done(function (data) {
                 // draw file
-                right.empty().append($("<h1/>").text(data.title));
+                right.empty().append(base.draw(data));
             });
         } else {
             right.empty();

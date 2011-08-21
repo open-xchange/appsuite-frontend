@@ -29,6 +29,7 @@ define("io.ox/core/extensions", function () {
         
         this.register = function (extension) {
             extensions.push(extension);
+            extensions.sort(function (a,b) { (a.index || 1000000000 ) - (b.index || 1000000000)});
             this.trigger("register", this);
             return this;
         };
@@ -43,17 +44,6 @@ define("io.ox/core/extensions", function () {
 
         this.map = function(cb) {
             return $.map(extensions, cb);
-        };
-        
-        this.execute = function(name, context) {
-            var args = Array.prototype.slice.call(arguments, 2)
-            return this.map(function (extension) {
-                var toExecute = name ? extension[name] : extension;
-                if (!context) {
-                    context = extension;
-                }
-                return toExecute.call(context, extension);
-            });
         };
         
         this.dump = function () {

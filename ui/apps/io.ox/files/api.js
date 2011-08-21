@@ -25,7 +25,7 @@ define("io.ox/files/api", function () {
                module: "infostore",
                params: {
                    action: "all",
-                   folder: options.folder,
+                   folder: options.id,
                    columns: "20,1",
                    sort: "700",
                    order: "asc"
@@ -49,7 +49,7 @@ define("io.ox/files/api", function () {
                module: "infostore",
                params: {
                    action: "get",
-                   folder: options.folder,
+                   folder: options.id,
                    id: id
                }
            });
@@ -61,7 +61,7 @@ define("io.ox/files/api", function () {
        defaultFolder : function () {
            var deferred = new $.Deferred();
            ox.api.http.GET({
-               module: "config/folders/infostore"
+               module: "config/folder/infostore"
            }).done(function (defaultInfostoreFolderId) {
                deferred.resolve(new FilesFolder({id : defaultInfostoreFolderId}));
            });
