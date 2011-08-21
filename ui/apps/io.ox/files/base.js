@@ -57,10 +57,10 @@ define("io.ox/files/base", function () {
             
             var count = 0;
             registry.point("io.ox.files.details.actions").each(function (index, extension) {
-                var clicked = function () {
-                    extension.clicked(file);
+                var action = function () {
+                    extension.action(file);
                 }
-                line.append($("<a/>").text(extension.label).attr("href", "#").click(clicked));
+                line.append($("<a/>").text(extension.label).attr("href", "#").click(action));
                 count++;
                 if (count == 5) {
                     count = 0;
@@ -168,7 +168,7 @@ define("io.ox/files/base", function () {
     registry.point("io.ox.files.details.actions").register({
         index: 10,
         label: "Download",
-        clicked: function (file) {
+        action: function (file) {
             window.open(file.url+"&content_type=application/octet-stream&content_disposition=attachment", file.title);
         }
     });
@@ -176,7 +176,7 @@ define("io.ox/files/base", function () {
     registry.point("io.ox.files.details.actions").register({
         index: 20,
         label: "Open",
-        clicked: function (file) {
+        action: function (file) {
             window.open(file.url, file.title);
         }
     });
@@ -184,7 +184,7 @@ define("io.ox/files/base", function () {
     registry.point("io.ox.files.details.actions").register({
         index: 30,
         label: "Send by E-Mail",
-        clicked: function (file) {
+        action: function (file) {
             alert("Zzzzzush: "+file.title);
         }
     });
