@@ -19,6 +19,8 @@ define("io.ox/files/main",
     // Faithfully copied from contacts/main
     
     var win = ox.ui.getWindow({ title: "Files" });
+    
+    var currentFolder = null;
 
     // left side
     var left = $("<div/>").addClass("leftside border-right")
@@ -66,10 +68,13 @@ define("io.ox/files/main",
             .done(cont);
     };
     // go!
-    vg.paint(function () {
-        // select first item
-        vg.selection.selectFirst();
-    });
+    api.defaultFolder().done(function (folder) {
+        currentFolder = folder;
+        vg.paint(function () {
+            // select first item
+            vg.selection.selectFirst();
+        });
+    })
     
     vg.selection.bind("change", function (selection) {
         if (selection.length === 1) {
