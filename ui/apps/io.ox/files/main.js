@@ -47,9 +47,9 @@
             .appendTo(win.nodes.content);
 
         // Grid
-        var vg = window.vg = new ox.ui.tk.VGrid(left);
+        var grid = window.grid = new ox.ui.tk.VGrid(left);
         // add template
-        vg.addTemplate({
+        grid.addTemplate({
             build: function () {
                 var name;
                 this
@@ -62,63 +62,33 @@
             }
         });
        
-        // get all IDs
-        vg.loadIds = function (cont) {
-            currentFolder.getAll()
-                .done(cont);
-        };
-        // get header data
-        vg.loadData = function (ids, cont) {
-            currentFolder.getList(ids)
-                .done(cont);
-        };
-        // go!
-        api.defaultFolder().done(function (folder) {
-            currentFolder = folder;
-            vg.paint(function () {
-                // select first item
-                vg.selection.selectFirst();
-            });
-        });
-
-        vg.selection.bind("change", function (selection) {
-            if (selection.length === 1) {
-                // get file
-                currentFolder.get(selection[0].id)
-                .done(function (data) {
-                    // draw file
-                    right.empty().append(base.draw(data));
-                });
-            } else {
-                right.empty();
-            }
-        });
-        vg.setAllRequest(function (cont) {
+        grid.setAllRequest(function (cont) {
             currentFolder.getAll()
                 .done(cont);
         });
 
         // get header data
-        vg.setListRequest(function (ids, cont) {
-            currentFolder.getList(ids)
+        grid.setListRequest(function (ids, cont) {
+            api.getList(ids)
                 .done(cont);
         });
         // go!
         api.defaultFolder().done(function (folder) {
             currentFolder = folder;
-            vg.paint(function () {
+            grid.paint(function () {
                 // select first item
-                vg.selection.selectFirst();
+                grid.selection.selectFirst();
             });
             win.show();
         });
 
-        vg.selection.bind("change", function (selection) {
+        grid.selection.bind("change", function (selection) {
             if (selection.length === 1) {
                 // get file
-                currentFolder.get(selection[0].id)
+                api.get(selection[0].folder_id, selection[0].id)
                 .done(function (data) {
                     // draw file
+                    console.log(data);
                     right.empty().append(base.draw(data));
                 });
             } else {

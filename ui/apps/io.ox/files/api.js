@@ -32,29 +32,6 @@ define("io.ox/files/api", function () {
                }
            });
        };
-       
-       this.getList = function (ids) {
-           return ox.api.http.fixList(ids, ox.api.http.PUT({
-               module: "infostore",
-               params: {
-                   action: "list",
-                   columns: "20,1,700,701,702,703,704,705,706,707,709,711"
-               },
-               data: ox.api.http.simplify(ids)
-           }));
-       };
-       
-       this.get = function (id) {
-           return ox.api.http.GET({
-               module: "infostore",
-               params: {
-                   action: "get",
-                   folder: options.id,
-                   id: id
-               }
-           });
-       };
-       
    };
    
    return ox.api.files = {
@@ -66,9 +43,28 @@ define("io.ox/files/api", function () {
                deferred.resolve(new FilesFolder({id : defaultInfostoreFolderId}));
            });
            return deferred;
+       }, 
+       
+       getList: function (ids) {
+           return ox.api.http.fixList(ids, ox.api.http.PUT({
+               module: "infostore",
+               params: {
+                   action: "list",
+                   columns: "20,1,700,701,702,703,704,705,706,707,709,711"
+               },
+               data: ox.api.http.simplify(ids)
+               }));
+           },
+         
+       get: function (folderId, id) {
+           return ox.api.http.GET({
+               module: "infostore",
+               params: {
+                   action: "get",
+                   folder: id,
+                   id: id
+               }
+           });
        }
-   };
-   
-   
-    
+   };    
 });
