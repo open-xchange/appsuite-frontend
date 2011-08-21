@@ -29,7 +29,7 @@ define("io.ox/core/extensions", function () {
         
         this.register = function (extension) {
             extensions.push(extension);
-            extensions.sort(function (a,b) { (a.index || 1000000000 ) - (b.index || 1000000000)});
+            extensions = extensions.sort(function (a,b) { return (a.index || 1000000000 ) - (b.index || 1000000000); });
             this.trigger("register", this);
             return this;
         };

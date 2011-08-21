@@ -14,7 +14,7 @@
  */
 
 define("io.ox/files/main",
-    ["io.ox/files/base", "io.ox/files/api"], function (base, api) {
+    ["io.ox/files/base", "io.ox/files/api", "css!io.ox/files/style.css"], function (base, api) {
     
     // Faithfully copied from contacts/main
     

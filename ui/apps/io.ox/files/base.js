@@ -23,24 +23,23 @@ define("io.ox/files/base", function () {
         element.append($("<h1/>").text(file.title));
         // Basic Info
         (function () {
-            var table = $("<table/>").addClass("basicInfo").attr("width", "100%");
-            var tr = $("<tr/>");
-            
-            table.append(tr);
-            element.append(table);
+            var container = $("<div/>").addClass("basicInfo");
+            var line = $("<div/>");
+            container.append(line);
+            element.append(container);
             
             registry.point("io.ox.files.details.basicInfo").each(function (index, extension) {
                 var customFields = extension.fields || [];
                 var count = 0;
                 $.each(customFields, function (index, field) {
                     var content = null;
-                    tr.append($("<th/>").text(extension.displayName(field))).append(content = $("<td/>"));
+                    line.append($("<em/>").text(extension.displayName(field)+":")).append(content = $("<span/>"));
                     extension.draw(field, file, content);
                     count++;
-                    if (count == 3) {
+                    if (count == 5) {
                         count = 0;
-                        tr = $("<tr/>");
-                        table.append(tr);
+                        line = $("<div/>");
+                        container.append(line);
                     }
                 });
             });
@@ -49,23 +48,23 @@ define("io.ox/files/base", function () {
         // Buttons
         
         (function () {
-            var table = $("<table/>").addClass("buttons").attr("width", "100%");;
-            var tr = $("<tr/>");
+            var container = $("<div/>").addClass("buttons");
+            var line = $("<div/>");
             
-            table.append(tr);
-            element.append(table);
+            container.append(line);
+            element.append(container);
             
             var count = 0;
             registry.point("io.ox.files.details.actions").each(function (index, extension) {
                 var clicked = function () {
                     extension.clicked(file);
                 }
-                tr.append($("<td/>").append("<a/>").text(extension.displayName).attr("href", "#").click(clicked));
+                line.append($("<a/>").text(extension.displayName).attr("href", "#").click(clicked));
                 count++;
-                if (count == 3) {
+                if (count == 5) {
                     count = 0;
-                    tr = $("<tr/>");
-                    table.append(tr);
+                    line = $("<div/>");
+                    container.append(line);
                 }
             });
         }());
@@ -100,7 +99,7 @@ define("io.ox/files/base", function () {
         // Render Description
         
         if (file.description) {
-            element.append("<div/>").text(file.description);            
+            element.append($("<div/>").text(file.description));            
         }
         
         // Render Additional
@@ -117,24 +116,72 @@ define("io.ox/files/base", function () {
     
     // Basic Info Fields
     
+    var bytesToSize = function (bytes) {
+        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        if (bytes == 0) return 'n/a';
+        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
+    };
+    
     registry.point("io.ox.files.details.basicInfo").register({
-       fields: ["file_size", "version"],
-       displayNames : {
-           "file_size": "Size",
-           "version": "Version"
-       },
+        index: 10,
+        fields: ["file_size"],
+        displayName: function () {
+            return "Size";
+        },
+        draw: function (field, file, element) {
+            element.text(bytesToSize(file["file_size"]));
+        }
+    });
+    
+    registry.point("io.ox.files.details.basicInfo").register({
+       index: 20,
+       fields: ["version"],
        displayName : function(field) {
-           return this.displayNames[field];
+           return "Version";
        },
-       draw: function(field, file, element) {
-           element.text(file[field]);
+       draw: function (field, file, element) {
+           element.text(file["version"]);
        }
        
+    });
+    
+    var formatDate = function (timestamp) {
+        var d = new Date(timestamp);
+        return d.toLocaleString();
+    }
+    
+    registry.point("io.ox.files.details.basicInfo").register({
+        index: 30,
+        fields: ["last_modified"],
+        displayName: function () {
+            return "Last Modified";
+        },
+        draw: function (field, file, element) {
+            element.text(formatDate(file["last_modified"]));
+        }
     });
     
     // Basic Actions
     
     registry.point("io.ox.files.details.actions").register({
+        index: 10,
+        displayName: "Download",
+        clicked: function (file) {
+            alert("Download: "+file.title);
+        }
+    });
+
+    registry.point("io.ox.files.details.actions").register({
+        index: 20,
+        displayName: "Open",
+        clicked: function (file) {
+            alert("Open: "+file.title);
+        }
+    });
+
+    registry.point("io.ox.files.details.actions").register({
+        index: 30,
         displayName: "Send by E-Mail",
         clicked: function (file) {
             alert("Zzzzzush: "+file.title);
@@ -150,7 +197,7 @@ define("io.ox/files/base", function () {
            return /\.txt$/.test(fileDescription.name);
        },
        draw: function (fileDescription, div) {
-           var textDisplay = $("<pre />");
+           var textDisplay = $("<textarea/>").attr("rows", "30").attr("cols", "80").attr("readonly", "readonly");
            $.get(fileDescription.dataURL).done(function (text) {
                textDisplay.text(text);
                div.append(textDisplay);
@@ -170,7 +217,7 @@ define("io.ox/files/base", function () {
               return false;
           },
           draw: function (fileDescription, div) {
-              div.append($("<img/>").attr("src", fileDescription.dataURL));
+              div.append($("<img/>").attr("src", fileDescription.dataURL+"&width=600&height=400").attr("width", "600").attr("height", "400").css("border", "1px solid black"));
           }
        });
     

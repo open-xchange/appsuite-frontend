@@ -10,3 +10,4 @@
 DEPLOY_DIR = "/Library/WebServer/Documents/ox7"
 
 watch("\.js$") { system("ant -Dbuild=#{DEPLOY_DIR}") }
+watch("\.css$") { system("ant -Dbuild=#{DEPLOY_DIR}") }
