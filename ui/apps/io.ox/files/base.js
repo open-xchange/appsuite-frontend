@@ -19,6 +19,7 @@ define("io.ox/files/base", function () {
     var registry = ox.api.extensions.registry;
     
     var draw = function (file) {
+        file.url = ox.ajaxRoot+"/infostore?action=document&id="+file.id+"&folder="+file.folder_id+"&session="+ox.session; // TODO: Put this somewhere in the model
         var element = $("<div />").addClass("fileDetails");
         element.append($("<h1/>").text(file.title));
         // Basic Info
@@ -81,7 +82,7 @@ define("io.ox/files/base", function () {
                 name: file.filename,
                 type: file.file_mimetype,
                 size: file.file_size,
-                dataURL: ox.ajaxRoot+"/infostore?action=document&id="+file.id+"&folder="+file.folder_id+"&session="+ox.session
+                dataURL: file.url
             };
             var rendered = false;
             registry.point("io.ox.files.renderer").each(function (index, renderer) {
@@ -168,7 +169,7 @@ define("io.ox/files/base", function () {
         index: 10,
         displayName: "Download",
         clicked: function (file) {
-            alert("Download: "+file.title);
+            window.open(file.url+"&content_type=application/octet-stream&content_disposition=attachment", file.title);
         }
     });
 
@@ -176,7 +177,7 @@ define("io.ox/files/base", function () {
         index: 20,
         displayName: "Open",
         clicked: function (file) {
-            alert("Open: "+file.title);
+            window.open(file.url, file.title);
         }
     });
 
