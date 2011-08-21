@@ -34,6 +34,6 @@ define("io.ox/files/main", function () {
     });
     
     return {
-        app: app
+        getApp: app.getInstance
     };
 });

@@ -23,6 +23,12 @@ define("io.ox/mail/base", function () {
         HOUR = MINUTE * 60;
     
     return {
+        
+        createNewMailDialog: function () {
+            require(["io.ox/mail/new"], function (m) {
+                m.getApp().launch();
+            });
+        },
 
         serializeList: function (list, delimiter) {
             var i = 0, $i = list.length, tmp = [];

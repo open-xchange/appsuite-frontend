@@ -27,7 +27,8 @@ define("io.ox/calendar/main", function () {
         win = ox.ui.createWindow({
             title: "Calendar",
             subtitle: new Date() + "",
-            search: true
+            search: true,
+            settings: true
         });
         
         app.setWindow(win);
@@ -35,6 +36,6 @@ define("io.ox/calendar/main", function () {
     });
     
     return {
-        app: app
+        getApp: app.getInstance
     };
 });

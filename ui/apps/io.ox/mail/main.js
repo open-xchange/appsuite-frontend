@@ -34,9 +34,34 @@ define("io.ox/mail/main",
         win = ox.ui.createWindow({
             title: "E-Mail",
             subtitle: "Inbox",
+            toolbar: true,
             search: true
         });
         
+        // toolbar
+        win.addButton({
+            label: "New Mail",
+            action: base.createNewMailDialog
+        })
+        .css("marginRight", "20px");
+        
+        win.addButton({
+            label: "Delete"
+        })
+        .css("marginRight", "20px");
+        
+        win.addButton({
+            label: "Reply"
+        });
+        
+        win.addButton({
+            label: "Reply All"
+        });
+
+        win.addButton({
+            label: "Forward"
+        });
+
         app.setWindow(win);
         
         // left panel
@@ -145,6 +170,6 @@ define("io.ox/mail/main",
     });
     
     return {
-        app: app
+        getApp: app.getInstance
     };
 });

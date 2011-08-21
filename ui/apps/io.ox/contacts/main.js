@@ -182,6 +182,6 @@ define("io.ox/contacts/main",
     });
     
     return {
-        app: app
+        getApp: app.getInstance
     };
 });
