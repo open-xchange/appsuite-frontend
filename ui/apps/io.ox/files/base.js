@@ -34,7 +34,7 @@ define("io.ox/files/base", function () {
                 var count = 0;
                 $.each(customFields, function (index, field) {
                     var content = null;
-                    line.append($("<em/>").text(extension.displayName(field)+":")).append(content = $("<span/>"));
+                    line.append($("<em/>").text(extension.label(field)+":")).append(content = $("<span/>"));
                     extension.draw(field, file, content);
                     count++;
                     if (count == 5) {
@@ -60,7 +60,7 @@ define("io.ox/files/base", function () {
                 var clicked = function () {
                     extension.clicked(file);
                 }
-                line.append($("<a/>").text(extension.displayName).attr("href", "#").click(clicked));
+                line.append($("<a/>").text(extension.label).attr("href", "#").click(clicked));
                 count++;
                 if (count == 5) {
                     count = 0;
@@ -127,7 +127,7 @@ define("io.ox/files/base", function () {
     registry.point("io.ox.files.details.basicInfo").register({
         index: 10,
         fields: ["file_size"],
-        displayName: function () {
+        label: function () {
             return "Size";
         },
         draw: function (field, file, element) {
@@ -138,7 +138,7 @@ define("io.ox/files/base", function () {
     registry.point("io.ox.files.details.basicInfo").register({
        index: 20,
        fields: ["version"],
-       displayName : function(field) {
+       label : function(field) {
            return "Version";
        },
        draw: function (field, file, element) {
@@ -155,7 +155,7 @@ define("io.ox/files/base", function () {
     registry.point("io.ox.files.details.basicInfo").register({
         index: 30,
         fields: ["last_modified"],
-        displayName: function () {
+        label: function () {
             return "Last Modified";
         },
         draw: function (field, file, element) {
@@ -167,7 +167,7 @@ define("io.ox/files/base", function () {
     
     registry.point("io.ox.files.details.actions").register({
         index: 10,
-        displayName: "Download",
+        label: "Download",
         clicked: function (file) {
             window.open(file.url+"&content_type=application/octet-stream&content_disposition=attachment", file.title);
         }
@@ -175,7 +175,7 @@ define("io.ox/files/base", function () {
 
     registry.point("io.ox.files.details.actions").register({
         index: 20,
-        displayName: "Open",
+        label: "Open",
         clicked: function (file) {
             window.open(file.url, file.title);
         }
@@ -183,7 +183,7 @@ define("io.ox/files/base", function () {
 
     registry.point("io.ox.files.details.actions").register({
         index: 30,
-        displayName: "Send by E-Mail",
+        label: "Send by E-Mail",
         clicked: function (file) {
             alert("Zzzzzush: "+file.title);
         }
