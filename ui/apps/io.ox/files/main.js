@@ -85,10 +85,10 @@
         grid.selection.bind("change", function (selection) {
             if (selection.length === 1) {
                 // get file
+                right.busy(true);
                 api.get(selection[0].folder_id, selection[0].id)
                 .done(function (data) {
                     // draw file
-                    console.log(data);
                     right.empty().append(base.draw(data));
                 });
             } else {
