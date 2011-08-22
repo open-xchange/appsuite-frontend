@@ -24,10 +24,10 @@
     	<mkdir dir="${build}"/>
     	
     	<propertyfile file="./build.properties">
-    		<entry key="version.build" type="int" operation="+" value="1" pattern="0000"/>
+    		<entry key="version.build" type="int" operation="+" value="1" pattern="00000"/>
     	</propertyfile>
 
-    	<property name="version" value="${version.generation}.${version.major}.${version.minor}.${version.build}" />
+    	<property name="version" value="7.0.0.${version.build}" />
     	
     	<echo message= "Build ${version}"/>
     	
