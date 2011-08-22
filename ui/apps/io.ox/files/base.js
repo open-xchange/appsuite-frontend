@@ -243,8 +243,9 @@ define("io.ox/files/base", function () {
             return false;
           },
        draw: function (fileDescription, div) {
-            var audio = $("<audio/>").attr("controls", "controls").attr("src", fileDescription.dataURL);
+            var audio = $("<audio/>");
             if (audio[0].canPlayType("audio/"+fileDescription["io.ox.files.detectedEnding"])) {
+                audio.attr("controls", "controls").attr("src", fileDescription.dataURL);
                 div.append(audio);
             }
        }
