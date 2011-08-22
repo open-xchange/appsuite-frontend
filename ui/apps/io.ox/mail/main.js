@@ -164,6 +164,9 @@ define("io.ox/mail/main",
             }
         });
         
+        win.bind("show", function () { grid.selection.keyboard(true); });
+        win.bind("hide", function () { grid.selection.keyboard(false); });
+        
         // go!
         grid.paint();
         win.show();

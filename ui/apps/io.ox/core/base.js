@@ -724,12 +724,14 @@ define("io.ox/core/base", function () {
                         }
                         this.nodes.outer.appendTo("#io-ox-windowmanager");
                         currentWindow = this;
+                        this.trigger("show");
                     }
                 };
                 
                 this.hide = function () {
                     this.nodes.outer.detach();
                     currentWindow = null;
+                    this.trigger("hide");
                 };
                 
                 this.toggle = function () {

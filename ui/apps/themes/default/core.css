@@ -285,6 +285,10 @@
 
 /* vGrid */
 
+.vgrid, .vgrid:focus {
+    outline: none;
+}
+
 .vgrid-cell {
     position: absolute;
     right: 0;

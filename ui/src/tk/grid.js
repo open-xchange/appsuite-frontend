@@ -98,7 +98,7 @@ ox.ui.tk.VGrid = function (target) {
     }
 
     // target node
-    var node = $(target).empty().bind("selectstart", false),
+    var node = $(target).empty().addClass("vgrid").bind("selectstart", false),
         // inner container
         container = $("<div/>").appendTo(node),
         // item template
@@ -159,7 +159,7 @@ ox.ui.tk.VGrid = function (target) {
     ox.api.event.Dispatcher.extend(this);
     
     // selection
-    ox.ui.tk.Selection.extend(this);
+    ox.ui.tk.Selection.extend(this, node);
     
     scrollToLabel = function (e) {
         var obj = labels.list[e.data || e];
@@ -324,7 +324,7 @@ ox.ui.tk.VGrid = function (target) {
                 // store
                 all = list;
                 // initialize selection
-                self.selection.init(all, node);
+                self.selection.init(all);
                 // adjust container height
                 container.css({
                     height: (numLabels * labelHeight + all.length * itemHeight) + "px",
@@ -448,5 +448,9 @@ ox.ui.tk.VGrid = function (target) {
         if (obj !== undefined) {
             scrollToLabel(obj);
         }
+    };
+    
+    this.keyboard = function (flag) {
+        this.selection.keyboard(flag);
     };
 };
