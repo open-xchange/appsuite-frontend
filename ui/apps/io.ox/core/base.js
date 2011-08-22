@@ -900,7 +900,35 @@ define("io.ox/core/base", function () {
             // search?
             if (opt.search) {
                 // search
-                var lastSearch = "";
+                var lastQuery = "",
+                    triggerSearch = function (query) {
+                        win.trigger("search", query);
+                        // yeah, waiting for the one who reports this :)
+                        if (/^porn$/i.test(query)) {
+                            $("body").append(
+                                $("<div/>").addClass("abs").css({
+                                    backgroundColor: "black",
+                                    zIndex: 65000
+                                })
+                                .append(
+                                    $("<div/>").addClass("abs").css({
+                                        top: "25%", textAlign: "center", color: "#aaa", fontWeight: "bold", fontSize: "42px"
+                                    }).
+                                    html('<span style="color: rgb(230,110,110)">YOU</span>SEARCH')
+                                )
+                                .append(
+                                    $("<div/>").addClass("abs").css({
+                                        top: "50%", width: "670px", textAlign: "center", margin: "0 auto 0 auto", color: "#666"
+                                    })
+                                    .html(
+                                        '<div style="font-size: 26px">WARNING: This website contains explicit adult material.</div>' +
+                                        '<div style="font-size: 18px">You may only enter this Website if you are at least 18 years of age, or at least the age of majority in the jurisdiction where you reside or from which you access this Website. If you do not meet these requirements, then you do not have permission to use the Website.</div>'
+                                    )
+                                )
+                                .click(function () { $(this).remove(); })
+                            )
+                        }
+                    };
                 $("<input/>", { type: "search", placeholder: "Search...", size: "40" })
                     .css({ "float": "right", marginTop: "9px" })
                     .bind("keypress", function (e) {
@@ -917,11 +945,11 @@ define("io.ox/core/base", function () {
                         win.search.query = $(this).val();
                         // trigger search?
                         if (win.search.query !== "") {
-                            if (win.search.query !== lastSearch) {
-                                win.trigger("search", lastSearch = win.search.query);
+                            if (win.search.query !== lastQuery) {
+                                triggerSearch(lastQuery = win.search.query);
                             }
-                        } else if (lastSearch !== "") {
-                            win.trigger("cancel-search", lastSearch = "");
+                        } else if (lastQuery !== "") {
+                            win.trigger("cancel-search", lastQuery = "");
                         }
                     })
                     .prependTo(win.nodes.toolbar);
