@@ -402,7 +402,7 @@ define("io.ox/core/http", ["io.ox/core/base"], function () {
     
     var processResponse = function (deferred, response, o) {
         // server error?
-        if (response && response.error !== undefined && response.data === undefined) {
+        if (response && response.error !== undefined && !response.data) {
             // session expired?
             if (response.code === "SES-0203") {
                 // relogin dialog

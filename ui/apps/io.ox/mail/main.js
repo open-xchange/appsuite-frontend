@@ -142,6 +142,7 @@ define("io.ox/mail/main",
         
         // LFO callback
         function drawMail(data) {
+            console.log("data", data);
             var mail = base.draw(data);
             right.idle().empty().append(mail);
             right.parent().scrollTop(0);
@@ -158,7 +159,8 @@ define("io.ox/mail/main",
                     folder: selection[0].folder_id,
                     id: selection[0].id
                 })
-                .done(ox.util.lfo(drawMail));
+                .done(ox.util.lfo(drawMail))
+                .fail(function () { right.idle().empty(); });
             } else {
                 right.empty();
             }
