@@ -333,7 +333,7 @@ define("io.ox/calendar/main", ["io.ox/calendar/api"], function (api) {
                             formatDate(new Date(app.start_date), "time") + " &ndash; " +
                             formatDate(new Date(app.end_date), "time") +
                         "</div>" +
-                        (app.note ? "<div style='line-height: 1.25em'>" + app.note + "</div>" : "")
+                        (app.note ? "<div style='line-height: 1.25em; font-family: monospace; white-space: pre-wrap;'>" + app.note + "</div>" : "")
                     ).
                     appendTo(dom.detailContainer);
                 // participants?

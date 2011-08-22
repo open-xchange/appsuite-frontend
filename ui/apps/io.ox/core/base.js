@@ -913,7 +913,7 @@ define("io.ox/core/base", function () {
                                     $("<div/>").addClass("abs").css({
                                         top: "25%", textAlign: "center", color: "#aaa", fontWeight: "bold", fontSize: "50px", fontFamily: "'Comic Sans MS', Arial"
                                     }).
-                                    html('<span style="color: rgb(230,110,110)">YOU</span>SEARCH')
+                                    html('<span style="color: rgb(230,110,110)">YOU</span> SEARCHED FOR WHAT?')
                                 )
                                 .append(
                                     $("<div/>").addClass("abs").css({
