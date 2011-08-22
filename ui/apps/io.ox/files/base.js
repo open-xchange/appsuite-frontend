@@ -229,16 +229,24 @@ define("io.ox/files/base", function () {
           }
        });
     
-    // .mp3
+    // .mp3 .ogg .wav
     
     registry.point("io.ox.files.renderer").register({
-       canRender: function (fileDescription) {
-           return /\.mp3$/.test(fileDescription.name);
-       },
+        endings: ["mp3", "ogg", "wav"],
+        canRender: function (fileDescription) {
+            for(var i = 0, l = this.endings.length; i < l; i++) {
+                if (new RegExp("\."+this.endings[i]+"$").test(fileDescription.name)) {
+                    fileDescription["io.ox.files.detectedEnding"] = this.endings[i];
+                    return true;
+                }
+            }
+            return false;
+          },
        draw: function (fileDescription, div) {
-           var audio = $("<audio/>").attr("controls", "controls").attr("src", fileDescription.dataURL);
-           div.append(audio);
-           console.log(audio);
+            var audio = $("<audio/>").attr("controls", "controls").attr("src", fileDescription.dataURL);
+            if (audio[0].canPlayType("audio/"+fileDescription["io.ox.files.detectedEnding"])) {
+                div.append(audio);
+            }
        }
     });
     
