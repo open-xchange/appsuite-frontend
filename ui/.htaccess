@@ -31,7 +31,7 @@ FileETag None
 
 RewriteEngine On
 # Strip version from requests
-RewriteRule 7\.\d{1,2}\.\d\.\d{4}/(.+) $1 [L]
+RewriteRule 7\.\d{1,2}\.\d\.\d{4,5}/(.+) $1 [L]
 
 # Special handling for non-cached files
 <Files index.html>
