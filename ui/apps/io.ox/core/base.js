@@ -546,7 +546,10 @@ define("io.ox/core/base", function () {
                         .addClass("label")
                         .text(label)
                 )
-                .bind("click", fn);
+                .bind("click", fn || function () {
+                    // just for develepment purposes
+                    $(this).stop().effect("shake", { direction: "left", times: 4, distance: 10 }, 50);
+                });
             // has icon?
             if (icon) {
                 // add icon
