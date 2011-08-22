@@ -35,6 +35,7 @@ define("io.ox/files/api", function () {
    };
    
    return ox.api.files = {
+       
        defaultFolder : function () {
            var deferred = new $.Deferred();
            ox.api.http.GET({
@@ -65,6 +66,20 @@ define("io.ox/files/api", function () {
                    id: id
                }
            });
-       }
+       },
+       
+       search: function (query) {
+           // search via pattern
+           return ox.api.http.PUT({
+               module: "infostore",
+               params: {
+                   action: "search",
+                   columns: "20,1",
+                   sort: "700",
+                   order: "asc"
+               },
+               data: { pattern: query }
+           });
+       },
    };    
 });

@@ -61,16 +61,20 @@
                 fields.name.text(data.title);
             }
         });
-       
+        
+        // all request
         grid.setAllRequest(function (cont) {
-            currentFolder.getAll()
-                .done(cont);
+            currentFolder.getAll().done(cont);
         });
-
-        // get header data
+        
+        // search request
+        grid.setAllRequest("search", function (cont) {
+            api.search(win.search.query).done(cont);
+        });
+        
+        // list request
         grid.setListRequest(function (ids, cont) {
-            api.getList(ids)
-                .done(cont);
+            api.getList(ids).done(cont);
         });
         
         // go!
@@ -81,6 +85,17 @@
                 grid.selection.selectFirst();
             });
             win.show();
+        });
+        
+        /*
+         * Search handling
+         */
+        win.bind("search", function (q) {
+            grid.refresh("search");
+        });
+        
+        win.bind("cancel-search", function () {
+            grid.refresh("all");
         });
         
         // hi cisco!

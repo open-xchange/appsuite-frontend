@@ -100,7 +100,16 @@ define("io.ox/files/base", function () {
         // Render Description
         
         if (file.description) {
-            element.append($("<div/>").text(file.description));            
+            element.append(
+                $("<div/>")
+                    .css({
+                        // makes it readable
+                        fontFamily: "monospace, 'Courier new'",
+                        whiteSpace: "pre-wrap",
+                        paddingRight: "2em"
+                    })
+                    .text(file.description)
+            );
         }
         
         // Render Additional
@@ -109,10 +118,8 @@ define("io.ox/files/base", function () {
             extension(file, element);
         });
         
-        
-        
         return element;
-    }
+    };
     
     
     // Basic Info Fields
@@ -150,7 +157,7 @@ define("io.ox/files/base", function () {
     var formatDate = function (timestamp) {
         var d = new Date(timestamp);
         return d.toLocaleString();
-    }
+    };
     
     registry.point("io.ox.files.details.basicInfo").register({
         index: 30,

@@ -318,26 +318,37 @@ ox.ui.tk.VGrid = function (target) {
     };
 
     loadAll = function (cont) {
+        
+        function apply (list, cont) {
+            // store
+            all = list;
+            // initialize selection
+            self.selection.init(all);
+            // adjust container height
+            container.css({
+                height: (numLabels * labelHeight + all.length * itemHeight) + "px",
+                visibility: "hidden"
+            });
+            // process labels
+            processLabels();
+            paintLabels();
+            // trigger event
+            self.trigger("ids-loaded");
+            // paint items
+            var offset = getIndex(node.scrollTop()) - (numRows - numVisible);
+            paint(offset, cont);
+        }
+        
+        // clear first
+        apply([]);
+        
+        // be busy
+        container.parent().busy();
+        
         // get all IDs
         loadIds[currentMode](function (list) {
             if (isArray(list)) {
-                // store
-                all = list;
-                // initialize selection
-                self.selection.init(all);
-                // adjust container height
-                container.css({
-                    height: (numLabels * labelHeight + all.length * itemHeight) + "px",
-                    visibility: "hidden"
-                }).parent().busy();
-                // process labels
-                processLabels();
-                paintLabels();
-                // trigger event
-                self.trigger("ids-loaded");
-                // paint items
-                var offset = getIndex(node.scrollTop()) - (numRows - numVisible);
-                paint(offset, function () {
+                apply(list, function () {
                     // select first
                     self.selection.selectFirst();
                     container.css({ visibility: "" }).parent().idle();
