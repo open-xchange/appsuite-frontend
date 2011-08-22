@@ -229,6 +229,18 @@ define("io.ox/files/base", function () {
           }
        });
     
+    // .mp3
+    
+    registry.point("io.ox.files.renderer").register({
+       canRender: function (fileDescription) {
+           return /\.mp3$/.test(fileDescription.name);
+       },
+       draw: function (fileDescription, div) {
+           var audio = $("<audio/>").attr("controls", "controls").attr("src", fileDescription.dataURL);
+           div.append(audio);
+           console.log(audio);
+       }
+    });
     
     return {
         draw: draw
