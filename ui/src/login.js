@@ -63,8 +63,12 @@ $(document).ready(function () {
     loadCore = function () {
         // remove unnecessary stuff
         cleanUp();
-        // load core
-        require(["css!themes/default/core.css", "io.ox/core/main"]);
+        // get configuration
+        ox.api.config.load()
+            .done(function () {
+                // load core
+                require(["css!themes/default/core.css", "io.ox/core/main"]);
+            });
         // show loader
         $("#background_loader").fadeIn(DURATION, function () {
             // hide login dialog
@@ -306,7 +310,7 @@ $(document).ready(function () {
         };
         // get basic modules
         require(
-            ["io.ox/core/base", "io.ox/core/http", "io.ox/core/event", "io.ox/core/extensions"],
+            ["io.ox/core/config", "io.ox/core/base", "io.ox/core/http", "io.ox/core/event", "io.ox/core/extensions"],
             cont
         );
     });

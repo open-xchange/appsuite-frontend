@@ -38,7 +38,7 @@
 		<concat destfile="${build}/login.js" fixlastline="yes">
 			<filelist dir=".">
 				<file name="lib/jquery.min.js"/>
-                <file name="lib/jquery-ui-1.8.14.custom.min.js"/>
+                <file name="lib/jquery-ui.min.js"/>
 				<file name="lib/require.js"/>
                 <file name="lib/jquery.plugins.js"/>
 				<file name="src/tk/grid.js"/>

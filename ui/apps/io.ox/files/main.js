@@ -24,15 +24,14 @@
     
     // launcher
     app.setLauncher(function () {
-        // get window
-        win = ox.ui.createWindow({
-            title: "Files",
-            search: true
-        });
-        app.setWindow(win);
         
-        var currentFolder = null;
-
+        // get window
+        app.setWindow(win = ox.ui.createWindow({
+            title: "Files",
+            subtitle: "Private files",
+            search: true
+        }));
+        
         // left side
         var left = $("<div/>").addClass("leftside border-right")
             .css({
@@ -64,7 +63,7 @@
         
         // all request
         grid.setAllRequest(function (cont) {
-            currentFolder.getAll().done(cont);
+            api.getAll().done(cont);
         });
         
         // search request
@@ -75,16 +74,6 @@
         // list request
         grid.setListRequest(function (ids, cont) {
             api.getList(ids).done(cont);
-        });
-        
-        // go!
-        api.defaultFolder().done(function (folder) {
-            currentFolder = folder;
-            grid.paint(function () {
-                // select first item
-                grid.selection.selectFirst();
-            });
-            win.show();
         });
         
         /*
@@ -98,25 +87,19 @@
             grid.refresh("all");
         });
         
-        // hi cisco!
-        // kleine Änderung von mir - das erkläre ich vor ort
-        // es gibt die LFO function - Latest Function Only :)
-        // die braucht man, wenn man schnell durch Grid läufts und Detais geladen werden.
-        // Sonst ist es Lotto, welche Response als letztes malt.
-        
         // LFO callback
         function drawDetail(data) {
             var detail = base.draw(data);
             right.idle().empty().append(detail);
             right.parent().scrollTop(0);
         }
-
+        
         grid.selection.bind("change", function (selection) {
             if (selection.length === 1) {
                 // get file
                 right.busy(true);
-                api.get(selection[0].folder_id, selection[0].id) // evil! :)
-                .done(ox.util.lfo(drawDetail)); // LFO!
+                api.get(selection[0].folder_id, selection[0].id) 
+                .done(ox.util.lfo(drawDetail));
             } else {
                 right.empty();
             }
@@ -125,6 +108,10 @@
         // explicit keyboard support
         win.bind("show", function () { grid.selection.keyboard(true); });
         win.bind("hide", function () { grid.selection.keyboard(false); });
+        
+        // go!
+        grid.paint();
+        win.show();
     });
     
     return {

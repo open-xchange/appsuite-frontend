@@ -907,12 +907,11 @@ define("io.ox/core/base", function () {
                         if (/^porn$/i.test(query)) {
                             $("body").append(
                                 $("<div/>").addClass("abs").css({
-                                    backgroundColor: "black",
-                                    zIndex: 65000
+                                    backgroundColor: "black", zIndex: 65000
                                 })
                                 .append(
                                     $("<div/>").addClass("abs").css({
-                                        top: "25%", textAlign: "center", color: "#aaa", fontWeight: "bold", fontSize: "42px"
+                                        top: "25%", textAlign: "center", color: "#aaa", fontWeight: "bold", fontSize: "50px", fontFamily: "'Comic Sans MS', Arial"
                                     }).
                                     html('<span style="color: rgb(230,110,110)">YOU</span>SEARCH')
                                 )
