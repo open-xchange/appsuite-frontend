@@ -1,0 +1,42 @@
+
+<h1>Apache Configuration</h1>
+
+<p>If you read this in your browser you should have done this already:</p>
+<pre class="text">
+1.  Check out the UI from git
+
+2.  Figure out Apache's document root. Common places are:
+
+    - MacOS: <i>/Library/WebServer/Documents</i>
+    - Linux: <i>/var/www</i>
+    
+3.  Create a new folder <i>ox7</i> in Apache's document root
+
+4.  Build the UI and the documentation with ant:
+
+    <i>ant -Dbuild=/Library/WebServer/Documents/ox7 all doc</i>
+
+5.  If everything works fine, the documentation should be at
+    <a href="http://localhost/ox7/doc">http://localhost/ox7/doc</a>.
+
+</pre>
+
+<p>Now do the following to configure your Apache properly:</p>
+<pre class="text">
+1.  Tell your Apache to process .htaccess files and how to connect to backend:
+
+    <i>ProxyPass /ajax http://localhost/ajax retry=0 connectiontimeout=5 timeout=10
+
+    &lt;Directory /Library/WebServer/Documents/ox7>
+      Options None +SymLinksIfOwnerMatch
+      AllowOverride Indexes FileInfo
+    &lt;/Directory></i>
+    
+    Use the proper document root depending on your OS or custom configuration!
+
+2.  If backend does not run on <i>localhost</i>, you have to adjust that (ProxyPass).
+
+3.  Restart Apache, e.g. <i>sudo apachectl restart</i>
+</pre>
+
+<p>And please double check everything you're doing!</p>

@@ -1,29 +1,18 @@
 
-How to get the UI running with eclipse
---------------------------------------
+How to get the UI running
+-------------------------
 
-* Check out (you should have done that)
+1.  Figure out Apache's document root. Common places are:
 
-* Configure environment variable for ant build:
-
-    - MacOS: /Library/WebServer/Documents/ox7
-    - Linux: /var/www/ox7
+    - MacOS: /Library/WebServer/Documents
+    - Linux: /var/www
     
-    Usually you have to create the folder ox7 in the proper directory.
-    
-* Tell your Apache to eat .htaccess files and how to connect to backend:
+2.  Create a new folder ox7 in Apache's document root
 
-    ProxyPass /ajax http://localhost/ajax retry=0 connectiontimeout=5 timeout=10
+3.  Build the UI and the documentation with ant:
 
-    <Directory /Library/WebServer/Documents/ox7>
-      Options None +SymLinksIfOwnerMatch
-      AllowOverride Indexes FileInfo
-    </Directory>
-    
-    Use the proper path for your OS!
+    ant -Dbuild=/Library/WebServer/Documents/ox7 all doc
 
-* If backend is not on localhost, adjust that.
+4.  If everything works fine, the documentation should be at
+    http://localhost/ox7/doc/apache.html. Continue reading there!
 
-* Restart Apache, e.g. "sudo apachectl restart"
-
-* And please double check everything you're doing!

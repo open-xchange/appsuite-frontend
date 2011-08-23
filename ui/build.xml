@@ -105,6 +105,11 @@
         </concat>
 
         <antcall target="doc.file">
+            <param name="file" value="apache"/>
+            <param name="title" value="Apache Configuration"/>
+        </antcall>
+        
+        <antcall target="doc.file">
             <param name="file" value="extensions"/>
             <param name="title" value="Extension Points"/>
         </antcall>
