@@ -290,7 +290,7 @@ $(document).ready(function () {
         // inject version
         baseUrl: ox.base + "/apps"
     });
-
+    
     // get pre core & server config
     require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js"], function (data) {
         // store server config

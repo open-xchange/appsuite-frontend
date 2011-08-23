@@ -62,7 +62,7 @@
         #eee 0%,
         #fff 80%
     );
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eee');
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee');
     cursor: pointer;
 }
 
