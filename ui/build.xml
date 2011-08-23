@@ -50,6 +50,7 @@
                 <file name="lib/jquery-ui.min.js"/>
                 <file name="lib/jquery.plugins.js"/>
                 <file name="lib/require.js"/>
+                <file name="lib/modernizr.js"/>
                 <file name="src/tk/grid.js"/>
                 <file name="src/tk/selection.js"/>
                 <file name="src/login.js"/>
