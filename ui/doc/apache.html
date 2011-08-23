@@ -24,11 +24,17 @@
 
 </pre>
 
-<p>Now do the following to configure your Apache properly:</p>
+<p>Now configure Apache:</p>
 <pre class="text">
-1.  Tell your Apache to process .htaccess files and how to connect to backend:
+1.  Make sure Apache loads the following modules:
 
-    <i>ProxyPass /ajax http://localhost/ajax retry=0 connectiontimeout=5 timeout=10
+    <i>mod_proxy, mod_proxy_ajp, mod_expires, mod_deflate, mod_rewrite,
+    mod_headers, mod_mime, and mod_setenvif</i>
+    
+2.  Tell your Apache to process .htaccess files and how to connect to backend:
+
+    <i>ProxyPass /ajax ajp://127.0.0.1:8009/ajax
+    # optional parameters: retry=0 connectiontimeout=5 timeout=10
 
     &lt;Directory /Library/WebServer/Documents/ox7>
       Options None +SymLinksIfOwnerMatch
@@ -37,9 +43,10 @@
     
     Use the proper document root depending on your OS or custom configuration!
 
-2.  If backend does not run on <i>localhost</i>, you have to adjust that (ProxyPass).
+3.  If backend does not run on <i>localhost</i> (127.0.0.1),
+    you have to adjust the ProxyPass directive.
 
-3.  Restart Apache, e.g. <i>sudo apachectl restart</i>
+4.  Restart Apache, e.g. <i>sudo apachectl restart</i>
 </pre>
 
 <p>And please double check everything you're doing!</p>

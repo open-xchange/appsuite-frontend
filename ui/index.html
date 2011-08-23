@@ -8,7 +8,6 @@
 <title>&#160;</title>
 
 <style type="text/css">
-/* prevent white flicker */
 html, body { background-color: #fff; margin: 0; padding; 0; overflow: hidden; }
 #background_loader {
     position: absolute; top: 0px; left: 0px;
@@ -16,10 +15,7 @@ html, body { background-color: #fff; margin: 0; padding; 0; overflow: hidden; }
 }
 </style>
 
-<link rel="stylesheet" href="apps/themes/login/login.css" id="initial-css"/>
-
 <script>
-// core namespace
 window.ox = {
     ajaxRoot: "/ajax",
     api: {},
@@ -28,9 +24,9 @@ window.ox = {
     ui: { session: {}, tk: {} },
     util: {}
 };
+document.write('<link rel="stylesheet" href="' + ox.base + '/apps/themes/login/login.css"/>');
+document.write('<script src="' + ox.base + '/login.js"></scr' + 'ipt>');
 </script>
-
-<script src="login.js"></script>
 
 </head>
 <body class="unselectable">
