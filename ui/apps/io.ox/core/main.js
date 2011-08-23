@@ -26,43 +26,48 @@ define("io.ox/core/main", ["io.ox/core/base"], function (base) {
             });
         });
     };
-
-    base.addLauncher("right", "Applications");
-    base.addLauncher("right", "Refresh");
-    base.addLauncher("right", "Help").find(".icon").css("backgroundColor", "#8CAD36");
-    base.addLauncher("right", "Sign out", PATH + "/images/logout.png", function (e) {
-        logout();
-    });
     
-    base.addLauncher("left", "E-Mail", null, function (e) {
-        var node = this;
-        require(["io.ox/mail/main"], function (m) {
-            m.getApp().setLaunchBarIcon(node).launch();
+    function launch () {
+        
+        base.addLauncher("right", "Applications");
+        base.addLauncher("right", "Refresh");
+        base.addLauncher("right", "Help").find(".icon").css("backgroundColor", "#8CAD36");
+        base.addLauncher("right", "Sign out", PATH + "/images/logout.png", function (e) {
+            logout();
         });
-    }).find(".icon").css("backgroundColor", "#4085B3");
-    
-    base.addLauncher("left", "Address Book", null, function (e) {
-        var node = this;
-        require(["io.ox/contacts/main"], function (m) {
-            m.getApp().setLaunchBarIcon(node).launch();
+        
+        base.addLauncher("left", "E-Mail", null, function (e) {
+            var node = this;
+            require(["io.ox/mail/main"], function (m) {
+                m.getApp().setLaunchBarIcon(node).launch();
+            });
+        }).find(".icon").css("backgroundColor", "#4085B3");
+        
+        base.addLauncher("left", "Address Book", null, function (e) {
+            var node = this;
+            require(["io.ox/contacts/main"], function (m) {
+                m.getApp().setLaunchBarIcon(node).launch();
+            });
+        }).find(".icon").css("backgroundColor", "#000");
+        
+        base.addLauncher("left", "Calendar", null, function (e) {
+            var node = this;
+            require(["io.ox/calendar/main"], function (m) {
+                m.getApp().setLaunchBarIcon(node).launch();
+            });
         });
-    }).find(".icon").css("backgroundColor", "#000");
-    
-    base.addLauncher("left", "Calendar", null, function (e) {
-        var node = this;
-        require(["io.ox/calendar/main"], function (m) {
-            m.getApp().setLaunchBarIcon(node).launch();
+        
+        base.addLauncher("left", "Files", null, function (e) {
+            var node = this;
+            require(["io.ox/files/main"], function (m) {
+                m.getApp().setLaunchBarIcon(node).launch();
+            });
         });
-    });
+        
+        $("#background_loader").removeClass("busy").fadeOut(500);
+    }
     
-    base.addLauncher("left", "Files", null, function (e) {
-        var node = this;
-        require(["io.ox/files/main"], function (m) {
-            m.getApp().setLaunchBarIcon(node).launch();
-        });
-    });
-
-    $("#background_loader").removeClass("busy").fadeOut(500);
-    
-    return {};
+    return {
+        launch: launch
+    };
 });

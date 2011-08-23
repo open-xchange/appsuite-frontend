@@ -1,0 +1,51 @@
+
+html {
+    margin: 0;
+    padding: 0;
+    border: 0px none;
+    background-color: #eee;
+    height: 100%;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11pt;
+    line-height: 1.5em;
+    color: black;
+    width: 700px;
+    margin: 0 auto 0 auto;
+    padding: 20px 40px 20px 40px;
+    background-color: white;
+    min-height: 100%;
+    overflow: visible;
+}
+
+a {
+    color: #08c;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h1, h2, h3 {
+    padding: 0;
+    margin: 0 0 1em 0;
+}
+
+p, pre {
+    margin: 0 0 2em 0;
+}
+
+pre.prettyprint {
+    font-size: 10pt;
+    margin: -1em 0 3em 0;
+}
+
+p.header {
+    font-size: 9pt;
+    color: #aaa;
+    padding-bottom: 0.25em;
+    border-bottom: 1px solid #eee;
+}

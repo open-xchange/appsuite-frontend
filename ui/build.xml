@@ -1,73 +1,124 @@
 <!-- 
 
-	All content on this website (including text, images, source
-	code and any other original works), unless otherwise noted,
-	is licensed under a Creative Commons License.
+    All content on this website (including text, images, source
+    code and any other original works), unless otherwise noted,
+    is licensed under a Creative Commons License.
 
-	http://creativecommons.org/licenses/by-nc-sa/2.5/
+    http://creativecommons.org/licenses/by-nc-sa/2.5/
 
-	Copyright (C) Open-Xchange Inc., 2011
-	Mail: info@open-xchange.com
+    Copyright (C) Open-Xchange Inc., 2011
+    Mail: info@open-xchange.com
 
-	@author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+    @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
 
  -->
 
 <project name="ui" default="all" basedir=".">
 
-	<!-- Adjust that to your document root, e.g. /var/www/ox7 -->
-	<property name="build" value="${basedir}/build"/>
-	<property file="./build.properties"/>
-	
+    <!-- Adjust that to your document root, e.g. /var/www/ox7 -->
+    <property name="build" value="${basedir}/build"/>
+    
     <target name="prepare">
-    	
-    	<mkdir dir="${build}"/>
-    	
-    	<propertyfile file="./build.properties">
-    		<entry key="version.build" type="int" operation="+" value="1" pattern="00000"/>
-    	</propertyfile>
-
-    	<property name="version" value="7.0.0.${version.build}" />
-    	
-    	<echo message= "Build ${version}"/>
-    	
+        
+        <mkdir dir="${build}"/>
+        <mkdir dir="${build}/doc"/>
+        
+        <tstamp>
+            <format property="now" pattern="yyMMdd.hhmmss"/>
+        </tstamp>
+        
+        <property name="version" value="7.0.0.${now}" />
+        
+        <echo message= "Build ${version}"/>
+        
     </target>
-	
-	<target name="all" depends="prepare">
-		
-		<concat destfile="${build}/login.js" fixlastline="yes">
-			<filelist dir=".">
-				<file name="lib/jquery.min.js"/>
+    
+    <target name="all" depends="prepare" description="Default target">
+        
+        <concat destfile="${build}/login.js" fixlastline="yes">
+            <filelist dir=".">
+                <file name="lib/jquery.min.js"/>
                 <file name="lib/jquery-ui.min.js"/>
-				<file name="lib/require.js"/>
                 <file name="lib/jquery.plugins.js"/>
-				<file name="src/tk/grid.js"/>
-				<file name="src/tk/selection.js"/>
-				<file name="src/login.js"/>
-			</filelist>
-		</concat>
-		
-		<copy overwrite="true" todir="${build}">
-			<fileset dir="." includes="index.html"/>
-			<fileset dir="." includes=".htaccess"/>
-		</copy>
-		
-		<!-- copy dirs -->
-		<copy overwrite="true" todir="${build}/src">
-		    <fileset dir="src" includes="**"/>
-		</copy>
-		<copy overwrite="true" todir="${build}/apps">
+                <file name="lib/require.js"/>
+                <file name="src/tk/grid.js"/>
+                <file name="src/tk/selection.js"/>
+                <file name="src/login.js"/>
+            </filelist>
+        </concat>
+
+        <concat destfile="${build}/pre-core.js" fixlastline="yes">
+            <filelist dir="apps/io.ox/core">
+                <file name="config.js"/>
+                <file name="base.js"/>
+                <file name="http.js"/>
+                <file name="event.js"/>
+                <file name="extensions.js"/>
+                <file name="main.js"/>
+            </filelist>
+        </concat>
+        
+        <copy overwrite="true" todir="${build}">
+            <fileset dir="." includes="index.html"/>
+            <fileset dir="." includes=".htaccess"/>
+        </copy>
+        
+        <!-- copy dirs -->
+        <copy overwrite="true" todir="${build}/src">
+            <fileset dir="src" includes="**"/>
+        </copy>
+        <copy overwrite="true" todir="${build}/apps">
             <fileset dir="apps" includes="**"/>
         </copy>
         <copy overwrite="true" todir="${build}/apps">
             <fileset dir="lib" includes="css.js"/>
         </copy>
-		
-		<!-- Replace version token -->
-		<replace file="${build}/index.html">
-			<replacefilter token="@ version @" value="${version}"/>
-		</replace>
-			
-	</target>
-		
+        
+        <!-- Replace version token -->
+        <replace file="${build}/index.html">
+            <replacefilter token="@ version @" value="${version}"/>
+        </replace>
+            
+    </target>
+    
+    <target name="doc.file">
+        <concat destfile="${build}/doc/${file}.html">
+            <filelist dir="doc">
+                <file name="lib/header.html"/>
+                <file name="${file}.html"/>
+                <file name="lib/footer.html"/>
+            </filelist>
+        </concat>
+        <concat destfile="${build}/doc/index.html" append="true">
+            <![CDATA[<a href="${file}.html">${title}</a><br/>]]>
+        </concat>
+    </target>
+        
+    <target name="doc" depends="prepare" description="Developer Documentation">
+
+        <!-- create index -->
+        <concat destfile="${build}/doc/index.html">
+            <filelist dir="doc">
+                <file name="lib/header.html"/>
+                <file name="index.html"/>
+            </filelist>
+        </concat>
+
+        <antcall target="doc.file">
+            <param name="file" value="extensions"/>
+            <param name="title" value="Extension Points"/>
+        </antcall>
+
+        <antcall target="doc.file">
+            <param name="file" value="vgrid"/>
+            <param name="title" value="VGrid"/>
+        </antcall>
+
+        <copy overwrite="true" todir="${build}/doc">
+            <fileset dir="doc/lib" includes="prettify.*, default.css"/>
+            <fileset dir="lib" includes="jquery.min.js"/>
+        </copy>
+        
+    </target>
+    
 </project>

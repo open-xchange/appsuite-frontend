@@ -83,7 +83,7 @@ define("io.ox/mail/main",
             .appendTo(win.nodes.content);
         
         // grid
-        grid = window.mailgrid = new ox.ui.tk.VGrid(left);
+        grid = new ox.ui.tk.VGrid(left);
         
         // add template
         grid.addTemplate({

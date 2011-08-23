@@ -65,7 +65,7 @@ define("io.ox/contacts/main",
             .appendTo(win.nodes.content);
 
         // grid
-        grid = window.grid = new ox.ui.tk.VGrid(left);
+        grid = new ox.ui.tk.VGrid(left);
         
         // add template
         grid.addTemplate({
@@ -96,13 +96,15 @@ define("io.ox/contacts/main",
             build: function () {
             },
             set: function (data, fields, index) {
-                this.text((data.last_name || data.display_name || "#").substr(0,1).toUpperCase());
+                var name = data.last_name || data.display_name || "#";
+                this.text(name.substr(0, 1).toUpperCase());
             }
         });
         
         // requires new label?
         grid.requiresLabel = function (i, data, current) {
-            var prefix = (data.last_name || data.display_name || "#").substr(0,1).toUpperCase();
+            var name = data.last_name || data.display_name || "#",
+                prefix = name.substr(0, 1).toUpperCase();
             return (i === 0 || prefix !== current) ? prefix : false;
         };
         

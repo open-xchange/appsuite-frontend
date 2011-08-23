@@ -67,7 +67,9 @@ $(document).ready(function () {
         ox.api.config.load()
             .done(function () {
                 // load core
-                require(["css!themes/default/core.css", "io.ox/core/main"]);
+                require(["io.ox/core/main", "css!themes/default/core.css"], function (core) {
+                    core.launch();
+                });
             });
         // show loader
         $("#background_loader").fadeIn(DURATION, function () {
@@ -230,8 +232,7 @@ $(document).ready(function () {
      */
     autoLogin = function () {
         ox.api.session.autoLogin()
-        .done(loadCore)
-        .fail(initialize);
+            .done(loadCore).fail(initialize);
     };
     
     /**
@@ -274,7 +275,7 @@ $(document).ready(function () {
             $("#io-ox-forgot-password").find("a").attr("href", sc.forgotPassword);
         }
         // use browser language
-        setDefaultLanguage().done(function () {
+        return setDefaultLanguage().done(function () {
             // show login dialog
             $("#io-ox-login-blocker").bind("mousedown", false);
             $("#io-ox-login-form").bind("submit", fnSubmit);
@@ -287,32 +288,21 @@ $(document).ready(function () {
     // init require.js
     require({
         // inject version
-        baseUrl: ox.version + "/apps"
+        baseUrl: ox.base + "/apps"
     });
 
-    // get server config
-    $.ajax({
-        url: "src/serverconfig.js",
-        dataType: "json"
-    })
-    .done(function (data) {
+    // get pre core & server config
+    require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js"], function (data) {
         // store server config
         serverConfig = data;
         // set page title now
         document.title = serverConfig.pageTitle || "ox7";
         // auto login?
-        var cont = function () {
-            if (serverConfig.autoLogin === true) {
-                autoLogin();
-            } else {
-                initialize();
-            }
-        };
-        // get basic modules
-        require(
-            ["io.ox/core/config", "io.ox/core/base", "io.ox/core/http", "io.ox/core/event", "io.ox/core/extensions"],
-            cont
-        );
+        if (serverConfig.autoLogin === true) {
+            autoLogin();
+        } else {
+            initialize();
+        }
     });
 
 });
