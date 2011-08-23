@@ -142,7 +142,6 @@ define("io.ox/mail/main",
         
         // LFO callback
         function drawMail(data) {
-            console.log("data", data);
             var mail = base.draw(data);
             right.idle().empty().append(mail);
             right.parent().scrollTop(0);
