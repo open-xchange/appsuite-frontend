@@ -15,10 +15,19 @@
 
 <project name="ui" default="all" basedir=".">
 
-    <!-- Adjust that to your document root, e.g. /var/www/ox7 -->
-    <property name="build" value="${basedir}/build"/>
+    <property environment="env"/>
     
-    <target name="prepare">
+    <target name="init">
+        <condition property="build" value="${env.BUILD}">
+            <and><not><isset property="build"/></not><isset property="env.BUILD"/></and>
+        </condition>
+        <condition property="build" value="${basedir}/build">
+            <not><isset property="build"/></not>
+        </condition>
+        <echo>Build path: ${build}</echo>
+    </target>
+    
+    <target name="prepare" depends="init">
         
         <mkdir dir="${build}"/>
         <mkdir dir="${build}/doc"/>

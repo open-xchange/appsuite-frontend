@@ -12,6 +12,11 @@ How to get the UI running
 3.  Build the UI and the documentation with ant:
 
     ant -Dbuild=/Library/WebServer/Documents/ox7 all doc
+    
+    or
+    
+    export BUILD="/Library/WebServer/Documents/ox7"
+    ant all doc
 
 4.  If everything works fine, the documentation should be at
     http://localhost/ox7/doc/apache.html. Continue reading there!
