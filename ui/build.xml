@@ -126,6 +126,11 @@
         </antcall>
 
         <antcall target="doc.file">
+            <param name="file" value="features"/>
+            <param name="title" value="Features"/>
+        </antcall>
+
+        <antcall target="doc.file">
             <param name="file" value="vgrid"/>
             <param name="title" value="VGrid"/>
         </antcall>
