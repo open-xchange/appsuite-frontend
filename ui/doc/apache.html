@@ -24,6 +24,43 @@
 
 </pre>
 
+<!-- Under construction -->
+<div style="display: none">
+<p>If you read this in your browser you should have done this already:</p>
+<pre class="text">
+1.  Check out the UI from git
+
+2.  Figure out Apache's document root. Common places are:
+
+    - MacOS: <i>/Library/WebServer/Documents</i>
+    - Linux: <i>/var/www</i>
+    
+3.  Create a new folder <i>ox7</i> in Apache's document root
+
+4.  You need node.js to build the UI:
+
+    For MacOS:
+    
+    - Visit <a href="https://sites.google.com/site/nodejsmacosx/">https://sites.google.com/site/nodejsmacosx/</a>
+      and install stable version.
+    
+    - Open terminal
+    
+    - Set environment variable:
+        <i>export buildir="/Library/WebServer/Documents/ox7"</i>
+        
+    - Build UI:
+      <i>./build.sh</i>
+      
+    - Build documentation:
+      <i>./build.sh doc</i>
+      
+5.  If everything works fine, the documentation should be at
+    <a href="http://localhost/ox7/doc">http://localhost/ox7/doc</a>.
+
+</pre>
+</div>
+
 <p>Now configure Apache:</p>
 <pre class="text">
 1.  Make sure Apache loads the following modules:

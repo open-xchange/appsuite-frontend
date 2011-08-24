@@ -15,6 +15,43 @@
 
 <project name="ui" default="all" basedir=".">
 
+	<!-- For automatic deployment, override it with a global variable,
+         e.g. /var/www/ox7
+    -->
+	<property name="build" value="${basedir}/build"/>
+    
+    <!-- DOES NOT WORK WITH BINARY DATA !!! All images are broken! -->
+    <target name="-all" description="Default target">
+    	<exec executable="/usr/bin/env" failonerror="true">
+            <env key="builddir" file="${build}"/>
+            <arg value="node"/>
+            <arg file="lib/jake/bin/cli.js"/>
+    		<arg value="--trace"/>
+        </exec>
+    </target>
+	
+	<target name="-doc" description="Developer documentation">
+        <exec executable="/usr/bin/env" failonerror="true">
+            <env key="builddir" file="${build}"/>
+            <arg value="node"/>
+            <arg file="lib/jake/bin/cli.js"/>
+            <arg value="--trace"/>
+        	<arg value="doc"/>
+        </exec>
+	</target>
+	
+	<target name="targets" description="List Jake targets">
+        <exec executable="/usr/bin/env" failonerror="true">
+            <env key="builddir" file="${build}"/>
+            <arg value="node"/>
+            <arg file="lib/jake/bin/cli.js"/>
+        	<arg value="--trace"/>
+        	<arg value="-T"/>
+        </exec>
+	</target>
+    
+    <!-- "Old" build.xml -->
+    
     <property environment="env"/>
     
     <target name="init">
@@ -127,7 +164,7 @@
 
         <antcall target="doc.file">
             <param name="file" value="features"/>
-            <param name="title" value="Feature Overview"/>
+            <param name="title" value="Features"/>
         </antcall>
 
         <antcall target="doc.file">
@@ -141,5 +178,5 @@
         </copy>
         
     </target>
-    
+
 </project>

@@ -64,6 +64,12 @@ define("io.ox/core/main", ["io.ox/core/base"], function (base) {
             });
         });
         
+        // TODO: hide this 'feature' more cleverly
+        if (ox.util.getHash("roadkill")) {
+            $("#io-ox-core").css("background", "url(apps/themes/default/roadkill.jpg) no-repeat");
+            $("#io-ox-core").css("background-size", "cover");
+        }
+        
         $("#background_loader").removeClass("busy").fadeOut(500);
     }
     
