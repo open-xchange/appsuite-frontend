@@ -21,7 +21,7 @@
     var plugin = {
 
         load: function (def, require, cont, config) {
-
+            
             var file = config.baseUrl + def,
                 // get path to fix URLs
                 path = file.replace(/\/[^\/]+$/, "/");
@@ -33,9 +33,9 @@
             })
             .done(function (css) {
                 // now the file is cached
-                $("<style/>", { type: "text/css" })
+                var text = css.replace(/url\(/g, "url(" + path);
+                $('<style type="text/css">' + text + '</style>')
                     .attr("data-require-src", def)
-                    .text(css.replace(/url\(/g, "url(" + path)) // fix URLs
                     .insertBefore($("script").eq(0)); // append before first script tag
                 // continue
                 cont();

@@ -46,7 +46,9 @@
     width: 30%;
 }
 
-.vgrid-cell.mail .subject {
+.vgrid-cell.mail .threadSize {
+    color: #8CAD36;
+    font-weight: bold;
 }
 
 /* Detail view */
@@ -66,14 +68,20 @@
         #ddd 100%
     );
     background-attachment: fixed;
+    padding: 0px 20px 0px 20px;
+}
+
+.mail-detail-pane > div {
+    min-height: 100%;
 }
 
 .mail-detail {
     background-color: white;
     border: 1px solid #aaa;
     padding: 20px;
-    margin: 20px;
-    min-height: 50%;
+    margin: 20px auto 0px auto;
+    min-height: 200px;
+    max-width: 650px;
     -moz-box-shadow: 0px 5px 10px -3px black;
     -webkit-box-shadow: 0px 5px 10px -3px black;
     box-shadow: 0px 5px 10px -3px black;
@@ -102,4 +110,9 @@
     font-size: 12px;
     line-height: 1.33333em;
     white-space: pre-wrap;
+}
+
+.mail-detail blockquote {
+    color: #888 !important;
+    border-color: #888 !important;
 }

@@ -2,8 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>&#160;</title>
 
@@ -22,6 +23,7 @@ window.ox = {
     base: "v=@ version @",
     session: "",
     ui: { session: {}, tk: {} },
+    user: "",
     util: {}
 };
 document.write('<link rel="stylesheet" href="' + ox.base + '/apps/themes/login/login.css"/>');
@@ -55,7 +57,7 @@ document.write('<script src="' + ox.base + '/login.js"></scr' + 'ipt>');
 
         <!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials -->
         <div id="login-box-content">
-            <form action="/lolololol" name="oxlogin" method="post" id="io-ox-login-form" novalidate="novalidate">
+            <form action="." name="oxlogin" method="post" id="io-ox-login-form" novalidate="novalidate">
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr>

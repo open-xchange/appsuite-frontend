@@ -56,6 +56,7 @@
                 <file name="lib/jquery-ui.min.js"/>
                 <file name="lib/jquery.plugins.js"/>
                 <file name="lib/require.js"/>
+                <file name="lib/modernizr.js"/>
                 <file name="src/tk/grid.js"/>
                 <file name="src/tk/selection.js"/>
                 <file name="src/login.js"/>
@@ -69,6 +70,7 @@
                 <file name="http.js"/>
                 <file name="event.js"/>
                 <file name="extensions.js"/>
+                <file name="cache.js"/>
                 <file name="main.js"/>
             </filelist>
         </concat>
@@ -127,6 +129,11 @@
         <antcall target="doc.file">
             <param name="file" value="extensions"/>
             <param name="title" value="Extension Points"/>
+        </antcall>
+
+        <antcall target="doc.file">
+            <param name="file" value="features"/>
+            <param name="title" value="Features"/>
         </antcall>
 
         <antcall target="doc.file">

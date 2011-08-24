@@ -78,7 +78,7 @@ define("io.ox/mail/main",
             .css({ left: gridWidth + 1 + "px", overflow: "auto" })
             .addClass("rightside mail-detail-pane")
             .append(
-                right = $("<div/>").addClass("abs")
+                right = $("<div/>")
             )
             .appendTo(win.nodes.content);
         
@@ -91,7 +91,9 @@ define("io.ox/mail/main",
                 var from, date, subject;
                 this.addClass("mail")
                     .append(
-                        subject = $("<div/>").addClass("subject")
+                        $("<div/>")
+                        .append(subject = $("<span/>").addClass("subject"))
+                        .append(threadSize = $("<span/>").addClass("threadSize"))
                     )
                     .append(
                         from = $("<div/>").addClass("from")
@@ -99,12 +101,16 @@ define("io.ox/mail/main",
                     .append(
                         date = $("<div/>").addClass("date")
                     );
-                return { from: from, date: date, subject: subject };
+                return { from: from, date: date, subject: subject, threadSize: threadSize };
             },
             set: function (data, fields, index) {
+                fields.subject.text(data.subject);
+                fields.threadSize.text(
+                    !data.threadSize || data.threadSize === 1 ?
+                        "" : " (" + data.threadSize + ")"
+                );
                 fields.from.text(base.serializeList(data.from));
                 fields.date.text(base.getTime(data.received_date));
-                fields.subject.text(data.subject);
                 if (base.isUnread(data)) {
                     this.addClass("unread");
                 }
@@ -116,16 +122,21 @@ define("io.ox/mail/main",
         
         // all request
         grid.setAllRequest(function (cont) {
-            api.getAll().done(cont);
-        });
-        
-        // search request
-        grid.setAllRequest("search", function (cont) {
-            api.search(win.search.query).done(cont);
+            api.getAllThreads().done(cont);
         });
         
         // list request
         grid.setListRequest(function (ids, cont) {
+            api.getThreads(ids).done(cont);
+        });
+        
+        // search: all request
+        grid.setAllRequest("search", function (cont) {
+            api.search(win.search.query).done(cont);
+        });
+        
+        // search: list request
+        grid.setListRequest("search", function (ids, cont) {
             api.getList(ids).done(cont);
         });
         
@@ -141,11 +152,32 @@ define("io.ox/mail/main",
         });
         
         // LFO callback
-        function drawMail(data) {
-            console.log("data", data);
-            var mail = base.draw(data);
-            right.idle().empty().append(mail);
-            right.parent().scrollTop(0);
+        function drawThread (list, mail) {
+            // loop over thread - use fragment to be fast for tons of mails
+            var i = 0, obj, frag = document.createDocumentFragment();
+            for (; obj = list[i]; i++) {
+                if (i === 0) {
+                    frag.appendChild(base.draw(mail).get(0));
+                } else {
+                    frag.appendChild(base.drawScaffold(obj).get(0));
+                }
+            }
+            right.idle().empty().get(0).appendChild(frag);
+            // show many to resolve?
+            var nodes = right.find(".mail-detail"),
+                numVisible = (right.parent().height() / nodes.eq(0).outerHeight(true) >> 0) + 1;
+            // resolve visible
+            nodes.slice(0, numVisible).trigger("resolve");
+            // look for scroll
+            var autoResolve = function () {
+                nodes.trigger("resolve");
+                $(this).unbind("scroll", autoResolve);
+            };
+            right.parent().bind("scroll", autoResolve);
+        }
+        
+        function drawMail (data) {
+            right.idle().empty().append(base.draw(data));
         }
         
         /*
@@ -153,14 +185,21 @@ define("io.ox/mail/main",
          */
         grid.selection.bind("change", function (selection) {
             if (selection.length === 1) {
-                // get mail
+                // be busy
                 right.busy(true);
-                api.get({
-                    folder: selection[0].folder_id,
-                    id: selection[0].id
-                })
-                .done(ox.util.lfo(drawMail))
-                .fail(function () { right.idle().empty(); });
+                // which mode?
+                if (grid.getMode() === "all") {
+                    // get thread
+                    var thread = api.getThread(selection[0]);
+                    // get first mail first
+                    api.get(thread[0])
+                        .done(ox.util.lfo(drawThread, thread))
+                        .fail(function () { right.idle().empty(); });
+                } else {
+                    api.get(selection[0])
+                        .done(ox.util.lfo(drawMail))
+                        .fail(function () { right.idle().empty(); });
+                }
             } else {
                 right.empty();
             }

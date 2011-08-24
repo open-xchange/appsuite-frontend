@@ -16,22 +16,35 @@
 define("io.ox/mail/api", ["io.ox/core/cache"], function (cache) {
     
     var cache = {
-        all: new cache.FlatCache("", true),
-        list: new cache.FlatCache("", true),
-        full: new cache.FlatCache("", true)
+        all: new cache.FlatCache("mailAll", false),
+        list: new cache.FlatCache("mailList", true),
+        full: new cache.FlatCache("mailFull", true)
     };
-
+    
+    // simple temporary thread cache
+    var threads = {};
+    
+    // helper: get number of mails in thread
+    var threadSize = function (obj) {
+        var key = obj.folder_id + "." + obj.id;
+        return (threads[key] || []).length;
+    };
+    
     return ox.api.mail = {
-
+        
         get: function (options) {
-
+            
             var o = $.extend({
                 folder: "6",
                 id: 0
             }, options);
             
+            if (o.folder_id) {
+                o.folder = o.folder_id;
+            }
+            
             var key = { folder_id: o.folder, id: o.id };
-
+            
             // contains?
             if (!cache.full.contains(key)) {
                 // cache miss
@@ -54,10 +67,98 @@ define("io.ox/mail/api", ["io.ox/core/cache"], function (cache) {
             }
         },
         
+        // ~ all
+        getAllThreads: function (options) {
+            
+            var def = $.Deferred();
+            
+            options = options || {};
+            options.columns = "601,600,612"; // +level
+            options.sort = "thread";
+            
+            this.getAll(options)
+            .done(function (data) {
+                // loop over data
+                var i = 0, obj, tmp, all = [];
+                for (; obj = data[i]; i++) {
+                    if (obj.level === 0) {
+                        // delete level
+                        delete obj.level;
+                        // add to all
+                        all.push(obj);
+                        // add to list & thread hash
+                        threads[obj.folder_id + "." + obj.id] = (tmp = [obj]);
+                    } else {
+                        tmp.unshift(obj);
+                    }
+                }
+                def.resolve(all);
+            })
+            .fail(def.reject);
+            
+            return def;
+        },
+        
+        // get mails in thread
+        getThread: function (obj) {
+            var key = obj.folder_id + "." + obj.id;
+            return threads[key] || [obj];
+        },
+        
+        // ~ get
+        getFullThread: function (obj) {
+            // get list of IDs
+            var key = obj.folder_id + "." + obj.id,
+                thread = threads[key] || [obj],
+                defs = [],
+                self = this;
+            // get each mail
+            $.each(thread, function (i) {
+                defs.push(self.get(thread[i]));
+            });
+            // join all deferred objects
+            var result = $.Deferred();
+            $.when.apply($, defs).done(function () {
+                var args = $.makeArray(arguments), tmp = [];
+                args = defs.length > 1 ? args : [args];
+                // loop over results
+                $.each(args, function (i) {
+                    tmp.push(args[i][0] || args[i]);
+                });
+                // resolve
+                result.resolve(tmp);
+            });
+            return result;
+        },
+        
+        // ~ list
+        getThreads: function (ids) {
+            
+            var def = $.Deferred();
+            
+            this.getList(ids)
+            .done(function (data) {
+                // clone not to mess up with searches
+                data = ox.util.clone(data);
+                // inject thread size
+                var i = 0, obj;
+                for (; obj = data[i]; i++) {
+                    obj.threadSize = threadSize(obj);
+                }
+                def.resolve(data);
+            })
+            .fail(def.reject);
+            
+            return def;
+        },
+        
         getAll: function (options) {
             
             var o = $.extend({
-                folder: "default0/INBOX"
+                folder: "default0/INBOX",
+                columns: "601,600",
+                sort: "610", // received_date
+                order: "desc"
             }, options);
             
             return ox.api.http.GET({
@@ -65,15 +166,16 @@ define("io.ox/mail/api", ["io.ox/core/cache"], function (cache) {
                 params: {
                     action: "all",
                     folder: o.folder,
-                    columns: "601,600",
-                    sort: "610", // received_date
-                    order: "desc"
+                    columns: o.columns,
+                    sort: o.sort,
+                    order: o.order
                 }
             });
         },
         
         getList: function (ids) {
-            
+            // be robust
+            ids = ids || [];
             // contains?
             if (!cache.list.contains(ids)) {
                 // cache miss

@@ -47,7 +47,7 @@ define("io.ox/core/extensions", function () {
         };
         
         this.dump = function () {
-            console.log(this, extensions);
+            console.info(this, extensions);
         }
     }
     
@@ -66,7 +66,7 @@ define("io.ox/core/extensions", function () {
         };
         
         this.dump = function () {
-            console.log(extensionPoints);
+            console.info(extensionPoints);
         };
     };
     

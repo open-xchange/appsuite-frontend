@@ -15,14 +15,29 @@
 
 define("io.ox/mail/base", function () {
     
+    var that = {};
+    
     var ngettext = function (s, p, n) {
             return n > 1 ? p : s;
         },
         format = ox.util.printf,
         MINUTE = 60 * 1000,
         HOUR = MINUTE * 60;
-    
-    return {
+        
+    // resolve mails on scroll
+    var autoResolve = function (e) {
+        // get mail api
+        var self = $(this);
+        require(["io.ox/mail/api"], function (api) {
+            // get mail data
+            api.get(e.data).done(function (data) {
+                // replace placeholder with mail content
+                self.replaceWith(that.draw(data));
+            });
+        });
+    };
+   
+    return that = {
         
         createNewMailDialog: function () {
             require(["io.ox/mail/new"], function (m) {
@@ -73,39 +88,46 @@ define("io.ox/mail/base", function () {
             return data.from && data.from.length && data.from[0][1] === "matthias.biggeleben@open-xchange.com";
         },
         
+        drawScaffold: function (obj) {
+            return $("<div/>")
+                .addClass("mail-detail")
+                .busy()
+                .bind("resolve", obj, autoResolve);
+        },
+        
         draw: function (data) {
             
-            var mailtext = data.attachments.length ? data.attachments[0].content : "";
+            if (!data || !data.attachments) {
+                return $("<div/>");
+            }
+            
+            var mailtext = data.attachments.length ? data.attachments[0].content : "",
+                mailNode = $("<div/>").addClass("content").html(mailtext);
+            
+            // collapse blockquotes
+            mailNode.find("blockquote").each(function () {
+                var quote = $(this);
+                quote.text( quote.contents().text().substr(0, 100) );
+            });
             
             return $("<div/>")
-                .addClass("abs mail-detail-pane")
+                .addClass("mail-detail")
                 .append(
                     $("<div/>")
-                        .addClass("mail-detail")
-                        .append(
-                            $("<div/>")
-                                .addClass("subject")
-                                .text(data.subject)
-                        )
-                        .append(
-                            $("<div/>")
-                                .addClass("from person")
-                                .text(this.serializeList(data.from))
-                        )
-                        .append(
-                            $("<div/>").text("\u00a0").addClass("spacer")
-                        )
-                        .append(
-                            $("<div/>")
-                                .addClass("content")
-                                .html(mailtext)
-                        )
+                        .addClass("subject")
+                        .text(data.subject)
                 )
-                // just for bottom space
                 .append(
-                    $("<div/>").css("height", "1px")
+                    $("<div/>")
+                        .addClass("from person")
+                        .text(this.serializeList(data.from))
+                )
+                .append(
+                    $("<div/>").text("\u00a0").addClass("spacer")
+                )
+                .append(
+                    mailNode
                 );
         }
-        
     };
 });

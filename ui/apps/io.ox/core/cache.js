@@ -31,28 +31,21 @@ define("io.ox/core/cache", function () {
     var CacheStorage = (function () {
          
         // persistent storage?
-        var hasLocalStorage = false;
-        try {
-            // supported by browser and explicitly activated?
-            hasLocalStorage = (ox.util.getParam("persistence") === "true") && "localStorage" in window && window.localStorage !== null;
-        } catch (e) {
-            // pssst
-        }
+        var hasLocalStorage = Modernizr.localstorage && ox.util.getParam("persistence") !== "false";
         
         return function (name, persistent) {
             
             // init fast storage
-            var id = "cache." + (name || "");
-            var fast = {};
-            
-            // use persistent storage?
-            var persist = hasLocalStorage && persistent === true;
+            var id = "cache." + (ox.user || "_") + "." + (name || ""),
+                reg = new RegExp("^" + id.replace(/\./g, "\\.") + "\\."),
+                fast = {},
+                // use persistent storage?
+                persist = hasLocalStorage && ox.user !== "" && persistent === true;
             
             // copy from persistent storage? (much faster than working on local storage)
             if (persist) {
                 // loop over all keys
-                var i = 0, $i = localStorage.length;
-                var reg = new RegExp("^cache\\." + name + "\\."), key;
+                var i = 0, $i = localStorage.length, key;
                 for (; i < $i; i++) {
                     // get key by index
                     key = localStorage.key(i);
@@ -70,7 +63,7 @@ define("io.ox/core/cache", function () {
                     // lazy update
                     setTimeout(function () {
                         // loop over all keys
-                        var i = 0, reg = new RegExp("^cache\\." + name + "\\."), key;
+                        var i = 0, key;
                         while (i < localStorage.length) {
                             // get key by index
                             key = localStorage.key(i);
@@ -94,7 +87,7 @@ define("io.ox/core/cache", function () {
                 fast[String(key)] = data;
                 // persistent set
                 if (persist) {
-                    // stringify now
+                    // serialize now (!)
                     var str = JSON.stringify(data);
                     // lazy update
                     setTimeout(function () {
@@ -136,8 +129,13 @@ define("io.ox/core/cache", function () {
     var SimpleCache = function (name, persistent) {
         
         // private fields
-        var index = new CacheStorage(name + ".index", persistent);
-        var isComplete = new CacheStorage(name + ".isComplete", persistent);
+        var index = new CacheStorage(name + ".index", persistent),
+            isComplete = new CacheStorage(name + ".isComplete", persistent);
+        
+        if (!name) {
+            // not funny!
+            throw("Each object cache needs a unique name!");
+        }
         
         // clear cache
         this.clear = function () {
@@ -479,6 +477,17 @@ define("io.ox/core/cache", function () {
         this.getClass = function () {
             return "FolderCache";
         };
+    };
+    
+    // debug!
+    window.dumpStorage = function () {
+        // loop over all keys
+        var i = 0, $i = localStorage.length, key;
+        for (; i < $i; i++) {
+            // get key by index
+            key = localStorage.key(i);
+            console.info("key", key, "value", JSON.parse(localStorage.getItem(key)));
+        }
     };
     
     return ox.api.cache = {
