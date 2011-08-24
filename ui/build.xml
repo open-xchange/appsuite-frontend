@@ -15,35 +15,41 @@
 
 <project name="ui" default="all" basedir=".">
 
-    <property environment="env"/>
+	<!-- For automatic deployment, override it with a global variable,
+         e.g. /var/www/ox7
+    -->
+	<property name="build" value="${basedir}/build"/>
     
-    <target name="init">
-        <condition property="build" value="${env.BUILD}">
-            <and><not><isset property="build"/></not><isset property="env.BUILD"/></and>
-        </condition>
-        <condition property="build" value="${basedir}/build">
-            <not><isset property="build"/></not>
-        </condition>
-        <echo>Build path: ${build}</echo>
+    <target name="all" description="Default target">
+    	<exec executable="/usr/bin/env" failonerror="true">
+            <env key="builddir" file="${build}"/>
+            <arg value="node"/>
+            <arg file="lib/jake/bin/cli.js"/>
+    		<arg value="--trace"/>
+        </exec>
     </target>
-    
-    <target name="prepare" depends="init">
-        
-        <mkdir dir="${build}"/>
-        <mkdir dir="${build}/doc"/>
-        
-        <tstamp>
-            <format property="now" pattern="yyMMdd.hhmmss"/>
-        </tstamp>
-        
-        <property name="version" value="7.0.0.${now}" />
-        
-        <echo message= "Build ${version}"/>
-        
-    </target>
-    
+	
+	<target name="doc" description="Developer documentation">
+        <exec executable="/usr/bin/env" failonerror="true">
+            <env key="builddir" file="${build}"/>
+            <arg value="node"/>
+            <arg file="lib/jake/bin/cli.js"/>
+            <arg value="--trace"/>
+        	<arg value="doc"/>
+        </exec>
+	</target>
+	
+	<target name="targets" description="List Jake targets">
+        <exec executable="/usr/bin/env" failonerror="true">
+            <env key="builddir" file="${build}"/>
+            <arg value="node"/>
+            <arg file="lib/jake/bin/cli.js"/>
+        	<arg value="--trace"/>
+        	<arg value="-T"/>
+        </exec>
+	</target>
+<!--
     <target name="all" depends="prepare" description="Default target">
-        
         <concat destfile="${build}/login.js" fixlastline="yes">
             <filelist dir=".">
                 <file name="lib/jquery.min.js"/>
@@ -72,7 +78,7 @@
             <fileset dir="." includes=".htaccess"/>
         </copy>
         
-        <!-- copy dirs -->
+        <!- - copy dirs - ->
         <copy overwrite="true" todir="${build}/src">
             <fileset dir="src" includes="**"/>
         </copy>
@@ -83,7 +89,7 @@
             <fileset dir="lib" includes="css.js"/>
         </copy>
         
-        <!-- Replace version token -->
+        <!- - Replace version token - ->
         <replace file="${build}/index.html">
             <replacefilter token="@ version @" value="${version}"/>
         </replace>
@@ -105,7 +111,7 @@
         
     <target name="doc" depends="prepare" description="Developer Documentation">
 
-        <!-- create index -->
+        <!- - create index - ->
         <concat destfile="${build}/doc/index.html">
             <filelist dir="doc">
                 <file name="lib/header.html"/>
@@ -134,5 +140,5 @@
         </copy>
         
     </target>
-    
+-->    
 </project>
