@@ -123,8 +123,10 @@ ox.ui.tk.VGrid = function (target) {
                 ox.util.call(cont, []);
             }
         },
-        loadData = function (ids, cont) {
-            ox.util.call(cont, ids);
+        loadData = {
+            all: function (ids, cont) {
+                ox.util.call(cont, ids);
+            }
         },
         // data index (contains ALL ids)
         all = [],
@@ -234,7 +236,8 @@ ox.ui.tk.VGrid = function (target) {
             pending = true;
         }
         // get item
-        loadData(all.slice(offset, offset + numRows), function (data) {
+        var load = loadData[currentMode] || loadData["all"];
+        load(all.slice(offset, offset + numRows), function (data) {
             // pending?
             if (isArray(pending)) {
                 // process latest paint
@@ -346,7 +349,8 @@ ox.ui.tk.VGrid = function (target) {
         container.parent().busy();
         
         // get all IDs
-        loadIds[currentMode](function (list) {
+        var load = loadIds[currentMode] || loadIds["all"];
+        load(function (list) {
             if (isArray(list)) {
                 apply(list, function () {
                     // select first
@@ -405,8 +409,13 @@ ox.ui.tk.VGrid = function (target) {
         loadIds[mode] = fn;
     };
     
-    this.setListRequest = function (fn) {
-        loadData = fn;
+    this.setListRequest = function (mode, fn) {
+        // parameter shift?
+        if (ox.util.isFunction(mode)) {
+            fn = mode;
+            mode = "all";
+        }
+        loadData[mode] = fn;
     };
 
     this.addTemplate = function (obj) {
@@ -438,6 +447,10 @@ ox.ui.tk.VGrid = function (target) {
         node.unbind("scroll").scrollTop(0).bind("scroll", fnScroll);
         // load all
         loadAll(cont);
+    };
+    
+    this.getMode = function () {
+        return currentMode;
     };
     
     this.getId = function (data) {

@@ -13,9 +13,10 @@
  * 
  */
 
-define("io.ox/core/config", function () {
+define("io.ox/core/config", ["io.ox/core/cache"], function (cache) {
     
-    var config = {};
+    var config = {},
+        configCache;
     
     var get = function (key) {
         var parts = typeof key === "string" ? key.split(/\./) : key,
@@ -118,15 +119,30 @@ define("io.ox/core/config", function () {
         },
         
         load: function () {
-            // load configuration
-            return ox.api.http.GET({
+            // loader
+            var load = function () {
+                return ox.api.http.GET({
                     module: "config",
                     appendColumns: false,
                     processData: false
                 })
                 .done(function (data) {
                     config = data !== undefined ? data.data : {};
+                    configCache.add("default", config);
                 });
+            };
+            // trick to be fast: cached?
+            if (!configCache) {
+                configCache = new cache.SimpleCache("config", true);
+            }
+            if (configCache.contains("default")) {
+                config = configCache.get("default");
+                load();
+                return $.Deferred().resolve(config);
+            } else {
+                // load configuration
+                return load();
+            }
         }
     };
 });

@@ -2,9 +2,9 @@
 define("io.ox/contacts/api", ["io.ox/core/cache"], function (cache) {
     
     var cache = {
-        all: new cache.FlatCache("", true),
-        list: new cache.FlatCache("", true),
-        full: new cache.FlatCache("", true)
+        all: new cache.FlatCache("contactAll", false),
+        list: new cache.FlatCache("contactList", false),
+        full: new cache.FlatCache("contactFull", true)
     };
 
     return ox.api.contacts = {

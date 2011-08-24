@@ -64,6 +64,7 @@
                 <file name="http.js"/>
                 <file name="event.js"/>
                 <file name="extensions.js"/>
+                <file name="cache.js"/>
                 <file name="main.js"/>
             </filelist>
         </concat>

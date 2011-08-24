@@ -69,6 +69,14 @@ $(document).ready(function () {
                 // load core
                 require(["io.ox/core/main", "css!themes/default/core.css"], function (core) {
                     core.launch();
+                    // auto launch apps?
+                    if (ox.util.getHash("launch")) {
+                        require(ox.util.getHash("launch").split(/,/), function () {
+                            $.each(arguments, function (i, m) { 
+                                m.getApp().launch();
+                            });
+                        });
+                    }
                 });
             });
         // show loader
@@ -273,6 +281,16 @@ $(document).ready(function () {
             $("#io-ox-forgot-password").remove();
         } else {
             $("#io-ox-forgot-password").find("a").attr("href", sc.forgotPassword);
+        }
+        // recommend chrome frame?
+        if (ox.browser.IE <= 8) {
+            var link = "http://www.google.com/chromeframe/?user=true";
+            $("#io-ox-login-feedback").html(
+                '<div>Your browser is slow and outdated!</div>' +
+                '<div style="font-size: 0.8em">Try <a href="' + link + '" target="_blank">Google Chrome Frame</a> ' +
+                'for much better performance. It&rsquo;s awesome! ' +
+                'Administrator rights are not required. Just restart IE after installation.</div>'
+            );
         }
         // use browser language
         return setDefaultLanguage().done(function () {

@@ -77,7 +77,7 @@ $.fn.busy = function (empty) {
         var self = $(this);
         clearTimeout(self.data("busy-timeout"));
         self.data("busy-timeout", setTimeout(function () {
-            self.addClass("io-ox-busy");
+            self.addClass("io-ox-busy").scrollTop(0);
             if (empty) {
                 self.empty();
             }

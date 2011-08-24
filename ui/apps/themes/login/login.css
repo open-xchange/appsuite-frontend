@@ -240,6 +240,7 @@ a:hover {
     font-size: 18pt;
     padding-top: 1em;
     color: #aaa;
+    text-align: center;
 }
 
 .io-ox-busy {

@@ -23,15 +23,13 @@ define("io.ox/core/base", function () {
         // adopted from prototype.js
         var ua = navigator.userAgent,
             isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]",
-            isIE = !!window.attachEvent && !isOpera,
             webkit = ua.indexOf('AppleWebKit/') > -1,
             chrome = ua.indexOf('Chrome/') > -1;
         return {
             /** @lends ox.browser */
             /** is IE? */
-            IE: !!window.attachEvent && !isOpera,
-            /** is IE9? */
-            IE9:    isIE && /MSIE 9/.test(ua),
+            IE: navigator.appName !== "Microsoft Internet Explorer" ? undefined
+                : Number(navigator.appVersion.match(/MSIE (\d+\.\d+)/)[1]),
             /** is Opera? */
             Opera: isOpera,
             /** is WebKit? */
@@ -346,13 +344,15 @@ define("io.ox/core/base", function () {
              * "Lastest function only
              * Works with non-anonymous functions only
              */
-            lfo: function (fn) {
+            lfo: function () {
                 // call counter
-                var count = (fn.count = (fn.count || 0) + 1);
+                var args = $.makeArray(arguments),
+                    fn = args.shift(),
+                    count = (fn.count = (fn.count || 0) + 1);
                 // wrap
                 return function () {
                     if (count === fn.count) {
-                        fn.apply(fn, arguments);
+                        fn.apply(fn, $.merge(args, arguments));
                     }
                 };
             },
@@ -415,6 +415,7 @@ define("io.ox/core/base", function () {
                 .done(function (data) {
                     // store session
                     ox.session = data.session;
+                    ox.user = "matthias.biggeleben"; // YEAH!
                 });
             },
             
@@ -434,6 +435,7 @@ define("io.ox/core/base", function () {
                 .done(function (data) {
                     // store session
                     ox.session = data.session;
+                    ox.user = username;
                     // set permanent cookie
                     if (store) {
                         ox.api.session.store();
@@ -548,7 +550,7 @@ define("io.ox/core/base", function () {
                 )
                 .bind("click", fn || function () {
                     // just for develepment purposes
-                    $(this).stop().effect("shake", { direction: "left", times: 4, distance: 10 }, 50);
+                    $(this).stop(true, true).effect("shake", { direction: "left", times: 4, distance: 10 }, 50);
                 });
             // has icon?
             if (icon) {
@@ -658,7 +660,7 @@ define("io.ox/core/base", function () {
             this.quit = function () {
                 // call quit function
                 var def = quitFn() || $.Deferred().resolve();
-                def.done(function () {
+                return def.done(function () {
                     // mark as not running
                     running = false;
                     // destroy launchbar icon
@@ -693,6 +695,7 @@ define("io.ox/core/base", function () {
         var guid = 0,
         
             // fullscreen mode
+            autoFullscreen = false,
             fullscreen = false,
             
             // toggle fullscreen mode
@@ -707,6 +710,13 @@ define("io.ox/core/base", function () {
                     $("#io-ox-leftbar, #io-ox-rightbar").show();
                 }
                 fullscreen = !fullscreen;
+            },
+            
+            interruptFullscreen = function () {
+                if (fullscreen) {
+                    toggleFullscreen();
+                    autoFullscreen = true;
+                }
             },
             
             // window class
@@ -725,6 +735,11 @@ define("io.ox/core/base", function () {
                         if (currentWindow) {
                             currentWindow.hide();
                         }
+                        // auto fullscreen?
+                        if (autoFullscreen) {
+                            toggleFullscreen();
+                            autoFullscreen = false;
+                        }
                         this.nodes.outer.appendTo("#io-ox-windowmanager");
                         currentWindow = this;
                         this.trigger("show");
@@ -735,6 +750,7 @@ define("io.ox/core/base", function () {
                     this.nodes.outer.detach();
                     currentWindow = null;
                     this.trigger("hide");
+                    interruptFullscreen();
                 };
                 
                 this.toggle = function () {
@@ -747,7 +763,10 @@ define("io.ox/core/base", function () {
                 
                 this.close = function () {
                     if (quitOnClose && this.app !== null) {
-                        this.app.quit();
+                        this.app.quit()
+                            .done(function () {
+                                interruptFullscreen();
+                            });
                     } else {
                         this.hide();
                     }
