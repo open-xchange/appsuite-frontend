@@ -35,11 +35,11 @@ topLevelTask("default", [], function() {
 });
 
 concat("login.js", ["lib/jquery.min.js", "lib/jquery-ui.min.js",
-        "lib/jquery.plugins.js", "lib/require.js", "src/tk/grid.js",
-        "src/tk/selection.js", "src/login.js"]);
+        "lib/jquery.plugins.js", "lib/require.js", "lib/modernizr.js",
+        "src/tk/grid.js", "src/tk/selection.js", "src/login.js"]);
 
 concat("pre-core.js", list("apps/io.ox/core", ["config.js", "base.js",
-        "http.js", "event.js", "extensions.js", "main.js"]));
+        "http.js", "event.js", "extensions.js", "cache.js", "main.js"]));
 
 copy(list([".htaccess", "src/", "apps/"]));
 
@@ -65,6 +65,7 @@ function docFile(file, title) {
 
 docFile("apache", "Apache Configuration");
 docFile("extensions", "Extension Points");
+docFile("features", "Features");
 docFile("vgrid", "VGrid");
 
 var indexFiles = ["lib/header.html", "index.html",
