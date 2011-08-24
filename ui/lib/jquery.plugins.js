@@ -89,7 +89,7 @@ $.fn.idle = function () {
     return this.each(function () {
         var self = $(this);
         clearTimeout(self.data("busy-timeout"));
-        self.removeClass("io-ox-busy");
+        self.removeClass("io-ox-busy").scrollTop(0);
     });
 };
 

@@ -44,7 +44,7 @@ define("io.ox/mail/base", function () {
                 m.getApp().launch();
             });
         },
-
+        
         serializeList: function (list, delimiter) {
             var i = 0, $i = list.length, tmp = [];
             for (; i < $i; i++) {
@@ -85,7 +85,7 @@ define("io.ox/mail/base", function () {
         
         isMe: function (data) {
             // hard wired
-            return data.from && data.from.length && data.from[0][1] === "matthias.biggeleben@open-xchange.com";
+            return data.from && data.from.length && data.from[0][1] === ox.user;
         },
         
         drawScaffold: function (obj) {
@@ -102,12 +102,17 @@ define("io.ox/mail/base", function () {
             }
             
             var mailtext = data.attachments.length ? data.attachments[0].content : "",
-                mailNode = $("<div/>").addClass("content").html(mailtext);
+                content = $("<div/>").addClass("content");
             
-            // collapse blockquotes
-            mailNode.find("blockquote").each(function () {
+            // remove stuff
+            content.html(
+                mailtext.replace(/(<br\/?>\s*){3,}/g, "<br/><br/>")
+            );
+            
+            // collapse block quotes
+            content.find("blockquote").each(function () {
                 var quote = $(this);
-                quote.text( quote.contents().text().substr(0, 100) );
+                quote.text( quote.contents().text().substr(0, 150) );
             });
             
             return $("<div/>")
@@ -126,7 +131,7 @@ define("io.ox/mail/base", function () {
                     $("<div/>").text("\u00a0").addClass("spacer")
                 )
                 .append(
-                    mailNode
+                    content
                 );
         }
     };

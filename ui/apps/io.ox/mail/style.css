@@ -24,6 +24,11 @@
     background-color: #f5f5f5;
 }
 
+.vgrid-cell.mail .subject {
+    display: inline-block;
+    width: 90%;
+}
+
 .vgrid-cell.mail.unread .subject {
     font-weight: bold;
 }
@@ -47,8 +52,22 @@
 }
 
 .vgrid-cell.mail .threadSize {
-    color: #8CAD36;
+    color: #888;
     font-weight: bold;
+    text-align: right;
+    display: inline-block;
+    width: 10%;
+}
+
+.borderradius .vgrid-cell.mail .threadSize {
+    background-color: #eee;
+    color: #888;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.borderradius .vgrid-cell.mail.selected .threadSize {
+    background-color: #026ABA;
 }
 
 /* Detail view */
@@ -68,11 +87,11 @@
         #ddd 100%
     );
     background-attachment: fixed;
-    padding: 0px 20px 0px 20px;
 }
 
 .mail-detail-pane > div {
-    min-height: 100%;
+    overflow: auto;
+    padding: 0px 20px 20px 20px;
 }
 
 .mail-detail {

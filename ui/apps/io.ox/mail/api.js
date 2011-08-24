@@ -30,6 +30,11 @@ define("io.ox/mail/api", ["io.ox/core/cache"], function (cache) {
         return (threads[key] || []).length;
     };
     
+    // helper: sort by received date
+    var dateSort = function (a, b) {
+        return b.received_date - a.received_date;
+    };
+    
     return ox.api.mail = {
         
         get: function (options) {
@@ -73,25 +78,31 @@ define("io.ox/mail/api", ["io.ox/core/cache"], function (cache) {
             var def = $.Deferred();
             
             options = options || {};
-            options.columns = "601,600,612"; // +level
+            options.columns = "601,600,610,612"; // +level, +received_date
             options.sort = "thread";
             
             this.getAll(options)
             .done(function (data) {
                 // loop over data
-                var i = 0, obj, tmp, all = [];
+                var i = 0, obj, tmp = null, all = [], first;
                 for (; obj = data[i]; i++) {
                     if (obj.level === 0) {
-                        // delete level
-                        delete obj.level;
-                        // add to all
-                        all.push(obj);
-                        // add to list & thread hash
-                        threads[obj.folder_id + "." + obj.id] = (tmp = [obj]);
+                        if (tmp) {
+                            // sort
+                            tmp.sort(dateSort);
+                            // add most recent element to list
+                            all.push(first = tmp[0]);
+                            // add to hash
+                            threads[first.folder_id + "." + first.id] = tmp;
+                        }
+                        // clear
+                        tmp = [obj];
                     } else {
-                        tmp.unshift(obj);
+                        tmp.push(obj);
                     }
                 }
+                // resort all
+                all.sort(dateSort);
                 def.resolve(all);
             })
             .fail(def.reject);

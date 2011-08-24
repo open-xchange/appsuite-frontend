@@ -21,6 +21,7 @@ window.ox = {
     ajaxRoot: "/ajax",
     api: {},
     base: "v=@ version @",
+    serverConfig: {},
     session: "",
     ui: { session: {}, tk: {} },
     user: "",
@@ -35,6 +36,7 @@ document.write('<script src="' + ox.base + '/login.js"></scr' + 'ipt>');
 
 <!-- Visual overlays -->
 <div id="background_loader" class="busy"></div>
+<div id="exit-fullscreen"></div>
 
 <!-- Core Panel -->
 <div id="io-ox-core" class="unselectable" style="display: none">

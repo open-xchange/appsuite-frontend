@@ -75,10 +75,10 @@ define("io.ox/mail/main",
         
         // right panel
         $("<div/>")
-            .css({ left: gridWidth + 1 + "px", overflow: "auto" })
+            .css({ left: gridWidth + 1 + "px" })
             .addClass("rightside mail-detail-pane")
             .append(
-                right = $("<div/>")
+                right = $("<div/>").addClass("abs")
             )
             .appendTo(win.nodes.content);
         
@@ -91,9 +91,10 @@ define("io.ox/mail/main",
                 var from, date, subject;
                 this.addClass("mail")
                     .append(
-                        $("<div/>")
-                        .append(subject = $("<span/>").addClass("subject"))
-                        .append(threadSize = $("<span/>").addClass("threadSize"))
+                        subject = $("<div/>").addClass("subject")
+                    )
+                    .append(
+                        threadSize = $("<span/>").addClass("threadSize")
                     )
                     .append(
                         from = $("<div/>").addClass("from")
@@ -106,8 +107,7 @@ define("io.ox/mail/main",
             set: function (data, fields, index) {
                 fields.subject.text(data.subject);
                 fields.threadSize.text(
-                    !data.threadSize || data.threadSize === 1 ?
-                        "" : " (" + data.threadSize + ")"
+                    !data.threadSize || data.threadSize === 1 ? "" : data.threadSize
                 );
                 fields.from.text(base.serializeList(data.from));
                 fields.date.text(base.getTime(data.received_date));
@@ -171,9 +171,9 @@ define("io.ox/mail/main",
             // look for scroll
             var autoResolve = function () {
                 nodes.trigger("resolve");
-                $(this).unbind("scroll", autoResolve);
+                right.unbind("scroll", autoResolve);
             };
-            right.parent().bind("scroll", autoResolve);
+            right.bind("scroll", autoResolve);
         }
         
         function drawMail (data) {

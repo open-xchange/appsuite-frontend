@@ -415,7 +415,8 @@ define("io.ox/core/base", function () {
                 .done(function (data) {
                     // store session
                     ox.session = data.session;
-                    ox.user = "matthias.biggeleben"; // YEAH!
+                    ox.user = "matthias.biggeleben@open-xchange.com"; // YEAH!
+                    // ox.user = data.user
                 });
             },
             
@@ -435,7 +436,8 @@ define("io.ox/core/base", function () {
                 .done(function (data) {
                     // store session
                     ox.session = data.session;
-                    ox.user = username;
+                    ox.user = username.indexOf("@") > -1 ?
+                        username : username + "@" + ox.serverConfig.defaultContext;
                     // set permanent cookie
                     if (store) {
                         ox.api.session.store();
@@ -820,6 +822,16 @@ define("io.ox/core/base", function () {
                     .appendTo(this.nodes.toolbar);
                 };
             };
+           
+        // init visual exit
+        var exitTimer = null;
+        $("#exit-fullscreen")
+            .bind("mouseover", function () {
+                exitTimer = setTimeout(interruptFullscreen, 250);
+            })
+            .bind("mouseout", function () {
+                clearTimeout(exitTimer);
+            });
         
         return function (options) {
             

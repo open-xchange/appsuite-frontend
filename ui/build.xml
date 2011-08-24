@@ -127,7 +127,7 @@
 
         <antcall target="doc.file">
             <param name="file" value="features"/>
-            <param name="title" value="Features"/>
+            <param name="title" value="Feature Overview"/>
         </antcall>
 
         <antcall target="doc.file">
