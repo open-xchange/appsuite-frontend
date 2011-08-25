@@ -1,21 +1,27 @@
 
-How to get the UI running
--------------------------
+How to get the UI running in Debian/Ubuntu
+------------------------------------------
 
-1.  Figure out Apache's document root. Common places are:
+1.  You need Apache and Node.js
 
-    - MacOS: /Library/WebServer/Documents
-    - Linux: /var/www
+        sudo apt-get install apache2 nodejs
+
+2.  Figure out Apache's document root (usually /var/www) and put the path for
+    the UI into an environment variable
+
+        export builddir="var/www/ox7"
     
-2.  Create a new folder ox7 in Apache's document root
+3.  Create the new directory for the UI with write rights for yourself
+    
+        sudo mkdir $builddir
+        sudo chown $(whoami) $builddir
 
-3.  Build the UI and the documentation:
+4.  Build the UI and the documentation:
 
-    export builddir="/Library/WebServer/Documents/ox7"
-    ./build.sh
-    ./build.sh doc
+        ./build.sh
+        ./build.sh doc
 
-4.  If everything works fine, the documentation should be at
+5.  If everything works fine, the documentation should be at
     http://localhost/ox7/doc/apache.html. Continue reading there!
 
 
