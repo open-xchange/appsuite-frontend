@@ -150,7 +150,7 @@ exports.concat = function(name, files, options) {
             for (var i = 0; i < files.length; i++) {
                 var data = typeof files[i] == "string" ?
                     fs.readFileSync(path.join(srcDir, files[i])) :
-                    files[i].getData();
+                    new Buffer(files[i].getData());
                 fs.writeSync(fd, data, 0, data.length, null);
             }
         }
