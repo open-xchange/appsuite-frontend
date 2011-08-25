@@ -106,8 +106,22 @@ define("io.ox/mail/base", function () {
             
             // remove stuff
             content.html(
-                mailtext.replace(/(<br\/?>\s*){3,}/g, "<br/><br/>")
+                $.trim(mailtext)
+                    // replace leading BR
+                    .replace(/^\s*(<br\/?>\s*)+/g, "")
+                    // reduce long BR sequences
+                    .replace(/(<br\/?>\s*){3,}/g, "<br/><br/>")
+                    // remove split block quotes
+                    .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, "<br/><br/>")
             );
+            
+            // get contents to split long character sequences for better wrapping
+            content.contents().each(function (i) {
+                var node = $(this), text = node.text(), length = text.length;
+                if (length >= 60) {
+                    node.text(text.replace(/(\S{60})/g, "$1\u200B"));
+                }
+            });
             
             // collapse block quotes
             content.find("blockquote").each(function () {

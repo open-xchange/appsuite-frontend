@@ -9,14 +9,11 @@ How to get the UI running
     
 2.  Create a new folder ox7 in Apache's document root
 
-3.  Build the UI and the documentation with ant:
+3.  Build the UI and the documentation:
 
-    ant -Dbuild=/Library/WebServer/Documents/ox7 all doc
-    
-    or
-    
-    export BUILD="/Library/WebServer/Documents/ox7"
-    ant all doc
+    export builddir="/Library/WebServer/Documents/ox7"
+    ./build.sh
+    ./build.sh doc
 
 4.  If everything works fine, the documentation should be at
     http://localhost/ox7/doc/apache.html. Continue reading there!
@@ -52,6 +49,3 @@ How to build the UI with node.js
 
 4.  If everything works fine, the documentation should be at
     http://localhost/ox7/doc/apache.html. Continue reading there!
-    
-
-
