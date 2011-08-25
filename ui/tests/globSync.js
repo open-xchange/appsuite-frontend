@@ -15,7 +15,7 @@ var fs = require("fs");
 var vows = require("vows");
 var assert = require("assert");
 
-var globSync = require("../lib/glob").globSync;
+var globSync = require("../lib/build/glob").globSync;
 
 function stub(dir, tree) {
     function getFile(path) {
