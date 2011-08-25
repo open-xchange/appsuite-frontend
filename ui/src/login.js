@@ -21,10 +21,8 @@ $(document).ready(function () {
 
     "use strict";
     
-    // server config
-    var serverConfig = {},
-        // animations
-        DURATION = 250,
+    // animations
+    var DURATION = 250,
         // flags
         relogin = false,
         // functions
@@ -54,7 +52,7 @@ $(document).ready(function () {
         $("#io-ox-login-form").unbind("submit");
         // free closures
         cleanUp = fnChangeLanguage = 
-            changeLanguage = initialize = serverConfig = null;
+            changeLanguage = initialize = null;
     };
     
     /**
@@ -198,7 +196,7 @@ $(document).ready(function () {
         // look at navigator.language with en_US as fallback
         var navLang = (navigator.language || navigator.userLanguage).substr(0, 2),
             lang = "en_US", id = "";
-        for (id in serverConfig.languages) {
+        for (id in ox.serverConfig.languages) {
             // match?
             if (id.substr(0, 2) === navLang) {
                 lang = id;
@@ -248,7 +246,7 @@ $(document).ready(function () {
      */
     initialize = function () {
         // shortcut
-        var sc = serverConfig, lang = sc.languages, node, id = "",
+        var sc = ox.serverConfig, lang = sc.languages, node, id = "",
             header = "", footer = "";
         // show languages
         if (lang !== false) {
@@ -312,11 +310,11 @@ $(document).ready(function () {
     // get pre core & server config
     require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js"], function (data) {
         // store server config
-        serverConfig = data;
+        ox.serverConfig = data;
         // set page title now
-        document.title = serverConfig.pageTitle || "ox7";
+        document.title = ox.serverConfig.pageTitle || "ox7";
         // auto login?
-        if (serverConfig.autoLogin === true) {
+        if (ox.serverConfig.autoLogin === true) {
             autoLogin();
         } else {
             initialize();

@@ -415,7 +415,8 @@ define("io.ox/core/base", function () {
                 .done(function (data) {
                     // store session
                     ox.session = data.session;
-                    ox.user = "matthias.biggeleben"; // YEAH!
+                    ox.user = "matthias.biggeleben@open-xchange.com"; // YEAH!
+                    // ox.user = data.user
                 });
             },
             
@@ -435,7 +436,8 @@ define("io.ox/core/base", function () {
                 .done(function (data) {
                     // store session
                     ox.session = data.session;
-                    ox.user = username;
+                    ox.user = username.indexOf("@") > -1 ?
+                        username : username + "@" + ox.serverConfig.defaultContext;
                     // set permanent cookie
                     if (store) {
                         ox.api.session.store();
@@ -548,9 +550,21 @@ define("io.ox/core/base", function () {
                         .addClass("label")
                         .text(label)
                 )
-                .bind("click", fn || function () {
-                    // just for develepment purposes
-                    $(this).stop(true, true).effect("shake", { direction: "left", times: 4, distance: 10 }, 50);
+                .bind("click", function () {
+                    if (!fn) {
+                        // just for develepment purposes [bug in jQuery: stop(true, true) does not work]
+                        $(this).stop(true).css("left", "").effect("shake", { direction: "left", times: 4, distance: 10 }, 50);
+                    } else {
+                        var self = $(this),
+                            cont = function () {
+                                // revert visual changes
+                                self.children().show().end().idle().css("height", "");
+                            };
+                        // set fixed height, be busy, hide inner content
+                        self.css("height", self.height() + "px").busy().children().hide();
+                        // call launcher with continuation
+                        fn(cont);
+                    }
                 });
             // has icon?
             if (icon) {
@@ -820,6 +834,16 @@ define("io.ox/core/base", function () {
                     .appendTo(this.nodes.toolbar);
                 };
             };
+           
+        // init visual exit
+        var exitTimer = null;
+        $("#exit-fullscreen")
+            .bind("mouseover", function () {
+                exitTimer = setTimeout(interruptFullscreen, 250);
+            })
+            .bind("mouseout", function () {
+                clearTimeout(exitTimer);
+            });
         
         return function (options) {
             

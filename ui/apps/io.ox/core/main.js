@@ -36,31 +36,37 @@ define("io.ox/core/main", ["io.ox/core/base"], function (base) {
             logout();
         });
         
-        base.addLauncher("left", "E-Mail", null, function (e) {
+        base.addLauncher("left", "E-Mail", null, function (cont) {
             var node = this;
             require(["io.ox/mail/main"], function (m) {
                 m.getApp().setLaunchBarIcon(node).launch();
+                cont();
             });
         }).find(".icon").css("backgroundColor", "#4085B3");
         
-        base.addLauncher("left", "Address Book", null, function (e) {
+        base.addLauncher("left", "Address Book", null, function (cont) {
             var node = this;
             require(["io.ox/contacts/main"], function (m) {
                 m.getApp().setLaunchBarIcon(node).launch();
+                cont();
             });
         }).find(".icon").css("backgroundColor", "#000");
         
-        base.addLauncher("left", "Calendar", null, function (e) {
+        base.addLauncher("left", "Calendar", null, function (cont) {
             var node = this;
-            require(["io.ox/calendar/main"], function (m) {
-                m.getApp().setLaunchBarIcon(node).launch();
-            });
+            setTimeout(function () {
+                require(["io.ox/calendar/main"], function (m) {
+                    m.getApp().setLaunchBarIcon(node).launch();
+                    cont();
+                });
+            }, 3000); // just for demo purposes
         });
         
-        base.addLauncher("left", "Files", null, function (e) {
+        base.addLauncher("left", "Files", null, function (cont) {
             var node = this;
             require(["io.ox/files/main"], function (m) {
                 m.getApp().setLaunchBarIcon(node).launch();
+                cont();
             });
         });
         

@@ -58,6 +58,17 @@ a:hover {
     z-index: 65000;
 }
 
+#exit-fullscreen {
+    position: absolute;
+    top: 0px;
+    width: 1px;
+    bottom: 0px;
+    left: 0px;
+    background-color: black;
+    z-index: 60000;
+    opacity: 0.01;
+}
+
 #io-ox-login-screen, #io-ox-login-screen-decorator {
     position: absolute;
     top: 0;

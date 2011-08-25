@@ -44,7 +44,7 @@ define("io.ox/mail/base", function () {
                 m.getApp().launch();
             });
         },
-
+        
         serializeList: function (list, delimiter) {
             var i = 0, $i = list.length, tmp = [];
             for (; i < $i; i++) {
@@ -85,7 +85,7 @@ define("io.ox/mail/base", function () {
         
         isMe: function (data) {
             // hard wired
-            return data.from && data.from.length && data.from[0][1] === "matthias.biggeleben@open-xchange.com";
+            return data.from && data.from.length && data.from[0][1] === ox.user;
         },
         
         drawScaffold: function (obj) {
@@ -102,12 +102,31 @@ define("io.ox/mail/base", function () {
             }
             
             var mailtext = data.attachments.length ? data.attachments[0].content : "",
-                mailNode = $("<div/>").addClass("content").html(mailtext);
+                content = $("<div/>").addClass("content");
             
-            // collapse blockquotes
-            mailNode.find("blockquote").each(function () {
+            // remove stuff
+            content.html(
+                $.trim(mailtext)
+                    // replace leading BR
+                    .replace(/^\s*(<br\/?>\s*)+/g, "")
+                    // reduce long BR sequences
+                    .replace(/(<br\/?>\s*){3,}/g, "<br/><br/>")
+                    // remove split block quotes
+                    .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, "<br/><br/>")
+            );
+            
+            // get contents to split long character sequences for better wrapping
+            content.contents().each(function (i) {
+                var node = $(this), text = node.text(), length = text.length;
+                if (length >= 60) {
+                    node.text(text.replace(/(\S{60})/g, "$1\u200B"));
+                }
+            });
+            
+            // collapse block quotes
+            content.find("blockquote").each(function () {
                 var quote = $(this);
-                quote.text( quote.contents().text().substr(0, 100) );
+                quote.text( quote.contents().text().substr(0, 150) );
             });
             
             return $("<div/>")
@@ -126,7 +145,7 @@ define("io.ox/mail/base", function () {
                     $("<div/>").text("\u00a0").addClass("spacer")
                 )
                 .append(
-                    mailNode
+                    content
                 );
         }
     };
