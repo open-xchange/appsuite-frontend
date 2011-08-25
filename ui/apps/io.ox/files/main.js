@@ -98,8 +98,7 @@
             if (selection.length === 1) {
                 // get file
                 right.busy(true);
-                api.get(selection[0].folder_id, selection[0].id) 
-                .done(ox.util.lfo(drawDetail));
+                api.get(selection[0]).done(ox.util.lfo(drawDetail));
             } else {
                 right.empty();
             }

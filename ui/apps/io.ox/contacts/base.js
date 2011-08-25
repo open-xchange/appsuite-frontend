@@ -29,7 +29,7 @@ define("io.ox/contacts/base", function () {
     return {
         
         getImage: function (obj) {
-            return obj.image1_url || "themes/login/dummypicture.png";
+            return obj.image1_url || (ox.base + "/apps/themes/login/dummypicture.png");
         },
         
         getFullName: function (obj) {

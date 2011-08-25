@@ -1,104 +1,64 @@
+/**
+ * 
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ * 
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * 
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com 
+ * 
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * 
+ */
 
-define("io.ox/contacts/api", ["io.ox/core/cache"], function (cache) {
+define("io.ox/contacts/api", ["io.ox/core/http", "io.ox/core/api-factory"], function (http, ApiFactory) {
     
-    var cache = {
-        all: new cache.FlatCache("contactAll", false),
-        list: new cache.FlatCache("contactList", false),
-        full: new cache.FlatCache("contactFull", true)
-    };
-
-    return ox.api.contacts = {
-
-        get: function (options) {
-
-            var o = $.extend({
+    // generate basic API
+    var api = ox.api.contacts = ApiFactory({
+        module: "contacts",
+        requests: {
+            all: {
+                action: "all",
                 folder: "6",
-                id: 0
-            }, options);
-            
-            var key = { folder_id: o.folder, id: o.id };
-
-            // contains?
-            if (!cache.full.contains(key)) {
-                // cache miss
-                return ox.api.http.GET({
-                    module: "contacts",
-                    params: {
-                        action: "get",
-                        folder: o.folder,
-                        id: o.id
-                    }
-                })
-                .done(function (data) {
-                    cache.full.add(data);
-                });
-            } else {
-                // cache hit
-                return $.Deferred().resolve(cache.full.get(key));
+                columns: "20,1,500,502",
+                sort: "607", // magic field
+                order: "asc"
+            },
+            list: {
+                action: "list",
+                columns: "20,1,500,501,502,505,520,555,556,557,569,602"
+            },
+            get: {
+                action: "get"
             }
-        },
-        
-        getAll: function (options) {
-            
-            var o = $.extend({
-                folder: "6"
-            }, options);
-            
-            return ox.api.http.GET({
-                module: "contacts",
-                params: {
-                    action: "all",
-                    folder: o.folder,
-                    columns: "20,1,500,502",
-                    sort: "607", // magic field
-                    order: "asc"
-                }
-            });
-        },
-        
-        getList: function (ids) {
-            
-            // contains?
-            if (!cache.list.contains(ids)) {
-                // cache miss
-                return ox.api.http.fixList(ids, ox.api.http.PUT({
-                    module: "contacts",
-                    params: {
-                        action: "list",
-                        columns: "20,1,500,501,502,505,520,555,556,557,569,602"
-                    },
-                    data: ox.api.http.simplify(ids)
-                }))
-                .done(function (data) {
-                    cache.list.addArray(data);
-                });
-            } else {
-                // cache hit
-                return $.Deferred().resolve(cache.list.get(ids));
+        }
+    });
+    
+    // extend API
+    
+    api.search = function (query) {
+        // search via pattern
+        return http.PUT({
+            module: "contacts",
+            params: {
+                action: "search",
+                columns: "20,1,500,502,602",
+                sort: "607",
+                order: "asc"
+            },
+            data: {
+                first_name: query,
+                last_name: query,
+                email1: query,
+                email2: query,
+                email3: query,
+                orSearch: true
             }
-        },
-        
-        search: function (query) {
-            // search via pattern
-            return ox.api.http.PUT({
-                module: "contacts",
-                params: {
-                    action: "search",
-                    columns: "20,1,500,502,602",
-                    sort: "607",
-                    order: "asc"
-                },
-                data: {
-                    first_name: query,
-                    last_name: query,
-                    email1: query,
-                    email2: query,
-                    email3: query,
-                    orSearch: true
-                }
-            });
-        },
-        
-        cache: cache
+        });
     };
+    
+    return api;
+
 });

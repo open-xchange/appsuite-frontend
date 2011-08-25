@@ -59,7 +59,7 @@ define("io.ox/core/main", ["io.ox/core/base"], function (base) {
                     m.getApp().setLaunchBarIcon(node).launch();
                     cont();
                 });
-            }, 3000); // just for demo purposes
+            }, 2000); // just for demo purposes
         });
         
         base.addLauncher("left", "Files", null, function (cont) {
