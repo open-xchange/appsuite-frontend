@@ -13,30 +13,39 @@
  * 
  */
 
-define("io.ox/core/main", ["io.ox/core/base"], function (base) {
+define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session"], function (desktop, session) {
 
     var PATH = "apps/io.ox/core";
     
     var logout = function () {
-        ox.api.session.logout()
+        session.logout()
         .done(function () {
             $("#background_loader").fadeIn(500, function () {
                 $("#io-ox-core").hide();
-                window.location.href = "index.html";
+                var l = location;
+                location.href = l.protocol + "//" + l.host + l.pathname.replace(/[^\/]+$/, "");
             });
         });
     };
     
     function launch () {
         
-        base.addLauncher("right", "Applications");
-        base.addLauncher("right", "Refresh");
-        base.addLauncher("right", "Help").find(".icon").css("backgroundColor", "#8CAD36");
-        base.addLauncher("right", "Sign out", PATH + "/images/logout.png", function (e) {
+        desktop.addLauncher("right", "Applications");
+        
+        desktop.addLauncher("right", "Refresh", null, function (cont) {
+            // trigger global event
+            ox.trigger("refresh");
+            cont();
+        });
+        
+        desktop.addLauncher("right", "Help").find(".icon")
+            .css("backgroundColor", "#8CAD36");
+        
+        desktop.addLauncher("right", "Sign out", PATH + "/images/logout.png", function (e) {
             logout();
         });
         
-        base.addLauncher("left", "E-Mail", null, function (cont) {
+        desktop.addLauncher("left", "E-Mail", null, function (cont) {
             var node = this;
             require(["io.ox/mail/main"], function (m) {
                 m.getApp().setLaunchBarIcon(node).launch();
@@ -44,7 +53,7 @@ define("io.ox/core/main", ["io.ox/core/base"], function (base) {
             });
         }).find(".icon").css("backgroundColor", "#4085B3");
         
-        base.addLauncher("left", "Address Book", null, function (cont) {
+        desktop.addLauncher("left", "Address Book", null, function (cont) {
             var node = this;
             require(["io.ox/contacts/main"], function (m) {
                 m.getApp().setLaunchBarIcon(node).launch();
@@ -52,7 +61,7 @@ define("io.ox/core/main", ["io.ox/core/base"], function (base) {
             });
         }).find(".icon").css("backgroundColor", "#000");
         
-        base.addLauncher("left", "Calendar", null, function (cont) {
+        desktop.addLauncher("left", "Calendar", null, function (cont) {
             var node = this;
             setTimeout(function () {
                 require(["io.ox/calendar/main"], function (m) {
@@ -62,7 +71,7 @@ define("io.ox/core/main", ["io.ox/core/base"], function (base) {
             }, 2000); // just for demo purposes
         });
         
-        base.addLauncher("left", "Files", null, function (cont) {
+        desktop.addLauncher("left", "Files", null, function (cont) {
             var node = this;
             require(["io.ox/files/main"], function (m) {
                 m.getApp().setLaunchBarIcon(node).launch();
@@ -76,7 +85,16 @@ define("io.ox/core/main", ["io.ox/core/base"], function (base) {
             $("#io-ox-core").css("background-size", "cover");
         }
         
-        $("#background_loader").removeClass("busy").fadeOut(500);
+        $("#background_loader").removeClass("busy").fadeOut(500, function () {
+            // auto launch apps?
+            if (ox.util.getHash("launch")) {
+                require(ox.util.getHash("launch").split(/,/), function () {
+                    $.each(arguments, function (i, m) { 
+                        m.getApp().launch();
+                    });
+                });
+            }
+        });
     }
     
     return {

@@ -30,7 +30,7 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
     };
     
     // generate basic API
-    var api = ox.api.mail = ApiFactory({
+    var api = ApiFactory({
         module: "mail",
         requests: {
             all: {
@@ -61,6 +61,9 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
         options = options || {};
         options.columns = "601,600,610,612"; // +level, +received_date
         options.sort = "thread";
+        
+        // clear threads
+        threads = {};
         
         this.getAll(options)
         .done(function (data) {
@@ -161,6 +164,15 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
             ]
         });
     };
+    
+    // bind to global refresh
+    ox.bind("refresh", function () {
+        // clear "all & list" caches
+        api.caches.all.clear();
+        api.caches.list.clear();
+        // trigger local refresh
+        api.trigger("refresh");
+    });
     
     return api;
 });

@@ -32,16 +32,19 @@ utils.topLevelTask("default", [], utils.summary);
 
 utils.concat("login.js", ["lib/jquery.min.js", "lib/jquery-ui.min.js",
         "lib/jquery.plugins.js", "lib/require.js", "lib/modernizr.js",
-        "src/tk/grid.js", "src/tk/selection.js", "src/login.js"]);
+        "src/login.js"]);
 
-utils.concat("pre-core.js", utils.list("apps/io.ox/core", ["config.js",
-        "base.js", "http.js", "event.js", "extensions.js", "cache.js",
-        "main.js"]));
+utils.concat("pre-core.js",
+    utils.list("apps/io.ox/core", [
+        "util.js", "event.js", "extensions.js", "cache.js", "http.js",
+        "config.js", "session.js", "desktop.js", "main.js"
+    ])
+);
 
-utils.copy(utils.list([".htaccess", "src/", "apps/"]));
+utils.copy(utils.list([".htaccess", "favicon.ico", "src/", "apps/"]));
 
 utils.copy(["index.html"], {
-    filter: function(data) { return data.replace("@ version @", version); }
+    filter: function(data) { return data.replace(/@ version @/g, version); }
 });
 
 utils.copyFile("lib/css.js", utils.dest("apps/css.js"));

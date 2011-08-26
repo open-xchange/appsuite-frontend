@@ -13,8 +13,10 @@
  * 
  */
 
-define("io.ox/contacts/main",
-    ["io.ox/contacts/base", "io.ox/contacts/api", "css!io.ox/contacts/style.css"], function (base, api) {
+define("io.ox/contacts/main", [
+    "io.ox/contacts/base", "io.ox/contacts/api",
+    "io.ox/core/tk/vgrid", "css!io.ox/contacts/style.css", 
+    ], function (base, api, VGrid) {
 
     // application object
     var app = ox.ui.createApp(),
@@ -65,7 +67,7 @@ define("io.ox/contacts/main",
             .appendTo(win.nodes.content);
 
         // grid
-        grid = new ox.ui.tk.VGrid(left);
+        grid = new VGrid(left);
         
         // add template
         grid.addTemplate({

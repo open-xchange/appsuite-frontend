@@ -13,19 +13,17 @@
  * 
  */
 
-/**
- * @namespace
- * @name ox.api.extensions
- */
-define("io.ox/core/extensions", function () {
+define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
 
     // A naive extension registry. 
     
     var ExtensionPoint = function (options) {
+        
         this.id = options.id;
         this.description = options.description;
         var extensions = [];
-        ox.api.event.Dispatcher.extend(this);
+        
+        event.Dispatcher.extend(this);
         
         this.register = function (extension) {
             extensions.push(extension);
@@ -48,8 +46,8 @@ define("io.ox/core/extensions", function () {
         
         this.dump = function () {
             console.info(this, extensions);
-        }
-    }
+        };
+    };
     
     var Registry = function () {
         var extensionPoints = {};
@@ -70,7 +68,7 @@ define("io.ox/core/extensions", function () {
         };
     };
     
-    return ox.api.extensions = {
+    return {
         registry: new Registry()
     };
 });

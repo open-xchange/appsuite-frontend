@@ -13,7 +13,7 @@
  * 
  */
 
-define("io.ox/calendar/api", function () {
+define("io.ox/calendar/api", ["io.ox/core/http"], function (http) {
     
     var MINUTE = 60000,
         HOUR = 60 * MINUTE,
@@ -23,7 +23,7 @@ define("io.ox/calendar/api", function () {
     // really stupid caching for dev speed
     var cache = {};
     
-    return ox.api.calendar = {
+    return {
         
         MINUTE: MINUTE,
         
@@ -67,7 +67,7 @@ define("io.ox/calendar/api", function () {
             var key = folderId + "." + start + "." + end;
             
             if (cache[key] === undefined) {
-                return ox.api.http.GET({
+                return http.GET({
                     module: "calendar",
                     appendColumns: true,
                     params: {

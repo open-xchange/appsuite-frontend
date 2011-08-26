@@ -62,19 +62,12 @@ $(document).ready(function () {
         // remove unnecessary stuff
         cleanUp();
         // get configuration
-        ox.api.config.load()
+        require("io.ox/core/config").load()
             .done(function () {
                 // load core
                 require(["io.ox/core/main", "css!themes/default/core.css"], function (core) {
+                    // go!
                     core.launch();
-                    // auto launch apps?
-                    if (ox.util.getHash("launch")) {
-                        require(ox.util.getHash("launch").split(/,/), function () {
-                            $.each(arguments, function (i, m) { 
-                                m.getApp().launch();
-                            });
-                        });
-                    }
                 });
             });
         // show loader
@@ -135,24 +128,27 @@ $(document).ready(function () {
             return;
         }
         // login
-        ox.api.session.login(
-            username,
-            password,
-            $("#io-ox-login-store-box").prop("checked")
-        )
-        .done(function () {
-            // success
-            restore();
+        if (ox.offline) {
             loginSuccess();
-        })
-        .fail(fail);
+        } else {
+            require("io.ox/core/session")
+            .login(
+                username,
+                password,
+                $("#io-ox-login-store-box").prop("checked")
+            )
+            .done(function () {
+                // success
+                restore();
+                loginSuccess();
+            })
+            .fail(fail);
+        }
     };
     
     changeLanguage = function (id) {
         // change language
         var cont = function (data) {
-            // clear feedback area
-            $("#io-ox-login-feedback").empty();
             // get all nodes
             $("[data-i18n]").each(function () {
                 var node = $(this),
@@ -209,7 +205,7 @@ $(document).ready(function () {
     /**
      * Relogin
      */
-    ox.ui.session.relogin = function () {
+    ox.relogin = function () {
         // set header
         $("#io-ox-login-header").html(
             "Your session is expired." + "<br/>" + 
@@ -237,8 +233,18 @@ $(document).ready(function () {
      * Try auto login
      */
     autoLogin = function () {
-        ox.api.session.autoLogin()
-            .done(loadCore).fail(initialize);
+        require("io.ox/core/session").autoLogin()
+            .done(loadCore)
+            .fail(initialize)
+            .fail(function (error) {
+                // offline?
+                if (error.error === "0 general") {
+                    ox.offline = true;
+                    $("#io-ox-login-feedback").text(
+                        "No internet connection. Using offline mode."
+                    );
+                }
+            })
     };
     
     /**
@@ -300,7 +306,7 @@ $(document).ready(function () {
             $("#background_loader").idle().fadeOut(DURATION, cont);
         });
     };
-
+    
     // init require.js
     require({
         // inject version
@@ -313,6 +319,8 @@ $(document).ready(function () {
         ox.serverConfig = data;
         // set page title now
         document.title = ox.serverConfig.pageTitle || "ox7";
+        // add global dispatcher
+        require("io.ox/core/event").Dispatcher.extend(ox);
         // auto login?
         if (ox.serverConfig.autoLogin === true) {
             autoLogin();

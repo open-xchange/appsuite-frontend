@@ -13,7 +13,7 @@
  * 
  */
 
-define("io.ox/calendar/main", ["io.ox/calendar/api"], function (api) {
+define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], function (api, config) {
 
     // application object
     var app = ox.ui.createApp(),
@@ -41,8 +41,8 @@ define("io.ox/calendar/main", ["io.ox/calendar/api"], function (api) {
             weekEnd = 0,
             step = 50,
             // time
-            startTime = ox.api.config.get("gui.calendar.starttime", 8),
-            endTime = ox.api.config.get("gui.calendar.endtime", 18),
+            startTime = config.get("gui.calendar.starttime", 8),
+            endTime = config.get("gui.calendar.endtime", 18),
             // sliders
             sliderA,
             sliderB;

@@ -14,15 +14,15 @@
  * 
  */
 
-define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api-factory"], function (http, ApiFactory) {
+define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api-factory", "io.ox/core/config"], function (http, ApiFactory, config) {
    
     // generate basic API
-    var api = ox.api.files = ApiFactory({
+    var api = ApiFactory({
         module: "infostore",
         requests: {
             all: {
                 action: "all",
-                folder: ox.api.config.get("folder.infostore"),
+                folder: config.get("folder.infostore"),
                 columns: "20,1",
                 sort: "700",
                 order: "asc"
@@ -52,44 +52,5 @@ define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api-factory"], functio
     };
     
     return api;
-    
-//   return ox.api.files = {
-//       
-//       getAll: function (folderId) {
-//           return ox.api.http.GET({
-//               module: "infostore",
-//               params: {
-//                   action: "all",
-//                   folder: folderId || ox.api.config.get("folder.infostore"),
-//                   columns: "20,1",
-//                   sort: "700",
-//                   order: "asc"
-//               }
-//           });
-//       },
-//       
-//       getList: function (ids) {
-//           return ox.api.http.fixList(ids, ox.api.http.PUT({
-//               module: "infostore",
-//               params: {
-//                   action: "list",
-//                   columns: "20,1,700,701,702,703,704,705,706,707,709,711"
-//               },
-//               data: ox.api.http.simplify(ids)
-//           }));
-//       },
-//         
-//       get: function (folderId, id) {
-//           return ox.api.http.GET({
-//               module: "infostore",
-//               params: {
-//                   action: "get",
-//                   folder: id,
-//                   id: id
-//               }
-//           });
-//       },
-//       
-//       
-//   };
+
 });

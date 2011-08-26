@@ -15,8 +15,9 @@
  
 // TODO: Render Versions
 
-define("io.ox/files/base", function () {
-    var registry = ox.api.extensions.registry;
+define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
+    
+    var registry = extensions.registry;
     
     var draw = function (file) {
         file.url = ox.ajaxRoot+"/infostore?action=document&id="+file.id+"&folder="+file.folder_id+"&session="+ox.session; // TODO: Put this somewhere in the model

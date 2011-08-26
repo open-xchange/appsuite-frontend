@@ -16,17 +16,17 @@
 /*jslint bitwise: true, nomen: false, onevar: false, plusplus: true, regexp: false, white: true, browser: true, devel: true, evil: true, forin: true, undef: true, eqeqeq: true, immed: true */
 /*global $, ox, require */
 
-(function () {
+define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
     
     "use strict";
     
-    ox.ui.tk.Selection = function (container) {
+    var Selection = function (container) {
 
         this.classFocus = "focussed";
         this.classSelected = "selected";
 
         // add dispatcher
-        ox.api.event.Dispatcher.extend(this);
+        event.Dispatcher.extend(this);
 
         var self = this,
             multiple = true,
@@ -301,9 +301,11 @@
         };
     };
 
-    ox.ui.tk.Selection.extend = function (obj, node) {
+    Selection.extend = function (obj, node) {
         // extend object
-        obj.selection = new ox.ui.tk.Selection(node);
+        obj.selection = new Selection(node);
     };
+    
+    return Selection;
 
-}());
+});

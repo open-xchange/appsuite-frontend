@@ -13,7 +13,7 @@
  * 
  */
 
-define("io.ox/core/config", ["io.ox/core/cache"], function (cache) {
+define("io.ox/core/config", ["io.ox/core/http", "io.ox/core/cache"], function (http, cache) {
     
     var config = {},
         configCache;
@@ -79,7 +79,7 @@ define("io.ox/core/config", ["io.ox/core/cache"], function (cache) {
         delete tmp[parts[$i]];
     };
     
-    return ox.api.config = {
+    return {
         
         get: function (path, defaultValue) {
             if (!path) { // undefined, null, ""
@@ -98,7 +98,7 @@ define("io.ox/core/config", ["io.ox/core/cache"], function (cache) {
                 set(path, value);
                 if (permanent) {
                     // save configuration path on server
-                    return ox.api.http.PUT({
+                    return http.PUT({
                         module: "config/" + path,
                         appendColumns: false,
                         processData: false,
@@ -121,7 +121,7 @@ define("io.ox/core/config", ["io.ox/core/cache"], function (cache) {
         load: function () {
             // loader
             var load = function () {
-                return ox.api.http.GET({
+                return http.GET({
                     module: "config",
                     appendColumns: false,
                     processData: false

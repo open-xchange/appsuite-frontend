@@ -13,7 +13,7 @@
  * 
  */
 
-define("io.ox/core/cache", function () {
+define("io.ox/core/cache", ["io.ox/core/util"], function () {
     
     // default key generator
     var defaultKeyGenerator = function (data) {
@@ -490,7 +490,7 @@ define("io.ox/core/cache", function () {
         }
     };
     
-    return ox.api.cache = {
+    return {
         SimpleCache: SimpleCache,
         FlatCache: FlatCache,
         FolderCache: FolderCache

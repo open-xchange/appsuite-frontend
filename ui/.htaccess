@@ -10,6 +10,7 @@ SetEnvIf Request_URI "\.(jsz|cssz|xmlz)$" no-gzip
 
 ExpiresActive On
 # Set expire headers
+ExpiresByType image/ico "access plus 6 months"
 ExpiresByType image/gif "access plus 6 months"
 ExpiresByType image/png "access plus 6 months"
 ExpiresByType image/jpg "access plus 6 months"
@@ -21,7 +22,8 @@ ExpiresByType text/javascript "access plus 6 months"
 ExpiresByType application/x-javascript "access plus 6 months"
 ExpiresDefault "access plus 6 months"
 
-# Modify headers
+# cache buster
+# Modify headers‚
 Header append Cache-Control "private"
 Header unset Last-Modified
 Header unset Vary
@@ -29,18 +31,13 @@ Header unset Vary
 Header unset ETag
 FileETag None
 
+# do never ever cache "index.html" or "offline.html"
+<FilesMatch "^(index)\.html">
+  ExpiresByType text/html "now"
+  ExpiresDefault "now"
+  Header set Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0"
+</FilesMatch>
+
 RewriteEngine On
 # Strip version from requests
 RewriteRule v=[^\/]+/(.+) $1 [L]
-
-# Special handling for non-cached files
-<Files index.html>
-  # Do not cache this file at the browser
-  ExpiresByType text/html "now"
-  ExpiresDefault "now"
-  Header unset Last-Modified
-  Header set Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0"
-  # Turn off ETag
-  Header unset ETag
-  FileETag None
-</Files>

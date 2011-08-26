@@ -16,7 +16,7 @@
 define("io.ox/contacts/api", ["io.ox/core/http", "io.ox/core/api-factory"], function (http, ApiFactory) {
     
     // generate basic API
-    var api = ox.api.contacts = ApiFactory({
+    var api = ApiFactory({
         module: "contacts",
         requests: {
             all: {

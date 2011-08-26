@@ -14,8 +14,10 @@
  *
  */
 
- define("io.ox/files/main",
-     ["io.ox/files/base", "io.ox/files/api", "css!io.ox/files/style.css"], function (base, api) {
+ define("io.ox/files/main", [
+    "io.ox/files/base", "io.ox/files/api",
+    "io.ox/core/tk/vgrid",  "css!io.ox/files/style.css"
+    ], function (base, api, VGrid) {
 
     // application object
     var app = ox.ui.createApp(),
@@ -46,7 +48,7 @@
             .appendTo(win.nodes.content);
 
         // Grid
-        var grid = window.grid = new ox.ui.tk.VGrid(left);
+        var grid = new VGrid(left);
         // add template
         grid.addTemplate({
             build: function () {

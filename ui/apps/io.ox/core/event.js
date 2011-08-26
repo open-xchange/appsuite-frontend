@@ -13,14 +13,9 @@
  * 
  */
 
-/**
- * @namespace
- * @name ox.api.event
- */
+define("io.ox/core/event", ["io.ox/core/util"], function () {
 
-define("io.ox/core/event", function () {
-
-    return ox.api.event = {
+    return {
 
         Dispatcher: (function () {
             
@@ -38,7 +33,7 @@ define("io.ox/core/event", function () {
             };
             
             /**
-             * @name ox.api.event.Dispatcher
+             * @name Dispatcher
              * @param {Object} target Target object
              * @class Event Dispatcher
              */
@@ -232,6 +227,7 @@ define("io.ox/core/event", function () {
                 obj.bind = obj.dispatcher.bind;
                 obj.unbind = obj.dispatcher.unbind;
                 obj.trigger = obj.dispatcher.trigger;
+                return obj;
             };
             
             return Dispatcher;

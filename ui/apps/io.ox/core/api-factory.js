@@ -13,7 +13,7 @@
  * 
  */
 
-define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache"], function (http, cache) {
+define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/core/event"], function (http, cache, event) {
     
     var fix = function (obj) {
         var clone = ox.util.clone(obj);
@@ -25,6 +25,8 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache"], functi
         
         // extend default options (deep)
         o = $.extend(true, {
+            // use cache
+            cache: true,
             // globally unique id for caches
             id: null,
             // for caches
@@ -50,13 +52,13 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache"], functi
             get: new cache.FlatCache(o.id + "-get", true, o.keyGenerator)
         };
         
-        return {
+        return event.Dispatcher.extend({
             
             getAll: function (options) {
                 // merge defaults for "all"
                 var opt = $.extend({}, o.requests.all, options || {});
                 // cache miss?
-                if (!caches.all.contains(opt.folder)) {
+                if (!o.cache || !caches.all.contains(opt.folder)) {
                     // call server and return deferred object
                     // TODO: special sort/order key stuff
                     return http.GET({
@@ -77,7 +79,7 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache"], functi
                 // be robust
                 ids = ids || [];
                 // cache miss?
-                if (!caches.list.contains(ids)) {
+                if (!o.cache || !caches.list.contains(ids)) {
                     // call server and return deferred object
                     return http.fixList(ids, http.PUT({
                         module: o.module,
@@ -98,22 +100,24 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache"], functi
                 // merge defaults for get
                 var opt = $.extend({}, o.requests.get, options || {});
                 // cache miss?
-                if (!caches.get.contains(opt)) {
+                if (!o.cache || !caches.get.contains(opt)) {
                     // call server and return deferred object
                     return http.GET({
                         module: o.module,
                         params: fix(opt)
                     })
-                    .done(function (data) {
+                    .done(function (data, timestamp) {
                         // add to cache
-                        caches.get.add(data);
+                        caches.get.add(data, timestamp);
                     });
                 } else {
                     // cache hit
                     return $.Deferred().resolve(caches.get.get(opt));
                 }
-            }
-        };
+            },
+            
+            caches: caches
+        });
     };
     
 });

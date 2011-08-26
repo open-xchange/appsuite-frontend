@@ -106,16 +106,16 @@ a:hover {
         linear,
         left top,
         left bottom,
-        color-stop(1, #f5f5f5),
-        color-stop(0, #666)
+        color-stop(0, #444450), /* f5f5f5 */
+        color-stop(1, #000)     /* #666 */
     );
     background-image: -moz-linear-gradient(
-        center bottom,
-        #f5f5f5 0%,
-        #666 100%
+        center top,
+        #444450 0%,
+        #000 100%
     );
     border-bottom: 1px solid #f0f0f0;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#f5f5f5');
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#444450');
 }
 
 #io-ox-login-container {
@@ -186,13 +186,13 @@ a:hover {
     font-weight: normal;
     line-height: 12pt;
     padding: 7px;
-    color: white;
+    color: black;
     text-align: center;
     width: 120px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px 5px 5px 5px;
-    border: 1px solid #555;
+    border: 1px solid #888;
     margin-top: 5px;
     
     background-color: #000;
@@ -202,22 +202,22 @@ a:hover {
     background-image: -webkit-gradient(
         linear,
         left top,
-        right bottom,
-        color-stop(0, rgb(97,96,97)),
-        color-stop(1, rgb(0,0,0))
+        left bottom,
+        color-stop(0, #fff),
+        color-stop(1, #ddd)
     );
     background-image: -moz-linear-gradient(
-        left top,
-        rgb(97,96,97) 0%,
-        rgb(0,0,0) 100%
+        center top,
+        #fff 0%,
+        #eee 100%
     );
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#000000');
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd');
 }
 
 .login-button:focus, .login-button:hover {
     -webkit-box-shadow: 0px 0px 10px 1px #555;
     -moz-box-shadow: 0px 0px 10px 1px #555;
-    box-shadow: 0px 0px 10px 1px #555;
+    box-shadow: 0px 0px 15px 1px #aaa;
 }
 
 .login-button:active {
@@ -229,7 +229,7 @@ a:hover {
 }
 
 .login-label {
-    color: #777;
+    color: #f5f5f5;
 }
 
 #io-ox-login-blocker {

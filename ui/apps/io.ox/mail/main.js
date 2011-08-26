@@ -13,8 +13,10 @@
  * 
  */
 
-define("io.ox/mail/main",
-    ["io.ox/mail/base", "io.ox/mail/api", "css!io.ox/mail/style.css"], function (base, api) {
+define("io.ox/mail/main", [
+     "io.ox/mail/base", "io.ox/mail/api", "io.ox/core/tk/vgrid",
+     "css!io.ox/mail/style.css"
+    ], function (base, api, VGrid) {
 
     // application object
     var app = ox.ui.createApp(),
@@ -83,7 +85,7 @@ define("io.ox/mail/main",
             .appendTo(win.nodes.content);
         
         // grid
-        grid = new ox.ui.tk.VGrid(left);
+        grid = new VGrid(left);
         
         // add template
         grid.addTemplate({
@@ -207,6 +209,11 @@ define("io.ox/mail/main",
         
         win.bind("show", function () { grid.selection.keyboard(true); });
         win.bind("hide", function () { grid.selection.keyboard(false); });
+        
+        // bind refresh
+        ox.bind("refresh", function () {
+            grid.refresh(grid.getMode());
+        });
         
         // go!
         grid.paint();

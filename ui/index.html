@@ -1,8 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 
-<meta charset="utf-8"/>
+<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
@@ -19,7 +19,6 @@ html, body { background-color: #fff; margin: 0; padding; 0; overflow: hidden; }
 <script>
 window.ox = {
     ajaxRoot: "/ajax",
-    api: {},
     base: "v=@ version @",
     serverConfig: {},
     session: "",
@@ -27,9 +26,12 @@ window.ox = {
     user: "",
     util: {}
 };
-document.write('<link rel="stylesheet" href="' + ox.base + '/apps/themes/login/login.css"/>');
-document.write('<script src="' + ox.base + '/login.js"></scr' + 'ipt>');
 </script>
+
+<link rel="stylesheet" href="v=@ version @/apps/themes/login/login.css">
+<script src="v=@ version @/login.js"></script>
+
+<link rel="shortcut icon" href="v=@ version @/favicon.ico">
 
 </head>
 <body class="unselectable">
@@ -64,27 +66,27 @@ document.write('<script src="' + ox.base + '/login.js"></scr' + 'ipt>');
                     <tbody>
                         <tr>
                             <td>
-                                <label for="io-ox-login-user" class="login-label" data-i18n="User name" >User name</label><br />
+                                <label for="io-ox-login-user" class="login-label" data-i18n="User name" >User name</label><br>
                                 <input type="text" tabindex="1" id="io-ox-login-username" 
                                     class="login-credential" name="username" value="" maxlength="1000"
-                                    autocorrect="off" autocapitalize="off"/>
+                                    autocorrect="off" autocapitalize="off">
                             </td>
                             <td>
-                                <label for="io-ox-login-password" class="login-label" data-i18n="Password">Password</label><br />
+                                <label for="io-ox-login-password" class="login-label" data-i18n="Password">Password</label><br>
                                 <input type="password" tabindex="2" id="io-ox-login-password"
                                     class="login-credential" name="password" value="" maxlength="100"
-                                    autocorrect="off" autocapitalize="off"/>
+                                    autocorrect="off" autocapitalize="off">
                             </td>
                             <td>
-                                <label class="login-label">&nbsp;</label><br/>
-                                <input type="submit" tabindex="3" data-i18n="Sign in" value="Sign in" id="login-button" class="login-button" name="submit"/>
+                                <label class="login-label">&nbsp;</label><br>
+                                <input type="submit" tabindex="3" data-i18n="Sign in" value="Sign in" id="login-button" class="login-button" name="submit">
                             </td>
                         </tr>
                         <tr><td colspan="3" style="height: 5px"></td></tr>
                         <tr>
                             <td>
                                 <div id="io-ox-login-store">
-                                    <input type="checkbox" tabindex="4" id="io-ox-login-store-box" checked="checked" name="store" value="1"/>
+                                    <input type="checkbox" tabindex="4" id="io-ox-login-store-box" checked="checked" name="store" value="1">
                                     <label for="io-ox-login-store-box" data-i18n="Stay signed in">Stay signed in</label>
                                 </div>
                             </td>

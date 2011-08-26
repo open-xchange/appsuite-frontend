@@ -13,12 +13,7 @@
  * 
  */
 
-/**
- * @namespace
- * @name ox.api.http
- */
-
-define("io.ox/core/http", ["io.ox/core/base"], function () {
+define("io.ox/core/http", ["io.ox/core/util"], function () {
         
     // default columns for each module
     var idMapping = {
@@ -405,8 +400,8 @@ define("io.ox/core/http", ["io.ox/core/base"], function () {
         if (response && response.error !== undefined && !response.data) {
             // session expired?
             if (response.code === "SES-0203") {
-                // relogin dialog
-                ox.ui.session.relogin();
+                // login dialog
+                ox.relogin();
             }
             deferred.reject(response);
         } else {
@@ -493,7 +488,7 @@ define("io.ox/core/http", ["io.ox/core/base"], function () {
                 processResponse(def, data, o);
             })
             .fail(function (xhr, textStatus, errorThrown) {
-                def.reject({ error: xhr.status + " " + errorThrown }, xhr);
+                def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
             });
         }
         if (slow) {
@@ -505,8 +500,7 @@ define("io.ox/core/http", ["io.ox/core/base"], function () {
         return def;
     };
     
-    return ox.api.http = {
-        /** @lends ox.api.http */
+    var that = {
         
         /**
          * Send a GET request
@@ -515,7 +509,7 @@ define("io.ox/core/http", ["io.ox/core/base"], function () {
          * @param {Object} options.params URL parameters
          * @returns {Object} jQuery's Deferred
          * @example
-         * ox.api.http.GET({ module: "mail", params: { action: "all", folder: "default0/INBOX" }});
+         * http.GET({ module: "mail", params: { action: "all", folder: "default0/INBOX" }});
          */
         GET: function (options) {
             return ajax(options, "GET");
@@ -590,7 +584,7 @@ define("io.ox/core/http", ["io.ox/core/base"], function () {
             deferred
                 .done(function (data) {
                     // simplify
-                    ids = ox.api.http.simplify(ids);
+                    ids = that.simplify(ids);
                     // build hash (uses folder_id!)
                     var i, obj, hash = {}, tmp = new Array(data.length);
                     for (i = 0; obj = data[i]; i++) {
@@ -685,7 +679,6 @@ define("io.ox/core/http", ["io.ox/core/base"], function () {
                                 range = size[j] > 1 ? data.slice(i, i + size[j]) : data[i];
                                 // call
                                 processResponse(range, q[i]);
-                                // ox.util.call(q[i].success, range);
                                 // inc
                                 i = i + size[j];
                                 j = j + 1;
@@ -704,4 +697,6 @@ define("io.ox/core/http", ["io.ox/core/base"], function () {
             }
         }
     };
+    
+    return that;
 });

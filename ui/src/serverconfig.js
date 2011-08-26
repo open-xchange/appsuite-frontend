@@ -18,7 +18,7 @@ define(function () {
         defaultContext: "open-xchange.com",
         
         copyright: "&copy; 2011 open xchange.",
-        version: "7.0.0002",
-        buildDate: "2010-08-03"
+        version: "7.0.0 dev",
+        buildDate: "2010-08-26"
     };
 });
