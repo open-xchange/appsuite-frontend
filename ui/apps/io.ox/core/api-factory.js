@@ -16,7 +16,7 @@
 define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/core/event"], function (http, cache, event) {
     
     var fix = function (obj) {
-        var clone = ox.util.clone(obj);
+        var clone = _.deepClone(obj);
         clone.folder = clone.folder || clone.folder_id;
         return clone;
     };
@@ -52,7 +52,7 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
             get: new cache.FlatCache(o.id + "-get", true, o.keyGenerator)
         };
         
-        return event.Dispatcher.extend({
+        var api = {
             
             getAll: function (options) {
                 // merge defaults for "all"
@@ -109,6 +109,11 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                     .done(function (data, timestamp) {
                         // add to cache
                         caches.get.add(data, timestamp);
+                        // update list cache
+                        if (caches.list.merge(data)) {
+                            // trigger local event
+                            api.trigger("refresh.list", data);
+                        }
                     });
                 } else {
                     // cache hit
@@ -117,7 +122,9 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
             },
             
             caches: caches
-        });
+        };
+        
+        return event.Dispatcher.extend(api);
     };
     
 });

@@ -82,11 +82,11 @@
          * Search handling
          */
         win.bind("search", function (q) {
-            grid.refresh("search");
+            grid.setMode("search");
         });
         
         win.bind("cancel-search", function () {
-            grid.refresh("all");
+            grid.setMode("all");
         });
         
         // LFO callback
@@ -100,7 +100,7 @@
             if (selection.length === 1) {
                 // get file
                 right.busy(true);
-                api.get(selection[0]).done(ox.util.lfo(drawDetail));
+                api.get(selection[0]).done(_.lfo(drawDetail));
             } else {
                 right.empty();
             }

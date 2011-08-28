@@ -80,15 +80,15 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session"], function
         });
         
         // TODO: hide this 'feature' more cleverly
-        if (ox.util.getHash("roadkill")) {
+        if (_.url.hash("roadkill")) {
             $("#io-ox-core").css("background", "url(apps/themes/default/roadkill.jpg) no-repeat");
             $("#io-ox-core").css("background-size", "cover");
         }
         
         $("#background_loader").removeClass("busy").fadeOut(500, function () {
             // auto launch apps?
-            if (ox.util.getHash("launch")) {
-                require(ox.util.getHash("launch").split(/,/), function () {
+            if (_.url.hash("launch")) {
+                require(_.url.hash("launch").split(/,/), function () {
                     $.each(arguments, function (i, m) { 
                         m.getApp().launch();
                     });

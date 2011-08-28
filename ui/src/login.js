@@ -105,7 +105,7 @@ $(document).ready(function () {
                 }, 50, function () {
                     // show error
                     $("#io-ox-login-feedback").text(
-                        ox.util.formatError(error, "%1$s")
+                        _.formatError(error, "%1$s")
                     );
                     // restore form
                     restore();
@@ -287,7 +287,7 @@ $(document).ready(function () {
             $("#io-ox-forgot-password").find("a").attr("href", sc.forgotPassword);
         }
         // recommend chrome frame?
-        if (ox.browser.IE <= 8) {
+        if (_.browser.IE <= 8) {
             var link = "http://www.google.com/chromeframe/?user=true";
             $("#io-ox-login-feedback").html(
                 '<div>Your browser is slow and outdated!</div>' +

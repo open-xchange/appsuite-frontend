@@ -13,7 +13,7 @@
  * 
  */
 
-define("io.ox/core/http", ["io.ox/core/util"], function () {
+define("io.ox/core/http", function () {
         
     // default columns for each module
     var idMapping = {
@@ -370,7 +370,7 @@ define("io.ox/core/http", ["io.ox/core/util"], function () {
             o.data = o.params;
         } else {
             // PUT & DELETE
-            o.url += "?" + ox.util.serialize(o.params);
+            o.url += "?" + _.serialize(o.params);
             o.original = o.data;
             o.data = JSON.stringify(o.data);
             o.contentType = "text/javascript; charset=UTF-8";
@@ -420,7 +420,7 @@ define("io.ox/core/http", ["io.ox/core/util"], function () {
                         var i = 0, $l = response.length, tmp;
                         for (; i < $l; i++) {
                             // time
-                            timestamp = response[i].timestamp !== undefined ? response[i].timestamp : ox.util.now();
+                            timestamp = response[i].timestamp !== undefined ? response[i].timestamp : _.now();
                             // data/error
                             if (response[i].data !== undefined) {
                                 // data
@@ -438,11 +438,11 @@ define("io.ox/core/http", ["io.ox/core/util"], function () {
                         deferred.resolve(data);
                     } else {
                         data = processData(response.data, o.module, o.params.columns);
-                        timestamp = response.timestamp !== undefined ? response.timestamp : ox.util.now();
+                        timestamp = response.timestamp !== undefined ? response.timestamp : _.now();
                         deferred.resolve(data, timestamp);
                     }
                 } else {
-                    deferred.resolve({}, ox.util.now());
+                    deferred.resolve({}, _.now());
                 }
             } else {
                 // e.g. plain text
@@ -454,7 +454,7 @@ define("io.ox/core/http", ["io.ox/core/util"], function () {
     // internal queue
     var paused = false;
     var queue = [];
-    var slow = ox.util.getHash("slow");
+    var slow = _.url.hash("slow");
     
     var ajax = function (options, type) {
         // process options
@@ -684,15 +684,15 @@ define("io.ox/core/http", ["io.ox/core/util"], function () {
                                 j = j + 1;
                             }
                             // continuation
-                            ox.util.call(cont);
+                            _.call(cont);
                         },
                         error: function (data) {
-                            return ox.util.call(error, data);
+                            return _.call(error, data);
                         }
                     });
                 } else {
                     // continuation
-                    ox.util.call(cont);
+                    _.call(cont);
                 }
             }
         }

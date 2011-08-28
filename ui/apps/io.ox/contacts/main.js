@@ -130,11 +130,11 @@ define("io.ox/contacts/main", [
          * Search handling
          */
         win.bind("search", function (q) {
-            grid.refresh("search");
+            grid.setMode("search");
         });
         
         win.bind("cancel-search", function () {
-            grid.refresh("all");
+            grid.setMode("all");
         });
         
         // LFO callback
@@ -153,7 +153,7 @@ define("io.ox/contacts/main", [
                     folder: selection[0].folder_id,
                     id: selection[0].id
                 })
-                .done(ox.util.lfo(drawContact));
+                .done(_.lfo(drawContact));
             } else {
                 right.empty();
             }

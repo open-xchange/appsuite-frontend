@@ -13,7 +13,7 @@
  * 
  */
 
-define("io.ox/core/event", ["io.ox/core/util"], function () {
+define("io.ox/core/event", function () {
 
     return {
 
@@ -68,7 +68,7 @@ define("io.ox/core/event", ["io.ox/core/util"], function () {
                     }
                     
                     // param shift?
-                    if (ox.util.isFunction(data)) {
+                    if (_.isFunction(data)) {
                         fn = data;
                         data = undefined;
                     }

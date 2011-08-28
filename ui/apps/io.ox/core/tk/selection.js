@@ -248,7 +248,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
             // clear
             clear();
             // get array
-            list = ox.util.isArray(list) ? list : [list];
+            list = _.isArray(list) ? list : [list];
             // loop
             var i = 0, $i = list.length;
             for (; i < $i; i++) {

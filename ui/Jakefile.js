@@ -32,12 +32,15 @@ utils.topLevelTask("default", [], utils.summary);
 
 utils.concat("login.js", ["lib/jquery.min.js", "lib/jquery-ui.min.js",
         "lib/jquery.plugins.js", "lib/require.js", "lib/modernizr.js",
-        "src/login.js"]);
+        "lib/underscore.js", "src/util.js",
+        "src/login.js"
+        ]);
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
-        "util.js", "event.js", "extensions.js", "cache.js", "http.js",
-        "config.js", "session.js", "desktop.js", "main.js"
+        "event.js", "extensions.js", "cache.js", "http.js",
+        "config.js", "session.js",
+        "desktop.js", "main.js"
     ])
 );
 

@@ -73,8 +73,8 @@ define("io.ox/calendar/api", ["io.ox/core/http"], function (http) {
                     params: {
                         action: "all",
                         folder: folderId || 0,
-                        start: start || ox.util.now(),
-                        end: end || (ox.util.now() + DAY)
+                        start: start || _.now(),
+                        end: end || (_.now() + DAY)
                     }
                 })
                 .done(function (data) {

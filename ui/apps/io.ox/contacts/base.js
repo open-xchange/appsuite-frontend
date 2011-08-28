@@ -180,7 +180,7 @@ define("io.ox/contacts/base", function () {
                 }
                 
                 // sort and loop members
-                var i = 0, list = ox.util.clone(obj.distribution_list), $i = list.length;
+                var i = 0, list = _.deepClone(obj.distribution_list), $i = list.length;
                 list.sort(mailSort);
                 for (; i < $i; i++) {
                     addMail(list[i].display_name, list[i].mail);

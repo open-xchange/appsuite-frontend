@@ -35,14 +35,6 @@ $.button = function (options) {
         className += " dark";
     }
     
-    if (ox.browser.Gecko) {
-        // firefox
-        className += " firefox";
-    } else if (ox.browser.WebKit) {
-        // webkit
-        className += " webkit";
-    }
-    
     // create text node
     var text;
     if (opt.label.nodeType === 3) {

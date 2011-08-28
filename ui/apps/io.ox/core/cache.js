@@ -13,7 +13,7 @@
  * 
  */
 
-define("io.ox/core/cache", ["io.ox/core/util"], function () {
+define("io.ox/core/cache", function () {
     
     // default key generator
     var defaultKeyGenerator = function (data) {
@@ -31,7 +31,7 @@ define("io.ox/core/cache", ["io.ox/core/util"], function () {
     var CacheStorage = (function () {
          
         // persistent storage?
-        var hasLocalStorage = Modernizr.localstorage && ox.util.getParam("persistence") !== "false";
+        var hasLocalStorage = Modernizr.localstorage && _.url.param("persistence") !== "false";
         
         return function (name, persistent) {
             
@@ -91,6 +91,7 @@ define("io.ox/core/cache", ["io.ox/core/util"], function () {
                     var str = JSON.stringify(data);
                     // lazy update
                     setTimeout(function () {
+                        localStorage.removeItem(id + "." + key);
                         localStorage.setItem(id + "." + key, str);
                     }, 0);
                 }
@@ -145,7 +146,7 @@ define("io.ox/core/cache", ["io.ox/core/util"], function () {
         
         this.add = function (key, data, timestamp) {
             // timestamp
-            timestamp = timestamp !== undefined ? timestamp : ox.util.now();
+            timestamp = timestamp !== undefined ? timestamp : _.now();
             // add/update?
             if (!index.contains(key) || timestamp >= index.get(key).timestamp) {
                 // type
@@ -275,13 +276,13 @@ define("io.ox/core/cache", ["io.ox/core/util"], function () {
         SimpleCache.call(this, name, persistent);
         
         // key generator
-        this.keyGenerator = ox.util.isFunction(keyGenerator) ? keyGenerator : defaultKeyGenerator;
+        this.keyGenerator = _.isFunction(keyGenerator) ? keyGenerator : defaultKeyGenerator;
         
         // get from cache
         var get = this.get;
         this.get = function (key) {
             // array?
-            if (ox.util.isArray(key)) {
+            if (_.isArray(key)) {
                 var i = 0, obj, tmp = new Array(key.length);
                 for (; obj = key[i]; i++) {
                     tmp[i] = this.get(obj);
@@ -306,10 +307,10 @@ define("io.ox/core/cache", ["io.ox/core/util"], function () {
             return key;
         };
         
-        // add to cache
+        // add multiple objects to cache
         this.addArray = function (data, timestamp) {
-            if (ox.util.isArray(data)) {
-                timestamp = timestamp !== undefined ? timestamp : ox.util.now();
+            if (_.isArray(data)) {
+                timestamp = timestamp !== undefined ? timestamp : _.now();
                 var i = 0, $l = data.length;
                 for (; i < $l; i++) {
                     this.add(data[i], timestamp);
@@ -317,11 +318,30 @@ define("io.ox/core/cache", ["io.ox/core/util"], function () {
             }
         };
         
+        this.merge = function (data) {
+            var key = String(this.keyGenerator(data)),
+                target, id, changed = false;
+            if (contains(key)) {
+                target = get(key);
+                // only merge properties of existing object
+                for (id in target) {
+                    changed = changed || !_.isEqual(target[id], data[id]);
+                    target[id] = data[id];
+                }
+                if (changed) {
+                    this.add(target);
+                }
+                return changed;
+            } else {
+                return false;
+            }
+        };
+        
         // contains
         var contains = this.contains;
         this.contains = function (key) {
             // array?
-            if (ox.util.isArray(key)) {
+            if (_.isArray(key)) {
                 var i = 0, $i = key.length, found = true;
                 for (; found && i < $i; i++) {
                     found = found && this.contains(key[i]);
@@ -363,7 +383,7 @@ define("io.ox/core/cache", ["io.ox/core/util"], function () {
             // add to cache
             var key = add.call(this, data, timestamp);
             // get parent id (to string)
-            var p = ox.util.firstOf(data.folder_id, data.folder) + "";
+            var p = _.firstOf(data.folder_id, data.folder) + "";
             var list = children.get(p) || [];
             // avoid circular reference (root = 0 says parent = 0)
             if (data.id !== p) {
@@ -401,7 +421,7 @@ define("io.ox/core/cache", ["io.ox/core/util"], function () {
             var data = this.get(key), p, pos, list;
             if (data !== undefined) {
                 // get parent id (to string)
-                p = ox.util.firstOf(data.folder_id, data.folder) + "";
+                p = _.firstOf(data.folder_id, data.folder) + "";
                 list = children.get(p) || [];
                 // remove from list
                 pos = $.inArray(key, list);

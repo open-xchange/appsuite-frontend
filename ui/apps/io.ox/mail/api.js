@@ -45,8 +45,7 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
             },
             get: {
                 action: "get",
-                view: "text",
-                unseen: true
+                view: "text"
             }
         }
     });
@@ -134,7 +133,7 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
         this.getList(ids)
         .done(function (data) {
             // clone not to mess up with searches
-            data = ox.util.clone(data);
+            data = _.deepClone(data);
             // inject thread size
             var i = 0, obj;
             for (; obj = data[i]; i++) {
@@ -171,7 +170,7 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
         api.caches.all.clear();
         api.caches.list.clear();
         // trigger local refresh
-        api.trigger("refresh");
+        api.trigger("refresh.all");
     });
     
     return api;

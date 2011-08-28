@@ -146,11 +146,11 @@ define("io.ox/mail/main", [
          * Search handling
          */
         win.bind("search", function (q) {
-            grid.refresh("search");
+            grid.setMode("search");
         });
         
         win.bind("cancel-search", function () {
-            grid.refresh("all");
+            grid.setMode("all");
         });
         
         // LFO callback
@@ -195,11 +195,11 @@ define("io.ox/mail/main", [
                     var thread = api.getThread(selection[0]);
                     // get first mail first
                     api.get(thread[0])
-                        .done(ox.util.lfo(drawThread, thread))
+                        .done(_.lfo(drawThread, thread))
                         .fail(function () { right.idle().empty(); });
                 } else {
                     api.get(selection[0])
-                        .done(ox.util.lfo(drawMail))
+                        .done(_.lfo(drawMail))
                         .fail(function () { right.idle().empty(); });
                 }
             } else {
@@ -212,12 +212,18 @@ define("io.ox/mail/main", [
         
         // bind refresh
         ox.bind("refresh", function () {
-            grid.refresh(grid.getMode());
+            grid.refresh();
+        });
+        
+        // bind list refresh
+        api.bind("refresh.list", function (data) {
+            grid.repaint();
         });
         
         // go!
-        grid.paint();
         win.show();
+        grid.paint();
+        
     });
     
     return {

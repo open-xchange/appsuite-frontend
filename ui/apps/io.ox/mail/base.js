@@ -20,7 +20,7 @@ define("io.ox/mail/base", function () {
     var ngettext = function (s, p, n) {
             return n > 1 ? p : s;
         },
-        format = ox.util.printf,
+        format = _.printf,
         MINUTE = 60 * 1000,
         HOUR = MINUTE * 60;
         
