@@ -106,7 +106,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         // set fixed height, be busy, hide inner content
                         self.css("height", self.height() + "px").busy().children().hide();
                         // call launcher with continuation
-                        fn(cont);
+                        fn.call(this).done(cont);
                     }
                 });
             // has icon?

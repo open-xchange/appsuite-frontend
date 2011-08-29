@@ -313,8 +313,23 @@ $(document).ready(function () {
         baseUrl: ox.base + "/apps"
     });
     
+    // teach require.js to use deferred objects
+    var req = require;
+    require = function (deps, callback) {
+        if (_.isArray(deps)) {
+            // use deferred object
+            var def = $.Deferred().done(callback);
+            req(deps, def.resolve);
+            return def;
+        } else {
+            // bypass
+            return req.apply(this, arguments);
+        }
+    };
+    
     // get pre core & server config
-    require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js"], function (data) {
+    require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js"])
+    .done(function (data) {
         // store server config
         ox.serverConfig = data;
         // set page title now

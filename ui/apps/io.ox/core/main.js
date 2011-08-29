@@ -45,37 +45,31 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session"], function
             logout();
         });
         
-        desktop.addLauncher("left", "E-Mail", null, function (cont) {
+        desktop.addLauncher("left", "E-Mail", null, function () {
             var node = this;
-            require(["io.ox/mail/main"], function (m) {
+            return require(["io.ox/mail/main"], function (m) {
                 m.getApp().setLaunchBarIcon(node).launch();
-                cont();
             });
         }).find(".icon").css("backgroundColor", "#4085B3");
         
-        desktop.addLauncher("left", "Address Book", null, function (cont) {
+        desktop.addLauncher("left", "Address Book", null, function () {
             var node = this;
-            require(["io.ox/contacts/main"], function (m) {
+            return require(["io.ox/contacts/main"], function (m) {
                 m.getApp().setLaunchBarIcon(node).launch();
-                cont();
             });
         }).find(".icon").css("backgroundColor", "#000");
         
-        desktop.addLauncher("left", "Calendar", null, function (cont) {
+        desktop.addLauncher("left", "Calendar", null, function () {
             var node = this;
-            setTimeout(function () {
-                require(["io.ox/calendar/main"], function (m) {
-                    m.getApp().setLaunchBarIcon(node).launch();
-                    cont();
-                });
-            }, 2000); // just for demo purposes
+            return require(["io.ox/calendar/main"], function (m) {
+                m.getApp().setLaunchBarIcon(node).launch();
+            });
         });
         
-        desktop.addLauncher("left", "Files", null, function (cont) {
+        desktop.addLauncher("left", "Files", null, function () {
             var node = this;
-            require(["io.ox/files/main"], function (m) {
+            return require(["io.ox/files/main"], function (m) {
                 m.getApp().setLaunchBarIcon(node).launch();
-                cont();
             });
         });
         
