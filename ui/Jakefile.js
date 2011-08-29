@@ -46,11 +46,13 @@ utils.concat("pre-core.js",
 
 utils.copy(utils.list([".htaccess", "favicon.ico", "src/", "apps/"]));
 
-utils.copy(["index.html"], {
-    filter: function(data) { return data.replace(/@ version @/g, version); }
-});
-
 utils.copyFile("lib/css.js", utils.dest("apps/css.js"));
+
+task("index");
+utils.copy(["index.html"], {
+    filter: function (data) { return data.replace(/@ version @/g, version); }
+});
+file("index.html", ["index"]);
 
 // doc task
 
