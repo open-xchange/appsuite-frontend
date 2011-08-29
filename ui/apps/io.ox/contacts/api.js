@@ -32,33 +32,23 @@ define("io.ox/contacts/api", ["io.ox/core/http", "io.ox/core/api-factory"], func
             },
             get: {
                 action: "get"
+            },
+            search: {
+                action: "search",
+                columns: "20,1,500,502,602",
+                sort: "607",
+                order: "asc",
+                getData: function (query) {
+                    return {
+                        first_name: query, last_name: query,
+                        email1: query, email2: query, email3: query,
+                        orSearch: true
+                    };
+                }
             }
         }
     });
     
-    // extend API
-    
-    api.search = function (query) {
-        // search via pattern
-        return http.PUT({
-            module: "contacts",
-            params: {
-                action: "search",
-                columns: "20,1,500,502,602",
-                sort: "607",
-                order: "asc"
-            },
-            data: {
-                first_name: query,
-                last_name: query,
-                email1: query,
-                email2: query,
-                email3: query,
-                orSearch: true
-            }
-        });
-    };
-    
     return api;
-
+    
 });

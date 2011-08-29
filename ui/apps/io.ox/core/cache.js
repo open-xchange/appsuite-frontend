@@ -261,16 +261,12 @@ define("io.ox/core/cache", function () {
         this.isComplete = function (key) {
             return isComplete.get(key) === true;
         };
-        
-        this.getClass = function () {
-            return "SimpleCache";
-        };
     };
     
     /**
      *  @class Flat Cache
      */
-    var FlatCache = function (name, persistent, keyGenerator) {
+    var ObjectCache = function (name, persistent, keyGenerator) {
         
         // inherit
         SimpleCache.call(this, name, persistent);
@@ -301,20 +297,19 @@ define("io.ox/core/cache", function () {
         // add to cache
         var add = this.add;
         this.add = function (data, timestamp) {
-            // get key
-            var key = String(this.keyGenerator(data));
-            add.call(this, key, data, timestamp);
-            return key;
-        };
-        
-        // add multiple objects to cache
-        this.addArray = function (data, timestamp) {
+            var key;
             if (_.isArray(data)) {
                 timestamp = timestamp !== undefined ? timestamp : _.now();
                 var i = 0, $l = data.length;
                 for (; i < $l; i++) {
-                    this.add(data[i], timestamp);
+                    key = String(this.keyGenerator(data[i]));
+                    add.call(this, key, data[i], timestamp);
                 }
+            } else {
+                // get key
+                key = String(this.keyGenerator(data));
+                add.call(this, key, data, timestamp);
+                return key;
             }
         };
         
@@ -357,20 +352,16 @@ define("io.ox/core/cache", function () {
                 }
             }
         };
-        
-        this.getClass = function () {
-            return "FlatCache";
-        };
     };
     
     /**
      *  @class Folder Cache
-     *  @augments FlatCache
+     *  @augments ObjectCache
      */
     var FolderCache = function (name, persistent) {
         
         // inherit
-        FlatCache.call(this, name, persistent, function (data) {
+        ObjectCache.call(this, name, persistent, function (data) {
             return data.id;
         });
         
@@ -493,15 +484,10 @@ define("io.ox/core/cache", function () {
                 complete: this.isComplete(key)
             };
         };
-        
-        this.getClass = function () {
-            return "FolderCache";
-        };
     };
     
     // debug!
     window.dumpStorage = function () {
-        // loop over all keys
         var i = 0, $i = localStorage.length, key;
         for (; i < $i; i++) {
             // get key by index
@@ -512,7 +498,7 @@ define("io.ox/core/cache", function () {
     
     return {
         SimpleCache: SimpleCache,
-        FlatCache: FlatCache,
+        ObjectCache: ObjectCache,
         FolderCache: FolderCache
     };
 });

@@ -110,9 +110,44 @@
         win.bind("show", function () { grid.selection.keyboard(true); });
         win.bind("hide", function () { grid.selection.keyboard(false); });
         
+        /*
+         * Support for file API
+         */ 
+        var overlay = $("<div/>").addClass("abs").css({
+            backgroundColor: "#000", color: "white",
+            textAlign: "center", paddingTop: "1em", fontSize: "42pt",
+            opacity: "0.75", zIndex: 65000
+        })
+        .text("Just drop the file anywhere...")
+        .bind("dragleave", function (e) {
+            overlay.detach();
+        })
+        .bind("dragenter dragover", false) // make dropzone
+        .bind("drop", function (e) {
+            var transfer = e.originalEvent.dataTransfer, file, reader;
+            if (transfer && transfer.files) {
+                file = transfer.files[0];
+                reader = new FileReader();
+                reader.onload = function (e) {
+                    console.log("YEAH", e.target.result);
+                    reader.onload = null;
+                };
+                // copy file
+                reader.readAsDataURL(file);
+            }
+            overlay.detach();
+            return false;
+        });
+        
+        $("body").bind("dragenter", function (e) {
+            overlay.appendTo("body");
+            return false;
+        });
+        
         // go!
-        grid.paint();
         win.show();
+        grid.paint();
+
     });
     
     return {

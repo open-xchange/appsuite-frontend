@@ -46,6 +46,19 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
             get: {
                 action: "get",
                 view: "text"
+            },
+            search: {
+                action: "search",
+                folder: "default0/INBOX",
+                columns: "601,600",
+                sort: "610",
+                order: "desc",
+                getData: function (query) {
+                    return [
+                        { col: 603, pattern: query }, // from
+                        { col: 607, pattern: query } // subject
+                    ];
+                }
             }
         }
     });
@@ -144,24 +157,6 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
         .fail(def.reject);
         
         return def;
-    };
-    
-    api.search = function (query) {
-        // search via pattern
-        return http.PUT({
-            module: "mail",
-            params: {
-                action: "search",
-                folder: "default0/INBOX",
-                columns: "601,600",
-                sort: "610",
-                order: "desc"
-            },
-            data: [
-                { col: 603, pattern: query }, // from
-                { col: 607, pattern: query } // subject
-            ]
-        });
     };
     
     // bind to global refresh

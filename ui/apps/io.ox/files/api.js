@@ -33,24 +33,19 @@ define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api-factory", "io.ox/c
             },
             get: {
                 action: "get"
+            },
+            search: {
+                action: "search",
+                columns: "20,1",
+                sort: "700",
+                order: "asc",
+                getData: function (query) {
+                    return { pattern: query };
+                }
             }
         }
     });
     
-    api.search = function (query) {
-        // search via pattern
-        return http.PUT({
-            module: "infostore",
-            params: {
-                action: "search",
-                columns: "20,1",
-                sort: "700",
-                order: "asc"
-            },
-            data: { pattern: query }
-        });
-    };
-    
     return api;
-
+    
 });

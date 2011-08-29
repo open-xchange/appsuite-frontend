@@ -139,7 +139,7 @@ define("io.ox/contacts/main", [
         
         // LFO callback
         function drawContact(data) {
-            right.idle().append(base.draw(data));
+            right.idle().empty().append(base.draw(data));
         }
 
         /*
@@ -148,11 +148,8 @@ define("io.ox/contacts/main", [
         grid.selection.bind("change", function (selection) {
             if (selection.length === 1) {
                 // get contact
-                right.empty().busy();
-                api.get({
-                    folder: selection[0].folder_id,
-                    id: selection[0].id
-                })
+                right.busy(true);
+                api.get(selection[0])
                 .done(_.lfo(drawContact));
             } else {
                 right.empty();
@@ -184,8 +181,9 @@ define("io.ox/contacts/main", [
         win.bind("hide", function () { grid.selection.keyboard(false); });
         
         // go!
-        grid.paint();
         win.show();
+        grid.paint();
+
     });
     
     return {

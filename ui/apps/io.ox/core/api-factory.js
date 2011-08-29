@@ -48,8 +48,8 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
         // create 3 caches for all, list, and get requests
         var caches = {
             all: new cache.SimpleCache(o.id + "-all", false),
-            list: new cache.FlatCache(o.id + "-list", true, o.keyGenerator),
-            get: new cache.FlatCache(o.id + "-get", true, o.keyGenerator)
+            list: new cache.ObjectCache(o.id + "-list", true, o.keyGenerator),
+            get: new cache.ObjectCache(o.id + "-get", true, o.keyGenerator)
         };
         
         var api = {
@@ -88,7 +88,7 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                     }))
                     .done(function (data) {
                         // add to cache
-                        caches.list.addArray(data);
+                        caches.list.add(data);
                     });
                 } else {
                     // cache hit
@@ -123,6 +123,23 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
             
             caches: caches
         };
+        
+        // add search?
+        if (o.requests.search) {
+            api.search = function (query, options) {
+                // merge defaults for search
+                var opt = $.extend({}, o.requests.search, options || {}),
+                    getData = opt.getData;
+                // remove getData functions
+                delete opt.data;
+                // go!
+                return http.PUT({
+                    module: o.module,
+                    params: opt,
+                    data: getData(query)
+                });
+            };
+        }
         
         return event.Dispatcher.extend(api);
     };
