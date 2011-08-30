@@ -45,7 +45,7 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
             },
             get: {
                 action: "get",
-                view: "text"
+                view: "html"
             },
             search: {
                 action: "search",

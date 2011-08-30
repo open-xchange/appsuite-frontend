@@ -54,7 +54,7 @@ utils.concat("pre-core.js",
     ])
 );
 
-utils.copy(utils.list([".htaccess", "favicon.ico", "src/", "apps/"]));
+utils.copy(utils.list([".htaccess", "blank.html", "favicon.ico", "src/", "apps/"]));
 
 utils.copyFile("lib/css.js", utils.dest("apps/css.js"));
 
