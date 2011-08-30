@@ -209,7 +209,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     
                 } else if (win) {
                     // toggle app window
-                    win.toggle();
+                    win.show();
                     return $.Deferred().resolve();
                 }
             };

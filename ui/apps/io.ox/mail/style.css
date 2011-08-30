@@ -107,21 +107,39 @@
     overflow-y: visible;
 }
 
-.mail-detail .from {
-    font-size: 10pt;
-    line-height: 1.5em;
-}
-
 .mail-detail .subject {
     font-size: 12pt;
     font-weight: bold;
-    line-height: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+.mail-detail .contact-picture {
+    float: right;
+    width: 64px;
+    height: 64px;
+    margin: 0 0 10px 10px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.mail-detail .list {
+    font-size: 10pt;
+    line-height: 1.2em;
+    padding: 0.25em 0 0.25em 0;
+    vertical-align: top;
+}
+
+.mail-detail .label {
+    font-weight: bold;
+    color: #aaa;
+    padding-right: 1em;
 }
 
 .mail-detail .spacer {
     font-size: 5px;
     border-bottom: 1px solid #ccc;
     margin-bottom: 1em;
+    clear: both;
 }
 
 .mail-detail .content {

@@ -25,21 +25,17 @@ How to get the UI running in Debian/Ubuntu
     http://localhost/ox7/doc/apache.html. Continue reading there!
 
 
-(UNDER CONSTRUCTION!)
-How to build the UI with node.js
---------------------------------
+How to get the UI running on MacOS X
+------------------------------------
 
-1.  Figure out Apache's document root. Common places are:
+1.  Figure out Apache's document root. If you haven't change anything, it's:
 
-    - MacOS: /Library/WebServer/Documents
-    - Linux: /var/www
+    /Library/WebServer/Documents
     
 2.  Create a new folder ox7 in Apache's document root
 
 3.  You need node.js to build the UI:
 
-    For MacOS:
-    
     - Visit https://sites.google.com/site/nodejsmacosx/ and install stable version.
     
     - Open terminal
@@ -55,3 +51,14 @@ How to build the UI with node.js
 
 4.  If everything works fine, the documentation should be at
     http://localhost/ox7/doc/apache.html. Continue reading there!
+    
+5.  If you want to work with eclipse, visit
+    http://stackoverflow.com/questions/829749/launch-mac-eclipse-with-environment-variables-set
+    
+    Your eclipse.sh should contain:
+    
+    #!/bin/sh
+    export builddir="/Library/WebServer/Documents/ox7"
+    exec "`dirname \"$0\"`/eclipse" $@
+    
+    This is a nice trick to get automatic builds without changing project files.

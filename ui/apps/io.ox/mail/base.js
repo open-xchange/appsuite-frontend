@@ -51,14 +51,19 @@ define("io.ox/mail/base", function () {
             });
         },
         
-        serializeList: function (list, delimiter) {
-            var i = 0, $i = list.length, tmp = [];
+        serializeList: function (list) {
+            var i = 0, $i = list.length, tmp = $();
             for (; i < $i; i++) {
-                tmp.push(
-                    (list[i][0] || list[i][1]).replace(/(^["']|["']$)/g, "")
+                tmp = tmp.add(
+                    $("<span/>").addClass("person").css("whiteSpace", "nowrap").text(
+                        (list[i][0] || list[i][1]).replace(/(^["']|["']$)/g, "")
+                    )
                 );
+                if (i < $i - 1) {
+                    tmp = tmp.add($("<span/>").css("color", "#555").html(" &bull; "));
+                }
             }
-            return tmp.join(delimiter || "; ");
+            return tmp;
         },
         
         getTime: function (timestamp) {
@@ -189,17 +194,59 @@ define("io.ox/mail/base", function () {
                 return $("<div/>");
             }
             
-            return $("<div/>")
+            var node, picture;
+            
+            node = $("<div/>")
                 .addClass("mail-detail")
+                .append(
+                    picture = $("<div/>").addClass("contact-picture")
+                )
                 .append(
                     $("<div/>")
                         .addClass("subject")
                         .text(data.subject)
                 )
                 .append(
-                    $("<div/>")
-                        .addClass("from person")
-                        .text(this.serializeList(data.from))
+                    $("<table/>", { border: "0", cellpadding: "0", cellspacing: "0" })
+                    .append(
+                        $("<tbody/>")
+                        .append(
+                            // FROM
+                            $("<tr/>")
+                            .append(
+                                $("<td/>").addClass("list label").text("From: ")
+                            )
+                            .append(
+                                $("<td/>").addClass("list")
+                                .append(this.serializeList(data.from))
+                            )
+                        )
+                        .append(
+                            // TO
+                            $("<tr/>")
+                            .append(
+                                $("<td/>").addClass("list label").text("To: ")
+                            )
+                            .append(
+                                $("<td/>").addClass("list")
+                                .append(this.serializeList(data.to))
+                            )
+                        )
+                        .append(
+                            data.cc.length ?
+                                // CC
+                                $("<tr/>")
+                                .append(
+                                    $("<td/>").addClass("list label").text("Copy: ")
+                                )
+                                .append(
+                                    $("<td/>").addClass("list")
+                                    .append(this.serializeList(data.cc))
+                                )
+                                :
+                                $()
+                        )
+                    )
                 )
                 .append(
                     $("<div/>").text("\u00a0").addClass("spacer")
@@ -207,6 +254,16 @@ define("io.ox/mail/base", function () {
                 .append(
                     this.getContent(data)
                 );
+            
+            require(["io.ox/mail/api"], function (api) {
+                // get contact picture
+                api.getContactPicture(data.from[0][1])
+                    .done(function (url) {
+                        picture.css("background-image", "url(" + url + ")");
+                    });
+            });
+            
+            return node;
         }
     };
 });

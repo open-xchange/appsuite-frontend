@@ -111,7 +111,7 @@ define("io.ox/mail/main", [
                 fields.threadSize.text(
                     !data.threadSize || data.threadSize === 1 ? "" : data.threadSize
                 );
-                fields.from.text(base.serializeList(data.from));
+                fields.from.empty().append(base.serializeList(data.from));
                 fields.date.text(base.getTime(data.received_date));
                 if (base.isUnread(data)) {
                     this.addClass("unread");

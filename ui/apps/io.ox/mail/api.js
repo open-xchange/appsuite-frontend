@@ -29,6 +29,9 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
         return b.received_date - a.received_date;
     };
     
+    // simple contact picture cache
+    var contactPictures = {};
+    
     // generate basic API
     var api = ApiFactory({
         module: "mail",
@@ -155,6 +158,52 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
             def.resolve(data);
         })
         .fail(def.reject);
+        
+        return def;
+    };
+    
+    // get contact picture by email address
+    api.getContactPicture = function (address) {
+        
+        // lower case!
+        address = String(address).toLowerCase();
+        
+        var def = $.Deferred();
+        
+        if (!contactPictures[address]) {
+            // search for contact
+            http.PUT({
+                module: "contacts",
+                params: {
+                    action: "search",
+                    columns: "20,1,500,606"
+                },
+                data: {
+                    email1: address, email2: address, email3: address, orSearch: true
+                }
+            })
+            .done(function (data) {
+                // focus on contact with an image
+                data = $.grep(data, function (obj) {
+                    return !!obj.image1_url;
+                });
+                if (data.length) {
+                    // favor contacts in global address book
+                    data.sort(function (a, b) {
+                        return b.folder_id === "6" ? +1 : -1;
+                    });
+                    // use first contact
+                    def.resolve(contactPictures[address] = data[0].image1_url);
+                } else {
+                    // no picture found
+                    def.resolve(contactPictures[address] = (ox.base + "/apps/themes/login/dummypicture.png"));
+                }
+            });
+            
+        } else {
+            // return cached picture
+            def.resolve(contactPictures[address]);
+        }
         
         return def;
     };
