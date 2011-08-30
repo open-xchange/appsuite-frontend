@@ -13,6 +13,8 @@
 var fs = require("fs");
 var path = require("path");
 var utils = require("./lib/build/fileutils");
+var jsp = require("./lib/uglify-js/uglify-js").parser;
+var pro = require("./lib/uglify-js/uglify-js").uglify;
 
 utils.builddir = process.env.builddir || "build";
 console.log("Build path: " + utils.builddir);
@@ -24,6 +26,18 @@ var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
     pad(t.getUTCHours()) + pad(t.getUTCMinutes()) +
     pad(t.getUTCSeconds());
 console.log("Build version: " + version);
+
+function jsFilter(data) {
+    if (process.env.debug) {
+        return data;
+    } else {
+        var ast = jsp.parse(data);
+//        ast = pro.ast_lift_variables(ast);
+        ast = pro.ast_mangle(ast);
+        ast = pro.ast_squeeze(ast, { dead_code: false });
+        return pro.gen_code(ast);
+    }
+}
 
 // default task
 
@@ -40,20 +54,19 @@ file(utils.dest("index.html"), ["force"]);
 utils.concat("login.js", ["lib/jquery.min.js", "lib/jquery-ui.min.js",
         "lib/jquery.plugins.js", "lib/require.js", "lib/modernizr.js",
         "lib/underscore.js", "src/util.js",
-        "src/login.js"
-        ]);
+        "src/login.js"], { filter: jsFilter });
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
         "event.js", "extensions.js", "cache.js", "http.js",
         "config.js", "session.js",
         "desktop.js", "main.js"
-    ])
+    ]), { filter: jsFilter }
 );
 
 utils.copy(utils.list([".htaccess", "favicon.ico", "src/", "apps/"]));
 
-utils.copyFile("lib/css.js", utils.dest("apps/css.js"));
+utils.copyFile("lib/css.js", utils.dest("apps/css.js"), jsFilter);
 
 // doc task
 
