@@ -119,6 +119,9 @@ define("io.ox/mail/main", [
                 if (base.isMe(data)) {
                     this.addClass("me");
                 }
+                if (base.isDeleted(data)) {
+                    this.addClass("deleted");
+                }
             }
         });
         

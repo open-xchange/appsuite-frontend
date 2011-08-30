@@ -94,6 +94,10 @@ define("io.ox/mail/base", function () {
             return (data.flags & 32) !== 32;
         },
         
+        isDeleted: function (data) {
+            return (data.flags & 2) === 2;
+        },
+        
         isMe: function (data) {
             // hard wired
             return data.from && data.from.length && data.from[0][1] === ox.user;
@@ -203,6 +207,9 @@ define("io.ox/mail/base", function () {
                 .addClass("mail-detail")
                 .append(
                     picture = $("<div/>").addClass("contact-picture").hide()
+                )
+                .append(
+                    $("<div/>").addClass("date list").text(this.getTime(data.received_date))
                 )
                 .append(
                     $("<div/>")
