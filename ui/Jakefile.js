@@ -28,17 +28,14 @@ console.log("Build version: " + version);
 // default task
 
 desc("Builds the GUI");
-utils.topLevelTask("default", [], function () {
-    
-    // always update index.html to get newest version!
-    var src = "index.html", dest = utils.dest("index.html");
-    fs.writeFileSync(dest,
-        fs.readFileSync(src, "utf8").replace(/@ version @/g, version)
-    );
+utils.topLevelTask("default", [], utils.summary);
 
-    utils.summary();
+utils.copy(["index.html"], {
+    filter: function(data) { return data.replace(/@ version @/g, version); }
 });
 
+task("force");
+file(utils.dest("index.html"), ["force"]);
 
 utils.concat("login.js", ["lib/jquery.min.js", "lib/jquery-ui.min.js",
         "lib/jquery.plugins.js", "lib/require.js", "lib/modernizr.js",
