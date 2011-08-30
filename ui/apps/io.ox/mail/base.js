@@ -56,11 +56,11 @@ define("io.ox/mail/base", function () {
             for (; i < $i; i++) {
                 tmp = tmp.add(
                     $("<span/>").addClass("person").css("whiteSpace", "nowrap").text(
-                        (list[i][0] || list[i][1]).replace(/(^["']|["']$)/g, "")
+                        (list[i][0] || list[i][1]).replace(/(^["'\\]+|["'\\]+$)/g, "")
                     )
                 );
                 if (i < $i - 1) {
-                    tmp = tmp.add($("<span/>").css("color", "#555").html(" &bull; "));
+                    tmp = tmp.add($("<span/>").css("color", "#555").html("&nbsp;&bull; "));
                 }
             }
             return tmp;
@@ -140,13 +140,14 @@ define("io.ox/mail/base", function () {
                         width: "100%"
                     })
                     .one("load", iframeGUID, function (e) {
-                        var doc = this.contentDocument;
+                        var doc = this.contentDocument,
+                            css = 'body { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; line-height: 12pt; }';
                         // this timeout is needed for chrome. seems that there is some kind of
                         // recursion protection (too close "load" events triggered by the same object).
                         setTimeout(function () {
                             // inject onload handler
                             html = html
-                                .replace(/<\/head>/, '  <style type="text/css">body { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; }</style>' + "\n</head>")
+                                .replace(/<\/head>/, '  <style type="text/css">' + css + '</style>' + "\n</head>")
                                 .replace(/<body/, '<body onload="parent.iframeResize(' + e.data + ', document.body);"');
                             // write content to document
                             doc.open();
@@ -194,12 +195,19 @@ define("io.ox/mail/base", function () {
                 return $("<div/>");
             }
             
-            var node, picture;
+            var node, picture,
+                showCC = data.cc.length > 0,
+                showTO = data.to.length > 1 || showCC;
             
             node = $("<div/>")
                 .addClass("mail-detail")
                 .append(
-                    picture = $("<div/>").addClass("contact-picture")
+                    picture = $("<div/>").addClass("contact-picture").hide()
+                )
+                .append(
+                    $("<div/>")
+                    .addClass("from list")
+                    .append(this.serializeList(data.from))
                 )
                 .append(
                     $("<div/>")
@@ -207,49 +215,27 @@ define("io.ox/mail/base", function () {
                         .text(data.subject)
                 )
                 .append(
-                    $("<table/>", { border: "0", cellpadding: "0", cellspacing: "0" })
-                    .append(
-                        $("<tbody/>")
-                        .append(
-                            // FROM
-                            $("<tr/>")
+                    showTO ?
+                        $("<div/>")
+                            .addClass("list")
                             .append(
-                                $("<td/>").addClass("list label").text("From: ")
+                                // TO
+                                $("<span/>").addClass("label").text("To: ")
                             )
                             .append(
-                                $("<td/>").addClass("list")
-                                .append(this.serializeList(data.from))
-                            )
-                        )
-                        .append(
-                            // TO
-                            $("<tr/>")
-                            .append(
-                                $("<td/>").addClass("list label").text("To: ")
+                                this.serializeList(data.to)
                             )
                             .append(
-                                $("<td/>").addClass("list")
-                                .append(this.serializeList(data.to))
-                            )
-                        )
-                        .append(
-                            data.cc.length ?
                                 // CC
-                                $("<tr/>")
-                                .append(
-                                    $("<td/>").addClass("list label").text("Copy: ")
-                                )
-                                .append(
-                                    $("<td/>").addClass("list")
-                                    .append(this.serializeList(data.cc))
-                                )
-                                :
-                                $()
-                        )
-                    )
+                                showCC ? $("<span/>").addClass("label").text(" Copy: ") : []
+                            )
+                            .append(
+                                this.serializeList(data.cc)
+                            )
+                        : []
                 )
                 .append(
-                    $("<div/>").text("\u00a0").addClass("spacer")
+                    $("<hr/>", { noshade: "noshade", size: "1" }).addClass("spacer")
                 )
                 .append(
                     this.getContent(data)
@@ -259,7 +245,9 @@ define("io.ox/mail/base", function () {
                 // get contact picture
                 api.getContactPicture(data.from[0][1])
                     .done(function (url) {
-                        picture.css("background-image", "url(" + url + ")");
+                        if (url) {
+                            picture.css("background-image", "url(" + url + ")").show();
+                        }
                     });
             });
             

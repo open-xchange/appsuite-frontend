@@ -93,16 +93,16 @@ define("io.ox/mail/main", [
                 var from, date, subject;
                 this.addClass("mail")
                     .append(
-                        subject = $("<div/>").addClass("subject")
-                    )
-                    .append(
-                        threadSize = $("<span/>").addClass("threadSize")
-                    )
-                    .append(
                         from = $("<div/>").addClass("from")
                     )
                     .append(
                         date = $("<div/>").addClass("date")
+                    )
+                    .append(
+                        subject = $("<div/>").addClass("subject")
+                    )
+                    .append(
+                        threadSize = $("<span/>").addClass("threadSize")
                     );
                 return { from: from, date: date, subject: subject, threadSize: threadSize };
             },

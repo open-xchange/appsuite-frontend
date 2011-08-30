@@ -139,6 +139,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
             selectedItems[key] = id;
             getNode(key).addClass(self.classSelected)
                 .intoViewport(container);
+            last = id;
         };
 
         deselect = function (id) {

@@ -170,7 +170,7 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
         
         var def = $.Deferred();
         
-        if (!contactPictures[address]) {
+        if (contactPictures[address] === undefined) {
             // search for contact
             http.PUT({
                 module: "contacts",
@@ -196,7 +196,7 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
                     def.resolve(contactPictures[address] = data[0].image1_url);
                 } else {
                     // no picture found
-                    def.resolve(contactPictures[address] = (ox.base + "/apps/themes/login/dummypicture.png"));
+                    def.resolve(contactPictures[address] = "");
                 }
             });
             
