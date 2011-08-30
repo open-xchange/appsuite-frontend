@@ -129,7 +129,7 @@
                 file = transfer.files[0];
                 reader = new FileReader();
                 reader.onload = function (e) {
-                    console.log("YEAH", e.target.result);
+                    console.warn("YEAH", e.target.result);
                     reader.onload = null;
                 };
                 // copy file

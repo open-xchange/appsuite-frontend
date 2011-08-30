@@ -32,10 +32,10 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session"], function
         
         desktop.addLauncher("right", "Applications");
         
-        desktop.addLauncher("right", "Refresh", null, function (cont) {
+        desktop.addLauncher("right", "Refresh", null, function () {
             // trigger global event
             ox.trigger("refresh");
-            cont();
+            return $.Deferred().resolve();
         });
         
         desktop.addLauncher("right", "Help").find(".icon")

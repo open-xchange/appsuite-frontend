@@ -36,6 +36,12 @@ define("io.ox/mail/base", function () {
             });
         });
     };
+    
+    // define global iframe resize handler
+    window.iframeResize = function (guid, body) {
+        var height = $(body).outerHeight(true);
+        $("#tmp-iframe-" + guid).css("height", height + 20 + "px");
+    };
    
     return that = {
         
@@ -95,39 +101,93 @@ define("io.ox/mail/base", function () {
                 .bind("resolve", obj, autoResolve);
         },
         
-        draw: function (data) {
+        getContent: function (data) {
             
             if (!data || !data.attachments) {
-                return $("<div/>");
+                return "";
             }
             
-            var mailtext = data.attachments.length ? data.attachments[0].content : "",
+            var att = data.attachments, i = 0, $i = att.length,
+                text = null, html = null,
                 content = $("<div/>").addClass("content");
             
-            // remove stuff
-            content.html(
-                $.trim(mailtext)
-                    // replace leading BR
-                    .replace(/^\s*(<br\/?>\s*)+/g, "")
-                    // reduce long BR sequences
-                    .replace(/(<br\/?>\s*){3,}/g, "<br/><br/>")
-                    // remove split block quotes
-                    .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, "<br/><br/>")
-            );
-            
-            // get contents to split long character sequences for better wrapping
-            content.contents().each(function (i) {
-                var node = $(this), text = node.text(), length = text.length;
-                if (length >= 60) {
-                    node.text(text.replace(/(\S{60})/g, "$1\u200B"));
+            for (; i < $i; i++) {
+                if (html === null && att[i].content_type === "text/html") {
+                    html = att[i].content;
+                } else if (text === null && att[i].content_type === "text/plain") {
+                    text = att[i].content;
                 }
-            });
+            }
             
-            // collapse block quotes
-            content.find("blockquote").each(function () {
-                var quote = $(this);
-                quote.text( quote.contents().text().substr(0, 150) );
-            });
+            // HTML content?
+            if (html !== null) {
+                
+                var iframeGUID = _.now();
+                
+                $("<iframe/>", {
+                        id: "tmp-iframe-" + iframeGUID,
+                        src: "blank.html",
+                        frameborder: "0",
+                        marginwidth: "0",
+                        marginheight: "0"
+                    })
+                    .css({
+                        width: "100%"
+                    })
+                    .one("load", iframeGUID, function (e) {
+                        var doc = this.contentDocument;
+                        // this timeout is needed for chrome. seems that there is some kind of
+                        // recursion protection (too close "load" events triggered by the same object).
+                        setTimeout(function () {
+                            // inject onload handler
+                            html = html
+                                .replace(/<\/head>/, '  <style type="text/css">body { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; }</style>' + "\n</head>")
+                                .replace(/<body/, '<body onload="parent.iframeResize(' + e.data + ', document.body);"');
+                            // write content to document
+                            doc.open();
+                            doc.write(html);
+                            doc.close();
+                            html = doc = null;
+                        }, 1);
+                    })
+                    .appendTo(content);
+                
+            }
+            else if (text !== null) {
+                
+                content.html(
+                    $.trim(text)
+                        // replace leading BR
+                        .replace(/^\s*(<br\/?>\s*)+/g, "")
+                        // reduce long BR sequences
+                        .replace(/(<br\/?>\s*){3,}/g, "<br/><br/>")
+                        // remove split block quotes
+                        .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, "<br/><br/>")
+                );
+                
+                // get contents to split long character sequences for better wrapping
+                content.contents().each(function (i) {
+                    var node = $(this), text = node.text(), length = text.length;
+                    if (length >= 60) {
+                        node.text(text.replace(/(\S{60})/g, "$1\u200B"));
+                    }
+                });
+                
+                // collapse block quotes
+                content.find("blockquote").each(function () {
+                    var quote = $(this);
+                    quote.text( quote.contents().text().substr(0, 150) );
+                });
+            }
+            
+            return content;
+        },
+        
+        draw: function (data) {
+            
+            if (!data) {
+                return $("<div/>");
+            }
             
             return $("<div/>")
                 .addClass("mail-detail")
@@ -145,7 +205,7 @@ define("io.ox/mail/base", function () {
                     $("<div/>").text("\u00a0").addClass("spacer")
                 )
                 .append(
-                    content
+                    this.getContent(data)
                 );
         }
     };

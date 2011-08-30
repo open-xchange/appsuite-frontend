@@ -205,29 +205,50 @@ $(document).ready(function () {
     /**
      * Relogin
      */
-    ox.relogin = function () {
-        // set header
-        $("#io-ox-login-header").html(
-            "Your session is expired." + "<br/>" + 
-            "<small>Please sign in again to continue.</small>"
-        );
-        // bind
-        $("#io-ox-login-form").bind("submit", fnSubmit);
-        $("#io-ox-login-password").val("");
-        // set success handler
-        loginSuccess = function () {
-            $("#io-ox-login-screen").fadeOut(DURATION, function () {
-                $("#io-ox-login-screen-decorator").hide();
-            });
+    (function () {
+        
+        var queue = [];
+        
+        ox.relogin = function (request, deferred) {
+            if (!relogin) {
+                // enqueue last request
+                queue = [{ request: request, deferred: deferred }];
+                // set flag
+                relogin = true;
+                // set header
+                $("#io-ox-login-header").html(
+                    "Your session is expired." + "<br/>" + 
+                    "<small>Please sign in again to continue.</small>"
+                );
+                // bind
+                $("#io-ox-login-form").bind("submit", fnSubmit);
+                $("#io-ox-login-password").val("");
+                // set success handler
+                loginSuccess = function () {
+                    $("#io-ox-login-screen").fadeOut(DURATION, function () {
+                        $("#io-ox-login-screen-decorator").hide();
+                        // process queue
+                        var i = 0, item, http = require("io.ox/core/http");
+                        for (; item = queue[i]; i++) {
+                            http.retry(item.request)
+                                .done(item.deferred.resolve)
+                                .fail(item.deferred.fail);
+                        }
+                        // set flag
+                        relogin = false;
+                    });
+                };
+                // show login dialog
+                $("#io-ox-login-screen-decorator").show();
+                $("#io-ox-login-screen").addClass("relogin").fadeIn(DURATION, function () {
+                    $("#io-ox-login-password").focus();
+                });
+            } else {
+                // enqueue last request
+                queue.push({ request: request, deferred: deferred });
+            }
         };
-        // set flag
-        relogin = true;
-        // show login dialog
-        $("#io-ox-login-screen-decorator").show();
-        $("#io-ox-login-screen").addClass("relogin").fadeIn(DURATION, function () {
-            $("#io-ox-login-password").focus();
-        });
-    };
+    }());
     
     /**
      * Try auto login

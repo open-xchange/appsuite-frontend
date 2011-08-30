@@ -401,9 +401,10 @@ define("io.ox/core/http", function () {
             // session expired?
             if (response.code === "SES-0203") {
                 // login dialog
-                ox.relogin();
+                ox.relogin(o, deferred);
+            } else {
+                deferred.reject(response);
             }
-            deferred.reject(response);
         } else {
             // handle warnings
             if (response && response.error !== undefined) {
@@ -464,6 +465,8 @@ define("io.ox/core/http", function () {
             queue.push(o);
             return;
         }
+        // store type for retry
+        o.type = type;
         // ajax (return Deferred)
         var def = $.Deferred(),
             opt = {
@@ -485,7 +488,7 @@ define("io.ox/core/http", function () {
             // go!
             $.ajax(opt)
             .done(function (data) {
-                processResponse(def, data, o);
+                processResponse(def, data, o, type);
             })
             .fail(function (xhr, textStatus, errorThrown) {
                 def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
@@ -599,6 +602,15 @@ define("io.ox/core/http", function () {
                 })
                 .fail(def.fail);
             return def;
+        },
+        
+        /**
+         * Retry request
+         */
+        retry: function (request) {
+            // get type
+            var type = (request.type || "GET").toUpperCase();
+            return this[type](request);
         },
         
         /**
