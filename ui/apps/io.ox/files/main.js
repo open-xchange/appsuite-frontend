@@ -16,8 +16,8 @@
 
  define("io.ox/files/main", [
     "io.ox/files/base", "io.ox/files/api",
-    "io.ox/core/tk/vgrid",  "css!io.ox/files/style.css"
-    ], function (base, api, VGrid) {
+    "io.ox/core/tk/vgrid",  "io.ox/files/upload", "css!io.ox/files/style.css"
+    ], function (base, api, VGrid, upload) {
 
     // application object
     var app = ox.ui.createApp(),
@@ -112,7 +112,8 @@
         
         /*
          * Support for file API
-         */ 
+         *
+         // Grab stuff from here and move to upload classes
         var overlay = $("<div/>").addClass("abs").css({
             backgroundColor: "#000", color: "white",
             textAlign: "center", paddingTop: "1em", fontSize: "42pt",
@@ -143,11 +144,25 @@
             overlay.appendTo("body");
             return false;
         });
-        
+        */ 
         // go!
         win.show();
         grid.paint();
-
+        
+        // Uploads
+        var queue = upload.createQueue({
+            processFile: function (file) {
+                return api.uploadFile({file: file}).done(function (data) {
+                    grid.refresh();
+                    // TODO: Error Handling
+                });
+            }
+        });
+        
+        var dropZone = upload.dnd.createDropZone(win.nodes.content);
+        dropZone.bind("drop", function (file) {
+            queue.offer(file);
+        });
     });
     
     return {

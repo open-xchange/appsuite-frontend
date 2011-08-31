@@ -45,6 +45,43 @@ define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api-factory", "io.ox/c
             }
         }
     });
+
+    function fallbackForOX6BackendREMOVEME (htmlpage) {
+        // Extract the JSON text
+        var matches = /\(({.*?})\)/.exec(htmlpage);
+        if (matches[1]) {
+            return matches[1];
+        }
+    }
+    
+    // Upload a file and store it
+    // As options, we expect:
+    // "folder" - The folder ID to upload the file to. This is optional and defaults to the standard files folder
+    // "file" - the file object to upload
+    // The method returns a deferred that is resolved once the file has been uploaded
+    api.uploadFile = function (options) {
+        // Alright, let's simulate a multipart formdata form
+        options.folder = options.folder || config.get("folder.infostore");
+        // TODO: This might make more sense in http.js
+        var formData = new FormData();
+        formData.append("file", options.file);
+        formData.append("json", "{folder_id: "+options.folder+"}");
+        var deferred = new $.Deferred();
+        
+        $.ajax({
+           url: ox.ajaxRoot+"/infostore?action=new&session="+ox.session,
+           data: formData,
+           cache: false,
+           contentType: false,
+           processData: false,
+           type: 'POST',
+           success: function(data){
+               deferred.resolve(fallbackForOX6BackendREMOVEME(data));
+           }
+        });
+        
+        return deferred;
+    }
     
     return api;
     
