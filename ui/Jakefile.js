@@ -15,6 +15,8 @@ var path = require("path");
 var utils = require("./lib/build/fileutils");
 var jsp = require("./lib/uglify-js/uglify-js").parser;
 var pro = require("./lib/uglify-js/uglify-js").uglify;
+var rimraf = require("./lib/rimraf/rimraf");
+var jshint = require("./lib/jshint").JSHINT;
 
 utils.builddir = process.env.builddir || "build";
 console.log("Build path: " + utils.builddir);
@@ -31,10 +33,24 @@ function jsFilter(data) {
     if (process.env.debug) {
         return data;
     } else {
+        // JSHint
+        if (!jshint(data)) {
+            console.error(jshint.errors.length + " Errors:");
+            for (var i = 0; i < jshint.errors.length; i++) {
+                var e = jshint.errors[i];
+                console.error(this.name + ":" + (e.line + 1) + ":" +
+                        (e.character + 1) + ": " + e.reason);
+                console.error(e.evidence);
+                console.error(Array(e.character).join(" ") + "^");
+            }
+            return data;
+        };
+        
+        // UglifyJS
         var ast = jsp.parse(data);
-//        ast = pro.ast_lift_variables(ast);
+        ast = pro.ast_lift_variables(ast);
         ast = pro.ast_mangle(ast);
-        ast = pro.ast_squeeze(ast, { dead_code: false });
+        ast = pro.ast_squeeze(ast);
         return pro.gen_code(ast);
     }
 }
@@ -51,10 +67,12 @@ utils.copy(["index.html"], {
 task("force");
 file(utils.dest("index.html"), ["force"]);
 
+utils.concat("login.js", ["src/util.js", "src/login.js"],
+    { to: "tmp", filter: jsFilter });
+
 utils.concat("login.js", ["lib/jquery.min.js", "lib/jquery-ui.min.js",
         "lib/jquery.plugins.js", "lib/require.js", "lib/modernizr.js",
-        "lib/underscore.js", "src/util.js",
-        "src/login.js"], { filter: jsFilter });
+        "lib/underscore.js", "tmp/login.js"]);
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
@@ -94,3 +112,9 @@ utils.concat("doc/index.html", indexFiles);
 utils.copy(utils.list("doc/lib", ["prettify.*", "default.css"]),
            { to: utils.dest("doc") });
 utils.copyFile("lib/jquery.min.js", utils.dest("doc/jquery.min.js"));
+
+// clean task
+
+task("clean", [], function() {
+    rimraf("tmp", function() { rimraf(utils.builddir, complete); });
+}, true);
