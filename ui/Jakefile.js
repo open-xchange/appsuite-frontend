@@ -33,19 +33,6 @@ function jsFilter(data) {
     if (process.env.debug) {
         return data;
     } else {
-        // JSHint
-        if (!jshint(data)) {
-            console.error(jshint.errors.length + " Errors:");
-            for (var i = 0; i < jshint.errors.length; i++) {
-                var e = jshint.errors[i];
-                console.error(this.name + ":" + (e.line + 1) + ":" +
-                        (e.character + 1) + ": " + e.reason);
-                console.error(e.evidence);
-                console.error(Array(e.character).join(" ") + "^");
-            }
-            return data;
-        };
-        
         // UglifyJS
         var ast = jsp.parse(data);
         ast = pro.ast_lift_variables(ast);
@@ -53,6 +40,24 @@ function jsFilter(data) {
         ast = pro.ast_squeeze(ast);
         return pro.gen_code(ast);
     }
+}
+
+function hint(data) {
+    if (/\.js$/.test(this.name) && !jshint(data)) {
+        console.error(jshint.errors.length + " Errors:");
+        for (var i = 0; i < jshint.errors.length; i++) {
+            var e = jshint.errors[i];
+            if (e) {
+                console.error(this.name + ":" + (e.line + 1) + ":" +
+                        (e.character + 1) + ": " + e.reason);
+                console.error(e.evidence);
+                console.error(Array(e.character).join(" ") + "^");
+            } else {
+                console.error("Fatal error");
+            }
+        }
+    }
+    return data;
 }
 
 // default task
@@ -82,7 +87,9 @@ utils.concat("pre-core.js",
     ]), { filter: jsFilter }
 );
 
-utils.copy(utils.list([".htaccess", "blank.html", "favicon.ico", "src/", "apps/"]));
+utils.copy(utils.list([".htaccess", "blank.html", "favicon.ico", "src/"]));
+
+utils.copy(utils.list("apps/"), { filter: hint });
 
 utils.copyFile("lib/css.js", utils.dest("apps/css.js"), jsFilter);
 
