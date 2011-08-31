@@ -15,6 +15,7 @@ var path = require("path");
 var utils = require("./lib/build/fileutils");
 var jsp = require("./lib/uglify-js/uglify-js").parser;
 var pro = require("./lib/uglify-js/uglify-js").uglify;
+var rimraf = require("./lib/rimraf/rimraf");
 
 utils.builddir = process.env.builddir || "build";
 console.log("Build path: " + utils.builddir);
@@ -34,7 +35,7 @@ function jsFilter(data) {
         var ast = jsp.parse(data);
         ast = pro.ast_lift_variables(ast);
         ast = pro.ast_mangle(ast);
-        ast = pro.ast_squeeze(ast, { dead_code: false });
+        ast = pro.ast_squeeze(ast);
         return pro.gen_code(ast);
     }
 }
@@ -96,3 +97,9 @@ utils.concat("doc/index.html", indexFiles);
 utils.copy(utils.list("doc/lib", ["prettify.*", "default.css"]),
            { to: utils.dest("doc") });
 utils.copyFile("lib/jquery.min.js", utils.dest("doc/jquery.min.js"));
+
+// clean task
+
+task("clean", [], function() {
+    rimraf("tmp", function() { rimraf(builddir, complete); });
+}, true);
