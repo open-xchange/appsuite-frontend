@@ -46,7 +46,7 @@ define("io.ox/mail/base", function () {
     return that = {
         
         createNewMailDialog: function () {
-            require(["io.ox/mail/new"], function (m) {
+            require(["io.ox/mail/write"], function (m) {
                 m.getApp().launch();
             });
         },

@@ -13,7 +13,6 @@
  * 
  */
 
-
 /*jslint bitwise: false, nomen: false, onevar: false, plusplus: false, regexp: false, white: true, browser: true, devel: true, evil: true, forin: true, undef: true, eqeqeq: true, immed: true */
 /*global $, ox, require */
 
