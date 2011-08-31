@@ -109,8 +109,8 @@ utils.concat("pre-core.js",
 utils.copy(utils.list([".htaccess", "blank.html", "favicon.ico", "src/"]));
 
 var apps = _.groupBy(utils.list("apps/"),
-    function(f) { return /\.js$/.test(f) ? "js" : "rest"; });
-utils.copy(apps.js, { filter: hint });
+    function (f) { return /\.js$/.test(f) ? "js" : "rest"; });
+utils.copy(apps.js, { filter: jsFilter });
 utils.copy(apps.rest);
 
 utils.copyFile("lib/css.js", utils.dest("apps/css.js"), jsFilter);
