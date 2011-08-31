@@ -101,5 +101,5 @@ utils.copyFile("lib/jquery.min.js", utils.dest("doc/jquery.min.js"));
 // clean task
 
 task("clean", [], function() {
-    rimraf("tmp", function() { rimraf(builddir, complete); });
+    rimraf("tmp", function() { rimraf(utils.builddir, complete); });
 }, true);
