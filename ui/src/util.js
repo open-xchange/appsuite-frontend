@@ -117,7 +117,7 @@
          * http.GET({ module: "calendar", params: { id: 158302 }, success: _.inspect });
          */
         inspect: function () {
-            var args = jQuery.makeArray(arguments); // $ is not jQuery here
+            var args = $.makeArray(arguments);
             args.unshift("Inspect");
             console.debug.apply(console, args);
         },
@@ -148,7 +148,7 @@
          * Return the first parameter that is not undefined
          */
         firstOf: function () {
-            var args = jQuery.makeArray(arguments), i = 0, $l = args.length;
+            var args = $.makeArray(arguments), i = 0, $l = args.length;
             for (; i < $l; i++) {
                 if (args[i] !== undefined) {
                     return args[i];

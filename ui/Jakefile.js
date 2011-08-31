@@ -17,6 +17,7 @@ var jsp = require("./lib/uglify-js/uglify-js").parser;
 var pro = require("./lib/uglify-js/uglify-js").uglify;
 var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
+var _ = require("./lib/underscore.js");
 
 utils.builddir = process.env.builddir || "build";
 console.log("Build path: " + utils.builddir);
@@ -30,6 +31,7 @@ var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
 console.log("Build version: " + version);
 
 function jsFilter(data) {
+    data = hint.call(this, data);
     if (process.env.debug) {
         return data;
     } else {
@@ -60,23 +62,21 @@ var jshintOptions = {
 };
 
 function hint(data) {
-    
-    
-    if (/\.js$/.test(this.name) && !jshint(data, jshintOptions)) {
-        console.error(jshint.errors.length + " Errors:");
-        for (var i = 0; i < jshint.errors.length; i++) {
-            var e = jshint.errors[i];
-            if (e) {
-                console.error(this.name + ":" + (e.line) + ":" +
-                        (e.character + 1) + ": " + e.reason);
-                console.error(e.evidence);
-                console.error(Array(e.character).join(" ") + "^");
-            } else {
-                console.error("Fatal error");
-            }
+
+    if (jshint(data, jshintOptions)) return data;
+    console.error(jshint.errors.length + " Errors:");
+    for (var i = 0; i < jshint.errors.length; i++) {
+        var e = jshint.errors[i];
+        if (e) {
+            console.error(this.name + ":" + (e.line) + ":" +
+                    (e.character + 1) + ": " + e.reason);
+            console.error(e.evidence);
+            console.error(Array(e.character).join(" ") + "^");
+        } else {
+            console.error("Fatal error");
         }
     }
-    return data;
+    fail("JSHint error");
 }
 
 // default task
@@ -108,7 +108,10 @@ utils.concat("pre-core.js",
 
 utils.copy(utils.list([".htaccess", "blank.html", "favicon.ico", "src/"]));
 
-utils.copy(utils.list("apps/"), { filter: hint });
+var apps = _.groupBy(utils.list("apps/"),
+    function(f) { return /\.js$/.test(f) ? "js" : "rest"; });
+utils.copy(apps.js, { filter: hint });
+utils.copy(apps.rest);
 
 utils.copyFile("lib/css.js", utils.dest("apps/css.js"), jsFilter);
 

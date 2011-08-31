@@ -13,9 +13,6 @@
  * 
  */
 
-/*jshint bitwise: false, nomen: false, onevar: false, plusplus: false, regexp: false, white: true, browser: true, devel: true, evil: true, forin: false, undef: true, eqeqeq: true, immed: true */
-/*global $, ox, require: true, _ */
-
 $(document).ready(function () {
 
     "use strict";
