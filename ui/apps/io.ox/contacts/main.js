@@ -49,7 +49,7 @@ define("io.ox/contacts/main", [
                 width: gridWidth + "px",
                 overflow: "auto"
             })
-            .appendTo(win.nodes.content);
+            .appendTo(win.nodes.main);
         
         // thumb index
         thumbs = $("<div/>")
@@ -58,13 +58,13 @@ define("io.ox/contacts/main", [
                 left: gridWidth + 3 + "px",
                 width: "34px"
             })
-            .appendTo(win.nodes.content);
+            .appendTo(win.nodes.main);
         
         // right panel
         right = $("<div/>")
             .css({ left: gridWidth + 38 + "px", overflow: "auto" })
             .addClass("rightside")
-            .appendTo(win.nodes.content);
+            .appendTo(win.nodes.main);
 
         // grid
         grid = new VGrid(left);

@@ -73,7 +73,7 @@ define("io.ox/mail/main", [
                 width: gridWidth + "px",
                 overflow: "auto"
             })
-            .appendTo(win.nodes.content);
+            .appendTo(win.nodes.main);
         
         // right panel
         $("<div/>")
@@ -82,7 +82,7 @@ define("io.ox/mail/main", [
             .append(
                 right = $("<div/>").addClass("abs")
             )
-            .appendTo(win.nodes.content);
+            .appendTo(win.nodes.main);
         
         // grid
         grid = new VGrid(left);

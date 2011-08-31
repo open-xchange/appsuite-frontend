@@ -48,7 +48,7 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
             sliderB;
         
         // dom scaffold
-        win.nodes.content
+        win.nodes.main
             .append(
                 container = $("<div/>").addClass("abs").css({
                     bottom: "30px", right: "10px"

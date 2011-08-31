@@ -284,7 +284,10 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 this.search = { query: "" };
                 this.app = null;
                 
-                var quitOnClose = false;
+                var quitOnClose = false,
+                    // views
+                    views = { main: true },
+                    currentView = "main";
                 
                 this.show = function () {
                     if (currentWindow !== this) {
@@ -375,6 +378,23 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         click: opt.action
                     })
                     .appendTo(this.nodes.toolbar);
+                };
+                
+                this.addView = function (id) {
+                    if (this.nodes[id] === undefined) {
+                        return this.nodes[id] = views[id] = $("<div/>")
+                            .addClass("window-content").hide()
+                            .appendTo(this.nodes.body);
+                    }
+                };
+                
+                this.setView = function (id) {
+                    if (id !== currentView) {
+                        if (views[id] !== undefined) {
+                            this.nodes[currentView].hide();
+                            this.nodes[currentView = id].show();
+                        }
+                    }
                 };
             };
            
@@ -474,7 +494,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                                 )
                                 .append(
                                     // content
-                                    win.nodes.content = $("<div/>")
+                                    win.nodes.main = $("<div/>")
                                         .addClass("window-content")
                                 )
                         )
@@ -558,12 +578,13 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
             win.setSubTitle(opt.subtitle);
             win.setTitle(opt.title);
             
+            
             // inc
             guid++;
             
             // quick settings?
             if (opt.settings) {
-                $.quickSettings(win.nodes.content, win.nodes.settings, win.nodes.settingsButton);
+                $.quickSettings(win.nodes.main, win.nodes.settings, win.nodes.settingsButton);
             } else {
                 win.nodes.settingsButton.hide();
             }

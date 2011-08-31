@@ -40,12 +40,12 @@
                 width: "309px",
                 overflow: "auto"
             })
-            .appendTo(win.nodes.content);
+            .appendTo(win.nodes.main);
 
         var right = $("<div/>")
             .css({ left: "347px", overflow: "auto" })
             .addClass("rightside")
-            .appendTo(win.nodes.content);
+            .appendTo(win.nodes.main);
 
         // Grid
         var grid = new VGrid(left);
