@@ -32,7 +32,7 @@ function jsFilter(data) {
         return data;
     } else {
         var ast = jsp.parse(data);
-//        ast = pro.ast_lift_variables(ast);
+        ast = pro.ast_lift_variables(ast);
         ast = pro.ast_mangle(ast);
         ast = pro.ast_squeeze(ast, { dead_code: false });
         return pro.gen_code(ast);
@@ -51,10 +51,12 @@ utils.copy(["index.html"], {
 task("force");
 file(utils.dest("index.html"), ["force"]);
 
+utils.concat("login.js", ["src/util.js", "src/login.js"],
+    { to: "tmp", filter: jsFilter });
+
 utils.concat("login.js", ["lib/jquery.min.js", "lib/jquery-ui.min.js",
         "lib/jquery.plugins.js", "lib/require.js", "lib/modernizr.js",
-        "lib/underscore.js", "src/util.js",
-        "src/login.js"], { filter: jsFilter });
+        "lib/underscore.js", "tmp/login.js"]);
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
