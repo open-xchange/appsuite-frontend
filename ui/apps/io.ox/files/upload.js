@@ -10,7 +10,6 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
         var self = this;
         var globalMode = false;
         var appendOverlay = function () {
-            console.log("Append Overlay");
             $node.appendTo("body");
             return false;
         };
@@ -25,7 +24,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
                     opacity: "0.75", zIndex: 65000
                 })
                 .text("Just drop the file anywhere...");
-                $("body").bind("dragenter", appendOverlay); 
+               
         }
         this.enabled = true;
         event.Dispatcher.extend(this);
@@ -75,13 +74,27 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
         });
         
         if (globalMode) {
+            var included = false;
             this.remove = function () {
+                if (!included) {
+                    return;
+                }
+                included = false;
                 $("body").unbind("dragenter", appendOverlay);
+            };
+            this.include = function () {
+                if (included) {
+                    return;
+                }
+                included = true;
+                $("body").bind("dragenter", appendOverlay); 
             };
         } else {
             this.remove = $.noop;
+            this.include = $.noop;
         }
         
+        this.include();
     }
     
     // And this is the duck type compatible version for browsers which don't support
@@ -91,6 +104,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
         this.bind = $.noop;
         this.unbind = $.noop;
         this.remove = $.noop;
+        this.include = $.noop;
         // Maybe add some more
     }
     
