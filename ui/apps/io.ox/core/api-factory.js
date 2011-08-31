@@ -89,6 +89,8 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                     .done(function (data) {
                         // add to cache
                         caches.list.add(data);
+                        // merge with "get" cache
+                        caches.get.merge(data);
                     });
                 } else {
                     // cache hit

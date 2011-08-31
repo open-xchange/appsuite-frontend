@@ -18,7 +18,7 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session"], function
     var PATH = "apps/io.ox/core";
     
     var logout = function () {
-        session.logout()
+        return session.logout()
         .done(function () {
             $("#background_loader").fadeIn(500, function () {
                 $("#io-ox-core").hide();
@@ -42,7 +42,7 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session"], function
             .css("backgroundColor", "#8CAD36");
         
         desktop.addLauncher("right", "Sign out", PATH + "/images/logout.png", function (e) {
-            logout();
+            return logout();
         });
         
         desktop.addLauncher("left", "E-Mail", null, function () {

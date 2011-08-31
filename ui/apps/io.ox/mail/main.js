@@ -90,7 +90,7 @@ define("io.ox/mail/main", [
         // add template
         grid.addTemplate({
             build: function () {
-                var from, date, subject;
+                var from, date, subject, threadSize, flag;
                 this.addClass("mail")
                     .append(
                         from = $("<div/>").addClass("from")
@@ -103,8 +103,11 @@ define("io.ox/mail/main", [
                     )
                     .append(
                         threadSize = $("<span/>").addClass("threadSize")
+                    )
+                    .append(
+                        flag = $("<div/>").addClass("flag abs")
                     );
-                return { from: from, date: date, subject: subject, threadSize: threadSize };
+                return { from: from, date: date, subject: subject, threadSize: threadSize, flag: flag };
             },
             set: function (data, fields, index) {
                 fields.subject.text(data.subject);
@@ -113,6 +116,7 @@ define("io.ox/mail/main", [
                 );
                 fields.from.empty().append(base.serializeList(data.from));
                 fields.date.text(base.getTime(data.received_date));
+                fields.flag.get(0).className = "flag abs flag_" + data.color_label;
                 if (base.isUnread(data)) {
                     this.addClass("unread");
                 }

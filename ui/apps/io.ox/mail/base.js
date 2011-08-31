@@ -121,9 +121,9 @@ define("io.ox/mail/base", function () {
                 content = $("<div/>").addClass("content");
             
             for (; i < $i; i++) {
-                if (html === null && att[i].content_type === "text/html") {
+                if (html === null && /^text\/html$/i.test(att[i].content_type)) {
                     html = att[i].content;
-                } else if (text === null && att[i].content_type === "text/plain") {
+                } else if (text === null && /^text\/plain$/i.test(att[i].content_type)) {
                     text = att[i].content;
                 }
             }
@@ -157,7 +157,8 @@ define("io.ox/mail/base", function () {
                             doc.open();
                             doc.write(html);
                             doc.close();
-                            html = doc = null;
+                            // don't leak
+                            html = text = doc = data = att = content = null;
                         }, 1);
                     })
                     .appendTo(content);
@@ -200,8 +201,8 @@ define("io.ox/mail/base", function () {
             }
             
             var node, picture,
-                showCC = data.cc.length > 0,
-                showTO = data.to.length > 1 || showCC;
+                showCC = data.cc && data.cc.length > 0,
+                showTO = (data.to && data.to.length > 1) || showCC;
             
             node = $("<div/>")
                 .addClass("mail-detail")
@@ -255,6 +256,7 @@ define("io.ox/mail/base", function () {
                         if (url) {
                             picture.css("background-image", "url(" + url + ")").show();
                         }
+                        url = picture = data = null;
                     });
             });
             

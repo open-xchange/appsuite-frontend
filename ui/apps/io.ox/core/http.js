@@ -372,7 +372,7 @@ define("io.ox/core/http", function () {
             // PUT & DELETE
             o.url += "?" + _.serialize(o.params);
             o.original = o.data;
-            o.data = JSON.stringify(o.data);
+            o.data = typeof o.data !== "string" ? JSON.stringify(o.data) : o.data;
             o.contentType = "text/javascript; charset=UTF-8";
         }
         // done

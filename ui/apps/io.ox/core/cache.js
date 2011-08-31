@@ -182,8 +182,8 @@ define("io.ox/core/cache", function () {
         this.remove = function (key) {
             // is array?
             if ($.isArray(key)) {
-                var i = 0, $l = key.length;
-                for (; i < $l; i++) {
+                var i = 0, $i = key.length;
+                for (; i < $i; i++) {
                     remove(key[i]);
                 }
             } else {
@@ -223,8 +223,8 @@ define("io.ox/core/cache", function () {
         
         // grep contained keys
         this.grepContains = function (list) {
-            var i = 0, $l = list.length, tmp = [];
-            for (; i < $l; i++) {
+            var i = 0, $i = list.length, tmp = [];
+            for (; i < $i; i++) {
                 if (this.contains(list[i])) {
                     tmp.push(list[i]);
                 }
@@ -300,8 +300,8 @@ define("io.ox/core/cache", function () {
             var key;
             if (_.isArray(data)) {
                 timestamp = timestamp !== undefined ? timestamp : _.now();
-                var i = 0, $l = data.length;
-                for (; i < $l; i++) {
+                var i = 0, $i = data.length;
+                for (; i < $i; i++) {
                     key = String(this.keyGenerator(data[i]));
                     add.call(this, key, data[i], timestamp);
                 }
@@ -313,22 +313,34 @@ define("io.ox/core/cache", function () {
             }
         };
         
-        this.merge = function (data) {
-            var key = String(this.keyGenerator(data)),
-                target, id, changed = false;
-            if (contains(key)) {
-                target = get(key);
-                // only merge properties of existing object
-                for (id in target) {
-                    changed = changed || !_.isEqual(target[id], data[id]);
-                    target[id] = data[id];
-                }
-                if (changed) {
-                    this.add(target);
+        this.merge = function (data, timestamp) {
+            var key, target, id, changed = false;
+            if (_.isArray(data)) {
+                timestamp = timestamp !== undefined ? timestamp : _.now();
+                var i = 0, $i = data.length;
+                for (; i < $i; i++) {
+                    key = String(this.keyGenerator(data[i]));
+                    changed = changed || this.merge(data[i], timestamp);
                 }
                 return changed;
             } else {
-                return false;
+                key = String(this.keyGenerator(data));
+                if (contains(key)) {
+                    target = get(key);
+                    // only merge properties of existing object
+                    for (id in target) {
+                        if (data[id] !== undefined) {
+                            changed = changed || !_.isEqual(target[id], data[id]);
+                            target[id] = data[id];
+                        }
+                    }
+                    if (changed) {
+                        this.add(target, timestamp);
+                    }
+                    return changed;
+                } else {
+                    return false;
+                }
             }
         };
         
@@ -430,8 +442,8 @@ define("io.ox/core/cache", function () {
         this.remove = function (key) {
             // is array?
             if ($.isArray(key)) {
-                var i = 0, $l = key.length;
-                for (; i < $l; i++) {
+                var i = 0, $i = key.length;
+                for (; i < $i; i++) {
                     removeChild.call(this, key[i]);
                 }
             } else {
@@ -443,8 +455,8 @@ define("io.ox/core/cache", function () {
             // has children?
             if (deep === true && children.contains(parent)) {
                 // loop
-                var i = 0, keys = children.get(parent), $l = keys.length;
-                for (; i < $l; i++) {
+                var i = 0, keys = children.get(parent), $i = keys.length;
+                for (; i < $i; i++) {
                     // remove its own children
                     if (keys[i] !== parent) {
                         this.removeChildren(keys[i], true);
@@ -464,8 +476,8 @@ define("io.ox/core/cache", function () {
             // exists?
             if (children.contains(parent)) {
                 // loop
-                var i = 0, keys = children.get(parent), $l = keys.length;
-                for (; i < $l; i++) {
+                var i = 0, keys = children.get(parent), $i = keys.length;
+                for (; i < $i; i++) {
                     tmp.push(this.get(keys[i]));
                 }
             }

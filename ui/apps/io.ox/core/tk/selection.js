@@ -277,8 +277,15 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
         
         this.selectFirst = function () {
             if (observedItems.length) {
+                clear();
                 select(observedItems[0]);
                 this.trigger("change", this.get());
+            }
+        };
+        
+        this.selectSmart = function () {
+            if (this.get().length === 0) {
+                this.selectFirst();
             }
         };
         

@@ -325,18 +325,21 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
         loadAll = function (cont) {
             
             function apply (list, cont) {
-                // store
-                all = list;
-                // initialize selection
-                self.selection.init(all);
-                // adjust container height
-                container.css({
-                    height: (numLabels * labelHeight + all.length * itemHeight) + "px",
-                    visibility: "hidden"
-                });
-                // process labels
-                processLabels();
-                paintLabels();
+                // changed?
+                if (list.length !== all.length || !_.isEqual(all, list)) {
+                    // store
+                    all = list;
+                    // initialize selection
+                    self.selection.init(all);
+                    // adjust container height
+                    container.css({
+                        height: (numLabels * labelHeight + all.length * itemHeight) + "px",
+                        visibility: "hidden"
+                    });
+                    // process labels
+                    processLabels();
+                    paintLabels();
+                }
                 // trigger event
                 self.trigger("ids-loaded");
                 // paint items
@@ -344,19 +347,18 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
                 paint(offset, cont);
             }
             
-            // clear first
-            apply([]);
-            
-            // be busy
-            container.parent().busy();
+            if (all.length === 0) {
+                // be busy
+                container.parent().busy();
+            }
             
             // get all IDs
             var load = loadIds[currentMode] || loadIds["all"];
             load(function (list) {
                 if (isArray(list)) {
                     apply(list, function () {
-                        // select first
-                        self.selection.selectFirst();
+                        // select first or previous selection
+                        self.selection.selectSmart();
                         container.css({ visibility: "" }).parent().idle();
                         _.call(cont);
                     });

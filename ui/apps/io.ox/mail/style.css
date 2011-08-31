@@ -20,6 +20,11 @@
     line-height: 1.5em;
 }
 
+.vgrid-cell.mail .flag {
+    left: auto;
+    width: 5px;
+}
+
 .vgrid-cell.mail.unread {
     background-color: #f5f5f5;
 }
@@ -163,3 +168,17 @@
     color: #888 !important;
     border-color: #888 !important;
 }
+
+/* flag colors */
+.flag_0  { background-color: transparent; }
+.flag_1  { background-color: #a00; }
+.flag_2  { background-color: #08c; }
+.flag_3  { background-color: #0a0; }
+.flag_4  { background-color: #888; }
+.flag_5  { background-color: #aaa; }
+.flag_6  { background-color: #aaa; }
+.flag_7  { background-color: #aaa; }
+.flag_8  { background-color: #aaa; }
+.flag_9  { background-color: #aaa; }
+.flag_10 { background-color: #fc0; }
+
