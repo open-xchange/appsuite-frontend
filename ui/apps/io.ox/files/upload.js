@@ -8,12 +8,35 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
     // "drop" when she released the file
     function DropZone ($node) {
         var self = this;
-        $node = $($node);
+        var globalMode = false;
+        var appendOverlay = function () {
+            console.log("Append Overlay");
+            $node.appendTo("body");
+            return false;
+        };
+        
+        if ($node) {
+            $node = $($node);
+        } else {
+            globalMode = true;
+            $node = $("<div/>").addClass("abs").css({
+                    backgroundColor: "#000", color: "white",
+                    textAlign: "center", paddingTop: "1em", fontSize: "42pt",
+                    opacity: "0.75", zIndex: 65000
+                })
+                .text("Just drop the file anywhere...");
+                $("body").bind("dragenter", appendOverlay); 
+        }
         this.enabled = true;
         event.Dispatcher.extend(this);
         
         // Now let's add the regular event handlers to fulfill our promises
         $node.bind({
+            dragenter: function () {
+                // We'll just hand this over. A few layers of indirection are always fun
+                self.trigger("dragenter");
+                return false; // Prevent regular event handling
+            },
             dragover: function () {
                 // We'll just hand this over. A few layers of indirection are always fun
                 self.trigger("dragover");
@@ -25,19 +48,40 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
                 return false; // Prevent regular event handling
                 
             },
+            dragleave: function () {
+                // We'll just hand this over. A few layers of indirection are always fun
+                if (globalMode) {
+                    $node.detach();
+                }
+                self.trigger("dragleave");
+                return false; // Prevent regular event handling
+                
+            },
             drop: function (event) {
                 // Finally something useful to do. Let's extract the file objects from the event
                 // grab the original event
-                event = event.originalEvent || event
-                var files = event.dataTransfer.files
+                if (globalMode) {
+                    $node.detach();
+                }
+                event = event.originalEvent || event;
+                var files = event.dataTransfer.files;
                 // And the pass them on
                 for(var i = 0, l = files.length; i < l; i++) {
                     self.trigger("drop", files[i]);
                 }
                 return false; // Prevent regular event handling
                 
-            }
+            }            
         });
+        
+        if (globalMode) {
+            this.remove = function () {
+                $("body").unbind("dragenter", appendOverlay);
+            };
+        } else {
+            this.remove = $.noop;
+        }
+        
     }
     
     // And this is the duck type compatible version for browsers which don't support
@@ -46,6 +90,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
         this.enabled = false;
         this.bind = $.noop;
         this.unbind = $.noop;
+        this.remove = $.noop;
         // Maybe add some more
     }
     
@@ -68,7 +113,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
                 processFile : function (file) {
                     return new $.Deferred().resolve();
                 }
-            }
+            };
         }
         event.Dispatcher.extend(this);
         
@@ -86,12 +131,12 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
                 self.stop();
                 self.queueChanged();
             });
-        }
+        };
         
         this.offer = function (file) {
             files.push(file);
             this.queueChanged();
-        }
+        };
         
         this.length = 0;
 
@@ -99,29 +144,29 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
             this.length = files.length;
             this.trigger("changed", this);
             this.nextFile();
-        }
+        };
         
         this.dump = function () {
             console.log("this", this, "files", files, "currentFile", currentFile);
-        }
+        };
         
         this.start = function (currentFile) {
             if (delegate.start) {
                 delegate.start(currentFile);
             }
             this.trigger("start", currentFile);
-        }
+        };
         
         this.processFile = function () {
             return delegate.processFile(currentFile);
-        }
+        };
         
         this.stop = function (currentFile) {
             if (delegate.stop) {
                 delegate.stop(currentFile);
             }
             this.trigger("stop", currentFile);
-        }
+        };
     }
      
     return {

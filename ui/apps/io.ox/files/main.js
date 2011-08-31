@@ -159,7 +159,7 @@
             }
         });
         
-        var dropZone = upload.dnd.createDropZone(win.nodes.content);
+        var dropZone = upload.dnd.createDropZone();
         dropZone.bind("drop", function (file) {
             queue.offer(file);
         });
