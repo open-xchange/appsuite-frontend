@@ -13,9 +13,6 @@
  * @ignore
  */
 
-/*jslint bitwise: true, nomen: false, onevar: false, plusplus: true, regexp: false, white: true, browser: true, devel: true, evil: true, forin: true, undef: true, eqeqeq: true, immed: true */
-/*global $, ox, require */
-
 define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
     
     "use strict";
@@ -78,24 +75,24 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
         fnKey = function (e) {
             var index;
             switch (e.which) {
-                case 38:
-                    // cursor up
-                    index = (getIndex(last) || 0) - 1;
-                    if (index >= 0) {
-                        clear();
-                        apply(observedItems[index], e);
-                    }
-                    e.preventDefault();
-                    break;
-                case 40:
-                    // cursor down
-                    index = (getIndex(last) || 0) + 1;
-                    if (index < observedItems.length) {
-                        clear();
-                        apply(observedItems[index], e);
-                    }
-                    e.preventDefault();
-                    break;
+            case 38:
+                // cursor up
+                index = (getIndex(last) || 0) - 1;
+                if (index >= 0) {
+                    clear();
+                    apply(observedItems[index], e);
+                }
+                e.preventDefault();
+                break;
+            case 40:
+                // cursor down
+                index = (getIndex(last) || 0) + 1;
+                if (index < observedItems.length) {
+                    clear();
+                    apply(observedItems[index], e);
+                }
+                e.preventDefault();
+                break;
             }
         };
         

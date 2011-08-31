@@ -15,7 +15,7 @@
 
 define("io.ox/contacts/main", [
     "io.ox/contacts/base", "io.ox/contacts/api",
-    "io.ox/core/tk/vgrid", "css!io.ox/contacts/style.css", 
+    "io.ox/core/tk/vgrid", "css!io.ox/contacts/style.css"
     ], function (base, api, VGrid) {
 
     // application object
@@ -72,7 +72,7 @@ define("io.ox/contacts/main", [
         // add template
         grid.addTemplate({
             build: function () {
-                var name, email;
+                var name, email, job;
                 this
                     .addClass("contact")
                     .append(name = $("<div/>").addClass("fullname"))
@@ -164,7 +164,7 @@ define("io.ox/contacts/main", [
             return $("<div/>").addClass("thumb-index border-bottom")
                 .text(char)
                 .bind("click", char, grid.scrollToLabelText);
-        };
+        }
         
         // draw thumb index
         grid.bind("ids-loaded", function () {

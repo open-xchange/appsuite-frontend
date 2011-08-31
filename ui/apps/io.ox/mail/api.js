@@ -84,7 +84,7 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
         .done(function (data) {
             // loop over data
             var i = 0, obj, tmp = null, all = [], first;
-            for (; obj = data[i]; i++) {
+            for (; (obj = data[i]); i++) {
                 if (obj.level === 0) {
                     if (tmp) {
                         // sort
@@ -152,7 +152,7 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
             data = _.deepClone(data);
             // inject thread size
             var i = 0, obj;
-            for (; obj = data[i]; i++) {
+            for (; (obj = data[i]); i++) {
                 obj.threadSize = threadSize(obj);
             }
             def.resolve(data);

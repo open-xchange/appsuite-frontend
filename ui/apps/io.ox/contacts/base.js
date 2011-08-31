@@ -35,7 +35,7 @@ define("io.ox/contacts/base", function () {
         getFullName: function (obj) {
             // vanity fix
             function fix(field) {
-                return /^(dr\.|prof\.|prof\. dr\.)$/i.test(field) ? field : "";
+                return (/^(dr\.|prof\.|prof\. dr\.)$/i).test(field) ? field : "";
             }
             // combine title, last_name, and first_name
             return obj.last_name && obj.first_name ?
@@ -172,12 +172,12 @@ define("io.ox/contacts/base", function () {
                 });
             }
             
+            function mailSort(a, b) {
+                return a.display_name < b.display_name ? -1 : 1;
+            }
+            
             // distribution list?
             if (obj.mark_as_distributionlist) {
-                
-                function mailSort(a, b) {
-                    return a.display_name < b.display_name ? -1 : 1;
-                }
                 
                 // sort and loop members
                 var i = 0, list = _.deepClone(obj.distribution_list), $i = list.length;
@@ -187,7 +187,7 @@ define("io.ox/contacts/base", function () {
                 }
                 
             } else {
-            
+                
                 addField("Department", obj.department);
                 addField("Position", obj.position);
                 addField("Profession", obj.profession);
@@ -203,7 +203,7 @@ define("io.ox/contacts/base", function () {
                 }
                 
                 if (r > 0) {
-                    addField("", "\u0020");
+                    addField("", "\u00a0");
                     r = 0;
                 }
                 
@@ -215,7 +215,7 @@ define("io.ox/contacts/base", function () {
                 r += addPhone("Mobile", obj.cellular_telephone2);
                 
                 if (r > 0) {
-                    addField("", "\u0020");
+                    addField("", "\u00a0");
                     r = 0;
                 }
                 
@@ -231,13 +231,13 @@ define("io.ox/contacts/base", function () {
                 }
                 
                 if (r > 0) {
-                    addField("", "\u0020");
+                    addField("", "\u00a0");
                     r = 0;
                 }
                 
-                var d = new Date(obj.birthday);
-                if (!isNaN(d.getDate())) {
-                    addField("Birthday", d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear());
+                var date = new Date(obj.birthday);
+                if (!isNaN(date.getDate())) {
+                    addField("Birthday", date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear());
                 }
             }
             

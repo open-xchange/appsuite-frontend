@@ -382,9 +382,10 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 
                 this.addView = function (id) {
                     if (this.nodes[id] === undefined) {
-                        return this.nodes[id] = views[id] = $("<div/>")
+                        var node = $("<div/>")
                             .addClass("window-content").hide()
                             .appendTo(this.nodes.body);
+                        return (this.nodes[id] = views[id] = node);
                     }
                 };
                 
@@ -531,7 +532,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                                     )
                                 )
                                 .click(function () { $(this).remove(); })
-                            )
+                            );
                         }
                     };
                 $("<input/>", { type: "search", placeholder: "Search...", size: "40" })

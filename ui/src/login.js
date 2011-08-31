@@ -13,8 +13,8 @@
  * 
  */
 
-/*jslint bitwise: false, nomen: false, onevar: false, plusplus: false, regexp: false, white: true, browser: true, devel: true, evil: true, forin: true, undef: true, eqeqeq: true, immed: true */
-/*global $, ox, require */
+/*jshint bitwise: false, nomen: false, onevar: false, plusplus: false, regexp: false, white: true, browser: true, devel: true, evil: true, forin: false, undef: true, eqeqeq: true, immed: true */
+/*global $, ox, require: true, _ */
 
 $(document).ready(function () {
 
@@ -152,13 +152,10 @@ $(document).ready(function () {
             $("[data-i18n]").each(function () {
                 var node = $(this),
                     val = (id === "en_US") ? node.attr("data-i18n") : data[node.attr("data-i18n")];
-                switch (this.tagName) {
-                    case "INPUT":
-                        node.val(val);
-                        break;
-                    default:
-                        node.text(val);
-                        break;
+                if (this.tagName === "INPUT") {
+                    node.val(val);
+                } else {
+                    node.text(val);
                 }
             });
         };
@@ -228,7 +225,7 @@ $(document).ready(function () {
                         $("#io-ox-login-screen-decorator").hide();
                         // process queue
                         var i = 0, item, http = require("io.ox/core/http");
-                        for (; item = queue[i]; i++) {
+                        for (; (item = queue[i]); i++) {
                             http.retry(item.request)
                                 .done(item.deferred.resolve)
                                 .fail(item.deferred.fail);
@@ -264,7 +261,7 @@ $(document).ready(function () {
                         "No internet connection. Using offline mode."
                     );
                 }
-            })
+            });
     };
     
     /**

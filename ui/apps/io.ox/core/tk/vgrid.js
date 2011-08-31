@@ -13,9 +13,6 @@
  * 
  */
 
-/*jslint bitwise: true, nomen: false, onevar: false, plusplus: true, regexp: false, white: true, browser: true, devel: true, evil: true, forin: true, undef: true, eqeqeq: true, immed: true */
-/*global $, ox, require */
-
 define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], function (Selection, event) {
 
     "use strict";
@@ -238,7 +235,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
                 pending = true;
             }
             // get item
-            var load = loadData[currentMode] || loadData["all"];
+            var load = loadData[currentMode] || loadData.all;
             load(all.slice(offset, offset + numRows), function (data) {
                 // pending?
                 if (isArray(pending)) {
@@ -353,7 +350,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
             }
             
             // get all IDs
-            var load = loadIds[currentMode] || loadIds["all"];
+            var load = loadIds[currentMode] || loadIds.all;
             load(function (list) {
                 if (isArray(list)) {
                     apply(list, function () {

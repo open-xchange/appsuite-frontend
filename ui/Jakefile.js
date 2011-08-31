@@ -42,13 +42,32 @@ function jsFilter(data) {
     }
 }
 
+var jshintOptions = {
+    bitwise: false,
+    nomen: false,
+    onevar: false,
+    plusplus: false,
+    regexp: false,
+    white: false,
+    browser: true,
+    devel: true,
+    evil: true,
+    forin: false,
+    undef: true,
+    eqeqeq: true,
+    immed: true,
+    predef: ["$", "_", "Modernizr", "define", "require", "ox"]
+};
+
 function hint(data) {
-    if (/\.js$/.test(this.name) && !jshint(data)) {
+    
+    
+    if (/\.js$/.test(this.name) && !jshint(data, jshintOptions)) {
         console.error(jshint.errors.length + " Errors:");
         for (var i = 0; i < jshint.errors.length; i++) {
             var e = jshint.errors[i];
             if (e) {
-                console.error(this.name + ":" + (e.line + 1) + ":" +
+                console.error(this.name + ":" + (e.line) + ":" +
                         (e.character + 1) + ": " + e.reason);
                 console.error(e.evidence);
                 console.error(Array(e.character).join(" ") + "^");

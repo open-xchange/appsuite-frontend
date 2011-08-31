@@ -43,7 +43,7 @@ define("io.ox/mail/base", function () {
         $("#tmp-iframe-" + guid).css("height", height + 20 + "px");
     };
    
-    return that = {
+    that = {
         
         createNewMailDialog: function () {
             require(["io.ox/mail/write"], function (m) {
@@ -263,4 +263,6 @@ define("io.ox/mail/base", function () {
             return node;
         }
     };
+    
+    return that;
 });

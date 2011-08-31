@@ -38,7 +38,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
                     line.append($("<em/>").text(extension.label(field)+":")).append(content = $("<span/>"));
                     extension.draw(field, file, content);
                     count++;
-                    if (count == 5) {
+                    if (count === 5) {
                         count = 0;
                         line = $("<div/>");
                         container.append(line);
@@ -60,10 +60,10 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
             registry.point("io.ox.files.details.actions").each(function (index, extension) {
                 var action = function () {
                     extension.action(file);
-                }
+                };
                 line.append($("<a/>").text(extension.label).attr("href", "#").click(action));
                 count++;
-                if (count == 5) {
+                if (count === 5) {
                     count = 0;
                     line = $("<div/>");
                     container.append(line);
@@ -127,8 +127,8 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
     
     var bytesToSize = function (bytes) {
         var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-        if (bytes == 0) return 'n/a';
-        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        if (bytes === 0) return 'n/a';
+        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
         return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
     };
     
@@ -139,7 +139,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
             return "Size";
         },
         draw: function (field, file, element) {
-            element.text(bytesToSize(file["file_size"]));
+            element.text(bytesToSize(file.file_size));
         }
     });
     
@@ -150,7 +150,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
            return "Version";
        },
        draw: function (field, file, element) {
-           element.text(file["version"]);
+           element.text(file.version);
        }
        
     });
@@ -167,7 +167,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
             return "Last Modified";
         },
         draw: function (field, file, element) {
-            element.text(formatDate(file["last_modified"]));
+            element.text(formatDate(file.last_modified));
         }
     });
     
@@ -203,7 +203,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
     // .txt
     registry.point("io.ox.files.renderer").register({
        canRender: function (fileDescription) {
-           return /\.txt$/.test(fileDescription.name);
+           return (/\.txt$/).test(fileDescription.name);
        },
        draw: function (fileDescription, div) {
            var textDisplay = $("<textarea/>").attr("rows", "30").attr("cols", "80").attr("readonly", "readonly");
@@ -219,7 +219,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
           endings: ["png", "jpg", "jpeg", "gif"],
           canRender: function (fileDescription) {
               for(var i = 0, l = this.endings.length; i < l; i++) {
-                  if (new RegExp("\."+this.endings[i]+"$").test(fileDescription.name)) {
+                  if (new RegExp("\\." + this.endings[i] + "$").test(fileDescription.name)) {
                       return true;
                   }
               }
@@ -236,7 +236,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
         endings: ["mp3", "ogg", "wav"],
         canRender: function (fileDescription) {
             for(var i = 0, l = this.endings.length; i < l; i++) {
-                if (new RegExp("\."+this.endings[i]+"$").test(fileDescription.name)) {
+                if (new RegExp("\\." + this.endings[i] + "$").test(fileDescription.name)) {
                     fileDescription["io.ox.files.detectedEnding"] = this.endings[i];
                     return true;
                 }

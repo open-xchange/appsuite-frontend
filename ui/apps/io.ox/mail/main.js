@@ -164,7 +164,7 @@ define("io.ox/mail/main", [
         function drawThread (list, mail) {
             // loop over thread - use fragment to be fast for tons of mails
             var i = 0, obj, frag = document.createDocumentFragment();
-            for (; obj = list[i]; i++) {
+            for (; (obj = list[i]); i++) {
                 if (i === 0) {
                     frag.appendChild(base.draw(mail).get(0));
                 } else {

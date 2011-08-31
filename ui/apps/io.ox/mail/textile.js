@@ -13,9 +13,6 @@
  * 
  */
 
-/*jslint bitwise: false, nomen: false, onevar: false, plusplus: false, regexp: false, white: false, browser: true, devel: true, evil: true, forin: true, undef: true, eqeqeq: true, immed: true */
-/*global $, ox, define */
-
 define("io.ox/mail/textile", function () {
         
     "use strict";

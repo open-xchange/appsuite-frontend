@@ -67,32 +67,6 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
                 )
             );
         
-        // initialize slider
-        sliderA.css("width", "200px").slider({
-            range: "min",
-            value: zoom,
-            min: 100,
-            max: 1000,
-            step: step,
-            slide: function (e, ui) {
-                zoom = ui.value;
-                updateZoom();
-            }
-        });
-        
-        sliderB.css("width", "200px").slider({
-            range: true,
-            values: [weekStart, weekEnd],
-            min: 0,
-            max: 6,
-            step: 1,
-            slide: function (e, ui) {
-                weekStart = ui.values[0];
-                weekEnd = ui.values[1];
-                updateDay();
-            }
-        });
-        
         var formatDate = function (d) {
             return d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear();
         };
@@ -120,157 +94,6 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
             }
         };
         
-        var paint = function() {
-            // clear
-            clear();
-            // view?
-            switch (view) {
-                case "day":
-                    paintDay(startDate + weekStart);
-                    break;
-                case "week":
-                    paintWeek();
-                    break;
-            }
-        };
-        
-        var paintDay = function (start) {
-            
-            // start?
-            if (start === undefined) {
-                start = startDate + weekStart;
-            }
-            
-            // content area (top)
-            dom.topContainer = $("<div/>").css({
-                position: "absolute", top: "0px", right: "16px", height: "50px", left: "50px"
-            }).appendTo(container);
-            
-            // content area (bottom)
-            dom.bottomContainer = $("<div/>").css({
-                position: "absolute", top: "50px", right: "0px", bottom: "0px", left: "0px",
-                overflow: "auto", overflowX: "hidden", overflowY: "scroll"
-            }).appendTo(container);
-            
-            // content area
-            dom.zoomContainer = $("<div/>").css({
-                position: "absolute", top: "0px", right: "0px", left: "0px",
-                height: zoom + "%"
-            }).appendTo(dom.bottomContainer);
-            
-            // hour container
-            dom.hourContainer = $("<div/>").css({
-                position: "absolute", top: "0%", left: "0px", width: "49px",
-                height: "100%", borderRight: "1px solid #aaa"
-            }).appendTo(dom.zoomContainer);
-            
-            // hours
-            var start = startTime, end = endTime;
-            var i, height = 100/24, top = height;
-            for (i = 1; i < 24; i++) {
-                var hour = $("<div/>").css({
-                    position: "absolute", top: top + "%", left: "0px", right: "0px",
-                    fontSize: "9pt", textAlign: "right", paddingRight: "5px",
-                    marginTop: "-6pt"
-                }).
-                text(i + ":00").
-                appendTo(dom.hourContainer);
-                top += height;
-            }
-            
-            // day
-            dom.dayContainer = $("<div/>").css({
-                position: "absolute", top: "0px", right: "0px", bottom: "0px", left: "50px"
-            }).appendTo(dom.zoomContainer);
-            
-            // hour grid
-            for (i = 0, top = 0; i < 48; i++) {
-                var h = Math.floor(i/2), height = 100/48;
-                var color = h >= start && h <= end ? "white" : "#F2F6FA";
-                var hour = $("<div/>").css({
-                    position: "absolute", top: top + "%", left: "0px", right: "0px",
-                    height: height + "%"
-                }).
-                append(
-                    $("<div/>").css({
-                        position: "absolute", top: "0px", right: "0px", bottom: "0px",
-                        left: "0px",
-                        backgroundColor: color,
-                        borderTop: "1px solid #ccc",
-                        borderTopColor: (i % 2 == 0 ? "#bbb" : "#ddd")
-                    })
-                ).
-                appendTo(dom.dayContainer);
-                top += height;
-            }
-            
-            // detail view
-            dom.detailContainer = $("<div/>").css({
-                position: "absolute", top: "0px", bottom: "0px", left: "50%", width: "50%",
-                backgroundColor: "white", display: "none", borderLeft: "1px solid #ccc",
-                overflow: "visible"
-            }).appendTo(dom.dayContainer);
-            
-            updateDay(start);
-        };
-        
-        var updateDay = function (start) {
-                
-            // start?
-            if (start === undefined) {
-                start = startDate + weekStart;
-            }
-            
-            // remove app container
-            $("div.appContainer", dom.dayContainer).remove();
-            // remove old appointments
-            $("div.discoAppointment", dom.dayContainer).remove();
-            // remove dates
-            $("div.date", dom.topContainer).remove();
-            
-            // appointment container
-            var days = weekEnd - weekStart + 1;
-            var width = 100/Math.max(2, days);
-            for (var i = weekStart, l = 0; i <= weekEnd; i++, l++) {
-                // header: date
-                var format = days <= 2 ? "dateday" : "date";
-                var fontSize = days <= 2 ? "14pt" : "12pt";
-                var dateNode = dom[id] = $("<div/>").css({
-                    position: "absolute", top: "0px", bottom: "0px", left: (l*width) + "%",
-                    width: width + "%",
-                    fontSize: fontSize, lineHeight: "50px", color: "#333",
-                    textAlign: "center"
-                }).addClass("date").appendTo(dom.topContainer);
-                
-                dateNode.text( formatDate(new Date(startDate + i * api.DAY), format) );
-                
-                // app container
-                var id = "appContainer" + l;
-                var node = dom[id] = $("<div/>").css({
-                    position: "absolute", top: "0px", bottom: "0px", left: (l*width) + "%", width: width + "%",
-                    borderLeft: l > 0 ? "1px dotted #ccc" : "0px none"
-                }).addClass("appContainer").appendTo(dom.dayContainer);
-                
-                // draw appointments
-                (function(i, node) {
-                    var start = startDate + i * api.DAY;
-                    getAppointments(start, function (response) {
-                        // loop appointments
-                        for (var index in response) {
-                            paintDayAppointment(response[index], start, node);
-                        }
-                        // add detail view?
-                        if (days == 1) {
-                            paintDetails(response, start);
-                            dom.detailContainer.show();
-                        } else {
-                            dom.detailContainer.hide();
-                        }
-                    });
-                })(i, node);
-            }
-        };
-            
         var styles = {
             1: { background: "#f7fbff", border: "#1c4a82" }, // reserved
             2: { background: "#f3eee0", border: "#f3b411" }, // temporary
@@ -311,6 +134,30 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
                 appendTo(outer);
         };
         
+        var paintParticipants = function (participants, node) {
+            var tmp = [], i = 0, $l = participants.length;
+            for(; i < $l; i++) {
+                if (participants[i].type !== 5) {
+                    tmp.push(participants[i]);
+                }
+            }
+            // get participants TODO
+            /*internalCache.getObjects(tmp, function(data) {
+                var tmp = [];
+                for (var id in data) {
+                    tmp.push(data[id].display_name);
+                }
+                // sort
+                tmp.sort();
+                // add mark up
+                var sorted = [];
+                for (var id in tmp) {
+                    sorted.push("<span style='color: #333; font-style: italic;'>" + tmp[id] + "</span>");
+                }
+                node.html("Teilnehmer: " + sorted.join(". "));
+            });*/
+        };
+        
         var paintDetails = function (data, startDate) {
             // clear
             dom.detailContainer.empty();
@@ -343,33 +190,192 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
                 }
             }
         };
+        
+        var updateDay = function (start) {
             
-        var paintParticipants = function (participants, node) {
-            var tmp = [], i = 0, $l = participants.length;
-            for(; i < $l; i++) {
-                if (participants[i].type != 5) {
-                    tmp.push(participants[i]);
-                }
+            // start?
+            if (start === undefined) {
+                start = startDate + weekStart;
             }
-            // get participants TODO
-            /*internalCache.getObjects(tmp, function(data) {
-                var tmp = [];
-                for (var id in data) {
-                    tmp.push(data[id].display_name);
-                }
-                // sort
-                tmp.sort();
-                // add mark up
-                var sorted = [];
-                for (var id in tmp) {
-                    sorted.push("<span style='color: #333; font-style: italic;'>" + tmp[id] + "</span>");
-                }
-                node.html("Teilnehmer: " + sorted.join(". "));
-            });*/
+            
+            // remove app container
+            $("div.appContainer", dom.dayContainer).remove();
+            // remove old appointments
+            $("div.discoAppointment", dom.dayContainer).remove();
+            // remove dates
+            $("div.date", dom.topContainer).remove();
+            
+            var days = weekEnd - weekStart + 1;
+            var width = 100/Math.max(2, days);
+
+            var drawAppointment = function (i, node) {
+                var start = startDate + i * api.DAY;
+                getAppointments(start, function (response) {
+                    // loop appointments
+                    for (var index in response) {
+                        paintDayAppointment(response[index], start, node);
+                    }
+                    // add detail view?
+                    if (days === 1) {
+                        paintDetails(response, start);
+                        dom.detailContainer.show();
+                    } else {
+                        dom.detailContainer.hide();
+                    }
+                });
+            };
+            
+            // appointment container
+            for (var i = weekStart, l = 0; i <= weekEnd; i++, l++) {
+                // header: date
+                var format = days <= 2 ? "dateday" : "date";
+                var fontSize = days <= 2 ? "14pt" : "12pt";
+                var id = "appContainer" + l;
+                
+                var dateNode = dom[id] = $("<div/>").css({
+                    position: "absolute", top: "0px", bottom: "0px", left: (l*width) + "%",
+                    width: width + "%",
+                    fontSize: fontSize, lineHeight: "50px", color: "#333",
+                    textAlign: "center"
+                }).addClass("date").appendTo(dom.topContainer);
+                
+                dateNode.text( formatDate(new Date(startDate + i * api.DAY), format) );
+                
+                // app container
+                var node = dom[id] = $("<div/>").css({
+                    position: "absolute", top: "0px", bottom: "0px", left: (l*width) + "%", width: width + "%",
+                    borderLeft: l > 0 ? "1px dotted #ccc" : "0px none"
+                }).addClass("appContainer").appendTo(dom.dayContainer);
+                
+                // draw appointments
+                drawAppointment(i, node);
+            }
+        };
+        
+        var paintDay = function (start) {
+            
+            // start?
+            if (start === undefined) {
+                start = startDate + weekStart;
+            }
+            
+            // content area (top)
+            dom.topContainer = $("<div/>").css({
+                position: "absolute", top: "0px", right: "16px", height: "50px", left: "50px"
+            }).appendTo(container);
+            
+            // content area (bottom)
+            dom.bottomContainer = $("<div/>").css({
+                position: "absolute", top: "50px", right: "0px", bottom: "0px", left: "0px",
+                overflow: "auto", overflowX: "hidden", overflowY: "scroll"
+            }).appendTo(container);
+            
+            // content area
+            dom.zoomContainer = $("<div/>").css({
+                position: "absolute", top: "0px", right: "0px", left: "0px",
+                height: zoom + "%"
+            }).appendTo(dom.bottomContainer);
+            
+            // hour container
+            dom.hourContainer = $("<div/>").css({
+                position: "absolute", top: "0%", left: "0px", width: "49px",
+                height: "100%", borderRight: "1px solid #aaa"
+            }).appendTo(dom.zoomContainer);
+            
+            // hours
+            start = startTime;
+            var end = endTime, hour, h, color;
+            var i, height = 100/24, top = height;
+            for (i = 1; i < 24; i++) {
+                hour = $("<div/>").css({
+                    position: "absolute", top: top + "%", left: "0px", right: "0px",
+                    fontSize: "9pt", textAlign: "right", paddingRight: "5px",
+                    marginTop: "-6pt"
+                }).
+                text(i + ":00").
+                appendTo(dom.hourContainer);
+                top += height;
+            }
+            
+            // day
+            dom.dayContainer = $("<div/>").css({
+                position: "absolute", top: "0px", right: "0px", bottom: "0px", left: "50px"
+            }).appendTo(dom.zoomContainer);
+            
+            // hour grid
+            for (i = 0, top = 0; i < 48; i++) {
+                h = Math.floor(i/2);
+                height = 100/48;
+                color = h >= start && h <= end ? "white" : "#F2F6FA";
+                hour = $("<div/>").css({
+                    position: "absolute", top: top + "%", left: "0px", right: "0px",
+                    height: height + "%"
+                }).
+                append(
+                    $("<div/>").css({
+                        position: "absolute", top: "0px", right: "0px", bottom: "0px",
+                        left: "0px",
+                        backgroundColor: color,
+                        borderTop: "1px solid #ccc",
+                        borderTopColor: (i % 2 === 0 ? "#bbb" : "#ddd")
+                    })
+                ).
+                appendTo(dom.dayContainer);
+                top += height;
+            }
+            
+            // detail view
+            dom.detailContainer = $("<div/>").css({
+                position: "absolute", top: "0px", bottom: "0px", left: "50%", width: "50%",
+                backgroundColor: "white", display: "none", borderLeft: "1px solid #ccc",
+                overflow: "visible"
+            }).appendTo(dom.dayContainer);
+            
+            updateDay(start);
         };
         
         var paintWeek = function () {
         };
+        
+        var paint = function() {
+            // clear
+            clear();
+            // view?
+            switch (view) {
+                case "day":
+                    paintDay(startDate + weekStart);
+                    break;
+                case "week":
+                    paintWeek();
+                    break;
+            }
+        };
+        
+        // initialize slider
+        sliderA.css("width", "200px").slider({
+            range: "min",
+            value: zoom,
+            min: 100,
+            max: 1000,
+            step: step,
+            slide: function (e, ui) {
+                zoom = ui.value;
+                updateZoom();
+            }
+        });
+        
+        sliderB.css("width", "200px").slider({
+            range: true,
+            values: [weekStart, weekEnd],
+            min: 0,
+            max: 6,
+            step: 1,
+            slide: function (e, ui) {
+                weekStart = ui.values[0];
+                weekEnd = ui.values[1];
+                updateDay();
+            }
+        });
         
         win.show();
         paint();

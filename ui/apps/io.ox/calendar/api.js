@@ -41,8 +41,7 @@ define("io.ox/calendar/api", ["io.ox/core/http"], function (http) {
             if (typeof step === "number") {
                 return Math.floor(timestamp / step) * step;
             } else {
-                switch (step) {
-                case "week":
+                if (step === "week") {
                     // get current date
                     var d = new Date(timestamp);
                     // get work day
@@ -51,7 +50,6 @@ define("io.ox/calendar/api", ["io.ox/core/http"], function (http) {
                     var t = d.getTime() - day * DAY;
                     // round down to day and return
                     return this.floor(t, DAY);
-                    break;
                 }
             }
         },

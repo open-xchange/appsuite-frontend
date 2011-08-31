@@ -572,7 +572,7 @@ define("io.ox/core/http", function () {
          */
         simplify: function (list) {
             var i = 0, item = null, tmp = new Array(list.length);
-            for (; item = list[i]; i++) {
+            for (; (item = list[i]); i++) {
                 tmp[i] = { folder: item.folder || item.folder_id, id: item.id };
             }
             return tmp;
@@ -590,11 +590,11 @@ define("io.ox/core/http", function () {
                     ids = that.simplify(ids);
                     // build hash (uses folder_id!)
                     var i, obj, hash = {}, tmp = new Array(data.length);
-                    for (i = 0; obj = data[i]; i++) {
+                    for (i = 0; (obj = data[i]); i++) {
                         hash[obj.folder_id + "." + obj.id] = obj;
                     }
                     // fix order (uses folder!)
-                    for (i = 0; obj = ids[i]; i++) {
+                    for (i = 0; (obj = ids[i]); i++) {
                         tmp[i] = hash[obj.folder + "." + obj.id];
                     }
                     hash = obj = ids = null;

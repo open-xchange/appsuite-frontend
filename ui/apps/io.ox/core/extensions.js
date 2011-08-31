@@ -50,6 +50,7 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
     };
     
     var Registry = function () {
+        
         var extensionPoints = {};
         
         this.point = function (id) {
@@ -60,7 +61,7 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             if (point) {
                 return point;
             }
-            return extensionPoints[id] = new ExtensionPoint({id: id});
+            return (extensionPoints[id] = new ExtensionPoint({id: id}));
         };
         
         this.dump = function () {

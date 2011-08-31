@@ -280,7 +280,7 @@ define("io.ox/core/cache", function () {
             // array?
             if (_.isArray(key)) {
                 var i = 0, obj, tmp = new Array(key.length);
-                for (; obj = key[i]; i++) {
+                for (; (obj = key[i]); i++) {
                     tmp[i] = this.get(obj);
                 }
                 return tmp;
@@ -313,6 +313,27 @@ define("io.ox/core/cache", function () {
             }
         };
         
+        // contains
+        var contains = this.contains;
+        this.contains = function (key) {
+            // array?
+            if (_.isArray(key)) {
+                var i = 0, $i = key.length, found = true;
+                for (; found && i < $i; i++) {
+                    found = found && this.contains(key[i]);
+                }
+                return found;
+            } else {
+                // simple value
+                if (typeof key === "string" || typeof key === "number") {
+                    return contains(key);
+                } else {
+                    // object, so get key
+                    return contains(String(this.keyGenerator(key)));
+                }
+            }
+        };
+        
         this.merge = function (data, timestamp) {
             var key, target, id, changed = false;
             if (_.isArray(data)) {
@@ -340,27 +361,6 @@ define("io.ox/core/cache", function () {
                     return changed;
                 } else {
                     return false;
-                }
-            }
-        };
-        
-        // contains
-        var contains = this.contains;
-        this.contains = function (key) {
-            // array?
-            if (_.isArray(key)) {
-                var i = 0, $i = key.length, found = true;
-                for (; found && i < $i; i++) {
-                    found = found && this.contains(key[i]);
-                }
-                return found;
-            } else {
-                // simple value
-                if (typeof key === "string" || typeof key === "number") {
-                    return contains(key);
-                } else {
-                    // object, so get key
-                    return contains(String(this.keyGenerator(key)));
                 }
             }
         };

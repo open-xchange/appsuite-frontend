@@ -158,7 +158,7 @@ define("io.ox/core/event", function () {
                         // execute function
                         try {
                             handler.fn.call(target, d, type);
-                        } catch (e) {
+                        } catch (ex_1) {
                             try {
                                 // and IE might even fail here
                                 if (window.debug) {
@@ -166,11 +166,11 @@ define("io.ox/core/event", function () {
                                     // might be tricky for debugging, but
                                     // IE tends to get stuck with sub windows
                                     // which is even harder to find out
-                                    console.error("Dispatcher.call() " + e);
+                                    console.error("Dispatcher.call() " + ex_1);
                                 }
-                            } catch (e) {
+                            } catch (ex_2) {
                                 // pssst - if u come around here, IE's console doesn't work
-                                console.error("Event.Dispatcher", e);
+                                console.error("Event.Dispatcher", ex_2);
                             }
                         }
                     }

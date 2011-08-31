@@ -20,7 +20,7 @@ define("io.ox/mail/write",
     function createInstance () {
         
         var app, win,
-            container, editor;
+            container, editor, editorContainer;
         
         app = ox.ui.createApp({
             title: "New E-Mail"
@@ -84,7 +84,7 @@ define("io.ox/mail/write",
             // load example text
             $.ajax({
                 url: "apps/io.ox/mail/example.txt",
-                dataType: "text",
+                dataType: "text"
             })
             .done(function (txt) {
                 editor.val(txt).focus();
