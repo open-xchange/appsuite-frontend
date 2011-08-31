@@ -76,6 +76,9 @@ define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api-factory", "io.ox/c
            processData: false,
            type: 'POST',
            success: function(data){
+               $.each(api.caches, function (cacheName, cache) {
+                   cache.clear(); // TODO: How can I clear just the data of one folder?
+               });
                deferred.resolve(fallbackForOX6BackendREMOVEME(data));
            }
         });
