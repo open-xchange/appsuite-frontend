@@ -100,7 +100,7 @@ exports.copyFile = function(src, dest, filter) {
     var dir = path.dirname(dest);
     directory(dir);
     file(dest, [src, dir, "Jakefile.js"], filter ? function() {
-        fs.writeFileSync(dest, filter(fs.readFileSync(src, "utf8")));
+        fs.writeFileSync(dest, filter.call(this, fs.readFileSync(src, "utf8")));
         counter++;
     } : function() {
         var data = fs.readFileSync(src);
@@ -148,7 +148,7 @@ exports.concat = function(name, files, options) {
                     fs.readFileSync(path.join(srcDir, files[i]), "utf8") :
                     files[i].getData());
             }
-            fs.writeSync(fd, filter(data.join("")), null);
+            fs.writeSync(fd, filter.call(this, data.join("")), null);
         } else {
             for (var i = 0; i < files.length; i++) {
                 var data = typeof files[i] == "string" ?

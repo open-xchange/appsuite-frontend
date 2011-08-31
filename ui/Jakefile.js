@@ -16,6 +16,7 @@ var utils = require("./lib/build/fileutils");
 var jsp = require("./lib/uglify-js/uglify-js").parser;
 var pro = require("./lib/uglify-js/uglify-js").uglify;
 var rimraf = require("./lib/rimraf/rimraf");
+var jshint = require("./lib/jshint").JSHINT;
 
 utils.builddir = process.env.builddir || "build";
 console.log("Build path: " + utils.builddir);
@@ -32,6 +33,20 @@ function jsFilter(data) {
     if (process.env.debug) {
         return data;
     } else {
+        // JSHint
+        if (!jshint(data)) {
+            console.error(jshint.errors.length + " Errors:");
+            for (var i = 0; i < jshint.errors.length; i++) {
+                var e = jshint.errors[i];
+                console.error(this.name + ":" + (e.line + 1) + ":" +
+                        (e.character + 1) + ": " + e.reason);
+                console.error(e.evidence);
+                console.error(Array(e.character).join(" ") + "^");
+            }
+            return data;
+        };
+        
+        // UglifyJS
         var ast = jsp.parse(data);
         ast = pro.ast_lift_variables(ast);
         ast = pro.ast_mangle(ast);
