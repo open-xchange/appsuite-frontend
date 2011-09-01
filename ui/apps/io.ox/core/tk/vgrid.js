@@ -118,13 +118,13 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
             currentMode = "all",
             // default all & list request
             loadIds = {
-                all: function (cont) {
-                    _.call(cont, []);
+                all: function (con) {
+                    return $.Deferred().resolve([]);
                 }
             },
             loadData = {
-                all: function (ids, cont) {
-                    _.call(cont, ids);
+                all: function (ids) {
+                    return $.Deferred().resolve(ids);
                 }
             },
             // data index (contains ALL ids)
@@ -223,76 +223,77 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
             }
         };
         
-        paint = function (offset, cont) {
+        paint = function (offset) {
             // keep positive
             offset = Math.max(0, offset);
             // pending?
+            var def;
             if (pending) {
                 // enqueue latest paint
-                pending = [offset, cont];
-                return;
+                def = $.Deferred();
+                pending = [offset, def];
+                return def;
             } else {
                 pending = true;
             }
             // get item
             var load = loadData[currentMode] || loadData.all;
-            load(all.slice(offset, offset + numRows), function (data) {
-                // pending?
-                if (isArray(pending)) {
-                    // process latest paint
-                    offset = pending[0];
-                    cont = pending[1];
-                    pending = false;
-                    paint(offset, cont);
-                    return;
-                } else {
-                    pending = false;
-                }
-                // vars
-                var i, $i, shift = 0, j = "", row,
-                    defaultClassName = template.getDefaultClassName(),
-                    tmp = new Array(data.length),
-                    node;
-                // get shift (top down)
-                for (j in labels.index) {
-                    if (offset > j) {
-                        shift++;
+            return load(all.slice(offset, offset + numRows))
+                .done(function (data) {
+                    // pending?
+                    if (isArray(pending)) {
+                        // process latest paint
+                        offset = pending[0];
+                        def = pending[1];
+                        pending = false;
+                        paint(offset).done(def.resolve);
+                        return;
+                    } else {
+                        pending = false;
                     }
-                }
-                // loop
-                for (i = 0, $i = data.length; i < $i; i++) {
-                    // shift?
-                    if (labels.index[offset + i] !== undefined) {
-                        shift++;
+                    // vars
+                    var i, $i, shift = 0, j = "", row,
+                        defaultClassName = template.getDefaultClassName(),
+                        tmp = new Array(data.length),
+                        node;
+                    // get shift (top down)
+                    for (j in labels.index) {
+                        if (offset > j) {
+                            shift++;
+                        }
                     }
-                    row = pool[i];
-                    // reset class name
-                    node = row.node[0];
-                    node.className = defaultClassName + " " + ((offset + i) % 2 ? "odd" : "even");
-                    // update fields
-                    row.update(data[i], offset + i);
-                    // polish row
-                    node.setAttribute("data-ox-id", self.selection.serialize(data[i]));
-                    node.style.top = shift * labelHeight + (offset + i) * itemHeight + "px";
-                    tmp[i] = row.node;
-                }
-                if ($i < numRows) {
-                    for (; i < numRows; i++) {
-                        node = pool[i].node[0];
-                        node.style.top = "-1000px";
-                        node.removeAttribute("data-ox-id");
-                        node.className = defaultClassName;
+                    // loop
+                    for (i = 0, $i = data.length; i < $i; i++) {
+                        // shift?
+                        if (labels.index[offset + i] !== undefined) {
+                            shift++;
+                        }
+                        row = pool[i];
+                        // reset class name
+                        node = row.node[0];
+                        node.className = defaultClassName + " " + ((offset + i) % 2 ? "odd" : "even");
+                        // update fields
+                        row.update(data[i], offset + i);
+                        // polish row
+                        node.setAttribute("data-ox-id", self.selection.serialize(data[i]));
+                        node.style.top = shift * labelHeight + (offset + i) * itemHeight + "px";
+                        tmp[i] = row.node;
                     }
-                }
-                // update selection
-                self.selection.update();
-                tmp = null;
-                // remember bounds
-                bounds.top = offset;
-                bounds.bottom = offset + numRows - numVisible;
-                // continue
-                _.call(cont);
-            });
+                    if ($i < numRows) {
+                        for (; i < numRows; i++) {
+                            node = pool[i].node[0];
+                            node.style.top = "-1000px";
+                            node.removeAttribute("data-ox-id");
+                            node.className = defaultClassName;
+                        }
+                    }
+                    // update selection
+                    self.selection.update();
+                    tmp = null;
+                    // remember bounds
+                    bounds.top = offset;
+                    bounds.bottom = offset + numRows - numVisible;
+                });
         };
         
         resize = function () {
@@ -319,9 +320,9 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
             }
         };
         
-        loadAll = function (cont) {
+        loadAll = function () {
             
-            function apply (list, cont) {
+            function apply (list) {
                 // changed?
                 if (list.length !== all.length || !_.isEqual(all, list)) {
                     // store
@@ -341,7 +342,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
                 self.trigger("ids-loaded");
                 // paint items
                 var offset = getIndex(node.scrollTop()) - (numRows - numVisible);
-                paint(offset, cont);
+                return paint(offset);
             }
             
             if (all.length === 0) {
@@ -350,29 +351,36 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
             }
             
             // get all IDs
-            var load = loadIds[currentMode] || loadIds.all;
-            load(function (list) {
+            var load = loadIds[currentMode] || loadIds.all,
+                def = $.Deferred();
+            
+            load().done(function (list) {
                 if (isArray(list)) {
-                    apply(list, function () {
-                        // select first or previous selection
-                        self.selection.selectSmart();
-                        container.css({ visibility: "" }).parent().idle();
-                        _.call(cont);
-                    });
+                    apply(list)
+                        .done(function () {
+                            // select first or previous selection
+                            self.selection.selectSmart();
+                            container.css({ visibility: "" }).parent().idle();
+                        })
+                        .done(def.resolve)
+                        .fail(def.reject);
                 } else {
-                    console.warn("VGrid.all(cont) must provide an array!");
+                    console.warn("VGrid.all() must provide an array!");
+                    def.fail(def.reject);
                 }
             });
+            
+            return def;
         };
         
-        init = function (cont) {
+        init = function () {
             // get sizes
             itemHeight = template.getHeight();
             labelHeight = label.getHeight();
             // resize
             resize();
             // load all IDs
-            loadAll(cont);
+            return loadAll();
         };
         
         getIndex = function (top) {
@@ -431,31 +439,33 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
             return false;
         };
         
-        this.paint = function (cont) {
+        this.paint = function () {
             node.unbind("scroll").bind("scroll", fnScroll);
-            init(cont);
+            return init();
         };
         
-        this.repaint = function (cont) {
+        this.repaint = function () {
             var offset = getIndex(node.scrollTop()) - (numRows - numVisible);
-            paint(offset, cont);
+            return paint(offset);
         };
         
-        this.refresh = function (cont) {
+        this.refresh = function () {
             // scroll to top
             node.unbind("scroll").scrollTop(0).bind("scroll", fnScroll);
             // load all
-            loadAll(cont);
+            return loadAll();
         };
         
         this.getMode = function () {
             return currentMode;
         };
         
-        this.setMode = function (mode, cont) {
+        this.setMode = function (mode) {
             if (currentMode !== mode) {
                 currentMode = mode;
-                this.refresh(cont);
+                return this.refresh();
+            } else {
+                return $.Deferred().reject();
             }
         };
         

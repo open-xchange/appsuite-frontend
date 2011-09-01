@@ -145,14 +145,18 @@ define("io.ox/mail/base", function () {
                     })
                     .one("load", iframeGUID, function (e) {
                         var doc = this.contentDocument,
-                            css = 'body { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; line-height: 12pt; }';
+                            css = 'body { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; line-height: 12pt; }' + "\n" +
+                                'pre { white-space: pre; white-space: pre-wrap; }' + "\n" +
+                                'blockquote { margin: 1em 0 1em 40px; }';
                         // this timeout is needed for chrome. seems that there is some kind of
                         // recursion protection (too close "load" events triggered by the same object).
                         setTimeout(function () {
                             // inject onload handler
                             html = html
                                 .replace(/<\/head>/, '  <style type="text/css">' + css + '</style>' + "\n</head>")
-                                .replace(/<body/, '<body onload="parent.iframeResize(' + e.data + ', document.body);"');
+                                .replace(/<body/, '<body onload="parent.iframeResize(' + e.data + ', document.body);"')
+                                .replace(/(>|\n)([ ]+)/g, "$1 ") // improve readability of <pre> blocks
+                                .replace(/\n[ ]/g, "\n");
                             // write content to document
                             doc.open();
                             doc.write(html);

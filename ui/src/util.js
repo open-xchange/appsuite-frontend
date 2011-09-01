@@ -193,9 +193,12 @@
                 count = (fn.count = (fn.count || 0) + 1);
             // wrap
             return function () {
-                if (count === fn.count) {
-                    fn.apply(fn, $.merge(curry, arguments));
-                }
+                var args = arguments;
+                setTimeout(function () {
+                    if (count === fn.count) {
+                        fn.apply(fn, $.merge(curry, args));
+                    }
+                }, 0);
             };
         },
         

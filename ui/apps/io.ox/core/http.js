@@ -388,7 +388,7 @@ define("io.ox/core/http", function () {
         return o;
     };
     
-    var processData = function (data, module, columns) {
+    var sanitize = function (data, module, columns) {
         // not array or no columns given?
         if (!$.isArray(data) || !columns) {
             // typically from "action=get" (already sanitized)
@@ -408,7 +408,7 @@ define("io.ox/core/http", function () {
         // server error?
         if (response && response.error !== undefined && !response.data) {
             // session expired?
-            if (response.code === "SES-0203") {
+            if ((/^SES\-/i).test(response.code)) {
                 // login dialog
                 ox.relogin(o, deferred);
             } else {
@@ -434,7 +434,7 @@ define("io.ox/core/http", function () {
                             // data/error
                             if (response[i].data !== undefined) {
                                 // data
-                                tmp = processData(response[i].data, o.data[i].module, o.data[i].columns);
+                                tmp = sanitize(response[i].data, o.data[i].module, o.data[i].columns);
                                 data.push({ data: tmp, timestamp: timestamp });
                                 // handle warnings within multiple
                                 if (response[i].error !== undefined) {
@@ -447,7 +447,7 @@ define("io.ox/core/http", function () {
                         }
                         deferred.resolve(data);
                     } else {
-                        data = processData(response.data, o.module, o.params.columns);
+                        data = sanitize(response.data, o.module, o.params.columns);
                         timestamp = response.timestamp !== undefined ? response.timestamp : _.now();
                         deferred.resolve(data, timestamp);
                     }

@@ -130,23 +130,23 @@ define("io.ox/mail/main", [
         });
         
         // all request
-        grid.setAllRequest(function (cont) {
-            api.getAllThreads().done(cont);
+        grid.setAllRequest(function () {
+            return api.getAllThreads();
         });
         
         // list request
-        grid.setListRequest(function (ids, cont) {
-            api.getThreads(ids).done(cont);
+        grid.setListRequest(function (ids) {
+            return api.getThreads(ids);
         });
         
         // search: all request
-        grid.setAllRequest("search", function (cont) {
-            api.search(win.search.query).done(cont);
+        grid.setAllRequest("search", function () {
+            return api.search(win.search.query);
         });
         
         // search: list request
-        grid.setListRequest("search", function (ids, cont) {
-            api.getList(ids).done(cont);
+        grid.setListRequest("search", function (ids) {
+            return api.getList(ids);
         });
         
         /*

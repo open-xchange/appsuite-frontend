@@ -300,14 +300,18 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                             toggleFullscreen();
                             autoFullscreen = false;
                         }
-                        this.nodes.outer.appendTo("#io-ox-windowmanager");
+                        var node = this.nodes.outer;
+                        if (node.parent().length === 0) {
+                            node.appendTo("#io-ox-windowmanager");
+                        }
+                        node.show();
                         currentWindow = this;
                         this.trigger("show");
                     }
                 };
                 
                 this.hide = function () {
-                    this.nodes.outer.detach();
+                    this.nodes.outer.hide();
                     currentWindow = null;
                     this.trigger("hide");
                     interruptFullscreen();

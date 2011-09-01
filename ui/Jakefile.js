@@ -20,7 +20,7 @@ var jshint = require("./lib/jshint").JSHINT;
 var _ = require("./lib/underscore.js");
 
 utils.builddir = process.env.builddir || "build";
-console.log("Build path: " + utils.builddir);
+console.info("Build path: " + utils.builddir);
 
 function pad(n) { return n < 10 ? "0" + n : n; }
 var t = utils.startTime;
@@ -28,11 +28,11 @@ var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
     pad(t.getUTCMonth()) + pad(t.getUTCDate()) + "." +
     pad(t.getUTCHours()) + pad(t.getUTCMinutes()) +
     pad(t.getUTCSeconds());
-console.log("Build version: " + version);
+console.info("Build version: " + version);
 
 function jsFilter(data) {
     data = hint.call(this, data);
-    if (process.env.debug) {
+    if (process.env.debug || true) {
         return data;
     } else {
         // UglifyJS

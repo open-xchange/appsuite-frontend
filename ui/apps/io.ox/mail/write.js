@@ -26,7 +26,7 @@ define("io.ox/mail/write",
             title: "New E-Mail"
         });
         
-        app.setLauncher(function (cont) {
+        app.setLauncher(function () {
             
             win = ox.ui.createWindow({
                 title: "New E-Mail",

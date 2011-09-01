@@ -111,18 +111,18 @@ define("io.ox/contacts/main", [
         };
         
         // all request
-        grid.setAllRequest(function (cont) {
-            api.getAll().done(cont);
+        grid.setAllRequest(function () {
+            return api.getAll();
         });
         
         // search request
-        grid.setAllRequest("search", function (cont) {
-            api.search(win.search.query).done(cont);
+        grid.setAllRequest("search", function () {
+            return api.search(win.search.query);
         });
         
         // list request
-        grid.setListRequest(function (ids, cont) {
-            api.getList(ids).done(cont);
+        grid.setListRequest(function (ids) {
+            return api.getList(ids);
         });
         
         
