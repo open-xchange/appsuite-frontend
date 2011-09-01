@@ -49,9 +49,7 @@ define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api-factory", "io.ox/c
     function fallbackForOX6BackendREMOVEME (htmlpage) {
         // Extract the JSON text
         var matches = /\((\{.*?\})\)/.exec(htmlpage);
-        if (matches[1]) {
-            return matches[1];
-        }
+        return matches && matches[1] ? JSON.parse(matches[1]) : {};
     }
     
     // Upload a file and store it
@@ -60,30 +58,33 @@ define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api-factory", "io.ox/c
     // "file" - the file object to upload
     // The method returns a deferred that is resolved once the file has been uploaded
     api.uploadFile = function (options) {
+        
         // Alright, let's simulate a multipart formdata form
-        options.folder = options.folder || config.get("folder.infostore");
+        options = $.extend({
+            folder: config.get("folder.infostore")
+        }, options || {});
+        
         // TODO: This might make more sense in http.js
         var formData = new FormData();
         formData.append("file", options.file);
-        formData.append("json", "{folder_id: "+options.folder+"}");
-        var deferred = new $.Deferred();
+        formData.append("json", "{folder_id: " + options.folder + "}");
         
-        $.ajax({
-           url: ox.ajaxRoot+"/infostore?action=new&session="+ox.session,
-           data: formData,
-           cache: false,
-           contentType: false,
-           processData: false,
-           type: 'POST',
-           success: function(data){
-               $.each(api.caches, function (cacheName, cache) {
-                   cache.clear(); // TODO: How can I clear just the data of one folder?
-               });
-               deferred.resolve(fallbackForOX6BackendREMOVEME(data));
-           }
-        });
-        
-        return deferred;
+        // TODO: (remove comment)
+        // moved some logic into http.api -> UPLOAD for FormData
+        return http.UPLOAD({
+                module: "infostore",
+                params: { action: "new" },
+                data: formData,
+                dataType: "text"
+            })
+            .pipe(function (data) {
+                // clear folder cache
+                api.caches.all.remove(options.folder);
+                return fallbackForOX6BackendREMOVEME(data);
+            });
+        // TODO: remove comment
+        // learned just some days ago: instead of wrapping deferred
+        // to manipulate the result you can use the pipe concept
     };
     
     return api;

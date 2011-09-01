@@ -345,9 +345,10 @@ define("io.ox/core/http", function () {
             params: {},
             data: {},
             dataType: "json",
-            appendColumns: type === "GET" ? false : true,
+            appendColumns: type === "GET" || type === "UPLOAD" ? false : true,
             appendSession: true,
             processData: true,
+            processResponse: true,
             cursor: true
         }, options || {});
         // prepend root
@@ -368,12 +369,20 @@ define("io.ox/core/http", function () {
         if (type === "GET" || type === "POST") {
             // GET & POST
             o.data = o.params;
-        } else {
+        }
+        else if (type === "PUT" || type === "DELETE"){
             // PUT & DELETE
             o.url += "?" + _.serialize(o.params);
             o.original = o.data;
             o.data = typeof o.data !== "string" ? JSON.stringify(o.data) : o.data;
             o.contentType = "text/javascript; charset=UTF-8";
+        }
+        else if (type === "UPLOAD") {
+            // POST with FormData object
+            o.url += "?" + _.serialize(o.params);
+            o.contentType = false;
+            o.processData = false;
+            o.processResponse = false;
         }
         // done
         return o;
@@ -411,7 +420,7 @@ define("io.ox/core/http", function () {
                 console.warn("TODO: warning");
             }
             // success
-            if (o.dataType === "json" && o.processData === true) {
+            if (o.dataType === "json" && o.processResponse === true) {
                 // variables
                 var data = [], timestamp;
                 // response? (logout e.g. hasn't any)
@@ -471,13 +480,14 @@ define("io.ox/core/http", function () {
         var def = $.Deferred(),
             opt = {
                 // type (GET, POST, PUT, ...)
-                type: type,
+                type: type === "UPLOAD" ? "POST" : type,
                 // url
                 url: o.url,
                 // data
                 data: o.data,
                 dataType: o.dataType,
-                contentType: o.contentType || "application/x-www-form-urlencoded"
+                processData: o.processData,
+                contentType: o.contentType !== undefined ? o.contentType : "application/x-www-form-urlencoded"
             };
         // use timeout?
         if (typeof o.timeout === "number") {
@@ -488,7 +498,11 @@ define("io.ox/core/http", function () {
             // go!
             $.ajax(opt)
             .done(function (data) {
-                processResponse(def, data, o, type);
+                if (o.processData) {
+                    processResponse(def, data, o, type);
+                } else {
+                    def.resolve(data);
+                }
             })
             .fail(function (xhr, textStatus, errorThrown) {
                 def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
@@ -549,6 +563,17 @@ define("io.ox/core/http", function () {
          */
         DELETE: function (options) {
             return ajax(options, "DELETE");
+        },
+        
+        /**
+         * Send a POST request using a FormData object
+         * @param {Object} options Request options
+         * @param {string} options.module Module, e.g. folder, mail, calendar etc.
+         * @param {Object} options.params URL parameters
+         * @returns {Object} jQuery's Deferred
+         */
+        UPLOAD: function (options) {
+            return ajax(options, "UPLOAD");
         },
         
         /**

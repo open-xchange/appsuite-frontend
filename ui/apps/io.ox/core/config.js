@@ -101,7 +101,7 @@ define("io.ox/core/config", ["io.ox/core/http", "io.ox/core/cache"], function (h
                     return http.PUT({
                         module: "config/" + path,
                         appendColumns: false,
-                        processData: false,
+                        processResponse: false,
                         data: value
                     });
                 }
@@ -124,7 +124,7 @@ define("io.ox/core/config", ["io.ox/core/http", "io.ox/core/cache"], function (h
                 return http.GET({
                     module: "config",
                     appendColumns: false,
-                    processData: false
+                    processResponse: false
                 })
                 .done(function (data) {
                     config = data !== undefined ? data.data : {};

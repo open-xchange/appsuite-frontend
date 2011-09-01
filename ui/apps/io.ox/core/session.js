@@ -23,7 +23,7 @@ define("io.ox/core/session", ["io.ox/core/http"], function (http) {
                 module: "login",
                 appendColumns: false,
                 appendSession: false,
-                processData: false,
+                processResponse: false,
                 timeout: 3000, // just try that for 3 secs
                 params: {
                     action: "autologin",
@@ -44,7 +44,7 @@ define("io.ox/core/session", ["io.ox/core/http"], function (http) {
                 module: "login",
                 appendColumns: false,
                 appendSession: false,
-                processData: false,
+                processResponse: false,
                 params: {
                     action: "login",
                     name: username,
@@ -68,7 +68,7 @@ define("io.ox/core/session", ["io.ox/core/http"], function (http) {
             return http.GET({
                 module: "login",
                 appendColumns: false,
-                processData: false,
+                processResponse: false,
                 params: {
                     action: "store"
                 }
@@ -80,7 +80,7 @@ define("io.ox/core/session", ["io.ox/core/http"], function (http) {
             return http.POST({
                 module: "login",
                 appendColumns: false,
-                processData: false,
+                processResponse: false,
                 params: {
                     action: "logout"
                 }
