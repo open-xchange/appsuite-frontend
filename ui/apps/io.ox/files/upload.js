@@ -6,6 +6,8 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
     // "dragover" if someone threatens to drop a file into $node
     // "dragend" when she released the file
     // "drop" when she released the file
+    // Calling code can hand over  a node or a jquery expression, if no node is passed, we'll create an overlay for the entire 
+    // visible screen and handle all eye candy ourselves.
     function DropZone ($node) {
         var self = this;
         var globalMode = false;
@@ -129,6 +131,12 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
                 }
             };
         }
+        
+        if (!delegate.processFile) {
+            console.warn("The delegate to a queue should implement a 'processFile' method!");
+            delegate.processFile = $.noop;
+        }
+        
         event.Dispatcher.extend(this);
         
         var files = []; 
