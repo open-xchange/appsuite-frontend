@@ -43,7 +43,7 @@
             .appendTo(win.nodes.main);
 
         var right = $("<div/>")
-            .css({ left: "347px", overflow: "auto" })
+            .css({ left: "310px", overflow: "auto", padding: "0px 40px 20px 40px" })
             .addClass("rightside")
             .appendTo(win.nodes.main);
 

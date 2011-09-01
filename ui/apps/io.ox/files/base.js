@@ -226,7 +226,11 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
               return false;
           },
           draw: function (fileDescription, div) {
-              div.append($("<img/>").attr("src", fileDescription.dataURL+"&width=600&height=400").attr("width", "600").attr("height", "400").css("border", "1px solid black"));
+              div.append(
+                  $("<img/>")
+                      .attr("src", fileDescription.dataURL + "&width=400&height=300")
+                      .css({ width: "400px", "maxWidth": "100%" })
+              );
           }
        });
     
