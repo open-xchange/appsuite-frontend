@@ -219,7 +219,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
           endings: ["png", "jpg", "jpeg", "gif"],
           canRender: function (fileDescription) {
               for(var i = 0, l = this.endings.length; i < l; i++) {
-                  if (new RegExp("\\." + this.endings[i] + "$").test(fileDescription.name)) {
+                  if (new RegExp("\\." + this.endings[i] + "$", "i").test(fileDescription.name)) {
                       return true;
                   }
               }
