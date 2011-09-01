@@ -161,7 +161,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
         };
         
         this.dump = function () {
-            console.log("this", this, "files", files, "currentFile", currentFile);
+            console.info("this", this, "files", files, "currentFile", currentFile);
         };
         
         this.start = function (currentFile) {

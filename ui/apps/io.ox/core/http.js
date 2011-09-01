@@ -608,9 +608,8 @@ define("io.ox/core/http", function () {
          */
         fixList: function (ids, deferred) {
             
-            var def = $.Deferred();
-            deferred
-                .done(function (data) {
+            return deferred
+                .pipe(function (data) {
                     // simplify
                     ids = that.simplify(ids);
                     // build hash (uses folder_id!)
@@ -623,10 +622,8 @@ define("io.ox/core/http", function () {
                         tmp[i] = hash[obj.folder + "." + obj.id];
                     }
                     hash = obj = ids = null;
-                    def.resolve(tmp);
-                })
-                .fail(def.fail);
-            return def;
+                    return tmp;
+                });
         },
         
         /**

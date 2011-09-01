@@ -171,15 +171,26 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
          * Initialize
          */
         this.init = function (all) {
+            // store current selection
+            var tmp = this.get();
             // clear list
-            this.clear();
+            clear();
             observedItems = all;
             observedItemsIndex = {};
             // build index
-            var i = 0, $i = all.length;
+            var i = 0, $i = all.length, key;
             for (; i < $i; i++) {
                 observedItemsIndex[self.serialize(all[i])] = i;
             }
+            // restore selection. check if each item exists
+            for (i = 0, $i = tmp.length; i < $i; i++) {
+                key = self.serialize(tmp[i]);
+                if (observedItemsIndex[key] !== undefined) {
+                    select(tmp[i]);
+                }
+            }
+            // event
+            self.trigger("change", self.get());
         };
         
         /**

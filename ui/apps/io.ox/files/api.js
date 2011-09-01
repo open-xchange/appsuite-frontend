@@ -49,7 +49,7 @@ define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api-factory", "io.ox/c
     function fallbackForOX6BackendREMOVEME (htmlpage) {
         // Extract the JSON text
         var matches = /\((\{.*?\})\)/.exec(htmlpage);
-        return matches && matches[1] ? JSON.parse(matches[1]) : {};
+        return matches && matches[1] ? JSON.parse(matches[1]) : null;
     }
     
     // Upload a file and store it
@@ -80,7 +80,8 @@ define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api-factory", "io.ox/c
             .pipe(function (data) {
                 // clear folder cache
                 api.caches.all.remove(options.folder);
-                return fallbackForOX6BackendREMOVEME(data);
+                var tmp = fallbackForOX6BackendREMOVEME(data);
+                return { folder_id: String(options.folder), id: String(tmp ? tmp.data : 0) };
             });
         // TODO: remove comment
         // learned just some days ago: instead of wrapping deferred

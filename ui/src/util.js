@@ -193,12 +193,9 @@
                 count = (fn.count = (fn.count || 0) + 1);
             // wrap
             return function () {
-                var args = arguments;
-                setTimeout(function () {
-                    if (count === fn.count) {
-                        fn.apply(fn, $.merge(curry, args));
-                    }
-                }, 50);
+                if (count === fn.count) {
+                    fn.apply(fn, $.merge(curry, arguments));
+                }
             };
         },
         

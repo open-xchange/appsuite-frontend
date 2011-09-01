@@ -117,10 +117,13 @@
         // Uploads
         var queue = upload.createQueue({
             processFile: function (file) {
-                return api.uploadFile({file: file}).done(function (data) {
-                    grid.refresh();
-                    // TODO: Error Handling
-                });
+                return api.uploadFile({file: file})
+                    .done(function (data) {
+                        // select new item
+                        grid.selection.set([data]);
+                        grid.refresh();
+                        // TODO: Error Handling
+                    });
             }
         });
         
