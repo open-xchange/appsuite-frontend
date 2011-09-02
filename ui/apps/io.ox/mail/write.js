@@ -83,7 +83,7 @@ define("io.ox/mail/write",
             
             // load example text
             $.ajax({
-                url: "apps/io.ox/mail/example.txt",
+                url: ox.base + "/apps/io.ox/mail/example.txt",
                 dataType: "text"
             })
             .done(function (txt) {

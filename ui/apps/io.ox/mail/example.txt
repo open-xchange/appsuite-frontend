@@ -5,8 +5,8 @@ Hello *World*
 * bla blaa blaaaa
 * blaaaaaaaaa
 
-.h1 Headline!
+h1. Headlines are possible...
+h2. Smaller ones too
 
 ---
-
 p{color:#E20074}. *And btw even this is possible for "pro users" who want to have their fancy colored signatures, for example.*

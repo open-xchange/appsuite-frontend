@@ -111,18 +111,10 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         fn.call(this).done(cont);
                     }
                 });
-            // has icon?
-            if (icon) {
-                // add icon
-                decorator.append(
-                    $("<img/>", { src: icon }).addClass("icon")
-                );
-            } else {
-                // add placeholder
-                decorator.append(
-                    $("<div/>").addClass("icon-placeholder")
-                );
-            }
+            // add icon
+            decorator.append(
+                $("<img/>", { src: icon || ox.base + "/apps/io.ox/core/images/default.png" }).addClass("icon")
+            );
             // add
             var c = currentWindow, target;
             if (side === "left" && c && c.app && (target = c.app.getLaunchBarIcon())) {
