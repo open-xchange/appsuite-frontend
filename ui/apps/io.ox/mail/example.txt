@@ -1,53 +1,11 @@
-h1. OX7 - The idea
+Hello *World*
 
-h2. UI
+... and please think of
+* blaaaa
+* bla blaa blaaaa
+* blaaaaaaaaa
 
-* Start with empty repository
-* reuse module code if it makes sense, e.g. calendar, tasks (too risky to go for full rebuild)
-* eye candy (window manager; wallpaper; theming)
-* light-weight (no fat framework; more "web-by"; strictly load on demand; be fast)
-* focussed: remove some views, e.g. make contact v-split great; remove card view (less code; less bugs; less effort)
-* app-centric: let the user decide what he/she needs; easy to extend; not all in one UI (like today)
-* extensibility: create extension points (allows plugins to explicitly extend functionality; instead of hacking existing code)
-* *Major Features*
-** Mail thread view
-** Promote plain text (additionally go for textile support if time allows that)
-** Messaging (be much better than mail)
-** Polish pub/sub aka social stuff (make it visible and usable)
-** Favorite folders
-** Photo view for infostore / Photo album publications
-* Minor stuff: Use native Drag&Drop; use audio if it makes sense
-
-!=image0!
-p=. _Textile supports inline images... Just drop an image from your desktop here!_ ;-)
-
-!=image1!
-p=. _Placeholder for another image..._
-
-h2. Server
-
-* Keep repository & keep API (thought about changing it; but too risky because all clients, tests, documentation would get deprecated)
-* Only change in API (but compatible): allow not using columns / plus: Central Dispatcher (like WebDesktop had)
-* Simplified Exception Framework
-* Self diagnosis
-* SOAP interface rework/fixes
-* Self-documenting APIs (like in WebDesktop)
-* Unified OSGI Registration
-* *Major Features*
-** App Mgmt (mirrors UI concept)
-** DB Caching (performance AND good search)
-** Branding 3000
-** Unified Groups
-** HaloAPI
-
-h2. Consequences
-
-* Simplified: OX7 will be a visual merge of OX6 and WebDesktop
-* Backend will (get/stay) stable - we don't want to mess around with that (think of USM, Mobile App etc.)
-* The feature list is close to 6.22 plus some potential 6.24 features
-* No demand for migration (rather some heavy update tasks)
-* Why upgrading to OX7? You get some hot new features, you will still have the central OX6 features. Looks fresh. Better UX. Extensible.
-* From the end-user perspective it deserves a generation change
+.h1 Headline!
 
 ---
 

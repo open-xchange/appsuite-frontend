@@ -508,9 +508,9 @@ define("io.ox/core/http", function () {
                 def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
             });
         }
-        if (slow) {
+        if (Number(slow)) {
             // simulate slow connection
-            setTimeout(cont, 200 + (Math.random() * 800 >> 0));
+            setTimeout(cont, 250 * Number(slow) + (Math.random() * 500 >> 0));
         } else {
             cont();
         }

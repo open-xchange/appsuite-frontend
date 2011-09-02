@@ -43,14 +43,16 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
             isRange,
             getIndex,
             getNode,
+            selectPrevious,
+            selectNext,
             fnKey;
         
         isMultiple = function (e) {
-            return multiple && e.metaKey;
+            return multiple && (e && e.metaKey);
         };
         
         isRange = function (e) {
-            return e.shiftKey;
+            return e && e.shiftKey;
         };
         
         // apply selection
@@ -70,27 +72,34 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
             // event
             self.trigger("change", self.get());
         };
-
+        
+        selectPrevious = function (e) {
+            var index = (getIndex(last) || 0) - 1;
+            if (index >= 0) {
+                clear();
+                apply(observedItems[index], e);
+            }
+        };
+        
+        selectNext = function (e) {
+            var index = (getIndex(last) || 0) + 1;
+            if (index < observedItems.length) {
+                clear();
+                apply(observedItems[index], e);
+            }
+        };
+        
         // key handler
         fnKey = function (e) {
-            var index;
             switch (e.which) {
             case 38:
                 // cursor up
-                index = (getIndex(last) || 0) - 1;
-                if (index >= 0) {
-                    clear();
-                    apply(observedItems[index], e);
-                }
+                selectPrevious(e);
                 e.preventDefault();
                 break;
             case 40:
                 // cursor down
-                index = (getIndex(last) || 0) + 1;
-                if (index < observedItems.length) {
-                    clear();
-                    apply(observedItems[index], e);
-                }
+                selectNext(e);
                 e.preventDefault();
                 break;
             }
@@ -296,6 +305,8 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                 this.selectFirst();
             }
         };
+        
+        this.selectNext = selectNext;
         
         /**
          * Is selected?

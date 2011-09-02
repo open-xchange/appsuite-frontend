@@ -364,6 +364,25 @@ define("io.ox/core/cache", function () {
                 }
             }
         };
+        
+        var remove = this.remove;
+        this.remove = function (data) {
+            if (_.isArray(data)) {
+                var i = 0, $i = data.length, key;
+                for (; i < $i; i++) {
+                    key = String(this.keyGenerator(data[i]));
+                    remove(key);
+                }
+            } else {
+                // simple value
+                if (typeof data === "string" || typeof data === "number") {
+                    remove(data);
+                } else {
+                    // object, so get key
+                    remove(String(this.keyGenerator(data)));
+                }
+            }
+        };
     };
     
     /**
@@ -511,6 +530,7 @@ define("io.ox/core/cache", function () {
     return {
         SimpleCache: SimpleCache,
         ObjectCache: ObjectCache,
-        FolderCache: FolderCache
+        FolderCache: FolderCache,
+        defaultKeyGenerator: defaultKeyGenerator
     };
 });

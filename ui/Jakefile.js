@@ -32,7 +32,7 @@ console.info("Build version: " + version);
 
 function jsFilter(data) {
     data = hint.call(this, data);
-    if (process.env.debug || true) {
+    if (process.env.debug) {
         return data;
     } else {
         // UglifyJS

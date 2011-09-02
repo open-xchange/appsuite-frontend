@@ -69,7 +69,7 @@ $.fn.busy = function (empty) {
         var self = $(this);
         clearTimeout(self.data("busy-timeout"));
         self.data("busy-timeout", setTimeout(function () {
-            self.addClass("io-ox-busy").scrollTop(0);
+            self.addClass("io-ox-busy");
             if (empty) {
                 self.empty();
             }
@@ -81,7 +81,7 @@ $.fn.idle = function () {
     return this.each(function () {
         var self = $(this);
         clearTimeout(self.data("busy-timeout"));
-        self.removeClass("io-ox-busy").scrollTop(0);
+        self.removeClass("io-ox-busy");
     });
 };
 

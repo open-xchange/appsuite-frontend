@@ -329,10 +329,9 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
                     all = list;
                     // initialize selection
                     self.selection.init(all);
-                    // adjust container height
+                    // adjust container height and hide it
                     container.css({
-                        height: (numLabels * labelHeight + all.length * itemHeight) + "px",
-                        visibility: "hidden"
+                        height: (numLabels * labelHeight + all.length * itemHeight) + "px"
                     });
                     // process labels
                     processLabels();
@@ -347,7 +346,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
             
             if (all.length === 0) {
                 // be busy
-                container.parent().busy();
+                container.css({ visibility: "hidden" }).parent().busy();
             }
             
             // get all IDs
@@ -358,9 +357,10 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
                 if (isArray(list)) {
                     apply(list)
                         .done(function () {
+                            // stop being busy
+                            container.css({ visibility: "" }).parent().idle();
                             // select first or previous selection
                             self.selection.selectSmart();
-                            container.css({ visibility: "" }).parent().idle();
                         })
                         .done(def.resolve)
                         .fail(def.reject);
@@ -451,7 +451,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
         
         this.refresh = function () {
             // scroll to top
-            node.unbind("scroll").scrollTop(0).bind("scroll", fnScroll);
+            // node.unbind("scroll").scrollTop(0).bind("scroll", fnScroll);
             // load all
             return loadAll();
         };
@@ -488,6 +488,10 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
             if (obj !== undefined) {
                 scrollToLabel(obj);
             }
+        };
+        
+        this.scrollTop = function () {
+            return node.scrollTop();
         };
         
         this.keyboard = function (flag) {

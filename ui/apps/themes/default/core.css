@@ -36,6 +36,7 @@
     );
     */
     background: url(wallpaper.jpg) no-repeat;
+    background-position: center top;
     background-size: cover;
     color: black;
 }
@@ -55,21 +56,33 @@
 
 .io-ox-launchbar .launcher {
     text-align: center;
-    margin: 0 0 1em 0;
+    margin: 0 0 15px 0;
     cursor: pointer;
 }
 
-.io-ox-launchbar img.icon {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 0.25em;
+.io-ox-launchbar .icon-decorator {
+    padding: 2px 4px 1px 4px;
+    background-color: rgba(0, 0, 0, 0.20);
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+    margin: 0 auto 3px 0;
+    display: inline-block;
 }
 
-.io-ox-launchbar div.icon {
+.io-ox-launchbar .active .icon-decorator {
+    background-color: rgba(255, 255, 255, 0.40);
+}
+
+.io-ox-launchbar .icon {
+    width: 48px;
+    height: 48px;
+}
+
+.io-ox-launchbar .icon-placeholder {
     width: 48px;
     height: 48px;
     background-color: white;
-    margin: 0 auto 0.25em auto;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px 5px 5px 5px;
@@ -77,7 +90,7 @@
     filter: alpha(opacity=40);
 }
 
-.io-ox-launchbar div.icon:hover {
+.io-ox-launchbar .icon-placeholder:hover {
     opacity: 0.60;
     filter: alpha(opacity=60);
 }
@@ -85,7 +98,7 @@
 .io-ox-launchbar .label {
     color: white;
     font-weight: bold;
-    text-shadow: 0px 2px 8px black;
+    text-shadow: 0px 1px 4px black;
 }
 
 /* window manager */
@@ -426,7 +439,8 @@ a.nolink {
     border: 1px solid #ccc;
     color: black;
     cursor: pointer;
-    padding: 5px 1em 5px 1em;
+    padding: 5px 1.5em 5px 1.5em;
+    margin: 2px 4px 2px 0px;
     white-space: nowrap;
     display: inline-block;
     vertical-align: middle;
@@ -447,6 +461,12 @@ a.nolink {
 .window-toolbar .io-ox-button:hover {
     background-image: -moz-linear-gradient(center top, #666, #444);
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#666), to(#444));
+}
+
+.window-toolbar .io-ox-button:active {
+    color: #ccc;
+    background-image: -moz-linear-gradient(center top, #444, #111);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#444), to(#111));
 }
 
 /* jQuery UI stuff */

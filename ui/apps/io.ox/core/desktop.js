@@ -87,11 +87,13 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
         // add launcher
         addLauncher = function (side, label, icon, fn) {
             // construct
-            var node = $("<div/>").addClass("launcher")
+            var node, decorator;
+            node = $("<div/>").addClass("launcher")
                 .append(
-                    $("<div/>")
-                        .addClass("label")
-                        .text(label)
+                    decorator = $("<div/>").addClass("icon-decorator")
+                )
+                .append(
+                    $("<div/>").addClass("label").text(label)
                 )
                 .bind("click", function () {
                     if (!fn) {
@@ -112,13 +114,13 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
             // has icon?
             if (icon) {
                 // add icon
-                node.prepend(
+                decorator.append(
                     $("<img/>", { src: icon }).addClass("icon")
                 );
             } else {
                 // add placeholder
-                node.prepend(
-                    $("<div/>").addClass("icon")
+                decorator.append(
+                    $("<div/>").addClass("icon-placeholder")
                 );
             }
             // add
@@ -170,7 +172,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
             };
             
             this.setLaunchBarIcon = function (node) {
-                launchbarIcon = node;
+                launchbarIcon = $(node);
                 return this;
             };
             
@@ -306,11 +308,13 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         }
                         node.show();
                         currentWindow = this;
+                        this.app.getLaunchBarIcon().addClass("active");
                         this.trigger("show");
                     }
                 };
                 
                 this.hide = function () {
+                    this.app.getLaunchBarIcon().removeClass("active");
                     this.nodes.outer.hide();
                     currentWindow = null;
                     this.trigger("hide");
@@ -340,6 +344,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     if (currentWindow === this) {
                         currentWindow = null;
                     }
+                    this.app.getLaunchBarIcon().removeClass("active");
                     this.nodes.outer.remove();
                     this.app.win = null;
                     this.app = null;

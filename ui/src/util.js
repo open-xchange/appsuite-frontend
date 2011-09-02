@@ -113,13 +113,15 @@
         /**
          * This function simply writes its parameters to console.
          * Useful to debug callbacks, e.g. event handlers.
+         * @returns {Object} First parameter to support inline inspecting
          * @example
          * http.GET({ module: "calendar", params: { id: 158302 }, success: _.inspect });
          */
-        inspect: function () {
+        inspect: function (first) {
             var args = $.makeArray(arguments);
             args.unshift("Inspect");
             console.debug.apply(console, args);
+            return first;
         },
         
         /**

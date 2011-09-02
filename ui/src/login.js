@@ -63,6 +63,7 @@ $(document).ready(function () {
                 // load core
                 require(["io.ox/core/main", "css!themes/default/core.css"], function (core) {
                     // go!
+                    $("#background_loader").idle();
                     core.launch();
                 });
             });
@@ -340,6 +341,9 @@ $(document).ready(function () {
             return req.apply(this, arguments);
         }
     };
+    
+    // be busy
+    $("#background_loader").busy();
     
     // get pre core & server config
     require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js"])

@@ -30,7 +30,7 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
             // globally unique id for caches
             id: null,
             // for caches
-            keyGenerator: null, // = default (folder_id.id)
+            keyGenerator: null, // ~ use default
             // module
             module: "",
             // for all, list, and get
@@ -38,7 +38,8 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                 all: { action: "all" },
                 list: { action: "list" },
                 get: { action: "get" },
-                search: { action: "search" }
+                search: { action: "search" },
+                remove: { action: "delete" }
             }
         }, o || {});
         
@@ -121,6 +122,43 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                     // cache hit
                     return $.Deferred().resolve(caches.get.get(opt));
                 }
+            },
+            
+            remove: function (ids) {
+                // be robust
+                ids = ids || [];
+                // delete on server
+                return http.PUT({
+                    module: o.module,
+                    params: o.requests.remove,
+                    data: http.simplify(ids),
+                    appendColumns: false
+                })
+                .done(function () {
+                    // find affected mails in simple cache
+                    var hash = {}, folders = {}, getKey = cache.defaultKeyGenerator;
+                    _(ids).each(function (o) {
+                        hash[getKey(o)] = true;
+                        folders[o.folder_id] = true;
+                    });
+                    // loop over each folder and look for items to remove
+                    _(folders).each(function (value, folder_id) {
+                        var items = caches.all.get(folder_id);
+                        if (items) {
+                            caches.all.add(
+                                folder_id,
+                                _(items).select(function (o) {
+                                    return hash[getKey(o)] !== true;
+                                })
+                            );
+                        }
+                    });
+                    // clear
+                    hash = folders = null;
+                    // remove from object caches
+                    caches.list.remove(ids);
+                    caches.get.remove(ids);
+                });
             },
             
             caches: caches

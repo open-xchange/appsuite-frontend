@@ -15,7 +15,7 @@
 
 define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session"], function (desktop, session) {
 
-    var PATH = "apps/io.ox/core";
+    var PATH = ox.base + "/apps/io.ox/core";
     
     var logout = function () {
         return session.logout()
@@ -30,43 +30,42 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session"], function
     
     function launch () {
         
-        desktop.addLauncher("right", "Applications");
+        desktop.addLauncher("right", "Applications", PATH + "/images/applications.png");
         
-        desktop.addLauncher("right", "Refresh", null, function () {
+        desktop.addLauncher("right", "Refresh", PATH + "/images/refresh.png", function () {
             // trigger global event
             ox.trigger("refresh");
             return $.Deferred().resolve();
         });
         
-        desktop.addLauncher("right", "Help").find(".icon")
-            .css("backgroundColor", "#8CAD36");
+        desktop.addLauncher("right", "Help", PATH + "/images/help.png");
         
         desktop.addLauncher("right", "Sign out", PATH + "/images/logout.png", function (e) {
             return logout();
         });
         
-        desktop.addLauncher("left", "E-Mail", null, function () {
+        desktop.addLauncher("left", "E-Mail", PATH + "/images/mail.png", function () {
             var node = this;
             return require(["io.ox/mail/main"], function (m) {
                 m.getApp().setLaunchBarIcon(node).launch();
             });
-        }).find(".icon").css("backgroundColor", "#4085B3");
+        });
         
-        desktop.addLauncher("left", "Address Book", null, function () {
+        desktop.addLauncher("left", "Address Book", PATH + "/images/addressbook.png", function () {
             var node = this;
             return require(["io.ox/contacts/main"], function (m) {
                 m.getApp().setLaunchBarIcon(node).launch();
             });
-        }).find(".icon").css("backgroundColor", "#000");
+        });
         
-        desktop.addLauncher("left", "Calendar", null, function () {
+        desktop.addLauncher("left", "Calendar", PATH + "/images/calendar.png", function () {
             var node = this;
             return require(["io.ox/calendar/main"], function (m) {
                 m.getApp().setLaunchBarIcon(node).launch();
             });
         });
         
-        desktop.addLauncher("left", "Files", null, function () {
+        desktop.addLauncher("left", "Files", PATH + "/images/files.png", function () {
             var node = this;
             return require(["io.ox/files/main"], function (m) {
                 m.getApp().setLaunchBarIcon(node).launch();

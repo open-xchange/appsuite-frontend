@@ -48,7 +48,14 @@ define("io.ox/mail/main", [
         .css("marginRight", "20px");
         
         win.addButton({
-            label: "Delete"
+            label: "Delete",
+            action: function () {
+                api.remove(grid.selection.get())
+                    .done(function () {
+                        grid.selection.selectNext();
+                        grid.refresh();
+                    });
+            }
         })
         .css("marginRight", "20px");
         
