@@ -59,6 +59,8 @@
     margin: 0 0 15px 0;
     cursor: pointer;
 }
+body, #logo h1 a, ul#menu li.on {
+}
 
 .io-ox-launchbar .icon-decorator {
     padding: 2px 4px 1px 4px;
@@ -72,6 +74,20 @@
 
 .io-ox-launchbar .active .icon-decorator {
     background-color: rgba(255, 255, 255, 0.40);
+}
+
+@-webkit-keyframes launcherColours {
+      0% { background-color: rgba(0, 0, 0, 0.20); }
+     50% { background-color: rgba(255, 255, 255, 0.50); }
+    100% { background-color: rgba(0, 0, 0, 0.20); }
+}
+
+.io-ox-launchbar .progress .icon-decorator {
+    -webkit-animation-direction: normal;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: launcherColours;
+    -webkit-animation-timing-function: ease-in-out;
 }
 
 .io-ox-launchbar .icon {

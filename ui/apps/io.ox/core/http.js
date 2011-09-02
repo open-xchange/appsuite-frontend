@@ -13,7 +13,7 @@
  * 
  */
 
-define("io.ox/core/http", function () {
+define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         
     // default columns for each module
     var idMapping = {
@@ -301,6 +301,8 @@ define("io.ox/core/http", function () {
     $.extend(idMapping.task, idMapping.common);
     $.extend(idMapping.user, idMapping.contacts, idMapping.common);
     
+    var that = {};
+    
     // get all columns of a module
     var getAllColumns = function (module, join) {
         // get ids
@@ -503,11 +505,14 @@ define("io.ox/core/http", function () {
                 } else {
                     def.resolve(data);
                 }
+                that.trigger("stop done", opt);
             })
             .fail(function (xhr, textStatus, errorThrown) {
                 def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
+                that.trigger("stop fail", opt);
             });
         }
+        that.trigger("start", opt);
         if (Number(slow)) {
             // simulate slow connection
             setTimeout(cont, 250 * Number(slow) + (Math.random() * 500 >> 0));
@@ -517,7 +522,7 @@ define("io.ox/core/http", function () {
         return def;
     };
     
-    var that = {
+    that = {
         
         /**
          * Send a GET request
@@ -640,6 +645,7 @@ define("io.ox/core/http", function () {
          */
         pause: function () {
             paused = true;
+            this.trigger("paused");
         },
             
         /**
@@ -698,6 +704,7 @@ define("io.ox/core/http", function () {
                 // clear queue & remove "paused" flag
                 queue = [];
                 paused = false;
+                this.trigger("resumed");
                 // send PUT
                 if (tmp.length > 0) {
                     this.PUT({
@@ -731,6 +738,8 @@ define("io.ox/core/http", function () {
             }
         }
     };
+    
+    event.Dispatcher.extend(that);
     
     return that;
 });
