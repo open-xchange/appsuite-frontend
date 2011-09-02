@@ -127,10 +127,11 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
             remove: function (ids) {
                 // be robust
                 ids = ids || [];
+                var opt = $.extend({}, o.requests.remove, { timestamp: _.now() });
                 // delete on server
                 return http.PUT({
                     module: o.module,
-                    params: o.requests.remove,
+                    params: opt,
                     data: http.simplify(ids),
                     appendColumns: false
                 })
@@ -158,6 +159,8 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                     // remove from object caches
                     caches.list.remove(ids);
                     caches.get.remove(ids);
+                    // trigger local refresh
+                    api.trigger("refresh.all");
                 });
             },
             
@@ -181,7 +184,18 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
             };
         }
         
-        return event.Dispatcher.extend(api);
+        event.Dispatcher.extend(api);
+        
+        // bind to global refresh
+        ox.bind("refresh", function () {
+            // clear "all & list" caches
+            api.caches.all.clear();
+            api.caches.list.clear();
+            // trigger local refresh
+            api.trigger("refresh.all");
+        });
+        
+        return api;
     };
     
 });

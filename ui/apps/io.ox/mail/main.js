@@ -50,11 +50,8 @@ define("io.ox/mail/main", [
         win.addButton({
             label: "Delete",
             action: function () {
-                api.remove(grid.selection.get())
-                    .done(function () {
-                        grid.selection.selectNext();
-                        grid.refresh();
-                    });
+                api.remove(grid.selection.get());
+                grid.selection.selectNext();
             }
         })
         .css("marginRight", "20px");
@@ -226,6 +223,11 @@ define("io.ox/mail/main", [
         
         // bind refresh
         ox.bind("refresh", function () {
+            grid.refresh();
+        });
+        
+        // bind all refresh
+        api.bind("refresh.all", function (data) {
             grid.refresh();
         });
         

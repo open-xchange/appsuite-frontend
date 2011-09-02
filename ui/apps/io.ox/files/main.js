@@ -22,7 +22,29 @@
     // application object
     var app = ox.ui.createApp(),
         // app window
-        win;
+        win,
+        // vgrid
+        grid,
+        // nodes
+        left,
+        right;
+    
+    function deleteItems () {
+        // ask first
+        require(["io.ox/core/dialogs"], function (dialogs) {
+            new dialogs.ModalDialog()
+                .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
+                .addButton("cancel", "No, rather not")
+                .addButton("delete", "Shut up and delete it!")
+                .show()
+                .done(function (action) {
+                    if (action === "delete") {
+                        api.remove(grid.selection.get());
+                        grid.selection.selectNext();
+                    }
+                });
+        });
+    }
     
     // launcher
     app.setLauncher(function () {
@@ -34,21 +56,27 @@
             search: true
         }));
         
+        // toolbar
+        win.addButton({
+            label: "Delete",
+            action: deleteItems
+        });
+        
         // left side
-        var left = $("<div/>").addClass("leftside border-right")
+        left = $("<div/>").addClass("leftside border-right")
             .css({
                 width: "309px",
                 overflow: "auto"
             })
             .appendTo(win.nodes.main);
-
-        var right = $("<div/>")
+        
+        right = $("<div/>")
             .css({ left: "310px", overflow: "auto", padding: "0px 40px 20px 40px" })
             .addClass("rightside")
             .appendTo(win.nodes.main);
-
+        
         // Grid
-        var grid = new VGrid(left);
+        grid = new VGrid(left);
         // add template
         grid.addTemplate({
             build: function () {
@@ -109,6 +137,21 @@
         // explicit keyboard support
         win.bind("show", function () { grid.selection.keyboard(true); });
         win.bind("hide", function () { grid.selection.keyboard(false); });
+        
+        // bind refresh
+        ox.bind("refresh", function () {
+            grid.refresh();
+        });
+        
+        // bind all refresh
+        api.bind("refresh.all", function (data) {
+            grid.refresh();
+        });
+        
+        // bind list refresh
+        api.bind("refresh.list", function (data) {
+            grid.repaint();
+        });
         
         // go!
         win.show();
