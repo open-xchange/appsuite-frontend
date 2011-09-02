@@ -55,8 +55,8 @@
             Safari: webkit && !chrome,
             /** Safari */
             Chrome: webkit && chrome,
-            /** is Gecko/Firefox? */
-            Gecko:  ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1,
+            /** is Firefox? */
+            Firefox:  ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1,
             /** MacOS **/
             MacOS: ua.indexOf('Macintosh') > -1
         },

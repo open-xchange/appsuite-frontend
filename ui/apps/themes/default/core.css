@@ -59,8 +59,6 @@
     margin: 0 0 15px 0;
     cursor: pointer;
 }
-body, #logo h1 a, ul#menu li.on {
-}
 
 .io-ox-launchbar .icon-decorator {
     padding: 2px 4px 1px 4px;
@@ -82,9 +80,20 @@ body, #logo h1 a, ul#menu li.on {
     100% { background-color: rgba(0, 0, 0, 0.20); }
 }
 
+@-moz-keyframes launcherColours {
+      0% { background-color: rgba(0, 0, 0, 0.20); }
+     50% { background-color: rgba(255, 255, 255, 0.50); }
+    100% { background-color: rgba(0, 0, 0, 0.20); }
+}
+
 .io-ox-launchbar .progress .icon-decorator {
+    -moz-animation-direction: normal;
+    -moz-animation-duration: 1.5s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-name: launcherColours;
+    -moz-animation-timing-function: ease-in-out;
     -webkit-animation-direction: normal;
-    -webkit-animation-duration: 2s;
+    -webkit-animation-duration: 1.5s;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-name: launcherColours;
     -webkit-animation-timing-function: ease-in-out;
@@ -445,6 +454,17 @@ a.nolink {
     border-left: 1px solid #ccc;
 }
 
+.nosearchfield input[type="search"] {
+    border: 0px none;
+    height: 17px;
+    line-height: 1em;
+    padding: 1px 10px 1px 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px 10px 10px 10px;
+    width: 200px;
+}
+
 /* buttons */
 
 .io-ox-button {
@@ -487,6 +507,7 @@ a.nolink {
     background-color: #444;
     background-image: -moz-linear-gradient(center top, #555, #333);
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#555), to(#333));
+    box-shadow: none;
 }
 
 .window-toolbar .io-ox-button:hover {

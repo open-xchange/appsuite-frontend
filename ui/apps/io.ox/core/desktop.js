@@ -432,7 +432,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 close = function () {
                     win.close();
                 };
-
+                
             // window container
             win.nodes.outer = $("<div/>")
                 .attr({

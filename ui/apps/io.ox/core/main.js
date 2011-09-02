@@ -44,7 +44,7 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
                 timer = setTimeout(function () {
                     timer = null;
                     off();
-                }, 2000);
+                }, 1500);
             }
             count++;
         });

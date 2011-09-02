@@ -342,6 +342,11 @@ $(document).ready(function () {
         }
     };
     
+    // searchfield fix
+    if (!_.browser.Chrome) {
+        $("html").addClass("nosearchfield");
+    }
+    
     // be busy
     $("#background_loader").busy();
     

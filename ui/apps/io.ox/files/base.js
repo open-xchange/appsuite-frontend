@@ -229,13 +229,15 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
               div.append(
                   $("<img/>")
                       .attr("src", fileDescription.dataURL + "&width=400&height=300")
-                      .css({ width: "400px", "maxWidth": "100%" })
+                      .css({
+                          width: "400px",
+                          "maxWidth": "100%"
+                      })
               );
           }
        });
     
     // .mp3 .ogg .wav
-    
     registry.point("io.ox.files.renderer").register({
         endings: ["mp3", "ogg", "wav"],
         canRender: function (fileDescription) {

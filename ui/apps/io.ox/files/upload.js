@@ -20,7 +20,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
             globalMode = true;
             $node = $("<div/>").addClass("abs").css({
                     backgroundColor: "#000", color: "white",
-                    textAlign: "center", paddingTop: "1em", fontSize: "42pt",
+                    textAlign: "center", paddingTop: "25%", fontSize: "42pt",
                     opacity: "0.75", zIndex: 65000
                 })
                 .text("Just drop the file anywhere...");
