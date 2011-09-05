@@ -193,13 +193,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
      
     return {
         dnd : {
-            enabled: (function () {
-                var xhr = new XMLHttpRequest(); 
-                if (xhr.upload && FormData) {
-                    return true;
-                }
-                return false;
-            }()),
+            enabled: Modernizr.draganddrop,
             createDropZone: function ($node) {
                 if (!this.enabled) {
                     return new DisabledDropZone($node);

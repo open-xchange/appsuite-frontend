@@ -177,6 +177,13 @@
         win.bind("hide", function () {
             dropZone.remove();
         });
+        
+        win.addButton({
+           label: "",
+           action: function () {
+               var $uploadForm = $('<div/>')
+           } 
+        });
     });
     
     return {
