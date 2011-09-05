@@ -22,7 +22,7 @@ var _ = require("./lib/underscore.js");
 utils.builddir = process.env.builddir || "build";
 console.info("Build path: " + utils.builddir);
 
-function pad(n) { return n < 10 ? "0" + n : n; }
+function pad (n) { return n < 10 ? "0" + n : n; }
 var t = utils.startTime;
 var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
     pad(t.getUTCMonth()) + pad(t.getUTCDate()) + "." +
@@ -30,7 +30,7 @@ var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
     pad(t.getUTCSeconds());
 console.info("Build version: " + version);
 
-function jsFilter(data) {
+function jsFilter (data) {
     data = hint.call(this, data);
     if (process.env.debug) {
         return data;
@@ -42,6 +42,17 @@ function jsFilter(data) {
         ast = pro.ast_squeeze(ast);
         return pro.gen_code(ast);
     }
+}
+
+var core_head = fs.readFileSync("html/core_head.html", "utf8"),
+    core_body = fs.readFileSync("html/core_body.html", "utf8");
+
+function htmlFilter (data) {
+    return data
+        .replace(/@\s?core_head\s?@/, core_head)
+        .replace(/@\s?core_body\s?@/, core_body)
+        .replace(/@\s?version\s?@/g, version)
+        .replace(/@base@/g, "v=" + version);
 }
 
 var jshintOptions = {
@@ -61,8 +72,7 @@ var jshintOptions = {
     predef: ["$", "_", "Modernizr", "define", "require", "ox"]
 };
 
-function hint(data) {
-
+function hint (data) {
     if (jshint(data, jshintOptions)) return data;
     console.error(jshint.errors.length + " Errors:");
     for (var i = 0; i < jshint.errors.length; i++) {
@@ -84,19 +94,29 @@ function hint(data) {
 desc("Builds the GUI");
 utils.topLevelTask("default", [], utils.summary);
 
-utils.copy(["index.html"], {
-    filter: function(data) { return data.replace(/@ version @/g, version); }
-});
+utils.copy(utils.list([".htaccess", "blank.html", "favicon.ico", "src/"]));
+
+// html
+
+utils.concat("core", ["html/index.html"], { filter: htmlFilter });
+utils.concat("signin", ["html/signin.html"], { filter: htmlFilter });
+utils.concat("core.appcache", ["core.appcache"], { filter: htmlFilter });
+utils.concat("signin.appcache", ["signin.appcache"], { filter: htmlFilter });
 
 task("force");
-file(utils.dest("index.html"), ["force"]);
+file(utils.dest("core"), ["force"]);
+file(utils.dest("signin"), ["force"]);
+file(utils.dest("core.appcache"), ["force"]);
+file(utils.dest("signin.appcache"), ["force"]);
 
-utils.concat("login.js", ["src/util.js", "src/login.js"],
+// js
+
+utils.concat("boot.js", ["src/util.js", "src/boot.js"],
     { to: "tmp", filter: jsFilter });
 
-utils.concat("login.js", ["lib/jquery.min.js", "lib/jquery-ui.min.js",
+utils.concat("boot.js", ["lib/jquery.min.js", "lib/jquery-ui.min.js",
         "lib/jquery.plugins.js", "lib/require.js", "lib/modernizr.js",
-        "lib/underscore.js", "tmp/login.js"]);
+        "lib/underscore.js", "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
@@ -105,8 +125,6 @@ utils.concat("pre-core.js",
         "desktop.js", "main.js"
     ]), { filter: jsFilter }
 );
-
-utils.copy(utils.list([".htaccess", "blank.html", "favicon.ico", "src/"]));
 
 var apps = _.groupBy(utils.list("apps/"),
     function (f) { return /\.js$/.test(f) ? "js" : "rest"; });

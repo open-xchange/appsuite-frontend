@@ -24,6 +24,7 @@ $(document).ready(function () {
         // functions
         cont,
         cleanUp,
+        gotoCore,
         loadCore,
         loginSuccess,
         fnSubmit,
@@ -51,6 +52,14 @@ $(document).ready(function () {
             changeLanguage = initialize = null;
     };
     
+    gotoCore = function () {
+        if (ox.signin === true) {
+            _.url.redirect("#session=" + encodeURIComponent(ox.session) + "&user=" + encodeURIComponent(ox.user));
+        } else {
+            loadCore();
+        }
+    };
+    
     /**
      * Load core
      */
@@ -76,8 +85,8 @@ $(document).ready(function () {
     };
     
     // default success handler
-    loginSuccess = loadCore;
-
+    loginSuccess = gotoCore;
+    
     /**
      * Handler for form submit
      */
@@ -117,7 +126,7 @@ $(document).ready(function () {
         $("#io-ox-login-blocker").show();
         $("#io-ox-login-feedback").busy().empty();
         // user name and password shouldn't be empty
-        if ($.trim(username).length === 0 || $.trim(password).length === 0) {
+        if ($.trim(username).length === 0 || ($.trim(password).length === 0 && ox.online)) {
             fail({
                 error: "Please enter your credentials.",
                 code: "UI-0001"
@@ -125,10 +134,7 @@ $(document).ready(function () {
             return;
         }
         // login
-        if (ox.offline) {
-            loginSuccess();
-        } else {
-            require("io.ox/core/session")
+        require("io.ox/core/session")
             .login(
                 username,
                 password,
@@ -140,7 +146,6 @@ $(document).ready(function () {
                 loginSuccess();
             })
             .fail(fail);
-        }
     };
     
     changeLanguage = function (id) {
@@ -216,6 +221,7 @@ $(document).ready(function () {
                 );
                 // bind
                 $("#io-ox-login-form").bind("submit", fnSubmit);
+                $("#io-ox-login-username").val(ox.user || "");
                 $("#io-ox-login-password").val("");
                 // set success handler
                 loginSuccess = function () {
@@ -245,21 +251,34 @@ $(document).ready(function () {
     }());
     
     /**
-     * Try auto login
+     * Auto login
      */
     autoLogin = function () {
-        require("io.ox/core/session").autoLogin()
-            .done(loadCore)
-            .fail(initialize)
-            .fail(function (error) {
-                // offline?
-                if (error.error === "0 general") {
-                    ox.offline = true;
-                    $("#io-ox-login-feedback").text(
-                        "No internet connection. Using offline mode."
-                    );
-                }
-            });
+        // got session via hash
+        console.log("autoLogin", "session", _.url.hash("session"), "online", ox.online, "signin", ox.signin);
+        if (_.url.hash("session")) {
+            ox.session = _.url.hash("session");
+            ox.user = _.url.hash("user");
+            _.url.redirect("#!"); // add some senseless characters to avoid unwanted scrolling
+            loadCore();
+        } else if (ox.serverConfig.autoLogin === true && ox.online) {
+            // try auto login
+            require("io.ox/core/session").autoLogin()
+                .done(gotoCore)
+                .fail(function () {
+                    if (ox.signin) {
+                        initialize();
+                    } else {
+                        _.url.redirect("signin");
+                    }
+                });
+        } else {
+            if (ox.signin) {
+                initialize();
+            } else {
+                _.url.redirect("signin");
+            }
+        }
     };
     
     /**
@@ -300,6 +319,11 @@ $(document).ready(function () {
             $("#io-ox-forgot-password").remove();
         } else {
             $("#io-ox-forgot-password").find("a").attr("href", sc.forgotPassword);
+        }
+        // disable password?
+        if (!ox.online) {
+            $("#io-ox-login-password").attr("disabled", "disabled");
+            $("#io-ox-login-feedback").html("Offline mode");
         }
         // recommend chrome frame?
         if (_.browser.IE <= 8) {
@@ -350,21 +374,37 @@ $(document).ready(function () {
     // be busy
     $("#background_loader").busy();
     
-    // get pre core & server config
-    require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js"])
-    .done(function (data) {
-        // store server config
-        ox.serverConfig = data;
-        // set page title now
-        document.title = ox.serverConfig.pageTitle || "ox7";
-        // add global dispatcher
-        require("io.ox/core/event").Dispatcher.extend(ox);
-        // auto login?
-        if (ox.serverConfig.autoLogin === true) {
-            autoLogin();
-        } else {
-            initialize();
-        }
-    });
-
+    var boot = function () {
+        // get pre core & server config
+        require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js", ox.base + "/src/online.js?t=" + _.now()])
+            .done(function (data) {
+                // store server config
+                ox.serverConfig = data;
+                // set page title now
+                document.title = ox.serverConfig.pageTitle || "ox7";
+                // add global dispatcher
+                require("io.ox/core/event").Dispatcher.extend(ox);
+                // continue
+                autoLogin();
+            });
+    };
+    
+    // support for application cache?
+    if (Modernizr.applicationcache) {
+        // wait for update event. if manifest has changed, we have to swap caches and reload
+        applicationCache.addEventListener("updateready", function (e) {
+            if (applicationCache.status === applicationCache.UPDATEREADY) {
+                applicationCache.swapCache();
+                location.reload();
+            } else {
+                boot();
+            }
+        }, false);
+        applicationCache.addEventListener("noupdate", boot, false);
+        applicationCache.addEventListener("error", boot, false);
+    } else {
+        // no cache support
+        boot();
+    }
+    
 });

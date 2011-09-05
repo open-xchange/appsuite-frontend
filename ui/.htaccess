@@ -1,6 +1,8 @@
 # Compress static data
 AddOutputFilterByType DEFLATE text/html text/plain text/javascript application/javascript text/css text/xml application/xml text/x-js application/x-javascript
 
+AddType text/cache-manifest .appcache
+
 # Define pre-compressed files
 AddType text/javascript .jsz
 AddType text/css .cssz
@@ -22,22 +24,31 @@ ExpiresByType text/javascript "access plus 6 months"
 ExpiresByType application/x-javascript "access plus 6 months"
 ExpiresDefault "access plus 6 months"
 
-# cache buster
-# Modify headers‚
-Header append Cache-Control "private"
-Header unset Last-Modified
-Header unset Vary
-# Turn off ETag
-Header unset ETag
-FileETag None
-
-# do never ever cache "index.html" or "offline.html"
-<FilesMatch "^(index)\.html">
-  ExpiresByType text/html "now"
-  ExpiresDefault "now"
-  Header set Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0"
+# cache buster (exclude cache manifest)
+<FilesMatch "^(?!(core|signin)\.appcache).*$">
+    # Modify headers
+    Header append Cache-Control "private"
+    Header unset Last-Modified
+    Header unset Vary
+    # Turn off ETag
+    Header unset ETag
+    FileETag None
 </FilesMatch>
 
+# do never ever cache core or signin page
+<FilesMatch "^(core|signin|online\.js)$">
+    ExpiresByType text/html "now"
+    ExpiresByType text/javascript "now"
+    ExpiresByType application/x-javascript "now"
+    ExpiresByType application/javascript "now"
+    Header set Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0"
+</FilesMatch>
+
+<FilesMatch "^(core|signin)$">
+    Header set Content-type "text/html"
+</FilesMatch>
+
+DirectoryIndex core
+
 RewriteEngine On
-# Strip version from requests
 RewriteRule v=[^\/]+/(.+) $1 [L]

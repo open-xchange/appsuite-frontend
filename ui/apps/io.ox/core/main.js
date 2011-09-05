@@ -22,8 +22,7 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
         .done(function () {
             $("#background_loader").fadeIn(500, function () {
                 $("#io-ox-core").hide();
-                var l = location;
-                location.href = l.protocol + "//" + l.host + l.pathname.replace(/[^\/]+$/, "");
+                _.url.redirect("signin");
             });
         });
     };
@@ -61,7 +60,9 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
         
         desktop.addLauncher("right", "Refresh", PATH + "/images/refresh.png", function () {
                 // trigger global event
-                ox.trigger("refresh");
+                if (ox.online) {
+                    ox.trigger("refresh");
+                }
                 return $.Deferred().resolve();
             })
             .attr("id", "io-ox-refresh-icon");

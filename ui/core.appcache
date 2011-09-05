@@ -1,0 +1,40 @@
+CACHE MANIFEST
+# build: @ version @
+
+CACHE:
+# core
+@base@/favicon.ico
+@base@/boot.js
+@base@/pre-core.js
+@base@/blank.html
+@base@/src/serverconfig.js
+@base@/apps/css.js
+@base@/apps/themes/login/login.css
+@base@/apps/themes/login/busy.gif
+@base@/apps/themes/login/dummypicture.png
+@base@/apps/themes/default/core.css
+@base@/apps/themes/default/wallpaper.jpg
+@base@/apps/io.ox/core/images/addressbook.png
+@base@/apps/io.ox/core/images/applications.png
+@base@/apps/io.ox/core/images/calendar.png
+@base@/apps/io.ox/core/images/default.png
+@base@/apps/io.ox/core/images/files.png
+@base@/apps/io.ox/core/images/help.png
+@base@/apps/io.ox/core/images/logout.png
+@base@/apps/io.ox/core/images/mail.png
+@base@/apps/io.ox/core/images/refresh.png
+# mail
+@base@/apps/io.ox/mail/main.js
+@base@/apps/io.ox/mail/api.js
+@base@/apps/io.ox/mail/style.css
+@base@/apps/io.ox/core/tk/vgrid.js
+@base@/apps/io.ox/mail/base.js
+@base@/apps/io.ox/core/api-factory.js
+@base@/apps/io.ox/core/tk/selection.js
+@base@/src/offline.js
+
+NETWORK:
+*
+
+FALLBACK:
+@base@/src/online.js @base@/src/offline.js

@@ -1,0 +1,21 @@
+CACHE MANIFEST
+# build: @ version @
+
+CACHE:
+@base@/favicon.ico
+@base@/boot.js
+@base@/pre-core.js
+@base@/blank.html
+@base@/src/serverconfig.js
+@base@/src/offline.js
+@base@/apps/css.js
+@base@/apps/themes/login/login.css
+@base@/apps/themes/login/busy.gif
+@base@/apps/themes/login/dummypicture.png
+
+NETWORK:
+*
+
+FALLBACK:
+@base@/src/online.js @base@/src/offline.js
+. signin

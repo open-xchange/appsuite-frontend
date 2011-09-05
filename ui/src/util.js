@@ -107,6 +107,14 @@
              */
             hash: function (name) {
                 return name === undefined ? hashData : hashData[name];
+            },
+            
+            /**
+             * Redirect
+             */
+            redirect: function (path) {
+                var l = location, href = l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, "/" + path);
+                location.href = href;
             }
         },
         

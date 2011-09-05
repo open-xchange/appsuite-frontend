@@ -15,6 +15,15 @@
 
 define("io.ox/core/session", ["io.ox/core/http"], function (http) {
     
+    var setSession = function (session) {
+        ox.session = session;
+    };
+    
+    var setUser = function (username) {
+        ox.user = username.indexOf("@") > -1 ?
+            username : username + "@" + ox.serverConfig.defaultContext;
+    };
+    
     var that = {
             
         autoLogin: function () {
@@ -39,28 +48,42 @@ define("io.ox/core/session", ["io.ox/core/http"], function (http) {
         },
         
         login: function (username, password, store) {
-            // POST request
-            return http.POST({
-                module: "login",
-                appendColumns: false,
-                appendSession: false,
-                processResponse: false,
-                params: {
-                    action: "login",
-                    name: username,
-                    password: password
-                }
-            })
-            .done(function (data) {
-                // store session
-                ox.session = data.session;
-                ox.user = username.indexOf("@") > -1 ?
-                    username : username + "@" + ox.serverConfig.defaultContext;
-                // set permanent cookie
-                if (store) {
-                    that.store();
-                }
-            });
+            var def = $.Deferred();
+            // online?
+            if (ox.online) {
+                // POST request
+                http.POST({
+                    module: "login",
+                    appendColumns: false,
+                    appendSession: false,
+                    processResponse: false,
+                    params: {
+                        action: "login",
+                        name: username,
+                        password: password
+                    }
+                })
+                .done(function (data) {
+                    // store session
+                    setSession(data.session);
+                    setUser(username);
+                    // set permanent cookie
+                    if (store) {
+                        that.store().done(function () {
+                            def.resolve(data);
+                        }).fail(def.reject);
+                    } else {
+                        def.resolve(data);
+                    }
+                })
+                .fail(def.reject);
+            } else {
+                // offline
+                setSession("offline");
+                setUser(username);
+                def.resolve({ session: ox.session, user: ox.user });
+            }
+            return def;
         },
         
         store: function () {
@@ -76,15 +99,19 @@ define("io.ox/core/session", ["io.ox/core/http"], function (http) {
         },
         
         logout: function () {
-            // POST request
-            return http.POST({
-                module: "login",
-                appendColumns: false,
-                processResponse: false,
-                params: {
-                    action: "logout"
-                }
-            });
+            if (ox.online) {
+                // POST request
+                return http.POST({
+                    module: "login",
+                    appendColumns: false,
+                    processResponse: false,
+                    params: {
+                        action: "logout"
+                    }
+                });
+            } else {
+                return $.Deferred().resolve();
+            }
         }
     };
     

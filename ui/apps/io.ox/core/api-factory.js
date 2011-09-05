@@ -48,7 +48,7 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
         
         // create 3 caches for all, list, and get requests
         var caches = {
-            all: new cache.SimpleCache(o.id + "-all", false),
+            all: new cache.SimpleCache(o.id + "-all", true),
             list: new cache.ObjectCache(o.id + "-list", true, o.keyGenerator),
             get: new cache.ObjectCache(o.id + "-get", true, o.keyGenerator)
         };
