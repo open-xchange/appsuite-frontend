@@ -48,7 +48,6 @@ ExpiresDefault "access plus 6 months"
     Header set Content-type "text/html"
 </FilesMatch>
 
-DirectoryIndex core
-
 RewriteEngine On
 RewriteRule v=[^\/]+/(.+) $1 [L]
+RewriteRule ^$ core [L]

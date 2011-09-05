@@ -254,8 +254,7 @@ $(document).ready(function () {
      * Auto login
      */
     autoLogin = function () {
-        // got session via hash
-        console.log("autoLogin", "session", _.url.hash("session"), "online", ox.online, "signin", ox.signin);
+        // got session via hash?
         if (_.url.hash("session")) {
             ox.session = _.url.hash("session");
             ox.user = _.url.hash("user");
