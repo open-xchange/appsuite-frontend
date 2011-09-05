@@ -9,7 +9,7 @@ How to get the UI running in Debian/Ubuntu
 2.  Figure out Apache's document root (usually /var/www) and put the path for
     the UI into an environment variable
 
-        export builddir="var/www/ox7"
+        export builddir="/var/www/ox7"
     
 3.  Create the new directory for the UI with write rights for yourself
     
