@@ -106,7 +106,7 @@ define("io.ox/mail/main", [
                         subject = $("<div/>").addClass("subject")
                     )
                     .append(
-                        threadSize = $("<span/>").addClass("threadSize")
+                        threadSize = $("<span/>").addClass("threadSize").hide()
                     )
                     .append(
                         flag = $("<div/>").addClass("flag abs")
@@ -115,7 +115,7 @@ define("io.ox/mail/main", [
             },
             set: function (data, fields, index) {
                 fields.subject.text(data.subject);
-                fields.threadSize.text(
+                fields.threadSize.show().text(
                     !data.threadSize || data.threadSize === 1 ? "" : data.threadSize
                 );
                 fields.from.empty().append(base.serializeList(data.from));
@@ -164,8 +164,27 @@ define("io.ox/mail/main", [
             grid.setMode("all");
         });
         
-        // LFO callback
-        function drawThread (list, mail) {
+        var showMail, drawThread, drawMail, drawFail;
+        
+        showMail = function (obj) {
+            // be busy
+            right.busy(true);
+            // which mode?
+            if (grid.getMode() === "all") {
+                // get thread
+                var thread = api.getThread(obj);
+                // get first mail first
+                api.get(thread[0])
+                    .done(_.lfo(drawThread, thread))
+                    .fail(_.lfo(drawFail, obj));
+            } else {
+                api.get(obj)
+                    .done(_.lfo(drawMail))
+                    .fail(_.lfo(drawFail, obj));
+            }
+        };
+        
+        drawThread = function (list, mail) {
             // loop over thread - use fragment to be fast for tons of mails
             var i = 0, obj, frag = document.createDocumentFragment();
             for (; (obj = list[i]); i++) {
@@ -187,32 +206,26 @@ define("io.ox/mail/main", [
                 right.unbind("scroll", autoResolve);
             };
             right.bind("scroll", autoResolve);
-        }
+        };
         
-        function drawMail (data) {
+        drawMail = function (data) {
             right.idle().empty().append(base.draw(data));
-        }
+        };
+        
+        drawFail = function (obj) {
+            right.idle().empty().append(
+                $.fail("Connection lost.", function () {
+                    showMail(obj);
+                })
+            );
+        };
         
         /*
          * Selection handling
          */
         grid.selection.bind("change", function (selection) {
             if (selection.length === 1) {
-                // be busy
-                right.busy(true);
-                // which mode?
-                if (grid.getMode() === "all") {
-                    // get thread
-                    var thread = api.getThread(selection[0]);
-                    // get first mail first
-                    api.get(thread[0])
-                        .done(_.lfo(drawThread, thread))
-                        .fail(function () { right.idle().empty(); });
-                } else {
-                    api.get(selection[0])
-                        .done(_.lfo(drawMail))
-                        .fail(function () { right.idle().empty(); });
-                }
+                showMail(selection[0]);
             } else {
                 right.empty();
             }
@@ -220,11 +233,6 @@ define("io.ox/mail/main", [
         
         win.bind("show", function () { grid.selection.keyboard(true); });
         win.bind("hide", function () { grid.selection.keyboard(false); });
-        
-        // bind refresh
-        ox.bind("refresh", function () {
-            grid.refresh();
-        });
         
         // bind all refresh
         api.bind("refresh.all", function (data) {

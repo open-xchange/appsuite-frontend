@@ -138,11 +138,6 @@
         win.bind("show", function () { grid.selection.keyboard(true); });
         win.bind("hide", function () { grid.selection.keyboard(false); });
         
-        // bind refresh
-        ox.bind("refresh", function () {
-            grid.refresh();
-        });
-        
         // bind all refresh
         api.bind("refresh.all", function (data) {
             grid.refresh();

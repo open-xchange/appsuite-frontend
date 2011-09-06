@@ -125,7 +125,6 @@ define("io.ox/contacts/main", [
             return api.getList(ids);
         });
         
-        
         /*
          * Search handling
          */
@@ -138,19 +137,33 @@ define("io.ox/contacts/main", [
         });
         
         // LFO callback
-        function drawContact(data) {
+        var showContact, drawContact, drawFail;
+        
+        showContact = function (obj) {
+            // get contact
+            right.busy(true);
+            api.get(obj)
+                .done(_.lfo(drawContact))
+                .fail(_.lfo(drawFail, obj));
+        };
+        
+        drawContact = function (data) {
             right.idle().empty().append(base.draw(data));
-        }
-
+        };
+        
+        drawFail = function (obj) {
+            right.idle().empty().append(
+                $.fail("Connection lost.", function () {
+                    showContact(obj);
+                })
+            );
+        };
         /*
          * Selection handling
          */
         grid.selection.bind("change", function (selection) {
             if (selection.length === 1) {
-                // get contact
-                right.busy(true);
-                api.get(selection[0])
-                .done(_.lfo(drawContact));
+                showContact(selection[0]);
             } else {
                 right.empty();
             }

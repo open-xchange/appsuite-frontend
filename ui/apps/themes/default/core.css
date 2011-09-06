@@ -562,6 +562,24 @@ a.nolink {
     box-shadow: 0px 0px 35px 1px #000;
 }
 
+/* fail handling */
+.io-ox-fail {
+    font-weight: bold;
+    color: #aaa;
+}
+
+.io-ox-center {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.io-ox-center > div {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
 /* jQuery UI stuff */
 
 .ui-slider-handle { outline: none }

@@ -464,9 +464,12 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
     };
     
     // internal queue
-    var paused = false;
-    var queue = [];
-    var slow = _.url.hash("slow");
+    var paused = false,
+        queue = [],
+        // slow mode
+        slow = _.url.hash("slow"),
+        // fail mode
+        fail = _.url.hash("fail");
     
     var ajax = function (options, type) {
         // process options
@@ -497,20 +500,27 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         }
         // continuation
         function cont () {
-            // go!
-            $.ajax(opt)
-            .done(function (data) {
-                if (o.processData) {
-                    processResponse(def, data, o, type);
-                } else {
-                    def.resolve(data);
-                }
-                that.trigger("stop done", opt);
-            })
-            .fail(function (xhr, textStatus, errorThrown) {
-                def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
+            if (fail && o.module !== "login" && Math.random() < Number(fail)) {
+                // simulate broken connection
+                console.error("HTTP fail", o.url, opt);
+                def.reject({ error: "0 simulated fail" });
                 that.trigger("stop fail", opt);
-            });
+            } else {
+                // go!
+                $.ajax(opt)
+                    .done(function (data) {
+                        if (o.processData) {
+                            processResponse(def, data, o, type);
+                        } else {
+                            def.resolve(data);
+                        }
+                        that.trigger("stop done", opt);
+                    })
+                    .fail(function (xhr, textStatus, errorThrown) {
+                        def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
+                        that.trigger("stop fail", opt);
+                    });
+            }
         }
         that.trigger("start", opt);
         if (Number(slow)) {

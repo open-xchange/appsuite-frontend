@@ -27,7 +27,7 @@ define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
             });
             
             win.nodes.main.append(
-                    $("<h1/>").text("Halo of " + data.displayName)
+                    $("<h1/>").text("Halo of " + (data.displayName || data.email ))
                 )
                 .bind("click", function () {
                     win.destroy();

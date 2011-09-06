@@ -40,12 +40,13 @@ body {
     user-select: none;
 }
 
-a, a:visited {
+a, a:visited, .link {
     color: #08c;
     text-decoration: none;
+    cursor: pointer;
 }
 
-a:hover {
+a:hover, .link:hover {
     text-decoration: underline;
 }
 

@@ -127,3 +127,21 @@ $.fn.intoViewport = function (node) {
     
     return this;
 };
+
+// center content via good old stupid table stuff
+$.center = function (stuff) {
+    // probably does not run in IE properly
+    return $("<div/>")
+        .addClass("abs io-ox-center")
+        .append($("<div/>").append(stuff));
+};
+
+$.fail = function (msg, retry) {
+    var tmp = $("<span/>").addClass("io-ox-fail").text(msg);
+    if (retry) {
+        tmp = tmp.add($("<span/>").text(" "))
+            .add($("<span/>").text("Retry").addClass("link").bind("click", retry));
+    }
+    console.log("hier?", tmp);
+    return $.center(tmp);
+};
