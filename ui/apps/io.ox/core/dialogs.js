@@ -93,7 +93,7 @@ require(["io.ox/core/dialogs"], function (dialogs) {
         .addButton("delete", "Shut up and delete it!")
         .show()
         .done(function (action) {
-            console.log("Yeah", action);
+            console.debug("Action", action);
         });
 });
 

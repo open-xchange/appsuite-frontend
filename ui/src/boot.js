@@ -374,7 +374,6 @@ $(document).ready(function () {
     $("#background_loader").busy();
     
     var boot = function () {
-        console.log("#8");
         // get pre core & server config
         require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js", ox.base + "/src/online.js?t=" + _.now()])
             .done(function (data) {
