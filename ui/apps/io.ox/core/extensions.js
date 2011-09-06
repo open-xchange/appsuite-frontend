@@ -69,7 +69,19 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
         };
     };
     
+    // extension loader
+    var load = function () {
+        // get proper list
+        var ext = ox.serverConfig.extensions || {},
+            list = (ox.signin ? ext.signin : ext.core) || [];
+        // transform to proper urls
+        list = _(list).map(function (i) { return "extensions/" + i + "/register"; });
+        // load extensions
+        return require(list);
+    };
+    
     return {
-        registry: new Registry()
+        registry: new Registry(),
+        load: load
     };
 });

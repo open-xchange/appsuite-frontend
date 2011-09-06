@@ -13,7 +13,7 @@
  * 
  */
 
-define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http"], function (desktop, session, http) {
+define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http", "io.ox/core/extensions"], function (desktop, session, http, extensions) {
 
     var PATH = ox.base + "/apps/io.ox/core",
         DURATION = 250;
@@ -40,7 +40,10 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
         
         http.bind("start", function () {
             if (count === 0) {
-                $("#io-ox-refresh-icon").addClass("progress");
+                if (timer === null) {
+                    $("#io-ox-refresh-icon").addClass("progress");
+                }
+                clearTimeout(timer);
                 timer = setTimeout(function () {
                     timer = null;
                     off();
@@ -111,16 +114,21 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
             $("#io-ox-core").css("background-size", "cover");
         }
         
-        $("#background_loader").removeClass("busy").fadeOut(DURATION, function () {
-            // auto launch apps?
-            if (_.url.hash("launch")) {
-                require(_.url.hash("launch").split(/,/), function () {
-                    $.each(arguments, function (i, m) { 
-                        m.getApp().launch();
-                    });
+        
+        // load core extensions
+        extensions.load()
+            .done(function () {
+                $("#background_loader").removeClass("busy").fadeOut(DURATION, function () {
+                    // auto launch apps?
+                    if (_.url.hash("launch")) {
+                        require(_.url.hash("launch").split(/,/), function () {
+                            $.each(arguments, function (i, m) { 
+                                m.getApp().launch();
+                            });
+                        });
+                    }
                 });
-            }
-        });
+            });
     }
     
     return {

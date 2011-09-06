@@ -13,7 +13,7 @@
  * 
  */
 
-define("io.ox/mail/base", function () {
+define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
     
     var that = {};
     
@@ -42,6 +42,13 @@ define("io.ox/mail/base", function () {
         var height = $(body).outerHeight(true);
         $("#tmp-iframe-" + guid).css("height", height + 20 + "px");
     };
+    
+    var fnClickPerson = function (e) {
+        console.log("fnClickPerson", e.data);
+        extensions.registry.point("io.ox/core/person:action").each(function (i, ext) {
+            _.call(ext.action, e.data);
+        });
+    };
    
     that = {
         
@@ -51,14 +58,17 @@ define("io.ox/mail/base", function () {
             });
         },
         
-        serializeList: function (list) {
-            var i = 0, $i = list.length, tmp = $();
+        serializeList: function (list, addHandlers) {
+            var i = 0, $i = list.length, tmp = $(), node, displayName = "";
             for (; i < $i; i++) {
-                tmp = tmp.add(
-                    $("<span/>").addClass("person").css("whiteSpace", "nowrap").text(
-                        (list[i][0] || list[i][1]).replace(/(^["'\\]+|["'\\]+$)/g, "")
-                    )
-                );
+                displayName = (list[i][0] || "").replace(/(^["'\\]+|["'\\]+$)/g, "");
+                node = $("<span/>").addClass("person")
+                    .css("whiteSpace", "nowrap").text(displayName || list[i][1]);
+                if (addHandlers) {
+                    node.bind("click", { displayName: displayName, email: list[i][1] }, fnClickPerson)
+                        .css("cursor", "pointer");
+                }
+                tmp = tmp.add(node);
                 if (i < $i - 1) {
                     tmp = tmp.add($("<span/>").css("color", "#555").html("&nbsp;&bull; "));
                 }
@@ -219,7 +229,7 @@ define("io.ox/mail/base", function () {
                 .append(
                     $("<div/>")
                     .addClass("from list")
-                    .append(this.serializeList(data.from))
+                    .append(this.serializeList(data.from, true))
                 )
                 .append(
                     $("<div/>")
@@ -235,14 +245,14 @@ define("io.ox/mail/base", function () {
                                 $("<span/>").addClass("label").text("To: ")
                             )
                             .append(
-                                this.serializeList(data.to)
+                                this.serializeList(data.to, true)
                             )
                             .append(
                                 // CC
                                 showCC ? $("<span/>").addClass("label").text(" Copy: ") : []
                             )
                             .append(
-                                this.serializeList(data.cc)
+                                this.serializeList(data.cc, true)
                             )
                         : []
                 )

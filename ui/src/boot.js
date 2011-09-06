@@ -33,7 +33,7 @@ $(document).ready(function () {
         setDefaultLanguage,
         autoLogin,
         initialize;
-
+    
     // continuation
     cont = function () {
         $("#io-ox-login-username").focus();
@@ -334,15 +334,21 @@ $(document).ready(function () {
                 'Administrator rights are not required. Just restart IE after installation.</div>'
             );
         }
-        // use browser language
-        return setDefaultLanguage().done(function () {
-            // show login dialog
-            $("#io-ox-login-blocker").bind("mousedown", false);
-            $("#io-ox-login-form").bind("submit", fnSubmit);
-            $("#io-ox-login-screen").show();
-            $("#io-ox-login-username").removeAttr("disabled").focus();
-            $("#background_loader").idle().fadeOut(DURATION, cont);
-        });
+        
+        return $.when(
+                // load extensions
+                require("io.ox/core/extensions").load(),
+                // use browser language
+                setDefaultLanguage()
+            )
+            .done(function () {
+                // show login dialog
+                $("#io-ox-login-blocker").bind("mousedown", false);
+                $("#io-ox-login-form").bind("submit", fnSubmit);
+                $("#io-ox-login-screen").show();
+                $("#io-ox-login-username").removeAttr("disabled").focus();
+                $("#background_loader").idle().fadeOut(DURATION, cont);
+            });
     };
     
     // init require.js
