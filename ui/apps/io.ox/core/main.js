@@ -15,12 +15,13 @@
 
 define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http"], function (desktop, session, http) {
 
-    var PATH = ox.base + "/apps/io.ox/core";
+    var PATH = ox.base + "/apps/io.ox/core",
+        DURATION = 250;
     
     var logout = function () {
         return session.logout()
         .done(function () {
-            $("#background_loader").fadeIn(500, function () {
+            $("#background_loader").fadeIn(DURATION, function () {
                 $("#io-ox-core").hide();
                 _.url.redirect("signin");
             });
@@ -110,7 +111,7 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
             $("#io-ox-core").css("background-size", "cover");
         }
         
-        $("#background_loader").removeClass("busy").fadeOut(500, function () {
+        $("#background_loader").removeClass("busy").fadeOut(DURATION, function () {
             // auto launch apps?
             if (_.url.hash("launch")) {
                 require(_.url.hash("launch").split(/,/), function () {

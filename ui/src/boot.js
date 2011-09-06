@@ -374,6 +374,7 @@ $(document).ready(function () {
     $("#background_loader").busy();
     
     var boot = function () {
+        console.log("#8");
         // get pre core & server config
         require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js", ox.base + "/src/online.js?t=" + _.now()])
             .done(function (data) {
@@ -390,20 +391,38 @@ $(document).ready(function () {
     
     // support for application cache?
     if (Modernizr.applicationcache) {
-        // wait for update event. if manifest has changed, we have to swap caches and reload
-        applicationCache.addEventListener("updateready", function (e) {
-            if (applicationCache.status === applicationCache.UPDATEREADY) {
-                applicationCache.swapCache();
-                location.reload();
-            } else {
-                boot();
-            }
-        }, false);
-        applicationCache.addEventListener("noupdate", boot, false);
-        applicationCache.addEventListener("error", boot, false);
+        
+        (function (fn) {
+        
+            var ac = applicationCache, update, cont;
+            
+            cont = function () {
+                ac.removeEventListener("updateready", update, false);
+                ac.removeEventListener("cached", fn, false);
+                ac.removeEventListener("noupdate", fn, false);
+                ac.removeEventListener("error", fn, false);
+                fn();
+            };
+            
+            update = function () {
+                if (ac.status === ac.UPDATEREADY) {
+                    // if manifest has changed, we have to swap caches and reload
+                    ac.swapCache();
+                    location.reload();
+                } else {
+                    cont();
+                }
+            };
+            
+            ac.addEventListener("updateready", update, false);
+            ac.addEventListener("cached", cont, false);
+            ac.addEventListener("noupdate", cont, false);
+            ac.addEventListener("error", cont, false);
+            
+        }(boot));
+        
     } else {
         // no cache support
         boot();
     }
-    
 });

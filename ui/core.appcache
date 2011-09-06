@@ -11,9 +11,9 @@ CACHE:
 @base@/apps/css.js
 @base@/apps/themes/login/login.css
 @base@/apps/themes/login/busy.gif
-@base@/apps/themes/login/dummypicture.png
 @base@/apps/themes/default/core.css
 @base@/apps/themes/default/wallpaper.jpg
+@base@/apps/themes/default/dummypicture.png
 @base@/apps/io.ox/core/images/addressbook.png
 @base@/apps/io.ox/core/images/applications.png
 @base@/apps/io.ox/core/images/calendar.png

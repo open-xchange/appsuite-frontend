@@ -115,8 +115,8 @@ utils.concat("boot.js", ["src/util.js", "src/boot.js"],
     { to: "tmp", filter: jsFilter });
 
 utils.concat("boot.js", ["lib/jquery.min.js", "lib/jquery-ui.min.js",
-        "lib/jquery.plugins.js", "lib/require.js", "lib/modernizr.js",
-        "lib/underscore.js", "tmp/boot.js"]);
+        "lib/require.js", "lib/modernizr.js", "lib/underscore.js", "lib/jquery.plugins.js",
+        "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
