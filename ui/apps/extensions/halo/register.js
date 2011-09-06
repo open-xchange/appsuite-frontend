@@ -21,7 +21,20 @@ define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
         index: 10,
         label: "Halo",
         action: function (data) {
-            alert("Soon you will get the halo of >" + data.displayName + "<");
+            
+            var win = ox.ui.createWindow({
+                chromeless: true
+            });
+            
+            win.nodes.main.append(
+                    $("<h1/>").text("Halo of " + data.displayName)
+                )
+                .bind("click", function () {
+                    win.destroy();
+                    win = null;
+                });
+            
+            win.show();
         }
     });
 });

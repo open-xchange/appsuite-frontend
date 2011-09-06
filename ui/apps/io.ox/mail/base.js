@@ -44,7 +44,6 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
     };
     
     var fnClickPerson = function (e) {
-        console.log("fnClickPerson", e.data);
         extensions.registry.point("io.ox/core/person:action").each(function (i, ext) {
             _.call(ext.action, e.data);
         });

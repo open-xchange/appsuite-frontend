@@ -8,12 +8,15 @@ CACHE:
 @base@/pre-core.js
 @base@/blank.html
 @base@/src/serverconfig.js
+@base@/src/offline.js
+# theme
 @base@/apps/css.js
 @base@/apps/themes/login/login.css
 @base@/apps/themes/login/busy.gif
 @base@/apps/themes/default/core.css
 @base@/apps/themes/default/wallpaper.jpg
 @base@/apps/themes/default/dummypicture.png
+# icons
 @base@/apps/io.ox/core/images/addressbook.png
 @base@/apps/io.ox/core/images/applications.png
 @base@/apps/io.ox/core/images/calendar.png
@@ -31,7 +34,8 @@ CACHE:
 @base@/apps/io.ox/mail/base.js
 @base@/apps/io.ox/core/api-factory.js
 @base@/apps/io.ox/core/tk/selection.js
-@base@/src/offline.js
+# extensions
+@base@/apps/extensions/halo/register.js
 
 NETWORK:
 *

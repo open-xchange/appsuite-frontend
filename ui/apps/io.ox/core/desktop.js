@@ -249,6 +249,8 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
             autoFullscreen = false,
             fullscreen = false,
             
+            previousWindow = null,
+            
             // toggle fullscreen mode
             toggleFullscreen = function () {
                 if (!fullscreen) {
@@ -287,6 +289,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     if (currentWindow !== this) {
                         // show
                         if (currentWindow) {
+                            previousWindow = currentWindow;
                             currentWindow.hide();
                         }
                         // auto fullscreen?
@@ -300,13 +303,17 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         }
                         node.show();
                         currentWindow = this;
-                        this.app.getLaunchBarIcon().addClass("active");
+                        if (this.app !== null) {
+                            this.app.getLaunchBarIcon().addClass("active");
+                        }
                         this.trigger("show");
                     }
                 };
                 
                 this.hide = function () {
-                    this.app.getLaunchBarIcon().removeClass("active");
+                    if (this.app !== null) {
+                        this.app.getLaunchBarIcon().removeClass("active");
+                    }
                     this.nodes.outer.hide();
                     currentWindow = null;
                     this.trigger("hide");
@@ -329,18 +336,28 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                             });
                     } else {
                         this.hide();
+                        if (previousWindow === this) {
+                            previousWindow = null;
+                        } else if (previousWindow !== null) {
+                            previousWindow.show();
+                        }
                     }
                 };
                 
                 this.destroy = function () {
-                    if (currentWindow === this) {
-                        currentWindow = null;
+                    if (currentWindow === this) { currentWindow = null; }
+                    if (previousWindow === this) { previousWindow = null; }
+                    if (this.app !== null) {
+                        this.app.getLaunchBarIcon().removeClass("active");
+                        this.app.win = null;
+                        this.app = null;
                     }
-                    this.app.getLaunchBarIcon().removeClass("active");
                     this.nodes.outer.remove();
-                    this.app.win = null;
-                    this.app = null;
                     this.nodes = null;
+                    this.show = $.noop;
+                    if (previousWindow) {
+                        previousWindow.show();
+                    }
                 };
                 
                 this.setQuitOnClose = function (flag) {
@@ -410,6 +427,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 clearTimeout(exitTimer);
             });
         
+        // window factory
         return function (options) {
             
             var opt = $.extend({
@@ -419,7 +437,8 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 subtitle: "",
                 search: false,
                 toolbar: false,
-                settings: false
+                settings: false,
+                chromesless: false
             }, options);
 
             // get width
@@ -562,34 +581,42 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     .prependTo(win.nodes.toolbar);
             }
             
-            // fix height/position
-            if (opt.toolbar || opt.search) {
-                var th = 28;
-                win.nodes.head.css("height", th + 30 + "px");
-                win.nodes.toolbar.css("height", th + 10 + "px");
-                win.nodes.body.css("top", th + 32 + "px");
+            // fix height/position/appearance
+            if (opt.chromeless) {
+                
+                win.nodes.head.remove();
+                win.nodes.toolbar.remove();
+                win.nodes.body.css("top", "0px");
+                
+            } else {
+                
+                // add fullscreen handler
+                win.nodes.title.bind("dblclick", toggleFullscreen);
+                
+                // add close handler
+                win.nodes.closeButton.bind("click", close);
+                
+                // set subtitle & title
+                win.setSubTitle(opt.subtitle);
+                win.setTitle(opt.title);
+                
+                if (opt.toolbar || opt.search) {
+                    var th = 28;
+                    win.nodes.head.css("height", th + 30 + "px");
+                    win.nodes.toolbar.css("height", th + 10 + "px");
+                    win.nodes.body.css("top", th + 32 + "px");
+                }
+                
+                // quick settings?
+                if (opt.settings) {
+                    $.quickSettings(win.nodes.main, win.nodes.settings, win.nodes.settingsButton);
+                } else {
+                    win.nodes.settingsButton.hide();
+                }
             }
-            
-            // add fullscreen handler
-            win.nodes.title.bind("dblclick", toggleFullscreen);
-            
-            // add close handler
-            win.nodes.closeButton.bind("click", close);
-            
-            // set subtitle & title
-            win.setSubTitle(opt.subtitle);
-            win.setTitle(opt.title);
-            
             
             // inc
             guid++;
-            
-            // quick settings?
-            if (opt.settings) {
-                $.quickSettings(win.nodes.main, win.nodes.settings, win.nodes.settingsButton);
-            } else {
-                win.nodes.settingsButton.hide();
-            }
             
             // return window object
             return win;
