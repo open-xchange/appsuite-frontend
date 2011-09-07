@@ -21,20 +21,9 @@ define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
         index: 10,
         label: "Halo",
         action: function (data) {
-            
-            var win = ox.ui.createWindow({
-                chromeless: true
+            require(["extensions/halo/main"], function (halo) {
+                halo.show(data);
             });
-            
-            win.nodes.main.append(
-                    $("<h1/>").text("Halo of " + (data.displayName || data.email ))
-                )
-                .bind("click", function () {
-                    win.destroy();
-                    win = null;
-                });
-            
-            win.show();
         }
     });
 });
