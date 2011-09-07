@@ -89,6 +89,7 @@ define("io.ox/core/dialogs", function () {
 
     
     var SlidingPane = function () {
+        var self = this;
         var nodes = {
             pane: pane.clone().hide().appendTo('body'),
             relativeTo: null
@@ -97,10 +98,12 @@ define("io.ox/core/dialogs", function () {
         nodes.content = nodes.pane.find('.content');
         nodes.controls = nodes.pane.find('.controls');
         
+        this.visible = false;
         
         var deferred = $.Deferred(),
         
         close = function () {
+            self.visible = false;
             nodes.pane.fadeOut();
         },
         
@@ -135,7 +138,16 @@ define("io.ox/core/dialogs", function () {
             return this;
         };
         
+        this.toggle = function () {
+            if (this.visible) {
+                process("toggeled");
+            } else {
+                this.show();
+            }
+        };
+        
         this.show = function () {
+            this.visible = true;
             var offset, top, left, height, width, windowHeight, windowWidth;
             
             windowHeight = $(window).height();

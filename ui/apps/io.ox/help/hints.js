@@ -26,14 +26,15 @@
         
         if (options.explanation) {
             var $explanationLink = $("<a/>").text("What's that?");
-
-            var openExplanation = function () {
-                new dialogs.SlidingPane().text(options.explanation).addButton("okay", "Got it!").relativeTo($explanationLink).show();
+            var pane = new dialogs.SlidingPane().text(options.explanation).addButton("okay", "Got it!").relativeTo($explanationLink);
+            
+            var toggleExplanation = function () {
+                pane.toggle();
                 return false; // Prevent default
             };
 
-            $explanationLink.click(openExplanation);
-            $hintNode.click(openExplanation);
+            $explanationLink.click(toggleExplanation);
+            $hintNode.click(toggleExplanation);
             $hintNode.append($explanationLink);
 
         }
