@@ -79,8 +79,91 @@ define("io.ox/core/dialogs", function () {
         };
     };
     
+    //TODO: Less C&P
+    var pane = $('<div/>').addClass('abs io-ox-dialog-pane').append(
+        $("<div/>").addClass("content")
+    )
+    .append(
+        $("<div/>").addClass("controls")
+    );
+    
+    var SlidingPane = function () {
+        var nodes = {
+            pane: pane.clone().hide().appendTo('body'),
+            relativeTo: null
+        };
+        
+        nodes.content = nodes.pane.find('.content');
+        nodes.controls = nodes.pane.find('.controls');
+        
+        
+        var deferred = $.Deferred(),
+        
+        close = function () {
+            nodes.pane.fadeOut();
+            nodes = deferred = null;
+        },
+        
+        process = function (e) {
+            deferred.resolve(e.data);
+            close();
+        };
+        
+        this.text = function (str) {
+            nodes.content.text(str || "");
+            return this;
+        };
+        
+        this.append = function (node) {
+            nodes.content.append(node);
+            return this;
+        };
+        
+        this.addButton = function (action, label) {
+            nodes.controls.append(
+                $.button({
+                    label: label,
+                    data: action,
+                    click: process
+                })
+            );
+            return this;
+        };
+        
+        this.relativeTo = function (node) {
+            nodes.relativeTo = $(node);
+            return this;
+        };
+        
+        this.show = function () {
+            var offset, top, left, height;
+            if (nodes.relativeTo) {
+                // Let's align the upper left edge of the pane 
+                // With the lower left edge of the element we're relative to
+                offset = nodes.relativeTo.offset();
+                top = offset.top + nodes.relativeTo.outerHeight()+3;
+                left = offset.left;
+                nodes.pane.css({
+                   top: top+"px",
+                   left: left+"px"
+                });
+            } else {
+                // Hm. Put it in the center. Though, truth be told, this is probably supposed
+                // to be a dialog
+                height = nodes.pane.height();
+                nodes.pane.css({
+                    height: height + "px",
+                    marginTop: 0 - (height / 2 >> 0) + "px"
+                });
+            }
+            nodes.pane.fadeIn();
+            return deferred;
+        };
+    };
+    
     return {
-        ModalDialog: Dialog
+        ModalDialog: Dialog,
+        SlidingPane: SlidingPane
     };
 });
 

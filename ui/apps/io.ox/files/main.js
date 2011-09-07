@@ -16,8 +16,8 @@
 
  define("io.ox/files/main", [
     "io.ox/files/base", "io.ox/files/api",
-    "io.ox/core/tk/vgrid",  "io.ox/files/upload", "css!io.ox/files/style.css"
-    ], function (base, api, VGrid, upload) {
+    "io.ox/core/tk/vgrid",  "io.ox/files/upload", "io.ox/core/dialogs", "css!io.ox/files/style.css"
+    ], function (base, api, VGrid, upload, dialogs) {
 
     // application object
     var app = ox.ui.createApp(),
@@ -31,19 +31,19 @@
     
     function deleteItems () {
         // ask first
-        require(["io.ox/core/dialogs"], function (dialogs) {
-            new dialogs.ModalDialog()
-                .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
-                .addButton("cancel", "No, rather not")
-                .addButton("delete", "Shut up and delete it!")
-                .show()
-                .done(function (action) {
-                    if (action === "delete") {
-                        api.remove(grid.selection.get());
-                        grid.selection.selectNext();
-                    }
-                });
-        });
+        
+        new dialogs.ModalDialog()
+            .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
+            .addButton("cancel", "No, rather not")
+            .addButton("delete", "Shut up and delete it!")
+            .show()
+            .done(function (action) {
+                if (action === "delete") {
+                    api.remove(grid.selection.get());
+                    grid.selection.selectNext();
+                }
+            });
+        
     }
     
     // launcher
@@ -178,10 +178,13 @@
             dropZone.remove();
         });
         
-        win.addButton({
-           label: "",
+        var uploadButton = win.addButton({
+           label: "Add File",
            action: function () {
-               var $uploadForm = $('<div/>')
+               var $fileField = $('<input type="file" multiple="multiple" />');
+               var pane = new dialogs.SlidingPane().relativeTo(uploadButton).append($fileField).addButton("Upload", function () {
+                  alert("Zzzzush"); 
+               });
            } 
         });
     });
