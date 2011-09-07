@@ -6,6 +6,8 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
     // "dragover" if someone threatens to drop a file into $node
     // "dragend" when she released the file
     // "drop" when she released the file
+    // Calling code can hand over  a node or a jquery expression, if no node is passed, we'll create an overlay for the entire 
+    // visible screen and handle all eye candy ourselves.
     function DropZone ($node) {
         var self = this;
         var globalMode = false;
@@ -57,11 +59,11 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
                 
             },
             drop: function (event) {
-                // Finally something useful to do. Let's extract the file objects from the event
-                // grab the original event
                 if (globalMode) {
                     $node.detach();
                 }
+                // Finally something useful to do. Let's extract the file objects from the event
+                // grab the original event
                 event = event.originalEvent || event;
                 var files = event.dataTransfer.files;
                 // And the pass them on
@@ -129,6 +131,12 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
                 }
             };
         }
+        
+        if (!delegate.processFile) {
+            console.warn("The delegate to a queue should implement a 'processFile' method!");
+            delegate.processFile = $.noop;
+        }
+        
         event.Dispatcher.extend(this);
         
         var files = []; 
@@ -185,13 +193,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
      
     return {
         dnd : {
-            enabled: (function () {
-                var xhr = new XMLHttpRequest(); 
-                if (xhr.upload && FormData) {
-                    return true;
-                }
-                return false;
-            }()),
+            enabled: Modernizr.draganddrop,
             createDropZone: function ($node) {
                 if (!this.enabled) {
                     return new DisabledDropZone($node);

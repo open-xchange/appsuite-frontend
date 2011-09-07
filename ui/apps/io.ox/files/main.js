@@ -14,10 +14,11 @@
  *
  */
 
+// TODO: Break this up, this is becoming messy
  define("io.ox/files/main", [
     "io.ox/files/base", "io.ox/files/api",
-    "io.ox/core/tk/vgrid",  "io.ox/files/upload", "css!io.ox/files/style.css"
-    ], function (base, api, VGrid, upload) {
+    "io.ox/core/tk/vgrid",  "io.ox/files/upload", "io.ox/core/dialogs", "css!io.ox/files/style.css"
+    ], function (base, api, VGrid, upload, dialogs) {
 
     // application object
     var app = ox.ui.createApp(),
@@ -31,19 +32,19 @@
     
     function deleteItems () {
         // ask first
-        require(["io.ox/core/dialogs"], function (dialogs) {
-            new dialogs.ModalDialog()
-                .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
-                .addButton("cancel", "No, rather not")
-                .addButton("delete", "Shut up and delete it!")
-                .show()
-                .done(function (action) {
-                    if (action === "delete") {
-                        api.remove(grid.selection.get());
-                        grid.selection.selectNext();
-                    }
-                });
-        });
+        
+        new dialogs.ModalDialog()
+            .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
+            .addButton("cancel", "No, rather not")
+            .addButton("delete", "Shut up and delete it!")
+            .show()
+            .done(function (action) {
+                if (action === "delete") {
+                    api.remove(grid.selection.get());
+                    grid.selection.selectNext();
+                }
+            });
+        
     }
     
     // launcher
@@ -164,7 +165,8 @@
                     });
             }
         });
-        
+                
+        // TODO: Add a hint for the user that dnd is available and what to do with it.
         var dropZone = upload.dnd.createDropZone();
         dropZone.bind("drop", function (file) {
             queue.offer(file);
@@ -177,6 +179,46 @@
         win.bind("hide", function () {
             dropZone.remove();
         });
+        
+        // Upload Button
+        // TODO: Make this IE compatible
+        (function () {
+            
+            var pane = new dialogs.SlidingPane();
+            // Let's build our upload form. Nothing fancy here, but we'll allow multiple selection
+            // TODO: Add a hint to the user, that multiple uploads are available and how to use them
+            var $fileField = $('<input type="file" multiple="multiple"></input>');
+            window.ciscoDebug = $fileField;
+            
+            pane.append($fileField);
+            pane.addButton("resolveUpload", "Upload");
+            pane.addButton("cancelUpload", "Cancel");
+            
+            var actions = {
+                resolveUpload: function () {
+                    var files = $fileField[0].files; //TODO: Find clean way to do this
+                    $.each(files, function (index, file) {
+                        queue.offer(file);
+                    });
+                },
+            
+                cancelUpload: function () {
+                    $fileField.val("");
+                }
+            };
+            
+            var showUploadField = function () {
+                pane.show().done(function (action) {
+                    actions[action]();
+                });
+            };
+            var uploadButton = win.addButton({
+               label: "Add File",
+               action: showUploadField 
+            });
+            pane.relativeTo(uploadButton);            
+        }());
+        
     });
     
     return {
