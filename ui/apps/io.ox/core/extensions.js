@@ -15,20 +15,22 @@
 
 define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
 
-    // A naive extension registry. 
+    // A naive extension registry.
     
-    var ExtensionPoint = function (options) {
+    var pointSorter = function (a, b) {
+        return (a.index || 1000000000 ) - (b.index || 1000000000);
+    };
+    
+    var Point = function (options) {
         
         this.id = options.id;
         this.description = options.description;
+        
         var extensions = [];
         
-        event.Dispatcher.extend(this);
-        
-        this.register = function (extension) {
+        this.extend = function (extension) {
             extensions.push(extension);
-            extensions = extensions.sort(function (a,b) { return (a.index || 1000000000 ) - (b.index || 1000000000); });
-            this.trigger("register", this);
+            extensions.sort(pointSorter);
             return this;
         };
         
@@ -36,52 +38,41 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             return extensions;
         };
         
-        this.each = function(cb) {
-            return $.each(extensions, cb);
+        this.each = function (cb) {
+            return _.each(extensions, cb);
         };
-
+        
         this.map = function(cb) {
-            return $.map(extensions, cb);
-        };
-        
-        this.dump = function () {
-            console.info(this, extensions);
+            return _.map(extensions, cb);
         };
     };
     
-    var Registry = function () {
+    // global registry
+    var registry = {},
         
-        var extensionPoints = {};
+        // get point
+        point = function (id) {
         
-        this.point = function (id) {
-            if (id instanceof ExtensionPoint) {
-                return id;
+            if (registry[id] !== undefined) {
+                return registry[id];
+            } else {
+                return (registry[id] = new Point({ id: id }));
             }
-            var point = extensionPoints[id];
-            if (point) {
-                return point;
-            }
-            return (extensionPoints[id] = new ExtensionPoint({id: id}));
-        };
+        },
         
-        this.dump = function () {
-            console.info(extensionPoints);
+        // extension loader
+        load = function () {
+            // get proper list
+            var ext = ox.serverConfig.extensions || {},
+                list = (ox.signin ? ext.signin : ext.core) || [];
+            // transform to proper urls
+            list = _(list).map(function (i) { return "extensions/" + i + "/register"; });
+            // load extensions
+            return require(list);
         };
-    };
-    
-    // extension loader
-    var load = function () {
-        // get proper list
-        var ext = ox.serverConfig.extensions || {},
-            list = (ox.signin ? ext.signin : ext.core) || [];
-        // transform to proper urls
-        list = _(list).map(function (i) { return "extensions/" + i + "/register"; });
-        // load extensions
-        return require(list);
-    };
     
     return {
-        registry: new Registry(),
+        point: point,
         load: load
     };
 });

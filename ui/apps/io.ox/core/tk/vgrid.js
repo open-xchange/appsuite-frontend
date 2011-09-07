@@ -380,7 +380,6 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
                 // inform user
                 container.hide().parent().idle().append(
                     $.fail("Connection lost.", function () {
-                        $(this).parents(".io-ox-center").remove();
                         container.show();
                         loadAll();
                     })

@@ -15,9 +15,7 @@
  
 // TODO: Render Versions
 
-define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
-    
-    var registry = extensions.registry;
+define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
     
     var draw = function (file) {
         file.url = ox.ajaxRoot+"/infostore?action=document&id="+file.id+"&folder="+file.folder_id+"&session="+ox.session; // TODO: Put this somewhere in the model
@@ -30,12 +28,11 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
             container.append(line);
             element.append(container);
             
-            registry.point("io.ox.files.details.basicInfo").each(function (index, extension) {
-                var customFields = extension.fields || [];
+            ext.point("io.ox.files.details.basicInfo").each(function (extension) {
                 var count = 0;
-                $.each(customFields, function (index, field) {
+                _.each(extension.fields, function (index, field) {
                     var content = null;
-                    line.append($("<em/>").text(extension.label(field)+":")).append(content = $("<span/>"));
+                    line.append($("<em/>").text(extension.label(field) + ":")).append(content = $("<span/>"));
                     extension.draw(field, file, content);
                     count++;
                     if (count === 5) {
@@ -57,7 +54,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
             element.append(container);
             
             var count = 0;
-            registry.point("io.ox.files.details.actions").each(function (index, extension) {
+            ext.point("io.ox.files.details.actions").each(function (extension) {
                 var action = function () {
                     extension.action(file);
                 };
@@ -86,7 +83,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
                 dataURL: file.url
             };
             var rendered = false;
-            registry.point("io.ox.files.renderer").each(function (index, renderer) {
+            ext.point("io.ox.files.renderer").each(function (renderer) {
                 if (!rendered && renderer.canRender(fileDescription)) {
                     renderer.draw(fileDescription, div);
                     rendered = true;
@@ -115,7 +112,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
         
         // Render Additional
         
-        registry.point("io.ox.files.details.additional").each(function (index, extension) {
+        ext.point("io.ox.files.details.additional").each(function (extension) {
             extension(file, element);
         });
         
@@ -132,7 +129,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
         return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
     };
     
-    registry.point("io.ox.files.details.basicInfo").register({
+    ext.point("io.ox.files.details.basicInfo").extend({
         index: 10,
         fields: ["file_size"],
         label: function () {
@@ -143,7 +140,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
         }
     });
     
-    registry.point("io.ox.files.details.basicInfo").register({
+    ext.point("io.ox.files.details.basicInfo").extend({
        index: 20,
        fields: ["version"],
        label : function(field) {
@@ -160,7 +157,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
         return d.toLocaleString();
     };
     
-    registry.point("io.ox.files.details.basicInfo").register({
+    ext.point("io.ox.files.details.basicInfo").extend({
         index: 30,
         fields: ["last_modified"],
         label: function () {
@@ -173,7 +170,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
     
     // Basic Actions
     
-    registry.point("io.ox.files.details.actions").register({
+    ext.point("io.ox.files.details.actions").extend({
         index: 10,
         label: "Download",
         action: function (file) {
@@ -181,7 +178,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
         }
     });
 
-    registry.point("io.ox.files.details.actions").register({
+    ext.point("io.ox.files.details.actions").extend({
         index: 20,
         label: "Open",
         action: function (file) {
@@ -189,7 +186,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
         }
     });
 
-    registry.point("io.ox.files.details.actions").register({
+    ext.point("io.ox.files.details.actions").extend({
         index: 30,
         label: "Send by E-Mail",
         action: function (file) {
@@ -201,7 +198,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
     // Simple Previews
     
     // .txt
-    registry.point("io.ox.files.renderer").register({
+    ext.point("io.ox.files.renderer").extend({
        canRender: function (fileDescription) {
            return (/\.txt$/).test(fileDescription.name);
        },
@@ -215,7 +212,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
     });
     
     // .png, .jpg, .jpeg, .gif
-    registry.point("io.ox.files.renderer").register({
+    ext.point("io.ox.files.renderer").extend({
           endings: ["png", "jpg", "jpeg", "gif"],
           canRender: function (fileDescription) {
               for(var i = 0, l = this.endings.length; i < l; i++) {
@@ -238,7 +235,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (extensions) {
        });
     
     // .mp3 .ogg .wav
-    registry.point("io.ox.files.renderer").register({
+    ext.point("io.ox.files.renderer").extend({
         endings: ["mp3", "ogg", "wav"],
         canRender: function (fileDescription) {
             for(var i = 0, l = this.endings.length; i < l; i++) {

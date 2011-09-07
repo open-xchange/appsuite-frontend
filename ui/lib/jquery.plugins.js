@@ -140,7 +140,10 @@ $.fail = function (msg, retry) {
     var tmp = $("<span/>").addClass("io-ox-fail").text(msg);
     if (retry) {
         tmp = tmp.add($("<span/>").text(" "))
-            .add($("<span/>").text("Retry").addClass("link").bind("click", retry));
+            .add($("<span/>").text("Retry").addClass("link").bind("click", function () {
+                $(this).parents(".io-ox-center").remove();
+                retry.apply(this, arguments);
+            }));
     }
     console.log("hier?", tmp);
     return $.center(tmp);

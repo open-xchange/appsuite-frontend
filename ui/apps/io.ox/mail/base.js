@@ -44,7 +44,7 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
     };
     
     var fnClickPerson = function (e) {
-        extensions.registry.point("io.ox/core/person:action").each(function (i, ext) {
+        extensions.point("io.ox/core/person:action").each(function (ext) {
             _.call(ext.action, e.data);
         });
     };
@@ -61,7 +61,7 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
             var i = 0, $i = list.length, tmp = $(), node, display_name = "";
             for (; i < $i; i++) {
                 display_name = (list[i][0] || "").replace(/(^["'\\]+|["'\\]+$)/g, "");
-                node = $("<span/>").addClass("person")
+                node = $("<span/>").addClass(addHandlers ? "person-link" : "person")
                     .css("whiteSpace", "nowrap").text(display_name || list[i][1]);
                 if (addHandlers) {
                     node.bind("click", { display_name: display_name, email1: list[i][1] }, fnClickPerson)

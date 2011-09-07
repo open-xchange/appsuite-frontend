@@ -15,9 +15,7 @@
 
 define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
     
-    var reg = ext.registry;
-    
-    reg.point("io.ox/core/person:action").register({
+    ext.point("io.ox/core/person:action").extend({
         index: 10,
         label: "Halo",
         action: function (data) {

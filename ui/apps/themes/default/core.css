@@ -429,8 +429,16 @@
 .bright-text {
     color: #888;
 }
-.email-address, .blue, .person {
+.email-address, .blue {
     color: #08C;
+}
+
+.person, .person-link {
+    color: #07b;
+}
+
+.person-link {
+    /*border-bottom: 1px dotted #ddd;*/
 }
 
 a.nolink {
