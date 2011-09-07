@@ -16,7 +16,7 @@
 /* VGrid elements */
 
 .vgrid-cell.mail {
-    padding: 0.5em 1em 0.5em 1em;
+    padding: 6px 12px 6px 12px;
     line-height: 1.5em;
 }
 
@@ -36,7 +36,7 @@
 
 .vgrid-cell.mail .subject {
     display: inline-block;
-    width: 90%;
+    width: 85%;
 }
 
 .vgrid-cell.mail.unread .subject {
@@ -67,6 +67,7 @@
     text-align: right;
     display: inline-block;
     width: 10%;
+    margin-left: 5%;
 }
 
 .borderradius .vgrid-cell.mail .threadSize {

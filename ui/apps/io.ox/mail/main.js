@@ -115,7 +115,7 @@ define("io.ox/mail/main", [
             },
             set: function (data, fields, index) {
                 fields.subject.text(data.subject);
-                fields.threadSize.show().text(
+                fields.threadSize.css("display", "inline-block").text(
                     !data.threadSize || data.threadSize === 1 ? "" : data.threadSize
                 );
                 fields.from.empty().append(base.serializeList(data.from));

@@ -17,7 +17,7 @@ html, body { background-color: #fff; margin: 0; padding; 0; overflow: hidden; }
 window.ox = {
     ajaxRoot: "/ajax",
     base: "v=@ version @",
-    online: true,
+    online: navigator.onLine !== undefined ? navigator.onLine : true,
     serverConfig: {},
     session: "",
     signin: false,

@@ -18,4 +18,3 @@ NETWORK:
 
 FALLBACK:
 @base@/src/online.js @base@/src/offline.js
-. signin

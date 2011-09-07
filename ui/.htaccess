@@ -11,7 +11,7 @@ AddEncoding gzip .jsz .cssz .xmlz
 SetEnvIf Request_URI "\.(jsz|cssz|xmlz)$" no-gzip
 
 ExpiresActive On
-# Set expire headers
+ExpiresDefault "access plus 6 months"
 ExpiresByType image/ico "access plus 6 months"
 ExpiresByType image/gif "access plus 6 months"
 ExpiresByType image/png "access plus 6 months"
@@ -22,10 +22,10 @@ ExpiresByType text/html "access plus 6 months"
 ExpiresByType text/xml "access plus 6 months"
 ExpiresByType text/javascript "access plus 6 months"
 ExpiresByType application/x-javascript "access plus 6 months"
-ExpiresDefault "access plus 6 months"
+ExpiresByType text/cache-manifest "access plus 0 seconds"
 
-# cache buster (exclude cache manifest)
-<FilesMatch "^(?!(core|signin)\.appcache).*$">
+# cache buster (exclude cache manifests and main pages)
+<FilesMatch "^(?!(core|signin)).*$">
     # Modify headers
     Header append Cache-Control "private"
     Header unset Last-Modified
@@ -35,9 +35,8 @@ ExpiresDefault "access plus 6 months"
     FileETag None
 </FilesMatch>
 
-# do never ever cache core or signin page
-<FilesMatch "^(core|signin|online\.js)$">
-    ExpiresByType text/html "now"
+# do never ever cache
+<FilesMatch "^(online\.js)$">
     ExpiresByType text/javascript "now"
     ExpiresByType application/x-javascript "now"
     ExpiresByType application/javascript "now"
@@ -45,7 +44,9 @@ ExpiresDefault "access plus 6 months"
 </FilesMatch>
 
 <FilesMatch "^(core|signin)$">
+    # must be done this way otherwise firefox does not put these files into application cache
     Header set Content-type "text/html"
+    ExpiresDefault "access plus 24 hours"
 </FilesMatch>
 
 RewriteEngine On

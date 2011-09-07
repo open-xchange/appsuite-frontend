@@ -17,6 +17,18 @@ $(document).ready(function () {
 
     "use strict";
     
+    // support for application cache?
+    if (Modernizr.applicationcache) {
+        // if manifest has changed, we have to swap caches and reload
+        var ac = window.applicationCache;
+        ac.addEventListener("updateready", function () {
+            if (ac.status === ac.UPDATEREADY) {
+                ac.swapCache();
+                location.reload();
+            }
+        }, false);
+    }
+    
     // animations
     var DURATION = 250,
         // flags
@@ -209,6 +221,9 @@ $(document).ready(function () {
         var queue = [];
         
         ox.relogin = function (request, deferred) {
+            if (!ox.online) {
+                return;
+            }
             if (!relogin) {
                 // enqueue last request
                 queue = [{ request: request, deferred: deferred }];
@@ -323,6 +338,8 @@ $(document).ready(function () {
         if (!ox.online) {
             $("#io-ox-login-password").attr("disabled", "disabled");
             $("#io-ox-login-feedback").html("Offline mode");
+        } else {
+            $("#io-ox-login-password").removeAttr("disabled");
         }
         // recommend chrome frame?
         if (_.browser.IE <= 8) {
@@ -381,7 +398,7 @@ $(document).ready(function () {
     
     var boot = function () {
         // get pre core & server config
-        require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js", ox.base + "/src/online.js?t=" + _.now()])
+        require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js", ox.base + "/src/online.js"])
             .done(function (data) {
                 // store server config
                 ox.serverConfig = data;
@@ -394,40 +411,5 @@ $(document).ready(function () {
             });
     };
     
-    // support for application cache?
-    if (Modernizr.applicationcache) {
-        
-        (function (fn) {
-        
-            var ac = applicationCache, update, cont;
-            
-            cont = function () {
-                ac.removeEventListener("updateready", update, false);
-                ac.removeEventListener("cached", fn, false);
-                ac.removeEventListener("noupdate", fn, false);
-                ac.removeEventListener("error", fn, false);
-                fn();
-            };
-            
-            update = function () {
-                if (ac.status === ac.UPDATEREADY) {
-                    // if manifest has changed, we have to swap caches and reload
-                    ac.swapCache();
-                    location.reload();
-                } else {
-                    cont();
-                }
-            };
-            
-            ac.addEventListener("updateready", update, false);
-            ac.addEventListener("cached", cont, false);
-            ac.addEventListener("noupdate", cont, false);
-            ac.addEventListener("error", cont, false);
-            
-        }(boot));
-        
-    } else {
-        // no cache support
-        boot();
-    }
+    boot();
 });
