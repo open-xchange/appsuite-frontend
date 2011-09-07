@@ -398,7 +398,7 @@ $(document).ready(function () {
     
     var boot = function () {
         // get pre core & server config
-        require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js", ox.base + "/src/online.js"])
+        require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js"])
             .done(function (data) {
                 // store server config
                 ox.serverConfig = data;
@@ -410,6 +410,22 @@ $(document).ready(function () {
                 autoLogin();
             });
     };
+    
+    // handle online/offline mode
+    if (!ox.signin) {
+        $(window).bind("online offline", function (e) {
+            if (e.type === "offline") {
+                $("#io-ox-offline").text("Offline").fadeIn(DURATION);
+                ox.online = false;
+            } else {
+                $("#io-ox-offline").text("Online").fadeOut(DURATION);
+                ox.online = true;
+            }
+        });
+        if (!ox.online) {
+            $(window).trigger("offline");
+        }
+    }
     
     boot();
 });
