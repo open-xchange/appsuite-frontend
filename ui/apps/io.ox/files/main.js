@@ -28,7 +28,8 @@
         grid,
         // nodes
         left,
-        right;
+        right,
+        statusBar;
     
     function deleteItems () {
         // ask first
@@ -64,7 +65,7 @@
         });
         
         // left side
-        left = $("<div/>").addClass("leftside border-right")
+        left = $("<div/>").addClass("leftside withStatusBar border-right")
             .css({
                 width: "309px",
                 overflow: "auto"
@@ -73,9 +74,14 @@
         
         right = $("<div/>")
             .css({ left: "310px", overflow: "auto", padding: "0px 40px 20px 40px" })
-            .addClass("rightside")
+            .addClass("rightside withStatusBar")
             .appendTo(win.nodes.main);
         
+        
+        statusBar = $("<div/>")
+        .addClass("statusBar")
+        .appendTo(win.nodes.main);
+                
         // Grid
         grid = new VGrid(left);
         // add template
@@ -154,6 +160,7 @@
         grid.paint();
         
         // Uploads
+        
         var queue = upload.createQueue({
             processFile: function (file) {
                 return api.uploadFile({file: file})
@@ -165,7 +172,22 @@
                     });
             }
         });
-                
+        
+        var $uploadStatus = $("<span/>");
+        var $filenameNode = $("<span/>").appendTo($uploadStatus);
+        
+        statusBar.append($uploadStatus);
+        queue.bind("start", function (file) {
+            $filenameNode.text(file.fileName);
+            statusBar.busy();
+        });
+
+        
+        queue.bind("stop", function () {
+            $filenameNode.text("");
+            statusBar.idle();
+        });
+             
         // TODO: Add a hint for the user that dnd is available and what to do with it.
         var dropZone = upload.dnd.createDropZone();
         dropZone.bind("drop", function (file) {
