@@ -413,6 +413,24 @@
     left: 200px;
 }
 
+.withStatusBar {
+    bottom: 30px;
+}
+
+.statusBar {
+    position: absolute;
+    top: auto;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    height: 19px;
+    padding-top: 10px;
+    padding-left: 10px;
+    background-color: #F0F0F0;
+    border-top: 1px solid #CCC;
+    color: #5C9CCC;
+}
+
 .atb, .abs {
     position: absolute;
     top: 0px;
