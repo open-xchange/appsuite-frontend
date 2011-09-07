@@ -214,7 +214,7 @@
             pane.append($fileField);
             pane.append(hints.createHint({
                 teaser: "Multiple uploads are available.",
-                explanation: "You can select more than one file to upload at the same time in the file choosing dialog. If you want to select a whole range of files, hold down the shift key while selecting the start and end of the range of files. If you want to select multiple individual files, hold down control while clicking on the file names or the function key, if you're on a mac."
+                explanation: "You can select more than one file to upload at the same time in the file choosing dialog. If you want to select a whole range of files, hold down the shift key while selecting the start and end of the range of files. If you want to select multiple individual files, hold down control while clicking on the file names (or the function key, if you're on a mac)."
             }));
             pane.addButton("resolveUpload", "Upload");
             pane.addButton("cancelUpload", "Cancel");
@@ -222,7 +222,7 @@
             var actions = {
                 resolveUpload: function () {
                     var files = $fileField[0].files; //TODO: Find clean way to do this
-                    $.each(files, function (index, file) {
+                    _.each(files, function (file) {
                         queue.offer(file);
                     });
                 },
