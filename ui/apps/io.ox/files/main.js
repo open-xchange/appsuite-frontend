@@ -17,8 +17,8 @@
 // TODO: Break this up, this is becoming messy
  define("io.ox/files/main", [
     "io.ox/files/base", "io.ox/files/api",
-    "io.ox/core/tk/vgrid",  "io.ox/files/upload", "io.ox/core/dialogs", "css!io.ox/files/style.css"
-    ], function (base, api, VGrid, upload, dialogs) {
+    "io.ox/core/tk/vgrid",  "io.ox/files/upload", "io.ox/core/dialogs", "io.ox/help/hints", "css!io.ox/files/style.css"
+    ], function (base, api, VGrid, upload, dialogs, hints) {
 
     // application object
     var app = ox.ui.createApp(),
@@ -212,6 +212,10 @@
             var $fileField = $('<input type="file" multiple="multiple"></input>');
             
             pane.append($fileField);
+            pane.append(hints.createHint({
+                teaser: "Multiple uploads are available.",
+                explanation: "You can select more than one file to upload at the same time in the file choosing dialog. If you want to select a whole range of files, hold down the shift key while selecting the start and end of the range of files. If you want to select multiple individual files, hold down control while clicking on the file names or the function key, if you're on a mac."
+            }));
             pane.addButton("resolveUpload", "Upload");
             pane.addButton("cancelUpload", "Cancel");
             
