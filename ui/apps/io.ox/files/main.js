@@ -188,8 +188,16 @@
             statusBar.idle();
         });
              
-        // TODO: Add a hint for the user that dnd is available and what to do with it.
+        
         var dropZone = upload.dnd.createDropZone();
+        
+        if (dropZone.enabled) {
+            statusBar.append(hints.createHint({
+                teaser: "Drag and Drop is enabled.",
+                explanation: "You can drag one or more files from your desktop and drop them in the browser window to upload them. Try it out!"
+            }));
+        }
+        
         dropZone.bind("drop", function (file) {
             queue.offer(file);
         });
