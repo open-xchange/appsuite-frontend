@@ -59,11 +59,11 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
                 
             },
             drop: function (event) {
-                // Finally something useful to do. Let's extract the file objects from the event
-                // grab the original event
                 if (globalMode) {
                     $node.detach();
                 }
+                // Finally something useful to do. Let's extract the file objects from the event
+                // grab the original event
                 event = event.originalEvent || event;
                 var files = event.dataTransfer.files;
                 // And the pass them on

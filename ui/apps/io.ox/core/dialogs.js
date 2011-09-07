@@ -86,6 +86,7 @@ define("io.ox/core/dialogs", function () {
     .append(
         $("<div/>").addClass("controls")
     );
+
     
     var SlidingPane = function () {
         var nodes = {
@@ -101,7 +102,6 @@ define("io.ox/core/dialogs", function () {
         
         close = function () {
             nodes.pane.fadeOut();
-            nodes = deferred = null;
         },
         
         process = function (e) {
@@ -136,7 +136,20 @@ define("io.ox/core/dialogs", function () {
         };
         
         this.show = function () {
-            var offset, top, left, height;
+            var offset, top, left, height, width;
+            
+            // Force Rendering for shrink-to-fit size detection
+            // There has to be a cleverer way to do this
+            var oldOpacity = nodes.pane.css("opacity");
+            nodes.pane.css("opacity", "0.001"); 
+            nodes.pane.show();
+            
+            height = nodes.controls.outerHeight(true) + nodes.content.outerHeight(true) + 2;
+            width = Math.max(nodes.controls.outerWidth(true), nodes.content.outerWidth(true)) + 2;
+            nodes.pane.hide();
+            nodes.pane.css("opacity", oldOpacity); 
+            
+            
             if (nodes.relativeTo) {
                 // Let's align the upper left edge of the pane 
                 // With the lower left edge of the element we're relative to
@@ -144,15 +157,17 @@ define("io.ox/core/dialogs", function () {
                 top = offset.top + nodes.relativeTo.outerHeight()+3;
                 left = offset.left;
                 nodes.pane.css({
+                   height: height + "px",
+                   width: width+"px",
                    top: top+"px",
                    left: left+"px"
                 });
             } else {
                 // Hm. Put it in the center. Though, truth be told, this is probably supposed
                 // to be a dialog
-                height = nodes.pane.height();
                 nodes.pane.css({
                     height: height + "px",
+                    width: width + "px",
                     marginTop: 0 - (height / 2 >> 0) + "px"
                 });
             }
