@@ -95,7 +95,9 @@ define("io.ox/contacts/base", function () {
                         $("<div/>").addClass("job").text(
                             obj.mark_as_distributionlist ?
                                 "Distribution list" :
-                                join(", ", obj.company, obj.position, obj.profession) + "\u00a0"
+                                (obj.company || obj.position || obj.profession) ?
+                                        join(", ", obj.company, obj.position, obj.profession) + "\u00a0" :
+                                        (obj.email1 || obj.email2 || obj.email3) + "\u00a0"
                         )
                     )
                 )

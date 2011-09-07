@@ -58,13 +58,13 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
         },
         
         serializeList: function (list, addHandlers) {
-            var i = 0, $i = list.length, tmp = $(), node, displayName = "";
+            var i = 0, $i = list.length, tmp = $(), node, display_name = "";
             for (; i < $i; i++) {
-                displayName = (list[i][0] || "").replace(/(^["'\\]+|["'\\]+$)/g, "");
+                display_name = (list[i][0] || "").replace(/(^["'\\]+|["'\\]+$)/g, "");
                 node = $("<span/>").addClass("person")
-                    .css("whiteSpace", "nowrap").text(displayName || list[i][1]);
+                    .css("whiteSpace", "nowrap").text(display_name || list[i][1]);
                 if (addHandlers) {
-                    node.bind("click", { displayName: displayName, email: list[i][1] }, fnClickPerson)
+                    node.bind("click", { display_name: display_name, email1: list[i][1] }, fnClickPerson)
                         .css("cursor", "pointer");
                 }
                 tmp = tmp.add(node);
