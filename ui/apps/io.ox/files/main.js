@@ -41,7 +41,8 @@
             .show()
             .done(function (action) {
                 if (action === "delete") {
-                    api.remove(grid.selection.get());
+                    statusBar.busy();
+                    api.remove(grid.selection.get()).done(function () {statusBar.idle();});
                     grid.selection.selectNext();
                 }
             });
@@ -173,21 +174,6 @@
             }
         });
         
-        var $uploadStatus = $("<span/>");
-        var $filenameNode = $("<span/>").appendTo($uploadStatus);
-        
-        statusBar.append($uploadStatus);
-        queue.bind("start", function (file) {
-            $filenameNode.text(file.fileName);
-            statusBar.busy();
-        });
-
-        
-        queue.bind("stop", function () {
-            $filenameNode.text("");
-            statusBar.idle();
-        });
-             
         
         var dropZone = upload.dnd.createDropZone();
         
@@ -210,6 +196,24 @@
             dropZone.remove();
         });
         
+        // Add status for uploads
+        
+        var $uploadStatus = $("<span/>").css("margin-left", "30px");
+        var $filenameNode = $("<span/>").appendTo($uploadStatus);
+
+        statusBar.append($uploadStatus);
+        queue.bind("start", function (file) {
+            $filenameNode.text("Uploading: "+file.fileName);
+            statusBar.busy();
+        });
+
+
+        queue.bind("stop", function () {
+            $filenameNode.text("");
+            statusBar.idle();
+        });
+        
+        
         // Upload Button
         // TODO: Make this IE compatible
         (function () {
@@ -230,7 +234,7 @@
             var actions = {
                 resolveUpload: function () {
                     var files = $fileField[0].files; //TODO: Find clean way to do this
-                    _.each(files, function (file) {
+                    _(files).each(function (file) {
                         queue.offer(file);
                     });
                 },
