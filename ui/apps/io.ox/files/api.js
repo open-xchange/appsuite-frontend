@@ -64,13 +64,10 @@ define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api-factory", "io.ox/c
             folder: config.get("folder.infostore")
         }, options || {});
         
-        // TODO: This might make more sense in http.js
         var formData = new FormData();
         formData.append("file", options.file);
         formData.append("json", "{folder_id: " + options.folder + "}");
         
-        // TODO: (remove comment)
-        // moved some logic into http.api -> UPLOAD for FormData
         return http.UPLOAD({
                 module: "infostore",
                 params: { action: "new" },
@@ -83,9 +80,6 @@ define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api-factory", "io.ox/c
                 var tmp = fallbackForOX6BackendREMOVEME(data);
                 return { folder_id: String(options.folder), id: String(tmp ? tmp.data : 0) };
             });
-        // TODO: remove comment
-        // learned just some days ago: instead of wrapping deferred
-        // to manipulate the result you can use the pipe concept
     };
     
     return api;
