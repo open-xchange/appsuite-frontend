@@ -210,7 +210,6 @@
             // Let's build our upload form. Nothing fancy here, but we'll allow multiple selection
             // TODO: Add a hint to the user, that multiple uploads are available and how to use them
             var $fileField = $('<input type="file" multiple="multiple"></input>');
-            window.ciscoDebug = $fileField;
             
             pane.append($fileField);
             pane.addButton("resolveUpload", "Upload");
