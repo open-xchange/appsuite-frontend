@@ -311,13 +311,14 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
             };
             
             // get item
-            var load = loadData[currentMode] || loadData.all;
+            var load = loadData[currentMode] || loadData.all,
+                subset = all.slice(offset, offset + numRows);
             
-            return load(all.slice(offset, offset + numRows))
+            return load(subset)
                 .done(cont)
                 .fail(function () {
                     // continue with dummy array
-                    cont(new Array(numRows));
+                    cont(new Array(subset.length));
                 });
         };
         
