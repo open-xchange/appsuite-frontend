@@ -429,6 +429,7 @@
     background-color: #F0F0F0;
     border-top: 1px solid #CCC;
     color: #5C9CCC;
+    font-size: 8pt;
 }
 
 .atb, .abs {
@@ -614,7 +615,7 @@ a.nolink {
 
 /* hints */
 
-div.hint {
+span.hint {
     font-size: 8pt;
     text-align: left;
 }

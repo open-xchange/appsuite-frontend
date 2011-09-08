@@ -20,16 +20,23 @@
     // 'explanation': A longer explanation
     // TODO: Allow explanations to be whole node structures with nice pictures and all...
     function Hint (options) {
-        var $hintNode = $('<div/>').addClass("hint");
-        $hintNode.append($("<span>").text(options.teaser));
+        var $hintNode = $('<span/>').addClass("hint");
+        $hintNode.append($("<span>").text(options.teaser+" "));
+        
         
         if (options.explanation) {
-            var $explanationLink = $("<a/>").text("What's that?").attr("href", "#");
-            $explanationLink.click(function () {
-                new dialogs.ModalDialog().text(options.explanation).addButton("okay", "Got it!").show();
+            var $explanationLink = $("<a/>").text("What's that?");
+            var pane = new dialogs.SlidingPane().text(options.explanation).addButton("okay", "Got it!").relativeTo($explanationLink);
+            
+            var toggleExplanation = function () {
+                pane.toggle();
                 return false; // Prevent default
-            });
+            };
+
+            $explanationLink.click(toggleExplanation);
+            $hintNode.click(toggleExplanation);
             $hintNode.append($explanationLink);
+
         }
         
         this.node = $hintNode;

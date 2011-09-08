@@ -142,7 +142,13 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
         var files = []; 
         var currentFile = null;
         
+        var processing = false;
+        
         this.nextFile = function () {
+            if (processing) {
+                return;
+            }
+            processing = true;
             var self = this;
             if (files.length <= 0) {
                 return;
@@ -150,6 +156,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
             currentFile = files.shift();
             this.start(currentFile);
             this.processFile(currentFile).done(function () {
+                processing = false;
                 self.stop();
                 self.queueChanged();
             });

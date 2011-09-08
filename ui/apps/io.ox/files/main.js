@@ -41,7 +41,8 @@
             .show()
             .done(function (action) {
                 if (action === "delete") {
-                    api.remove(grid.selection.get());
+                    statusBar.busy();
+                    api.remove(grid.selection.get()).done(function () {statusBar.idle();});
                     grid.selection.selectNext();
                 }
             });
@@ -173,23 +174,16 @@
             }
         });
         
-        var $uploadStatus = $("<span/>");
-        var $filenameNode = $("<span/>").appendTo($uploadStatus);
         
-        statusBar.append($uploadStatus);
-        queue.bind("start", function (file) {
-            $filenameNode.text(file.fileName);
-            statusBar.busy();
-        });
-
-        
-        queue.bind("stop", function () {
-            $filenameNode.text("");
-            statusBar.idle();
-        });
-             
-        // TODO: Add a hint for the user that dnd is available and what to do with it.
         var dropZone = upload.dnd.createDropZone();
+        
+        if (dropZone.enabled) {
+            statusBar.append(hints.createHint({
+                teaser: "Drag and Drop is enabled.",
+                explanation: "You can drag one or more files from your desktop and drop them in the browser window to upload them. Try it out!"
+            }));
+        }
+        
         dropZone.bind("drop", function (file) {
             queue.offer(file);
         });
@@ -201,6 +195,24 @@
         win.bind("hide", function () {
             dropZone.remove();
         });
+        
+        // Add status for uploads
+        
+        var $uploadStatus = $("<span/>").css("margin-left", "30px");
+        var $filenameNode = $("<span/>").appendTo($uploadStatus);
+
+        statusBar.append($uploadStatus);
+        queue.bind("start", function (file) {
+            $filenameNode.text("Uploading: "+file.fileName);
+            statusBar.busy();
+        });
+
+
+        queue.bind("stop", function () {
+            $filenameNode.text("");
+            statusBar.idle();
+        });
+        
         
         // Upload Button
         // TODO: Make this IE compatible
@@ -214,7 +226,7 @@
             pane.append($fileField);
             pane.append(hints.createHint({
                 teaser: "Multiple uploads are available.",
-                explanation: "You can select more than one file to upload at the same time in the file choosing dialog. If you want to select a whole range of files, hold down the shift key while selecting the start and end of the range of files. If you want to select multiple individual files, hold down control while clicking on the file names or the function key, if you're on a mac."
+                explanation: "You can select more than one file to upload at the same time in the file choosing dialog. If you want to select a whole range of files, hold down the shift key while selecting the start and end of the range of files. If you want to select multiple individual files, hold down control while clicking on the file names (or the function key, if you're on a mac)."
             }));
             pane.addButton("resolveUpload", "Upload");
             pane.addButton("cancelUpload", "Cancel");
@@ -222,7 +234,7 @@
             var actions = {
                 resolveUpload: function () {
                     var files = $fileField[0].files; //TODO: Find clean way to do this
-                    $.each(files, function (index, file) {
+                    _(files).each(function (file) {
                         queue.offer(file);
                     });
                 },

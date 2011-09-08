@@ -89,6 +89,7 @@ define("io.ox/core/dialogs", function () {
 
     
     var SlidingPane = function () {
+        var self = this;
         var nodes = {
             pane: pane.clone().hide().appendTo('body'),
             relativeTo: null
@@ -97,10 +98,12 @@ define("io.ox/core/dialogs", function () {
         nodes.content = nodes.pane.find('.content');
         nodes.controls = nodes.pane.find('.controls');
         
+        this.visible = false;
         
         var deferred = $.Deferred(),
         
         close = function () {
+            self.visible = false;
             nodes.pane.fadeOut();
         },
         
@@ -135,8 +138,20 @@ define("io.ox/core/dialogs", function () {
             return this;
         };
         
+        this.toggle = function () {
+            if (this.visible) {
+                process("toggeled");
+            } else {
+                this.show();
+            }
+        };
+        
         this.show = function () {
-            var offset, top, left, height, width;
+            this.visible = true;
+            var offset, top, left, height, width, windowHeight, windowWidth;
+            
+            windowHeight = $(window).height();
+            windowWidth = $(window).width();
             
             // Force Rendering for shrink-to-fit size detection
             // There has to be a cleverer way to do this
@@ -151,11 +166,30 @@ define("io.ox/core/dialogs", function () {
             
             
             if (nodes.relativeTo) {
-                // Let's align the upper left edge of the pane 
-                // With the lower left edge of the element we're relative to
+                // Depending on where our anchor element is, position the pane
                 offset = nodes.relativeTo.offset();
-                top = offset.top + nodes.relativeTo.outerHeight()+3;
-                left = offset.left;
+                // Is the anchor in the upper half?
+                if (offset.top < (windowHeight / 2)) {
+                    // Yup, so we'll put the pane below the anchor
+                    top = offset.top + nodes.relativeTo.outerHeight()+3;
+                } else {
+                    // Nope, so we'll put the pane above the anchor
+                    top = offset.top - height - 10;
+                    if (top < 0) {
+                        top = 0;
+                    }
+                }
+                
+                // Is the anchor to the left or the right of the center?
+                
+                if (offset.left < (windowWidth / 2)) {
+                    // It's on the left, so we align the left sides
+                    left = offset.left;
+                } else {
+                    // It's on the right, so we align the right sides
+                    left = offset.left + nodes.relativeTo.outerWidth() - width;
+                }
+                
                 nodes.pane.css({
                    height: height + "px",
                    width: width+"px",
