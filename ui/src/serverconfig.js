@@ -23,7 +23,7 @@ define(function () {
         
         extensions: {
             signin: [],
-            core: ["halo"]
+            core: ["halo", "contacts", "linkedIn"]
         }
     };
 });
