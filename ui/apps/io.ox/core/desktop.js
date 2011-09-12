@@ -80,41 +80,29 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
     
     // ref to core screen
     var core = $("#io-ox-core"),
-        // left bar
-        leftBar = $("<div/>", { id: "io-ox-leftbar" }).addClass("io-ox-launchbar"),
-        // right bar
-        rightBar = $("<div/>", { id: "io-ox-rightbar" }).addClass("io-ox-launchbar"),
+        // top bar
+        topBar = $("#io-ox-topbar"),
         // add launcher
-        addLauncher = function (side, label, icon, fn) {
+        addLauncher = function (side, label, fn) {
             // construct
-            var node, decorator;
-            node = $("<div/>").addClass("launcher")
-                .append(
-                    decorator = $("<div/>").addClass("icon-decorator")
-                )
-                .append(
-                    $("<div/>").addClass("label").text(label)
-                )
+            var node = $("<div/>").addClass("launcher")
+                .text(label)
                 .bind("click", function () {
-                    if (!fn) {
-                        // just for develepment purposes [bug in jQuery: stop(true, true) does not work]
-                        $(this).stop(true).css("left", "").effect("shake", { direction: "left", times: 4, distance: 10 }, 50);
+                    var self = $(this);
+                    if (!_.isFunction(fn)) {
+                        // for development only - should never happen
+                        self.css("backgroundColor", "#800000");
+                        setTimeout(function () { self.css("backgroundColor", ""); }, 500);
                     } else {
-                        var self = $(this),
-                            cont = function () {
-                                // revert visual changes
-                                self.children().show().end().idle().css("height", "");
-                            };
-                        // set fixed height, be busy, hide inner content
-                        self.css("height", self.height() + "px").busy().children().hide();
-                        // call launcher with continuation
-                        fn.call(this).done(cont);
+                        // set fixed width, hide label, be busy
+                        self.css("width", self.width() + "px").text("\u00a0").busy();
+                        // call launcher
+                        fn.call(this).done(function () {
+                            // revert visual changes
+                            self.idle().text(label).css("height", "");
+                        });
                     }
                 });
-            // add icon
-            decorator.append(
-                $("<img/>", { src: icon || ox.base + "/apps/io.ox/core/images/default.png" }).addClass("icon")
-            );
             // add
             var c = currentWindow, target;
             if (side === "left" && c && c.app && (target = c.app.getLaunchBarIcon())) {
@@ -122,13 +110,17 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 node.hide().insertAfter(target).fadeIn(1000);
             } else {
                 // just add
-                (side === "left" ? leftBar : rightBar).append(node);
+                if (side === "left") {
+                    node.appendTo(topBar);
+                } else {
+                    node.addClass("right").appendTo(topBar);
+                }
             }
             return node;
         };
         
-    // add bars and show
-    core.append(leftBar).append(rightBar).show();
+    // add bar and show
+    core.append(topBar).show();
     
     /**
      * Create app
@@ -195,7 +187,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     // needs launch bar icon?
                     if (!launchbarIcon) {
                         launchbarIcon = addLauncher(
-                            "left", opt.title, opt.icon, self.launch
+                            "left", opt.title, self.launch
                         );
                     }
                     // go!
@@ -272,6 +264,36 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 }
             },
             
+            pane = $("#io-ox-windowmanager-pane"),
+            
+            scrollTo = function (node, cont) {
+                var children = pane.find(".window-container-center"),
+                    center = node.find(".window-container-center").show(),
+                    index = node.data("index") || 0,
+                    left = (-index * 100) + "%",
+                    done = function () {
+                        children.not(center).hide();
+                        center.addClass("shadow");
+                        _.call(cont);
+                    };
+                // change? (firefox converts 0% to 0px so we have to convert to integer)
+                if (parseInt(left, 10) !== parseInt(pane.css("left"), 10)) {
+                    // hide shadows to speed things up!
+                    children.removeClass("shadow");
+                    // use CSS transitions?
+                    if (Modernizr.csstransitions) {
+                        node.show();
+                        pane.one(_.browser.WebKit ? "webkitTransitionEnd" : "transitionend", done);
+                        pane.css("left", left);
+                    } else {
+                        node.show();
+                        pane.stop().animate({ left: left }, 400, done);
+                    }
+                } else {
+                    _.call(cont);
+                }
+            },
+            
             // window class
             Window = function (id) {
                 
@@ -285,12 +307,12 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     views = { main: true },
                     currentView = "main";
                 
-                this.show = function () {
+                this.show = function (cont) {
                     if (currentWindow !== this) {
                         // show
                         if (currentWindow) {
                             previousWindow = currentWindow;
-                            currentWindow.hide();
+                            currentWindow.blur();
                         }
                         // auto fullscreen?
                         if (autoFullscreen) {
@@ -299,23 +321,33 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         }
                         var node = this.nodes.outer;
                         if (node.parent().length === 0) {
-                            node.appendTo("#io-ox-windowmanager");
+                            node.css("left", ((guid - 1) * 100) + "%")
+                                .data("index", guid - 1)
+                                .appendTo(pane);
                         }
-                        node.show();
                         currentWindow = this;
                         if (this.app !== null) {
                             this.app.getLaunchBarIcon().addClass("active");
                         }
+                        scrollTo(node, cont);
                         this.trigger("show");
+                    } else {
+                        _.call(cont);
+                    }
+                };
+                
+                this.blur = function () {
+                    if (this.app !== null) {
+                        this.app.getLaunchBarIcon().removeClass("active");
+                    }
+                    if (currentWindow === this) {
+                        currentWindow = null;
                     }
                 };
                 
                 this.hide = function () {
-                    if (this.app !== null) {
-                        this.app.getLaunchBarIcon().removeClass("active");
-                    }
+                    this.blur();
                     this.nodes.outer.hide();
-                    currentWindow = null;
                     this.trigger("hide");
                     interruptFullscreen();
                 };
@@ -461,7 +493,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 .addClass("window-container")
                 .append(
                     $("<div/>")
-                        .addClass("window-container-center")
+                        .addClass("window-container-center shadow")
                         .data({
                             width: width + unit
                         })

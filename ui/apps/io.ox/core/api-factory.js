@@ -40,7 +40,8 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                 get: { action: "get" },
                 search: { action: "search" },
                 remove: { action: "delete" }
-            }
+            },
+            fail: { }
         }, o || {});
         
         // use module as id?
@@ -63,13 +64,13 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                     // call server and return deferred object
                     // TODO: special sort/order key stuff
                     return http.GET({
-                        module: o.module,
-                        params: opt
-                    })
-                    .done(function (data, timestamp) {
-                        // add to cache
-                        caches.all.add(opt.folder, data, timestamp);
-                    });
+                            module: o.module,
+                            params: opt
+                        })
+                        .done(function (data, timestamp) {
+                            // add to cache
+                            caches.all.add(opt.folder, data, timestamp);
+                        });
                 } else {
                     // cache hit
                     return $.Deferred().resolve(caches.all.get(opt.folder));
@@ -83,16 +84,16 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                 if (!o.cache || !caches.list.contains(ids)) {
                     // call server and return deferred object
                     return http.fixList(ids, http.PUT({
-                        module: o.module,
-                        params: o.requests.list,
-                        data: http.simplify(ids)
-                    }))
-                    .done(function (data) {
-                        // add to cache
-                        caches.list.add(data);
-                        // merge with "get" cache
-                        caches.get.merge(data);
-                    });
+                            module: o.module,
+                            params: o.requests.list,
+                            data: http.simplify(ids)
+                        }))
+                        .done(function (data) {
+                            // add to cache
+                            caches.list.add(data);
+                            // merge with "get" cache
+                            caches.get.merge(data);
+                        });
                 } else {
                     // cache hit
                     return $.Deferred().resolve(caches.list.get(ids));
@@ -106,36 +107,33 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                 if (!o.cache || !caches.get.contains(opt)) {
                     // call server and return deferred object
                     return http.GET({
-                        module: o.module,
-                        params: fix(opt)
-                    })
-                    .done(function (data, timestamp) {
-                        // add to cache
-                        caches.get.add(data, timestamp);
-                        // update list cache
-                        if (caches.list.merge(data)) {
-                            // trigger local event
-                            api.trigger("refresh.list", data);
-                        }
-                    });
+                            module: o.module,
+                            params: fix(opt)
+                        })
+                        .done(function (data, timestamp) {
+                            // add to cache
+                            caches.get.add(data, timestamp);
+                            // update list cache
+                            if (caches.list.merge(data)) {
+                                // trigger local event
+                                api.trigger("refresh.list", data);
+                            }
+                        })
+                        .fail(function (e) {
+                            _.call(o.fail.get, e, opt, o);
+                        });
                 } else {
                     // cache hit
                     return $.Deferred().resolve(caches.get.get(opt));
                 }
             },
             
-            remove: function (ids) {
+            remove: function (ids, local) {
                 // be robust
                 ids = ids || [];
                 var opt = $.extend({}, o.requests.remove, { timestamp: _.now() });
-                // delete on server
-                return http.PUT({
-                    module: o.module,
-                    params: opt,
-                    data: http.simplify(ids),
-                    appendColumns: false
-                })
-                .done(function () {
+                // done
+                var done = function () {
                     // find affected mails in simple cache
                     var hash = {}, folders = {}, getKey = cache.defaultKeyGenerator;
                     _(ids).each(function (o) {
@@ -161,7 +159,19 @@ define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                     caches.get.remove(ids);
                     // trigger local refresh
                     api.trigger("refresh.all");
-                });
+                };
+                // delete on server?
+                if (local !== true) {
+                    return http.PUT({
+                        module: o.module,
+                        params: opt,
+                        data: http.simplify(ids),
+                        appendColumns: false
+                    })
+                    .done(done);
+                } else {
+                    return $.Deferred().resolve().done(done);
+                }
             },
             
             caches: caches

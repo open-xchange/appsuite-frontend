@@ -63,6 +63,19 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
                     ];
                 }
             }
+        },
+        pipe: {
+            all: function (data) {
+                
+            }
+        },
+        fail: {
+            get: function (e, params) {
+                if (e.code === "MSG-0032") {
+                    // mail no longer exists, so we remove it locally
+                    api.remove([params], true);
+                }
+            }
         }
     });
     

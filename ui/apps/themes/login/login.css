@@ -97,27 +97,67 @@ a:hover, .link:hover {
     box-shadow: 0px 0px 70px 5px #000;
 }
 
-.gradient {
+.wallpaper {
+    background-color: #333;
+    background-image: url(colorful_circles_of_light-wallpaper-1280x800.jpg);
+    xbackground-image: url(green_stripes-wallpaper-1280x800.jpg);
+    xbackground-image: url(minimalist_art_light_gray-wallpaper-1280x800.jpg);
+    background-size: cover;
+    background-position: top center;
+}
+
+#io-ox-login-background {
     position: absolute;
     bottom: 50%;
     right: 0;
     top: 0;
     left: 0;
     z-index: 0;
+    border-bottom: 1px solid #f0f0f0;
+/*  
     background-image: -webkit-gradient(
         linear,
         left top,
         left bottom,
-        color-stop(0, #444450), /* f5f5f5 */
-        color-stop(1, #000)     /* #666 */
+        color-stop(0, #444450),
+        color-stop(1, #000)
     );
     background-image: -moz-linear-gradient(
         center top,
         #444450 0%,
         #000 100%
     );
-    border-bottom: 1px solid #f0f0f0;
+    
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#444450');
+*/
+}
+
+#io-ox-login-form-background {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 50%;
+    height: 80px;
+    background-color: black;
+    background-color: rgba(0, 0, 0, 0.60);
+    z-index: 1;
+}
+
+.cssgradients #io-ox-login-form-background {
+    height: 200px;
+    background-color: transparent;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0.0, transparent),
+        color-stop(0.75, rgba(0, 0, 0, 0.80))
+    );
+    background-image: -moz-linear-gradient(
+        center top,
+        transparent 0%,
+        rgba(0, 0, 0, 0.80) 80%
+    );
 }
 
 #io-ox-login-container {
@@ -127,20 +167,21 @@ a:hover, .link:hover {
     bottom: 0;
     left: 50%;
     margin-left: -340px;
-    z-index: 1;
+    z-index: 2;
 }
 
 #io-ox-login-header {
     position: absolute;
     top: 25%;
     left: 0;
-    margin-top: -1.25em;
+    right: 0;
+    margin-top: -1.5em;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 24pt;
     font-weight: normal;
     color: white;
-    text-align: left;
-    text-shadow: 0px 1px 1px black;
+    text-align: right;
+    text-shadow: 1px 2px 3px black;
     z-index: 1;
 }
 
@@ -188,16 +229,16 @@ a:hover, .link:hover {
     font-weight: normal;
     line-height: 12pt;
     padding: 7px;
-    color: black;
+    color: white;
     text-align: center;
     width: 120px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px 5px 5px 5px;
-    border: 1px solid #888;
+    border: 1px solid #222;
     margin-top: 5px;
     
-    background-color: #000;
+    background-color: #222;
     outline: none;
     cursor: pointer;
     
@@ -205,21 +246,21 @@ a:hover, .link:hover {
         linear,
         left top,
         left bottom,
-        color-stop(0, #fff),
-        color-stop(1, #ddd)
+        color-stop(0, #333),
+        color-stop(1, #222)
     );
     background-image: -moz-linear-gradient(
         center top,
-        #fff 0%,
-        #eee 100%
+        #333 0%,
+        #222 100%
     );
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd');
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3333333', endColorstr='#222222');
 }
 
 .login-button:focus, .login-button:hover {
-    -webkit-box-shadow: 0px 0px 10px 1px #555;
-    -moz-box-shadow: 0px 0px 10px 1px #555;
-    box-shadow: 0px 0px 15px 1px #aaa;
+    -webkit-box-shadow: 0px 0px 10px 1px #444;
+    -moz-box-shadow: 0px 0px 10px 1px #444;
+    box-shadow: 0px 0px 10px 1px #444;
 }
 
 .login-button:active {

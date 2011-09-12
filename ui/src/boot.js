@@ -66,7 +66,10 @@ $(document).ready(function () {
     
     gotoCore = function () {
         if (ox.signin === true) {
-            _.url.redirect("#session=" + encodeURIComponent(ox.session) + "&user=" + encodeURIComponent(ox.user));
+            // show loader
+            $("#background_loader").fadeIn(DURATION, function () {
+                _.url.redirect("#?" + encodeURIComponent(_.rot("session=" + ox.session + "&user=" + ox.user, 1)));
+            });
         } else {
             loadCore();
         }
@@ -78,6 +81,9 @@ $(document).ready(function () {
     loadCore = function () {
         // remove unnecessary stuff
         cleanUp();
+        // hide login dialog
+        $("#io-ox-login-screen").hide();
+        $(this).busy();
         // get configuration
         require("io.ox/core/config").load()
             .done(function () {
@@ -88,12 +94,6 @@ $(document).ready(function () {
                     core.launch();
                 });
             });
-        // show loader
-        $("#background_loader").fadeIn(DURATION, function () {
-            // hide login dialog
-            $("#io-ox-login-screen").hide();
-            $(this).busy();
-        });
     };
     
     // default success handler

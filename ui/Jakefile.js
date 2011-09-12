@@ -148,6 +148,7 @@ function docFile(file, title) {
 
 docFile("apache", "Apache Configuration");
 docFile("extensions", "Extension Points");
+docFile("external", "External Libs");
 docFile("features", "Features");
 docFile("vgrid", "VGrid");
 

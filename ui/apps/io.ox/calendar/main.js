@@ -377,9 +377,9 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
             }
         });
         
-        win.show();
-        paint();
-        
+        win.show(function () {
+            paint();
+        });
     });
     
     return {

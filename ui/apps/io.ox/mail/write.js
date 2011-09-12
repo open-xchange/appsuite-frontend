@@ -88,8 +88,9 @@ define("io.ox/mail/write",
             })
             .done(function (txt) {
                 editor.val(txt).focus();
-                win.show();
-                editor.focus();
+                win.show(function () {
+                    editor.focus();
+                });
             });
         });
         

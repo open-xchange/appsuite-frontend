@@ -18,8 +18,8 @@ define("extensions/halo/main", ["io.ox/contacts/base", "css!io.ox/contacts/style
     function show (data) {
         
         var app = ox.ui.createApp({
-                title: data.display_name || "Halo",
-                icon: "apps/extensions/halo/halo.png"
+                title: data.display_name || "Halo"
+                //icon: "apps/extensions/halo/halo.png"
             });
         
         app.setLauncher(function () {

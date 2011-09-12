@@ -4,8 +4,13 @@
 <div id="exit-fullscreen"></div>
 
 <!-- Core Panel -->
-<div id="io-ox-core" class="unselectable" style="display: none">
-    <div id="io-ox-windowmanager"></div>
+<div id="io-ox-core" class="abs unselectable wallpaper" style="display: none">
+    <!-- top bar -->
+    <div id="io-ox-topbar" class="abs"></div>
+    <!-- window manager -->
+    <div id="io-ox-windowmanager">
+        <div id="io-ox-windowmanager-pane" class="atb"></div>
+    </div>
 </div>
 
 <!-- Login screen -->
@@ -13,7 +18,8 @@
 <div id="io-ox-login-screen" class="unselectable" style="display: none">
 
     <!-- Background decoration -->
-    <div class="gradient"></div>
+    <div id="io-ox-login-background" class="wallpaper"></div>
+    <div id="io-ox-login-form-background"></div>
 
     <div id="io-ox-login-blocker" style="display: none"></div>
 

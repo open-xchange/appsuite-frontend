@@ -245,9 +245,9 @@ define("io.ox/mail/main", [
         });
         
         // go!
-        win.show();
-        grid.paint();
-        
+        win.show(function () {
+            grid.paint();
+        });
     });
     
     return {

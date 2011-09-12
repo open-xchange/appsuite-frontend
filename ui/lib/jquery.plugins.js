@@ -145,6 +145,5 @@ $.fail = function (msg, retry) {
                 retry.apply(this, arguments);
             }));
     }
-    console.log("hier?", tmp);
     return $.center(tmp);
 };

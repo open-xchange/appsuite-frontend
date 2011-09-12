@@ -36,9 +36,17 @@
         return obj;
     };
     
+    // stupid string rotator
+    var rot = function (str, shift) {
+        return _(String(str).split("")).map(function (i) { return String.fromCharCode(i.charCodeAt(0) + shift); }).join("");
+    };
+    
     // get hash & query
     var queryData = deserialize(document.location.search.substr(1), /&/),
-        hashData = deserialize(document.location.hash.substr(1), /&/);
+        hashData = document.location.hash.substr(1);
+    
+    // decode
+    hashData = deserialize(hashData.substr(0, 1) === "?" ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData);
     
     // extend underscore utilities
     _.extend(_, {
@@ -92,6 +100,8 @@
          * _.deserialize("a=1&b=2&c=text");
          */
         deserialize: deserialize,
+        
+        rot: rot,
         
         url: {
             /**

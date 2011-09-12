@@ -194,9 +194,9 @@ define("io.ox/contacts/main", [
         win.bind("hide", function () { grid.selection.keyboard(false); });
         
         // go!
-        win.show();
-        grid.paint();
-
+        win.show(function () {
+            grid.paint();
+        });
     });
     
     return {

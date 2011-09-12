@@ -157,11 +157,11 @@
         });
         
         // go!
-        win.show();
-        grid.paint();
+        win.show(function () {
+            grid.paint();
+        });
         
         // Uploads
-        
         var queue = upload.createQueue({
             processFile: function (file) {
                 return api.uploadFile({file: file})
