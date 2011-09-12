@@ -15,6 +15,7 @@ var path = require("path");
 var utils = require("./lib/build/fileutils");
 var jsp = require("./lib/uglify-js/uglify-js").parser;
 var pro = require("./lib/uglify-js/uglify-js").uglify;
+var ast = require("./lib/build/ast");
 var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
 var _ = require("./lib/underscore.js");
@@ -30,13 +31,118 @@ var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
     pad(t.getUTCSeconds());
 console.info("Build version: " + version);
 
+var defineWalker = ast("define").asCall().walker();
+var gtWalker = ast("gt").any("gt").asCall().walker();
+var gtMethodWalker = ast("gt.gt").any("gt").asCall().walker();
+var getGt = ast("gt").asCall().getter("gt");
+var getMethod = ast("gt.gt").asCall().getter("gt");
+var getStr = ast("'str'").getter("str");
+
+var potHeader = 'msgid ""\nmsgstr ""\n' +
+    '"Project-Id-Version: Open-Xchange 6\\n"\n' +
+    '"POT-Creation-Date: DATE\\n"\n' +
+    '"PO-Revision-Date: DATE\\n"\n' +
+    '"Last-Translator: NAME <EMAIL>\\n"\n' +
+    '"Language-Team: NAME <EMAIL>\\n"\n' +
+    '"MIME-Version: 1.0\\n"\n' +
+    '"Content-Type: text/plain; charset=UTF-8\\n"\n' +
+    '"Content-Transfer-Encoding: 8bit\\n"\n' +
+    '"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\\n"\n';
+
+var gtMethods = {
+       gettext: ["msgid"],
+      pgettext: ["msgctxt", "msgid"],
+     dpgettext: [, "msgctxt", "msgid"],
+      ngettext: ["msgid", "msgid_plural", , ],
+     npgettext: ["msgctxt", "msgid", "msgid_plural", , ],
+    dnpgettext: [, "msgctxt", "msgid", "msgid_plural", , ]
+};
+
+var pot = {};
+
+function addMessage(node, method) {
+    var args = node[2];
+    if (args.length != method.length) return;
+    var msg = { comments: _.pluck(node[0].start.comments_before, "value") };
+    for (var i = 0; i < method.length; i++) if (method[i]) {
+        msg[method[i]] = getStr(args[i]);
+    }
+    
+    var key = msg.msgid;
+    if (msg.msgid_plural) key += "\x01" + msg.msgid_plural;
+    if (msg.msgctxt) key = msg.msgctxt + "\0" + key;
+    
+    if (key in pot) {
+        if (!deepEqual(pot[key].comments, msg.comments)) {
+            throw new Error("Different comments for the same text");
+        }
+    } else {
+        pot[key] = msg;
+    }
+    return pro.MAP.skip;
+}
+
+function potScan(tree) {
+    ast.scanner(defineWalker, function(scope) {
+        if (scope.refs.define !== undefined) return;
+        var args = this[2];
+        var deps = _.detect(args, ast.is("array"));
+        var f = _.detect(args, ast.is("function"));
+        if (!deps || !f) return;
+        var gtIndex = _.indexOf(_.pluck(deps[1], 1), "gettext");
+        if (gtIndex < 0) return;
+        var gtName = f[2][gtIndex];
+        var gtScope = f[3].scope;
+        ast.scanner(gtWalker, function(scope) {
+            if (getGt(this) != gtName) return;
+            if (scope.refs[gtName] != gtScope) return;
+            return addMessage(this, gtMethods.gettext);
+        }).scanner(gtMethodWalker, function(scope) {
+            if (getMethod[0](this) != gtName) return;
+            if (scope.refs[gtName] != gtScope) return;
+            var method = gtMethods[getMethod[1](this)];
+            if (!method) return;
+            return addMessage(this, method);
+        }).scan(f);
+        return pro.MAP.skip;
+    }).scan(pro.ast_add_scope(tree));
+}
+
+function escapePO(s) {
+    return s.replace(/[\x00-\x1f\\"]/g, function(c) {
+        var n = Number(c.charCodeAt(0)).toString(16);
+        return "\\u00" + (n.length < 2 ? "0" + n : n);
+    });
+}
+
+function generatePOT() {
+    var f = [potHeader];
+    for (var i in pot) {
+        msg = pot[i];
+        for (var j = 0; j < msg.comments.length; j++) {
+            f.push(_.map(msg.comments[j].split("\n"),
+                         function(s) { return "#" + s; }));
+        }
+        if (msg.msgctxt) f.push('msgctxt "' + escapePO(msg.msgctxt) + '"');
+        f.push('msgid "' + escapePO(msg.msgid) + '"');
+        if (msg.msgid_plural) {
+            f.push('msgid_plural "' + escapePO(msg.msgid_plural) + '"');
+            f.push('msgstr[0] ""\nmsgstr[1] ""\n');
+        } else {
+            f.push('msgstr ""\n');
+        }
+    }
+    return f.join("\n");
+}
+
 function jsFilter (data) {
     data = hint.call(this, data);
     if (process.env.debug) {
         return data;
     } else {
         // UglifyJS
-        var ast = jsp.parse(data);
+        var ast = jsp.parse(data, false, true);
+        potScan(ast);
         ast = pro.ast_lift_variables(ast);
         ast = pro.ast_mangle(ast);
         ast = pro.ast_squeeze(ast);
@@ -92,7 +198,10 @@ function hint (data) {
 // default task
 
 desc("Builds the GUI");
-utils.topLevelTask("default", [], utils.summary);
+utils.topLevelTask("default", [], function() {
+    fs.writeFile("ox.pot", generatePOT());
+    utils.summary();
+});
 
 utils.copy(utils.list([".htaccess", "blank.html", "favicon.ico", "src/"]));
 
