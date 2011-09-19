@@ -66,7 +66,6 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
         },
         pipe: {
             all: function (data) {
-                
             }
         },
         fail: {
@@ -193,6 +192,8 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
                         data.sort(function (a, b) {
                             return b.folder_id === "6" ? +1 : -1;
                         });
+                        // remove host
+                        data[0].image1_url = data[0].image1_url.replace(/^https?\:\/\/[^\/]+/i, "");
                         // use first contact
                         return (contactPictures[address] = data[0].image1_url);
                     } else {
