@@ -233,7 +233,8 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
                 .append(
                     $("<div/>")
                         .addClass("subject")
-                        .text(data.subject)
+                        // inject some zero-width spaces for better word-break
+                        .text(data.subject.replace(/([\/\.\,\-]+)/g, "$1\u200B"))
                 )
                 .append(
                     showTO ?

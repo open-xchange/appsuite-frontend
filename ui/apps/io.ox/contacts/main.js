@@ -62,7 +62,7 @@ define("io.ox/contacts/main", [
         
         // right panel
         right = $("<div/>")
-            .css({ left: gridWidth + 38 + "px", overflow: "auto" })
+            .css({ left: gridWidth + 39 + "px", overflow: "auto" })
             .addClass("rightside")
             .appendTo(win.nodes.main);
 

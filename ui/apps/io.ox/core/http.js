@@ -410,7 +410,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         // server error?
         if (response && response.error !== undefined && !response.data) {
             // session expired?
-            if ((/^SES\-/i).test(response.code)) {
+            var isSessionError = (/^SES\-/i).test(response.code),
+                isAutoLogin = o.module === "login" && o.data && o.data.action === "autologin";
+            if (isSessionError && !isAutoLogin) {
                 // login dialog
                 ox.relogin(o, deferred);
             } else {

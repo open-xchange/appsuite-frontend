@@ -44,7 +44,7 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
             },
             list: {
                 action: "list",
-                columns: "102,601,600,603,607,610,611"
+                columns: "102,600,601,602,603,607,610,611,614"
             },
             get: {
                 action: "get",

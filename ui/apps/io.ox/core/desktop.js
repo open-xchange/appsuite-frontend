@@ -266,28 +266,37 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
             
             pane = $("#io-ox-windowmanager-pane"),
             
+            getX = function (node) {
+                return node.data("x") || 0;
+            },
+            
             scrollTo = function (node, cont) {
+                
                 var children = pane.find(".window-container-center"),
                     center = node.find(".window-container-center").show(),
                     index = node.data("index") || 0,
-                    left = (-index * 100) + "%",
+                    left = (-index * 105),
                     done = function () {
-                        children.not(center).hide();
-                        center.addClass("shadow");
-                        _.call(cont);
+                        setTimeout(function () {
+                            children.not(center).hide();
+                            pane.removeClass("no-shadows");
+                            _.call(cont);
+                        }, 10);
                     };
-                // change? (firefox converts 0% to 0px so we have to convert to integer)
-                if (parseInt(left, 10) !== parseInt(pane.css("left"), 10)) {
+                // change?
+                if (left !== getX(pane)) {
                     // hide shadows to speed things up!
-                    children.removeClass("shadow");
+                    pane.addClass("no-shadows");
                     // use CSS transitions?
-                    if (Modernizr.csstransitions) {
+                    if (Modernizr.csstransforms3d) {
                         node.show();
                         pane.one(_.browser.WebKit ? "webkitTransitionEnd" : "transitionend", done);
-                        pane.css("left", left);
+                        pane.data("x", left);
+                        pane.css("left", left + "%");
+                        //pane.css("webkitTransform", "translate3d(" + left + "%, 0, 0)");
                     } else {
                         node.show();
-                        pane.stop().animate({ left: left }, 400, done);
+                        pane.stop().animate({ left: left + "%" }, 400, done);
                     }
                 } else {
                     _.call(cont);
@@ -321,15 +330,15 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         }
                         var node = this.nodes.outer;
                         if (node.parent().length === 0) {
-                            node.css("left", ((guid - 1) * 100) + "%")
-                                .data("index", guid - 1)
-                                .appendTo(pane);
+                            node.data("index", guid - 1).css("left", ((guid - 1) * 105) + "%").appendTo(pane);
+                            //node.appendTo(pane);
                         }
-                        currentWindow = this;
                         if (this.app !== null) {
                             this.app.getLaunchBarIcon().addClass("active");
                         }
+                        //node.show();
                         scrollTo(node, cont);
+                        currentWindow = this;
                         this.trigger("show");
                     } else {
                         _.call(cont);
@@ -587,29 +596,35 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                             );
                         }
                     };
-                $("<input/>", { type: "search", placeholder: "Search...", size: "40" })
-                    .css({ "float": "right", marginTop: "9px" })
-                    .bind("keypress", function (e) {
-                        e.stopPropagation();
-                    })
-                    .bind("search", function (e) {
-                        e.stopPropagation();
-                        if ($(this).val() === "") {
-                            $(this).blur();
-                        }
-                    })
-                    .bind("change", function (e) {
-                        e.stopPropagation();
-                        win.search.query = $(this).val();
-                        // trigger search?
-                        if (win.search.query !== "") {
-                            if (win.search.query !== lastQuery) {
-                                triggerSearch(lastQuery = win.search.query);
-                            }
-                        } else if (lastQuery !== "") {
-                            win.trigger("cancel-search", lastQuery = "");
-                        }
-                    })
+                    
+                $("<div/>")
+                    .addClass("searchfield-wrapper")
+                    .css({ "float": "right", marginTop: "7px" })
+                    .append(
+                        $("<input/>", { type: "search", placeholder: "Search...", size: "40" })
+                            
+                            .bind("keypress", function (e) {
+                                e.stopPropagation();
+                            })
+                            .bind("search", function (e) {
+                                e.stopPropagation();
+                                if ($(this).val() === "") {
+                                    $(this).blur();
+                                }
+                            })
+                            .bind("change", function (e) {
+                                e.stopPropagation();
+                                win.search.query = $(this).val();
+                                // trigger search?
+                                if (win.search.query !== "") {
+                                    if (win.search.query !== lastQuery) {
+                                        triggerSearch(lastQuery = win.search.query);
+                                    }
+                                } else if (lastQuery !== "") {
+                                    win.trigger("cancel-search", lastQuery = "");
+                                }
+                            })
+                    )
                     .prependTo(win.nodes.toolbar);
             }
             
@@ -634,9 +649,9 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 
                 if (opt.toolbar || opt.search) {
                     var th = 28;
-                    win.nodes.head.css("height", th + 30 + "px");
-                    win.nodes.toolbar.css("height", th + 10 + "px");
-                    win.nodes.body.css("top", th + 32 + "px");
+                    win.nodes.head.css("height", th + 27 + "px");
+                    win.nodes.toolbar.css("height", th + 7 + "px");
+                    win.nodes.body.css("top", th + 28 + "px");
                 }
                 
                 // quick settings?

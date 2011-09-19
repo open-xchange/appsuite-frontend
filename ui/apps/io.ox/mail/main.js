@@ -94,33 +94,35 @@ define("io.ox/mail/main", [
         // add template
         grid.addTemplate({
             build: function () {
-                var from, date, subject, threadSize, flag;
+                var from, date, priority, subject, attachment, threadSize, flag;
                 this.addClass("mail")
                     .append(
-                        from = $("<div/>").addClass("from")
+                        $("<div/>")
+                            .append(date = $("<span/>").addClass("date"))
+                            .append(from = $("<span/>").addClass("from"))
                     )
                     .append(
-                        date = $("<div/>").addClass("date")
+                        $("<div/>")
+                            .append(threadSize = $("<div/>").addClass("threadSize"))
+                            .append(attachment = $("<span/>").addClass("attachment"))
+                            .append(priority = $("<span/>").addClass("priority"))
+                            .append(subject = $("<span/>").addClass("subject"))
                     )
-                    .append(
-                        subject = $("<div/>").addClass("subject")
-                    )
-                    .append(
-                        threadSize = $("<span/>").addClass("threadSize").hide()
-                    )
-                    .append(
-                        flag = $("<div/>").addClass("flag abs")
-                    );
-                return { from: from, date: date, subject: subject, threadSize: threadSize, flag: flag };
+                    .append(flag = $("<div/>").addClass("flag abs"));
+                return { from: from, date: date, priority: priority, subject: subject, attachment: attachment, threadSize: threadSize, flag: flag };
             },
             set: function (data, fields, index) {
+                fields.priority.text(data.priority < 3 ? " \u2605\u2605\u2605 " : "");
                 fields.subject.text(data.subject);
-                fields.threadSize.css("display", "inline-block").text(
-                    !data.threadSize || data.threadSize === 1 ? "" : data.threadSize
-                );
+                if (!data.threadSize || data.threadSize === 1) {
+                    fields.threadSize.text("").hide();
+                } else {
+                    fields.threadSize.text(data.threadSize).css("display", "");
+                }
                 fields.from.empty().append(base.serializeList(data.from));
                 fields.date.text(base.getTime(data.received_date));
                 fields.flag.get(0).className = "flag abs flag_" + data.color_label;
+                fields.attachment.css("display", data.attachment ? "" : "none");
                 if (base.isUnread(data)) {
                     this.addClass("unread");
                 }

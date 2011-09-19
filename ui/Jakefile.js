@@ -137,7 +137,7 @@ function generatePOT() {
 
 function jsFilter (data) {
     data = hint.call(this, data);
-    if (process.env.debug) {
+    if (process.env.debug || true) {
         return data;
     } else {
         // UglifyJS

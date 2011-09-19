@@ -443,7 +443,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
             if (index >= bounds.bottom - 2) {
                 // below bottom
                 paint(index - (numVisible / 2 >> 0));
-            } else if (index < bounds.top + 2) {
+            } else if (index < bounds.top + 2 && bounds.top !== 0) {
                 // above top
                 paint(index - numVisible);
             }

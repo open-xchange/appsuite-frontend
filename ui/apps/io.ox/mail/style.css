@@ -34,9 +34,9 @@
     text-decoration: line-through;
 }
 
-.vgrid-cell.mail .subject {
-    display: inline-block;
-    width: 85%;
+.vgrid-cell.mail .priority {
+    font-weight: bold;
+    color: #fc0;
 }
 
 .vgrid-cell.mail.unread .subject {
@@ -45,8 +45,6 @@
 
 .vgrid-cell.mail .from {
     color: #08c;
-    display: inline-block;
-    width: 70%;
 }
 
 .vgrid-cell.mail.me .from {
@@ -56,18 +54,24 @@
 
 .vgrid-cell.mail .date {
     color: #888;
-    text-align: right;
     display: inline-block;
-    width: 30%;
+    float: right;
+}
+
+.vgrid-cell.mail .attachment {
+    background: url(images/attachment.png) no-repeat 0px 6px;
+    width: 14px;
+    margin-left: 1em;
+    float: right;
 }
 
 .vgrid-cell.mail .threadSize {
     color: #888;
     font-weight: bold;
-    text-align: right;
+    padding: 0 0.75em 0 0.75em;
+    margin-left: 1em;
     display: inline-block;
-    width: 10%;
-    margin-left: 5%;
+    float: right;
 }
 
 .borderradius .vgrid-cell.mail .threadSize {
@@ -116,6 +120,9 @@
     -webkit-box-shadow: 0px 5px 10px -3px black;
     box-shadow: 0px 5px 10px -3px black;
     overflow-y: visible;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
 }
 
 .mail-detail .date {
@@ -129,6 +136,7 @@
     font-weight: bold;
     line-height: 1.2em;
     margin: 0.25em 0 0.25em 0;
+    word-wrap: break-word;
 }
 
 .mail-detail .contact-picture {
@@ -173,10 +181,10 @@
 
 /* flag colors */
 .flag_0  { background-color: transparent; }
-.flag_1  { background-color: #a00; }
-.flag_2  { background-color: #08c; }
-.flag_3  { background-color: #0a0; }
-.flag_4  { background-color: #888; }
+.flag_1  { background-color: #913F3F; } /* red */
+.flag_2  { background-color: #3F6B91; } /* blue */
+.flag_3  { background-color: #6D913F; } /* green */
+.flag_4  { background-color: #888; } /* dark gray */
 .flag_5  { background-color: #aaa; }
 .flag_6  { background-color: #aaa; }
 .flag_7  { background-color: #aaa; }
