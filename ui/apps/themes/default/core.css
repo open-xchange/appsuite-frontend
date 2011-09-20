@@ -30,6 +30,12 @@
     /*overflow: hidden;*/
 }
 
+/* ipad: better fat finger support */
+.touch #io-ox-topbar { height: 35px; }
+.touch #io-ox-topbar .launcher { font-size: 14px; line-height: 35px; padding: 0 15px 0 15px; }
+.touch #io-ox-windowmanager { top: 40px; }
+.touch #io-ox-windowmanager .window-container-center { width: 100% !important; }
+
 #io-ox-topbar .launcher {
     color: white;
     font-weight: bold;
@@ -51,7 +57,7 @@
     display: inline-block !important;
 }
 
-#io-ox-topbar .launcher:hover {
+#io-ox-topbar .launcher.hover {
     background-color: #ccc;
     background-color: rgba(255, 255, 255, 0.40);
 }
@@ -109,8 +115,8 @@
     text-shadow: none !important;
 }
 
-.csstransforms3d #io-ox-windowmanager-pane {
-    -webkit-transition-duration: 0.35s;
+.csstransforms3d.mouse #io-ox-windowmanager-pane {
+    -webkit-transition-duration: 0.25s;
     -webkit-transition-timing-function: linear;
 }
 

@@ -393,6 +393,11 @@ $(document).ready(function () {
         $("html").addClass("nosearchfield");
     }
     
+    // do we have a mouse?
+    if (!Modernizr.touch) {
+        $("html").addClass("mouse");
+    }
+    
     // be busy
     $("#background_loader").busy();
     

@@ -29,7 +29,9 @@ define("io.ox/contacts/base", function () {
     return {
         
         getImage: function (obj) {
-            return obj.image1_url || (ox.base + "/apps/themes/default/dummypicture.png");
+            return obj.image1_url ?
+                obj.image1_url.replace(/^https?\:\/\/[^\/]+/i, "") :
+                (ox.base + "/apps/themes/default/dummypicture.png");
         },
         
         getFullName: function (obj) {

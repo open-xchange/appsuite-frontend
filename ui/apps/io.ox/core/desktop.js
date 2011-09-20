@@ -87,6 +87,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
             // construct
             var node = $("<div/>").addClass("launcher")
                 .text(label)
+                .hover(function () { $(this).addClass("hover"); }, function () { $(this).removeClass("hover"); })
                 .bind("click", function () {
                     var self = $(this);
                     if (!_.isFunction(fn)) {
@@ -119,8 +120,8 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
             return node;
         };
         
-    // add bar and show
-    core.append(topBar).show();
+    // show
+    core.show();
     
     /**
      * Create app
@@ -277,26 +278,31 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     index = node.data("index") || 0,
                     left = (-index * 105),
                     done = function () {
-                        setTimeout(function () {
+                        if (!Modernizr.touch) {
                             children.not(center).hide();
                             pane.removeClass("no-shadows");
-                            _.call(cont);
-                        }, 10);
+                            pane.find(".window-body").children().show();
+                        }
+                        _.call(cont);
                     };
                 // change?
                 if (left !== getX(pane)) {
-                    // hide shadows to speed things up!
-                    pane.addClass("no-shadows");
+                    // remember position
+                    pane.data("x", left);
+                    node.show();
+                    // touch device?
+                    if (Modernizr.touch) {
+                        pane.css("left", left + "%"); done();
+                    }
                     // use CSS transitions?
-                    if (Modernizr.csstransforms3d) {
-                        node.show();
+                    else if (Modernizr.csstransforms3d) {
                         pane.one(_.browser.WebKit ? "webkitTransitionEnd" : "transitionend", done);
-                        pane.data("x", left);
+                        // hide shadows to speed things up!
+                        pane.addClass("no-shadows");
+                        pane.find(".window-body").children().hide();
                         pane.css("left", left + "%");
-                        //pane.css("webkitTransform", "translate3d(" + left + "%, 0, 0)");
                     } else {
-                        node.show();
-                        pane.stop().animate({ left: left + "%" }, 400, done);
+                        pane.stop().animate({ left: left + "%" }, 250, done);
                     }
                 } else {
                     _.call(cont);
