@@ -13,7 +13,7 @@
  * 
  */
 
-define("io.ox/contacts/base", function () {
+define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
     
     // smart join
     var join = function () {
@@ -96,7 +96,7 @@ define("io.ox/contacts/base", function () {
                     .append(
                         $("<div/>").addClass("job").text(
                             obj.mark_as_distributionlist ?
-                                "Distribution list" :
+                                gt("Distribution list") :
                                 (obj.company || obj.position || obj.profession) ?
                                         join(", ", obj.company, obj.position, obj.profession) + "\u00a0" :
                                         (obj.email1 || obj.email2 || obj.email3) + "\u00a0"
@@ -192,18 +192,18 @@ define("io.ox/contacts/base", function () {
                 
             } else {
                 
-                addField("Department", obj.department);
-                addField("Position", obj.position);
-                addField("Profession", obj.profession);
+                addField(gt("Department"), obj.department);
+                addField(gt("Position"), obj.position);
+                addField(gt("Profession"), obj.profession);
                 
                 var r = 0;
                 
                 if (obj.street_business || obj.city_business) {
-                    r += addAddress("Work", obj.street_business, obj.postal_code_business, obj.city_business);
+                    r += addAddress(gt("Work"), obj.street_business, obj.postal_code_business, obj.city_business);
                 }
                 
                 if (obj.street_home || obj.city_home) {
-                    r += addAddress("Home", obj.street_home, obj.postal_code_home, obj.city_home);
+                    r += addAddress(gt("Home"), obj.street_home, obj.postal_code_home, obj.city_home);
                 }
                 
                 if (r > 0) {
@@ -211,12 +211,12 @@ define("io.ox/contacts/base", function () {
                     r = 0;
                 }
                 
-                r += addPhone("Phone (business)", obj.telephone_business1);
-                r += addPhone("Phone (business)", obj.telephone_business2);
-                r += addPhone("Phone (private)", obj.telephone_home1);
-                r += addPhone("Phone (private)", obj.telephone_home2);
-                r += addPhone("Mobile", obj.cellular_telephone1);
-                r += addPhone("Mobile", obj.cellular_telephone2);
+                r += addPhone(gt("Phone (business)"), obj.telephone_business1);
+                r += addPhone(gt("Phone (business)"), obj.telephone_business2);
+                r += addPhone(gt("Phone (private)"), obj.telephone_home1);
+                r += addPhone(gt("Phone (private)"), obj.telephone_home2);
+                r += addPhone(gt("Mobile"), obj.cellular_telephone1);
+                r += addPhone(gt("Mobile"), obj.cellular_telephone2);
                 
                 if (r > 0) {
                     addField("", "\u00a0");
@@ -224,14 +224,14 @@ define("io.ox/contacts/base", function () {
                 }
                 
                 var dupl = {};
-                r += addMail("E-Mail", obj.email1);
+                r += addMail(gt("E-Mail"), obj.email1);
                 dupl[obj.email1] = true;
                 if (dupl[obj.email2] !== true) {
-                    r += addMail("E-Mail", obj.email2);
+                    r += addMail(gt("E-Mail"), obj.email2);
                     dupl[obj.email2] = true;
                 }
                 if (dupl[obj.email3] !== true) {
-                    r += addMail("E-Mail", obj.email3);
+                    r += addMail(gt("E-Mail"), obj.email3);
                 }
                 
                 if (r > 0) {
@@ -241,7 +241,7 @@ define("io.ox/contacts/base", function () {
                 
                 var date = new Date(obj.birthday);
                 if (!isNaN(date.getDate())) {
-                    addField("Birthday", date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear());
+                    addField(gt("Birthday"), date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear());
                 }
             }
             

@@ -163,6 +163,7 @@ $(document).ready(function () {
     changeLanguage = function (id) {
         // change language
         var cont = function (data) {
+            require("io.ox/core/gettext").init(data);
             // get all nodes
             $("[data-i18n]").each(function () {
                 var node = $(this),

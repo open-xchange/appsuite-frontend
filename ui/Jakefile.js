@@ -39,8 +39,8 @@ var getMethod = ast("gt.gt").asCall().getter("gt");
 var getStr = ast("'str'").getter("str");
 
 var potHeader = 'msgid ""\nmsgstr ""\n' +
-    '"Project-Id-Version: Open-Xchange 6\\n"\n' +
-    '"POT-Creation-Date: DATE\\n"\n' +
+    '"Project-Id-Version: Open-Xchange 7\\n"\n' +
+    '"POT-Creation-Date: ' + t + '\\n"\n' +
     '"PO-Revision-Date: DATE\\n"\n' +
     '"Last-Translator: NAME <EMAIL>\\n"\n' +
     '"Language-Team: NAME <EMAIL>\\n"\n' +
@@ -58,9 +58,19 @@ var gtMethods = {
     dnpgettext: [, "msgctxt", "msgid", "msgid_plural", , ]
 };
 
-var pot = {};
+var pot = {}, potFiles = {};
 
-function addMessage(node, method) {
+function addMsg(map, key, msg) {
+    if (key in map) {
+        if (!_.isEqual(map[key].comments, msg.comments)) {
+            throw new Error("Different comments for the same text");
+        }
+    } else {
+        map[key] = msg;
+    }
+}
+
+function addMessage(filename, node, method) {
     var args = node[2];
     if (args.length != method.length) return;
     var msg = { comments: _.pluck(node[0].start.comments_before, "value") };
@@ -72,37 +82,33 @@ function addMessage(node, method) {
     if (msg.msgid_plural) key += "\x01" + msg.msgid_plural;
     if (msg.msgctxt) key = msg.msgctxt + "\0" + key;
     
-    if (key in pot) {
-        if (!deepEqual(pot[key].comments, msg.comments)) {
-            throw new Error("Different comments for the same text");
-        }
-    } else {
-        pot[key] = msg;
-    }
+    addMsg(pot, key, msg);
+    var file = potFiles[filename] || (potFiles[filename] = {});
+    file[key] = pot[key];
     return pro.MAP.skip;
 }
 
-function potScan(tree) {
+function potScan(filename, tree) {
     ast.scanner(defineWalker, function(scope) {
         if (scope.refs.define !== undefined) return;
         var args = this[2];
         var deps = _.detect(args, ast.is("array"));
         var f = _.detect(args, ast.is("function"));
         if (!deps || !f) return;
-        var gtIndex = _.indexOf(_.pluck(deps[1], 1), "gettext");
+        var gtIndex = _.indexOf(_.pluck(deps[1], 1), "io.ox/core/gettext");
         if (gtIndex < 0) return;
         var gtName = f[2][gtIndex];
         var gtScope = f[3].scope;
         ast.scanner(gtWalker, function(scope) {
             if (getGt(this) != gtName) return;
             if (scope.refs[gtName] != gtScope) return;
-            return addMessage(this, gtMethods.gettext);
+            return addMessage(filename, this, gtMethods.gettext);
         }).scanner(gtMethodWalker, function(scope) {
             if (getMethod[0](this) != gtName) return;
             if (scope.refs[gtName] != gtScope) return;
             var method = gtMethods[getMethod[1](this)];
             if (!method) return;
-            return addMessage(this, method);
+            return addMessage(filename, this, method);
         }).scan(f);
         return pro.MAP.skip;
     }).scan(pro.ast_add_scope(tree));
@@ -115,7 +121,15 @@ function escapePO(s) {
     });
 }
 
-function generatePOT() {
+function generatePOT(files) {
+    _.each(files, function(file) {
+        orig = file.slice(8).replace(/\+-/g, "/").replace(/\+\+/g, "+");
+        if (!(orig in potFiles)) {
+            var loaded = JSON.parse(fs.readFileSync(file, "utf8"));
+            potFiles[orig] = loaded;
+            for (var i in loaded) addMsg(pot, i, loaded[i]);
+        }
+    });
     var f = [potHeader];
     for (var i in pot) {
         msg = pot[i];
@@ -137,18 +151,19 @@ function generatePOT() {
 
 function jsFilter (data) {
     data = hint.call(this, data);
-    if (process.env.debug || true) {
+    if (process.env.debug) {
         return data;
     } else {
         // UglifyJS
         var ast = jsp.parse(data, false, true);
-        potScan(ast);
+        potScan(this.name, ast);
         ast = pro.ast_lift_variables(ast);
         ast = pro.ast_mangle(ast);
         ast = pro.ast_squeeze(ast);
         return pro.gen_code(ast);
     }
 }
+utils.addFilter("source", jsFilter);
 
 var core_head = fs.readFileSync("html/core_head.html", "utf8"),
     core_body = fs.readFileSync("html/core_body.html", "utf8");
@@ -198,15 +213,31 @@ function hint (data) {
 // default task
 
 desc("Builds the GUI");
-utils.topLevelTask("default", [], function() {
-    fs.writeFile("ox.pot", generatePOT());
-    utils.summary();
-});
+utils.topLevelTask("default", ["i18n/ox.pot"], utils.summary);
 
 utils.concat(".htaccess", ["html/.htaccess"]); /* TODO: should be copy */
 utils.concat("blank.html", ["html/blank.html"]);
 utils.concat("favicon.ico", ["html/favicon.ico"]);
 utils.copy(utils.list(["src/"]));
+
+//i18n
+
+directory("i18n");
+file("i18n/ox.pot", ["i18n", "Jakefile.js"], function() {
+    fs.writeFile(this.name, generatePOT(this.prereqs.slice(2)));
+});
+
+directory("tmp/pot");
+utils.addHandler("source", function(filename) {
+    var dest = "tmp/pot/" + filename.replace(/\+/g, "++").replace(/\//g, "+-");
+    file("i18n/ox.pot", [dest]);
+    file(dest, ["tmp/pot", filename], function() {
+        if (filename in potFiles) {
+            var data = JSON.stringify(potFiles[filename] || {});
+            fs.writeFileSync(this.name, data);
+        }
+    });
+});
 
 // html
 
@@ -224,26 +255,26 @@ file(utils.dest("signin.appcache"), ["force"]);
 // js
 
 utils.concat("boot.js", ["src/util.js", "src/boot.js"],
-    { to: "tmp", filter: jsFilter });
+    { to: "tmp", type: "source" });
 
 utils.concat("boot.js", ["lib/jquery.min.js", "lib/jquery-ui.min.js",
-        "lib/require.js", "lib/modernizr.js", "lib/underscore.js", "lib/jquery.plugins.js",
-        "tmp/boot.js"]);
+        "lib/require.js", "lib/modernizr.js", "lib/underscore.js",
+        "lib/jquery.plugins.js", "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
         "event.js", "extensions.js", "cache.js", "http.js",
-        "config.js", "session.js",
+        "config.js", "session.js", "gettext.js",
         "desktop.js", "main.js"
-    ]), { filter: jsFilter }
+    ]), { type: "source" }
 );
 
 var apps = _.groupBy(utils.list("apps/"),
     function (f) { return /\.js$/.test(f) ? "js" : "rest"; });
-utils.copy(apps.js, { filter: jsFilter });
+utils.copy(apps.js, { type: "source" });
 utils.copy(apps.rest);
 
-utils.copyFile("lib/css.js", utils.dest("apps/css.js"), jsFilter);
+utils.copyFile("lib/css.js", utils.dest("apps/css.js"), { type: "source" });
 
 // doc task
 

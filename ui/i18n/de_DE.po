@@ -1,0 +1,47 @@
+#
+# Viktor Pracht <viktor.pracht@open-xchange.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Open-Xchange 7\n"
+"POT-Creation-Date: Mon Sep 19 2011 15:11:18 GMT+0200 (CEST)\n"
+"PO-Revision-Date: 2011-09-19 15:34+0200\n"
+"Last-Translator: Viktor Pracht <viktor.pracht@open-xchange.com>\n"
+"Language-Team: Deutsch <i18n@open-xchange.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bits\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+msgid "Distribution list"
+msgstr "Verteilerliste"
+
+msgid "Department"
+msgstr "Abteilung"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Profession"
+msgstr "Beruf"
+
+msgid "Work"
+msgstr "Geschäftlich"
+
+msgid "Home"
+msgstr "Privat"
+
+msgid "Phone (business)"
+msgstr "Telefon (geschäftlich)"
+
+msgid "Phone (private)"
+msgstr "Telefon (privat)"
+
+msgid "Mobile"
+msgstr "Mobiltelefon"
+
+msgid "E-Mail"
+msgstr "E-Mail"
+
+msgid "Birthday"
+msgstr "Geburtstag"
