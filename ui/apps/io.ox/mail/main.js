@@ -112,7 +112,7 @@ define("io.ox/mail/main", [
                 return { from: from, date: date, priority: priority, subject: subject, attachment: attachment, threadSize: threadSize, flag: flag };
             },
             set: function (data, fields, index) {
-                fields.priority.text(data.priority < 3 ? " \u2605\u2605\u2605 " : "");
+                fields.priority.text(base.getPriority(data));
                 fields.subject.text(data.subject);
                 if (!data.threadSize || data.threadSize === 1) {
                     fields.threadSize.text("").hide();

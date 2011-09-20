@@ -203,14 +203,17 @@ utils.topLevelTask("default", [], function() {
     utils.summary();
 });
 
-utils.copy(utils.list([".htaccess", "blank.html", "favicon.ico", "src/"]));
+utils.concat(".htaccess", ["html/.htaccess"]); /* TODO: should be copy */
+utils.concat("blank.html", ["html/blank.html"]);
+utils.concat("favicon.ico", ["html/favicon.ico"]);
+utils.copy(utils.list(["src/"]));
 
 // html
 
 utils.concat("core", ["html/index.html"], { filter: htmlFilter });
 utils.concat("signin", ["html/signin.html"], { filter: htmlFilter });
-utils.concat("core.appcache", ["core.appcache"], { filter: htmlFilter });
-utils.concat("signin.appcache", ["signin.appcache"], { filter: htmlFilter });
+utils.concat("core.appcache", ["html/core.appcache"], { filter: htmlFilter });
+utils.concat("signin.appcache", ["html/signin.appcache"], { filter: htmlFilter });
 
 task("force");
 file(utils.dest("core"), ["force"]);

@@ -75,7 +75,41 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
             return tmp;
         },
         
+        serializeAttachments: function (data, list) {
+            var i = 0, $i = list.length, tmp = $(), filename = "", href = "";
+            for (; i < $i; i++) {
+                filename = list[i].filename || "";
+                href = "/ajax/mail?" + $.param({
+                    action: "attachment",
+                    folder: data.folder_id,
+                    id: data.id,
+                    attachment: list[i].id,
+                    save: "1",
+                    session: ox.session
+                });
+                tmp = tmp.add(
+                    $("<a/>", { href: href, target: "_blank" }).addClass("attachment-link").text(filename)
+                );
+                if (i < $i - 1) {
+                    tmp = tmp.add(
+                        $("<span/>").css("color", "#555").html("&nbsp;&bull; ")
+                    );
+                }
+            }
+            return tmp;
+        },
+        
+        /* @returns {String} Proper text */
+        getPriority: function (data) {
+            return data.priority < 3 ? " \u2605\u2605\u2605 " : "";
+        },
+        
         getTime: function (timestamp) {
+            var d = new Date(timestamp);
+            return d.getUTCDate() + "." + (d.getUTCMonth() + 1) + "." + d.getUTCFullYear();
+        },
+        
+        getSmartTime: function (timestamp) {
             var now = new Date(),
                 zone = now.getTimezoneOffset(),
                 time = now.getTime() - zone * 60 * 1000,
@@ -215,7 +249,16 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
             
             var node, picture,
                 showCC = data.cc && data.cc.length > 0,
-                showTO = (data.to && data.to.length > 1) || showCC;
+                showTO = (data.to && data.to.length > 1) || showCC,
+                i = 0, $i = (data.attachments || []).length, attachments = [], hasAttachments = false;
+            
+            // get non-inline attachments
+            for (; i < $i; i++) {
+                if (data.attachments[i].disp === "attachment") {
+                    attachments.push(data.attachments[i]);
+                    hasAttachments = true;
+                }
+            }
             
             node = $("<div/>")
                 .addClass("mail-detail")
@@ -223,7 +266,7 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
                     picture = $("<div/>").addClass("contact-picture").hide()
                 )
                 .append(
-                    $("<div/>").addClass("date list").text(this.getTime(data.received_date))
+                    $("<div/>").addClass("date list").text(this.getSmartTime(data.received_date))
                 )
                 .append(
                     $("<div/>")
@@ -235,6 +278,9 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
                         .addClass("subject")
                         // inject some zero-width spaces for better word-break
                         .text(data.subject.replace(/([\/\.\,\-]+)/g, "$1\u200B"))
+                        .append(
+                            $("<span/>").addClass("priority").text(" " + that.getPriority(data))
+                        )
                 )
                 .append(
                     showTO ?
@@ -254,6 +300,20 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
                             .append(
                                 this.serializeList(data.cc, true)
                             )
+                        : []
+                )
+                .append(
+                    // attachments
+                    hasAttachments ?
+                        $("<div/>")
+                            .addClass("list")
+                            .append(
+                                 // TO
+                                 $("<span/>").addClass("label").text("Attachments: ")
+                             )
+                             .append(
+                                 this.serializeAttachments(data, attachments)
+                             )
                         : []
                 )
                 .append(

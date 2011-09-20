@@ -51,6 +51,7 @@ a, a:visited, .link {
 
 a:hover, .link:hover {
     text-decoration: underline;
+    cursor: pointer;
 }
 
 #background_loader {

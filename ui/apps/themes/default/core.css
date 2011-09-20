@@ -432,6 +432,12 @@
     /*border-bottom: 1px dotted #ddd;*/
 }
 
+.attachment-link {
+    color: black;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 a.nolink {
     color: black;
     text-decoration: none;

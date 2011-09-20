@@ -278,12 +278,13 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     index = node.data("index") || 0,
                     left = (-index * 105),
                     done = function () {
-                        if (!Modernizr.touch) {
-                            children.not(center).hide();
-                            pane.removeClass("no-shadows");
-                            pane.find(".window-body").children().show();
-                        }
-                        _.call(cont);
+                        // use timeout for smoother animations
+                        setTimeout(function () {
+                            if (!Modernizr.touch) {
+                                pane.removeClass("no-shadows");
+                            }
+                            _.call(cont);
+                        }, 10);
                     };
                 // change?
                 if (left !== getX(pane)) {
@@ -299,7 +300,6 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         pane.one(_.browser.WebKit ? "webkitTransitionEnd" : "transitionend", done);
                         // hide shadows to speed things up!
                         pane.addClass("no-shadows");
-                        pane.find(".window-body").children().hide();
                         pane.css("left", left + "%");
                     } else {
                         pane.stop().animate({ left: left + "%" }, 250, done);
@@ -320,51 +320,62 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 var quitOnClose = false,
                     // views
                     views = { main: true },
-                    currentView = "main";
+                    currentView = "main",
+                    self = this,
+                    firstShow = true;
                 
                 this.show = function (cont) {
                     if (currentWindow !== this) {
                         // show
+                        var node = this.nodes.outer;
+                        if (firstShow) {
+                            node.data("index", guid - 1).css("left", ((guid - 1) * 105) + "%");
+                            firstShow = false;
+                        }
                         if (currentWindow) {
                             previousWindow = currentWindow;
-                            currentWindow.blur();
+                            //currentWindow.blur();
                         }
                         // auto fullscreen?
                         if (autoFullscreen) {
                             toggleFullscreen();
                             autoFullscreen = false;
                         }
-                        var node = this.nodes.outer;
                         if (node.parent().length === 0) {
-                            node.data("index", guid - 1).css("left", ((guid - 1) * 105) + "%").appendTo(pane);
-                            //node.appendTo(pane);
+                            node.appendTo(pane);
                         }
                         if (this.app !== null) {
                             this.app.getLaunchBarIcon().addClass("active");
                         }
                         //node.show();
-                        scrollTo(node, cont);
-                        currentWindow = this;
-                        this.trigger("show");
+                        scrollTo(node, function () {
+                            if (currentWindow) {
+                                currentWindow.hide();
+                            }
+                            currentWindow = self;
+                            _.call(cont);
+                            self.trigger("show");
+                        });
                     } else {
                         _.call(cont);
                     }
                 };
                 
-                this.blur = function () {
+                this.hide = function () {
                     if (this.app !== null) {
                         this.app.getLaunchBarIcon().removeClass("active");
                     }
+                    // detach if there are no iframes
+                    if (this.nodes.outer.find("iframe").length === 0) {
+                        this.nodes.outer.detach();
+                    } else {
+                        this.nodes.outer.hide();
+                    }
+                    this.trigger("hide");
+                    interruptFullscreen();
                     if (currentWindow === this) {
                         currentWindow = null;
                     }
-                };
-                
-                this.hide = function () {
-                    this.blur();
-                    this.nodes.outer.hide();
-                    this.trigger("hide");
-                    interruptFullscreen();
                 };
                 
                 this.toggle = function () {
@@ -411,7 +422,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     quitOnClose = !!flag;
                 };
                 
-                var self = this, title = "", subtitle = "";
+                var title = "", subtitle = "";
                 
                 function applyTitle () {
                     var spans = self.nodes.title.find("span");
