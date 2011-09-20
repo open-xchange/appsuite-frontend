@@ -15,8 +15,13 @@
  */
 
 define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions"], function (api, ext) {
+    var haloAPI = null;
     
-    function show (data) {
+    var main = {
+        show: null
+    };
+    
+    function initialisedShow (data) {
         var app = ox.ui.createApp({
                 title: data.display_name || "Halo"
                 //icon: "apps/extensions/halo/halo.png"
@@ -38,54 +43,16 @@ define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions"],
                 });
                 
             // Trigger Server Halo API
-            (function () {
-                var point = ext.point("io.ox/halo/person:renderer");
-                function buildRenderer($div) {
-                    return function (info) {
-                        if (info.data) {
-                            // Alright, we've got something renderable
-                            point.each(function (extension) {
-                               if (extension.handles(info.type)) {
-                                    var $extDiv = $("<div/>");
-                                    $div.append($extDiv);
-                                    var deferred = extension.render(info.data, $extDiv);
-                                    if (deferred) {
-                                        $extDiv.busy();
-                                        deferred.done(function () {$extDiv.idle();});
-                                    }
-                               } 
-                            });
-                        }
-                        if (info.token) {
-                            // Alright, we need to fetch some more data
-                            var $extDiv = $("<div/>");
-                            $extDiv.busy();
-                            $div.append($extDiv);
-                            api.resolve(info.token).done(function (response) {
-                                // TODO: Error Handling
-                                $extDiv.idle();
-                                buildRenderer($extDiv)(response.data);
-                            });
-                        }
-                    };
-                }
-                var $div = $("<div/>");
-                $div.busy();
-                win.nodes.main.append($div);
-                api.person(data).done(function (response) {
-                    _(response.data).each(buildRenderer($div));
-                    $div.idle();
+            var investigations = haloAPI.investigate(data);
+            _(investigations).each(function (promise, providerName) {
+                var $node = $("<div/>");
+                $node.busy();
+                win.nodes.main.append($node);
+                
+                promise.done(function (response) {
+                    $node.idle();
+                    api.viewer.draw($node, providerName, response);
                 });
-            }());
-            
-            ext.point("io.ox/halo/person:generic").each(function (extension) {
-                var $div = $('<$div />');
-                var deferred = extension.render(data, $div);
-                if (deferred) {
-                    $div.busy();
-                    deferred.done(function () { $div.idle(); });
-                }
-                win.nodes.main.append($div);
             });
                 
             win.show();
@@ -94,7 +61,13 @@ define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions"],
         app.launch();
     }
     
-    return {
-        show: show
+    main.show = function (data) {
+        api.init().done(function (halo) {
+            haloAPI = halo;
+            main.show = initialisedShow;
+            main.show(data);
+        });
     };
+       
+    return main;
 });

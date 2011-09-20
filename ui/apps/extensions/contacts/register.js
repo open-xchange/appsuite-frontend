@@ -1,10 +1,21 @@
 define("extensions/contacts/register", ["io.ox/core/extensions"], function (ext) {
-    ext.point("io.ox/halo/person:renderer").extend({
+    ext.point("io.ox/halo/contact:renderer").extend({
         handles: function (type) {return type === "contact"; },
-        render: function  (contact, $node) {
+        draw: function  ($node, providerName, contacts) {
+            if (contacts.length === 0) {
+                return;
+            }
             require(["io.ox/contacts/base", "css!io.ox/contacts/style.css"], function (base) {
-                $node.append(base.draw(contact));
+                $node.append(base.draw(contacts[0]));
             });
         }
+    });
+    
+    ext.point("io.ox/halo/contact:requestEnhancement").extend({
+       enhances: function (type) {return type === "contact"; },
+       enhance: function (request) {
+           request.appendColumns = true;
+           request.columnModule = "contacts";
+       } 
     });
 });
