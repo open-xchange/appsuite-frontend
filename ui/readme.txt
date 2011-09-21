@@ -41,7 +41,7 @@ How to get the UI running on MacOS X
     - Open terminal
     
     - Set environment variable:
-        export buildir="/Library/WebServer/Documents/ox7"
+        export builddir="/Library/WebServer/Documents/ox7"
         
     - Build UI:
       ./build.sh
