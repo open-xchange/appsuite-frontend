@@ -124,7 +124,7 @@ function escapePO(s) {
 function generatePOT(files) {
     _.each(files, function(file) {
         orig = file.slice(8).replace(/\+-/g, "/").replace(/\+\+/g, "+");
-        if (!(orig in potFiles)) {
+        if (!(orig in potFiles)&& path.existsSync(file)) {
             var loaded = JSON.parse(fs.readFileSync(file, "utf8"));
             potFiles[orig] = loaded;
             for (var i in loaded) addMsg(pot, i, loaded[i]);
