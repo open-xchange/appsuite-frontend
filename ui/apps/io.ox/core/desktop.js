@@ -622,6 +622,14 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                             });
                             // no search here
                             return;
+                        } else if (/^no star wars$/i.test(query) && currentWindow) {
+                            // star wars!
+                            currentWindow.nodes.outer.css({
+                                webkitTransitionDuration: "1s",
+                                webkitTransform: "perspective(0px) rotate3d(1, 0, 0, 0deg)"
+                            });
+                            // no search here
+                            return;
                         }
                         win.trigger("search", query);
                     };

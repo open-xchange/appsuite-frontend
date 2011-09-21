@@ -13,6 +13,8 @@
  * 
  */
 
+var initializeAndDefine;
+
 $(document).ready(function () {
 
     "use strict";
@@ -371,7 +373,8 @@ $(document).ready(function () {
     // init require.js
     require({
         // inject version
-        baseUrl: ox.base + "/apps"
+        baseUrl: ox.base + "/apps",
+        waitSeconds: 10
     });
     
     // teach require.js to use deferred objects
@@ -386,6 +389,20 @@ $(document).ready(function () {
             // bypass
             return req.apply(this, arguments);
         }
+    };
+    
+    initializeAndDefine = function (name, initDeps, init, deps, callback) {
+        // add loader plugin for this specific module
+        define(name + ":init", {
+            load: function (name, req, onLoad, config) {
+                // resolve dependencies and inject onLoad callback
+                req(initDeps, function () {
+                    init.apply(window, [onLoad].concat($.makeArray(arguments)));
+                });
+            }
+        });
+        // define module. add plugin as dependency
+        define(name, deps.concat(name + ":init!"), callback);
     };
     
     // searchfield fix

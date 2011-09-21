@@ -175,7 +175,7 @@ var jshintOptions = {
     undef: true,
     eqeqeq: true,
     immed: true,
-    predef: ["$", "_", "Modernizr", "define", "require", "ox"]
+    predef: ["$", "_", "Modernizr", "define", "require", "ox", "initializeAndDefine"]
 };
 
 function hint (data) {
