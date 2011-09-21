@@ -136,7 +136,7 @@
     font-size: 12pt;
     font-weight: bold;
     line-height: 1.2em;
-    margin: 0.25em 0 0.25em 0;
+    margin: 0.4em 0 0.4em 0;
     word-wrap: break-word;
 }
 
@@ -158,13 +158,12 @@
 .mail-detail .list {
     font-size: 10pt;
     line-height: 1.25em;
-    padding: 0.4em 0 0.4em 0;
+    padding: 0.2em 0 0.2em 0;
     vertical-align: top;
 }
 
 .mail-detail .label {
-    font-weight: bold;
-    color: #bbb;
+    color: #aaa;
 }
 
 .mail-detail .spacer {

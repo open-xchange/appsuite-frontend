@@ -175,12 +175,12 @@
         linear,
         left bottom,
         left top,
-        color-stop(0, #d0d0d0),
+        color-stop(0, #c0c0c0),
         color-stop(1, #fff)
     );
     background-image: -moz-linear-gradient(
         center bottom,
-        #d0d0d0 0%,
+        #c0c0c0 0%,
         #fff 100%
     );
     color: black;
@@ -223,9 +223,9 @@
 }
 
 .window-control {
-    color: #777;
+    color: white;
     font-weight: normal;
-    background-color: #dadada;
+    background-color: #c0c0c0;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px 10px 10px 10px;
@@ -237,6 +237,11 @@
     margin-left: 5px;
     display: inline-block;
     cursor: pointer;
+}
+
+.window-control:hover {
+    background-color: #888;
+    color: #ddd;
 }
 
 .window-body {
@@ -432,6 +437,10 @@
     /*border-bottom: 1px dotted #ddd;*/
 }
 
+.delimiter {
+    color: #888;
+}
+
 .attachment-link {
     color: black;
     text-decoration: underline;
@@ -518,16 +527,16 @@ input[type=search] {
 
 .window-toolbar .io-ox-button {
     color: black;
-    border: 1px solid #aaa;
+    border: 1px solid #999;
     background-color: #e0e0e0;
-    background-image: -moz-linear-gradient(center top, #fff, #dadada); /* 555 to 333 */
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#dadada));
+    background-image: -moz-linear-gradient(center top, #fff, #d0d0d0); /* 555 to 333 */
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#d0d0d0));
     box-shadow: none;
 }
 
 .window-toolbar .io-ox-button:hover {
-    background-image: -moz-linear-gradient(center top, #fff, #eee);
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#eee));
+    background-color: #fff;
+    background-image: none;
 }
 
 .window-toolbar .io-ox-button:active {
