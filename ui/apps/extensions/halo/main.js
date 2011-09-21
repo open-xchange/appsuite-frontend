@@ -10,13 +10,18 @@
  * Mail: info@open-xchange.com 
  * 
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * 
  */
 
-define("extensions/halo/main", ["io.ox/contacts/base", "css!io.ox/contacts/style.css"], function (base) {
-
-    function show (data) {
-        
+define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions"], function (api, ext) {
+    var haloAPI = null;
+    
+    var main = {
+        show: null
+    };
+    
+    function initialisedShow (data) {
         var app = ox.ui.createApp({
                 title: data.display_name || "Halo"
                 //icon: "apps/extensions/halo/halo.png"
@@ -35,18 +40,34 @@ define("extensions/halo/main", ["io.ox/contacts/base", "css!io.ox/contacts/style
                 .bind("click", function () {
                     win.close();
                     win = null;
-                })
-                .append(
-                    base.draw(data)
-                );
-            
+                });
+                
+            // Trigger Server Halo API
+            var investigations = haloAPI.investigate(data);
+            _(investigations).each(function (promise, providerName) {
+                var $node = $("<div/>");
+                $node.busy();
+                win.nodes.main.append($node);
+                
+                promise.done(function (response) {
+                    $node.idle();
+                    api.viewer.draw($node, providerName, response);
+                });
+            });
+                
             win.show();
         });
         
         app.launch();
     }
     
-    return {
-        show: show
+    main.show = function (data) {
+        api.init().done(function (halo) {
+            haloAPI = halo;
+            main.show = initialisedShow;
+            main.show(data);
+        });
     };
+       
+    return main;
 });
