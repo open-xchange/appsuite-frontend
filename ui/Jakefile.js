@@ -254,12 +254,12 @@ file(utils.dest("signin.appcache"), ["force"]);
 
 // js
 
-utils.concat("boot.js", ["src/util.js", "src/boot.js"],
+utils.concat("boot.js", ["lib/jquery.plugins.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 
 utils.concat("boot.js", ["lib/jquery.min.js", "lib/jquery-ui.min.js",
         "lib/require.js", "lib/modernizr.js", "lib/underscore.js",
-        "lib/jquery.plugins.js", "tmp/boot.js"]);
+        "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
