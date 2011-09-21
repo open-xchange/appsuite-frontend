@@ -441,6 +441,11 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     applyTitle();
                 };
                 
+                this.addClass = function () {
+                    var o = this.nodes.outer;
+                    return o.addClass.apply(o, arguments);
+                };
+                
                 this.addButton = function (options) {
                     
                     var opt = $.extend({
