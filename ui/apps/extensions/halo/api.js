@@ -97,21 +97,18 @@ define("extensions/halo/api", ["io.ox/core/http", "io.ox/core/extensions"], func
     return {
         viewer : viewer,
         init: function () {
-            var deferred = new $.Deferred();
-            http.GET({
-                module: "halo/contact",
-                params: {
-                    action: "services"
-                }
-            }).done(function (response) {
-                var halo = new HaloAPI({
-                    providers: response,
-                    providerFilter: viewer
+            return http.GET({
+                    module: "halo/contact",
+                    params: {
+                        action: "services"
+                    }
+                })
+                .pipe(function (response) {
+                    return new HaloAPI({
+                        providers: response,
+                        providerFilter: viewer
+                    });
                 });
-                deferred.resolve(halo);
-            });
-            
-            return deferred;
         }
     };
     

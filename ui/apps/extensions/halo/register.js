@@ -20,7 +20,7 @@ define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
         label: "Halo",
         action: function (data) {
             require(["extensions/halo/main"], function (halo) {
-                halo.show(data);
+                halo.init().always(function () { halo.show(data); });
             });
         }
     });
