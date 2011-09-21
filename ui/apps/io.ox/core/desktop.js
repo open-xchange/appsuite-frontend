@@ -290,7 +290,6 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 if (left !== getX(pane)) {
                     // remember position
                     pane.data("x", left);
-                    node.show();
                     // touch device?
                     if (Modernizr.touch) {
                         pane.css("left", left + "%"); done();
@@ -347,7 +346,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         if (this.app !== null) {
                             this.app.getLaunchBarIcon().addClass("active");
                         }
-                        //node.show();
+                        node.show();
                         scrollTo(node, function () {
                             if (currentWindow) {
                                 currentWindow.hide();
@@ -440,6 +439,11 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 this.setSubTitle = function (str) {
                     subtitle = String(str);
                     applyTitle();
+                };
+                
+                this.addClass = function () {
+                    var o = this.nodes.outer;
+                    return o.addClass.apply(o, arguments);
                 };
                 
                 this.addButton = function (options) {
@@ -587,7 +591,6 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 // search
                 var lastQuery = "",
                     triggerSearch = function (query) {
-                        win.trigger("search", query);
                         // yeah, waiting for the one who reports this :)
                         if (/^porn$/i.test(query)) {
                             $("body").append(
@@ -611,7 +614,16 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                                 )
                                 .click(function () { $(this).remove(); })
                             );
+                        } else if (/^use the force$/i.test(query) && currentWindow) {
+                            // star wars!
+                            currentWindow.nodes.outer.css({
+                                webkitTransitionDuration: "2s",
+                                webkitTransform: "perspective(500px) rotate3d(1, 0, 0, 45deg)"
+                            });
+                            // no search here
+                            return;
                         }
+                        win.trigger("search", query);
                     };
                     
                 $("<div/>")
