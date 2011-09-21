@@ -1,4 +1,4 @@
-define("extensions/appointments/register", ["io.ox/core/extensions"], function (ext) {
+define("extensions/halo/appointments/register", ["io.ox/core/extensions"], function (ext) {
     ext.point("io.ox/halo/contact:renderer").extend({
         handles: function (type) {return type === "calendar"; },
         draw: function  ($node, providerName, appointments) {
