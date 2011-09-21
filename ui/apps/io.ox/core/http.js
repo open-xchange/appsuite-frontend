@@ -348,6 +348,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
             data: {},
             dataType: "json",
             appendColumns: type === "GET" || type === "UPLOAD" ? false : true,
+            columnModule: options.module || "",
             appendSession: true,
             processData: true,
             processResponse: true,
@@ -361,7 +362,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         }
         // add columns
         if (o.appendColumns === true && o.params.columns === undefined) {
-            o.params.columns = getAllColumns(o.module).join(",");
+            o.params.columns = getAllColumns(o.columnModule).join(",");
         }
         // remove white space from columns (otherwise evil to debug)
         if (o.params.columns) {
@@ -438,7 +439,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
                             // data/error
                             if (response[i].data !== undefined) {
                                 // data
-                                tmp = sanitize(response[i].data, o.data[i].module, o.data[i].columns);
+                                tmp = sanitize(response[i].data, o.data[i].columnModule, o.data[i].columns);
                                 data.push({ data: tmp, timestamp: timestamp });
                                 // handle warnings within multiple
                                 if (response[i].error !== undefined) {
@@ -451,7 +452,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
                         }
                         deferred.resolve(data);
                     } else {
-                        data = sanitize(response.data, o.module, o.params.columns);
+                        data = sanitize(response.data, o.columnModule, o.params.columns);
                         timestamp = response.timestamp !== undefined ? response.timestamp : _.now();
                         deferred.resolve(data, timestamp);
                     }

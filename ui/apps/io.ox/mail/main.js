@@ -40,6 +40,8 @@ define("io.ox/mail/main", [
             search: true
         });
         
+        win.addClass("io-ox-mail-main");
+        
         // toolbar
         win.addButton({
             label: "New Mail",
@@ -57,17 +59,17 @@ define("io.ox/mail/main", [
         .css("marginRight", "20px");
         
         win.addButton({
+            label: "Reply All"
+        });
+        
+        win.addButton({
             label: "Reply"
         });
         
         win.addButton({
-            label: "Reply All"
-        });
-
-        win.addButton({
             label: "Forward"
         });
-
+        
         app.setWindow(win);
         
         // left panel

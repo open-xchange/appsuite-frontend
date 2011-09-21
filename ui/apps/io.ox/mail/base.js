@@ -69,7 +69,7 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
                 }
                 tmp = tmp.add(node);
                 if (i < $i - 1) {
-                    tmp = tmp.add($("<span/>").css("color", "#555").html("&nbsp;&bull; "));
+                    tmp = tmp.add($("<span/>").addClass("delimiter").html("&nbsp;&bull; "));
                 }
             }
             return tmp;
@@ -92,7 +92,7 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
                 );
                 if (i < $i - 1) {
                     tmp = tmp.add(
-                        $("<span/>").css("color", "#555").html("&nbsp;&bull; ")
+                        $("<span/>").addClass("delimiter").html("&nbsp;&bull; ")
                     );
                 }
             }
@@ -288,14 +288,14 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
                             .addClass("list")
                             .append(
                                 // TO
-                                $("<span/>").addClass("label").text("To: ")
+                                $("<span/>").addClass("label").text("To:\u00a0")
                             )
                             .append(
                                 this.serializeList(data.to, true)
                             )
                             .append(
                                 // CC
-                                showCC ? $("<span/>").addClass("label").text(" Copy: ") : []
+                                showCC ? $("<span/>").addClass("label").text(" Copy:\u00a0") : []
                             )
                             .append(
                                 this.serializeList(data.cc, true)

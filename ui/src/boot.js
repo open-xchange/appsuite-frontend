@@ -376,7 +376,7 @@ $(document).ready(function () {
     });
     
     // teach require.js to use deferred objects
-    var req = require;
+    var req = window.req = require;
     require = function (deps, callback) {
         if (_.isArray(deps)) {
             // use deferred object
