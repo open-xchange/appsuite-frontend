@@ -1,16 +1,16 @@
 /**
- * 
+ *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
- * 
+ *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * 
+ *
  * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com 
- * 
+ * Mail: info@open-xchange.com
+ *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- * 
+ *
  */
 
 var initializeAndDefine;
@@ -62,7 +62,7 @@ $(document).ready(function () {
         // unbind
         $("#io-ox-login-form").unbind("submit");
         // free closures
-        cleanUp = fnChangeLanguage = 
+        cleanUp = fnChangeLanguage =
             changeLanguage = initialize = null;
     };
     
@@ -233,7 +233,7 @@ $(document).ready(function () {
                 relogin = true;
                 // set header
                 $("#io-ox-login-header").html(
-                    "Your session is expired." + "<br/>" + 
+                    "Your session is expired." + "<br/>" +
                     "<small>Please sign in again to continue.</small>"
                 );
                 // bind

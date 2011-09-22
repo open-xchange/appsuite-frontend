@@ -17,6 +17,6 @@ define("extensions/halo/appointments/register", ["io.ox/core/extensions"], funct
        enhance: function (request) {
            request.appendColumns = true;
            request.columnModule = "calendar";
-       } 
+       }
     });
 });

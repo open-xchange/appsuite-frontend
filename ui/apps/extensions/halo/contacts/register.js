@@ -16,6 +16,6 @@ define("extensions/halo/contacts/register", ["io.ox/core/extensions"], function 
        enhance: function (request) {
            request.appendColumns = true;
            request.columnModule = "contacts";
-       } 
+       }
     });
 });

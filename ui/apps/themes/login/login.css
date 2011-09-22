@@ -1,16 +1,16 @@
 /**
- * 
+ *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
- * 
+ *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * 
+ *
  * Copyright (C) 2011 Open-Xchange, Inc.
- * Mail: info@open-xchange.com 
- * 
+ * Mail: info@open-xchange.com
+ *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- * 
+ *
  */
 
 html {
@@ -121,7 +121,7 @@ a:hover, .link:hover {
     left: 0;
     z-index: 0;
     border-bottom: 1px solid #f0f0f0;
-/*  
+/*
     background-image: -webkit-gradient(
         linear,
         left top,

@@ -1,16 +1,16 @@
 /**
- * 
+ *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
- * 
+ *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * 
+ *
  * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com 
- * 
+ * Mail: info@open-xchange.com
+ *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- * 
+ *
  */
 
 define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
@@ -115,8 +115,24 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
         },
         
         getTime: function (timestamp) {
-            var d = new Date(timestamp);
-            return d.getUTCDate() + "." + (d.getUTCMonth() + 1) + "." + d.getUTCFullYear();
+            var now = new Date(),
+                d = new Date(timestamp),
+                lz = function (i, digits) {
+                    var str = String(i), n = digits || 1, diff = n - str.length;
+                    return (diff > 0 ? new Array(diff + 1).join("0") : "") + str;
+                },
+                time = function () {
+                    return lz(d.getUTCHours(), 2) + ":" + lz(d.getUTCMinutes(), 2);
+                },
+                date = function () {
+                    return lz(d.getUTCDate(), 2) + "." + lz(d.getUTCMonth() + 1, 2) + "." + d.getUTCFullYear();
+                };
+            // today?
+            if (d.getUTCDate() === now.getUTCDate()) {
+                return time();
+            } else {
+                return date();
+            }
         },
         
         getSmartTime: function (timestamp) {

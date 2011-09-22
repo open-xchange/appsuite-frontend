@@ -1,16 +1,16 @@
 /**
- * 
+ *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
- * 
+ *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * 
+ *
  * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com 
- * 
+ * Mail: info@open-xchange.com
+ *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- * 
+ *
  */
 
 define("io.ox/contacts/base", function () {
@@ -59,7 +59,7 @@ define("io.ox/contacts/base", function () {
         
         getJob: function (obj) {
             // combine position and company
-            return obj.position && obj.company ? 
+            return obj.position && obj.company ?
                 obj.position + ", " + obj.company :
                 obj.position || obj.company || "";
         },
@@ -151,7 +151,7 @@ define("io.ox/contacts/base", function () {
             
             function addAddress(label, street, code, city, country) {
                 return addField(label, true, function (node) {
-                    var a = $("<a/>", { 
+                    var a = $("<a/>", {
                             href: "http://www.google.de/maps?q=" + encodeURIComponent(join(", ", street, join(" ", code, city))),
                             target: "_blank"
                         }).addClass("nolink");

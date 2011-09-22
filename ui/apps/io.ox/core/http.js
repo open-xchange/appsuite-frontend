@@ -1,16 +1,16 @@
 /**
- * 
+ *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
- * 
+ *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * 
+ *
  * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com 
- * 
+ * Mail: info@open-xchange.com
+ *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- * 
+ *
  */
 
 define("io.ox/core/http", ["io.ox/core/event"], function (event) {
@@ -295,7 +295,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
     $.extend(idMapping.calendar, idMapping.common);
-    $.extend(idMapping.infostore, idMapping.common); 
+    $.extend(idMapping.infostore, idMapping.common);
     delete idMapping.infostore["101"]; // not "common" here (exception)
     delete idMapping.infostore["104"];
     $.extend(idMapping.task, idMapping.common);
@@ -597,7 +597,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         /**
          * Get all columns of a module
          * @param {string} module Module name
-         * @returns {Array} All columns 
+         * @returns {Array} All columns
          */
         getAllColumns: getAllColumns,
         
@@ -698,7 +698,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
                 }
                 // create multiple request
                 i = 0;
-                $l = q.length; 
+                $l = q.length;
                 tmp = [];
                 for (; i < $l; i++) {
                     // get request

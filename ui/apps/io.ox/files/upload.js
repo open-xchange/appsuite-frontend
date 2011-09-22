@@ -6,7 +6,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
     // "dragover" if someone threatens to drop a file into $node
     // "dragend" when she released the file
     // "drop" when she released the file
-    // Calling code can hand over  a node or a jquery expression, if no node is passed, we'll create an overlay for the entire 
+    // Calling code can hand over  a node or a jquery expression, if no node is passed, we'll create an overlay for the entire
     // visible screen and handle all eye candy ourselves.
     function DropZone ($node) {
         var self = this;
@@ -72,7 +72,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
                 }
                 return false; // Prevent regular event handling
                 
-            }            
+            }
         });
         
         if (globalMode) {
@@ -89,7 +89,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
                     return;
                 }
                 included = true;
-                $("body").bind("dragenter", appendOverlay); 
+                $("body").bind("dragenter", appendOverlay);
             };
         } else {
             this.remove = $.noop;
@@ -111,11 +111,11 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
     }
     
     
-    // Next we'll need a file upload queue 
+    // Next we'll need a file upload queue
     // This will simply store files and drain the queue by uploading one file after another
     // Events:
     // "start" - When a file is being uploaded.
-    // "stop" - When an upload is through. 
+    // "stop" - When an upload is through.
     // If the delegate implements "start" and "stop" methods, those will be called as well
     // The delegate must implement a "processFile" method, that is called to really process the file. It is expected to return
     // a promise or deferred, to tell us when we are done with a file
@@ -139,7 +139,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
         
         event.Dispatcher.extend(this);
         
-        var files = []; 
+        var files = [];
         var currentFile = null;
         
         var processing = false;

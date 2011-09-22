@@ -2,11 +2,11 @@
  * All content on this website (including text, images, source code and any
  * other original works), unless otherwise noted, is licensed under a Creative
  * Commons License.
- * 
+ *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * 
+ *
  * Copyright (C) Open-Xchange Inc., 2011 Mail: info@open-xchange.com
- * 
+ *
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
@@ -163,18 +163,19 @@ function htmlFilter (data) {
 
 var jshintOptions = {
     bitwise: false,
+    browser: true,
+    devel: true,
+    eqeqeq: true,
+    evil: true,
+    forin: false,
+    immed: true,
     nomen: false,
     onevar: false,
     plusplus: false,
     regexp: false,
-    white: false,
-    browser: true,
-    devel: true,
-    evil: true,
-    forin: false,
+    trailing: true,
     undef: true,
-    eqeqeq: true,
-    immed: true,
+    white: false,
     predef: ["$", "_", "Modernizr", "define", "require", "ox", "initializeAndDefine"]
 };
 

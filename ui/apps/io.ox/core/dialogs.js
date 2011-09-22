@@ -1,16 +1,16 @@
 /**
- * 
+ *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
- * 
+ *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * 
+ *
  * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com 
- * 
+ * Mail: info@open-xchange.com
+ *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- * 
+ *
  */
 
 define("io.ox/core/dialogs", function () {
@@ -156,14 +156,13 @@ define("io.ox/core/dialogs", function () {
             // Force Rendering for shrink-to-fit size detection
             // There has to be a cleverer way to do this
             var oldOpacity = nodes.pane.css("opacity");
-            nodes.pane.css("opacity", "0.001"); 
+            nodes.pane.css("opacity", "0.001");
             nodes.pane.show();
             
             height = nodes.controls.outerHeight(true) + nodes.content.outerHeight(true) + 2;
             width = Math.max(nodes.controls.outerWidth(true), nodes.content.outerWidth(true)) + 2;
             nodes.pane.hide();
-            nodes.pane.css("opacity", oldOpacity); 
-            
+            nodes.pane.css("opacity", oldOpacity);
             
             if (nodes.relativeTo) {
                 // Depending on where our anchor element is, position the pane

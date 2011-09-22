@@ -1,16 +1,16 @@
 /**
- * 
+ *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
- * 
+ *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * 
+ *
  * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com 
- * 
+ * Mail: info@open-xchange.com
+ *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- * 
+ *
  */
 
 define("io.ox/mail/textile", function () {
@@ -272,9 +272,9 @@ define("io.ox/mail/textile", function () {
             content = content.replace(
                 /((^|\n)([a-zöäüß \-]+ \d+[a-z]*)([,.]*[ \n]*)(\d{5} [a-zäöüß \-]+))/ig,
                 function (m, all, a, s, b, c) {
-                    return a + '<a href="http://maps.google.de/maps?z=18&q=' + 
-                        encodeURIComponent(s + ", " + c) + 
-                        '" target="_blank" title="Google Maps..." class="textile-address">' + 
+                    return a + '<a href="http://maps.google.de/maps?z=18&q=' +
+                        encodeURIComponent(s + ", " + c) +
+                        '" target="_blank" title="Google Maps..." class="textile-address">' +
                         (s + b + c).replace(/\n/g, "<br/>") + '</a>';
                 }
             );

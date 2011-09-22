@@ -1,16 +1,16 @@
 /**
- * 
+ *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
- * 
+ *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * 
+ *
  * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com 
- * 
+ * Mail: info@open-xchange.com
+ *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- * 
+ *
  */
 
 define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], function (api, config) {
@@ -127,7 +127,7 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
                 css({
                     position: "absolute",
                     top: "0px", right: "0px", bottom: "0px", left: "0px",
-                    MozBorderRadius: "10px", 
+                    MozBorderRadius: "10px",
                     padding: "2px 0px 2px 10px", fontSize: "9pt", fontWeight: "bold", color: "black"
                 }).
                 text(app.title).
@@ -175,8 +175,8 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
                         fontSize: "10pt", lineHeight: "1.5em", color: "black"
                     }).
                     html(
-                        "<div style='font-size: 14pt; color: " + color + "'>" + app.title + "</div>" + 
-                        "<div style='font-size: 11pt; font-weight: bold;'>" + 
+                        "<div style='font-size: 14pt; color: " + color + "'>" + app.title + "</div>" +
+                        "<div style='font-size: 11pt; font-weight: bold;'>" +
                             formatDate(new Date(app.start_date), "time") + " &ndash; " +
                             formatDate(new Date(app.end_date), "time") +
                         "</div>" +

@@ -1,14 +1,14 @@
 /**
- * 
+ *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
- * 
+ *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * 
+ *
  * Copyright (C) 2004-2009 Open-Xchange, Inc.
- * Mail: info@open-xchange.com 
- * 
+ * Mail: info@open-xchange.com
+ *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @ignore
  */
@@ -107,11 +107,8 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
         
         // click handler
         click = function (e) {
-            // get node
             var node = $(this),
-                // get key
                 key = node.attr("data-ox-id"),
-                // get id
                 id = observedItems[getIndex(key)];
             // exists?
             if (id !== undefined) {
@@ -127,7 +124,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                 }
             }
         };
-
+        
         getIndex = function (id) {
             return observedItemsIndex[self.serialize(id)];
         };
@@ -135,7 +132,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
         getNode = function (id) {
             return container.find(".selectable[data-ox-id='" + self.serialize(id) + "']");
         };
-
+        
         isSelected = function (id) {
             return selectedItems[self.serialize(id)] !== undefined;
         };
@@ -147,9 +144,9 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                 .intoViewport(container);
             last = id;
         };
-
+        
         deselect = function (id) {
-            var key = self.serialize(id); 
+            var key = self.serialize(id);
             delete selectedItems[key];
             getNode(key).removeClass(self.classSelected);
         };
@@ -161,21 +158,21 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                 select(id);
             }
         };
-
+        
         clear = function () {
             var id = "";
             for (id in selectedItems) {
                 deselect(id);
             }
         };
-
+        
         /**
          * Serialize object to get a flat key
-         */ 
+         */
         this.serialize = function (obj) {
             return typeof obj === "object" ? obj.folder_id + "." + obj.id : obj;
         };
-
+        
         /**
          * Initialize
          */
@@ -220,7 +217,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                 }
             }
         };
-
+        
         /**
          * Set multiple mode
          */
