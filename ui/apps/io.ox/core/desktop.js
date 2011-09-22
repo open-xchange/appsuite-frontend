@@ -618,7 +618,8 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                             // star wars!
                             currentWindow.nodes.outer.css({
                                 webkitTransitionDuration: "2s",
-                                webkitTransform: "perspective(500px) rotate3d(1, 0, 0, 45deg)"
+                                webkitTransform: "perspective(500px) rotate3d(1, 0, 0, 45deg)",
+                                top: "-150px"
                             });
                             // no search here
                             return;
@@ -626,7 +627,8 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                             // star wars!
                             currentWindow.nodes.outer.css({
                                 webkitTransitionDuration: "1s",
-                                webkitTransform: "perspective(0px) rotate3d(1, 0, 0, 0deg)"
+                                webkitTransform: "perspective(0px) rotate3d(1, 0, 0, 0deg)",
+                                top: ""
                             });
                             // no search here
                             return;

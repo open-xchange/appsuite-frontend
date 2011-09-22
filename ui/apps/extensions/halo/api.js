@@ -108,7 +108,7 @@
                 rendererPoint.each(function (ext) {
                    if (ext.handles(providerName)) {
                        ext.draw($node, providerName, data);
-                   } 
+                   }
                 });
             };
         }
