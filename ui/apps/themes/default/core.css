@@ -319,6 +319,10 @@
     white-space: nowrap;
 }
 
+.no-ellipsis .vgrid-cell * {
+    white-space: normal;
+}
+
 .vgrid-cell.odd {
     /*background-color: #f5f5f5;*/
 }
@@ -468,7 +472,7 @@ a.nolink {
     border-left: 1px solid #ccc;
 }
 
-.nosearchfield .searchfield-wrapper {
+.no-searchfield .searchfield-wrapper {
     width: 220px;
     height: 17px;
     line-height: 1em;

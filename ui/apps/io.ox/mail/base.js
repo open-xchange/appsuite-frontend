@@ -57,12 +57,22 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
             });
         },
         
+        getDisplayName: function (pair) {
+            var display_name = (pair[0] || "").replace(/(^["'\\]+|["'\\]+$)/g, "");
+            return display_name || pair[1];
+        },
+        
+        getFrom: function (list, prewrap) {
+            var dn = this.getDisplayName(list[0]);
+            return $("<span/>").addClass("person").text(prewrap ? _.prewrap(dn) : dn);
+        },
+        
         serializeList: function (list, addHandlers) {
             var i = 0, $i = list.length, tmp = $(), node, display_name = "";
             for (; i < $i; i++) {
-                display_name = (list[i][0] || "").replace(/(^["'\\]+|["'\\]+$)/g, "");
+                display_name = this.getDisplayName(list[i]);
                 node = $("<span/>").addClass(addHandlers ? "person-link" : "person")
-                    .css("whiteSpace", "nowrap").text(display_name || list[i][1]);
+                    .css("whiteSpace", "nowrap").text(display_name);
                 if (addHandlers) {
                     node.bind("click", { display_name: display_name, email1: list[i][1] }, fnClickPerson)
                         .css("cursor", "pointer");
@@ -227,7 +237,7 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
                 content.contents().each(function (i) {
                     var node = $(this), text = node.text(), length = text.length;
                     if (length >= 60) {
-                        node.text(text.replace(/(\S{60})/g, "$1\u200B"));
+                        node.text(text.replace(/(\S{60})/g, "$1\u200B")); // zero width space
                     }
                 });
                 
@@ -276,8 +286,8 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
                 .append(
                     $("<div/>")
                         .addClass("subject")
-                        // inject some zero-width spaces for better word-break
-                        .text(data.subject.replace(/([\/\.\,\-]+)/g, "$1\u200B"))
+                        // inject some zero width spaces for better word-break
+                        .text(_.prewrap(data.subject))
                         .append(
                             $("<span/>").addClass("priority").text(" " + that.getPriority(data))
                         )

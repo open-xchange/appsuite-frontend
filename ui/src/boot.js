@@ -407,12 +407,17 @@ $(document).ready(function () {
     
     // searchfield fix
     if (!_.browser.Chrome) {
-        $("html").addClass("nosearchfield");
+        $("html").addClass("no-searchfield");
     }
     
     // do we have a mouse?
     if (!Modernizr.touch) {
         $("html").addClass("mouse");
+    }
+    
+    // no ellipsis? (firefox)
+    if (_.browser.Firefox) {
+        $("html").addClass("no-ellipsis");
     }
     
     // be busy

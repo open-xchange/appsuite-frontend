@@ -15,6 +15,10 @@
 
 /* VGrid elements */
 
+.vgrid-cell.mail * {
+    height: 1.5em;
+}
+
 .vgrid-cell.mail {
     padding: 6px 12px 6px 12px;
     line-height: 1.5em;
@@ -24,6 +28,7 @@
     left: auto;
     bottom: -1px;
     width: 5px;
+    height: auto;
 }
 
 .vgrid-cell.mail.unread {

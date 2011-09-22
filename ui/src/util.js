@@ -252,6 +252,10 @@
                 e.code,
                 e.error_id
             );
+        },
+        
+        prewrap: function (text) {
+            return String(text).replace(/([\/\.\,\-]+)/g, "$1\u200B");
         }
     });
     

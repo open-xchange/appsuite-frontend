@@ -115,13 +115,13 @@ define("io.ox/mail/main", [
             },
             set: function (data, fields, index) {
                 fields.priority.text(base.getPriority(data));
-                fields.subject.text(data.subject);
+                fields.subject.text(_.prewrap(data.subject));
                 if (!data.threadSize || data.threadSize === 1) {
                     fields.threadSize.text("").hide();
                 } else {
                     fields.threadSize.text(data.threadSize).css("display", "");
                 }
-                fields.from.empty().append(base.serializeList(data.from));
+                fields.from.empty().append(base.getFrom(data.from), true);
                 fields.date.text(base.getTime(data.received_date));
                 fields.flag.get(0).className = "flag abs flag_" + data.color_label;
                 fields.attachment.css("display", data.attachment ? "" : "none");
