@@ -13,7 +13,7 @@
  * 
  */
 
-define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http", "io.ox/core/extensions"], function (desktop, session, http, extensions) {
+define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http", "io.ox/core/extensions", "io.ox/core/gettext"], function (desktop, session, http, extensions, gt) {
 
     var PATH = ox.base + "/apps/io.ox/core",
         DURATION = 250;
@@ -60,13 +60,13 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
     
     function launch () {
         
-        desktop.addLauncher("right", "Sign out", function (e) {
+        desktop.addLauncher("right", gt("Sign out"), function (e) {
             return logout();
         });
         
-        desktop.addLauncher("right", "Help");
+        desktop.addLauncher("right", gt("Help"));
         
-        desktop.addLauncher("right", "Refresh", function () {
+        desktop.addLauncher("right", gt("Refresh"), function () {
                 // trigger global event
                 if (ox.online) {
                     ox.trigger("refresh");
@@ -78,30 +78,30 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
         // refresh animation
         initRefreshAnimation();
         
-        desktop.addLauncher("right", "Applications");
+        desktop.addLauncher("right", gt("Applications"));
         
-        desktop.addLauncher("left", "E-Mail", function () {
+        desktop.addLauncher("left", gt("E-Mail"), function () {
                 var node = this;
                 return require(["io.ox/mail/main"], function (m) {
                     m.getApp().setLaunchBarIcon(node).launch();
                 });
             });
         
-        desktop.addLauncher("left", "Address Book", function () {
+        desktop.addLauncher("left", gt("Address Book"), function () {
                 var node = this;
                 return require(["io.ox/contacts/main"], function (m) {
                     m.getApp().setLaunchBarIcon(node).launch();
                 });
             });
         
-        desktop.addLauncher("left", "Calendar", function () {
+        desktop.addLauncher("left", gt("Calendar"), function () {
                 var node = this;
                 return require(["io.ox/calendar/main"], function (m) {
                     m.getApp().setLaunchBarIcon(node).launch();
                 });
             });
         
-        desktop.addLauncher("left", "Files", function () {
+        desktop.addLauncher("left", gt("Files"), function () {
                 var node = this;
                 return require(["io.ox/files/main"], function (m) {
                     m.getApp().setLaunchBarIcon(node).launch();

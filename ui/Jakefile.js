@@ -16,6 +16,7 @@ var utils = require("./lib/build/fileutils");
 var jsp = require("./lib/uglify-js/uglify-js").parser;
 var pro = require("./lib/uglify-js/uglify-js").uglify;
 var ast = require("./lib/build/ast");
+var i18n = require("./lib/build/i18n");
 var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
 var _ = require("./lib/underscore.js");
@@ -31,142 +32,31 @@ var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
     pad(t.getUTCSeconds());
 console.info("Build version: " + version);
 
-var defineWalker = ast("define").asCall().walker();
-var gtWalker = ast("gt").any("gt").asCall().walker();
-var gtMethodWalker = ast("gt.gt").any("gt").asCall().walker();
-var getGt = ast("gt").asCall().getter("gt");
-var getMethod = ast("gt.gt").asCall().getter("gt");
-var getStr = ast("'str'").getter("str");
-
-var potHeader = 'msgid ""\nmsgstr ""\n' +
-    '"Project-Id-Version: Open-Xchange 7\\n"\n' +
-    '"POT-Creation-Date: ' + t + '\\n"\n' +
-    '"PO-Revision-Date: DATE\\n"\n' +
-    '"Last-Translator: NAME <EMAIL>\\n"\n' +
-    '"Language-Team: NAME <EMAIL>\\n"\n' +
-    '"MIME-Version: 1.0\\n"\n' +
-    '"Content-Type: text/plain; charset=UTF-8\\n"\n' +
-    '"Content-Transfer-Encoding: 8bit\\n"\n' +
-    '"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\\n"\n';
-
-var gtMethods = {
-       gettext: ["msgid"],
-      pgettext: ["msgctxt", "msgid"],
-     dpgettext: [, "msgctxt", "msgid"],
-      ngettext: ["msgid", "msgid_plural", , ],
-     npgettext: ["msgctxt", "msgid", "msgid_plural", , ],
-    dnpgettext: [, "msgctxt", "msgid", "msgid_plural", , ]
-};
-
-var pot = {}, potFiles = {};
-
-function addMsg(map, key, msg) {
-    if (key in map) {
-        if (!_.isEqual(map[key].comments, msg.comments)) {
-            throw new Error("Different comments for the same text");
-        }
-    } else {
-        map[key] = msg;
-    }
-}
-
-function addMessage(filename, node, method) {
-    var args = node[2];
-    if (args.length != method.length) return;
-    var msg = { comments: _.pluck(node[0].start.comments_before, "value") };
-    for (var i = 0; i < method.length; i++) if (method[i]) {
-        msg[method[i]] = getStr(args[i]);
-    }
-    
-    var key = msg.msgid;
-    if (msg.msgid_plural) key += "\x01" + msg.msgid_plural;
-    if (msg.msgctxt) key = msg.msgctxt + "\0" + key;
-    
-    addMsg(pot, key, msg);
-    var file = potFiles[filename] || (potFiles[filename] = {});
-    file[key] = pot[key];
-    return pro.MAP.skip;
-}
-
-function potScan(filename, tree) {
-    ast.scanner(defineWalker, function(scope) {
-        if (scope.refs.define !== undefined) return;
-        var args = this[2];
-        var deps = _.detect(args, ast.is("array"));
-        var f = _.detect(args, ast.is("function"));
-        if (!deps || !f) return;
-        var gtIndex = _.indexOf(_.pluck(deps[1], 1), "io.ox/core/gettext");
-        if (gtIndex < 0) return;
-        var gtName = f[2][gtIndex];
-        var gtScope = f[3].scope;
-        ast.scanner(gtWalker, function(scope) {
-            if (getGt(this) != gtName) return;
-            if (scope.refs[gtName] != gtScope) return;
-            return addMessage(filename, this, gtMethods.gettext);
-        }).scanner(gtMethodWalker, function(scope) {
-            if (getMethod[0](this) != gtName) return;
-            if (scope.refs[gtName] != gtScope) return;
-            var method = gtMethods[getMethod[1](this)];
-            if (!method) return;
-            return addMessage(filename, this, method);
-        }).scan(f);
-        return pro.MAP.skip;
-    }).scan(pro.ast_add_scope(tree));
-}
-
-function escapePO(s) {
-    return s.replace(/[\x00-\x1f\\"]/g, function(c) {
-        var n = Number(c.charCodeAt(0)).toString(16);
-        return "\\u00" + (n.length < 2 ? "0" + n : n);
-    });
-}
-
-function generatePOT(files) {
-    _.each(files, function(file) {
-        orig = file.slice(8).replace(/\+-/g, "/").replace(/\+\+/g, "+");
-        if (!(orig in potFiles)&& path.existsSync(file)) {
-            var loaded = JSON.parse(fs.readFileSync(file, "utf8"));
-            potFiles[orig] = loaded;
-            for (var i in loaded) addMsg(pot, i, loaded[i]);
-        }
-    });
-    var f = [potHeader];
-    for (var i in pot) {
-        msg = pot[i];
-        for (var j = 0; j < msg.comments.length; j++) {
-            f.push(_.map(msg.comments[j].split("\n"),
-                         function(s) { return "#" + s; }));
-        }
-        if (msg.msgctxt) f.push('msgctxt "' + escapePO(msg.msgctxt) + '"');
-        f.push('msgid "' + escapePO(msg.msgid) + '"');
-        if (msg.msgid_plural) {
-            f.push('msgid_plural "' + escapePO(msg.msgid_plural) + '"');
-            f.push('msgstr[0] ""\nmsgstr[1] ""\n');
-        } else {
-            f.push('msgstr ""\n');
-        }
-    }
-    return f.join("\n");
-}
+var debug = Boolean(process.env.debug);
+if (debug) console.info("Debug mode: on");
 
 function jsFilter (data) {
     data = hint.call(this, data);
-    if (process.env.debug) {
-        return data;
-    } else {
-        // UglifyJS
-        var ast = jsp.parse(data, false, true);
-        potScan(this.name, ast);
-        ast = pro.ast_lift_variables(ast);
-        ast = pro.ast_mangle(ast);
-        ast = pro.ast_squeeze(ast);
-        return pro.gen_code(ast);
-    }
+    var ast = jsp.parse(data, false, true);
+    
+    i18n.potScan(this.name, ast);
+    
+    // UglifyJS
+    if (debug) return data;
+    ast = pro.ast_lift_variables(ast);
+    ast = pro.ast_mangle(ast);
+    ast = pro.ast_squeeze(ast);
+    return pro.gen_code(ast);
 }
 utils.addFilter("source", jsFilter);
 
 var core_head = fs.readFileSync("html/core_head.html", "utf8"),
     core_body = fs.readFileSync("html/core_body.html", "utf8");
+
+core_body.replace(/data-i18n="([^"]*)"/g, function(match, msgid) {
+    i18n.addMessage({ msgid: msgid });
+});
+
 
 function htmlFilter (data) {
     return data
@@ -215,16 +105,14 @@ function hint (data) {
 desc("Builds the GUI");
 utils.topLevelTask("default", ["i18n/ox.pot"], utils.summary);
 
-utils.concat(".htaccess", ["html/.htaccess"]); /* TODO: should be copy */
-utils.concat("blank.html", ["html/blank.html"]);
-utils.concat("favicon.ico", ["html/favicon.ico"]);
-utils.copy(utils.list(["src/"]));
+utils.copy(utils.list("html", [".htaccess", "blank.html", "favicon.ico"]));
+utils.copy(utils.list("src/"));
 
-//i18n
+// i18n
 
 directory("i18n");
 file("i18n/ox.pot", ["i18n", "Jakefile.js"], function() {
-    fs.writeFile(this.name, generatePOT(this.prereqs.slice(2)));
+    fs.writeFile(this.name, i18n.generatePOT(this.prereqs.slice(2)));
 });
 
 directory("tmp/pot");
@@ -232,11 +120,19 @@ utils.addHandler("source", function(filename) {
     var dest = "tmp/pot/" + filename.replace(/\+/g, "++").replace(/\//g, "+-");
     file("i18n/ox.pot", [dest]);
     file(dest, ["tmp/pot", filename], function() {
-        if (filename in potFiles) {
-            var data = JSON.stringify(potFiles[filename] || {});
+        if (filename in i18n.potFiles) {
+            var data = JSON.stringify(i18n.potFiles[filename] || {});
             fs.writeFileSync(this.name, data);
         }
     });
+});
+
+// l10n
+
+utils.copy(utils.list("i18n", "*.po"), {
+    to: utils.dest("l10n"),
+    filter: function(data) { return JSON.stringify(i18n.parsePO(data)); },
+    mapper: function(name) { return name.replace(/\.po$/, ".json"); }
 });
 
 // html
@@ -306,6 +202,21 @@ utils.copyFile("lib/jquery.min.js", utils.dest("doc/jquery.min.js"));
 
 // clean task
 
+desc("Removes all generated files");
 task("clean", [], function() {
+    if (path.existsSync("i18n/ox.pot")) fs.unlinkSync("i18n/ox.pot");
     rimraf("tmp", function() { rimraf(utils.builddir, complete); });
+}, true);
+
+// msgmerge task
+
+desc("Updates all .po files with the generated ox.pot");
+task("merge", ["i18n/ox.pot"], function() {
+    var files = _.without(utils.list("i18n/*.po"), "i18n/en_US.po");
+    var count = files.length;
+    for (var i = 0; i < files.length; i++) {
+        utils.exec("msgmerge",
+            ["-Us", "--backup=none", files[i], "i18n/ox.pot"],
+            function() { if (!--count) complete(); });
+    }
 }, true);

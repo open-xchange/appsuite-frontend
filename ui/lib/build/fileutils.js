@@ -13,6 +13,7 @@
 
 var fs = require("fs");
 var path = require("path");
+var child_process = require("child_process");
 var globSync = require("./glob").globSync;
 
 /**
@@ -114,13 +115,17 @@ exports.summary = function() {
  * options.to instead of files.dir. Defaults to the build directory.
  * @param {Function} options.filter An optional filter function which takes
  * the contents of a file as parameter and returns the filtered contents.
+ * @param {Function} options.mapper An optional file name mapper.
+ * It's a function which takes the original target file name (as computed by
+ * files.dir and options.to) as parameter and returns the mapped file name.
  */
 exports.copy = function(files, options) {
     var srcDir = files.dir || "";
     var destDir = options && options.to || exports.builddir;
+    var mapper = options && options.mapper || function(f) { return f; };
     for (var i = 0; i < files.length; i++) {
         exports.copyFile(path.join(srcDir, files[i]),
-                         path.join(destDir, files[i]), options);
+                         mapper(path.join(destDir, files[i])), options);
     }
 };
 
@@ -263,4 +268,18 @@ exports.list = function(dir, globs) {
     var retval = Array.prototype.concat.apply([], arrays);
     retval.dir = dir;
     return retval;
+};
+
+/**
+ * Asynchronously executes an external command.
+ * stdin, stdout and stderr are passed through to the parent process.
+ * @param {String} command The command to execute.
+ * @param {Array} args An array of parameters.
+ * @param {Function} callback A callback which is called when the command
+ * returns.
+ */
+exports.exec = function(command, args, callback) {
+    var child = child_process.spawn("/usr/bin/env", [command].concat(args),
+        { customFds: [0, 1, 2] });
+    child.on("exit", callback);
 };

@@ -15,11 +15,18 @@ define("io.ox/core/gettext", [], function() {
     
     function gettext(text) { return gettext.dpgettext("", "", text); }
     
-    var pluralForm, domains = {};
+    var lang = "en_US", pluralForm = function() { return 0; }, domains = {};
     
-    gettext.init = function(data) {
-        pluralForm = data.plural;
-        domains = { "": data };
+    gettext.setLanguage = function(language) {
+        if (language === lang) return $.when();
+        lang = language;
+        return $.ajax({
+            url: ox.base + "/l10n/" + lang + ".json",
+            dataType: "json"
+        }).done(function(data) {
+            pluralForm = Function("n", "return " + data.plural + ";");
+            domains = { "": data.dictionary };
+        });
     };
 
     gettext.noI18n = function(text) { return text; };

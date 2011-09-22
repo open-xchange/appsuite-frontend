@@ -5,81 +5,81 @@ msgstr ""
 "PO-Revision-Date: Thu Sep 22 2011 11:38:57 GMT+0200 (CEST)\n"
 "Last-Translator: NAME <EMAIL>\n"
 "Language-Team: OX <i18n@open-xchange.com>\n"
-"Language: de_DE\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bits\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n>1;\n"
 
 msgid "Address Book"
-msgstr "Adressbuch"
+msgstr ""
 
 msgid "Applications"
-msgstr "Anwendungen"
+msgstr ""
 
 msgid "Birthday"
-msgstr "Geburtstag"
+msgstr "Date de naissance"
 
 msgid "Calendar"
-msgstr "Kalender"
+msgstr ""
 
 msgid "Department"
-msgstr "Abteilung"
+msgstr "Service"
 
 msgid "Distribution list"
-msgstr "Verteilerliste"
+msgstr "Liste de diffusion"
 
 msgid "E-Mail"
-msgstr "E-Mail"
+msgstr "Courrier électronique"
 
 msgid "Files"
-msgstr "Dateien"
+msgstr ""
 
 msgid "Forgot your password?"
-msgstr "Passwort vergessen?"
+msgstr "Mot de passe oublié?"
 
 msgid "Help"
-msgstr "Hilfe"
+msgstr ""
 
 msgid "Home"
-msgstr "Privat"
+msgstr "Privé"
 
 msgid "Languages"
-msgstr "Sprachen"
+msgstr "Langues"
 
 msgid "Mobile"
-msgstr "Mobiltelefon"
+msgstr "Tél. portable"
 
 msgid "Password"
-msgstr "Passwort"
+msgstr "Mot de passe"
 
 msgid "Phone (business)"
-msgstr "Telefon (geschäftlich)"
+msgstr "Tél. (professionnel)"
 
 msgid "Phone (private)"
-msgstr "Telefon (privat)"
+msgstr "Tél. (privé)"
 
 msgid "Position"
-msgstr "Position"
+msgstr "Poste"
 
 msgid "Profession"
-msgstr "Beruf"
+msgstr "Profession"
 
 msgid "Refresh"
-msgstr "Aktualisieren"
+msgstr ""
 
 msgid "Sign in"
-msgstr "Anmelden"
+msgstr "Connexion"
 
 msgid "Sign out"
-msgstr "Abmelden"
+msgstr ""
 
 msgid "Stay signed in"
-msgstr "Angemeldet bleiben"
+msgstr "Rester connecté"
 
 msgid "User name"
-msgstr "Benutzername"
+msgstr "Nom d'utilisateur"
 
 msgid "Work"
-msgstr "Geschäftlich"
+msgstr "Professionnel"
 
