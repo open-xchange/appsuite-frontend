@@ -115,9 +115,12 @@
         
         var viewer = new HaloView();
         
-        return new HaloAPI({
-            providerFilter: viewer
-        });
+        return {
+                    halo:  new HaloAPI({
+                            providerFilter: viewer
+                        }),
+                    viewer: viewer
+               };
     }
     
     initializeAndDefine(

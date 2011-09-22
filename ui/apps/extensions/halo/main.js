@@ -39,7 +39,7 @@ define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions"],
                 
             // Trigger Server Halo API
             if (api) {
-                var investigations = api.investigate(data);
+                var investigations = api.halo.investigate(data);
                 _(investigations).each(function (promise, providerName) {
                     var $node = $("<div/>");
                     $node.busy();
