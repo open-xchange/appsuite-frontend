@@ -1310,7 +1310,7 @@ function characters(str) {
 
 function member(name, array) {
         for (var i = array.length; --i >= 0;)
-                if (array[i] === name)
+                if (array[i] == name)
                         return true;
         return false;
 };
