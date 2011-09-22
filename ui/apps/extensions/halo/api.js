@@ -59,7 +59,7 @@
                             action: "investigate",
                             provider: providerName
                         },
-                        appendColumns: false, // Shouldn't this be the default
+                        appendColumns: false,
                         contact: contact
                     };
                     // Let extensions enhance the request with additional parameters
