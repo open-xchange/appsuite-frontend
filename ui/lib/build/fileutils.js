@@ -13,6 +13,7 @@
 
 var fs = require("fs");
 var path = require("path");
+var child_process = require("child_process");
 var globSync = require("./glob").globSync;
 
 /**
@@ -38,10 +39,43 @@ var counter = 0;
 exports.startTime = new Date;
 
 /**
- * The name of the current top-level task, if any.
- * @type String
+ * Types of files which are processed with the same settings.
+ * Each type consists of an array of handlers for dependency-building and
+ * an array of filters to process the file contents.
+ * The special type "*" is applies to all files and is applied after
+ * the type-specific handlers and filters.
  */
-var topLevelTaskName;
+var types = { "*": { handlers: [], filters: [] } };
+
+/**
+ * Adds a handler to the specified type.
+ * @param {String} type The type to which the handler is added.
+ * @param {Function} handler The handler function which is called for every file
+ * of the specified type, with the target filename as parameter.
+ */
+exports.addHandler = function(type, handler) {
+    var t = types[type];
+    if (!t) t = types[type] = { handlers: [], filters: [] };
+    t.handlers.push(handler);
+};
+
+/**
+ * Adds a filter to the specified type.
+ * @param {String} type The type to which the filter is added.
+ * @param {Function} filter The filter function which is called for every file
+ * of the specified type, with the file data as a string parameter. It should
+ * return the filtered data as a string.
+ */
+exports.addFilter = function(type, filter) {
+    var t = types[type];
+    if (!t) t = types[type] = { handlers: [], filters: [] };
+    t.filters.push(filter);
+};
+
+/**
+ * The name of the current top level task, if any-
+ */
+var topLevelTaskName = null;
 
 /**
  * Defines a new top-level task.
@@ -52,8 +86,12 @@ var topLevelTaskName;
  */
 exports.topLevelTask = function(name) {
     topLevelTaskName = name;
-    if (name) task.apply(this, arguments);
+    if (name) return task.apply(this, arguments);
 };
+
+exports.addHandler("*", function(filename) {
+    if (topLevelTaskName) task(topLevelTaskName, [filename]);
+});
 
 /**
  * Callback for top-level tasks to report the number of generated files and the
@@ -77,37 +115,82 @@ exports.summary = function() {
  * options.to instead of files.dir. Defaults to the build directory.
  * @param {Function} options.filter An optional filter function which takes
  * the contents of a file as parameter and returns the filtered contents.
+ * @param {Function} options.mapper An optional file name mapper.
+ * It's a function which takes the original target file name (as computed by
+ * files.dir and options.to) as parameter and returns the mapped file name.
  */
 exports.copy = function(files, options) {
     var srcDir = files.dir || "";
     var destDir = options && options.to || exports.builddir;
-    var filter = options && options.filter;
+    var mapper = options && options.mapper || function(f) { return f; };
     for (var i = 0; i < files.length; i++) {
         exports.copyFile(path.join(srcDir, files[i]),
-                         path.join(destDir, files[i]), filter);
+                         mapper(path.join(destDir, files[i])), options);
     }
 };
+
+/**
+ * Returns a combined handler and a combined filter function for a combination
+ * of filename and options.
+ * @param {String} filename The name of the target file.
+ * @param {Object} options An optional object with options for copy or concat.
+ * @param {Function} options.filter An optional filter function which takes
+ * the contents of a file as parameter and returns the filtered contents.
+ * @param {String} options.type An optional file type. Defaults to the file
+ * extension of the destination.
+ * @type Object
+ * @returns An object with two methods: handler and filter.
+ * handler should be called to generate dependencies. If filter is not null,
+ * It should be called with the contents of the file as a string parameter.
+ * It will then return the filtered file contents as a string.
+ */
+function getType(filename, options) {
+    if (!options) options = {};
+    var type = options.type || path.extname(filename);
+    type = types[type] || { handlers: [], filters: [] };
+    var handlers = [].concat(type.handlers, types["*"].handlers);
+    var filters = [].concat(options.filter || [], type.filters,
+                            types["*"].filters);
+    return {
+        handler: function(filename) {
+            for (var i = 0; i < handlers.length; i++) handlers[i](filename);
+        },
+        filter: filters.length ? function(data) {
+            for (var i = 0; i < filters.length; i++) {
+                data = filters[i].call(this, data);
+            }
+            return data;
+        } : null
+    };
+}
 
 /**
  * Copies a single file.
  * Any missing directories are created automatically.
  * @param {String} src The filename of the source file.
  * @param {String} dest The filename of the target file.
- * @param {Function} filter An optional filter function which takes the contents
- * of the file as parameter and returns the filtered contents.
+ * @param {Object} options An optional object containing various options.
+ * @param {Function} options.filter An optional filter function which takes
+ * the contents of a file as parameter and returns the filtered contents.
+ * @param {String} options.type An optional file type. Defaults to the file
+ * extension of the destination.
  */
-exports.copyFile = function(src, dest, filter) {
+exports.copyFile = function(src, dest, options) {
     var dir = path.dirname(dest);
     directory(dir);
-    file(dest, [src, dir, "Jakefile.js"], filter ? function() {
-        fs.writeFileSync(dest, filter.call(this, fs.readFileSync(src, "utf8")));
-        counter++;
-    } : function() {
-        var data = fs.readFileSync(src);
-        fs.writeFileSync(dest, data, 0, data.length, null);
-        counter++;
-    });
-    if (topLevelTaskName) task(topLevelTaskName, [dest]);
+    var type = getType(dest, options);
+    var callback = type.filter ?
+        function() {
+            fs.writeFileSync(dest,
+                type.filter.call(this, fs.readFileSync(src, "utf8")));
+            counter++;
+        } : function() {
+            var data = fs.readFileSync(src);
+            fs.writeFileSync(dest, data, 0, data.length, null);
+            counter++;
+        };
+    file(dest, [src, dir, "Jakefile.js"], callback);
+    type.handler(dest);
 };
 
 /**
@@ -126,13 +209,15 @@ exports.copyFile = function(src, dest, filter) {
  * options.to instead of files.dir. Defaults to the build directory.
  * @param {Function} options.filter An optional filter function which takes
  * the concatenated contents as parameter and returns the filtered contents.
+ * @param {String} options.type An optional file type. Defaults to the file
+ * extension of the destination.
  */
 exports.concat = function(name, files, options) {
     var srcDir = files.dir || "";
     var dest = path.join(options && options.to || exports.builddir, name);
     var destDir = path.dirname(dest);
     var deps = [];
-    var filter = options && options.filter;
+    var type = getType(dest, options);
     for (var i = 0; i < files.length; i++) {
         if (typeof files[i] == "string") deps.push(path.join(srcDir, files[i]));
     }
@@ -141,14 +226,14 @@ exports.concat = function(name, files, options) {
     directory(destDir);
     file(dest, deps, function() {
         var fd = fs.openSync(dest, "w");
-        if (filter) {
+        if (type.filter) {
             var data = [];
             for (var i = 0; i < files.length; i++) {
                 data.push(typeof files[i] == "string" ?
                     fs.readFileSync(path.join(srcDir, files[i]), "utf8") :
                     files[i].getData());
             }
-            fs.writeSync(fd, filter.call(this, data.join("")), null);
+            fs.writeSync(fd, type.filter.call(this, data.join("")), null);
         } else {
             for (var i = 0; i < files.length; i++) {
                 var data = typeof files[i] == "string" ?
@@ -160,7 +245,7 @@ exports.concat = function(name, files, options) {
         fs.closeSync(fd);
         counter++;
     });
-    if (topLevelTaskName) task(topLevelTaskName, [dest]);
+    type.handler(dest);
 };
 
 /**
@@ -183,4 +268,18 @@ exports.list = function(dir, globs) {
     var retval = Array.prototype.concat.apply([], arrays);
     retval.dir = dir;
     return retval;
+};
+
+/**
+ * Asynchronously executes an external command.
+ * stdin, stdout and stderr are passed through to the parent process.
+ * @param {String} command The command to execute.
+ * @param {Array} args An array of parameters.
+ * @param {Function} callback A callback which is called when the command
+ * returns.
+ */
+exports.exec = function(command, args, callback) {
+    var child = child_process.spawn("/usr/bin/env", [command].concat(args),
+        { customFds: [0, 1, 2] });
+    child.on("exit", callback);
 };

@@ -1,0 +1,85 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Open-Xchange 7\n"
+"POT-Creation-Date: Thu Sep 22 2011 11:38:57 GMT+0200 (CEST)\n"
+"PO-Revision-Date: Thu Sep 22 2011 11:38:57 GMT+0200 (CEST)\n"
+"Last-Translator: NAME <EMAIL>\n"
+"Language-Team: OX <i18n@open-xchange.com>\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bits\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+msgid "Address Book"
+msgstr "Adressbuch"
+
+msgid "Applications"
+msgstr "Anwendungen"
+
+msgid "Birthday"
+msgstr "Geburtstag"
+
+msgid "Calendar"
+msgstr "Kalender"
+
+msgid "Department"
+msgstr "Abteilung"
+
+msgid "Distribution list"
+msgstr "Verteilerliste"
+
+msgid "E-Mail"
+msgstr "E-Mail"
+
+msgid "Files"
+msgstr "Dateien"
+
+msgid "Forgot your password?"
+msgstr "Passwort vergessen?"
+
+msgid "Help"
+msgstr "Hilfe"
+
+msgid "Home"
+msgstr "Privat"
+
+msgid "Languages"
+msgstr "Sprachen"
+
+msgid "Mobile"
+msgstr "Mobiltelefon"
+
+msgid "Password"
+msgstr "Passwort"
+
+msgid "Phone (business)"
+msgstr "Telefon (geschäftlich)"
+
+msgid "Phone (private)"
+msgstr "Telefon (privat)"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Profession"
+msgstr "Beruf"
+
+msgid "Refresh"
+msgstr "Aktualisieren"
+
+msgid "Sign in"
+msgstr "Anmelden"
+
+msgid "Sign out"
+msgstr "Abmelden"
+
+msgid "Stay signed in"
+msgstr "Angemeldet bleiben"
+
+msgid "User name"
+msgstr "Benutzername"
+
+msgid "Work"
+msgstr "Geschäftlich"
+

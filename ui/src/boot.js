@@ -87,8 +87,12 @@ $(document).ready(function () {
         $("#io-ox-login-screen").hide();
         $(this).busy();
         // get configuration
-        require("io.ox/core/config").load()
+        var config = require("io.ox/core/config");
+        config.load()
             .done(function () {
+                // Set user's language (as opposed to the browser's language)
+                var lang = config.get("language");
+                require("io.ox/core/gettext").setLanguage(lang);
                 // load core
                 require(["io.ox/core/main", "css!themes/default/core.css"], function (core) {
                     // go!
@@ -163,32 +167,19 @@ $(document).ready(function () {
     };
     
     changeLanguage = function (id) {
-        // change language
-        var cont = function (data) {
+        var gt = require("io.ox/core/gettext");
+        return gt.setLanguage(id).done(function () {
             // get all nodes
             $("[data-i18n]").each(function () {
                 var node = $(this),
-                    val = (id === "en_US") ? node.attr("data-i18n") : data[node.attr("data-i18n")];
+                    val = gt(node.attr("data-i18n"));
                 if (this.tagName === "INPUT") {
                     node.val(val);
                 } else {
                     node.text(val);
                 }
             });
-        };
-        // get language pack
-        if (id !== "en_US") {
-            return $.when(
-                $.ajax({
-                    url: "src/i18n/" + id + ".js",
-                    dataType: "json"
-                })
-                .done(cont)
-            );
-        } else {
-            cont({});
-            return $.Deferred().resolve();
-        }
+        });
     };
     
     fnChangeLanguage = function (e) {
