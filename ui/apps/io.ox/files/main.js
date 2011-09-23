@@ -15,10 +15,10 @@
  */
 
 // TODO: Break this up, this is becoming messy
- define("io.ox/files/main", [
-    "io.ox/files/base", "io.ox/files/api",
-    "io.ox/core/tk/vgrid",  "io.ox/files/upload", "io.ox/core/dialogs", "io.ox/help/hints", "css!io.ox/files/style.css"
-    ], function (base, api, VGrid, upload, dialogs, hints) {
+define("io.ox/files/main",
+    ["io.ox/files/base", "io.ox/files/api",
+    "io.ox/core/tk/vgrid",  "io.ox/files/upload", "io.ox/core/dialogs", "io.ox/help/hints", "css!io.ox/files/style.css"],
+    function (base, api, VGrid, upload, dialogs, hints) {
 
     // application object
     var app = ox.ui.createApp(),
@@ -31,7 +31,7 @@
         right,
         statusBar;
     
-    function deleteItems () {
+    function deleteItems() {
         // ask first
         
         new dialogs.ModalDialog()
@@ -42,7 +42,10 @@
             .done(function (action) {
                 if (action === "delete") {
                     statusBar.busy();
-                    api.remove(grid.selection.get()).done(function () {statusBar.idle();});
+                    api.remove(grid.selection.get())
+                        .done(function () {
+                            statusBar.idle();
+                        });
                     grid.selection.selectNext();
                 }
             });
@@ -143,8 +146,12 @@
         });
         
         // explicit keyboard support
-        win.bind("show", function () { grid.selection.keyboard(true); });
-        win.bind("hide", function () { grid.selection.keyboard(false); });
+        win.bind("show", function () {
+            grid.selection.keyboard(true);
+        });
+        win.bind("hide", function () {
+            grid.selection.keyboard(false);
+        });
         
         // bind all refresh
         api.bind("refresh.all", function (data) {
@@ -203,7 +210,7 @@
 
         statusBar.append($uploadStatus);
         queue.bind("start", function (file) {
-            $filenameNode.text("Uploading: "+file.fileName);
+            $filenameNode.text("Uploading: " + file.fileName);
             statusBar.busy();
         });
 
@@ -250,8 +257,8 @@
                 });
             };
             var uploadButton = win.addButton({
-               label: "Add File",
-               action: showUploadField
+                label: "Add File",
+                action: showUploadField
             });
             pane.relativeTo(uploadButton);
         }());

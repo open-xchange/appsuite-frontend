@@ -21,7 +21,7 @@
     var name = "extensions/halo/api";
     var activeProviders = [];
     
-    function init (ready, http) {
+    function init(ready, http) {
         
         http.GET({
                 module: "halo/contact",
@@ -36,11 +36,15 @@
             .fail(ready);
     }
     
-    function module (http, extensions) {
+    function module(http, extensions) {
         
-        function HaloAPI (options) {
+        function HaloAPI(options) {
             
-            var providerFilter = options.providerFilter || {filterProviders: function (providers) {return providers;}};
+            var providerFilter = options.providerFilter || {
+                filterProviders: function (providers) {
+                    return providers;
+                }
+            };
             var requestEnhancementPoint = extensions.point("io.ox/halo/contact:requestEnhancement");
             
             // Investigate a contact
@@ -85,7 +89,7 @@
             };
         }
         
-        function HaloView () {
+        function HaloView() {
             
             var rendererPoint = extensions.point("io.ox/halo/contact:renderer");
             
@@ -93,11 +97,11 @@
                 var filtered = [];
                 
                 _(providers).each(function (providerName) {
-                   rendererPoint.each(function (ext) {
-                       if (ext.handles(providerName)) {
-                           filtered.push(providerName);
-                       }
-                   });
+                    rendererPoint.each(function (ext) {
+                        if (ext.handles(providerName)) {
+                            filtered.push(providerName);
+                        }
+                    });
                 });
                 
                 return filtered;
@@ -106,9 +110,9 @@
             this.draw = function ($node, providerName, data) {
                 $node = $($node);
                 rendererPoint.each(function (ext) {
-                   if (ext.handles(providerName)) {
-                       ext.draw($node, providerName, data);
-                   }
+                    if (ext.handles(providerName)) {
+                        ext.draw($node, providerName, data);
+                    }
                 });
             };
         }
@@ -116,11 +120,11 @@
         var viewer = new HaloView();
         
         return {
-                    halo:  new HaloAPI({
-                            providerFilter: viewer
-                        }),
-                    viewer: viewer
-               };
+            halo: new HaloAPI({
+                providerFilter: viewer
+            }),
+            viewer: viewer
+        };
     }
     
     initializeAndDefine(

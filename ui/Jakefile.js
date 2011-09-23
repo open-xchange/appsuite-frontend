@@ -81,7 +81,7 @@ var jshintOptions = {
     regexp: false,
     trailing: true,
     undef: true,
-    white: false,
+    white: true,
     predef: ["$", "_", "Modernizr", "define", "require", "ox", "initializeAndDefine"]
 };
 

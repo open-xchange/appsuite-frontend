@@ -49,23 +49,32 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
         
         // dom scaffold
         win.nodes.main
+        .append(
+            container = $("<div/>")
+            .addClass("abs")
+            .css({
+                bottom: "30px",
+                right: "10px"
+            })
+        )
+        .append(
+            $("<div/>")
+            .addClass("abs")
+            .css({
+                top: "auto",
+                height: "19px",
+                paddingTop: "10px",
+                backgroundColor: "#f0f0f0",
+                borderTop: "1px solid #ccc"
+            })
             .append(
-                container = $("<div/>").addClass("abs").css({
-                    bottom: "30px", right: "10px"
-                })
+                sliderA = $("<div/>")
+                .css({ display: "inline-block", margin: "0 20px 0 20px" })
             )
             .append(
-                $("<div/>").addClass("abs").css({
-                    top: "auto", height: "19px", paddingTop: "10px",
-                    backgroundColor: "#f0f0f0", borderTop: "1px solid #ccc"
-                })
-                .append(
-                    sliderA = $("<div/>").css({ display: "inline-block", margin: "0 20px 0 20px" })
-                )
-                .append(
-                    sliderB = $("<div/>").css({ display: "inline-block" })
-                )
-            );
+                sliderB = $("<div/>").css({ display: "inline-block" })
+            )
+        );
         
         var formatDate = function (d) {
             return d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear();
@@ -103,7 +112,7 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
             
         var paintDayAppointment = function (app, startDate, node) {
             // convert dates to dimension
-            var pct = 100/24;
+            var pct = 100 / 24;
             var top = api.floor(app.start_date - startDate) / api.HOUR * pct;
             var height = (app.end_date - app.start_date) / api.HOUR * pct;
             // colors
@@ -111,32 +120,43 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
             var backgroundColor = styles[shown_as].background;
             var border = styles[shown_as].border;
             // paint appointment
-            var outer = $("<div/>").
-                css({
-                    position: "absolute", zIndex: 10,
-                    left: "5px", right: "5px", top: top + "%", height: height + "%",
-                    MozBorderRadius: "10px", webkitBorderRadius: "10px",
-                    backgroundColor: "white", //backgroundColor,
-                    border: "1px solid #555",
-                    borderLeft: (border ? "10px solid " + border : "10px solid #555")
-                }).
-                addClass("discoAppointment").
-                appendTo(node);
+            var outer = $("<div/>")
+            .css({
+                position: "absolute",
+                zIndex: 10,
+                left: "5px",
+                right: "5px",
+                top: top + "%",
+                height: height + "%",
+                MozBorderRadius: "10px",
+                webkitBorderRadius: "10px",
+                backgroundColor: "white",
+                border: "1px solid #555",
+                borderLeft: (border ? "10px solid " + border : "10px solid #555")
+            })
+            .addClass("discoAppointment")
+            .appendTo(node);
             
-            var inner = $("<div/>").
-                css({
-                    position: "absolute",
-                    top: "0px", right: "0px", bottom: "0px", left: "0px",
-                    MozBorderRadius: "10px",
-                    padding: "2px 0px 2px 10px", fontSize: "9pt", fontWeight: "bold", color: "black"
-                }).
-                text(app.title).
-                appendTo(outer);
+            var inner = $("<div/>")
+            .css({
+                position: "absolute",
+                top: "0px",
+                right: "0px",
+                bottom: "0px",
+                left: "0px",
+                MozBorderRadius: "10px",
+                padding: "2px 0px 2px 10px",
+                fontSize: "9pt",
+                fontWeight: "bold",
+                color: "black"
+            })
+            .text(app.title)
+            .appendTo(outer);
         };
         
         var paintParticipants = function (participants, node) {
-            var tmp = [], i = 0, $l = participants.length;
-            for(; i < $l; i++) {
+            var tmp = [], i = 0, $i = participants.length;
+            for (; i < $i; i++) {
                 if (participants[i].type !== 5) {
                     tmp.push(participants[i]);
                 }
@@ -162,27 +182,33 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
             // clear
             dom.detailContainer.empty();
             // sort by start date
-            data.sort(function (a,b) { return a.start_date - b.start_date; });
+            data.sort(function (a, b) {
+                return a.start_date - b.start_date;
+            });
             // fill
             for (var index in data) {
                 var app = data[index];
                 var shown_as = app.shown_as || 1;
                 var color = styles[shown_as].border;
-                var node = $("<div/>").
-                    css({
-                        position: "static", borderBottom: "1px dotted #aaa",
-                        margin: "0px 10px 10px 10px", padding: "0px 0px 10px 0px",
-                        fontSize: "10pt", lineHeight: "1.5em", color: "black"
-                    }).
-                    html(
+                var node = $("<div/>")
+                    .css({
+                        position: "static",
+                        borderBottom: "1px dotted #aaa",
+                        margin: "0px 10px 10px 10px",
+                        padding: "0px 0px 10px 0px",
+                        fontSize: "10pt",
+                        lineHeight: "1.5em",
+                        color: "black"
+                    })
+                    .html(
                         "<div style='font-size: 14pt; color: " + color + "'>" + app.title + "</div>" +
                         "<div style='font-size: 11pt; font-weight: bold;'>" +
                             formatDate(new Date(app.start_date), "time") + " &ndash; " +
                             formatDate(new Date(app.end_date), "time") +
                         "</div>" +
                         (app.note ? "<div style='line-height: 1.25em; font-family: monospace; white-space: pre-wrap;'>" + app.note + "</div>" : "")
-                    ).
-                    appendTo(dom.detailContainer);
+                    )
+                    .appendTo(dom.detailContainer);
                 // participants?
                 if (app.participants && app.participants.length) {
                     var participantNode = $("<div/>").css({ lineHeight: "1.25em" }).appendTo(node);
@@ -206,7 +232,7 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
             $("div.date", dom.topContainer).remove();
             
             var days = weekEnd - weekStart + 1;
-            var width = 100/Math.max(2, days);
+            var width = 100 / Math.max(2, days);
 
             var drawAppointment = function (i, node) {
                 var start = startDate + i * api.DAY;
@@ -232,20 +258,37 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
                 var fontSize = days <= 2 ? "14pt" : "12pt";
                 var id = "appContainer" + l;
                 
-                var dateNode = dom[id] = $("<div/>").css({
-                    position: "absolute", top: "0px", bottom: "0px", left: (l*width) + "%",
-                    width: width + "%",
-                    fontSize: fontSize, lineHeight: "50px", color: "#333",
-                    textAlign: "center"
-                }).addClass("date").appendTo(dom.topContainer);
+                var dateNode = dom[id] = $("<div/>")
+                    .css({
+                        position: "absolute",
+                        top: "0px",
+                        bottom: "0px",
+                        left: (l * width) + "%",
+                        width: width + "%",
+                        fontSize: fontSize,
+                        lineHeight: "50px",
+                        color: "#333",
+                        textAlign: "center"
+                    })
+                    .addClass("date")
+                    .appendTo(dom.topContainer);
                 
-                dateNode.text( formatDate(new Date(startDate + i * api.DAY), format) );
+                dateNode.text(
+                    formatDate(new Date(startDate + i * api.DAY), format)
+                );
                 
                 // app container
-                var node = dom[id] = $("<div/>").css({
-                    position: "absolute", top: "0px", bottom: "0px", left: (l*width) + "%", width: width + "%",
-                    borderLeft: l > 0 ? "1px dotted #ccc" : "0px none"
-                }).addClass("appContainer").appendTo(dom.dayContainer);
+                var node = dom[id] = $("<div/>")
+                    .css({
+                        position: "absolute",
+                        top: "0px",
+                        bottom: "0px",
+                        left: (l * width) + "%",
+                        width: width + "%",
+                        borderLeft: l > 0 ? "1px dotted #ccc" : "0px none"
+                    })
+                    .addClass("appContainer")
+                    .appendTo(dom.dayContainer);
                 
                 // draw appointments
                 drawAppointment(i, node);
@@ -260,76 +303,128 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
             }
             
             // content area (top)
-            dom.topContainer = $("<div/>").css({
-                position: "absolute", top: "0px", right: "16px", height: "50px", left: "50px"
-            }).appendTo(container);
+            dom.topContainer = $("<div/>")
+                .css({
+                    position: "absolute",
+                    top: "0px",
+                    right: "16px",
+                    height: "50px",
+                    left: "50px"
+                })
+                .appendTo(container);
             
             // content area (bottom)
-            dom.bottomContainer = $("<div/>").css({
-                position: "absolute", top: "50px", right: "0px", bottom: "0px", left: "0px",
-                overflow: "auto", overflowX: "hidden", overflowY: "scroll"
-            }).appendTo(container);
+            dom.bottomContainer = $("<div/>")
+                .css({
+                    position: "absolute",
+                    top: "50px",
+                    right: "0px",
+                    bottom: "0px",
+                    left: "0px",
+                    overflow: "auto",
+                    overflowX: "hidden",
+                    overflowY: "scroll"
+                })
+                .appendTo(container);
             
             // content area
-            dom.zoomContainer = $("<div/>").css({
-                position: "absolute", top: "0px", right: "0px", left: "0px",
-                height: zoom + "%"
-            }).appendTo(dom.bottomContainer);
+            dom.zoomContainer = $("<div/>")
+                .css({
+                    position: "absolute",
+                    top: "0px",
+                    right: "0px",
+                    left: "0px",
+                    height: zoom + "%"
+                })
+                .appendTo(dom.bottomContainer);
             
             // hour container
-            dom.hourContainer = $("<div/>").css({
-                position: "absolute", top: "0%", left: "0px", width: "49px",
-                height: "100%", borderRight: "1px solid #aaa"
-            }).appendTo(dom.zoomContainer);
+            dom.hourContainer = $("<div/>")
+                .css({
+                    position: "absolute",
+                    top: "0%",
+                    left: "0px",
+                    width: "49px",
+                    height: "100%",
+                    borderRight: "1px solid #aaa"
+                })
+                .appendTo(dom.zoomContainer);
             
             // hours
             start = startTime;
             var end = endTime, hour, h, color;
-            var i, height = 100/24, top = height;
+            var i, height = 100 / 24, top = height;
             for (i = 1; i < 24; i++) {
-                hour = $("<div/>").css({
-                    position: "absolute", top: top + "%", left: "0px", right: "0px",
-                    fontSize: "9pt", textAlign: "right", paddingRight: "5px",
-                    marginTop: "-6pt"
-                }).
-                text(i + ":00").
-                appendTo(dom.hourContainer);
+                hour = $("<div/>")
+                    .css({
+                        position: "absolute",
+                        top: top + "%",
+                        left: "0px",
+                        right: "0px",
+                        fontSize: "9pt",
+                        textAlign: "right",
+                        paddingRight: "5px",
+                        marginTop: "-6pt"
+                    })
+                    .text(i + ":00")
+                    .appendTo(dom.hourContainer);
                 top += height;
             }
             
             // day
-            dom.dayContainer = $("<div/>").css({
-                position: "absolute", top: "0px", right: "0px", bottom: "0px", left: "50px"
-            }).appendTo(dom.zoomContainer);
+            dom.dayContainer = $("<div/>")
+                .css({
+                    position: "absolute",
+                    top: "0px",
+                    right: "0px",
+                    bottom: "0px",
+                    left: "50px"
+                })
+                .appendTo(dom.zoomContainer);
             
             // hour grid
             for (i = 0, top = 0; i < 48; i++) {
-                h = Math.floor(i/2);
-                height = 100/48;
+                h = Math.floor(i / 2);
+                height = 100 / 48;
                 color = h >= start && h <= end ? "white" : "#F2F6FA";
-                hour = $("<div/>").css({
-                    position: "absolute", top: top + "%", left: "0px", right: "0px",
-                    height: height + "%"
-                }).
-                append(
-                    $("<div/>").css({
-                        position: "absolute", top: "0px", right: "0px", bottom: "0px",
+                hour = $("<div/>")
+                    .css({
+                        position: "absolute",
+                        top: top + "%",
                         left: "0px",
-                        backgroundColor: color,
-                        borderTop: "1px solid #ccc",
-                        borderTopColor: (i % 2 === 0 ? "#bbb" : "#ddd")
+                        right: "0px",
+                        height: height + "%"
                     })
-                ).
-                appendTo(dom.dayContainer);
+                    .append(
+                        $("<div/>").css({
+                            position: "absolute",
+                            top: "0px",
+                            right: "0px",
+                            bottom: "0px",
+                            left: "0px",
+                            backgroundColor: color,
+                            borderTop: "1px solid #ccc",
+                            borderTopColor: (i % 2 === 0 ? "#bbb" : "#ddd")
+                        })
+                    )
+                    .appendTo(dom.dayContainer);
                 top += height;
             }
             
             // detail view
-            dom.detailContainer = $("<div/>").css({
-                position: "absolute", top: "0px", bottom: "0px", left: "50%", width: "50%",
-                backgroundColor: "white", display: "none", borderLeft: "1px solid #ccc",
-                overflow: "visible"
-            }).appendTo(dom.dayContainer);
+            dom.detailContainer = $("<div/>")
+                .css({
+                    position: "absolute",
+                    top: "0px",
+                    bottom: "0px",
+                    left: "50%",
+                    width: "50%",
+                    backgroundColor: "white",
+                    display: "none",
+                    borderLeft: "1px solid #ccc",
+                    overflow: "visible"
+                })
+                .appendTo(dom.dayContainer);
             
             updateDay(start);
         };
@@ -337,17 +432,17 @@ define("io.ox/calendar/main", ["io.ox/calendar/api", "io.ox/core/config"], funct
         var paintWeek = function () {
         };
         
-        var paint = function() {
+        var paint = function () {
             // clear
             clear();
             // view?
             switch (view) {
-                case "day":
-                    paintDay(startDate + weekStart);
-                    break;
-                case "week":
-                    paintWeek();
-                    break;
+            case "day":
+                paintDay(startDate + weekStart);
+                break;
+            case "week":
+                paintWeek();
+                break;
             }
         };
         

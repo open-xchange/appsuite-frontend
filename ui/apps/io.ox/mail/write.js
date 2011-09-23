@@ -17,7 +17,7 @@ define("io.ox/mail/write",
     ["io.ox/mail/api", "io.ox/mail/textile", "css!io.ox/mail/style.css", "css!io.ox/mail/write.css"], function (api, textile) {
 
     // multi instance pattern
-    function createInstance () {
+    function createInstance() {
         
         var app, win,
             container, editor, editorContainer;

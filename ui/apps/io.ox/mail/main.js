@@ -13,10 +13,9 @@
  *
  */
 
-define("io.ox/mail/main", [
-     "io.ox/mail/base", "io.ox/mail/api", "io.ox/core/tk/vgrid",
-     "css!io.ox/mail/style.css"
-    ], function (base, api, VGrid) {
+define("io.ox/mail/main",
+     ["io.ox/mail/base", "io.ox/mail/api", "io.ox/core/tk/vgrid",
+     "css!io.ox/mail/style.css"], function (base, api, VGrid) {
 
     // application object
     var app = ox.ui.createApp(),
@@ -235,8 +234,12 @@ define("io.ox/mail/main", [
             }
         });
         
-        win.bind("show", function () { grid.selection.keyboard(true); });
-        win.bind("hide", function () { grid.selection.keyboard(false); });
+        win.bind("show", function () {
+            grid.selection.keyboard(true);
+        });
+        win.bind("hide", function () {
+            grid.selection.keyboard(false);
+        });
         
         // bind all refresh
         api.bind("refresh.all", function (data) {

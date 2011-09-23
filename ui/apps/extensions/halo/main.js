@@ -16,7 +16,7 @@
 
 define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions"], function (api, ext) {
     
-    function show (data) {
+    function show(data) {
         
         var app = ox.ui.createApp({
             title: data.display_name || "Halo"

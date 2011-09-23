@@ -77,7 +77,6 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
     
     // current window
     var currentWindow = null;
-    
     // ref to core screen
     var core = $("#io-ox-core"),
         // top bar
@@ -85,25 +84,35 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
         // add launcher
         addLauncher = function (side, label, fn) {
             // construct
-            var node = $("<div/>").addClass("launcher")
-                .text(label)
-                .hover(function () { $(this).addClass("hover"); }, function () { $(this).removeClass("hover"); })
-                .bind("click", function () {
-                    var self = $(this);
-                    if (!_.isFunction(fn)) {
-                        // for development only - should never happen
-                        self.css("backgroundColor", "#800000");
-                        setTimeout(function () { self.css("backgroundColor", ""); }, 500);
-                    } else {
-                        // set fixed width, hide label, be busy
-                        self.css("width", self.width() + "px").text("\u00a0").busy();
-                        // call launcher
-                        fn.call(this).done(function () {
-                            // revert visual changes
-                            self.idle().text(label).css("height", "");
-                        });
-                    }
-                });
+            var node = $("<div/>")
+            .addClass("launcher")
+            .text(label)
+            .hover(
+                function () {
+                    $(this).addClass("hover");
+                },
+                function () {
+                    $(this).removeClass("hover");
+                }
+            )
+            .bind("click", function () {
+                var self = $(this);
+                if (!_.isFunction(fn)) {
+                    // for development only - should never happen
+                    self.css("backgroundColor", "#800000");
+                    setTimeout(function () {
+                        self.css("backgroundColor", "");
+                    }, 500);
+                } else {
+                    // set fixed width, hide label, be busy
+                    self.css("width", self.width() + "px").text("\u00a0").busy();
+                    // call launcher
+                    fn.call(this).done(function () {
+                        // revert visual changes
+                        self.idle().text(label).css("height", "");
+                    });
+                }
+            });
             // add
             var c = currentWindow, target;
             if (side === "left" && c && c.app && (target = c.app.getLaunchBarIcon())) {
@@ -292,7 +301,8 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     pane.data("x", left);
                     // touch device?
                     if (Modernizr.touch) {
-                        pane.css("left", left + "%"); done();
+                        pane.css("left", left + "%");
+                        done();
                     }
                     // use CSS transitions?
                     else if (Modernizr.csstransforms3d) {
@@ -402,8 +412,12 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 };
                 
                 this.destroy = function () {
-                    if (currentWindow === this) { currentWindow = null; }
-                    if (previousWindow === this) { previousWindow = null; }
+                    if (currentWindow === this) {
+                        currentWindow = null;
+                    }
+                    if (previousWindow === this) {
+                        previousWindow = null;
+                    }
                     if (this.app !== null) {
                         this.app.getLaunchBarIcon().removeClass("active");
                         this.app.win = null;
@@ -423,7 +437,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 
                 var title = "", subtitle = "";
                 
-                function applyTitle () {
+                function applyTitle() {
                     var spans = self.nodes.title.find("span");
                     spans.eq(0).text(
                         title + (subtitle === "" ? "" : " - ")
@@ -482,12 +496,12 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
         // init visual exit
         var exitTimer = null;
         $("#exit-fullscreen")
-            .bind("mouseover", function () {
-                exitTimer = setTimeout(interruptFullscreen, 250);
-            })
-            .bind("mouseout", function () {
-                clearTimeout(exitTimer);
-            });
+        .bind("mouseover", function () {
+            exitTimer = setTimeout(interruptFullscreen, 250);
+        })
+        .bind("mouseout", function () {
+            clearTimeout(exitTimer);
+        });
         
         // window factory
         return function (options) {
@@ -516,72 +530,71 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 
             // window container
             win.nodes.outer = $("<div/>")
-                .attr({
-                    id: opt.id,
-                    "data-window-nr": guid
+            .attr({
+                id: opt.id,
+                "data-window-nr": guid
+            })
+            .addClass("window-container")
+            .append(
+                $("<div/>")
+                .addClass("window-container-center shadow")
+                .data({
+                    width: width + unit
+                }).css({
+                    width: width + unit
                 })
-                .addClass("window-container")
                 .append(
-                    $("<div/>")
-                        .addClass("window-container-center shadow")
-                        .data({
-                            width: width + unit
-                        })
-                        .css({
-                            width: width + unit
-                        })
+                // window HEAD
+                win.nodes.head = $("<div/>")
+                    .addClass("window-head")
+                    .append(
+                        // title
+                        win.nodes.title = $("<div/>")
+                        .addClass("window-title")
+                        .append($("<span/>"))
+                        .append($("<span/>").addClass("subtitle"))
+                    )
+                    .append(
+                        // toolbar
+                        win.nodes.toolbar = $("<div/>")
+                        .addClass("window-toolbar")
+                    )
+                    .append(
+                        // controls
+                        $("<div/>")
+                        .addClass("window-controls")
                         .append(
-                            // window HEAD
-                            win.nodes.head = $("<div/>")
-                                .addClass("window-head")
-                                .append(
-                                    // title
-                                    win.nodes.title = $("<div/>")
-                                        .addClass("window-title")
-                                        .append($("<span/>"))
-                                        .append($("<span/>").addClass("subtitle"))
-                                )
-                                .append(
-                                    // toolbar
-                                    win.nodes.toolbar = $("<div/>")
-                                        .addClass("window-toolbar")
-                                )
-                                .append(
-                                    // controls
-                                    $("<div/>")
-                                        .addClass("window-controls")
-                                        .append(
-                                            // settings
-                                            win.nodes.settingsButton = $("<div/>")
-                                                .addClass("window-control")
-                                                .text("\u270E")
-                                        )
-                                        .append(
-                                            // close
-                                            win.nodes.closeButton = $("<div/>")
-                                                .addClass("window-control")
-                                                .text("\u2715")
-                                        )
-                                )
+                            // settings
+                            win.nodes.settingsButton = $("<div/>")
+                            .addClass("window-control")
+                            .text("\u270E")
                         )
                         .append(
-                            // window BODY
-                            win.nodes.body = $("<div/>")
-                                .addClass("window-body")
-                                .append(
-                                    // quick settings
-                                    win.nodes.settings = $("<div/>")
-                                        .hide()
-                                        .addClass("window-settings")
-                                        .html("<h2>Each window can have a quick settings area</h2>")
-                                )
-                                .append(
-                                    // content
-                                    win.nodes.main = $("<div/>")
-                                        .addClass("window-content")
-                                )
+                            // close
+                            win.nodes.closeButton = $("<div/>")
+                            .addClass("window-control")
+                            .text("\u2715")
                         )
-                );
+                    )
+                )
+                .append(
+                    // window BODY
+                    win.nodes.body = $("<div/>")
+                    .addClass("window-body")
+                    .append(
+                        // quick settings
+                        win.nodes.settings = $("<div/>")
+                        .hide()
+                        .addClass("window-settings")
+                        .html("<h2>Each window can have a quick settings area</h2>")
+                    )
+                    .append(
+                        // content
+                        win.nodes.main = $("<div/>")
+                        .addClass("window-content")
+                    )
+                )
+            );
             
             // add dispatcher
             event.Dispatcher.extend(win);
@@ -594,25 +607,42 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         // yeah, waiting for the one who reports this :)
                         if (/^porn$/i.test(query)) {
                             $("body").append(
-                                $("<div/>").addClass("abs").css({
-                                    backgroundColor: "black", zIndex: 65000
+                                $("<div/>")
+                                .addClass("abs")
+                                .css({
+                                    backgroundColor: "black",
+                                    zIndex: 65000
                                 })
                                 .append(
-                                    $("<div/>").addClass("abs").css({
-                                        top: "25%", textAlign: "center", color: "#aaa", fontWeight: "bold", fontSize: "50px", fontFamily: "'Comic Sans MS', Arial"
-                                    }).
-                                    html('<span style="color: rgb(230,110,110)">YOU</span> SEARCHED FOR WHAT?')
+                                    $("<div/>")
+                                    .addClass("abs").css({
+                                        top: "25%",
+                                        textAlign: "center",
+                                        color: "#aaa",
+                                        fontWeight: "bold",
+                                        fontSize: "50px",
+                                        fontFamily: "'Comic Sans MS', Arial"
+                                    })
+                                    .html('<span style="color: rgb(230,110,110)">YOU</span> SEARCHED FOR WHAT?')
                                 )
                                 .append(
-                                    $("<div/>").addClass("abs").css({
-                                        top: "50%", width: "670px", textAlign: "center", margin: "0 auto 0 auto", color: "#666"
+                                    $("<div/>")
+                                    .addClass("abs")
+                                    .css({
+                                        top: "50%",
+                                        width: "670px",
+                                        textAlign: "center",
+                                        margin: "0 auto 0 auto",
+                                        color: "#666"
                                     })
                                     .html(
                                         '<div style="font-size: 26px">WARNING: This website contains explicit adult material.</div>' +
                                         '<div style="font-size: 18px">You may only enter this Website if you are at least 18 years of age, or at least the age of majority in the jurisdiction where you reside or from which you access this Website. If you do not meet these requirements, then you do not have permission to use the Website.</div>'
                                     )
                                 )
-                                .click(function () { $(this).remove(); })
+                                .click(function () {
+                                        $(this).remove();
+                                    })
                             );
                         } else if (/^use the force$/i.test(query) && currentWindow) {
                             // star wars!

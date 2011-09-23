@@ -279,7 +279,9 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
             b = getIndex(b);
             // swap?
             if (a > b) {
-                var tmp = a; a = b; b = tmp;
+                var tmp = a;
+                a = b;
+                b = tmp;
             }
             // loop
             for (; a <= b; a++) {

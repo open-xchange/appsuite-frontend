@@ -13,10 +13,7 @@
  *
  */
 
-define("io.ox/contacts/main", [
-    "io.ox/contacts/base", "io.ox/contacts/api",
-    "io.ox/core/tk/vgrid", "css!io.ox/contacts/style.css"
-    ], function (base, api, VGrid) {
+define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api", "io.ox/core/tk/vgrid", "css!io.ox/contacts/style.css"], function (base, api, VGrid) {
         
     // application object
     var app = ox.ui.createApp(),
@@ -190,8 +187,12 @@ define("io.ox/contacts/main", [
             }
         });
         
-        win.bind("show", function () { grid.selection.keyboard(true); });
-        win.bind("hide", function () { grid.selection.keyboard(false); });
+        win.bind("show", function () {
+            grid.selection.keyboard(true);
+        });
+        win.bind("hide", function () {
+            grid.selection.keyboard(false);
+        });
         
         // go!
         win.show(function () {

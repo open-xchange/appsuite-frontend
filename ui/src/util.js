@@ -38,7 +38,9 @@
     
     // stupid string rotator
     var rot = function (str, shift) {
-        return _(String(str).split("")).map(function (i) { return String.fromCharCode(i.charCodeAt(0) + shift); }).join("");
+        return _(String(str).split("")).map(function (i) {
+            return String.fromCharCode(i.charCodeAt(0) + shift);
+        }).join("");
     };
     
     // get hash & query
@@ -235,7 +237,9 @@
                 .replace(
                     /%(([0-9]+)\$)?[A-Za-z]/g,
                     function (match, pos, n) {
-                        if (pos) { index = n - 1; }
+                        if (pos) {
+                            index = n - 1;
+                        }
                         return params[index++];
                     }
                 )

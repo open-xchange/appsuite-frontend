@@ -170,7 +170,7 @@ define("io.ox/core/dialogs", function () {
                 // Is the anchor in the upper half?
                 if (offset.top < (windowHeight / 2)) {
                     // Yup, so we'll put the pane below the anchor
-                    top = offset.top + nodes.relativeTo.outerHeight()+3;
+                    top = offset.top + nodes.relativeTo.outerHeight() + 3;
                 } else {
                     // Nope, so we'll put the pane above the anchor
                     top = offset.top - height - 10;
@@ -190,10 +190,10 @@ define("io.ox/core/dialogs", function () {
                 }
                 
                 nodes.pane.css({
-                   height: height + "px",
-                   width: width+"px",
-                   top: top+"px",
-                   left: left+"px"
+                    height: height + "px",
+                    width: width + "px",
+                    top: top + "px",
+                    left: left + "px"
                 });
             } else {
                 // Hm. Put it in the center. Though, truth be told, this is probably supposed

@@ -126,14 +126,13 @@ define("io.ox/mail/textile", function () {
                     }
                     else if ((match = line.match(rImage))) {
                         // image
-                        parent.append(
+                        parent
+                        .append(
                             para = $("<p>")
                             .css("margin", "0")
                             .append(
-                                node = $("<img/>", {
-                                    src: editorFiles[match[2]],
-                                    alt: ""
-                                })
+                                node = $("<img/>")
+                                .attr({ src: editorFiles[match[2]], alt: "" })
                                 .css("maxWidth", "45em")
                             )
                         );

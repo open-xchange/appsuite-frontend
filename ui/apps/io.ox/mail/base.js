@@ -149,7 +149,7 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
                     return "" + format(ngettext("%d minute ago", "%d minutes ago", n), n); /*i18n*/
                 } else {
                     n = Math.ceil(delta / HOUR);
-                    return ""+ format(ngettext("%d hour ago", "%d hours ago", n), n); /*i18n*/
+                    return "" + format(ngettext("%d hour ago", "%d hours ago", n), n); /*i18n*/
                 }
             } else if (d.getDate() === now.getDate() - 1) {
                 // yesterday
@@ -260,7 +260,7 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
                 // collapse block quotes
                 content.find("blockquote").each(function () {
                     var quote = $(this);
-                    quote.text( quote.contents().text().substr(0, 150) );
+                    quote.text(quote.contents().text().substr(0, 150));
                 });
             }
             

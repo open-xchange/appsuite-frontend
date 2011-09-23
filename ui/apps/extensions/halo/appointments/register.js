@@ -1,6 +1,8 @@
 define("extensions/halo/appointments/register", ["io.ox/core/extensions"], function (ext) {
     ext.point("io.ox/halo/contact:renderer").extend({
-        handles: function (type) {return type === "calendar"; },
+        handles: function (type) {
+            return type === "calendar";
+        },
         draw: function  ($node, providerName, appointments) {
             if (appointments.length === 0) {
                 return;
@@ -13,10 +15,12 @@ define("extensions/halo/appointments/register", ["io.ox/core/extensions"], funct
     });
     
     ext.point("io.ox/halo/contact:requestEnhancement").extend({
-       enhances: function (type) {return type === "calendar"; },
-       enhance: function (request) {
-           request.appendColumns = true;
-           request.columnModule = "calendar";
-       }
+        enhances: function (type) {
+            return type === "calendar";
+        },
+        enhance: function (request) {
+            request.appendColumns = true;
+            request.columnModule = "calendar";
+        }
     });
 });

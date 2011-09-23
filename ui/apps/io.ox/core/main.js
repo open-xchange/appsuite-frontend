@@ -28,11 +28,11 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
             });
     };
     
-    function initRefreshAnimation () {
+    function initRefreshAnimation() {
         
         var count = 0, timer = null;
         
-        function off () {
+        function off() {
             if (count === 0 && timer === null) {
                 $("#io-ox-refresh-icon").removeClass("progress");
             }
@@ -58,7 +58,7 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
         });
     }
     
-    function launch () {
+    function launch() {
         
         desktop.addLauncher("right", gt("Sign out"), function (e) {
             return logout();

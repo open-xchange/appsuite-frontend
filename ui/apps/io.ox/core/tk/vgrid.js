@@ -348,7 +348,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
         
         loadAll = function () {
             
-            function apply (list) {
+            function apply(list) {
                 // changed?
                 if (list.length !== all.length || !_.isEqual(all, list)) {
                     // store
@@ -375,7 +375,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
                 container.css({ visibility: "hidden" }).parent().busy();
             }
             
-            function handleFail () {
+            function handleFail() {
                 // clear grid
                 apply([]);
                 // inform user

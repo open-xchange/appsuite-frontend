@@ -8,7 +8,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
     // "drop" when she released the file
     // Calling code can hand over  a node or a jquery expression, if no node is passed, we'll create an overlay for the entire
     // visible screen and handle all eye candy ourselves.
-    function DropZone ($node) {
+    function DropZone($node) {
         var self = this;
         var globalMode = false;
         var appendOverlay = function () {
@@ -20,13 +20,18 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
             $node = $($node);
         } else {
             globalMode = true;
-            $node = $("<div/>").addClass("abs").css({
-                    backgroundColor: "#000", color: "white",
-                    textAlign: "center", paddingTop: "25%", fontSize: "42pt",
-                    opacity: "0.75", zIndex: 65000
+            $node = $("<div/>")
+                .addClass("abs")
+                .css({
+                    backgroundColor: "#000",
+                    color: "white",
+                    textAlign: "center",
+                    paddingTop: "25%",
+                    fontSize: "42pt",
+                    opacity: "0.75",
+                    zIndex: 65000
                 })
                 .text("Just drop the file anywhere...");
-               
         }
         this.enabled = true;
         event.Dispatcher.extend(this);
@@ -67,7 +72,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
                 event = event.originalEvent || event;
                 var files = event.dataTransfer.files;
                 // And the pass them on
-                for(var i = 0, l = files.length; i < l; i++) {
+                for (var i = 0, l = files.length; i < l; i++) {
                     self.trigger("drop", files[i]);
                 }
                 return false; // Prevent regular event handling
@@ -101,7 +106,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
     
     // And this is the duck type compatible version for browsers which don't support
     // the File API. You can define this DropZone but will never hear back.
-    function DisabledDropZone ($node) {
+    function DisabledDropZone($node) {
         this.enabled = false;
         this.bind = $.noop;
         this.unbind = $.noop;
@@ -119,7 +124,7 @@ define("io.ox/files/upload",  ["io.ox/core/event"], function (event) {
     // If the delegate implements "start" and "stop" methods, those will be called as well
     // The delegate must implement a "processFile" method, that is called to really process the file. It is expected to return
     // a promise or deferred, to tell us when we are done with a file
-    function FileProcessingQueue (delegate) {
+    function FileProcessingQueue(delegate) {
         if (!delegate) {
             console.warn("No delegate supplied to file processing queue.");
             // the noop delegate

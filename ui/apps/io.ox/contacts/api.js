@@ -40,8 +40,11 @@ define("io.ox/contacts/api", ["io.ox/core/http", "io.ox/core/api-factory"], func
                 order: "asc",
                 getData: function (query) {
                     return {
-                        first_name: query, last_name: query,
-                        email1: query, email2: query, email3: query,
+                        first_name: query,
+                        last_name: query,
+                        email1: query,
+                        email2: query,
+                        email3: query,
                         orSearch: true
                     };
                 }

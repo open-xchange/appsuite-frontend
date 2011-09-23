@@ -18,7 +18,8 @@
 define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
     
     var draw = function (file) {
-        file.url = ox.ajaxRoot+"/infostore?action=document&id="+file.id+"&folder="+file.folder_id+"&session="+ox.session; // TODO: Put this somewhere in the model
+        file.url = ox.ajaxRoot + "/infostore?action=document&id=" + file.id +
+            "&folder=" + file.folder_id + "&session=" + ox.session; // TODO: Put this somewhere in the model
         var element = $("<div />").addClass("fileDetails");
         element.append($("<h1/>").text(file.title));
         // Basic Info
@@ -100,13 +101,13 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
         if (file.description) {
             element.append(
                 $("<div/>")
-                    .css({
-                        // makes it readable
-                        fontFamily: "monospace, 'Courier new'",
-                        whiteSpace: "pre-wrap",
-                        paddingRight: "2em"
-                    })
-                    .text(file.description)
+                .css({
+                    // makes it readable
+                    fontFamily: "monospace, 'Courier new'",
+                    whiteSpace: "pre-wrap",
+                    paddingRight: "2em"
+                })
+                .text(file.description)
             );
         }
         
@@ -123,10 +124,13 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
     // Basic Info Fields
     
     var bytesToSize = function (bytes) {
-        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-        if (bytes === 0) return 'n/a';
-        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
-        return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
+        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'], i;
+        if (bytes === 0) {
+            return 'n/a';
+        } else {
+            i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+            return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
+        }
     };
     
     ext.point("io.ox.files.details.basicInfo").extend({
@@ -141,15 +145,14 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
     });
     
     ext.point("io.ox.files.details.basicInfo").extend({
-       index: 20,
-       fields: ["version"],
-       label : function(field) {
-           return "Version";
-       },
-       draw: function (field, file, element) {
-           element.text(file.version);
-       }
-       
+        index: 20,
+        fields: ["version"],
+        label: function (field) {
+            return "Version";
+        },
+        draw: function (field, file, element) {
+            element.text(file.version);
+        }
     });
     
     var formatDate = function (timestamp) {
@@ -174,7 +177,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
         index: 10,
         label: "Download",
         action: function (file) {
-            window.open(file.url+"&content_type=application/octet-stream&content_disposition=attachment", file.title);
+            window.open(file.url + "&content_type=application/octet-stream&content_disposition=attachment", file.title);
         }
     });
 
@@ -190,7 +193,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
         index: 30,
         label: "Send by E-Mail",
         action: function (file) {
-            alert("Zzzzzush: "+file.title);
+            alert("Zzzzzush: " + file.title);
         }
     });
     
@@ -199,53 +202,53 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
     
     // .txt
     ext.point("io.ox.files.renderer").extend({
-       canRender: function (fileDescription) {
-           return (/\.txt$/).test(fileDescription.name);
-       },
-       draw: function (fileDescription, div) {
-           var textDisplay = $("<textarea/>").attr("rows", "30").attr("cols", "80").attr("readonly", "readonly");
-           $.get(fileDescription.dataURL).done(function (text) {
-               textDisplay.text(text);
-               div.append(textDisplay);
-           });
-       }
+        canRender: function (fileDescription) {
+            return (/\.txt$/).test(fileDescription.name);
+        },
+        draw: function (fileDescription, div) {
+            var textDisplay = $("<textarea/>").attr("rows", "30").attr("cols", "80").attr("readonly", "readonly");
+            $.get(fileDescription.dataURL).done(function (text) {
+                textDisplay.text(text);
+                div.append(textDisplay);
+            });
+        }
     });
     
     // .png, .jpg, .jpeg, .gif
     ext.point("io.ox.files.renderer").extend({
-          endings: ["png", "jpg", "jpeg", "gif"],
-          canRender: function (fileDescription) {
-              for(var i = 0, l = this.endings.length; i < l; i++) {
-                  if (new RegExp("\\." + this.endings[i] + "$", "i").test(fileDescription.name)) {
-                      return true;
-                  }
-              }
-              return false;
-          },
-          draw: function (fileDescription, div) {
-              div.append(
-                  $("<img/>")
-                      .attr("src", fileDescription.dataURL + "&width=400&height=300")
-                      .css({
-                          width: "400px",
-                          "maxWidth": "100%"
-                      })
-              );
-          }
-       });
+        endings: ["png", "jpg", "jpeg", "gif"],
+        canRender: function (fileDescription) {
+            for (var i = 0, l = this.endings.length; i < l; i++) {
+                if (new RegExp("\\." + this.endings[i] + "$", "i").test(fileDescription.name)) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        draw: function (fileDescription, div) {
+            div.append(
+                $("<img/>")
+                .attr("src", fileDescription.dataURL + "&width=400&height=300")
+                .css({
+                    width: "400px",
+                    maxWidth: "100%"
+                })
+            );
+        }
+    });
     
     // .mp3 .ogg .wav
     ext.point("io.ox.files.renderer").extend({
         endings: ["mp3", "ogg", "wav"],
         canRender: function (fileDescription) {
-            for(var i = 0, l = this.endings.length; i < l; i++) {
+            for (var i = 0, l = this.endings.length; i < l; i++) {
                 if (new RegExp("\\." + this.endings[i] + "$").test(fileDescription.name)) {
                     fileDescription["io.ox.files.detectedEnding"] = this.endings[i];
                     return true;
                 }
             }
             return false;
-          },
+        },
         draw: function (fileDescription, div) {
             // support audio format?
             if (Modernizr.audio[fileDescription["io.ox.files.detectedEnding"]]) {

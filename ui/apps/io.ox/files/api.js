@@ -46,7 +46,7 @@ define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api-factory", "io.ox/c
         }
     });
 
-    function fallbackForOX6BackendREMOVEME (htmlpage) {
+    function fallbackForOX6BackendREMOVEME(htmlpage) {
         // Extract the JSON text
         var matches = /\((\{.*?\})\)/.exec(htmlpage);
         return matches && matches[1] ? JSON.parse(matches[1]) : null;

@@ -373,7 +373,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
             // GET & POST
             o.data = o.params;
         }
-        else if (type === "PUT" || type === "DELETE"){
+        else if (type === "PUT" || type === "DELETE") {
             // PUT & DELETE
             o.url += "?" + _.serialize(o.params);
             o.original = o.data;
@@ -502,7 +502,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
             opt.timeout = o.timeout;
         }
         // continuation
-        function cont () {
+        function cont() {
             if (fail && o.module !== "login" && Math.random() < Number(fail)) {
                 // simulate broken connection
                 console.error("HTTP fail", o.url, opt);

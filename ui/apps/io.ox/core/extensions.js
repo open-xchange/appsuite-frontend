@@ -18,7 +18,7 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
     // A naive extension registry.
     
     var pointSorter = function (a, b) {
-        return (a.index || 1000000000 ) - (b.index || 1000000000);
+        return (a.index || 1000000000) - (b.index || 1000000000);
     };
     
     var Point = function (options) {
@@ -42,7 +42,7 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             return _.each(extensions, cb);
         };
         
-        this.map = function(cb) {
+        this.map = function (cb) {
             return _.map(extensions, cb);
         };
     };
@@ -66,7 +66,9 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             var ext = ox.serverConfig.extensions || {},
                 list = (ox.signin ? ext.signin : ext.core) || [];
             // transform to proper urls
-            list = _(list).map(function (i) { return "extensions/" + i + "/register"; });
+            list = _(list).map(function (i) {
+                return "extensions/" + i + "/register";
+            });
             // load extensions
             return require(list);
         };

@@ -179,7 +179,10 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function
                         columns: "20,1,500,606"
                     },
                     data: {
-                        email1: address, email2: address, email3: address, orSearch: true
+                        email1: address,
+                        email2: address,
+                        email3: address,
+                        orSearch: true
                     }
                 })
                 .pipe(function (data) {
