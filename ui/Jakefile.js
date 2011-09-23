@@ -46,7 +46,8 @@ function jsFilter (data) {
     ast = pro.ast_lift_variables(ast);
     ast = pro.ast_mangle(ast);
     ast = pro.ast_squeeze(ast);
-    return pro.gen_code(ast);
+    // use split_lines -- don't know why but chrome crashes on endless lines
+    return pro.split_lines(pro.gen_code(ast), 500);
 }
 utils.addFilter("source", jsFilter);
 
