@@ -335,20 +335,20 @@
     line-height: 1em;
     padding: 5px 10px 4px 10px;
     background-color: #eee;
-    border-bottom: 1px solid #888;
+    border-bottom: 1px solid #ccc;
     background-image: -webkit-gradient(
         linear,
         left bottom,
         left top,
-        color-stop(0.00, #ccc),
+        color-stop(0.00, #f0f0f0),
         color-stop(0.80, #fff)
     );
     background-image: -moz-linear-gradient(
         center bottom,
-        #ccc 0%,
+        #f0f0f0 0%,
         #fff 80%
     );
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#cccccc');
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f0f0f0');
     cursor: pointer;
 }
 

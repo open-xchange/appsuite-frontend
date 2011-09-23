@@ -260,6 +260,11 @@
         
         prewrap: function (text) {
             return String(text).replace(/([\/\.\,\-]+)/g, "$1\u200B");
+        },
+        
+        pad: function (val, length, fill) {
+            var str = String(val), n = length || 1, diff = n - str.length;
+            return (diff > 0 ? new Array(diff + 1).join(fill || "0") : "") + str;
         }
     });
     

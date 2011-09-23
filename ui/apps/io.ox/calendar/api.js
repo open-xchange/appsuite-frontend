@@ -13,17 +13,18 @@
  *
  */
 
-define("io.ox/calendar/api", ["io.ox/core/http"], function (http) {
+define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (http, event) {
     
     var MINUTE = 60000,
         HOUR = 60 * MINUTE,
         DAY = 24 * HOUR,
         WEEK = 7 * DAY;
     
-    // really stupid caching for dev speed
-    var cache = {};
+    // really stupid caching for speed
+    var all_cache = {},
+        get_cache = {};
     
-    return {
+    var api = {
         
         MINUTE: MINUTE,
         
@@ -54,33 +55,106 @@ define("io.ox/calendar/api", ["io.ox/core/http"], function (http) {
             }
         },
         
-        list: function (folderId, start, end) {
+        get: function (o) {
             
-            // default: 0 = all
-            folderId = folderId || 0;
-            // round start & end
-            start = (start / DAY >> 0) * DAY;
-            end = (end / DAY >> 0) * DAY;
+            o = o || {};
             
-            var key = folderId + "." + start + "." + end;
+            var params = {
+                action: "get",
+                id: o.id,
+                folder: o.folder || o.folder_id
+            };
             
-            if (cache[key] === undefined) {
-                return http.GET({
-                    module: "calendar",
-                    appendColumns: true,
-                    params: {
-                        action: "all",
-                        folder: folderId || 0,
-                        start: start || _.now(),
-                        end: end || (_.now() + DAY)
-                    }
-                })
-                .done(function (data) {
-                    cache[key] = data;
-                });
-            } else {
-                return $.Deferred().resolve(cache[key]);
+            if (o.recurrence_position !== null) {
+                params.recurrence_position = o.recurrence_position;
             }
+            
+            var key = o.folder + "." + o.id + "." + (o.recurrence_position || 0);
+            
+            if (get_cache[key] === undefined) {
+                return http.GET({
+                        module: "calendar",
+                        params: params
+                    })
+                    .done(function (data) {
+                        get_cache[key] = data;
+                    });
+            } else {
+                return $.Deferred().resolve(get_cache[key]);
+            }
+        },
+        
+        getAll: function (o) {
+            
+            o = $.extend({
+                folder: "0",
+                start: _.now(),
+                end: _.now() + 28 * DAY
+            }, o || {});
+            
+            // round start & end date
+            o.start = (o.start / DAY >> 0) * DAY;
+            o.end = (o.end / DAY >> 0) * DAY;
+            
+            var key = o.folder + "." + o.start + "." + o.end;
+            
+            if (all_cache[key] === undefined) {
+                return http.GET({
+                        module: "calendar",
+                        params: {
+                            action: "all",
+                            columns: "1,20,207,201", // id, folder_id, recurrence_position, start_date
+                            folder: o.folder,
+                            start: o.start,
+                            end: o.end,
+                            sort: "201",
+                            order: "asc"
+                        }
+                    })
+                    .done(function (data) {
+                        all_cache[key] = data;
+                    });
+            } else {
+                return $.Deferred().resolve(all_cache[key]);
+            }
+        },
+        
+        getList: function (ids) {
+            return http.fixList(ids,
+                http.PUT({
+                    module: "calendar",
+                    params: {
+                        action: "list"
+                    },
+                    data: http.simplify(ids)
+                })
+            );
+        },
+        
+        search: function (query) {
+            return http.PUT({
+                    module: "calendar",
+                    params: {
+                        action: "search",
+                        sort: "201",
+                        order: "desc" // top-down makes more sense
+                    },
+                    data: {
+                        pattern: query
+                    }
+                });
         }
     };
+    
+    event.Dispatcher.extend(api);
+    
+    // bind to global refresh
+    ox.bind("refresh", function () {
+        // clear caches
+        all_cache = {};
+        // trigger local refresh
+        api.trigger("refresh.all");
+    });
+    
+    return api;
 });

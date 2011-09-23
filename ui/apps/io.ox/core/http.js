@@ -616,7 +616,18 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         simplify: function (list) {
             var i = 0, item = null, tmp = new Array(list.length);
             for (; (item = list[i]); i++) {
-                tmp[i] = { folder: item.folder || item.folder_id, id: item.id };
+                if (typeof item === "object") {
+                    tmp[i] = { id: item.id };
+                    if (item.folder || item.folder_id) {
+                        tmp[i].folder = item.folder || item.folder_id;
+                    }
+                    if (item.recurrence_position) {
+                        tmp[i].recurrence_position = item.recurrence_position;
+                    }
+                } else {
+                    // just integers for example
+                    tmp[i] = item;
+                }
             }
             return tmp;
         },
@@ -631,13 +642,15 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
                     // simplify
                     ids = that.simplify(ids);
                     // build hash (uses folder_id!)
-                    var i, obj, hash = {}, tmp = new Array(data.length);
+                    var i, obj, hash = {}, tmp = new Array(data.length), key;
                     for (i = 0; (obj = data[i]); i++) {
-                        hash[obj.folder_id + "." + obj.id] = obj;
+                        key = String(obj.internal_userid ? obj.internal_userid : (obj.folder_id || 0) + "." + (obj.internal_userid || obj.id) + "." + (obj.recurrence_position || 0));
+                        hash[key] = obj;
                     }
                     // fix order (uses folder!)
                     for (i = 0; (obj = ids[i]); i++) {
-                        tmp[i] = hash[obj.folder + "." + obj.id];
+                        key = String(typeof obj === "object" ? (obj.folder || 0) + "." + (obj.internal_userid || obj.id) + "." + (obj.recurrence_position || 0) : obj);
+                        tmp[i] = hash[key];
                     }
                     hash = obj = ids = null;
                     return tmp;

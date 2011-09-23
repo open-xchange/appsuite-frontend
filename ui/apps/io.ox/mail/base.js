@@ -117,15 +117,11 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
         getTime: function (timestamp) {
             var now = new Date(),
                 d = new Date(timestamp),
-                lz = function (i, digits) {
-                    var str = String(i), n = digits || 1, diff = n - str.length;
-                    return (diff > 0 ? new Array(diff + 1).join("0") : "") + str;
-                },
                 time = function () {
-                    return lz(d.getUTCHours(), 2) + ":" + lz(d.getUTCMinutes(), 2);
+                    return _.pad(d.getUTCHours(), 2) + ":" + _.pad(d.getUTCMinutes(), 2);
                 },
                 date = function () {
-                    return lz(d.getUTCDate(), 2) + "." + lz(d.getUTCMonth() + 1, 2) + "." + d.getUTCFullYear();
+                    return _.pad(d.getUTCDate(), 2) + "." + _.pad(d.getUTCMonth() + 1, 2) + "." + d.getUTCFullYear();
                 };
             // today?
             if (d.getUTCDate() === now.getUTCDate()) {

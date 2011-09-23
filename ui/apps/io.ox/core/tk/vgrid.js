@@ -311,6 +311,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
             };
             
             // get item
+            
             var load = loadData[currentMode] || loadData.all,
                 subset = all.slice(offset, offset + numRows);
             

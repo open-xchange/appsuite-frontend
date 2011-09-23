@@ -92,13 +92,16 @@ $(document).ready(function () {
             .done(function () {
                 // Set user's language (as opposed to the browser's language)
                 var lang = config.get("language");
-                require("io.ox/core/gettext").setLanguage(lang);
-                // load core
-                require(["io.ox/core/main", "css!themes/default/core.css"], function (core) {
-                    // go!
-                    $("#background_loader").idle();
-                    core.launch();
-                });
+                // join
+                $.when(
+                        require("io.ox/core/gettext").setLanguage(lang),
+                        require(["io.ox/core/main", "css!themes/default/core.css"])
+                    )
+                    .done(function () {
+                        // go!
+                        $("#background_loader").idle();
+                        require("io.ox/core/main").launch();
+                    });
             });
     };
     
