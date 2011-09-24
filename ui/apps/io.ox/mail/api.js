@@ -13,7 +13,7 @@
  *
  */
 
-define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api-factory"], function (http, ApiFactory) {
+define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api/factory"], function (http, ApiFactory) {
     
     // simple temporary thread cache
     var threads = {};

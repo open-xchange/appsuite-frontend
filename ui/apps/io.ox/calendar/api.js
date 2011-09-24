@@ -15,45 +15,13 @@
 
 define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (http, event) {
     
-    var MINUTE = 60000,
-        HOUR = 60 * MINUTE,
-        DAY = 24 * HOUR,
-        WEEK = 7 * DAY;
-    
     // really stupid caching for speed
     var all_cache = {},
         get_cache = {};
     
+    var DAY = 60000 * 60 * 24;
+    
     var api = {
-        
-        MINUTE: MINUTE,
-        
-        HOUR: HOUR,
-        
-        DAY: DAY,
-        
-        WEEK: WEEK,
-        
-        floor: function (timestamp, step) {
-            // set defaults
-            timestamp = timestamp || 0;
-            step = step || HOUR;
-            // number?
-            if (typeof step === "number") {
-                return Math.floor(timestamp / step) * step;
-            } else {
-                if (step === "week") {
-                    // get current date
-                    var d = new Date(timestamp);
-                    // get work day
-                    var day = (d.getDay() + 6) % 7; // starts on Monday
-                    // subtract
-                    var t = d.getTime() - day * DAY;
-                    // round down to day and return
-                    return this.floor(t, DAY);
-                }
-            }
-        },
         
         get: function (o) {
             
@@ -87,7 +55,6 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
         getAll: function (o) {
             
             o = $.extend({
-                folder: "0",
                 start: _.now(),
                 end: _.now() + 28 * DAY
             }, o || {});
@@ -96,20 +63,26 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
             o.start = (o.start / DAY >> 0) * DAY;
             o.end = (o.end / DAY >> 0) * DAY;
             
-            var key = o.folder + "." + o.start + "." + o.end;
+            var key = o.folder + "." + o.start + "." + o.end,
+                params = {
+                    action: "all",
+                    columns: "1,20,207,201", // id, folder_id, recurrence_position, start_date
+                    start: o.start,
+                    end: o.end,
+                    showPrivate: true,
+                    recurrence_master: false,
+                    sort: "201",
+                    order: "asc"
+                };
+            
+            if (o.folder !== undefined) {
+                params.folder = o.folder;
+            }
             
             if (all_cache[key] === undefined) {
                 return http.GET({
                         module: "calendar",
-                        params: {
-                            action: "all",
-                            columns: "1,20,207,201", // id, folder_id, recurrence_position, start_date
-                            folder: o.folder,
-                            start: o.start,
-                            end: o.end,
-                            sort: "201",
-                            order: "asc"
-                        }
+                        params: params
                     })
                     .done(function (data) {
                         all_cache[key] = data;

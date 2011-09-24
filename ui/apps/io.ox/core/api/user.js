@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/users", ["io.ox/core/http", "io.ox/core/api-factory"], function (http, ApiFactory) {
+define("io.ox/core/api/user", ["io.ox/core/http", "io.ox/core/api/factory"], function (http, ApiFactory) {
     
     // generate basic API
     var api = ApiFactory({

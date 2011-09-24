@@ -14,7 +14,7 @@
  *
  */
 
-define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api-factory", "io.ox/core/config"], function (http, ApiFactory, config) {
+define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api/factory", "io.ox/core/config"], function (http, ApiFactory, config) {
    
     // generate basic API
     var api = ApiFactory({

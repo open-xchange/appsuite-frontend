@@ -13,7 +13,7 @@
  *
  */
 
-define("io.ox/contacts/api", ["io.ox/core/http", "io.ox/core/api-factory"], function (http, ApiFactory) {
+define("io.ox/contacts/api", ["io.ox/core/http", "io.ox/core/api/factory"], function (http, ApiFactory) {
     
     // generate basic API
     var api = ApiFactory({

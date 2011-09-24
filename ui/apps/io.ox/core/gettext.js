@@ -17,7 +17,7 @@ define("io.ox/core/gettext", [], function () {
         return gettext.dpgettext("", "", text);
     }
     
-    var lang = "en_US",
+    var lang = "",
         pluralForm = function () {
             return 0;
         },
@@ -49,7 +49,7 @@ define("io.ox/core/gettext", [], function () {
     gettext.dpgettext = function (domain, context, text) {
         var dictionary = domains[domain];
         if (!dictionary) {
-            throw new Error("Invalid i18n domain: " + domain);
+            throw new Error("Invalid i18n domain: '" + domain + "' for text '" + text + "'");
         }
         var key = context ? context + "\x00" + text : text;
         return dictionary[key] || text;

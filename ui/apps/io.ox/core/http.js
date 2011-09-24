@@ -243,13 +243,15 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
             "3020" : "com.openexchange.subscribe.subscriptionFlag",
             "3030" : "com.openexchange.folderstorage.displayName"
         },
-        "user" : {
+        "user": {
             "610" : "aliases",
             "611" : "timezone",
             "612" : "locale",
             "613" : "groups",
             "614" : "contact_id",
             "615" : "login_info"
+        },
+        "resource": {
         },
         "account": {
             "1001": "id",
@@ -343,17 +345,18 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
     var processOptions = function (options, type) {
         // defaults
         var o = $.extend({
-            module: "",
-            params: {},
-            data: {},
-            dataType: "json",
-            appendColumns: type === "GET" || type === "UPLOAD" ? false : true,
-            columnModule: options.module || "",
-            appendSession: true,
-            processData: true,
-            processResponse: true,
-            cursor: true
-        }, options || {});
+                module: "",
+                params: {},
+                data: {},
+                dataType: "json",
+                appendColumns: type === "GET" || type === "UPLOAD" ? false : true,
+                columnModule: options.module || "",
+                appendSession: true,
+                processData: true,
+                processResponse: true,
+                cursor: true
+            }, options || {}),
+            columns;
         // prepend root
         o.url = ox.ajaxRoot + "/" + o.module;
         // add session
@@ -362,7 +365,10 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         }
         // add columns
         if (o.appendColumns === true && o.params.columns === undefined) {
-            o.params.columns = getAllColumns(o.columnModule).join(",");
+            columns = getAllColumns(o.columnModule);
+            if (columns.length) {
+                o.params.columns = columns.join(",");
+            }
         }
         // remove white space from columns (otherwise evil to debug)
         if (o.params.columns) {

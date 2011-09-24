@@ -13,7 +13,7 @@
  *
  */
 
-define("io.ox/core/api-factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/core/event"], function (http, cache, event) {
+define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/core/event"], function (http, cache, event) {
     
     var fix = function (obj) {
         var clone = _.deepClone(obj);
