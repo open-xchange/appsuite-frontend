@@ -24,19 +24,11 @@ define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions"],
         
         app.setLauncher(function () {
             
-            var win = ox.ui.createWindow({
-                chromeless: true
-            });
+            var win = ox.ui.createWindow({});
             
             app.setWindow(win);
             win.setQuitOnClose(true);
-            
-            win.nodes.main
-                .bind("click", function () {
-                    win.close();
-                    win = null;
-                });
-                
+                        
             // Trigger Server Halo API
             if (api) {
                 var investigations = api.halo.investigate(data);

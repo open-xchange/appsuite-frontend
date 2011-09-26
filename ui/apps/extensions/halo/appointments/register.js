@@ -1,4 +1,4 @@
-define("extensions/halo/appointments/register", ["io.ox/core/extensions"], function (ext) {
+define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox/core/dialogs"], function (ext, dialogs) {
     ext.point("io.ox/halo/contact:renderer").extend({
         handles: function (type) {
             return type === "calendar";
@@ -9,7 +9,11 @@ define("extensions/halo/appointments/register", ["io.ox/core/extensions"], funct
             }
             var $list = $("<ul/>").appendTo($node);
             _(appointments).each(function (appointment) {
-                $list.append($("<li/>").text(appointment.title));
+                var $entry = $("<li/>").text(appointment.title).click(function () {
+                    new dialogs.ModalDialog().text(appointment.title).setUnderlayAction("ok").setDefaultAction("ok").show();
+                    return false;
+                });
+                $list.append($entry);
             });
         }
     });
