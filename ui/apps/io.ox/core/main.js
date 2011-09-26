@@ -108,6 +108,13 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
                 });
             });
         
+        desktop.addLauncher("left", gt("AJAX Requests"), function () {
+                var node = this;
+                return require(["io.ox/internal/ajaxDebug/main"], function (m) {
+                    m.getApp().setLaunchBarIcon(node).launch();
+                });
+            });
+        
         // TODO: hide this 'feature' more cleverly
         if (_.url.hash("roadkill")) {
             $("#io-ox-core").css("background", "url(apps/themes/default/roadkill.jpg) no-repeat");

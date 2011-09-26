@@ -16,9 +16,9 @@ define("io.ox/internal/ajaxDebug/callHandling", ["io.ox/core/http", "io.ox/core/
     
     var callHandler = {
         history: [],
-        performRequest: function(options) {
+        perform: function(options) {
             var entry = {
-                id = history.length,
+                id: this.history.length,
                 query: options,
                 response: null
             };
@@ -26,13 +26,19 @@ define("io.ox/internal/ajaxDebug/callHandling", ["io.ox/core/http", "io.ox/core/
             this.trigger("historychanged", this);
             options.appendColumns = false;
             if (options.data) {
-                return http.PUT(options).done(function (data) {
+                http.PUT(options).done(function (data) {
+                    entry.response = data;
+                    callHandler.trigger("entrychanged", entry);
+                });
+            } else {
+                http.GET(options).done(function (data) {
                     entry.response = data;
                     callHandler.trigger("entrychanged", entry);
                 });
             }
+            return entry;
         }
-    }
+    };
     
     event.Dispatcher.extend(callHandler);
     
