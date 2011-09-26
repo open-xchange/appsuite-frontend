@@ -46,7 +46,7 @@ define("io.ox/core/gettext", [], function () {
     gettext.pgettext = function (context, text) {
         return gettext.dpgettext("", context, text);
     };
-    gettext.dpgettext = function(domain, context, text) {
+    gettext.dpgettext = function (domain, context, text) {
         var dictionary = domains[domain];
         if (!dictionary) {
             throw new Error("Invalid i18n domain: '" + domain + "' for text '" + text + "'");

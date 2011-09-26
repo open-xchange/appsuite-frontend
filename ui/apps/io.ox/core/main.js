@@ -107,7 +107,7 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
                     m.getApp().setLaunchBarIcon(node).launch();
                 });
             });
-        
+        // TODO: Move this, once the application launcher is ready.
         desktop.addLauncher("left", gt("AJAX Requests"), function () {
                 var node = this;
                 return require(["io.ox/internal/ajaxDebug/main"], function (m) {

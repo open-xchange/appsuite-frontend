@@ -16,7 +16,7 @@ define("io.ox/internal/ajaxDebug/callHandling", ["io.ox/core/http", "io.ox/core/
     
     var callHandler = {
         history: [],
-        perform: function(options, cb) {
+        perform: function (options, cb) {
             var entry = {
                 id: this.history.length,
                 query: options,

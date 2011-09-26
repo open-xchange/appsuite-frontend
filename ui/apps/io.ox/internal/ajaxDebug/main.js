@@ -13,8 +13,7 @@
  *
  */
 
-// TODO: Break this up, this is becoming messy
- define("io.ox/internal/ajaxDebug/main", [ "io.ox/core/tk/vgrid", "io.ox/internal/ajaxDebug/callHandling", "io.ox/internal/ajaxDebug/callViews"], function (VGrid, callHandler, callViews) {
+define("io.ox/internal/ajaxDebug/main", [ "io.ox/core/tk/vgrid", "io.ox/internal/ajaxDebug/callHandling", "io.ox/internal/ajaxDebug/callViews"], function (VGrid, callHandler, callViews) {
 
     // application object
     var app = ox.ui.createApp(),
@@ -70,7 +69,7 @@
                 return { name: name };
             },
             set: function (data, fields, index) {
-                fields.name.text(data.query.module+"."+data.query.params.action);
+                fields.name.text(data.query.module + "." + data.query.params.action);
             }
         });
     
@@ -85,7 +84,7 @@
         // list request
         grid.setListRequest(function (ids) {
             var entries = _(ids).map(function (id) {
-               return callHandler.history[id.id];
+                return callHandler.history[id.id];
             });
             return new $.Deferred().resolve(entries);
         });
@@ -112,7 +111,7 @@
             label: "Dump to Console",
             action: function () {
                 if (viewer.dirty) {
-                    console.log({query: viewer.getQuery()}  );
+                    console.log({query: viewer.getQuery()});
                 } else {
                     var selection = grid.selection.get();
                     if (selection.length === 1) {
@@ -148,6 +147,6 @@
     });
     
     return {
-         getApp: app.getInstance
+        getApp: app.getInstance
     };
 });

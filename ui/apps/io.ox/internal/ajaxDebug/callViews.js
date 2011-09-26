@@ -16,7 +16,7 @@
 
 define("io.ox/internal/ajaxDebug/callViews", function () {
 
-    function CallView ($node, callHandling) {
+    function CallView($node, callHandling) {
         var self = this;
         $node = $("<form/>").appendTo($node);
         
@@ -43,12 +43,12 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
             this.id = entry.id;
             // Address Text
             $address.focus();
-            var addressText = entry.query.module+"."+entry.query.params.action;
+            var addressText = entry.query.module + "." + entry.query.params.action;
             var queryString = "";
             _(entry.query.params).each(function (value, key) {
-               if (key !== 'action' && key !== 'session') {
-                   queryString = queryString + "&" + escape(key) + "=" + escape(value);
-               }
+                if (key !== 'action' && key !== 'session') {
+                    queryString = queryString + "&" + escape(key) + "=" + escape(value);
+                }
             });
             if (queryString.length > 0) {
                 addressText += "?" + queryString.substring(1);
@@ -104,12 +104,12 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
                     });
                 }
             } else {
-                alert("Can't parse query: "+$address.val()+". Please use the following format: module.action?param1=value1&param2=value2");
+                alert("Can't parse query: " + $address.val() + ". Please use the following format: module.action?param1=value1&param2=value2");
             }
             
             if ($body.val()) {
                 try {
-                    query.data = new Function("return "+$body.val())(); // The JSON parser is too anal
+                    query.data = new Function("return " + $body.val())(); // The JSON parser is too anal
                 } catch (err) {
                     query.data = $body.val();
                 }
@@ -117,15 +117,15 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
             return query;
         };
         
-       function submit () {
+        function submit() {
             var query = self.getQuery();
             var entry = callHandling.perform(query);
             self.draw(entry, {inProgress: true});
-            return false
+            return false;
         }
         
         
-        function changed () {
+        function changed() {
             if ($address.val().match(addrRegex)) {
                 $address.css("border", "green solid 3px");
             } else {
@@ -133,7 +133,7 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
             }
             if ($body.val()) {
                 try {
-                    new Function("return "+$body.val())(); // The JSON parser is too anal
+                    new Function("return " + $body.val())(); // The JSON parser is too anal
                     $body.css("border", "green solid 3px");
                 } catch (err) {
                     $body.css("border", "red solid 3px");
@@ -142,7 +142,6 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
             self.dirty = true;
         }
         
-        $form.submit(submit);
         $submit.click(submit);
         
         $address.change(changed);
