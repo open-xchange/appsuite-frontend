@@ -57,7 +57,11 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
             
             // Body
             if (entry.query.data) {
-                $body.val(JSON.stringify(entry.query.data, null, 4));
+                if (_.isString(entry.query.data)) {
+                    $body.val(entry.query.data);
+                } else {
+                    $body.val(JSON.stringify(entry.query.data, null, 4));
+                }
             } else {
                 $body.val("");
             }
@@ -139,7 +143,7 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
         
         $submit.click(submit);
         
-        $address.keypress(changed);
+        $address.change(changed);
         $body.change(changed);
         
         callHandling.bind("entrychanged", function (entry) {
