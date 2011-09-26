@@ -124,6 +124,21 @@
             }
         });
         
+        var autorepeat = false;
+        function repeat() {
+            if (autorepeat) {
+                callHandler.perform(viewer.getQuery(), repeat);
+            }
+        }
+        
+        win.addButton({
+            label: "Autorepeat",
+            action: function () {
+                autorepeat = !autorepeat;
+                repeat();
+            }
+        });
+        
         
         // go!
         win.show(function () {

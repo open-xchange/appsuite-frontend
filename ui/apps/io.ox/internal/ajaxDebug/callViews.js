@@ -20,8 +20,12 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
         var self = this;
         $node = $($node);
         
-        var $address = $('<input type="text"/>').css({
-            width: "500px"
+        var $address = $('<input/>').css({
+            width: "500px",
+            "margin-left": "2px" // ???
+        }).attr({
+            type: "text",
+            placeholder: "module.action?param1=param2"
         });
         var $body = $('<textarea cols="80" rows="20"/>'),
             $resp = $('<textarea cols="80", rows="30" readonly="readonly"/>').hide(),
@@ -101,7 +105,7 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
             
             if ($body.val()) {
                 try {
-                    query.data = JSON.parse($body.val());
+                    query.data = new Function("return "+$body.val())(); // The JSON parser is too anal
                 } catch (err) {
                     query.data = $body.val();
                 }
@@ -124,7 +128,7 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
             }
             if ($body.val()) {
                 try {
-                    JSON.parse($body.val());
+                    new Function("return "+$body.val())(); // The JSON parser is too anal
                     $body.css("border", "green solid 3px");
                 } catch (err) {
                     $body.css("border", "red solid 3px");
@@ -136,7 +140,7 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
         $submit.click(submit);
         
         $address.keypress(changed);
-        $body.keypress(changed);
+        $body.change(changed);
         
         callHandling.bind("entrychanged", function (entry) {
             if (entry.id === self.id && !self.dirty) {
