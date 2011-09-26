@@ -43,7 +43,10 @@ define("io.ox/core/dialogs", function () {
             process = function (e) {
                 deferred.resolve(e.data);
                 close();
-            };
+            },
+            underlayAction = null,
+            defaultAction = null
+            ;
             
         this.text = function (str) {
             nodes.popup.find(".content").text(str || "");
@@ -76,6 +79,31 @@ define("io.ox/core/dialogs", function () {
             nodes.underlay.show();
             nodes.popup.show();
             return deferred;
+        };
+        
+        
+        
+        nodes.underlay.click(function () {
+            if (underlayAction) {
+                process({data: underlayAction});
+            }
+        });
+        
+        nodes.popup.click(function () {
+            if (defaultAction) {
+                process({data: defaultAction});
+            }
+        });
+        
+        
+        this.setUnderlayAction = function (action) {
+            underlayAction = action;
+            return this;
+        };
+        
+        this.setDefaultAction = function (action) {
+            defaultAction = action;
+            return this;
         };
     };
     
@@ -208,6 +236,7 @@ define("io.ox/core/dialogs", function () {
             return deferred;
         };
     };
+    
     
     return {
         ModalDialog: Dialog,
