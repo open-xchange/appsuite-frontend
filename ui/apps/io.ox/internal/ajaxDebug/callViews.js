@@ -27,7 +27,7 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
             type: "text",
             placeholder: "module.action?param1=param2"
         });
-        var $body = $('<textarea cols="80" rows="20"/>'),
+        var $body = $('<textarea cols="80" rows="20"/>').attr("placeholder", "['the', 'body']"),
             $resp = $('<textarea cols="80", rows="30" readonly="readonly"/>').hide(),
             $submit = $('<button>').text("Send");
         
