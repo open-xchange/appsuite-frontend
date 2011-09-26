@@ -18,7 +18,7 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
 
     function CallView ($node, callHandling) {
         var self = this;
-        $node = $($node);
+        $node = $("<form/>").appendTo($node);
         
         var $address = $('<input/>').css({
             width: "500px",
@@ -121,6 +121,7 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
             var query = self.getQuery();
             var entry = callHandling.perform(query);
             self.draw(entry, {inProgress: true});
+            return false
         }
         
         
@@ -141,6 +142,7 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
             self.dirty = true;
         }
         
+        $form.submit(submit);
         $submit.click(submit);
         
         $address.change(changed);
