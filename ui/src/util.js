@@ -225,7 +225,7 @@
         },
         
         /**
-         * Format
+         * format/printf
          */
         printf: function (str, params) {
             // is array?

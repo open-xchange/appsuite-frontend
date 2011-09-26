@@ -425,8 +425,6 @@ $(document).ready(function () {
                 ox.serverConfig = data;
                 // set page title now
                 document.title = ox.serverConfig.pageTitle || "ox7";
-                // add global dispatcher
-                require("io.ox/core/event").Dispatcher.extend(ox);
                 // continue
                 autoLogin();
             });

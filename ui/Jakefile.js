@@ -163,6 +163,7 @@ utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
         "event.js", "extensions.js", "cache.js", "http.js",
         "config.js", "session.js", "gettext.js",
+        "api/factory.js", "api/user.js", "api/resource.js",
         "desktop.js", "main.js"
     ]), { type: "source" }
 );

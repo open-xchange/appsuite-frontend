@@ -16,6 +16,9 @@ define("io.ox/core/api/resource", ["io.ox/core/http", "io.ox/core/api/factory"],
     // generate basic API
     var api = ApiFactory({
         module: "resource",
+        keyGenerator: function (obj) {
+            return String(obj.id);
+        },
         requests: {
             all: {
             },

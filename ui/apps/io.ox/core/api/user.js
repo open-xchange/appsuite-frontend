@@ -16,6 +16,9 @@ define("io.ox/core/api/user", ["io.ox/core/http", "io.ox/core/api/factory"], fun
     // generate basic API
     var api = ApiFactory({
         module: "user",
+        keyGenerator: function (obj) {
+            return String(obj.id);
+        },
         requests: {
             all: {
                 columns: "1,20",
@@ -40,6 +43,20 @@ define("io.ox/core/api/user", ["io.ox/core/http", "io.ox/core/api/factory"], fun
             }
         }
     });
+    
+    api.getTextNode = function (id) {
+        var node = document.createTextNode("");
+        api.get({ id: id })
+            .done(function (data) {
+                node.nodeValue = data.display_name;
+            })
+            .always(function () {
+                _.defer(function () { // use defer! otherwise we return null on cache hit
+                    node = null; // don't leak
+                });
+            });
+        return node;
+    };
     
     return api;
 });

@@ -11,17 +11,42 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/calendar/base", [], function () {
+define("io.ox/calendar/base", ["io.ox/core/gettext", "io.ox/core/api/user", "io.ox/core/api/resource"], function (gettext, userAPI, resourceAPI) {
     
-    // week day
-    var days = "So Mo Di Mi Do Fr Sa".split(' '),
+    // week day names
+    var gt = gettext,
+        n_day = "So Mo Di Mi Do Fr Sa".split(' '),
+        // month names
+        n_month = [gettext("January"), gettext("February"), gettext("March"),
+                   gettext("April"), gettext("May"), gettext("June"),
+                   gettext("July"), gettext("August"), gettext("September"),
+                   gettext("October"), gettext("November"), gettext("December")
+                  ],
+        // day names
+        n_count = [gettext("last"), "", gettext("first"), gettext("second"),
+                   gettext("third"), gettext("fourth"), gettext("last")
+                   ],
         // shown as
-        shownAs = " reserved temporary absent free".split(' '),
+        n_shownAs = [gettext("Reserved"), gettext("Temporary"),
+                     gettext("Absent"), gettext("Free")
+                     ],
+        shownAsClass = "reserved temporary absent free".split(' '),
+        // confirmation status (none, accepted, declined, tentative)
+        n_confirm = ["", "\u2713", "x", "?"],
+        confirmClass = ["", "accepted", "declined", "tentative"],
         // constants
         MINUTE = 60000,
         HOUR = 60 * MINUTE,
         DAY = 24 * HOUR,
-        WEEK = 7 * DAY;
+        WEEK = 7 * DAY,
+        // day bitmask
+        SUNDAY = 1,
+        MONDAY = 2,
+        THUESDAY = 4,
+        WEDNESDAY = 8,
+        THURSDAY = 16,
+        FRIDAY = 32,
+        SATURDAY = 64;
     
     var that = {
         
@@ -61,7 +86,7 @@ define("io.ox/calendar/base", [], function () {
         
         getDate: function (timestamp) {
             var d = new Date(timestamp);
-            return days[d.getUTCDay()] + ", " + _.pad(d.getUTCDate(), 2) + "." + _.pad(d.getUTCMonth() + 1, 2) + "." + d.getUTCFullYear();
+            return n_day[d.getUTCDay()] + ", " + _.pad(d.getUTCDate(), 2) + "." + _.pad(d.getUTCMonth() + 1, 2) + "." + d.getUTCFullYear();
         },
         
         getDateInterval: function (data) {
@@ -84,8 +109,122 @@ define("io.ox/calendar/base", [], function () {
             }
         },
         
+        getShownAsClass: function (data) {
+            return shownAsClass[(data.shown_as || 1) - 1];
+        },
+        
         getShownAs: function (data) {
-            return shownAs[data.shown_as || 0];
+            return n_shownAs[(data.shown_as || 1) - 1];
+        },
+        
+        isSeries: function (data) {
+            return !!data.recurrence_type;
+        },
+        
+        getSeriesString: function (data) {
+            
+            function getCountString(i) {
+                return n_count[i + 1];
+            }
+            
+            function getDayString(i) {
+                var tmp = [];
+                switch (i) {
+                case 62:
+                    tmp.push(gettext("Work Day"));
+                    break;
+                case 65:
+                    tmp.push(gettext("Weekend Day"));
+                    break;
+                case 127:
+                    tmp.push(gettext("Day"));
+                    break;
+                default:
+                    if ((i % MONDAY) / SUNDAY >= 1) {
+                        tmp.push(gettext("Sunday"));
+                    }
+                    if ((i % THUESDAY) / MONDAY >= 1) {
+                        tmp.push(gettext("Monday"));
+                    }
+                    if ((i % WEDNESDAY) / THUESDAY >= 1) {
+                        tmp.push(gettext("Tuesday"));
+                    }
+                    if ((i % THURSDAY) / WEDNESDAY >= 1) {
+                        tmp.push(gettext("Wednesday"));
+                    }
+                    if ((i % FRIDAY) / THURSDAY >= 1) {
+                        tmp.push(gettext("Thursday"));
+                    }
+                    if ((i % SATURDAY) / FRIDAY >= 1) {
+                        tmp.push(gettext("Friday"));
+                    }
+                    if (i / SATURDAY >= 1) {
+                        tmp.push(gettext("Saturday"));
+                    }
+                }
+                return tmp.join(", ");
+            }
+            
+            function getMonthString(i) {
+                return n_month[i];
+            }
+            
+            var str = "", f = _.printf,
+                interval = data.interval, days = data.days, month = data.month,
+                day_in_month = data.day_in_month;
+            
+            switch (data.recurrence_type) {
+            case 1:
+                str = f(gettext("Each %s Day"), interval);
+                break;
+            case 2:
+                str = interval === 1 ?
+                    f(gettext("Weekly on %s"), getDayString(days)) :
+                    f(gettext("Each %s weeks on %s"), interval, getDayString(days));
+                break;
+            case 3:
+                if (days === null) {
+                    str = f(gettext("On %s. day every %s. month"), day_in_month, data.interval);
+                } else {
+                    str = f(gettext("On %s %s each %s. months"), getCountString(day_in_month), getDayString(days), interval);
+                }
+                break;
+            case 4:
+                if (days === null) {
+                    str = f(gettext("Each %s. %s"), day_in_month, getMonthString(month));
+                } else {
+                    str = f(gettext("On %s %s in %s"), getCountString(day_in_month), getDayString(days), getMonthString(month));
+                }
+                break;
+            }
+            
+            return str;
+        },
+        
+        getNote: function (data) {
+            return $.trim(data.note || "")
+                .replace(/\n{3,}/g, "\n\n")
+                .replace(/</g, "&lt;")
+                .replace(/(https?\:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
+        },
+        
+        getConfirmations: function (data) {
+            var hash = {};
+            // internal users
+            _(data.users).each(function (obj) {
+                hash[String(obj.id)] = {
+                    status: obj.confirmation || 0,
+                    comment: obj.confirmmessage || ""
+                };
+            });
+            // external users
+            _(data.confirmations).each(function (obj) {
+                hash[obj.mail] = {
+                    status: obj.status || 0,
+                    comment: obj.confirmmessage || ""
+                };
+            });
+            return hash;
         },
         
         draw: function (data) {
@@ -96,21 +235,25 @@ define("io.ox/calendar/base", [], function () {
             
             var list = data.participants, $i = list.length,
                 participants = $i > 1 ? $("<div>").addClass("participants") : $(),
+                confirmations = {},
                 note = data.note ?
                     $("<div>")
-                        .append($("<div>").addClass("label").text("Comments"))
-                        .append($("<div>").addClass("note").text(data.note)) :
-                    $();
+                        .append($("<div>").addClass("note").html(this.getNote(data))) :
+                    $(),
+                seriesString = this.getSeriesString(data);
             
             var node = $("<div>")
                 .addClass("calendar-detail")
                 .append(
                     $("<div>").addClass("date")
                         .append(
-                            $("<div>").addClass("day").text(this.getDateInterval(data))
+                            $("<div>").addClass("interval").text(this.getTimeInterval(data))
                         )
                         .append(
-                            $("<div>").addClass("interval").text(this.getTimeInterval(data))
+                            $("<div>").addClass("day").text(
+                                this.getDateInterval(data) +
+                                (seriesString !== "" ? " \u2013 " + seriesString : "")
+                            )
                         )
                 )
                 .append(
@@ -120,93 +263,149 @@ define("io.ox/calendar/base", [], function () {
                     $("<div>").addClass("location").text(data.location || "\u00a0")
                 )
                 .append(note)
-                .append(participants);
+                .append(participants)
+                .append($("<div>").addClass("label").text("Details"));
+            
+            // show as
+            node.append(
+                    $("<span>")
+                        .addClass("detail-label")
+                        .text("Show as" + ":\u00a0")
+                )
+                .append(
+                    $("<span>")
+                        .addClass("detail shown_as " + this.getShownAsClass(data))
+                        .text("\u00a0")
+                )
+                .append(
+                    $("<span>")
+                        .addClass("detail")
+                        .text(" " + this.getShownAs(data))
+                )
+                .append($("<br>"))
+            // folder
+                .append(
+                    $("<span>").addClass("detail-label").text("Folder" + ":\u00a0")
+                )
+                .append(
+                    $("<span>").addClass("detail").text(data.folder_id)
+                )
+                .append($("<br>"))
+            // created
+                .append(
+                    $("<span>")
+                        .addClass("detail-label")
+                        .text("Created" + ":\u00a0")
+                )
+                .append(
+                    $("<span>")
+                        .addClass("detail")
+                        .append($("<span>").text(this.getDate(data.creation_date)))
+                        .append($("<span>").text(" \u2013 "))
+                        .append($("<span>").append(userAPI.getTextNode(data.created_by)))
+                )
+                .append($("<br>"))
+            // modified by
+                .append(
+                    $("<span>")
+                        .addClass("detail-label")
+                        .text("Modified" + ":\u00a0")
+                )
+                .append(
+                    $("<span>")
+                        .addClass("detail")
+                        .append($("<span>").text(this.getDate(data.last_modified)))
+                        .append($("<span>").text(" \u2013 "))
+                        .append($("<span>").append(userAPI.getTextNode(data.modified_by)))
+                )
+                .append($("<br>"));
+            
+            function drawParticipant(obj, hash) {
+                var key = obj.mail || obj.id, conf = hash[key] || { status: 1, comment: "" },
+                    confirm = n_confirm[conf.status || 0],
+                    statusClass = confirmClass[conf.status || 0],
+                    personClass = hash[key] ? "person" : "",
+                    name = obj.display_name || String(obj.mail).toLowerCase(),
+                    node;
+                node = $("<div>").addClass("participant")
+                    .append($("<span>").addClass("status " + statusClass).text(confirm))
+                    .append($("<span>").addClass(personClass).text(name));
+                if (conf.comment !== "") {
+                    node.append($("<span>").addClass("comment").text(conf.comment));
+                }
+                return node;
+            }
             
             // has participants?
             if ($i > 1) {
+                
+                confirmations = this.getConfirmations(data);
                 participants.busy();
-                // get user & resource APIs
-                require(["io.ox/core/api/user", "io.ox/core/api/resource"], function (user, resource) {
-                    // get internal users
-                    var users = _(list)
+                
+                // get internal users
+                var users = _(list)
+                    .chain()
+                    .select(function (obj) {
+                        return obj.type === 1;
+                    })
+                    .map(function (obj) {
+                        return obj.id;
+                    })
+                    .value();
+                // get resources
+                var resources = _(list)
+                    .chain()
+                    .select(function (obj) {
+                        return obj.type === 3;
+                    })
+                    .map(function (obj) {
+                        return { id: obj.id };
+                    })
+                    .value();
+                // get external participants
+                var external = _(list)
+                    .chain()
+                    .select(function (obj) {
+                        return obj.type === 5;
+                    })
+                    .sortBy(function (obj) {
+                        return obj.mail;
+                    })
+                    .value();
+                
+                var plist = $("<div>").addClass("participant-list");
+                
+                $.when(userAPI.getList(users), resourceAPI.getList(resources))
+                .done(function (userList, resourceList) {
+                    // loop over internal users
+                    _(userList)
                         .chain()
-                        .select(function (obj) {
-                            return obj.type === 1;
+                        .sortBy(function (obj) {
+                            return obj.display_name;
                         })
-                        .map(function (obj) {
-                            return obj.id;
-                        })
-                        .value();
-                    // get resources
-                    var resources = _(list)
+                        .each(function (obj) {
+                            plist.append(drawParticipant(obj, confirmations));
+                        });
+                    // loop over resources
+                    _(resourceList)
                         .chain()
-                        .select(function (obj) {
-                            return obj.type === 3;
+                        .sortBy(function (obj) {
+                            return obj.display_name;
                         })
-                        .map(function (obj) {
-                            return obj.id;
-                        })
-                        .value();
-                    // get external participants
-                    var external = _(list)
-                        .chain()
-                        .select(function (obj) {
-                            return obj.type === 5;
-                        })
-                        .map(function (obj) {
-                            return obj.mail; // not id!
-                        })
-                        .value()
-                        .sort();
-                    
-                    var plist = $("<div>").addClass("participant-list");
-                    
-                    $.when(
-                        user.getList(users).done(function (data) {
-                            // loop over internal users
-                            _(data)
-                                .chain()
-                                .sortBy(function (obj) {
-                                    return obj.display_name;
-                                })
-                                .each(function (obj) {
-                                    plist.append(
-                                       $("<div>").addClass("participant person").text(obj.display_name || "---")
-                                    );
-                                });
-                            // loop over external participants
-                            _(external).each(function (obj) {
-                                plist.append(
-                                   $("<div>").addClass("participant person").text(String(obj).toLowerCase())
-                                );
-                            });
-                        }),
-                        resource.getList(resources).done(function (data) {
-                            // loop over internal users
-                            _(data)
-                                .chain()
-                                .sortBy(function (obj) {
-                                    return obj.display_name;
-                                })
-                                .each(function (obj) {
-                                    plist.append(
-                                       $("<div>").addClass("participant person").text(obj.display_name || "---")
-                                    );
-                                });
-                            // loop over external participants
-                            _(external).each(function (obj) {
-                                plist.append(
-                                   $("<div>").addClass("participant person").text(String(obj).toLowerCase())
-                                );
-                            });
-                        })
-                    )
-                    .always(function () {
-                        participants.idle()
-                            .append($("<div>").addClass("label").text("Participants"))
-                            .append(plist)
-                            .append($("<div>").addClass("participants-clear"));
+                        .each(function (obj) {
+                            plist.append(drawParticipant(obj, confirmations));
+                        });
+                })
+                .always(function () {
+                    // loop over external participants
+                    _(external).each(function (obj) {
+                        plist.append(drawParticipant(obj, confirmations));
                     });
+                    // finish
+                    participants.idle()
+                        .append($("<div>").addClass("label").text("Participants"))
+                        .append(plist)
+                        .append($("<div>").addClass("participants-clear"));
                 });
             }
             

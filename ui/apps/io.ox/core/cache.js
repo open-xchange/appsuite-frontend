@@ -18,7 +18,7 @@ define("io.ox/core/cache", function () {
     // default key generator
     var defaultKeyGenerator = function (data) {
         if (typeof data === "object" && data) {
-            return (data.folder_id || data.folder) + "." + data.id;
+            return (data.folder_id || data.folder || 0) + "." + data.id;
         } else {
             return "";
         }

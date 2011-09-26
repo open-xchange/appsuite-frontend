@@ -81,7 +81,9 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                 // be robust
                 ids = ids || [];
                 // cache miss?
-                if (!o.cache || !caches.list.contains(ids)) {
+                if (ids.length === 0) {
+                    return $.Deferred().resolve([]);
+                } else if (!o.cache || !caches.list.contains(ids)) {
                     // call server and return deferred object
                     return http.fixList(ids, http.PUT({
                             module: o.module,

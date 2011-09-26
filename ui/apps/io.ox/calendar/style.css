@@ -44,10 +44,11 @@
     bottom: -1px;
 }
 
-.vgrid-cell.calendar .shown_as.reserved { background-color: #08c; } /* blue */
-.vgrid-cell.calendar .shown_as.temporary { background-color: #fc0; } /* yellow */
-.vgrid-cell.calendar .shown_as.absent { background-color: #913F3F; } /* red */
-.vgrid-cell.calendar .shown_as.free { background-color: #8EB360; } /* green */
+/* shown_as */
+.shown_as.reserved { background-color: #08c; } /* blue */
+.shown_as.temporary { background-color: #fc0; } /* yellow */
+.shown_as.absent { background-color: #913F3F; } /* red */
+.shown_as.free { background-color: #8EB360; } /* green */
 
 /* Detail view */
 
@@ -62,11 +63,12 @@
 
 .calendar-detail .interval {
     color: #08c;
+    white-space: nowrap;
+    float: right;
 }
 
 .calendar-detail .day {
     color: #888;
-    float: right;
 }
 
 .calendar-detail .title {
@@ -91,6 +93,7 @@
 .calendar-detail .note {
     white-space: pre-wrap;
     max-width: 550px;
+    margin-top: 2em;
     -webkit-user-select: text;
     -moz-user-select: text;
     user-select: text;
@@ -116,16 +119,50 @@
 }
 
 .calendar-detail .participant {
-    line-height: 1.5em;
+    line-height: 1.1em;
     display: inline-block;
     width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-right: 20px;
+    margin: 0 20px 0.5em 0;
     float: left;
 }
 
 .csscolumns .calendar-detail .participant {
-    margin-right: 0px;
+    margin: 0 0 0.5em 0;
     float: none;
 }
+
+.calendar-detail .detail-label {
+    display: inline-block;
+    width: 80px;
+    white-space: nowrap;
+    color: #666;
+}
+
+.calendar-detail .detail {
+    white-space: nowrap;
+}
+
+.calendar-detail .detail.shown_as {
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+}
+
+.calendar-detail .participant .status {
+    display: inline-block;
+    width: 1.5em;
+}
+
+.calendar-detail .participant .status.accepted { color: #8EB360; } /* green */
+.calendar-detail .participant .status.declined { color: #913F3F; } /* red */
+.calendar-detail .participant .status.tentative { color: #aaa; } /* gray */
+
+.calendar-detail .participant .comment {
+    color: #888;
+    font-style: italic;
+    display: block;
+    padding-left: 1.5em;
+}
+

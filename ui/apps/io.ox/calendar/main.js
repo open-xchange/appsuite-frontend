@@ -78,7 +78,7 @@ define("io.ox/calendar/main",
                 fields.title.text(data.title);
                 fields.location.text(data.location);
                 fields.date.text(base.getTimeInterval(data));
-                fields.shown_as.get(0).className = "abs shown_as " + base.getShownAs(data);
+                fields.shown_as.get(0).className = "abs shown_as " + base.getShownAsClass(data);
             }
         });
         

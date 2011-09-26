@@ -15,7 +15,7 @@
 
 define("io.ox/core/event", function () {
 
-    return {
+    var that = {
 
         Dispatcher: (function () {
             
@@ -234,4 +234,9 @@ define("io.ox/core/event", function () {
             
         }())
     };
+    
+    // add global dispatcher
+    that.Dispatcher.extend(ox);
+    
+    return that;
 });
