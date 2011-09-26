@@ -25,7 +25,6 @@
         // nodes
         left,
         right,
-        statusBar,
         viewer;
     
     // launcher
@@ -33,7 +32,8 @@
         
         // get window
         app.setWindow(win = ox.ui.createWindow({
-            title: "AJAX Debugger"
+            title: "AJAX Debugger",
+            search: true
         }));
     
         // toolbar
@@ -43,7 +43,7 @@
         }); */
     
         // left side
-        left = $("<div/>").addClass("leftside withStatusBar border-right")
+        left = $("<div/>").addClass("leftside border-right")
             .css({
                 width: "309px",
                 overflow: "auto"
@@ -51,14 +51,10 @@
             .appendTo(win.nodes.main);
     
         right = $("<div/>")
-            .css({ left: "310px", overflow: "auto", padding: "0px 40px 20px 40px" })
-            .addClass("rightside withStatusBar")
+            .css({ left: "310px", overflow: "auto", padding: "20px 40px 20px 40px" })
+            .addClass("rightside")
             .appendTo(win.nodes.main);
     
-    
-        statusBar = $("<div/>")
-        .addClass("statusBar")
-        .appendTo(win.nodes.main);
     
         viewer = new callViews.CallView(right, callHandler);
             
@@ -80,19 +76,17 @@
     
         // all request
         grid.setAllRequest(function () {
-            var ids = _(callHandler.history).map(function (entry) {
-                return entry.id;
+            var ids = _(callHandler.history.slice().reverse()).map(function (entry) {
+                return entry;
             });
-            console.log(ids);
             return new $.Deferred().resolve(ids);
         });
       
         // list request
         grid.setListRequest(function (ids) {
             var entries = _(ids).map(function (id) {
-               return callHandler.history[id];
+               return callHandler.history[id.id];
             });
-            console.log(entries);
             return new $.Deferred().resolve(entries);
         });
     
@@ -100,23 +94,42 @@
     
         grid.selection.bind("change", function (selection) {
             if (selection.length === 1) {
-                // get file
                 viewer.draw(selection[0]);
             }
         });
     
         // explicit keyboard support
-        win.bind("show", function () { grid.selection.keyboard(true); });
-        win.bind("hide", function () { grid.selection.keyboard(false); });
+        //win.bind("show", function () { grid.selection.keyboard(true); });
+        //win.bind("hide", function () { grid.selection.keyboard(false); });
         
         callHandler.bind("historychanged", function () {
             grid.refresh();
+            grid.selection.set(_(callHandler.history).last());
         });
+
+        // Buttons
+        win.addButton({
+            label: "Dump to Console",
+            action: function () {
+                if (viewer.dirty) {
+                    console.log({query: viewer.getQuery()}  );
+                } else {
+                    var selection = grid.selection.get();
+                    if (selection.length === 1) {
+                        console.log(selection[0]);
+                    } else {
+                        console.log(selection);
+                    }
+                }
+            }
+        });
+        
         
         // go!
         win.show(function () {
             grid.paint();
         });
+        
     });
     
     return {
