@@ -92,9 +92,9 @@
 }
 
 .calendar-detail .note {
-    white-space: pre-wrap;
     max-width: 550px;
-    margin-top: 2em;
+    white-space: pre-wrap;
+    margin: 2em 0 1em 0;
     -webkit-user-select: text;
     -moz-user-select: text;
     user-select: text;
@@ -111,18 +111,18 @@
 }
 
 .calendar-detail .participant-list {
-    -webkit-column-width: 300px;
+    -webkit-column-width: 250px;
     -webkit-column-gap: 20px;
-    -moz-column-width: 300px;
+    -moz-column-width: 250px;
     -moz-column-gap: 20px;
-    column-width: 300px;
+    column-width: 250px;
     column-gap: 20px;
 }
 
 .calendar-detail .participant {
     line-height: 1.1em;
     display: inline-block;
-    width: 300px;
+    width: 250px;
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 0 20px 0.5em 0;
