@@ -251,6 +251,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
             "614" : "contact_id",
             "615" : "login_info"
         },
+        "group": {
+        },
         "resource": {
         },
         "account": {
@@ -308,7 +310,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
     // get all columns of a module
     var getAllColumns = function (module, join) {
         // get ids
-        var ids = idMapping[module];
+        var ids = idMapping[module] || {};
         // flatten this array
         var tmp = [], column = "";
         for (column in ids) {
@@ -330,7 +332,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         // columns set?
         columns = columns !== undefined ? columns : getAllColumns(module);
         // get ids
-        var ids = idMapping[module];
+        var ids = idMapping[module] || {};
         var obj = {}, i = 0, $l = data.length;
         // loop through data
         for (; i < $l; i++) {

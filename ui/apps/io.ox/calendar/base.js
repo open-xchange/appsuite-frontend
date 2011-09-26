@@ -11,11 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/calendar/base", ["io.ox/core/gettext", "io.ox/core/api/user", "io.ox/core/api/resource"], function (gettext, userAPI, resourceAPI) {
+define("io.ox/calendar/base",
+    ["io.ox/core/gettext", "io.ox/core/api/user", "io.ox/core/api/group",
+     "io.ox/core/api/resource"], function (gettext, userAPI, groupAPI, resourceAPI) {
     
     // week day names
-    var gt = gettext,
-        n_day = "So Mo Di Mi Do Fr Sa".split(' '),
+    var n_day = "So Mo Di Mi Do Fr Sa".split(' '),
         // month names
         n_month = [gettext("January"), gettext("February"), gettext("March"),
                    gettext("April"), gettext("May"), gettext("June"),
@@ -328,8 +329,8 @@ define("io.ox/calendar/base", ["io.ox/core/gettext", "io.ox/core/api/user", "io.
                     name = obj.display_name || String(obj.mail).toLowerCase(),
                     node;
                 node = $("<div>").addClass("participant")
-                    .append($("<span>").addClass("status " + statusClass).text(confirm))
-                    .append($("<span>").addClass(personClass).text(name));
+                    .append($("<span>").addClass(personClass).text(name))
+                    .append($("<span>").addClass("status " + statusClass).text(" " + confirm));
                 if (conf.comment !== "") {
                     node.append($("<span>").addClass("comment").text(conf.comment));
                 }
@@ -350,6 +351,16 @@ define("io.ox/calendar/base", ["io.ox/core/gettext", "io.ox/core/api/user", "io.
                     })
                     .map(function (obj) {
                         return obj.id;
+                    })
+                    .value();
+                // get user groups
+                var groups = _(list)
+                    .chain()
+                    .select(function (obj) {
+                        return obj.type === 2;
+                    })
+                    .map(function (obj) {
+                        return { id: obj.id };
                     })
                     .value();
                 // get resources
@@ -373,10 +384,14 @@ define("io.ox/calendar/base", ["io.ox/core/gettext", "io.ox/core/api/user", "io.
                     })
                     .value();
                 
-                var plist = $("<div>").addClass("participant-list");
                 
-                $.when(userAPI.getList(users), resourceAPI.getList(resources))
-                .done(function (userList, resourceList) {
+                participants.append($("<div>")
+                        .addClass("label").text("Participants"));
+                    
+                var plist = $("<div>").addClass("participant-list").appendTo(participants);
+                
+                $.when(userAPI.getList(users), groupAPI.getList(groups), resourceAPI.getList(resources))
+                .done(function (userList, groupList, resourceList) {
                     // loop over internal users
                     _(userList)
                         .chain()
@@ -386,6 +401,40 @@ define("io.ox/calendar/base", ["io.ox/core/gettext", "io.ox/core/api/user", "io.
                         .each(function (obj) {
                             plist.append(drawParticipant(obj, confirmations));
                         });
+                    // loop over external participants
+                    _(external).each(function (obj) {
+                        plist.append(drawParticipant(obj, confirmations));
+                    });
+                    // loop over groups
+                    _(groupList)
+                        .chain()
+                        .sortBy(function (obj) {
+                            return obj.display_name;
+                        })
+                        .each(function (obj) {
+                            // new section
+                            var glist;
+                            participants
+                                .append($("<div>").addClass("group").text(obj.display_name + ":"))
+                                .append(glist = $("<div>").addClass("participant-list"));
+                            // resolve group members
+                            userAPI.getList(obj.members)
+                                .done(function (members) {
+                                    // sort members
+                                    _(members)
+                                        .chain()
+                                        .sortBy(function (obj) {
+                                            return obj.display_name;
+                                        })
+                                        .each(function (obj) {
+                                            glist.append(drawParticipant(obj, confirmations));
+                                        });
+                                });
+                        });
+                    // new section
+                    participants
+                        .append($("<div>").addClass("label").text("Resources"))
+                        .append(plist = $("<div>").addClass("participant-list"));
                     // loop over resources
                     _(resourceList)
                         .chain()
@@ -397,14 +446,8 @@ define("io.ox/calendar/base", ["io.ox/core/gettext", "io.ox/core/api/user", "io.
                         });
                 })
                 .always(function () {
-                    // loop over external participants
-                    _(external).each(function (obj) {
-                        plist.append(drawParticipant(obj, confirmations));
-                    });
                     // finish
                     participants.idle()
-                        .append($("<div>").addClass("label").text("Participants"))
-                        .append(plist)
                         .append($("<div>").addClass("participants-clear"));
                 });
             }

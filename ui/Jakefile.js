@@ -42,7 +42,7 @@ function jsFilter (data) {
     i18n.potScan(this.name, ast);
     
     // UglifyJS
-    if (debug) return data;
+    if (debug||true) return data;
     ast = pro.ast_lift_variables(ast);
     ast = pro.ast_mangle(ast);
     ast = pro.ast_squeeze(ast);
@@ -70,6 +70,7 @@ function htmlFilter (data) {
 var jshintOptions = {
     bitwise: false,
     browser: true,
+    debug: true,
     devel: true,
     eqeqeq: true,
     evil: true,
@@ -163,7 +164,7 @@ utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
         "event.js", "extensions.js", "cache.js", "http.js",
         "config.js", "session.js", "gettext.js",
-        "api/factory.js", "api/user.js", "api/resource.js",
+        "api/factory.js", "api/user.js", "api/resource.js", "api/group.js",
         "desktop.js", "main.js"
     ]), { type: "source" }
 );
