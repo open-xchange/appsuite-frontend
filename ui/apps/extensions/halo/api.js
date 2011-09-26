@@ -30,7 +30,7 @@
                 }
             })
             .done(function (response) {
-                activeProviders = response;
+                activeProviders
                 ready();
             })
             .fail(ready);

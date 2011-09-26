@@ -1,7 +1,7 @@
 define("extensions/halo/contacts/register", ["io.ox/core/extensions"], function (ext) {
     ext.point("io.ox/halo/contact:renderer").extend({
         handles: function (type) {
-            return type === "contact";
+            return type === "com.openexchange.halo.contacts";
         },
         draw: function  ($node, providerName, contacts) {
             if (contacts.length === 0) {
@@ -19,7 +19,7 @@ define("extensions/halo/contacts/register", ["io.ox/core/extensions"], function 
         },
         enhance: function (request) {
             request.appendColumns = true;
-            request.columnModule = "contacts";
+            request.columnModule = "com.openexchange.halo.contacts";
         }
     });
 });
