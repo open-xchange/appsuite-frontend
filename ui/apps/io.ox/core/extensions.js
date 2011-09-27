@@ -26,11 +26,14 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
         this.id = options.id;
         this.description = options.description;
         
+        event.Dispatcher.extend(this);
+        
         var extensions = [];
         
         this.extend = function (extension) {
             extensions.push(extension);
             extensions.sort(pointSorter);
+            this.trigger("extended");
             return this;
         };
         
