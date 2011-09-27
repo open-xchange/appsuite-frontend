@@ -58,7 +58,6 @@ define("io.ox/files/api", ["io.ox/core/http", "io.ox/core/api/factory", "io.ox/c
     // "file" - the file object to upload
     // The method returns a deferred that is resolved once the file has been uploaded
     api.uploadFile = function (options) {
-        
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
             folder: config.get("folder.infostore")

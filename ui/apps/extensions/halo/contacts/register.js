@@ -15,11 +15,11 @@ define("extensions/halo/contacts/register", ["io.ox/core/extensions"], function 
     
     ext.point("io.ox/halo/contact:requestEnhancement").extend({
         enhances: function (type) {
-            return type === "contact";
+            return type === "com.openexchange.halo.contacts";
         },
         enhance: function (request) {
             request.appendColumns = true;
-            request.columnModule = "com.openexchange.halo.contacts";
+            request.columnModule = "contacts";
         }
     });
 });
