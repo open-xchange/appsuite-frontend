@@ -44,7 +44,7 @@ define("io.ox/internal/testing/main", ["io.ox/internal/testing/jasmine", "io.ox/
                         var $node = $("<div/>").appendTo(win.nodes.main);
                         $node.append($("<h1/>").text(suite.description));
                         suiteNodes[suite.id] = $node;
-                        var $listContainer = $("<div />").appendTo($node).text("It...");
+                        var $listContainer = $("<div />").appendTo($node);
                         var $list = $("<ul/>").appendTo($listContainer);
                         _(suite.specs()).each(function (spec) {
                             specNodes[spec.id] = $("<li/>").appendTo($list).text(spec.description);

@@ -15,11 +15,34 @@
 
 define("extensions/halo/config", function () {
    
-    function HaloConfig(providersConfig, activeProviders) {
-       
-    }
    
     return {
-        HaloConfig: HaloConfig
+        interpret: function (providersConfig, activeProviders) {
+
+            if (!providersConfig) {
+                return activeProviders;
+            }
+            var providers = [];
+            var availability = {};
+            _(activeProviders).each(function (provider) {
+                availability[provider] = true;
+            });
+
+            providersConfig = _(providersConfig).map(function (val) {
+                return val;
+            });
+            
+            providersConfig.sort(function (a, b) {
+                return a.position - b.position;
+            });
+
+            _(providersConfig).each(function (config) {
+                if (availability[config.provider] && config.enabled) {
+                    providers.push(config.provider);
+                }
+            });
+
+            return providers;
+        }
     };
 });
