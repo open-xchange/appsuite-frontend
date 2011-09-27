@@ -82,6 +82,7 @@ var jshintOptions = {
     trailing: true,
     undef: true,
     white: true,
+    loopfunc: true,
     predef: ["$", "_", "Modernizr", "define", "require", "ox", "initializeAndDefine"]
 };
 

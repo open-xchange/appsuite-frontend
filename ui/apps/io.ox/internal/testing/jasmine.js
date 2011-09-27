@@ -1565,9 +1565,9 @@ define("io.ox/internal/testing/jasmine", function () {
                         }
                     }
                 };
-            })(functionName);
+            }(functionName));
         }
-    })();
+    }());
     /**
      * Holds results for a set of Jasmine spec. Allows for the results array to hold another jasmine.NestedResults
      *
@@ -1891,6 +1891,7 @@ define("io.ox/internal/testing/jasmine", function () {
         if (self.env.reporter.reportRunnerStarting) {
             self.env.reporter.reportRunnerStarting(this);
         }
+
         self.queue.start(function () {
             self.finishCallback();
         });
@@ -2531,5 +2532,7 @@ define("io.ox/internal/testing/jasmine", function () {
         "build": 0,
         "revision": 1315677058
     };
+    
+    return exports;
 
 });

@@ -25,5 +25,8 @@ define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
         }
     });
     
-    ext.point("io.ox/testing/suite", "extensions/halo/config-test.js");
+    ext.point("io.ox/testing/suite").extend({
+        file: "extensions/halo/config-test",
+        title: "Halo Config"
+    });
 });
