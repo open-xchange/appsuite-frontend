@@ -21,7 +21,7 @@
     var name = "extensions/halo/api";
     var activeProviders = [];
     
-    function init(ready, http, config) {
+    function init(ready, http, config, haloConfigUtil) {
         
         http.GET({
                 module: "halo/contact",
@@ -35,14 +35,7 @@
                     activeMap[provider] = true;
                 });
                 var providerConfig = config.get("ui.halo.providers");
-                
-                
-                
-                if (providerConfig) {
-                    
-                } else {
-                    activeProviders = response;
-                }
+                activeProviders = haloConfigUtil.interpret(providerConfig, response);
                 ready();
             })
             .fail(ready);
@@ -141,7 +134,7 @@
     
     initializeAndDefine(
         name,
-        ["io.ox/core/http", "io.ox/core/config"], init,
+        ["io.ox/core/http", "io.ox/core/config", "extensions/halo/config"], init,
         ["io.ox/core/http", "io.ox/core/extensions"], module
     );
 }());
