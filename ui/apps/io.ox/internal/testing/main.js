@@ -13,13 +13,13 @@
  *
  */
 
-define("extensions/halo/config", function () {
-   
-    function HaloConfig(providersConfig, activeProviders) {
-       
-    }
-   
-    return {
-        HaloConfig: HaloConfig
-    };
+define("io.ox/internal/testing/main", ["io.ox/internal/testing/jasmine", "io.ox/core/extensions"], function (jasmine, ext) {
+    ext.point("io.ox/testing/suite", function (testDef) {
+        console.log(testDef);
+        require([testDef], function (suite) {
+            suite(jasmine);
+        });
+    });
+    
+    
 });

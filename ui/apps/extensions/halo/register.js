@@ -24,4 +24,6 @@ define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
             });
         }
     });
+    
+    ext.point("io.ox/testing/suite", "extensions/halo/config-test.js");
 });
