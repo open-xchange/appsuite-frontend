@@ -35,18 +35,18 @@ console.info("Build version: " + version);
 var debug = Boolean(process.env.debug);
 if (debug) console.info("Debug mode: on");
 
-function jsFilter (data) {
-    data = hint.call(this, data);
+function jsFilter (data, getSrc) {
+    data = hint.call(this, data, getSrc);
     var ast = jsp.parse(data, false, true);
     
-    i18n.potScan(this.name, ast);
+    i18n.potScan(this.name, ast, getSrc);
     
     // UglifyJS
     if (debug) return data;
     ast = pro.ast_lift_variables(ast);
     ast = pro.ast_mangle(ast);
     ast = pro.ast_squeeze(ast);
-    // use split_lines -- don't know why but chrome crashes on endless lines
+    // use split_lines
     return pro.split_lines(pro.gen_code(ast), 500);
 }
 utils.addFilter("source", jsFilter);
@@ -85,13 +85,14 @@ var jshintOptions = {
     predef: ["$", "_", "Modernizr", "define", "require", "ox", "initializeAndDefine"]
 };
 
-function hint (data) {
+function hint (data, getSrc) {
     if (jshint(data, jshintOptions)) return data;
     console.error(jshint.errors.length + " Errors:");
     for (var i = 0; i < jshint.errors.length; i++) {
         var e = jshint.errors[i];
         if (e) {
-            console.error(this.name + ":" + (e.line) + ":" +
+            var src = getSrc(e.line);
+            console.error(src.name + ":" + (src.line) + ":" +
                     (e.character + 1) + ": " + e.reason);
             console.error(e.evidence);
             console.error(Array(e.character).join(" ") + "^");
@@ -105,22 +106,21 @@ function hint (data) {
 // default task
 
 desc("Builds the GUI");
-utils.topLevelTask("default", ["i18n/ox.pot"], utils.summary);
+utils.topLevelTask("default", ["ox.pot"], utils.summary);
 
 utils.copy(utils.list("html", [".htaccess", "blank.html", "favicon.ico"]));
 utils.copy(utils.list("src/"));
 
 // i18n
 
-directory("i18n");
-file("i18n/ox.pot", ["i18n", "Jakefile.js"], function() {
-    fs.writeFile(this.name, i18n.generatePOT(this.prereqs.slice(2)));
+file("ox.pot", ["Jakefile.js"], function() {
+    fs.writeFile(this.name, i18n.generatePOT(this.prereqs.slice(1)));
 });
 
 directory("tmp/pot");
 utils.addHandler("source", function(filename) {
     var dest = "tmp/pot/" + filename.replace(/\+/g, "++").replace(/\//g, "+-");
-    file("i18n/ox.pot", [dest]);
+    file("ox.pot", [dest]);
     file(dest, ["tmp/pot", filename], function() {
         if (filename in i18n.potFiles) {
             var data = JSON.stringify(i18n.potFiles[filename] || {});
@@ -214,12 +214,12 @@ task("clean", [], function() {
 // msgmerge task
 
 desc("Updates all .po files with the generated ox.pot");
-task("merge", ["i18n/ox.pot"], function() {
+task("merge", ["ox.pot"], function() {
     var files = _.without(utils.list("i18n/*.po"), "i18n/en_US.po");
     var count = files.length;
     for (var i = 0; i < files.length; i++) {
         utils.exec("msgmerge",
-            ["-Us", "--backup=none", files[i], "i18n/ox.pot"],
+            ["-Us", "--backup=none", files[i], "ox.pot"],
             function() { if (!--count) complete(); });
     }
 }, true);
