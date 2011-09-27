@@ -173,7 +173,6 @@ define("io.ox/core/cache", function () {
         // private
         var remove = function (key) {
             if (index.contains(key)) {
-                var o = index.get(key);
                 index.remove(key);
             }
         };
@@ -368,10 +367,9 @@ define("io.ox/core/cache", function () {
         var remove = this.remove;
         this.remove = function (data) {
             if (_.isArray(data)) {
-                var i = 0, $i = data.length, key;
+                var i = 0, $i = data.length;
                 for (; i < $i; i++) {
-                    key = String(this.keyGenerator(data[i]));
-                    remove(key);
+                    this.remove(data[i]);
                 }
             } else {
                 // simple value

@@ -157,16 +157,17 @@
 
 .calendar-detail .participant .status.accepted { color: #8EB360; } /* green */
 .calendar-detail .participant .status.declined { color: #913F3F; } /* red */
-.calendar-detail .participant .status.tentative { color: #aaa; } /* gray */
+.calendar-detail .participant .status.tentative { color: #c80; } /* orange */
 
 .calendar-detail .participant .comment {
     color: #888;
     font-style: italic;
     display: block;
     white-space: normal;
+    padding-left: 1em;
 }
 
 .calendar-detail .group {
     margin: 0.5em 0 0.5em 0;
-    color: #888;
+    color: #555;
 }

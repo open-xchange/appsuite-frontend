@@ -431,19 +431,21 @@ define("io.ox/calendar/base",
                                         });
                                 });
                         });
-                    // new section
-                    participants
-                        .append($("<div>").addClass("label").text("Resources"))
-                        .append(plist = $("<div>").addClass("participant-list"));
-                    // loop over resources
-                    _(resourceList)
-                        .chain()
-                        .sortBy(function (obj) {
-                            return obj.display_name;
-                        })
-                        .each(function (obj) {
-                            plist.append(drawParticipant(obj, confirmations));
-                        });
+                    // resources
+                    if (resourceList.length) {
+                        participants
+                            .append($("<div>").addClass("label").text("Resources"))
+                            .append(plist = $("<div>").addClass("participant-list"));
+                        // loop over resources
+                        _(resourceList)
+                            .chain()
+                            .sortBy(function (obj) {
+                                return obj.display_name;
+                            })
+                            .each(function (obj) {
+                                plist.append(drawParticipant(obj, confirmations));
+                            });
+                    }
                 })
                 .always(function () {
                     // finish

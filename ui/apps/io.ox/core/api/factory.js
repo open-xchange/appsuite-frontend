@@ -68,6 +68,16 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                             params: opt
                         })
                         .done(function (data, timestamp) {
+                            // remove deprecated entries
+                            // TODO: consider folder_id
+                            var diff = _(caches.get.keys())
+                                .difference(
+                                    data.map(function (obj) {
+                                        return caches.get.keyGenerator(obj);
+                                    })
+                                );
+                            caches.list.remove(diff);
+                            caches.get.remove(diff);
                             // add to cache
                             caches.all.add(opt.folder, data, timestamp);
                         });
