@@ -1,0 +1,203 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Open-Xchange 7\n"
+"POT-Creation-Date: Tue Sep 27 2011 15:11:43 GMT+0200 (CEST)\n"
+"PO-Revision-Date: DATE\n"
+"Last-Translator: NAME <EMAIL>\n"
+"Language-Team: NAME <EMAIL>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+msgid "User name"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Sign in"
+msgstr ""
+
+msgid "Stay signed in"
+msgstr ""
+
+msgid "Forgot your password?"
+msgstr ""
+
+msgid "Languages"
+msgstr ""
+
+msgid "Sign out"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Applications"
+msgstr ""
+
+msgid "E-Mail"
+msgstr ""
+
+msgid "Address Book"
+msgstr ""
+
+msgid "Calendar"
+msgstr ""
+
+msgid "Files"
+msgstr ""
+
+msgid "AJAX Requests"
+msgstr ""
+
+msgid "Tests"
+msgstr ""
+
+msgid "January"
+msgstr ""
+
+msgid "February"
+msgstr ""
+
+msgid "March"
+msgstr ""
+
+msgid "April"
+msgstr ""
+
+msgid "May"
+msgstr ""
+
+msgid "June"
+msgstr ""
+
+msgid "July"
+msgstr ""
+
+msgid "August"
+msgstr ""
+
+msgid "September"
+msgstr ""
+
+msgid "October"
+msgstr ""
+
+msgid "November"
+msgstr ""
+
+msgid "December"
+msgstr ""
+
+msgid "last"
+msgstr ""
+
+msgid "first"
+msgstr ""
+
+msgid "second"
+msgstr ""
+
+msgid "third"
+msgstr ""
+
+msgid "fourth"
+msgstr ""
+
+msgid "Reserved"
+msgstr ""
+
+msgid "Temporary"
+msgstr ""
+
+msgid "Absent"
+msgstr ""
+
+msgid "Free"
+msgstr ""
+
+msgid "Work Day"
+msgstr ""
+
+msgid "Weekend Day"
+msgstr ""
+
+msgid "Day"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
+
+msgid "Monday"
+msgstr ""
+
+msgid "Tuesday"
+msgstr ""
+
+msgid "Wednesday"
+msgstr ""
+
+msgid "Thursday"
+msgstr ""
+
+msgid "Friday"
+msgstr ""
+
+msgid "Saturday"
+msgstr ""
+
+msgid "Each %s Day"
+msgstr ""
+
+msgid "Weekly on %s"
+msgstr ""
+
+msgid "Each %s weeks on %s"
+msgstr ""
+
+msgid "On %s. day every %s. month"
+msgstr ""
+
+msgid "On %s %s each %s. months"
+msgstr ""
+
+msgid "Each %s. %s"
+msgstr ""
+
+msgid "On %s %s in %s"
+msgstr ""
+
+msgid "Distribution list"
+msgstr ""
+
+msgid "Department"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Profession"
+msgstr ""
+
+msgid "Work"
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "Phone (business)"
+msgstr ""
+
+msgid "Phone (private)"
+msgstr ""
+
+msgid "Mobile"
+msgstr ""
+
+msgid "Birthday"
+msgstr ""
