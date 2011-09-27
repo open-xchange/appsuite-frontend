@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
-"POT-Creation-Date: Tue Sep 27 2011 15:27:16 GMT+0200 (CEST)\n"
+"POT-Creation-Date: Tue Sep 27 2011 17:48:32 GMT+0200 (CEST)\n"
 "PO-Revision-Date: DATE\n"
 "Last-Translator: NAME <EMAIL>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -63,6 +63,10 @@ msgstr ""
 
 #: apps/io.ox/core/main.js:111
 msgid "AJAX Requests"
+msgstr ""
+
+#: apps/io.ox/core/main.js:118
+msgid "Tests"
 msgstr ""
 
 #: apps/io.ox/calendar/base.js:21
