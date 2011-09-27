@@ -24,6 +24,10 @@ define("extensions/halo/config-test", function () {
             it("does something", function () {
                 expect(1 + 1).toEqual(2);
             });
+            it("fails", function () {
+                expect(1 + 1).toEqual(2);
+                expect(1 + 1).toEqual(3);
+            });
         });
     };
 });
