@@ -56,7 +56,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
             
             o = $.extend({
                 start: _.now(),
-                end: _.now() + 28 * DAY
+                end: _.now() + 28 * 4 * DAY
             }, o || {});
             
             // round start & end date

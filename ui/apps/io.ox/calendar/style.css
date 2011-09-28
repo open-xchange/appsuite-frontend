@@ -120,7 +120,7 @@
 }
 
 .calendar-detail .participant {
-    line-height: 1.1em;
+    line-height: 1.2em;
     display: inline-block;
     width: 250px;
     overflow: hidden;
@@ -161,13 +161,12 @@
 
 .calendar-detail .participant .comment {
     color: #888;
-    font-style: italic;
     display: block;
     white-space: normal;
     padding-left: 1em;
 }
 
 .calendar-detail .group {
-    margin: 0.5em 0 0.5em 0;
-    color: #555;
+    margin: 0.75em 0 0.25em 0;
+    color: #333;
 }

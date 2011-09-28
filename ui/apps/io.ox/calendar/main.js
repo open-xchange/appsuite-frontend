@@ -12,8 +12,9 @@
  */
 
 define("io.ox/calendar/main",
-    ["io.ox/calendar/api", "io.ox/calendar/base", "io.ox/core/config", "io.ox/core/tk/vgrid",
-     "css!io.ox/calendar/style.css"], function (api, base, config, VGrid) {
+    ["io.ox/calendar/api", "io.ox/calendar/util", "io.ox/calendar/view-detail",
+     "io.ox/core/config", "io.ox/core/tk/vgrid",
+     "css!io.ox/calendar/style.css"], function (api, util, viewDetail, config, VGrid) {
     
     // application object
     var app = ox.ui.createApp(),
@@ -32,7 +33,7 @@ define("io.ox/calendar/main",
         // get window
         app.setWindow(win = ox.ui.createWindow({
             title: "Calendar",
-            subtitle: new Date() + "",
+            subtitle: util.getDate(),
             search: true
         }));
         
@@ -77,8 +78,8 @@ define("io.ox/calendar/main",
             set: function (data, fields, index) {
                 fields.title.text(data.title);
                 fields.location.text(data.location);
-                fields.date.text(base.getTimeInterval(data));
-                fields.shown_as.get(0).className = "abs shown_as " + base.getShownAsClass(data);
+                fields.date.text(util.getTimeInterval(data));
+                fields.shown_as.get(0).className = "abs shown_as " + util.getShownAsClass(data);
             }
         });
         
@@ -88,14 +89,14 @@ define("io.ox/calendar/main",
                 this.addClass("calendar-label");
             },
             set: function (data, fields, index) {
-                var d = base.getDate(data.start_date);
+                var d = util.getDate(data.start_date);
                 this.text(d);
             }
         });
         
         // requires new label?
         grid.requiresLabel = function (i, data, current) {
-            var d = base.getDate(data.start_date);
+            var d = util.getDate(data.start_date);
             return (i === 0 || d !== current) ? d : false;
         };
         
@@ -142,7 +143,7 @@ define("io.ox/calendar/main",
         };
         
         drawAppointment = function (data) {
-            right.idle().empty().append(base.draw(data));
+            right.idle().empty().append(viewDetail.draw(data));
         };
         
         drawFail = function (obj) {

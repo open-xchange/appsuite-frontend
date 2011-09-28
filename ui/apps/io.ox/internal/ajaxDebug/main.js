@@ -111,13 +111,13 @@ define("io.ox/internal/ajaxDebug/main", [ "io.ox/core/tk/vgrid", "io.ox/internal
             label: "Dump to Console",
             action: function () {
                 if (viewer.dirty) {
-                    console.log({query: viewer.getQuery()});
+                    console.debug({query: viewer.getQuery()});
                 } else {
                     var selection = grid.selection.get();
                     if (selection.length === 1) {
-                        console.log(selection[0]);
+                        console.debug(selection[0]);
                     } else {
-                        console.log(selection);
+                        console.debug(selection);
                     }
                 }
             }
