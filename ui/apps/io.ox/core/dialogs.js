@@ -105,6 +105,12 @@ define("io.ox/core/dialogs", function () {
             defaultAction = action;
             return this;
         };
+        
+        this.lightbox = function () {
+            underlayAction = "close";
+            defaultAction = "close";
+            return this;
+        };
     };
     
     //TODO: Less C&P
