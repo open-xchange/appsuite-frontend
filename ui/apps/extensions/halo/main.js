@@ -28,14 +28,15 @@ define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions"],
             
             app.setWindow(win);
             win.setQuitOnClose(true);
-                        
+            
+            var content = $("<div/>").css({overflow: "auto"}).appendTo(win.nodes.main);
             // Trigger Server Halo API
             if (api) {
                 var investigations = api.halo.investigate(data);
                 _(investigations).each(function (promise, providerName) {
                     var $node = $("<div/>");
                     $node.busy();
-                    win.nodes.main.append($node);
+                    content.append($node);
                     promise.done(function (response) {
                         $node.idle();
                         api.viewer.draw($node, providerName, response);

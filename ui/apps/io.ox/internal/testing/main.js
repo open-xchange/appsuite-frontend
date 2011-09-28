@@ -74,8 +74,6 @@ define("io.ox/internal/testing/main", ["io.ox/internal/testing/jasmine", "io.ox/
                                 $("<div/>").appendTo($node).text(item.toString());
                             }
                         });
-                        
-                        // TODO: Add details about the failure
                     }
                     //console.log("spec results", spec);
                 }
