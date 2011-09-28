@@ -42,7 +42,7 @@ function jsFilter (data, getSrc) {
     i18n.potScan(this.name, ast, getSrc);
     
     // UglifyJS
-    if (debug||true) return data;
+    if (debug) return data;
     ast = pro.ast_lift_variables(ast);
     ast = pro.ast_mangle(ast);
     ast = pro.ast_squeeze(ast);
@@ -83,7 +83,7 @@ var jshintOptions = {
     trailing: true,
     undef: true,
     white: true,
-    loopfunc: true,
+    loopfunc: false,
     predef: ["$", "_", "Modernizr", "define", "require", "ox", "initializeAndDefine"]
 };
 

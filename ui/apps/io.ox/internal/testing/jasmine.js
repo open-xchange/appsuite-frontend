@@ -1554,18 +1554,20 @@ define("io.ox/internal/testing/jasmine", function () {
             "log"
         ];
         
+        var wrap = function (functionName) {
+            return function () {
+                for (var j = 0; j < this.subReporters_.length; j++) {
+                    var subReporter = this.subReporters_[j];
+                    if (subReporter[functionName]) {
+                        subReporter[functionName].apply(subReporter, arguments);
+                    }
+                }
+            };
+        };
+        
         for (var i = 0; i < functionNames.length; i++) {
             var functionName = functionNames[i];
-            jasmine.MultiReporter.prototype[functionName] = (function (functionName) {
-                return function () {
-                    for (var j = 0; j < this.subReporters_.length; j++) {
-                        var subReporter = this.subReporters_[j];
-                        if (subReporter[functionName]) {
-                            subReporter[functionName].apply(subReporter, arguments);
-                        }
-                    }
-                };
-            }(functionName));
+            jasmine.MultiReporter.prototype[functionName] = wrap(functionName);
         }
     }());
     /**
@@ -1807,50 +1809,55 @@ define("io.ox/internal/testing/jasmine", function () {
     jasmine.Queue.LOOP_DONT_RECURSE = true;
 
     jasmine.Queue.prototype.next_ = function () {
+        
         var self = this;
         var goAgain = true;
+        var calledSynchronously = true;
+        var completedSynchronously = false;
 
+        var onComplete = function () {
+            if (jasmine.Queue.LOOP_DONT_RECURSE && calledSynchronously) {
+                completedSynchronously = true;
+                return;
+            }
+
+            if (self.blocks[self.index].abort) {
+                self.abort = true;
+            }
+
+            self.offset = 0;
+            self.index++;
+
+            var now = new Date().getTime();
+            if (self.env.updateInterval && now - self.env.lastUpdate > self.env.updateInterval) {
+                self.env.lastUpdate = now;
+                self.env.setTimeout(function () {
+                    self.next_();
+                }, 0);
+            } else {
+                if (jasmine.Queue.LOOP_DONT_RECURSE && completedSynchronously) {
+                    goAgain = true;
+                } else {
+                    self.next_();
+                }
+            }
+        };
+        
         while (goAgain) {
+            
             goAgain = false;
-
+            calledSynchronously = true;
+            completedSynchronously = false;
+            
             if (self.index < self.blocks.length && !this.abort) {
-                var calledSynchronously = true;
-                var completedSynchronously = false;
-
-                var onComplete = function () {
-                    if (jasmine.Queue.LOOP_DONT_RECURSE && calledSynchronously) {
-                        completedSynchronously = true;
-                        return;
-                    }
-
-                    if (self.blocks[self.index].abort) {
-                        self.abort = true;
-                    }
-
-                    self.offset = 0;
-                    self.index++;
-
-                    var now = new Date().getTime();
-                    if (self.env.updateInterval && now - self.env.lastUpdate > self.env.updateInterval) {
-                        self.env.lastUpdate = now;
-                        self.env.setTimeout(function () {
-                            self.next_();
-                        }, 0);
-                    } else {
-                        if (jasmine.Queue.LOOP_DONT_RECURSE && completedSynchronously) {
-                            goAgain = true;
-                        } else {
-                            self.next_();
-                        }
-                    }
-                };
+                
                 self.blocks[self.index].execute(onComplete);
-
+                
                 calledSynchronously = false;
                 if (completedSynchronously) {
                     onComplete();
                 }
-
+                
             } else {
                 self.running = false;
                 if (self.onComplete) {

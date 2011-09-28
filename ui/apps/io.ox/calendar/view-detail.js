@@ -18,71 +18,75 @@ define("io.ox/calendar/view-detail",
     
     // draw via extension points
     
-    // draw appointment body
-    ext.point("io.ox/calendar/detail").extend("create", {
-        index: 100,
-        create: function (data) {
-            return ext.children("io.ox/calendar/detail").create(data);
-        }
-    });
-    
     // draw appointment date & time
-    ext.point("io.ox/calendar/detail/date").extend("create", {
+    ext.point("io.ox/calendar/detail").extend({
         index: 100,
-        create: function (data) {
-            return $("<div>").addClass("date")
-                .append(
-                    ext.children("io.ox/calendar/detail/date").create(data)
-                );
+        id: "date",
+        draw: function (data) {
+            var node = $("<div>").addClass("date").appendTo(this);
+            ext.point("io.ox/calendar/detail/date").each(function (e) {
+                e.draw.call(node, data);
+            });
         }
     });
     
     // draw appointment time
-    ext.point("io.ox/calendar/detail/date/time").extend("create", {
+    ext.point("io.ox/calendar/detail/date").extend({
         index: 100,
-        create: function (data) {
-            return $("<div>").addClass("interval").text(util.getTimeInterval(data));
+        id: "time",
+        draw: function (data) {
+            this.append(
+                $("<div>").addClass("interval").text(util.getTimeInterval(data))
+            );
         }
     });
     
     // draw date and series information
-    ext.point("io.ox/calendar/detail/date/series").extend("create", {
+    ext.point("io.ox/calendar/detail/date").extend({
         index: 200,
-        create: function (data) {
+        id: "date",
+        draw: function (data) {
             var seriesString = util.getSeriesString(data);
-            return $("<div>").addClass("day").text(
+            this.append(
+                $("<div>").addClass("day").text(
                     util.getDateInterval(data) +
                     (seriesString !== "" ? " \u2013 " + seriesString : "")
-                );
+                )
+            );
         }
     });
     
     // draw title
-    ext.point("io.ox/calendar/detail/title").extend("create", {
+    ext.point("io.ox/calendar/detail").extend({
         index: 200,
-        create: function (data) {
-            return $("<div>").addClass("title").text(data.title || "");
+        id: "title",
+        draw: function (data) {
+            this.append(
+                $("<div>").addClass("title").text(data.title || "")
+            );
         }
     });
     
     // draw location
-    ext.point("io.ox/calendar/detail/location").extend("create", {
+    ext.point("io.ox/calendar/detail").extend({
         index: 300,
-        create: function (data) {
-            return $("<div>").addClass("location").text(data.location || "\u00a0");
+        id: "location",
+        draw: function (data) {
+            this.append(
+                $("<div>").addClass("location").text(data.location || "\u00a0")
+            );
         }
     });
     
     // draw note/comment
-    ext.point("io.ox/calendar/detail/note").extend("create", {
+    ext.point("io.ox/calendar/detail").extend({
         index: 400,
-        create: function (data) {
+        id: "note",
+        draw: function (data) {
             if (data.note) {
-                return $("<div>").append(
+                this.append(
                     $("<div>").addClass("note").html(util.getNote(data))
                 );
-            } else {
-                return null; // do not consider
             }
         }
     });
@@ -121,12 +125,13 @@ define("io.ox/calendar/view-detail",
         return node;
     }
     
-    ext.point("io.ox/calendar/detail/participants").extend("create", {
+    ext.point("io.ox/calendar/detail").extend({
         index: 500,
-        create: function (data) {
+        id: "participants",
+        draw: function (data) {
             
             var list = data.participants, $i = list.length,
-                participants = $i > 1 ? $("<div>").addClass("participants") : null,
+                participants = $i > 1 ? $("<div>").addClass("participants") : $(),
                 confirmations = {};
             
             // has more than one participant?
@@ -249,91 +254,103 @@ define("io.ox/calendar/view-detail",
                 });
             }
             
-            return participants;
+            this.append(participants);
         }
     });
     
     // draw details
-    ext.point("io.ox/calendar/detail/details").extend("create", {
+    ext.point("io.ox/calendar/detail").extend({
         index: 600,
-        create: function (data) {
-            return $("<div>")
-                .append(
-                    $("<div>").addClass("label").text("Details"))
-                .append(
-                        ext.children("io.ox/calendar/detail/details").create(data)
-                );
+        draw: function (data) {
+            var node = $("<div>")
+                .append($("<div>").addClass("label").text("Details"))
+                .appendTo(this);
+            ext.point("io.ox/calendar/detail/details").each(function (e) {
+                e.draw.call(node, data);
+            });
         }
     });
     
     // show as
-    ext.point("io.ox/calendar/detail/details/showas").extend("create", {
+    ext.point("io.ox/calendar/detail/details").extend({
         index: 100,
-        create: function (data) {
-            return $("<span>")
-                .addClass("detail-label")
-                .text("Show as" + ":\u00a0")
-                .add(
-                    $("<span>")
-                        .addClass("detail shown_as " + util.getShownAsClass(data))
-                        .text("\u00a0")
-                 )
-                 .add(
-                    $("<span>")
-                        .addClass("detail")
-                        .text(" " + util.getShownAs(data))
-                 )
-                 .add($("<br>"));
+        id: "shownAs",
+        draw: function (data) {
+            this.append(
+                $("<span>")
+                    .addClass("detail-label")
+                    .text("Show as" + ":\u00a0")
+            )
+            .append(
+                $("<span>")
+                    .addClass("detail shown_as " + util.getShownAsClass(data))
+                    .text("\u00a0")
+            )
+            .append(
+                $("<span>")
+                    .addClass("detail")
+                    .text(" " + util.getShownAs(data))
+            )
+            .append($("<br>"));
         }
     });
     
     // folder
-    ext.point("io.ox/calendar/detail/details/folder").extend("create", {
+    ext.point("io.ox/calendar/detail/details").extend({
         index: 200,
-        create: function (data) {
-            return $("<span>")
-                .addClass("detail-label")
-                .text("Folder" + ":\u00a0")
-                .add(
-                     $("<span>").addClass("detail").text(data.folder_id)
-                 )
-                 .add($("<br>"));
+        id: "folder",
+        draw: function (data) {
+            this.append(
+                $("<span>")
+                    .addClass("detail-label")
+                    .text("Folder" + ":\u00a0")
+            )
+            .append(
+                 $("<span>").addClass("detail").text(data.folder_id)
+            )
+            .append($("<br>"));
         }
     });
     
     // created on/by
-    ext.point("io.ox/calendar/detail/details/created").extend("create", {
+    ext.point("io.ox/calendar/detail/details").extend({
         index: 200,
-        create: function (data) {
-            return $("<span>")
-                .addClass("detail-label")
-                .text("Created" + ":\u00a0")
-                .add(
-                    $("<span>")
-                        .addClass("detail")
-                        .append($("<span>").text(util.getDate(data.creation_date)))
-                        .append($("<span>").text(" \u2013 "))
-                        .append($("<span>").append(userAPI.getTextNode(data.created_by)))
-                 )
-                 .add($("<br>"));
+        id: "created",
+        draw: function (data) {
+            this.append(
+                $("<span>")
+                    .addClass("detail-label")
+                    .text("Created" + ":\u00a0")
+            )
+            .append(
+                $("<span>")
+                    .addClass("detail")
+                    .append($("<span>").text(util.getDate(data.creation_date)))
+                    .append($("<span>").text(" \u2013 "))
+                    .append($("<span>").append(userAPI.getTextNode(data.created_by)))
+             )
+             .append($("<br>"));
         }
     });
     
     // modified on/by
-    ext.point("io.ox/calendar/detail/details/modified").extend("create", {
+    ext.point("io.ox/calendar/detail/details").extend({
         index: 200,
-        create: function (data) {
-            return $("<span>")
-                .addClass("detail-label")
-                .text("Modified" + ":\u00a0")
-                .add(
-                    $("<span>")
-                        .addClass("detail")
-                        .append($("<span>").text(util.getDate(data.last_modified)))
-                        .append($("<span>").text(" \u2013 "))
-                        .append($("<span>").append(userAPI.getTextNode(data.modified_by)))
-                 )
-                 .add($("<br>"));
+        id: "modified",
+        draw: function (data) {
+            this.append(
+                $("<span>")
+                    .addClass("detail-label")
+                    .text("Modified" + ":\u00a0")
+            )
+            .append(
+                $("<span>")
+                    .addClass("detail")
+                    .append($("<span>").text(util.getDate(data.last_modified)))
+                    .append($("<span>").text(" \u2013 "))
+                    .append($("<span>").append(userAPI.getTextNode(data.modified_by)))
+             )
+             .append($("<br>"));
         }
     });
     
@@ -341,15 +358,18 @@ define("io.ox/calendar/view-detail",
         
         draw: function (data) {
             
+            var node;
+            
             if (!data) {
-                return $();
+                node = $();
             } else {
-                return $("<div>")
-                    .addClass("calendar-detail")
-                    .append(
-                        ext.point("io.ox/calendar/detail").create(data)
-                    );
+                node = $("<div>").addClass("calendar-detail");
+                ext.point("io.ox/calendar/detail").each(function (e) {
+                    e.draw.call(node, data);
+                });
             }
+            
+            return node;
         }
     };
 });

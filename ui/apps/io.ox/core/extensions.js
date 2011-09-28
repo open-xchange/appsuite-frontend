@@ -25,102 +25,57 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             return Math.random() > 0.5 ? -1 : +1;
         };
     
-    // disabled extension points
-    var disabled = {};
-    
-    // point collection
-    var Collection = function (list) {
-        
-        var points = list || [];
-        
-        var bypass = function (name) {
-            return function () {
-                var args = $.makeArray(arguments), tmp = [];
-                _.each(points, function (point) {
-                    tmp.concat(point[name].apply(point, args));
-                });
-                return tmp;
-            };
-        };
-        
-        this.extend = bypass("extend");
-        this.all = bypass("all");
-        this.each = bypass("each");
-        this.map = bypass("map");
-        
-        this.create = function () {
-            
-            var list = [], tmp = $(), args = $.makeArray(arguments);
-            
-            // loop over points to gather all relevant extensions
-            _.each(points, function (point) {
-                if (!disabled[point.id]) {
-                    point.each("create", function (extension) {
-                        list.push(extension);
-                    });
-                }
-            });
-            
-            list.sort(pointSorter);
-            
-            _(list).each(function (extension) {
-                // call
-                var result = extension.create.apply(extension, args);
-                if (result !== null) {
-                    tmp = tmp.add(result);
-                }
-            });
-            
-            return tmp;
-        };
-    };
-    
     var Point = function (options) {
         
         this.id = options.id;
         this.description = options.description || "";
         
-        var extensions = {
-            create: [],
-            extend: []
-        };
+        var extensions = [],
+            disabled = {};
         
         event.Dispatcher.extend(this);
         
-        this.extend = function (type, extension) {
+        this.extend = function (extension) {
             
-            if (typeof type !== "string") {
-                extension = type;
-                type = "extend";
-            }
+            extensions.push(extension);
+            extensions.sort(pointSorter);
             
-            var list = (extensions[type] || (extensions[type] = []));
-            list.push(extension);
-            list.sort(pointSorter);
-            
-            this.trigger("extended");
+            this.trigger("extended", extension);
             
             return this;
         };
         
-        this.all = function (type) {
-            return extensions[type || "extend"];
+        this.all = function () {
+            return _(extensions).map(function (obj) {
+                    return obj.id;
+                });
         };
         
-        this.each = function (type, cb) {
-            if (typeof type !== "string") {
-                cb = type;
-                type = "extend";
-            }
-            return _.each(disabled[this.id] ? [] : extensions[type || "extend"], cb);
+        this.each = function (cb) {
+            _(extensions)
+                .chain()
+                .select(function (obj) {
+                    return !disabled[obj.id];
+                })
+                .each(cb);
         };
         
-        this.map = function (type, cb) {
-            if (typeof type !== "string") {
-                cb = type;
-                type = "extend";
-            }
-            return _.map(disabled[this.id] ? [] : extensions[type || "extend"], cb);
+        this.map = function (cb) {
+            return _(extensions)
+                .chain()
+                .select(function (obj) {
+                    return !disabled[obj.id];
+                })
+                .map(cb)
+                .value();
+        };
+        
+        this.disable = function (id) {
+            disabled[id] = true;
+        };
+        
+        this.enable = function (id) {
+            delete disabled[id];
         };
     };
     
@@ -133,39 +88,15 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
         point: function (id) {
         
             if (registry[id] !== undefined) {
-                return new Collection([registry[id]]);
+                return registry[id];
             } else {
-                return new Collection([(registry[id] = new Point({ id: id }))]);
+                return (registry[id] = new Point({ id: id }));
             }
         },
         
-        // get child points
-        children: function (path) {
-            
-            // ends with slash?
-            if (!(/\/$/).test(path)) {
-                path += "/";
-            }
-            
-            var len = path.length, list;
-            
-            // loop over all points that match
-            list = _(registry)
-                .select(function (obj) {
-                    // matches path and has no further slashes?
-                    var id = String(obj.id);
-                    return id.substr(0, len) === path && id.substr(len).indexOf("/") === -1;
-                });
-            
-            return new Collection(list);
-        },
-        
-        disable: function (id) {
-            disabled[id] = true;
-        },
-        
-        enable: function (id) {
-            delete disabled[id];
+        // get all points
+        all: function () {
+            return _.keys(registry);
         },
         
         // extension loader
@@ -184,5 +115,5 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
 });
 
 // test examples:
-// require("io.ox/core/extensions").disable("io.ox/calendar/detail/participants");
-// require("io.ox/core/extensions").disable("io.ox/calendar/detail/date");
+// require("io.ox/core/extensions").point("io.ox/calendar/detail").disable("participants");
+// require("io.ox/core/extensions").point("io.ox/calendar/detail").disable("date");
