@@ -122,6 +122,7 @@ utils.addFilter("less", function(lessfile, getSrc) {
                 var filename = path.join(path.dirname(getSrc(1).name),
                                          url.value.value);
                 var buf = fs.readFileSync(filename);
+                if (buf.length > 24558) return; // IE8 size limit
                 url.attrs = { mime: "image/png", charset: "", base64: ";base64",
                               data: "," + buf.toString("base64") };
                 delete url.value;
