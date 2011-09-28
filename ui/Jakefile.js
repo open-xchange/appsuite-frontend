@@ -13,13 +13,15 @@
 var fs = require("fs");
 var path = require("path");
 var utils = require("./lib/build/fileutils");
+var _ = require("./lib/underscore.js");
 var jsp = require("./lib/uglify-js/uglify-js").parser;
 var pro = require("./lib/uglify-js/uglify-js").uglify;
 var ast = require("./lib/build/ast");
 var i18n = require("./lib/build/i18n");
 var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
-var _ = require("./lib/underscore.js");
+var less = require("./lib/less.js/lib/less/index");
+var myless = require("./lib/build/less");
 
 utils.builddir = process.env.builddir || "build";
 console.info("Build path: " + utils.builddir);
@@ -169,12 +171,21 @@ utils.concat("pre-core.js",
     ]), { type: "source" }
 );
 
-var apps = _.groupBy(utils.list("apps/"),
-    function (f) { return /\.js$/.test(f) ? "js" : "rest"; });
-utils.copy(apps.js, { type: "source" });
-utils.copy(apps.rest);
-
 utils.copyFile("lib/css.js", utils.dest("apps/css.js"), { type: "source" });
+
+// apps
+
+var apps = _.groupBy(utils.list("apps/"), function (f) {
+    var match = /\.(js|less|png)$/.exec(f);
+    return match && match[1] || "rest"; });
+if (apps.js) utils.copy(apps.js, { type: "source" });
+if (apps.less) {
+    utils.copy(apps.less, {
+        type: "less",
+        mapper: function(s) { return s.replace(/\.less$/, ".css"); }
+    });
+}
+if (apps.rest) utils.copy(apps.rest);
 
 // doc task
 
