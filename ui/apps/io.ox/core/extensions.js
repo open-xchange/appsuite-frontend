@@ -10,7 +10,7 @@
  * Mail: info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
- *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
