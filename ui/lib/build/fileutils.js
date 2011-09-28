@@ -15,6 +15,7 @@ var fs = require("fs");
 var path = require("path");
 var child_process = require("child_process");
 var globSync = require("./glob").globSync;
+var _ = require("../underscore");
 
 /**
  * Default destination directory.
@@ -155,9 +156,9 @@ function getType(filename, options) {
         handler: function(filename) {
             for (var i = 0; i < handlers.length; i++) handlers[i](filename);
         },
-        filter: filters.length ? function(data) {
+        filter: filters.length ? function(data, getSrc) {
             for (var i = 0; i < filters.length; i++) {
-                data = filters[i].call(this, data);
+                data = filters[i].call(this, data, getSrc);
             }
             return data;
         } : null
@@ -182,7 +183,8 @@ exports.copyFile = function(src, dest, options) {
     var callback = type.filter ?
         function() {
             fs.writeFileSync(dest,
-                type.filter.call(this, fs.readFileSync(src, "utf8")));
+                type.filter.call(this, fs.readFileSync(src, "utf8"),
+                    function(line) { return { name: src, line: line }; }));
             counter++;
         } : function() {
             var data = fs.readFileSync(src);
@@ -227,13 +229,31 @@ exports.concat = function(name, files, options) {
     file(dest, deps, function() {
         var fd = fs.openSync(dest, "w");
         if (type.filter) {
-            var data = [];
+            var data = [], fileDefs = [], start = 0;
             for (var i = 0; i < files.length; i++) {
-                data.push(typeof files[i] == "string" ?
-                    fs.readFileSync(path.join(srcDir, files[i]), "utf8") :
-                    files[i].getData());
+                if (typeof files[i] == "string") {
+                    var src = path.join(srcDir, files[i]);
+                    var contents = fs.readFileSync(src, "utf8");
+                    var last = contents.charAt(contents.length - 1);
+                    if (last != "\r" && last != "\n") contents += "\n";
+                    data.push(contents);
+                    fileDefs.push({ name: src, start: start });
+                    start += contents.split(/\r?\n|\r/g).length - 1;
+                } else {
+                    data.push(typeof files[i] == "string" ?
+                            fs.readFileSync(path.join(srcDir, files[i]), "utf8") :
+                            files[i].getData());
+                }
             }
-            fs.writeSync(fd, type.filter.call(this, data.join("")), null);
+            fs.writeSync(fd, type.filter.call(this, data.join(""), getSrc),
+                         null);
+            function getSrc(line) {
+                var def = fileDefs[_.sortedIndex(fileDefs, line, getStart) - 1];
+                function getStart(x) {
+                    return typeof x == "number" ? x : x.start;
+                }
+                return { name: def.name, line: line - def.start };
+            }
         } else {
             for (var i = 0; i < files.length; i++) {
                 var data = typeof files[i] == "string" ?
@@ -282,4 +302,28 @@ exports.exec = function(command, args, callback) {
     var child = child_process.spawn("/usr/bin/env", [command].concat(args),
         { customFds: [0, 1, 2] });
     child.on("exit", callback);
+};
+
+/**
+ * Merges two sorted arrays based on an optional comparison function
+ * (like Array.prototype.sort).
+ * @param {Array} a The first array.
+ * @param {Array} b The second array.
+ * @type Array
+ * @return A sorted array with elements from a and b, except for duplicates
+ * from b. All entries from a are included. 
+ */
+exports.merge = function(a, b, cmp) {
+    if (!cmp) cmp = function(x, y) { return x < y ? -1 : x > y ? 1 : 0; };
+    var c = Array(a.length + b.length);
+    var ai = 0, bi = 0, ci = 0;
+    while (ai < a.length && bi < b.length) {
+        var diff = cmp(a[ai], b[bi]);
+        c[ci++] = diff > 0 ? b[bi++] : a[ai++];
+        if (!diff) bi++;
+    }
+    while (ai < a.length) c[ci++] = a[ai++];
+    while (bi < b.length) c[ci++] = b[bi++];
+    c.length = ci;
+    return c;
 };

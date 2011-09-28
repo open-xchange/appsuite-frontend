@@ -114,6 +114,13 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
                     m.getApp().setLaunchBarIcon(node).launch();
                 });
             });
+        // TODO: Move this, once the application launcher is ready.
+        desktop.addLauncher("left", gt("Tests"), function () {
+                var node = this;
+                return require(["io.ox/internal/testing/main"], function (m) {
+                    m.getApp().setLaunchBarIcon(node).launch();
+                });
+            });
         
         // TODO: hide this 'feature' more cleverly
         if (_.url.hash("roadkill")) {

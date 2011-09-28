@@ -51,18 +51,45 @@ var gtMethods = {
 var pot = {};
 exports.potFiles = {};
 
+function formatLocations(locations) {
+    var lines = [], current = "#:";
+    for (var i = 0; i < locations.length; i++) {
+        var loc = " " + locations[i].name + ":" + locations[i].line;
+        if (current.length + loc.length > 80) {
+            lines.push(current);
+            current = "#:";
+        }
+        current += loc;
+    }
+    if (current.length > 2) lines.push(current);
+    return lines;
+}
+
+function generateComment(msg) {
+    return msg.comments.concat(formatLocations(msg.locations)).join("\n");
+}
+
 function addMsg(map, key, msg) {
+    msg.locations.sort(cmp);
+    function cmp(a, b) {
+        return a.name < b.name ? -1 : a.name > b.name ? 1 : a.line - b.line;
+    }
     if (key in map) {
         if (!_.isEqual(map[key].comments, msg.comments)) {
-            throw new Error("Different comments for the same text");
+            throw new Error("Different comments for the same text:\n\n" +
+                            generateComment(msg) + "\n\nvs\n\n" +
+                            generateComment(map[key]) + "\n");
         }
+        map[key].locations = utils.merge(map[key].locations, msg.locations,
+                                         cmp);
     } else {
         map[key] = msg;
     }
 }
 
-exports.addMessage = function(msg, filename) {
+exports.addMessage = function(msg, filename, getSrc) {
     if (!msg.comments) msg.comments = [];
+    if (!msg.locations) msg.locations = [];
     var key = msg.msgid;
     if (msg.msgid_plural) key += "\x01" + msg.msgid_plural;
     if (msg.msgctxt) key = msg.msgctxt + "\0" + key;
@@ -74,19 +101,32 @@ exports.addMessage = function(msg, filename) {
     }
 };
 
-function addMessage(filename, node, method) {
+function warn(message, src) {
+    console.warn(
+        ["WARNING: ", message, "\n  at ", src.name, ":", src.line].join(""));
+}
+
+function addMessage(filename, node, method, getSrc) {
+    var src = getSrc(node[0].start.line + 1);
     var args = node[2];
-    if (args.length != method.length) return;
-    var msg = { comments: _.pluck(node[0].start.comments_before, "value") };
-    for (var i = 0; i < method.length; i++) if (method[i]) {
-        msg[method[i]] = getStr(args[i]);
+    if (args.length != method.length) {
+        return warn("Invalid number of arguments to i18n function", src);
+    }
+    var msg = {
+        comments: _(node[0].start.comments_before).chain()
+            .map(function(c) { return c.value.split(/\r?\n|\r/g); }).flatten()
+            .filter(function(s) { return s.charAt(0) === "#"; }).value(),
+        locations: [src]
+    };
+    for (var i = 0; i < method.length; i++) {
+        if (method[i]) msg[method[i]] = getStr(args[i]);
     }
     
-    exports.addMessage(msg, filename);
+    exports.addMessage(msg, filename, getSrc);
     return pro.MAP.skip;
 }
 
-exports.potScan = function(filename, tree) {
+exports.potScan = function(filename, tree, getSrc) {
     ast.scanner(defineWalker, function(scope) {
         if (scope.refs.define !== undefined) return;
         var args = this[2];
@@ -100,13 +140,13 @@ exports.potScan = function(filename, tree) {
         ast.scanner(gtWalker, function(scope) {
             if (getGt(this) != gtName) return;
             if (scope.refs[gtName] != gtScope) return;
-            return addMessage(filename, this, gtMethods.gettext);
+            return addMessage(filename, this, gtMethods.gettext, getSrc);
         }).scanner(gtMethodWalker, function(scope) {
             if (getMethod[0](this) != gtName) return;
             if (scope.refs[gtName] != gtScope) return;
             var method = gtMethods[getMethod[1](this)];
             if (!method) return;
-            return addMessage(filename, this, method);
+            return addMessage(filename, this, method, getSrc);
         }).scan(f);
         return pro.MAP.skip;
     }).scan(pro.ast_add_scope(tree));
@@ -131,10 +171,8 @@ exports.generatePOT = function(files) {
     var f = [potHeader];
     for (var i in pot) {
         msg = pot[i];
-        for (var j = 0; j < msg.comments.length; j++) {
-            f.push(_.map(msg.comments[j].split("\n"),
-                         function(s) { return "#" + s; }));
-        }
+        var comment = generateComment(msg);
+        if (comment) f.push(comment);
         if (msg.msgctxt) f.push('msgctxt "' + escapePO(msg.msgctxt) + '"');
         f.push('msgid "' + escapePO(msg.msgid) + '"');
         if (msg.msgid_plural) {

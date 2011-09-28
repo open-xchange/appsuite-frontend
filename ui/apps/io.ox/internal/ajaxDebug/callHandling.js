@@ -25,6 +25,7 @@ define("io.ox/internal/ajaxDebug/callHandling", ["io.ox/core/http", "io.ox/core/
             this.history.push(entry);
             this.trigger("historychanged", this);
             options.appendColumns = false;
+            options.processResponse = false;
             
             function process(data) {
                 entry.response = data;

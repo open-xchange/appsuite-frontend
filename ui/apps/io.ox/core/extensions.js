@@ -85,6 +85,8 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             extend: []
         };
         
+        event.Dispatcher.extend(this);
+        
         this.extend = function (type, extension) {
             
             if (typeof type !== "string") {
@@ -95,6 +97,8 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             var list = (extensions[type] || (extensions[type] = []));
             list.push(extension);
             list.sort(pointSorter);
+            
+            this.trigger("extended");
             
             return this;
         };
