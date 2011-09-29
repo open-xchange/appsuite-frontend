@@ -281,6 +281,8 @@ jake = new function () {
               // Assume there's a task to fall back to to generate the file
             }
 
+            // Keep a record if action has been run
+            var actionRan = false;
             // Compare mod-time of all the prereqs with the mod-time of this task
             if (prereqs.length) {
               for (var i = 0, ii = prereqs.length; i < ii; i++) {
@@ -293,6 +295,7 @@ jake = new function () {
                 if ((prereqTask && !(prereqTask instanceof FileTask || prereqTask instanceof DirectoryTask))
                     || (!modTime || _modTimes[prereqName] >= modTime)) {
                   if (typeof task.action == 'function') {
+                    actionRan = true;
                     task.action.apply(task, args || []);
                     // The action may have created/modified the file
                     // ---------
@@ -322,8 +325,8 @@ jake = new function () {
 
             _modTimes[name] = modTime;
 
-            // Async tasks call this themselves
-            if (!task.async) {
+            // Async tasks whose action has run call this themselves
+            if (!task.async || !actionRan) {
               complete();
             }
 
