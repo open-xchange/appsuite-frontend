@@ -1,5 +1,6 @@
 define("extensions/halo/contacts/register", ["io.ox/core/extensions"], function (ext) {
     ext.point("io.ox/halo/contact:renderer").extend({
+        id: "contacts",
         handles: function (type) {
             return type === "com.openexchange.halo.contacts";
         },
@@ -14,6 +15,7 @@ define("extensions/halo/contacts/register", ["io.ox/core/extensions"], function 
     });
     
     ext.point("io.ox/halo/contact:requestEnhancement").extend({
+        id: "contacts-request",
         enhances: function (type) {
             return type === "com.openexchange.halo.contacts";
         },

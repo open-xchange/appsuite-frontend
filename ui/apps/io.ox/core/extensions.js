@@ -17,25 +17,57 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
 
     // A naive extension registry.
     
-    var pointSorter = function (a, b) {
+    // global registry
+    var registry = {},
+    
+        // module
+        that,
+        
+        // sort by index
+        pointSorter = function (a, b) {
             return (a.index || 1000000000) - (b.index || 1000000000);
         },
+        
         // for debugging purposes
         randomSorter = function () {
             return Math.random() > 0.5 ? -1 : +1;
-        };
+        },
+        
+        // function wrappers
+        wrappers = {};
     
     var Point = function (options) {
         
-        this.id = options.id;
+        this.id = String(options.id);
         this.description = options.description || "";
         
         var extensions = [],
-            disabled = {};
-        
+            replacements = {},
+            disabled = {},
+            // get enabled extensions
+            list = function () {
+                return _(extensions)
+                    .chain()
+                    .select(function (obj) {
+                        return !disabled[obj.id];
+                    });
+            },
+            self = this;
+            
         event.Dispatcher.extend(this);
         
         this.extend = function (extension) {
+            
+            if (!extension.id) {
+                throw "Extensions must have an id!";
+            }
+            
+            if (replacements[extension.id]) {
+                console.log("replace", extension, "with", replacements[extension.id]);
+                _.extend(extension, replacements[extension.id]);
+                console.log("now", extension);
+                delete replacements[extension.id];
+            }
             
             extensions.push(extension);
             extensions.sort(pointSorter);
@@ -45,6 +77,26 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             return this;
         };
         
+        this.replace = function (extension) {
+            
+            if (!extension.id) {
+                throw "Replacements must have an id!";
+            }
+            
+            var replaced = false;
+            
+            _(extensions).map(function (e) {
+                if (e.id === extension.id) {
+                    _.extend(e, extension);
+                    replaced = true;
+                }
+            });
+            
+            if (!replaced) {
+                replacements[extension.id] = extension;
+            }
+        };
+        
         this.all = function () {
             return _(extensions).map(function (obj) {
                     return obj.id;
@@ -52,22 +104,37 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
         };
         
         this.each = function (cb) {
-            _(extensions)
-                .chain()
-                .select(function (obj) {
-                    return !disabled[obj.id];
-                })
-                .each(cb);
+            list().each(cb);
+        };
+        
+        this.invoke = function (name, context, args) {
+            if (!_.isArray(args)) {
+                args = [args];
+            }
+            return list().each(function (obj) {
+                var fn = obj[name];
+                if (fn) {
+                    // wrap?
+                    if (wrappers[name]) {
+                        wrappers[name].call(context, {
+                            args: args,
+                            extension: obj,
+                            original: function () {
+                                fn.apply(context, args);
+                            },
+                            id: self.id + "/" + obj.id,
+                            module: that,
+                            point: self
+                        });
+                    } else {
+                        fn.apply(context, args);
+                    }
+                }
+            });
         };
         
         this.map = function (cb) {
-            return _(extensions)
-                .chain()
-                .select(function (obj) {
-                    return !disabled[obj.id];
-                })
-                .map(cb)
-                .value();
+            return list().map(cb).value();
         };
         
         this.disable = function (id) {
@@ -78,11 +145,8 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             delete disabled[id];
         };
     };
-    
-    // global registry
-    var registry = {};
         
-    return {
+    that = {
         
         // get point
         point: function (id) {
@@ -110,10 +174,33 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             });
             // load extensions
             return require(list);
+        },
+        
+        // add wrapper
+        addWrapper: function (name, fn) {
+            wrappers[name] = fn;
         }
     };
+    
+    return that;
 });
 
-// test examples:
-// require("io.ox/core/extensions").point("io.ox/calendar/detail").disable("participants");
-// require("io.ox/core/extensions").point("io.ox/calendar/detail").disable("date");
+/*
+ * Examples
+ * --------
+ *
+ * Disable participants
+ *   require("io.ox/core/extensions").point("io.ox/calendar/detail").disable("participants");
+ *
+ * Disable date
+ *   require("io.ox/core/extensions").point("io.ox/calendar/detail").disable("date");
+ *
+ * Extend "draw" function (to call customize)
+ *   var ext = require("io.ox/core/extensions"); ext.addWrapper("draw", function (e) { e.original(); ext.point(e.id).invoke("customize", this, e.args); });
+ *
+ * use new "customize" function
+ *   var ext = require("io.ox/core/extensions"); ext.point("io.ox/calendar/detail/date/time").extend({ customize: function () { this.css("background", "yellow"); } });
+ *
+ * Replace existing extension
+ *   var ext = require("io.ox/core/extensions"); ext.point("io.ox/calendar/detail").replace({ id: "title", draw: function () { this.append($("<div>").addClass("title").text("YEAH!")); } });
+ */

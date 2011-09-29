@@ -17,6 +17,7 @@ define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
     
     ext.point("io.ox/core/person:action").extend({
         index: 10,
+        id: "default",
         label: "Halo",
         action: function (data) {
             require(["extensions/halo/main"], function (halo) {
@@ -26,6 +27,7 @@ define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
     });
     
     ext.point("io.ox/testing/suite").extend({
+        id: "default",
         file: "extensions/halo/config-test",
         title: "Halo Config"
     });

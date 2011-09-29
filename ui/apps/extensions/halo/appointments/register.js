@@ -4,6 +4,7 @@ define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox
     
   
     ext.point("io.ox/halo/contact:renderer").extend({
+        id: "appointments",
         handles: function (type) {
             return type === "com.openexchange.halo.appointments";
         },
@@ -23,6 +24,7 @@ define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox
     });
     
     ext.point("io.ox/halo/contact:requestEnhancement").extend({
+        id: "request-appointments",
         enhances: function (type) {
             return type === "com.openexchange.halo.appointments";
         },

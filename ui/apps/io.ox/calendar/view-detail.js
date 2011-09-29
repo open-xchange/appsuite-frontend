@@ -24,9 +24,7 @@ define("io.ox/calendar/view-detail",
         id: "date",
         draw: function (data) {
             var node = $("<div>").addClass("date").appendTo(this);
-            ext.point("io.ox/calendar/detail/date").each(function (e) {
-                e.draw.call(node, data);
-            });
+            ext.point("io.ox/calendar/detail/date").invoke("draw", node, data);
         }
     });
     
@@ -261,13 +259,12 @@ define("io.ox/calendar/view-detail",
     // draw details
     ext.point("io.ox/calendar/detail").extend({
         index: 600,
+        id: "details",
         draw: function (data) {
             var node = $("<div>")
                 .append($("<div>").addClass("label").text("Details"))
                 .appendTo(this);
-            ext.point("io.ox/calendar/detail/details").each(function (e) {
-                e.draw.call(node, data);
-            });
+            ext.point("io.ox/calendar/detail/details").invoke("draw", node, data);
         }
     });
     
@@ -364,9 +361,7 @@ define("io.ox/calendar/view-detail",
                 node = $();
             } else {
                 node = $("<div>").addClass("calendar-detail");
-                ext.point("io.ox/calendar/detail").each(function (e) {
-                    e.draw.call(node, data);
-                });
+                ext.point("io.ox/calendar/detail").invoke("draw", node, data);
             }
             
             return node;

@@ -134,6 +134,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
     };
     
     ext.point("io.ox.files.details.basicInfo").extend({
+        id: "size",
         index: 10,
         fields: ["file_size"],
         label: function () {
@@ -145,6 +146,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
     });
     
     ext.point("io.ox.files.details.basicInfo").extend({
+        id: "version",
         index: 20,
         fields: ["version"],
         label: function (field) {
@@ -161,6 +163,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
     };
     
     ext.point("io.ox.files.details.basicInfo").extend({
+        id: "last_modified",
         index: 30,
         fields: ["last_modified"],
         label: function () {
@@ -174,6 +177,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
     // Basic Actions
     
     ext.point("io.ox.files.details.actions").extend({
+        id: "download",
         index: 10,
         label: "Download",
         action: function (file) {
@@ -182,6 +186,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
     });
 
     ext.point("io.ox.files.details.actions").extend({
+        id: "open",
         index: 20,
         label: "Open",
         action: function (file) {
@@ -190,6 +195,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
     });
 
     ext.point("io.ox.files.details.actions").extend({
+        id: "send",
         index: 30,
         label: "Send by E-Mail",
         action: function (file) {
@@ -202,6 +208,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
     
     // .txt
     ext.point("io.ox.files.renderer").extend({
+        id: "text",
         canRender: function (fileDescription) {
             return (/\.txt$/).test(fileDescription.name);
         },
@@ -216,6 +223,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
     
     // .png, .jpg, .jpeg, .gif
     ext.point("io.ox.files.renderer").extend({
+        id: "images",
         endings: ["png", "jpg", "jpeg", "gif"],
         canRender: function (fileDescription) {
             for (var i = 0, l = this.endings.length; i < l; i++) {
@@ -239,6 +247,7 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
     
     // .mp3 .ogg .wav
     ext.point("io.ox.files.renderer").extend({
+        id: "audio",
         endings: ["mp3", "ogg", "wav"],
         canRender: function (fileDescription) {
             for (var i = 0, l = this.endings.length; i < l; i++) {

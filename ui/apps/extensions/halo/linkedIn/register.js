@@ -1,5 +1,6 @@
 define("extensions/halo/linkedIn/register", ["io.ox/core/extensions"], function (ext) {
     ext.point("io.ox/halo/contact:renderer").extend({
+        id: "linkedin",
         handles: function (type) {
             return type === "com.openexchange.halo.linkedIn.fullProfile";
         },
