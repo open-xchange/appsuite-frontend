@@ -34,7 +34,7 @@ define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions"],
             if (api) {
                 var investigations = api.halo.investigate(data);
                 _(investigations).each(function (promise, providerName) {
-                    var $node = $("<div/>");
+                    var $node = $("<div/>").css("min-height", "100px");
                     $node.busy();
                     content.append($node);
                     promise.done(function (response) {

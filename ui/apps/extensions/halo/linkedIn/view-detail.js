@@ -1,4 +1,4 @@
-define("extensions/halo/linkedIn/view-details", ["io.ox/core/extensions", "css!extensions/halo/linkedIn/style.css"], function (ext) {
+define("extensions/halo/linkedIn/view-detail", ["io.ox/core/extensions", "css!extensions/halo/linkedIn/style.css"], function (ext) {
     var actionPoint = ext.point("linkedIn/details/actions");
     var rendererPoint = ext.point("linkedIn/details/renderer");
     

@@ -9,7 +9,7 @@ define("extensions/halo/linkedIn/view-halo", ["io.ox/core/dialogs", "css!extensi
             var $relationNode = $table.find(".r2");
 
             function openDetails() {
-                require(["extensions/halo/linkedIn/view-details"], function (detailViewer) {
+                require(["extensions/halo/linkedIn/view-detail"], function (detailViewer) {
                     detailViewer.show(liResponse);
                 });
                 return false;

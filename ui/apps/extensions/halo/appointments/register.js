@@ -12,13 +12,20 @@ define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox
             if (appointments.length === 0) {
                 return;
             }
-            var $list = $("<ul/>").appendTo($node);
-            _(appointments).each(function (appointment) {
-                var $entry = $("<li/>").text(appointment.title).click(function () {
-                    new dialogs.ModalDialog().text(appointment.title).setUnderlayAction("ok").setDefaultAction("ok").show();
-                    return false;
+            require(["io.ox/calendar/util"], function (calendarUtil) {
+                var $appointmentDiv = $("<div/>").appendTo($node);
+                $appointmentDiv.append("<h1/>").text("Appointments");
+                var $list = $("<ul/>").appendTo($appointmentDiv);
+                _(appointments).each(function (appointment) {
+                    var description = appointment.title + " (" + calendarUtil.getDateInterval(appointment) + " " + calendarUtil.getTimeInterval(appointment) + ")";
+                    var $entry = $("<li/>").text(description).click(function () {
+                        require(["extensions/halo/appointments/view-detail"], function (viewer) {
+                            viewer.show(appointment);
+                        });
+                        return false;
+                    });
+                    $list.append($entry);
                 });
-                $list.append($entry);
             });
         }
     });

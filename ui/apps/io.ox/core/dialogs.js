@@ -71,7 +71,9 @@ define("io.ox/core/dialogs", function () {
         
         this.show = function () {
             // center popup element first
+            
             var height = nodes.popup.height();
+            
             nodes.popup.css({
                 height: height + "px",
                 marginTop: 0 - (height / 2 >> 0) + "px"
