@@ -1,0 +1,49 @@
+.halo div.linkedIn {
+    margin-right: 2em;
+}
+
+.linkedIn .actions a {
+    margin-right : 10px;
+}
+
+.linkedIn .extension {
+    margin-bottom: 20px;
+}
+
+.linkedIn .pastEngagements .current {
+    background-color: #ddf;
+}
+
+.linkedIn .position .title {
+    font-size: 16px;
+}
+
+.linkedIn .position .companyName {
+    font-size: 14px;
+}
+
+.linkedIn .position .companyIndustry {
+    font-size: 12px;
+}
+
+.linkedIn .position .timeSpent {
+    font-size: 9px;
+}
+
+.linkedIn .position {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.linkedIn .details .name {
+    font-size: 24px;
+}
+
+.linkedIn .details .headline {
+    font-size: 16px;
+    color: #AAA;
+}
+
+.linkedIn .extension {
+    margin-bottom: 20px;
+}
