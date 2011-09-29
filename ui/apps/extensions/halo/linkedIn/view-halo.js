@@ -10,13 +10,18 @@ define("extensions/halo/linkedIn/view-halo", ["io.ox/core/dialogs"], function (d
             
             $pictureNode.append($("<img/>").attr("src", liResponse.pictureUrl));
             
+            function openDetails() {
+                require(["extensions/halo/linkedIn/view-details"], function (detailViewer) {
+                    detailViewer.show(liResponse);
+                });
+                return false;
+            }
+            
             $nameNode.append($("<div class='name' />").text(liResponse.firstName + " " + liResponse.lastName));
             $nameNode.append($("<div class='liHeadline' />").text(liResponse.headline));
-            $nameNode.append($("<a href='#' />").text("Details").click(function () {
-                new dialogs.ModalDialog().append($("<pre/>").text(JSON.stringify(liResponse, null, 2))).lightbox().show();
-                return false;
-            }));
+            $nameNode.append($("<a href='#' />").text("Details").click(openDetails));
             
+            $node.click(openDetails); // We don't care, where the user clicks in the LinkedIn area, we'll always open the details. The link is added only to entice the user to click
             return $node;
         }
     };
