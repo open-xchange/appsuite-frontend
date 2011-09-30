@@ -244,25 +244,26 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
                     r += addField(gt("Birthday"), date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear());
                 }
                 
-                if (r > 0) {
-                    addField("", "\u00a0");
-                    r = 0;
-                }
-                
                 // QR code
-                addField("", true, function (td) {
-                    td.append(
-                        $("<span>").addClass("link")
-                            .text("Show QR-code")
-                            .bind("click", function () {
-                                require(["io.ox/contacts/view-qrcode"], function (qr) {
-                                    var vc = qr.getVCard(obj);
-                                    td.empty().qrcode(vc);
-                                    vc = td = qr = null;
-                                });
-                            })
-                    );
-                });
+                if (Modernizr.canvas) {
+                    if (r > 0) {
+                        addField("", "\u00a0");
+                        r = 0;
+                    }
+                    addField("", true, function (td) {
+                        td.append(
+                            $("<span>").addClass("link")
+                                .text("Show QR-code")
+                                .bind("click", function () {
+                                    require(["io.ox/contacts/view-qrcode"], function (qr) {
+                                        var vc = qr.getVCard(obj);
+                                        td.empty().qrcode(vc);
+                                        vc = td = qr = null;
+                                    });
+                                })
+                        );
+                    });
+                }
             }
             
             return table;

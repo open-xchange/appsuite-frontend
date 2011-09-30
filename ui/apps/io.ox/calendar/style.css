@@ -44,6 +44,15 @@
     bottom: -1px;
 }
 
+.borderradius .vgrid-cell.calendar .shown_as {
+    top: 5px;
+    bottom: 5px;
+    border-right: 0px none;
+    -moz-border-radius: 0px 5px 5px 0px;
+    -webkit-border-radius: 0px 5px 5px 0px;
+    border-radius: 0px 5px 5px 0px;
+}
+
 /* shown_as */
 .shown_as.reserved { background-color: #08c; } /* blue */
 .shown_as.temporary { background-color: #fc0; } /* yellow */
