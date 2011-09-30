@@ -38,9 +38,12 @@ var debug = Boolean(process.env.debug);
 if (debug) console.info("Debug mode: on");
 
 function jsFilter (data, getSrc) {
-    data = hint.call(this, data, getSrc);
-    var ast = jsp.parse(data, false, true);
     
+    if (data.substr(0, 11) !== "//#NOJSHINT") {
+        data = hint.call(this, data, getSrc);
+    }
+    
+    var ast = jsp.parse(data, false, true);
     i18n.potScan(this.name, ast, getSrc);
     
     // UglifyJS

@@ -73,28 +73,28 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
                 return typeof val === "string" && val !== "";
             }
             
-            table = $("<table/>", { border: 0, cellpadding: 0, cellspacing: 0 })
+            table = $("<table>", { border: 0, cellpadding: 0, cellspacing: 0 })
                 .addClass("contact-detail")
-                .append(tbody = $("<tbody/>"));
+                .append(tbody = $("<tbody>"));
                 
             tbody.append(
-                $("<tr/>")
+                $("<tr>")
                 .append(
-                    $("<td/>")
+                    $("<td>")
                     .css({ paddingBottom: "2em", width: "150px" })
                     .append(
-                        $("<div/>").addClass("picture")
+                        $("<div>").addClass("picture")
                         .css({ backgroundImage: "url(" + this.getImage(obj) + ")" })
                     )
                 )
                 .append(
-                    $("<td/>")
+                    $("<td>")
                     .css({ paddingTop: "2em", verticalAlign: "top" })
                     .append(
-                        $("<div/>").addClass("name").text(this.getFullName(obj))
+                        $("<div>").addClass("name").text(this.getFullName(obj))
                     )
                     .append(
-                        $("<div/>").addClass("job").text(
+                        $("<div>").addClass("job").text(
                             obj.mark_as_distributionlist ?
                                 gt("Distribution list") :
                                 (obj.company || obj.position || obj.profession) ?
@@ -107,10 +107,10 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
             
             function addField(label, value, fn) {
                 if (value) {
-                    var td = $("<td/>").addClass("value");
+                    var td = $("<td>").addClass("value");
                     tbody.append(
-                        $("<tr/>")
-                        .append($("<td/>").addClass("label").text(label))
+                        $("<tr>")
+                        .append($("<td>").addClass("label").text(label))
                         .append(td)
                     );
                     if ($.isFunction(fn)) {
@@ -132,7 +132,7 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
                     node
                     .addClass("blue")
                     .append(
-                        $("<a/>", { href: "mailto: " + value })
+                        $("<a>", { href: "mailto: " + value })
                         .addClass("blue").text(value)
                     );
                 });
@@ -143,7 +143,7 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
                     node
                     .addClass("blue")
                     .append(
-                        $("<a/>", { href: "callto: " + value })
+                        $("<a>", { href: "callto: " + value })
                         .addClass("blue").text(value)
                     );
                 });
@@ -151,27 +151,27 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
             
             function addAddress(label, street, code, city, country) {
                 return addField(label, true, function (node) {
-                    var a = $("<a/>", {
+                    var a = $("<a>", {
                             href: "http://www.google.de/maps?q=" + encodeURIComponent(join(", ", street, join(" ", code, city))),
                             target: "_blank"
                         }).addClass("nolink");
                     if (street) {
-                        a.append($("<span/>").text(street));
+                        a.append($("<span>").text(street));
                         if (city) {
-                            a.append($("<br/>"));
+                            a.append($("<br>"));
                         }
                     }
                     if (code) {
-                        a.append($("<span/>").text(code + " "));
+                        a.append($("<span>").text(code + " "));
                     }
                     if (city) {
-                        a.append($("<span/>").text(city));
+                        a.append($("<span>").text(city));
                     }
                     if (country) {
-                        a.append($("<br/>"));
-                        a.append($("<span/>").text(country));
+                        a.append($("<br>"));
+                        a.append($("<span>").text(country));
                     }
-                    a.append($("<br/><small class='blue'>(Google Maps&trade;)</small>"));
+                    a.append($("<br><small class='blue'>(Google Maps&trade;)</small>"));
                     node.append(a);
                 });
             }
@@ -241,8 +241,28 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
                 
                 var date = new Date(obj.birthday);
                 if (!isNaN(date.getDate())) {
-                    addField(gt("Birthday"), date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear());
+                    r += addField(gt("Birthday"), date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear());
                 }
+                
+                if (r > 0) {
+                    addField("", "\u00a0");
+                    r = 0;
+                }
+                
+                // QR code
+                addField("", true, function (td) {
+                    td.append(
+                        $("<span>").addClass("link")
+                            .text("Show QR-code")
+                            .bind("click", function () {
+                                require(["io.ox/contacts/view-qrcode"], function (qr) {
+                                    var vc = qr.getVCard(obj);
+                                    td.empty().qrcode(vc);
+                                    vc = td = qr = null;
+                                });
+                            })
+                    );
+                });
             }
             
             return table;
