@@ -46,7 +46,9 @@ define("io.ox/calendar/util",
         WEDNESDAY = 8,
         THURSDAY = 16,
         FRIDAY = 32,
-        SATURDAY = 64;
+        SATURDAY = 64,
+        // week starts with (0=Sunday, 1=Monday, ..., 6=Saturday)
+        firstWeekDay = 1;
     
     var that = {
         
@@ -57,6 +59,23 @@ define("io.ox/calendar/util",
         DAY: DAY,
         
         WEEK: WEEK,
+        
+        getFirstWeekDay: function () {
+            return firstWeekDay;
+        },
+        
+        getDayNames: function () {
+            return n_day.slice(firstWeekDay).concat(n_day.slice(0, firstWeekDay));
+        },
+        
+        getDaysInMonth: function (year, month) {
+            // trick: month + 1 & day = zero -> last day in month
+            return new Date(year, month + 1, 0).getDate();
+        },
+        
+        isToday: function (timestamp) {
+            return new Date(timestamp).toDateString() === new Date().toDateString();
+        },
         
         floor: function (timestamp, step) {
             // set defaults
@@ -233,6 +252,51 @@ define("io.ox/calendar/util",
                 };
             });
             return hash;
+        },
+        
+        // returns a set of rows, each containing 7 days
+        // helps at drawing a mini calendar or a month view
+        getMonthScaffold: function (timestamp) {
+            
+            // use timestamp or current time
+            var d = new Date(timestamp || _.now()),
+                year = d.getUTCFullYear(),
+                month = d.getUTCMonth(),
+                weekday = d.getUTCDay(),
+                // apply week day shift
+                shift = (7 + weekday - that.getFirstWeekDay()) % 7,
+                // get number of days in month
+                max = that.getDaysInMonth(year, month) + shift,
+                // loop
+                i = 0,
+                rows = [],
+                day = Date.UTC(year, month, 1) - DAY * shift,
+                row,
+                obj;
+            
+            for (; i < max || i % 7 !== 0; i += 1, day += DAY) {
+                if (i % 7 === 0) {
+                    row = [];
+                    rows.push(row);
+                }
+                d = new Date(day);
+                row.push(obj = {
+                    year: d.getUTCFullYear(),
+                    month: d.getUTCMonth(),
+                    date: d.getUTCDate(),
+                    day: d.getUTCDay(),
+                    timestamp: day,
+                    isToday: that.isToday(day),
+                    col: i % 7,
+                    row: rows.length - 1
+                });
+                // is weekend?
+                obj.isWeekend = obj.day === 0 || obj.day === 6;
+                // is out of current month?
+                obj.isOut = obj.year !== year || obj.month !== month;
+            }
+            
+            return rows;
         }
     };
     

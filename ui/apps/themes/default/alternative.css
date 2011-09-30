@@ -1,0 +1,71 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.wallpaper {
+    background-image: none !important;
+}
+
+#io-ox-topbar {
+    background-color: black;
+    background-color: rgba(0, 0, 0, 0.90);
+}
+
+.csstransforms3d.mouse #io-ox-windowmanager-pane {
+    -webkit-transition-duration: 0.01s;
+}
+
+.window-container {
+    top: 0px;
+    bottom: 0px;
+}
+
+.window-container-center {
+    width: 100% !important;
+    -moz-border-radius: 0px 0px 0px 0px;
+    -webkit-border-radius: 0px 0px 0px 0px;
+    border-radius: 0px 0px 0px 0px;
+}
+
+.window-container-center.shadow {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.window-head {
+    -moz-border-radius: 0px 0px 0px 0px;
+    -webkit-border-radius: 0px 0px 0px 0px;
+    border-radius: 0px 0px 0px 0px;
+    border-bottom: 1px solid #ccc;
+    background-color: #f5f5f5;
+    background-image: none;
+}
+
+.window-toolbar .io-ox-button {
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    background-image: none !important;
+}
+
+.mail-detail-pane {
+    background-color: #eee !important;
+    background-image: none !important;
+}
+
+.mail-detail {
+    max-width: 100%;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+

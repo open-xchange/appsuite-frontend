@@ -92,26 +92,46 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
                 }
             });
             
-            if (!replaced) {
+            if (replaced) {
+                extensions.sort(pointSorter);
+            } else {
                 replacements[extension.id] = extension;
             }
+            
+            return this;
         };
         
         this.all = function () {
+            return extensions;
+        };
+        
+        this.keys = function () {
             return _(extensions).map(function (obj) {
                     return obj.id;
                 });
         };
         
+        // public for testing purposes
+        this.sort = function () {
+            extensions.sort(pointSorter);
+            return this;
+        };
+        
         this.each = function (cb) {
             list().each(cb);
+            return this;
+        };
+        
+        this.map = function (cb) {
+            list().map(cb);
+            return this;
         };
         
         this.invoke = function (name, context, args) {
             if (!_.isArray(args)) {
                 args = [args];
             }
-            return list().each(function (obj) {
+            list().each(function (obj) {
                 var fn = obj[name];
                 if (fn) {
                     // wrap?
@@ -131,18 +151,17 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
                     }
                 }
             });
-        };
-        
-        this.map = function (cb) {
-            return list().map(cb).value();
+            return this;
         };
         
         this.disable = function (id) {
             disabled[id] = true;
+            return this;
         };
         
         this.enable = function (id) {
             delete disabled[id];
+            return this;
         };
     };
         
@@ -158,8 +177,8 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             }
         },
         
-        // get all points
-        all: function () {
+        // get all ids
+        keys: function () {
             return _.keys(registry);
         },
         
@@ -203,4 +222,8 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
  *
  * Replace existing extension
  *   var ext = require("io.ox/core/extensions"); ext.point("io.ox/calendar/detail").replace({ id: "title", draw: function () { this.append($("<div>").addClass("title").text("YEAH!")); } });
+ *
+ * Shuffle extension order
+ *   var ext = require("io.ox/core/extensions"); ext.point("io.ox/calendar/detail").each(function (e) { e.index = Math.random() * 1000 >> 0; }).sort();
+ *
  */

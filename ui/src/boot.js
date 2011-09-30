@@ -22,13 +22,18 @@ $(document).ready(function () {
     // support for application cache?
     if (Modernizr.applicationcache) {
         // if manifest has changed, we have to swap caches and reload
-        var ac = window.applicationCache;
-        ac.addEventListener("updateready", function () {
-            if (ac.status === ac.UPDATEREADY) {
-                ac.swapCache();
-                location.reload();
-            }
-        }, false);
+        var ac = window.applicationCache,
+            updateReady = function () {
+                if (ac.status === ac.UPDATEREADY) {
+                    ac.swapCache();
+                    location.reload();
+                }
+            };
+        ac.addEventListener("updateready", updateReady, false);
+        // unbind after some seconds
+        setTimeout(function () {
+            ac.removeEventListener("updateready", updateReady, false);
+        }, 10000);
     }
     
     // animations
