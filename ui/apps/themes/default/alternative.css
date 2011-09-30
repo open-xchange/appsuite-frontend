@@ -12,7 +12,8 @@
  */
 
 .wallpaper {
-    background-image: none !important;
+    background-color: #aaa;
+    background-image: none;
 }
 
 #io-ox-topbar {
@@ -54,12 +55,16 @@
 .window-toolbar .io-ox-button {
     border: 1px solid #ccc;
     background-color: #f0f0f0;
-    background-image: none !important;
+    background-image: none;
 }
 
 .mail-detail-pane {
-    background-color: #eee !important;
-    background-image: none !important;
+    background-color: #fff;
+    background-image: none;
+}
+
+.mail-detail-pane > div {
+    padding: 0;
 }
 
 .mail-detail {
@@ -67,5 +72,12 @@
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
     box-shadow: none;
+    margin: 0;
+    border: 0px none;
+    border-bottom: 5px solid #555;
+}
+
+.mail-detail:last-child {
+    border-bottom: 0px none;
 }
 

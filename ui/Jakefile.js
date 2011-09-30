@@ -161,7 +161,7 @@ utils.concat("boot.js", ["lib/jquery.plugins.js", "src/util.js", "src/boot.js"],
 
 utils.concat("boot.js", ["lib/jquery.min.js", "lib/jquery-ui.min.js",
         "lib/require.js", "lib/modernizr.js", "lib/underscore.js",
-        "tmp/boot.js"]);
+        "src/css.js", "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
@@ -172,7 +172,7 @@ utils.concat("pre-core.js",
     ]), { type: "source" }
 );
 
-utils.copyFile("lib/css.js", utils.dest("apps/css.js"), { type: "source" });
+//utils.copyFile("lib/css.js", utils.dest("apps/css.js"), { type: "source" });
 
 // apps
 

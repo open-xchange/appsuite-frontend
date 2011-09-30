@@ -100,7 +100,7 @@ $(document).ready(function () {
                 // join
                 $.when(
                         require("io.ox/core/gettext").setLanguage(lang),
-                        require(["io.ox/core/main", "css!themes/default/core.css"])
+                        require(["io.ox/core/main", "theme!themes/default/core.css"])
                     )
                     .done(function () {
                         // go!
