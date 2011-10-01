@@ -8,7 +8,6 @@ CACHE:
 @base@/blank.html
 @base@/src/serverconfig.js
 @base@/src/offline.js
-@base@/apps/css.js
 # theme
 @base@/apps/themes/login/login.css
 @base@/apps/themes/login/busy.gif

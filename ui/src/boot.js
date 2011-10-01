@@ -130,11 +130,8 @@ $(document).ready(function () {
                 // fail
                 $("#io-ox-login-feedback").idle();
                 // shake it!
-                $("#login-box-content").stop().effect("shake", {
-                    direction: "left",
-                    times: 4,
-                    distance: 10
-                }, 50, function () {
+                $("#login-box-content").stop().shake()
+                .done(function () {
                     // show error
                     $("#io-ox-login-feedback").text(
                         _.formatError(error, "%1$s")

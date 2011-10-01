@@ -147,3 +147,26 @@ $.fail = function (msg, retry) {
     }
     return $.center(tmp);
 };
+
+// simple shake effect
+
+$.fn.shake = function (num, dist, d) {
+    // defaults
+    num = num || 4;
+    dist = dist || 10;
+    d = d || 25;
+    // return deferred
+    var def = $.Deferred(), count = 0, max = num * 3,
+        inc = function () {
+            if (++count === max) {
+                def.resolve();
+            }
+        },
+        node = this.eq(0);
+    for (var i = 0; i < num; i++) {
+        node.animate({ left: -dist }, d, inc)
+            .animate({ left: dist }, d * 2, inc)
+            .animate({ left: 0 }, d, inc);
+    }
+    return def;
+};
