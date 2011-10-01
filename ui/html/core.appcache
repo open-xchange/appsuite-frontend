@@ -10,22 +10,11 @@ CACHE:
 @base@/src/serverconfig.js
 @base@/src/offline.js
 # theme
-@base@/apps/css.js
 @base@/apps/themes/login/login.css
 @base@/apps/themes/login/busy.gif
+@base@/apps/themes/login/raining_2-wallpaper-1280x800.jpg
 @base@/apps/themes/default/core.css
-@base@/apps/themes/default/wallpaper.jpg
-@base@/apps/themes/default/dummypicture.png
-# icons
-@base@/apps/io.ox/core/images/addressbook.png
-@base@/apps/io.ox/core/images/applications.png
-@base@/apps/io.ox/core/images/calendar.png
-@base@/apps/io.ox/core/images/default.png
-@base@/apps/io.ox/core/images/files.png
-@base@/apps/io.ox/core/images/help.png
-@base@/apps/io.ox/core/images/logout.png
-@base@/apps/io.ox/core/images/mail.png
-@base@/apps/io.ox/core/images/refresh.png
+@base@/apps/themes/default/dummypicture.xpng
 # mail
 @base@/apps/io.ox/mail/main.js
 @base@/apps/io.ox/mail/api.js

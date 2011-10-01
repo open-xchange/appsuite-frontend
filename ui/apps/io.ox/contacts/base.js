@@ -31,7 +31,7 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
         getImage: function (obj) {
             return obj.image1_url ?
                 obj.image1_url.replace(/^https?\:\/\/[^\/]+/i, "") :
-                (ox.base + "/apps/themes/default/dummypicture.png");
+                (ox.base + "/apps/themes/default/dummypicture.xpng");
         },
         
         getFullName: function (obj) {

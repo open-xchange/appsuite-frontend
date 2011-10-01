@@ -19,10 +19,11 @@
 }
 
 .vgrid-cell.vgrid-label.calendar-label {
+    font-size: 9pt;
     font-weight: normal;
-    line-height: 1em;
-    height: 1em;
-    color: #888;
+    line-height: 1.2em;
+    height: 1.2em;
+    color: #555;
 }
 
 .vgrid-cell.calendar .title {
@@ -82,7 +83,8 @@
 
 .calendar-detail .title {
     font-size: 18pt;
-    line-height: 28pt;
+    line-height: 22pt;
+    margin: 0.25em 0 0.25em 0;
 }
 
 .calendar-detail .location {

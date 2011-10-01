@@ -205,25 +205,48 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
 });
 
 /*
- * Examples
- * --------
- *
- * Disable participants
- *   require("io.ox/core/extensions").point("io.ox/calendar/detail").disable("participants");
- *
- * Disable date
- *   require("io.ox/core/extensions").point("io.ox/calendar/detail").disable("date");
- *
- * Extend "draw" function (to call customize)
- *   var ext = require("io.ox/core/extensions"); ext.addWrapper("draw", function (e) { e.original(); ext.point(e.id).invoke("customize", this, e.args); });
- *
- * use new "customize" function
- *   var ext = require("io.ox/core/extensions"); ext.point("io.ox/calendar/detail/date/time").extend({ customize: function () { this.css("background", "yellow"); } });
- *
- * Replace existing extension
- *   var ext = require("io.ox/core/extensions"); ext.point("io.ox/calendar/detail").replace({ id: "title", draw: function () { this.append($("<div>").addClass("title").text("YEAH!")); } });
- *
- * Shuffle extension order
- *   var ext = require("io.ox/core/extensions"); ext.point("io.ox/calendar/detail").each(function (e) { e.index = Math.random() * 1000 >> 0; }).sort();
- *
- */
+
+Examples
+--------
+
+// Disable participants
+var ext = require("io.ox/core/extensions");
+ext.point("io.ox/calendar/detail").disable("participants");
+
+// Disable date
+var ext = require("io.ox/core/extensions");
+ext.point("io.ox/calendar/detail").disable("date");
+
+// Extend "draw" function (to introduce "customize")
+var ext = require("io.ox/core/extensions");
+ext.addWrapper("draw", function (e) {
+    e.original();
+    ext.point(e.id).invoke("customize", this, e.args);
+});
+
+// use new "customize" function
+var ext = require("io.ox/core/extensions");
+ext.point("io.ox/calendar/detail/date/time").extend({
+    customize: function () {
+        this.css("background", "#fc0");
+    }
+});
+
+// Replace existing extension
+var ext = require("io.ox/core/extensions");
+ext.point("io.ox/calendar/detail").replace({
+    id: "title",
+    draw: function () {
+        this.append(
+            $("<div>").addClass("title").text("Hello World!")
+        );
+    }
+});
+
+// Shuffle extension order
+var ext = require("io.ox/core/extensions");
+ext.point("io.ox/calendar/detail").each(function (e) {
+    e.index = Math.random() * 1000 >> 0;
+}).sort();
+
+*/

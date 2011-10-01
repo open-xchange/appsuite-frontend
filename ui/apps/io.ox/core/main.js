@@ -122,13 +122,6 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
                 });
             });
         
-        // TODO: hide this 'feature' more cleverly
-        if (_.url.hash("roadkill")) {
-            $("#io-ox-core").css("background", "url(apps/themes/default/roadkill.jpg) no-repeat");
-            $("#io-ox-core").css("background-size", "cover");
-        }
-        
-        
         // load core extensions
         extensions.load()
             .done(function () {

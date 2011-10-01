@@ -12,6 +12,7 @@ CACHE:
 # theme
 @base@/apps/themes/login/login.css
 @base@/apps/themes/login/busy.gif
+@base@/apps/themes/login/raining_2-wallpaper-1280x800.jpg
 
 NETWORK:
 *

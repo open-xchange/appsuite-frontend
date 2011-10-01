@@ -10,6 +10,9 @@ AddType text/xml .xmlz
 AddEncoding gzip .jsz .cssz .xmlz
 SetEnvIf Request_URI "\.(jsz|cssz|xmlz)$" no-gzip
 
+# excluded PNGs
+AddType image/png .xpng
+
 ExpiresActive On
 ExpiresDefault "access plus 6 months"
 ExpiresByType image/ico "access plus 6 months"
