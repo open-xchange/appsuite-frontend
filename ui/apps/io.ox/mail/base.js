@@ -67,6 +67,10 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
             return $("<span/>").addClass("person").text(prewrap ? _.prewrap(dn) : dn);
         },
         
+        getFlag: function (data) {
+            return data.color_label || 0;
+        },
+        
         serializeList: function (list, addHandlers) {
             var i = 0, $i = list.length, tmp = $(), node, display_name = "";
             for (; i < $i; i++) {
@@ -284,6 +288,9 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
             
             node = $("<div/>")
                 .addClass("mail-detail")
+                .append(
+                    $("<div>").addClass("abs flag flag_" + this.getFlag(data))
+                )
                 .append(
                     picture = $("<div/>").addClass("contact-picture").hide()
                 )

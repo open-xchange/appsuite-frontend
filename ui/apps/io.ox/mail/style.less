@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,7 +9,6 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- *
  */
 
 /* VGrid elements */
@@ -27,7 +25,8 @@
 .vgrid-cell.mail .flag {
     left: auto;
     bottom: -1px;
-    width: 5px;
+    width: 4px;
+    border-left: 1px solid white;
     height: auto;
 }
 
@@ -120,6 +119,7 @@
 }
 
 .mail-detail {
+    position: relative;
     background-color: white;
     border: 1px solid #aaa;
     padding: 20px;
@@ -193,8 +193,13 @@
     border-color: #888 !important;
 }
 
+.mail-detail .flag {
+    right: auto;
+    width: 4px;
+}
+
 /* flag colors */
-.flag_0  { background-color: transparent; }
+.flag_0  { background-color: transparent; visibility: hidden; }
 .flag_1  { background-color: #913F3F; } /* red */
 .flag_2  { background-color: #3F6B91; } /* blue */
 .flag_3  { background-color: #6D913F; } /* green */
