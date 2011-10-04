@@ -1,4 +1,4 @@
-define("extensions/halo/linkedIn/view-halo", ["io.ox/core/dialogs", "css!extensions/halo/linkedIn/style.css"], function (dialogs) {
+define("extensions/halo/linkedIn/view-halo", ["io.ox/core/lightbox", "css!extensions/halo/linkedIn/style.css"], function (lightbox) {
     return {
         draw: function (liResponse) {
             var $node = $("<div/>").addClass("linkedIn");
@@ -10,7 +10,14 @@ define("extensions/halo/linkedIn/view-halo", ["io.ox/core/dialogs", "css!extensi
 
             function openDetails() {
                 require(["extensions/halo/linkedIn/view-detail"], function (detailViewer) {
-                    detailViewer.show(liResponse);
+                    new lightbox.Lightbox({
+                        getGhost: function () {
+                            return $node;
+                        },
+                        buildPage: function () {
+                            return detailViewer.draw(liResponse);
+                        }
+                    }).show();
                 });
                 return false;
             }
