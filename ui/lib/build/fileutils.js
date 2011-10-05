@@ -339,7 +339,7 @@ var includesFile;
  */
 exports.loadIncludes = function(filename) {
     includesFile = filename;
-    if (path.exists(filename)) {
+    if (path.existsSync(filename)) {
         includes = JSON.parse(fs.readFileSync(filename, "utf8"));
         for (var i in includes) file(i, includes[i]);
     }
