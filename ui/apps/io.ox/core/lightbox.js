@@ -40,7 +40,7 @@ define("io.ox/core/lightbox", function () {
             var $page = $(delegate.buildPage()).hide();
             var mustSwap = ($page !== null && !_.isUndefined($page));
             
-            $page = $page || $ghost || $("<div><h1>You forgot to implement #buildGhost and #buildPage in the delegate for this lightbox</h1></div>");
+            $page = $page || $ghost || $("<div><h1>You forgot to implement #getGhost and #buildPage in the delegate for this lightbox</h1></div>");
             // Determine final dimensions
             var width, height, left, top;
             

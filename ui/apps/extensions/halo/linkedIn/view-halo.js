@@ -2,6 +2,7 @@ define("extensions/halo/linkedIn/view-halo", ["io.ox/core/lightbox", "css!extens
     return {
         draw: function (liResponse) {
             var $node = $("<div/>").addClass("linkedIn");
+            $node.append("<h1>LinkedIn</h1>");
             var $detailNode = $("<div/>").addClass("details").appendTo($node);
             var $table = $("<table><tr><td class='t10' /><td class='t11' /></td></tr><tr><td class='r2' colspan='2'/></tr><table>").appendTo($detailNode);
             var $pictureNode = $table.find(".t10");

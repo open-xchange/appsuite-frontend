@@ -114,11 +114,16 @@
             
             this.draw = function ($node, providerName, data) {
                 $node = $($node);
+                var deferreds = [];
                 rendererPoint.each(function (ext) {
                     if (ext.handles(providerName)) {
-                        ext.draw($node, providerName, data);
+                        var deferred = ext.draw($node, providerName, data);
+                        if (deferred) {
+                            deferreds.push(deferred);
+                        }
                     }
                 });
+                return $.when.apply($, deferreds);
             };
         }
         

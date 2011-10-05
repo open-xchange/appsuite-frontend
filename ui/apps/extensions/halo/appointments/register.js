@@ -10,8 +10,11 @@ define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox
         },
         draw: function  ($node, providerName, appointments) {
             if (appointments.length === 0) {
+                $node.append("<h1>Appointments</h1>");
+                $node.append("<div>No Appointments found.</div>");
                 return;
             }
+            var deferred = new $.Deferred();
             require(["io.ox/calendar/util"], function (calendarUtil) {
                 var $appointmentDiv = $("<div/>").appendTo($node);
                 $appointmentDiv.append("<h1/>").text("Appointments");
@@ -26,7 +29,9 @@ define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox
                     });
                     $list.append($entry);
                 });
+                deferred.resolve();
             });
+            return deferred;
         }
     });
     
