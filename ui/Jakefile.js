@@ -59,11 +59,6 @@ utils.addFilter("source", jsFilter);
 var core_head = fs.readFileSync("html/core_head.html", "utf8"),
     core_body = fs.readFileSync("html/core_body.html", "utf8");
 
-core_body.replace(/data-i18n="([^"]*)"/g, function(match, msgid) {
-    i18n.addMessage({ msgid: msgid });
-});
-
-
 function htmlFilter (data) {
     return data
         .replace(/@\s?core_head\s?@/, core_head)
@@ -110,10 +105,15 @@ function hint (data, getSrc) {
     fail("JSHint error");
 }
 
+utils.loadIncludes("tmp/includes.json");
+
 // default task
 
 desc("Builds the GUI");
-utils.topLevelTask("default", ["ox.pot"], utils.summary);
+utils.topLevelTask("default", ["ox.pot"], function() {
+    utils.saveIncludes();
+    utils.summary();
+});
 
 utils.copy(utils.list("html", [".htaccess", "blank.html", "favicon.ico"]));
 utils.copy(utils.list("src/"));
@@ -135,6 +135,18 @@ utils.addHandler("source", function(filename) {
         }
     });
 });
+
+(function() {
+    var body_lines = core_body.split(/\r?\n|\r/);
+    for (var i = 0; i < body_lines.length; i++) {
+        body_lines[i].replace(/data-i18n="([^"]*)"/g, function(match, msgid) {
+            i18n.addMessage({
+                msgid: msgid,
+                locations: [{ name: "html/core_body.html", line: i + 1 }]
+            });
+        });
+    }
+})();
 
 // l10n
 

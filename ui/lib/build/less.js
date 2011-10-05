@@ -54,9 +54,9 @@ less.tree.URL.prototype.getChildren =
 
 less.Parser.importer = function (file, paths, callback) {
     var pathname = null;
-
-//    paths.unshift('.');
-
+    
+    paths.unshift('.');
+    
     for (var i = 0; i < paths.length; i++) {
         try {
             pathname = path.join(paths[i], file);
@@ -66,18 +66,18 @@ less.Parser.importer = function (file, paths, callback) {
             pathname = null;
         }
     }
-
+    
     if (pathname) {
         var data = fs.readFileSync(pathname, 'utf-8');
         new(less.Parser)({
             paths: [path.dirname(pathname)],
-              filename: pathname
+            filename: pathname
         }).parse(data, function (e, root) {
-              if (e) less.writeError(e);
-              callback(root);
+            if (e) less.writeError(e);
+            callback(root);
         });
     } else {
-        sys.error("file '" + file + "' wasn't found.\n");
+        require("util").error("file '" + file + "' wasn't found.\n");
         process.exit(1);
     }
 };
@@ -88,10 +88,10 @@ less.Parser.importer = function (file, paths, callback) {
  * nodes (prefix order).
  * @param {Object} root The root node of the syntax tree over which to iterate.
  * @param {Function} matcher An optional matcher which specifies for
- * which nodes f should be called. It can be a function or a constructor.
+ * which nodes f should be called. It can be a function or a node constructor.
  * If it is a function, it should take any node as parameter and return true if
- * the node matches. If it is a constructor, all instances of that constructor
- * will match. If omitted entirely, all nodes will match.
+ * the node matches. If it is a node constructor, all instances of that node
+ * class will match. If omitted entirely, all nodes will match.
  * @param {Function} f A callback function which is called with a matching node
  * as parameter.
  */
@@ -115,7 +115,10 @@ exports.iterate = function(root, matcher, f) {
 
 utils.addFilter("less", function(lessfile, getSrc) {
     var result = "";
-    new less.Parser({ filename: getSrc(1).name }).parse(lessfile,
+    var src = getSrc(1).name, dest = this.name;
+    utils.setIncludes(dest, []);
+    new less.Parser({ filename: src, paths: [path.dirname(src)] }).parse(
+        lessfile,
         function(e, tree) {
             exports.iterate(tree, less.tree.URL, function(url) {
                 if (!url.value || !/\.png$/.test(url.value.value)) return;
@@ -126,6 +129,11 @@ utils.addFilter("less", function(lessfile, getSrc) {
                 url.attrs = { mime: "image/png", charset: "", base64: ";base64",
                               data: "," + buf.toString("base64") };
                 delete url.value;
+                utils.addInclude(dest, filename);
+            });
+            exports.iterate(tree, less.tree.Import, function(import_) {
+                utils.addInclude(dest,
+                                 path.join(path.dirname(src), import_.path));
             });
             result = tree.toCSS({ compress: !process.env.debug });
         });
