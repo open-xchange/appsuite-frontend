@@ -84,7 +84,7 @@ define("io.ox/core/lightbox", function () {
                     duration: 500,
                     complete: function () {
                         if (mustSwap) {
-                            $ghostClone.remove();
+                            nodes.popup.empty();
                             nodes.popup.append($page);
                             $page.show();
                         }

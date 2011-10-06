@@ -1,4 +1,4 @@
-define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox/core/dialogs"], function (ext, dialogs) {
+define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox/core/lightbox"], function (ext, lightbox) {
     // Taken From Calendar API
     var DAY = 60000 * 60 * 24;
     
@@ -17,13 +17,20 @@ define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox
             var deferred = new $.Deferred();
             require(["io.ox/calendar/util"], function (calendarUtil) {
                 var $appointmentDiv = $("<div/>").appendTo($node);
-                $appointmentDiv.append("<h1/>").text("Appointments");
+                $appointmentDiv.append($("<h1/>").text("Appointments"));
                 var $list = $("<ul/>").appendTo($appointmentDiv);
                 _(appointments).each(function (appointment) {
                     var description = appointment.title + " (" + calendarUtil.getDateInterval(appointment) + " " + calendarUtil.getTimeInterval(appointment) + ")";
                     var $entry = $("<li/>").text(description).click(function () {
-                        require(["extensions/halo/appointments/view-detail"], function (viewer) {
-                            viewer.show(appointment);
+                        require(["io.ox/calendar/view-detail", "css!io.ox/calendar/style.css"], function (viewer) {
+                            new lightbox.Lightbox({
+                                getGhost: function () {
+                                    return $entry;
+                                },
+                                buildPage: function () {
+                                    return viewer.draw(appointment);
+                                }
+                            }).show();
                         });
                         return false;
                     });
