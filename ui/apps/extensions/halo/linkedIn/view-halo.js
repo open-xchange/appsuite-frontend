@@ -35,8 +35,8 @@ define("extensions/halo/linkedIn/view-halo", ["io.ox/core/lightbox", "css!io.ox/
             
             
             if (liResponse.positions && liResponse.positions.values && liResponse.positions.values.length !== 0) {
+                var $posNode = $("<ul/>").appendTo($relationNode);
                 _(liResponse.positions.values).each(function (position) {
-                    var $posNode = $("<ul/>").appendTo($relationNode);
                     if (position.isCurrent) {
                         var $item = $("<li/>").appendTo($posNode);
                         if (position.title) {

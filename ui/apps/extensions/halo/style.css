@@ -1,13 +1,14 @@
-.ray.done h1 {
+.io-ox-halo {
+    font-family: 'Droid Serif', 'Times New Roman', georgia, serif;
     font-size: 16px;
+    line-height: 1.2em;
+}
+
+.io-ox-halo h1 {
+    font-size: 24px;
     font-weight: normal;
 }
 
-/*.ray.done {
-    padding: 5px;
-    background-color: #eee;
-    -webkit-border-radius: 12px; 
-       -moz-border-radius: 12px; 
-            border-radius: 12px; 
-    -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
-}*/
+.io-ox-halo h2 {
+    font-size: 18px;
+}

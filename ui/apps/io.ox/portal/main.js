@@ -20,6 +20,8 @@ define("io.ox/portal/main", ["io.ox/core/extensions", "css!io.ox/portal/style.cs
             title: "Portal"
         }));
         
+        win.nodes.main.addClass("io-ox-portal");
+        
         //TODO: Add Configurability
         ext.point("io.ox/portal/widget").each(function (extension) {
             

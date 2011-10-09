@@ -25,7 +25,7 @@ define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions", 
         app.setLauncher(function () {
             
             var win = ox.ui.createWindow({});
-            
+            win.nodes.main.addClass("io-ox-halo");
             app.setWindow(win);
             win.setQuitOnClose(true);
             
