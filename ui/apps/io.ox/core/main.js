@@ -80,6 +80,13 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
         
         desktop.addLauncher("right", gt("Applications"));
         
+        desktop.addLauncher("left", gt("Portal"), function () {
+                var node = this;
+                return require(["io.ox/portal/main"], function (m) {
+                    m.getApp().setLaunchBarIcon(node).launch();
+                });
+            });
+            
         desktop.addLauncher("left", gt("E-Mail"), function () {
                 var node = this;
                 return require(["io.ox/mail/main"], function (m) {

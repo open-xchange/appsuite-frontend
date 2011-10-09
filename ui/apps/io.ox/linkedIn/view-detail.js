@@ -1,4 +1,4 @@
-define("extensions/halo/linkedIn/view-detail", ["io.ox/core/extensions", "css!extensions/halo/linkedIn/style.css"], function (ext) {
+define("io.ox/linkedIn/view-detail", ["io.ox/core/extensions", "io.ox/core/lightbox", "css!io.ox/linkedIn/style.css"], function (ext, lightbox) {
     var actionPoint = ext.point("linkedIn/details/actions");
     var rendererPoint = ext.point("linkedIn/details/renderer");
     
@@ -120,8 +120,18 @@ define("extensions/halo/linkedIn/view-detail", ["io.ox/core/extensions", "css!ex
                 $myNode.append($("<h1/>").text("Connections you share with " + data.firstName + " " + data.lastName));
                 _(data.relationToViewer.connections.values).each(function (relation) {
                     if (relation.fullProfile) {
-                        $myNode.append($("<img/>").attr("src", relation.fullProfile.pictureUrl).attr("alt", relation.fullProfile.firstName + " " + relation.fullProfile.lastName));
-                        $myNode.click(todo);
+                        var $image = $("<img/>").attr("src", relation.fullProfile.pictureUrl).attr("alt", relation.fullProfile.firstName + " " + relation.fullProfile.lastName);
+                        $myNode.append($image);
+                        $image.click(function () {
+                            new lightbox.Lightbox({
+                                getGhost: function () {
+                                    return $image;
+                                },
+                                buildPage: function () {
+                                    return draw(relation.fullProfile);
+                                }
+                            }).show();
+                        });
                     } else {
                         $myNode.append($("<span/>").text(relation.person.firstName + " " + relation.person.lastName));
                     }

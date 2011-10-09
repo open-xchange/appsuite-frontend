@@ -1,4 +1,4 @@
-define("extensions/halo/linkedIn/view-halo", ["io.ox/core/lightbox", "css!extensions/halo/linkedIn/style.css"], function (lightbox) {
+define("extensions/halo/linkedIn/view-halo", ["io.ox/core/lightbox", "css!io.ox/linkedIn/style.css"], function (lightbox) {
     return {
         draw: function (liResponse) {
             var $node = $("<div/>").addClass("linkedIn");
@@ -10,7 +10,7 @@ define("extensions/halo/linkedIn/view-halo", ["io.ox/core/lightbox", "css!extens
             var $relationNode = $table.find(".r2");
 
             function openDetails() {
-                require(["extensions/halo/linkedIn/view-detail"], function (detailViewer) {
+                require(["io.ox/linkedIn/view-detail"], function (detailViewer) {
                     new lightbox.Lightbox({
                         getGhost: function () {
                             return $node;

@@ -70,7 +70,7 @@ define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions", 
                 });
                 win.nodes.main.masonry({
                     itemSelector : '.ray',
-                    columnWidth: 100,
+                    columnWidth: win.nodes.main.width() / 3,
                     isAnimated : true
                 });
             }
