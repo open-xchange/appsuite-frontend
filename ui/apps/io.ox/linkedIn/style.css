@@ -7,7 +7,6 @@
 }
 
 .linkedIn .pastEngagements .current {
-    background-color: #ddf;
 }
 
 .linkedIn .position .title {
@@ -19,16 +18,17 @@
 }
 
 .linkedIn .position .companyIndustry {
+    display: none;
     font-size: 12px;
 }
 
 .linkedIn .position .timeSpent {
-    font-size: 9px;
+    float: right;
+    color: #AAA;
 }
 
 .linkedIn .position {
-    padding: 10px;
-    margin-bottom: 10px;
+    margin: 0.5em 0 0.5em 0;
 }
 
 .linkedIn .details .name {
