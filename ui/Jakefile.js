@@ -192,7 +192,7 @@ utils.concat("pre-core.js",
 // apps
 
 var apps = _.groupBy(utils.list("apps/"), function (f) {
-    var match = /\.(js|less|png)$/.exec(f);
+    var match = /\.(js|less)$/.exec(f);
     return match && match[1] || "rest"; });
 if (apps.js) utils.copy(apps.js, { type: "source" });
 if (apps.less) {
