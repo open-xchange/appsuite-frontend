@@ -130,8 +130,7 @@ define("io.ox/core/cache", function () {
     var SimpleCache = function (name, persistent) {
         
         // private fields
-        var index = new CacheStorage(name + ".index", persistent),
-            isComplete = new CacheStorage(name + ".isComplete", persistent);
+        var index = new CacheStorage(name + ".index", persistent);
         
         if (!name) {
             // not funny!
@@ -141,7 +140,6 @@ define("io.ox/core/cache", function () {
         // clear cache
         this.clear = function () {
             index.clear();
-            isComplete.clear();
         };
         
         this.add = function (key, data, timestamp) {
@@ -180,7 +178,7 @@ define("io.ox/core/cache", function () {
         // remove from cache (key|array of keys)
         this.remove = function (key) {
             // is array?
-            if ($.isArray(key)) {
+            if (_.isArray(key)) {
                 var i = 0, $i = key.length;
                 for (; i < $i; i++) {
                     remove(key[i]);
@@ -250,15 +248,6 @@ define("io.ox/core/cache", function () {
         // contains
         this.contains = function (key) {
             return index.contains(key);
-        };
-        
-        // explicit cache
-        this.setComplete = function (key, flag) {
-            isComplete.set(key, flag === undefined ? true : !!flag);
-        };
-        
-        this.isComplete = function (key) {
-            return isComplete.get(key) === true;
         };
     };
     
@@ -395,21 +384,22 @@ define("io.ox/core/cache", function () {
         });
         
         // private
-        var children = new CacheStorage(name + ".children", persistent);
+        var children = new CacheStorage(name + ".children", persistent),
+            isComplete = new CacheStorage(name + ".isComplete", persistent);
         
         // override "add"
         var add = this.add;
         this.add = function (data, timestamp, prepend) {
             // add to cache
-            var key = add.call(this, data, timestamp);
-            // get parent id (to string)
-            var p = _.firstOf(data.folder_id, data.folder) + "";
-            var list = children.get(p) || [];
+            var key = add.call(this, data, timestamp),
+                // get parent id (to string)
+                p = _.firstOf(data.folder_id, data.folder) + "",
+                list = children.get(p) || [],
+                pos;
             // avoid circular reference (root = 0 says parent = 0)
             if (data.id !== p) {
                 // add/replace
-                var pos = $.inArray(key, list);
-                if (pos === -1) {
+                if ((pos = _.indexOf(key, list)) === -1) {
                     // add
                     if (prepend === true) {
                         list.unshift(key);
@@ -430,6 +420,7 @@ define("io.ox/core/cache", function () {
         var clear = this.clear;
         this.clear = function () {
             children.clear();
+            isComplete.clear();
             clear.call(this);
         };
         
@@ -444,8 +435,7 @@ define("io.ox/core/cache", function () {
                 p = _.firstOf(data.folder_id, data.folder) + "";
                 list = children.get(p) || [];
                 // remove from list
-                pos = $.inArray(key, list);
-                if (pos > -1) {
+                if ((pos = _.indexOf(key, list)) > -1) {
                     list.splice(pos, 1);
                 }
                 children.set(p, list);
@@ -458,7 +448,7 @@ define("io.ox/core/cache", function () {
         
         this.remove = function (key) {
             // is array?
-            if ($.isArray(key)) {
+            if (_.isArray(key)) {
                 var i = 0, $i = key.length;
                 for (; i < $i; i++) {
                     removeChild.call(this, key[i]);
@@ -512,6 +502,15 @@ define("io.ox/core/cache", function () {
                 children: this.children(key),
                 complete: this.isComplete(key)
             };
+        };
+        
+        // explicit cache
+        this.setComplete = function (key, flag) {
+            isComplete.set(key, flag === undefined ? true : !!flag);
+        };
+        
+        this.isComplete = function (key) {
+            return isComplete.get(key) === true;
         };
     };
     

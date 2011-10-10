@@ -122,14 +122,14 @@ define("io.ox/core/config", ["io.ox/core/http", "io.ox/core/cache"], function (h
             // loader
             var load = function () {
                 return http.GET({
-                    module: "config",
-                    appendColumns: false,
-                    processResponse: false
-                })
-                .done(function (data) {
-                    config = data !== undefined ? data.data : {};
-                    configCache.add("default", config);
-                });
+                        module: "config",
+                        appendColumns: false,
+                        processResponse: false
+                    })
+                    .done(function (data) {
+                        config = data !== undefined ? data.data : {};
+                        configCache.add("default", config);
+                    });
             };
             // trick to be fast: cached?
             if (!configCache) {

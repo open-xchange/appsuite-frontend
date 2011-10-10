@@ -32,8 +32,7 @@ define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api", "io.
     
         // get window
         win = ox.ui.createWindow({
-            title: "Address Book",
-            subtitle: "Global Address Book",
+            title: "Global Address Book",
             search: true
         });
         

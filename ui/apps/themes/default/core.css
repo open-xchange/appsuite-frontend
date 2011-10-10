@@ -20,11 +20,10 @@
 
 #io-ox-topbar {
     bottom: auto;
-    height: 25px;
+    height: 24px;
     background-color: black;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-bottom: 1px solid black;
-    padding: 2px 5px 2px 5px;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 0px 1px 1px 1px;
     /*overflow: hidden;*/
 }
 
@@ -35,17 +34,17 @@
 .touch #io-ox-windowmanager .window-container-center { width: 100% !important; }
 
 #io-ox-topbar .launcher {
-    color: white;
+    color: #ccc;
     font-weight: bold;
     text-shadow: 0px 1px 4px black;
-    padding: 0 10px 0 10px;
-    margin-right: 1px;
-    line-height: 25px;
+    padding: 1px 12px 2px 12px;
+    margin: 0px 1px 0px 0px;
+    line-height: 20px;
     text-align: center;
     white-space: nowrap;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 0px 0px 5px 5px;
+    -webkit-border-radius: 0px 0px 5px 5px;
+    border-radius: 0px 0px 5px 5px;
     display: inline-block !important;
     cursor: pointer;
 }
@@ -56,13 +55,15 @@
 }
 
 #io-ox-topbar .launcher.hover {
+    color: #fff;
     background-color: #ccc;
-    background-color: rgba(255, 255, 255, 0.40);
+    background-color: rgba(120, 120, 120, 0.80);
 }
 
 #io-ox-topbar .launcher.active {
-    background-color: #aaa;
-    background-color: rgba(255, 255, 255, 0.60);
+    color: #fff;
+    background-color: #444;
+    background-color: rgba(60, 60, 60, 1.00);
 }
 
 @-webkit-keyframes launcherColours {
@@ -94,7 +95,7 @@
 
 #io-ox-windowmanager {
     position: absolute;
-    top: 30px;
+    top: 26px;
     right: 0px;
     bottom: 0px;
     left: 0px;
@@ -120,9 +121,9 @@
 
 .window-container {
     position: absolute;
-    top: 5px;
+    top: 0px;
     width: 100%;
-    bottom: 5px;
+    bottom: 0px;
     left: 0px;
 }
 
@@ -140,12 +141,14 @@
 .window-container-center {
     position: relative;
     margin: 0px auto 0px auto;
-    width: 80% !important;
+    width: 100% !important; /* 90% */
     max-width: 100%;
     height: 100%;
+    /*
     -moz-border-radius: 8px 8px 0px 0px;
     -webkit-border-radius: 8px 8px 0px 0px;
     border-radius: 8px 8px 0px 0px;
+    */
 }
 
 #io-ox-windowmanager.fullscreen .window-container-center {
@@ -153,9 +156,11 @@
 }
 
 .window-container-center.shadow {
+    /*
     -moz-box-shadow: 0px 10px 20px 1px black;
     -webkit-box-shadow: 0px 10px 20px 1px black;
     box-shadow: 0px 10px 20px 1px black;
+    */
 }
 
 .window-head {
@@ -164,6 +169,11 @@
     right: 0px;
     height: 26px;
     left: 0px;
+    border-bottom: 1px solid #000;
+    background-color: #111;
+    background-color: rgba(0, 0, 0, 0.30);
+    color: white;
+    /*
     -moz-border-radius: 8px 8px 0px 0px;
     -webkit-border-radius: 8px 8px 0px 0px;
     border-radius: 8px 8px 0px 0px;
@@ -182,6 +192,7 @@
         #fff 100%
     );
     color: black;
+    */
     font-family: Lucida Grande, Arial;
     font-size: 9pt;
     -webkit-user-select: none;
@@ -195,23 +206,28 @@
     right: 0px;
     height: 18px;
     left: 0px;
-    padding: 4px 10px 4px 10px;
+    padding: 6px 10px 4px 13px;
     line-height: 18px;
-    text-align: center;
-    color: black;
+    /*text-align: center;*/
+    color: white;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 200;
+    font-size: 18pt;
+    line-height: 18pt;
+    text-shadow: 0px 0px 1px #eee;
 }
 
 .window-title .subtitle {
-    color: #888;
+    color: #ccc;
 }
 
 .window-toolbar {
     position: absolute;
-    top: 20px;
+    top: 27px;
     right: 0px;
     height: 0px;
     left: 0px;
-    padding: 2px 7px 5px 8px;
+    padding: 2px 7px 5px 13px;
 }
 
 .window-controls {
@@ -223,7 +239,7 @@
 .window-control {
     color: white;
     font-weight: normal;
-    background-color: #c0c0c0;
+    background-color: #444;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px 10px 10px 10px;
@@ -305,7 +321,7 @@
     position: absolute;
     right: 0;
     left: 0;
-    padding: 8px 10px 8px 10px;
+    padding: 8px 13px 8px 13px;
     border-bottom: 1px solid #ddd;
     color: black;
     background-color: white; /* resolves hw accel anti-aliasing */
@@ -331,7 +347,7 @@
     text-align: center;
     color: black;
     line-height: 1em;
-    padding: 5px 10px 4px 10px;
+    padding: 5px 13px 4px 13px;
     background-color: #eee;
     border-bottom: 1px solid #ccc;
     background-image: -webkit-gradient(
@@ -423,6 +439,13 @@
 }
 
 /* ---- */
+
+.clear-title {
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 200;
+    font-size: 20pt;
+    line-height: 1.15em;
+}
 
 .bright-text {
     color: #888;
@@ -525,6 +548,18 @@ input[type=search] {
     color: #333;
     background-image: -moz-linear-gradient(center top, #eee, #fff);
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eee), to(#fff));
+}
+
+.window-toolbar .io-ox-toolbar-link {
+    font-size: 9pt;
+    color: #79ADDB;
+    display: inline-block;
+    margin: 2px 20px 2px 0px;
+    cursor: pointer;
+}
+
+.window-toolbar .io-ox-toolbar-link:hover {
+    text-decoration: underline;
 }
 
 .window-toolbar .io-ox-button {

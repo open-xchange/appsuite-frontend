@@ -60,8 +60,8 @@ define("io.ox/core/event", function () {
                     type = trimSplit(type);
                     
                     // multiple types?
-                    if ($.isArray(type)) {
-                        $.each(type, function (i, type) {
+                    if (_.isArray(type)) {
+                        _.each(type, function (type) {
                             self.bind(type, data, fn);
                         });
                         return;
@@ -108,8 +108,8 @@ define("io.ox/core/event", function () {
                     type = trimSplit(type);
                     
                     // multiple types?
-                    if ($.isArray(trim)) {
-                        $.each(type, function (i, type) {
+                    if (_.isArray(trim)) {
+                        _.each(type, function (type) {
                             self.unbind(type, fn);
                         });
                         return;
@@ -144,8 +144,8 @@ define("io.ox/core/event", function () {
                     type = trimSplit(type);
                     
                     // multiple types?
-                    if ($.isArray(type)) {
-                        $.each(type, function (i, type) {
+                    if (_.isArray(type)) {
+                        _.each(type, function (type) {
                             self.trigger(type, data);
                         });
                         return;

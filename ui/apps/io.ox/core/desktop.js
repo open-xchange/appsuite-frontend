@@ -462,16 +462,21 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 
                 this.addButton = function (options) {
                     
-                    var opt = $.extend({
+                    var o = $.extend({
                         label: "Action",
                         action: $.noop
                     }, options || {});
                     
-                    return $.button({
-                        label: opt.label,
-                        click: opt.action
-                    })
-                    .appendTo(this.nodes.toolbar);
+                    return $("<div>")
+                        .addClass("io-ox-toolbar-link")
+                        .text(String(o.label))
+                        .bind("click", o.action)
+                        .appendTo(this.nodes.toolbar);
+//                    return $.button({
+//                        label: opt.label,
+//                        click: opt.action
+//                    })
+//                    .appendTo(this.nodes.toolbar);
                 };
                 
                 this.addView = function (id) {
@@ -668,7 +673,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     
                 $("<div/>")
                     .addClass("searchfield-wrapper")
-                    .css({ "float": "right", marginTop: "7px" })
+                    .css({ "float": "right" })
                     .append(
                         $("<input/>", { type: "search", placeholder: "Search...", size: "40" })
                             

@@ -32,8 +32,7 @@ define("io.ox/calendar/main",
     
         // get window
         app.setWindow(win = ox.ui.createWindow({
-            title: "Calendar",
-            subtitle: util.getDate(),
+            title: util.getDate(),
             search: true
         }));
         

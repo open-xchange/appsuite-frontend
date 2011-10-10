@@ -31,8 +31,7 @@ define("io.ox/mail/main",
     
         // get window
         win = ox.ui.createWindow({
-            title: "E-Mail",
-            subtitle: "Inbox",
+            title: "Inbox",
             toolbar: true,
             search: true
         });
@@ -44,7 +43,7 @@ define("io.ox/mail/main",
             label: "New Mail",
             action: base.createNewMailDialog
         })
-        .css("marginRight", "20px");
+        .css("marginRight", "40px");
         
         win.addButton({
             label: "Delete",
@@ -53,7 +52,7 @@ define("io.ox/mail/main",
                 grid.selection.selectNext();
             }
         })
-        .css("marginRight", "20px");
+        .css("marginRight", "40px");
         
         win.addButton({
             label: "Reply All"

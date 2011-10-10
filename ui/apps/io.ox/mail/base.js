@@ -304,7 +304,7 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
                 )
                 .append(
                     $("<div/>")
-                        .addClass("subject")
+                        .addClass("subject clear-title")
                         // inject some zero width spaces for better word-break
                         .text(_.prewrap(data.subject))
                         .append(

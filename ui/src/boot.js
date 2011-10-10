@@ -267,6 +267,15 @@ $(document).ready(function () {
      * Auto login
      */
     autoLogin = function () {
+        
+        function fail() {
+            if (ox.signin) {
+                initialize();
+            } else {
+                _.url.redirect("signin");
+            }
+        }
+        
         // got session via hash?
         if (_.url.hash("session")) {
             ox.session = _.url.hash("session");
@@ -275,21 +284,21 @@ $(document).ready(function () {
             loadCore();
         } else if (ox.serverConfig.autoLogin === true && ox.online) {
             // try auto login
-            require("io.ox/core/session").autoLogin()
-                .done(gotoCore)
-                .fail(function () {
-                    if (ox.signin) {
-                        initialize();
-                    } else {
-                        _.url.redirect("signin");
-                    }
-                });
-        } else {
-            if (ox.signin) {
-                initialize();
+            var session = require("io.ox/core/session");
+            if (!ox.signin) {
+                session.cachedAutoLogin()
+                    .done(function () {
+                        gotoCore();
+                        session.autoLogin().fail(fail);
+                    })
+                    .fail(function () {
+                        session.autoLogin().done(gotoCore).fail(fail);
+                    });
             } else {
-                _.url.redirect("signin");
+                session.autoLogin().done(gotoCore).fail(fail);
             }
+        } else {
+            fail();
         }
     };
     

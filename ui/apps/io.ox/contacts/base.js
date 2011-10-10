@@ -17,13 +17,11 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
     
     // smart join
     var join = function () {
-        var tmp = [], i = 1, $i = arguments.length, delimiter = arguments[0] || "";
-        for (; i < $i; i++) {
-            if (arguments[i]) {
-                tmp.push(arguments[i]);
-            }
-        }
-        return tmp.join(delimiter);
+        return _(arguments)
+            .select(function (obj, i) {
+                return i > 0 && !!obj;
+            })
+            .join(arguments[0] || "");
     };
     
     return {
@@ -91,10 +89,10 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
                     $("<td>")
                     .css({ paddingTop: "2em", verticalAlign: "top" })
                     .append(
-                        $("<div>").addClass("name").text(this.getFullName(obj))
+                        $("<div>").addClass("name clear-title").text(this.getFullName(obj))
                     )
                     .append(
-                        $("<div>").addClass("job").text(
+                        $("<div>").addClass("job clear-title").text(
                             obj.mark_as_distributionlist ?
                                 gt("Distribution list") :
                                 (obj.company || obj.position || obj.profession) ?

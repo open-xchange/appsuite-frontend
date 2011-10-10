@@ -19,6 +19,27 @@ define("io.ox/core/session", ["io.ox/core/http"], function (http) {
         ox.session = session;
     };
     
+    var setCachedSession = function () {
+        document.cookie = _.serialize({ session: ox.session });
+        document.cookie = _.serialize({ user: ox.user });
+    };
+    
+    var getCachedSession = function () {
+        var obj = _.deserialize(document.cookie, "; ");
+        if (obj.session && obj.user) {
+            ox.session = obj.session;
+            ox.user = obj.user;
+            return true;
+        } else {
+            return false;
+        }
+    };
+    
+    var removeCachedSession = function () {
+        document.cookie = "session=";
+        document.cookie = "user=";
+    };
+    
     var setUser = function (username) {
         ox.user = username.indexOf("@") > -1 ?
             username : username + "@" + ox.serverConfig.defaultContext;
@@ -26,6 +47,11 @@ define("io.ox/core/session", ["io.ox/core/http"], function (http) {
     
     var that = {
             
+        cachedAutoLogin: function () {
+            var def = $.Deferred();
+            return getCachedSession() ? def.resolve() : def.reject();
+        },
+        
         autoLogin: function () {
             // GET request
             return http.GET({
@@ -69,6 +95,8 @@ define("io.ox/core/session", ["io.ox/core/http"], function (http) {
                     setUser(username);
                     // set permanent cookie
                     if (store) {
+                        // cache session
+                        setCachedSession();
                         that.store().done(function () {
                             def.resolve(data);
                         }).fail(def.reject);
@@ -100,6 +128,7 @@ define("io.ox/core/session", ["io.ox/core/http"], function (http) {
         
         logout: function () {
             if (ox.online) {
+                removeCachedSession();
                 // POST request
                 return http.POST({
                     module: "login",

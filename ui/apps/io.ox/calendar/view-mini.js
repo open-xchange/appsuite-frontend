@@ -19,10 +19,10 @@ define("io.ox/calendar/view-mini",
         
         draw: function (timestamp) {
             // debugging mode: output to console
-            console.log(util.getDayNames().join(" "));
+            console.debug(util.getDayNames().join(" "));
             var list = util.getMonthScaffold(timestamp);
             _(list).each(function (days) {
-                console.log(
+                console.debug(
                     _(days).map(function (day) {
                             return _.pad(day.date, 2, " ");
                         })

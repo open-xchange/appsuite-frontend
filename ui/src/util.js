@@ -20,56 +20,81 @@
     var ua = navigator.userAgent,
         isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]",
         webkit = ua.indexOf('AppleWebKit/') > -1,
-        chrome = ua.indexOf('Chrome/') > -1;
-        
-    // deserialize
-    var deserialize = function (str, delimiter) {
-        var pairs = (str || "").split(delimiter === undefined ? "&" : delimiter);
-        var i = 0, $l = pairs.length, pair, obj = {}, d = decodeURIComponent;
-        for (; i < $l; i++) {
-            pair = pairs[i];
-            var keyValue = pair.split(/\=/), key = keyValue[0], value = keyValue[1];
-            if (key !== "" || value !== undefined) {
-                obj[d(key)] = d(value);
+        chrome = ua.indexOf('Chrome/') > -1,
+        // shortcut
+        slice = Array.prototype.slice,
+        // deserialize
+        deserialize = function (str, delimiter) {
+            var pairs = (str || "").split(delimiter === undefined ? "&" : delimiter);
+            var i = 0, $l = pairs.length, pair, obj = {}, d = decodeURIComponent;
+            for (; i < $l; i++) {
+                pair = pairs[i];
+                var keyValue = pair.split(/\=/), key = keyValue[0], value = keyValue[1];
+                if (key !== "" || value !== undefined) {
+                    obj[d(key)] = d(value);
+                }
             }
-        }
-        return obj;
-    };
-    
-    // stupid string rotator
-    var rot = function (str, shift) {
-        return _(String(str).split("")).map(function (i) {
-            return String.fromCharCode(i.charCodeAt(0) + shift);
-        }).join("");
-    };
-    
-    // get hash & query
-    var queryData = deserialize(document.location.search.substr(1), /&/),
+            return obj;
+        },
+        // stupid string rotator
+        rot = function (str, shift) {
+            return _(String(str).split("")).map(function (i) {
+                return String.fromCharCode(i.charCodeAt(0) + shift);
+            }).join("");
+        },
+        // get hash & query
+        queryData = deserialize(document.location.search.substr(1), /&/),
         hashData = document.location.hash.substr(1);
-    
+        
     // decode
     hashData = deserialize(hashData.substr(0, 1) === "?" ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData);
     
-    // extend underscore utilities
-    _.extend(_, {
-        
-        browser: {
-            /** is IE? */
-            IE: navigator.appName !== "Microsoft Internet Explorer" ? undefined
-                : Number(navigator.appVersion.match(/MSIE (\d+\.\d+)/)[1]),
-            /** is Opera? */
-            Opera: isOpera,
-            /** is WebKit? */
-            WebKit: webkit,
-            /** Safari */
-            Safari: webkit && !chrome,
-            /** Chrome */
-            Chrome: webkit && chrome,
-            /** is Firefox? */
-            Firefox:  ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1,
-            /** MacOS **/
-            MacOS: ua.indexOf('Macintosh') > -1
+    // add namespaces
+    _.browser = {
+        /** is IE? */
+        IE: navigator.appName !== "Microsoft Internet Explorer" ? undefined
+            : Number(navigator.appVersion.match(/MSIE (\d+\.\d+)/)[1]),
+        /** is Opera? */
+        Opera: isOpera,
+        /** is WebKit? */
+        WebKit: webkit,
+        /** Safari */
+        Safari: webkit && !chrome,
+        /** Chrome */
+        Chrome: webkit && chrome,
+        /** is Firefox? */
+        Firefox:  ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1,
+        /** MacOS **/
+        MacOS: ua.indexOf('Macintosh') > -1
+    };
+    
+    _.url = {
+        /**
+         * @param name {string} [Name] of the query parameter
+         * @returns {Object} Value or all values
+         */
+        param: function (name) {
+            return name === undefined ? queryData : queryData[name];
         },
+        /**
+         * @param {string} [name] Name of the hash parameter
+         * @returns {Object} Value or all values
+         */
+        hash: function (name) {
+            return name === undefined ? hashData : hashData[name];
+        },
+        
+        /**
+         * Redirect
+         */
+        redirect: function (path) {
+            var l = location, href = l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, "/" + path);
+            location.href = href;
+        }
+    };
+    
+    // extend underscore utilities
+    _.mixin({
         
         /**
          * Serialize object (key/value pairs) to fit into URLs (e.g. a=1&b=2&c=HelloWorld)
@@ -105,31 +130,6 @@
         
         rot: rot,
         
-        url: {
-            /**
-             * @param name {string} [Name] of the query parameter
-             * @returns {Object} Value or all values
-             */
-            param: function (name) {
-                return name === undefined ? queryData : queryData[name];
-            },
-            /**
-             * @param {string} [name] Name of the hash parameter
-             * @returns {Object} Value or all values
-             */
-            hash: function (name) {
-                return name === undefined ? hashData : hashData[name];
-            },
-            
-            /**
-             * Redirect
-             */
-            redirect: function (path) {
-                var l = location, href = l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, "/" + path);
-                location.href = href;
-            }
-        },
-        
         /**
          * This function simply writes its parameters to console.
          * Useful to debug callbacks, e.g. event handlers.
@@ -138,7 +138,7 @@
          * http.GET({ module: "calendar", params: { id: 158302 }, success: _.inspect });
          */
         inspect: function (first) {
-            var args = $.makeArray(arguments);
+            var args = slice.call(arguments);
             args.unshift("Inspect");
             console.debug.apply(console, args);
             return first;
@@ -170,7 +170,7 @@
          * Return the first parameter that is not undefined
          */
         firstOf: function () {
-            var args = $.makeArray(arguments), i = 0, $l = args.length;
+            var args = slice.call(arguments), i = 0, $l = args.length;
             for (; i < $l; i++) {
                 if (args[i] !== undefined) {
                     return args[i];
@@ -210,15 +210,15 @@
          */
         lfo: function () {
             // call counter
-            var curry = $.makeArray(arguments),
+            var curry = slice.call(arguments),
                 fn = curry.shift(),
                 count = (fn.count = (fn.count || 0) + 1);
             // wrap
             return function () {
-                var args = arguments;
+                var args = slice.call(arguments);
                 setTimeout(function () {
                     if (count === fn.count) {
-                        fn.apply(fn, $.merge(curry, args));
+                        fn.apply(fn, curry.concat(args));
                     }
                 }, 0);
             };
@@ -230,7 +230,7 @@
         printf: function (str, params) {
             // is array?
             if (!_.isArray(params)) {
-                params = $.makeArray(arguments).slice(1);
+                params = slice.call(arguments, 1);
             }
             var index = 0;
             return String(str)

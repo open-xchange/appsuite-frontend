@@ -13,7 +13,10 @@
  *
  */
 
-define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http", "io.ox/core/extensions", "io.ox/core/gettext"], function (desktop, session, http, extensions, gt) {
+define("io.ox/core/main",
+    ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http",
+    "io.ox/core/extensions", "io.ox/core/gettext"],
+    function (desktop, session, http, extensions, gt) {
 
     var PATH = ox.base + "/apps/io.ox/core",
         DURATION = 250;
@@ -122,20 +125,26 @@ define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/co
                 });
             });
         
-        // load core extensions
-        extensions.load()
+        var def = $.Deferred(),
+            autoLaunch = _.url.hash("launch") ? _.url.hash("launch").split(/,/) : [];
+        
+        $.when(
+                extensions.load(),
+                require(autoLaunch),
+                def
+            )
             .done(function () {
-                $("#background_loader").removeClass("busy").fadeOut(DURATION, function () {
-                    // auto launch apps?
-                    if (_.url.hash("launch")) {
-                        require(_.url.hash("launch").split(/,/), function () {
-                            $.each(arguments, function (i, m) {
-                                m.getApp().launch();
-                            });
-                        });
-                    }
+                _(autoLaunch).each(function (id) {
+                    require(id).getApp().launch();
                 });
             });
+        
+        if (autoLaunch.length) {
+            $("#background_loader").removeClass("busy").hide();
+            def.resolve();
+        } else {
+            $("#background_loader").removeClass("busy").fadeOut(DURATION, def.resolve);
+        }
     }
     
     return {

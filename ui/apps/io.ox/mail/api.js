@@ -130,8 +130,8 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api/factory"], function
             defs = [],
             self = this;
         // get each mail
-        $.each(thread, function (i) {
-            defs.push(self.get(thread[i]));
+        _.each(thread, function (t) {
+            defs.push(self.get(t));
         });
         // join all deferred objects
         var result = $.Deferred();
@@ -139,8 +139,8 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api/factory"], function
             var args = $.makeArray(arguments), tmp = [];
             args = defs.length > 1 ? args : [args];
             // loop over results
-            $.each(args, function (i) {
-                tmp.push(args[i][0] || args[i]);
+            _.each(args, function (obj) {
+                tmp.push(obj[0] || obj);
             });
             // resolve
             result.resolve(tmp);

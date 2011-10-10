@@ -16,6 +16,12 @@ define("io.ox/calendar/view-detail",
      "io.ox/core/api/user", "io.ox/core/api/group", "io.ox/core/api/resource"
     ], function (ext, util, gettext, userAPI, groupAPI, resourceAPI) {
     
+    var fnClickPerson = function (e) {
+        ext.point("io.ox/core/person:action").each(function (ext) {
+            _.call(ext.action, e.data);
+        });
+    };
+
     // draw via extension points
     
     // draw appointment date & time
@@ -60,7 +66,7 @@ define("io.ox/calendar/view-detail",
         id: "title",
         draw: function (data) {
             this.append(
-                $("<div>").addClass("title").text(data.title || "")
+                $("<div>").addClass("title clear-title").text(data.title || "")
             );
         }
     });
@@ -99,12 +105,12 @@ define("io.ox/calendar/view-detail",
             statusClass = util.getConfirmationClass(conf.status),
             isPerson = hash[key] || obj.folder_id,
             personClass = isPerson ? "person" : "",
-            name, node, name_lc, mail_lc;
+            name, node, name_lc,
+            mail_lc = String(obj.mail).toLowerCase();
         // external participant?
         if (obj.type === 5) {
             // beautify
             name_lc = String(obj.display_name).toLowerCase();
-            mail_lc = String(obj.mail).toLowerCase();
             if (name_lc === mail_lc) {
                 name = mail_lc;
             } else {
@@ -115,7 +121,8 @@ define("io.ox/calendar/view-detail",
         }
         node = $("<div>").addClass("participant")
             .append($("<span>").addClass(personClass).text(name))
-            .append($("<span>").addClass("status " + statusClass).text(" " + confirm));
+            .append($("<span>").addClass("status " + statusClass).text(" " + confirm))
+            .bind("click", { display_name: name, email1: mail_lc }, fnClickPerson);
         // has confirmation comment?
         if (conf.comment !== "") {
             node.append($("<span>").addClass("comment").text(conf.comment));

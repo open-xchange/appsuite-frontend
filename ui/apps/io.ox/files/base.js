@@ -20,8 +20,11 @@ define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
     var draw = function (file) {
         file.url = ox.ajaxRoot + "/infostore?action=document&id=" + file.id +
             "&folder=" + file.folder_id + "&session=" + ox.session; // TODO: Put this somewhere in the model
-        var element = $("<div />").addClass("fileDetails");
-        element.append($("<h1/>").text(file.title));
+        
+        // container & title
+        var element = $("<div>").addClass("file-details")
+            .append($("<div>").addClass("title clear-title").text(file.title));
+        
         // Basic Info
         (function () {
             var container = $("<div/>").addClass("basicInfo");

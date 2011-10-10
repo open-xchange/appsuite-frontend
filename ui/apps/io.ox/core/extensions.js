@@ -63,9 +63,7 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             }
             
             if (replacements[extension.id]) {
-                console.log("replace", extension, "with", replacements[extension.id]);
                 _.extend(extension, replacements[extension.id]);
-                console.log("now", extension);
                 delete replacements[extension.id];
             }
             

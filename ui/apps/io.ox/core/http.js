@@ -401,7 +401,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
     
     var sanitize = function (data, module, columns) {
         // not array or no columns given?
-        if (!$.isArray(data) || !columns) {
+        if (!_.isArray(data) || !columns) {
             // typically from "action=get" (already sanitized)
             return data;
         } else {

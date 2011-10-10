@@ -57,8 +57,7 @@ define("io.ox/files/main",
         
         // get window
         app.setWindow(win = ox.ui.createWindow({
-            title: "Files",
-            subtitle: "Private files",
+            title: "Private files",
             search: true
         }));
         
@@ -77,7 +76,7 @@ define("io.ox/files/main",
             .appendTo(win.nodes.main);
         
         right = $("<div/>")
-            .css({ left: "310px", overflow: "auto", padding: "0px 40px 20px 40px" })
+            .css({ left: "310px", overflow: "auto", padding: "30px" })
             .addClass("rightside withStatusBar")
             .appendTo(win.nodes.main);
         
