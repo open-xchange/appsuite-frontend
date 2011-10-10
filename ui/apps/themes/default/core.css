@@ -20,7 +20,7 @@
 
 #io-ox-topbar {
     bottom: auto;
-    height: 24px;
+    height: 26px;
     background-color: black;
     background-color: rgba(0, 0, 0, 0.6);
     padding: 0px 1px 1px 1px;
@@ -37,7 +37,7 @@
     color: #ccc;
     font-weight: bold;
     text-shadow: 0px 1px 4px black;
-    padding: 1px 12px 2px 12px;
+    padding: 2px 12px 3px 12px;
     margin: 0px 1px 0px 0px;
     line-height: 20px;
     text-align: center;
@@ -95,7 +95,7 @@
 
 #io-ox-windowmanager {
     position: absolute;
-    top: 26px;
+    top: 28px;
     right: 0px;
     bottom: 0px;
     left: 0px;
