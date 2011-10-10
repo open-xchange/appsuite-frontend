@@ -14,7 +14,7 @@
  *
  */
 
-define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions"], function (api, ext) {
+define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions", "css!extensions/halo/style.css"], function (api, ext) {
     
     function show(data) {
         
@@ -25,26 +25,58 @@ define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions"],
         app.setLauncher(function () {
             
             var win = ox.ui.createWindow({});
-            
+            win.nodes.main.addClass("io-ox-halo");
             app.setWindow(win);
             win.setQuitOnClose(true);
             
-            var content = $("<div/>").css({overflow: "auto"}).appendTo(win.nodes.main);
+            win.nodes.main.css({overflow: "auto"});
             // Trigger Server Halo API
+            var $busyIndicator = $("<div/>").css({"float": "left", "margin": "10px", "height": "100px"}).addClass("ray busyIndicator");
+            $busyIndicator.busy();
+            win.nodes.main.append($busyIndicator);
+
             if (api) {
                 var investigations = api.halo.investigate(data);
+                var drawingFinished = [];
                 _(investigations).each(function (promise, providerName) {
-                    var $node = $("<div/>");
-                    $node.busy();
-                    content.append($node);
+                    var $node = $("<div/>").css({"float": "left", "margin": "5px", "min-width": "100px"}).addClass("ray");
+                    win.nodes.main.append($node);
+                    var drawn = new $.Deferred();
+                    drawingFinished.push(drawn);
                     promise.done(function (response) {
-                        $node.idle();
-                        api.viewer.draw($node, providerName, response);
+                        var $newNode = $("<div/>").css({"float": "left", "margin": "10px"}).addClass("ray done");
+                        var deferred = api.viewer.draw($newNode, providerName, response);
+                        if (deferred) {
+                            deferred.done(function () {
+                                $node.imagesLoaded(function () {
+                                    $node.after($newNode);
+                                    $node.remove();
+                                    win.nodes.main.masonry("reload");
+                                    drawn.resolve();
+                                });
+                            });
+                        } else {
+                            win.nodes.main.masonry("reload");
+                            $node.imagesLoaded(function () {
+                                win.nodes.main.masonry("reload");
+                                drawn.resolve();
+                            });
+                        }
                     });
+                });
+                $.when.apply($, drawingFinished).done(function () {
+                    $busyIndicator.remove();
+                    win.nodes.main.masonry("reload");
+                });
+                win.nodes.main.masonry({
+                    itemSelector : '.ray',
+                    columnWidth: win.nodes.main.width() / 3,
+                    isAnimated : true
                 });
             }
             
             win.show();
+            $busyIndicator.css("width", win.nodes.main.width() + "px");
         });
         
         app.launch();

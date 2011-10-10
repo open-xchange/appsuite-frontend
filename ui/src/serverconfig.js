@@ -24,7 +24,7 @@ define(function () {
         extensions: {
             signin: [],
             core: ["halo"],
-            halo: ["halo/contacts", "halo/appointments", "halo/linkedIn"]
+            halo: ["halo/contacts", "halo/appointments", "halo/linkedIn", "portal/appointments", "portal/linkedIn"]
         }
     };
 });

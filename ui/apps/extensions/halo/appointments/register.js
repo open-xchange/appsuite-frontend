@@ -1,4 +1,4 @@
-define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox/core/dialogs"], function (ext, dialogs) {
+define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox/core/lightbox"], function (ext, lightbox) {
     // Taken From Calendar API
     var DAY = 60000 * 60 * 24;
     
@@ -10,16 +10,35 @@ define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox
         },
         draw: function  ($node, providerName, appointments) {
             if (appointments.length === 0) {
+                $node.append("<h1>Appointments</h1>");
+                $node.append("<div>No Appointments found.</div>");
                 return;
             }
-            var $list = $("<ul/>").appendTo($node);
-            _(appointments).each(function (appointment) {
-                var $entry = $("<li/>").text(appointment.title).click(function () {
-                    new dialogs.ModalDialog().text(appointment.title).setUnderlayAction("ok").setDefaultAction("ok").show();
-                    return false;
+            var deferred = new $.Deferred();
+            require(["io.ox/calendar/util"], function (calendarUtil) {
+                var $appointmentDiv = $("<div/>").appendTo($node);
+                $appointmentDiv.append($("<h1/>").text("Appointments"));
+                var $list = $("<ul/>").appendTo($appointmentDiv);
+                _(appointments).each(function (appointment) {
+                    var description = appointment.title + " (" + calendarUtil.getDateInterval(appointment) + " " + calendarUtil.getTimeInterval(appointment) + ")";
+                    var $entry = $("<li/>").text(description).click(function () {
+                        require(["io.ox/calendar/view-detail", "css!io.ox/calendar/style.css"], function (viewer) {
+                            new lightbox.Lightbox({
+                                getGhost: function () {
+                                    return $entry;
+                                },
+                                buildPage: function () {
+                                    return viewer.draw(appointment);
+                                }
+                            }).show();
+                        });
+                        return false;
+                    });
+                    $list.append($entry);
                 });
-                $list.append($entry);
+                deferred.resolve();
             });
+            return deferred;
         }
     });
     

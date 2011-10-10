@@ -8,9 +8,13 @@ define("extensions/halo/contacts/register", ["io.ox/core/extensions"], function 
             if (contacts.length === 0) {
                 return;
             }
+            var deferred = new $.Deferred();
             require(["io.ox/contacts/base", "css!io.ox/contacts/style.css"], function (base) {
+                $node.append("<h1>Address Book</h1>");
                 $node.append(base.draw(contacts[0]));
+                deferred.resolve();
             });
+            return deferred;
         }
     });
     

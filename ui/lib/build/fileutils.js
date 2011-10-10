@@ -327,3 +327,46 @@ exports.merge = function(a, b, cmp) {
     c.length = ci;
     return c;
 };
+
+var includes = {};
+var includesFile;
+
+/**
+ * Specifies a file which stores include information between builds, and loads
+ * it if it already exists.
+ * @param {String} filename The file which stores include information between
+ * builds.
+ */
+exports.loadIncludes = function(filename) {
+    includesFile = filename;
+    if (path.existsSync(filename)) {
+        includes = JSON.parse(fs.readFileSync(filename, "utf8"));
+        for (var i in includes) file(i, includes[i]);
+    }
+};
+
+/**
+ * Adds an include found in a source file.
+ * @param {String} file The file which contains the include.
+ * @param {String} include Name of the included file.
+ */
+exports.addInclude = function(file, include) {
+    (includes[file] || (includes[file] = [])).push(include);
+};
+
+/**
+ * Specifies which includes were found in a source file.
+ * @param {String} file The file which contains the includes.
+ * @param {Array} includedFiles An array with names of included files.
+ */
+exports.setIncludes = function(file, includedFiles) {
+    includes[file] = includedFiles;
+};
+
+/**
+ * Saves the list of inlcudes to the file previously specified by loadIncludes.
+ */
+exports.saveIncludes = function() {
+    for (var i in includes) if (!includes[i].length) delete includes[i];
+    fs.writeFileSync(includesFile, JSON.stringify(includes));
+};

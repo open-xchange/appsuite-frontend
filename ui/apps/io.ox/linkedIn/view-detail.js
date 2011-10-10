@@ -1,4 +1,4 @@
-define("extensions/halo/linkedIn/view-details", ["io.ox/core/extensions", "css!extensions/halo/linkedIn/style.css"], function (ext) {
+define("io.ox/linkedIn/view-detail", ["io.ox/core/extensions", "io.ox/core/lightbox", "css!io.ox/linkedIn/style.css"], function (ext, lightbox) {
     var actionPoint = ext.point("linkedIn/details/actions");
     var rendererPoint = ext.point("linkedIn/details/renderer");
     
@@ -6,51 +6,33 @@ define("extensions/halo/linkedIn/view-details", ["io.ox/core/extensions", "css!e
         alert("TODO");
     }
 
-    function show(data) {
+    function draw(data) {
+        var $node = $("<div/>").addClass("linkedIn").css({overflow: "auto"});
+        var $detailNode = $("<div/>").addClass("details").appendTo($node);
+        var $table = $("<table><tr><td class='t10' /><td class='t11' /></td></tr><tr><td class='r2' colspan='2'/></tr><table>").appendTo($detailNode);
+        var $pictureNode = $table.find(".t10");
+        var $nameNode = $table.find(".t11");
+        var $relationNode = $table.find(".r2");
         
-        var app = ox.ui.createApp({
-            title: data.firstName + " " + data.lastName + "(LinkedIn)"
+        $pictureNode.append($("<img/>").attr("src", data.pictureUrl));
+        
+        $nameNode.append($("<div class='name' />").text(data.firstName + " " + data.lastName));
+        $nameNode.append($("<div class='headline' />").text(data.headline));
+        
+        var $actionsNode = $("<div/>").addClass("actions").appendTo($node);
+        actionPoint.each(function (ext) {
+            $actionsNode.append($("<a href='#'/>").text(ext.label).click(function () {
+                ext.action();
+                return false;
+            }));
         });
         
-        app.setLauncher(function () {
-            
-            var win = ox.ui.createWindow({});
-            win.nodes.main.css("overflow", "auto");
-            
-            app.setWindow(win);
-            win.setQuitOnClose(true);
-            
-            var $node = $("<div/>").addClass("linkedIn").appendTo(win.nodes.main);
-            var $detailNode = $("<div/>").addClass("details").appendTo($node);
-            var $table = $("<table><tr><td class='t10' /><td class='t11' /></td></tr><tr><td class='r2' colspan='2'/></tr><table>").appendTo($detailNode);
-            var $pictureNode = $table.find(".t10");
-            var $nameNode = $table.find(".t11");
-            var $relationNode = $table.find(".r2");
-            
-            $pictureNode.append($("<img/>").attr("src", data.pictureUrl));
-            
-            $nameNode.append($("<div class='name' />").text(data.firstName + " " + data.lastName));
-            $nameNode.append($("<div class='headline' />").text(data.headline));
-            
-            var $actionsNode = $("<div/>").addClass("actions").appendTo($node);
-            actionPoint.each(function (ext) {
-                $actionsNode.append($("<a href='#'/>").text(ext.label).click(function () {
-                    ext.action();
-                    return false;
-                }));
-            });
-            
-            rendererPoint.each(function (ext) {
-                $node.append(ext.draw({data: data, win: win}));
-            });
-            
-            win.show();
+        rendererPoint.each(function (ext) {
+            $node.append(ext.draw({data: data, win: $node}));
         });
         
-        
-        app.launch();
+        return $node;
     }
-    
     
     // Mock Actions
     actionPoint.extend({
@@ -115,7 +97,7 @@ define("extensions/halo/linkedIn/view-details", ["io.ox/core/extensions", "css!e
                         if (pastEngagementsVisible) {
                             $moreToggle.text("Show less");
                             _(pastEngagements).invoke("fadeIn", 500);
-                            win.nodes.main.animate({scrollTop: _(pastEngagements).first().offset().top - 50}, 500);
+                            win.animate({scrollTop: _(pastEngagements).first().offset().top - 50}, 500);
                         } else {
                             $moreToggle.text("More...");
                             _(pastEngagements).invoke("fadeOut");
@@ -138,9 +120,17 @@ define("extensions/halo/linkedIn/view-details", ["io.ox/core/extensions", "css!e
                 $myNode.append($("<h1/>").text("Connections you share with " + data.firstName + " " + data.lastName));
                 _(data.relationToViewer.connections.values).each(function (relation) {
                     if (relation.fullProfile) {
-                        $myNode.append($("<img/>").attr("src", relation.fullProfile.pictureUrl).attr("alt", relation.fullProfile.firstName + " " + relation.fullProfile.lastName));
-                        $myNode.click(function () {
-                            show(relation.fullProfile);
+                        var $image = $("<img/>").attr("src", relation.fullProfile.pictureUrl).attr("alt", relation.fullProfile.firstName + " " + relation.fullProfile.lastName);
+                        $myNode.append($image);
+                        $image.click(function () {
+                            new lightbox.Lightbox({
+                                getGhost: function () {
+                                    return $image;
+                                },
+                                buildPage: function () {
+                                    return draw(relation.fullProfile);
+                                }
+                            }).show();
                         });
                     } else {
                         $myNode.append($("<span/>").text(relation.person.firstName + " " + relation.person.lastName));
@@ -154,6 +144,6 @@ define("extensions/halo/linkedIn/view-details", ["io.ox/core/extensions", "css!e
     });
     
     return {
-        show: show
+        draw: draw
     };
 });

@@ -56,11 +56,41 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             
         event.Dispatcher.extend(this);
         
+        function createInvoke(point, ext) {
+            return function (name, context, args) {
+                if (!_.isArray(args)) {
+                    args = [args];
+                }
+                var fn = ext[name];
+                if (fn) {
+                    // wrap?
+                    if (wrappers[name]) {
+                        return wrappers[name].call(context, {
+                            args: args,
+                            extension: ext,
+                            original: function () {
+                                return fn.apply(context, args);
+                            },
+                            id: point.id + "/" + ext.id,
+                            module: that,
+                            point: point
+                        });
+                    } else {
+                        return fn.apply(context, args);
+                    }
+                }
+            };
+        }
+        
         this.extend = function (extension) {
-            
+            if (extension.invoke) {
+                throw "Extensions must not have their own invoke method";
+            }
             if (!extension.id) {
                 throw "Extensions must have an id!";
             }
+            
+            extension.invoke = createInvoke(this, extension);
             
             if (replacements[extension.id]) {
                 _.extend(extension, replacements[extension.id]);
@@ -129,27 +159,7 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             if (!_.isArray(args)) {
                 args = [args];
             }
-            list().each(function (obj) {
-                var fn = obj[name];
-                if (fn) {
-                    // wrap?
-                    if (wrappers[name]) {
-                        wrappers[name].call(context, {
-                            args: args,
-                            extension: obj,
-                            original: function () {
-                                fn.apply(context, args);
-                            },
-                            id: self.id + "/" + obj.id,
-                            module: that,
-                            point: self
-                        });
-                    } else {
-                        fn.apply(context, args);
-                    }
-                }
-            });
-            return this;
+            return list().invoke("invoke", name, context, args);
         };
         
         this.disable = function (id) {

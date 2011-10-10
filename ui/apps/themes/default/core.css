@@ -617,7 +617,7 @@ input[type=search] {
 }
 
 .io-ox-dialog-pane {
-    width: 500px;  /* Shring to fit would be nicer */
+    width: 500px;  /* Shrink to fit would be nicer */
     overflow: visible;
     background-color: white;
     border: 3px solid #111;
@@ -639,12 +639,24 @@ input[type=search] {
     text-align: right;
 }
 
-
 .boxshadow .io-ox-dialog-popup {
     border: 1px solid #555;
     -moz-box-shadow: 0px 0px 35px 1px #000;
     -webkit-box-shadow: 0px 0px 35px 1px #000;
     box-shadow: 0px 0px 35px 1px #000;
+}
+
+/* Lightbox */
+
+.io-ox-lightbox-popup {
+    overflow: hidden;
+    background-color: white;
+    border: 3px solid #111;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px 5px 5px 5px;
+    z-index: 65001;
+    padding: 20px;
 }
 
 /* hints */

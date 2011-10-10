@@ -2,6 +2,18 @@
 <h1>Extension Points</h1>
 
 <p>Examples:</p>
+<script type="text/example">
+    var ext = require("io.ox/core/extensions");
+    ext.point("io.ox/calendar/detail").extend({
+        index: 1000, 
+        id: "dreiChinesen",
+        draw: function (appointment) {
+            var psuedoChineseTitle = appointment.title.replace(/[aeiou]/g, "o");
+            var $titleNode = $("<h1/>").text(psuedoChineseTitle);
+            return this.append($titleNode);
+        } 
+    });
+</script>
 
 <script type="text/example">
 // Disable participants
