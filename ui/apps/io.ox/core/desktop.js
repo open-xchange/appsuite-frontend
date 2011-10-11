@@ -261,18 +261,15 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
             that.trigger("empty", false);
         });
         
-        that.bind("window.quit", function (win) {
-            var pos = _(windows).indexOf(win);
-            if (pos !== -1) {
-                windows.splice(pos, 1);
-            }
-            that.trigger("empty", numOpen() === 0);
-        });
-        
-        that.bind("window.close", function (win) {
+        that.bind("window.close window.quit", function (win, type) {
             
             var pos = _(windows).indexOf(win), i, $i, found = false;
+            
             if (pos !== -1) {
+                // remove?
+                if (type === "window.quit") {
+                    windows.splice(pos, 1);
+                }
                 // look right
                 for (i = pos, $i = windows.length; i < $i && !found; i++) {
                     if (windows[i].state.open) {
