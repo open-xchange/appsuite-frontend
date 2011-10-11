@@ -14,7 +14,7 @@
  */
 
 define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api", "io.ox/core/tk/vgrid", "css!io.ox/contacts/style.css"], function (base, api, VGrid) {
-        
+    
     // application object
     var app = ox.ui.createApp(),
         // app window
@@ -29,7 +29,7 @@ define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api", "io.
     
     // launcher
     app.setLauncher(function () {
-    
+        
         // get window
         win = ox.ui.createWindow({
             title: "Global Address Book",

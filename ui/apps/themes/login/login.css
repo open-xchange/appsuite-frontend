@@ -64,17 +64,6 @@ a:hover, .link:hover {
     -webkit-transform: translateZ(0); /* activate GPU acceleration */
 }
 
-#exit-fullscreen {
-    position: absolute;
-    top: 0px;
-    width: 1px;
-    bottom: 0px;
-    left: 0px;
-    background-color: black;
-    z-index: 60000;
-    opacity: 0.01;
-}
-
 #io-ox-login-screen, #io-ox-login-screen-decorator {
     position: absolute;
     top: 0;
@@ -103,7 +92,7 @@ a:hover, .link:hover {
 
 .wallpaper {
     background-color: #333;
-    background-image: url(raining_2-wallpaper-1280x800.jpg);
+    background: url(raining_2-wallpaper-1280x800.jpg) no-repeat center center fixed;
     /*
     xbackground-image: url(colorful_circles_of_light-wallpaper-1280x800.jpg);
     xbackground-image: url(green_stripes-wallpaper-1280x800.jpg);
@@ -112,7 +101,6 @@ a:hover, .link:hover {
     xbackground-image: url(abstract_background_brown_and_blue_circles-wallpaper-1280x800.jpg);
     */
     background-size: cover;
-    background-position: center center;
 }
 
 #io-ox-login-background {
