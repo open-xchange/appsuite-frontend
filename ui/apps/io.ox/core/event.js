@@ -19,18 +19,18 @@ define("io.ox/core/event", function () {
 
         Dispatcher: (function () {
             
-            var guid = 1;
-            
-            var trim = function (type) {
-                // events should be string and lower case
-                return (type + "").toLowerCase().replace(/(^\s+|\s+$)/g, "");
-            };
-            
-            var trimSplit = function (type) {
-                type = trim(type);
-                // split?
-                return type.search(/\s/) > -1 ? type.split(/\s+/) : type;
-            };
+            var guid = 1,
+                
+                trim = function (type) {
+                    // events should be string and lower case
+                    return (type + "").toLowerCase().replace(/(^\s+|\s+$)/g, "");
+                },
+                
+                split = function (type) {
+                    type = trim(type);
+                    // split?
+                    return type.search(/\s/) > -1 ? type.split(/\s+/) : [type];
+                };
             
             /**
              * @name Dispatcher
@@ -56,45 +56,27 @@ define("io.ox/core/event", function () {
                  */
                 this.bind = function (type, data, fn) {
                     
-                    // trim
-                    type = trimSplit(type);
-                    
-                    // multiple types?
-                    if (_.isArray(type)) {
-                        _.each(type, function (type) {
-                            self.bind(type, data, fn);
-                        });
-                        return;
-                    }
-                    
-                    // param shift?
+                    // parameter shift?
                     if (_.isFunction(data)) {
                         fn = data;
                         data = undefined;
                     }
                     
-                    // new queue?
-                    if (self.handlers[type] === undefined) {
-                        self.handlers[type] = {};
-                    }
-                    
-                    var h = self.handlers[type];
-                    
-                    // add guid
-                    if (fn.oxGuid === undefined) {
-                        fn.oxGuid = guid++;
-                    }
-                    
-                    // add event once
-                    if (h[fn.oxGuid] === undefined) {
-                        // add
-                        h[fn.oxGuid] = {
-                            fn: fn,
-                            data: data
-                        };
-                        // heuristic
-                        self.has = true;
-                    }
+                    _(split(type)).each(function (t) {
+                        
+                        // get/create queue
+                        var h = self.handlers[t] || (self.handlers[t] = {});
+                        
+                        fn.oxGuid = fn.oxGuid !== undefined ? fn.oxGuid : String(guid++);
+                        
+                        // add event once
+                        if (h[fn.oxGuid] === undefined) {
+                            // add
+                            h[fn.oxGuid] = { fn: fn, data: data };
+                            // heuristic
+                            self.has = true;
+                        }
+                    });
                 };
                 
                 /**
@@ -104,27 +86,16 @@ define("io.ox/core/event", function () {
                  */
                 this.unbind = function (type, fn) {
                     
-                    // trim
-                    type = trimSplit(type);
-                    
-                    // multiple types?
-                    if (_.isArray(trim)) {
-                        _.each(type, function (type) {
-                            self.unbind(type, fn);
-                        });
-                        return;
-                    }
-                    
-                    // get handlers
-                    var h = self.handlers[type] || {};
-                    
-                    // prevent IE from throwing unnecessary errors
-                    try {
-                        // remove listener
-                        delete h[fn.oxGuid];
-                    } catch (e) {
-                        // nothing
-                    }
+                    _(split(type)).each(function (t) {
+                        
+                        var h = self.handlers[t] || {};
+                        
+                        // prevent IE from throwing unnecessary errors
+                        try {
+                            // remove listener
+                            delete h[fn.oxGuid];
+                        } catch (e) { }
+                    });
                 };
                 
                 /**
@@ -134,25 +105,12 @@ define("io.ox/core/event", function () {
                  */
                 this.trigger = function (type, data) {
                     
-                    var id = "", h = null;
-                    
                     if (self.has === false || self.enabled === false) {
                         return;
                     }
                     
-                    // trim
-                    type = trimSplit(type);
-                    
-                    // multiple types?
-                    if (_.isArray(type)) {
-                        _.each(type, function (type) {
-                            self.trigger(type, data);
-                        });
-                        return;
-                    }
-                    
                     // call handler
-                    function call(handler) {
+                    function call(handler, type) {
                         // merge data?
                         var d = handler.data ? $.extend({}, handler.data, data || {}) : data;
                         // execute function
@@ -160,27 +118,24 @@ define("io.ox/core/event", function () {
                             handler.fn.call(target, d, type);
                         } catch (ex_1) {
                             try {
-                                // and IE might even fail here
-                                if (window.debug) {
-                                    // catching exceptions here
-                                    // might be tricky for debugging, but
-                                    // IE tends to get stuck with sub windows
-                                    // which is even harder to find out
-                                    console.error("Dispatcher.call() " + ex_1);
-                                }
+                                console.error("Dispatcher.trigger(" + type + ") " + ex_1);
                             } catch (ex_2) {
-                                // pssst - if u come around here, IE's console doesn't work
-                                console.error("Event.Dispatcher", ex_2);
+                                // if u come around here, IE's console doesn't work
+                                if (ox.debug) {
+                                    alert("Dispatcher.trigger(" + type + ") " + ex_1);
+                                }
                             }
                         }
                     }
                     
-                    // get handlers
-                    h = self.handlers[trim(type)] || {};
-                    // loop
-                    for (id in h) {
-                        call(h[id]);
-                    }
+                    _(split(type)).each(function (t) {
+                        
+                        var h = self.handlers[t] || {}, id = "";
+                        
+                        for (id in h) {
+                            call(h[id], t);
+                        }
+                    });
                 };
                 
                 /**

@@ -20,9 +20,9 @@
 
 #io-ox-topbar {
     bottom: auto;
-    height: 24px;
+    height: 26px;
     background-color: black;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.2);
     padding: 0px 1px 1px 1px;
     /*overflow: hidden;*/
 }
@@ -37,14 +37,11 @@
     color: #ccc;
     font-weight: bold;
     text-shadow: 0px 1px 4px black;
-    padding: 1px 12px 2px 12px;
+    padding: 2px 12px 5px 12px;
     margin: 0px 1px 0px 0px;
     line-height: 20px;
     text-align: center;
     white-space: nowrap;
-    -moz-border-radius: 0px 0px 5px 5px;
-    -webkit-border-radius: 0px 0px 5px 5px;
-    border-radius: 0px 0px 5px 5px;
     display: inline-block !important;
     cursor: pointer;
 }
@@ -57,13 +54,13 @@
 #io-ox-topbar .launcher.hover {
     color: #fff;
     background-color: #ccc;
-    background-color: rgba(120, 120, 120, 0.80);
+    background-color: rgba(0, 0, 0, 0.25);
 }
 
 #io-ox-topbar .launcher.active {
     color: #fff;
     background-color: #444;
-    background-color: rgba(60, 60, 60, 1.00);
+    background-color: rgba(255, 255, 255, 0.20);
 }
 
 @-webkit-keyframes launcherColours {
@@ -91,14 +88,37 @@
     -webkit-animation-timing-function: ease-in-out;
 }
 
+/* empty desktop */
+#io-ox-desktop {
+    top: 28px;
+}
+
+#io-ox-welcome {
+    background-color: #000;
+    background-color: rgba(0, 0, 0, 0.50);
+    color: white;
+    top: auto;
+    height: 70px;
+    padding: 10px 13px 10px 13px;
+    text-shadow: 0px 0px 1px #000;
+    text-align: right;
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+#io-ox-welcome .at {
+    color: #aaa;
+    display: inline-block;
+    margin: 0 0.15em 0 0.15em;
+}
+
+#io-ox-welcome .clock {
+    color: #ccc;
+}
+
 /* window manager */
 
 #io-ox-windowmanager {
-    position: absolute;
-    top: 26px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
+    top: 27px;
     overflow: hidden;
 }
 
@@ -169,7 +189,8 @@
     right: 0px;
     height: 26px;
     left: 0px;
-    border-bottom: 1px solid #000;
+    border-top: 1px solid #ccc;
+    border-top-color: rgba(255, 255, 255, 0.20);
     background-color: #111;
     background-color: rgba(0, 0, 0, 0.30);
     color: white;
@@ -439,13 +460,6 @@
 }
 
 /* ---- */
-
-.clear-title {
-    font-family: Helvetica, Arial, sans-serif;
-    font-weight: 200;
-    font-size: 20pt;
-    line-height: 1.15em;
-}
 
 .bright-text {
     color: #888;
