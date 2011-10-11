@@ -127,13 +127,6 @@
     width: 100%;
 }
 
-#io-ox-windowmanager-pane.no-shadows * {
-    -moz-box-shadow: none !important;
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-}
-
 .csstransforms3d.mouse #io-ox-windowmanager-pane {
     -webkit-transition-duration: 0.35s;
     -webkit-transition-timing-function: linear;
@@ -147,82 +140,45 @@
     left: 0px;
 }
 
-#io-ox-windowmanager.fullscreen .window-container {
-    top: 0px;
-    bottom: 0px;
-}
-
-#io-ox-windowmanager.fullscreen .window-container {
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-
 .window-container-center {
     position: relative;
     margin: 0px auto 0px auto;
     width: 100% !important; /* 90% */
     max-width: 100%;
     height: 100%;
-    /*
-    -moz-border-radius: 8px 8px 0px 0px;
-    -webkit-border-radius: 8px 8px 0px 0px;
-    border-radius: 8px 8px 0px 0px;
-    */
 }
 
 #io-ox-windowmanager.fullscreen .window-container-center {
     width: 100% !important;
 }
 
-.window-container-center.shadow {
-    /*
-    -moz-box-shadow: 0px 10px 20px 1px black;
-    -webkit-box-shadow: 0px 10px 20px 1px black;
-    box-shadow: 0px 10px 20px 1px black;
-    */
-}
-
 .window-head {
     position: absolute;
     top: 0px;
     right: 0px;
-    height: 26px;
+    height: 34px;
     left: 0px;
+    
     border-top: 1px solid #ccc;
     border-top-color: rgba(255, 255, 255, 0.20);
     background-color: #111;
     background-color: rgba(0, 0, 0, 0.30);
+    
     color: white;
-    /*
-    -moz-border-radius: 8px 8px 0px 0px;
-    -webkit-border-radius: 8px 8px 0px 0px;
-    border-radius: 8px 8px 0px 0px;
-    border-bottom: 1px solid #888;
-    background-color: #e0e0e0;
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, #c0c0c0),
-        color-stop(1, #fff)
-    );
-    background-image: -moz-linear-gradient(
-        center bottom,
-        #c0c0c0 0%,
-        #fff 100%
-    );
-    color: black;
-    */
     font-family: Lucida Grande, Arial;
     font-size: 9pt;
+    
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
 }
 
+.window-head.larger {
+    height: 55px;
+}
+
 .window-title {
-    position: absolute;
+    position: relative;
     top: 0px;
     right: 0px;
     height: 18px;
@@ -243,10 +199,9 @@
 }
 
 .window-toolbar {
-    position: absolute;
-    top: 27px;
+    position: relative;
+    top: 0px;
     right: 0px;
-    height: 0px;
     left: 0px;
     padding: 2px 7px 5px 13px;
 }
@@ -281,12 +236,16 @@
 
 .window-body {
     position: absolute;
-    top: 28px;
+    top: 36px;
     right: 0px;
     bottom: 0px;
     left: 0px;
     background-color: white;
     white-space: normal;
+}
+
+.window-body.movedown {
+    top: 56px;
 }
 
 .window-settings {
@@ -330,6 +289,13 @@
     -webkit-user-select: text;
     -moz-user-select: text;
     user-select: text;
+}
+
+@media screen and (min-height: 800px) {
+    .window-head { height: 44px; }
+    .window-head.larger { height: 55px; padding: 10px 0 10px 0; }
+    .window-body { top: 46px; }
+    .window-body.movedown { top: 76px; }
 }
 
 /* vGrid */
