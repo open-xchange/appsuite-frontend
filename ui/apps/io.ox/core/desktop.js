@@ -311,7 +311,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 var children = pane.find(".window-container-center"),
                     center = node.find(".window-container-center").show(),
                     index = node.data("index") || 0,
-                    left = (-index * 105),
+                    left = (-index * 101),
                     done = function () {
                         // use timeout for smoother animations
                         setTimeout(function () {
@@ -365,7 +365,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         // show
                         var node = this.nodes.outer;
                         if (firstShow) {
-                            node.data("index", guid - 1).css("left", ((guid - 1) * 105) + "%");
+                            node.data("index", guid - 1).css("left", ((guid - 1) * 101) + "%");
                         }
                         if (node.parent().length === 0) {
                             node.appendTo(pane);
