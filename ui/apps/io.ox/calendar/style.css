@@ -34,8 +34,14 @@
     color: #888;
 }
 
-.vgrid-cell.calendar .date {
+.vgrid-cell.calendar .time {
     color: #08c;
+    float: right;
+    display: inline-block;
+}
+
+.vgrid-cell.calendar .date {
+    color: #555;
 }
 
 .vgrid-cell.calendar .shown_as {

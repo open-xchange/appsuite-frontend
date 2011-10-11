@@ -54,6 +54,13 @@ a:hover, .link:hover {
     cursor: pointer;
 }
 
+.clear-title {
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 200;
+    font-size: 20pt;
+    line-height: 1.15em;
+}
+
 #background_loader {
     position: absolute;
     top: 0px;
@@ -173,12 +180,10 @@ a:hover, .link:hover {
     left: 0;
     right: 0;
     margin-top: -1.5em;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 24pt;
-    font-weight: normal;
+    font-size: 28pt;
     color: white;
     text-align: right;
-    text-shadow: 1px 2px 3px black;
+    text-shadow: 0px 1px 2px black;
     z-index: 1;
 }
 
