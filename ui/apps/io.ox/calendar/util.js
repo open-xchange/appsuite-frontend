@@ -128,22 +128,28 @@ define("io.ox/calendar/util",
             diff = d - now;
             diffWeek = d - weekStart;
             
-            if (diff >= 0 && diff < DAY) {
-                // today
-                return "Today";
-            } else if (diff >= 0 && diff < 2 * DAY) {
-                // tomorrow
-                return "Tomorrow";
-            } else if (diff >= 0 && diffWeek < 7 * DAY) {
-                // this week
-                return n_day[d.getUTCDay()];
-            } else if (diff >= 0 && diffWeek >= 7 * DAY && diffWeek < 14 * DAY) {
-                // next week
-                return "Next week";
+            // past?
+            if (diff < 0) {
+                if (diff >= -1 * DAY) {
+                    return "Yesterday";
+                } else if (diffWeek > -7 * DAY) {
+                    return "Last Week";
+                }
             } else {
-                // any other month
-                return n_month[d.getUTCMonth()] + " " + d.getUTCFullYear();
+                // future
+                if (diff < DAY) {
+                    return "Today";
+                } else if (diff < 2 * DAY) {
+                    return "Tomorrow";
+                } else if (diffWeek < 7 * DAY) {
+                    return n_day[d.getUTCDay()]; // this week
+                } else if (diffWeek >= 7 * DAY && diffWeek < 14 * DAY) {
+                    return "Next week";
+                }
             }
+            
+            // any other month
+            return n_month[d.getUTCMonth()] + " " + d.getUTCFullYear();
         },
         
         getDateInterval: function (data) {
