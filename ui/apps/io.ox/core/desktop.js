@@ -365,6 +365,9 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         if (node.parent().length === 0) {
                             node.appendTo(pane);
                         }
+                        if (currentWindow && currentWindow.app !== null) {
+                            currentWindow.app.getLaunchBarIcon().removeClass("active");
+                        }
                         if (this.app !== null) {
                             this.app.getLaunchBarIcon().addClass("active");
                         }
