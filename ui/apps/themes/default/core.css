@@ -22,9 +22,14 @@
     bottom: auto;
     height: 26px;
     background-color: black;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.20);
     padding: 0px 1px 1px 1px;
     /*overflow: hidden;*/
+}
+
+.rgba #io-ox-topbar {
+    padding-bottom: 0px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.30);
 }
 
 /* ipad: better fat finger support */
@@ -61,6 +66,11 @@
     color: #fff;
     background-color: #444;
     background-color: rgba(255, 255, 255, 0.20);
+}
+
+.rgba #io-ox-topbar .launcher.active {
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 @-webkit-keyframes launcherColours {
@@ -102,7 +112,7 @@
     padding: 10px 13px 10px 13px;
     text-shadow: 0px 0px 1px #000;
     text-align: right;
-    border-top: 1px solid rgba(0, 0, 0, 0.25);
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 #io-ox-welcome .at {
