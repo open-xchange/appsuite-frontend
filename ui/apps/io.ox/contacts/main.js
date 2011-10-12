@@ -13,7 +13,7 @@
  *
  */
 
-define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api", "io.ox/core/tk/vgrid", "css!io.ox/contacts/style.css"], function (base, api, VGrid) {
+define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api", "io.ox/core/tk/vgrid", "io.ox/contacts/view-detail", "css!io.ox/contacts/style.css"], function (base, api, VGrid, viewDetail) {
         
     // application object
     var app = ox.ui.createApp(),
@@ -144,7 +144,8 @@ define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api", "io.
         };
         
         drawContact = function (data) {
-            right.idle().empty().append(base.draw(data));
+            //right.idle().empty().append(base.draw(data));
+            right.idle().empty().append(viewDetail.draw(data));
         };
         
         drawFail = function (obj) {
