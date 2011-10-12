@@ -32,7 +32,7 @@
                 })
                 .done(function (css) {
                     // now the file is cached
-                    var text = css.replace(/url\(/g, "url(" + path);
+                    var text = css.replace(/url\((?!data\:)/g, "url(" + path);
                     $('<style type="text/css">' + text + '</style>')
                         .attr("data-require-src", def)
                         .insertBefore($(selector).eq(0));
