@@ -22,9 +22,14 @@
     bottom: auto;
     height: 26px;
     background-color: black;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.20);
     padding: 0px 1px 1px 1px;
     /*overflow: hidden;*/
+}
+
+.rgba #io-ox-topbar {
+    padding-bottom: 0px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.30);
 }
 
 /* ipad: better fat finger support */
@@ -37,14 +42,11 @@
     color: #ccc;
     font-weight: bold;
     text-shadow: 0px 1px 4px black;
-    padding: 2px 12px 3px 12px;
+    padding: 2px 12px 5px 12px;
     margin: 0px 1px 0px 0px;
     line-height: 20px;
     text-align: center;
     white-space: nowrap;
-    -moz-border-radius: 0px 0px 5px 5px;
-    -webkit-border-radius: 0px 0px 5px 5px;
-    border-radius: 0px 0px 5px 5px;
     display: inline-block !important;
     cursor: pointer;
 }
@@ -57,13 +59,18 @@
 #io-ox-topbar .launcher.hover {
     color: #fff;
     background-color: #ccc;
-    background-color: rgba(120, 120, 120, 0.80);
+    background-color: rgba(0, 0, 0, 0.25);
 }
 
 #io-ox-topbar .launcher.active {
     color: #fff;
     background-color: #444;
-    background-color: rgba(60, 60, 60, 1.00);
+    background-color: rgba(255, 255, 255, 0.20);
+}
+
+.rgba #io-ox-topbar .launcher.active {
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 @-webkit-keyframes launcherColours {
@@ -91,27 +98,43 @@
     -webkit-animation-timing-function: ease-in-out;
 }
 
+/* empty desktop */
+#io-ox-desktop {
+    top: 28px;
+}
+
+#io-ox-welcome {
+    background-color: #000;
+    background-color: rgba(0, 0, 0, 0.50);
+    color: white;
+    top: auto;
+    height: 70px;
+    padding: 10px 13px 10px 13px;
+    text-shadow: 0px 0px 1px #000;
+    text-align: right;
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+#io-ox-welcome .at {
+    color: #aaa;
+    display: inline-block;
+    margin: 0 0.15em 0 0.15em;
+}
+
+#io-ox-welcome .clock {
+    color: #ccc;
+}
+
 /* window manager */
 
 #io-ox-windowmanager {
-    position: absolute;
-    top: 28px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
+    top: 27px;
     overflow: hidden;
 }
 
 #io-ox-windowmanager-pane {
     left: 0%;
     width: 100%;
-}
-
-#io-ox-windowmanager-pane.no-shadows * {
-    -moz-box-shadow: none !important;
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
 }
 
 .csstransforms3d.mouse #io-ox-windowmanager-pane {
@@ -127,81 +150,45 @@
     left: 0px;
 }
 
-#io-ox-windowmanager.fullscreen .window-container {
-    top: 0px;
-    bottom: 0px;
-}
-
-#io-ox-windowmanager.fullscreen .window-container {
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
-
 .window-container-center {
     position: relative;
     margin: 0px auto 0px auto;
     width: 100% !important; /* 90% */
     max-width: 100%;
     height: 100%;
-    /*
-    -moz-border-radius: 8px 8px 0px 0px;
-    -webkit-border-radius: 8px 8px 0px 0px;
-    border-radius: 8px 8px 0px 0px;
-    */
 }
 
 #io-ox-windowmanager.fullscreen .window-container-center {
     width: 100% !important;
 }
 
-.window-container-center.shadow {
-    /*
-    -moz-box-shadow: 0px 10px 20px 1px black;
-    -webkit-box-shadow: 0px 10px 20px 1px black;
-    box-shadow: 0px 10px 20px 1px black;
-    */
-}
-
 .window-head {
     position: absolute;
     top: 0px;
     right: 0px;
-    height: 26px;
+    height: 34px;
     left: 0px;
-    border-bottom: 1px solid #000;
+    
+    border-top: 1px solid #ccc;
+    border-top-color: rgba(255, 255, 255, 0.20);
     background-color: #111;
     background-color: rgba(0, 0, 0, 0.30);
+    
     color: white;
-    /*
-    -moz-border-radius: 8px 8px 0px 0px;
-    -webkit-border-radius: 8px 8px 0px 0px;
-    border-radius: 8px 8px 0px 0px;
-    border-bottom: 1px solid #888;
-    background-color: #e0e0e0;
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, #c0c0c0),
-        color-stop(1, #fff)
-    );
-    background-image: -moz-linear-gradient(
-        center bottom,
-        #c0c0c0 0%,
-        #fff 100%
-    );
-    color: black;
-    */
     font-family: Lucida Grande, Arial;
     font-size: 9pt;
+    
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
 }
 
+.window-head.larger {
+    height: 55px;
+}
+
 .window-title {
-    position: absolute;
+    position: relative;
     top: 0px;
     right: 0px;
     height: 18px;
@@ -222,10 +209,9 @@
 }
 
 .window-toolbar {
-    position: absolute;
-    top: 27px;
+    position: relative;
+    top: 0px;
     right: 0px;
-    height: 0px;
     left: 0px;
     padding: 2px 7px 5px 13px;
 }
@@ -260,12 +246,16 @@
 
 .window-body {
     position: absolute;
-    top: 28px;
+    top: 36px;
     right: 0px;
     bottom: 0px;
     left: 0px;
     background-color: white;
     white-space: normal;
+}
+
+.window-body.movedown {
+    top: 56px;
 }
 
 .window-settings {
@@ -309,6 +299,13 @@
     -webkit-user-select: text;
     -moz-user-select: text;
     user-select: text;
+}
+
+@media screen and (min-height: 800px) {
+    .window-head { height: 44px; }
+    .window-head.larger { height: 55px; padding: 10px 0 10px 0; }
+    .window-body { top: 46px; }
+    .window-body.movedown { top: 76px; }
 }
 
 /* vGrid */
@@ -439,13 +436,6 @@
 }
 
 /* ---- */
-
-.clear-title {
-    font-family: Helvetica, Arial, sans-serif;
-    font-weight: 200;
-    font-size: 20pt;
-    line-height: 1.15em;
-}
 
 .bright-text {
     color: #888;

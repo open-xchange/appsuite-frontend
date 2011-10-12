@@ -15,7 +15,11 @@ define("io.ox/calendar/util",
     ["io.ox/core/gettext"], function (gettext) {
     
     // week day names
-    var n_day = "So Mo Di Mi Do Fr Sa".split(' '),
+    var n_dayShort = "So Mo Di Mi Do Fr Sa".split(' '),
+        n_day = [gettext("Sunday"), gettext("Monday"), gettext("Tuesday"),
+                 gettext("Wednesday"), gettext("Thursday"), gettext("Friday"),
+                 gettext("Saturday")
+                 ],
         // month names
         n_month = [gettext("January"), gettext("February"), gettext("March"),
                    gettext("April"), gettext("May"), gettext("June"),
@@ -65,7 +69,7 @@ define("io.ox/calendar/util",
         },
         
         getDayNames: function () {
-            return n_day.slice(firstWeekDay).concat(n_day.slice(0, firstWeekDay));
+            return n_dayShort.slice(firstWeekDay).concat(n_dayShort.slice(0, firstWeekDay));
         },
         
         getDaysInMonth: function (year, month) {
@@ -87,11 +91,11 @@ define("io.ox/calendar/util",
             } else {
                 if (step === "week") {
                     // get current date
-                    var d = new Date(timestamp);
-                    // get work day
-                    var day = (d.getDay() + 6) % 7; // starts on Monday
-                    // subtract
-                    var t = d.getTime() - day * DAY;
+                    var d = new Date(timestamp),
+                        // get work day TODO: consider custom week start
+                        day = d.getDay(),
+                        // subtract
+                        t = d.getTime() - day * DAY;
                     // round down to day and return
                     return this.floor(t, DAY);
                 }
@@ -105,7 +109,47 @@ define("io.ox/calendar/util",
         
         getDate: function (timestamp) {
             var d = timestamp !== undefined ? new Date(timestamp) : new Date();
-            return n_day[d.getUTCDay()] + ", " + _.pad(d.getUTCDate(), 2) + "." + _.pad(d.getUTCMonth() + 1, 2) + "." + d.getUTCFullYear();
+            return n_dayShort[d.getUTCDay()] + ", " + _.pad(d.getUTCDate(), 2) + "." + _.pad(d.getUTCMonth() + 1, 2) + "." + d.getUTCFullYear();
+        },
+        
+        getSmartDate: function (timestamp) {
+            
+            var d = timestamp !== undefined ? new Date(timestamp) : new Date(),
+                now = new Date(),
+                weekStart = this.floor(now.getTime(), "week"),
+                diff = 0,
+                diffWeek = 0;
+            
+            // normalize
+            d.setUTCHours(0, 0, 0, 0);
+            now.setUTCHours(0, 0, 0, 0);
+            
+            // get difference
+            diff = d - now;
+            diffWeek = d - weekStart;
+            
+            // past?
+            if (diff < 0) {
+                if (diff >= -1 * DAY) {
+                    return "Yesterday";
+                } else if (diffWeek > -7 * DAY) {
+                    return "Last Week";
+                }
+            } else {
+                // future
+                if (diff < DAY) {
+                    return "Today";
+                } else if (diff < 2 * DAY) {
+                    return "Tomorrow";
+                } else if (diffWeek < 7 * DAY) {
+                    return n_day[d.getUTCDay()]; // this week
+                } else if (diffWeek >= 7 * DAY && diffWeek < 14 * DAY) {
+                    return "Next week";
+                }
+            }
+            
+            // any other month
+            return n_month[d.getUTCMonth()] + " " + d.getUTCFullYear();
         },
         
         getDateInterval: function (data) {

@@ -239,6 +239,59 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
         
     }());
     
+    ox.ui.windowManager = (function () {
+        
+        var that = event.Dispatcher.extend({}),
+            // list of windows
+            windows = [],
+            // get number of open windows
+            numOpen = function () {
+                return _(windows).inject(function (count, obj) {
+                    return count + (obj.state.open ? 1 : 0);
+                }, 0);
+            };
+        
+        that.bind("window.open", function (win) {
+            if (_(windows).indexOf(win) === -1) {
+                windows.push(win);
+            }
+        });
+        
+        that.bind("window.beforeshow", function (win) {
+            that.trigger("empty", false);
+        });
+        
+        that.bind("window.close window.quit", function (win, type) {
+            
+            var pos = _(windows).indexOf(win), i, $i, found = false;
+            
+            if (pos !== -1) {
+                // remove?
+                if (type === "window.quit") {
+                    windows.splice(pos, 1);
+                }
+                // look right
+                for (i = pos, $i = windows.length; i < $i && !found; i++) {
+                    if (windows[i].state.open) {
+                        windows[i].show();
+                        found = true;
+                    }
+                }
+                // look left
+                for (i = pos - 1; i >= 0 && !found; i--) {
+                    if (windows[i].state.open) {
+                        windows[i].show();
+                    }
+                }
+            }
+            
+            that.trigger("empty", numOpen() === 0);
+        });
+        
+        return that;
+        
+    }());
+    
     /**
      * Create window
      */
@@ -246,33 +299,6 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
 
         // window guid
         var guid = 0,
-        
-            // fullscreen mode
-            autoFullscreen = false,
-            fullscreen = false,
-            
-            previousWindow = null,
-            
-            // toggle fullscreen mode
-            toggleFullscreen = function () {
-                if (!fullscreen) {
-                    // grow
-                    $("#io-ox-leftbar, #io-ox-rightbar").hide();
-                    $("#io-ox-windowmanager").addClass("fullscreen");
-                } else {
-                    // shrink
-                    $("#io-ox-windowmanager").removeClass("fullscreen");
-                    $("#io-ox-leftbar, #io-ox-rightbar").show();
-                }
-                fullscreen = !fullscreen;
-            },
-            
-            interruptFullscreen = function () {
-                if (fullscreen) {
-                    toggleFullscreen();
-                    autoFullscreen = true;
-                }
-            },
             
             pane = $("#io-ox-windowmanager-pane"),
             
@@ -285,13 +311,10 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 var children = pane.find(".window-container-center"),
                     center = node.find(".window-container-center").show(),
                     index = node.data("index") || 0,
-                    left = (-index * 105),
+                    left = (-index * 101),
                     done = function () {
                         // use timeout for smoother animations
                         setTimeout(function () {
-                            if (!Modernizr.touch) {
-                                pane.removeClass("no-shadows");
-                            }
                             _.call(cont);
                         }, 10);
                     };
@@ -307,8 +330,6 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     // use CSS transitions?
                     else if (Modernizr.csstransforms3d) {
                         pane.one(_.browser.WebKit ? "webkitTransitionEnd" : "transitionend", done);
-                        // hide shadows to speed things up!
-                        pane.addClass("no-shadows");
                         pane.css("left", left + "%");
                     } else {
                         pane.stop().animate({ left: left + "%" }, 250, done);
@@ -324,6 +345,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 this.id = id;
                 this.nodes = {};
                 this.search = { query: "" };
+                this.state = { visible: false, running: false, open: false };
                 this.app = null;
                 
                 var quitOnClose = false,
@@ -338,24 +360,18 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         // show
                         var node = this.nodes.outer;
                         if (firstShow) {
-                            node.data("index", guid - 1).css("left", ((guid - 1) * 105) + "%");
-                            firstShow = false;
-                        }
-                        if (currentWindow) {
-                            previousWindow = currentWindow;
-                            //currentWindow.blur();
-                        }
-                        // auto fullscreen?
-                        if (autoFullscreen) {
-                            toggleFullscreen();
-                            autoFullscreen = false;
+                            node.data("index", guid - 1).css("left", ((guid - 1) * 101) + "%");
                         }
                         if (node.parent().length === 0) {
                             node.appendTo(pane);
                         }
+                        if (currentWindow && currentWindow.app !== null) {
+                            currentWindow.app.getLaunchBarIcon().removeClass("active");
+                        }
                         if (this.app !== null) {
                             this.app.getLaunchBarIcon().addClass("active");
                         }
+                        ox.ui.windowManager.trigger("window.beforeshow", self);
                         node.show();
                         scrollTo(node, function () {
                             if (currentWindow) {
@@ -363,7 +379,15 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                             }
                             currentWindow = self;
                             _.call(cont);
+                            self.state.visible = true;
+                            self.state.open = true;
                             self.trigger("show");
+                            if (firstShow) {
+                                self.state.running = true;
+                                ox.ui.windowManager.trigger("window.open", self);
+                                firstShow = false;
+                            }
+                            ox.ui.windowManager.trigger("window.show", self);
                         });
                     } else {
                         _.call(cont);
@@ -380,8 +404,9 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     } else {
                         this.nodes.outer.hide();
                     }
+                    this.state.visible = false;
                     this.trigger("hide");
-                    interruptFullscreen();
+                    ox.ui.windowManager.trigger("window.hide", this);
                     if (currentWindow === this) {
                         currentWindow = null;
                     }
@@ -399,24 +424,22 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     if (quitOnClose && this.app !== null) {
                         this.app.quit()
                             .done(function () {
-                                interruptFullscreen();
+                                self.trigger("quit");
+                                self.state.open = false;
+                                self.state.running = false;
+                                ox.ui.windowManager.trigger("window.quit", self);
                             });
                     } else {
                         this.hide();
-                        if (previousWindow === this) {
-                            previousWindow = null;
-                        } else if (previousWindow !== null) {
-                            previousWindow.show();
-                        }
+                        this.state.open = false;
+                        this.trigger("close");
+                        ox.ui.windowManager.trigger("window.close", this);
                     }
                 };
                 
                 this.destroy = function () {
                     if (currentWindow === this) {
                         currentWindow = null;
-                    }
-                    if (previousWindow === this) {
-                        previousWindow = null;
                     }
                     if (this.app !== null) {
                         this.app.getLaunchBarIcon().removeClass("active");
@@ -426,9 +449,6 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     this.nodes.outer.remove();
                     this.nodes = null;
                     this.show = $.noop;
-                    if (previousWindow) {
-                        previousWindow.show();
-                    }
                 };
                 
                 this.setQuitOnClose = function (flag) {
@@ -472,11 +492,6 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         .text(String(o.label))
                         .bind("click", o.action)
                         .appendTo(this.nodes.toolbar);
-//                    return $.button({
-//                        label: opt.label,
-//                        click: opt.action
-//                    })
-//                    .appendTo(this.nodes.toolbar);
                 };
                 
                 this.addView = function (id) {
@@ -498,16 +513,6 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 };
             };
            
-        // init visual exit
-        var exitTimer = null;
-        $("#exit-fullscreen")
-        .bind("mouseover", function () {
-            exitTimer = setTimeout(interruptFullscreen, 250);
-        })
-        .bind("mouseout", function () {
-            clearTimeout(exitTimer);
-        });
-        
         // window factory
         return function (options) {
             
@@ -542,7 +547,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
             .addClass("window-container")
             .append(
                 $("<div/>")
-                .addClass("window-container-center shadow")
+                .addClass("window-container-center")
                 .data({
                     width: width + unit
                 }).css({
@@ -711,9 +716,6 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 
             } else {
                 
-                // add fullscreen handler
-                win.nodes.title.bind("dblclick", toggleFullscreen);
-                
                 // add close handler
                 win.nodes.closeButton.bind("click", close);
                 
@@ -722,10 +724,10 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 win.setTitle(opt.title);
                 
                 if (opt.toolbar || opt.search) {
-                    var th = 28;
-                    win.nodes.head.css("height", th + 27 + "px");
-                    win.nodes.toolbar.css("height", th + 7 + "px");
-                    win.nodes.body.css("top", th + 28 + "px");
+                    win.nodes.head.addClass("larger");
+                    win.nodes.body.addClass("movedown");
+                } else {
+                    win.nodes.toolbar.hide();
                 }
                 
                 // quick settings?

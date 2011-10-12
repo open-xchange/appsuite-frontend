@@ -15,7 +15,7 @@
 
 .vgrid-cell.calendar {
     height: 3.5em;
-    padding: 0.75em 20px 0.75em 13px;
+    padding: 0.75em 13px 0.75em 13px;
 }
 
 .vgrid-cell.vgrid-label.calendar-label {
@@ -34,14 +34,20 @@
     color: #888;
 }
 
-.vgrid-cell.calendar .date {
+.vgrid-cell.calendar .time {
     color: #08c;
+    float: right;
+    display: inline-block;
+}
+
+.vgrid-cell.calendar .date {
+    color: #555;
 }
 
 .vgrid-cell.calendar .shown_as {
-    left: auto;
+    right: auto;
     border-left: 1px solid white;
-    width: 5px;
+    width: 4px;
     bottom: -1px;
 }
 
@@ -49,9 +55,9 @@
     top: 5px;
     bottom: 5px;
     border-left: 0px none;
-    -moz-border-radius: 5px 0px 0px 5px;
-    -webkit-border-radius: 5px 0px 0px 5px;
-    border-radius: 5px 0px 0px 5px;
+    -moz-border-radius: 0px 4px 4px 0px;
+    -webkit-border-radius: 0px 4px 4px 0px;;
+    border-radius: 0px 4px 4px 0px;;
 }
 
 /* shown_as */
