@@ -7,7 +7,7 @@
  *
  * Copyright (C) Open-Xchange Inc., 2006-2011 Mail: info@open-xchange.com
  *
- * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
 define("io.ox/contacts/view-detail", [
