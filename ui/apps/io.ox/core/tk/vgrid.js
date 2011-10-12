@@ -502,12 +502,11 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
         };
         
         this.setMode = function (mode) {
-            if (currentMode !== mode) {
-                currentMode = mode;
-                return this.refresh();
-            } else {
-                return $.Deferred().reject();
-            }
+            // we don't check for currentModule but always refresh
+            // otherwise subsequent search queries are impossible
+            // if this function gets called too often, fix it elsewhere
+            currentMode = mode;
+            return this.refresh();
         };
         
         this.getId = function (data) {

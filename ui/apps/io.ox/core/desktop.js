@@ -315,9 +315,6 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     done = function () {
                         // use timeout for smoother animations
                         setTimeout(function () {
-                            if (!Modernizr.touch) {
-                                pane.removeClass("no-shadows");
-                            }
                             _.call(cont);
                         }, 10);
                     };
@@ -333,8 +330,6 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     // use CSS transitions?
                     else if (Modernizr.csstransforms3d) {
                         pane.one(_.browser.WebKit ? "webkitTransitionEnd" : "transitionend", done);
-                        // hide shadows to speed things up!
-                        pane.addClass("no-shadows");
                         pane.css("left", left + "%");
                     } else {
                         pane.stop().animate({ left: left + "%" }, 250, done);
@@ -369,6 +364,9 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         }
                         if (node.parent().length === 0) {
                             node.appendTo(pane);
+                        }
+                        if (currentWindow && currentWindow.app !== null) {
+                            currentWindow.app.getLaunchBarIcon().removeClass("active");
                         }
                         if (this.app !== null) {
                             this.app.getLaunchBarIcon().addClass("active");
@@ -494,11 +492,6 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         .text(String(o.label))
                         .bind("click", o.action)
                         .appendTo(this.nodes.toolbar);
-//                    return $.button({
-//                        label: opt.label,
-//                        click: opt.action
-//                    })
-//                    .appendTo(this.nodes.toolbar);
                 };
                 
                 this.addView = function (id) {
@@ -554,7 +547,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
             .addClass("window-container")
             .append(
                 $("<div/>")
-                .addClass("window-container-center shadow")
+                .addClass("window-container-center")
                 .data({
                     width: width + unit
                 }).css({
@@ -731,10 +724,10 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 win.setTitle(opt.title);
                 
                 if (opt.toolbar || opt.search) {
-                    var th = 28;
-                    win.nodes.head.css("height", th + 27 + "px");
-                    win.nodes.toolbar.css("height", th + 7 + "px");
-                    win.nodes.body.css("top", th + 28 + "px");
+                    win.nodes.head.addClass("larger");
+                    win.nodes.body.addClass("movedown");
+                } else {
+                    win.nodes.toolbar.hide();
                 }
                 
                 // quick settings?
