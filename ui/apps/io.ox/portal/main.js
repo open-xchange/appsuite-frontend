@@ -7,25 +7,31 @@
 * @author Francisco Laguna <francisco.laguna@open-xchange.com>
 *
 */
-define("io.ox/portal/main", ["io.ox/core/extensions", "css!io.ox/portal/style.css"], function (ext) {
+var tmp = _(ox.serverConfig.extensions.portal)
+    .map(function (obj) {
+        return "extensions/" + obj + "/register";
+    });
+define("io.ox/portal/main", ["io.ox/core/extensions", "css!io.ox/portal/style.css"].concat(tmp), function (ext) {
     // application object
     var app = ox.ui.createApp(),
         // app window
         win;
     // launcher
     app.setLauncher(function () {
-    
+        
         // get window
         app.setWindow(win = ox.ui.createWindow({
-            title: "Portal"
+            title: "Portal",
+            toolbar: true
         }));
         
-        win.nodes.main.addClass("io-ox-portal");
+        win.nodes.main.addClass("io-ox-portal").css({overflow: "auto"});
+        
         
         //TODO: Add Configurability
         ext.point("io.ox/portal/widget").each(function (extension) {
             
-            var $node = $("<div/>").addClass("io-ox-portal-widget").css({"min-height" : "100px"});
+            var $node = $("<div/>").addClass("io-ox-portal-widget");
             $node.busy();
             win.nodes.main.append($node);
             var loadingData =  extension.invoke("load");
@@ -38,9 +44,9 @@ define("io.ox/portal/main", ["io.ox/core/extensions", "css!io.ox/portal/style.cs
                         drawingDone.done(function () {
                             $node.after($newNode);
                             $node.remove();
-                            win.nodes.main.masonry("reload");
+                            //win.nodes.main.masonry("reload");
                             $newNode.imagesLoaded(function () {
-                                win.nodes.main.masonry("reload");
+                                //win.nodes.main.masonry("reload");
                             });
                         });
                     }
@@ -54,11 +60,11 @@ define("io.ox/portal/main", ["io.ox/core/extensions", "css!io.ox/portal/style.cs
         // go!
         win.show();
 
-        win.nodes.main.masonry({
-            itemSelector : '.io-ox-portal-widget',
-            columnWidth: win.nodes.main.width() / 3,
-            isAnimated : true
-        });
+        // win.nodes.main.masonry({
+        //             itemSelector : '.io-ox-portal-widget',
+        //             columnWidth: win.nodes.main.width() / 3,
+        //             isAnimated : true
+        //         });
     });
     
     

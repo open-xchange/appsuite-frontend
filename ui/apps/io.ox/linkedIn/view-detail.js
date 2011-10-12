@@ -14,7 +14,7 @@ define("io.ox/linkedIn/view-detail", ["io.ox/core/extensions", "io.ox/core/light
         var $nameNode = $table.find(".t11");
         var $relationNode = $table.find(".r2");
         
-        $pictureNode.append($("<img/>").attr("src", data.pictureUrl));
+        $pictureNode.append($("<img/>").attr("src", data.pictureUrl || (ox.base + "/apps/themes/default/dummypicture.xpng")));
         
         $nameNode.append($("<div class='name' />").text(data.firstName + " " + data.lastName));
         $nameNode.append($("<div class='headline' />").text(data.headline));
@@ -71,15 +71,6 @@ define("io.ox/linkedIn/view-detail", ["io.ox/core/extensions", "io.ox/core/light
                         $posNode.hide();
                         pastEngagements.push($posNode);
                     }
-                    if (position.title) {
-                        $("<h1/>").appendTo($posNode).text(position.title).addClass("title");
-                    }
-                    if (position.company && position.company.name) {
-                        $("<h2/>").text(position.company.name).appendTo($posNode).addClass("companyName");
-                    }
-                    if (position.company && position.company.industry) {
-                        $("<h3/>").appendTo($posNode).text(position.company.industry).addClass("companyIndustry");
-                    }
                     if (position.startDate && position.startDate.year) {
                         var timeSpentThere = position.startDate.year;
                         if (position.endDate && position.endDate.year) {
@@ -87,7 +78,13 @@ define("io.ox/linkedIn/view-detail", ["io.ox/core/extensions", "io.ox/core/light
                         } else if (position.isCurrent) {
                             timeSpentThere += " - Present";
                         }
-                        $("<h4/>").text(timeSpentThere).appendTo($posNode).addClass("positionTimeSpent");
+                        $("<span/>").text(timeSpentThere).appendTo($posNode).addClass("timeSpent");
+                    }
+                    if (position.title) {
+                        $("<span/>").appendTo($posNode).text(position.title).addClass("title");
+                    }
+                    if (position.company && position.company.name) {
+                        $("<div/>").text(position.company.name).appendTo($posNode).addClass("companyName");
                     }
                 });
                 if (pastEngagements.length !== 0) {
@@ -120,7 +117,9 @@ define("io.ox/linkedIn/view-detail", ["io.ox/core/extensions", "io.ox/core/light
                 $myNode.append($("<h1/>").text("Connections you share with " + data.firstName + " " + data.lastName));
                 _(data.relationToViewer.connections.values).each(function (relation) {
                     if (relation.fullProfile) {
-                        var $image = $("<img/>").attr("src", relation.fullProfile.pictureUrl).attr("alt", relation.fullProfile.firstName + " " + relation.fullProfile.lastName);
+                        var imageUrl = relation.fullProfile && relation.fullProfile.pictureUrl ?
+                            relation.fullProfile.pictureUrl : ox.base + "/apps/themes/default/dummypicture.xpng";
+                        var $image = $("<img/>").attr("src", imageUrl).attr("alt", relation.fullProfile.firstName + " " + relation.fullProfile.lastName);
                         $myNode.append($image);
                         $image.click(function () {
                             new lightbox.Lightbox({

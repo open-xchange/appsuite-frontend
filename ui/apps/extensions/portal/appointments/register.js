@@ -30,7 +30,7 @@ define("io.ox/portal/appointments/register", ["io.ox/core/extensions"], function
             var deferred = new $.Deferred(),
             $node = this;
             $node.addClass("io-ox-portal-appointments");
-            $node.append("<h1>Appointments</h1>");
+            $node.append($("<div/>").addClass("clear-title").text("Appointments"));
             if (appointments.length === 0) {
                 $node.append("<h2>You don't have any appointments in the near future. Go take a walk!</h2>");
                 deferred.resolve();

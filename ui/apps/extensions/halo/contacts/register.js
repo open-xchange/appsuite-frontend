@@ -10,7 +10,7 @@ define("extensions/halo/contacts/register", ["io.ox/core/extensions"], function 
             }
             var deferred = new $.Deferred();
             require(["io.ox/contacts/base", "css!io.ox/contacts/style.css"], function (base) {
-                $node.append("<h1>Address Book</h1>");
+                $node.append($("<div/>").addClass("clear-title").text("Address Book"));
                 $node.append(base.draw(contacts[0]));
                 deferred.resolve();
             });

@@ -20,7 +20,11 @@ define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
         id: "default",
         label: "Halo",
         action: function (data) {
-            require(["extensions/halo/main"].concat(ox.extensions.halo), function (halo) {
+            var tmp = _(ox.serverConfig.extensions.halo)
+                .map(function (obj) {
+                    return "extensions/" + obj + "/register";
+                });
+            require(["extensions/halo/main"].concat(tmp), function (halo) {
                 halo.show(data);
             });
         }

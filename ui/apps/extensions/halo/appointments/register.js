@@ -9,19 +9,17 @@ define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox
             return type === "com.openexchange.halo.appointments";
         },
         draw: function  ($node, providerName, appointments) {
+            $node.append($("<div/>").addClass("clear-title").text("Appointments"));
             if (appointments.length === 0) {
-                $node.append("<h1>Appointments</h1>");
                 $node.append("<div>No Appointments found.</div>");
                 return;
             }
             var deferred = new $.Deferred();
             require(["io.ox/calendar/util"], function (calendarUtil) {
                 var $appointmentDiv = $("<div/>").appendTo($node);
-                $appointmentDiv.append($("<h1/>").text("Appointments"));
-                var $list = $("<ul/>").appendTo($appointmentDiv);
                 _(appointments).each(function (appointment) {
                     var description = appointment.title + " (" + calendarUtil.getDateInterval(appointment) + " " + calendarUtil.getTimeInterval(appointment) + ")";
-                    var $entry = $("<li/>").text(description).click(function () {
+                    var $entry = $("<div/>").text(description).click(function () {
                         require(["io.ox/calendar/view-detail", "css!io.ox/calendar/style.css"], function (viewer) {
                             new lightbox.Lightbox({
                                 getGhost: function () {
@@ -34,7 +32,7 @@ define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox
                         });
                         return false;
                     });
-                    $list.append($entry);
+                    $appointmentDiv.append($entry);
                 });
                 deferred.resolve();
             });
