@@ -13,7 +13,8 @@
 
 define("io.ox/calendar/view-detail",
     ["io.ox/core/extensions", "io.ox/calendar/util", "io.ox/core/gettext",
-     "io.ox/core/api/user", "io.ox/core/api/group", "io.ox/core/api/resource"
+     "io.ox/core/api/user", "io.ox/core/api/group", "io.ox/core/api/resource",
+     "css!io.ox/calendar/style.css"
     ], function (ext, util, gettext, userAPI, groupAPI, resourceAPI) {
     
     "use strict";

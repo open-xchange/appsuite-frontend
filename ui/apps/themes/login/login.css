@@ -347,10 +347,11 @@ a:hover, .link:hover {
     text-shadow: 0px 0px 1px white;
 }
 
-/* ipad */
+/* ipad
 @media screen and (orientation: portrait) {
     body { width: 768px; }
 }
 @media screen and (orientation: landscape) {
     body { width: 1024px; }
 }
+*/

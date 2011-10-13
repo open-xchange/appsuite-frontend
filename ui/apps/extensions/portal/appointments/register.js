@@ -21,13 +21,13 @@ define("io.ox/portal/appointments/register", ["io.ox/core/extensions"], function
         load: function () {
             var loading = new $.Deferred();
             require(["io.ox/calendar/api"], function (api) {
-                var getAll = api.getAll();
-                getAll.fail(loading.reject); // This should be easier
-                getAll.done(function (ids) {
-                    var loadFirstTen = api.getList(ids.slice(0, 10));
-                    loadFirstTen.fail(loading.reject);
-                    loadFirstTen.done(loading.resolve);
-                });
+                api.getAll()
+                    .done(function (ids) {
+                        api.getList(ids.slice(0, 10))
+                            .done(loading.resolve)
+                            .fail(loading.reject);
+                    })
+                    .fail(loading.reject); // This should be easier
             });
             return loading;
         },
@@ -46,20 +46,21 @@ define("io.ox/portal/appointments/register", ["io.ox/core/extensions"], function
                 var $list = $("<ul/>").appendTo($node);
                 _(appointments).each(function (appointment) {
                     var description = appointment.title + " (" + calendarUtil.getDateInterval(appointment) + " " + calendarUtil.getTimeInterval(appointment) + ")";
-                    var $entry = $("<li/>").text(description).click(function () {
-                        require(["io.ox/calendar/view-detail", "io.ox/core/lightbox", "css!io.ox/calendar/style.css"], function (viewer, lightbox) {
-                            new lightbox.Lightbox({
-                                getGhost: function () {
-                                    return $entry;
-                                },
-                                buildPage: function () {
-                                    return viewer.draw(appointment);
-                                }
-                            }).show();
-                        });
-                        return false;
-                    });
-                    $list.append($entry);
+                    var $entry = $("<li/>").text(description)
+                        .click(function () {
+                            // open dialog
+                            require(["io.ox/calendar/view-detail", "io.ox/core/dialogs"], function (view, dialogs) {
+                                new dialogs.ModalDialog({
+                                        width: 600,
+                                        easyOut: true
+                                    })
+                                    .append(view.draw(appointment))
+                                    .addButton("close", "Close")
+                                    .show();
+                            });
+                            return false;
+                        })
+                        .appendTo($list);
                 });
                 deferred.resolve();
             });
