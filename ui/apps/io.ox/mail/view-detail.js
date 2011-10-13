@@ -1,24 +1,23 @@
 /**
- * All content on this website (including text, images, source code and any
- * other original works), unless otherwise noted, is licensed under a Creative
- * Commons License.
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011 Mail: info@open-xchange.com
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
  *
- * @author Christoph Kopp <christoph.kopp@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Christoph Kopp <christoph.kopp@open-xchange.com
  */
 
 define("io.ox/mail/view-detail", [
         "io.ox/core/extensions",
         "io.ox/mail/util"
     ], function (ext, util) {
-        'use strict';
-    
-        var fnClickPerson,
-            that;
         
+        'use strict';
         
         // define global iframe resize handler
         window.iframeResize = function (guid, body) {
@@ -26,53 +25,8 @@ define("io.ox/mail/view-detail", [
             $("#tmp-iframe-" + guid).css("height", height + 20 + "px");
         };
         
-        fnClickPerson = function (e) {
-            ext.point("io.ox/core/person:action").each(function (ext) {
-                _.call(ext.action, e.data);
-            });
-        };
-
-        that = {
-            serializeList: function (list, addHandlers) {
-                var i = 0, $i = list.length, tmp = $(), node, display_name = "";
-                for (; i < $i; i++) {
-                    display_name = util.getDisplayName(list[i]);
-                    node = $("<span/>").addClass(addHandlers ? "person-link" : "person")
-                        .css("whiteSpace", "nowrap").text(display_name);
-                    if (addHandlers) {
-                        node.bind("click", { display_name: display_name, email1: list[i][1] }, fnClickPerson)
-                            .css("cursor", "pointer");
-                    }
-                    tmp = tmp.add(node);
-                    if (i < $i - 1) {
-                        tmp = tmp.add($("<span/>").addClass("delimiter").html("&nbsp;&bull; "));
-                    }
-                }
-                return tmp;
-            },
-            serializeAttachments: function (data, list) {
-                var i = 0, $i = list.length, tmp = $(), filename = "", href = "";
-                for (; i < $i; i++) {
-                    filename = list[i].filename || "";
-                    href = "/ajax/mail?" + $.param({
-                        action: "attachment",
-                        folder: data.folder_id,
-                        id: data.id,
-                        attachment: list[i].id,
-                        save: "1",
-                        session: ox.session
-                    });
-                    tmp = tmp.add(
-                        $("<a/>", { href: href, target: "_blank" }).addClass("attachment-link").text(filename)
-                    );
-                    if (i < $i - 1) {
-                        tmp = tmp.add(
-                            $("<span/>").addClass("delimiter").html("&nbsp;&bull; ")
-                        );
-                    }
-                }
-                return tmp;
-            },
+        var that = {
+                
             getContent: function (data) {
                 if (!data || !data.attachments) {
                     return "";
@@ -158,29 +112,26 @@ define("io.ox/mail/view-detail", [
                 }
                 return content;
             },
+            
             drawScaffold: function (obj, resolver) {
                 return $("<div/>")
                     .addClass("mail-detail")
                     .busy()
                     .bind("resolve", obj, resolver);
             },
+            
             draw: function (data) {
+                
                 if (!data) {
                     return $("<div/>");
                 }
                 
-                var node;
-                    
-                
-                node = $("<div/>").addClass("mail-detail");
+                var node = $("<div/>").addClass("mail-detail");
                 ext.point('io.ox/mail/detail').invoke('draw', node, data);
-
                 
                 return node;
             }
-                
         };
-        
         
         //extensions
         ext.point('io.ox/mail/detail').extend({
@@ -223,13 +174,13 @@ define("io.ox/mail/view-detail", [
             }
         });
         ext.point('io.ox/mail/detail').extend({
-            index: 140,
+            index: 120,
             id: 'fromlist',
             draw: function (data) {
                 this.append(
                     $("<div/>")
                     .addClass("from list")
-                    .append(that.serializeList(data.from, true))
+                    .append(util.serializeList(data.from, true))
                 );
             }
         });
@@ -259,14 +210,14 @@ define("io.ox/mail/view-detail", [
                             .addClass("list")
                             .append(
                                 // TO
-                                $("<span/>").addClass("label").text("To:\u00a0")
+                                $("<span/>").addClass("label").text("To:\u00A0")
                             )
                             .append(
                                 that.serializeList(data.to, true)
                             )
                             .append(
                                 // CC
-                                showCC ? $("<span/>").addClass("label").text(" Copy:\u00a0") : []
+                                showCC ? $("<span/>").addClass("label").text(" Copy:\u00A0") : []
                             )
                             .append(
                                 that.serializeList(data.cc, true)
@@ -301,7 +252,7 @@ define("io.ox/mail/view-detail", [
                                  $("<span/>").addClass("label").text("Attachments: ")
                              )
                              .append(
-                                 that.serializeAttachments(data, attachments)
+                                 util.serializeAttachments(data, attachments)
                              )
                         : []
                 );

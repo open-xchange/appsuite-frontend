@@ -107,7 +107,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     }, 500);
                 } else {
                     // set fixed width, hide label, be busy
-                    self.css("width", self.width() + "px").text("\u00a0").busy();
+                    self.css("width", self.width() + "px").text("\u00A0").busy();
                     // call launcher
                     fn.call(this).done(function () {
                         // revert visual changes

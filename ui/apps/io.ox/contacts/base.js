@@ -98,8 +98,8 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
                             obj.mark_as_distributionlist ?
                                 gt("Distribution list") :
                                 (obj.company || obj.position || obj.profession) ?
-                                        join(", ", obj.company, obj.position, obj.profession) + "\u00a0" :
-                                        (obj.email1 || obj.email2 || obj.email3) + "\u00a0"
+                                        join(", ", obj.company, obj.position, obj.profession) + "\u00A0" :
+                                        (obj.email1 || obj.email2 || obj.email3) + "\u00A0"
                         )
                     )
                 )
@@ -207,7 +207,7 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
                 }
                 
                 if (r > 0) {
-                    addField("", "\u00a0");
+                    addField("", "\u00A0");
                     r = 0;
                 }
                 
@@ -219,7 +219,7 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
                 r += addPhone(gt("Mobile"), obj.cellular_telephone2);
                 
                 if (r > 0) {
-                    addField("", "\u00a0");
+                    addField("", "\u00A0");
                     r = 0;
                 }
                 
@@ -235,7 +235,7 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
                 }
                 
                 if (r > 0) {
-                    addField("", "\u00a0");
+                    addField("", "\u00A0");
                     r = 0;
                 }
                 
@@ -247,7 +247,7 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
                 // QR code
                 if (Modernizr.canvas) {
                     if (r > 0) {
-                        addField("", "\u00a0");
+                        addField("", "\u00A0");
                         r = 0;
                     }
                     addField("", true, function (td) {

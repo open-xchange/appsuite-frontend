@@ -80,7 +80,7 @@ define("io.ox/calendar/view-detail",
         id: "location",
         draw: function (data) {
             this.append(
-                $("<div>").addClass("location").text(data.location || "\u00a0")
+                $("<div>").addClass("location").text(data.location || "\u00A0")
             );
         }
     });
@@ -286,12 +286,12 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .text("Show as" + ":\u00a0")
+                    .text("Show as" + ":\u00A0")
             )
             .append(
                 $("<span>")
                     .addClass("detail shown_as " + util.getShownAsClass(data))
-                    .text("\u00a0")
+                    .text("\u00A0")
             )
             .append(
                 $("<span>")
@@ -310,7 +310,7 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .text("Folder" + ":\u00a0")
+                    .text("Folder" + ":\u00A0")
             )
             .append(
                  $("<span>").addClass("detail").text(data.folder_id)
@@ -327,7 +327,7 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .text("Created" + ":\u00a0")
+                    .text("Created" + ":\u00A0")
             )
             .append(
                 $("<span>")
@@ -348,7 +348,7 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .text("Modified" + ":\u00a0")
+                    .text("Modified" + ":\u00A0")
             )
             .append(
                 $("<span>")

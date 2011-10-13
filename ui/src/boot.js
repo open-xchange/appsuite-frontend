@@ -318,7 +318,7 @@ $(document).ready(function () {
                     .bind("click", id, fnChangeLanguage)
                     .text(lang[id])
                 );
-                node.append(document.createTextNode("\u00a0 "));
+                node.append(document.createTextNode("\u00A0 "));
             }
         } else {
             $("#io-ox-languages").remove();

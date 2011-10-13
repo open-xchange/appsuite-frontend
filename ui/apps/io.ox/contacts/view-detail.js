@@ -128,8 +128,8 @@ define("io.ox/contacts/view-detail",
                         data.mark_as_distributionlist ?
                             gt("Distribution list") :
                             (data.company || data.position || data.profession) ?
-                                    join(", ", data.company, data.position, data.profession) + "\u00a0" :
-                                    (data.email1 || data.email2 || data.email3) + "\u00a0"
+                                    join(", ", data.company, data.position, data.profession) + "\u00A0" :
+                                    (data.email1 || data.email2 || data.email3) + "\u00A0"
                     )
                 ).appendTo(this);
         }
@@ -194,7 +194,7 @@ define("io.ox/contacts/view-detail",
                 r += addAddress(gt("Home"), data.street_home, data.postal_code_home, data.city_home, null, this);
             }
             if (r > 0) {
-                addField("", "\u00a0", this);
+                addField("", "\u00A0", this);
             }
         }
     });
@@ -211,7 +211,7 @@ define("io.ox/contacts/view-detail",
             r += addPhone(gt("Mobile"), data.cellular_telephone1, this);
             r += addPhone(gt("Mobile"), data.cellular_telephone2, this);
             if (r > 0) {
-                addField("", "\u00a0", this);
+                addField("", "\u00A0", this);
             }
         }
     });
@@ -231,7 +231,7 @@ define("io.ox/contacts/view-detail",
                 r += addMail(gt("E-Mail"), data.email3, this);
             }
             if (r > 0) {
-                addField("", "\u00a0", this);
+                addField("", "\u00A0", this);
             }
         }
         
@@ -255,7 +255,7 @@ define("io.ox/contacts/view-detail",
             var r = 0;
             if (Modernizr.canvas) {
                 if (r > 0) {
-                    addField("", "\u00a0", this);
+                    addField("", "\u00A0", this);
                     r = 0;
                 }
                 addField("QR", true, this, function (td) {

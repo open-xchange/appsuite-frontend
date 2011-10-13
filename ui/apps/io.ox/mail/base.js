@@ -319,14 +319,14 @@ define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
                             .addClass("list")
                             .append(
                                 // TO
-                                $("<span/>").addClass("label").text("To:\u00a0")
+                                $("<span/>").addClass("label").text("To:\u00A0")
                             )
                             .append(
                                 this.serializeList(data.to, true)
                             )
                             .append(
                                 // CC
-                                showCC ? $("<span/>").addClass("label").text(" Copy:\u00a0") : []
+                                showCC ? $("<span/>").addClass("label").text(" Copy:\u00A0") : []
                             )
                             .append(
                                 this.serializeList(data.cc, true)

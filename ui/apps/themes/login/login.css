@@ -118,22 +118,6 @@ a:hover, .link:hover {
     left: 0;
     z-index: 0;
     border-bottom: 1px solid #f0f0f0;
-/*
-    background-image: -webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0, #444450),
-        color-stop(1, #000)
-    );
-    background-image: -moz-linear-gradient(
-        center top,
-        #444450 0%,
-        #000 100%
-    );
-    
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#444450');
-*/
 }
 
 #io-ox-login-form-background {
@@ -157,6 +141,7 @@ a:hover, .link:hover {
         color-stop(0.0, transparent),
         color-stop(0.75, rgba(0, 0, 0, 0.80))
     );
+    background-image: -o-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.80) 75%);
     background-image: -moz-linear-gradient(
         center top,
         transparent 0%,
@@ -251,6 +236,7 @@ a:hover, .link:hover {
         color-stop(0, #333),
         color-stop(1, #222)
     );
+    background-image: -o-linear-gradient(top, #333 0%, #222 100%);
     background-image: -moz-linear-gradient(
         center top,
         #333 0%,

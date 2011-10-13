@@ -69,7 +69,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
                 var node = $(this);
                 if (node.children().length === 0) {
                     if (node.text() === "") {
-                        node.text("\u00a0");
+                        node.text("\u00A0");
                     }
                 }
             });
