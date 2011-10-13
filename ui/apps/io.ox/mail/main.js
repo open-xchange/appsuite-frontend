@@ -12,11 +12,21 @@
  */
 
 define("io.ox/mail/main",
-    ["io.ox/mail/base", "io.ox/mail/api", "io.ox/core/tk/vgrid",
-     "css!io.ox/mail/style.css"], function (base, api, VGrid) {
+    ["io.ox/mail/util", "io.ox/mail/api", "io.ox/core/tk/vgrid", "io.ox/mail/view-detail", "io.ox/mail/base",
+     "css!io.ox/mail/style.css"], function (util, api, VGrid, viewDetail, base) {
     
     "use strict";
-    
+    var mailDetailAutoResolve = function (e) {
+        // get mail api
+        var self = $(this);
+        require(["io.ox/mail/api"], function (api) {
+            // get mail data
+            api.get(e.data).done(function (data) {
+                // replace placeholder with mail content
+                self.replaceWith(viewDetail.draw(data));
+            });
+        });
+    };
     // application object
     var app = ox.ui.createApp(),
         // app window
@@ -43,7 +53,7 @@ define("io.ox/mail/main",
         // toolbar
         win.addButton({
             label: "New Mail",
-            action: base.createNewMailDialog
+            action: util.createNewMailDialog
         })
         .css("marginRight", "40px");
         
@@ -112,24 +122,24 @@ define("io.ox/mail/main",
                 return { from: from, date: date, priority: priority, subject: subject, attachment: attachment, threadSize: threadSize, flag: flag };
             },
             set: function (data, fields, index) {
-                fields.priority.text(base.getPriority(data));
+                fields.priority.text(util.getPriority(data));
                 fields.subject.text(_.prewrap(data.subject));
                 if (!data.threadSize || data.threadSize === 1) {
                     fields.threadSize.text("").hide();
                 } else {
                     fields.threadSize.text(data.threadSize).css("display", "");
                 }
-                fields.from.empty().append(base.getFrom(data.from), true);
-                fields.date.text(base.getTime(data.received_date));
+                fields.from.empty().append(util.getFrom(data.from), true);
+                fields.date.text(util.getTime(data.received_date));
                 fields.flag.get(0).className = "flag abs flag_" + data.color_label;
                 fields.attachment.css("display", data.attachment ? "" : "none");
-                if (base.isUnread(data)) {
+                if (util.isUnread(data)) {
                     this.addClass("unread");
                 }
-                if (base.isMe(data)) {
+                if (util.isMe(data)) {
                     this.addClass("me");
                 }
-                if (base.isDeleted(data)) {
+                if (util.isDeleted(data)) {
                     this.addClass("deleted");
                 }
             }
@@ -165,7 +175,7 @@ define("io.ox/mail/main",
         win.bind("cancel-search", function () {
             grid.setMode("all");
         });
-        
+         
         var showMail, drawThread, drawMail, drawFail;
         
         showMail = function (obj) {
@@ -191,9 +201,11 @@ define("io.ox/mail/main",
             var i = 0, obj, frag = document.createDocumentFragment();
             for (; (obj = list[i]); i++) {
                 if (i === 0) {
-                    frag.appendChild(base.draw(mail).get(0));
+                    frag.appendChild(viewDetail.draw(mail).get(0));
+                    //frag.appendChild(base.draw(mail).get(0));
                 } else {
-                    frag.appendChild(base.drawScaffold(obj).get(0));
+                    frag.appendChild(viewDetail.drawScaffold(obj, mailDetailAutoResolve).get(0));
+                    //frag.appendChild(base.drawScaffold(obj).get(0));
                 }
             }
             right.idle().empty().get(0).appendChild(frag);
@@ -211,7 +223,8 @@ define("io.ox/mail/main",
         };
         
         drawMail = function (data) {
-            right.idle().empty().append(base.draw(data));
+            right.idle().empty().append(viewDetail.draw(data));
+            //right.idle().empty().append(base.draw(data));
         };
         
         drawFail = function (obj) {
