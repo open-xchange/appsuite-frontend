@@ -16,6 +16,8 @@ define("io.ox/calendar/view-detail",
      "io.ox/core/api/user", "io.ox/core/api/group", "io.ox/core/api/resource"
     ], function (ext, util, gettext, userAPI, groupAPI, resourceAPI) {
     
+    "use strict";
+    
     var fnClickPerson = function (e) {
         ext.point("io.ox/core/person:action").each(function (ext) {
             _.call(ext.action, e.data);

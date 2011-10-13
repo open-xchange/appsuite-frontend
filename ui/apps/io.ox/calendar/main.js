@@ -16,6 +16,8 @@ define("io.ox/calendar/main",
      "io.ox/core/config", "io.ox/core/tk/vgrid",
      "css!io.ox/calendar/style.css"], function (api, util, viewDetail, config, VGrid) {
     
+    "use strict";
+    
     // application object
     var app = ox.ui.createApp(),
         // app window

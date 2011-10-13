@@ -15,6 +15,8 @@
 
 (function () {
     
+    "use strict";
+    
     // browser detection
     // adopted from prototype.js
     var ua = navigator.userAgent,

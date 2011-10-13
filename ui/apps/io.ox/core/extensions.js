@@ -14,8 +14,9 @@
  */
 
 define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
-
+    
     // A naive extension registry.
+    "use strict";
     
     // global registry
     var registry = {},

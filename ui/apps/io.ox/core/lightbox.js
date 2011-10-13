@@ -15,6 +15,9 @@
 // TODO: Use fancy css transformations for optimization and only fall back to jquery animations if needed
 
 define("io.ox/core/lightbox", function () {
+    
+    "use strict";
+    
     // scaffolds
     var $underlay = $("<div/>").addClass("abs io-ox-dialog-underlay"),
         $popup = $("<div/>").addClass("abs io-ox-lightbox-popup");

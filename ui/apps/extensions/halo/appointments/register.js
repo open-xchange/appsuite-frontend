@@ -1,8 +1,24 @@
-define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox/core/lightbox"], function (ext, lightbox) {
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ */
+
+define("extensions/halo/appointments/register",
+    ["io.ox/core/extensions", "io.ox/core/lightbox"], function (ext, lightbox) {
+    
+    "use strict";
+    
     // Taken From Calendar API
     var DAY = 60000 * 60 * 24;
     
-  
     ext.point("io.ox/halo/contact:renderer").extend({
         id: "appointments",
         handles: function (type) {

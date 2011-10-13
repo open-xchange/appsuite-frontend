@@ -1,5 +1,4 @@
-    /**
- *
+/**
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,11 +9,12 @@
  * Mail: info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
- *
  */
+
 // TODO: Add Convenience and niceties
 define("io.ox/internal/testing/main", ["io.ox/internal/testing/jasmine", "io.ox/core/extensions"], function (jasmine, ext) {
     
+    "use strict";
     
     var app = ox.ui.createApp({
         title: "Unit Tests"

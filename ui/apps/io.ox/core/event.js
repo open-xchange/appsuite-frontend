@@ -15,6 +15,8 @@
 
 define("io.ox/core/event", function () {
 
+    "use strict";
+    
     var that = {
 
         Dispatcher: (function () {

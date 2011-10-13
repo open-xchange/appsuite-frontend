@@ -15,6 +15,8 @@
 
 define("io.ox/mail/base", ["io.ox/core/extensions"], function (extensions) {
     
+    "use strict";
+    
     var that = {};
     
     var ngettext = function (s, p, n) {

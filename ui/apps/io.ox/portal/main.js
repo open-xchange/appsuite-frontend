@@ -1,17 +1,27 @@
-/*
-* http://creativecommons.org/licenses/by-nc-sa/2.5/
-*
-* Copyright (C) Open-Xchange Inc., 2006-2011
-* Mail: info@open-xchange.com
-*
-* @author Francisco Laguna <francisco.laguna@open-xchange.com>
-*
-*/
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ */
+
+//TODO: remove this global stuff
 var tmp = _(ox.serverConfig.extensions.portal)
     .map(function (obj) {
+        "use strict";
         return "extensions/" + obj + "/register";
     });
+
 define("io.ox/portal/main", ["io.ox/core/extensions", "css!io.ox/portal/style.css"].concat(tmp), function (ext) {
+    
+    "use strict";
+    
     // application object
     var app = ox.ui.createApp(),
         // app window

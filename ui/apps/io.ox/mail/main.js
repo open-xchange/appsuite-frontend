@@ -12,9 +12,11 @@
  */
 
 define("io.ox/mail/main",
-     ["io.ox/mail/base", "io.ox/mail/api", "io.ox/core/tk/vgrid",
+    ["io.ox/mail/base", "io.ox/mail/api", "io.ox/core/tk/vgrid",
      "css!io.ox/mail/style.css"], function (base, api, VGrid) {
-
+    
+    "use strict";
+    
     // application object
     var app = ox.ui.createApp(),
         // app window

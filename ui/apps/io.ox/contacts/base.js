@@ -15,6 +15,8 @@
 
 define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
     
+    "use strict";
+    
     // smart join
     var join = function () {
         return _(arguments)

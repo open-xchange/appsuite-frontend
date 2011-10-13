@@ -14,7 +14,9 @@
  */
 
 define("io.ox/core/dialogs", function () {
-
+    
+    "use strict";
+    
     // scaffolds
     var underlay = $("<div/>").addClass("abs io-ox-dialog-underlay"),
         popup = $("<div/>").addClass("io-ox-dialog-popup")

@@ -15,6 +15,8 @@
 
 define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
     
+    "use strict";
+    
     /**
      * Quick settings for application windows
      */

@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,9 +9,11 @@
  * Mail: info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
- *
  */
+
 define("io.ox/help/hints", ["io.ox/core/dialogs"], function (dialogs) {
+    
+    "use strict";
     
     // A hint consists of a short teaser text and, optionally, a longer explanation
     // Therefore, options include:

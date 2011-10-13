@@ -14,6 +14,8 @@
 define("io.ox/calendar/util",
     ["io.ox/core/gettext"], function (gettext) {
     
+    "use strict";
+    
     // week day names
     var n_dayShort = "So Mo Di Mi Do Fr Sa".split(' '),
         n_day = [gettext("Sunday"), gettext("Monday"), gettext("Tuesday"),

@@ -13,6 +13,8 @@
 
 define("io.ox/core/gettext", [], function () {
     
+    "use strict";
+    
     function gettext(text) {
         return gettext.dpgettext("", "", text);
     }
@@ -32,7 +34,7 @@ define("io.ox/core/gettext", [], function () {
                     url: ox.base + "/l10n/" + lang + ".json",
                     dataType: "json"
                 }).done(function (data) {
-                    pluralForm = Function("n", "return " + data.plural + ";");
+                    pluralForm = new Function("n", "return " + data.plural + ";");
                     domains = { "": data.dictionary };
                 });
         }

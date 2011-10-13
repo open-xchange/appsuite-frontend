@@ -15,7 +15,9 @@
 
 define("io.ox/mail/write",
     ["io.ox/mail/api", "io.ox/mail/textile", "css!io.ox/mail/style.css", "css!io.ox/mail/write.css"], function (api, textile) {
-
+    
+    "use strict";
+    
     // multi instance pattern
     function createInstance() {
         

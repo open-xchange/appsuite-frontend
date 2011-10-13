@@ -15,6 +15,8 @@
 
 define("io.ox/internal/ajaxDebug/main", [ "io.ox/core/tk/vgrid", "io.ox/internal/ajaxDebug/callHandling", "io.ox/internal/ajaxDebug/callViews"], function (VGrid, callHandler, callViews) {
 
+    "use strict";
+    
     // application object
     var app = ox.ui.createApp(),
         // app window

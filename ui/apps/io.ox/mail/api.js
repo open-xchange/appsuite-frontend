@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,10 +9,12 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- *
  */
 
-define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api/factory"], function (http, ApiFactory) {
+define("io.ox/mail/api",
+    ["io.ox/core/http", "io.ox/core/api/factory"], function (http, apiFactory) {
+    
+    "use strict";
     
     // simple temporary thread cache
     var threads = {};
@@ -33,7 +34,7 @@ define("io.ox/mail/api", ["io.ox/core/http", "io.ox/core/api/factory"], function
     var contactPictures = {};
     
     // generate basic API
-    var api = ApiFactory({
+    var api = apiFactory({
         module: "mail",
         requests: {
             all: {

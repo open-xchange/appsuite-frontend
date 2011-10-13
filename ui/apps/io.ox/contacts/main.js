@@ -14,8 +14,9 @@
  */
 
 define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api", "io.ox/core/tk/vgrid", "io.ox/contacts/view-detail", "css!io.ox/contacts/style.css"], function (base, api, VGrid, viewDetail) {
-        
-
+    
+    "use strict";
+    
     // application object
     var app = ox.ui.createApp(),
         // app window

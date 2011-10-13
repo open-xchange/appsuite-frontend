@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -11,10 +10,13 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
- *
  */
 
-define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions", "css!extensions/halo/style.css"], function (api, ext) {
+define("extensions/halo/main",
+    ["extensions/halo/api", "io.ox/core/extensions",
+     "css!extensions/halo/style.css"], function (api, ext) {
+    
+    "use strict";
     
     function show(data) {
         

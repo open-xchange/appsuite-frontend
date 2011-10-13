@@ -11,10 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/api/resource", ["io.ox/core/http", "io.ox/core/api/factory"], function (http, ApiFactory) {
+define("io.ox/core/api/resource",
+    ["io.ox/core/http", "io.ox/core/api/factory"], function (http, apiFactory) {
+    
+    "use strict";
     
     // generate basic API
-    var api = ApiFactory({
+    var api = apiFactory({
         module: "resource",
         keyGenerator: function (obj) {
             return String(obj.id);

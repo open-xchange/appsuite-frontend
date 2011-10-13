@@ -15,6 +15,8 @@ define("io.ox/calendar/view-mini",
     ["io.ox/calendar/util", "io.ox/core/gettext"
     ], function (util, gettext) {
     
+    "use strict";
+    
     return  {
         
         draw: function (timestamp) {

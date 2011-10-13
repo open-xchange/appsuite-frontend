@@ -1,4 +1,23 @@
-define("io.ox/linkedIn/view-detail", ["io.ox/core/extensions", "io.ox/core/lightbox", "css!io.ox/linkedIn/style.css"], function (ext, lightbox) {
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ */
+
+define("io.ox/linkedIn/view-detail",
+    ["io.ox/core/extensions",
+     "io.ox/core/lightbox",
+     "css!io.ox/linkedIn/style.css"], function (ext, lightbox) {
+    
+    "use strict";
+    
     var actionPoint = ext.point("linkedIn/details/actions");
     var rendererPoint = ext.point("linkedIn/details/renderer");
     

@@ -80,6 +80,7 @@ var jshintOptions = {
     onevar: false,
     plusplus: false,
     regexp: false,
+    strict: true,
     trailing: true,
     undef: true,
     white: true,

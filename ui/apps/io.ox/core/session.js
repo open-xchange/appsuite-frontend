@@ -15,6 +15,8 @@
 
 define("io.ox/core/session", ["io.ox/core/http"], function (http) {
     
+    "use strict";
+    
     var setSession = function (session) {
         ox.session = session;
     };

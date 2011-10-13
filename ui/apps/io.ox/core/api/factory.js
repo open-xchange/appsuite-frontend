@@ -15,6 +15,8 @@
 
 define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/core/event"], function (http, cache, event) {
     
+    "use strict";
+    
     var fix = function (obj) {
         var clone = _.deepClone(obj);
         clone.folder = clone.folder || clone.folder_id;
