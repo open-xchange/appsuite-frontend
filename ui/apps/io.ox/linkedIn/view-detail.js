@@ -26,12 +26,13 @@ define("io.ox/linkedIn/view-detail",
     }
 
     function draw(data) {
-        var $node = $("<div/>").addClass("linkedIn").css({overflow: "auto"});
-        var $detailNode = $("<div/>").addClass("details").appendTo($node);
-        var $table = $("<table><tr><td class='t10' /><td class='t11' /></td></tr><tr><td class='r2' colspan='2'/></tr><table>").appendTo($detailNode);
-        var $pictureNode = $table.find(".t10");
-        var $nameNode = $table.find(".t11");
-        var $relationNode = $table.find(".r2");
+        
+        var $node = $("<div/>").addClass("linkedIn").css({ overflow: "auto" }),
+            $detailNode = $("<div/>").addClass("details").appendTo($node),
+            $table = $("<table><tr><td class='t10' /><td class='t11' /></td></tr><tr><td class='r2' colspan='2'/></tr><table>").appendTo($detailNode),
+            $pictureNode = $table.find(".t10"),
+            $nameNode = $table.find(".t11"),
+            $relationNode = $table.find(".r2");
         
         $pictureNode.append($("<img/>").attr("src", data.pictureUrl || (ox.base + "/apps/themes/default/dummypicture.xpng")));
         
@@ -138,7 +139,10 @@ define("io.ox/linkedIn/view-detail",
                     if (relation.fullProfile) {
                         var imageUrl = relation.fullProfile && relation.fullProfile.pictureUrl ?
                             relation.fullProfile.pictureUrl : ox.base + "/apps/themes/default/dummypicture.xpng";
-                        var $image = $("<img/>").attr("src", imageUrl).attr("alt", relation.fullProfile.firstName + " " + relation.fullProfile.lastName);
+                        var $image = $("<img/>")
+                            .css("margin", "0 5px 0 0")
+                            .attr("src", imageUrl)
+                            .attr("alt", relation.fullProfile.firstName + " " + relation.fullProfile.lastName);
                         $myNode.append($image);
                         $image.click(function () {
                             new lightbox.Lightbox({
