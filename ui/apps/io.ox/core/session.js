@@ -70,8 +70,7 @@ define("io.ox/core/session", ["io.ox/core/http"], function (http) {
             .done(function (data) {
                 // store session
                 ox.session = data.session;
-                ox.user = "matthias.biggeleben@open-xchange.com"; // YEAH!
-                // ox.user = data.user
+                ox.user = data.user || ("matthias.biggeleben@" + ox.serverConfig.defaultContext); // YEAH!
             });
         },
         

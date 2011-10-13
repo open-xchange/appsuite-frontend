@@ -94,9 +94,9 @@ define("io.ox/mail/api",
         return this.getAll(options)
             .pipe(function (data) {
                 // loop over data
-                var i = 0, obj, tmp = null, all = [], first;
-                for (; (obj = data[i]); i++) {
-                    if (obj.level === 0) {
+                var i = 0, obj, tmp = null, all = [], first,
+                    // store thread
+                    store = function () {
                         if (tmp) {
                             // sort
                             tmp.sort(dateSort);
@@ -105,12 +105,17 @@ define("io.ox/mail/api",
                             // add to hash
                             threads[first.folder_id + "." + first.id] = tmp;
                         }
-                        // clear
+                    };
+                for (; (obj = data[i]); i++) {
+                    if (obj.level === 0) {
+                        store();
                         tmp = [obj];
-                    } else {
+                    } else if (tmp) {
                         tmp.push(obj);
                     }
                 }
+                // store last thread
+                store();
                 // resort all
                 all.sort(dateSort);
                 return all;
