@@ -12,12 +12,14 @@
  */
 
 define("io.ox/calendar/view-grid-template",
-    ["io.ox/calendar/util", "css!io.ox/calendar/style.css"], function (util) {
+    ["io.ox/calendar/util", "io.ox/core/tk/vgrid",
+     "css!io.ox/calendar/style.css"], function (util, VGrid) {
     
     "use strict";
     
-    return {
+    var that = {
         
+        // main grid template
         main: {
             build: function () {
                 var title, location, time, date, shown_as;
@@ -38,6 +40,7 @@ define("io.ox/calendar/view-grid-template",
             }
         },
         
+        // template for labels
         label: {
             build: function () {
                 this.addClass("calendar-label");
@@ -48,9 +51,52 @@ define("io.ox/calendar/view-grid-template",
             }
         },
         
+        // detect new labels
         requiresLabel: function (i, data, current) {
             var d = util.getSmartDate(data.start_date);
             return (i === 0 || d !== current) ? d : false;
+        },
+        
+        // simple grid-based list for portal & halo
+        drawSimpleGrid: function (list) {
+            
+            // use template
+            var tmpl = new VGrid.Template(),
+                $div = $("<div>");
+            
+            // add template
+            tmpl.add(that.main);
+            
+            _(list).each(function (data, i) {
+                tmpl.getClone()
+                    .update(data, i).appendTo($div)
+                    .node.css("position", "relative").data("appointment", data);
+            });
+            
+            return $div;
+        },
+        
+        // simple click handler used by several simple grids
+        hOpenDetailPopup: function (e) {
+            
+            var data = e.data || $(this).data("appointment");
+            
+            require(["io.ox/calendar/view-detail", "io.ox/core/tk/dialogs"],
+                function (view, dialogs) {
+                    new dialogs.ModalDialog({
+                            width: 600,
+                            easyOut: true
+                        })
+                        .append(view.draw(data))
+                        .addButton("close", "Close")
+                        .show();
+                    data = null;
+                }
+            );
+            
+            return false;
         }
     };
+    
+    return that;
 });

@@ -48,42 +48,12 @@ define("io.ox/portal/appointments/register", ["io.ox/core/extensions"], function
                 
             } else {
                 
-                require(
-                    ["io.ox/calendar/util",
-                     "io.ox/core/tk/vgrid",
-                     "io.ox/calendar/view-grid-template",
-                     "css!io.ox/calendar/style.css"
-                    ], function (util, VGrid, gridTemplate) {
+                require(["io.ox/calendar/view-grid-template"], function (viewGrid) {
                     
-                    // use template
-                    var tmpl = new VGrid.Template(),
-                        $div = $("<div>");
+                    viewGrid.drawSimpleGrid(appointments)
+                        .delegate(".vgrid-cell", "click", viewGrid.hOpenDetailPopup)
+                        .appendTo($node);
                     
-                    // add template
-                    tmpl.add(gridTemplate.main);
-                    
-                    var fnClick = function (e) {
-                        // open dialog
-                        require(["io.ox/calendar/view-detail", "io.ox/core/tk/dialogs"], function (view, dialogs) {
-                            new dialogs.ModalDialog({
-                                    width: 600,
-                                    easyOut: true
-                                })
-                                .append(view.draw(e.data))
-                                .addButton("close", "Close")
-                                .show();
-                        });
-                        return false;
-                    };
-                    
-                    _(appointments).each(function (data, i) {
-                        tmpl.getClone()
-                            .update(data, i).appendTo($div)
-                            .node.css("position", "relative")
-                            .bind("click", data, fnClick);
-                    });
-                    
-                    $node.append($div);
                     deferred.resolve();
                 });
             }

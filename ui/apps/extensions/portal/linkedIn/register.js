@@ -18,14 +18,20 @@ define("extensions/portal/linkedin/register", ["io.ox/core/extensions", "io.ox/c
     ext.point("portal/linkedin/updates/renderer").extend({
         id: "CONN",
         draw: function (activity) {
+            
             var deferred = new $.Deferred();
+            
             if (activity.updateType !== "CONN") {
-                deferred.resolve();
-                return deferred;
+                return deferred.resolve();
             }
             
-            var $updateEntry = $("<div/>").addClass("io-ox-portal-linkedin-updates-entry").appendTo(this);
-            var $detailEntry = $("<div/>").addClass("io-ox-portal-linkedin-updates-details").hide().appendTo(this);
+            var $updateEntry = $("<div/>")
+                    .addClass("io-ox-portal-linkedin-updates-entry")
+                    .appendTo(this),
+                    
+                $detailEntry = $("<div/>")
+                    .addClass("io-ox-portal-linkedin-updates-details")
+                    .hide().appendTo(this);
             
             function displayName(person) {
                 var dname = person.firstName + " " + person.lastName,
@@ -58,11 +64,17 @@ define("extensions/portal/linkedin/register", ["io.ox/core/extensions", "io.ox/c
                 
                 return link;
             }
-            // Check presence of all variables
-            $updateEntry.append(displayName(activity.updateContent.person)).append($("<span />").text(" is now connected with ")).append(displayName(activity.updateContent.person.connections.values[0]));
             
-            deferred.resolve();
-            return deferred;
+            // Check presence of all variables
+            $updateEntry.append(
+                displayName(activity.updateContent.person)
+            ).append(
+                $("<span />").text(" is now connected with ")
+            ).append(
+                displayName(activity.updateContent.person.connections.values[0])
+            );
+            
+            return deferred.resolve();
         }
     });
     
@@ -79,16 +91,27 @@ define("extensions/portal/linkedin/register", ["io.ox/core/extensions", "io.ox/c
         },
         
         draw: function (activityFeed) {
+            
             var drawing = new $.Deferred(),
-            $node = this;
-            $node.append($("<div/>").addClass("clear-title").text("LinkedIn Network Updates"));
+                $node = this,
+                $box = $("<div>");
+            
+            $node.append(
+                    $("<div/>").addClass("clear-title")
+                    .text("LinkedIn Network Updates")
+                )
+                .append(
+                    $box.css("marginTop", "20px")
+                );
+            
             if (activityFeed.values && activityFeed.values !== 0) {
                 _(activityFeed.values).each(function (activity) {
-                    ext.point("portal/linkedin/updates/renderer").invoke("draw", $node, activity);
+                    ext.point("portal/linkedin/updates/renderer")
+                        .invoke("draw", $box, activity);
                 });
             }
-            drawing.resolve();
-            return drawing;
+            
+            return drawing.resolve();
         }
     };
     
@@ -96,11 +119,8 @@ define("extensions/portal/linkedin/register", ["io.ox/core/extensions", "io.ox/c
     var inboxPortal = {
         id: "linkedinInbox",
         load: function () {
-            
         },
-        
         draw: function () {
-            
         }
     };
     

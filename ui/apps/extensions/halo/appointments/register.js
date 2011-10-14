@@ -25,33 +25,30 @@ define("extensions/halo/appointments/register",
             return type === "com.openexchange.halo.appointments";
         },
         draw: function  ($node, providerName, appointments) {
-            $node.append($("<div/>").addClass("clear-title").text("Appointments"));
-            if (appointments.length === 0) {
-                $node.append("<div>No Appointments found.</div>");
-                return;
-            }
+            
             var deferred = new $.Deferred();
-            require(["io.ox/calendar/util"], function (calendarUtil) {
-                var $appointmentDiv = $("<div/>").appendTo($node);
-                _(appointments).each(function (appointment) {
-                    var description = appointment.title + " (" + calendarUtil.getDateInterval(appointment) + " " + calendarUtil.getTimeInterval(appointment) + ")";
-                    var $entry = $("<div/>").text(description).click(function () {
-                        require(["io.ox/calendar/view-detail", "css!io.ox/calendar/style.css"], function (viewer) {
-                            new lightbox.Lightbox({
-                                getGhost: function () {
-                                    return $entry;
-                                },
-                                buildPage: function () {
-                                    return viewer.draw(appointment);
-                                }
-                            }).show();
-                        });
-                        return false;
-                    });
-                    $appointmentDiv.append($entry);
-                });
+            
+            $node.append(
+                $("<div/>").addClass("widget-title clear-title").text("Appointments")
+            );
+            
+            if (appointments.length === 0) {
+                
+                $node.append("<div>No Appointments found.</div>");
                 deferred.resolve();
-            });
+                
+            } else {
+            
+                require(["io.ox/calendar/view-grid-template"], function (viewGrid) {
+                    
+                    viewGrid.drawSimpleGrid(appointments)
+                        .delegate(".vgrid-cell", "click", viewGrid.hOpenDetailPopup)
+                        .appendTo($node);
+                    
+                    deferred.resolve();
+                });
+            }
+            
             return deferred;
         }
     });

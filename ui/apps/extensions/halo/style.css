@@ -1,6 +1,10 @@
-.io-ox-halo {
-    font-size: 16px;
-    line-height: 1.2em;
+
+.io-ox-halo .widget-title {
+    margin: 0.5em 0 1em 0;
+}
+
+.io-ox-halo .vgrid-cell:last-child {
+    border-bottom: 0px none;
 }
 
 .io-ox-halo h1 {

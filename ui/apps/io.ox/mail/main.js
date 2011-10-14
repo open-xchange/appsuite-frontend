@@ -12,21 +12,22 @@
  */
 
 define("io.ox/mail/main",
-    ["io.ox/mail/util", "io.ox/mail/api", "io.ox/core/tk/vgrid", "io.ox/mail/view-detail", "io.ox/mail/base",
-     "css!io.ox/mail/style.css"], function (util, api, VGrid, viewDetail, base) {
+    ["io.ox/mail/util", "io.ox/mail/api", "io.ox/core/tk/vgrid",
+     "io.ox/mail/view-detail", "css!io.ox/mail/style.css"
+    ], function (util, api, VGrid, viewDetail) {
     
     "use strict";
-    var mailDetailAutoResolve = function (e) {
+    
+    var autoResolveThreads = function (e) {
         // get mail api
         var self = $(this);
-        require(["io.ox/mail/api"], function (api) {
-            // get mail data
-            api.get(e.data).done(function (data) {
-                // replace placeholder with mail content
-                self.replaceWith(viewDetail.draw(data));
-            });
+        // get mail data
+        api.get(e.data).done(function (data) {
+            // replace placeholder with mail content
+            self.replaceWith(viewDetail.draw(data));
         });
     };
+    
     // application object
     var app = ox.ui.createApp(),
         // app window
@@ -202,10 +203,8 @@ define("io.ox/mail/main",
             for (; (obj = list[i]); i++) {
                 if (i === 0) {
                     frag.appendChild(viewDetail.draw(mail).get(0));
-                    //frag.appendChild(base.draw(mail).get(0));
                 } else {
-                    frag.appendChild(viewDetail.drawScaffold(obj, mailDetailAutoResolve).get(0));
-                    //frag.appendChild(base.drawScaffold(obj).get(0));
+                    frag.appendChild(viewDetail.drawScaffold(obj, autoResolveThreads).get(0));
                 }
             }
             right.idle().empty().get(0).appendChild(frag);
@@ -224,7 +223,6 @@ define("io.ox/mail/main",
         
         drawMail = function (data) {
             right.idle().empty().append(viewDetail.draw(data));
-            //right.idle().empty().append(base.draw(data));
         };
         
         drawFail = function (obj) {

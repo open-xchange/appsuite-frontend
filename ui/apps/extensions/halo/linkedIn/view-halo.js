@@ -17,8 +17,8 @@ define("extensions/halo/linkedIn/view-halo", ["io.ox/linkedIn/view-detail", "css
     
     return {
         draw: function (liResponse) {
-            var $node = $("<div/>").addClass("linkedIn");
-            $node.append($("<div/>").addClass("clear-title").text("LinkedIn"));
+            var $node = $("<div>").addClass("linkedIn");
+            $node.append($("<div>").addClass("widget-title clear-title").text("LinkedIn"));
             $node.append(viewer.draw(liResponse));
             return $node;
         }

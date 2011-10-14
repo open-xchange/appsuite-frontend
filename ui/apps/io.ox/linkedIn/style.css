@@ -10,16 +10,16 @@
 }
 
 .linkedIn .position .title {
-    font-size: 16px;
+    font-size: 10pt;
 }
 
 .linkedIn .position .companyName {
-    font-size: 14px;
+    font-size: 9pt;
 }
 
 .linkedIn .position .companyIndustry {
     display: none;
-    font-size: 12px;
+    font-size: 9pt;
 }
 
 .linkedIn .position .timeSpent {

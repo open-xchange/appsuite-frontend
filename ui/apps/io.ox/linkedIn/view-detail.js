@@ -13,8 +13,8 @@
 
 define("io.ox/linkedIn/view-detail",
     ["io.ox/core/extensions",
-     "io.ox/core/lightbox",
-     "css!io.ox/linkedIn/style.css"], function (ext, lightbox) {
+     "io.ox/core/tk/dialogs",
+     "css!io.ox/linkedIn/style.css"], function (ext, dialogs) {
     
     "use strict";
     
@@ -130,11 +130,16 @@ define("io.ox/linkedIn/view-detail",
     rendererPoint.extend({
         id: "linkein/details/renderer/relations",
         draw: function (options) {
-            var data = options.data;
             
-            var $myNode = $("<div/>").addClass("relations extension");
+            var data = options.data,
+                $myNode = $("<div/>").addClass("relations extension");
+            
             if (data.relationToViewer && data.relationToViewer.connections && data.relationToViewer.connections.values && data.relationToViewer.connections.values !== 0) {
-                $myNode.append($("<h1/>").text("Connections you share with " + data.firstName + " " + data.lastName));
+                $myNode.append(
+                    $("<div>")
+                        .css({ marginBottom: "5px", fontWeight: "bold" }) // TODO: make CSS class
+                        .text("Connections you share with " + data.firstName + " " + data.lastName)
+                );
                 _(data.relationToViewer.connections.values).each(function (relation) {
                     if (relation.fullProfile) {
                         var imageUrl = relation.fullProfile && relation.fullProfile.pictureUrl ?
@@ -145,14 +150,13 @@ define("io.ox/linkedIn/view-detail",
                             .attr("alt", relation.fullProfile.firstName + " " + relation.fullProfile.lastName);
                         $myNode.append($image);
                         $image.click(function () {
-                            new lightbox.Lightbox({
-                                getGhost: function () {
-                                    return $image;
-                                },
-                                buildPage: function () {
-                                    return draw(relation.fullProfile);
-                                }
-                            }).show();
+                            new dialogs.ModalDialog({
+                                    width: 600,
+                                    easyOut: true
+                                })
+                                .append(draw(relation.fullProfile))
+                                .addButton("close", "Close")
+                                .show();
                         });
                     } else {
                         $myNode.append($("<span/>").text(relation.person.firstName + " " + relation.person.lastName));

@@ -1,4 +1,10 @@
-.io-ox-portal {
+
+.io-ox-portal .clear-title {
+    margin: 0.5em 0 1em 0;
+}
+
+.io-ox-portal .vgrid-cell:last-child {
+    border-bottom: 0px none;
 }
 
 .io-ox-portal h1 {

@@ -21,7 +21,8 @@ CACHE:
 @base@/apps/io.ox/mail/api.js
 @base@/apps/io.ox/mail/style.css
 @base@/apps/io.ox/core/tk/vgrid.js
-@base@/apps/io.ox/mail/base.js
+@base@/apps/io.ox/mail/util.js
+@base@/apps/io.ox/mail/view-detail.js
 @base@/apps/io.ox/core/api/factory.js
 @base@/apps/io.ox/core/tk/selection.js
 # extensions
