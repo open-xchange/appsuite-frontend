@@ -325,6 +325,14 @@
     background-color: white; /* resolves hw accel anti-aliasing */
 }
 
+.vgrid-cell.hover {
+    cursor: pointer;
+}
+
+.vgrid-cell.hover:hover {
+    background-color: #f5f5f5;
+}
+
 .vgrid-cell * {
     overflow: hidden;
     text-overflow: ellipsis;

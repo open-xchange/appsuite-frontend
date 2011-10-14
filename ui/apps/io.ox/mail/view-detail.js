@@ -86,15 +86,17 @@ define("io.ox/mail/view-detail", [
                 }
                 else if (text !== null) {
                     
-                    content.html(
-                        $.trim(text)
-                            // replace leading BR
-                            .replace(/^\s*(<br\/?>\s*)+/g, "")
-                            // reduce long BR sequences
-                            .replace(/(<br\/?>\s*){3,}/g, "<br/><br/>")
-                            // remove split block quotes
-                            .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, "<br/><br/>")
-                    );
+                    content
+                        .addClass("plain-text")
+                        .html(
+                            $.trim(text)
+                                // replace leading BR
+                                .replace(/^\s*(<br\/?>\s*)+/g, "")
+                                // reduce long BR sequences
+                                .replace(/(<br\/?>\s*){3,}/g, "<br/><br/>")
+                                // remove split block quotes
+                                .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, "<br/><br/>")
+                        );
                     
                     // get contents to split long character sequences for better wrapping
                     content.contents().each(function (i) {

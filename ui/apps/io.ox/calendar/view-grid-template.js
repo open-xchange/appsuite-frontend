@@ -69,8 +69,10 @@ define("io.ox/calendar/view-grid-template",
             
             _(list).each(function (data, i) {
                 tmpl.getClone()
-                    .update(data, i).appendTo($div)
-                    .node.css("position", "relative").data("appointment", data);
+                    .update(data, i).appendTo($div).node
+                        .css("position", "relative")
+                        .data("appointment", data)
+                        .addClass("hover");
             });
             
             return $div;
