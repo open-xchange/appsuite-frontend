@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/help/hints", ["io.ox/core/dialogs"], function (dialogs) {
+define("io.ox/help/hints", ["io.ox/core/tk/dialogs"], function (dialogs) {
     
     "use strict";
     

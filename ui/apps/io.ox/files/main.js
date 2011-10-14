@@ -18,7 +18,7 @@ define("io.ox/files/main",
      "io.ox/files/api",
      "io.ox/core/tk/vgrid",
      "io.ox/files/upload",
-     "io.ox/core/dialogs",
+     "io.ox/core/tk/dialogs",
      "io.ox/help/hints",
      "css!io.ox/files/style.css"
     ], function (base, api, VGrid, upload, dialogs, hints) {

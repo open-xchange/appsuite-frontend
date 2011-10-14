@@ -15,7 +15,7 @@ define(function () {
             fr_FR: "Français"
         },
         
-        defaultContext: "open-xchange.com",
+        defaultContext: "1337",
         
         copyright: "&copy; 2011 open xchange.",
         version: "7.0.0 dev",

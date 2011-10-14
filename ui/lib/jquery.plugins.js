@@ -104,11 +104,9 @@
                 // get visible area
                 y1 = pane.scrollTop(),
                 y2 = 0,
-                // get position
-                pos = this.position(),
-                top = pos.top + y1,
+                // get top position
+                top = this.offset().top + y1 - pane.offset().top,
                 h = 0;
-            
             // out of visible area?
             if (top < y1) {
                 // scroll up!

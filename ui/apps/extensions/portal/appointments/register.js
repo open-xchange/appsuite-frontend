@@ -32,38 +32,61 @@ define("io.ox/portal/appointments/register", ["io.ox/core/extensions"], function
             return loading;
         },
         draw: function (appointments) {
+            
             var deferred = new $.Deferred(),
-            $node = this;
-            $node.addClass("io-ox-portal-appointments");
-            $node.append($("<div/>").addClass("clear-title").text("Appointments"));
+                $node = this;
+            
+            $node.addClass("io-ox-portal-appointments")
+                .append(
+                    $("<div/>").addClass("clear-title").text("Appointments")
+                );
+            
             if (appointments.length === 0) {
-                $node.append("<h2>You don't have any appointments in the near future. Go take a walk!</h2>");
+                
+                $node.append("<div><b>You don't have any appointments in the near future. Go take a walk!</b></div>");
                 deferred.resolve();
-                return deferred;
-            }
-            require(["io.ox/calendar/util"], function (calendarUtil) {
-                $node.append("<h2>Your next " + appointments.length + " appointments</h2>");
-                var $list = $("<ul/>").appendTo($node);
-                _(appointments).each(function (appointment) {
-                    var description = appointment.title + " (" + calendarUtil.getDateInterval(appointment) + " " + calendarUtil.getTimeInterval(appointment) + ")";
-                    var $entry = $("<li/>").text(description)
-                        .click(function () {
-                            // open dialog
-                            require(["io.ox/calendar/view-detail", "io.ox/core/dialogs"], function (view, dialogs) {
-                                new dialogs.ModalDialog({
-                                        width: 600,
-                                        easyOut: true
-                                    })
-                                    .append(view.draw(appointment))
-                                    .addButton("close", "Close")
-                                    .show();
-                            });
-                            return false;
-                        })
-                        .appendTo($list);
+                
+            } else {
+                
+                require(
+                    ["io.ox/calendar/util",
+                     "io.ox/core/tk/vgrid",
+                     "io.ox/calendar/view-grid-template",
+                     "css!io.ox/calendar/style.css"
+                    ], function (util, VGrid, gridTemplate) {
+                    
+                    // use template
+                    var tmpl = new VGrid.Template(),
+                        $div = $("<div>");
+                    
+                    // add template
+                    tmpl.add(gridTemplate.main);
+                    
+                    var fnClick = function (e) {
+                        // open dialog
+                        require(["io.ox/calendar/view-detail", "io.ox/core/tk/dialogs"], function (view, dialogs) {
+                            new dialogs.ModalDialog({
+                                    width: 600,
+                                    easyOut: true
+                                })
+                                .append(view.draw(e.data))
+                                .addButton("close", "Close")
+                                .show();
+                        });
+                        return false;
+                    };
+                    
+                    _(appointments).each(function (data, i) {
+                        tmpl.getClone()
+                            .update(data, i).appendTo($div)
+                            .node.css("position", "relative")
+                            .bind("click", data, fnClick);
+                    });
+                    
+                    $node.append($div);
+                    deferred.resolve();
                 });
-                deferred.resolve();
-            });
+            }
             return deferred;
         }
     };

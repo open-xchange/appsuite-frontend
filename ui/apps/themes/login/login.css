@@ -33,7 +33,7 @@ body {
     color: black;
     height: 100%;
     overflow: hidden;
-    background-color: #fff;
+    background-color: #000;
     cursor: default;
 }
 
@@ -54,8 +54,12 @@ a:hover, .link:hover {
     cursor: pointer;
 }
 
+@font-face {
+    font-family: OpenSans; src: url(fonts/OpenSans-Light.ttf);
+}
+
 .clear-title {
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: OpenSans, Helvetica, Arial, sans-serif;
     font-weight: 200;
     font-size: 20pt;
     line-height: 1.15em;

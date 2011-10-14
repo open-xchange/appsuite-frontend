@@ -95,13 +95,11 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
             case 38:
                 // cursor up
                 selectPrevious(e);
-                e.preventDefault();
-                break;
+                return false;
             case 40:
                 // cursor down
                 selectNext(e);
-                e.preventDefault();
-                break;
+                return false;
             }
         };
         
@@ -205,7 +203,6 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
         this.update = function () {
             // get nodes
             var nodes = container.find(".selectable"),
-                // loop
                 i = 0, $i = nodes.length, node = null;
             for (; i < $i; i++) {
                 node = $(nodes[i]);

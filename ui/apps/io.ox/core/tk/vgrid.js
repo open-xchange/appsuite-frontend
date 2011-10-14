@@ -18,15 +18,19 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
     "use strict";
     
     /**
-     * Private Template class
+     * Template class
      * @returns {Template}
      */
-    function Template() {
+    function Template(options) {
 
         var template = [],
-            tagName = "div",
-            defaultClassName = "vgrid-cell",
-
+            
+            // default options
+            o = _.extend({
+                tagName: "div",
+                defaultClassName: "vgrid-cell"
+            }),
+            
             getHeight = function (node) {
                 node.css("visibility", "hidden").show()
                     .appendTo(document.body);
@@ -35,8 +39,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
                 return height;
             };
         
-        this.node = $("<" + tagName + "/>")
-            .addClass(defaultClassName).css("top", "-1000px");
+        this.node = $("<" + o.tagName + ">").addClass(o.defaultClassName);
 
         this.add = function (obj) {
             if (obj && obj.build) {
@@ -49,19 +52,52 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
         };
         
         this.getDefaultClassName = function () {
-            return defaultClassName;
+            return o.defaultClassName;
         };
-
+        
+        // internal class
+        function Row(node) {
+            this.node = node;
+            this.fields = {};
+            this.set = [];
+            this.detached = true;
+        }
+        
+        Row.prototype.update = function (data, index, id) {
+            // loop over setters
+            var i = 0, setters = this.set, $i = setters.length;
+            for (; i < $i; i++) {
+                setters[i].call(this.node, data, this.fields, index);
+            }
+            // set composite id?
+            if (id !== undefined) {
+                this.node.attr("data-ox-id", id);
+            }
+            return this;
+        };
+        
+        Row.prototype.appendTo = function (target) {
+            if (this.detached) {
+                this.node.appendTo(target);
+                this.detached = false;
+            }
+            return this;
+        };
+        
+        Row.prototype.detach = function () {
+            this.node.detach();
+            this.node.removeAttr("data-ox-id");
+            this.detached = true;
+            return this;
+        };
+        
         this.getClone = function () {
             var i = 0, $i = template.length, tmpl,
-                row = {
-                    node: this.node.clone(),
-                    fields: {},
-                    set: []
-                };
+                row = new Row(this.node.clone());
+            // build
             for (; i < $i; i++) {
                 tmpl = template[i];
-                $.extend(row.fields, tmpl.build.call(row.node) || {});
+                _.extend(row.fields, tmpl.build.call(row.node) || {});
                 row.set.push(tmpl.set || $.noop);
             }
             // clean up template to avoid typical mistakes
@@ -79,16 +115,8 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
                     this.style.width = this.style.height = "0px";
                 }
             });
-            // add update
-            row.update = function (data, index) {
-                // loop over setters
-                var i = 0, $i = row.set.length;
-                for (; i < $i; i++) {
-                    row.set[i].call(row.node, data, row.fields, index);
-                }
-            };
             // remember class name
-            defaultClassName = row.node[0].className;
+            o.defaultClassName = row.node[0].className;
             // return row
             return row;
         };
@@ -99,7 +127,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
         // target node
         var node = $(target).empty().addClass("vgrid").bind("selectstart", false),
             // inner container
-            container = $("<div/>").appendTo(node),
+            container = $("<div>").css({ position: "relative", top: "0px" }).appendTo(node),
             // item template
             template = new Template(),
             // label template
@@ -276,16 +304,15 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
                     // no data? (happens if list request fails)
                     if (!data[i]) {
                         pool[i] = clone = template.getClone();
-                        clone.node.appendTo(container);
                     }
                     row = pool[i];
+                    row.appendTo(container);
                     // reset class name
                     node = row.node[0];
                     node.className = defaultClassName + " " + ((offset + i) % 2 ? "odd" : "even");
                     if (data[i]) {
                         // update fields
-                        row.update(data[i], offset + i);
-                        node.setAttribute("data-ox-id", self.selection.serialize(data[i]));
+                        row.update(data[i], offset + i, self.selection.serialize(data[i]));
                     }
                     node.style.top = shift * labelHeight + (offset + i) * itemHeight + "px";
                     tmp[i] = row.node;
@@ -294,9 +321,10 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
                 // any nodes left to clear?
                 if ($i < numRows) {
                     for (; i < numRows; i++) {
-                        node = pool[i].node[0];
-                        node.style.top = "-1000px";
-                        node.removeAttribute("data-ox-id");
+                        pool[i].detach();
+                        pool[i].node[0].className = defaultClassName;
+                        //node.style.top = "-1000px";
+                        //node.removeAttribute("data-ox-id");
                         node.className = defaultClassName;
                     }
                 }
@@ -521,7 +549,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
         this.getLabels = function () {
             return labels;
         };
-    
+        
         this.scrollToLabelText = function (e) {
             // get via text index
             var obj = labels.textIndex[e.data || e];
@@ -538,6 +566,9 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
             this.selection.keyboard(flag);
         };
     };
+    
+    // make Template accessible
+    VGrid.Template = Template;
     
     return VGrid;
 });

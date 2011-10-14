@@ -13,7 +13,7 @@
  *
  */
 
-define("io.ox/core/dialogs", function () {
+define("io.ox/core/tk/dialogs", function () {
     
     "use strict";
     
@@ -300,7 +300,7 @@ define("io.ox/core/dialogs", function () {
 
 /* Test
 
-require(["io.ox/core/dialogs"], function (dialogs) {
+require(["io.ox/core/tk/dialogs"], function (dialogs) {
     new dialogs.ModalDialog()
         .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
         .addButton("cancel", "No, rather not")
