@@ -323,9 +323,6 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
                     for (; i < numRows; i++) {
                         pool[i].detach();
                         pool[i].node[0].className = defaultClassName;
-                        //node.style.top = "-1000px";
-                        //node.removeAttribute("data-ox-id");
-                        node.className = defaultClassName;
                     }
                 }
                 

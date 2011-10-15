@@ -42,7 +42,7 @@ define("extensions/portal/linkedin/register", ["io.ox/core/extensions", "io.ox/c
                         return;
                     }
                     link.prop("personId", person.id);
-                    require(["io.ox/linkedIn/view-detail", "io.ox/core/lightbox"], function (viewer, lightbox) {
+                    require(["io.ox/linkedIn/view-detail"], function (viewer) {
                         var loading = http.GET({
                             module: "integrations/linkedin/portal",
                             params: {

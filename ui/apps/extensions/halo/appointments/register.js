@@ -12,7 +12,7 @@
  */
 
 define("extensions/halo/appointments/register",
-    ["io.ox/core/extensions", "io.ox/core/lightbox"], function (ext, lightbox) {
+    ["io.ox/core/extensions"], function (ext) {
     
     "use strict";
     
