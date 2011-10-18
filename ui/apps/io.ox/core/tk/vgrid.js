@@ -125,7 +125,9 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
     var VGrid = function (target) {
 
         // target node
-        var node = $(target).empty().addClass("vgrid").bind("selectstart", false),
+        var node = $(target).empty().addClass("vgrid"),
+            // first run
+            firstRun = true,
             // inner container
             container = $("<div>").css({ position: "relative", top: "0px" }).appendTo(node),
             // item template
@@ -171,6 +173,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
             pending = false,
             // private methods
             scrollToLabel,
+            hScrollToLabel,
             paintLabels,
             processLabels,
             paint,
@@ -190,13 +193,19 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
         // selection
         Selection.extend(this, node);
         
-        scrollToLabel = function (e) {
-            var obj = labels.list[e.data || e];
+        scrollToLabel = function (index) {
+            var obj = labels.list[index];
             if (obj !== undefined) {
                 node.stop().animate({
                     scrollTop: obj.top
                 }, 250);
             }
+        };
+        
+        hScrollToLabel = function (e) {
+            var index = $(this).data("label-index") || 0,
+                inc = e.type === "dblclick" ? 1 : 0;
+            scrollToLabel(index + inc);
         };
         
         paintLabels = function () {
@@ -220,8 +229,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
                         top: obj.top + "px"
                     })
                     .addClass("vgrid-label")
-                    .bind("click", i, scrollToLabel)
-                    .bind("dblclick", i + 1, scrollToLabel)
+                    .data("label-index", i)
                 );
                 clone.node.appendTo(container);
             }
@@ -508,7 +516,12 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
         };
         
         this.paint = function () {
-            node.unbind("scroll").bind("scroll", fnScroll);
+            if (firstRun) {
+                node.bind("selectstart", false)
+                    .bind("scroll", fnScroll)
+                    .delegate(".vgrid-label", "click dblclick", hScrollToLabel);
+                firstRun = false;
+            }
             return init();
         };
         
@@ -549,9 +562,9 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
         
         this.scrollToLabelText = function (e) {
             // get via text index
-            var obj = labels.textIndex[e.data || e];
-            if (obj !== undefined) {
-                scrollToLabel(obj);
+            var index = labels.textIndex[e.data || e];
+            if (index !== undefined) {
+                scrollToLabel(index);
             }
         };
         
