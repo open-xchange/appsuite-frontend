@@ -13,7 +13,7 @@
  *
  */
 
-define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
+define("io.ox/contacts/base", ["gettext!io.ox/contacts/contacts"], function (gt) {
     
     "use strict";
     
@@ -253,7 +253,7 @@ define("io.ox/contacts/base", ["io.ox/core/gettext"], function (gt) {
                     addField("", true, function (td) {
                         td.append(
                             $("<span>").addClass("link")
-                                .text("Show QR-code")
+                                .text(gt("Show QR-code"))
                                 .bind("click", function () {
                                     require(["io.ox/contacts/view-qrcode"], function (qr) {
                                         var vc = qr.getVCard(obj);
