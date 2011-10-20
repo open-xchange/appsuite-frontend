@@ -84,7 +84,7 @@
             });
         };
         return plugin("title", function (data, callback) {
-            var theme = "@foreground: #000;\n@background: #88f;\n";
+            var theme = "@foreground: #000;\n@background: #fff;\n";
             new less.Parser({ paths: [""], filename: name + ".less" })
                 .parse(theme + data, function (e, root) {
                     if (e) return console.error("LESS error", e);
