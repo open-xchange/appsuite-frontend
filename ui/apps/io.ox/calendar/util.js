@@ -12,7 +12,7 @@
  */
 
 define("io.ox/calendar/util",
-    ["io.ox/core/gettext"], function (gettext) {
+    ["gettext!io.ox/calendar/calendar"], function (gettext) {
     
     // week day names
     var n_day = "So Mo Di Mi Do Fr Sa".split(' '),

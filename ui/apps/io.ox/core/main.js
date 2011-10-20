@@ -13,7 +13,9 @@
  *
  */
 
-define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http", "io.ox/core/extensions", "io.ox/core/gettext"], function (desktop, session, http, extensions, gt) {
+define("io.ox/core/main", ["io.ox/core/desktop", "io.ox/core/session",
+    "io.ox/core/http", "io.ox/core/extensions", "gettext!io.ox/core/main"],
+    function (desktop, session, http, extensions, gt) {
 
     var PATH = ox.base + "/apps/io.ox/core",
         DURATION = 250;

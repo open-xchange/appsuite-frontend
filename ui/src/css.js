@@ -1,3 +1,4 @@
+//#NOJSHINT
 /**
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
@@ -11,11 +12,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+/**
+ * LESS is distributed under the terms of the Apache License, Version 2.0
+ */
+
 (function () {
 
-    "use strict";
-
-    var plugin = function (selector) {
+    var plugin = function (selector, filter) {
         
         return {
 
@@ -31,13 +34,19 @@
                     dataType: "text"
                 })
                 .done(function (css) {
-                    // now the file is cached
-                    var text = css.replace(/url\(/g, "url(" + path);
-                    $('<style type="text/css">' + text + '</style>')
-                        .attr("data-require-src", def)
-                        .insertBefore($(selector).eq(0));
-                    // continue
-                    cont();
+                    if (filter) {
+                        filter(css, insert);
+                    } else {
+                        insert(css);
+                    }
+                    function insert(css) {
+                        var text = css.replace(/url\(/g, "url(" + path);
+                        $('<style type="text/css">' + text + '</style>')
+                            .attr("data-require-src", def)
+                            .insertBefore($(selector).eq(0));
+                        // continue
+                        cont();
+                    }
                 });
             }
         };
@@ -49,4 +58,51 @@
     // theme plugin
     define("theme", plugin("script"));  // append before first script tag
     
+    define("less", function () {
+        var less = { tree: {} }, exports = less;
+        function require(name) {
+            return less[name.split("/")[1]];
+        }
+        (function () {
+            var window; // pretend we're not in a browser
+            //@include parser.js
+        }());
+        //@include tree.js
+        //@include functions.js
+        //@include tree/*.js
+        less.Parser.importer = function (file, paths, callback) {
+            var filename = paths[0] ? paths[0] + "/" + file : file;
+            window.require([filename], function (data) {
+                new less.Parser({
+                    paths: [filename.replace(/(?:^(\/)|\/|^)[^\/]*$/, "$1")],
+                    filename: filename
+                }).parse(data, function (e, root) {
+                    if (e) return console.error("LESS error", e);
+                    callback(root);
+                });
+            });
+        };
+        return plugin("title", function (data, callback) {
+            var theme = "@foreground: #000;\n@background: #88f;\n";
+            new less.Parser({ paths: [""], filename: name + ".less" })
+                .parse(theme + data, function (e, root) {
+                    if (e) return console.error("LESS error", e);
+                    callback(root.toCSS());
+                });
+        });
+    });
+    
 }());
+
+define ("gettext", ["io.ox/core/gettext"], function(gettext) {
+    return {
+        load: function(name, parentRequire, load, config) {
+            var module = gettext.getModule(name);
+            if (module) {
+                parentRequire([module], load);
+            } else {
+                load(gettext(name));
+            }
+        }
+    };
+});

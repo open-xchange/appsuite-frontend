@@ -12,7 +12,7 @@
  */
 
 define("io.ox/calendar/view-mini",
-    ["io.ox/calendar/util", "io.ox/core/gettext"
+    ["io.ox/calendar/util", "gettext!io.ox/calendar/calendar"
     ], function (util, gettext) {
     
     return  {

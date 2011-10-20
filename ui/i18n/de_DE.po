@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
-"POT-Creation-Date: Thu Sep 22 2011 11:38:57 GMT+0200 (CEST)\n"
+"POT-Creation-Date: Thu Oct 20 2011 13:23:16 GMT+0200 (CEST)\n"
 "PO-Revision-Date: Thu Sep 22 2011 11:38:57 GMT+0200 (CEST)\n"
 "Last-Translator: NAME <EMAIL>\n"
 "Language-Team: OX <i18n@open-xchange.com>\n"
@@ -11,75 +11,270 @@ msgstr ""
 "Content-Transfer-Encoding: 8bits\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
+#: apps/io.ox/core/main.js:113
+msgid "AJAX Requests"
+msgstr "AJAX Anfragen"
+
+#: apps/io.ox/calendar/util.js:31
+msgid "Absent"
+msgstr "Abwesend"
+
+#: apps/io.ox/core/main.js:92
 msgid "Address Book"
 msgstr "Adressbuch"
 
+#: apps/io.ox/core/main.js:83
 msgid "Applications"
 msgstr "Anwendungen"
 
+#: apps/io.ox/calendar/util.js:21
+msgid "April"
+msgstr "April"
+
+#: apps/io.ox/calendar/util.js:22
+msgid "August"
+msgstr "August"
+
+#: apps/io.ox/contacts/base.js:244
 msgid "Birthday"
 msgstr "Geburtstag"
 
+#: apps/io.ox/core/main.js:99
 msgid "Calendar"
 msgstr "Kalender"
 
+#: apps/io.ox/calendar/util.js:167
+msgid "Day"
+msgstr "Tag"
+
+#: apps/io.ox/calendar/util.js:23
+msgid "December"
+msgstr "Dezember"
+
+#: apps/io.ox/contacts/base.js:195
 msgid "Department"
 msgstr "Abteilung"
 
+#: apps/io.ox/contacts/base.js:99
 msgid "Distribution list"
 msgstr "Verteilerliste"
 
+#: apps/io.ox/contacts/base.js:227
+#: apps/io.ox/contacts/base.js:230
+#: apps/io.ox/contacts/base.js:234
+#: apps/io.ox/core/main.js:85
 msgid "E-Mail"
 msgstr "E-Mail"
 
+#: apps/io.ox/calendar/util.js:205
+msgid "Each %s Day"
+msgstr "Jeden %s Tag"
+
+#: apps/io.ox/calendar/util.js:210
+msgid "Each %s weeks on %s"
+msgstr "Alle %s Wochen am %s"
+
+#: apps/io.ox/calendar/util.js:221
+msgid "Each %s. %s"
+msgstr "Jeden %s. %s"
+
+#: apps/io.ox/calendar/util.js:20
+msgid "February"
+msgstr "Februar"
+
+#: apps/io.ox/core/main.js:106
 msgid "Files"
 msgstr "Dateien"
 
+#: html/core_body.html:63
 msgid "Forgot your password?"
 msgstr "Passwort vergessen?"
 
+#: apps/io.ox/calendar/util.js:31
+msgid "Free"
+msgstr "Frei"
+
+#: apps/io.ox/calendar/util.js:186
+msgid "Friday"
+msgstr "Freitag"
+
+#: apps/io.ox/core/main.js:69
 msgid "Help"
 msgstr "Hilfe"
 
+#: apps/io.ox/contacts/base.js:206
 msgid "Home"
 msgstr "Privat"
 
+#: apps/io.ox/calendar/util.js:20
+msgid "January"
+msgstr "Januar"
+
+#: apps/io.ox/calendar/util.js:22
+msgid "July"
+msgstr "Juli"
+
+#: apps/io.ox/calendar/util.js:21
+msgid "June"
+msgstr "Juni"
+
+#: html/core_body.html:77
 msgid "Languages"
 msgstr "Sprachen"
 
+#: apps/io.ox/calendar/util.js:20
+msgid "March"
+msgstr "März"
+
+#: apps/io.ox/calendar/util.js:21
+msgid "May"
+msgstr "Mai"
+
+#: apps/io.ox/contacts/base.js:218
+#: apps/io.ox/contacts/base.js:219
 msgid "Mobile"
 msgstr "Mobiltelefon"
 
+#: apps/io.ox/calendar/util.js:174
+msgid "Monday"
+msgstr "Montag"
+
+#: apps/io.ox/calendar/util.js:23
+msgid "November"
+msgstr "November"
+
+#: apps/io.ox/calendar/util.js:23
+msgid "October"
+msgstr "Oktober"
+
+#: apps/io.ox/calendar/util.js:216
+msgid "On %s %s each %s. months"
+msgstr "Am %s %s jeden %s. Monats"
+
+#: apps/io.ox/calendar/util.js:223
+msgid "On %s %s in %s"
+msgstr "Am %s %s in %s"
+
+#: apps/io.ox/calendar/util.js:214
+msgid "On %s. day every %s. month"
+msgstr "Am %s. Tag jeden %s Monat"
+
+#: html/core_body.html:44
 msgid "Password"
 msgstr "Passwort"
 
+#: apps/io.ox/contacts/base.js:214
+#: apps/io.ox/contacts/base.js:215
 msgid "Phone (business)"
 msgstr "Telefon (geschäftlich)"
 
+#: apps/io.ox/contacts/base.js:216
+#: apps/io.ox/contacts/base.js:217
 msgid "Phone (private)"
 msgstr "Telefon (privat)"
 
+#: apps/io.ox/contacts/base.js:196
 msgid "Position"
 msgstr "Position"
 
+#: apps/io.ox/contacts/base.js:197
 msgid "Profession"
 msgstr "Beruf"
 
+#: apps/io.ox/core/main.js:71
 msgid "Refresh"
 msgstr "Aktualisieren"
 
+#: apps/io.ox/calendar/util.js:30
+msgid "Reserved"
+msgstr "Reserviert"
+
+#: apps/io.ox/calendar/util.js:189
+msgid "Saturday"
+msgstr "Samstag"
+
+#: apps/io.ox/calendar/util.js:22
+msgid "September"
+msgstr "September"
+
+#: apps/io.ox/contacts/base.js:256
+msgid "Show QR-code"
+msgstr "QR-Code zeigen"
+
+#: html/core_body.html:51
 msgid "Sign in"
 msgstr "Anmelden"
 
+#: apps/io.ox/core/main.js:65
 msgid "Sign out"
 msgstr "Abmelden"
 
+#: html/core_body.html:59
 msgid "Stay signed in"
 msgstr "Angemeldet bleiben"
 
+#: apps/io.ox/calendar/util.js:171
+msgid "Sunday"
+msgstr "Sonntag"
+
+#: apps/io.ox/calendar/util.js:30
+msgid "Temporary"
+msgstr "Vorübergehend"
+
+#: apps/io.ox/core/main.js:120
+msgid "Tests"
+msgstr "Tests"
+
+#: apps/io.ox/calendar/util.js:183
+msgid "Thursday"
+msgstr "Donnerstag"
+
+#: apps/io.ox/calendar/util.js:177
+msgid "Tuesday"
+msgstr "Dienstag"
+
+#: html/core_body.html:38
 msgid "User name"
 msgstr "Benutzername"
 
+#: apps/io.ox/calendar/util.js:180
+msgid "Wednesday"
+msgstr "Mittwoch"
+
+#: apps/io.ox/calendar/util.js:164
+msgid "Weekend Day"
+msgstr "Wochenendtag"
+
+#: apps/io.ox/calendar/util.js:209
+msgid "Weekly on %s"
+msgstr "Wöchentlich an %s"
+
+#: apps/io.ox/contacts/base.js:202
 msgid "Work"
 msgstr "Geschäftlich"
+
+#: apps/io.ox/calendar/util.js:161
+msgid "Work Day"
+msgstr "Werktag"
+
+#: apps/io.ox/calendar/util.js:26
+msgid "first"
+msgstr "ersten"
+
+#: apps/io.ox/calendar/util.js:27
+msgid "fourth"
+msgstr "vierten"
+
+#: apps/io.ox/calendar/util.js:26
+#: apps/io.ox/calendar/util.js:27
+msgid "last"
+msgstr "letzten"
+
+#: apps/io.ox/calendar/util.js:26
+msgid "second"
+msgstr "zweiten"
+
+#: apps/io.ox/calendar/util.js:27
+msgid "third"
+msgstr "dritten"
 

@@ -13,7 +13,7 @@
 
 define("io.ox/mail/main",
      ["io.ox/mail/base", "io.ox/mail/api", "io.ox/core/tk/vgrid",
-     "css!io.ox/mail/style.css"], function (base, api, VGrid) {
+     "less!io.ox/mail/style.less"], function (base, api, VGrid) {
 
     // application object
     var app = ox.ui.createApp(),
