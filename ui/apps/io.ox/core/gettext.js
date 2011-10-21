@@ -15,65 +15,64 @@ define("io.ox/core/gettext", [], function () {
     
     "use strict";
     
-    function gettext(text) {
-        return gettext.dpgettext("", "", text);
+    var modules = {};
+    
+    function gt(id, po) {
+        if (po) {
+            po.plural = new Function("n", "return " + po.plural + ";");
+        }
+        modules[id] = po;
+        
+        function gettext(text) {
+            return gettext.pgettext("", text);
+        }
+        
+        gettext.enable = function () {
+            modules[id] = po;
+        };
+        
+        gettext.noI18n = function (text) {
+            return text;
+        };
+        
+        gettext.gettext = gettext;
+        gettext.pgettext = function (context, text) {
+            var key = context ? context + "\x00" + text : text;
+            return modules[id].dictionary[key] || text;
+        };
+        
+        gettext.ngettext = function (singular, plural, n) {
+            return gettext.npgettext("", singular, plural, n);
+        };
+        gettext.npgettext = function (context, singular, plural, n) {
+            var key = singular + "\x01" + plural;
+            key = context ? context + "\x00" + key : key;
+            var translation = modules[id].dictionary[key];
+            return translation ?
+                translation[Number(modules[id].plural(Number(n)))] :
+                Number(n) !== 1 ? plural : singular;
+        };
+        
+        return gettext;
     }
     
-    var lang = "",
-        pluralForm = function () {
-            return 0;
-        },
-        domains = {};
-    
-    gettext.setLanguage = function (language) {
-        if (language === lang) {
-            return $.when();
-        } else {
+    var lang;
+    gt.setLanguage = function (language) {
+        function enableModule(module) {
+            module.enable();
+        }
+        var deferreds = [];
+        if (language !== lang) {
             lang = language;
-            return $.ajax({
-                    url: ox.base + "/l10n/" + lang + ".json",
-                    dataType: "json"
-                }).done(function (data) {
-                    pluralForm = new Function("n", "return " + data.plural + ";");
-                    domains = { "": data.dictionary };
-                });
+            for (var i in modules) {
+                deferreds.push(require([gt.getModule(i)], enableModule));
+            }
         }
+        return $.when.apply($, deferreds);
     };
-
-    gettext.noI18n = function (text) {
-        return text;
+    gt.getModule = function (name) {
+        return lang ? name + "." + lang : undefined;
     };
     
-    gettext.gettext = gettext;
-    gettext.pgettext = function (context, text) {
-        return gettext.dpgettext("", context, text);
-    };
-    gettext.dpgettext = function (domain, context, text) {
-        var dictionary = domains[domain];
-        if (!dictionary) {
-            throw new Error("Invalid i18n domain: '" + domain + "' for text '" + text + "'");
-        }
-        var key = context ? context + "\x00" + text : text;
-        return dictionary[key] || text;
-    };
-    
-    gettext.ngettext = function (singular, plural, n) {
-        return gettext.dnpgettext("", "", singular, plural, n);
-    };
-    gettext.npgettext = function (context, singular, plural, n) {
-        return gettext.dnpgettext("", context, singular, plural, n);
-    };
-    gettext.dnpgettext = function (domain, context, singular, plural, n) {
-        var dictionary = domains[domain];
-        if (!dictionary) {
-            throw new Error("Invalid i18n domain: " + domain);
-        }
-        var key = singular + "\x01" + plural;
-        key = context ? context + "\x00" + key : key;
-        var translation = dictionary[key];
-        return translation ? translation[Number(pluralForm(Number(n)))] :
-               Number(n) !== 1 ? plural : singular;
-    };
-    
-    return gettext;
+    return gt;
 });

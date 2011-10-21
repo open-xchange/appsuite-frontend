@@ -13,7 +13,7 @@
 
 define("io.ox/mail/main",
     ["io.ox/mail/util", "io.ox/mail/api", "io.ox/core/tk/vgrid",
-     "io.ox/mail/view-detail", "io.ox/mail/actions", "css!io.ox/mail/style.css"
+     "io.ox/mail/view-detail", "io.ox/mail/actions", "less!io.ox/mail/style.less"
     ], function (util, api, VGrid, viewDetail) {
     
     "use strict";

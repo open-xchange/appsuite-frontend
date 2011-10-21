@@ -13,7 +13,7 @@
 
 define("io.ox/contacts/view-detail",
     ["io.ox/core/extensions",
-     "io.ox/core/gettext",
+     "gettext!io.ox/contacts/contacts",
      "io.ox/core/api/user",
      "io.ox/core/api/group",
      "io.ox/core/api/resource",

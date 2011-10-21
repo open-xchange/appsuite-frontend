@@ -12,7 +12,7 @@
  */
 
 define("io.ox/calendar/util",
-    ["io.ox/core/gettext"], function (gettext) {
+    ["gettext!io.ox/calendar/calendar"], function (gettext) {
     
     "use strict";
     
