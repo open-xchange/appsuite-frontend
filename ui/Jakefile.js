@@ -173,7 +173,7 @@ file(utils.dest("signin.appcache"), ["force"]);
 
 // js
 
-utils.concat("boot.js", ["lib/jquery.plugins.js", "src/util.js", "src/boot.js"],
+utils.concat("boot.js", ["lib/jquery.plugins.js", "lib/jquery.tokeninput.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 
 utils.concat("boot.js", ["lib/jquery.min.js",

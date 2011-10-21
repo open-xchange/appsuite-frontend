@@ -682,7 +682,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     .addClass("searchfield-wrapper")
                     .css({ "float": "right" })
                     .append(
-                        $("<input/>", { type: "search", placeholder: "Search...", size: "40" })
+                        $("<input/>", { type: "search", id: "autocomplete", placeholder: "Search...", size: "40" })
                             
                             .bind("keypress", function (e) {
                                 e.stopPropagation();
@@ -707,8 +707,10 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                             })
                     )
                     .prependTo(win.nodes.toolbar);
+               
+                
             }
-            
+          
             // fix height/position/appearance
             if (opt.chromeless) {
                 
