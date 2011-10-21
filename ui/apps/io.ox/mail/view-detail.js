@@ -14,8 +14,9 @@
 
 define("io.ox/mail/view-detail", [
         "io.ox/core/extensions",
-        "io.ox/mail/util"
-    ], function (ext, util) {
+        "io.ox/mail/util",
+        "io.ox/mail/actions"
+    ], function (ext, util, actions) {
         
         'use strict';
         
@@ -193,10 +194,10 @@ define("io.ox/mail/view-detail", [
                 this.append(
                     $("<div/>")
                         .addClass("subject clear-title")
-                    // inject some zero width spaces for better word-break
+                        // inject some zero width spaces for better word-break
                         .text(_.prewrap(data.subject))
                         .append($("<span/>").addClass("priority").text(" " + util.getPriority(data)))
-                    );
+                );
             }
         });
         ext.point('io.ox/mail/detail').extend({
@@ -260,15 +261,13 @@ define("io.ox/mail/view-detail", [
                 );
             }
         });
-        ext.point('io.ox/mail/detail').extend({
+        
+        ext.point('io.ox/mail/detail').extend(new ext.InlineLinks({
             index: 170,
-            id: 'spacer',
-            draw: function (data) {
-                this.append(
-                    $("<hr/>", { noshade: "noshade", size: "1" }).addClass("spacer")
-                );
-            }
-        });
+            id: 'inline-links',
+            ref: 'io.ox/core/mail/links/inline'
+        }));
+        
         ext.point('io.ox/mail/detail').extend({
             index: 180,
             id: 'content',

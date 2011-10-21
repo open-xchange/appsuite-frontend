@@ -324,8 +324,12 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 if (left !== getX(pane)) {
                     // remember position
                     pane.data("x", left);
+                    // do motion TODO: clean up here!
+                    if (true) {
+                        pane.animate({ left: left + "%" }, 0, done);
+                    }
                     // touch device?
-                    if (Modernizr.touch) {
+                    else if (Modernizr.touch) {
                         pane.css("left", left + "%");
                         done();
                     }

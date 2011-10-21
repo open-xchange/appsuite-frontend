@@ -185,7 +185,7 @@ utils.concat("pre-core.js",
         "event.js", "extensions.js", "cache.js", "http.js",
         "config.js", "session.js", "gettext.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js",
-        "desktop.js", "main.js"
+        "api/folder.js", "collection.js", "desktop.js", "main.js"
     ]), { type: "source" }
 );
 
@@ -219,6 +219,7 @@ function docFile(file, title) {
 }
 
 docFile("apache", "Apache Configuration");
+docFile("demo", "Demo Steps");
 docFile("extensions", "Extension Points");
 docFile("libs", "External Libs");
 docFile("features", "Features");
