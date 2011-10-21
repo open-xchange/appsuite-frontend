@@ -12,9 +12,13 @@
  */
 
 define("io.ox/calendar/view-detail",
-    ["io.ox/core/extensions", "io.ox/calendar/util", "io.ox/core/gettext",
-     "io.ox/core/api/user", "io.ox/core/api/group", "io.ox/core/api/resource"
+    ["io.ox/core/extensions", "io.ox/calendar/util",
+     "gettext!io.ox/calendar/calendar", "io.ox/core/api/user",
+     "io.ox/core/api/group", "io.ox/core/api/resource",
+     "css!io.ox/calendar/style.css"
     ], function (ext, util, gettext, userAPI, groupAPI, resourceAPI) {
+    
+    "use strict";
     
     var fnClickPerson = function (e) {
         ext.point("io.ox/core/person:action").each(function (ext) {
@@ -77,7 +81,7 @@ define("io.ox/calendar/view-detail",
         id: "location",
         draw: function (data) {
             this.append(
-                $("<div>").addClass("location").text(data.location || "\u00a0")
+                $("<div>").addClass("location").text(data.location || "\u00A0")
             );
         }
     });
@@ -119,6 +123,7 @@ define("io.ox/calendar/view-detail",
         } else {
             name = obj.display_name || String(obj.mail).toLowerCase();
         }
+        console.log("draw part", name, "email", mail_lc, "data", obj);
         node = $("<div>").addClass("participant")
             .append($("<span>").addClass(personClass).text(name))
             .append($("<span>").addClass("status " + statusClass).text(" " + confirm))
@@ -283,12 +288,12 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .text("Show as" + ":\u00a0")
+                    .text("Show as" + ":\u00A0")
             )
             .append(
                 $("<span>")
                     .addClass("detail shown_as " + util.getShownAsClass(data))
-                    .text("\u00a0")
+                    .text("\u00A0")
             )
             .append(
                 $("<span>")
@@ -307,7 +312,7 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .text("Folder" + ":\u00a0")
+                    .text("Folder" + ":\u00A0")
             )
             .append(
                  $("<span>").addClass("detail").text(data.folder_id)
@@ -324,7 +329,7 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .text("Created" + ":\u00a0")
+                    .text("Created" + ":\u00A0")
             )
             .append(
                 $("<span>")
@@ -345,7 +350,7 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .text("Modified" + ":\u00a0")
+                    .text("Modified" + ":\u00A0")
             )
             .append(
                 $("<span>")

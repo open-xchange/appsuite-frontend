@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,12 +9,12 @@
  * Mail: info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
- *
  */
 
 define("extensions/halo/config", function () {
-   
-   
+    
+    "use strict";
+    
     return {
         interpret: function (providersConfig, activeProviders) {
 

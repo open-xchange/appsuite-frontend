@@ -16,6 +16,8 @@
 
 define("io.ox/internal/ajaxDebug/callViews", function () {
 
+    "use strict";
+    
     function CallView($node, callHandling) {
         var self = this;
         $node = $("<form/>").appendTo($node);

@@ -13,8 +13,10 @@
  *
  */
 
-define("io.ox/core/dialogs", function () {
-
+define("io.ox/core/tk/dialogs", function () {
+    
+    "use strict";
+    
     // scaffolds
     var underlay = $("<div/>").addClass("abs io-ox-dialog-underlay"),
         popup = $("<div/>").addClass("io-ox-dialog-popup")
@@ -25,7 +27,7 @@ define("io.ox/core/dialogs", function () {
                 $("<div/>").addClass("controls")
             );
     
-    var Dialog = function () {
+    var Dialog = function (options) {
         
         var nodes = {
                 underlay: underlay.clone().hide().appendTo("body"),
@@ -34,22 +36,32 @@ define("io.ox/core/dialogs", function () {
             
             deferred = $.Deferred(),
             
+            closeViaEscapeKey,
+            
             close = function () {
+                $(document).unbind("keydown", closeViaEscapeKey);
                 nodes.popup.remove();
                 nodes.underlay.remove();
                 nodes = deferred = null;
             },
             
             process = function (e) {
-                deferred.resolve(e.data);
+                deferred.resolve(e.data || e);
                 close();
             },
-            underlayAction = null,
-            defaultAction = null
-            ;
+            
+            o = _.extend({
+                underlayAction: null,
+                defaultAction: null,
+                easyOut: false
+                // width (px), height (px),
+                // maxWidth (px), maxHeight (px)
+            }, options);
             
         this.text = function (str) {
-            nodes.popup.find(".content").text(str || "");
+            var p = nodes.popup.find(".content");
+            p.find(".plain-text").remove();
+            p.append($("<div>").addClass("plain-text").text(str || ""));
             return this;
         };
         
@@ -69,48 +81,82 @@ define("io.ox/core/dialogs", function () {
             return this;
         };
         
+        closeViaEscapeKey = function (e) {
+            if (e.which === 27) {
+                process("cancel");
+            }
+        };
+        
         this.show = function () {
-            // center popup element first
             
-            var height = nodes.popup.height();
+            var dim = {
+                width: o.width || nodes.popup.width(),
+                height: o.height || nodes.popup.height()
+            };
             
-            nodes.popup.css({
-                height: height + "px",
-                marginTop: 0 - (height / 2 >> 0) + "px"
+            // limit width & height
+            _(["width", "height"]).each(function (d) {
+                // apply explicit limit
+                var id = o[$.camelCase("max-" + d)];
+                if (o[id] && dim[d] > o[id]) {
+                    dim[d] = o[id];
+                }
+                // apply document limits
+                var max = $(document)[d]() - 100;
+                if (dim[d] && dim[d] > max) {
+                    dim[d] = max;
+                }
             });
+            
+            // apply dimensions
+            nodes.popup.css({
+                width: dim.width + "px",
+                height: dim.height + "px",
+                marginTop: 0 - ((dim.height + 60) / 2 >> 0) + "px"
+            });
+            
             nodes.underlay.show();
             nodes.popup.show();
+            
+            // fix content height in case async requests draw later
+            var h1 = nodes.popup.height(),
+                h2 = nodes.popup.find(".controls").outerHeight(true);
+            nodes.popup.find(".content").css("height", (h1 - h2) + "px");
+            
+            if (o.easyOut) {
+                $(document).bind("keydown", closeViaEscapeKey);
+            }
+            
             return deferred;
         };
         
-        
-        
         nodes.underlay.click(function () {
-            if (underlayAction) {
-                process({data: underlayAction});
+            if (o.underlayAction) {
+                process(o.underlayAction);
+            } else if (o.easyOut) {
+                process("cancel");
             }
         });
         
         nodes.popup.click(function () {
-            if (defaultAction) {
-                process({data: defaultAction});
+            if (o.defaultAction) {
+                process(o.defaultAction);
             }
         });
         
-        
         this.setUnderlayAction = function (action) {
-            underlayAction = action;
+            o.underlayAction = action;
             return this;
         };
         
         this.setDefaultAction = function (action) {
-            defaultAction = action;
+            o.defaultAction = action;
             return this;
         };
         
         this.lightbox = function () {
-            underlayAction = "close";
-            defaultAction = "close";
+            o.underlayAction = "close";
+            o.defaultAction = "close";
             return this;
         };
     };
@@ -254,7 +300,7 @@ define("io.ox/core/dialogs", function () {
 
 /* Test
 
-require(["io.ox/core/dialogs"], function (dialogs) {
+require(["io.ox/core/tk/dialogs"], function (dialogs) {
     new dialogs.ModalDialog()
         .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
         .addButton("cancel", "No, rather not")

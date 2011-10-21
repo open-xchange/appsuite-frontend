@@ -13,14 +13,16 @@ CACHE:
 @base@/apps/themes/login/login.css
 @base@/apps/themes/login/busy.gif
 @base@/apps/themes/login/raining_2-wallpaper-1280x800.jpg
+@base@/apps/themes/login/fonts/OpenSans-Light.ttf
 @base@/apps/themes/default/core.css
-@base@/apps/themes/default/dummypicture.xpng
+@base@/apps/themes/default/dummypicture.png
 # mail
 @base@/apps/io.ox/mail/main.js
 @base@/apps/io.ox/mail/api.js
 @base@/apps/io.ox/mail/style.css
 @base@/apps/io.ox/core/tk/vgrid.js
-@base@/apps/io.ox/mail/base.js
+@base@/apps/io.ox/mail/util.js
+@base@/apps/io.ox/mail/view-detail.js
 @base@/apps/io.ox/core/api/factory.js
 @base@/apps/io.ox/core/tk/selection.js
 # extensions

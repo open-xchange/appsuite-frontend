@@ -13,8 +13,10 @@
 
 define("io.ox/calendar/main",
     ["io.ox/calendar/api", "io.ox/calendar/util", "io.ox/calendar/view-detail",
-     "io.ox/core/config", "io.ox/core/tk/vgrid",
-     "css!io.ox/calendar/style.css"], function (api, util, viewDetail, config, VGrid) {
+     "io.ox/core/config", "io.ox/core/tk/vgrid", "io.ox/calendar/view-grid-template",
+     "css!io.ox/calendar/style.css"], function (api, util, viewDetail, config, VGrid, tmpl) {
+    
+    "use strict";
     
     // application object
     var app = ox.ui.createApp(),
@@ -51,7 +53,7 @@ define("io.ox/calendar/main",
         
         // right panel
         right = $("<div/>")
-            .css({ left: gridWidth + 1 + "px", overflow: "auto" })
+            .css({ left: gridWidth + 1 + "px", overflow: "auto", padding: "30px" })
             .addClass("rightside calendar-detail-pane")
             .appendTo(win.nodes.main);
         
@@ -64,40 +66,13 @@ define("io.ox/calendar/main",
         };
         
         // add template
-        grid.addTemplate({
-            build: function () {
-                var title, location, date, shown_as;
-                this.addClass("calendar")
-                    .append(date = $("<div>").addClass("date"))
-                    .append(title = $("<div>").addClass("title"))
-                    .append(location = $("<div>").addClass("location"))
-                    .append(shown_as = $("<div/>").addClass("abs shown_as"));
-                return { title: title, location: location, date: date, shown_as: shown_as };
-            },
-            set: function (data, fields, index) {
-                fields.title.text(data.title);
-                fields.location.text(data.location);
-                fields.date.text(util.getTimeInterval(data));
-                fields.shown_as.get(0).className = "abs shown_as " + util.getShownAsClass(data);
-            }
-        });
+        grid.addTemplate(tmpl.main);
         
         // add label template
-        grid.addLabelTemplate({
-            build: function () {
-                this.addClass("calendar-label");
-            },
-            set: function (data, fields, index) {
-                var d = util.getDate(data.start_date);
-                this.text(d);
-            }
-        });
+        grid.addLabelTemplate(tmpl.label);
         
         // requires new label?
-        grid.requiresLabel = function (i, data, current) {
-            var d = util.getDate(data.start_date);
-            return (i === 0 || d !== current) ? d : false;
-        };
+        grid.requiresLabel = tmpl.requiresLabel;
         
         // all request
         grid.setAllRequest(function () {

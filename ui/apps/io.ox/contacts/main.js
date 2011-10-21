@@ -13,8 +13,10 @@
  *
  */
 
-define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api", "io.ox/core/tk/vgrid", "css!io.ox/contacts/style.css"], function (base, api, VGrid) {
-        
+define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api", "io.ox/core/tk/vgrid", "io.ox/contacts/view-detail", "css!io.ox/contacts/style.css"], function (base, api, VGrid, viewDetail) {
+    
+    "use strict";
+    
     // application object
     var app = ox.ui.createApp(),
         // app window
@@ -29,7 +31,7 @@ define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api", "io.
     
     // launcher
     app.setLauncher(function () {
-    
+        
         // get window
         win = ox.ui.createWindow({
             title: "Global Address Book",
@@ -58,7 +60,7 @@ define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api", "io.
         
         // right panel
         right = $("<div/>")
-            .css({ left: gridWidth + 39 + "px", overflow: "auto" })
+            .css({ left: gridWidth + 39 + "px", overflow: "auto", padding: "30px" })
             .addClass("rightside")
             .appendTo(win.nodes.main);
 
@@ -113,6 +115,7 @@ define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api", "io.
         
         // search request
         grid.setAllRequest("search", function () {
+            //alert('hier');
             return api.search(win.search.query);
         });
         
@@ -144,7 +147,8 @@ define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api", "io.
         };
         
         drawContact = function (data) {
-            right.idle().empty().append(base.draw(data));
+            //right.idle().empty().append(base.draw(data));
+            right.idle().empty().append(viewDetail.draw(data));
         };
         
         drawFail = function (obj) {
@@ -196,6 +200,52 @@ define("io.ox/contacts/main", ["io.ox/contacts/base", "io.ox/contacts/api", "io.
         // go!
         win.show(function () {
             grid.paint();
+             
+            var searchAdapter = {
+                    search: function (options) {
+                        api.search(options.query)
+                            .done(_.lfo(options.success))
+                            .fail(_.lfo(options.fail));
+                    }
+                };
+            
+            $("#autocomplete").tokenInput(searchAdapter, {
+                searchDelay: 500,
+                minChars: 3,
+                tokenLimit: 3,
+                propertyToSearch: 'display_name',
+                preventDuplicates: false,
+                theme: 'ox',
+                onResult: function (result, query) {
+                    //console.log('on Result');
+                    console.log(arguments);
+                    result.unshift({display_name: query, last_name: query});
+                    return result;
+                },
+                onAdd: function (input, tokenlist) {
+                    var q = "";
+                    console.log("ONADD");
+                    console.log(tokenlist);
+                    _.each(tokenlist, function (token) {
+                        q += " " + token.last_name;
+                    });
+                    $(this).val($.trim(q));
+                },
+                onDelete: function (token_data, tokenlist) {
+                    var q = "";
+                    console.log('onDelete');
+                    console.log(token_data);
+                    _.each(tokenlist, function (token) {
+                        q += " " + token.last_name;
+                    });
+                    $(this).val($.trim(q));
+                },
+                onReady: function () {
+                    console.log('onReady');
+                }
+
+            });
+           
         });
     });
     

@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -11,10 +10,13 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
- *
  */
 
-define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions", "css!extensions/halo/style.css"], function (api, ext) {
+define("extensions/halo/main",
+    ["extensions/halo/api", "io.ox/core/extensions",
+     "css!extensions/halo/style.css"], function (api, ext) {
+    
+    "use strict";
     
     function show(data) {
         
@@ -24,59 +26,38 @@ define("extensions/halo/main", ["extensions/halo/api", "io.ox/core/extensions", 
         
         app.setLauncher(function () {
             
-            var win = ox.ui.createWindow({});
+            var win = ox.ui.createWindow({
+                title: data.display_name || "Halo",
+                toolbar: true
+            });
             win.nodes.main.addClass("io-ox-halo");
             app.setWindow(win);
             win.setQuitOnClose(true);
             
             win.nodes.main.css({overflow: "auto"});
             // Trigger Server Halo API
-            var $busyIndicator = $("<div/>").css({"float": "left", "margin": "10px", "height": "100px"}).addClass("ray busyIndicator");
-            $busyIndicator.busy();
-            win.nodes.main.append($busyIndicator);
-
             if (api) {
                 var investigations = api.halo.investigate(data);
                 var drawingFinished = [];
                 _(investigations).each(function (promise, providerName) {
-                    var $node = $("<div/>").css({"float": "left", "margin": "5px", "min-width": "100px"}).addClass("ray");
+                    var $node = $("<div/>").css({"min-width": "100px"}).addClass("ray");
+                    $node.busy();
                     win.nodes.main.append($node);
                     var drawn = new $.Deferred();
                     drawingFinished.push(drawn);
                     promise.done(function (response) {
-                        var $newNode = $("<div/>").css({"float": "left", "margin": "10px"}).addClass("ray done");
-                        var deferred = api.viewer.draw($newNode, providerName, response);
+                        $node.idle();
+                        var deferred = api.viewer.draw($node, providerName, response);
                         if (deferred) {
-                            deferred.done(function () {
-                                $node.imagesLoaded(function () {
-                                    $node.after($newNode);
-                                    $node.remove();
-                                    win.nodes.main.masonry("reload");
-                                    drawn.resolve();
-                                });
-                            });
+                            deferred.done(drawn.resolve);
                         } else {
-                            win.nodes.main.masonry("reload");
-                            $node.imagesLoaded(function () {
-                                win.nodes.main.masonry("reload");
-                                drawn.resolve();
-                            });
+                            drawn.resolve();
                         }
                     });
-                });
-                $.when.apply($, drawingFinished).done(function () {
-                    $busyIndicator.remove();
-                    win.nodes.main.masonry("reload");
-                });
-                win.nodes.main.masonry({
-                    itemSelector : '.ray',
-                    columnWidth: win.nodes.main.width() / 3,
-                    isAnimated : true
                 });
             }
             
             win.show();
-            $busyIndicator.css("width", win.nodes.main.width() + "px");
         });
         
         app.launch();

@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -11,15 +10,21 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
- *
  */
 
 // TODO: Break this up, this is becoming messy
 define("io.ox/files/main",
-    ["io.ox/files/base", "io.ox/files/api",
-    "io.ox/core/tk/vgrid",  "io.ox/files/upload", "io.ox/core/dialogs", "io.ox/help/hints", "css!io.ox/files/style.css"],
-    function (base, api, VGrid, upload, dialogs, hints) {
-
+    ["io.ox/files/base",
+     "io.ox/files/api",
+     "io.ox/core/tk/vgrid",
+     "io.ox/files/upload",
+     "io.ox/core/tk/dialogs",
+     "io.ox/help/hints",
+     "css!io.ox/files/style.css"
+    ], function (base, api, VGrid, upload, dialogs, hints) {
+    
+    "use strict";
+    
     // application object
     var app = ox.ui.createApp(),
         // app window

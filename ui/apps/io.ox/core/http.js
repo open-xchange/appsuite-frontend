@@ -14,7 +14,9 @@
  */
 
 define("io.ox/core/http", ["io.ox/core/event"], function (event) {
-        
+    
+    "use strict";
+    
     // default columns for each module
     var idMapping = {
         "common" : {

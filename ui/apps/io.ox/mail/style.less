@@ -64,7 +64,7 @@
 }
 
 .vgrid-cell.mail .attachment {
-    background: url(images/attachment.xpng) no-repeat 0px 6px;
+    background: url(images/attachment.png) no-repeat 0px 6px;
     width: 14px;
     margin-left: 1em;
     float: right;
@@ -105,6 +105,9 @@
         color-stop(0.50, #ccc),
         color-stop(1.00, #f5f5f5)
     );
+    background-image: -o-linear-gradient(
+        top, #ccc 50%, #f5f5f5 100%
+    );
     background-image: -moz-linear-gradient(
         center top,
         #ccc 50%,
@@ -120,12 +123,12 @@
 
 .mail-detail {
     position: relative;
-    background-color: white;
+    background-color: lighten(@background, 10%);
     border: 1px solid #aaa;
     padding: 20px;
     margin: 20px auto 0px auto;
-    min-height: 200px;
-    max-width: 700px;
+    min-height: 70%;
+    max-width: 850px;
     -moz-box-shadow: 0px 5px 10px -3px black;
     -webkit-box-shadow: 0px 5px 10px -3px black;
     box-shadow: 0px 5px 10px -3px black;
@@ -149,6 +152,7 @@
 
 .mail-detail .priority {
     font-weight: bold;
+    font-size: 80%;
     color: #fc0;
 }
 
@@ -181,9 +185,13 @@
 }
 
 .mail-detail .content {
+}
+
+.mail-detail .content.plain-text {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 10pt;
     line-height: 1.25em;
+    max-width: 600px;
 }
 
 .mail-detail blockquote {

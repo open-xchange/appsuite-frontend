@@ -38,15 +38,18 @@
     background-color: #eee;
     background-image: -webkit-gradient(
         linear,
-        left bottom,
         left top,
-        color-stop(0.00, #eee),
-        color-stop(0.80, #fff)
+        left bottom,
+        color-stop(0.20, #fff),
+        color-stop(1.00, #eee)
+    );
+    background-image: -o-linear-gradient(
+        top, #fff 0%, #eee 80%
     );
     background-image: -moz-linear-gradient(
         center bottom,
-        #eee 0%,
-        #fff 80%
+        #fff 20%,
+        #eee 100%
     );
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee');
     cursor: pointer;
@@ -56,10 +59,13 @@
     color: white;
     background-image: -webkit-gradient(
         linear,
-        left bottom,
         left top,
-        color-stop(0.00, #111),
-        color-stop(0.80, #555)
+        left bottom,
+        color-stop(0.20, #555),
+        color-stop(1.00, #111)
+    );
+    background-image: -o-linear-gradient(
+        top, #555 20%, #111 100%
     );
     background-image: -moz-linear-gradient(
         center bottom,
@@ -69,10 +75,6 @@
 }
 
 /* Detail view */
-
-.contact-detail {
-    margin: 2em;
-}
 
 .contact-detail td {
     padding: 0 3em 1em 0;

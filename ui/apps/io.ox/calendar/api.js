@@ -15,6 +15,8 @@
 
 define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (http, event) {
     
+    "use strict";
+    
     // really stupid caching for speed
     var all_cache = {},
         get_cache = {};

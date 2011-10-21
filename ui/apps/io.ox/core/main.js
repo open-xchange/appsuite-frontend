@@ -14,10 +14,11 @@
  */
 
 define("io.ox/core/main",
-    ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http",
-    "io.ox/core/extensions", "io.ox/core/gettext"],
-    function (desktop, session, http, extensions, gt) {
-
+    ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http", "io.ox/core/extensions",
+    "gettext!io.ox/core/main"], function (desktop, session, http, ext, gt) {
+    
+    "use strict";
+    
     var PATH = ox.base + "/apps/io.ox/core",
         DURATION = 250;
     
@@ -139,11 +140,57 @@ define("io.ox/core/main",
                 });
             });
         
+        // initialize empty desktop
+        
+        ext.point("io.ox/core/desktop").extend({
+            id: "welcome",
+            draw: function () {
+                
+                var date, update;
+                
+                update = function () {
+                    var d = new Date();
+                    date.text(
+                        _.pad(d.getHours(), 2) + ":" + _.pad(d.getMinutes(), 2) + ":" + _.pad(d.getSeconds(), 2)
+                    );
+                };
+                
+                this.append(
+                    $("<div>", { id: "io-ox-welcome" })
+                    .addClass("abs")
+                    .append(
+                        $("<div>").addClass("clear-title")
+                        .append(
+                            // split user into three parts, have to use inject here to get proper node set
+                            _(String(ox.user).split(/(\@)/)).inject(function (tmp, s, i) {
+                                    return tmp.add($("<span>").text(String(s)).addClass(i === 1 ? "at": ""));
+                                }, $())
+                        )
+                    )
+                    .append(
+                        date = $("<div>").addClass("clock clear-title").text("")
+                    )
+                );
+                
+                update();
+                setTimeout(function () {
+                    setInterval(update, 1000);
+                }, (new Date() % 1000) + 1);
+            }
+        });
+        
+        ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
+        
+        ox.ui.windowManager.bind("empty", function (flag) {
+            $("#io-ox-desktop")[flag ? "show" : "hide"]();
+            $("#io-ox-windowmanager")[flag ? "hide" : "show"]();
+        });
+        
         var def = $.Deferred(),
             autoLaunch = _.url.hash("launch") ? _.url.hash("launch").split(/,/) : [];
         
         $.when(
-                extensions.load(),
+                ext.load(),
                 require(autoLaunch),
                 def
             )

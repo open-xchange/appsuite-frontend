@@ -21,7 +21,7 @@
 			<arguments>
 				<dictionary>
 					<key>LaunchConfigHandle</key>
-					<value>&lt;project&gt;/.externalToolBuilders/Node Auto Build.launch</value>
+					<value>&lt;project&gt;/.externalToolBuilders/Node Auto Doc.launch</value>
 				</dictionary>
 			</arguments>
 		</buildCommand>
@@ -31,7 +31,7 @@
 			<arguments>
 				<dictionary>
 					<key>LaunchConfigHandle</key>
-					<value>&lt;project&gt;/.externalToolBuilders/Node Auto Doc.launch</value>
+					<value>&lt;project&gt;/.externalToolBuilders/Node Auto Build.launch</value>
 				</dictionary>
 			</arguments>
 		</buildCommand>

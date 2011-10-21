@@ -33,7 +33,7 @@ body {
     color: black;
     height: 100%;
     overflow: hidden;
-    background-color: #fff;
+    background-color: #000;
     cursor: default;
 }
 
@@ -54,6 +54,17 @@ a:hover, .link:hover {
     cursor: pointer;
 }
 
+@font-face {
+    font-family: OpenSans; src: url(fonts/OpenSans-Light.ttf);
+}
+
+.clear-title {
+    font-family: OpenSans, Helvetica, Arial, sans-serif;
+    font-weight: 200;
+    font-size: 20pt;
+    line-height: 1.15em;
+}
+
 #background_loader {
     position: absolute;
     top: 0px;
@@ -62,17 +73,6 @@ a:hover, .link:hover {
     left: 0px;
     z-index: 65000;
     -webkit-transform: translateZ(0); /* activate GPU acceleration */
-}
-
-#exit-fullscreen {
-    position: absolute;
-    top: 0px;
-    width: 1px;
-    bottom: 0px;
-    left: 0px;
-    background-color: black;
-    z-index: 60000;
-    opacity: 0.01;
 }
 
 #io-ox-login-screen, #io-ox-login-screen-decorator {
@@ -103,7 +103,7 @@ a:hover, .link:hover {
 
 .wallpaper {
     background-color: #333;
-    background-image: url(raining_2-wallpaper-1280x800.jpg);
+    background: url(raining_2-wallpaper-1280x800.jpg) no-repeat center center fixed;
     /*
     xbackground-image: url(colorful_circles_of_light-wallpaper-1280x800.jpg);
     xbackground-image: url(green_stripes-wallpaper-1280x800.jpg);
@@ -112,7 +112,6 @@ a:hover, .link:hover {
     xbackground-image: url(abstract_background_brown_and_blue_circles-wallpaper-1280x800.jpg);
     */
     background-size: cover;
-    background-position: center center;
 }
 
 #io-ox-login-background {
@@ -123,22 +122,6 @@ a:hover, .link:hover {
     left: 0;
     z-index: 0;
     border-bottom: 1px solid #f0f0f0;
-/*
-    background-image: -webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0, #444450),
-        color-stop(1, #000)
-    );
-    background-image: -moz-linear-gradient(
-        center top,
-        #444450 0%,
-        #000 100%
-    );
-    
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#444450');
-*/
 }
 
 #io-ox-login-form-background {
@@ -162,6 +145,7 @@ a:hover, .link:hover {
         color-stop(0.0, transparent),
         color-stop(0.75, rgba(0, 0, 0, 0.80))
     );
+    background-image: -o-linear-gradient(top, transparent 0%, rgba(0, 0, 0, 0.80) 75%);
     background-image: -moz-linear-gradient(
         center top,
         transparent 0%,
@@ -185,12 +169,10 @@ a:hover, .link:hover {
     left: 0;
     right: 0;
     margin-top: -1.5em;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 24pt;
-    font-weight: normal;
+    font-size: 28pt;
     color: white;
     text-align: right;
-    text-shadow: 1px 2px 3px black;
+    text-shadow: 0px 1px 2px black;
     z-index: 1;
 }
 
@@ -258,6 +240,7 @@ a:hover, .link:hover {
         color-stop(0, #333),
         color-stop(1, #222)
     );
+    background-image: -o-linear-gradient(top, #333 0%, #222 100%);
     background-image: -moz-linear-gradient(
         center top,
         #333 0%,
@@ -354,10 +337,11 @@ a:hover, .link:hover {
     text-shadow: 0px 0px 1px white;
 }
 
-/* ipad */
+/* ipad
 @media screen and (orientation: portrait) {
     body { width: 768px; }
 }
 @media screen and (orientation: landscape) {
     body { width: 1024px; }
 }
+*/

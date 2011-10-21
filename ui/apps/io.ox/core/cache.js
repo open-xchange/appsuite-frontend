@@ -15,6 +15,8 @@
 
 define("io.ox/core/cache", function () {
     
+    "use strict";
+    
     // default key generator
     var defaultKeyGenerator = function (data) {
         if (typeof data === "object" && data) {

@@ -1,43 +1,54 @@
-define("extensions/halo/appointments/register", ["io.ox/core/extensions", "io.ox/core/lightbox"], function (ext, lightbox) {
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ */
+
+define("extensions/halo/appointments/register",
+    ["io.ox/core/extensions"], function (ext) {
+    
+    "use strict";
+    
     // Taken From Calendar API
     var DAY = 60000 * 60 * 24;
     
-  
     ext.point("io.ox/halo/contact:renderer").extend({
         id: "appointments",
         handles: function (type) {
             return type === "com.openexchange.halo.appointments";
         },
         draw: function  ($node, providerName, appointments) {
-            if (appointments.length === 0) {
-                $node.append("<h1>Appointments</h1>");
-                $node.append("<div>No Appointments found.</div>");
-                return;
-            }
+            
             var deferred = new $.Deferred();
-            require(["io.ox/calendar/util"], function (calendarUtil) {
-                var $appointmentDiv = $("<div/>").appendTo($node);
-                $appointmentDiv.append($("<h1/>").text("Appointments"));
-                var $list = $("<ul/>").appendTo($appointmentDiv);
-                _(appointments).each(function (appointment) {
-                    var description = appointment.title + " (" + calendarUtil.getDateInterval(appointment) + " " + calendarUtil.getTimeInterval(appointment) + ")";
-                    var $entry = $("<li/>").text(description).click(function () {
-                        require(["io.ox/calendar/view-detail", "css!io.ox/calendar/style.css"], function (viewer) {
-                            new lightbox.Lightbox({
-                                getGhost: function () {
-                                    return $entry;
-                                },
-                                buildPage: function () {
-                                    return viewer.draw(appointment);
-                                }
-                            }).show();
-                        });
-                        return false;
-                    });
-                    $list.append($entry);
-                });
+            
+            $node.append(
+                $("<div/>").addClass("widget-title clear-title").text("Appointments")
+            );
+            
+            if (appointments.length === 0) {
+                
+                $node.append("<div>No Appointments found.</div>");
                 deferred.resolve();
-            });
+                
+            } else {
+            
+                require(["io.ox/calendar/view-grid-template"], function (viewGrid) {
+                    
+                    viewGrid.drawSimpleGrid(appointments)
+                        .delegate(".vgrid-cell", "click", viewGrid.hOpenDetailPopup)
+                        .appendTo($node);
+                    
+                    deferred.resolve();
+                });
+            }
+            
             return deferred;
         }
     });

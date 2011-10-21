@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -11,12 +10,13 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
- *
  */
 
 // TODO: Caching?
 
 (function () {
+    
+    "use strict";
     
     var name = "extensions/halo/api";
     var activeProviders = [];

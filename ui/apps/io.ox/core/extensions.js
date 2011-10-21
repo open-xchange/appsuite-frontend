@@ -13,9 +13,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
-
+define("io.ox/core/extensions",
+    ["io.ox/core/event", "io.ox/core/collection"], function (event, Collection) {
+    
     // A naive extension registry.
+    "use strict";
     
     // global registry
     var registry = {},
@@ -155,6 +157,14 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             return this;
         };
         
+        this.select = function (cb) {
+            return list().select(cb).value();
+        };
+        
+        this.inject = function (cb, memo) {
+            return list().inject(cb, memo).value();
+        };
+        
         this.invoke = function (name, context, args) {
             if (!_.isArray(args)) {
                 args = [args];
@@ -172,12 +182,73 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
             return this;
         };
     };
+    
+    // common extension classes
+    // TODO: find a better place as it contains UI stuff
+    
+    var Link = function (options) {
         
+        _.extend(this, options);
+        
+        var self = this,
+            click = function (e) {
+                var node = $(this);
+                e.preventDefault();
+                that.point(node.data("ref")).invoke("action", node.data("context"));
+            };
+        
+        this.draw = function (context) {
+            this.append(
+                $("<a>", { href: "#" }).addClass("io-ox-action-link")
+                .data({ ref: self.ref, context: context })
+                .click(click)
+                .text(String(self.label))
+            );
+        };
+    };
+    
+    var InlineLinks = function (options) {
+        
+        var self = _.extend(this, options);
+        
+        this.draw = function (context) {
+            
+            // create & add node first, since the rest is async
+            var node = $("<div>").addClass("io-ox-inline-links").appendTo(this),
+                // get collection
+                collection = new Collection(context);
+            
+            // resolve collection's properties
+            collection.getProperties()
+                .done(function () {
+                    // get links (check for requirements)
+                    var links = that.point(self.ref).select(function (link) {
+                        // process actions
+                        return that.point(link.ref).inject(function (flag, action) {
+                            if (_.isFunction(action.requires)) {
+                                // check requirements
+                                return flag && action.requires({ collection: collection });
+                            } else {
+                                return flag;
+                            }
+                        }, true);
+                    });
+                    // empty?
+                    if (links.length === 0) {
+                        node.addClass("empty");
+                    } else {
+                        // draw links
+                        _(links).invoke("invoke", "draw", node, context);
+                    }
+                });
+        };
+    };
+    
     that = {
         
         // get point
         point: function (id) {
-        
+            id = id || "";
             if (registry[id] !== undefined) {
                 return registry[id];
             } else {
@@ -206,7 +277,10 @@ define("io.ox/core/extensions", ["io.ox/core/event"], function (event) {
         // add wrapper
         addWrapper: function (name, fn) {
             wrappers[name] = fn;
-        }
+        },
+        
+        Link: Link,
+        InlineLinks: InlineLinks
     };
     
     return that;

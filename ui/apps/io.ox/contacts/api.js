@@ -13,10 +13,13 @@
  *
  */
 
-define("io.ox/contacts/api", ["io.ox/core/http", "io.ox/core/api/factory"], function (http, ApiFactory) {
+define("io.ox/contacts/api",
+    ["io.ox/core/http", "io.ox/core/api/factory"], function (http, apiFactory) {
+    
+    "use strict";
     
     // generate basic API
-    var api = ApiFactory({
+    var api = apiFactory({
         module: "contacts",
         requests: {
             all: {

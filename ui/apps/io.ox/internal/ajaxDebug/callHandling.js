@@ -14,6 +14,8 @@
 
 define("io.ox/internal/ajaxDebug/callHandling", ["io.ox/core/http", "io.ox/core/event"], function (http, event) {
     
+    "use strict";
+    
     var callHandler = {
         history: [],
         perform: function (options, cb) {

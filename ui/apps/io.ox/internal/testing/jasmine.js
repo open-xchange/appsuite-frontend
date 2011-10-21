@@ -1,6 +1,8 @@
+//#NOJSHINT
 // Adapted Jasmine Testing Framework for OX7 Environment
-/*globals ActiveXObject: true */
+
 define("io.ox/internal/testing/jasmine", function () {
+    
     var exports = {};
 
     var isCommonJS = true;

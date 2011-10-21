@@ -15,16 +15,17 @@ define(function () {
             fr_FR: "Français"
         },
         
-        defaultContext: "open-xchange.com",
+        defaultContext: "1337",
         
         copyright: "&copy; 2011 open xchange.",
         version: "7.0.0 dev",
-        buildDate: "2010-08-26",
+        buildDate: "2010-10-21",
         
         extensions: {
             signin: [],
             core: ["halo"],
-            halo: ["halo/contacts", "halo/appointments", "halo/linkedIn", "portal/appointments", "portal/linkedIn"]
+            halo: ["halo/contacts", "halo/appointments", "halo/linkedIn"],
+            portal: [ "portal/appointments", "portal/linkedIn"]
         }
     };
 });

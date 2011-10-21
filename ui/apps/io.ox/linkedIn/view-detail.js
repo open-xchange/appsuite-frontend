@@ -1,4 +1,23 @@
-define("io.ox/linkedIn/view-detail", ["io.ox/core/extensions", "io.ox/core/lightbox", "css!io.ox/linkedIn/style.css"], function (ext, lightbox) {
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ */
+
+define("io.ox/linkedIn/view-detail",
+    ["io.ox/core/extensions",
+     "io.ox/core/tk/dialogs",
+     "css!io.ox/linkedIn/style.css"], function (ext, dialogs) {
+    
+    "use strict";
+    
     var actionPoint = ext.point("linkedIn/details/actions");
     var rendererPoint = ext.point("linkedIn/details/renderer");
     
@@ -7,14 +26,15 @@ define("io.ox/linkedIn/view-detail", ["io.ox/core/extensions", "io.ox/core/light
     }
 
     function draw(data) {
-        var $node = $("<div/>").addClass("linkedIn").css({overflow: "auto"});
-        var $detailNode = $("<div/>").addClass("details").appendTo($node);
-        var $table = $("<table><tr><td class='t10' /><td class='t11' /></td></tr><tr><td class='r2' colspan='2'/></tr><table>").appendTo($detailNode);
-        var $pictureNode = $table.find(".t10");
-        var $nameNode = $table.find(".t11");
-        var $relationNode = $table.find(".r2");
         
-        $pictureNode.append($("<img/>").attr("src", data.pictureUrl));
+        var $node = $("<div/>").addClass("linkedIn").css({ overflow: "auto" }),
+            $detailNode = $("<div/>").addClass("details").appendTo($node),
+            $table = $("<table><tr><td class='t10' /><td class='t11' /></td></tr><tr><td class='r2' colspan='2'/></tr><table>").appendTo($detailNode),
+            $pictureNode = $table.find(".t10"),
+            $nameNode = $table.find(".t11"),
+            $relationNode = $table.find(".r2");
+        
+        $pictureNode.append($("<img/>").attr("src", data.pictureUrl || (ox.base + "/apps/themes/default/dummypicture.xpng")));
         
         $nameNode.append($("<div class='name' />").text(data.firstName + " " + data.lastName));
         $nameNode.append($("<div class='headline' />").text(data.headline));
@@ -71,15 +91,6 @@ define("io.ox/linkedIn/view-detail", ["io.ox/core/extensions", "io.ox/core/light
                         $posNode.hide();
                         pastEngagements.push($posNode);
                     }
-                    if (position.title) {
-                        $("<h1/>").appendTo($posNode).text(position.title).addClass("title");
-                    }
-                    if (position.company && position.company.name) {
-                        $("<h2/>").text(position.company.name).appendTo($posNode).addClass("companyName");
-                    }
-                    if (position.company && position.company.industry) {
-                        $("<h3/>").appendTo($posNode).text(position.company.industry).addClass("companyIndustry");
-                    }
                     if (position.startDate && position.startDate.year) {
                         var timeSpentThere = position.startDate.year;
                         if (position.endDate && position.endDate.year) {
@@ -87,7 +98,13 @@ define("io.ox/linkedIn/view-detail", ["io.ox/core/extensions", "io.ox/core/light
                         } else if (position.isCurrent) {
                             timeSpentThere += " - Present";
                         }
-                        $("<h4/>").text(timeSpentThere).appendTo($posNode).addClass("positionTimeSpent");
+                        $("<span/>").text(timeSpentThere).appendTo($posNode).addClass("timeSpent");
+                    }
+                    if (position.title) {
+                        $("<span/>").appendTo($posNode).text(position.title).addClass("title");
+                    }
+                    if (position.company && position.company.name) {
+                        $("<div/>").text(position.company.name).appendTo($posNode).addClass("companyName");
                     }
                 });
                 if (pastEngagements.length !== 0) {
@@ -113,24 +130,33 @@ define("io.ox/linkedIn/view-detail", ["io.ox/core/extensions", "io.ox/core/light
     rendererPoint.extend({
         id: "linkein/details/renderer/relations",
         draw: function (options) {
-            var data = options.data;
             
-            var $myNode = $("<div/>").addClass("relations extension");
+            var data = options.data,
+                $myNode = $("<div/>").addClass("relations extension");
+            
             if (data.relationToViewer && data.relationToViewer.connections && data.relationToViewer.connections.values && data.relationToViewer.connections.values !== 0) {
-                $myNode.append($("<h1/>").text("Connections you share with " + data.firstName + " " + data.lastName));
+                $myNode.append(
+                    $("<div>")
+                        .css({ marginBottom: "5px", fontWeight: "bold" }) // TODO: make CSS class
+                        .text("Connections you share with " + data.firstName + " " + data.lastName)
+                );
                 _(data.relationToViewer.connections.values).each(function (relation) {
                     if (relation.fullProfile) {
-                        var $image = $("<img/>").attr("src", relation.fullProfile.pictureUrl).attr("alt", relation.fullProfile.firstName + " " + relation.fullProfile.lastName);
+                        var imageUrl = relation.fullProfile && relation.fullProfile.pictureUrl ?
+                            relation.fullProfile.pictureUrl : ox.base + "/apps/themes/default/dummypicture.xpng";
+                        var $image = $("<img/>")
+                            .css("margin", "0 5px 0 0")
+                            .attr("src", imageUrl)
+                            .attr("alt", relation.fullProfile.firstName + " " + relation.fullProfile.lastName);
                         $myNode.append($image);
                         $image.click(function () {
-                            new lightbox.Lightbox({
-                                getGhost: function () {
-                                    return $image;
-                                },
-                                buildPage: function () {
-                                    return draw(relation.fullProfile);
-                                }
-                            }).show();
+                            new dialogs.ModalDialog({
+                                    width: 600,
+                                    easyOut: true
+                                })
+                                .append(draw(relation.fullProfile))
+                                .addButton("close", "Close")
+                                .show();
                         });
                     } else {
                         $myNode.append($("<span/>").text(relation.person.firstName + " " + relation.person.lastName));

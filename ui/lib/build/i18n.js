@@ -21,7 +21,6 @@ var rimraf = require("../rimraf/rimraf");
 var jshint = require("../jshint").JSHINT;
 var _ = require("../underscore.js");
 
-var defineWalker = ast("define").asCall().walker();
 var gtWalker = ast("gt").any("gt").asCall().walker();
 var gtMethodWalker = ast("gt.gt").any("gt").asCall().walker();
 var getGt = ast("gt").asCall().getter("gt");
@@ -87,7 +86,7 @@ function addMsg(map, key, msg) {
     }
 }
 
-exports.addMessage = function(msg, filename, getSrc) {
+exports.addMessage = function(msg, filename) {
     if (!msg.comments) msg.comments = [];
     if (!msg.locations) msg.locations = [];
     var key = msg.msgid;
@@ -122,34 +121,132 @@ function addMessage(filename, node, method, getSrc) {
         if (method[i]) msg[method[i]] = getStr(args[i]);
     }
     
-    exports.addMessage(msg, filename, getSrc);
+    exports.addMessage(msg, filename);
     return pro.MAP.skip;
 }
 
-exports.potScan = function(filename, tree, getSrc) {
-    ast.scanner(defineWalker, function(scope) {
-        if (scope.refs.define !== undefined) return;
-        var args = this[2];
-        var deps = _.detect(args, ast.is("array"));
-        var f = _.detect(args, ast.is("function"));
-        if (!deps || !f) return;
-        var gtIndex = _.indexOf(_.pluck(deps[1], 1), "io.ox/core/gettext");
-        if (gtIndex < 0) return;
-        var gtName = f[2][gtIndex];
-        var gtScope = f[3].scope;
-        ast.scanner(gtWalker, function(scope) {
-            if (getGt(this) != gtName) return;
-            if (scope.refs[gtName] != gtScope) return;
-            return addMessage(filename, this, gtMethods.gettext, getSrc);
-        }).scanner(gtMethodWalker, function(scope) {
-            if (getMethod[0](this) != gtName) return;
-            if (scope.refs[gtName] != gtScope) return;
-            var method = gtMethods[getMethod[1](this)];
-            if (!method) return;
-            return addMessage(filename, this, method, getSrc);
-        }).scan(f);
-        return pro.MAP.skip;
-    }).scan(pro.ast_add_scope(tree));
+function languages() {
+    if (!languages.value) {
+        languages.value = _.map(utils.list("i18n/*.po"), function(s) {
+            return s.replace(/^i18n\/(.*)\.po$/, "$1");
+        });
+    }
+    return languages.value;
+}
+
+function poFiles() {
+    if (!poFiles.value) {
+        poFiles.value = {};
+        _.each(languages(), function(lang) {
+            poFiles.value[lang] = exports.parsePO(
+                fs.readFileSync("i18n/" + lang + ".po", "utf8"));
+        });
+    }
+    return poFiles.value;
+}
+
+// gtModules :: { target basename: {
+//     "name": string,
+//     "files": { source file: [string] }
+// } }
+// modifiedModules :: { target basename: 1 }
+// TODO: language distinction in modifiedModules
+var gtModules = {}, modifiedModules = {}, gtModulesFilename;
+
+function writeModule(target) {
+    var pofiles = poFiles();
+    for (var lang in pofiles) {
+        var po = pofiles[lang], dict = {};
+        _.each(gtModules[target].files, function(file) {
+            _.each(file, function(key) { dict[key] = po.dictionary[key]; });
+        });
+        var js = JSON.stringify({
+            nplurals: po.nplurals,
+            plural: po.plural,
+            dictionary: dict
+        }, null, process.env.debug ? 4 : 0);
+        var name = gtModules[target].name;
+        fs.writeFileSync(target + "." + lang + ".js",
+            'define("' + name + "." + lang +
+            '",["io.ox/core/gettext"],function(g){return g("' + name + '",' +
+            js + ');});');
+    }
+}
+
+exports.modules = {
+    load: function(filename) {
+        gtModulesFilename = filename;
+        if (path.existsSync(filename)) {
+            gtModules = JSON.parse(fs.readFileSync(filename, "utf8"));
+        }
+    },
+    add: function(moduleName, source, target) {
+        var dest = utils.dest(path.join("apps", moduleName));
+        var module = gtModules[dest];
+        if (!module) module = gtModules[dest] = { name: moduleName, files: {} };
+        module.files[source] = _.keys(exports.potFiles[target] || {});
+        modifiedModules[dest] = true;
+        _.each(languages(), function(lang) {
+            utils.includes.set(dest + "." + lang + ".js",
+                ["i18n/" + lang + ".po"], "lang.js");
+        });
+    },
+    save: function() {
+        for (var target in gtModules) {
+            if (modifiedModules[target]) writeModule(target);
+        }
+        modifiedModules = {};
+        fs.writeFileSync(gtModulesFilename, JSON.stringify(gtModules));
+    }
+};
+
+exports.potScanner = function(name, deps, f) {
+    var self = this;
+    
+    // find gettext dependency
+    var apiName, moduleName;
+    var depNames = _.pluck(deps[1], 1);
+    for (var i = 0; i < depNames.length; i++) {
+        if (depNames[i].substring(0, 8) === "gettext!") {
+            apiName = f[2][i];
+            moduleName = depNames[i].substring(8);
+            break;
+        }
+    }
+    if (!apiName) return;
+    
+    // find gettext calls
+    // results are stored in pot and exports.potFiles
+    var gtScope = f[3].scope;
+    ast.scanner(gtWalker, function(scope) {
+        if (getGt(this) !== apiName) return;
+        if (scope.refs[apiName] !== gtScope) return;
+        return addMessage(self.task.name, this, gtMethods.gettext, self.getSrc);
+    }).scanner(gtMethodWalker, function(scope) {
+        if (getMethod[0](this) !== apiName) return;
+        if (scope.refs[apiName] !== gtScope) return;
+        var method = gtMethods[getMethod[1](this)];
+        if (!method) return;
+        return addMessage(self.task.name, this, method, self.getSrc);
+    }).scan(f);
+    
+    exports.modules.add(moduleName, this.getSrc(1).name, this.task.name);
+};
+
+utils.fileType("lang.js").addHook("handler", function(name) {
+    var m = /^(.*)\.([^\.]*)\.js$/.exec(name), dest = m[1], lang = m[2];
+    file(name, [], function() { modifiedModules[dest] = true; });
+});
+
+exports.potHandler = function(filename) {
+    var dest = "tmp/pot/" + filename.replace(/\+/g, "++").replace(/\//g, "+-");
+    file("ox.pot", [dest]);
+    file(dest, ["tmp/pot", filename], function() {
+        if (filename in exports.potFiles) {
+            var data = JSON.stringify(exports.potFiles[filename] || {});
+            fs.writeFileSync(this.name, data);
+        }
+    });
 };
 
 function escapePO(s) {
@@ -162,7 +259,7 @@ function escapePO(s) {
 exports.generatePOT = function(files) {
     _.each(files, function(file) {
         orig = file.slice(8).replace(/\+-/g, "/").replace(/\+\+/g, "+");
-        if (!(orig in exports.potFiles)&& path.existsSync(file)) {
+        if (!(orig in exports.potFiles) && path.existsSync(file)) {
             var loaded = JSON.parse(fs.readFileSync(file, "utf8"));
             exports.potFiles[orig] = loaded;
             for (var i in loaded) addMsg(pot, i, loaded[i]);

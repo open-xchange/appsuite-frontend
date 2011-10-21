@@ -15,6 +15,13 @@
 
 var initializeAndDefine;
 
+// init require.js
+require({
+    // inject version
+    baseUrl: ox.base + "/apps",
+    waitSeconds: 10
+});
+
 $(document).ready(function () {
 
     "use strict";
@@ -97,15 +104,16 @@ $(document).ready(function () {
             .done(function () {
                 // Set user's language (as opposed to the browser's language)
                 var lang = config.get("language");
-                // join
-                $.when(
-                        require("io.ox/core/gettext").setLanguage(lang),
-                        require(["io.ox/core/main", "theme!themes/default/core.css"])
-                    )
-                    .done(function () {
+                require(["io.ox/core/gettext"])
+                    .pipe(function (gt) {
+                        return gt.setLanguage(lang);
+                    }).pipe(function () {
+                        return require(["io.ox/core/main",
+                                        "theme!themes/default/core.css"]);
+                    }).done(function (main) {
                         // go!
                         $("#background_loader").idle();
-                        require("io.ox/core/main").launch();
+                        main.launch();
                     });
             });
     };
@@ -172,19 +180,23 @@ $(document).ready(function () {
     };
     
     changeLanguage = function (id) {
-        var gt = require("io.ox/core/gettext");
-        return gt.setLanguage(id).done(function () {
-            // get all nodes
-            $("[data-i18n]").each(function () {
-                var node = $(this),
-                    val = gt(node.attr("data-i18n"));
-                if (this.tagName === "INPUT") {
-                    node.val(val);
-                } else {
-                    node.text(val);
-                }
+        return require(["io.ox/core/gettext"])
+            .pipe(function (gettext) {
+                return gettext.setLanguage(id);
+            }).pipe(function () {
+                return require(["gettext!io.ox/core/login"]);
+            }).pipe(function (gt) {
+                // get all nodes
+                $("[data-i18n]").each(function () {
+                    var node = $(this),
+                        val = gt(node.attr("data-i18n"));
+                    if (this.tagName === "INPUT") {
+                        node.val(val);
+                    } else {
+                        node.text(val);
+                    }
+                });
             });
-        });
     };
     
     fnChangeLanguage = function (e) {
@@ -318,7 +330,7 @@ $(document).ready(function () {
                     .bind("click", id, fnChangeLanguage)
                     .text(lang[id])
                 );
-                node.append(document.createTextNode("\u00a0 "));
+                node.append(document.createTextNode("\u00A0 "));
             }
         } else {
             $("#io-ox-languages").remove();
@@ -374,13 +386,6 @@ $(document).ready(function () {
                 $("#background_loader").idle().fadeOut(DURATION, cont);
             });
     };
-    
-    // init require.js
-    require({
-        // inject version
-        baseUrl: ox.base + "/apps",
-        waitSeconds: 10
-    });
     
     // teach require.js to use deferred objects
     var req = window.req = require;

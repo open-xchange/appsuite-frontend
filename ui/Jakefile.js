@@ -37,24 +37,38 @@ console.info("Build version: " + version);
 var debug = Boolean(process.env.debug);
 if (debug) console.info("Debug mode: on");
 
-function jsFilter (data, getSrc) {
+var defineWalker = ast("define").asCall().walker();
+function jsFilter (data) {
+    var self = this;
     
     if (data.substr(0, 11) !== "//#NOJSHINT") {
-        data = hint.call(this, data, getSrc);
+        data = hint.call(this, data, this.getSrc);
     }
     
-    var ast = jsp.parse(data, false, true);
-    i18n.potScan(this.name, ast, getSrc);
+    var tree = jsp.parse(data, false, true);
+    var defineHooks = this.type.getHooks("define");
+    tree = ast.scanner(defineWalker, function(scope) {
+        if (scope.refs.define !== undefined) return;
+        var args = this[2];
+        var name = _.detect(args, ast.is("string"));
+        var deps = _.detect(args, ast.is("array"));
+        var f = _.detect(args, ast.is("function"));
+        if (!name || !deps || !f) return;
+        for (var i = 0; i < defineHooks.length; i++) {
+            defineHooks[i].call(self, name, deps, f);
+        }
+    }).scan(pro.ast_add_scope(tree));
     
     // UglifyJS
     if (debug) return data;
-    ast = pro.ast_lift_variables(ast);
-    ast = pro.ast_mangle(ast);
-    ast = pro.ast_squeeze(ast);
+    tree = pro.ast_lift_variables(tree);
+    tree = pro.ast_mangle(tree);
+    tree = pro.ast_squeeze(tree);
     // use split_lines
-    return pro.split_lines(pro.gen_code(ast), 500);
+    return pro.split_lines(pro.gen_code(tree), 500);
 }
-utils.addFilter("source", jsFilter);
+utils.fileType("source").addHook("filter", jsFilter)
+    .addHook("define", i18n.potScanner);
 
 var core_head = fs.readFileSync("html/core_head.html", "utf8"),
     core_body = fs.readFileSync("html/core_body.html", "utf8");
@@ -80,9 +94,10 @@ var jshintOptions = {
     onevar: false,
     plusplus: false,
     regexp: false,
+    strict: true,
     trailing: true,
     undef: true,
-    white: true,
+    white: !debug,
     loopfunc: false,
     predef: ["$", "_", "Modernizr", "define", "require", "ox", "initializeAndDefine"]
 };
@@ -105,15 +120,17 @@ function hint (data, getSrc) {
     fail("JSHint error");
 }
 
-utils.loadIncludes("tmp/includes.json");
-
 // default task
 
 desc("Builds the GUI");
 utils.topLevelTask("default", ["ox.pot"], function() {
-    utils.saveIncludes();
+    utils.includes.save();
+    i18n.modules.save();
     utils.summary();
 });
+
+i18n.modules.load("tmp/i18n.json");
+utils.includes.load("tmp/includes.json");
 
 utils.copy(utils.list("html", [".htaccess", "blank.html", "favicon.ico"]));
 utils.copy(utils.list("src/"));
@@ -125,16 +142,8 @@ file("ox.pot", ["Jakefile.js"], function() {
 });
 
 directory("tmp/pot");
-utils.addHandler("source", function(filename) {
-    var dest = "tmp/pot/" + filename.replace(/\+/g, "++").replace(/\//g, "+-");
-    file("ox.pot", [dest]);
-    file(dest, ["tmp/pot", filename], function() {
-        if (filename in i18n.potFiles) {
-            var data = JSON.stringify(i18n.potFiles[filename] || {});
-            fs.writeFileSync(this.name, data);
-        }
-    });
-});
+utils.fileType("source").addHook("handler", i18n.potHandler);
+utils.fileType("module").addHook("handler", i18n.potHandler);
 
 (function() {
     var body_lines = core_body.split(/\r?\n|\r/);
@@ -143,9 +152,11 @@ utils.addHandler("source", function(filename) {
             i18n.addMessage({
                 msgid: msgid,
                 locations: [{ name: "html/core_body.html", line: i + 1 }]
-            });
+            }, "html/core_body.html");
         });
     }
+    i18n.modules.add("io.ox/core/login", "html/core_body.html",
+                     "html/core_body.html");
 })();
 
 // l10n
@@ -171,34 +182,79 @@ file(utils.dest("signin.appcache"), ["force"]);
 
 // js
 
-utils.concat("boot.js", ["lib/jquery.plugins.js", "src/util.js", "src/boot.js"],
+utils.concat("boot.js", ["lib/jquery.plugins.js", "lib/jquery.tokeninput.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
+
+utils.copy(utils.list("src", "css.js"), {
+    to: "tmp", type: "source", filter: function(data) {
+        var dest = this.task.name;
+        utils.includes.set(dest, []);
+        var dir = "lib/less.js/lib/less";
+        return data.replace(/\/\/@include\s+(.*)$/gm, function(m, name) {
+            return utils.list(dir, name).map(function(file) {
+                var include = path.join(dir, file);
+                utils.includes.add(dest, include);
+                return fs.readFileSync(include, "utf8");
+            }).join("\n");
+        });
+    }
+});
 
 utils.concat("boot.js", ["lib/jquery.min.js",
         "lib/require.js", "lib/modernizr.js", "lib/underscore.js",
-        "src/css.js", "tmp/boot.js"]);
+        "tmp/css.js", utils.string("\n"), "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
         "event.js", "extensions.js", "cache.js", "http.js",
         "config.js", "session.js", "gettext.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js",
-        "desktop.js", "main.js"
+        "api/folder.js", "collection.js", "desktop.js", "main.js"
     ]), { type: "source" }
 );
 
-//utils.copyFile("lib/css.js", utils.dest("apps/css.js"), { type: "source" });
+// module dependencies
+
+var moduleDeps = {};
+var depsPath = utils.dest("dependencies.json");
+
+utils.fileType("module").addHook("filter", jsFilter)
+    .addHook("define", i18n.potScanner)
+    .addHook("define", function(name, deps, f) {
+        moduleDeps[name] = _.pluck(deps[1], 1);
+    })
+    .addHook("handler", function(name) { file(depsPath, [name]); });
+
+utils.concat("dependencies.json", [{
+    getData: function() {
+        if (path.existsSync(depsPath)) {
+            var oldFile = fs.readFileSync(depsPath, "utf8");
+            if (oldFile) {
+                var oldDeps = JSON.parse(oldFile);
+                for (var i in oldDeps) {
+                    if (!(i in moduleDeps) &&
+                        path.existsSync(path.join("apps", i + ".js")))
+                    {
+                        moduleDeps[i] = oldDeps[i];
+                    }
+                }
+            }
+        }
+        return JSON.stringify(moduleDeps);
+    }
+}], { filter: _.identity }); // prevents binary mode, which erases target before calling getData
 
 // apps
 
 var apps = _.groupBy(utils.list("apps/"), function (f) {
-    var match = /\.(js|less)$/.exec(f);
-    return match && match[1] || "rest"; });
-if (apps.js) utils.copy(apps.js, { type: "source" });
-if (apps.less) {
-    utils.copy(apps.less, {
+    var match = /\.(js|lss)$/.exec(f);
+    return match && match[1] || "rest";
+});
+if (apps.js) utils.copy(apps.js, { type: "module" });
+if (apps.lss) {
+    utils.copy(apps.lss, {
         type: "less",
-        mapper: function(s) { return s.replace(/\.less$/, ".css"); }
+        mapper: function(s) { return s.replace(/\.lss$/, ".css"); }
     });
 }
 if (apps.rest) utils.copy(apps.rest);
@@ -217,6 +273,7 @@ function docFile(file, title) {
 }
 
 docFile("apache", "Apache Configuration");
+docFile("demo", "Demo Steps");
 docFile("extensions", "Extension Points");
 docFile("libs", "External Libs");
 docFile("features", "Features");

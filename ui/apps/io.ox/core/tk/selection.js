@@ -95,13 +95,11 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
             case 38:
                 // cursor up
                 selectPrevious(e);
-                e.preventDefault();
-                break;
+                return false;
             case 40:
                 // cursor down
                 selectNext(e);
-                e.preventDefault();
-                break;
+                return false;
             }
         };
         
@@ -140,8 +138,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
         select = function (id) {
             var key = self.serialize(id);
             selectedItems[key] = id;
-            getNode(key).addClass(self.classSelected)
-                .intoViewport(container);
+            getNode(key).addClass(self.classSelected).intoViewport(container);
             last = id;
         };
         
@@ -205,12 +202,9 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
         this.update = function () {
             // get nodes
             var nodes = container.find(".selectable"),
-                // loop
                 i = 0, $i = nodes.length, node = null;
             for (; i < $i; i++) {
                 node = $(nodes[i]);
-                // bind click
-                node.unbind("click").bind("click", click);
                 // is selected?
                 if (isSelected(node.attr("data-ox-id"))) {
                     node.addClass(self.classSelected);
@@ -318,13 +312,12 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
          * Keyboard support
          */
         this.keyboard = function (flag) {
-            // keyboard support (use keydown, IE does not react on keypress with cursor keys)
-            if (flag) {
-                $(document).bind("keydown", fnKey);
-            } else {
-                $(document).unbind("keydown", fnKey);
-            }
+            // keyboard support (use keydown! IE does not react on keypress with cursor keys)
+            $(document)[flag ? "bind" : "unbind"]("keydown", fnKey);
         };
+        
+        // bind general click handler
+        container.delegate(".selectable", "click", click);
     };
 
     Selection.extend = function (obj, node) {
