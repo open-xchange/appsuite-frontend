@@ -13,7 +13,7 @@
 
 define("io.ox/mail/main",
     ["io.ox/mail/util", "io.ox/mail/api", "io.ox/core/tk/vgrid",
-     "io.ox/mail/view-detail", "css!io.ox/mail/style.css"
+     "io.ox/mail/view-detail", "io.ox/mail/actions", "less!io.ox/mail/style.less"
     ], function (util, api, VGrid, viewDetail) {
     
     "use strict";
@@ -57,27 +57,6 @@ define("io.ox/mail/main",
             action: util.createNewMailDialog
         })
         .css("marginRight", "40px");
-        
-        win.addButton({
-            label: "Delete",
-            action: function () {
-                api.remove(grid.selection.get());
-                grid.selection.selectNext();
-            }
-        })
-        .css("marginRight", "40px");
-        
-        win.addButton({
-            label: "Reply All"
-        });
-        
-        win.addButton({
-            label: "Reply"
-        });
-        
-        win.addButton({
-            label: "Forward"
-        });
         
         app.setWindow(win);
         

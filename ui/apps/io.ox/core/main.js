@@ -15,7 +15,7 @@
 
 define("io.ox/core/main",
     ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http", "io.ox/core/extensions",
-    "io.ox/core/gettext"], function (desktop, session, http, ext, gt) {
+    "gettext!io.ox/core/main"], function (desktop, session, http, ext, gt) {
     
     "use strict";
     

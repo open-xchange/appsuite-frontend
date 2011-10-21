@@ -19,7 +19,7 @@ define(function () {
         
         copyright: "&copy; 2011 open xchange.",
         version: "7.0.0 dev",
-        buildDate: "2010-08-26",
+        buildDate: "2010-10-21",
         
         extensions: {
             signin: [],

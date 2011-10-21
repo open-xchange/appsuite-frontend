@@ -39,42 +39,49 @@ var counter = 0;
 
 exports.startTime = new Date;
 
+function FileType() {}
+
+/**
+ * Returns all applicable hooks of a specific hook type. 
+ * @param {String} type The hook type to return.
+ * @param {Function or Array} prepend An optional hook or array of hooks to
+ * prepend before all other hooks.
+ * @type Array
+ * @returns An array of hooks.
+ */
+FileType.prototype.getHooks = function(type, prepend) {
+    return [].concat(prepend || [], this[type] || [], types["*"][type] || []);
+};
+
+/**
+ * Adds a hook to this file type.
+ * @param {String} type The type of the added hook.
+ * @param {Function} hook The hook function to add.
+ * @type FileType
+ * @return Itself, for chaining.
+ */
+FileType.prototype.addHook = function(type, hook) {
+    var hooks = this[type] || (this[type] = []);
+    hooks.push(hook);
+    return this;
+};
+
 /**
  * Types of files which are processed with the same settings.
  * Each type consists of an array of handlers for dependency-building and
- * an array of filters to process the file contents.
+ * an array of filters to process the file contents. Optionally, other types
+ * of hooks can be used by individual handlers and filters.
  * The special type "*" is applies to all files and is applied after
  * the type-specific handlers and filters.
  */
-var types = { "*": { handlers: [], filters: [] } };
+var types = { "*": new FileType() };
 
-/**
- * Adds a handler to the specified type.
- * @param {String} type The type to which the handler is added.
- * @param {Function} handler The handler function which is called for every file
- * of the specified type, with the target filename as parameter.
- */
-exports.addHandler = function(type, handler) {
-    var t = types[type];
-    if (!t) t = types[type] = { handlers: [], filters: [] };
-    t.handlers.push(handler);
+exports.fileType = function(type) {
+    return types[type] || (types[type] = new FileType());
 };
 
 /**
- * Adds a filter to the specified type.
- * @param {String} type The type to which the filter is added.
- * @param {Function} filter The filter function which is called for every file
- * of the specified type, with the file data as a string parameter. It should
- * return the filtered data as a string.
- */
-exports.addFilter = function(type, filter) {
-    var t = types[type];
-    if (!t) t = types[type] = { handlers: [], filters: [] };
-    t.filters.push(filter);
-};
-
-/**
- * The name of the current top level task, if any-
+ * The name of the current top level task, if any.
  */
 var topLevelTaskName = null;
 
@@ -90,7 +97,7 @@ exports.topLevelTask = function(name) {
     if (name) return task.apply(this, arguments);
 };
 
-exports.addHandler("*", function(filename) {
+exports.fileType("*").addHook("handler", function(filename) {
     if (topLevelTaskName) task(topLevelTaskName, [filename]);
 });
 
@@ -123,7 +130,7 @@ exports.summary = function() {
 exports.copy = function(files, options) {
     var srcDir = files.dir || "";
     var destDir = options && options.to || exports.builddir;
-    var mapper = options && options.mapper || function(f) { return f; };
+    var mapper = options && options.mapper || _.identity;
     for (var i = 0; i < files.length; i++) {
         exports.copyFile(path.join(srcDir, files[i]),
                          mapper(path.join(destDir, files[i])), options);
@@ -147,23 +154,46 @@ exports.copy = function(files, options) {
  */
 function getType(filename, options) {
     if (!options) options = {};
-    var type = options.type || path.extname(filename);
-    type = types[type] || { handlers: [], filters: [] };
-    var handlers = [].concat(type.handlers, types["*"].handlers);
-    var filters = [].concat(options.filter || [], type.filters,
-                            types["*"].filters);
+    var type = exports.fileType(options.type || path.extname(filename));
+    var handlers = type.getHooks("handler");
+    var filters = type.getHooks("filter", options.filter);
     return {
         handler: function(filename) {
-            for (var i = 0; i < handlers.length; i++) handlers[i](filename);
+            var obj = { type: type };
+            for (var i = 0; i < handlers.length; i++) {
+                handlers[i].call(obj, filename);
+            }
         },
-        filter: filters.length ? function(data, getSrc) {
+        filter: filters.length ? function(task, data, getSrc) {
+            var obj = { type: type, task: task, getSrc: getSrc };
             for (var i = 0; i < filters.length; i++) {
-                data = filters[i].call(this, data, getSrc);
+                data = filters[i].call(obj, data);
             }
             return data;
         } : null
     };
 }
+
+/**
+ * Wrapper around Jake's file() function.
+ * @param {String} dest The destination file name.
+ * @param {Array} deps An array with dependency names.
+ * @param {Function} callback The callback parameter for file().
+ * @param {String} type An optional file type. Defaults to the file
+ * extension of the destination.
+ */
+exports.file = function(dest, deps, callback, type) {
+    var dir = path.dirname(dest);
+    directory(dir);
+    file(dest, deps, function() {
+        callback.apply(this, arguments);
+        counter++;
+    });
+    file(dest, [dir, "Jakefile.js"]);
+    var obj = { type: exports.fileType(type || path.extname(dest)) };
+    var handlers = obj.type.getHooks("handler");
+    for (var i = 0; i < handlers.length; i++) handlers[i].call(obj, dest);
+};
 
 /**
  * Copies a single file.
@@ -177,22 +207,17 @@ function getType(filename, options) {
  * extension of the destination.
  */
 exports.copyFile = function(src, dest, options) {
-    var dir = path.dirname(dest);
-    directory(dir);
     var type = getType(dest, options);
     var callback = type.filter ?
         function() {
             fs.writeFileSync(dest,
-                type.filter.call(this, fs.readFileSync(src, "utf8"),
+                type.filter(this, fs.readFileSync(src, "utf8"),
                     function(line) { return { name: src, line: line }; }));
-            counter++;
         } : function() {
             var data = fs.readFileSync(src);
             fs.writeFileSync(dest, data, 0, data.length, null);
-            counter++;
         };
-    file(dest, [src, dir, "Jakefile.js"], callback);
-    type.handler(dest);
+    exports.file(dest, [src], callback, options && options.type);
 };
 
 /**
@@ -227,7 +252,6 @@ exports.concat = function(name, files, options) {
     deps.push("Jakefile.js");
     directory(destDir);
     file(dest, deps, function() {
-        var fd = fs.openSync(dest, "w");
         if (type.filter) {
             var data = [], fileDefs = [], start = 0;
             for (var i = 0; i < files.length; i++) {
@@ -245,8 +269,7 @@ exports.concat = function(name, files, options) {
                             files[i].getData());
                 }
             }
-            fs.writeSync(fd, type.filter.call(this, data.join(""), getSrc),
-                         null);
+            fs.writeFileSync(dest, type.filter(this, data.join(""), getSrc));
             function getSrc(line) {
                 var def = fileDefs[_.sortedIndex(fileDefs, line, getStart) - 1];
                 function getStart(x) {
@@ -255,18 +278,28 @@ exports.concat = function(name, files, options) {
                 return { name: def.name, line: line - def.start };
             }
         } else {
+            var fd = fs.openSync(dest, "w");
             for (var i = 0; i < files.length; i++) {
                 var data = typeof files[i] == "string" ?
                     fs.readFileSync(path.join(srcDir, files[i])) :
                     new Buffer(files[i].getData());
                 fs.writeSync(fd, data, 0, data.length, null);
             }
+            fs.closeSync(fd);
         }
-        fs.closeSync(fd);
         counter++;
     });
     type.handler(dest);
 };
+
+/**
+ * Converts a string to a pseudo-file for use by concat().
+ * @param {String} s The string which should be inserted.
+ * @type Object
+ * @return An object which can be used as an element of the second parameter to
+ * concat(). It has one method: getData(), which returns the string s.
+ */
+exports.string = function(s) { return { getData: function() { return s; } }; };
 
 /**
  * Returns a list of filenames specified by a root directory and one or more
@@ -331,42 +364,61 @@ exports.merge = function(a, b, cmp) {
 var includes = {};
 var includesFile;
 
-/**
- * Specifies a file which stores include information between builds, and loads
- * it if it already exists.
- * @param {String} filename The file which stores include information between
- * builds.
- */
-exports.loadIncludes = function(filename) {
-    includesFile = filename;
-    if (path.existsSync(filename)) {
-        includes = JSON.parse(fs.readFileSync(filename, "utf8"));
-        for (var i in includes) file(i, includes[i]);
+exports.includes = {
+
+    /**
+     * Specifies a file which stores include information between builds, and
+     * loads it if it already exists.
+     * @param {String} filename The file which stores include information
+     * between builds.
+     */
+    load: function(filename) {
+        includesFile = filename;
+        if (path.existsSync(filename)) {
+            includes = JSON.parse(fs.readFileSync(filename, "utf8"));
+            for (var target in includes) {
+                var inc = includes[target];
+                file(target, inc.list);
+                if (inc.type) {
+                    getType(target, { type: inc.type }).handler(target);
+                }
+            }
+        }
+    },
+    
+    /**
+     * Specifies which includes were found in a source file.
+     * @param {String} file The target file which contains the results of
+     * the inclusion.
+     * @param {Array} includedFiles An array with names of included files.
+     * @param {String} type An optional file type which can be used to
+     * handle loaded files.
+     */
+    set: function(file, includedFiles, type) {
+        includes[file] = { list: includedFiles };
+        if (type) includes[file].type = type;
+    },
+    
+    /**
+     * Adds an include found in a source file.
+     * @param {String} file The target file which contains the results of
+     * the inclusion.
+     * @param {String} include Name of the included file.
+     */
+    add: function(file, include) {
+        if (!(file in includes)) includes[file] = { list: {} };
+        includes[file].list.push(include);
+    },
+    
+    /**
+     * Saves the list of inlcudes to the file previously specified by
+     * includes.load.
+     */
+    save: function() {
+        for (var i in includes) {
+            if (!includes[i].list.length) delete includes[i];
+        }
+        fs.writeFileSync(includesFile, JSON.stringify(includes));
     }
-};
-
-/**
- * Adds an include found in a source file.
- * @param {String} file The file which contains the include.
- * @param {String} include Name of the included file.
- */
-exports.addInclude = function(file, include) {
-    (includes[file] || (includes[file] = [])).push(include);
-};
-
-/**
- * Specifies which includes were found in a source file.
- * @param {String} file The file which contains the includes.
- * @param {Array} includedFiles An array with names of included files.
- */
-exports.setIncludes = function(file, includedFiles) {
-    includes[file] = includedFiles;
-};
-
-/**
- * Saves the list of inlcudes to the file previously specified by loadIncludes.
- */
-exports.saveIncludes = function() {
-    for (var i in includes) if (!includes[i].length) delete includes[i];
-    fs.writeFileSync(includesFile, JSON.stringify(includes));
+    
 };
