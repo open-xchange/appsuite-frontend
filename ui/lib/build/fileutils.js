@@ -406,7 +406,7 @@ exports.includes = {
      * @param {String} include Name of the included file.
      */
     add: function(file, include) {
-        if (!(file in includes)) includes[file] = { list: {} };
+        if (!(file in includes)) includes[file] = { list: [] };
         includes[file].list.push(include);
     },
     

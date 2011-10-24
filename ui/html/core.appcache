@@ -19,7 +19,7 @@ CACHE:
 # mail
 @base@/apps/io.ox/mail/main.js
 @base@/apps/io.ox/mail/api.js
-@base@/apps/io.ox/mail/style.css
+@base@/apps/io.ox/mail/style.less
 @base@/apps/io.ox/core/tk/vgrid.js
 @base@/apps/io.ox/mail/util.js
 @base@/apps/io.ox/mail/view-detail.js

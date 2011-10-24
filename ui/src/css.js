@@ -95,10 +95,11 @@
     
 }());
 
-define ("gettext", ["io.ox/core/gettext"], function(gettext) {
+define ("gettext", function (gettext) {
     return {
-        load: function(name, parentRequire, load, config) {
-            var module = gettext.getModule(name);
+        load: function (name, parentRequire, load, config) {
+            var gettext = require("io.ox/core/gettext"),
+                module = gettext.getModule(name);
             if (module) {
                 parentRequire([module], load);
             } else {
