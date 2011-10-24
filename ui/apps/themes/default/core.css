@@ -496,7 +496,7 @@ a.nolink {
     border-left: 1px solid #ccc;
 }
 
-.no-searchfield .searchfield-wrapper {
+/* removed .no-searchfield because Crome wont see the wrapperstyles*/ .searchfield-wrapper {
     width: 300px;
     height: 17px;
     line-height: 1em;
@@ -735,10 +735,13 @@ li.token-input-token-ox {
     overflow: hidden; 
     height: auto !important; 
     height: 15px;
-    margin: 1px 3px 0px;
-    padding: 1px 3px;
-    background-color: #eff2f7;
-    color: #000;
+    /*margin: 1px 1x 0px;*/
+    margin: 0px 3px 0px 0px;
+    padding: 2px 3px 1px;
+    /*background-color: #eff2f7;*/
+    background-color: #3F9EFC;
+    /*color: #000;*/
+    color: #fff;
     cursor: default;
     border: 1px solid #ccd5e4;
     font-size: 11px;
@@ -756,14 +759,16 @@ li.token-input-token-ox p {
 }
 
 li.token-input-token-ox span {
-    color: #a6b3cf;
+    /*color: #a6b3cf;*/
+    color: #fff;
     margin-left: 5px;
     font-weight: bold;
     cursor: pointer;
 }
 
 li.token-input-selected-token-ox {
-    background-color: #5670a6;
+    /*background-color: #5670a6;*/
+    background-color: #026ABA;
     border: 1px solid #3b5998;
     color: #fff;
 }
@@ -771,14 +776,15 @@ li.token-input-selected-token-ox {
 li.token-input-input-token-ox {
     float: left;
    /* margin: 0;*/
-   margin: 0 0 4px;
+   margin: 2px 2px 3px 2px;
     padding: 0;
     list-style-type: none;
 }
 
 div.token-input-dropdown-ox {
     position: absolute;
-    width: 300px;
+   /* width: 300px;*/
+   width: 297px;
     background-color: #fff;
     overflow: hidden;
     border-left: 1px solid #ccc;
@@ -823,7 +829,8 @@ div.token-input-dropdown-ox ul li em {
 }
 
 div.token-input-dropdown-ox ul li.token-input-selected-dropdown-item-ox {
-    background-color: #3b5998;
+    /*background-color: #3b5998;*/
+    background-color: #3F9EFC;
     color: #fff;
 }
 
