@@ -496,7 +496,7 @@ a.nolink {
     border-left: 1px solid #ccc;
 }
 
-/* removed .no-searchfield because Crome wont see the wrapperstyles*/ .searchfield-wrapper {
+/* .no-searchfield removed because searchfield is now type=text */ .searchfield-wrapper {
     width: 300px;
     height: 17px;
     line-height: 1em;
@@ -508,6 +508,19 @@ a.nolink {
     border: 1px solid #bbb;
     display: inline-block;
 }
+
+.searchfield-wrapper input{
+	margin: 2px 2px 3px;
+	background-color: white;
+	border: 0 none;
+	font-size: 11px;
+	padding: 0;
+	width: 100px;
+	/*line-height: 15px;*/
+	
+	
+}
+
 
 input[type=search] {
     width: 220px;
@@ -722,6 +735,7 @@ ul.token-input-list-ox {
 
 ul.token-input-list-ox li input {
     border: 0;
+    font-size: 11px;
     width: 100px;
     /*padding: 3px 8px;*/
     padding: 0px;
