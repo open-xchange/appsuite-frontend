@@ -15,7 +15,7 @@
  
 // TODO: Render Versions
 
-define("io.ox/files/base", ["io.ox/core/extensions"], function (ext) {
+define("io.ox/files/view-detail", ["io.ox/core/extensions"], function (ext) {
     
     "use strict";
     
