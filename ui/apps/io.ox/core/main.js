@@ -105,12 +105,12 @@ define("io.ox/core/main",
                 });
             });
         
-        desktop.addLauncher("left", gt("Tasks"), function () {
-            var node = this;
-            return require(["io.ox/tasks/main"], function (m) {
-                m.getApp().setLaunchBarIcon(node).launch();
-            });
-        });
+//        desktop.addLauncher("left", gt("Tasks"), function () {
+//            var node = this;
+//            return require(["io.ox/tasks/main"], function (m) {
+//                m.getApp().setLaunchBarIcon(node).launch();
+//            });
+//        });
         
         desktop.addLauncher("left", gt("Calendar"), function () {
                 var node = this;
