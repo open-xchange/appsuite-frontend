@@ -686,7 +686,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     .addClass("searchfield-wrapper")
                     .css({ "float": "right" })
                     .append(
-                        $("<input/>", { type: "search", id: "autocomplete", placeholder: "Search...", size: "40" })
+                        $("<input/>", { type: "text", id: "autocomplete", placeholder: "Search...", size: "40" })
                             
                             .bind("keypress", function (e) {
                                 e.stopPropagation();

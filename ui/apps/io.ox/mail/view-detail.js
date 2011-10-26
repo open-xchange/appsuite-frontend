@@ -216,14 +216,14 @@ define("io.ox/mail/view-detail", [
                                 $("<span/>").addClass("label").text("To:\u00A0")
                             )
                             .append(
-                                that.serializeList(data.to, true)
+                                util.serializeList(data.to, true)
                             )
                             .append(
                                 // CC
                                 showCC ? $("<span/>").addClass("label").text(" Copy:\u00A0") : []
                             )
                             .append(
-                                that.serializeList(data.cc, true)
+                                util.serializeList(data.cc, true)
                             )
                         : []
                 );
