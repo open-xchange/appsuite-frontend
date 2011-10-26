@@ -19,14 +19,22 @@ define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
         index: 10,
         id: "default",
         label: "Halo",
-        action: function (data) {
+        action: function (data, e) {
+            // get all extensions
             var tmp = _(ox.serverConfig.extensions.halo)
                 .map(function (obj) {
                     return "extensions/" + obj + "/register";
                 });
-            require(["extensions/halo/main"].concat(tmp), function (halo) {
-                halo.show(data);
-            });
+            // require detail view, dialogs & all halo extensions
+            require(
+                ["extensions/halo/view-detail", "io.ox/core/tk/dialogs"].concat(tmp),
+                function (view, dialogs) {
+                    new dialogs.SidePopup()
+                        .show(e, function (popup) {
+                            popup.append(view.draw(data));
+                        });
+                }
+            );
         }
     });
     

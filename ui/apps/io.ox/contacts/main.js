@@ -203,7 +203,8 @@ define("io.ox/contacts/main",
         // go!
         win.show(function () {
             grid.paint();
-             
+            
+            /* turn off for demo purposes
             var searchAdapter = {
                     search: function (options) {
                         api.search(options.query)
@@ -211,7 +212,6 @@ define("io.ox/contacts/main",
                             .fail(_.lfo(options.fail));
                     }
                 };
-            
             $("#autocomplete").tokenInput(searchAdapter, {
                 searchDelay: 500,
                 minChars: 3,
@@ -246,9 +246,8 @@ define("io.ox/contacts/main",
                 onReady: function () {
                     console.log('onReady');
                 }
-
             });
-           
+            */
         });
     });
     

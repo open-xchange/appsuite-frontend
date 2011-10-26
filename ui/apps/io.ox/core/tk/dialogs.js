@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,12 +9,11 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- *
  */
 
 define("io.ox/core/tk/dialogs", function () {
     
-    "use strict";
+    'use strict';
     
     // scaffolds
     var underlay = $("<div/>").addClass("abs io-ox-dialog-underlay"),
@@ -161,6 +159,132 @@ define("io.ox/core/tk/dialogs", function () {
         };
     };
     
+    var SidePopup = function (width) {
+        
+        var pane = $("<div>")
+                .addClass("io-ox-sidepopup-pane abs"),
+            popup = $("<div>")
+                .addClass("io-ox-sidepopup abs")
+                .append(pane)
+                .bind("click", function (e) {
+                    e.preventDefault();
+                }),
+            arrow = $("<div>")
+                .addClass("io-ox-sidepopup-arrow")
+                .append($("<div>").addClass("border"))
+                .append($("<div>").addClass("triangle")),
+            open,
+            close,
+            closeByEscapeKey,
+            closeByScroll,
+            closeByClick,
+            timer = null,
+            self = this;
+        
+        // public nodes
+        this.nodes = {};
+        this.lastTrigger = null;
+        
+        closeByEscapeKey = function (e) {
+            if (e.which === 27) {
+                close(e);
+            }
+        };
+        
+        closeByScroll = function (e) {
+            close(e);
+        };
+        
+        closeByClick = function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+                close(e);
+            }
+        };
+        
+        close = function (e) {
+            // remove handlers & avoid leaks
+            $(document).unbind("keydown", closeByEscapeKey);
+            self.nodes.closest.unbind("scroll", closeByScroll);
+            self.nodes.click.unbind("click", closeByClick);
+            self.lastTrigger = null;
+            // use time to avoid flicker
+            timer = setTimeout(function () {
+                arrow.detach();
+                pane.empty();
+                popup.detach();
+            }, 100);
+        };
+        
+        open = function (e, handler) {
+            // get proper elements
+            var my = $(this), current, zIndex, sidepopup;
+            self.nodes = {
+                closest: my.parents(".io-ox-sidepopup-pane, .window-content"),
+                click: my.parents(".io-ox-sidepopup-pane, .window-body"),
+                target: my.parents(".window-body")
+            };
+            // get active side popup & triggering element
+            sidepopup = self.nodes.closest.prop("sidepopup") || null;
+            self.lastTrigger = sidepopup ? sidepopup.lastTrigger : null;
+            // get zIndex for visual stacking
+            zIndex = (my.parents(".io-ox-sidepopup, .window-content").css("zIndex") || 1) + 2;
+            // second click?
+            if (self.lastTrigger === this) {
+                close(e);
+            } else {
+                // open siblings?
+                if (sidepopup) {
+                    sidepopup.close();
+                }
+                // remember as current trigger
+                self.lastTrigger = this;
+                self.nodes.closest.prop("sidepopup", self);
+                // prevent default to avoid close
+                e.preventDefault();
+                // clear timer
+                clearTimeout(timer);
+                // add handlers to close popup
+                self.nodes.click.bind("click", closeByClick);
+                self.nodes.closest.bind("scroll", closeByScroll);
+                $(document).bind("keydown", closeByEscapeKey);
+                // decide for proper side
+                var distance = e.pageX - ($(document).width() / 2 >> 0),
+                    narrow = Math.abs(distance) < 50 ? " narrow" : "";
+                popup.removeClass("left right narrow")
+                    .addClass((distance < 0 ? "right" : "left") + narrow)
+                    .css("zIndex", zIndex);
+                arrow.removeClass("left right narrow")
+                    .addClass((distance < 0 ? "left" : "right") + narrow)
+                    .css("zIndex", zIndex + 1);
+                // call custom handler
+                (handler || $.noop).call(this, pane.empty(), e);
+                // set arrow top
+                var halfHeight = (my.outerHeight(true) / 2 >> 0),
+                    top = my.offset().top + halfHeight - self.nodes.target.offset().top;
+                arrow.css("top", top);
+                // finally, add popup to proper element
+                self.nodes.target.append(popup).append(arrow);
+            }
+        };
+        
+        this.delegate = function (node, selector, handler) {
+            $(node).delegate(selector, "click", function (e) {
+                open.call(this, e, handler);
+            });
+            return this;
+        };
+        
+        this.show = function (e, handler) {
+            open.call(e.target, e, handler);
+            return this;
+        };
+        
+        this.close = function (e) {
+            close(e);
+        };
+    };
+    
     //TODO: Less C&P
     var pane = $('<div/>').addClass('abs io-ox-dialog-pane').append(
         $("<div/>").addClass("content")
@@ -291,10 +415,10 @@ define("io.ox/core/tk/dialogs", function () {
         };
     };
     
-    
     return {
         ModalDialog: Dialog,
-        SlidingPane: SlidingPane
+        SlidingPane: SlidingPane,
+        SidePopup: SidePopup
     };
 });
 

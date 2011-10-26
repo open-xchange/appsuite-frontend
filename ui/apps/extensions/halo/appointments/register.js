@@ -38,15 +38,26 @@ define("extensions/halo/appointments/register",
                 deferred.resolve();
                 
             } else {
-            
-                require(["io.ox/calendar/view-grid-template"], function (viewGrid) {
-                    
-                    viewGrid.drawSimpleGrid(appointments)
-                        .delegate(".vgrid-cell", "click", viewGrid.hOpenDetailPopup)
-                        .appendTo($node);
-                    
-                    deferred.resolve();
-                });
+                
+                // TODO: unify with portal code (copy/paste right now)
+                require(
+                    ["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
+                    function (dialogs, viewGrid) {
+                        
+                        viewGrid.drawSimpleGrid(appointments).appendTo($node);
+                        
+                        new dialogs.SidePopup()
+                            .delegate($node, ".vgrid-cell", function (popup) {
+                                var data = $(this).data("appointment");
+                                require(["io.ox/calendar/view-detail"], function (view) {
+                                    popup.append(view.draw(data));
+                                    data = null;
+                                });
+                            });
+                        
+                        deferred.resolve();
+                    }
+                );
             }
             
             return deferred;

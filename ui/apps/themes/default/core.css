@@ -33,9 +33,9 @@
 }
 
 /* ipad: better fat finger support */
-.touch #io-ox-topbar { height: 35px; }
-.touch #io-ox-topbar .launcher { font-size: 14px; line-height: 35px; padding: 0 15px 0 15px; }
-.touch #io-ox-windowmanager { top: 40px; }
+.touch #io-ox-topbar { height: 40px; }
+.touch #io-ox-topbar .launcher { font-size: 14px; line-height: 35px; padding: 2px 15px 5px 15px; }
+.touch #io-ox-windowmanager { top: 42px; }
 .touch #io-ox-windowmanager .window-container-center { width: 100% !important; }
 
 #io-ox-topbar .launcher {
@@ -961,3 +961,74 @@ div.token-input-dropdown ul li.token-input-selected-dropdown-item {
 .io-ox-action-link:last-child {
     margin-right: 0;
 } 
+
+/* side popups */
+.io-ox-sidepopup {
+    background-color: white;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    z-index: 3; /* above .window-content */
+    -moz-box-shadow: 0px 0px 30px -5px #555;
+    -webkit-box-shadow: 0px 0px 20px -5px #000;
+    box-shadow: 0px 0px 30px 0px #aaa;
+}
+
+.io-ox-sidepopup-pane {
+    padding: 30px;
+    overflow: auto;
+}
+
+.io-ox-sidepopup.right {
+    border-right: 0px none;
+}
+
+.io-ox-sidepopup.left {
+    border-left: 0px none;
+}
+
+.io-ox-sidepopup-arrow {
+    position: absolute;
+    z-index: 4;
+}
+
+.io-ox-sidepopup-arrow .border {
+    position: absolute;
+    height: 0;
+    width: 0;
+    border: 20px solid transparent;
+    top: -20px;
+}
+
+.io-ox-sidepopup-arrow .triangle {
+    position: absolute;
+    height: 0;
+    width: 0px;
+    border: 20px solid transparent;
+    top: -20px;
+}
+
+.io-ox-sidepopup.right, .io-ox-sidepopup-arrow.left { left: 50%; }
+.io-ox-sidepopup.right.narrow, .io-ox-sidepopup-arrow.left.narrow { left: 55%; }
+
+.io-ox-sidepopup.left, .io-ox-sidepopup-arrow.right { right: 50%; }
+.io-ox-sidepopup.left.narrow, .io-ox-sidepopup-arrow.right.narrow { right: 55%; }
+
+.io-ox-sidepopup-arrow.left .border {
+    border-right-color: #aaa;
+    left: -40px;
+}
+
+.io-ox-sidepopup-arrow.left .triangle {
+    border-right-color: #fff;
+    left: -39px;
+}
+
+.io-ox-sidepopup-arrow.right .border {
+    border-left-color: #aaa;
+    right: -40px;
+}
+
+.io-ox-sidepopup-arrow.right .triangle {
+    border-left-color: #fff;
+    right: -39px;
+}

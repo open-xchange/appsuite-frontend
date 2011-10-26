@@ -22,7 +22,7 @@ define("io.ox/calendar/view-detail",
     
     var fnClickPerson = function (e) {
         ext.point("io.ox/core/person:action").each(function (ext) {
-            _.call(ext.action, e.data);
+            _.call(ext.action, e.data, e);
         });
     };
 
@@ -123,7 +123,6 @@ define("io.ox/calendar/view-detail",
         } else {
             name = obj.display_name || String(obj.mail).toLowerCase();
         }
-        console.log("draw part", name, "email", mail_lc, "data", obj);
         node = $("<div>").addClass("participant")
             .append($("<span>").addClass(personClass).text(name))
             .append($("<span>").addClass("status " + statusClass).text(" " + confirm))

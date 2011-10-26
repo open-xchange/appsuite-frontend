@@ -297,18 +297,7 @@ $(document).ready(function () {
         } else if (ox.serverConfig.autoLogin === true && ox.online) {
             // try auto login
             var session = require("io.ox/core/session");
-            if (!ox.signin) {
-                session.cachedAutoLogin()
-                    .done(function () {
-                        gotoCore();
-                        session.autoLogin().fail(fail);
-                    })
-                    .fail(function () {
-                        session.autoLogin().done(gotoCore).fail(fail);
-                    });
-            } else {
-                session.autoLogin().done(gotoCore).fail(fail);
-            }
+            session.autoLogin().done(gotoCore).fail(fail);
         } else {
             fail();
         }
@@ -423,6 +412,11 @@ $(document).ready(function () {
     // do we have a mouse?
     if (!Modernizr.touch) {
         $("html").addClass("mouse");
+    } else {
+        // avoid body scroll for touch devices
+        $(document).bind("touchmove", function (e) {
+            //e.preventDefault();
+        });
     }
     
     // no ellipsis? (firefox)

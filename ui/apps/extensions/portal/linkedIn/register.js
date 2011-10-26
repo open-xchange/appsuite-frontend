@@ -31,38 +31,50 @@ define("extensions/portal/linkedin/register", ["io.ox/core/extensions", "io.ox/c
                     
                 $detailEntry = $("<div/>")
                     .addClass("io-ox-portal-linkedin-updates-details")
-                    .hide().appendTo(this);
+                    .hide().appendTo(this),
+                    
+                self = $(this);
             
-            function displayName(person) {
-                var dname = person.firstName + " " + person.lastName,
-                link = $("<a href='#' />").text(dname).click(function () {
-                    if (link.prop("personId") === person.id) {
-                        link.prop("personId", null);
-                        $detailEntry.hide();
-                        return;
-                    }
-                    link.prop("personId", person.id);
-                    require(["io.ox/linkedIn/view-detail"], function (viewer) {
-                        var loading = http.GET({
+            function fnClick(e) {
+                
+                var person = e.data;
+                e.preventDefault();
+                
+                require(["io.ox/linkedIn/view-detail", "io.ox/core/tk/dialogs"], function (viewer, dialogs) {
+                    
+                    var busy = $("<div>")
+                            .css("minHeight", "100px")
+                            .busy(),
+                        node = $("<div>")
+                            .append(viewer.draw(person))
+                            .append(busy);
+                    
+                    new dialogs.SidePopup()
+                        .show(e, function (popup) {
+                            popup.append(node);
+                        });
+                    
+                    return http.GET({
                             module: "integrations/linkedin/portal",
                             params: {
                                 action: "fullProfile",
                                 id: person.id
                             }
+                        })
+                        .done(function (completeProfile) {
+                            busy.idle();
+                            node.empty()
+                                .append(viewer.draw(completeProfile));
                         });
-                        $detailEntry.empty()
-                            .append(viewer.draw(person))
-                            .show();
-                        var $busyIndicator = $("<div/>").css({"min-height": "100px"}).appendTo($detailEntry);
-                        $busyIndicator.busy();
-                        loading.done(function (completeProfile) {
-                            $busyIndicator.idle().remove();
-                            $detailEntry.empty().append(viewer.draw(completeProfile));
-                        });
-                    });
                 });
+            }
+            
+            function displayName(person) {
                 
-                return link;
+                var dname = person.firstName + " " + person.lastName;
+                return $("<a href='#' />")
+                    .text(dname)
+                    .bind("click", person, fnClick);
             }
             
             // Check presence of all variables
