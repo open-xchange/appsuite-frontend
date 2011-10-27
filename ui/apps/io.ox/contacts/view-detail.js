@@ -14,12 +14,8 @@
 define("io.ox/contacts/view-detail",
     ["io.ox/core/extensions",
      "gettext!io.ox/contacts/contacts",
-     "io.ox/core/api/user",
-     "io.ox/core/api/group",
-     "io.ox/core/api/resource",
-     "io.ox/contacts/base",
-     "io.ox/contacts/view-qrcode"
-    ], function (ext, gt, userAPI, groupAPI, resourceAPI, base, qr) {
+     "io.ox/contacts/util"
+    ], function (ext, gt, util) {
     
     "use strict";
     
@@ -114,24 +110,35 @@ define("io.ox/contacts/view-detail",
         index: 100,
         id: 'contact-picture',
         draw: function (data) {
-            $("<td>").css({ paddingBottom: "2em", width: "150px" })
-                .append($("<div>").addClass("picture")
-                       .css({backgroundImage: "url(" + base.getImage(data) + ")"})).appendTo(this);
             
-            $("<td>")
-                .css({ paddingTop: "2em", verticalAlign: "top" })
+            this.append(
+                $("<td>")
+                .css({ verticalAlign: "top" })
                 .append(
-                    $("<div>").addClass("name clear-title").text(base.getFullName(data))
+                    $("<div>").addClass("picture")
+                    .css({ backgroundImage: "url(" + util.getImage(data) + ")" })
+                )
+            )
+            .append(
+                $("<td>")
+                .css({ verticalAlign: "top" })
+                .append(
+                    $("<div>")
+                    .addClass("name clear-title")
+                    .text(util.getFullName(data))
                 )
                 .append(
-                    $("<div>").addClass("job clear-title").text(
+                    $("<div>")
+                    .addClass("job clear-title")
+                    .text(
                         data.mark_as_distributionlist ?
                             gt("Distribution list") :
                             (data.company || data.position || data.profession) ?
                                     join(", ", data.company, data.position, data.profession) + "\u00A0" :
                                     (data.email1 || data.email2 || data.email3) + "\u00A0"
                     )
-                ).appendTo(this);
+                )
+            );
         }
     });
     
@@ -255,10 +262,10 @@ define("io.ox/contacts/view-detail",
             var r = 0;
             if (Modernizr.canvas) {
                 if (r > 0) {
-                    addField("", "\u00A0", this);
+                    addField("\u00A0", "\u00A0", this);
                     r = 0;
                 }
-                addField("QR", true, this, function (td) {
+                addField("\u00A0", true, this, function (td) {
                     td.append(
                         $("<span>").addClass("link")
                             .text("Show QR-code")

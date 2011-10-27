@@ -76,6 +76,11 @@
 
 /* Detail view */
 
+.contact-detail {
+    width: 100%;
+    max-width: 600px;
+}
+
 .contact-detail td {
     padding: 0 3em 1em 0;
 }
@@ -91,6 +96,7 @@
     font-weight: normal;
     text-align: right;
     vertical-align: top;
+    width: 100px;
 }
 
 .contact-detail .value {
@@ -109,7 +115,12 @@
 }
 
 .contact-detail .picture {
-    height: 100px;
-    background-position: right center;
+    width: 100px;
+    height: 80px;
+    display: inline-block;
+    float: right;
+    background-position: right top;
     background-repeat: no-repeat;
+    background-size: cover;
+    margin-bottom: 2em;
 }

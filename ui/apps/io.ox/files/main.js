@@ -81,8 +81,8 @@ define("io.ox/files/main",
             .appendTo(win.nodes.main);
         
         right = $("<div/>")
-            .css({ left: "310px", overflow: "auto", padding: "30px" })
-            .addClass("rightside withStatusBar")
+            .css({ left: "310px", overflow: "auto" })
+            .addClass("rightside default-content-padding withStatusBar")
             .appendTo(win.nodes.main);
         
         

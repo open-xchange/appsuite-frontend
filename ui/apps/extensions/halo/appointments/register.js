@@ -29,7 +29,7 @@ define("extensions/halo/appointments/register",
             var deferred = new $.Deferred();
             
             $node.append(
-                $("<div/>").addClass("widget-title clear-title").text("Appointments")
+                $("<div/>").addClass("widget-title clear-title").text("Shared Appointments")
             );
             
             if (appointments.length === 0) {

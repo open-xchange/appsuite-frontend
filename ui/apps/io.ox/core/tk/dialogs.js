@@ -161,29 +161,41 @@ define("io.ox/core/tk/dialogs", function () {
     
     var SidePopup = function (width) {
         
-        var pane = $("<div>")
-                .addClass("io-ox-sidepopup-pane abs"),
-            popup = $("<div>")
-                .addClass("io-ox-sidepopup abs")
-                .append(pane)
-                .bind("click", function (e) {
-                    e.preventDefault();
-                }),
-            arrow = $("<div>")
-                .addClass("io-ox-sidepopup-arrow")
-                .append($("<div>").addClass("border"))
-                .append($("<div>").addClass("triangle")),
+        var processEvent,
+            isProcessed,
             open,
             close,
             closeByEscapeKey,
             closeByScroll,
             closeByClick,
             timer = null,
+            
+            pane = $("<div>")
+                .addClass("io-ox-sidepopup-pane default-content-padding abs"),
+            popup = $("<div>")
+                .addClass("io-ox-sidepopup abs")
+                .append(pane)
+                .bind("click", function (e) {
+                    processEvent(e);
+                }),
+            arrow = $("<div>")
+                .addClass("io-ox-sidepopup-arrow")
+                .append($("<div>").addClass("border"))
+                .append($("<div>").addClass("triangle")),
+            
             self = this;
         
         // public nodes
         this.nodes = {};
         this.lastTrigger = null;
+        
+        processEvent = function (e) {
+            e.preventDefault();
+        };
+        
+        isProcessed = function (e) {
+            return e.isDefaultPrevented();
+        };
         
         closeByEscapeKey = function (e) {
             if (e.which === 27) {
@@ -196,8 +208,8 @@ define("io.ox/core/tk/dialogs", function () {
         };
         
         closeByClick = function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
+            if (!isProcessed(e)) {
+                processEvent(e);
                 close(e);
             }
         };
@@ -233,36 +245,65 @@ define("io.ox/core/tk/dialogs", function () {
             if (self.lastTrigger === this) {
                 close(e);
             } else {
+                
                 // open siblings?
                 if (sidepopup) {
                     sidepopup.close();
                 }
+                
                 // remember as current trigger
                 self.lastTrigger = this;
                 self.nodes.closest.prop("sidepopup", self);
+                
                 // prevent default to avoid close
-                e.preventDefault();
+                processEvent(e);
                 // clear timer
                 clearTimeout(timer);
+                
                 // add handlers to close popup
                 self.nodes.click.bind("click", closeByClick);
                 self.nodes.closest.bind("scroll", closeByScroll);
                 $(document).bind("keydown", closeByEscapeKey);
+                
                 // decide for proper side
-                var distance = e.pageX - ($(document).width() / 2 >> 0),
-                    narrow = Math.abs(distance) < 50 ? " narrow" : "";
-                popup.removeClass("left right narrow")
-                    .addClass((distance < 0 ? "right" : "left") + narrow)
+                var docWidth = $(document).width(),
+                    max = docWidth * 0.45 >> 0,
+                    distance, mode, direction, pos,
+                    parentPopup = my.parents(".io-ox-sidepopup").first();
+                    
+                if (parentPopup.length) {
+                    mode = parentPopup.hasClass("right") ? "left" : "right";
+                } else {
+                    distance = my.offset().left + my.outerWidth() - (docWidth / 2 >> 0);
+                    mode = distance < 0 ? "right" : "left";
+                }
+                
+                direction = mode === "right" ? "left" : "right";
+                pos = mode === "right" ?
+                        Math.max(max, Math.max(width || 0, my.offset().left + my.outerWidth() + 25)) :
+                        Math.max(max, docWidth - Math.max(width || 0, my.offset().left + 25));
+                        
+                
+                //pane.css("maxWidth", max + "px");
+                
+                popup.removeClass("left right")
+                    .addClass(mode)
+                    .css(direction, pos + "px")
                     .css("zIndex", zIndex);
-                arrow.removeClass("left right narrow")
-                    .addClass((distance < 0 ? "left" : "right") + narrow)
+                
+                arrow.removeClass("left right")
+                    .addClass(mode)
+                    .css(direction, pos + "px")
                     .css("zIndex", zIndex + 1);
+                
                 // call custom handler
                 (handler || $.noop).call(this, pane.empty(), e);
+                
                 // set arrow top
                 var halfHeight = (my.outerHeight(true) / 2 >> 0),
                     top = my.offset().top + halfHeight - self.nodes.target.offset().top;
                 arrow.css("top", top);
+                
                 // finally, add popup to proper element
                 self.nodes.target.append(popup).append(arrow);
             }

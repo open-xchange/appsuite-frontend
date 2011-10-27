@@ -12,9 +12,14 @@
  */
 
 define("io.ox/mail/main",
-    ["io.ox/mail/util", "io.ox/mail/api", "io.ox/core/tk/vgrid",
-     "io.ox/mail/view-detail", "io.ox/mail/actions", "less!io.ox/mail/style.less"
-    ], function (util, api, VGrid, viewDetail) {
+    ["io.ox/mail/util",
+     "io.ox/mail/api",
+     "io.ox/core/tk/vgrid",
+     "io.ox/mail/view-detail",
+     "io.ox/mail/view-grid-template",
+     "io.ox/mail/actions",
+     "less!io.ox/mail/style.less"
+    ], function (util, api, VGrid, viewDetail, tmpl) {
     
     "use strict";
     
@@ -82,48 +87,7 @@ define("io.ox/mail/main",
         grid = new VGrid(left);
         
         // add template
-        grid.addTemplate({
-            build: function () {
-                var from, date, priority, subject, attachment, threadSize, flag;
-                this.addClass("mail")
-                    .append(
-                        $("<div/>")
-                            .append(date = $("<span/>").addClass("date"))
-                            .append(from = $("<span/>").addClass("from"))
-                    )
-                    .append(
-                        $("<div/>")
-                            .append(threadSize = $("<div/>").addClass("threadSize"))
-                            .append(attachment = $("<span/>").addClass("attachment"))
-                            .append(priority = $("<span/>").addClass("priority"))
-                            .append(subject = $("<span/>").addClass("subject"))
-                    )
-                    .append(flag = $("<div/>").addClass("flag abs"));
-                return { from: from, date: date, priority: priority, subject: subject, attachment: attachment, threadSize: threadSize, flag: flag };
-            },
-            set: function (data, fields, index) {
-                fields.priority.text(util.getPriority(data));
-                fields.subject.text(_.prewrap(data.subject));
-                if (!data.threadSize || data.threadSize === 1) {
-                    fields.threadSize.text("").hide();
-                } else {
-                    fields.threadSize.text(data.threadSize).css("display", "");
-                }
-                fields.from.empty().append(util.getFrom(data.from), true);
-                fields.date.text(util.getTime(data.received_date));
-                fields.flag.get(0).className = "flag abs flag_" + data.color_label;
-                fields.attachment.css("display", data.attachment ? "" : "none");
-                if (util.isUnread(data)) {
-                    this.addClass("unread");
-                }
-                if (util.isMe(data)) {
-                    this.addClass("me");
-                }
-                if (util.isDeleted(data)) {
-                    this.addClass("deleted");
-                }
-            }
-        });
+        grid.addTemplate(tmpl.main);
         
         // all request
         grid.setAllRequest(function () {

@@ -38,24 +38,39 @@ define("io.ox/portal/main", ["io.ox/core/extensions", "css!io.ox/portal/style.cs
         
         win.nodes.main.addClass("io-ox-portal").css({overflow: "auto"});
         
+        var resize = function () {
+            
+            var nodes = win.nodes.main.find(".io-ox-portal-widget"),
+                availWidth = win.nodes.main.width(),
+                cols = Math.max(1, availWidth / 400 >> 0),
+                width = 100 / cols,
+                i = 0, $i = nodes.length, last;
+            for (; i < $i; i++) {
+                last = i % cols === cols - 1;
+                nodes.eq(i).css({
+                    width: width - (last ? 0 : 2) + "%",
+                    marginRight: last ? "0%": "2%"
+                });
+            }
+        };
         
         //TODO: Add Configurability
         ext.point("io.ox/portal/widget").each(function (extension) {
             
-            var $node = $("<div/>").addClass("io-ox-portal-widget");
-            $node.busy();
-            win.nodes.main.append($node);
+            var $node = $("<div>")
+                .addClass("io-ox-portal-widget")
+                .busy()
+                .appendTo(win.nodes.main);
             
-            (extension.invoke("load") || $.Deferred().reject())
+            extension.invoke("load")
                 .done(function (data) {
-                    $node.idle();
-                    var $newNode = $("<div/>").addClass("io-ox-portal-widget");
-                    var drawingDone = extension.invoke("draw", $newNode, [data]);
+                    var drawingDone = extension.invoke("draw", $node, [data]);
                     if (drawingDone) {
                         drawingDone.done(function () {
-                            $node.after($newNode);
-                            $node.remove();
+                            $node.idle();
                         });
+                    } else {
+                        $node.idle();
                     }
                 })
                 .fail(function (e) {
@@ -64,7 +79,10 @@ define("io.ox/portal/main", ["io.ox/core/extensions", "css!io.ox/portal/style.cs
         });
         
         // go!
-        win.show();
+        win.show(function () {
+            $(window).bind("resize", resize);
+            resize();
+        });
     });
     
     

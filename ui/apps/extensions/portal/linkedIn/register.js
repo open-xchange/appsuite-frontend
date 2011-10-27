@@ -92,7 +92,7 @@ define("extensions/portal/linkedin/register", ["io.ox/core/extensions", "io.ox/c
     
     var updatesPortal = {
         id: "linkedinUpdates",
-        index: 1000,
+        index: 200,
         load: function () {
             return http.GET({
                 module: "integrations/linkedin/portal",

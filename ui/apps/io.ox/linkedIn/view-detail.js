@@ -37,7 +37,7 @@ define("io.ox/linkedIn/view-detail",
         $pictureNode.append(
             $("<img>")
             .css({ margin: "0 5px 0 0" })
-            .attr("src", data.pictureUrl || (ox.base + "/apps/themes/default/dummypicture.xpng"))
+            .attr("src", data.pictureUrl || (ox.base + "/apps/themes/default/dummypicture.png"))
         );
         
         $nameNode
@@ -158,7 +158,7 @@ define("io.ox/linkedIn/view-detail",
                 _(data.relationToViewer.connections.values).each(function (relation) {
                     if (relation.fullProfile) {
                         var imageUrl = relation.fullProfile && relation.fullProfile.pictureUrl ?
-                            relation.fullProfile.pictureUrl : ox.base + "/apps/themes/default/dummypicture.xpng";
+                            relation.fullProfile.pictureUrl : ox.base + "/apps/themes/default/dummypicture.png";
                         $("<img>")
                             .addClass("linkedin-profile-picture")
                             .css({ margin: "0 5px 0 0", cursor: "pointer" })

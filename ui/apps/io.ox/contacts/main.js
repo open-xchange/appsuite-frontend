@@ -63,8 +63,8 @@ define("io.ox/contacts/main",
         
         // right panel
         right = $("<div/>")
-            .css({ left: gridWidth + 39 + "px", overflow: "auto", padding: "30px" })
-            .addClass("rightside")
+            .css({ left: gridWidth + 39 + "px", overflow: "auto" })
+            .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main);
 
         // grid
