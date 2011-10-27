@@ -108,9 +108,9 @@ $(document).ready(function () {
                     .pipe(function (gt) {
                         return gt.setLanguage(lang);
                     }).pipe(function () {
-                        return require(["io.ox/core/main",
-                                        "theme!themes/default/core.css"]);
-                    }).done(function (main) {
+                        return require(["themes", "io.ox/core/main"]);
+                    }).done(function (themes, main) {
+                        themes.set("default");
                         // go!
                         $("#background_loader").idle();
                         main.launch();

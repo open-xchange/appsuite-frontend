@@ -252,31 +252,56 @@ exports.concat = function(name, files, options) {
     deps.push("Jakefile.js");
     directory(destDir);
     file(dest, deps, function() {
-        if (type.filter) {
-            var data = [], fileDefs = [], start = 0;
-            for (var i = 0; i < files.length; i++) {
-                if (typeof files[i] == "string") {
-                    var src = path.join(srcDir, files[i]);
-                    var contents = fs.readFileSync(src, "utf8");
-                    var last = contents.charAt(contents.length - 1);
-                    if (last != "\r" && last != "\n") contents += "\n";
-                    data.push(contents);
-                    fileDefs.push({ name: src, start: start });
-                    start += contents.split(/\r?\n|\r/g).length - 1;
-                } else {
-                    data.push(typeof files[i] == "string" ?
-                            fs.readFileSync(path.join(srcDir, files[i]), "utf8") :
-                            files[i].getData());
+        var data = [];
+        function fileDefs() {
+            if (fileDefs.value) return fileDefs.value;
+            fileDefs.value = [];
+            var start = 0, index = 0;
+            for (var i = 0; i < data.length; i++) {
+                var lines = data[i].split(/\r?\n|\r/g);
+                for (var j = 0, idx = 0; j < lines.length; j++) {
+                    var len = lines[j].length;
+                    lines[j] = idx;
+                    idx += len;
                 }
+                fileDefs.value.push({
+                    name: typeof files[i] !== "string" ? "" :
+                        path.join(srcDir, files[i]),
+                    start: start, index: index, lines: lines
+                });
+                start += lines.length - 1;
+                index += contents.length;
+            }
+            return fileDefs.value;
+        }
+        function getSrc(line) {
+            var defs = fileDefs();
+            var def = defs[_.sortedIndex(defs, line, getStart) - 1];
+            function getStart(x) {
+                return typeof x == "number" ? x : x.start;
+            }
+            return { name: def.name, line: line - def.start };
+        }
+        getSrc.byIndex = function(index) {
+            var defs = fileDefs();
+            var def = defs[_.sortedIndex(defs, index, getStart) - 1];
+            function getStart(x) {
+                return typeof x == "number" ? x : x.index;
+            }
+            var line = _.sortedIndex(def.lines, index - def.index + 1);
+            return { name: def.name, line: line,
+                     col: index - def.lines[line - 1] + 1 };
+        };
+        if (type.filter) {
+            for (var i = 0; i < files.length; i++) {
+                var contents = typeof files[i] == "string" ?
+                    fs.readFileSync(path.join(srcDir, files[i]), "utf8") :
+                    files[i].getData();
+                var last = contents.charAt(contents.length - 1);
+                if (last != "\r" && last != "\n") contents += "\n";
+                data.push(contents);
             }
             fs.writeFileSync(dest, type.filter(this, data.join(""), getSrc));
-            function getSrc(line) {
-                var def = fileDefs[_.sortedIndex(fileDefs, line, getStart) - 1];
-                function getStart(x) {
-                    return typeof x == "number" ? x : x.start;
-                }
-                return { name: def.name, line: line - def.start };
-            }
         } else {
             var fd = fs.openSync(dest, "w");
             for (var i = 0; i < files.length; i++) {
@@ -334,6 +359,12 @@ exports.list = function(dir, globs) {
 exports.exec = function(command, args, callback) {
     var child = child_process.spawn("/usr/bin/env", [command].concat(args),
         { customFds: [0, 1, 2] });
+    child.on("exit", callback);
+};
+
+exports.gzip = function(src, dest, callback) {
+    var child = child_process.spawn("gzip", ["-nc", src]);
+    child.stdout.pipe(fs.createWriteStream(dest));
     child.on("exit", callback);
 };
 
