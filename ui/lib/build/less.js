@@ -116,25 +116,50 @@ utils.fileType("less").addHook("filter", function(lessfile) {
     var result = "";
     var src = this.getSrc(1).name, dest = this.task.name;
     utils.includes.set(dest, []);
-    new less.Parser({ filename: src, paths: [path.dirname(src)] }).parse(
-        lessfile,
-        function(e, tree) {
-            exports.iterate(tree, less.tree.URL, function(url) {
-                if (!url.value || !/\.png$/.test(url.value.value)) return;
-                var filename = path.join(path.dirname(self.getSrc(1).name),
-                                         url.value.value);
-                var buf = fs.readFileSync(filename);
-                if (buf.length > 24558) return; // IE8 size limit
-                url.attrs = { mime: "image/png", charset: "", base64: ";base64",
-                              data: "," + buf.toString("base64") };
-                delete url.value;
-                utils.includes.add(dest, filename);
+    try {
+        new less.Parser({ paths: [path.dirname(src)] }).parse(
+            lessfile,
+            function(e, tree) {
+                if (e) {
+                    var src = self.getSrc(e.line);
+                    console.error(src.name + ":" + src.line, e.message);
+                    return fail();
+                }
+                try {
+                    exports.iterate(tree, less.tree.URL, function(url) {
+                        if (!url.value || !/\.png$/.test(url.value.value)) return;
+                        var filename = path.join(path.dirname(self.getSrc(1).name),
+                                                 url.value.value);
+                        var buf = fs.readFileSync(filename);
+                        if (buf.length > 24558) return; // IE8 size limit
+                        url.attrs = { mime: "image/png", charset: "", base64: ";base64",
+                                      data: "," + buf.toString("base64") };
+                        delete url.value;
+                        utils.includes.add(dest, filename);
+                    });
+                    exports.iterate(tree, less.tree.Import, function(import_) {
+                        utils.includes.add(dest,
+                                         path.join(path.dirname(src), import_.path));
+                    });
+                    result = tree.toCSS({ compress: !process.env.debug });
+                } catch (e) {
+                    if (e.index) {
+                        var src = this.getSrc.byIndex(e.index);
+                        console.error(src.name + ":" + src.line, e.message);
+                    } else {
+                        console.error(e);
+                    }
+                    fail();
+                }
             });
-            exports.iterate(tree, less.tree.Import, function(import_) {
-                utils.includes.add(dest,
-                                 path.join(path.dirname(src), import_.path));
-            });
-            result = tree.toCSS({ compress: !process.env.debug });
-        });
+    } catch (e) {
+        if (e.index) {
+            var src = this.getSrc.byIndex(e.index);
+            console.error(src.name + ":" + src.line, e.message);
+        } else {
+            console.error(e);
+        }
+        fail();
+    }
     return result;
 });

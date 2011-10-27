@@ -14,9 +14,9 @@
  */
 
 define("io.ox/contacts/main",
-    ["io.ox/contacts/base", "io.ox/contacts/api", "io.ox/core/tk/vgrid",
+    ["io.ox/contacts/util", "io.ox/contacts/api", "io.ox/core/tk/vgrid",
      "io.ox/contacts/view-detail", "css!io.ox/contacts/style.css"
-    ], function (base, api, VGrid, viewDetail) {
+    ], function (util, api, VGrid, viewDetail) {
     
     "use strict";
     
@@ -87,9 +87,9 @@ define("io.ox/contacts/main",
                     fields.email.text("");
                     fields.job.text("Distribution list");
                 } else {
-                    fields.name.text(base.getFullName(data));
-                    fields.email.text(base.getMail(data));
-                    fields.job.text(base.getJob(data));
+                    fields.name.text(util.getFullName(data));
+                    fields.email.text(util.getMail(data));
+                    fields.job.text(util.getJob(data));
                 }
             }
         });

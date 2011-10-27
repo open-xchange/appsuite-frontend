@@ -18,7 +18,7 @@ define("io.ox/mail/main",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
      "io.ox/mail/actions",
-     "less!io.ox/mail/style.less"
+     "css!io.ox/mail/style.css"
     ], function (util, api, VGrid, viewDetail, tmpl) {
     
     "use strict";

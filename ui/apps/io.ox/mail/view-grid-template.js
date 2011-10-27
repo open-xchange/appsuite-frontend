@@ -13,7 +13,7 @@
 
 define("io.ox/mail/view-grid-template",
     ["io.ox/mail/util", "io.ox/core/tk/vgrid",
-     "less!io.ox/mail/style.less"], function (util, VGrid) {
+     "css!io.ox/mail/style.css"], function (util, VGrid) {
     
     "use strict";
     
