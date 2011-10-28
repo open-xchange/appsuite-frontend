@@ -2,6 +2,26 @@
 <h1>Extension Points</h1>
 
 <p>Examples:</p>
+
+<script type="text/example">
+var ext = require("io.ox/core/extensions");
+ext.point('io.ox/mail/detail').extend({
+    index: 180,
+    id: 'ad',
+    draw: function (data) {
+        this.append(
+            $("<div>")
+            .css({
+                backgroundImage: "url(" + ox.base + "/apps/themes/default/ad.jpg)",
+                width: "468px",
+                height: "60px",
+                margin: "0px auto 20px auto"
+            })
+        );
+    }
+});
+</script>
+
 <script type="text/example">
     var ext = require("io.ox/core/extensions");
     ext.point("io.ox/calendar/detail").extend({

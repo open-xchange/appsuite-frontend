@@ -40,7 +40,7 @@ define("io.ox/portal/mail/register",
             $node.addClass("io-ox-portal-mail")
                 .append(
                     $("<div/>").addClass("clear-title")
-                        .text("Your Inbox")
+                        .text("New E-Mails")
                 );
             
             if (list.length === 0) {

@@ -269,7 +269,7 @@ define("io.ox/mail/view-detail",
     }));
     
     ext.point('io.ox/mail/detail').extend({
-        index: 180,
+        index: 200,
         id: 'content',
         draw: function (data) {
             this.append(

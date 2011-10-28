@@ -74,7 +74,7 @@ define("io.ox/portal/main", ["io.ox/core/extensions", "css!io.ox/portal/style.cs
                     }
                 })
                 .fail(function (e) {
-                    $node.idle().text(String(e.error));
+                    $node.idle().remove(); //idle().text(String(e.error));
                 });
         });
         
