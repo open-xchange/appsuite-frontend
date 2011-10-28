@@ -143,6 +143,30 @@ define("io.ox/core/main",
         // initialize empty desktop
         
         ext.point("io.ox/core/desktop").extend({
+            id: "upsell",
+            draw: function () {
+                // does nothing - just to demo an exemplary upsell path
+                this.append(
+                    $("<div>", { id: "io-ox-welcome-upsell" })
+                    .css({
+                        width: "200px",
+                        height: "2.25em",
+                        position: "absolute",
+                        right: "50px",
+                        bottom: "150px",
+                        border: "5px solid #555",
+                        webkitBorderRadius: "10px",
+                        boxShadow: "0px 0px 20px -5px white",
+                        padding: "40px",
+                        fontSize: "18pt",
+                        textAlign: "center"
+                    })
+                    .text("Click here for a 90-days free trial!")
+                );
+            }
+        });
+        
+        ext.point("io.ox/core/desktop").extend({
             id: "welcome",
             draw: function () {
                 

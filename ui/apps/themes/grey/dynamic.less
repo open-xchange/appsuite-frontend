@@ -22,7 +22,7 @@
     bottom: auto;
     height: 26px;
     background-color: @menu-background;
-    background-color: fade(@menu-background, 20%);
+    background-color: fade(@menu-background, 100%);
     padding: 0px 1px 1px 1px;
     /*overflow: hidden;*/
 }
@@ -41,7 +41,7 @@
 #io-ox-topbar .launcher {
     color: mix(@menu-color, @menu-background, 75%);
     font-weight: bold;
-    text-shadow: 0px 1px 4px @menu-background;
+    text-shadow: 0px 1px 3px @menu-background;
     padding: 2px 12px 5px 12px;
     margin: 0px 1px 0px 0px;
     line-height: 20px;
@@ -63,9 +63,9 @@
 }
 
 #io-ox-topbar .launcher.active {
-    color: @menu-color;
+    color: @menu-color-active;
     background-color: mix(@menu-color, @menu-background, 400%/15);
-    background-color: fade(@menu-background, 30%);
+    background-color: @menu-background-active;
 }
 
 .rgba #io-ox-topbar .launcher.active {
@@ -94,6 +94,10 @@
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-name: launcherColours;
     -webkit-animation-timing-function: ease-in-out;
+}
+
+#io-ox-welcome-upsell {
+    background-color: #fff;
 }
 
 /* empty desktop */
@@ -171,8 +175,8 @@
     
     border-top: 1px solid mix(@head-color, @head-background, 75%);
     border-top-color: fade(@head-color, 30%);
-    background-color: mix(@head-color, @head-background, 100%/15);
-    background-color: fade(@head-background, 30%);
+    
+    background-color: #E8F5FF;
     
     color: @head-color;
     font-family: Lucida Grande, Arial;
@@ -197,11 +201,10 @@
     line-height: 18px;
     /*text-align: center;*/
     color: @head-color;
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: OpenSans, Helvetica, Arial, sans-serif;
     font-weight: 200;
-    font-size: 18pt;
+    font-size: 16pt;
     line-height: 18pt;
-    text-shadow: 0px 0px 1px mix(@head-color, @head-background, 1400%/15);
 }
 
 .window-title .subtitle {

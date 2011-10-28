@@ -22,7 +22,7 @@
     bottom: auto;
     height: 26px;
     background-color: @menu-background;
-    background-color: fade(@menu-background, 20%);
+    background-color: fade(@menu-background, 100%);
     padding: 0px 1px 1px 1px;
     /*overflow: hidden;*/
 }
@@ -41,7 +41,7 @@
 #io-ox-topbar .launcher {
     color: mix(@menu-color, @menu-background, 75%);
     font-weight: bold;
-    text-shadow: 0px 1px 4px @menu-background;
+    text-shadow: 0px 1px 3px @menu-background;
     padding: 2px 12px 5px 12px;
     margin: 0px 1px 0px 0px;
     line-height: 20px;
@@ -63,9 +63,9 @@
 }
 
 #io-ox-topbar .launcher.active {
-    color: @menu-color;
+    color: @menu-color-active;
     background-color: mix(@menu-color, @menu-background, 400%/15);
-    background-color: fade(@menu-background, 30%);
+    background-color: @menu-background-active;
 }
 
 .rgba #io-ox-topbar .launcher.active {
@@ -96,17 +96,8 @@
     -webkit-animation-timing-function: ease-in-out;
 }
 
-@-webkit-keyframes upsellColours {
-    from { background-color: rgba(255, 255, 255, 1.0); }
-      to { background-color: rgba(255, 255, 255, 0.6); }
-}
-
 #io-ox-welcome-upsell {
-    -webkit-animation-direction: alternate;
-    -webkit-animation-duration: 1s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-name: upsellColours;
-    -webkit-animation-timing-function: ease-in-out;
+    background-color: #fff;
 }
 
 /* empty desktop */
@@ -185,7 +176,7 @@
     border-top: 1px solid mix(@head-color, @head-background, 75%);
     border-top-color: fade(@head-color, 30%);
     background-color: mix(@head-color, @head-background, 100%/15);
-    background-color: fade(@head-background, 30%);
+    background-color: fade(@head-background, 100%);
     
     color: @head-color;
     font-family: Lucida Grande, Arial;
