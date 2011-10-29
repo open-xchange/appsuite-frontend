@@ -46,7 +46,9 @@
         },
         // get hash & query
         queryData = deserialize(document.location.search.substr(1), /&/),
-        hashData = document.location.hash.substr(1);
+        hashData = document.location.hash.substr(1),
+        // local timezone offset
+        timezoneOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
         
     // decode
     hashData = deserialize(hashData.substr(0, 1) === "?" ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData);
@@ -161,11 +163,19 @@
         },
         
         /**
-         * Return current time as timestamp
+         * Returns local current time as timestamp
          * @returns {long} Timestamp
          */
         now: function () {
             return (new Date()).getTime();
+        },
+        
+        /**
+         * Returns current time as UTC timestamp
+         * @returns {long} Timestamp
+         */
+        utc: function () {
+            return (new Date()).getTime() - timezoneOffset;
         },
         
         /**

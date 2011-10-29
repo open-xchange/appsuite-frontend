@@ -161,6 +161,9 @@ define("io.ox/core/tk/dialogs", function () {
     
     var SidePopup = function (width) {
         
+        // default minimum width
+        width = width || 400;
+        
         var processEvent,
             isProcessed,
             open,
@@ -267,34 +270,53 @@ define("io.ox/core/tk/dialogs", function () {
                 
                 // decide for proper side
                 var docWidth = $(document).width(),
-                    max = docWidth * 0.45 >> 0,
-                    distance, mode, direction, pos,
-                    parentPopup = my.parents(".io-ox-sidepopup").first();
+                    min = docWidth * 0.45 >> 0,
+                    w, distance, mode, right, left, pos,
+                    parentPopup = my.parents(".io-ox-sidepopup").first(),
+                    firstPopup = parentPopup.length === 0;
                     
-                if (parentPopup.length) {
-                    mode = parentPopup.hasClass("right") ? "left" : "right";
-                } else {
+                if (firstPopup) {
+                    // get initial side
                     distance = my.offset().left + my.outerWidth() - (docWidth / 2 >> 0);
                     mode = distance < 0 ? "right" : "left";
+                } else {
+                    // toggle side for next popup
+                    mode = parentPopup.hasClass("right") ? "left" : "right";
                 }
                 
-                direction = mode === "right" ? "left" : "right";
-                pos = mode === "right" ?
-                        Math.max(max, Math.max(width || 0, my.offset().left + my.outerWidth() + 25)) :
-                        Math.max(max, docWidth - Math.max(width || 0, my.offset().left + 25));
-                        
+                if (mode === "left") {
+                    // pops up on the left side
+                    w = my.offset().left - 25;
+                    w = Math.max(min, Math.max(width || 0, w));
+                    pos = Math.max(100, docWidth - w);
+                    right = pos;
+                    left = 0;
+                } else {
+                    // pops up on the right side
+                    w = docWidth - (my.offset().left + my.outerWidth() + 25);
+                    w = Math.max(min, Math.max(width || 0, w));
+                    pos = Math.max(100, docWidth - w);
+                    right = 0;
+                    left = pos;
+                }
                 
                 //pane.css("maxWidth", max + "px");
                 
                 popup.removeClass("left right")
                     .addClass(mode)
-                    .css(direction, pos + "px")
-                    .css("zIndex", zIndex);
+                    .css({
+                        right: right + "px",
+                        left: left + "px",
+                        zIndex: zIndex
+                    });
                 
                 arrow.removeClass("left right")
                     .addClass(mode)
-                    .css(direction, pos + "px")
-                    .css("zIndex", zIndex + 1);
+                    .css({
+                        right: right + "px",
+                        left: left + "px",
+                        zIndex: zIndex + 1
+                    });
                 
                 // call custom handler
                 (handler || $.noop).call(this, pane.empty(), e);

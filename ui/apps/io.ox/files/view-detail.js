@@ -15,7 +15,8 @@
  
 // TODO: Render Versions
 
-define("io.ox/files/view-detail", ["io.ox/core/extensions"], function (ext) {
+define("io.ox/files/view-detail",
+    ["io.ox/core/extensions", "io.ox/core/i18n"], function (ext, i18n) {
     
     "use strict";
     
@@ -162,11 +163,6 @@ define("io.ox/files/view-detail", ["io.ox/core/extensions"], function (ext) {
         }
     });
     
-    var formatDate = function (timestamp) {
-        var d = new Date(timestamp);
-        return d.toLocaleString();
-    };
-    
     ext.point("io.ox.files.details.basicInfo").extend({
         id: "last_modified",
         index: 30,
@@ -175,7 +171,7 @@ define("io.ox/files/view-detail", ["io.ox/core/extensions"], function (ext) {
             return "Last Modified";
         },
         draw: function (field, file, element) {
-            element.text(formatDate(file.last_modified));
+            element.text(i18n.date("fulldatetime", file.last_modified));
         }
     });
     

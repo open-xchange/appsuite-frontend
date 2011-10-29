@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,12 +9,12 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- *
  */
 
 define("io.ox/core/main",
-    ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http", "io.ox/core/extensions",
-    "gettext!io.ox/core/main"], function (desktop, session, http, ext, gt) {
+    ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http",
+     "io.ox/core/extensions", "io.ox/core/i18n",
+    "gettext!io.ox/core/main"], function (desktop, session, http, ext, i18n, gt) {
     
     "use strict";
     
@@ -173,10 +172,7 @@ define("io.ox/core/main",
                 var date, update;
                 
                 update = function () {
-                    var d = new Date();
-                    date.text(
-                        _.pad(d.getHours(), 2) + ":" + _.pad(d.getMinutes(), 2) + ":" + _.pad(d.getSeconds(), 2)
-                    );
+                    date.text(i18n.date("EEE dd. MMM YYYY HH:mm:ss"));
                 };
                 
                 this.append(
