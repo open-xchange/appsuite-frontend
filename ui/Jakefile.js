@@ -207,7 +207,7 @@ utils.concat("boot.js", ["lib/jquery.min.js",
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
         "event.js", "extensions.js", "cache.js", "http.js",
-        "config.js", "session.js", "gettext.js",
+        "config.js", "session.js", "gettext.js", "i18n.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js",
         "api/folder.js", "collection.js", "desktop.js", "main.js"
     ]), { type: "source" }
