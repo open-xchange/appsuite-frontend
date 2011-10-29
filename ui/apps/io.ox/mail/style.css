@@ -22,6 +22,10 @@
     line-height: 1.5em;
 }
 
+.io-ox-portal-widget .vgrid-cell.mail { /* portal */
+    padding: 6px 2px 6px 2px;
+}
+
 .vgrid-cell.mail .flag {
     left: auto;
     bottom: -1px;

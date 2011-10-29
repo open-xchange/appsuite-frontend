@@ -27,12 +27,25 @@ define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
                 });
             // require detail view, dialogs & all halo extensions
             require(
-                ["extensions/halo/view-detail", "io.ox/core/tk/dialogs"].concat(tmp),
-                function (view, dialogs) {
-                    new dialogs.SidePopup()
-                        .show(e, function (popup) {
-                            popup.append(view.draw(data));
+                ["extensions/halo/view-detail", "io.ox/core/tk/dialogs",
+                 "io.ox/core/api/user"
+                ].concat(tmp), function (view, dialogs, userAPI) {
+                    var cont = function (data) {
+                        new dialogs.SidePopup()
+                            .show(e, function (popup) {
+                                popup.append(view.draw(data));
+                            });
+                    };
+                    // is internal user?
+                    if (data.internal_userid !== undefined) {
+                        //TODO: remove this once backend can do this lookup
+                        userAPI.get({ id: data.internal_userid })
+                        .done(function (data) {
+                            cont({ email1: data.email1 });
                         });
+                    } else {
+                        cont(data);
+                    }
                 }
             );
         }

@@ -1,6 +1,7 @@
 
 .io-ox-portal .clear-title {
     margin: 0.5em 0 1em 0;
+    font-size: 16pt;
 }
 
 .io-ox-portal .vgrid-cell:last-child {
@@ -30,5 +31,4 @@
 .io-ox-portal-linkedin-updates-details {
     margin: 1em 0 1em 4em;
 }
-
 

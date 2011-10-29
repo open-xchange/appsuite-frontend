@@ -48,8 +48,8 @@ define("io.ox/portal/main", ["io.ox/core/extensions", "css!io.ox/portal/style.cs
             for (; i < $i; i++) {
                 last = i % cols === cols - 1;
                 nodes.eq(i).css({
-                    width: width - (last ? 0 : 2) + "%",
-                    marginRight: last ? "0%": "2%"
+                    width: width - (last ? 0 : 3) + "%",
+                    marginRight: last ? "0%": "3%"
                 });
             }
         };

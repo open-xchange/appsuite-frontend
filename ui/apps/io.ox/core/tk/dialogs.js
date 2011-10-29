@@ -270,7 +270,7 @@ define("io.ox/core/tk/dialogs", function () {
                 
                 // decide for proper side
                 var docWidth = $(document).width(),
-                    min = docWidth * 0.45 >> 0,
+                    max = docWidth * 0.55 >> 0,
                     w, distance, mode, right, left, pos,
                     parentPopup = my.parents(".io-ox-sidepopup").first(),
                     firstPopup = parentPopup.length === 0;
@@ -284,17 +284,24 @@ define("io.ox/core/tk/dialogs", function () {
                     mode = parentPopup.hasClass("right") ? "left" : "right";
                 }
                 
+                // minimum required width less than max?
+                if (max < width) {
+                    max = width;
+                }
+                
                 if (mode === "left") {
                     // pops up on the left side
                     w = my.offset().left - 25;
-                    w = Math.max(min, Math.max(width || 0, w));
+                    w = Math.max(width, w);
+                    w = Math.min(max, w);
                     pos = Math.max(100, docWidth - w);
                     right = pos;
                     left = 0;
                 } else {
                     // pops up on the right side
                     w = docWidth - (my.offset().left + my.outerWidth() + 25);
-                    w = Math.max(min, Math.max(width || 0, w));
+                    w = Math.max(width, w);
+                    w = Math.min(max, w);
                     pos = Math.max(100, docWidth - w);
                     right = 0;
                     left = pos;
