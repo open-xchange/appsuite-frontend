@@ -41,10 +41,10 @@
             
             // get window
             app.setWindow(win = ox.ui.createWindow({
-                title: $($.text(i18n.getGreetingPhrase()))
-                    .add($.text(", "))
+                title: $($.txt(i18n.getGreetingPhrase()))
+                    .add($.txt(", "))
                     .add(userAPI.getTextNode(config.get("identifier")))
-                    .add($.text(" "))
+                    .add($.txt(" "))
                     .add($("<span>").addClass("subtitle").text("(" + ox.user + ")")),
                 toolbar: true
             }));

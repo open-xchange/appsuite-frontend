@@ -173,7 +173,7 @@
         return def;
     };
     
-    $.text = function (str) {
+    $.txt = function (str) {
         return document.createTextNode(str);
     };
     

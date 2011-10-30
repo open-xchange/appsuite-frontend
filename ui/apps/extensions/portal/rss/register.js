@@ -40,16 +40,16 @@ define("io.ox/portal/rss/register",
                 );
             
             _(feed.entries).each(function (entry) {
-                var title = $("<div>").addClass("rss-title").text(entry.title || ""),
-                    content = $("<div>").addClass("rss-content").html(entry.content || "");
-                content.find("img")
-                    .removeAttr("hspace")
-                    .removeAttr("vspace")
-                    .removeAttr("align");
                 self.append(
                     $("<div>").addClass("rss-entry")
-                    .append(title)
-                    .append(content)
+                    .append(
+                        $("<div>").addClass("rss-title").text(entry.title || "")
+                    )
+                    .append(
+                        $("<div>").addClass("rss-content").html(entry.content || "")
+                        .find("img").removeAttr("hspace vspace align")
+                        .end()
+                    )
                 );
             });
             
