@@ -25,7 +25,7 @@ define(function () {
             signin: [],
             core: ["halo"],
             halo: ["halo/contacts", "halo/appointments", "halo/linkedIn"],
-            portal: ["portal/appointments", "portal/linkedIn", "portal/mail"]
+            portal: ["appointments", "linkedIn", "mail", "rss"]
         },
         
         previewMimeTypes : {

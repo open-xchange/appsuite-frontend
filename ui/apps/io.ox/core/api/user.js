@@ -51,7 +51,7 @@ define("io.ox/core/api/user",
         var node = document.createTextNode("");
         api.get({ id: id })
             .done(function (data) {
-                node.nodeValue = data.display_name;
+                node.nodeValue = data.display_name || data.email1;
             })
             .always(function () {
                 _.defer(function () { // use defer! otherwise we return null on cache hit

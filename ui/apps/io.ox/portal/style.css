@@ -17,11 +17,14 @@
     font-size: 18px;
 }
 
-.io-ox-portal-widget {
+.io-ox-portal-column {
     display: inline-block;
-    min-height: 100px;
-    margin-bottom: 30px;
     float: left;
+}
+
+.io-ox-portal-widget {
+    min-height: 100px;
+    margin-bottom: 40px;
 }
 
 .io-ox-portal-widget .clear-title {
@@ -32,3 +35,26 @@
     margin: 1em 0 1em 4em;
 }
 
+.io-ox-portal-rss .rss-entry {
+    max-width: 450px;
+    clear: both;
+}
+
+.io-ox-portal-rss .rss-title {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #900;
+    margin: 2em 0 1em 0;
+}
+
+.io-ox-portal-rss .rss-content {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.io-ox-portal-rss .rss-content img {
+    float: left;
+    margin: 0 1.5em 0.5em 0;
+}

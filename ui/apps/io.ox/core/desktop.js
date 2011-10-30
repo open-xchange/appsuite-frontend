@@ -461,23 +461,19 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     quitOnClose = !!flag;
                 };
                 
-                var title = "", subtitle = "";
+                var title = "";
                 
                 function applyTitle() {
                     var spans = self.nodes.title.find("span");
-                    spans.eq(0).text(
-                        title + (subtitle === "" ? "" : " - ")
+                    spans.eq(0).empty().append(
+                        typeof title === "string" ?
+                            document.createTextNode(title) :
+                            title
                     );
-                    spans.eq(1).text(subtitle);
                 }
                 
-                this.setTitle = function (str) {
-                    title = String(str);
-                    applyTitle();
-                };
-                
-                this.setSubTitle = function (str) {
-                    subtitle = String(str);
+                this.setTitle = function (t) {
+                    title = t;
                     applyTitle();
                 };
                 
@@ -727,8 +723,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 // add close handler
                 win.nodes.closeButton.bind("click", close);
                 
-                // set subtitle & title
-                win.setSubTitle(opt.subtitle);
+                // set title
                 win.setTitle(opt.title);
                 
                 if (opt.toolbar || opt.search) {

@@ -102,6 +102,23 @@ define("io.ox/core/i18n", ["gettext!io.ox/core/i18n"], function (gettext) {
             }
             
             return format.replace(dRegex, dReplace(date));
+        },
+        
+        // time-based greeting phrase
+        getGreetingPhrase: function (time) {
+            
+            time = time !== undefined ? time : _.utc();
+            
+            var hour = new Date(time).getHours();
+            
+            // find proper phrase
+            if (hour >= 4 && hour <= 11) {
+                return gettext("Good morning");
+            } else if (hour >= 18 && hour <= 23) {
+                return gettext("Good evening");
+            } else {
+                return gettext("Hello");
+            }
         }
     };
 });
