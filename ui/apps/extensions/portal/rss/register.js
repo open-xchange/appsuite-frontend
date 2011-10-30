@@ -49,6 +49,12 @@ define("io.ox/portal/rss/register",
                         $("<div>").addClass("rss-content").html(entry.content || "")
                         .find("img").removeAttr("hspace vspace align")
                         .end()
+                        .append($.txt(" "))
+                        .append(
+                            $("<a>", { href: entry.link, target: "_blank"})
+                            .css("whiteSpace", "nowrap")
+                            .text("Read full article")
+                        )
                     )
                 );
             });
