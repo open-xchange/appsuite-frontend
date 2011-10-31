@@ -270,7 +270,7 @@ define("io.ox/core/tk/dialogs", function () {
                 
                 // decide for proper side
                 var docWidth = $(document).width(),
-                    max = docWidth * 0.55 >> 0,
+                    max = (docWidth * 0.50 >> 0) + 1,
                     w, distance, mode, right, left, pos,
                     parentPopup = my.parents(".io-ox-sidepopup").first(),
                     firstPopup = parentPopup.length === 0;
@@ -284,8 +284,8 @@ define("io.ox/core/tk/dialogs", function () {
                     mode = parentPopup.hasClass("right") ? "left" : "right";
                 }
                 
-                // minimum required width less than max?
-                if (max < width) {
+                // min-width greater than max-width?
+                if (width > max) {
                     max = width;
                 }
                 
@@ -294,7 +294,7 @@ define("io.ox/core/tk/dialogs", function () {
                     w = my.offset().left - 25;
                     w = Math.max(width, w);
                     w = Math.min(max, w);
-                    pos = Math.max(100, docWidth - w);
+                    pos = Math.max(50, docWidth - w); // hard limit
                     right = pos;
                     left = 0;
                 } else {
@@ -302,28 +302,24 @@ define("io.ox/core/tk/dialogs", function () {
                     w = docWidth - (my.offset().left + my.outerWidth() + 25);
                     w = Math.max(width, w);
                     w = Math.min(max, w);
-                    pos = Math.max(100, docWidth - w);
+                    pos = Math.max(50, docWidth - w); // hard limit
                     right = 0;
                     left = pos;
                 }
+                
+                // convert to percent (nice for dynamic resizing)
+                left = !left ? "0" : (left / docWidth * 100 >> 0) + "%";
+                right = !right ? "0" : (right / docWidth * 100 >> 0) + "%";
                 
                 //pane.css("maxWidth", max + "px");
                 
                 popup.removeClass("left right")
                     .addClass(mode)
-                    .css({
-                        right: right + "px",
-                        left: left + "px",
-                        zIndex: zIndex
-                    });
+                    .css({ right: right, left: left, zIndex: zIndex });
                 
                 arrow.removeClass("left right")
                     .addClass(mode)
-                    .css({
-                        right: right + "px",
-                        left: left + "px",
-                        zIndex: zIndex + 1
-                    });
+                    .css({ right: right, left: left, zIndex: zIndex + 1 });
                 
                 // call custom handler
                 (handler || $.noop).call(this, pane.empty(), e);
