@@ -171,10 +171,6 @@ define("io.ox/core/main",
                 
                 var date, update;
                 
-                update = function () {
-                    date.text(i18n.date("EEE dd. MMM YYYY HH:mm:ss"));
-                };
-                
                 this.append(
                     $("<div>", { id: "io-ox-welcome" })
                     .addClass("abs")
@@ -192,10 +188,12 @@ define("io.ox/core/main",
                     )
                 );
                 
+                update = function () {
+                    date.text(i18n.date("EEE dd. MMM YYYY HH:mm:ss"));
+                };
+                
                 update();
-                setTimeout(function () {
-                    setInterval(update, 1000);
-                }, (new Date() % 1000) + 1);
+                _.every(1, "second", update);
             }
         });
         

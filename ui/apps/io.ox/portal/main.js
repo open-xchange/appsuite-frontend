@@ -34,20 +34,28 @@
         // application object
         var app = ox.ui.createApp(),
             // app window
-            win;
+            win,
+            // update window title
+            updateTitle = function () {
+                win.setTitle(
+                    $($.txt(i18n.getGreetingPhrase()))
+                    .add($.txt(", "))
+                    .add(userAPI.getTextNode(config.get("identifier")))
+                    .add($.txt(" "))
+                    .add($("<small>").addClass("subtitle").text("(" + ox.user + ")"))
+                );
+            };
         
         // launcher
         app.setLauncher(function () {
             
             // get window
             app.setWindow(win = ox.ui.createWindow({
-                title: $($.txt(i18n.getGreetingPhrase()))
-                    .add($.txt(", "))
-                    .add(userAPI.getTextNode(config.get("identifier")))
-                    .add($.txt(" "))
-                    .add($("<span>").addClass("subtitle").text("(" + ox.user + ")")),
                 toolbar: true
             }));
+            
+            updateTitle();
+            _.every(1, "hour", updateTitle);
             
             win.nodes.main.addClass("io-ox-portal").css({overflow: "auto"});
             
