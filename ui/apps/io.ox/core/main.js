@@ -189,11 +189,11 @@ define("io.ox/core/main",
                 );
                 
                 update = function () {
-                    date.text(i18n.date("EEE dd. MMM YYYY HH:mm:ss"));
+                    date.text(i18n.date("EEE dd. MMM YYYY HH:mm"));
                 };
                 
                 update();
-                _.every(1, "second", update);
+                _.every(1, "minute", update);
             }
         });
         

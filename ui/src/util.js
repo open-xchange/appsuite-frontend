@@ -292,7 +292,7 @@
             setTimeout(function () {
                 fn();
                 setInterval(fn, interval * (num || 1));
-            }, (new Date() % interval) + 1);
+            }, interval - (_.utc() % interval) + 1);
         }
     });
     

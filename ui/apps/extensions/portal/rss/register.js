@@ -21,7 +21,7 @@ define("io.ox/portal/rss/register",
     // SPIEGEL Online
     feeds.push({
         id: "rss-spiegel",
-        url: "http://www.spiegel.de/schlagzeilen/tops/index.rss",
+        url: "http://www.spiegel.de/international/europe/index.rss",
         index: 400,
         cssClass: "spiegel"
     });
@@ -31,6 +31,13 @@ define("io.ox/portal/rss/register",
         id: "rss-engadget",
         url: "http://www.engadget.com/rss.xml",
         index: 500
+    });
+    
+    // Another one...
+    feeds.push({
+        id: "rss-handelsblatt",
+        url: "http://www.handelsblatt.com/contentexport/feed/schlagzeilen",
+        index: 600
     });
     
     _(feeds).each(function (extension) {
@@ -72,7 +79,7 @@ define("io.ox/portal/rss/register",
                             .end()
                             .find("img")
                                 .removeAttr("hspace vspace align height")
-                                .css("height", "auto")
+                                .css({ float: "", height: "auto", margin: "", border: "" })
                             .end()
                             .find("iframe")
                                 .attr("frameborder", "0")
