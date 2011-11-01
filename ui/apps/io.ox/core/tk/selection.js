@@ -313,11 +313,11 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
          */
         this.keyboard = function (flag) {
             // keyboard support (use keydown! IE does not react on keypress with cursor keys)
-            $(document)[flag ? "bind" : "unbind"]("keydown", fnKey);
+            $(document)[flag ? "on" : "off"]("keydown", fnKey);
         };
         
         // bind general click handler
-        container.delegate(".selectable", "click", click);
+        container.on("click", ".selectable", click);
     };
 
     Selection.extend = function (obj, node) {

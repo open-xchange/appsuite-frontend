@@ -52,7 +52,7 @@ define("io.ox/files/upload", ["io.ox/core/event"], function (event) {
         event.Dispatcher.extend(this);
         
         // Now let's add the regular event handlers to fulfill our promises
-        $node.bind({
+        $node.on({
             dragenter: function () {
                 // We'll just hand this over. A few layers of indirection are always fun
                 self.trigger("dragenter");
@@ -91,7 +91,6 @@ define("io.ox/files/upload", ["io.ox/core/event"], function (event) {
                     self.trigger("drop", files[i]);
                 }
                 return false; // Prevent regular event handling
-                
             }
         });
         
@@ -102,14 +101,14 @@ define("io.ox/files/upload", ["io.ox/core/event"], function (event) {
                     return;
                 }
                 included = false;
-                $("body").unbind("dragenter", appendOverlay);
+                $("body").off("dragenter", appendOverlay);
             };
             this.include = function () {
                 if (included) {
                     return;
                 }
                 included = true;
-                $("body").bind("dragenter", appendOverlay);
+                $("body").on("dragenter", appendOverlay);
             };
         } else {
             this.remove = $.noop;

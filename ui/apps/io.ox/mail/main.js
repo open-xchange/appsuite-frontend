@@ -69,8 +69,7 @@ define("io.ox/mail/main",
         left = $("<div/>")
             .addClass("leftside border-right")
             .css({
-                width: gridWidth + "px",
-                overflow: "auto"
+                width: gridWidth + "px"
             })
             .appendTo(win.nodes.main);
         
@@ -159,9 +158,9 @@ define("io.ox/mail/main",
             // look for scroll
             var autoResolve = function () {
                 nodes.trigger("resolve");
-                right.unbind("scroll", autoResolve);
+                right.off("scroll", autoResolve);
             };
-            right.bind("scroll", autoResolve);
+            right.on("scroll", autoResolve);
         };
         
         drawMail = function (data) {

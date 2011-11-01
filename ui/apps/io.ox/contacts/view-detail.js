@@ -269,7 +269,7 @@ define("io.ox/contacts/view-detail",
                     td.append(
                         $("<span>").addClass("link")
                             .text("Show QR-code")
-                            .bind("click", function () {
+                            .on("click", function () {
                                 require(["io.ox/contacts/view-qrcode"], function (qr) {
                                     var vc = qr.getVCard(data);
                                     td.empty().qrcode(vc);

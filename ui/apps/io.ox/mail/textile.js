@@ -103,7 +103,7 @@ define("io.ox/mail/textile", function () {
                             node = $("<blockquote/>")
                             .addClass("textile-quote")
                             .html("<div class='textile-quote-arrow'>\u25BC</div>")
-                            .bind("click", { open: false }, fnToggleQuote)
+                            .on("click", { open: false }, fnToggleQuote)
                         );
                         i = lookAhead(lines, i, ">", node, level);
                     }

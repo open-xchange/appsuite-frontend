@@ -72,7 +72,7 @@ $(document).ready(function () {
         $("#io-ox-login-username").attr("disabled", "disabled");
         $("#io-ox-login-password").val("");
         // unbind
-        $("#io-ox-login-form").unbind("submit");
+        $("#io-ox-login-form").off("submit");
         // free closures
         cleanUp = fnChangeLanguage =
             changeLanguage = initialize = null;
@@ -245,7 +245,7 @@ $(document).ready(function () {
                     "<small>Please sign in again to continue.</small>"
                 );
                 // bind
-                $("#io-ox-login-form").bind("submit", fnSubmit);
+                $("#io-ox-login-form").on("submit", fnSubmit);
                 $("#io-ox-login-username").val(ox.user || "");
                 $("#io-ox-login-password").val("");
                 // set success handler
@@ -316,7 +316,7 @@ $(document).ready(function () {
             for (id in lang) {
                 node.append(
                     $("<a/>", { href: "#" })
-                    .bind("click", id, fnChangeLanguage)
+                    .on("click", id, fnChangeLanguage)
                     .text(lang[id])
                 );
                 node.append(document.createTextNode("\u00A0 "));
@@ -368,8 +368,8 @@ $(document).ready(function () {
             )
             .done(function () {
                 // show login dialog
-                $("#io-ox-login-blocker").bind("mousedown", false);
-                $("#io-ox-login-form").bind("submit", fnSubmit);
+                $("#io-ox-login-blocker").on("mousedown", false);
+                $("#io-ox-login-form").on("submit", fnSubmit);
                 $("#io-ox-login-screen").show();
                 $("#io-ox-login-username").removeAttr("disabled").focus();
                 $("#background_loader").idle().fadeOut(DURATION, cont);
@@ -414,7 +414,7 @@ $(document).ready(function () {
         $("html").addClass("mouse");
     } else {
         // avoid body scroll for touch devices
-        $(document).bind("touchmove", function (e) {
+        $(document).on("touchmove", function (e) {
             //e.preventDefault();
         });
     }
@@ -442,7 +442,7 @@ $(document).ready(function () {
     
     // handle online/offline mode
     if (!ox.signin) {
-        $(window).bind("online offline", function (e) {
+        $(window).on("online offline", function (e) {
             if (e.type === "offline") {
                 $("#io-ox-offline").text("Offline").fadeIn(DURATION);
                 ox.online = false;

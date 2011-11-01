@@ -60,7 +60,8 @@
             win.nodes.main.addClass("io-ox-portal").css({overflow: "auto"});
             
             var widgets = $(),
-                lastCols = 0;
+                lastCols = 0,
+                columnTemplate = $("<div>").addClass("io-ox-portal-column");
             
             var resize = function () {
                 
@@ -78,7 +79,7 @@
                     for (i = 0; i < numColumns; i++) {
                         last = i % numColumns === numColumns - 1;
                         columns = columns.add(
-                            $("<div>").addClass("io-ox-portal-column").css({
+                            columnTemplate.clone().css({
                                 width: width - (last ? 0 : 5) + "%",
                                 marginRight: last ? "0%": "5%"
                             })
@@ -121,12 +122,12 @@
             });
             
             win.bind("show", function () {
-                $(window).bind("resize", resize);
+                $(window).on("resize", resize);
                 resize();
             });
             
             win.bind("hide", function () {
-                $(window).unbind("resize", resize);
+                $(window).off("resize", resize);
             });
             
             // go!

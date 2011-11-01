@@ -121,7 +121,7 @@ define("io.ox/mail/view-detail",
             return $("<div/>")
                 .addClass("mail-detail page")
                 .busy()
-                .bind("resolve", obj, resolver);
+                .on("resolve", obj, resolver);
         },
         
         draw: function (data) {

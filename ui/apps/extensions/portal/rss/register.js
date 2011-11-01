@@ -35,6 +35,13 @@ define("io.ox/portal/rss/register",
     
     // Another one...
     feeds.push({
+        id: "rss-a",
+        url: "http://golem.de.dynamic.feedsportal.com/pf/578068/http://rss.golem.de/rss.php?feed=RSS1.0",
+        index: 550
+    });
+
+    // Another one...
+    feeds.push({
         id: "rss-handelsblatt",
         url: "http://www.handelsblatt.com/contentexport/feed/schlagzeilen",
         index: 600
