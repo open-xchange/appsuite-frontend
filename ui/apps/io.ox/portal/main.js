@@ -96,6 +96,23 @@
                 }
             };
             
+            // demo AD widget
+            ext.point('io.ox/portal/widget').extend({
+                index: 410,
+                id: 'ad',
+                load: function () {
+                    return $.when();
+                },
+                draw: function (data) {
+                    this.append(
+                        $("<img>")
+                        .attr("src", ox.base + "/apps/themes/default/ad2.jpg")
+                        .css({ width: "100%", height: "auto" })
+                    );
+                    return $.when();
+                }
+            });
+            
             //TODO: Add Configurability
             ext.point("io.ox/portal/widget").each(function (extension) {
                 

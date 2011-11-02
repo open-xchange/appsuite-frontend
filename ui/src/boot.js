@@ -203,7 +203,7 @@ $(document).ready(function () {
         // stop event
         e.preventDefault();
         // change language
-        changeLanguage(e.data);
+        changeLanguage(e.data.id);
     };
     
     /**
@@ -316,7 +316,7 @@ $(document).ready(function () {
             for (id in lang) {
                 node.append(
                     $("<a/>", { href: "#" })
-                    .on("click", id, fnChangeLanguage)
+                    .on("click", { id: id }, fnChangeLanguage)
                     .text(lang[id])
                 );
                 node.append(document.createTextNode("\u00A0 "));

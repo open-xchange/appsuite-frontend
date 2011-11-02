@@ -30,6 +30,7 @@ define("io.ox/portal/rss/register",
     feeds.push({
         id: "rss-engadget",
         url: "http://www.engadget.com/rss.xml",
+        num: 2,
         index: 500
     });
     
@@ -55,7 +56,8 @@ define("io.ox/portal/rss/register",
             load: function () {
                 // get RSS feed via Google Feed API
                 var url = "http://ajax.googleapis.com/ajax/services/feed/" +
-                    "load?v=1.0&num=4&callback=?&q=" + encodeURIComponent(extension.url);
+                    "load?v=1.0&num=" + (extension.num || 4) +
+                    "&callback=?&q=" + encodeURIComponent(extension.url);
                 return $.getJSON(url)
                     .pipe(function (data) {
                         return data && data.responseData ? data.responseData.feed : {};
@@ -86,7 +88,7 @@ define("io.ox/portal/rss/register",
                             .end()
                             .find("img")
                                 .removeAttr("hspace vspace align height")
-                                .css({ float: "", height: "auto", margin: "", border: "" })
+                                .css({ clear: "both", float: "", height: "auto", margin: "", border: "" })
                             .end()
                             .find("iframe")
                                 .attr("frameborder", "0")
