@@ -104,13 +104,6 @@ a:hover, .link:hover {
 .wallpaper {
     background-color: #333;
     background: url(raining_2-wallpaper-1280x800.jpg) no-repeat center center fixed;
-    /*
-    xbackground-image: url(colorful_circles_of_light-wallpaper-1280x800.jpg);
-    xbackground-image: url(green_stripes-wallpaper-1280x800.jpg);
-    xbackground-image: url(minimalist_art_light_gray-wallpaper-1280x800.jpg);
-    xbackground-image: url(black_wood-wallpaper-1280x800.jpg);
-    xbackground-image: url(abstract_background_brown_and_blue_circles-wallpaper-1280x800.jpg);
-    */
     background-size: cover;
 }
 

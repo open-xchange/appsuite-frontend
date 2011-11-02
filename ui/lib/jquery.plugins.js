@@ -173,6 +173,10 @@
         return def;
     };
     
+    $.txt = function (str) {
+        return document.createTextNode(str);
+    };
+    
 }());
 
 

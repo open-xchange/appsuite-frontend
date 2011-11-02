@@ -18,6 +18,7 @@ define("io.ox/core/gettext", [], function () {
     var modules = {};
     
     function gt(id, po) {
+        
         if (po) {
             po.plural = new Function("n", "return " + po.plural + ";");
         }
@@ -45,9 +46,9 @@ define("io.ox/core/gettext", [], function () {
             return gettext.npgettext("", singular, plural, n);
         };
         gettext.npgettext = function (context, singular, plural, n) {
-            var key = singular + "\x01" + plural;
-            key = context ? context + "\x00" + key : key;
-            var translation = modules[id].dictionary[key];
+            var key = (context ? context + "\x00" : "") +
+                    singular + "\x01" + plural,
+                translation = modules[id].dictionary[key];
             return translation ?
                 translation[Number(modules[id].plural(Number(n)))] :
                 Number(n) !== 1 ? plural : singular;
@@ -56,7 +57,8 @@ define("io.ox/core/gettext", [], function () {
         return gettext;
     }
     
-    var lang;
+    var lang = "en_US"; // TODO: don't know if that's right - but it fixes runtime errors
+    
     gt.setLanguage = function (language) {
         function enableModule(module) {
             module.enable();

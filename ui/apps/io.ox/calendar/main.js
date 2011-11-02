@@ -53,8 +53,8 @@ define("io.ox/calendar/main",
         
         // right panel
         right = $("<div/>")
-            .css({ left: gridWidth + 1 + "px", overflow: "auto", padding: "30px" })
-            .addClass("rightside calendar-detail-pane")
+            .css({ left: gridWidth + 1 + "px", overflow: "auto" })
+            .addClass("rightside default-content-padding calendar-detail-pane")
             .appendTo(win.nodes.main);
         
         // grid

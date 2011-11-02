@@ -14,14 +14,14 @@
 
 // TODO: Break this up, this is becoming messy
 define("io.ox/files/main",
-    ["io.ox/files/base",
+    ["io.ox/files/view-detail",
      "io.ox/files/api",
      "io.ox/core/tk/vgrid",
      "io.ox/files/upload",
      "io.ox/core/tk/dialogs",
      "io.ox/help/hints",
      "css!io.ox/files/style.css"
-    ], function (base, api, VGrid, upload, dialogs, hints) {
+    ], function (viewDetail, api, VGrid, upload, dialogs, hints) {
     
     "use strict";
     
@@ -81,8 +81,8 @@ define("io.ox/files/main",
             .appendTo(win.nodes.main);
         
         right = $("<div/>")
-            .css({ left: "310px", overflow: "auto", padding: "30px" })
-            .addClass("rightside withStatusBar")
+            .css({ left: "310px", overflow: "auto" })
+            .addClass("rightside default-content-padding withStatusBar")
             .appendTo(win.nodes.main);
         
         
@@ -134,7 +134,7 @@ define("io.ox/files/main",
         
         // LFO callback
         function drawDetail(data) {
-            var detail = base.draw(data);
+            var detail = viewDetail.draw(data);
             right.idle().empty().append(detail);
             right.parent().scrollTop(0);
         }

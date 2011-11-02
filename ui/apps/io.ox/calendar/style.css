@@ -35,7 +35,7 @@
 }
 
 .vgrid-cell.calendar .time {
-    color: #08c;
+    color: #555;
     float: right;
     display: inline-block;
 }
@@ -78,7 +78,7 @@
 }
 
 .calendar-detail .interval {
-    color: #08c;
+    color: #555;
     white-space: nowrap;
     float: right;
 }
@@ -145,6 +145,7 @@
     margin: 0 20px 0.5em 0;
     float: left;
     white-space: nowrap;
+    cursor: pointer;
 }
 
 .csscolumns .calendar-detail .participant {
@@ -169,9 +170,7 @@
     width: 1em;
 }
 
-.calendar-detail .participant .status {
-}
-
+.calendar-detail .participant .status { }
 .calendar-detail .participant .status.accepted { color: #8EB360; } /* green */
 .calendar-detail .participant .status.declined { color: #913F3F; } /* red */
 .calendar-detail .participant .status.tentative { color: #c80; } /* orange */

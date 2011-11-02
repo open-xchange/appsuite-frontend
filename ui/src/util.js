@@ -46,7 +46,9 @@
         },
         // get hash & query
         queryData = deserialize(document.location.search.substr(1), /&/),
-        hashData = document.location.hash.substr(1);
+        hashData = document.location.hash.substr(1),
+        // local timezone offset
+        timezoneOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
         
     // decode
     hashData = deserialize(hashData.substr(0, 1) === "?" ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData);
@@ -161,11 +163,19 @@
         },
         
         /**
-         * Return current time as timestamp
+         * Returns local current time as timestamp
          * @returns {long} Timestamp
          */
         now: function () {
             return (new Date()).getTime();
+        },
+        
+        /**
+         * Returns current time as UTC timestamp
+         * @returns {long} Timestamp
+         */
+        utc: function () {
+            return (new Date()).getTime() - timezoneOffset;
         },
         
         /**
@@ -264,9 +274,25 @@
             return String(text).replace(/([\/\.\,\-]+)/g, "$1\u200B");
         },
         
+        // good for leading-zeros for example
         pad: function (val, length, fill) {
             var str = String(val), n = length || 1, diff = n - str.length;
             return (diff > 0 ? new Array(diff + 1).join(fill || "0") : "") + str;
+        },
+        
+        // call function 'every' 1 hour or 5 seconds
+        every: function (num, type, fn) {
+            var interval = 1000;
+            if (type === "hour") {
+                interval *= 3600;
+            } else if (type === "minute") {
+                interval *= 60;
+            }
+            // wait until proper clock tick
+            setTimeout(function () {
+                fn();
+                setInterval(fn, interval * (num || 1));
+            }, interval - (_.utc() % interval) + 1);
         }
     });
     

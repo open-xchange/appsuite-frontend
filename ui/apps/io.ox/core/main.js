@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,12 +9,12 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- *
  */
 
 define("io.ox/core/main",
-    ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http", "io.ox/core/extensions",
-    "gettext!io.ox/core/main"], function (desktop, session, http, ext, gt) {
+    ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http",
+     "io.ox/core/extensions", "io.ox/core/i18n",
+    "gettext!io.ox/core/main"], function (desktop, session, http, ext, i18n, gt) {
     
     "use strict";
     
@@ -105,6 +104,13 @@ define("io.ox/core/main",
                 });
             });
         
+//        desktop.addLauncher("left", gt("Tasks"), function () {
+//            var node = this;
+//            return require(["io.ox/tasks/main"], function (m) {
+//                m.getApp().setLaunchBarIcon(node).launch();
+//            });
+//        });
+        
         desktop.addLauncher("left", gt("Calendar"), function () {
                 var node = this;
                 return require(["io.ox/calendar/main"], function (m) {
@@ -136,17 +142,34 @@ define("io.ox/core/main",
         // initialize empty desktop
         
         ext.point("io.ox/core/desktop").extend({
+            id: "upsell",
+            draw: function () {
+                // does nothing - just to demo an exemplary upsell path
+                this.append(
+                    $("<div>", { id: "io-ox-welcome-upsell" })
+                    .css({
+                        width: "200px",
+                        height: "2.25em",
+                        position: "absolute",
+                        right: "50px",
+                        bottom: "150px",
+                        border: "5px solid #555",
+                        webkitBorderRadius: "10px",
+                        boxShadow: "0px 0px 20px -5px white",
+                        padding: "40px",
+                        fontSize: "18pt",
+                        textAlign: "center"
+                    })
+                    .text("Click here for a 90-days free trial!")
+                );
+            }
+        });
+        
+        ext.point("io.ox/core/desktop").extend({
             id: "welcome",
             draw: function () {
                 
                 var date, update;
-                
-                update = function () {
-                    var d = new Date();
-                    date.text(
-                        _.pad(d.getHours(), 2) + ":" + _.pad(d.getMinutes(), 2) + ":" + _.pad(d.getSeconds(), 2)
-                    );
-                };
                 
                 this.append(
                     $("<div>", { id: "io-ox-welcome" })
@@ -165,10 +188,12 @@ define("io.ox/core/main",
                     )
                 );
                 
+                update = function () {
+                    date.text(i18n.date("EEE dd. MMM YYYY HH:mm"));
+                };
+                
                 update();
-                setTimeout(function () {
-                    setInterval(update, 1000);
-                }, (new Date() % 1000) + 1);
+                _.every(1, "minute", update);
             }
         });
         

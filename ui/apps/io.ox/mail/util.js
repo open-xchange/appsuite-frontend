@@ -28,7 +28,7 @@ define("io.ox/mail/util", ["io.ox/core/extensions"], function (ext) {
     
     var fnClickPerson = function (e) {
         ext.point("io.ox/core/person:action").each(function (ext) {
-            _.call(ext.action, e.data);
+            _.call(ext.action, e.data, e);
         });
     };
     

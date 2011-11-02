@@ -25,9 +25,8 @@ define("extensions/halo/contacts/register", ["io.ox/core/extensions"], function 
                 return;
             }
             var deferred = new $.Deferred();
-            require(["io.ox/contacts/base", "css!io.ox/contacts/style.css"], function (base) {
-                $node.append($("<div/>").addClass("widget-title clear-title").text("Address Book"));
-                $node.append(base.draw(contacts[0]));
+            require(["io.ox/contacts/view-detail", "css!io.ox/contacts/style.css"], function (view) {
+                $node.append(view.draw(contacts[0]));
                 deferred.resolve();
             });
             return deferred;

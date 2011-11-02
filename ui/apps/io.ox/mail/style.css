@@ -22,6 +22,10 @@
     line-height: 1.5em;
 }
 
+.io-ox-portal-widget .vgrid-cell.mail { /* portal */
+    padding: 6px 2px 6px 2px;
+}
+
 .vgrid-cell.mail .flag {
     left: auto;
     bottom: -1px;
@@ -123,7 +127,14 @@
 
 .mail-detail {
     position: relative;
-    background-color: lighten(@background, 10%);
+    background-color: #fff;
+    overflow-y: visible;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+}
+
+.mail-detail.page {
     border: 1px solid #aaa;
     padding: 20px;
     margin: 20px auto 0px auto;
@@ -132,10 +143,6 @@
     -moz-box-shadow: 0px 5px 10px -3px black;
     -webkit-box-shadow: 0px 5px 10px -3px black;
     box-shadow: 0px 5px 10px -3px black;
-    overflow-y: visible;
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    user-select: text;
 }
 
 .mail-detail .date {

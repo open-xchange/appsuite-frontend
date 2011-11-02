@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,12 +9,11 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- *
  */
 
 define("io.ox/core/tk/dialogs", function () {
     
-    "use strict";
+    'use strict';
     
     // scaffolds
     var underlay = $("<div/>").addClass("abs io-ox-dialog-underlay"),
@@ -161,6 +159,198 @@ define("io.ox/core/tk/dialogs", function () {
         };
     };
     
+    var SidePopup = function (width) {
+        
+        // default minimum width
+        width = width || 400;
+        
+        var processEvent,
+            isProcessed,
+            open,
+            close,
+            closeByEscapeKey,
+            closeByScroll,
+            closeByClick,
+            timer = null,
+            
+            pane = $("<div>")
+                .addClass("io-ox-sidepopup-pane default-content-padding abs"),
+            popup = $("<div>")
+                .addClass("io-ox-sidepopup abs")
+                .append(pane)
+                .bind("click", function (e) {
+                    processEvent(e);
+                }),
+            arrow = $("<div>")
+                .addClass("io-ox-sidepopup-arrow")
+                .append($("<div>").addClass("border"))
+                .append($("<div>").addClass("triangle")),
+            
+            self = this;
+        
+        // public nodes
+        this.nodes = {};
+        this.lastTrigger = null;
+        
+        processEvent = function (e) {
+            e.preventDefault();
+        };
+        
+        isProcessed = function (e) {
+            return e.isDefaultPrevented();
+        };
+        
+        closeByEscapeKey = function (e) {
+            if (e.which === 27) {
+                close(e);
+            }
+        };
+        
+        closeByScroll = function (e) {
+            close(e);
+        };
+        
+        closeByClick = function (e) {
+            if (!isProcessed(e)) {
+                processEvent(e);
+                close(e);
+            }
+        };
+        
+        close = function (e) {
+            // remove handlers & avoid leaks
+            $(document).unbind("keydown", closeByEscapeKey);
+            self.nodes.closest.unbind("scroll", closeByScroll);
+            self.nodes.click.unbind("click", closeByClick);
+            self.lastTrigger = null;
+            // use time to avoid flicker
+            timer = setTimeout(function () {
+                arrow.detach();
+                pane.empty();
+                popup.detach();
+            }, 100);
+        };
+        
+        open = function (e, handler) {
+            // get proper elements
+            var my = $(this), current, zIndex, sidepopup;
+            self.nodes = {
+                closest: my.parents(".io-ox-sidepopup-pane, .window-content"),
+                click: my.parents(".io-ox-sidepopup-pane, .window-body"),
+                target: my.parents(".window-body")
+            };
+            // get active side popup & triggering element
+            sidepopup = self.nodes.closest.prop("sidepopup") || null;
+            self.lastTrigger = sidepopup ? sidepopup.lastTrigger : null;
+            // get zIndex for visual stacking
+            zIndex = (my.parents(".io-ox-sidepopup, .window-content").css("zIndex") || 1) + 2;
+            // second click?
+            if (self.lastTrigger === this) {
+                close(e);
+            } else {
+                
+                // open siblings?
+                if (sidepopup) {
+                    sidepopup.close();
+                }
+                
+                // remember as current trigger
+                self.lastTrigger = this;
+                self.nodes.closest.prop("sidepopup", self);
+                
+                // prevent default to avoid close
+                processEvent(e);
+                // clear timer
+                clearTimeout(timer);
+                
+                // add handlers to close popup
+                self.nodes.click.bind("click", closeByClick);
+                self.nodes.closest.bind("scroll", closeByScroll);
+                $(document).bind("keydown", closeByEscapeKey);
+                
+                // decide for proper side
+                var docWidth = $(document).width(),
+                    max = (docWidth * 0.50 >> 0) + 1,
+                    w, distance, mode, right, left, pos,
+                    parentPopup = my.parents(".io-ox-sidepopup").first(),
+                    firstPopup = parentPopup.length === 0;
+                    
+                if (firstPopup) {
+                    // get initial side
+                    distance = my.offset().left + my.outerWidth() - (docWidth / 2 >> 0);
+                    mode = distance < 0 ? "right" : "left";
+                } else {
+                    // toggle side for next popup
+                    mode = parentPopup.hasClass("right") ? "left" : "right";
+                }
+                
+                // min-width greater than max-width?
+                if (width > max) {
+                    max = width;
+                }
+                
+                if (mode === "left") {
+                    // pops up on the left side
+                    w = my.offset().left - 25;
+                    w = Math.max(width, w);
+                    w = Math.min(max, w);
+                    pos = Math.max(50, docWidth - w); // hard limit
+                    right = pos;
+                    left = 0;
+                } else {
+                    // pops up on the right side
+                    w = docWidth - (my.offset().left + my.outerWidth() + 25);
+                    w = Math.max(width, w);
+                    w = Math.min(max, w);
+                    pos = Math.max(50, docWidth - w); // hard limit
+                    right = 0;
+                    left = pos;
+                }
+                
+                // convert to percent (nice for dynamic resizing)
+                left = !left ? "0" : (left / docWidth * 100 >> 0) + "%";
+                right = !right ? "0" : (right / docWidth * 100 >> 0) + "%";
+                
+                //pane.css("maxWidth", max + "px");
+                
+                popup.removeClass("left right")
+                    .addClass(mode)
+                    .css({ right: right, left: left, zIndex: zIndex });
+                
+                arrow.removeClass("left right")
+                    .addClass(mode)
+                    .css({ right: right, left: left, zIndex: zIndex + 1 });
+                
+                // call custom handler
+                (handler || $.noop).call(this, pane.empty(), e);
+                
+                // set arrow top
+                var halfHeight = (my.outerHeight(true) / 2 >> 0),
+                    top = my.offset().top + halfHeight - self.nodes.target.offset().top;
+                arrow.css("top", top);
+                
+                // finally, add popup to proper element
+                self.nodes.target.append(popup).append(arrow);
+            }
+        };
+        
+        this.delegate = function (node, selector, handler) {
+            $(node).delegate(selector, "click", function (e) {
+                open.call(this, e, handler);
+            });
+            return this;
+        };
+        
+        this.show = function (e, handler) {
+            open.call(e.target, e, handler);
+            return this;
+        };
+        
+        this.close = function (e) {
+            close(e);
+        };
+    };
+    
     //TODO: Less C&P
     var pane = $('<div/>').addClass('abs io-ox-dialog-pane').append(
         $("<div/>").addClass("content")
@@ -294,10 +484,10 @@ define("io.ox/core/tk/dialogs", function () {
         };
     };
     
-    
     return {
         ModalDialog: Dialog,
-        SlidingPane: SlidingPane
+        SlidingPane: SlidingPane,
+        SidePopup: SidePopup
     };
 });
 

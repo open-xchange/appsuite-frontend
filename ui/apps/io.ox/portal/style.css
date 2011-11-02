@@ -1,6 +1,7 @@
 
 .io-ox-portal .clear-title {
     margin: 0.5em 0 1em 0;
+    font-size: 16pt;
 }
 
 .io-ox-portal .vgrid-cell:last-child {
@@ -16,12 +17,14 @@
     font-size: 18px;
 }
 
-.io-ox-portal-widget {
+.io-ox-portal-column {
     display: inline-block;
     float: left;
-    width: 450px;
+}
+
+.io-ox-portal-widget {
     min-height: 100px;
-    margin: 0px 40px 30px 0px;
+    margin-bottom: 40px;
 }
 
 .io-ox-portal-widget .clear-title {
@@ -32,4 +35,32 @@
     margin: 1em 0 1em 4em;
 }
 
+.io-ox-portal-rss .rss-entry {
+    max-width: 450px;
+    clear: both;
+}
 
+.io-ox-portal-rss .rss-title {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+    margin: 2em 0 1em 0;
+}
+
+.io-ox-portal-rss.spiegel .rss-title {
+    color: #900;
+}
+
+.io-ox-portal-rss .rss-content {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.io-ox-portal-rss .rss-content img {
+    float: left;
+    margin: 0 1.5em 0.5em 0;
+    border: 0px none;
+    max-width: 250px;
+}

@@ -190,7 +190,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
             "710" : "current_version",
             "711" : "number_of_versions"
         },
-        "task" : {
+        "tasks" : {
             "200" : "title",
             "201" : "start_date",
             "202" : "end_date",
@@ -304,7 +304,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
     $.extend(idMapping.infostore, idMapping.common);
     delete idMapping.infostore["101"]; // not "common" here (exception)
     delete idMapping.infostore["104"];
-    $.extend(idMapping.task, idMapping.common);
+    $.extend(idMapping.tasks, idMapping.common);
     $.extend(idMapping.user, idMapping.contacts, idMapping.common);
     
     var that = {};

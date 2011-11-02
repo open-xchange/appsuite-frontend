@@ -14,12 +14,14 @@
  */
 
 define("io.ox/contacts/main",
-    ["io.ox/contacts/base", "io.ox/contacts/api", "io.ox/core/tk/vgrid",
+
+    ["io.ox/contacts/util", "io.ox/contacts/api", "io.ox/core/tk/vgrid",
      "io.ox/core/tk/dialogs", "io.ox/help/hints",
      "io.ox/contacts/view-detail",
      "io.ox/core/config",
      "css!io.ox/contacts/style.css"
-    ], function (base, api, VGrid, dialogs, hints, viewDetail, config) {
+    ], function (util, api, VGrid, dialogs, hints, viewDetail, config) {
+
     
     "use strict";
     
@@ -67,8 +69,8 @@ define("io.ox/contacts/main",
         
         // right panel
         right = $("<div/>")
-            .css({ left: gridWidth + 39 + "px", overflow: "auto", padding: "30px" })
-            .addClass("rightside")
+            .css({ left: gridWidth + 39 + "px", overflow: "auto" })
+            .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main);
 
         // grid
@@ -91,9 +93,9 @@ define("io.ox/contacts/main",
                     fields.email.text("");
                     fields.job.text("Distribution list");
                 } else {
-                    fields.name.text(base.getFullName(data));
-                    fields.email.text(base.getMail(data));
-                    fields.job.text(base.getJob(data));
+                    fields.name.text(util.getFullName(data));
+                    fields.email.text(util.getMail(data));
+                    fields.job.text(util.getJob(data));
                 }
             }
         });
@@ -207,7 +209,8 @@ define("io.ox/contacts/main",
         // go!
         win.show(function () {
             grid.paint();
-             
+            
+            /* turn off for demo purposes
             var searchAdapter = {
                     search: function (options) {
                         api.search(options.query)
@@ -215,7 +218,6 @@ define("io.ox/contacts/main",
                             .fail(_.lfo(options.fail));
                     }
                 };
-            
             $("#autocomplete").tokenInput(searchAdapter, {
                 searchDelay: 500,
                 minChars: 3,
@@ -250,9 +252,8 @@ define("io.ox/contacts/main",
                 onReady: function () {
                     console.log('onReady');
                 }
-
             });
-           
+            */
         });
         // NewContact Form
         (function () {

@@ -230,7 +230,8 @@ exports.potScanner = function(name, deps, f) {
         return addMessage(self.task.name, this, method, self.getSrc);
     }).scan(f);
     
-    exports.modules.add(moduleName, this.getSrc(1).name, this.task.name);
+    exports.modules.add(moduleName, this.getSrc(name[0].start.line + 1).name,
+                        this.task.name);
 };
 
 utils.fileType("lang.js").addHook("handler", function(name) {

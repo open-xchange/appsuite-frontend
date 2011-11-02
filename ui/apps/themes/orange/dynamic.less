@@ -13,7 +13,7 @@
 
 #io-ox-core {
     z-index: 1;
-    color: black;
+    color: @color;
 }
 
 /* top bar */
@@ -21,27 +21,27 @@
 #io-ox-topbar {
     bottom: auto;
     height: 26px;
-    background-color: black;
-    background-color: rgba(0, 0, 0, 0.20);
+    background-color: @menu-background;
+    background-color: fade(@menu-background, 100%);
     padding: 0px 1px 1px 1px;
     /*overflow: hidden;*/
 }
 
 .rgba #io-ox-topbar {
     padding-bottom: 0px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.30);
+    border-bottom: 1px solid fade(@menu-background, 30%);
 }
 
 /* ipad: better fat finger support */
-.touch #io-ox-topbar { height: 35px; }
-.touch #io-ox-topbar .launcher { font-size: 14px; line-height: 35px; padding: 0 15px 0 15px; }
-.touch #io-ox-windowmanager { top: 40px; }
+.touch #io-ox-topbar { height: 40px; }
+.touch #io-ox-topbar .launcher { font-size: 14px; line-height: 35px; padding: 2px 15px 5px 15px; }
+.touch #io-ox-windowmanager { top: 42px; }
 .touch #io-ox-windowmanager .window-container-center { width: 100% !important; }
 
 #io-ox-topbar .launcher {
-    color: #ccc;
+    color: mix(@menu-color, @menu-background, 75%);
     font-weight: bold;
-    text-shadow: 0px 1px 4px black;
+    text-shadow: 0px 1px 3px @menu-background;
     padding: 2px 12px 5px 12px;
     margin: 0px 1px 0px 0px;
     line-height: 20px;
@@ -57,45 +57,47 @@
 }
 
 #io-ox-topbar .launcher.hover {
-    color: #fff;
-    background-color: #ccc;
-    background-color: rgba(0, 0, 0, 0.25);
+    color: @menu-color;
+    background-color: mix(@menu-color, @menu-background, 75%);
+    background-color: fade(@menu-background, 25%);
 }
 
 #io-ox-topbar .launcher.active {
-    color: #fff;
-    background-color: #444;
-    background-color: rgba(255, 255, 255, 0.30);
+    color: @menu-color-active;
+    background-color: mix(@menu-color, @menu-background, 400%/15);
+    background-color: @menu-background-active;
 }
 
 .rgba #io-ox-topbar .launcher.active {
     padding-bottom: 4px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid fade(@menu-color, 12%);
 }
 
 @-webkit-keyframes launcherColours {
-      0% { background-color: rgba(0, 0, 0, 0.0); }
-     50% { background-color: rgba(255, 255, 255, 0.40); }
-    100% { background-color: rgba(0, 0, 0, 0.00); }
+    from { background-color: fade(@menu-background, 0%); }
+      to { background-color: fade(@menu-color, 40%); }
 }
 
 @-moz-keyframes launcherColours {
-      0% { background-color: rgba(0, 0, 0, 0.00); }
-     50% { background-color: rgba(255, 255, 255, 0.40); }
-    100% { background-color: rgba(0, 0, 0, 0.00); }
+    from { background-color: fade(@menu-background, 0%); }
+      to { background-color: fade(@menu-color, 40%); }
 }
 
 #io-ox-topbar .launcher.progress {
-    -moz-animation-direction: normal;
-    -moz-animation-duration: 1.5s;
+    -moz-animation-direction: alternate;
+    -moz-animation-duration: 0.75s;
     -moz-animation-iteration-count: infinite;
     -moz-animation-name: launcherColours;
     -moz-animation-timing-function: ease-in-out;
-    -webkit-animation-direction: normal;
-    -webkit-animation-duration: 1.5s;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-duration: 0.75s;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-name: launcherColours;
     -webkit-animation-timing-function: ease-in-out;
+}
+
+#io-ox-welcome-upsell {
+    background-color: #fff;
 }
 
 /* empty desktop */
@@ -104,25 +106,25 @@
 }
 
 #io-ox-welcome {
-    background-color: #000;
-    background-color: rgba(0, 0, 0, 0.50);
-    color: white;
+    background-color: @welcome-background;
+    background-color: fade(@welcome-background, 50%);
+    color: @welcome-color;
     top: auto;
     height: 70px;
     padding: 10px 13px 10px 13px;
-    text-shadow: 0px 0px 1px #aaa;
+    text-shadow: 0px 0px 1px mix(@welcome-color, @welcome-background, 67%);
     text-align: right;
-    border-top: 1px solid rgba(0, 0, 0, 0.15);
+    border-top: 1px solid fade(@welcome-background, 15%);
 }
 
 #io-ox-welcome .at {
-    color: #aaa;
+    color: mix(@welcome-color, @welcome-background, 67%);
     display: inline-block;
     margin: 0 0.15em 0 0.15em;
 }
 
 #io-ox-welcome .clock {
-    color: #ccc;
+    color: mix(@welcome-color, @welcome-background, 75%);
 }
 
 /* window manager */
@@ -171,12 +173,12 @@
     height: 34px;
     left: 0px;
     
-    border-top: 1px solid #ccc;
-    border-top-color: rgba(255, 255, 255, 0.30);
-    background-color: #111;
-    background-color: rgba(0, 0, 0, 0.30);
+    border-top: 1px solid mix(@head-color, @head-background, 75%);
+    border-top-color: fade(@head-color, 30%);
+    background-color: mix(@head-color, @head-background, 100%/15);
+    background-color: fade(@head-background, 100%);
     
-    color: white;
+    color: @head-color;
     font-family: Lucida Grande, Arial;
     font-size: 9pt;
     
@@ -198,16 +200,16 @@
     padding: 6px 10px 4px 13px;
     line-height: 18px;
     /*text-align: center;*/
-    color: white;
+    color: @head-color;
     font-family: Helvetica, Arial, sans-serif;
     font-weight: 200;
     font-size: 18pt;
     line-height: 18pt;
-    text-shadow: 0px 0px 1px #eee;
+    text-shadow: 0px 0px 1px mix(@head-color, @head-background, 1400%/15);
 }
 
 .window-title .subtitle {
-    color: #ccc;
+    color: mix(@head-color, @head-background, 75%);
 }
 
 .window-toolbar {
@@ -225,9 +227,9 @@
 }
 
 .window-control {
-    color: white;
+    color: @head-color;
     font-weight: normal;
-    background-color: #444;
+    background-color: mix(@head-color, @head-background, 400%/15);
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 10px 10px 10px 10px;
@@ -242,8 +244,8 @@
 }
 
 .window-control:hover {
-    background-color: #888;
-    color: #ddd;
+    background-color: mix(@head-color, @head-background, 800%/15);
+    color: mix(@head-color, @head-background, 1300%/15);
 }
 
 .window-body {
@@ -252,7 +254,7 @@
     right: 0px;
     bottom: 0px;
     left: 0px;
-    background-color: white;
+    background-color: @background;
     white-space: normal;
 }
 
@@ -267,12 +269,18 @@
     left: -1px !important;
     z-index: 1;
     padding: 10px 15px 10px 15px;
-    color: white;
-    background-color: #444;
-    background-image: -moz-linear-gradient(center top, #111, #555);
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#111), to(#555));
-    background-image: -o-linear-gradient(top, #111 0%, #555 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#111111', endColorstr='#555555');
+    color: @head-color;
+    background-color: mix(@settings-color, @settings-background, 400%/15);
+    background-image: -moz-linear-gradient(center top,
+        mix(@settings-color, @settings-background, 100%/15),
+        mix(@settings-color, @settings-background, 500%/15));
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%,
+        from(mix(@settings-color, @settings-background, 100%/15)),
+        to(mix(@settings-color, @settings-background, 500%/15)));
+    background-image: -o-linear-gradient(top,
+        mix(@settings-color, @settings-background, 100%/15) 0%,
+        mix(@settings-color, @settings-background, 500%/15) 100%);
+    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="mix(@settings-color, @settings-background, 100%/15)~", endColorstr="mix(@settings-color, @settings-background, 500%/15)~")";
 }
 
 .window-content {
@@ -282,7 +290,7 @@
     bottom: 0px;
     left: 0px;
     z-index: 2;
-    background-color: white;
+    background-color: @background;
     padding: 10px 15px 10px 15px;
     overflow: hidden;
 }
@@ -322,9 +330,9 @@
     right: 0;
     left: 0;
     padding: 8px 13px 8px 13px;
-    border-bottom: 1px solid #ddd;
-    color: black;
-    background-color: white; /* resolves hw accel anti-aliasing */
+    border-bottom: 1px solid mix(@color, @background, 200%/15);
+    color: @color;
+    background-color: @background; /* resolves hw accel anti-aliasing */
 }
 
 .vgrid-cell.hover {
@@ -332,7 +340,7 @@
 }
 
 .vgrid-cell.hover:hover {
-    background-color: #f5f5f5;
+    background-color: mix(@color, @background, 1000%/255);
 }
 
 .vgrid-cell * {
@@ -346,7 +354,7 @@
 }
 
 .vgrid-cell.odd {
-    /*background-color: #f5f5f5;*/
+    /*background-color: mix(@color, @background, 1000%/255);*/
 }
 
 .vgrid-cell.vgrid-label {
@@ -356,41 +364,41 @@
     color: black;
     line-height: 1em;
     padding: 5px 13px 4px 13px;
-    background-color: #eee;
-    border-bottom: 1px solid #ccc;
+    background-color: mix(@color, @background, 100%/15);
+    border-bottom: 1px solid mix(@color, @background, 300%/15);
     background-image: -webkit-gradient(
         linear,
         left top,
         left bottom,
-        color-stop(0.20, #fff),
-        color-stop(1.00, #f0f0f0)
+        color-stop(0.20, @background),
+        color-stop(1.00, mix(@color, @background, 1500%/255))
     );
-    background-image: -o-linear-gradient(top, #fff 20%, #f0f0f0 100%);
+    background-image: -o-linear-gradient(top, @background 20%, mix(@color, @background, 1500%/255) 100%);
     background-image: -moz-linear-gradient(
         center bottom,
-        #f0f0f0 0%,
-        #fff 80%
+        mix(@color, @background, 1500%/255) 0%,
+        @background 80%
     );
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f0f0f0');
+    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="@background~", endColorstr="mix(@color, @background, 1500%/255)~")";
     cursor: pointer;
 }
 
 .vgrid-cell.selected {
-    background-color: #08c !important;
+    background-color: @selected-background !important;
     background-image: -webkit-gradient(
         linear,
         left top,
         left bottom,
-        color-stop(0, #3F9EFC),
-        color-stop(1, #026ABA)
+        color-stop(0, lighten(@selected-background, 20%)),
+        color-stop(1, darken(@selected-background, 5%))
     ) !important;
-    background-image: -o-linear-gradient(top, #3F9EFC 0%, #026ABA 100%) !important;
+    background-image: -o-linear-gradient(top, lighten(@selected-background, 20%) 0%, darken(@selected-background, 5%) 100%) !important;
     background-image: -moz-linear-gradient(
         center top,
-        #3F9EFC 0%,
-        #026ABA 100%
+        lighten(@selected-background, 20%) 0%,
+        darken(@selected-background, 5%) 100%
     ) !important;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#54A7FF', endColorstr='#0260A8');
+    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@selected-background, 20%)", endColorstr="darken(@selected-background, 5%)~")";
     border-bottom-color: black;
 }
 
@@ -406,7 +414,7 @@
     bottom: 0px;
     left: 0px;
     width: 200px;
-    background-color: white;
+    background-color: @background;
 }
 
 .rightside {
@@ -415,7 +423,7 @@
     right: 0px;
     bottom: 0px;
     left: 200px;
-    background-color: white;
+    background-color: @background;
 }
 
 .withStatusBar {
@@ -431,9 +439,9 @@
     height: 19px;
     padding-top: 10px;
     padding-left: 10px;
-    background-color: #F0F0F0;
-    border-top: 1px solid #CCC;
-    color: #5C9CCC;
+    background-color: @status-background;
+    border-top: 1px solid darken(@status-background, 10%);
+    color: @status-color;
     font-size: 8pt;
 }
 
@@ -469,6 +477,10 @@
     color: #888;
 }
 
+.default-content-padding {
+    padding: 30px 40px 30px 40px;
+}
+
 .attachment-link {
     color: black;
     text-decoration: underline;
@@ -496,7 +508,8 @@ a.nolink {
     border-left: 1px solid #ccc;
 }
 
-/* .no-searchfield removed because searchfield is now type=text */ .searchfield-wrapper {
+/*  removed because searchfield is now type=text */
+.no-searchfield .searchfield-wrapper {
     width: 300px;
     height: 17px;
     line-height: 1em;
@@ -509,6 +522,7 @@ a.nolink {
     display: inline-block;
 }
 
+/*
 .searchfield-wrapper input{
 	margin: 2px 2px 3px;
 	background-color: white;
@@ -516,11 +530,8 @@ a.nolink {
 	font-size: 11px;
 	padding: 0;
 	width: 100px;
-	/*line-height: 15px;*/
-	
-	
 }
-
+*/
 
 input[type=search] {
     width: 220px;
@@ -652,7 +663,7 @@ input[type=search] {
 }
 
 .io-ox-dialog-pane {
-    width: auto ;/*Shrink to fit would be nicer */
+    width: 500px;  /* Shrink to fit would be nicer */
     overflow: visible;
     background-color: white;
     border: 3px solid #111;
@@ -667,65 +678,6 @@ input[type=search] {
     text-align: center;
     color: black;
     padding: 10px;
-}
-
-/*styles for form elements*/
-
-.io-ox-dialog-pane .content .clear{
-	clear: both;
-}
-
-.io-ox-dialog-pane .content .block.new_file{
-	width: 350px;
-	/*width: auto;*/
-	text-align: right;
-	margin-bottom: 15px;
-	padding-top: 5px;
-	overflow: hidden;
-	font-size: 10pt;
-}
-
-
-
-.io-ox-dialog-pane .content .block.new_contact{
-	width: 520px;
-	text-align: right;
-	margin-bottom: 15px;
-	padding: 5px;
-	overflow: hidden;
-	font-size: 10pt;
-	
-/*	
--moz-box-shadow: 0px 0px 4px #888;
--webkit-box-shadow: 0px 0px 4px #888;
-box-shadow: 0px 0px 4px #888;
--moz-border-radius: 10px;
--webkit-border-radius: 10px;
-border-radius: 10px 10px 10px 10px;
-border: 1px solid #BBB;*/
-
-}
-
-.io-ox-dialog-pane .content .field{
-	width: 230px;
-	float: left;
-	margin: 0 10px 10px 0;
-	
-}
-
-.io-ox-dialog-pane .content .field.even{
-	float: right;
-}
-
-
-.io-ox-dialog-pane .content div label{
-	width: auto;
-	float: left;
-	line-height: 18px;
-}
-.io-ox-dialog-pane .content div input{
-	width: auto;
-	float: right;
 }
 
 .io-ox-dialog-pane .controls {
@@ -1041,3 +993,67 @@ div.token-input-dropdown ul li.token-input-selected-dropdown-item {
 .io-ox-action-link:last-child {
     margin-right: 0;
 } 
+
+/* side popups */
+.io-ox-sidepopup {
+    background-color: white;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    z-index: 3; /* above .window-content */
+    -moz-box-shadow: 0px 0px 30px -5px #555;
+    -webkit-box-shadow: 0px 0px 20px -5px #000;
+    box-shadow: 0px 0px 30px 0px #aaa;
+}
+
+.io-ox-sidepopup-pane {
+    overflow: auto;
+}
+
+.io-ox-sidepopup.right {
+    border-right: 0px none;
+}
+
+.io-ox-sidepopup.left {
+    border-left: 0px none;
+}
+
+.io-ox-sidepopup-arrow {
+    position: absolute;
+    z-index: 4;
+}
+
+.io-ox-sidepopup-arrow .border {
+    position: absolute;
+    height: 0;
+    width: 0;
+    border: 20px solid transparent;
+    top: -20px;
+}
+
+.io-ox-sidepopup-arrow .triangle {
+    position: absolute;
+    height: 0;
+    width: 0px;
+    border: 20px solid transparent;
+    top: -20px;
+}
+
+.io-ox-sidepopup-arrow.left .border {
+    border-left-color: #aaa;
+    right: -40px;
+}
+
+.io-ox-sidepopup-arrow.left .triangle {
+    border-left-color: #fff;
+    right: -39px;
+}
+
+.io-ox-sidepopup-arrow.right .border {
+    border-right-color: #aaa;
+    left: -40px;
+}
+
+.io-ox-sidepopup-arrow.right .triangle {
+    border-right-color: #fff;
+    left: -39px;
+}

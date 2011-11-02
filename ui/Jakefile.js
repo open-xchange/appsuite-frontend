@@ -207,7 +207,7 @@ utils.concat("boot.js", ["lib/jquery.min.js",
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
         "event.js", "extensions.js", "cache.js", "http.js",
-        "config.js", "session.js", "gettext.js",
+        "config.js", "session.js", "gettext.js", "i18n.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js",
         "api/folder.js", "collection.js", "desktop.js", "main.js"
     ]), { type: "source" }
@@ -247,17 +247,19 @@ utils.concat("dependencies.json", [{
 // apps
 
 var apps = _.groupBy(utils.list("apps/"), function (f) {
-    var match = /\.(js|lss)$/.exec(f);
+    var match = /\.(js)$/.exec(f);
     return match && match[1] || "rest";
 });
 if (apps.js) utils.copy(apps.js, { type: "module" });
-if (apps.lss) {
-    utils.copy(apps.lss, {
-        type: "less",
-        mapper: function(s) { return s.replace(/\.lss$/, ".css"); }
-    });
-}
 if (apps.rest) utils.copy(apps.rest);
+
+// precompute themes
+
+_.each(utils.list("apps/themes/*/dynamic.less"), function(theme) {
+    utils.concat(theme.replace(/\.less$/, ".css"),
+        [theme.replace(/\/dynamic\.less$/, "/definitions.less"), theme],
+        { type: "less" });
+});
 
 // doc task
 
