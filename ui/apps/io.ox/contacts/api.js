@@ -24,7 +24,7 @@ define("io.ox/contacts/api",
         requests: {
             all: {
                 action: "all",
-                folder: "6",
+                folder:  "11179", //"6",
                 columns: "20,1,500,502",
                 sort: "607", // magic field
                 order: "asc"
@@ -55,6 +55,13 @@ define("io.ox/contacts/api",
         }
     });
     
+    api.newContact = function (formdata) {
+        
+                        return http.PUT({module: "contacts", params: {action: "new"}, data: formdata});
+                        
+                    };
+        
+                 
     return api;
     
 });
