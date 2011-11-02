@@ -23,7 +23,6 @@
     }
     
     function relativeCSS(path, css) {
-console.log("relative", path);
         return css.replace(/url\((?!\/|[A-Za-z][A-Za-z0-9+.-]*\:)/g,
                            "url(" + path);
     }
