@@ -434,7 +434,6 @@ define("io.ox/core/tk/dialogs", function () {
             
             height = nodes.controls.outerHeight(true) + nodes.content.outerHeight(true) + 2;
             //width =  Math.max(nodes.controls.outerWidth(true), nodes.content.outerWidth(true)) + 2;
-            //get actual width
             width = nodes.content.find('.block').outerWidth(true) + 20;
             nodes.pane.hide();
             nodes.pane.css("opacity", oldOpacity);
