@@ -124,3 +124,37 @@
     background-size: cover;
     margin-bottom: 2em;
 }
+
+
+/*new contact form*/
+
+.io-ox-dialog-pane .content .block{
+	margin-bottom: 15px;
+	/*height: auto;*/
+	clear: both;
+	overflow: hidden;
+	
+}
+
+.io-ox-dialog-pane .content .block .field{
+	float: left;
+	margin-bottom:20px;
+	padding-top: 2px;
+	width: 230px;
+}
+
+
+.io-ox-dialog-pane .content .block .field.even{
+	float: right;
+}
+
+.io-ox-dialog-pane .content .block .field label{
+	font-size: 10pt;
+	width: auto;
+	float: left;
+	line-height: 15pt;
+}
+.io-ox-dialog-pane .content .block .field input{
+	width: auto;
+	float: right;
+}
