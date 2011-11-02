@@ -90,6 +90,8 @@ define("io.ox/conversation/main",
         
         var currentChatId = null,
             
+            lastMessage = "",
+            
             drawMessages,
             
             pollTimer = null,
@@ -118,19 +120,26 @@ define("io.ox/conversation/main",
             .append(
                 $("<textarea>")
                 .css("resize", "none")
-                .on("keypress", function (e) {
+                .on("keydown", function (e) {
+                    var self, val;
                     // pressed enter?
                     if (e.which === 13) {
-                        var self = $(this),
-                            val = self.val();
+                        self = $(this);
+                        val = self.val();
                         self.attr("disabled", "disabled");
                         api.sendMessage(currentChatId, val)
                             .done(function () {
+                                lastMessage = val;
                                 self.val("").removeAttr("disabled");
                             })
                             .fail(function () {
                                 self.removeAttr("disabled");
                             });
+                    } else if (e.which === 38) {
+                        self = $(this);
+                        if (self.val() === "") {
+                            self.val(lastMessage);
+                        }
                     }
                 })
             )
