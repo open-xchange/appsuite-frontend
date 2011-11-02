@@ -109,7 +109,7 @@ define("io.ox/conversation/main",
                     // fetch messages
                     api.getMessages(currentChatId)
                     .done(drawMessages);
-                }, 1000);
+                }, 2000);
             };
         
         var pane = $("<div>").addClass("abs conversation default-content-padding")
