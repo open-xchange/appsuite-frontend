@@ -23,6 +23,7 @@
     }
     
     function relativeCSS(path, css) {
+console.log("relative", path);
         return css.replace(/url\((?!\/|[A-Za-z][A-Za-z0-9+.-]*\:)/g,
                            "url(" + path);
     }
@@ -47,7 +48,8 @@
     });
     
     var currentTheme = "";
-    var lessFiles = [];
+    var themeLess = {}, lessFiles = [themeLess];
+    var themeCSS;
     
     var less = (function () {
         var less = { tree: {} }, exports = less;
@@ -142,14 +144,18 @@
          */
         set: function (name) {
             return require(["text!themes/" + name + "/definitions.less",
-                            "text!themes/" + name + "/dynamic.css",
-                            "text!themes/" + name + "/dynamic.less",
-                            "css!themes/" + name + "/static.css"])
+                            "text!themes/" + name + "/static.css",
+                            "text!themes/" + name + "/dynamic.less"])
                 .pipe(function(theme, css, less) {
-                    var filename = ox.base + "/apps/themes/" + name +
-                                   "/dynamic.less";
-                    lessFiles.push({ name: filename, source: less,
-                                     node: insert(filename, css, "script") });
+                    var path = ox.base + "/apps/themes/" + name + "/";
+                    if (themeCSS) {
+                        themeCSS.text(relativeCSS(path, css));
+                    } else {
+                        themeCSS = insert(path + "static.css", css, "script");
+                    }
+                    themeLess.path = path;
+                    themeLess.name = path + "dynamic.less";
+                    themeLess.source = less;
                     return setTheme(theme);
                 });
         },
