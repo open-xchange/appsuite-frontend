@@ -126,7 +126,7 @@ define("io.ox/calendar/view-detail",
         node = $("<div>").addClass("participant")
             .append($("<span>").addClass(personClass).text(name))
             .append($("<span>").addClass("status " + statusClass).text(" " + confirm))
-            .bind("click", {
+            .on("click", {
                 display_name: name,
                 email1: mail_lc,
                 internal_userid: obj.internal_userid

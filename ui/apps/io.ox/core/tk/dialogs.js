@@ -37,7 +37,7 @@ define("io.ox/core/tk/dialogs", function () {
             closeViaEscapeKey,
             
             close = function () {
-                $(document).unbind("keydown", closeViaEscapeKey);
+                $(document).off("keydown", closeViaEscapeKey);
                 nodes.popup.remove();
                 nodes.underlay.remove();
                 nodes = deferred = null;
@@ -122,7 +122,7 @@ define("io.ox/core/tk/dialogs", function () {
             nodes.popup.find(".content").css("height", (h1 - h2) + "px");
             
             if (o.easyOut) {
-                $(document).bind("keydown", closeViaEscapeKey);
+                $(document).on("keydown", closeViaEscapeKey);
             }
             
             return deferred;
@@ -178,7 +178,7 @@ define("io.ox/core/tk/dialogs", function () {
             popup = $("<div>")
                 .addClass("io-ox-sidepopup abs")
                 .append(pane)
-                .bind("click", function (e) {
+                .on("click", function (e) {
                     processEvent(e);
                 }),
             arrow = $("<div>")
@@ -219,9 +219,9 @@ define("io.ox/core/tk/dialogs", function () {
         
         close = function (e) {
             // remove handlers & avoid leaks
-            $(document).unbind("keydown", closeByEscapeKey);
-            self.nodes.closest.unbind("scroll", closeByScroll);
-            self.nodes.click.unbind("click", closeByClick);
+            $(document).off("keydown", closeByEscapeKey);
+            self.nodes.closest.off("scroll", closeByScroll);
+            self.nodes.click.off("click", closeByClick);
             self.lastTrigger = null;
             // use time to avoid flicker
             timer = setTimeout(function () {
@@ -264,9 +264,9 @@ define("io.ox/core/tk/dialogs", function () {
                 clearTimeout(timer);
                 
                 // add handlers to close popup
-                self.nodes.click.bind("click", closeByClick);
-                self.nodes.closest.bind("scroll", closeByScroll);
-                $(document).bind("keydown", closeByEscapeKey);
+                self.nodes.click.on("click", closeByClick);
+                self.nodes.closest.on("scroll", closeByScroll);
+                $(document).on("keydown", closeByEscapeKey);
                 
                 // decide for proper side
                 var docWidth = $(document).width(),
@@ -335,7 +335,7 @@ define("io.ox/core/tk/dialogs", function () {
         };
         
         this.delegate = function (node, selector, handler) {
-            $(node).delegate(selector, "click", function (e) {
+            $(node).on("click", selector, function (e) {
                 open.call(this, e, handler);
             });
             return this;

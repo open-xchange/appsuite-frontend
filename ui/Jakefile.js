@@ -99,7 +99,10 @@ var jshintOptions = {
     undef: true,
     white: !debug,
     loopfunc: false,
-    predef: ["$", "_", "Modernizr", "define", "require", "ox", "initializeAndDefine"]
+    predef: [
+         "$", "_", "Modernizr", "define", "require", "ox",
+         "initializeAndDefine", "iScroll"
+    ]
 };
 
 function hint (data, getSrc) {
@@ -200,7 +203,7 @@ utils.copy(utils.list("src", "css.js"), {
     }
 });
 
-utils.concat("boot.js", ["lib/jquery.min.js",
+utils.concat("boot.js", ["lib/jquery.min.js",// "lib/iscroll.js",
         "lib/require.js", "lib/modernizr.js", "lib/underscore.js",
         "tmp/css.js", utils.string("\n"), "tmp/boot.js"]);
 

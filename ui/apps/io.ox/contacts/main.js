@@ -185,7 +185,7 @@ define("io.ox/contacts/main",
         function drawThumb(char) {
             return $("<div/>").addClass("thumb-index border-bottom")
                 .text(char)
-                .bind("click", char, grid.scrollToLabelText);
+                .on("click", { text: char }, grid.scrollToLabelText);
         }
         
         // draw thumb index

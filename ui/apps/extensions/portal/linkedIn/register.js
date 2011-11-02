@@ -74,7 +74,7 @@ define("extensions/portal/linkedin/register", ["io.ox/core/extensions", "io.ox/c
                 var dname = person.firstName + " " + person.lastName;
                 return $("<a href='#' />")
                     .text(dname)
-                    .bind("click", person, fnClick);
+                    .on("click", person, fnClick);
             }
             
             // Check presence of all variables
