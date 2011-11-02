@@ -41,7 +41,7 @@ define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
                         //TODO: remove this once backend can do this lookup
                         userAPI.get({ id: data.internal_userid })
                         .done(function (data) {
-                            cont({ email1: data.email1 });
+                            cont({ email1: data.email1, email2: data.email2, email3: data.email3 });
                         });
                     } else {
                         cont(data);

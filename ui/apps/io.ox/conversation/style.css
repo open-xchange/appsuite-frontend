@@ -1,0 +1,32 @@
+
+.io-ox-conversation .conversation {
+    bottom: 79px;
+}
+
+.io-ox-conversation .conversation .message {
+    width: 500px;
+    margin: 0 auto 2em auto;
+}
+
+.io-ox-conversation .conversation .message .from {
+    font-weight: bold;
+    color: #aaa;
+}
+
+.io-ox-conversation .conversation .message .text {
+    color: black;
+}
+
+.io-ox-conversation .box {
+    top: auto;
+    height: 80px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    text-align: center;
+    background-color: white;
+}
+
+.io-ox-conversation .box textarea {
+    width: 500px;
+    height: 60px;
+}
