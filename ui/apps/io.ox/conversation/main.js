@@ -153,6 +153,8 @@ define("io.ox/conversation/main",
                     )
                 );
             });
+            
+            pane.scrollTop(pane.get(0).scrollHeight);
         };
         
         var showChat = function (obj) {
