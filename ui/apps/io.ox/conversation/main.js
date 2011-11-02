@@ -107,8 +107,10 @@ define("io.ox/conversation/main",
                 stopPolling();
                 pollTimer = setInterval(function () {
                     // fetch messages
-                    api.getMessages(currentChatId)
-                    .done(drawMessages);
+                    if (ox.session) {
+                        api.getMessages(currentChatId)
+                        .done(drawMessages);
+                    }
                 }, 2000);
             };
         
@@ -184,9 +186,11 @@ define("io.ox/conversation/main",
         
         win.bind("show", function () {
             grid.selection.keyboard(true);
+            startPolling();
         });
         win.bind("hide", function () {
             grid.selection.keyboard(false);
+            stopPolling();
         });
         
         // bind all refresh
