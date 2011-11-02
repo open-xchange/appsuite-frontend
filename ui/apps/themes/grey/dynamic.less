@@ -662,7 +662,7 @@ input[type=search] {
 }
 
 .io-ox-dialog-pane {
-    width: 500px;  /* Shrink to fit would be nicer */
+    width: auto ;/*Shrink to fit would be nicer */
     overflow: visible;
     background-color: white;
     border: 3px solid #111;
@@ -677,6 +677,65 @@ input[type=search] {
     text-align: center;
     color: black;
     padding: 10px;
+}
+
+/*styles for form elements*/
+
+.io-ox-dialog-pane .content .clear{
+	clear: both;
+}
+
+.io-ox-dialog-pane .content .block.new_file{
+	width: 350px;
+	/*width: auto;*/
+	text-align: right;
+	margin-bottom: 15px;
+	padding-top: 5px;
+	overflow: hidden;
+	font-size: 10pt;
+}
+
+
+
+.io-ox-dialog-pane .content .block.new_contact{
+	width: 520px;
+	text-align: right;
+	margin-bottom: 15px;
+	padding: 5px;
+	overflow: hidden;
+	font-size: 10pt;
+	
+/*	
+-moz-box-shadow: 0px 0px 4px #888;
+-webkit-box-shadow: 0px 0px 4px #888;
+box-shadow: 0px 0px 4px #888;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+border-radius: 10px 10px 10px 10px;
+border: 1px solid #BBB;*/
+
+}
+
+.io-ox-dialog-pane .content .field{
+	width: 230px;
+	float: left;
+	margin: 0 10px 10px 0;
+	
+}
+
+.io-ox-dialog-pane .content .field.even{
+	float: right;
+}
+
+
+.io-ox-dialog-pane .content div label{
+	width: auto;
+	float: left;
+	line-height: 18px;
+}
+.io-ox-dialog-pane .content div input{
+	width: auto;
+	float: right;
 }
 
 .io-ox-dialog-pane .controls {

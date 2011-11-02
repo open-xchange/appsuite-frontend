@@ -182,7 +182,7 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
             init,
             getIndex,
             fnScroll;
-    
+        
         // add label class
         template.node.addClass("selectable");
         label.node.addClass("vgrid-label");
@@ -517,9 +517,9 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
         
         this.paint = function () {
             if (firstRun) {
-                node.bind("selectstart", false)
-                    .bind("scroll", fnScroll)
-                    .delegate(".vgrid-label", "click dblclick", hScrollToLabel);
+                node.on("selectstart", false)
+                    .on("scroll", fnScroll)
+                    .on("click dblclick", ".vgrid-label", hScrollToLabel);
                 firstRun = false;
             }
             return init();
@@ -562,7 +562,8 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
         
         this.scrollToLabelText = function (e) {
             // get via text index
-            var index = labels.textIndex[e.data || e];
+            var text = e.data ? e.data.text : e,
+                index = labels.textIndex[text];
             if (index !== undefined) {
                 scrollToLabel(index);
             }

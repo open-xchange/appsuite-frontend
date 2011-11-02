@@ -48,7 +48,7 @@ define("io.ox/mail/util", ["io.ox/core/extensions"], function (ext) {
                 node = $("<span/>").addClass(addHandlers ? "person-link" : "person")
                     .css("whiteSpace", "nowrap").text(display_name);
                 if (addHandlers) {
-                    node.bind("click", { display_name: display_name, email1: list[i][1] }, fnClickPerson)
+                    node.on("click", { display_name: display_name, email1: list[i][1] }, fnClickPerson)
                         .css("cursor", "pointer");
                 }
                 tmp = tmp.add(node);

@@ -14,9 +14,14 @@
  */
 
 define("io.ox/contacts/main",
+
     ["io.ox/contacts/util", "io.ox/contacts/api", "io.ox/core/tk/vgrid",
-     "io.ox/contacts/view-detail", "css!io.ox/contacts/style.css"
-    ], function (util, api, VGrid, viewDetail) {
+     "io.ox/core/tk/dialogs", "io.ox/help/hints",
+     "io.ox/contacts/view-detail",
+     "io.ox/core/config",
+     "css!io.ox/contacts/style.css"
+    ], function (util, api, VGrid, dialogs, hints, viewDetail, config) {
+
     
     "use strict";
     
@@ -42,7 +47,8 @@ define("io.ox/contacts/main",
         });
         
         app.setWindow(win);
-
+        
+    
         // left panel
         left = $("<div/>")
             .addClass("leftside border-right")
@@ -179,7 +185,7 @@ define("io.ox/contacts/main",
         function drawThumb(char) {
             return $("<div/>").addClass("thumb-index border-bottom")
                 .text(char)
-                .bind("click", char, grid.scrollToLabelText);
+                .on("click", { text: char }, grid.scrollToLabelText);
         }
         
         // draw thumb index
@@ -249,6 +255,89 @@ define("io.ox/contacts/main",
             });
             */
         });
+        // NewContact Form
+        (function () {
+            
+                    
+                    var pane = new dialogs.SlidingPane(),
+                        // create formblocks
+                    
+                        $divblock_name = $('<div/>').addClass('block new_contact name'),
+                        $divblock_company = $('<div/>').addClass('block new_contact company'),
+                        $divblock_b_address = $('<div/>').addClass('block new_contact address'),
+                        $divblock_b_phone = $('<div/>').addClass('block new_contact phone'),
+                        
+                        // create inputfields - a function for reducing code is needed
+                        
+                        $first_name = $('<div class="field"><label>first name</label><input id="first_name" type="text" ></input></div>'),
+                        $last_name  = $('<div class="field"><label>last name</label><input id="last_name" type="text"></input></div>'),
+                        $company = $('<div class="field"><label>company</label><input id="company" type="text"></input></div>'),
+                        $position = $('<div class="field"><label>position</label><input id="position" type="text"></input></div>'),
+                        $profession = $('<div class="field"><label>profession</label><input id="profession" type="text"></input></div>'),
+                        $department = $('<div class="field"><label>department</label><input id="department" type="text"></input></div>'),
+                        $street_business = $('<div class="field"><label>street</label><input id="street_business" type="text"></input></div>'),
+                        $postal_code_business = $('<div class="field"><label>postal code</label><input id="postal_code_business" type="text"></input></div>'),
+                        $city_business = $('<div class="field"><label>city</label><input id="city_business" type="text"></input></div>'),
+                        $phone_business1 = $('<div class="field"><label>tel.</label><input id="$phone_business1" type="text"></input></div>');
+                   
+                    // assemble the form
+                    pane.append($divblock_name);
+                    $first_name.appendTo($divblock_name);
+                    $last_name.appendTo($divblock_name);
+                    
+                    pane.append($divblock_company);
+                    $company.appendTo($divblock_company);
+                    $department.appendTo($divblock_company);
+                    $position.appendTo($divblock_company);
+                    $profession.appendTo($divblock_company);
+                    
+                    pane.append($divblock_b_address);
+                    $street_business.appendTo($divblock_b_address);
+                    $postal_code_business.appendTo($divblock_b_address);
+                    $city_business.appendTo($divblock_b_address);
+                    $city_business.appendTo($divblock_b_address);
+                    
+                    pane.append($divblock_b_phone);
+                    $phone_business1.appendTo($divblock_b_phone);
+                    
+                    $(".content .block .field:nth-child(even)").addClass('even');
+                   
+                    pane.addButton("resolveNewContact", "Save");
+                    pane.addButton("cancelNewContact", "Cancel");
+                    
+                    //collect the data
+                    var actions = {
+                        resolveNewContact: function () {
+                                            var f_id = config.get("folder.contacts");
+                                            var formdata = {folder_id: f_id};
+                                            $(".content input").each(function (index) {
+                                                                        var value =  $(this).val();
+                                                                        var id = $(this).attr('id');
+                                                                        formdata[id] = value;
+                                                                    });
+                                            api.newContact(formdata);
+                            
+                                        },
+                    
+                        cancelNewContact: function () {
+                                                $(".content input").each(function (index) {
+                                                    $(this).val("");
+                                                });
+                                            }
+                        
+                    };
+                    
+                    var showNewContactPane = function () {
+                        pane.show().done(function (action) {
+                            actions[action]();
+                        });
+                    };
+                    var newContactButton = win.addButton({
+                        label: "New Contact",
+                        action: showNewContactPane
+                    });
+                    pane.relativeTo(newContactButton);
+                }());
     });
     
     return {

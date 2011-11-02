@@ -50,9 +50,9 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
             }
             
             // rebind events
-            link.unbind("click")
-                .bind("dblclick", false)
-                .bind("click", function (e) {
+            link.off("click")
+                .on("dblclick", false)
+                .on("click", function (e) {
                     window.container = container;
                     window.config = config;
                     // open
@@ -97,7 +97,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     $(this).removeClass("hover");
                 }
             )
-            .bind("click", function () {
+            .on("click", function () {
                 var self = $(this);
                 if (!_.isFunction(fn)) {
                     // for development only - should never happen
@@ -492,7 +492,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     return $("<div>")
                         .addClass("io-ox-toolbar-link")
                         .text(String(o.label))
-                        .bind("click", o.action)
+                        .on("click", o.action)
                         .appendTo(this.nodes.toolbar);
                 };
                 
@@ -684,16 +684,16 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     .append(
                         $("<input/>", { type: "search", id: "autocomplete", placeholder: "Search...", size: "40" })
                             
-                            .bind("keypress", function (e) {
+                            .on("keypress", function (e) {
                                 e.stopPropagation();
                             })
-                            .bind("search", function (e) {
+                            .on("search", function (e) {
                                 e.stopPropagation();
                                 if ($(this).val() === "") {
                                     $(this).blur();
                                 }
                             })
-                            .bind("change", function (e) {
+                            .on("change", function (e) {
                                 e.stopPropagation();
                                 win.search.query = $(this).val();
                                 // trigger search?
@@ -721,7 +721,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
             } else {
                 
                 // add close handler
-                win.nodes.closeButton.bind("click", close);
+                win.nodes.closeButton.on("click", close);
                 
                 // set title
                 win.setTitle(opt.title);
