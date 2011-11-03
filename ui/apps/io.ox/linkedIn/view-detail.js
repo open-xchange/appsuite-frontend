@@ -27,7 +27,6 @@ define("io.ox/linkedIn/view-detail",
     }
 
     function draw(data) {
-        
         var $node = $("<div>").addClass("linkedIn").css({ overflow: "auto" }),
             $detailNode = $("<div>").addClass("details").appendTo($node),
             $table = $("<table><tr><td class='t10'></td><td class='t11'></td></tr><tr><td class='r2' colspan='2'></td></tr><table>").appendTo($detailNode),

@@ -23,6 +23,9 @@ define("extensions/halo/linkedIn/register", ["io.ox/core/extensions"], function 
         draw: function ($node, providerName, liResponse) {
             var deferred = new $.Deferred();
             require(["extensions/halo/linkedIn/view-halo", "css!io.ox/linkedIn/style.css"], function (base) {
+                if (liResponse.values) {
+                    liResponse = liResponse.values[0];
+                }
                 $node.append(base.draw(liResponse));
                 deferred.resolve();
             });
