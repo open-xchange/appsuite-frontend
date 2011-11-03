@@ -168,7 +168,7 @@ define("io.ox/core/main",
                         fontSize: "18pt",
                         textAlign: "center"
                     })
-                    .text("Click here for a 90-days free trial!")
+                    .text("Click here for a 90-day free trial!")
                 );
             }
         });
