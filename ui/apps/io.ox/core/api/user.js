@@ -61,5 +61,30 @@ define("io.ox/core/api/user",
         return node;
     };
     
+    api.getPicture = function (id) {
+        var node = $("<div>")
+            .css("backgroundImage", "url(" + ox.base + "/apps/themes/default/dummypicture.png)"),
+            clear = function () {
+                _.defer(function () { // use defer! otherwise we return null on cache hit
+                    node = null; // don't leak
+                });
+            };
+        api.get({ id: id })
+            .done(function (data) {
+                // ask contact interface for picture
+                require(["io.ox/contacts/api"], function (contactsAPI) {
+                    contactsAPI.get({ id: data.contact_id, folder: data.folder_id })
+                    .done(function (data) {
+                        if (data.image1_url) {
+                            node.css("backgroundImage", "url(" + data.image1_url + ")");
+                        }
+                    })
+                    .always(clear);
+                });
+            })
+            .fail(clear);
+        return node;
+    };
+
     return api;
 });

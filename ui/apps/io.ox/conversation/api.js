@@ -37,12 +37,13 @@ define("io.ox/conversation/api",
         }
     });
     
-    api.getMessages = function (id, timestamp) {
+    api.getMessages = function (id, since) {
         return http.GET({
             module: "conversation",
             params: {
                 action: "allMessages",
-                id: id
+                id: id,
+                since: since || 0
             }
         });
     };

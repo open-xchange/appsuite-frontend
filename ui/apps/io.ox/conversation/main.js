@@ -15,8 +15,10 @@ define("io.ox/conversation/main",
     ["io.ox/mail/util",
      "io.ox/conversation/api",
      "io.ox/core/tk/vgrid",
+     "io.ox/core/api/user",
+     "io.ox/core/config",
      "css!io.ox/conversation/style.css"
-    ], function (util, api, VGrid) {
+    ], function (util, api, VGrid, userAPI, config) {
     
     "use strict";
     
@@ -78,99 +80,188 @@ define("io.ox/conversation/main",
         
         // all request
         grid.setAllRequest(function () {
+            //return $.Deferred().resolve([{ id: "db-0-1017" }]);
             return api.getAll();
         });
         
         // list request
         grid.setListRequest(function (ids) {
+            //return $.Deferred().resolve([{ id: "db-0-1017", subject: "YEAH" }]);
             return api.getList(ids);
         });
         
         // -------------------------------------------------------------
         
         var currentChatId = null,
-            
             lastMessage = "",
-            
-            drawMessages,
-            
+            lastMessageId = null,
+            lastTimestamp = 0,
             pollTimer = null,
+            // current user id
+            myself = String(config.get("identifier")),
+            // DOM nodes
+            pane, controls, textarea,
+            // functions
+            stopPolling,
+            startPolling,
+            resumePolling,
+            pollNow,
+            tick,
+            processMessages,
+            applyEmoticons,
+            drawMessages,
+            sendMessage;
             
-            stopPolling = function () {
-                if (pollTimer !== null) {
-                    clearInterval(pollTimer);
-                    pollTimer = null;
-                }
-            },
-            
-            startPolling = function () {
-                stopPolling();
-                pollTimer = setInterval(function () {
-                    // fetch messages
-                    if (ox.session) {
-                        api.getMessages(currentChatId)
-                        .done(drawMessages);
-                    }
-                }, 2000);
-            };
+        stopPolling = function () {
+            if (pollTimer !== null) {
+                clearInterval(pollTimer);
+                pollTimer = null;
+            }
+        };
         
-        var pane = $("<div>").addClass("abs conversation default-content-padding")
-            .css({ overflow: "auto" })
-            .appendTo(right);
+        resumePolling = function () {
+            if (pollTimer === null) {
+                pollTimer = setInterval(tick, 2000);
+            }
+        };
         
-        var box = $("<div>").addClass("abs box")
-            .append(
-                $("<textarea>")
-                .css("resize", "none")
-                .on("keydown", function (e) {
-                    var self, val;
-                    // pressed enter?
-                    if (e.which === 13) {
-                        self = $(this);
-                        val = self.val();
-                        self.attr("disabled", "disabled");
-                        api.sendMessage(currentChatId, val)
-                            .done(function () {
-                                lastMessage = val;
-                                self.val("").removeAttr("disabled");
-                            })
-                            .fail(function () {
-                                self.removeAttr("disabled");
-                            });
-                    } else if (e.which === 38) {
-                        self = $(this);
-                        if (self.val() === "") {
-                            self.val(lastMessage);
-                        }
-                    }
-                })
-            )
-            .appendTo(right);
+        startPolling = function (id) {
+            // stop running poll
+            stopPolling();
+            // init
+            currentChatId = id;
+            lastMessageId = null;
+            lastTimestamp = 0;
+            // poll now and every 1 second
+            tick();
+            resumePolling();
+        };
+        
+        pollNow = function () {
+            stopPolling();
+            tick();
+            resumePolling();
+        };
+        
+        processMessages = function (list) {
             
+            // get most recent message
+            var last = _(list).last() || { id: null, timestamp: 0 };
+            // got new messages?
+            if (last.id !== null && last.id !== lastMessageId) {
+                
+                lastMessageId = last.id;
+                lastTimestamp = last.timeStamp;
+                
+                drawMessages(list);
+            }
+        };
+        
+        tick = function () {
+            // fetch messages
+            if (ox.session) {
+//                processMessages([
+//                    { id: 1, from: { id: 3, name: "Rafael" }, text: "Hi, lunch at 14h?", timestamp: 1320271984084 },
+//                    { id: 2, from: { id: 4, name: "Matthias" }, text: "(y) Yep, where?", timestamp: 1320271984084 },
+//                    { id: 3, from: { id: 3, name: "Rafael" }, text: "Stadtgrill :)", timestamp: 1320271984084 },
+//                    { id: 4, from: { id: 4, name: "Matthias" }, text: "Okay... *just a test*", timestamp: 1320271984084 },
+//                    { id: 5, from: { id: 5, name: "Tobi" }, text: "Lebenszeitvernichtung für Designer: I got 96/100 in this html5 kerning game http://type.method.ac :D", timestamp: 1320273474082 }
+//                ]);
+                api.getMessages(currentChatId, lastTimestamp)
+                .done(processMessages);
+            }
+        };
+        
+        var emoticons = { ":D": "bigsmile", ":)": "smile", "(y)": "yes" };
+        
+        applyEmoticons = function (str) {
+            return '<img src="' + ox.base + "/apps/io.ox/conversation/images/" +
+                emoticons[str] + '.gif" class="emoticon">';
+        };
+        
         drawMessages = function (list) {
             
-            pane.idle().empty();
-            
             _(list).each(function (msg) {
+                var html = String(msg.text)
+                        .replace(/</g, '&lt;')
+                        .replace(/(\:D|\:\)|\(y\))/g, applyEmoticons)
+                        .replace(/\*(\w[^\*]*\w)\*/g, "<b>$1</b>")
+                        .replace(/(http:\/\/\S+)/ig, '<a href="$1" target="_blank">$1</a>'),
+                    from = msg.from || {};
                 pane.append(
                     $("<div>").addClass("message")
                     .append(
-                        $("<div>").addClass("from")
-                        .text(msg.from.name)
+                        userAPI.getPicture(from.id)
+                        .addClass("picture")
+                    )
+                    .append(
+                        $("<div>").addClass("from" + (from.id === myself ? " me" : ""))
+                        .text(from.name)
                     )
                     .append(
                         $("<div>").addClass("text")
-                        .text(msg.text)
+                        .html(html)
                     )
                 );
             });
             
-            pane.scrollTop(pane.get(0).scrollHeight);
+            pane.parent().scrollTop(pane.height() + 100);
         };
         
+        sendMessage = function () {
+            var val = $.trim(textarea.val());
+            if (val !== "") {
+                textarea.attr("disabled", "disabled");
+                api.sendMessage(currentChatId, val)
+                    .done(function () {
+                        lastMessage = val;
+                        textarea.val("");
+                        pollNow();
+                    })
+                    .always(function () {
+                        textarea.removeAttr("disabled").focus();
+                    });
+            }
+        };
+        
+        $("<div>").addClass("abs conversation default-content-padding")
+            .css({ overflow: "auto", paddingBottom: "0" })
+            .append(
+                pane = $("<div>").addClass("centered-box")
+            )
+            .appendTo(right);
+        
+        textarea = $("<textarea>")
+            .attr({ placeholder: "Type your message here..." })
+            .css("resize", "none")
+            .on("keydown", function (e) {
+                var self;
+                // pressed enter?
+                if (e.which === 13) {
+                    sendMessage();
+                } else if (e.which === 38) {
+                    self = $(this);
+                    if (self.val() === "") {
+                        self.val(lastMessage).select();
+                    }
+                }
+            });
+        
+        controls = $("<div>").addClass("abs controls")
+            .append(
+                $("<div>").addClass("centered-box")
+                .append(textarea)
+                .append(
+                    $("<button>").addClass("send").text("Send")
+                    .on("click", sendMessage)
+                )
+            )
+            .appendTo(right);
+            
         var showChat = function (obj) {
-            currentChatId = obj.id;
-            startPolling();
+            pane.empty();
+            textarea.val("").focus();
+            startPolling(obj.id);
         };
         
         /*
@@ -186,7 +277,7 @@ define("io.ox/conversation/main",
         
         win.bind("show", function () {
             grid.selection.keyboard(true);
-            startPolling();
+            resumePolling();
         });
         win.bind("hide", function () {
             grid.selection.keyboard(false);
