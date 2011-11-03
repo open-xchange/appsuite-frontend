@@ -156,19 +156,20 @@ define("io.ox/linkedIn/view-detail",
                     .delegate($myNode, ".linkedin-profile-picture", open);
                 
                 _(data.relationToViewer.connections.values).each(function (relation) {
+                    var imageUrl;
                     if (relation.person && relation.person.pictureUrl) {
-                        var imageUrl = relation.person.pictureUrl;
-                        $("<img>")
-                            .addClass("linkedin-profile-picture")
-                            .css({ margin: "0 5px 0 0", cursor: "pointer" })
-                            .attr("src", imageUrl)
-                            .attr("alt", relation.person.firstName + " " + relation.person.lastName)
-                            .data("object-data", relation.person)
-                            .appendTo($myNode);
+                        imageUrl = relation.person.pictureUrl;
                     } else {
-                        $("<span>").text(relation.person.firstName + " " + relation.person.lastName)
-                            .appendTo($myNode);
+                        imageUrl = ox.base + "/apps/themes/default/dummypicture.png";
                     }
+                    $("<img>")
+                        .addClass("linkedin-profile-picture")
+                        .css({ margin: "0 5px 0 0", cursor: "pointer" })
+                        .attr("src", imageUrl)
+                        .attr("alt", relation.person.firstName + " " + relation.person.lastName)
+                        .data("object-data", relation.person)
+                        .appendTo($myNode);
+                    
                 });
             }
             
