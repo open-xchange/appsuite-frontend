@@ -14,7 +14,8 @@
 define("io.ox/linkedIn/view-detail",
     ["io.ox/core/extensions",
      "io.ox/core/tk/dialogs",
-     "css!io.ox/linkedIn/style.css"], function (ext, dialogs) {
+     "io.ox/core/http",
+     "css!io.ox/linkedIn/style.css"], function (ext, dialogs, http) {
     
     "use strict";
     
@@ -148,8 +149,22 @@ define("io.ox/linkedIn/view-detail",
                     .appendTo($myNode);
                 
                 var open = function (popup) {
-                        var data = $(this).data("object-data");
-                        popup.append(draw(data));
+                        var person = $(this).data("object-data");
+                        popup.append(draw(person));
+                        var busy = $("<div/>").css("min-height", "100px").busy().appendTo(popup);
+                        
+                        http.GET({
+                            module: "integrations/linkedin/portal",
+                            params: {
+                                action: "fullProfile",
+                                id: person.id
+                            }
+                        })
+                        .done(function (completeProfile) {
+                            busy.idle();
+                            popup.empty()
+                                .append(draw(completeProfile));
+                        });
                     };
                 
                 new dialogs.SidePopup()
