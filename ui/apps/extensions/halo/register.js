@@ -44,7 +44,7 @@ define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
                             cont({ email1: data.email1, email2: data.email2, email3: data.email3 });
                         });
                     } else { */
-                        cont(data);
+                    cont(data);
                     //}
                 }
             );
