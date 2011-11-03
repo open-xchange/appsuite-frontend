@@ -115,6 +115,21 @@ define("io.ox/preview/main",
         });
     }
     
+    Renderer.register({
+        id: "text",
+        endings: [ "txt", "js" ],
+        canRender: function (file) {
+            return $.inArray(util.FileTypesMap.getFileType(file.name), this.endings) !== -1;
+        },
+        paint: function (file, node) {
+            if (this.canRender(file)) {
+                $.ajax({ url: file.dataURL, dataType: "html" }).done(function (txt) {
+                    node.css({ border: "1px dotted silver", padding: "10px", whiteSpace: "pre-wrap" }).text(txt);
+                });
+            }
+        }
+    });
+    
     var Preview = function (file) {
 
         this.file = file;
