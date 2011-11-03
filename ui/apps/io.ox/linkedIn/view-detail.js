@@ -14,7 +14,8 @@
 define("io.ox/linkedIn/view-detail",
     ["io.ox/core/extensions",
      "io.ox/core/tk/dialogs",
-     "css!io.ox/linkedIn/style.css"], function (ext, dialogs) {
+     "io.ox/core/http",
+     "css!io.ox/linkedIn/style.css"], function (ext, dialogs, http) {
     
     "use strict";
     
@@ -119,11 +120,11 @@ define("io.ox/linkedIn/view-detail",
                         pastEngagementsVisible = !pastEngagementsVisible;
                         if (pastEngagementsVisible) {
                             $moreToggle.text("Show less");
-                            _(pastEngagements).invoke("fadeIn", 500);
+                            _(pastEngagements).invoke("show");
                             win.animate({scrollTop: _(pastEngagements).first().offset().top - 50}, 500);
                         } else {
                             $moreToggle.text("More...");
-                            _(pastEngagements).invoke("fadeOut");
+                            _(pastEngagements).invoke("hide");
                         }
                     }).appendTo($myNode);
                 }
@@ -148,27 +149,42 @@ define("io.ox/linkedIn/view-detail",
                     .appendTo($myNode);
                 
                 var open = function (popup) {
-                        var data = $(this).data("object-data");
-                        popup.append(draw(data));
+                        var person = $(this).data("object-data");
+                        popup.append(draw(person));
+                        var busy = $("<div/>").css("min-height", "100px").busy().appendTo(popup);
+                        
+                        http.GET({
+                            module: "integrations/linkedin/portal",
+                            params: {
+                                action: "fullProfile",
+                                id: person.id
+                            }
+                        })
+                        .done(function (completeProfile) {
+                            busy.idle();
+                            popup.empty()
+                                .append(draw(completeProfile));
+                        });
                     };
                 
                 new dialogs.SidePopup()
                     .delegate($myNode, ".linkedin-profile-picture", open);
                 
                 _(data.relationToViewer.connections.values).each(function (relation) {
+                    var imageUrl;
                     if (relation.person && relation.person.pictureUrl) {
-                        var imageUrl = relation.person.pictureUrl;
-                        $("<img>")
-                            .addClass("linkedin-profile-picture")
-                            .css({ margin: "0 5px 0 0", cursor: "pointer" })
-                            .attr("src", imageUrl)
-                            .attr("alt", relation.person.firstName + " " + relation.person.lastName)
-                            .data("object-data", relation.person)
-                            .appendTo($myNode);
+                        imageUrl = relation.person.pictureUrl;
                     } else {
-                        $("<span>").text(relation.person.firstName + " " + relation.person.lastName)
-                            .appendTo($myNode);
+                        imageUrl = ox.base + "/apps/themes/default/dummypicture.png";
                     }
+                    $("<img>")
+                        .addClass("linkedin-profile-picture")
+                        .css({ margin: "0 5px 0 0", cursor: "pointer" })
+                        .attr("src", imageUrl)
+                        .attr("alt", relation.person.firstName + " " + relation.person.lastName)
+                        .data("object-data", relation.person)
+                        .appendTo($myNode);
+                    
                 });
             }
             
