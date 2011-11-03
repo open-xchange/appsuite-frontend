@@ -37,6 +37,38 @@ define("io.ox/conversation/api",
         }
     });
     
+    api.createConversation = function (subject) {
+        
+        var def = $.Deferred();
+        
+        function create(ids) {
+            http.PUT({
+                    module: "conversation",
+                    params: { action: "new" },
+                    data: { subject: subject || "" }
+                })
+                .done(def.resolve)
+                .fail(def.reject);
+        }
+        
+        // get all user IDs
+        require(["io.ox/core/api/user"], function (userAPI) {
+            userAPI.getAll()
+                .pipe(function (data) {
+                    return _(data).map(function (obj) {
+                        return obj.id;
+                    });
+                })
+                .done(function (ids) {
+                    ids.sort();
+                    // create new conversation
+                    create(ids);
+                });
+        });
+        
+        return def;
+    };
+    
     api.getMessages = function (id, since) {
         return http.GET({
             module: "conversation",

@@ -120,7 +120,7 @@ define("io.ox/conversation/main",
         };
         
         resumePolling = function () {
-            if (pollTimer === null) {
+            if (pollTimer === null && currentChatId !== null) {
                 pollTimer = setInterval(tick, 2000);
             }
         };
@@ -235,6 +235,8 @@ define("io.ox/conversation/main",
             .attr({ placeholder: "Type your message here..." })
             .css("resize", "none")
             .on("keydown", function (e) {
+                // don't bubble up to the vgrid
+                e.stopPropagation();
                 var self;
                 // pressed enter?
                 if (e.which === 13) {
