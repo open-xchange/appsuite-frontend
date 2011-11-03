@@ -120,11 +120,11 @@ define("io.ox/linkedIn/view-detail",
                         pastEngagementsVisible = !pastEngagementsVisible;
                         if (pastEngagementsVisible) {
                             $moreToggle.text("Show less");
-                            _(pastEngagements).invoke("fadeIn", 500);
+                            _(pastEngagements).invoke("show");
                             win.animate({scrollTop: _(pastEngagements).first().offset().top - 50}, 500);
                         } else {
                             $moreToggle.text("More...");
-                            _(pastEngagements).invoke("fadeOut");
+                            _(pastEngagements).invoke("hide");
                         }
                     }).appendTo($myNode);
                 }
