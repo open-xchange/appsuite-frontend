@@ -35,7 +35,7 @@ define("io.ox/files/view-detail",
             container.append(line);
             element.append(container);
             
-            ext.point("io.ox.files.details.basicInfo").each(function (extension) {
+            ext.point("io.ox/files/details/basicInfo").each(function (extension) {
                 var count = 0;
                 _.each(extension.fields, function (index, field) {
                     var content = null;
@@ -61,7 +61,7 @@ define("io.ox/files/view-detail",
             element.append(container);
             
             var count = 0;
-            ext.point("io.ox.files.details.actions").each(function (extension) {
+            ext.point("io.ox/files/details/actions").each(function (extension) {
                 var action = function () {
                     extension.action(file);
                 };
@@ -82,24 +82,16 @@ define("io.ox/files/view-detail",
             if (!file.filename) {
                 return;
             }
-            var div = $("<div/>").addClass("preview");
+            var node = $("<div/>").addClass("preview");
+            element.append(node);
             var fileDescription = {
                 name: file.filename,
-                type: file.file_mimetype,
+                mimetype: file.file_mimetype,
                 size: file.file_size,
                 dataURL: file.url
             };
-            var rendered = false;
-            ext.point("io.ox.files.renderer").each(function (renderer) {
-                if (!rendered && renderer.canRender(fileDescription)) {
-                    renderer.draw(fileDescription, div);
-                    rendered = true;
-                }
-            });
-           
-            if (rendered) {
-                element.append(div);
-            }
+            
+            ext.point("io.ox/files/details/preview").invoke("draw", node, [ fileDescription, node ]);
         }());
         
         // Render Description
@@ -119,10 +111,10 @@ define("io.ox/files/view-detail",
         
         // Render Additional
         
-        ext.point("io.ox.files.details.additional").each(function (extension) {
+        ext.point("io.ox/files/details/additional").each(function (extension) {
             extension(file, element);
         });
-        
+
         return element;
     };
     
@@ -139,7 +131,7 @@ define("io.ox/files/view-detail",
         }
     };
     
-    ext.point("io.ox.files.details.basicInfo").extend({
+    ext.point("io.ox/files/details/basicInfo").extend({
         id: "size",
         index: 10,
         fields: ["file_size"],
@@ -151,7 +143,7 @@ define("io.ox/files/view-detail",
         }
     });
     
-    ext.point("io.ox.files.details.basicInfo").extend({
+    ext.point("io.ox/files/details/basicInfo").extend({
         id: "version",
         index: 20,
         fields: ["version"],
@@ -163,7 +155,7 @@ define("io.ox/files/view-detail",
         }
     });
     
-    ext.point("io.ox.files.details.basicInfo").extend({
+    ext.point("io.ox/files/details/basicInfo").extend({
         id: "last_modified",
         index: 30,
         fields: ["last_modified"],
@@ -177,7 +169,7 @@ define("io.ox/files/view-detail",
     
     // Basic Actions
     
-    ext.point("io.ox.files.details.actions").extend({
+    ext.point("io.ox/files/details/actions").extend({
         id: "download",
         index: 10,
         label: "Download",
@@ -186,7 +178,7 @@ define("io.ox/files/view-detail",
         }
     });
 
-    ext.point("io.ox.files.details.actions").extend({
+    ext.point("io.ox/files/details/actions").extend({
         id: "open",
         index: 20,
         label: "Open",
@@ -195,7 +187,7 @@ define("io.ox/files/view-detail",
         }
     });
 
-    ext.point("io.ox.files.details.actions").extend({
+    ext.point("io.ox/files/details/actions").extend({
         id: "send",
         index: 30,
         label: "Send by E-Mail",
@@ -204,69 +196,16 @@ define("io.ox/files/view-detail",
         }
     });
     
-        
-    // Simple Previews
-    
-    // .txt
-    ext.point("io.ox.files.renderer").extend({
-        id: "text",
-        canRender: function (fileDescription) {
-            return (/\.txt$/).test(fileDescription.name);
-        },
-        draw: function (fileDescription, div) {
-            var textDisplay = $("<textarea/>").attr("rows", "30").attr("cols", "80").attr("readonly", "readonly");
-            $.get(fileDescription.dataURL).done(function (text) {
-                textDisplay.text(text);
-                div.append(textDisplay);
+    ext.point("io.ox/files/details/preview").extend({
+        id: "preview",
+        draw: function (file, node) {
+            require(["io.ox/preview/main"], function (Preview) {
+                var prev = new Preview(file);
+                if (prev.supportsPreview()) {
+                    prev.appendTo(node);
+                    node.show();
+                }
             });
-        }
-    });
-    
-    // .png, .jpg, .jpeg, .gif
-    ext.point("io.ox.files.renderer").extend({
-        id: "images",
-        endings: ["png", "jpg", "jpeg", "gif"],
-        canRender: function (fileDescription) {
-            for (var i = 0, l = this.endings.length; i < l; i++) {
-                if (new RegExp("\\." + this.endings[i] + "$", "i").test(fileDescription.name)) {
-                    return true;
-                }
-            }
-            return false;
-        },
-        draw: function (fileDescription, div) {
-            div.append(
-                $("<img/>")
-                .attr("src", fileDescription.dataURL + "&width=400&height=300")
-                .css({
-                    width: "400px",
-                    maxWidth: "100%"
-                })
-            );
-        }
-    });
-    
-    // .mp3 .ogg .wav
-    ext.point("io.ox.files.renderer").extend({
-        id: "audio",
-        endings: ["mp3", "ogg", "wav"],
-        canRender: function (fileDescription) {
-            for (var i = 0, l = this.endings.length; i < l; i++) {
-                if (new RegExp("\\." + this.endings[i] + "$").test(fileDescription.name)) {
-                    fileDescription["io.ox.files.detectedEnding"] = this.endings[i];
-                    return true;
-                }
-            }
-            return false;
-        },
-        draw: function (fileDescription, div) {
-            // support audio format?
-            if (Modernizr.audio[fileDescription["io.ox.files.detectedEnding"]]) {
-                $("<audio/>").attr({
-                    controls: "controls",
-                    src: fileDescription.dataURL
-                }).appendTo(div);
-            }
         }
     });
     
