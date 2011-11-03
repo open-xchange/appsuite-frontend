@@ -151,7 +151,7 @@ define("io.ox/conversation/main",
             if (last.id !== null && last.id !== lastMessageId) {
                 
                 lastMessageId = last.id;
-                lastTimestamp = last.timeStamp;
+                lastTimestamp = last.timestamp;
                 
                 drawMessages(list);
             }
