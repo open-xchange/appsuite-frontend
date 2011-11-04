@@ -50,6 +50,54 @@ less.tree.Shorthand.prototype.getChildren =
 less.tree.URL.prototype.getChildren =
     function() { return this.attrs ? [] : [this.value]; };
 
+// Cloning mixins
+
+(function(defs) {
+    function callClone(o) { return o.clone(); }
+    var code = [];
+    for (var i in defs) {
+        code.push("less.tree." + i +
+            ".prototype.clone = function() { return new less.tree." + i + "(" +
+            _.map(defs[i], function(field) {
+                switch (field.charAt(0)) {
+                case "!":
+                    return "this." + field.slice(1) + ".clone()";
+                case "[":
+                    return "_.map(this." + field.slice(1) + ", callClone)";
+                default:
+                    return "this." + field;
+                }
+            }).join(", ") + "); };");
+    }
+    eval(code.join("\n"));
+}({
+    Alpha: ["value && this.value.clone ? this.value.clone() : this.value"],
+    Anonymous: ["value"], Call: ["name", "[args", "index"],
+    Color: ["rgb.slice()", "alpha"], Comment: ["value", "silent"],
+    Combinator: ["value"], Dimension: ["value", "unit"],
+    Directive: ["name", "ruleset ? this.ruleset.rules : this.value.clone()"],
+    Element: ["!combinator", "value"], Expression: ["[value"],
+    JavaScript: ["expression", "index", "escaped"], Keyword: ["value"],
+    "mixin.Call": ["selector.elements", "[arguments", "index"],
+    Operation: ["op", "[operands"],
+    Quoted: ["quote", "value", "escaped", "index"],
+    Rule: ["name", "!value", "important", "index"],
+    Ruleset: ["[selectors", "[rules"], Selector: ["[elements"],
+    Shorthand: ["!a", "!b"], URL: ["attrs || this.value.clone()", "paths"],
+    Value: ["[value"], Variable: ["name", "index"]
+}));
+
+less.tree.mixin.Definition.prototype.clone = function() {
+    return new less.tree.mixin.Definition(this.name,
+        _.map(this.params, function(param) {
+            var clone = {};
+            if (param.name) clone.name = param.name;
+            if (param.value) clone.value = param.value.clone();
+            return clone;
+        }),
+        _.map(this.rules, function(rule) { return rule.clone(); }));
+};
+
 // Synchronous importer (a modified copy of the original in less/index.js)
 
 less.Parser.importer = function (file, paths, callback) {
@@ -111,55 +159,52 @@ exports.iterate = function(root, matcher, f) {
     }
 };
 
+exports.tree = less.tree;
+
+exports.parse = function(data, src) {
+    var result;
+    new less.Parser({ paths: [path.dirname(src)] }).parse(data,
+        function(e, tree) { if (e) throw e; else result = tree; });
+    return result;
+};
+
 utils.fileType("less").addHook("filter", function(lessfile) {
     var self = this;
     var result = "";
     var src = this.getSrc(1).name, dest = this.task.name;
     utils.includes.set(dest, []);
     try {
-        new less.Parser({ paths: [path.dirname(src)] }).parse(
-            lessfile,
-            function(e, tree) {
-                if (e) {
-                    var src = self.getSrc(e.line);
-                    console.error(src.name + ":" + src.line, e.message);
-                    return fail();
-                }
-                try {
-                    exports.iterate(tree, less.tree.URL, function(url) {
-                        if (!url.value || !/\.png$/.test(url.value.value)) return;
-                        var filename = path.join(path.dirname(self.getSrc(1).name),
-                                                 url.value.value);
-                        var buf = fs.readFileSync(filename);
-                        if (buf.length > 24558) return; // IE8 size limit
-                        url.attrs = { mime: "image/png", charset: "", base64: ";base64",
-                                      data: "," + buf.toString("base64") };
-                        delete url.value;
-                        utils.includes.add(dest, filename);
-                    });
-                    exports.iterate(tree, less.tree.Import, function(import_) {
-                        utils.includes.add(dest,
-                                         path.join(path.dirname(src), import_.path));
-                    });
-                    result = tree.toCSS({ compress: !process.env.debug });
-                } catch (e) {
-                    if (e.index) {
-                        var src = this.getSrc.byIndex(e.index);
-                        console.error(src.name + ":" + src.line, e.message);
-                    } else {
-                        console.error(e);
-                    }
-                    fail();
-                }
-            });
+        new less.Parser({ paths: [path.dirname(src)] }).parse(lessfile, filter);
     } catch (e) {
-        if (e.index) {
-            var src = this.getSrc.byIndex(e.index);
-            console.error(src.name + ":" + src.line, e.message);
-        } else {
-            console.error(e);
+        if (e.line) {
+            var src = this.getSrc(e.line);
+            console.error(src.name + ":" + src.line);
         }
-        fail();
+        throw e;
     }
     return result;
+    
+    function filter(e, tree) {
+        if (e) throw e;
+        
+        _.each(self.type.getHooks("less"), function(hook) {
+            tree = hook.call(self, tree) || tree;
+        });
+        exports.iterate(tree, less.tree.URL, function(url) {
+            if (!url.value || !/\.png$/.test(url.value.value)) return;
+            var filename = path.join(path.dirname(self.getSrc(1).name),
+                                     url.value.value);
+            var buf = fs.readFileSync(filename);
+            if (buf.length > 24558) return; // IE8 size limit
+            url.attrs = { mime: "image/png", charset: "", base64: ";base64",
+                          data: "," + buf.toString("base64") };
+            delete url.value;
+            utils.includes.add(dest, filename);
+        });
+        exports.iterate(tree, less.tree.Import, function(import_) {
+            utils.includes.add(dest,
+                             path.join(path.dirname(src), import_.path));
+        });
+        result = tree.toCSS({ compress: !process.env.debug });
+    }
 });

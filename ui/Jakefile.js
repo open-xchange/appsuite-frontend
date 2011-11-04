@@ -20,8 +20,7 @@ var ast = require("./lib/build/ast");
 var i18n = require("./lib/build/i18n");
 var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
-var less = require("./lib/less.js/lib/less/index");
-var myless = require("./lib/build/less");
+var less = require("./lib/build/less");
 
 utils.builddir = process.env.builddir || "build";
 console.info("Build path: " + utils.builddir);
@@ -256,13 +255,56 @@ var apps = _.groupBy(utils.list("apps/"), function (f) {
 if (apps.js) utils.copy(apps.js, { type: "module" });
 if (apps.rest) utils.copy(apps.rest);
 
-// precompute themes
+// themes
 
-_.each(utils.list("apps/themes/*/dynamic.less"), function(theme) {
-    utils.concat(theme.replace(/\.less$/, ".css"),
-        [theme.replace(/\/dynamic\.less$/, "/definitions.less"), theme],
-        { type: "less" });
-});
+(function() {
+    function eachClause(tree, f) {
+        _.each(tree.rules, function(rule) {
+            if (rule instanceof less.tree.Import) {
+                if (rule.css) {
+                    f(rule.toCSS(), rule);
+                } else {
+                    eachClause(rule.root, f);
+                }
+            } else if (rule.name) {
+                f(rule.name, rule);
+            } else if (rule.selectors) {
+                _.each(rule.selectors, function(selector) {
+                    f(selector.toCSS(), rule);
+                });
+            }
+        });
+    }
+
+    function getTemplate() {
+        if (getTemplate.value) return getTemplate.value;
+        var f = "apps/themes/template.less";
+        return getTemplate.value = less.parse(fs.readFileSync(f, "utf8"), f);
+    }
+    
+    utils.fileType("less").addHook("less", function(tree) {
+        var overrides = {};
+        eachClause(tree, function(key, rule) { overrides[key] = true; });
+        var inherited = [];
+        eachClause(getTemplate(), function(key, rule) {
+            if (overrides[key] || rule.inherited) return;
+            inherited.push(rule);
+            rule.inherited = true;
+        });
+        tree.rules = _.map(inherited, function(rule) {
+            rule.inherited = false;
+            return rule.clone();
+        }).concat(tree.rules);
+    }).addHook("handler", function(dest) {
+        file(dest, ["apps/themes/template.less"]);
+    });
+    
+    _.each(utils.list("apps/themes/*/style.less"), function(theme) {
+        utils.concat(theme.replace(/\.less$/, ".css"),
+            [theme.replace(/\/style\.less$/, "/definitions.less"), theme],
+            { type: "less" });
+    });
+}());
 
 // doc task
 

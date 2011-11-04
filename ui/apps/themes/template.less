@@ -11,6 +11,32 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+// Variable definitions which are required by all modules,
+// override them in definitions.less
+
+@menu-background: #000;
+@menu-color: #fff;
+
+@background: #fff;
+@color: #000;
+
+@selected-background: #08c;
+@selected-color: #5C9CCC;
+
+@status-background: #F0F0F0;
+@status-color: #000;
+
+@head-background: @menu-background;
+@head-color: @menu-color;
+
+@welcome-background: @menu-background;
+@welcome-color: @menu-color;
+
+@settings-background: @menu-background;
+@settings-color: @menu-color;
+
+// The rest is common to all modules, override it in style.less
+
 #io-ox-core {
     z-index: 1;
     color: @color;
@@ -22,7 +48,7 @@
     bottom: auto;
     height: 26px;
     background-color: @menu-background;
-    background-color: fade(@menu-background, 100%);
+    background-color: fade(@menu-background, 20%);
     padding: 0px 1px 1px 1px;
     /*overflow: hidden;*/
 }
@@ -41,7 +67,7 @@
 #io-ox-topbar .launcher {
     color: mix(@menu-color, @menu-background, 75%);
     font-weight: bold;
-    text-shadow: 0px 1px 3px @menu-background;
+    text-shadow: 0px 1px 4px @menu-background;
     padding: 2px 12px 5px 12px;
     margin: 0px 1px 0px 0px;
     line-height: 20px;
@@ -63,9 +89,9 @@
 }
 
 #io-ox-topbar .launcher.active {
-    color: @menu-color-active;
+    color: @menu-color;
     background-color: mix(@menu-color, @menu-background, 400%/15);
-    background-color: @menu-background-active;
+    background-color: fade(@menu-background, 30%);
 }
 
 .rgba #io-ox-topbar .launcher.active {
@@ -96,8 +122,22 @@
     -webkit-animation-timing-function: ease-in-out;
 }
 
+@-webkit-keyframes upsellColours {
+    from { background-color: rgba(255, 255, 255, 1.0); }
+      to { background-color: rgba(255, 255, 255, 0.6); }
+}
+
+@-moz-keyframes upsellColours {
+    from { background-color: rgba(255, 255, 255, 1.0); }
+      to { background-color: rgba(255, 255, 255, 0.6); }
+}
+
 #io-ox-welcome-upsell {
-    background-color: #fff;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: upsellColours;
+    -webkit-animation-timing-function: ease-in-out;
 }
 
 /* empty desktop */
@@ -176,7 +216,7 @@
     border-top: 1px solid mix(@head-color, @head-background, 75%);
     border-top-color: fade(@head-color, 30%);
     background-color: mix(@head-color, @head-background, 100%/15);
-    background-color: fade(@head-background, 100%);
+    background-color: fade(@head-background, 30%);
     
     color: @head-color;
     font-family: Lucida Grande, Arial;
@@ -194,10 +234,9 @@
 .window-title {
     position: relative;
     top: 0px;
-    right: 0px;
-    height: 18px;
+    height: 18pt;
     left: 0px;
-    padding: 6px 10px 4px 13px;
+    padding: 6px 10px 2px 13px;
     line-height: 18px;
     /*text-align: center;*/
     color: @head-color;
@@ -206,6 +245,8 @@
     font-size: 18pt;
     line-height: 18pt;
     text-shadow: 0px 0px 1px mix(@head-color, @head-background, 1400%/15);
+    width: 80%;
+    overflow: hidden;
 }
 
 .window-title .subtitle {
@@ -217,7 +258,7 @@
     top: 0px;
     right: 0px;
     left: 0px;
-    padding: 2px 7px 5px 13px;
+    padding: 0px 7px 5px 13px;
 }
 
 .window-controls {
@@ -320,6 +361,12 @@
 }
 
 /* vGrid */
+
+.vgrid {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
 
 .vgrid, .vgrid:focus {
     outline: none;
@@ -1000,9 +1047,6 @@ div.token-input-dropdown ul li.token-input-selected-dropdown-item {
     border-left: 1px solid #aaa;
     border-right: 1px solid #aaa;
     z-index: 3; /* above .window-content */
-    -moz-box-shadow: 0px 0px 30px -5px #555;
-    -webkit-box-shadow: 0px 0px 20px -5px #000;
-    box-shadow: 0px 0px 30px 0px #aaa;
 }
 
 .io-ox-sidepopup-pane {
@@ -1011,10 +1055,16 @@ div.token-input-dropdown ul li.token-input-selected-dropdown-item {
 
 .io-ox-sidepopup.right {
     border-right: 0px none;
+    -moz-box-shadow: -10px 0px 30px -10px #aaa;
+    -webkit-box-shadow: -10px 0px 30px -10px #aaa;
+    box-shadow: -10px 0px 30px -10px #aaa;
 }
 
 .io-ox-sidepopup.left {
     border-left: 0px none;
+    -moz-box-shadow: 10px 0px 30px -10px #aaa;
+    -webkit-box-shadow: 10px 0px 30px -10px #aaa;
+    box-shadow: 10px 0px 30px -10px #aaa;
 }
 
 .io-ox-sidepopup-arrow {

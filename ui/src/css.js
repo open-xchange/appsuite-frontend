@@ -23,7 +23,6 @@
     }
     
     function relativeCSS(path, css) {
-console.log("relative", path);
         return css.replace(/url\((?!\/|[A-Za-z][A-Za-z0-9+.-]*\:)/g,
                            "url(" + path);
     }
@@ -114,7 +113,7 @@ console.log("relative", path);
                 lessFiles.push(file);
                 load();
             }).fail(function (e) {
-                console.log("LESS error", e);
+                console.error("LESS error", e);
                 load();
             });
         }
@@ -144,8 +143,8 @@ console.log("relative", path);
          */
         set: function (name) {
             return require(["text!themes/" + name + "/definitions.less",
-                            "text!themes/" + name + "/static.css",
-                            "text!themes/" + name + "/dynamic.less"])
+                            "text!themes/" + name + "/style.css",
+                            "text!themes/" + name + "/style.less"])
                 .pipe(function(theme, css, less) {
                     var path = ox.base + "/apps/themes/" + name + "/";
                     if (themeCSS) {
