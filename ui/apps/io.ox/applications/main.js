@@ -24,7 +24,7 @@ define("io.ox/applications/main",
         win,
         // grid
         grid,
-        gridWidth = 310,
+        gridWidth = 250,
         // nodes
         left,
         right;
@@ -51,7 +51,7 @@ define("io.ox/applications/main",
         
         // right panel
         right = $("<div/>")
-            .css({ left: gridWidth + 1 + "px", overflow: "auto" })
+            .css({ left: gridWidth + 1 + "px", overflow: "auto", paddingRight: "0" })
             .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main);
         
