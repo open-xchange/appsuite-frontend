@@ -54,15 +54,15 @@ define(function () {
             },
             
             "io.ox/internal/ajaxDebug": {
-                title: "Ajax",
-                company: "Open-Xchange",
+                title: "Ajax Debugger",
+                company: "CompuGlobalHyperMegaNet",
                 icon: "default.png",
                 category: "Dev"
             },
             
             "io.ox/internal/testing": {
                 title: "UI Test Suite",
-                company: "Open-Xchange",
+                company: "CompuGlobalHyperMegaNet",
                 icon: "default.png",
                 category: "Dev"
             }
