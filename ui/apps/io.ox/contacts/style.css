@@ -128,8 +128,22 @@
 
 /*new contact form*/
 
+.abs.io-ox-dialog-pane {
+-webkit-box-shadow: 1px 1px 10px 1px #888;
+-moz-box-shadow: 1px 1px 10px 1px #888;
+box-shadow: 1px 1px 10px 1px #888; 
+}
+
+.abs.io-ox-dialog-pane .content {
+	padding: 10px;
+}
+
 .io-ox-dialog-pane .content .block{
+	background-image: -moz-linear-gradient(center top , #FFFFFF, #EEEEEE);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff), to(#eeeeee));
+	border: 1px solid #EEEEEE;
 	margin-bottom: 15px;
+	padding: 5px;
 	/*height: auto;*/
 	clear: both;
 	overflow: hidden;
@@ -155,6 +169,6 @@
 	line-height: 15pt;
 }
 .io-ox-dialog-pane .content .block .field input{
-	width: auto;
+	width: 120px;
 	float: right;
 }
