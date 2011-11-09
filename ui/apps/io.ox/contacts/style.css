@@ -125,20 +125,9 @@
     margin-bottom: 2em;
 }
 
-
 /*new contact form*/
 
-.abs.io-ox-dialog-pane {
--webkit-box-shadow: 1px 1px 10px 1px #888;
--moz-box-shadow: 1px 1px 10px 1px #888;
-box-shadow: 1px 1px 10px 1px #888; 
-}
-
-.abs.io-ox-dialog-pane .content {
-	padding: 10px;
-}
-
-.io-ox-dialog-pane .content .block{
+.create-contact .block {
 	background-image: -moz-linear-gradient(center top , #FFFFFF, #EEEEEE);
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff), to(#eeeeee));
 	border: 1px solid #EEEEEE;
@@ -147,28 +136,27 @@ box-shadow: 1px 1px 10px 1px #888;
 	/*height: auto;*/
 	clear: both;
 	overflow: hidden;
-	
 }
 
-.io-ox-dialog-pane .content .block .field{
+.create-contact .block .field {
 	float: left;
 	margin-bottom:20px;
 	padding-top: 2px;
 	width: 230px;
 }
 
-
-.io-ox-dialog-pane .content .block .field.even{
+.create-contact .block .field.even {
 	float: right;
 }
 
-.io-ox-dialog-pane .content .block .field label{
+.create-contact .block .field label {
 	font-size: 10pt;
 	width: auto;
 	float: left;
 	line-height: 15pt;
 }
-.io-ox-dialog-pane .content .block .field input{
+
+.create-contact .block .field input {
 	width: 120px;
 	float: right;
 }

@@ -243,7 +243,9 @@ define("io.ox/calendar/util",
             }
             
             var str = "", f = _.printf,
-                interval = data.interval, days = data.days, month = data.month,
+                interval = data.interval,
+                days = data.days || null,
+                month = data.month,
                 day_in_month = data.day_in_month;
             
             switch (data.recurrence_type) {
@@ -257,9 +259,13 @@ define("io.ox/calendar/util",
                 break;
             case 3:
                 if (days === null) {
-                    str = f(gettext("On %s. day every %s. month"), day_in_month, data.interval);
+                    str = interval === 1 ?
+                        f(gettext("On %s. day every month"), day_in_month) :
+                        f(gettext("On %s. day every %s. month"), day_in_month, interval);
                 } else {
-                    str = f(gettext("On %s %s each %s. months"), getCountString(day_in_month), getDayString(days), interval);
+                    str = interval === 1 ?
+                        f(gettext("On %s %s every month"), getCountString(day_in_month), getDayString(days)) :
+                        f(gettext("On %s %s each %s. months"), getCountString(day_in_month), getDayString(days), interval);
                 }
                 break;
             case 4:

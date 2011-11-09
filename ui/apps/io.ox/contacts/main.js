@@ -124,7 +124,6 @@ define("io.ox/contacts/main",
         
         // search request
         grid.setAllRequest("search", function () {
-            //alert('hier');
             return api.search(win.search.query);
         });
         
@@ -210,7 +209,7 @@ define("io.ox/contacts/main",
         });
         
         
-     // bind all refresh
+        // bind all refresh
         api.bind("refresh.all", function (data) {
             grid.refresh();
         });
@@ -273,8 +272,8 @@ define("io.ox/contacts/main",
         (function () {
                         
                     
-                    var pane = new dialogs.SlidingPane(),
-                        pane_edit = new dialogs.SlidingPane(),
+                    var pane = new dialogs.CreateDialog(),//SlidingPane(),
+                        pane_edit = new dialogs.CreateDialog(),//SlidingPane(),
                         
                         // create formblocks
                         $divblock_name = $('<div/>').addClass('block new_contact name'),
@@ -304,6 +303,10 @@ define("io.ox/contacts/main",
                         $city_business = field_html("city", "city_business"),
                         $phone_business1 = field_html("tel.", "telephone_business1");
                         
+                    
+                    pane.getContentNode().addClass("create-contact");
+                    pane_edit.getContentNode().addClass("create-contact");
+                    
                     // assemble the crate form
                     pane.append($divblock_name);
                     $first_name.appendTo($divblock_name);
@@ -454,8 +457,8 @@ define("io.ox/contacts/main",
                     
                     var showNewContactPane = function () {
                                                 pane.show().done(function (action) {
-                                                                        actions[action]();
-                                                                    });
+                                                    actions[action]();
+                                                });
                                             };
                     
                     var showEditContactPane = function () {
@@ -487,8 +490,8 @@ define("io.ox/contacts/main",
                                     getContact(data[0]);
                                 });
                     
-                    pane.relativeTo(newContactButton);
-                    pane_edit.relativeTo(newContactButton);
+                    //pane.relativeTo(newContactButton);
+                    //pane_edit.relativeTo(newContactButton);
                 }());
     });
     

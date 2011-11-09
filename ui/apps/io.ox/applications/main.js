@@ -134,7 +134,6 @@ define("io.ox/applications/main",
         
         // bind all refresh
         api.bind("refresh.all", function (data) {
-            console.log("AHA.refresh");
             grid.refresh();
         });
     });
