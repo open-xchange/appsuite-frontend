@@ -21,7 +21,7 @@ define("io.ox/mail/main",
      "css!io.ox/mail/style.css"
     ], function (util, api, VGrid, viewDetail, tmpl) {
     
-    "use strict";
+    'use strict';
     
     var autoResolveThreads = function (e) {
         // get mail api

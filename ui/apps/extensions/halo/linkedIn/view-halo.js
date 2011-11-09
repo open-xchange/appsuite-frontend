@@ -19,8 +19,13 @@ define("extensions/halo/linkedIn/view-halo", ["io.ox/linkedIn/view-detail", "css
         draw: function (liResponse) {
             var $node = $("<div>").addClass("linkedIn");
             $node.append($("<div>").addClass("widget-title clear-title").text("LinkedIn"));
-            $node.append(viewer.draw(liResponse));
+            if (liResponse.status && liResponse.status === 404) {
+                $node.append($("<div>").text("Not found"));
+            } else {
+                $node.append(viewer.draw(liResponse));
+            }
             return $node;
+            
         }
     };
 });

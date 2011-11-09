@@ -20,8 +20,7 @@ var ast = require("./lib/build/ast");
 var i18n = require("./lib/build/i18n");
 var rimraf = require("./lib/rimraf/rimraf");
 var jshint = require("./lib/jshint").JSHINT;
-var less = require("./lib/less.js/lib/less/index");
-var myless = require("./lib/build/less");
+var less = require("./lib/build/less");
 
 utils.builddir = process.env.builddir || "build";
 console.info("Build path: " + utils.builddir);
@@ -203,8 +202,9 @@ utils.copy(utils.list("src", "css.js"), {
     }
 });
 
-utils.concat("boot.js", ["lib/jquery.min.js",// "lib/iscroll.js",
-        "lib/require.js", "lib/modernizr.js", "lib/underscore.js",
+utils.concat("boot.js", ["lib/jquery.min.js",
+        "lib/underscore.js", // load this before require.js to keep global object
+        "lib/require.js", "lib/modernizr.js",
         "tmp/css.js", utils.string("\n"), "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
@@ -256,13 +256,80 @@ var apps = _.groupBy(utils.list("apps/"), function (f) {
 if (apps.js) utils.copy(apps.js, { type: "module" });
 if (apps.rest) utils.copy(apps.rest);
 
-// precompute themes
+// themes
 
-_.each(utils.list("apps/themes/*/dynamic.less"), function(theme) {
-    utils.concat(theme.replace(/\.less$/, ".css"),
-        [theme.replace(/\/dynamic\.less$/, "/definitions.less"), theme],
-        { type: "less" });
-});
+(function() {
+    function eachClause(tree, f) {
+        _.each(tree.rules, function(rule) {
+            if (rule instanceof less.tree.Import) {
+                if (rule.css) {
+                    f(rule.toCSS(), rule);
+                } else {
+                    eachClause(rule.root, f);
+                }
+            } else if (rule.name) {
+                f(rule.name, rule);
+            } else if (rule.selectors) {
+                _.each(rule.selectors, function(selector) {
+                    f(selector.toCSS(), rule);
+                });
+            }
+        });
+    }
+
+    function getTemplates() {
+        if (getTemplates.value) return getTemplates.value;
+        var t = getTemplates.value = {
+            definitions: less.parseFile("apps/themes/definitions.less"),
+            style: less.parseFile("apps/themes/style.less")
+        };
+        t.style.rules = t.definitions.clone().rules.concat(t.style.rules);
+        return t;
+    }
+    
+    function themeFilter(template) {
+        return function(tree) {
+            var overrides = {};
+            eachClause(tree, function(key, rule) { overrides[key] = true; });
+            var inherited = [];
+            eachClause(getTemplates()[template], function(key, rule) {
+                if (overrides[key] || rule.inherited) return;
+                inherited.push(rule);
+                rule.inherited = true;
+            });
+            tree.rules = _.map(inherited, function(rule) {
+                rule.inherited = false;
+                return rule.clone();
+            }).concat(tree.rules);
+        };
+    }
+    
+    utils.fileType("theme-def")
+        .addHook("filter", function(data) {
+            return less.print(less.lessFilter.call(this, data));
+        })
+        .addHook("less", themeFilter("definitions"))
+        .addHook("handler", function(dest) {
+            file(dest, ["apps/themes/definitions.less"]);
+        });
+    
+    utils.fileType("theme-style")
+        .addHook("filter", function(data) {
+            return less.lessFilter.call(this, data).toCSS({ compress: !debug });
+        })
+        .addHook("less", themeFilter("style"))
+        .addHook("handler", function(dest) {
+            file(dest, ["apps/themes/definitions.less",
+                        "apps/themes/style.less"]);
+        });
+    
+    _.each(utils.list("apps/themes/*/definitions.less"), function(theme) {
+        utils.copy([theme], { type: "theme-def" });
+        var dir = path.dirname(theme);
+        utils.concat(path.join(dir, "style.css"),
+            [theme, path.join(dir, "style.less")], { type: "theme-style" });
+    });
+}());
 
 // doc task
 

@@ -13,8 +13,8 @@
 
 define("io.ox/core/main",
     ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http",
-     "io.ox/core/extensions", "io.ox/core/i18n",
-    "gettext!io.ox/core/main"], function (desktop, session, http, ext, i18n, gt) {
+     "io.ox/core/api/apps", "io.ox/core/extensions", "io.ox/core/i18n",
+    "gettext!io.ox/core/main"], function (desktop, session, http, appAPI, ext, i18n, gt) {
     
     "use strict";
     
@@ -81,63 +81,23 @@ define("io.ox/core/main",
         // refresh animation
         initRefreshAnimation();
         
-        desktop.addLauncher("right", gt("Applications"));
+        desktop.addLauncher("right", gt("Applications"), function () {
+            var node = this;
+            return require(["io.ox/applications/main"], function (m) {
+                m.getApp().setLaunchBarIcon(node).launch();
+            });
+        });
         
-        desktop.addLauncher("left", gt("Portal"), function () {
+        var addLauncher = function (app) {
+            desktop.addLauncher("left", app.title, function () {
                 var node = this;
-                return require(["io.ox/portal/main"], function (m) {
+                return require([app.id + '/main'], function (m) {
                     m.getApp().setLaunchBarIcon(node).launch();
                 });
             });
-            
-        desktop.addLauncher("left", gt("E-Mail"), function () {
-                var node = this;
-                return require(["io.ox/mail/main"], function (m) {
-                    m.getApp().setLaunchBarIcon(node).launch();
-                });
-            });
+        };
         
-        desktop.addLauncher("left", gt("Address Book"), function () {
-                var node = this;
-                return require(["io.ox/contacts/main"], function (m) {
-                    m.getApp().setLaunchBarIcon(node).launch();
-                });
-            });
-        
-//        desktop.addLauncher("left", gt("Tasks"), function () {
-//            var node = this;
-//            return require(["io.ox/tasks/main"], function (m) {
-//                m.getApp().setLaunchBarIcon(node).launch();
-//            });
-//        });
-        
-        desktop.addLauncher("left", gt("Calendar"), function () {
-                var node = this;
-                return require(["io.ox/calendar/main"], function (m) {
-                    m.getApp().setLaunchBarIcon(node).launch();
-                });
-            });
-        
-        desktop.addLauncher("left", gt("Files"), function () {
-                var node = this;
-                return require(["io.ox/files/main"], function (m) {
-                    m.getApp().setLaunchBarIcon(node).launch();
-                });
-            });
-        // TODO: Move this, once the application launcher is ready.
-        desktop.addLauncher("left", gt("AJAX Requests"), function () {
-                var node = this;
-                return require(["io.ox/internal/ajaxDebug/main"], function (m) {
-                    m.getApp().setLaunchBarIcon(node).launch();
-                });
-            });
-        // TODO: Move this, once the application launcher is ready.
-        desktop.addLauncher("left", gt("Tests"), function () {
-                var node = this;
-                return require(["io.ox/internal/testing/main"], function (m) {
-                    m.getApp().setLaunchBarIcon(node).launch();
-                });
-            });
+        _(appAPI.getFavorites()).each(addLauncher);
         
         // initialize empty desktop
         
@@ -160,7 +120,7 @@ define("io.ox/core/main",
                         fontSize: "18pt",
                         textAlign: "center"
                     })
-                    .text("Click here for a 90-days free trial!")
+                    .text("Click here for a 90-day free trial!")
                 );
             }
         });

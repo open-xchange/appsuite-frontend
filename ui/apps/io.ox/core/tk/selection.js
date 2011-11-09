@@ -194,6 +194,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
             }
             // event
             self.trigger("change", self.get());
+            return this;
         };
         
         /**
@@ -210,6 +211,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                     node.addClass(self.classSelected);
                 }
             }
+            return this;
         };
         
         /**
@@ -217,6 +219,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
          */
         this.setMultiple = function (flag) {
             multiple = !!flag;
+            return this;
         };
 
         /**
@@ -240,6 +243,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
             if (quiet !== true) {
                 this.trigger("change", []);
             }
+            return this;
         };
 
         /**
@@ -248,6 +252,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
         this.select = function (id) {
             select(id);
             this.trigger("change", this.get());
+            return this;
         };
         
         /**
@@ -265,6 +270,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
             }
             // event
             this.trigger("change", list);
+            return this;
         };
         
         this.selectRange = function (a, b) {
@@ -283,6 +289,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
             }
             // event
             this.trigger("change", this.get());
+            return this;
         };
         
         this.selectFirst = function () {
@@ -291,12 +298,14 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                 select(observedItems[0]);
                 this.trigger("change", this.get());
             }
+            return this;
         };
         
         this.selectSmart = function () {
             if (this.get().length === 0) {
                 this.selectFirst();
             }
+            return this;
         };
         
         this.selectNext = selectNext;
@@ -314,6 +323,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
         this.keyboard = function (flag) {
             // keyboard support (use keydown! IE does not react on keypress with cursor keys)
             $(document)[flag ? "on" : "off"]("keydown", fnKey);
+            return this;
         };
         
         // bind general click handler

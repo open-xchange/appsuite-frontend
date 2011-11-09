@@ -88,33 +88,31 @@ define("io.ox/preview/util",
         };
     };
     
-    var FileTypesMap = function () {
+    var FileTypesMap = {
         
-        var map = {};
-        
-        this.getFileType = function (filename) {
+        getFileType : function (filename) {
             if (filename === undefined) {
                 return null;
             }
             var fileEnding = filename.match(/\.([a-z0-9]{2,4})$/i);
             if (fileEnding.length === 2) {
-                return fileEnding[0];
+                return fileEnding[1];
             }
             return null;
-        };
+        },
         
-        this.getContentType = function (filename) {
+        getContentType : function (filename) {
             var fileType = this.getFileType(filename);
             if (filename === undefined || fileType === null) {
                 return null;
             }
-            return map[fileType];
-        };
+            return previewMap[fileType];
+        },
         
         /**
          * @param type {String} Can be both, either a filename or file type
          */
-        this.previewSupported = function (type) {
+        previewSupported : function (type) {
             if (previewMap[type]) {
                 // we have a matching type
                 return true;
@@ -122,7 +120,7 @@ define("io.ox/preview/util",
                 // maybe it's a filename?
                 return !!previewMap[this.getFileType(type) || ""];
             }
-        };
+        }
     };
 
     return {

@@ -47,7 +47,8 @@
     });
     
     var currentTheme = "";
-    var lessFiles = [];
+    var themeLess = {}, lessFiles = [themeLess];
+    var themeCSS;
     
     var less = (function () {
         var less = { tree: {} }, exports = less;
@@ -112,7 +113,7 @@
                 lessFiles.push(file);
                 load();
             }).fail(function (e) {
-                console.log("LESS error", e);
+                console.error("LESS error", e);
                 load();
             });
         }
@@ -142,14 +143,18 @@
          */
         set: function (name) {
             return require(["text!themes/" + name + "/definitions.less",
-                            "text!themes/" + name + "/dynamic.css",
-                            "text!themes/" + name + "/dynamic.less",
-                            "css!themes/" + name + "/static.css"])
+                            "text!themes/" + name + "/style.css",
+                            "text!themes/" + name + "/style.less"])
                 .pipe(function(theme, css, less) {
-                    var filename = ox.base + "/apps/themes/" + name +
-                                   "/dynamic.less";
-                    lessFiles.push({ name: filename, source: less,
-                                     node: insert(filename, css, "script") });
+                    var path = ox.base + "/apps/themes/" + name + "/";
+                    if (themeCSS) {
+                        themeCSS.text(relativeCSS(path, css));
+                    } else {
+                        themeCSS = insert(path + "static.css", css, "script");
+                    }
+                    themeLess.path = path;
+                    themeLess.name = path + "dynamic.less";
+                    themeLess.source = less;
                     return setTheme(theme);
                 });
         },

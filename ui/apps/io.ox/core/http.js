@@ -425,6 +425,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
                 isAutoLogin = o.module === "login" && o.data && o.data.action === "autologin";
             if (isSessionError && !isAutoLogin) {
                 // login dialog
+                ox.session = "";
                 ox.relogin(o, deferred);
             } else {
                 deferred.reject(response);

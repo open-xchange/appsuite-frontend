@@ -1,0 +1,308 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+define("io.ox/conversation/main",
+    ["io.ox/mail/util",
+     "io.ox/conversation/api",
+     "io.ox/core/tk/vgrid",
+     "io.ox/core/api/user",
+     "io.ox/core/config",
+     "css!io.ox/conversation/style.css"
+    ], function (util, api, VGrid, userAPI, config) {
+    
+    "use strict";
+    
+    // application object
+    var app = ox.ui.createApp(),
+        // app window
+        win,
+        // grid
+        grid,
+        gridWidth = 310,
+        // nodes
+        left,
+        right;
+    
+    // launcher
+    app.setLauncher(function () {
+    
+        // get window
+        win = ox.ui.createWindow({
+            title: "Conversations",
+            toolbar: true
+        });
+        
+        win.addClass("io-ox-conversations-main");
+        app.setWindow(win);
+        
+        // left panel
+        left = $("<div/>")
+            .addClass("leftside border-right")
+            .css({
+                width: gridWidth + "px"
+            })
+            .appendTo(win.nodes.main);
+        
+        // right panel
+        right = $("<div/>")
+            .css({ left: gridWidth + 1 + "px" })
+            .addClass("rightside io-ox-conversation")
+            .appendTo(win.nodes.main);
+        
+        // grid
+        grid = new VGrid(left);
+        
+        // add template
+        grid.addTemplate({
+            build: function () {
+                var subject;
+                this.addClass("conversation")
+                    .append(
+                        $("<div/>")
+                        .append(subject = $("<span/>").addClass("subject"))
+                    );
+                return { subject: subject };
+            },
+            set: function (data, fields, index) {
+                fields.subject.text(data.subject || "#");
+            }
+        });
+        
+        // all request
+        grid.setAllRequest(function () {
+            //return $.Deferred().resolve([{ id: "db-0-1017" }]);
+            return api.getAll();
+        });
+        
+        // list request
+        grid.setListRequest(function (ids) {
+            //return $.Deferred().resolve([{ id: "db-0-1017", subject: "YEAH" }]);
+            return api.getList(ids);
+        });
+        
+        // -------------------------------------------------------------
+        
+        var currentChatId = null,
+            lastMessage = "",
+            lastMessageId = null,
+            lastTimestamp = 0,
+            pollTimer = null,
+            // current user id
+            myself = String(config.get("identifier")),
+            // DOM nodes
+            pane, controls, textarea,
+            // functions
+            stopPolling,
+            startPolling,
+            resumePolling,
+            pollNow,
+            tick,
+            processMessages,
+            applyEmoticons,
+            drawMessages,
+            sendMessage;
+            
+        stopPolling = function () {
+            if (pollTimer !== null) {
+                clearInterval(pollTimer);
+                pollTimer = null;
+            }
+        };
+        
+        resumePolling = function () {
+            if (pollTimer === null && currentChatId !== null) {
+                pollTimer = setInterval(tick, 2000);
+            }
+        };
+        
+        startPolling = function (id) {
+            // stop running poll
+            stopPolling();
+            // init
+            currentChatId = id;
+            lastMessageId = null;
+            lastTimestamp = 0;
+            // poll now and every 1 second
+            tick();
+            resumePolling();
+        };
+        
+        pollNow = function () {
+            stopPolling();
+            tick();
+            resumePolling();
+        };
+        
+        processMessages = function (list) {
+            
+            // get most recent message
+            var last = _(list).last() || { id: null, timestamp: 0 };
+            // got new messages?
+            if (last.id !== null && last.id !== lastMessageId) {
+                
+                lastMessageId = last.id;
+                lastTimestamp = last.timestamp;
+                
+                drawMessages(list);
+            }
+        };
+        
+        tick = function () {
+            // fetch messages
+            if (ox.session) {
+//                processMessages([
+//                    { id: 1, from: { id: 3, name: "Rafael" }, text: "Hi, lunch at 14h?", timestamp: 1320271984084 },
+//                    { id: 2, from: { id: 4, name: "Matthias" }, text: "(y) Yep, where?", timestamp: 1320271984084 },
+//                    { id: 3, from: { id: 3, name: "Rafael" }, text: "Stadtgrill :)", timestamp: 1320271984084 },
+//                    { id: 4, from: { id: 4, name: "Matthias" }, text: "Okay... *just a test*", timestamp: 1320271984084 },
+//                    { id: 5, from: { id: 5, name: "Tobi" }, text: "Lebenszeitvernichtung für Designer: I got 96/100 in this html5 kerning game http://type.method.ac :D", timestamp: 1320273474082 }
+//                ]);
+                api.getMessages(currentChatId, lastTimestamp)
+                .done(processMessages);
+            }
+        };
+        
+        var emoticons = { ":D": "bigsmile", ":)": "smile", "(y)": "yes" };
+        
+        applyEmoticons = function (str) {
+            return '<img src="' + ox.base + "/apps/io.ox/conversation/images/" +
+                emoticons[str] + '.gif" class="emoticon">';
+        };
+        
+        drawMessages = function (list) {
+            
+            _(list).each(function (msg) {
+                var html = String(msg.text)
+                        .replace(/</g, '&lt;')
+                        .replace(/(\:D|\:\)|\(y\))/g, applyEmoticons)
+                        .replace(/\*(\w[^\*]*\w)\*/g, "<b>$1</b>")
+                        .replace(/(http:\/\/\S+)/ig, '<a href="$1" target="_blank">$1</a>'),
+                    from = msg.from || {};
+                pane.append(
+                    $("<div>").addClass("message")
+                    .append(
+                        userAPI.getPicture(from.id)
+                        .addClass("picture")
+                    )
+                    .append(
+                        $("<div>").addClass("from" + (from.id === myself ? " me" : ""))
+                        .text(from.name)
+                    )
+                    .append(
+                        $("<div>").addClass("text")
+                        .html(html)
+                    )
+                );
+            });
+            
+            pane.parent().scrollTop(pane.height() + 100);
+        };
+        
+        sendMessage = function () {
+            var val = $.trim(textarea.val());
+            if (val !== "") {
+                textarea.attr("disabled", "disabled");
+                api.sendMessage(currentChatId, val)
+                    .done(function () {
+                        lastMessage = val;
+                        textarea.val("");
+                        pollNow();
+                    })
+                    .always(function () {
+                        textarea.removeAttr("disabled").focus();
+                    });
+            }
+        };
+        
+        $("<div>").addClass("abs conversation default-content-padding")
+            .css({ overflow: "auto", paddingBottom: "0" })
+            .append(
+                pane = $("<div>").addClass("centered-box")
+            )
+            .appendTo(right);
+        
+        textarea = $("<textarea>")
+            .attr({ placeholder: "Type your message here..." })
+            .css("resize", "none")
+            .on("keydown", function (e) {
+                // don't bubble up to the vgrid
+                e.stopPropagation();
+                var self;
+                // pressed enter?
+                if (e.which === 13) {
+                    sendMessage();
+                } else if (e.which === 38) {
+                    self = $(this);
+                    if (self.val() === "") {
+                        self.val(lastMessage).select();
+                    }
+                }
+            });
+        
+        controls = $("<div>").addClass("abs controls")
+            .append(
+                $("<div>").addClass("centered-box")
+                .append(textarea)
+                .append(
+                    $("<button>").addClass("send").text("Send")
+                    .on("click", sendMessage)
+                )
+            )
+            .appendTo(right);
+            
+        var showChat = function (obj) {
+            pane.empty();
+            textarea.val("").focus();
+            startPolling(obj.id);
+        };
+        
+        /*
+         * Selection handling
+         */
+        grid.selection.bind("change", function (selection) {
+            if (selection.length === 1) {
+                showChat(selection[0]);
+            } else {
+                pane.empty();
+            }
+        });
+        
+        win.bind("show", function () {
+            grid.selection.keyboard(true);
+            resumePolling();
+        });
+        win.bind("hide", function () {
+            grid.selection.keyboard(false);
+            stopPolling();
+        });
+        
+        // bind all refresh
+        api.bind("refresh.all", function (data) {
+            grid.refresh();
+        });
+        
+        // bind list refresh
+        api.bind("refresh.list", function (data) {
+            grid.repaint();
+        });
+        
+        // go!
+        win.show(function () {
+            grid.paint();
+        });
+    });
+    
+    return {
+        getApp: app.getInstance
+    };
+});

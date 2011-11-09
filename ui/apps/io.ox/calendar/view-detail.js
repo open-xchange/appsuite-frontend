@@ -109,25 +109,26 @@ define("io.ox/calendar/view-detail",
             statusClass = util.getConfirmationClass(conf.status),
             isPerson = hash[key] || obj.folder_id,
             personClass = isPerson ? "person" : "",
-            name, node, name_lc,
+            display_name, name, node, name_lc,
             mail_lc = String(obj.mail).toLowerCase();
         // external participant?
         if (obj.type === 5) {
             // beautify
             name_lc = String(obj.display_name).toLowerCase();
             if (name_lc === mail_lc) {
-                name = mail_lc;
+                name = display_name = mail_lc;
             } else {
                 name = obj.display_name ? obj.display_name + " <" + mail_lc + ">" : mail_lc;
+                display_name = obj.display_name || mail_lc;
             }
         } else {
-            name = obj.display_name || String(obj.mail).toLowerCase();
+            name = display_name = obj.display_name || String(obj.mail).toLowerCase();
         }
         node = $("<div>").addClass("participant")
             .append($("<span>").addClass(personClass).text(name))
             .append($("<span>").addClass("status " + statusClass).text(" " + confirm))
             .on("click", {
-                display_name: name,
+                display_name: display_name,
                 email1: mail_lc,
                 internal_userid: obj.internal_userid
             }, fnClickPerson);

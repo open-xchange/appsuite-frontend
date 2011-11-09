@@ -1,0 +1,88 @@
+
+.io-ox-conversation .centered-box {
+    width: 550px;
+    margin: 0 auto 0 auto;
+}
+
+.io-ox-conversation .conversation {
+    bottom: 91px;
+}
+
+.io-ox-conversation .conversation .message {
+    position: relative;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+    min-height: 48px;
+    padding: 0 110px 0 72px;
+    margin-bottom: 24px;
+}
+
+.io-ox-conversation .message .from {
+    font-weight: normal;
+    color: #08c;
+}
+
+.io-ox-conversation .message .from.me {
+    color: #aaa;
+}
+
+.io-ox-conversation .message .text {
+    color: black;
+}
+
+.io-ox-conversation .message .emoticon {
+    vertical-align: bottom;
+    vertical-align: text-bottom;
+}
+
+.io-ox-conversation .message .picture {
+    position: absolute;
+    left: 0px;
+    width: 48px;
+    height: 48px;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    border-radius: 3px;
+}
+
+.io-ox-conversation .controls {
+    top: auto;
+    height: 80px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    text-align: center;
+    background-color: #f5f5f5;
+}
+
+.io-ox-conversation .controls textarea {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+    width: 360px;
+    height: 40px;
+    border: 1px solid #ccc;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    outline: none;
+    padding: 10px;
+    margin: 0px 10px 0 48px;
+    vertical-align: top;
+}
+
+.io-ox-conversation .controls button {
+    background-color: #eee;
+    border: 1px solid #ccc;
+    color: black;
+    line-height: 2em;
+    width: 80px;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.io-ox-conversation .controls button:hover {
+    background-color: #ddd;
+}
