@@ -74,6 +74,9 @@ define("io.ox/applications/main",
             set: function (data, fields, index) {
                 fields.count.text(data.count);
                 fields.title.text(data.title);
+                if (data.id === "upgrades" && data.count > 0) {
+                    fields.count.addClass("highlight");
+                }
             }
         });
         
@@ -103,7 +106,7 @@ define("io.ox/applications/main",
         
         var loadView = function (obj) {
             var id = obj.id;
-            if (id !== "installed" && id !== "favorites") {
+            if (id !== "installed" && id !== "favorites" && id !== "upgrades") {
                 id = "category";
             }
             require(["io.ox/applications/view-" + id])

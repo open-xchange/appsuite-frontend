@@ -51,7 +51,7 @@
             });
             return [
                     {
-                        // special "Favorites" category
+                        // special "Installed" category
                         id: "installed",
                         title: "Installed",
                         count: appData.installed.length,
@@ -62,6 +62,13 @@
                         id: "favorites",
                         title: "Favorites",
                         count: appData.favorites.length,
+                        group: "Your Apps"
+                    },
+                    {
+                        // special "Upgrades" category
+                        id: "upgrades",
+                        title: "Upgrades",
+                        count: 1,
                         group: "Your Apps"
                     }
                 ].concat(
