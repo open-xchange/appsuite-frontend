@@ -1,0 +1,14 @@
+Source: open-xchange-gui
+Section: non-free/web
+Priority: optional
+Maintainer: Viktor Pracht <viktor.pracht@open-xchange.com>
+Build-Depends: debhelper (>= 8.0.0), nodejs (>= 0.4.0)
+Standards-Version: 3.9.2
+Homepage: http://open-xchange.com
+Vcs-Git: https://git.open-xchange.com/git/wd/frontend/web
+Vcs-Browser: https://git.open-xchange.com/gitweb/?p=wd/frontend/web;a=summary
+
+Package: open-xchange-gui
+Architecture: all
+Depends: ${misc:Depends}, apache2
+Description: Open-Xchange HTML5 client
