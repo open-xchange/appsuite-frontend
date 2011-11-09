@@ -49,6 +49,11 @@
     background-color: #035696;
 }
 
+.io-ox-applications-main p {
+    width: 500px;
+    margin: 1em 0 1em 0;
+}
+
 .io-ox-applications-main .apps {
     margin: 30px 0 0px 0;
 }
@@ -71,6 +76,8 @@
 }
 
 .io-ox-applications-main .app .title .favorite {
+    font-size: 80%;
+    vertical-align: text-bottom;
     margin-left: 0.5em;
     color: #fc0;
 }

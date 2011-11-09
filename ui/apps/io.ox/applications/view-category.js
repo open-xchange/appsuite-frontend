@@ -25,15 +25,14 @@ define("io.ox/applications/view-category",
                     $("<div>").addClass("clear-title")
                     .text("Category: " + context.id)
                 );
-                
-            // get apps
-            api.getByCategory(context.id).done(function (list) {
-                var apps = $("<div>").addClass("apps");
-                _(list).each(function (data) {
-                    apps.append(view.drawApp(data));
-                });
-                node.append(apps);
+            
+            var apps = $("<div>").addClass("apps");
+            
+            _(api.getByCategory(context.id)).each(function (data) {
+                apps.append(view.drawApp(data));
             });
+            
+            node.children().eq(0).after(apps);
             
             return node;
         }

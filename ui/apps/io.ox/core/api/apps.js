@@ -11,17 +11,41 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/api/apps", [], function () {
+(function () {
     
     'use strict';
     
     // simple plain cache
-    var cache = null,
+    var appCache = null,
+        appData = {};
     
-        getCategories = function (data) {
+    function init(ready, cache) {
+        
+        appCache = new cache.SimpleCache("apps", true);
+        
+        function fetch() {
+            return require([ox.base + "/src/userconfig.js"])
+                .done(function (data) {
+                    // add to cache & local var
+                    appCache.add("default", appData = data);
+                });
+        }
+        
+        if (!appCache.contains("default")) {
+            // fetch data from server
+            fetch().done(ready);
+        } else {
+            // use locally stored data but also fetch new stuff
+            appData = appCache.get("default");
+            fetch();
+            ready();
+        }
+    }
+    
+    var getCategories = function () {
             // loop over apps to figure out numbers per category
             var counts = {};
-            _(data.apps).each(function (app) {
+            _(appData.apps).each(function (app) {
                 var id = app.category || "---";
                 counts[id] = (counts[id] || 0) + 1;
             });
@@ -30,19 +54,19 @@ define("io.ox/core/api/apps", [], function () {
                         // special "Favorites" category
                         id: "installed",
                         title: "Installed",
-                        count: data.installed.length,
+                        count: appData.installed.length,
                         group: "Your Apps"
                     },
                     {
                         // special "Favorites" category
                         id: "favorites",
                         title: "Favorites",
-                        count: data.favorites.length,
+                        count: appData.favorites.length,
                         group: "Your Apps"
                     }
                 ].concat(
                     // loop over categories and add count per category
-                    _(data.categories).map(function (id) {
+                    _(appData.categories).map(function (id) {
                         return {
                             id: id.toLowerCase(),
                             title: id,
@@ -61,8 +85,8 @@ define("io.ox/core/api/apps", [], function () {
             return obj;
         },
         
-        getByCategory = function (id, cache) {
-            return _(cache.apps)
+        getByCategory = function (id) {
+            return _(appData.apps)
                 .chain()
                 .map(function (obj, id) {
                     return bless(obj, id);
@@ -73,70 +97,58 @@ define("io.ox/core/api/apps", [], function () {
                 .value();
         },
         
-        getSpecial = function (prop, data) {
-            return _(data[prop]).map(function (id) {
-                return bless(cache.apps[id], id);
+        getSpecial = function (prop) {
+            return _(appData[prop]).map(function (id) {
+                return bless(appData.apps[id], id);
             });
         };
+    
+    function module(event) {
         
-    return {
+        var api = {
         
-        getCategories: function () {
-            if (cache === null) {
-                return require([ox.base + "/src/userconfig.js"])
-                    .done(function (data) {
-                        cache = data;
-                    })
-                    .pipe(getCategories);
-            } else {
-                return $.Deferred().resolve(getCategories(cache));
+            getCategories: getCategories,
+            
+            getByCategory: getByCategory,
+            
+            getInstalled: function () {
+                return getSpecial('installed');
+            },
+            
+            getFavorites: function () {
+                return getSpecial('favorites');
+            },
+            
+            isFavorite: function (data) {
+                return _(appData.favorites).indexOf(data.id) > -1;
+            },
+            
+            markAsFavorite: function (id) {
+                if (_(appData.favorites).indexOf(id) === -1) {
+                    appData.favorites.push(id);
+                    api.trigger("refresh.all");
+                }
+            },
+            
+            unmarkAsFavorite: function (id) {
+                var pos = _(appData.favorites).indexOf(id);
+                if (pos !== -1) {
+                    appData.favorites.splice(pos, 1);
+                    api.trigger("refresh.all");
+                }
             }
-        },
+        };
         
-        getByCategory: function (id) {
-            if (cache === null) {
-                return require([ox.base + "/src/userconfig.js"])
-                    .done(function (data) {
-                        cache = data;
-                    })
-                    .pipe(function () {
-                        return getByCategory(id, cache);
-                    });
-            } else {
-                return $.Deferred().resolve(getByCategory(id, cache));
-            }
-        },
+        event.Dispatcher.extend(api);
         
-        getInstalled: function () {
-            if (cache === null) {
-                return require([ox.base + "/src/userconfig.js"])
-                    .done(function (data) {
-                        cache = data;
-                    })
-                    .pipe(function (data) {
-                        return getSpecial('installed', data);
-                    });
-            } else {
-                return $.Deferred().resolve(getSpecial('installed', cache));
-            }
-        },
+        return api;
         
-        getFavorites: function () {
-            if (cache === null) {
-                return require([ox.base + "/src/userconfig.js"])
-                    .done(function (data) {
-                        cache = data;
-                    })
-                    .pipe(function (data) {
-                        return getSpecial('favorites', data);
-                    });
-            } else {
-                return $.Deferred().resolve(getSpecial('favorites', cache));
-            }
-        },
-        
-        isFavorite: function (data) {
-            return cache === null ? false : _(cache.favorites).indexOf(data.id) > -1;
-        }
-    };
-});
+    } /* end: module */
+    
+    initializeAndDefine(
+        "io.ox/core/api/apps",
+        ["io.ox/core/cache"], init,
+        ["io.ox/core/event"], module
+    );
+
+}());

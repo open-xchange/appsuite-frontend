@@ -33,6 +33,12 @@ define("io.ox/applications/view-common", ["io.ox/core/api/apps"], function (api)
     
     function fnFavor(e) {
         e.preventDefault();
+        api.markAsFavorite(e.data.id);
+    }
+    
+    function fnUnmark(e) {
+        e.preventDefault();
+        api.unmarkAsFavorite(e.data.id);
     }
     
     function drawApp(data) {
@@ -48,12 +54,19 @@ define("io.ox/applications/view-common", ["io.ox/core/api/apps"], function (api)
         // favorite?
         if (api.isFavorite(data)) {
             node.find(".title").append(
-                $("<span/>").addClass("favorite").text("\u2605")
+                $("<span/>")
+                .attr("title", "Favorite")
+                .addClass("favorite").text("\u2605")
+            );
+            node.find(".links").append(
+                $("<a>", { href: "#" }).text("Unmark as favorite")
+                .on("click", { id: data.id }, fnUnmark)
+                .add($.txt("\u00A0 "))
             );
         } else {
             // add favorite link
             node.find(".links").append(
-                $("<a>", { href: "#" }).text("Favor this app")
+                $("<a>", { href: "#" }).text("Mark as favorite")
                 .on("click", { id: data.id }, fnFavor)
                 .add($.txt("\u00A0 "))
             );

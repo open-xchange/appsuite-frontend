@@ -94,7 +94,7 @@ define("io.ox/applications/main",
         
         // all request
         grid.setAllRequest(function () {
-            return api.getCategories();
+            return $.Deferred().resolve(api.getCategories());
         });
         
         var showView = function (data, view) {
@@ -127,6 +127,12 @@ define("io.ox/applications/main",
         // go!
         win.show(function () {
             grid.paint();
+        });
+        
+        // bind all refresh
+        api.bind("refresh.all", function (data) {
+            console.log("AHA.refresh");
+            grid.refresh();
         });
     });
     

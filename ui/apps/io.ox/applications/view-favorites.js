@@ -26,14 +26,13 @@ define("io.ox/applications/view-favorites",
                     .text("Favorite applications")
                 );
                 
-            // get apps
-            api.getFavorites().done(function (list) {
-                var apps = $("<div>").addClass("apps");
-                _(list).each(function (data) {
-                    apps.append(view.drawApp(data));
-                });
-                node.append(apps);
+            var apps = $("<div>").addClass("apps");
+            
+            _(api.getFavorites()).each(function (data) {
+                apps.append(view.drawApp(data));
             });
+            
+            node.children().eq(0).after(apps);
             
             return node;
         }

@@ -3,9 +3,16 @@ define(function () {
     
     return {
         
-        installed: ["io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar"],
+        installed: [
+            "io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar",
+            "io.ox/files", "io.ox/conversation",
+            "io.ox/internal/ajaxDebug", "io.ox/internal/testing"
+        ],
         
-        favorites: ["io.ox/portal", "io.ox/mail"],
+        favorites: [
+            "io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar",
+            "io.ox/files", "io.ox/conversation"
+        ],
         
         categories: ["Basic", "Productivity", "Dev"],
         
@@ -47,7 +54,7 @@ define(function () {
             },
             
             "io.ox/conversation": {
-                title: "Chat",
+                title: "Conversations",
                 company: "Open-Xchange",
                 icon: "default.png",
                 category: "Productivity"

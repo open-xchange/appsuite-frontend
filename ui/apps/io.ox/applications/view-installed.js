@@ -24,16 +24,23 @@ define("io.ox/applications/view-installed",
                 .append(
                     $("<div>").addClass("clear-title")
                     .text("Installed applications")
+                )
+                .append(
+                    $("<p>").text(
+                        'Your favorite applications, designated by ' + "\u2605" +
+                        ', are always shown in the top left navigation bar. ' +
+                        'This allows a faster start of your favorites.'
+                    )
                 );
                 
             // get apps
-            api.getInstalled('installed').done(function (list) {
-                var apps = $("<div>").addClass("apps");
-                _(list).each(function (data) {
-                    apps.append(view.drawApp(data));
-                });
-                node.append(apps);
+            var apps = $("<div>").addClass("apps");
+            
+            _(api.getInstalled('installed')).each(function (data) {
+                apps.append(view.drawApp(data));
             });
+            
+            node.children().eq(1).after(apps);
             
             return node;
         }
