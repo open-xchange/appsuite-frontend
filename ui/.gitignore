@@ -2,3 +2,7 @@
 /tmp
 /i18n/ox.pot
 /ox.pot
+/debian/files
+/debian/open-xchange-gui/
+/debian/open-xchange-gui.debhelper.log
+/debian/open-xchange-gui.substvars
