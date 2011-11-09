@@ -17,7 +17,7 @@ var utils = require("./fileutils");
 var _ = require("../underscore");
 var less = require("../less.js/lib/less/index");
 
-// Iteration mixins
+// Traversal mixins
 
 function noChildren() { return []; }
 ["Anonymous", "Color", "Combinator", "Comment", "Dimension", "JavaScript",
@@ -49,6 +49,141 @@ less.tree.Shorthand.prototype.getChildren =
     function() { return [this.a, this.b]; };
 less.tree.URL.prototype.getChildren =
     function() { return this.attrs ? [] : [this.value]; };
+
+// Cloning mixins
+
+(function(defs) {
+    function callClone(o) { return o.clone(); }
+    var code = [];
+    for (var i in defs) {
+        code.push("less.tree." + i +
+            ".prototype.clone = function() { return new less.tree." + i + "(" +
+            _.map(defs[i], function(field) {
+                switch (field.charAt(0)) {
+                case "!":
+                    return "this." + field.slice(1) + ".clone()";
+                case "[":
+                    field = "this." + field.slice(1);
+                    return field + " && _.map(" + field + ", callClone)";
+                default:
+                    return "this." + field;
+                }
+            }).join(", ") + "); };");
+    }
+    eval(code.join("\n"));
+}({
+    Alpha: ["value && this.value.clone ? this.value.clone() : this.value"],
+    Anonymous: ["value"], Call: ["name", "[args", "index"],
+    Color: ["rgb.slice()", "alpha"], Comment: ["value", "silent"],
+    Combinator: ["value"], Dimension: ["value", "unit"],
+    Directive: ["name", "ruleset ? this.ruleset.rules : this.value.clone()"],
+    Element: ["!combinator", "value"], Expression: ["[value"],
+    JavaScript: ["expression", "index", "escaped"], Keyword: ["value"],
+    "mixin.Call": ["selector.elements", "[arguments", "index"],
+    Operation: ["op", "[operands"],
+    Quoted: ["quote", "value", "escaped", "index"],
+    Rule: ["name", "!value", "important", "index"],
+    Ruleset: ["[selectors", "[rules"], Selector: ["[elements"],
+    Shorthand: ["!a", "!b"], URL: ["attrs || this.value.clone()", "paths"],
+    Value: ["[value"], Variable: ["name", "index"]
+}));
+
+less.tree.mixin.Definition.prototype.clone = function() {
+    return new less.tree.mixin.Definition(this.name,
+        _.map(this.params, function(param) {
+            var clone = {};
+            if (param.name) clone.name = param.name;
+            if (param.value) clone.value = param.value.clone();
+            return clone;
+        }),
+        _.map(this.rules, function(rule) { return rule.clone(); }));
+};
+
+// Printing mixins
+
+exports.print = function(node) { return _.flatten([node.print()]).join(""); };
+
+function mapIntersperse(list, f, separator) {
+    if (!list.length) return [];
+    var out = [f(list[0])];
+    if (separator === undefined) separator = ",";
+    for (var i = 1; i < list.length; i++) out.push(separator, f(list[i]));
+    return out;
+}
+
+function printList(list, separator, prec) {
+    return mapIntersperse(list, function(n) { return n.print(prec); },
+                          separator);
+}
+
+function printParam(param) {
+    return !param.name ? param.value.print() :
+        !param.value ? param.name.print() :
+        [param.name.print(), ":", param.value.print()];
+}
+
+less.tree.Alpha.prototype.print = function() {
+    return ["alpha(opacity=",
+            this.value.print ? this.value.print() : this.value, ")"];
+};
+less.tree.Anonymous.prototype.print =
+    less.tree.Combinator.prototype.print =
+    less.tree.Comment.prototype.print =
+    less.tree.Keyword.prototype.print = function() { return this.value; };
+less.tree.Call.prototype.print =
+    function() { return [this.name, "(", printList(this.args), ")"]; };
+less.tree.Color.prototype.print = less.tree.Dimension.prototype.print =
+    function() { return this.toCSS(); };
+less.tree.Directive.prototype.print = function() {
+    return this.ruleset ?
+        [this.name, "{\n", this.ruleset.print(true), "}\n"] :
+        [this.name, " ", this.valule.print()];
+};
+less.tree.Element.prototype.print =
+    function() { return [this.combinator.print(), this.value]; };
+less.tree.Expression.prototype.print =
+    function(prec) { return printList(this.value, " ", prec); };
+less.tree.Import.prototype.print =
+    function() { return ["@import ", this._path.print()]; };
+less.tree.JavaScript.prototype.print =
+    function() { return [this.escaped ? "~`" : "`", this.expression, "`"]; };
+less.tree.mixin.Call.prototype.print = function() {
+    return this.args ? 
+        [printList(this.elements, ""), "(", printList(this.args), ")"] :
+        printList(this.elements, "");
+};
+less.tree.mixin.Definition.prototype.print = function() {
+    return [this.name, "(", mapIntersperse(this.params, printParam), "){\n",
+            printList(this.rules, "\n"), "}\n"];
+};
+less.tree.Operation.prototype.print = function(prec) {
+    return this.op === "*" || this.op === "/" ?
+        printList(this.operands, this.op, 1) :
+        prec ? ["(", printList(this.operands, this.op), ")"] :
+                     printList(this.operands, this.op);
+};
+less.tree.Quoted.prototype.print = function() {
+    return [this.escaped ? "~" : "", this.quote, this.value, this.quote];
+};
+less.tree.Rule.prototype.print = function() {
+    return [this.name, ":", this.value.print(), this.important, ";"];
+};
+less.tree.Ruleset.prototype.print = function(root) {
+    return root || this.root ? printList(this.rules, "\n") :
+        [printList(this.selectors), "{\n", printList(this.rules, "\n"), "}\n"];
+};
+less.tree.Shorthand.prototype.print =
+    function() { return [this.a.print(), "/", this.b.print()]; };
+less.tree.Selector.prototype.print =
+    function() { return printList(this.elements, ""); };
+less.tree.URL.prototype.print = function() {
+    return this.attrs ? ["url(data:", this.attrs.mime, this.attrs.charset,
+                         this.attrs.abse64, this.attrs.data] :
+        ["url(", this.value.print(), ")"];
+};
+less.tree.Value.prototype.print =
+    function() { return printList(this.value); };
+less.tree.Variable.prototype.print = function() { return this.name; };
 
 // Synchronous importer (a modified copy of the original in less/index.js)
 
@@ -111,55 +246,56 @@ exports.iterate = function(root, matcher, f) {
     }
 };
 
-utils.fileType("less").addHook("filter", function(lessfile) {
+exports.tree = less.tree;
+
+exports.parse = function(data, src) {
+    var result;
+    new less.Parser({ paths: [path.dirname(src)] }).parse(data,
+        function(e, tree) { if (e) throw e; else result = tree; });
+    return result;
+};
+
+exports.parseFile = function(filename) {
+    return exports.parse(fs.readFileSync(filename, "utf8"), filename);
+};
+
+exports.lessFilter = function(data) {
     var self = this;
     var result = "";
     var src = this.getSrc(1).name, dest = this.task.name;
     utils.includes.set(dest, []);
     try {
-        new less.Parser({ paths: [path.dirname(src)] }).parse(
-            lessfile,
-            function(e, tree) {
-                if (e) {
-                    var src = self.getSrc(e.line);
-                    console.error(src.name + ":" + src.line, e.message);
-                    return fail();
-                }
-                try {
-                    exports.iterate(tree, less.tree.URL, function(url) {
-                        if (!url.value || !/\.png$/.test(url.value.value)) return;
-                        var filename = path.join(path.dirname(self.getSrc(1).name),
-                                                 url.value.value);
-                        var buf = fs.readFileSync(filename);
-                        if (buf.length > 24558) return; // IE8 size limit
-                        url.attrs = { mime: "image/png", charset: "", base64: ";base64",
-                                      data: "," + buf.toString("base64") };
-                        delete url.value;
-                        utils.includes.add(dest, filename);
-                    });
-                    exports.iterate(tree, less.tree.Import, function(import_) {
-                        utils.includes.add(dest,
-                                         path.join(path.dirname(src), import_.path));
-                    });
-                    result = tree.toCSS({ compress: !process.env.debug });
-                } catch (e) {
-                    if (e.index) {
-                        var src = this.getSrc.byIndex(e.index);
-                        console.error(src.name + ":" + src.line, e.message);
-                    } else {
-                        console.error(e);
-                    }
-                    fail();
-                }
-            });
+        new less.Parser({ paths: [path.dirname(src)] }).parse(data, filter);
     } catch (e) {
-        if (e.index) {
-            var src = this.getSrc.byIndex(e.index);
-            console.error(src.name + ":" + src.line, e.message);
-        } else {
-            console.error(e);
+        if (e.line) {
+            var src = this.getSrc(e.line);
+            console.error(src.name + ":" + src.line);
         }
-        fail();
+        throw e;
     }
     return result;
-});
+    
+    function filter(e, tree) {
+        if (e) throw e;
+        
+        _.each(self.type.getHooks("less"), function(hook) {
+            tree = hook.call(self, tree) || tree;
+        });
+        exports.iterate(tree, less.tree.URL, function(url) {
+            if (!url.value || !/\.png$/.test(url.value.value)) return;
+            var filename = path.join(path.dirname(self.getSrc(1).name),
+                                     url.value.value);
+            var buf = fs.readFileSync(filename);
+            if (buf.length > 24558) return; // IE8 size limit
+            url.attrs = { mime: "image/png", charset: "", base64: ";base64",
+                          data: "," + buf.toString("base64") };
+            delete url.value;
+            utils.includes.add(dest, filename);
+        });
+        exports.iterate(tree, less.tree.Import, function(import_) {
+            utils.includes.add(dest,
+                             path.join(path.dirname(src), import_.path));
+        });
+        result = tree;
+    }
+};

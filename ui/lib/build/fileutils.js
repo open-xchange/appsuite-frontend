@@ -71,7 +71,7 @@ FileType.prototype.addHook = function(type, hook) {
  * Each type consists of an array of handlers for dependency-building and
  * an array of filters to process the file contents. Optionally, other types
  * of hooks can be used by individual handlers and filters.
- * The special type "*" is applies to all files and is applied after
+ * The special type "*" applies to all files and is applied after
  * the type-specific handlers and filters.
  */
 var types = { "*": new FileType() };
@@ -256,21 +256,14 @@ exports.concat = function(name, files, options) {
         function fileDefs() {
             if (fileDefs.value) return fileDefs.value;
             fileDefs.value = [];
-            var start = 0, index = 0;
+            var start = 0;
             for (var i = 0; i < data.length; i++) {
-                var lines = data[i].split(/\r?\n|\r/g);
-                for (var j = 0, idx = 0; j < lines.length; j++) {
-                    var len = lines[j].length;
-                    lines[j] = idx;
-                    idx += len;
-                }
                 fileDefs.value.push({
                     name: typeof files[i] !== "string" ? "" :
                         path.join(srcDir, files[i]),
-                    start: start, index: index, lines: lines
+                    start: start
                 });
-                start += lines.length - 1;
-                index += contents.length;
+                start += data[i].split(/\r?\n|\r/g).length - 1;
             }
             return fileDefs.value;
         }
@@ -282,16 +275,6 @@ exports.concat = function(name, files, options) {
             }
             return { name: def.name, line: line - def.start };
         }
-        getSrc.byIndex = function(index) {
-            var defs = fileDefs();
-            var def = defs[_.sortedIndex(defs, index, getStart) - 1];
-            function getStart(x) {
-                return typeof x == "number" ? x : x.index;
-            }
-            var line = _.sortedIndex(def.lines, index - def.index + 1);
-            return { name: def.name, line: line,
-                     col: index - def.lines[line - 1] + 1 };
-        };
         if (type.filter) {
             for (var i = 0; i < files.length; i++) {
                 var contents = typeof files[i] == "string" ?
