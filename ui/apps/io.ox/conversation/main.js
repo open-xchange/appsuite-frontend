@@ -31,7 +31,10 @@ define("io.ox/conversation/main",
         gridWidth = 310,
         // nodes
         left,
-        right;
+        right,
+        
+        notifications = window.webkitNotifications,
+        useNotifier = false;
     
     // launcher
     app.setLauncher(function () {
@@ -44,6 +47,25 @@ define("io.ox/conversation/main",
         
         win.addClass("io-ox-conversations-main");
         app.setWindow(win);
+        
+        // use notifications?
+        if (notifications && document.webkitHidden !== undefined) {
+            // get permission (0 = granted, 1 = ask, 2 = off)
+            var perm = notifications.checkPermission();
+            if (perm === 1) {
+                // add toolbar link
+                win.addButton({
+                    label: "Use notifications",
+                    action: function () {
+                        notifications.requestPermission(function () {
+                            useNotifier = true;
+                        });
+                    }
+                });
+            } else if (perm === 0) {
+                useNotifier = true;
+            }
+        }
         
         // left panel
         left = $("<div/>")
@@ -97,6 +119,9 @@ define("io.ox/conversation/main",
             lastMessageId = null,
             lastTimestamp = 0,
             pollTimer = null,
+            firstPoll = true,
+            // const
+            POLL_FREQ = 5000,
             // current user id
             myself = String(config.get("identifier")),
             // DOM nodes
@@ -121,7 +146,7 @@ define("io.ox/conversation/main",
         
         resumePolling = function () {
             if (pollTimer === null && currentChatId !== null) {
-                pollTimer = setInterval(tick, 2000);
+                pollTimer = setInterval(tick, POLL_FREQ);
             }
         };
         
@@ -132,6 +157,7 @@ define("io.ox/conversation/main",
             currentChatId = id;
             lastMessageId = null;
             lastTimestamp = 0;
+            firstPoll = true;
             // poll now and every 1 second
             tick();
             resumePolling();
@@ -154,6 +180,24 @@ define("io.ox/conversation/main",
                 lastTimestamp = last.timestamp;
                 
                 drawMessages(list);
+                
+                // show notification?
+                if (!firstPoll && useNotifier && ox.windowState === "background") {
+                    
+                    var from = last.from || { name: "" };
+                    
+                    userAPI.getPictureURL(from.id)
+                        .done(function (url) {
+                            // create & show notification
+                            var n = notifications.createNotification(url, from.name, last.text);
+                            n.show();
+                            setTimeout(function () {
+                                n.cancel();
+                            }, 5000);
+                        });
+                }
+                
+                firstPoll = false;
             }
         };
         

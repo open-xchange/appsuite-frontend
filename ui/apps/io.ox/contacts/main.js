@@ -124,7 +124,6 @@ define("io.ox/contacts/main",
         
         // search request
         grid.setAllRequest("search", function () {
-            //alert('hier');
             return api.search(win.search.query);
         });
         
@@ -210,7 +209,7 @@ define("io.ox/contacts/main",
         });
         
         
-     // bind all refresh
+        // bind all refresh
         api.bind("refresh.all", function (data) {
             grid.refresh();
         });
@@ -271,8 +270,11 @@ define("io.ox/contacts/main",
         });
         // NewContact Form
         (function () {
-            var pane = new dialogs.SlidingPane(),
-                pane_edit = new dialogs.SlidingPane(),
+
+
+
+            var pane = new dialogs.CreateDialog(),//SlidingPane(),
+                pane_edit = new dialogs.CreateDialog(),//SlidingPane(),
                 
                 // create formblocks
                 $divblock_name = $('<div/>').addClass('block new_contact name'),
@@ -284,13 +286,13 @@ define("io.ox/contacts/main",
                 $divblock_edit_company = $('<div/>').addClass('block edit_contact company'),
                 $divblock_b_edit_address = $('<div/>').addClass('block edit_contact address'),
                 $divblock_b_edit_phone = $('<div/>').addClass('block edit_contact phone');
-                
+    
             function field_html(label, id) {
                 return $('<div/>').addClass('field').append('<label>' + label + '</label>')
                 .append('<input class="' + id + '"type="text"> </input>');
-
-            }
             
+            }
+
             var $first_name = field_html("first name", "first_name"),
                 $last_name = field_html("last name", "last_name"),
                 $company = field_html("company", "company"),
@@ -301,7 +303,11 @@ define("io.ox/contacts/main",
                 $postal_code_business = field_html("postal code", "postal_code_business"),
                 $city_business = field_html("city", "city_business"),
                 $phone_business1 = field_html("tel.", "telephone_business1");
-                
+    
+
+            pane.getContentNode().addClass("create-contact");
+            pane_edit.getContentNode().addClass("create-contact");
+            
             // assemble the crate form
             pane.append($divblock_name);
             $first_name.appendTo($divblock_name);
@@ -348,11 +354,11 @@ define("io.ox/contacts/main",
                 
             pane_edit.addButton("resolveEditContact", "Save");
             pane_edit.addButton("cancelEditContact", "Cancel");
-                
+    
             $(".content .block .field:nth-child(even)").addClass('even');
-                
-                //fill the edit form
-                
+    
+    //fill the edit form
+    
             var getContact;
                 
             function fillForm(selected) {
@@ -361,7 +367,7 @@ define("io.ox/contacts/main",
                         $(this).val(selected[name]);
                     });
                 }
-                
+    
             getContact = function (obj) {
                     api.get(obj)
                         .done(_.lfo(fillForm))
@@ -393,6 +399,7 @@ define("io.ox/contacts/main",
                                 grid.selection.selectNext();
                             }
                         });
+
                     
             }
                 
@@ -449,6 +456,7 @@ define("io.ox/contacts/main",
                                                 if (value !== "") {
                                                     formdata[id] = value;
                                                 }
+
                                             });
                                         if (!_.isEmpty(formdata)) {
                                             var fDataId = parseInt(formdata.id, 10),
@@ -458,53 +466,53 @@ define("io.ox/contacts/main",
                                             formdata.timestamp = timestamp;
                                             api.update(formdata);
                                         }
+                                        
                                     },
-                                    
+                
                 cancelEditContact: function () {
-                                        console.log("cancel");
-                                    }
+                                    console.log("cancel");
+                                }
             };
-            
+                
             var showNewContactPane = function () {
-                                        pane.show()
-                                        .done(function (action) {
-                                                actions[action]();
-                                            });
-                                    };
-            
+                                    pane.show().done(function (action) {
+                                        actions[action]();
+                                    });
+                                };
+                
             var showEditContactPane = function () {
-                                        pane_edit.show()
-                                        .done(function (action) {
-                                                actions[action]();
-                                            });
-                                    };
-            
+                                    pane_edit.show().done(function (action) {
+                                                                actions[action]();
+                                                            });
+                                };
+
             var newContactButton = win.addButton({ // something weird - button keeps the action
                 label: "New Contact",
                 action: showNewContactPane
             });
-            
+
             var editContactButton = win.addButton({
                 label: "Edit",
                 action: showEditContactPane
             })
-            .bind('click', function () {
-                                var data = grid.selection.get();
-                                getContact(data[0]);
-                            });
-            
+.bind('click', function () {
+                var data = grid.selection.get();
+                getContact(data[0]);
+            });
+
             var deleteContactButton = win.addButton({
                 label: "Delete",
                 action: removeContact
             })
-            .bind('click', function () {
-                            var data = grid.selection.get();
-                            getContact(data[0]);
-                        });
-            
-            pane.relativeTo(newContactButton);
-            pane_edit.relativeTo(newContactButton);
+.bind('click', function () {
+                var data = grid.selection.get();
+                getContact(data[0]);
+            });
+
+//pane.relativeTo(newContactButton);
+//pane_edit.relativeTo(newContactButton);
         }());
+
     });
     
     return {

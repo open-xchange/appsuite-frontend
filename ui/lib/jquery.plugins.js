@@ -51,7 +51,7 @@
         // create button
         var button = $("<button/>").addClass(className).append(
             $("<span/>").append(text)
-        ).bind(
+        ).on(
             "click", opt.data, opt.click
         );
         

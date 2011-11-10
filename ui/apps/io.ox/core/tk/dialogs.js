@@ -36,26 +36,45 @@ define("io.ox/core/tk/dialogs", function () {
             
             closeViaEscapeKey,
             
-            close = function () {
-                $(document).off("keydown", closeViaEscapeKey);
-                nodes.popup.remove();
-                nodes.underlay.remove();
-                nodes = deferred = null;
-            },
+            self = this,
             
-            process = function (e) {
-                deferred.resolve(e.data || e);
-                close();
-            },
+            data = {},
             
             o = _.extend({
                 underlayAction: null,
                 defaultAction: null,
-                easyOut: false
+                easyOut: false,
+                center: true,
+                top: "50%"
                 // width (px), height (px),
                 // maxWidth (px), maxHeight (px)
-            }, options);
+            }, options),
             
+            close = function () {
+                $(document).off("keydown", closeViaEscapeKey);
+                nodes.popup.empty().remove();
+                nodes.underlay.remove();
+                // self destruction
+                for (var prop in self) {
+                    delete self[prop];
+                }
+                nodes = deferred = self = data = o = null;
+            },
+            
+            process = function (e) {
+                deferred.resolve(e.data ? e.data.action : e, data);
+                close();
+            };
+            
+        this.data = function (d) {
+            data = d !== undefined ? d : {};
+            return this;
+        };
+        
+        this.getContentNode = function () {
+            return nodes.popup.find(".content");
+        };
+        
         this.text = function (str) {
             var p = nodes.popup.find(".content");
             p.find(".plain-text").remove();
@@ -72,7 +91,7 @@ define("io.ox/core/tk/dialogs", function () {
             nodes.popup.find(".controls").append(
                 $.button({
                     label: label,
-                    data: action,
+                    data: { action: action },
                     click: process
                 })
             );
@@ -107,11 +126,21 @@ define("io.ox/core/tk/dialogs", function () {
             });
             
             // apply dimensions
-            nodes.popup.css({
-                width: dim.width + "px",
-                height: dim.height + "px",
-                marginTop: 0 - ((dim.height + 60) / 2 >> 0) + "px"
-            });
+            if (o.center) {
+                // center vertically
+                nodes.popup.css({
+                    width: dim.width + "px",
+                    height: dim.height + "px",
+                    top: "50%",
+                    marginTop: 0 - ((dim.height + 60) / 2 >> 0) + "px"
+                });
+            } else {
+                // use fixed top position
+                nodes.popup.css({
+                    width: dim.width + "px",
+                    top: o.top || "0px"
+                });
+            }
             
             nodes.underlay.show();
             nodes.popup.show();
@@ -151,12 +180,15 @@ define("io.ox/core/tk/dialogs", function () {
             o.defaultAction = action;
             return this;
         };
+    };
+    
+    var CreateDialog = function (options) {
         
-        this.lightbox = function () {
-            o.underlayAction = "close";
-            o.defaultAction = "close";
-            return this;
-        };
+        options = options || {};
+        options.top = "50px";
+        options.center = false;
+        
+        Dialog.call(this, options);
     };
     
     var SidePopup = function (width) {
@@ -485,6 +517,7 @@ define("io.ox/core/tk/dialogs", function () {
     
     return {
         ModalDialog: Dialog,
+        CreateDialog: CreateDialog,
         SlidingPane: SlidingPane,
         SidePopup: SidePopup
     };
@@ -500,6 +533,18 @@ require(["io.ox/core/tk/dialogs"], function (dialogs) {
         .show()
         .done(function (action) {
             console.debug("Action", action);
+        });
+});
+
+require(["io.ox/core/tk/dialogs"], function (dialogs) {
+    new dialogs.CreateDialog()
+        .text(new Array(20).join("Lorem ipsum dolor sit amet, consetetur sadipscing elitr"))
+        .data({ id: 1234 })
+        .addButton("cancel", "Cancel")
+        .addButton("yep", "Yep")
+        .show()
+        .done(function (action, data) {
+            console.debug("Action", action, data);
         });
 });
 
