@@ -13,9 +13,9 @@
 
 define("io.ox/core/api/user",
     ["io.ox/core/http", "io.ox/core/api/factory"], function (http, apiFactory) {
-    
+
     "use strict";
-    
+
     // generate basic API
     var api = apiFactory({
         module: "user",
@@ -46,7 +46,7 @@ define("io.ox/core/api/user",
             }
         }
     });
-    
+
     api.getTextNode = function (id) {
         var node = document.createTextNode("");
         api.get({ id: id })
@@ -60,15 +60,15 @@ define("io.ox/core/api/user",
             });
         return node;
     };
-    
+
     api.getPictureURL = function (id) {
-        
+
         var deferred = $.Deferred(),
             url = ox.base + "/apps/themes/default/dummypicture.png",
             fail = function () {
                 deferred.resolve(url);
             };
-            
+
         api.get({ id: id })
             .done(function (data) {
                 // ask contact interface for picture
@@ -85,10 +85,10 @@ define("io.ox/core/api/user",
                 });
             })
             .fail(fail);
-        
+
         return deferred;
     };
-    
+
     api.getPicture = function (id) {
         var node = $("<div>"),
             clear = function () {

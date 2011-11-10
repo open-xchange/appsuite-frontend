@@ -12,9 +12,9 @@
  */
 
 define("io.ox/core/tk/dialogs", function () {
-    
+
     'use strict';
-    
+
     // scaffolds
     var underlay = $("<div/>").addClass("abs io-ox-dialog-underlay"),
         popup = $("<div/>").addClass("io-ox-dialog-popup")
@@ -24,22 +24,22 @@ define("io.ox/core/tk/dialogs", function () {
             .append(
                 $("<div/>").addClass("controls")
             );
-    
+
     var Dialog = function (options) {
-        
+
         var nodes = {
                 underlay: underlay.clone().hide().appendTo("body"),
                 popup: popup.clone().hide().appendTo("body")
             },
-            
+
             deferred = $.Deferred(),
-            
+
             closeViaEscapeKey,
-            
+
             self = this,
-            
+
             data = {},
-            
+
             o = _.extend({
                 underlayAction: null,
                 defaultAction: null,
@@ -49,7 +49,7 @@ define("io.ox/core/tk/dialogs", function () {
                 // width (px), height (px),
                 // maxWidth (px), maxHeight (px)
             }, options),
-            
+
             close = function () {
                 $(document).off("keydown", closeViaEscapeKey);
                 nodes.popup.empty().remove();
@@ -60,33 +60,33 @@ define("io.ox/core/tk/dialogs", function () {
                 }
                 nodes = deferred = self = data = o = null;
             },
-            
+
             process = function (e) {
                 deferred.resolve(e.data ? e.data.action : e, data);
                 close();
             };
-            
+
         this.data = function (d) {
             data = d !== undefined ? d : {};
             return this;
         };
-        
+
         this.getContentNode = function () {
             return nodes.popup.find(".content");
         };
-        
+
         this.text = function (str) {
             var p = nodes.popup.find(".content");
             p.find(".plain-text").remove();
             p.append($("<div>").addClass("plain-text").text(str || ""));
             return this;
         };
-        
+
         this.append = function (node) {
             nodes.popup.find(".content").append(node);
             return this;
         };
-        
+
         this.addButton = function (action, label) {
             nodes.popup.find(".controls").append(
                 $.button({
@@ -97,20 +97,20 @@ define("io.ox/core/tk/dialogs", function () {
             );
             return this;
         };
-        
+
         closeViaEscapeKey = function (e) {
             if (e.which === 27) {
                 process("cancel");
             }
         };
-        
+
         this.show = function () {
-            
+
             var dim = {
                 width: o.width || nodes.popup.width(),
                 height: o.height || nodes.popup.height()
             };
-            
+
             // limit width & height
             _(["width", "height"]).each(function (d) {
                 // apply explicit limit
@@ -124,7 +124,7 @@ define("io.ox/core/tk/dialogs", function () {
                     dim[d] = max;
                 }
             });
-            
+
             // apply dimensions
             if (o.center) {
                 // center vertically
@@ -141,22 +141,22 @@ define("io.ox/core/tk/dialogs", function () {
                     top: o.top || "0px"
                 });
             }
-            
+
             nodes.underlay.show();
             nodes.popup.show();
-            
+
             // fix content height in case async requests draw later
             var h1 = nodes.popup.height(),
                 h2 = nodes.popup.find(".controls").outerHeight(true);
             nodes.popup.find(".content").css("height", (h1 - h2) + "px");
-            
+
             if (o.easyOut) {
                 $(document).on("keydown", closeViaEscapeKey);
             }
-            
+
             return deferred;
         };
-        
+
         nodes.underlay.click(function () {
             if (o.underlayAction) {
                 process(o.underlayAction);
@@ -164,38 +164,38 @@ define("io.ox/core/tk/dialogs", function () {
                 process("cancel");
             }
         });
-        
+
         nodes.popup.click(function () {
             if (o.defaultAction) {
                 process(o.defaultAction);
             }
         });
-        
+
         this.setUnderlayAction = function (action) {
             o.underlayAction = action;
             return this;
         };
-        
+
         this.setDefaultAction = function (action) {
             o.defaultAction = action;
             return this;
         };
     };
-    
+
     var CreateDialog = function (options) {
-        
+
         options = options || {};
         options.top = "50px";
         options.center = false;
-        
+
         Dialog.call(this, options);
     };
-    
+
     var SidePopup = function (width) {
-        
+
         // default minimum width
         width = width || 400;
-        
+
         var processEvent,
             isProcessed,
             open,
@@ -204,7 +204,7 @@ define("io.ox/core/tk/dialogs", function () {
             closeByScroll,
             closeByClick,
             timer = null,
-            
+
             pane = $("<div>")
                 .addClass("io-ox-sidepopup-pane default-content-padding abs"),
             popup = $("<div>")
@@ -217,38 +217,38 @@ define("io.ox/core/tk/dialogs", function () {
                 .addClass("io-ox-sidepopup-arrow")
                 .append($("<div>").addClass("border"))
                 .append($("<div>").addClass("triangle")),
-            
+
             self = this;
-        
+
         // public nodes
         this.nodes = {};
         this.lastTrigger = null;
-        
+
         processEvent = function (e) {
             e.preventDefault();
         };
-        
+
         isProcessed = function (e) {
             return e.isDefaultPrevented();
         };
-        
+
         closeByEscapeKey = function (e) {
             if (e.which === 27) {
                 close(e);
             }
         };
-        
+
         closeByScroll = function (e) {
             close(e);
         };
-        
+
         closeByClick = function (e) {
             if (!isProcessed(e)) {
                 processEvent(e);
                 close(e);
             }
         };
-        
+
         close = function (e) {
             // remove handlers & avoid leaks
             $(document).off("keydown", closeByEscapeKey);
@@ -262,7 +262,7 @@ define("io.ox/core/tk/dialogs", function () {
                 popup.detach();
             }, 100);
         };
-        
+
         open = function (e, handler) {
             // get proper elements
             var my = $(this), current, zIndex, sidepopup;
@@ -280,33 +280,33 @@ define("io.ox/core/tk/dialogs", function () {
             if (self.lastTrigger === this) {
                 close(e);
             } else {
-                
+
                 // open siblings?
                 if (sidepopup) {
                     sidepopup.close();
                 }
-                
+
                 // remember as current trigger
                 self.lastTrigger = this;
                 self.nodes.closest.prop("sidepopup", self);
-                
+
                 // prevent default to avoid close
                 processEvent(e);
                 // clear timer
                 clearTimeout(timer);
-                
+
                 // add handlers to close popup
                 self.nodes.click.on("click", closeByClick);
                 self.nodes.closest.on("scroll", closeByScroll);
                 $(document).on("keydown", closeByEscapeKey);
-                
+
                 // decide for proper side
                 var docWidth = $(document).width(),
                     max = (docWidth * 0.50 >> 0) + 1,
                     w, distance, mode, right, left, pos,
                     parentPopup = my.parents(".io-ox-sidepopup").first(),
                     firstPopup = parentPopup.length === 0;
-                    
+
                 if (firstPopup) {
                     // get initial side
                     distance = my.offset().left + my.outerWidth() - (docWidth / 2 >> 0);
@@ -315,12 +315,12 @@ define("io.ox/core/tk/dialogs", function () {
                     // toggle side for next popup
                     mode = parentPopup.hasClass("right") ? "left" : "right";
                 }
-                
+
                 // min-width greater than max-width?
                 if (width > max) {
                     max = width;
                 }
-                
+
                 if (mode === "left") {
                     // pops up on the left side
                     w = my.offset().left - 25;
@@ -338,51 +338,51 @@ define("io.ox/core/tk/dialogs", function () {
                     right = 0;
                     left = pos;
                 }
-                
+
                 // convert to percent (nice for dynamic resizing)
                 left = !left ? "0" : (left / docWidth * 100 >> 0) + "%";
                 right = !right ? "0" : (right / docWidth * 100 >> 0) + "%";
-                
+
                 //pane.css("maxWidth", max + "px");
-                
+
                 popup.removeClass("left right")
                     .addClass(mode)
                     .css({ right: right, left: left, zIndex: zIndex });
-                
+
                 arrow.removeClass("left right")
                     .addClass(mode)
                     .css({ right: right, left: left, zIndex: zIndex + 1 });
-                
+
                 // call custom handler
                 (handler || $.noop).call(this, pane.empty(), e);
-                
+
                 // set arrow top
                 var halfHeight = (my.outerHeight(true) / 2 >> 0),
                     top = my.offset().top + halfHeight - self.nodes.target.offset().top;
                 arrow.css("top", top);
-                
+
                 // finally, add popup to proper element
                 self.nodes.target.append(popup).append(arrow);
             }
         };
-        
+
         this.delegate = function (node, selector, handler) {
             $(node).on("click", selector, function (e) {
                 open.call(this, e, handler);
             });
             return this;
         };
-        
+
         this.show = function (e, handler) {
             open.call(e.target, e, handler);
             return this;
         };
-        
+
         this.close = function (e) {
             close(e);
         };
     };
-    
+
     //TODO: Less C&P
     var pane = $('<div/>').addClass('abs io-ox-dialog-pane').append(
         $("<div/>").addClass("content")
@@ -391,42 +391,42 @@ define("io.ox/core/tk/dialogs", function () {
         $("<div/>").addClass("controls")
     );
 
-    
+
     var SlidingPane = function () {
         var self = this;
         var nodes = {
             pane: pane.clone().hide().appendTo('body'),
             relativeTo: null
         };
-        
+
         nodes.content = nodes.pane.find('.content');
         //console.log( nodes.content);
         nodes.controls = nodes.pane.find('.controls');
-        
+
         this.visible = false;
-        
+
         var deferred = $.Deferred(),
-        
+
         close = function () {
             self.visible = false;
             nodes.pane.fadeOut();
         },
-        
+
         process = function (e) {
             deferred.resolve(e.data);
             close();
         };
-        
+
         this.text = function (str) {
             nodes.content.text(str || "");
             return this;
         };
-        
+
         this.append = function (node) {
             nodes.content.append(node);
             return this;
         };
-        
+
         this.addButton = function (action, label) {
             nodes.controls.append(
                 $.button({
@@ -437,12 +437,12 @@ define("io.ox/core/tk/dialogs", function () {
             );
             return this;
         };
-        
+
         this.relativeTo = function (node) {
             nodes.relativeTo = $(node);
             return this;
         };
-        
+
         this.toggle = function () {
             if (this.visible) {
                 process("toggeled");
@@ -450,26 +450,26 @@ define("io.ox/core/tk/dialogs", function () {
                 this.show();
             }
         };
-        
+
         this.show = function () {
             this.visible = true;
             var offset, top, left, height, width, windowHeight, windowWidth;
-            
+
             windowHeight = $(window).height();
             windowWidth = $(window).width();
-            
+
             // Force Rendering for shrink-to-fit size detection
             // There has to be a cleverer way to do this
             var oldOpacity = nodes.pane.css("opacity");
             nodes.pane.css("opacity", "0.001");
             nodes.pane.show();
-            
+
             height = nodes.controls.outerHeight(true) + nodes.content.outerHeight(true) + 2;
             //width =  Math.max(nodes.controls.outerWidth(true), nodes.content.outerWidth(true)) + 2;
             width = nodes.content.find('.block').outerWidth(true) + 20;
             nodes.pane.hide();
             nodes.pane.css("opacity", oldOpacity);
-            
+
             if (nodes.relativeTo) {
                 // Depending on where our anchor element is, position the pane
                 offset = nodes.relativeTo.offset();
@@ -484,9 +484,9 @@ define("io.ox/core/tk/dialogs", function () {
                         top = 0;
                     }
                 }
-                
+
                 // Is the anchor to the left or the right of the center?
-                
+
                 if (offset.left < (windowWidth / 2)) {
                     // It's on the left, so we align the left sides
                     left = offset.left;
@@ -494,7 +494,7 @@ define("io.ox/core/tk/dialogs", function () {
                     // It's on the right, so we align the right sides
                     left = offset.left + nodes.relativeTo.outerWidth() - width;
                 }
-                
+
                 nodes.pane.css({
                     height: height + "px",
                     width: width + "px",
@@ -514,7 +514,7 @@ define("io.ox/core/tk/dialogs", function () {
             return deferred;
         };
     };
-    
+
     return {
         ModalDialog: Dialog,
         CreateDialog: CreateDialog,

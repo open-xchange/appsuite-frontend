@@ -14,33 +14,33 @@
  */
 
 define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (http, event) {
-    
+
     "use strict";
-    
+
     // really stupid caching for speed
     var all_cache = {},
         get_cache = {};
-    
+
     var DAY = 60000 * 60 * 24;
-    
+
     var api = {
-        
+
         get: function (o) {
-            
+
             o = o || {};
-            
+
             var params = {
                 action: "get",
                 id: o.id,
                 folder: o.folder || o.folder_id
             };
-            
+
             if (o.recurrence_position !== null) {
                 params.recurrence_position = o.recurrence_position;
             }
-            
+
             var key = o.folder + "." + o.id + "." + (o.recurrence_position || 0);
-            
+
             if (get_cache[key] === undefined) {
                 return http.GET({
                         module: "calendar",
@@ -53,18 +53,18 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 return $.Deferred().resolve(get_cache[key]);
             }
         },
-        
+
         getAll: function (o) {
-            
+
             o = $.extend({
                 start: _.now(),
                 end: _.now() + 28 * 1 * DAY
             }, o || {});
-            
+
             // round start & end date
             o.start = (o.start / DAY >> 0) * DAY;
             o.end = (o.end / DAY >> 0) * DAY;
-            
+
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
                     action: "all",
@@ -76,11 +76,11 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                     sort: "201",
                     order: "asc"
                 };
-            
+
             if (o.folder !== undefined) {
                 params.folder = o.folder;
             }
-            
+
             if (all_cache[key] === undefined) {
                 return http.GET({
                         module: "calendar",
@@ -93,7 +93,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 return $.Deferred().resolve(all_cache[key]);
             }
         },
-        
+
         getList: function (ids) {
             return http.fixList(ids,
                 http.PUT({
@@ -105,7 +105,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 })
             );
         },
-        
+
         search: function (query) {
             return http.PUT({
                     module: "calendar",
@@ -120,9 +120,9 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 });
         }
     };
-    
+
     event.Dispatcher.extend(api);
-    
+
     // bind to global refresh
     ox.bind("refresh", function () {
         // clear caches
@@ -130,6 +130,6 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
         // trigger local refresh
         api.trigger("refresh.all");
     });
-    
+
     return api;
 });
