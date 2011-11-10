@@ -24,7 +24,7 @@ define("io.ox/contacts/api",
         requests: {
             all: {
                 action: "all",
-                folder:  "11179",//6
+                folder:  "6",
                 columns: "20,1,500,502",
                 sort: "607", // magic field
                 order: "asc"
@@ -55,47 +55,55 @@ define("io.ox/contacts/api",
         }
     });
     
-    api.newContact = function (formdata) {
-                        return http.PUT({module: "contacts", params: {action: "new"}, data: formdata, datatype: "text"})
-                        .done(_.lfo(function () {
-                            api.caches.all.clear();
-                            api.caches.list.clear();
-                            api.trigger("refresh.all");
-                        }))
-                        .fail(function () {
-                            console.log("connection lost");
-                        }); //what to do if fails?
-                    };
+    api.create = function (formdata) {
+        return http.PUT({
+            module: "contacts",
+            params: {action: "new"},
+            data: formdata,
+            datatype: "text"
+        })
+        .done(function () {
+            api.caches.all.clear(); //TODO considere proper folder
+            api.trigger("refresh.all");
+        })
+        .fail(function () {
+            console.log("connection lost");//what to do if fails?
+        });
+    };
                     
-    api.editContact =  function (formdata) {
-        //console.log(formdata);
-                            return http.PUT({module: "contacts", params: {action: "update", id: formdata.id, folder: formdata.folderId, timestamp: formdata.timestamp},
-                             data: formdata, datatype: "text"})
-                            .done(_.lfo(function () {
-                                api.caches.all.clear();
-                                api.caches.get.clear();
-                                api.caches.list.clear();
-                                api.trigger("refresh.all");
-                            }))
-                            .fail(function () {
-                                console.log("connection lost");
-                            }); //what to do if fails?
-                        };
-                        
-    api.deleteContact =  function (formdata) {
-                                console.log(formdata);
-                                return http.PUT({module: "contacts", params: {action: "delete", timestamp: formdata.last_modified},
-                                data: {folder: formdata.folder_id, id: formdata.id}, datatype: "text"})
-                               .done(_.lfo(function () {
-                                    api.caches.all.clear();
-                                    api.caches.list.clear();
-                                    api.trigger("refresh.all");
-                                }))
-                               .fail(function () {
-                                    console.log("connection lost");
-                                }); //what to do if fails?
-                                //alert("weg");
-                            };
+    api.update =  function (formdata) {
+        return http.PUT({
+            module: "contacts",
+            params: {action: "update", id: formdata.id, folder: formdata.folderId, timestamp: formdata.timestamp},
+            data: formdata,
+            datatype: "text"
+        })
+        .done(function () {
+            api.caches.get.clear();
+            api.caches.list.clear();
+            api.trigger("refresh.list");
+        })
+        .fail(function () {
+            console.log("connection lost");//what to do if fails?
+        });
+    };
+                       
+    api.remove =  function (formdata) {
+        return http.PUT({
+            module: "contacts",
+            params: {action: "delete", timestamp: formdata.last_modified},
+            data: {folder: formdata.folder_id, id: formdata.id},
+            datatype: "text"
+        })
+       .done(function () {
+            api.caches.all.clear();
+            api.caches.list.clear();
+            api.trigger("refresh.all");
+        })
+       .fail(function () {
+            console.log("connection lost");//what to do if fails?
+        });
+    };
                  
     return api;
     
