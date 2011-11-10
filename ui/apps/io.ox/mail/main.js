@@ -20,9 +20,9 @@ define("io.ox/mail/main",
      "io.ox/mail/actions",
      "css!io.ox/mail/style.css"
     ], function (util, api, VGrid, viewDetail, tmpl) {
-    
+
     'use strict';
-    
+
     var autoResolveThreads = function (e) {
         // get mail api
         var self = $(this);
@@ -32,7 +32,7 @@ define("io.ox/mail/main",
             self.replaceWith(viewDetail.draw(data));
         });
     };
-    
+
     // application object
     var app = ox.ui.createApp(),
         // app window
@@ -43,28 +43,28 @@ define("io.ox/mail/main",
         // nodes
         left,
         right;
-    
+
     // launcher
     app.setLauncher(function () {
-    
+
         // get window
         win = ox.ui.createWindow({
             title: "Inbox",
             toolbar: true,
             search: true
         });
-        
+
         win.addClass("io-ox-mail-main");
-        
+
         // toolbar
         win.addButton({
             label: "New Mail",
             action: util.createNewMailDialog
         })
         .css("marginRight", "40px");
-        
+
         app.setWindow(win);
-        
+
         // left panel
         left = $("<div/>")
             .addClass("leftside border-right")
@@ -72,7 +72,7 @@ define("io.ox/mail/main",
                 width: gridWidth + "px"
             })
             .appendTo(win.nodes.main);
-        
+
         // right panel
         $("<div/>")
             .css({ left: gridWidth + 1 + "px" })
@@ -81,46 +81,46 @@ define("io.ox/mail/main",
                 right = $("<div/>").addClass("abs")
             )
             .appendTo(win.nodes.main);
-        
+
         // grid
         grid = new VGrid(left);
-        
+
         // add template
         grid.addTemplate(tmpl.main);
-        
+
         // all request
         grid.setAllRequest(function () {
             return api.getAllThreads();
         });
-        
+
         // list request
         grid.setListRequest(function (ids) {
             return api.getThreads(ids);
         });
-        
+
         // search: all request
         grid.setAllRequest("search", function () {
             return api.search(win.search.query);
         });
-        
+
         // search: list request
         grid.setListRequest("search", function (ids) {
             return api.getList(ids);
         });
-        
+
         /*
          * Search handling
          */
         win.bind("search", function (q) {
             grid.setMode("search");
         });
-        
+
         win.bind("cancel-search", function () {
             grid.setMode("all");
         });
-         
+
         var showMail, drawThread, drawMail, drawFail;
-        
+
         showMail = function (obj) {
             // be busy
             right.busy(true);
@@ -138,7 +138,7 @@ define("io.ox/mail/main",
                     .fail(_.lfo(drawFail, obj));
             }
         };
-        
+
         drawThread = function (list, mail) {
             // loop over thread - use fragment to be fast for tons of mails
             var i = 0, obj, frag = document.createDocumentFragment();
@@ -162,11 +162,11 @@ define("io.ox/mail/main",
             };
             right.on("scroll", autoResolve);
         };
-        
+
         drawMail = function (data) {
             right.idle().empty().append(viewDetail.draw(data));
         };
-        
+
         drawFail = function (obj) {
             right.idle().empty().append(
                 $.fail("Connection lost.", function () {
@@ -174,7 +174,7 @@ define("io.ox/mail/main",
                 })
             );
         };
-        
+
         /*
          * Selection handling
          */
@@ -185,30 +185,30 @@ define("io.ox/mail/main",
                 right.empty();
             }
         });
-        
+
         win.bind("show", function () {
             grid.selection.keyboard(true);
         });
         win.bind("hide", function () {
             grid.selection.keyboard(false);
         });
-        
+
         // bind all refresh
         api.bind("refresh.all", function (data) {
             grid.refresh();
         });
-        
+
         // bind list refresh
         api.bind("refresh.list", function (data) {
             grid.repaint();
         });
-        
+
         // go!
         win.show(function () {
             grid.paint();
         });
     });
-    
+
     return {
         getApp: app.getInstance
     };

@@ -13,22 +13,23 @@
  *
  */
 
-define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
-    
+define("io.ox/core/desktop",
+    ["io.ox/core/event", "io.ox/core/extensions"], function (event, ext) {
+
     "use strict";
-    
+
     /**
      * Quick settings for application windows
      */
     $.quickSettings = (function () {
-        
+
         return function (containerSelector, configSelector, link) {
-            
+
             var container = $(containerSelector);
             var config = $(configSelector);
-            
+
             link = $(link);
-            
+
             if (!config.hasClass("quick-settings")) {
                 // adjust container
                 container.css({
@@ -48,7 +49,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     minHeight: "100px"
                 });
             }
-            
+
             // rebind events
             link.off("click")
                 .on("dblclick", false)
@@ -72,11 +73,11 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 });
         };
     }());
-    
+
     /**
      * Core UI
      */
-    
+
     // current window
     var currentWindow = null;
     // ref to core screen
@@ -130,22 +131,22 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
             }
             return node;
         };
-        
+
     // show
     core.show();
-    
+
     /**
      * Create app
      */
     ox.ui.createApp = (function () {
-        
+
         function App(options) {
-            
+
             var opt = $.extend({
                 title: "",
                 icon: null
             }, options || {});
-            
+
             // dummy function
             var dummyFn = function () {
                     return $.Deferred().resolve();
@@ -162,36 +163,36 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 running = false,
                 // self
                 self = this;
-            
+
             this.getInstance = function () {
                 return self; // not this!
             };
-            
+
             this.setLaunchBarIcon = function (node) {
                 launchbarIcon = $(node);
                 return this;
             };
-            
+
             this.getLaunchBarIcon = function () {
                 return launchbarIcon;
             };
-            
+
             this.setLauncher = function (fn) {
                 launchFn = fn;
                 return this;
             };
-            
+
             this.setQuit = function (fn) {
                 quitFn = fn;
                 return this;
             };
-            
+
             this.setWindow = function (w) {
                 win = w;
                 win.app = this;
                 return this;
             };
-            
+
             this.launch = function () {
                 if (!running) {
                     // mark as running
@@ -204,14 +205,14 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     }
                     // go!
                     return (launchFn() || $.Deferred().resolve());
-                    
+
                 } else if (win) {
                     // toggle app window
                     win.show();
                     return $.Deferred().resolve();
                 }
             };
-            
+
             this.quit = function () {
                 // call quit function
                 var def = quitFn() || $.Deferred().resolve();
@@ -234,15 +235,15 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 });
             };
         }
-        
+
         return function (options) {
             return new App(options);
         };
-        
+
     }());
-    
+
     ox.ui.windowManager = (function () {
-        
+
         var that = event.Dispatcher.extend({}),
             // list of windows
             windows = [],
@@ -252,21 +253,21 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     return count + (obj.state.open ? 1 : 0);
                 }, 0);
             };
-        
+
         that.bind("window.open", function (win) {
             if (_(windows).indexOf(win) === -1) {
                 windows.push(win);
             }
         });
-        
+
         that.bind("window.beforeshow", function (win) {
             that.trigger("empty", false);
         });
-        
+
         that.bind("window.close window.quit", function (win, type) {
-            
+
             var pos = _(windows).indexOf(win), i, $i, found = false;
-            
+
             if (pos !== -1) {
                 // remove?
                 if (type === "window.quit") {
@@ -286,14 +287,14 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     }
                 }
             }
-            
+
             that.trigger("empty", numOpen() === 0);
         });
-        
+
         return that;
-        
+
     }());
-    
+
     /**
      * Create window
      */
@@ -301,15 +302,15 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
 
         // window guid
         var guid = 0,
-            
+
             pane = $("#io-ox-windowmanager-pane"),
-            
+
             getX = function (node) {
                 return node.data("x") || 0;
             },
-            
+
             scrollTo = function (node, cont) {
-                
+
                 var children = pane.find(".window-container-center"),
                     center = node.find(".window-container-center").show(),
                     index = node.data("index") || 0,
@@ -344,23 +345,24 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     _.call(cont);
                 }
             },
-            
+
             // window class
-            Window = function (id) {
-                
+            Window = function (id, name) {
+
                 this.id = id;
+                this.name = name;
                 this.nodes = {};
                 this.search = { query: "" };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
-                
+
                 var quitOnClose = false,
                     // views
                     views = { main: true },
                     currentView = "main",
                     self = this,
                     firstShow = true;
-                
+
                 this.show = function (cont) {
                     if (currentWindow !== this) {
                         // show
@@ -377,6 +379,11 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         if (this.app !== null) {
                             this.app.getLaunchBarIcon().addClass("active");
                         }
+
+                        // update toolbar
+                        ext.point(this.name + "/toolbar")
+                            .invoke('draw', this.nodes.toolbar.empty(), {});
+
                         ox.ui.windowManager.trigger("window.beforeshow", self);
                         node.show();
                         scrollTo(node, function () {
@@ -399,7 +406,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         _.call(cont);
                     }
                 };
-                
+
                 this.hide = function () {
                     if (this.app !== null) {
                         this.app.getLaunchBarIcon().removeClass("active");
@@ -417,7 +424,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         currentWindow = null;
                     }
                 };
-                
+
                 this.toggle = function () {
                     if (currentWindow === this) {
                         this.hide();
@@ -425,7 +432,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         this.show();
                     }
                 };
-                
+
                 this.close = function () {
                     if (quitOnClose && this.app !== null) {
                         this.app.quit()
@@ -442,7 +449,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         ox.ui.windowManager.trigger("window.close", this);
                     }
                 };
-                
+
                 this.destroy = function () {
                     if (currentWindow === this) {
                         currentWindow = null;
@@ -456,13 +463,13 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     this.nodes = null;
                     this.show = $.noop;
                 };
-                
+
                 this.setQuitOnClose = function (flag) {
                     quitOnClose = !!flag;
                 };
-                
+
                 var title = "";
-                
+
                 function applyTitle() {
                     var spans = self.nodes.title.find("span");
                     spans.eq(0).empty().append(
@@ -471,31 +478,31 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                             title
                     );
                 }
-                
+
                 this.setTitle = function (t) {
                     title = t;
                     applyTitle();
                 };
-                
+
                 this.addClass = function () {
                     var o = this.nodes.outer;
                     return o.addClass.apply(o, arguments);
                 };
-                
+
                 this.addButton = function (options) {
-                    
+
                     var o = $.extend({
                         label: "Action",
                         action: $.noop
                     }, options || {});
-                    
+
                     return $("<div>")
                         .addClass("io-ox-toolbar-link")
                         .text(String(o.label))
                         .on("click", o.action)
                         .appendTo(this.nodes.toolbar);
                 };
-                
+
                 this.addView = function (id) {
                     if (this.nodes[id] === undefined) {
                         var node = $("<div/>")
@@ -504,7 +511,7 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         return (this.nodes[id] = views[id] = node);
                     }
                 };
-                
+
                 this.setView = function (id) {
                     if (id !== currentView) {
                         if (views[id] !== undefined) {
@@ -514,15 +521,15 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     }
                 };
             };
-           
+
         // window factory
         return function (options) {
-            
+
             var opt = $.extend({
                 id: "window-" + guid,
+                name: "",
                 width: 0,
                 title: "Window #" + guid,
-                subtitle: "",
                 search: false,
                 toolbar: false,
                 settings: false,
@@ -534,12 +541,12 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                 width = meta[0],
                 unit = meta[1],
                 // create new window instance
-                win = new Window(opt.id),
+                win = new Window(opt.id, opt.name),
                 // close window
                 close = function () {
                     win.close();
                 };
-                
+
             // window container
             win.nodes.outer = $("<div/>")
             .attr({
@@ -564,7 +571,6 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         win.nodes.title = $("<div/>")
                         .addClass("window-title")
                         .append($("<span/>"))
-                        .append($("<span/>").addClass("subtitle"))
                     )
                     .append(
                         // toolbar
@@ -607,10 +613,10 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     )
                 )
             );
-            
+
             // add dispatcher
             event.Dispatcher.extend(win);
-            
+
             // search?
             if (opt.search) {
                 // search
@@ -677,13 +683,13 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                         }
                         win.trigger("search", query);
                     };
-                    
+
                 $("<div/>")
                     .addClass("searchfield-wrapper")
                     .css({ "float": "right" })
                     .append(
                         $("<input/>", { type: "search", id: "autocomplete", placeholder: "Search...", size: "40" })
-                            
+
                             .on("keypress", function (e) {
                                 e.stopPropagation();
                             })
@@ -707,32 +713,32 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                             })
                     )
                     .prependTo(win.nodes.toolbar);
-               
-                
+
+
             }
-          
+
             // fix height/position/appearance
             if (opt.chromeless) {
-                
+
                 win.nodes.head.remove();
                 win.nodes.toolbar.remove();
                 win.nodes.body.css("top", "0px");
-                
+
             } else {
-                
+
                 // add close handler
                 win.nodes.closeButton.on("click", close);
-                
+
                 // set title
                 win.setTitle(opt.title);
-                
+
                 if (opt.toolbar || opt.search) {
                     win.nodes.head.addClass("larger");
                     win.nodes.body.addClass("movedown");
                 } else {
                     win.nodes.toolbar.hide();
                 }
-                
+
                 // quick settings?
                 if (opt.settings) {
                     $.quickSettings(win.nodes.main, win.nodes.settings, win.nodes.settingsButton);
@@ -740,18 +746,18 @@ define("io.ox/core/desktop", ["io.ox/core/event"], function (event) {
                     win.nodes.settingsButton.hide();
                 }
             }
-            
+
             // inc
             guid++;
-            
+
             // return window object
             return win;
         };
-        
+
     }());
-    
+
     return {
         addLauncher: addLauncher
     };
-    
+
 });
