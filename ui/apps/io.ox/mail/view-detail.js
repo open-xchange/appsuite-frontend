@@ -17,27 +17,27 @@ define("io.ox/mail/view-detail",
      "io.ox/mail/util",
      "io.ox/mail/actions"
     ], function (ext, util, actions) {
-        
+
     'use strict';
-    
+
     // define global iframe resize handler
     window.iframeResize = function (guid, body) {
         var height = $(body).outerHeight(true);
         $("#tmp-iframe-" + guid).css("height", height + 20 + "px");
     };
-    
+
     var that = {
-            
+
         getContent: function (data) {
-            
+
             if (!data || !data.attachments) {
                 return $();
             }
-            
+
             var att = data.attachments, i = 0, $i = att.length,
                 text = null, html = null,
                 content = $("<div/>").addClass("content");
-            
+
             for (; i < $i; i++) {
                 if (html === null && /^text\/html$/i.test(att[i].content_type)) {
                     html = att[i].content;
@@ -45,12 +45,12 @@ define("io.ox/mail/view-detail",
                     text = att[i].content;
                 }
             }
-            
+
             // HTML content?
             if (html !== null) {
-                
+
                 var iframeGUID = _.now();
-                
+
                 $("<iframe/>", {
                         id: "tmp-iframe-" + iframeGUID,
                         src: "blank.html",
@@ -84,10 +84,10 @@ define("io.ox/mail/view-detail",
                         }, 1);
                     })
                     .appendTo(content);
-                
+
             }
             else if (text !== null) {
-                
+
                 content
                     .addClass("plain-text")
                     .html(
@@ -99,7 +99,7 @@ define("io.ox/mail/view-detail",
                             // remove split block quotes
                             .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, "<br/><br/>")
                     );
-                
+
                 // get contents to split long character sequences for better wrapping
                 content.contents().each(function (i) {
                     var node = $(this), text = node.text(), length = text.length;
@@ -107,7 +107,7 @@ define("io.ox/mail/view-detail",
                         node.text(text.replace(/(\S{60})/g, "$1\u200B")); // zero width space
                     }
                 });
-                
+
                 // collapse block quotes
                 content.find("blockquote").each(function () {
                     var quote = $(this);
@@ -116,27 +116,27 @@ define("io.ox/mail/view-detail",
             }
             return content;
         },
-        
+
         drawScaffold: function (obj, resolver) {
             return $("<div/>")
                 .addClass("mail-detail page")
                 .busy()
                 .on("resolve", obj, resolver);
         },
-        
+
         draw: function (data) {
-            
+
             if (!data) {
                 return $("<div/>");
             }
-            
+
             var node = $("<div/>").addClass("mail-detail page");
             ext.point('io.ox/mail/detail').invoke('draw', node, data);
-            
+
             return node;
         }
     };
-    
+
     //extensions
     ext.point('io.ox/mail/detail').extend({
         index: 120,
@@ -206,7 +206,7 @@ define("io.ox/mail/view-detail",
         draw: function (data) {
             var showCC = data.cc && data.cc.length > 0,
             showTO = (data.to && data.to.length > 1) || showCC;
-            
+
             this.append(
                 showTO ?
                     $("<div/>")
@@ -237,7 +237,7 @@ define("io.ox/mail/view-detail",
                 $i = (data.attachments || []).length,
                 attachments = [],
                 hasAttachments = false;
-            
+
             // get non-inline attachments
             for (; i < $i; i++) {
                 if (data.attachments[i].disp === "attachment") {
@@ -261,13 +261,13 @@ define("io.ox/mail/view-detail",
             );
         }
     });
-    
+
     ext.point('io.ox/mail/detail').extend(new ext.InlineLinks({
         index: 170,
         id: 'inline-links',
         ref: 'io.ox/core/mail/links/inline'
     }));
-    
+
     ext.point('io.ox/mail/detail').extend({
         index: 200,
         id: 'content',
@@ -277,6 +277,6 @@ define("io.ox/mail/view-detail",
             );
         }
     });
-    
+
     return that;
 });
