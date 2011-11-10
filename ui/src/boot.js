@@ -456,5 +456,10 @@ $(document).ready(function () {
         }
     }
     
+    // handle document visiblity
+    $(window).on("blur focus", function (e) {
+            ox.windowState = e.type === "blur" ? "background" : "foreground";
+        });
+    
     boot();
 });

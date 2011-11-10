@@ -36,12 +36,7 @@ define("io.ox/core/tk/dialogs", function () {
             
             closeViaEscapeKey,
             
-            close = function () {
-                $(document).off("keydown", closeViaEscapeKey);
-                nodes.popup.remove();
-                nodes.underlay.remove();
-                nodes = deferred = null;
-            },
+            self = this,
             
             data = {},
             
@@ -54,6 +49,17 @@ define("io.ox/core/tk/dialogs", function () {
                 // width (px), height (px),
                 // maxWidth (px), maxHeight (px)
             }, options),
+            
+            close = function () {
+                $(document).off("keydown", closeViaEscapeKey);
+                nodes.popup.empty().remove();
+                nodes.underlay.remove();
+                // self destruction
+                for (var prop in self) {
+                    delete self[prop];
+                }
+                nodes = deferred = self = data = o = null;
+            },
             
             process = function (e) {
                 deferred.resolve(e.data ? e.data.action : e, data);
@@ -172,12 +178,6 @@ define("io.ox/core/tk/dialogs", function () {
         
         this.setDefaultAction = function (action) {
             o.defaultAction = action;
-            return this;
-        };
-        
-        this.lightbox = function () {
-            o.underlayAction = "close";
-            o.defaultAction = "close";
             return this;
         };
     };

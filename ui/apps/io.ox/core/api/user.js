@@ -61,14 +61,14 @@ define("io.ox/core/api/user",
         return node;
     };
     
-    api.getPicture = function (id) {
-        var node = $("<div>")
-            .css("backgroundImage", "url(" + ox.base + "/apps/themes/default/dummypicture.png)"),
-            clear = function () {
-                _.defer(function () { // use defer! otherwise we return null on cache hit
-                    node = null; // don't leak
-                });
+    api.getPictureURL = function (id) {
+        
+        var deferred = $.Deferred(),
+            url = ox.base + "/apps/themes/default/dummypicture.png",
+            fail = function () {
+                deferred.resolve(url);
             };
+            
         api.get({ id: id })
             .done(function (data) {
                 // ask contact interface for picture
@@ -76,13 +76,31 @@ define("io.ox/core/api/user",
                     contactsAPI.get({ id: data.contact_id, folder: data.folder_id })
                     .done(function (data) {
                         if (data.image1_url) {
-                            node.css("backgroundImage", "url(" + data.image1_url + ")");
+                            deferred.resolve(data.image1_url);
+                        } else {
+                            fail();
                         }
                     })
-                    .always(clear);
+                    .fail(fail);
                 });
             })
-            .fail(clear);
+            .fail(fail);
+        
+        return deferred;
+    };
+    
+    api.getPicture = function (id) {
+        var node = $("<div>"),
+            clear = function () {
+                _.defer(function () { // use defer! otherwise we return null on cache hit
+                    node = clear = null; // don't leak
+                });
+            };
+        api.getPictureURL(id)
+            .done(function (url) {
+                node.css("backgroundImage", "url(" + url + ")");
+            })
+            .always(clear);
         return node;
     };
 
