@@ -349,6 +349,7 @@ docFile("demo", "Demo Steps");
 docFile("extensions", "Extension Points");
 docFile("libs", "External Libs");
 docFile("features", "Features");
+docFile("development_guide", "UI Development Style Guide");
 docFile("vgrid", "VGrid");
 
 var indexFiles = ["lib/header.html", "index.html",
