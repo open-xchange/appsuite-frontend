@@ -314,10 +314,31 @@ define("io.ox/conversations/main",
             )
             .appendTo(right);
 
-        var showChat = function (obj) {
-            pane.empty();
+        var showChat = function (data) {
+            // clear messages
+            pane.idle().empty();
+            // add subject
+            pane.append(
+                $.inlineEdit()
+                .text(data.subject || "No subject")
+                .css({
+                    fontWeight: "bold",
+                    fontSize: "14pt",
+                    color: "#aaa",
+                    lineHeight: "1.5em",
+                    width: "500px",
+                    marginBottom: "1em",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis"
+                })
+                .on("update", function (e, subject) {
+                    api.update(data.id, { subject: subject });
+                })
+            );
+            // focus textarea
             textarea.val("").focus();
-            startPolling(obj.id);
+            startPolling(data.id);
         };
 
         /*
@@ -325,7 +346,9 @@ define("io.ox/conversations/main",
          */
         grid.selection.bind("change", function (selection) {
             if (selection.length === 1) {
-                showChat(selection[0]);
+                pane.busy();
+                api.get({ id: selection[0].id })
+                    .done(_.lfo(showChat));
             } else {
                 pane.empty();
             }

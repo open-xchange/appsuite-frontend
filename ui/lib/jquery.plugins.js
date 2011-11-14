@@ -14,11 +14,11 @@
  */
 
 (function () {
-    
+
     "use strict";
 
     $.button = function (options) {
-        
+
         // options
         var opt = $.extend({
             label: "",
@@ -30,15 +30,15 @@
             // other options:
             // tabIndex, id, mousedown
         }, options || {});
-        
+
         // class name
         var className = "io-ox-button" + (!opt.enabled ? " disabled" : "");
-        
+
         if (opt.theme === "dark") {
             // dark theme
             className += " dark";
         }
-        
+
         // create text node
         var text;
         if (opt.label.nodeType === 3) {
@@ -47,27 +47,27 @@
         } else {
             text = document.createTextNode(opt.label);
         }
-        
+
         // create button
         var button = $("<button/>").addClass(className).append(
             $("<span/>").append(text)
         ).on(
             "click", opt.data, opt.click
         );
-        
+
         // add id?
         if (opt.id !== undefined) {
             button.attr("id", opt.id);
         }
-        
+
         // add tabindex?
         if (opt.tabIndex !== undefined) {
             button.attr("tabindex", opt.tabIndex);
         }
-        
+
         return button;
     };
-    
+
     $.fn.busy = function (empty) {
         return this.each(function () {
             var self = $(this);
@@ -80,7 +80,7 @@
             }, 200));
         });
     };
-    
+
     $.fn.idle = function () {
         return this.each(function () {
             var self = $(this);
@@ -88,15 +88,15 @@
             self.removeClass("io-ox-busy");
         });
     };
-    
+
     $.fn.intoViewport = function (node) {
-    
+
         if (!node || this.length === 0) {
             return this;
         }
-        
+
         try {
-            
+
             // get pane
             var pane = $(node),
                 // get pane height
@@ -120,16 +120,16 @@
                     pane.scrollTop(y1 + top + h - y2);
                 }
             }
-            
+
         } catch (e) {
             // IE sometimes crashes
             // even Chrome might get in trouble during ultra fast scrolling
             console.error("$.fn.intoViewport", this, e);
         }
-        
+
         return this;
     };
-    
+
     // center content via good old stupid table stuff
     $.center = function (stuff) {
         // probably does not run in IE properly
@@ -137,7 +137,7 @@
             .addClass("abs io-ox-center")
             .append($("<div/>").append(stuff));
     };
-    
+
     $.fail = function (msg, retry) {
         var tmp = $("<span/>").addClass("io-ox-fail").text(msg);
         if (retry) {
@@ -153,9 +153,9 @@
         }
         return $.center(tmp);
     };
-    
+
     // simple shake effect
-    
+
     $.fn.shake = function (num, dist, d) {
         // defaults
         num = num || 4;
@@ -176,11 +176,61 @@
         }
         return def;
     };
-    
+
     $.txt = function (str) {
         return document.createTextNode(str);
     };
-    
+
+    $.inlineEdit = function () {
+
+        var restore, blur, key, click;
+
+        restore = function (node, text) {
+            node.text(text).insertBefore(this);
+            $(this).remove();
+        };
+
+        blur = function (e) {
+            restore.call(this, e.data.node, $(this).val());
+        };
+
+        key = function (e) {
+            var val;
+            if (e.which === 13) {
+                // enter = update
+                if ((val = $.trim($(this).val()))) {
+                    restore.call(this, e.data.node, val);
+                    e.data.node.trigger("update", val);
+                }
+            } else if (e.which === 27) {
+                // escape = cancel
+                restore.call(this, e.data.node, e.data.text);
+            }
+        };
+
+        click = function (e) {
+            // create input field as replacement for current element
+            var self = $(this);
+            $('<input type="text" class="nice-input">')
+                .css({
+                    width: self.width() + "px",
+                    fontSize: self.css("fontSize"),
+                    fontWeight: self.css("fontWeight"),
+                    lineHeight: self.css("lineHeight"),
+                    marginBottom: self.css("marginBottom")
+                })
+                .val(self.text())
+                .on("keydown", { node: self, text: self.text() }, key)
+                .on("blur", { node: self }, blur)
+                .insertBefore(self)
+                .focus()
+                .select();
+            self.detach();
+        };
+
+        return $('<div>').on("dblclick", click);
+    };
+
 }());
 
 

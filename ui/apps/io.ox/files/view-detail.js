@@ -12,29 +12,31 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  *
  */
- 
+
 // TODO: Render Versions
 
 define("io.ox/files/view-detail",
-    ["io.ox/core/extensions", "io.ox/core/i18n"], function (ext, i18n) {
-    
+    ["io.ox/core/extensions",
+     "io.ox/core/i18n",
+     "io.ox/files/actions"], function (ext, i18n) {
+
     "use strict";
-    
+
     var draw = function (file) {
         file.url = ox.ajaxRoot + "/infostore?action=document&id=" + file.id +
             "&folder=" + file.folder_id + "&session=" + ox.session; // TODO: Put this somewhere in the model
-        
+
         // container & title
         var element = $("<div>").addClass("file-details")
             .append($("<div>").addClass("title clear-title").text(file.title));
-        
+
         // Basic Info
         (function () {
             var container = $("<div/>").addClass("basicInfo");
             var line = $("<div/>");
             container.append(line);
             element.append(container);
-            
+
             ext.point("io.ox/files/details/basicInfo").each(function (extension) {
                 var count = 0;
                 _.each(extension.fields, function (index, field) {
@@ -49,35 +51,12 @@ define("io.ox/files/view-detail",
                     }
                 });
             });
+
+            ext.point("io.ox/files/details").invoke("draw", line, file);
         }());
-        
-        // Buttons
-        
-        (function () {
-            var container = $("<div/>").addClass("buttons");
-            var line = $("<div/>");
-            
-            container.append(line);
-            element.append(container);
-            
-            var count = 0;
-            ext.point("io.ox/files/details/actions").each(function (extension) {
-                var action = function () {
-                    extension.action(file);
-                };
-                line.append($("<a/>").text(extension.label).attr("href", "#").click(action));
-                count++;
-                if (count === 5) {
-                    count = 0;
-                    line = $("<div/>");
-                    container.append(line);
-                }
-            });
-        }());
-        
-        
+
         // Content Preview, if available
-        
+
         (function () {
             if (!file.filename) {
                 return;
@@ -90,12 +69,12 @@ define("io.ox/files/view-detail",
                 size: file.file_size,
                 dataURL: file.url
             };
-            
+
             ext.point("io.ox/files/details/preview").invoke("draw", node, [ fileDescription, node ]);
         }());
-        
+
         // Render Description
-        
+
         if (file.description) {
             element.append(
                 $("<div/>")
@@ -108,19 +87,19 @@ define("io.ox/files/view-detail",
                 .text(file.description)
             );
         }
-        
+
         // Render Additional
-        
+
         ext.point("io.ox/files/details/additional").each(function (extension) {
             extension(file, element);
         });
 
         return element;
     };
-    
-    
+
+
     // Basic Info Fields
-    
+
     var bytesToSize = function (bytes) {
         var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'], i;
         if (bytes === 0) {
@@ -130,7 +109,7 @@ define("io.ox/files/view-detail",
             return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
         }
     };
-    
+
     ext.point("io.ox/files/details/basicInfo").extend({
         id: "size",
         index: 10,
@@ -142,7 +121,7 @@ define("io.ox/files/view-detail",
             element.text(bytesToSize(file.file_size));
         }
     });
-    
+
     ext.point("io.ox/files/details/basicInfo").extend({
         id: "version",
         index: 20,
@@ -154,7 +133,7 @@ define("io.ox/files/view-detail",
             element.text(file.version);
         }
     });
-    
+
     ext.point("io.ox/files/details/basicInfo").extend({
         id: "last_modified",
         index: 30,
@@ -166,36 +145,15 @@ define("io.ox/files/view-detail",
             element.text(i18n.date("fulldatetime", file.last_modified));
         }
     });
-    
+
     // Basic Actions
-    
-    ext.point("io.ox/files/details/actions").extend({
-        id: "download",
-        index: 10,
-        label: "Download",
-        action: function (file) {
-            window.open(file.url + "&content_type=application/octet-stream&content_disposition=attachment", file.title);
-        }
-    });
 
-    ext.point("io.ox/files/details/actions").extend({
-        id: "open",
-        index: 20,
-        label: "Open",
-        action: function (file) {
-            window.open(file.url, file.title);
-        }
-    });
+    ext.point('io.ox/files/details').extend(new ext.InlineLinks({
+        index: 40,
+        id: 'inline-links',
+        ref: 'io.ox/files/links/inline'
+    }));
 
-    ext.point("io.ox/files/details/actions").extend({
-        id: "send",
-        index: 30,
-        label: "Send by E-Mail",
-        action: function (file) {
-            alert("Zzzzzush: " + file.title);
-        }
-    });
-    
     ext.point("io.ox/files/details/preview").extend({
         id: "preview",
         draw: function (file, node) {
@@ -208,7 +166,7 @@ define("io.ox/files/view-detail",
             });
         }
     });
-    
+
     return {
         draw: draw
     };

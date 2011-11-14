@@ -24,7 +24,7 @@ define("io.ox/core/api/user",
         },
         requests: {
             all: {
-                columns: "1,20",
+                columns: "1,20,500",
                 sort: "500", // display_name
                 order: "asc"
             },

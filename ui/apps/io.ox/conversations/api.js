@@ -12,7 +12,9 @@
  */
 
 define("io.ox/conversations/api",
-    ["io.ox/core/http", "io.ox/core/api/factory"], function (http, apiFactory) {
+    ["io.ox/core/http", "io.ox/core/api/factory",
+     "io.ox/core/config"
+    ], function (http, apiFactory, config) {
 
     "use strict";
 
@@ -46,18 +48,29 @@ define("io.ox/conversations/api",
                 module: "conversation",
                 params: { action: "update", id: id },
                 data: data || {}
+            })
+            .done(function (data) {
+                // returns updated full data, so we update all relevant caches
+                api.caches.get.add(data);
+                api.caches.list.add(data);
+                // publish new state
+                api.trigger("refresh.list");
             });
     };
 
     api.create = function (subject) {
 
-        var def = $.Deferred();
+        var def = $.Deferred(),
+            display_names = [];
 
         function create(ids) {
             return http.PUT({
                     module: "conversation",
                     params: { action: "new" },
-                    data: { subject: subject || "No subject" }
+                    data: {
+                        subject: subject || display_names.join(", "),
+                        newMembers: ids
+                    }
                 });
         }
 
@@ -65,23 +78,28 @@ define("io.ox/conversations/api",
         require(["io.ox/core/api/user"], function (userAPI) {
             userAPI.getAll()
                 .pipe(function (data) {
-                    return _(data).map(function (obj) {
-                        return String(obj.id);
-                    });
+                    return _(data)
+                        .chain()
+                        .each(function (obj) {
+                            display_names.push(obj.display_name);
+                        })
+                        .map(function (obj) {
+                            return obj.id;
+                        })
+                        //TODO: backend must fix this (ignore existing users)
+                        .without(config.get("identifier"))
+                        .value();
                 })
                 .pipe(function (ids) {
                     ids.sort();
                     // create new conversation
                     return create(ids)
-                        .pipe(function (data) {
+                        .done(function (data) {
                             // trigger
                             api.caches.all.clear();
                             api.trigger("refresh.all");
-                            // new chat id
-                            var id = data.id;
-                            return api.addMembers(id, ids);
+                            def.resolve();
                         })
-                        .done(def.resolve)
                         .fail(def.reject);
                 })
                 .fail(def.reject);

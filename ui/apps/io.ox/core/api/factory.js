@@ -14,17 +14,17 @@
  */
 
 define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/core/event"], function (http, cache, event) {
-    
+
     "use strict";
-    
+
     var fix = function (obj) {
         var clone = _.deepClone(obj);
         clone.folder = clone.folder || clone.folder_id;
         return clone;
     };
-    
+
     return function (o) {
-        
+
         // extend default options (deep)
         o = $.extend(true, {
             // use cache
@@ -45,19 +45,19 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
             },
             fail: { }
         }, o || {});
-        
+
         // use module as id?
         o.id = o.id || o.module;
-        
+
         // create 3 caches for all, list, and get requests
         var caches = {
             all: new cache.SimpleCache(o.id + "-all", true),
             list: new cache.ObjectCache(o.id + "-list", true, o.keyGenerator),
             get: new cache.ObjectCache(o.id + "-get", true, o.keyGenerator)
         };
-        
+
         var api = {
-            
+
             getAll: function (options) {
                 // merge defaults for "all"
                 var opt = $.extend({}, o.requests.all, options || {});
@@ -88,7 +88,7 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                     return $.Deferred().resolve(caches.all.get(opt.folder));
                 }
             },
-            
+
             getList: function (ids) {
                 // be robust
                 ids = ids || [];
@@ -113,7 +113,7 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                     return $.Deferred().resolve(caches.list.get(ids));
                 }
             },
-            
+
             get: function (options) {
                 // merge defaults for get
                 var opt = $.extend({}, o.requests.get, options || {});
@@ -141,10 +141,11 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                     return $.Deferred().resolve(caches.get.get(opt));
                 }
             },
-            
+
             remove: function (ids, local) {
                 // be robust
                 ids = ids || [];
+                ids = _.isArray(ids) ? ids : [ids];
                 var opt = $.extend({}, o.requests.remove, { timestamp: _.now() });
                 // done
                 var done = function () {
@@ -172,8 +173,10 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                     caches.list.remove(ids);
                     caches.get.remove(ids);
                     // trigger local refresh
+                    api.trigger("afterdelete");
                     api.trigger("refresh.all");
                 };
+                api.trigger("beforedelete");
                 // delete on server?
                 if (local !== true) {
                     return http.PUT({
@@ -187,10 +190,10 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                     return $.Deferred().resolve().done(done);
                 }
             },
-            
+
             caches: caches
         };
-        
+
         // add search?
         if (o.requests.search) {
             api.search = function (query, options) {
@@ -207,9 +210,9 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                 });
             };
         }
-        
+
         event.Dispatcher.extend(api);
-        
+
         // bind to global refresh
         ox.bind("refresh", function () {
             // clear "all & list" caches
@@ -218,8 +221,8 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
             // trigger local refresh
             api.trigger("refresh.all");
         });
-        
+
         return api;
     };
-    
+
 });

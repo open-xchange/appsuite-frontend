@@ -400,7 +400,6 @@ define("io.ox/core/tk/dialogs", function () {
         };
 
         nodes.content = nodes.pane.find('.content');
-        //console.log( nodes.content);
         nodes.controls = nodes.pane.find('.controls');
 
         this.visible = false;
