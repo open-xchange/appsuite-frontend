@@ -91,15 +91,21 @@ define('io.ox/mail/write/main',
                     $('<div>')
                     .css('position', 'relative')
                     .append(
-                        // send button
-                        $.button({ label: 'Send', tabIndex: 4, action: sendMail })
-                        .addClass('default-action send-button')
+                        $('<div>').addClass('send-button-wrapper')
+                        .append(
+                            // send button
+                            $.button({ label: 'Send', tabIndex: 4, action: sendMail })
+                            .addClass('default-action send-button')
+                        )
                     )
                     .append(
-                        // subject
-                        subject = $('<input>')
-                        .attr({ type: 'text', tabindex: '1' })
-                        .addClass('subject')
+                        $('<div>').addClass('subject-wrapper')
+                        .append(
+                            // subject
+                            subject = $('<input>')
+                            .attr({ type: 'text', tabindex: '1' })
+                            .addClass('subject')
+                        )
                     )
                 )
                 .append(

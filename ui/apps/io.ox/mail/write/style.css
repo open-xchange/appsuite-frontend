@@ -13,21 +13,26 @@
     overflow: auto;
 }
 
-.io-ox-mail-write input[type=text].subject {
+.io-ox-mail-write .subject-wrapper {
     position: absolute;
     top: 0px;
     left: 0px;
-    width: auto;
     right: 123px;
+    background-color: green;
 }
 
-.io-ox-mail-write .send-button {
+.io-ox-mail-write .send-button-wrapper {
+    background-color: red;
     position: absolute;
-    margin: 0;
     right: 0px;
     width: 110px;
+}
+.io-ox-mail-write .send-button {
+    width: 100%;
+    margin: 0;
     font-size: 12px;
     line-height: 18px;
+    height: 29px;
     padding: 5px 10px 4px 10px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -58,6 +63,7 @@
 .io-ox-mail-write input[type=text] {
     font-size: 12px;
     line-height: 18px;
+    height: 29px;
     border: 1px solid #ddd;
     background-color: white;
     color: black;

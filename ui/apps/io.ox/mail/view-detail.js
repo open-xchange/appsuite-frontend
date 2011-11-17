@@ -155,9 +155,9 @@ define("io.ox/mail/view-detail",
             this.append(
                 picture = $("<div/>").addClass("contact-picture").hide()
             );
-            require(["io.ox/mail/api"], function (api) {
+            require(["io.ox/contacts/api"], function (api) {
                 // get contact picture
-                api.getContactPicture(data.from[0][1])
+                api.getPictureURL(data.from[0][1])
                     .done(function (url) {
                         if (url) {
                             picture.css("background-image", "url(" + url + ")").show();
