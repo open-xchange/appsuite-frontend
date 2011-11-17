@@ -15,34 +15,34 @@
 
 define("io.ox/core/extensions",
     ["io.ox/core/event", "io.ox/core/collection"], function (event, Collection) {
-    
+
     // A naive extension registry.
     "use strict";
-    
+
     // global registry
     var registry = {},
-    
+
         // module
         that,
-        
+
         // sort by index
         pointSorter = function (a, b) {
             return (a.index || 1000000000) - (b.index || 1000000000);
         },
-        
+
         // for debugging purposes
         randomSorter = function () {
             return Math.random() > 0.5 ? -1 : +1;
         },
-        
+
         // function wrappers
         wrappers = {};
-    
+
     var Point = function (options) {
-        
+
         this.id = String(options.id);
         this.description = options.description || "";
-        
+
         var extensions = [],
             replacements = {},
             disabled = {},
@@ -55,9 +55,9 @@ define("io.ox/core/extensions",
                     });
             },
             self = this;
-            
+
         event.Dispatcher.extend(this);
-        
+
         function createInvoke(point, ext) {
             return function (name, context, args) {
                 if (!_.isArray(args)) {
@@ -83,7 +83,7 @@ define("io.ox/core/extensions",
                 }
             };
         }
-        
+
         this.extend = function (extension) {
             if (extension.invoke) {
                 throw "Extensions must not have their own invoke method";
@@ -91,112 +91,112 @@ define("io.ox/core/extensions",
             if (!extension.id) {
                 throw "Extensions must have an id!";
             }
-            
+
             extension.invoke = createInvoke(this, extension);
-            
+
             if (replacements[extension.id]) {
                 _.extend(extension, replacements[extension.id]);
                 delete replacements[extension.id];
             }
-            
+
             extensions.push(extension);
             extensions.sort(pointSorter);
-            
+
             this.trigger("extended", extension);
-            
+
             return this;
         };
-        
+
         this.replace = function (extension) {
-            
+
             if (!extension.id) {
                 throw "Replacements must have an id!";
             }
-            
+
             var replaced = false;
-            
+
             _(extensions).map(function (e) {
                 if (e.id === extension.id) {
                     _.extend(e, extension);
                     replaced = true;
                 }
             });
-            
+
             if (replaced) {
                 extensions.sort(pointSorter);
             } else {
                 replacements[extension.id] = extension;
             }
-            
+
             return this;
         };
-        
+
         this.all = function () {
             return extensions;
         };
-        
+
         this.keys = function () {
             return _(extensions).map(function (obj) {
                     return obj.id;
                 });
         };
-        
+
         // public for testing purposes
         this.sort = function () {
             extensions.sort(pointSorter);
             return this;
         };
-        
+
         this.each = function (cb) {
             list().each(cb);
             return this;
         };
-        
+
         this.map = function (cb) {
             list().map(cb);
             return this;
         };
-        
+
         this.select = function (cb) {
             return list().select(cb).value();
         };
-        
+
         this.inject = function (cb, memo) {
             return list().inject(cb, memo).value();
         };
-        
+
         this.invoke = function (name, context, args) {
             if (!_.isArray(args)) {
                 args = [args];
             }
             return list().invoke("invoke", name, context, args);
         };
-        
+
         this.disable = function (id) {
             disabled[id] = true;
             return this;
         };
-        
+
         this.enable = function (id) {
             delete disabled[id];
             return this;
         };
     };
-    
+
     // common extension classes
     // TODO: find a better place as it contains UI stuff
-    
+
     var Link = function (options) {
-        
+
         _.extend(this, options);
-        
+
         var self = this,
             click = function (e) {
                 var node = $(this);
                 e.preventDefault();
                 that.point(node.data("ref")).invoke("action", node.data("context"));
             };
-        
+
         this.draw = function (context) {
             this.append(
                 $("<a>", { href: "#" }).addClass("io-ox-action-link")
@@ -206,46 +206,52 @@ define("io.ox/core/extensions",
             );
         };
     };
-    
-    var InlineLinks = function (options) {
-        
-        var self = _.extend(this, options);
-        
-        this.draw = function (context) {
-            
-            // create & add node first, since the rest is async
-            var node = $("<div>").addClass("io-ox-inline-links").appendTo(this),
-                // get collection
-                collection = new Collection(context);
-            
-            // resolve collection's properties
-            collection.getProperties()
-                .done(function () {
-                    // get links (check for requirements)
-                    var links = that.point(self.ref).select(function (link) {
-                        // process actions
-                        return that.point(link.ref).inject(function (flag, action) {
-                            if (_.isFunction(action.requires)) {
-                                // check requirements
-                                return flag && action.requires({ collection: collection });
-                            } else {
-                                return flag;
-                            }
-                        }, true);
-                    });
-                    // empty?
-                    if (links.length === 0) {
-                        node.addClass("empty");
-                    } else {
-                        // draw links
-                        _(links).invoke("invoke", "draw", node, context);
-                    }
+
+    var applyCollection = function (self, collection, node, context) {
+        // resolve collection's properties
+        collection.getProperties()
+            .done(function () {
+                // get links (check for requirements)
+                var links = that.point(self.ref).select(function (link) {
+                    // process actions
+                    return that.point(link.ref).inject(function (flag, action) {
+                        if (_.isFunction(action.requires)) {
+                            // check requirements
+                            return flag && action.requires({ collection: collection });
+                        } else {
+                            return flag;
+                        }
+                    }, true);
                 });
+                // empty?
+                if (links.length === 0) {
+                    node.addClass("empty");
+                } else {
+                    // draw links
+                    _(links).invoke("invoke", "draw", node, context);
+                }
+            });
+    };
+
+    var ToolbarLinks = function (options) {
+        var self = _.extend(this, options);
+        this.draw = function (context) {
+            // paint on current node
+            applyCollection(self, new Collection(context), this, context);
         };
     };
-    
+
+    var InlineLinks = function (options) {
+        var self = _.extend(this, options);
+        this.draw = function (context) {
+            // create & add node first, since the rest is async
+            var node = $("<div>").addClass("io-ox-inline-links").appendTo(this);
+            applyCollection(self, new Collection(context), node, context);
+        };
+    };
+
     that = {
-        
+
         // get point
         point: function (id) {
             id = id || "";
@@ -255,12 +261,12 @@ define("io.ox/core/extensions",
                 return (registry[id] = new Point({ id: id }));
             }
         },
-        
+
         // get all ids
         keys: function () {
             return _.keys(registry);
         },
-        
+
         // extension loader
         load: function () {
             // get proper list
@@ -273,16 +279,17 @@ define("io.ox/core/extensions",
             // load extensions
             return require(list);
         },
-        
+
         // add wrapper
         addWrapper: function (name, fn) {
             wrappers[name] = fn;
         },
-        
+
         Link: Link,
-        InlineLinks: InlineLinks
+        InlineLinks: InlineLinks,
+        ToolbarLinks: ToolbarLinks
     };
-    
+
     return that;
 });
 

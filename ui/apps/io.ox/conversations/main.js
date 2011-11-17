@@ -11,17 +11,19 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/conversation/main",
+define("io.ox/conversations/main",
     ["io.ox/mail/util",
-     "io.ox/conversation/api",
+     "io.ox/conversations/api",
      "io.ox/core/tk/vgrid",
      "io.ox/core/api/user",
      "io.ox/core/config",
-     "css!io.ox/conversation/style.css"
-    ], function (util, api, VGrid, userAPI, config) {
-    
+     "io.ox/core/extensions",
+     "css!io.ox/conversations/style.css",
+     "io.ox/conversations/actions"
+    ], function (util, api, VGrid, userAPI, config, ext) {
+
     "use strict";
-    
+
     // application object
     var app = ox.ui.createApp(),
         // app window
@@ -32,22 +34,30 @@ define("io.ox/conversation/main",
         // nodes
         left,
         right,
-        
+
         notifications = window.webkitNotifications,
         useNotifier = false;
-    
+
     // launcher
     app.setLauncher(function () {
-    
+
         // get window
         win = ox.ui.createWindow({
+            name: 'io.ox/conversations',
             title: "Conversations",
             toolbar: true
         });
-        
+
         win.addClass("io-ox-conversations-main");
         app.setWindow(win);
-        
+
+        // add "create" link
+        ext.point('io.ox/conversations/toolbar').extend(new ext.ToolbarLinks({
+            index: 100,
+            id: 'inline-links',
+            ref: 'io.ox/conversations/links/toolbar'
+        }));
+
         // use notifications?
         if (notifications && document.webkitHidden !== undefined) {
             // get permission (0 = granted, 1 = ask, 2 = off)
@@ -66,7 +76,7 @@ define("io.ox/conversation/main",
                 useNotifier = true;
             }
         }
-        
+
         // left panel
         left = $("<div/>")
             .addClass("leftside border-right")
@@ -74,16 +84,16 @@ define("io.ox/conversation/main",
                 width: gridWidth + "px"
             })
             .appendTo(win.nodes.main);
-        
+
         // right panel
         right = $("<div/>")
             .css({ left: gridWidth + 1 + "px" })
             .addClass("rightside io-ox-conversation")
             .appendTo(win.nodes.main);
-        
+
         // grid
         grid = new VGrid(left);
-        
+
         // add template
         grid.addTemplate({
             build: function () {
@@ -99,21 +109,21 @@ define("io.ox/conversation/main",
                 fields.subject.text(data.subject || "#");
             }
         });
-        
+
         // all request
         grid.setAllRequest(function () {
             //return $.Deferred().resolve([{ id: "db-0-1017" }]);
             return api.getAll();
         });
-        
+
         // list request
         grid.setListRequest(function (ids) {
             //return $.Deferred().resolve([{ id: "db-0-1017", subject: "YEAH" }]);
             return api.getList(ids);
         });
-        
+
         // -------------------------------------------------------------
-        
+
         var currentChatId = null,
             lastMessage = "",
             lastMessageId = null,
@@ -136,20 +146,20 @@ define("io.ox/conversation/main",
             applyEmoticons,
             drawMessages,
             sendMessage;
-            
+
         stopPolling = function () {
             if (pollTimer !== null) {
                 clearInterval(pollTimer);
                 pollTimer = null;
             }
         };
-        
+
         resumePolling = function () {
             if (pollTimer === null && currentChatId !== null) {
                 pollTimer = setInterval(tick, POLL_FREQ);
             }
         };
-        
+
         startPolling = function (id) {
             // stop running poll
             stopPolling();
@@ -162,30 +172,30 @@ define("io.ox/conversation/main",
             tick();
             resumePolling();
         };
-        
+
         pollNow = function () {
             stopPolling();
             tick();
             resumePolling();
         };
-        
+
         processMessages = function (list) {
-            
+
             // get most recent message
             var last = _(list).last() || { id: null, timestamp: 0 };
             // got new messages?
             if (last.id !== null && last.id !== lastMessageId) {
-                
+
                 lastMessageId = last.id;
                 lastTimestamp = last.timestamp;
-                
+
                 drawMessages(list);
-                
+
                 // show notification?
                 if (!firstPoll && useNotifier && ox.windowState === "background") {
-                    
+
                     var from = last.from || { name: "" };
-                    
+
                     userAPI.getPictureURL(from.id)
                         .done(function (url) {
                             // create & show notification
@@ -196,11 +206,11 @@ define("io.ox/conversation/main",
                             }, 5000);
                         });
                 }
-                
+
                 firstPoll = false;
             }
         };
-        
+
         tick = function () {
             // fetch messages
             if (ox.session) {
@@ -215,16 +225,16 @@ define("io.ox/conversation/main",
                 .done(processMessages);
             }
         };
-        
+
         var emoticons = { ":D": "bigsmile", ":)": "smile", "(y)": "yes" };
-        
+
         applyEmoticons = function (str) {
-            return '<img src="' + ox.base + "/apps/io.ox/conversation/images/" +
+            return '<img src="' + ox.base + "/apps/io.ox/conversations/images/" +
                 emoticons[str] + '.gif" class="emoticon">';
         };
-        
+
         drawMessages = function (list) {
-            
+
             _(list).each(function (msg) {
                 var html = String(msg.text)
                         .replace(/</g, '&lt;')
@@ -248,10 +258,10 @@ define("io.ox/conversation/main",
                     )
                 );
             });
-            
+
             pane.parent().scrollTop(pane.height() + 100);
         };
-        
+
         sendMessage = function () {
             var val = $.trim(textarea.val());
             if (val !== "") {
@@ -267,14 +277,14 @@ define("io.ox/conversation/main",
                     });
             }
         };
-        
+
         $("<div>").addClass("abs conversation default-content-padding")
             .css({ overflow: "auto", paddingBottom: "0" })
             .append(
                 pane = $("<div>").addClass("centered-box")
             )
             .appendTo(right);
-        
+
         textarea = $("<textarea>")
             .attr({ placeholder: "Type your message here..." })
             .css("resize", "none")
@@ -292,7 +302,7 @@ define("io.ox/conversation/main",
                     }
                 }
             });
-        
+
         controls = $("<div>").addClass("abs controls")
             .append(
                 $("<div>").addClass("centered-box")
@@ -303,13 +313,13 @@ define("io.ox/conversation/main",
                 )
             )
             .appendTo(right);
-            
+
         var showChat = function (obj) {
             pane.empty();
             textarea.val("").focus();
             startPolling(obj.id);
         };
-        
+
         /*
          * Selection handling
          */
@@ -320,7 +330,7 @@ define("io.ox/conversation/main",
                 pane.empty();
             }
         });
-        
+
         win.bind("show", function () {
             grid.selection.keyboard(true);
             resumePolling();
@@ -329,23 +339,23 @@ define("io.ox/conversation/main",
             grid.selection.keyboard(false);
             stopPolling();
         });
-        
+
         // bind all refresh
         api.bind("refresh.all", function (data) {
             grid.refresh();
         });
-        
+
         // bind list refresh
         api.bind("refresh.list", function (data) {
             grid.repaint();
         });
-        
+
         // go!
         win.show(function () {
             grid.paint();
         });
     });
-    
+
     return {
         getApp: app.getInstance
     };

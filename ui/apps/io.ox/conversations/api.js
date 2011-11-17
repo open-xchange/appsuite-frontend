@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/conversation/api",
+define("io.ox/conversations/api",
     ["io.ox/core/http", "io.ox/core/api/factory"], function (http, apiFactory) {
-    
+
     "use strict";
-    
+
     // generate basic API
     var api = apiFactory({
         module: "conversation",
@@ -36,39 +36,60 @@ define("io.ox/conversation/api",
             }
         }
     });
-    
-    api.createConversation = function (subject) {
-        
+
+    api.addMembers = function (id, users) {
+        return api.update(id, { newMembers: users || [] });
+    };
+
+    api.update = function (id, data) {
+        return http.PUT({
+                module: "conversation",
+                params: { action: "update", id: id },
+                data: data || {}
+            });
+    };
+
+    api.create = function (subject) {
+
         var def = $.Deferred();
-        
+
         function create(ids) {
-            http.PUT({
+            return http.PUT({
                     module: "conversation",
                     params: { action: "new" },
-                    data: { subject: subject || "" }
-                })
-                .done(def.resolve)
-                .fail(def.reject);
+                    data: { subject: subject || "No subject" }
+                });
         }
-        
+
         // get all user IDs
         require(["io.ox/core/api/user"], function (userAPI) {
             userAPI.getAll()
                 .pipe(function (data) {
                     return _(data).map(function (obj) {
-                        return obj.id;
+                        return String(obj.id);
                     });
                 })
-                .done(function (ids) {
+                .pipe(function (ids) {
                     ids.sort();
                     // create new conversation
-                    create(ids);
-                });
+                    return create(ids)
+                        .pipe(function (data) {
+                            // trigger
+                            api.caches.all.clear();
+                            api.trigger("refresh.all");
+                            // new chat id
+                            var id = data.id;
+                            return api.addMembers(id, ids);
+                        })
+                        .done(def.resolve)
+                        .fail(def.reject);
+                })
+                .fail(def.reject);
         });
-        
+
         return def;
     };
-    
+
     api.getMessages = function (id, since) {
         return http.GET({
             module: "conversation",
@@ -79,7 +100,7 @@ define("io.ox/conversation/api",
             }
         });
     };
-    
+
     api.sendMessage = function (id, text) {
         return http.PUT({
             module: "conversation",
@@ -92,5 +113,6 @@ define("io.ox/conversation/api",
             }
         });
     };
+
     return api;
 });
