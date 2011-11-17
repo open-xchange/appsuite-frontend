@@ -373,19 +373,39 @@ $(document).ready(function () {
         }
     };
 
-    initializeAndDefine = function (name, initDeps, init, deps, callback) {
-        // add loader plugin for this specific module
-        define(name + ":init", {
-            load: function (name, req, onLoad, config) {
-                // resolve dependencies and inject onLoad callback
-                req(initDeps, function () {
-                    init.apply(window, [onLoad].concat($.makeArray(arguments)));
-                });
-            }
-        });
-        // define module. add plugin as dependency
-        define(name, deps.concat(name + ":init!"), callback);
-    };
+    /**
+     * Asynchronous define (has same signature than define)
+     * Callback must return deferred object.
+     */
+    define.async = (function () {
+
+        var getLoader = function (name, deps, callback) {
+                return function (n, req, onLoad, config) {
+                    // resolve module dependencies
+                    req(deps, function () {
+                        // get module (must return deferred object)
+                        var def = callback.apply(null, arguments);
+                        if (def && def.done) {
+                            def.done(onLoad);
+                        } else {
+                            console.error('Module "' + name + '" does not return a deferred object!');
+                        }
+                        name = deps = callback = null;
+                    });
+                };
+            },
+
+            identity = function (x) {
+                return x;
+            };
+
+        return function (name, deps, callback) {
+            // use loader plugin to defer module definition
+            define(name + ':init', { load: getLoader(name, deps, callback) });
+            // define real module - will wait for promise
+            define(name, [name + ':init!'], identity);
+        };
+    }());
 
     // searchfield fix
     if (!_.browser.Chrome) {

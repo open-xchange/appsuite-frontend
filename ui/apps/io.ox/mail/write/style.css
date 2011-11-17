@@ -18,14 +18,14 @@
     top: 0px;
     left: 0px;
     width: auto;
-    right: 113px;
+    right: 123px;
 }
 
 .io-ox-mail-write .send-button {
     position: absolute;
     margin: 0;
     right: 0px;
-    width: 100px;
+    width: 110px;
     font-size: 12px;
     line-height: 18px;
     padding: 5px 10px 4px 10px;
@@ -129,9 +129,9 @@
 }
 
 .io-ox-mail-write .text-editor {
-    font-family: monospace;
-    font-size: 14px;
-    line-height: 21px;
+    font-family: Monaco, monospace;
+    font-size: 13px;
+    line-height: 18px;
     color: black;
     background-color: white;
     border: 1px solid #ddd;
@@ -145,7 +145,6 @@
     -webkit-box-sizing: border-box;
     -ms-box-sizing: border-box;
     box-sizing: border-box;
-    -webkit-font-smoothing: antialiased
 }
 
 .io-ox-mail-write .text-editor:focus {
