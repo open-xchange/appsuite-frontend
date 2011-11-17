@@ -240,6 +240,15 @@
     padding: 0px 7px 5px 13px;
 }
 
+.window-toolbar .io-ox-toolbar-link,
+.window-toolbar .io-ox-action-link {
+    font-size: 9pt;
+    color: #fff;
+    display: inline-block;
+    margin: 2px 20px 2px 0px;
+    cursor: pointer;
+}
+
 .window-controls {
     position: absolute;
     top: 6px;
@@ -361,6 +370,10 @@
     background-color: @background; /* resolves hw accel anti-aliasing */
 }
 
+.vgrid-cell-padding {
+    padding: 8px 13px 8px 13px; /* for consinstent elements */
+}
+
 .vgrid-cell.hover {
     cursor: pointer;
 }
@@ -409,6 +422,10 @@
     cursor: pointer;
 }
 
+.vgrid-cell.vgrid-label.left {
+    text-align: left;
+}
+
 .vgrid-cell.selected {
     background-color: @selected-background !important;
     background-image: -webkit-gradient(
@@ -432,6 +449,14 @@
     color: white !important;
 }
 
+.vgrid-cell.relative {
+    position: relative;
+}
+
+.vgrid-cell.no-border {
+    border-bottom: 0px none;
+}
+
 /* ---- */
 
 .leftside {
@@ -443,6 +468,11 @@
     background-color: @background;
 }
 
+.reverse.leftside {
+    width: auto;
+    right: 310px;
+}
+
 .rightside {
     position: absolute;
     top: 0px;
@@ -450,6 +480,11 @@
     bottom: 0px;
     left: 200px;
     background-color: @background;
+}
+
+.reverse.rightside {
+    left: auto;
+    width: 310px;
 }
 
 .withStatusBar {
@@ -605,40 +640,11 @@ input[type=search] {
     background-image: -o-linear-gradient(top, #eee 0%, #fff 100%);
 }
 
-.window-toolbar .io-ox-toolbar-link,
-.window-toolbar .io-ox-action-link {
-    font-size: 9pt;
-    color: #79ADDB;
-    display: inline-block;
-    margin: 2px 20px 2px 0px;
-    cursor: pointer;
-}
-
-.window-toolbar .io-ox-toolbar-link:hover,
-.window-toolbar .io-ox-action-link:hover {
-    text-decoration: underline;
-}
-
-.window-toolbar .io-ox-button {
-    color: black;
-    border: 1px solid #999;
-    background-color: #e0e0e0;
-    background-image: -moz-linear-gradient(center top, #fff, #d0d0d0); /* 555 to 333 */
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#d0d0d0));
-    background-image: -o-linear-gradient(top, #fff 0%, #d0d0d0 100%);
-    box-shadow: none;
-}
-
-.window-toolbar .io-ox-button:hover {
-    background-color: #fff;
-    background-image: none;
-}
-
-.window-toolbar .io-ox-button:active {
-    color: #555;
-    background-image: -moz-linear-gradient(center top, #eee, #ddd);
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eee), to(#ddd));
-    background-image: -o-linear-gradient(top, #eee 0%, #ddd 100%);
+.io-ox-button.default-action {
+    background-image: -moz-linear-gradient(center top, #fff, #eee);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFEE00), to(#fc0));
+    background-image: -o-linear-gradient(top, #fff 0%, #eee 100%);
+    border: 1px solid #E6B800;
 }
 
 /* Dialogs */
@@ -1101,4 +1107,32 @@ input.nice-input {
 
 input.nice-input:focus {
     box-shadow: 0px 0px 5px 1px #08c;
+}
+
+/* auto complete */
+
+.autocomplete-popup {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0px 5px 20px -10px black;
+    z-index: 100000;
+    height: 200px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.autocomplete-popup .autocomplete-item {
+    padding: 0.5em 10px 0.5em 10px;
+    line-height: 1.5em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.autocomplete-popup .autocomplete-item.selected {
+    background-color: #eee;
 }
