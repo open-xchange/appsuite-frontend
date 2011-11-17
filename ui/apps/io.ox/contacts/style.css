@@ -160,3 +160,71 @@
 	width: 120px;
 	float: right;
 }
+
+
+/*update form*/
+
+.up1 {
+	float: left;
+	width: 400px;
+}
+
+.up2 {
+	float: right;
+	width: 400px;
+}
+ .contact_update_frame {
+	font-family: monospace;
+	font-size: 14px;
+	line-height: 21px;
+	color: black;
+	background-color: none;
+	border: 0px none;
+	outline: none;
+	/*width: 100%;*/
+	width: 900px;
+	height: 100%;
+	resize: none;
+	padding: 1em;
+	margin: 0px;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-font-smoothing: antialiased;
+}
+
+.contact_update_frame .block .field {
+	
+	margin-bottom:5px;
+	padding-top: 2px;
+	width: 333px;
+	overflow: hidden;
+}
+
+.contact_update_frame .block .field label {
+	font-size: 10pt;
+	width: auto;
+	float: left;
+	line-height: 15pt;
+}
+
+.contact_update_frame .block .field input {
+	width: 120px;
+	float: right;
+}
+
+ .contact_update_frame .block {
+ width: 400px;
+ margin-bottom: 25px;
+ }
+
+/*scrollabel unsortet*/
+
+.block.edit_contact.unsortedfields{
+	
+	overflow: scroll;
+	height: 300px;
+	width: 400px;
+	padding: 5px;
+	border: solid 1px #888;
+}
