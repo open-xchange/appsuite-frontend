@@ -34,6 +34,18 @@ define("io.ox/contacts/util", ["gettext!io.ox/contacts/contacts"], function (gt)
                 (obj.display_name || "").replace(/"|'/g, "");
         },
         
+        createDisplayName: function (obj) {
+            if (!obj.first_name) {
+                obj.first_name = "undefined";
+            }
+            if (!obj.last_name) {
+                obj.last_name = "undefined";
+            }
+            obj.display_name = obj.first_name + "," + obj.last_name;
+            return obj.display_name;
+        },
+        
+        
         getDisplayName: function (obj) {
             // combine last_name, and first_name
             return obj.last_name && obj.first_name ?
@@ -51,6 +63,12 @@ define("io.ox/contacts/util", ["gettext!io.ox/contacts/contacts"], function (gt)
             return obj.position && obj.company ?
                 obj.position + ", " + obj.company :
                 obj.position || obj.company || "";
+        },
+        
+        createUpdatePage: function () {
+            require(["io.ox/contacts/update_app"], function (u) {
+                u.getApp().launch();
+            });
         }
     };
 });
