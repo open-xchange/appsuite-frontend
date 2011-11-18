@@ -18,11 +18,12 @@ define('io.ox/mail/write/main',
      'io.ox/mail/util',
      'io.ox/mail/write/textile',
      'io.ox/core/extensions',
+     'io.ox/core/config',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/core/tk/autocomplete',
      'css!io.ox/mail/style.css',
-     'css!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, contactsAPI, contactsUtil) {
+     'css!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil) {
 
     'use strict';
 
@@ -55,7 +56,7 @@ define('io.ox/mail/write/main',
             sections = {};
 
         app = ox.ui.createApp({
-            title: 'New E-Mail'
+            title: 'Compose'
         });
 
         function sendMail() {
@@ -94,7 +95,7 @@ define('io.ox/mail/write/main',
                         .append(
                             // subject
                             subject = $('<input>')
-                            .attr({ type: 'text', tabindex: '1' })
+                            .attr({ type: 'text', name: "subject", tabindex: '1' })
                             .addClass('subject')
                         )
                     )
@@ -118,7 +119,7 @@ define('io.ox/mail/write/main',
                     .text(label + '')
                 )
                 .append(
-                    sections[id] = $('<div>')
+                    sections[id] = $('<div>').addClass('section')
                 );
                 if (show === false) {
                     sections[id + 'Label'].hide();
@@ -242,26 +243,96 @@ define('io.ox/mail/write/main',
                 );
             }
 
+            function createRadio(name, value, text, isChecked) {
+                var id = name + "_" + value + "_" + _.now(),
+                    radio = $('<input>', { type: 'radio', name: name, id: id, value: value, tabindex: '2' }),
+                    label = $('<label>', { 'for': id }).text("\u00A0" + text + "\u00A0");
+                if (isChecked) {
+                    radio.attr('checked', 'checked');
+                }
+                return radio.add(label);
+            }
+
+            function createCheckbox(name, text, isChecked) {
+                var id = name + "_" + _.now(),
+                    box = $('<input>', { type: 'checkbox', name: name, id: id, value: '1', tabindex: '2' }),
+                    label = $('<label>', { 'for': id }).text("\u00A0" + text + "\u00A0");
+                if (isChecked) {
+                    box.attr('checked', 'checked');
+                }
+                return box.add(label);
+            }
+
             // side panel
             sidepanel = $('<div/>')
                 .css({ width: (GRID_WIDTH - 13) + 'px' })
                 .addClass('reverse rightside io-ox-mail-write-sidepanel');
 
+            // sections
+
+            // TO
             addSection('to', 'To')
                 .append(createField('to'))
                 .append(createRecipientList('to'));
 
+            // CC
             addSection('cc', 'Copy / CC', false)
                 .append(createField('cc'))
                 .append(createRecipientList('cc'));
 
+            // BCC
             addSection('bcc', 'Blind Copy / BCC', false)
                 .append(createField('bcc'))
                 .append(createRecipientList('bcc'));
 
-            addSection('attachments', 'Attachments', false);
-            addSection('options', 'Options', false);
-            addSection('signatures', 'Signatures', false);
+            // Attachments
+            addSection('attachments', 'Attachments', false)
+                .append(
+                    // File upload
+                    $('<div>').addClass('section-item')
+                    .text("Under construction")
+                );
+
+            // Options
+            addSection('options', 'Options', false)
+                .append(
+                    // Priority
+                    $('<div>').addClass('section-item')
+                    .append(
+                        $('<div>').addClass('group-label').text('Priority')
+                    )
+                    .append(createRadio('priority', 'high', 'High'))
+                    .append(createRadio('priority', 'normal', 'Normal', true))
+                    .append(createRadio('priority', 'low', 'Low'))
+                )
+                .append(
+                    // Delivery Receipt
+                    $('<div>').addClass('section-item')
+                    .append(createCheckbox('receipt', 'Delivery Receipt'))
+                )
+                .append(
+                    // Attach vCard
+                    $('<div>').addClass('section-item')
+                    .append(createCheckbox('vcard', 'Attach vCard'))
+                );
+
+            // Signatures
+            var signatures = config.get('gui.mail.signatures', []);
+            if (signatures.length) {
+                addSection('signatures', 'Signatures', false)
+                    .append(
+                        _(signatures).inject(function (memo, o) {
+                            return memo.add(
+                                    $('<div>').addClass('section-item')
+                                    .append(
+                                        $('<a>', { href: '#', tabindex: '2' })
+                                        .text(o.signature_name)
+                                        .on('click', false)
+                                    )
+                                );
+                        }, $())
+                    );
+            }
 
             sidepanel.append(
                 $('<div>')
@@ -271,29 +342,47 @@ define('io.ox/mail/write/main',
                 .append(createLink('bcc', 'Show blind copy'))
                 .append(createLink('attachments', 'Show attachments'))
                 .append(createLink('options', 'Show options'))
-                .append(createLink('signatures', 'Show signatures'))
+                .append(signatures.length ? createLink('signatures', 'Show signatures') : $())
             );
 
             // add panels to windows
             win.nodes.main.addClass('io-ox-mail-write')
-                .append(main).append(sidepanel);
+                .append(
+                    $('<form name="compose">')
+                    .append(main).append(sidepanel)
+                );
 
-//            // load example text
-//            $.ajax({
-//                url: ox.base + '/apps/io.ox/mail/write/example.txt',
-//                dataType: 'text'
-//            })
-//            .done(function (txt) {
-//                editor.val(txt).focus();
-//                win.show(function () {
-//                    subject.focus().select();
-//                });
-//            });
+            var adjustEditorMargin = (function () {
+                // trick to force document reflow
+                var alt = false;
+                return _.debounce(function () {
+                    var w = editor.outerWidth() - 12;
+                    editor.css('paddingRight', Math.max(10, w - 650) + 'px');
+                    // force reflow
+                    editor.css('display', (alt = !alt) ? 'block' : '');
+                }, 100);
+            }());
 
-            win.show(function () {
-                subject.focus().select();
+            win.bind('show', function () {
+                adjustEditorMargin();
+                $(window).on('resize', adjustEditorMargin);
             });
 
+            win.bind('hide', function () {
+                $(window).off('resize', adjustEditorMargin);
+            });
+
+            // load example text
+            $.ajax({
+                url: ox.base + '/apps/io.ox/mail/write/example.txt',
+                dataType: 'text'
+            })
+            .done(function (txt) {
+                win.show(function () {
+                    editor.val(txt);
+                    subject.focus().select();
+                });
+            });
         });
 
         app.send = function () {

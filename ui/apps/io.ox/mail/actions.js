@@ -73,7 +73,7 @@ define("io.ox/mail/actions", ["io.ox/core/extensions"], function (ext) {
     ext.point("io.ox/mail/links/toolbar").extend(new ext.Link({
         index: 100,
         id: "write",
-        label: "Write new e-mail",
+        label: "Compose",
         ref: "io.ox/mail/actions/write"
     }));
 

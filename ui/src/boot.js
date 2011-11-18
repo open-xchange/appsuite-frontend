@@ -488,7 +488,6 @@ $(document).ready(function () {
             };
 
             cont = function (e) {
-                console.warn("Boot...");
                 clear();
                 boot();
             };

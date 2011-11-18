@@ -1,12 +1,8 @@
-Hello *World*
+*Underscore.js*
 
-... and please think of
-* blaaaa
-* bla blaa blaaaa
-* blaaaaaaaaa
+Underscore is a utility-belt library for JavaScript that provides a lot of the functional programming support that you would expect in Prototype.js (or Ruby), but without extending any of the built-in JavaScript objects. It's the tie to go along with jQuery's tux.
 
-h1. Headlines are possible...
-h2. Smaller ones too
+Underscore provides 60-odd functions that support both the usual functional suspects: map, select, invoke — as well as more specialized helpers: function binding, javascript templating, deep equality testing, and so on. It delegates to built-in functions, if present, so modern browsers will use the native implementations of forEach, map, reduce, filter, every, some and indexOf.
 
 ---
 p{color:#E20074}. *And btw even this is possible for "pro users" who want to have their fancy colored signatures, for example.*
