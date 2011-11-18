@@ -102,6 +102,20 @@
     float: left;
 }
 
+.io-ox-mail-write .section {
+    margin-bottom: 10px;
+}
+
+.io-ox-mail-write .section-item {
+    background-color: white;
+    margin-bottom: 1px;
+    padding: 0.5em 10px 0.5em 10px;
+}
+
+.io-ox-mail-write .option .group-label {
+    font-weight: bold;
+}
+
 .io-ox-mail-write .editor-container {
     top: 71px;
     right: 13px;
