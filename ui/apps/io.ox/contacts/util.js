@@ -11,7 +11,9 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/contacts/util", ["gettext!io.ox/contacts/contacts"], function (gt) {
+define("io.ox/contacts/util",
+        ["gettext!io.ox/contacts/contacts", "io.ox/core/tk/selection"
+         ], function (gt, sel) {
     
     "use strict";
     
@@ -70,5 +72,6 @@ define("io.ox/contacts/util", ["gettext!io.ox/contacts/contacts"], function (gt)
                 u.getApp().launch();
             });
         }
+       
     };
 });

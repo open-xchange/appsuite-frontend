@@ -14,15 +14,15 @@
  */
 
 define("io.ox/contacts/main",
-
     ["io.ox/contacts/util", "io.ox/contacts/api", "io.ox/core/tk/vgrid",
      "io.ox/core/tk/dialogs", "io.ox/help/hints",
      "io.ox/contacts/view-detail",
      "io.ox/core/config", "io.ox/contacts/create",
      "io.ox/contacts/update_app",
+     "io.ox/core/extensions",
      "css!io.ox/contacts/style.css"
-    ], function (util, api, VGrid, dialogs, hints, viewDetail, config, create, update_app) {
-
+     //"io.ox/contacts/actions" //TODO: where is it? or typo?
+    ], function (util, api, VGrid, dialogs, hints, viewDetail, config, create, update_app, ext) {
 
     "use strict";
 
@@ -32,7 +32,7 @@ define("io.ox/contacts/main",
         win,
         // grid
         grid,
-        gridWidth = 290,
+        GRID_WIDTH = 290,
         // nodes
         left,
         thumbs,
@@ -43,18 +43,89 @@ define("io.ox/contacts/main",
 
         // get window
         win = ox.ui.createWindow({
+            name: 'io.ox/contacts',
             title: "Global Address Book",
+            titleWidth: (GRID_WIDTH - 10) + "px",
+            toolbar: true,
             search: true
         });
 
         app.setWindow(win);
 
+//      create extensionpoints
+//      link actions
+
+        ext.point("io.ox/contacts/main/create").extend({
+            index: 100,
+            id: "create",
+            action: function () {
+                create.show();
+            }
+        });
+
+        ext.point("io.ox/contacts/main/update").extend({
+            index: 100,
+            id: "update",
+            action: function () {
+                util.createUpdatePage();
+                var data = grid.selection.get();
+                update_app.getContact(data[0]);
+            }
+        });
+
+        ext.point("io.ox/contacts/main/delete").extend({
+            index: 100,
+            id: "delete",
+            action:  function removeContact() {
+                new dialogs.ModalDialog()
+                .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
+                .addButton("cancel", "No, rather not")
+                .addButton("delete", "Shut up and delete it!")
+                .show()
+                .done(function (action) {
+                    if (action === "delete") {
+                        var data = grid.selection.get(),
+                        getContact_del;
+                        getContact_del = function (obj) {
+                            api.get(obj)
+                            .done(_.lfo(api.remove));
+//                            .fail(_.lfo(drawFail, obj)); // needs function
+                        };
+                        getContact_del(data[0]);
+                        grid.selection.selectNext();
+                    }
+                });
+            }
+        });
+
+//      ext.point link creation
+
+        ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
+            index: 100,
+            id: "create",
+            label: "create",
+            ref: "io.ox/contacts/main/create"
+        }));
+
+        ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
+            index: 100,
+            id: "update",
+            label: "update",
+            ref: "io.ox/contacts/main/update"
+        }));
+
+        ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
+            index: 100,
+            id: "delete",
+            label: "delete",
+            ref: "io.ox/contacts/main/delete"
+        }));
 
         // left panel
         left = $("<div/>")
             .addClass("leftside border-right")
             .css({
-                width: gridWidth + "px",
+                width: GRID_WIDTH + "px",
                 overflow: "auto"
             })
             .appendTo(win.nodes.main);
@@ -63,14 +134,14 @@ define("io.ox/contacts/main",
         thumbs = $("<div/>")
             .addClass("atb contact-grid-index border-left border-right")
             .css({
-                left: gridWidth + 3 + "px",
+                left: GRID_WIDTH + 3 + "px",
                 width: "34px"
             })
             .appendTo(win.nodes.main);
 
         // right panel
         right = $("<div/>")
-            .css({ left: gridWidth + 39 + "px", overflow: "auto" })
+            .css({ left: GRID_WIDTH + 39 + "px", overflow: "auto" })
             .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main);
 
@@ -155,10 +226,9 @@ define("io.ox/contacts/main",
                 .fail(_.lfo(drawFail, obj));
         };
 
-
-
         drawContact = function (data) {
             //right.idle().empty().append(base.draw(data));
+            console.log("draw", data);
             right.idle().empty().append(viewDetail.draw(data));
 
         };
@@ -209,7 +279,6 @@ define("io.ox/contacts/main",
             grid.selection.keyboard(false);
         });
 
-
         // bind all refresh
         api.bind("refresh.all", function (data) {
             grid.refresh();
@@ -240,15 +309,15 @@ define("io.ox/contacts/main",
                 preventDuplicates: false,
                 theme: 'ox',
                 onResult: function (result, query) {
-                    //console.debug('on Result');
-                    console.debug(arguments);
+                    //console.log('on Result');
+                    console.log(arguments);
                     result.unshift({display_name: query, last_name: query});
                     return result;
                 },
                 onAdd: function (input, tokenlist) {
                     var q = "";
-                    console.debug("ONADD");
-                    console.debug(tokenlist);
+                    console.log("ONADD");
+                    console.log(tokenlist);
                     _.each(tokenlist, function (token) {
                         q += " " + token.last_name;
                     });
@@ -256,79 +325,19 @@ define("io.ox/contacts/main",
                 },
                 onDelete: function (token_data, tokenlist) {
                     var q = "";
-                    console.debug('onDelete');
-                    console.debug(token_data);
+                    console.log('onDelete');
+                    console.log(token_data);
                     _.each(tokenlist, function (token) {
                         q += " " + token.last_name;
                     });
                     $(this).val($.trim(q));
                 },
                 onReady: function () {
-                    console.debug('onReady');
+                    console.log('onReady');
                 }
             });
             */
         });
-        // NewContact Form
-        (function () {
-            function fieldHtml(label, id) {
-                return $('<div/>').addClass('field').append('<label>' + label + '</label>')
-                .append('<input class="' + id + '"type="text"> </input>');
-            }
-
-
-            function removeContact() {
-                new dialogs.ModalDialog()
-                    .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
-                    .addButton("cancel", "No, rather not")
-                    .addButton("delete", "Shut up and delete it!")
-                    .show()
-                    .done(function (action) {
-                        if (action === "delete") {
-                            //statusBar.busy();
-                            var data = grid.selection.get(),
-                            getContact_del;
-                            getContact_del = function (obj) {
-                                api.get(obj)
-                                .done(_.lfo(api.remove))
-                                .fail(_.lfo(drawFail, obj)); // needs function
-                            };
-                            getContact_del(data[0]);
-                            grid.selection.selectNext();
-                        }
-                    });
-            }
-
-
-            var showNewContactPane = function () {
-                create.show();
-            };
-
-            var showEditContactPane = function () {
-                util.createUpdatePage();
-            };
-
-            var newContactButton = win.addButton({
-                label: "New Contact",
-                action: showNewContactPane
-            });
-
-            var editContactButton = win.addButton({
-                label: "Edit",
-                action: showEditContactPane
-            })
-            .bind('click', function () {
-                var data = grid.selection.get();
-                update_app.getContact(data[0]);
-            });
-
-            var deleteContactButton = win.addButton({
-                label: "Delete",
-                action: removeContact
-            });
-
-        }());
-
     });
 
     return {

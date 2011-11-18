@@ -339,7 +339,7 @@ define("io.ox/contacts/update_app",
                                 formdata.timestamp = timestamp;
                                 api.update(formdata);
                             }
-    //                  TODO needs quit aufter save
+                            app.quit();
                         },
                         
     //                  cancel and quit the update app

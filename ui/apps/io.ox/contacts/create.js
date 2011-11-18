@@ -14,23 +14,18 @@
  */
 
 define("io.ox/contacts/create",
-
     ["io.ox/contacts/util", "io.ox/contacts/api",
      "io.ox/core/tk/dialogs",
      "io.ox/core/config",
      "css!io.ox/contacts/style.css"
     ], function (util, api, dialogs, config) {
 
-
     "use strict";
-
 
     function fieldHtml(label, id) {
         return $('<div/>').addClass('field').append('<label>' + label + '</label>')
         .append('<input class="' + id + '"type="text"> </input>');
-
     }
-
 
  // create formblocks
     var $divblockName = $('<div/>').addClass('block new_contact name'),
@@ -50,10 +45,11 @@ define("io.ox/contacts/create",
 
     //assemble create form
     var newCreatePane = function () {
+
         var pane = new dialogs.CreateDialog();
         pane.getContentNode().addClass("create-contact");
-
         pane.append($divblockName);
+
         $firstName.appendTo($divblockName);
         $lastName.appendTo($divblockName);
 
@@ -77,8 +73,8 @@ define("io.ox/contacts/create",
 
         $(".content .block .field:nth-child(even)").addClass('even');
 
-
         var actions = {
+
             resolveNewContact: function () {
                 var fId = config.get("folder.contacts"),
                 formdata = {},
@@ -109,11 +105,9 @@ define("io.ox/contacts/create",
             }
         };
 
-
-
         pane.show().done(function (action) {
             actions[action]();
-          // console.debug(actions);
+          // console.log(actions);
         });
     };
 

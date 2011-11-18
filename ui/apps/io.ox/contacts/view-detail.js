@@ -16,9 +16,9 @@ define("io.ox/contacts/view-detail",
      "gettext!io.ox/contacts/contacts",
      "io.ox/contacts/util"
     ], function (ext, gt, util) {
-    
+
     "use strict";
-    
+
     // smart join
     var join = function () {
         return _(arguments)
@@ -27,7 +27,7 @@ define("io.ox/contacts/view-detail",
         })
         .join(arguments[0] || "");
     };
-    
+
     function addField(label, value, context, fn) {
         if (value) {
             var node = $("<tr>").appendTo(context),
@@ -47,7 +47,7 @@ define("io.ox/contacts/view-detail",
             return 0;
         }
     }
-    
+
     function addMail(label, value, context) {
         return addField(label, value, context, function (node) {
             node
@@ -58,7 +58,7 @@ define("io.ox/contacts/view-detail",
             );
         });
     }
-    
+
     function addPhone(label, value, context) {
         return addField(label, value, context, function (node) {
             node
@@ -69,7 +69,7 @@ define("io.ox/contacts/view-detail",
             );
         });
     }
-    
+
     function addAddress(label, street, code, city, country, context) {
         return addField(label, true, context, function (node) {
             var a = $("<a>", {
@@ -96,7 +96,7 @@ define("io.ox/contacts/view-detail",
             node.append(a);
         });
     }
-    
+
     ext.point("io.ox/contacts/detail").extend({
         index: 100,
         id: "contact-details",
@@ -105,12 +105,12 @@ define("io.ox/contacts/view-detail",
             ext.point("io.ox/contacts/detail/head").invoke("draw", node, data);
         }
     });
-    
+
     ext.point("io.ox/contacts/detail/head").extend({
         index: 100,
         id: 'contact-picture',
         draw: function (data) {
-            
+
             this.append(
                 $("<td>")
                 .css({ verticalAlign: "top" })
@@ -141,47 +141,47 @@ define("io.ox/contacts/view-detail",
             );
         }
     });
-    
+
     ext.point("io.ox/contacts/detail").extend({
         index: 100,
-        id: "contact-details",
+        id: "address",
         draw: function (data) {
             ext.point("io.ox/contacts/detail/address").invoke("draw", this, data);
         }
     });
-    
+
     ext.point("io.ox/contacts/detail").extend({
         index: 200,
-        id: "contact-details",
+        id: "phones",
         draw: function (data) {
             ext.point("io.ox/contacts/detail/phones").invoke("draw", this, data);
         }
     });
-    
+
     ext.point("io.ox/contacts/detail").extend({
         index: 200,
-        id: "contact-details",
+        id: "mails",
         draw: function (data) {
             ext.point("io.ox/contacts/detail/mails").invoke("draw", this, data);
         }
     });
-    
+
     ext.point("io.ox/contacts/detail").extend({
         index: 200,
-        id: "contact-details",
+        id: "birthday",
         draw: function (data) {
             ext.point("io.ox/contacts/detail/birthday").invoke("draw", this, data);
         }
     });
-    
+
     ext.point("io.ox/contacts/detail").extend({
         index: 200,
-        id: "contact-details",
+        id: "qr",
         draw: function (data) {
             ext.point("io.ox/contacts/detail/qr").invoke("draw", this, data);
         }
     });
-    
+
     ext.point("io.ox/contacts/detail/address").extend({
         index: 100,
         id: 'contact-address',
@@ -191,9 +191,9 @@ define("io.ox/contacts/view-detail",
             addField(gt("Department"), data.department, this);
             addField(gt("Position"), data.position, this);
             addField(gt("Profession"), data.profession, this);
-            
+
             var r = 0;
-            
+
             if (data.street_business || data.city_business) {
                 r += addAddress(gt("Work"), data.street_business, data.postal_code_business, data.city_business, null, this);
             }
@@ -205,7 +205,7 @@ define("io.ox/contacts/view-detail",
             }
         }
     });
-    
+
     ext.point("io.ox/contacts/detail/phones").extend({
         index: 100,
         id: 'contact-phone',
@@ -241,9 +241,9 @@ define("io.ox/contacts/view-detail",
                 addField("", "\u00A0", this);
             }
         }
-        
+
     });
-    
+
     ext.point("io.ox/contacts/detail/birthday").extend({
         index: 100,
         id: 'contact-birthdays',
@@ -280,12 +280,12 @@ define("io.ox/contacts/view-detail",
                 });
             }
         }
-        
+
     });
+
     return {
         draw: function (data) {
             var node;
-            
             if (!data) {
                 node = $();
             } else {
