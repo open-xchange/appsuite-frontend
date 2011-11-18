@@ -228,7 +228,7 @@ define("io.ox/contacts/main",
 
         drawContact = function (data) {
             //right.idle().empty().append(base.draw(data));
-            console.log("draw", data);
+            console.debug("draw", data);
             right.idle().empty().append(viewDetail.draw(data));
 
         };
@@ -309,15 +309,15 @@ define("io.ox/contacts/main",
                 preventDuplicates: false,
                 theme: 'ox',
                 onResult: function (result, query) {
-                    //console.log('on Result');
-                    console.log(arguments);
+                    //console.debug('on Result');
+                    console.debug(arguments);
                     result.unshift({display_name: query, last_name: query});
                     return result;
                 },
                 onAdd: function (input, tokenlist) {
                     var q = "";
-                    console.log("ONADD");
-                    console.log(tokenlist);
+                    console.debug("ONADD");
+                    console.debug(tokenlist);
                     _.each(tokenlist, function (token) {
                         q += " " + token.last_name;
                     });
@@ -325,15 +325,15 @@ define("io.ox/contacts/main",
                 },
                 onDelete: function (token_data, tokenlist) {
                     var q = "";
-                    console.log('onDelete');
-                    console.log(token_data);
+                    console.debug('onDelete');
+                    console.debug(token_data);
                     _.each(tokenlist, function (token) {
                         q += " " + token.last_name;
                     });
                     $(this).val($.trim(q));
                 },
                 onReady: function () {
-                    console.log('onReady');
+                    console.debug('onReady');
                 }
             });
             */

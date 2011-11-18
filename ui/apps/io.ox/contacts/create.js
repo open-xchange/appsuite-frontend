@@ -107,7 +107,7 @@ define("io.ox/contacts/create",
 
         pane.show().done(function (action) {
             actions[action]();
-          // console.log(actions);
+          // console.debug(actions);
         });
     };
 

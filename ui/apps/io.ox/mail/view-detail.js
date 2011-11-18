@@ -265,7 +265,7 @@ define("io.ox/mail/view-detail",
     ext.point('io.ox/mail/detail').extend(new ext.InlineLinks({
         index: 170,
         id: 'inline-links',
-        ref: 'io.ox/core/mail/links/inline'
+        ref: 'io.ox/mail/links/inline'
     }));
 
     ext.point('io.ox/mail/detail').extend({
