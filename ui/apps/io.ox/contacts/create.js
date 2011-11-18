@@ -95,7 +95,7 @@ define("io.ox/contacts/create",
                     formdata.display_name = util.createDisplayName(formdata);
                     api.create(formdata);
                 }
-                  
+                 
                   //clear the form
                 $(".content .new_contact input").each(function (index) {
                     $(this).val("");
