@@ -24,7 +24,7 @@ define("io.ox/core/api/user",
         },
         requests: {
             all: {
-                columns: "1,20",
+                columns: "1,20,500",
                 sort: "500", // display_name
                 order: "asc"
             },
@@ -63,30 +63,15 @@ define("io.ox/core/api/user",
 
     api.getPictureURL = function (id) {
 
-        var deferred = $.Deferred(),
-            url = ox.base + "/apps/themes/default/dummypicture.png",
-            fail = function () {
-                deferred.resolve(url);
-            };
-
-        api.get({ id: id })
-            .done(function (data) {
-                // ask contact interface for picture
-                require(["io.ox/contacts/api"], function (contactsAPI) {
-                    contactsAPI.get({ id: data.contact_id, folder: data.folder_id })
-                    .done(function (data) {
-                        if (data.image1_url) {
-                            deferred.resolve(data.image1_url);
-                        } else {
-                            fail();
-                        }
-                    })
-                    .fail(fail);
-                });
-            })
-            .fail(fail);
-
-        return deferred;
+        return $.when(api.get({ id: id }), require(["io.ox/contacts/api"]))
+            .pipe(
+                function (data, contactsAPI) {
+                    return contactsAPI.getPictureURL(data);
+                },
+                function () {
+                    return ox.base + "/apps/themes/default/dummypicture.png";
+                }
+            );
     };
 
     api.getPicture = function (id) {

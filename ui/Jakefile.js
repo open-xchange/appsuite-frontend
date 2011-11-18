@@ -39,11 +39,11 @@ if (debug) console.info("Debug mode: on");
 var defineWalker = ast("define").asCall().walker();
 function jsFilter (data) {
     var self = this;
-    
+
     if (data.substr(0, 11) !== "//#NOJSHINT") {
         data = hint.call(this, data, this.getSrc);
     }
-    
+
     var tree = jsp.parse(data, false, true);
     var defineHooks = this.type.getHooks("define");
     tree = ast.scanner(defineWalker, function(scope) {
@@ -57,7 +57,7 @@ function jsFilter (data) {
             defineHooks[i].call(self, name, deps, f);
         }
     }).scan(pro.ast_add_scope(tree));
-    
+
     // UglifyJS
     if (debug) return data;
     tree = pro.ast_lift_variables(tree);
@@ -286,7 +286,7 @@ if (apps.rest) utils.copy(apps.rest);
         t.style.rules = t.definitions.clone().rules.concat(t.style.rules);
         return t;
     }
-    
+
     function themeFilter(template) {
         return function(tree) {
             var overrides = {};
@@ -303,7 +303,7 @@ if (apps.rest) utils.copy(apps.rest);
             }).concat(tree.rules);
         };
     }
-    
+
     utils.fileType("theme-def")
         .addHook("filter", function(data) {
             return less.print(less.lessFilter.call(this, data));
@@ -312,7 +312,7 @@ if (apps.rest) utils.copy(apps.rest);
         .addHook("handler", function(dest) {
             file(dest, ["apps/themes/definitions.less"]);
         });
-    
+
     utils.fileType("theme-style")
         .addHook("filter", function(data) {
             return less.lessFilter.call(this, data).toCSS({ compress: !debug });
@@ -322,7 +322,7 @@ if (apps.rest) utils.copy(apps.rest);
             file(dest, ["apps/themes/definitions.less",
                         "apps/themes/style.less"]);
         });
-    
+
     _.each(utils.list("apps/themes/*/definitions.less"), function(theme) {
         utils.copy([theme], { type: "theme-def" });
         var dir = path.dirname(theme);

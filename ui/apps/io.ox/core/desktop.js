@@ -382,7 +382,7 @@ define("io.ox/core/desktop",
 
                         // update toolbar
                         ext.point(this.name + "/toolbar")
-                            .invoke('draw', this.nodes.toolbar.empty(), {});
+                            .invoke('draw', this.nodes.toolbar.empty(), this.app || this);
 
                         ox.ui.windowManager.trigger("window.beforeshow", self);
                         node.show();

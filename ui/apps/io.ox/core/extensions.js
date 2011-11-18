@@ -194,7 +194,8 @@ define("io.ox/core/extensions",
             click = function (e) {
                 var node = $(this);
                 e.preventDefault();
-                that.point(node.data("ref")).invoke("action", node.data("context"));
+                // TODO: don't know if using self for context makes sense
+                that.point(node.data("ref")).invoke("action", self, node.data("context"));
             };
 
         this.draw = function (context) {

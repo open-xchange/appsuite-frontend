@@ -22,9 +22,9 @@ define("io.ox/files/main",
      "io.ox/help/hints",
      "css!io.ox/files/style.css"
     ], function (viewDetail, api, VGrid, upload, dialogs, hints) {
-    
+
     "use strict";
-    
+
     // application object
     var app = ox.ui.createApp(),
         // app window
@@ -35,43 +35,16 @@ define("io.ox/files/main",
         left,
         right,
         statusBar;
-    
-    function deleteItems() {
-        // ask first
-        
-        new dialogs.ModalDialog()
-            .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
-            .addButton("cancel", "No, rather not")
-            .addButton("delete", "Shut up and delete it!")
-            .show()
-            .done(function (action) {
-                if (action === "delete") {
-                    statusBar.busy();
-                    api.remove(grid.selection.get())
-                        .done(function () {
-                            statusBar.idle();
-                        });
-                    grid.selection.selectNext();
-                }
-            });
-        
-    }
-    
+
     // launcher
     app.setLauncher(function () {
-        
+
         // get window
         app.setWindow(win = ox.ui.createWindow({
             title: "Private files",
             search: true
         }));
-        
-        // toolbar
-        win.addButton({
-            label: "Delete",
-            action: deleteItems
-        });
-        
+
         // left side
         left = $("<div/>").addClass("leftside withStatusBar border-right")
             .css({
@@ -79,17 +52,17 @@ define("io.ox/files/main",
                 overflow: "auto"
             })
             .appendTo(win.nodes.main);
-        
+
         right = $("<div/>")
             .css({ left: "310px", overflow: "auto" })
             .addClass("rightside default-content-padding withStatusBar")
             .appendTo(win.nodes.main);
-        
-        
+
+
         statusBar = $("<div/>")
         .addClass("statusBar")
         .appendTo(win.nodes.main);
-                
+
         // Grid
         grid = new VGrid(left);
         // add template
@@ -105,40 +78,40 @@ define("io.ox/files/main",
                 fields.name.text(data.title);
             }
         });
-        
+
         // all request
         grid.setAllRequest(function () {
             return api.getAll();
         });
-        
+
         // search request
         grid.setAllRequest("search", function () {
             return api.search(win.search.query);
         });
-        
+
         // list request
         grid.setListRequest(function (ids) {
             return api.getList(ids);
         });
-        
+
         /*
          * Search handling
          */
         win.bind("search", function (q) {
             grid.setMode("search");
         });
-        
+
         win.bind("cancel-search", function () {
             grid.setMode("all");
         });
-        
+
         // LFO callback
         function drawDetail(data) {
             var detail = viewDetail.draw(data);
             right.idle().empty().append(detail);
             right.parent().scrollTop(0);
         }
-        
+
         grid.selection.bind("change", function (selection) {
             if (selection.length === 1) {
                 // get file
@@ -148,7 +121,7 @@ define("io.ox/files/main",
                 right.empty();
             }
         });
-        
+
         // explicit keyboard support
         win.bind("show", function () {
             grid.selection.keyboard(true);
@@ -156,22 +129,32 @@ define("io.ox/files/main",
         win.bind("hide", function () {
             grid.selection.keyboard(false);
         });
-        
+
         // bind all refresh
         api.bind("refresh.all", function (data) {
             grid.refresh();
         });
-        
+
         // bind list refresh
         api.bind("refresh.list", function (data) {
             grid.repaint();
         });
-        
+
+        // delete item
+        api.bind("beforedelete", function () {
+            statusBar.busy();
+            grid.selection.selectNext();
+        });
+
+        api.bind("afterdelete", function () {
+            statusBar.idle();
+        });
+
         // go!
         win.show(function () {
             grid.paint();
         });
-        
+
         // Uploads
         var queue = upload.createQueue({
             processFile: function (file) {
@@ -184,31 +167,31 @@ define("io.ox/files/main",
                     });
             }
         });
-        
-        
+
+
         var dropZone = upload.dnd.createDropZone();
-        
+
         if (dropZone.enabled) {
             statusBar.append(hints.createHint({
                 teaser: "Drag and Drop is enabled.",
                 explanation: "You can drag one or more files from your desktop and drop them in the browser window to upload them. Try it out!"
             }));
         }
-        
+
         dropZone.bind("drop", function (file) {
             queue.offer(file);
         });
-        
+
         win.bind("show", function () {
             dropZone.include();
         });
-        
+
         win.bind("hide", function () {
             dropZone.remove();
         });
-        
+
         // Add status for uploads
-        
+
         var $uploadStatus = $("<span/>").css("margin-left", "30px");
         var $filenameNode = $("<span/>").appendTo($uploadStatus);
 
@@ -223,12 +206,12 @@ define("io.ox/files/main",
             $filenameNode.text("");
             statusBar.idle();
         });
-        
-        
+
+
         // Upload Button
         // TODO: Make this IE compatible
         (function () {
-            
+
             var pane = new dialogs.SlidingPane();
             // Let's build our upload form. Nothing fancy here, but we'll allow multiple selection
             // TODO: Add a hint to the user, that multiple uploads are available and how to use them
@@ -244,15 +227,15 @@ define("io.ox/files/main",
             //    teaser: "Multiple uploads are available.",
             //    explanation: "You can select more than one file to upload at the same time in the file choosing dialog. If you want to select a whole range of files, hold down the shift key while selecting the start and end of the range of files. If you want to select multiple individual files, hold down control while clicking on the file names (or the function key, if you're on a mac)."
             //}));
-            
+
             pane.append($divblock_filefield);
             $fileField.appendTo($divblock_filefield);
             $clear.appendTo($divblock_filefield);
             $hint.appendTo($divblock_filefield);
-            
+
             pane.addButton("resolveUpload", "Upload");
             pane.addButton("cancelUpload", "Cancel");
-            
+
             var actions = {
                 resolveUpload: function () {
                     var files = $fileField[0].files; //TODO: Find clean way to do this
@@ -260,12 +243,12 @@ define("io.ox/files/main",
                         queue.offer(file);
                     });
                 },
-            
+
                 cancelUpload: function () {
                     $fileField.val("");
                 }
             };
-            
+
             var showUploadField = function () {
                 pane.show().done(function (action) {
                     console.log("Action: " + action);
@@ -278,9 +261,9 @@ define("io.ox/files/main",
             });
             pane.relativeTo(uploadButton);
         }());
-        
+
     });
-    
+
     return {
         getApp: app.getInstance
     };

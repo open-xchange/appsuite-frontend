@@ -11,13 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/applications/main",
-    ["io.ox/core/api/apps", "io.ox/core/tk/vgrid",
-     "css!io.ox/applications/style.css"
+define('io.ox/applications/main',
+    ['io.ox/core/api/apps',
+     'io.ox/core/tk/vgrid',
+     'css!io.ox/applications/style.css'
     ], function (api, VGrid) {
-    
-    "use strict";
-    
+
+    'use strict';
+
     // application object
     var app = ox.ui.createApp(),
         // app window
@@ -28,116 +29,116 @@ define("io.ox/applications/main",
         // nodes
         left,
         right;
-    
+
     // launcher
     app.setLauncher(function () {
-    
+
         // get window
         win = ox.ui.createWindow({
-            title: "Applications",
+            title: 'Applications',
             toolbar: true
         });
-        
-        win.addClass("io-ox-applications-main");
+
+        win.addClass('io-ox-applications-main');
         app.setWindow(win);
-        
+
         // left panel
-        left = $("<div/>")
-            .addClass("leftside border-right")
+        left = $('<div>')
+            .addClass('leftside border-right')
             .css({
-                width: gridWidth + "px"
+                width: gridWidth + 'px'
             })
             .appendTo(win.nodes.main);
-        
+
         // right panel
-        right = $("<div/>")
-            .css({ left: gridWidth + 1 + "px", overflow: "auto", paddingRight: "0" })
-            .addClass("rightside default-content-padding")
+        right = $('<div>')
+            .css({ left: gridWidth + 1 + 'px', overflow: 'auto', paddingRight: '0' })
+            .addClass('rightside default-content-padding')
             .appendTo(win.nodes.main);
-        
+
         // grid
         grid = new VGrid(left);
-        
+
         // add template
         grid.addTemplate({
             build: function () {
                 var count, title;
-                this.addClass("application")
+                this.addClass('application')
                     .append(
-                        count = $("<div>").addClass("count")
+                        count = $('<div>').addClass('count')
                     )
                     .append(
-                        title = $("<div>").addClass("title")
+                        title = $('<div>').addClass('title')
                     );
                 return { count: count, title: title };
             },
             set: function (data, fields, index) {
                 fields.count.text(data.count);
                 fields.title.text(data.title);
-                if (data.id === "upgrades" && data.count > 0) {
-                    fields.count.addClass("highlight");
+                if (data.id === 'upgrades' && data.count > 0) {
+                    fields.count.addClass('highlight');
                 }
             }
         });
-        
+
         // add label template
         grid.addLabelTemplate({
             build: function () {
-                this.addClass("application-label");
+                this.addClass('application-label');
             },
             set: function (data, fields, index) {
-                this.text(data.group || "");
+                this.text(data.group || '');
             }
         });
-        
+
         // requires new label?
         grid.requiresLabel = function (i, data, current) {
             return data.group !== current ? data.group : false;
         };
-        
+
         // all request
         grid.setAllRequest(function () {
             return $.Deferred().resolve(api.getCategories());
         });
-        
+
         var showView = function (data, view) {
             right.empty().append(view.draw(data));
         };
-        
+
         var loadView = function (obj) {
             var id = obj.id;
-            if (id !== "installed" && id !== "favorites" && id !== "upgrades") {
-                id = "category";
+            if (id !== 'installed' && id !== 'favorites' && id !== 'upgrades') {
+                id = 'category';
             }
-            require(["io.ox/applications/view-" + id])
+            require(['io.ox/applications/view-' + id])
                 .done(_.lfo(showView, obj));
         };
-        
+
         grid.selection.setMultiple(false)
-            .bind("change", function (selection) {
+            .bind('change', function (selection) {
                 if (selection.length === 1) {
                     loadView(selection[0]);
                 }
             });
-        
-        win.bind("show", function () {
+
+        win.bind('show', function () {
             grid.selection.keyboard(true);
         });
-        win.bind("hide", function () {
+        win.bind('hide', function () {
             grid.selection.keyboard(false);
         });
-        
+
         // go!
         win.show(function () {
             grid.paint();
         });
-        
+
         // bind all refresh
-        api.bind("refresh.all", function (data) {
+        api.bind('refresh.all', function (data) {
             grid.refresh();
         });
     });
-    
+
     return {
         getApp: app.getInstance
     };

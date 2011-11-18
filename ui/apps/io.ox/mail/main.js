@@ -14,12 +14,13 @@
 define("io.ox/mail/main",
     ["io.ox/mail/util",
      "io.ox/mail/api",
+     "io.ox/core/extensions",
      "io.ox/core/tk/vgrid",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
      "io.ox/mail/actions",
      "css!io.ox/mail/style.css"
-    ], function (util, api, VGrid, viewDetail, tmpl) {
+    ], function (util, api, ext, VGrid, viewDetail, tmpl) {
 
     'use strict';
 
@@ -49,21 +50,21 @@ define("io.ox/mail/main",
 
         // get window
         win = ox.ui.createWindow({
+            name: 'io.ox/mail',
             title: "Inbox",
             toolbar: true,
             search: true
         });
 
         win.addClass("io-ox-mail-main");
-
-        // toolbar
-        win.addButton({
-            label: "New Mail",
-            action: util.createNewMailDialog
-        })
-        .css("marginRight", "40px");
-
         app.setWindow(win);
+
+        // add "create" link
+        ext.point('io.ox/mail/toolbar').extend(new ext.ToolbarLinks({
+            index: 100,
+            id: 'inline-links',
+            ref: 'io.ox/mail/links/toolbar'
+        }));
 
         // left panel
         left = $("<div/>")

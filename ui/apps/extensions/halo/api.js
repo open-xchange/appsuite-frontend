@@ -14,132 +14,129 @@
 
 // TODO: Caching?
 
-(function () {
-    
-    "use strict";
-    
-    var name = "extensions/halo/api";
-    var activeProviders = [];
-    
-    function init(ready, http, config, haloConfigUtil) {
-        
-        http.GET({
-                module: "halo/contact",
-                params: {
-                    action: "services"
-                }
-            })
-            .done(function (response) {
-                var activeMap = {};
-                _(response).each(function (provider) {
-                    activeMap[provider] = true;
-                });
-                var providerConfig = config.get("ui.halo.providers");
-                activeProviders = haloConfigUtil.interpret(providerConfig, response);
-                ready();
-            })
-            .fail(ready);
-    }
-    
-    function module(http, extensions) {
-        
-        function HaloAPI(options) {
-            
-            var providerFilter = options.providerFilter || {
-                filterProviders: function (providers) {
-                    return providers;
-                }
-            };
-            var requestEnhancementPoint = extensions.point("io.ox/halo/contact:requestEnhancement");
-            
-            // Investigate a contact
-            // This will trigger a backend halo call for every active provider
-            // extensions in point "io.ox/halo/contact:requestEnhancement" will have a chance to modify the call
-            // returns an Object mapping a provider to a deferred that will eventually provide the data
-            this.investigate = function (contact) {
-                var investigationMap = {};
-                // Send a request for every active provider
-                var myProviders = providerFilter.filterProviders(activeProviders);
-                _(myProviders).each(function (providerName) {
-                    // Construct the basic request
-                    var request = {
-                        module: "halo/contact",
-                        params: {
-                            action: "investigate",
-                            provider: providerName
-                        },
-                        appendColumns: false,
-                        contact: contact
-                    };
-                    // Let extensions enhance the request with additional parameters
-                    requestEnhancementPoint.each(function (ext) {
-                        if (!ext.enhances(providerName)) {
-                            return;
-                        }
-                        var updatedRequest = ext.enhance(request, providerName);
-                        if (updatedRequest) {
-                            request = updatedRequest;
-                        }
-                    });
-                    // Read back the contact in case it was modified by an extension point
-                    contact = request.contact;
-                    delete request.contact;
-                    
-                    request.data = contact;
-                    
-                    // have the http module handle the request and put the deferred into the map
-                    investigationMap[providerName] = http.PUT(request);
-                });
-                return investigationMap;
-            };
-        }
-        
-        function HaloView() {
-            
-            var rendererPoint = extensions.point("io.ox/halo/contact:renderer");
-            
-            this.filterProviders = function (providers) {
-                var filtered = [];
-                
-                _(providers).each(function (providerName) {
-                    rendererPoint.each(function (ext) {
-                        if (ext.handles(providerName)) {
-                            filtered.push(providerName);
-                        }
-                    });
-                });
-                
-                return filtered;
-            };
-            
-            this.draw = function ($node, providerName, data) {
-                $node = $($node);
-                var deferreds = [];
-                rendererPoint.each(function (ext) {
-                    if (ext.handles(providerName)) {
-                        var deferred = ext.draw($node, providerName, data);
-                        if (deferred) {
-                            deferreds.push(deferred);
-                        }
+define.async('extensions/halo/api',
+    ['io.ox/core/http', 'io.ox/core/config',
+     'extensions/halo/config', 'io.ox/core/extensions'
+    ], function (http, config, haloConfigUtil, ext) {
+
+    'use strict';
+
+    var activeProviders = [],
+        // deferred define
+        wait = $.Deferred(),
+        api;
+
+    // initialize (async)
+    http.GET({
+            module: 'halo/contact',
+            params: {
+                action: 'services'
+            }
+        })
+        .done(function (response) {
+            var activeMap = {};
+            _(response).each(function (provider) {
+                activeMap[provider] = true;
+            });
+            var providerConfig = config.get('ui.halo.providers');
+            activeProviders = haloConfigUtil.interpret(providerConfig, response);
+        })
+        .always(function () {
+            wait.resolve(api);
+        });
+
+    function HaloAPI(options) {
+
+        var providerFilter = options.providerFilter || {
+            filterProviders: function (providers) {
+                return providers;
+            }
+        };
+        var requestEnhancementPoint = ext.point('io.ox/halo/contact:requestEnhancement');
+
+        // Investigate a contact
+        // This will trigger a backend halo call for every active provider
+        // extensions in point 'io.ox/halo/contact:requestEnhancement' will have a chance to modify the call
+        // returns an Object mapping a provider to a deferred that will eventually provide the data
+        this.investigate = function (contact) {
+            var investigationMap = {};
+            // Send a request for every active provider
+            var myProviders = providerFilter.filterProviders(activeProviders);
+            _(myProviders).each(function (providerName) {
+                // Construct the basic request
+                var request = {
+                    module: 'halo/contact',
+                    params: {
+                        action: 'investigate',
+                        provider: providerName
+                    },
+                    appendColumns: false,
+                    contact: contact
+                };
+                // Let extensions enhance the request with additional parameters
+                requestEnhancementPoint.each(function (ext) {
+                    if (!ext.enhances(providerName)) {
+                        return;
+                    }
+                    var updatedRequest = ext.enhance(request, providerName);
+                    if (updatedRequest) {
+                        request = updatedRequest;
                     }
                 });
-                return $.when.apply($, deferreds);
-            };
-        }
-        
-        var viewer = new HaloView();
-        
-        return {
-            halo: new HaloAPI({
-                providerFilter: viewer
-            }),
-            viewer: viewer
+                // Read back the contact in case it was modified by an extension point
+                contact = request.contact;
+                delete request.contact;
+
+                request.data = contact;
+
+                // have the http module handle the request and put the deferred into the map
+                investigationMap[providerName] = http.PUT(request);
+            });
+            return investigationMap;
         };
     }
-    
-    initializeAndDefine(
-        name,
-        ["io.ox/core/http", "io.ox/core/config", "extensions/halo/config"], init,
-        ["io.ox/core/http", "io.ox/core/extensions"], module
-    );
-}());
+
+    function HaloView() {
+
+        var rendererPoint = ext.point('io.ox/halo/contact:renderer');
+
+        this.filterProviders = function (providers) {
+            var filtered = [];
+
+            _(providers).each(function (providerName) {
+                rendererPoint.each(function (ext) {
+                    if (ext.handles(providerName)) {
+                        filtered.push(providerName);
+                    }
+                });
+            });
+
+            return filtered;
+        };
+
+        this.draw = function ($node, providerName, data) {
+            $node = $($node);
+            var deferreds = [];
+            rendererPoint.each(function (ext) {
+                if (ext.handles(providerName)) {
+                    var deferred = ext.draw($node, providerName, data);
+                    if (deferred) {
+                        deferreds.push(deferred);
+                    }
+                }
+            });
+            return $.when.apply($, deferreds);
+        };
+    }
+
+    var viewer = new HaloView();
+
+    api = {
+        halo: new HaloAPI({
+            providerFilter: viewer
+        }),
+        viewer: viewer
+    };
+
+    return wait;
+});

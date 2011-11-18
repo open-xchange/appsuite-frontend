@@ -13,26 +13,23 @@
 
 define("io.ox/mail/api",
     ["io.ox/core/http", "io.ox/core/api/factory"], function (http, apiFactory) {
-    
+
     "use strict";
-    
+
     // simple temporary thread cache
     var threads = {};
-    
+
     // helper: get number of mails in thread
     var threadSize = function (obj) {
         var key = obj.folder_id + "." + obj.id;
         return (threads[key] || []).length;
     };
-    
+
     // helper: sort by received date
     var dateSort = function (a, b) {
         return b.received_date - a.received_date;
     };
-    
-    // simple contact picture cache
-    var contactPictures = {};
-    
+
     // generate basic API
     var api = apiFactory({
         module: "mail",
@@ -78,19 +75,19 @@ define("io.ox/mail/api",
             }
         }
     });
-    
+
     // extend API
-    
+
     // ~ all
     api.getAllThreads = function (options) {
-        
+
         options = options || {};
         options.columns = "601,600,610,612"; // +level, +received_date
         options.sort = "thread";
-        
+
         // clear threads
         threads = {};
-        
+
         return this.getAll(options)
             .pipe(function (data) {
                 // loop over data
@@ -121,13 +118,13 @@ define("io.ox/mail/api",
                 return all;
             });
     };
-        
+
     // get mails in thread
     api.getThread = function (obj) {
         var key = obj.folder_id + "." + obj.id;
         return threads[key] || [obj];
     };
-    
+
     // ~ get
     api.getFullThread = function (obj) {
         // get list of IDs
@@ -153,10 +150,10 @@ define("io.ox/mail/api",
         });
         return result;
     };
-    
+
     // ~ list
     api.getThreads = function (ids) {
-        
+
         return this.getList(ids)
             .pipe(function (data) {
                 // clone not to mess up with searches
@@ -169,53 +166,6 @@ define("io.ox/mail/api",
                 return data;
             });
     };
-    
-    // get contact picture by email address
-    api.getContactPicture = function (address) {
-        
-        // lower case!
-        address = String(address).toLowerCase();
-        
-        if (contactPictures[address] === undefined) {
-            // search for contact
-            return http.PUT({
-                    module: "contacts",
-                    params: {
-                        action: "search",
-                        columns: "20,1,500,606"
-                    },
-                    data: {
-                        email1: address,
-                        email2: address,
-                        email3: address,
-                        orSearch: true
-                    }
-                })
-                .pipe(function (data) {
-                    // focus on contact with an image
-                    data = $.grep(data, function (obj) {
-                        return !!obj.image1_url;
-                    });
-                    if (data.length) {
-                        // favor contacts in global address book
-                        data.sort(function (a, b) {
-                            return b.folder_id === "6" ? +1 : -1;
-                        });
-                        // remove host
-                        data[0].image1_url = data[0].image1_url.replace(/^https?\:\/\/[^\/]+/i, "");
-                        // use first contact
-                        return (contactPictures[address] = data[0].image1_url);
-                    } else {
-                        // no picture found
-                        return (contactPictures[address] = "");
-                    }
-                });
-            
-        } else {
-            // return cached picture
-            return $.Deferred().resolve(contactPictures[address]);
-        }
-    };
-    
+
     return api;
 });

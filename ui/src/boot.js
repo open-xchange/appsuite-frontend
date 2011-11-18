@@ -25,24 +25,7 @@ require({
 $(document).ready(function () {
 
     "use strict";
-    
-    // support for application cache?
-    if (Modernizr.applicationcache) {
-        // if manifest has changed, we have to swap caches and reload
-        var ac = window.applicationCache,
-            updateReady = function () {
-                if (ac.status === ac.UPDATEREADY) {
-                    ac.swapCache();
-                    location.reload();
-                }
-            };
-        ac.addEventListener("updateready", updateReady, false);
-        // unbind after some seconds
-        setTimeout(function () {
-            ac.removeEventListener("updateready", updateReady, false);
-        }, 10000);
-    }
-    
+
     // animations
     var DURATION = 250,
         // flags
@@ -59,12 +42,12 @@ $(document).ready(function () {
         setDefaultLanguage,
         autoLogin,
         initialize;
-    
+
     // continuation
     cont = function () {
-        $("#io-ox-login-username").focus();
+        $("#io-ox-login-username").focus().select();
     };
-    
+
     cleanUp = function () {
         // remove dom nodes
         $("#io-ox-login-footer").remove();
@@ -77,7 +60,7 @@ $(document).ready(function () {
         cleanUp = fnChangeLanguage =
             changeLanguage = initialize = null;
     };
-    
+
     gotoCore = function () {
         if (ox.signin === true) {
             // show loader
@@ -88,7 +71,7 @@ $(document).ready(function () {
             loadCore();
         }
     };
-    
+
     /**
      * Load core
      */
@@ -117,10 +100,10 @@ $(document).ready(function () {
                     });
             });
     };
-    
+
     // default success handler
     loginSuccess = gotoCore;
-    
+
     /**
      * Handler for form submit
      */
@@ -147,7 +130,7 @@ $(document).ready(function () {
                     // restore form
                     restore();
                     // reset focus
-                    $("#io-ox-login-" + (relogin ? "password" : "username")).focus();
+                    $("#io-ox-login-" + (relogin ? "password" : "username")).focus().select();
                 });
             },
             // get user name / password
@@ -178,7 +161,7 @@ $(document).ready(function () {
             })
             .fail(fail);
     };
-    
+
     changeLanguage = function (id) {
         return require(["io.ox/core/gettext"])
             .pipe(function (gettext) {
@@ -198,14 +181,14 @@ $(document).ready(function () {
                 });
             });
     };
-    
+
     fnChangeLanguage = function (e) {
         // stop event
         e.preventDefault();
         // change language
         changeLanguage(e.data.id);
     };
-    
+
     /**
      * Set default language
      */
@@ -222,14 +205,14 @@ $(document).ready(function () {
         }
         return changeLanguage(lang);
     };
-    
+
     /**
      * Relogin
      */
     (function () {
-        
+
         var queue = [];
-        
+
         ox.relogin = function (request, deferred) {
             if (!ox.online) {
                 return;
@@ -266,7 +249,7 @@ $(document).ready(function () {
                 // show login dialog
                 $("#io-ox-login-screen-decorator").show();
                 $("#io-ox-login-screen").addClass("relogin").fadeIn(DURATION, function () {
-                    $("#io-ox-login-password").focus();
+                    $("#io-ox-login-password").focus().select();
                 });
             } else {
                 // enqueue last request
@@ -274,12 +257,12 @@ $(document).ready(function () {
             }
         };
     }());
-    
+
     /**
      * Auto login
      */
     autoLogin = function () {
-        
+
         function fail() {
             if (ox.signin) {
                 initialize();
@@ -287,7 +270,7 @@ $(document).ready(function () {
                 _.url.redirect("signin");
             }
         }
-        
+
         // got session via hash?
         if (_.url.hash("session")) {
             ox.session = _.url.hash("session");
@@ -302,7 +285,7 @@ $(document).ready(function () {
             fail();
         }
     };
-    
+
     /**
      * Initialize login screen
      */
@@ -359,7 +342,7 @@ $(document).ready(function () {
                 'Administrator rights are not required. Just restart IE after installation.</div>'
             );
         }
-        
+
         return $.when(
                 // load extensions
                 require("io.ox/core/extensions").load(),
@@ -371,11 +354,11 @@ $(document).ready(function () {
                 $("#io-ox-login-blocker").on("mousedown", false);
                 $("#io-ox-login-form").on("submit", fnSubmit);
                 $("#io-ox-login-screen").show();
-                $("#io-ox-login-username").removeAttr("disabled").focus();
+                $("#io-ox-login-username").removeAttr("disabled").focus().select();
                 $("#background_loader").idle().fadeOut(DURATION, cont);
             });
     };
-    
+
     // teach require.js to use deferred objects
     var req = window.req = require;
     require = function (deps, callback) {
@@ -389,26 +372,46 @@ $(document).ready(function () {
             return req.apply(this, arguments);
         }
     };
-    
-    initializeAndDefine = function (name, initDeps, init, deps, callback) {
-        // add loader plugin for this specific module
-        define(name + ":init", {
-            load: function (name, req, onLoad, config) {
-                // resolve dependencies and inject onLoad callback
-                req(initDeps, function () {
-                    init.apply(window, [onLoad].concat($.makeArray(arguments)));
-                });
-            }
-        });
-        // define module. add plugin as dependency
-        define(name, deps.concat(name + ":init!"), callback);
-    };
-    
+
+    /**
+     * Asynchronous define (has same signature than define)
+     * Callback must return deferred object.
+     */
+    define.async = (function () {
+
+        var getLoader = function (name, deps, callback) {
+                return function (n, req, onLoad, config) {
+                    // resolve module dependencies
+                    req(deps, function () {
+                        // get module (must return deferred object)
+                        var def = callback.apply(null, arguments);
+                        if (def && def.done) {
+                            def.done(onLoad);
+                        } else {
+                            console.error('Module "' + name + '" does not return a deferred object!');
+                        }
+                        name = deps = callback = null;
+                    });
+                };
+            },
+
+            identity = function (x) {
+                return x;
+            };
+
+        return function (name, deps, callback) {
+            // use loader plugin to defer module definition
+            define(name + ':init', { load: getLoader(name, deps, callback) });
+            // define real module - will wait for promise
+            define(name, [name + ':init!'], identity);
+        };
+    }());
+
     // searchfield fix
     if (!_.browser.Chrome) {
         $("html").addClass("no-searchfield");
     }
-    
+
     // do we have a mouse?
     if (!Modernizr.touch) {
         $("html").addClass("mouse");
@@ -418,15 +421,15 @@ $(document).ready(function () {
             //e.preventDefault();
         });
     }
-    
+
     // no ellipsis? (firefox)
     if (_.browser.Firefox) {
         $("html").addClass("no-ellipsis");
     }
-    
+
     // be busy
     $("#background_loader").busy();
-    
+
     var boot = function () {
         // get pre core & server config
         require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js"])
@@ -439,7 +442,7 @@ $(document).ready(function () {
                 autoLogin();
             });
     };
-    
+
     // handle online/offline mode
     if (!ox.signin) {
         $(window).on("online offline", function (e) {
@@ -455,11 +458,38 @@ $(document).ready(function () {
             $(window).trigger("offline");
         }
     }
-    
+
     // handle document visiblity
     $(window).on("blur focus", function (e) {
             ox.windowState = e.type === "blur" ? "background" : "foreground";
         });
-    
-    boot();
+
+    // support for application cache?
+    if (Modernizr.applicationcache) {
+
+        (function () {
+
+            var ac = window.applicationCache,
+                updateReady = function () {
+                    // if manifest has changed, we have to swap caches and reload
+                    if (ac.status === ac.UPDATEREADY) {
+                        ac.swapCache();
+                        location.reload();
+                    }
+                },
+                cont = function () {
+                    ac.removeEventListener("cached", cont, false);
+                    ac.removeEventListener("noupdate", cont, false);
+                    ac.removeEventListener("updateready", cont, false);
+                    boot();
+                };
+
+            ac.addEventListener("cached", cont, false);
+            ac.addEventListener("noupdate", cont, false);
+            ac.addEventListener("updateready", updateReady, false);
+
+        }());
+    } else {
+        boot();
+    }
 });
