@@ -529,7 +529,8 @@ define("io.ox/core/desktop",
                 id: "window-" + guid,
                 name: "",
                 width: 0,
-                title: "Window #" + guid,
+                title: "",
+                titleWidth: '300px',
                 search: false,
                 toolbar: false,
                 settings: false,
@@ -569,12 +570,14 @@ define("io.ox/core/desktop",
                     .append(
                         // title
                         win.nodes.title = $("<div/>")
+                        .css("width", opt.titleWidth)
                         .addClass("window-title")
                         .append($("<span/>"))
                     )
                     .append(
                         // toolbar
                         win.nodes.toolbar = $("<div/>")
+                        .css("left", opt.titleWidth)
                         .addClass("window-toolbar")
                     )
                     .append(
@@ -685,36 +688,48 @@ define("io.ox/core/desktop",
                     };
 
                 $("<div/>")
-                    .addClass("searchfield-wrapper")
-                    .css({ "float": "right" })
-                    .append(
-                        $("<input/>", { type: "search", id: "autocomplete", placeholder: "Search...", size: "40" })
-
-                            .on("keypress", function (e) {
-                                e.stopPropagation();
-                            })
-                            .on("search", function (e) {
-                                e.stopPropagation();
-                                if ($(this).val() === "") {
-                                    $(this).blur();
+                .addClass("searchfield-wrapper")
+                .css({ "float": "right" })
+                .append(
+                    $("<input>", {
+                        type: "search",
+                        placeholder: "Search...",
+                        size: "40"
+                    })
+                    .on({
+                        keypress: function (e) {
+                            e.stopPropagation();
+                        },
+                        search: function (e) {
+                            e.stopPropagation();
+                            if ($(this).val() === "") {
+                                $(this).blur();
+                            }
+                        },
+                        change: function (e) {
+                            e.stopPropagation();
+                            win.search.query = $(this).val();
+                            // trigger search?
+                            if (win.search.query !== "") {
+                                if (win.search.query !== lastQuery) {
+                                    triggerSearch(lastQuery = win.search.query);
                                 }
-                            })
-                            .on("change", function (e) {
-                                e.stopPropagation();
-                                win.search.query = $(this).val();
-                                // trigger search?
-                                if (win.search.query !== "") {
-                                    if (win.search.query !== lastQuery) {
-                                        triggerSearch(lastQuery = win.search.query);
-                                    }
-                                } else if (lastQuery !== "") {
-                                    win.trigger("cancel-search", lastQuery = "");
-                                }
-                            })
-                    )
-                    .prependTo(win.nodes.toolbar);
+                            } else if (lastQuery !== "") {
+                                win.trigger("cancel-search", lastQuery = "");
+                            }
+                        }
+                    })
+                )
+                .prependTo(win.nodes.toolbar);
+            }
 
-
+            // toolbar extension point
+            if (opt.toolbar === true && opt.name) {
+                // add "create" link
+                ext.point(opt.name + '/toolbar').extend(new ext.ToolbarLinks({
+                    id: 'links',
+                    ref: opt.name + '/links/toolbar'
+                }));
             }
 
             // fix height/position/appearance
@@ -732,12 +747,12 @@ define("io.ox/core/desktop",
                 // set title
                 win.setTitle(opt.title);
 
-                if (opt.toolbar || opt.search) {
-                    win.nodes.head.addClass("larger");
-                    win.nodes.body.addClass("movedown");
-                } else {
-                    win.nodes.toolbar.hide();
-                }
+//                if (opt.toolbar || opt.search) {
+//                    win.nodes.head.addClass("larger");
+//                    win.nodes.body.addClass("movedown");
+//                } else {
+//                    win.nodes.toolbar.hide();
+//                }
 
                 // quick settings?
                 if (opt.settings) {

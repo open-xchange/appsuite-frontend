@@ -40,7 +40,7 @@ define("io.ox/mail/main",
         win,
         // grid
         grid,
-        gridWidth = 310,
+        GRID_WIDTH = 310,
         // nodes
         left,
         right;
@@ -52,6 +52,7 @@ define("io.ox/mail/main",
         win = ox.ui.createWindow({
             name: 'io.ox/mail',
             title: "Inbox",
+            titleWidth: GRID_WIDTH + 10 + "px",
             toolbar: true,
             search: true
         });
@@ -59,24 +60,17 @@ define("io.ox/mail/main",
         win.addClass("io-ox-mail-main");
         app.setWindow(win);
 
-        // add "create" link
-        ext.point('io.ox/mail/toolbar').extend(new ext.ToolbarLinks({
-            index: 100,
-            id: 'inline-links',
-            ref: 'io.ox/mail/links/toolbar'
-        }));
-
         // left panel
         left = $("<div/>")
             .addClass("leftside border-right")
             .css({
-                width: gridWidth + "px"
+                width: GRID_WIDTH + "px"
             })
             .appendTo(win.nodes.main);
 
         // right panel
         $("<div/>")
-            .css({ left: gridWidth + 1 + "px" })
+            .css({ left: GRID_WIDTH + 1 + "px" })
             .addClass("rightside mail-detail-pane")
             .append(
                 right = $("<div/>").addClass("abs")

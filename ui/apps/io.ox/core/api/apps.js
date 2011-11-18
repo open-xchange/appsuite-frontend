@@ -24,29 +24,6 @@ define.async('io.ox/core/api/apps',
         wait = $.Deferred(),
         api;
 
-    // initialize
-    appCache = new cache.SimpleCache('apps', true);
-
-    function fetch() {
-        return require([ox.base + '/src/userconfig.js'])
-            .done(function (data) {
-                // add to cache & local var
-                appCache.add('default', appData = data);
-            });
-    }
-
-    if (!appCache.contains('default')) {
-        // fetch data from server
-        fetch().done(function () {
-            wait.resolve(api);
-        });
-    } else {
-        // use locally stored data but also fetch new stuff
-        appData = appCache.get('default');
-        fetch();
-        wait.resolve(api);
-    }
-
     var getCategories = function () {
             // loop over apps to figure out numbers per category
             var counts = {};
@@ -151,6 +128,29 @@ define.async('io.ox/core/api/apps',
     };
 
     event.Dispatcher.extend(api);
+
+    // initialize
+    appCache = new cache.SimpleCache('apps', true);
+
+    function fetch() {
+        return require([ox.base + '/src/userconfig.js'])
+            .done(function (data) {
+                // add to cache & local var
+                appCache.add('default', appData = data);
+            });
+    }
+
+    if (!appCache.contains('default')) {
+        // fetch data from server
+        fetch().done(function () {
+            wait.resolve(api);
+        });
+    } else {
+        // use locally stored data but also fetch new stuff
+        appData = appCache.get('default');
+        fetch();
+        wait.resolve(api);
+    }
 
     return wait;
 });

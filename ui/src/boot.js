@@ -470,19 +470,28 @@ $(document).ready(function () {
         (function () {
 
             var ac = window.applicationCache,
-                updateReady = function () {
-                    // if manifest has changed, we have to swap caches and reload
-                    if (ac.status === ac.UPDATEREADY) {
-                        ac.swapCache();
-                        location.reload();
-                    }
-                },
-                cont = function () {
-                    ac.removeEventListener("cached", cont, false);
-                    ac.removeEventListener("noupdate", cont, false);
-                    ac.removeEventListener("updateready", cont, false);
-                    boot();
-                };
+                clear, updateReady, cont;
+
+            clear = function () {
+                ac.removeEventListener("cached", cont, false);
+                ac.removeEventListener("noupdate", cont, false);
+                ac.removeEventListener("updateready", updateReady, false);
+            };
+
+            updateReady = function () {
+                // if manifest has changed, we have to swap caches and reload
+                if (ac.status === ac.UPDATEREADY) {
+                    clear();
+                    ac.swapCache();
+                    location.reload();
+                }
+            };
+
+            cont = function (e) {
+                console.warn("Boot...");
+                clear();
+                boot();
+            };
 
             ac.addEventListener("cached", cont, false);
             ac.addEventListener("noupdate", cont, false);

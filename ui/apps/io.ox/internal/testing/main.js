@@ -13,30 +13,30 @@
 
 // TODO: Add Convenience and niceties
 define("io.ox/internal/testing/main", ["io.ox/internal/testing/jasmine", "io.ox/core/extensions"], function (jasmine, ext) {
-    
+
     "use strict";
-    
+
     var app = ox.ui.createApp({
         title: "Unit Tests"
     }),
     // app window
     win;
-        
+
     app.setLauncher(function () {
-        
+
         // get window
         app.setWindow(win = ox.ui.createWindow({
             title: "Jasmine Tests",
             search: true
         }));
-        
+
         function go() {
             win.show();
-            
+
             var env = jasmine.jasmine.getEnv();
             var suiteNodes = {};
             var specNodes = {};
-            
+
             env.addReporter({
                 reportRunnerStarting: function (runner) {
                     win.nodes.main.busy();
@@ -52,14 +52,14 @@ define("io.ox/internal/testing/main", ["io.ox/internal/testing/jasmine", "io.ox/
                     });
                 },
                 reportRunnerResults: function (runner) {
-                    //console.log("reportRunnerResults", runner.results());
+                    //console.debug("reportRunnerResults", runner.results());
                     win.nodes.main.idle();
                 },
                 reportSuiteResults: function (suite) {
-                    //console.log(suite);
+                    //console.debug(suite);
                 },
                 reportSpecStarting: function (spec) {
-                    //console.log("spec starting", spec);
+                    //console.debug("spec starting", spec);
                 },
                 reportSpecResults: function (spec) {
                     var $node = specNodes[spec.id];
@@ -75,7 +75,7 @@ define("io.ox/internal/testing/main", ["io.ox/internal/testing/jasmine", "io.ox/
                             }
                         });
                     }
-                    //console.log("spec results", spec);
+                    //console.debug("spec results", spec);
                 }
             });
             env.execute();
@@ -89,12 +89,12 @@ define("io.ox/internal/testing/main", ["io.ox/internal/testing/jasmine", "io.ox/
                 });
             }
         });
-        
-        
+
+
     });
-    
+
     return {
         getApp: app.getInstance
     };
-    
+
 });

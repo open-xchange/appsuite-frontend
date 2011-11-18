@@ -13,17 +13,17 @@
 
 define("io.ox/preview/main",
     ["io.ox/preview/util"], function (util) {
-    
+
     "use strict";
-    
+
     var Renderer = {
 
         // a map file ending <-> renderer id
         map: {},
-        
+
         // available render engines
         engines: [],
-        
+
         register: function (Engine) {
             var Self = this;
             $.each(Engine.endings, function (index, element) {
@@ -32,7 +32,7 @@ define("io.ox/preview/main",
             this.engines.push(Engine);
             return true;
         },
-        
+
         get: function (id) {
             for (var i = 0; i < this.engines.length; i++) {
                 var Engine = this.engines[i];
@@ -42,12 +42,12 @@ define("io.ox/preview/main",
             }
             return null;
         },
-        
+
         getByFileType: function (fileType) {
             return this.get(this.map[fileType]) || null;
         }
     };
-    
+
     // register image typed renderer
     Renderer.register({
         id: "image",
@@ -66,7 +66,7 @@ define("io.ox/preview/main",
             );
         }
     });
-    
+
     // register audio typed renderer
     if (Modernizr.audio) {
         Renderer.register({
@@ -91,7 +91,7 @@ define("io.ox/preview/main",
             }
         });
     }
-    
+
     // if available register office typed renderer
     if (ox.serverConfig.previewMimeTypes) {
         Renderer.register({
@@ -114,7 +114,7 @@ define("io.ox/preview/main",
             }
         });
     }
-    
+
     Renderer.register({
         id: "text",
         endings: [ "txt", "js" ],
@@ -129,30 +129,30 @@ define("io.ox/preview/main",
             }
         }
     });
-    
+
     var Preview = function (file) {
 
         this.file = file;
         this.Renderer = null;
-        
+
         if (this.file.file_mimetype) {
             this.file.mimetype = this.file.file_mimetype;
         } else if (!this.file.mimetype) {
             this.file.mimetype = "application/octet-stream";
         }
-        
+
         if (this.file.filename) {
             this.file.name = this.file.filename;
         }
-        
+
         if (this.file.name) {
             // get matching renderer
             this.Renderer = Renderer.getByFileType(util.FileTypesMap.getFileType(this.file.name));
         }
-        
+
         this.ContentType = new util.ContentType(this.file.mimetype);
     };
-    
+
     Preview.prototype = {
 
         getContentType: function () {
@@ -162,7 +162,7 @@ define("io.ox/preview/main",
         getRenderer: function () {
             return this.Renderer;
         },
-        
+
         supportsPreview: function () {
             if (this.Renderer !== null) {
                 return this.Renderer.canRender(this.file);
@@ -170,20 +170,20 @@ define("io.ox/preview/main",
                 return false;
             }
         },
-        
+
         appendTo: function (node) {
             if (this.supportsPreview()) {
                 this.Renderer.paint(this.file, node);
             }
         }
     };
-    
+
 //    var ct = new util.ContentType('application/vnd.openxmlformats-officedocument.wordprocessingml.document; charset="UTF-8"; name="My testing document.docx";');
-//    console.log(ct, ct.getBaseType(), ct.getSubType(), ct.getPrimaryType(), ct.getParameterList(), ct.previewSupported());
+//    console.debug(ct, ct.getBaseType(), ct.getSubType(), ct.getPrimaryType(), ct.getParameterList(), ct.previewSupported());
 //
 //    var ftm = util.FileTypesMap;
-//    console.log(ftm, ftm.getContentType('My testing document.docx'), ftm.getFileType('My testing document.docx'), ftm.previewSupported('My testing document.docx'));
-    
+//    console.debug(ftm, ftm.getContentType('My testing document.docx'), ftm.getFileType('My testing document.docx'), ftm.previewSupported('My testing document.docx'));
+
     return Preview;
-    
+
 });

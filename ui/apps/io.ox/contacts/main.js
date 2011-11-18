@@ -23,9 +23,9 @@ define("io.ox/contacts/main",
      "css!io.ox/contacts/style.css"
     ], function (util, api, VGrid, dialogs, hints, viewDetail, config, create, update_app) {
 
-    
+
     "use strict";
-    
+
     // application object
     var app = ox.ui.createApp(),
         // app window
@@ -37,19 +37,19 @@ define("io.ox/contacts/main",
         left,
         thumbs,
         right;
-    
+
     // launcher
     app.setLauncher(function () {
-        
+
         // get window
         win = ox.ui.createWindow({
             title: "Global Address Book",
             search: true
         });
-        
+
         app.setWindow(win);
-        
-    
+
+
         // left panel
         left = $("<div/>")
             .addClass("leftside border-right")
@@ -58,7 +58,7 @@ define("io.ox/contacts/main",
                 overflow: "auto"
             })
             .appendTo(win.nodes.main);
-        
+
         // thumb index
         thumbs = $("<div/>")
             .addClass("atb contact-grid-index border-left border-right")
@@ -67,7 +67,7 @@ define("io.ox/contacts/main",
                 width: "34px"
             })
             .appendTo(win.nodes.main);
-        
+
         // right panel
         right = $("<div/>")
             .css({ left: gridWidth + 39 + "px", overflow: "auto" })
@@ -76,7 +76,7 @@ define("io.ox/contacts/main",
 
         // grid
         grid = new VGrid(left);
-        
+
         // add template
         grid.addTemplate({
             build: function () {
@@ -100,7 +100,7 @@ define("io.ox/contacts/main",
                 }
             }
         });
-        
+
         // add label template
         grid.addLabelTemplate({
             build: function () {
@@ -110,43 +110,43 @@ define("io.ox/contacts/main",
                 this.text(name.substr(0, 1).toUpperCase());
             }
         });
-        
+
         // requires new label?
         grid.requiresLabel = function (i, data, current) {
             var name = data.last_name || data.display_name || "#",
                 prefix = name.substr(0, 1).toUpperCase();
             return (i === 0 || prefix !== current) ? prefix : false;
         };
-        
+
         // all request
         grid.setAllRequest(function () {
             return api.getAll();
         });
-        
+
         // search request
         grid.setAllRequest("search", function () {
             return api.search(win.search.query);
         });
-        
+
         // list request
         grid.setListRequest(function (ids) {
             return api.getList(ids);
         });
-        
+
         /*
          * Search handling
          */
         win.bind("search", function (q) {
             grid.setMode("search");
         });
-        
+
         win.bind("cancel-search", function () {
             grid.setMode("all");
         });
-        
+
         // LFO callback
         var showContact, drawContact, drawFail;
-        
+
         showContact = function (obj) {
             // get contact
             right.busy(true);
@@ -154,15 +154,15 @@ define("io.ox/contacts/main",
                 .done(_.lfo(drawContact))
                 .fail(_.lfo(drawFail, obj));
         };
-        
-                   
-        
+
+
+
         drawContact = function (data) {
             //right.idle().empty().append(base.draw(data));
             right.idle().empty().append(viewDetail.draw(data));
-            
+
         };
-        
+
         drawFail = function (obj) {
             right.idle().empty().append(
                 $.fail("Connection lost.", function () {
@@ -184,13 +184,13 @@ define("io.ox/contacts/main",
         /**
          * Thumb index
          */
-        
+
         function drawThumb(char) {
             return $("<div/>").addClass("thumb-index border-bottom")
                 .text(char)
                 .on("click", { text: char }, grid.scrollToLabelText);
         }
-        
+
         // draw thumb index
         grid.bind("ids-loaded", function () {
             // get labels
@@ -201,29 +201,29 @@ define("io.ox/contacts/main",
                 thumbs.append(drawThumb(char));
             }
         });
-        
+
         win.bind("show", function () {
             grid.selection.keyboard(true);
         });
         win.bind("hide", function () {
             grid.selection.keyboard(false);
         });
-        
-        
+
+
         // bind all refresh
         api.bind("refresh.all", function (data) {
             grid.refresh();
         });
-        
+
         // bind list refresh
         api.bind("refresh.list", function (data) {
             grid.repaint();
         });
-        
+
         // go!
         win.show(function () {
             grid.paint();
-            
+
             /* turn off for demo purposes
             var searchAdapter = {
                     search: function (options) {
@@ -240,15 +240,15 @@ define("io.ox/contacts/main",
                 preventDuplicates: false,
                 theme: 'ox',
                 onResult: function (result, query) {
-                    //console.log('on Result');
-                    console.log(arguments);
+                    //console.debug('on Result');
+                    console.debug(arguments);
                     result.unshift({display_name: query, last_name: query});
                     return result;
                 },
                 onAdd: function (input, tokenlist) {
                     var q = "";
-                    console.log("ONADD");
-                    console.log(tokenlist);
+                    console.debug("ONADD");
+                    console.debug(tokenlist);
                     _.each(tokenlist, function (token) {
                         q += " " + token.last_name;
                     });
@@ -256,15 +256,15 @@ define("io.ox/contacts/main",
                 },
                 onDelete: function (token_data, tokenlist) {
                     var q = "";
-                    console.log('onDelete');
-                    console.log(token_data);
+                    console.debug('onDelete');
+                    console.debug(token_data);
                     _.each(tokenlist, function (token) {
                         q += " " + token.last_name;
                     });
                     $(this).val($.trim(q));
                 },
                 onReady: function () {
-                    console.log('onReady');
+                    console.debug('onReady');
                 }
             });
             */
@@ -275,8 +275,8 @@ define("io.ox/contacts/main",
                 return $('<div/>').addClass('field').append('<label>' + label + '</label>')
                 .append('<input class="' + id + '"type="text"> </input>');
             }
-            
-    
+
+
             function removeContact() {
                 new dialogs.ModalDialog()
                     .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
@@ -298,12 +298,12 @@ define("io.ox/contacts/main",
                         }
                     });
             }
-            
-            
+
+
             var showNewContactPane = function () {
                 create.show();
             };
-                
+
             var showEditContactPane = function () {
                 util.createUpdatePage();
             };
@@ -330,7 +330,7 @@ define("io.ox/contacts/main",
         }());
 
     });
-    
+
     return {
         getApp: app.getInstance
     };

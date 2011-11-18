@@ -26,26 +26,23 @@ define('io.ox/mail/write/main',
 
     'use strict';
 
-//    // actions
-//    ext.point('io.ox/mail/write/actions/send').extend({
-//        id: 'send',
-//        action: function (app) {
-//            app.send();
-//        }
-//    });
-//    ext.point('io.ox/mail/write/links/toolbar').extend(new ext.Link({
-//        index: 100,
-//        id: 'send',
-//        label: 'Send',
-//        ref: 'io.ox/mail/write/actions/send'
-//    }));
-//    // add 'create' link
-//    ext.point('io.ox/mail/write/toolbar').extend(new ext.ToolbarLinks({
-//        index: 100,
-//        id: 'inline-links',
-//        ref: 'io.ox/mail/write/links/toolbar'
-//    }));
+    // actions (define outside of multi-instance app)
+    ext.point('io.ox/mail/write/actions/send').extend({
+        id: 'send',
+        action: function (app) {
+            app.send();
+        }
+    });
 
+    ext.point('io.ox/mail/write/links/toolbar').extend(new ext.Link({
+        index: 100,
+        id: 'send',
+        label: 'Send',
+        ref: 'io.ox/mail/write/actions/send',
+        customize: function () {
+            this.css('width', '70px').addClass('default-action');
+        }
+    }));
 
     // multi instance pattern
     function createInstance() {
@@ -61,11 +58,17 @@ define('io.ox/mail/write/main',
             title: 'New E-Mail'
         });
 
+        function sendMail() {
+            alert("Coming soon...");
+        }
+
         app.setLauncher(function () {
 
             win = ox.ui.createWindow({
                 name: 'io.ox/mail/write',
-                title: ''
+                title: '',
+                titleWidth: '0px',
+                toolbar: true
             });
             app.setWindow(win);
             win.setQuitOnClose(true);
@@ -77,10 +80,6 @@ define('io.ox/mail/write/main',
                 right: GRID_WIDTH + 'px'
             });
 
-            function sendMail() {
-                alert("jaja ...");
-            }
-
             main.append(
                 $('<div>')
                 .addClass('abs io-ox-mail-write-main')
@@ -90,14 +89,6 @@ define('io.ox/mail/write/main',
                 .append(
                     $('<div>')
                     .css('position', 'relative')
-                    .append(
-                        $('<div>').addClass('send-button-wrapper')
-                        .append(
-                            // send button
-                            $.button({ label: 'Send', tabIndex: 4, action: sendMail })
-                            .addClass('default-action send-button')
-                        )
-                    )
                     .append(
                         $('<div>').addClass('subject-wrapper')
                         .append(
@@ -306,7 +297,7 @@ define('io.ox/mail/write/main',
         });
 
         app.send = function () {
-            console.log('YEAH.send!', arguments);
+            alert("Coming soon ...");
         };
 
         return app;
