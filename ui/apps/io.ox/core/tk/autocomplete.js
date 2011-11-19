@@ -21,9 +21,11 @@ define('io.ox/core/tk/autocomplete', function () {
 
         o = $.extend({
             minLength: 2,
+            maxResults: 20,
             delay: 200,
             source: null,
             draw: null,
+            click: $.noop,
             toString: JSON.stringify
         }, o || {});
 
@@ -49,7 +51,8 @@ define('io.ox/core/tk/autocomplete', function () {
                     var children;
                     if (i >= 0 && i < (children = popup.children()).length) {
                         children.removeClass('selected')
-                            .eq(i).addClass('selected');
+                            .eq(i).addClass('selected')
+                            .intoViewport(popup);
                         index = i;
                         update();
                     }
@@ -58,10 +61,10 @@ define('io.ox/core/tk/autocomplete', function () {
             open = function () {
                     if (!isOpen) {
                         // calculate position/dimension and show popup
-                        var o = self.offset(),
+                        var off = self.offset(),
                             w = self.outerWidth(),
                             h = self.outerHeight();
-                        popup.css({ top: o.top + h, left: o.left, width: w })
+                        popup.css({ top: off.top + h, left: off.left, width: w })
                             .appendTo('body');
                         isOpen = true;
                     }
@@ -78,6 +81,7 @@ define('io.ox/core/tk/autocomplete', function () {
             fnSelectItem = function (e) {
                     e.preventDefault(); // avoids a full click to keep focus
                     select(e.data.index);
+                    o.click.apply(self.get(0), e);
                     close();
                 },
 
@@ -85,8 +89,8 @@ define('io.ox/core/tk/autocomplete', function () {
             cbSearchResult = function (query, list) {
                     if (list.length) {
                         // draw results
-                        popup.empty();
-                        _(list).each(function (data, index) {
+                        popup.idle();
+                        _(list.slice(0, o.maxResults)).each(function (data, index) {
                             var node = $('<div>')
                                 .addClass('autocomplete-item')
                                 .data('data', data)
@@ -97,7 +101,7 @@ define('io.ox/core/tk/autocomplete', function () {
                         });
                         // leads to results
                         emptyPrefix = "\u0000";
-                        open();
+                        //open();
                         index = -1;
                     } else {
                         // leads to no results
@@ -143,6 +147,8 @@ define('io.ox/core/tk/autocomplete', function () {
                         if (val !== lastValue && val.indexOf(emptyPrefix) === -1) {
                             // trigger search
                             lastValue = val;
+                            popup.empty().busy();
+                            open();
                             o.source(val).done(_.lfo(cbSearchResult, val));
                         }
                     } else {

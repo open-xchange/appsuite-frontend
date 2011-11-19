@@ -89,6 +89,7 @@ var jshintOptions = {
     evil: true,
     forin: false,
     immed: true,
+    loopfunc: false,
     nomen: false,
     onevar: false,
     plusplus: false,
@@ -96,8 +97,8 @@ var jshintOptions = {
     strict: true,
     trailing: true,
     undef: true,
+    validthis: true,
     white: !debug,
-    loopfunc: false,
     predef: [
          "$", "_", "Modernizr", "define", "require", "ox",
          "initializeAndDefine", "iScroll"

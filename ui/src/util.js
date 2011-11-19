@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,13 +9,12 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- *
  */
 
 (function () {
-    
+
     "use strict";
-    
+
     // browser detection
     // adopted from prototype.js
     var ua = navigator.userAgent,
@@ -49,10 +47,10 @@
         hashData = document.location.hash.substr(1),
         // local timezone offset
         timezoneOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
-        
+
     // decode
     hashData = deserialize(hashData.substr(0, 1) === "?" ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData);
-    
+
     // add namespaces
     _.browser = {
         /** is IE? */
@@ -71,7 +69,7 @@
         /** MacOS **/
         MacOS: ua.indexOf('Macintosh') > -1
     };
-    
+
     _.url = {
         /**
          * @param name {string} [Name] of the query parameter
@@ -87,7 +85,7 @@
         hash: function (name) {
             return name === undefined ? hashData : hashData[name];
         },
-        
+
         /**
          * Redirect
          */
@@ -96,10 +94,10 @@
             location.href = href;
         }
     };
-    
+
     // extend underscore utilities
     _.mixin({
-        
+
         /**
          * Serialize object (key/value pairs) to fit into URLs (e.g. a=1&b=2&c=HelloWorld)
          * @param {Object} obj Object to serialize
@@ -119,7 +117,7 @@
             }
             return tmp.join(delimiter === undefined ? "&" : delimiter);
         },
-        
+
         /**
          * Deserialize object (key/value pairs)
          * @param {string} str String to deserialize
@@ -131,9 +129,9 @@
          * _.deserialize("a=1&b=2&c=text");
          */
         deserialize: deserialize,
-        
+
         rot: rot,
-        
+
         /**
          * This function simply writes its parameters to console.
          * Useful to debug callbacks, e.g. event handlers.
@@ -147,7 +145,7 @@
             console.debug.apply(console, args);
             return first;
         },
-        
+
         /**
          * Call function if first parameter is a function (simplifies callbacks)
          * @param {function ()} fn Callback
@@ -161,7 +159,7 @@
                 return fn.apply(fn, args);
             }
         },
-        
+
         /**
          * Returns local current time as timestamp
          * @returns {long} Timestamp
@@ -169,7 +167,7 @@
         now: function () {
             return (new Date()).getTime();
         },
-        
+
         /**
          * Returns current time as UTC timestamp
          * @returns {long} Timestamp
@@ -177,7 +175,7 @@
         utc: function () {
             return (new Date()).getTime() - timezoneOffset;
         },
-        
+
         /**
          * Return the first parameter that is not undefined
          */
@@ -190,7 +188,7 @@
             }
             return undefined;
         },
-        
+
         /**
          * Clone object
          * @param {Object} elem Object to clone
@@ -215,7 +213,7 @@
                 return subclone(elem);
             }
         },
-        
+
         /**
          * "Lastest function only
          * Works with non-anonymous functions only
@@ -235,7 +233,7 @@
                 }, 0);
             };
         },
-        
+
         /**
          * format/printf
          */
@@ -257,7 +255,7 @@
                 )
                 .replace(/%%/, "%");
         },
-        
+
         /**
          * Format error
          */
@@ -269,17 +267,17 @@
                 e.error_id
             );
         },
-        
+
         prewrap: function (text) {
             return String(text).replace(/([\/\.\,\-]+)/g, "$1\u200B");
         },
-        
+
         // good for leading-zeros for example
         pad: function (val, length, fill) {
             var str = String(val), n = length || 1, diff = n - str.length;
             return (diff > 0 ? new Array(diff + 1).join(fill || "0") : "") + str;
         },
-        
+
         // call function 'every' 1 hour or 5 seconds
         every: function (num, type, fn) {
             var interval = 1000;
@@ -295,5 +293,5 @@
             }, interval - (_.utc() % interval) + 1);
         }
     });
-    
+
 }());
