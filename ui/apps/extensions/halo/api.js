@@ -124,7 +124,8 @@ define.async('extensions/halo/api',
                 action: 'services'
             }
         })
-        .pine(function (response) {
+        .pipe(function (response) {
+            // TODO: activeMap is just local - remove?
             var activeMap = {};
             _(response).each(function (provider) {
                 activeMap[provider] = true;

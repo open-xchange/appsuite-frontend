@@ -1,15 +1,15 @@
 
-.io-ox-mail-write-main, .io-ox-mail-write-sidepanel.rightside {
+.io-ox-mail-write-main, .io-ox-mail-write-sidepanel.leftside {
     background-color: #f5f5f5;
     padding: 13px;
 }
 
-.io-ox-mail-write-main.leftside {
-    padding-right: 6px;
+.io-ox-mail-write-main.rightside {
+    padding-left: 13px;
 }
 
-.io-ox-mail-write-sidepanel.rightside {
-    padding-left: 7px;
+.io-ox-mail-write-sidepanel.leftside {
+    padding-right: 13px;
     overflow: auto;
 }
 
@@ -35,7 +35,8 @@
     text-shadow: 1px 1px 2px white;
 }
 
-.io-ox-mail-write input[type=text] {
+.io-ox-mail-write input[type=text],
+.io-ox-mail-write input[type=text].discreet:focus {
     font-size: 12px;
     line-height: 18px;
     height: 29px;
@@ -57,6 +58,11 @@
     box-shadow: 0px 0px 4px 0px #08c;
 }
 
+.io-ox-mail-write input[type=text].discreet {
+    border-color: #ddd;
+    background-color: #eee;
+}
+
 .io-ox-mail-write input[type=text].subject {
     font-weight: bold;
     font-size: 14px;
@@ -64,8 +70,15 @@
 
 .io-ox-mail-write .label {
     font-size: 11px;
-    color: #888;
+    color: #555;
     padding: 0px 0px 3px 0px;
+}
+
+.io-ox-mail-write .collapse {
+    font-size: 11px;
+    padding: 0px 0px 3px 0px;
+    float: right;
+    display: inline-block;
 }
 
 .io-ox-mail-write .recipient-list {
@@ -76,20 +89,13 @@
     padding-bottom: 10px;
 }
 
+.io-ox-mail-write .section-link {
+    line-height: 2em;
+    white-space: nowrap;
+}
+
 .io-ox-mail-write-contact {
     height: 3em;
-}
-
-.io-ox-mail-write-contact.list-item {
-    background-color: white;
-    margin-bottom: 1px;
-    padding: 0.5em 10px 0.5em 10px;
-}
-
-.io-ox-mail-write-contact.list-item div {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .io-ox-mail-write-contact .contact-image {
@@ -107,20 +113,76 @@
 }
 
 .io-ox-mail-write .section-item {
+    position: relative;
     background-color: white;
     margin-bottom: 1px;
-    padding: 0.5em 10px 0.5em 10px;
+    padding: 0.5em 2.5em 0.5em 10px;
 }
 
-.io-ox-mail-write .option .group-label {
-    font-weight: bold;
+.io-ox-mail-write .section-item.pointer {
+    cursor: pointer;
 }
 
-.io-ox-mail-write .editor-container {
+.io-ox-mail-write .section-item div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.io-ox-mail-write .section-item .remove {
+    display: inline-block;
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    bottom: 1px;
+    width: 2em;
+    background-color: #eee;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.io-ox-mail-write .section-item .remove .icon {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin-top: -0.5em;
+    text-align: center;
+}
+
+.io-ox-mail-write .section-item .remove:hover {
+    background-color: #800;
+    color: #fff;
+    text-decoration: none;
+}
+
+.io-ox-mail-write .section-item .group-label {
+    display: block;
+    font-style: italic;
+    margin-right: 1em;
+}
+
+.io-ox-mail-write .section-item .signature-preview {
+    font-style: italic;
+    color: #888;
+    white-space: normal;
+}
+
+.io-ox-mail-write .editor-outer-container {
     top: 71px;
     right: 13px;
     bottom: 13px;
     left: 13px;
+    background-color: white;
+}
+
+.io-ox-mail-write .editor-inner-container {
+    z-index: 2;
+}
+
+.io-ox-mail-write .editor-print-margin {
+    border-right: 1px dotted #ddd;
+    z-index: 1;
 }
 
 .io-ox-mail-write .text-editor {
@@ -128,7 +190,7 @@
     font-size: 13px;
     line-height: 18px;
     color: black;
-    background-color: white;
+    background-color: transparent;
     border: 1px solid #ddd;
     outline: none;
     width: 100%;
