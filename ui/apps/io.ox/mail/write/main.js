@@ -459,6 +459,7 @@ define('io.ox/mail/write/main',
                     .append(createCheckbox('vcard', 'Attach vCard'))
                 );
 
+
             sidepanel.append(
                 $('<div>')
                 .addClass('links')
