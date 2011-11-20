@@ -67,7 +67,7 @@ define("io.ox/contacts/api",
             api.trigger("refresh.all");
         })
         .fail(function () {
-            console.log("connection lost");//what to do if fails?
+            console.debug('connection lost');//what to do if fails?
         });
     };
                     
@@ -84,7 +84,7 @@ define("io.ox/contacts/api",
             api.trigger("refresh.list");
         })
         .fail(function () {
-            console.log("connection lost");//what to do if fails?
+            console.debug('connection lost');//what to do if fails?
         });
     };
                        
@@ -101,7 +101,7 @@ define("io.ox/contacts/api",
             api.trigger("refresh.all");
         })
        .fail(function () {
-            console.log("connection lost");//what to do if fails?
+            console.debug('connection lost');//what to do if fails?
         });
     };
                  

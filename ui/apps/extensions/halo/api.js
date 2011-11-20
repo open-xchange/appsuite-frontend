@@ -22,28 +22,7 @@ define.async('extensions/halo/api',
     'use strict';
 
     var activeProviders = [],
-        // deferred define
-        wait = $.Deferred(),
         api;
-
-    // initialize (async)
-    http.GET({
-            module: 'halo/contact',
-            params: {
-                action: 'services'
-            }
-        })
-        .done(function (response) {
-            var activeMap = {};
-            _(response).each(function (provider) {
-                activeMap[provider] = true;
-            });
-            var providerConfig = config.get('ui.halo.providers');
-            activeProviders = haloConfigUtil.interpret(providerConfig, response);
-        })
-        .always(function () {
-            wait.resolve(api);
-        });
 
     function HaloAPI(options) {
 
@@ -138,5 +117,22 @@ define.async('extensions/halo/api',
         viewer: viewer
     };
 
-    return wait;
+    // initialize (async)
+    return http.GET({
+            module: 'halo/contact',
+            params: {
+                action: 'services'
+            }
+        })
+        .pipe(function (response) {
+            // TODO: activeMap is just local - remove?
+            var activeMap = {};
+            _(response).each(function (provider) {
+                activeMap[provider] = true;
+            });
+            var providerConfig = config.get('ui.halo.providers');
+            activeProviders = haloConfigUtil.interpret(providerConfig, response);
+            // publish api!
+            return api;
+        });
 });

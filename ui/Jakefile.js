@@ -89,6 +89,7 @@ var jshintOptions = {
     evil: true,
     forin: false,
     immed: true,
+    loopfunc: false,
     nomen: false,
     onevar: false,
     plusplus: false,
@@ -96,8 +97,8 @@ var jshintOptions = {
     strict: true,
     trailing: true,
     undef: true,
+    validthis: true,
     white: !debug,
-    loopfunc: false,
     predef: [
          "$", "_", "Modernizr", "define", "require", "ox",
          "initializeAndDefine", "iScroll"
@@ -184,7 +185,7 @@ file(utils.dest("signin.appcache"), ["force"]);
 
 // js
 
-utils.concat("boot.js", ["lib/jquery.plugins.js", "lib/jquery.tokeninput.js", "src/util.js", "src/boot.js"],
+utils.concat("boot.js", ["src/jquery.plugins.js", "lib/jquery.tokeninput.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 
 utils.copy(utils.list("src", "css.js"), {
@@ -351,6 +352,7 @@ docFile("libs", "External Libs");
 docFile("features", "Features");
 docFile("development_guide", "UI Development Style Guide");
 docFile("vgrid", "VGrid");
+docFile("i18n", "Internationalization");
 
 var indexFiles = ["lib/header.html", "index.html",
     { getData: function() { return titles.join("\n"); } }, "lib/footer.html"];

@@ -189,7 +189,7 @@
     position: absolute;
     top: 0px;
     right: 0px;
-    height: 34px;
+    height: 50px;
     left: 0px;
     
     border-top: 1px solid mix(@head-color, @head-background, 75%);
@@ -211,61 +211,95 @@
 }
 
 .window-title {
-    position: relative;
-    top: 0px;
-    height: 18pt;
+    position: absolute;
+    top: 10px;
+    height: 36px;
     left: 0px;
-    padding: 6px 10px 2px 13px;
-    line-height: 18px;
-    /*text-align: center;*/
+    padding: 0 10px 0 13px;
+    width: 300px;
     color: @head-color;
     font-family: Helvetica, Arial, sans-serif;
     font-weight: 200;
-    font-size: 18pt;
-    line-height: 18pt;
+    font-size: 24px;
+    line-height: 30px;
     text-shadow: 0px 0px 1px mix(@head-color, @head-background, 1400%/15);
-    width: 80%;
     overflow: hidden;
-}
-
-.window-title .subtitle {
-    color: mix(@head-color, @head-background, 75%);
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .window-toolbar {
-    position: relative;
-    top: 0px;
-    right: 0px;
-    left: 0px;
-    padding: 0px 7px 5px 13px;
+    position: absolute;
+    top: 10px;
+    right: 40px;
+    left: 300px;
+    padding: 0 0 0 13px;
+    height: 30px;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
-.window-toolbar .io-ox-toolbar-link,
-.window-toolbar .io-ox-action-link {
-    font-size: 9pt;
+.window-toolbar a {
+    font-size: 12px;
+    line-height: 18px;
     color: #fff;
+    text-align: center;
     display: inline-block;
-    margin: 2px 20px 2px 0px;
+    margin: 0 10px 0 0;
     cursor: pointer;
+    background-color: #555;
+    border: 1px solid #333;
+    padding: 4px 1.5em 4px 1.5em;
+    white-space: nowrap;
+    vertical-align: middle;
+    outline: none;
+    text-decoration: none;
+}
+
+.window-toolbar a:hover {
+    text-decoration: none;
+    background-color: #888;
+}
+
+.window-toolbar a:focus,
+.window-toolbar a:hover {
+    border-color: #555;
+    box-shadow: 0px 0px 4px 0px #000;
+}
+
+.window-toolbar a.default-action {
+    color: #000;
+    border: 1px solid #E6B800;
+    background-color: #fc0;
+    background-image: -moz-linear-gradient(center top, #FFEE00, #fc0);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFEE00), to(#fc0));
+    background-image: -o-linear-gradient(top, #FFEE00 0%, #fc0 100%);
+}
+
+.window-toolbar a.default-action:focus,
+.window-toolbar a.default-action:hover {
+    background-color: #fc0;
+    background-image: none;
 }
 
 .window-controls {
     position: absolute;
-    top: 6px;
-    right: 8px;
+    top: 10px;
+    right: 13px;
 }
 
 .window-control {
     color: @head-color;
     font-weight: normal;
-    background-color: mix(@head-color, @head-background, 400%/15);
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px 10px 10px 10px;
-    font-size: 8px;
-    line-height: 15px;
-    height: 15px;
-    width: 15px;
+    border: 2px solid #aaa;
+    background-color: transparent;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px 20px 20px 20px;
+    font-size: 16px;
+    line-height: 26px;
+    height: 26px;
+    width: 26px;
     text-align: center;
     margin-left: 5px;
     display: inline-block;
@@ -273,13 +307,14 @@
 }
 
 .window-control:hover {
-    background-color: mix(@head-color, @head-background, 800%/15);
-    color: mix(@head-color, @head-background, 1300%/15);
+    background-color: #333;
+    border-color: #555;
+    color: #888;
 }
 
 .window-body {
     position: absolute;
-    top: 36px;
+    top: 50px;
     right: 0px;
     bottom: 0px;
     left: 0px;
@@ -342,10 +377,9 @@
 }
 
 @media screen and (min-height: 800px) {
-    .window-head { height: 44px; }
-    .window-head.larger { height: 55px; padding: 10px 0 10px 0; }
-    .window-body { top: 46px; }
-    .window-body.movedown { top: 76px; }
+    .window-head { height: 70px; }
+    .window-title, .window-toolbar, .window-controls { top: 20px; }
+    .window-body { top: 70px; }
 }
 
 /* vGrid */
@@ -1011,6 +1045,7 @@ div.token-input-dropdown ul li.token-input-selected-dropdown-item {
     padding: 0.25em 0 0.25em 0;
     margin: 0.5em 0px 1.5em 0px;
     border-bottom: 1px solid #eee;
+    height: 1em;
 }
 
 .io-ox-inline-links.empty {
@@ -1118,6 +1153,8 @@ input.nice-input:focus {
     box-shadow: 0px 5px 20px -10px black;
     z-index: 100000;
     height: 200px;
+    overflow-x: hidden;
+    overfloy-y: auto;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -ms-box-sizing: border-box;

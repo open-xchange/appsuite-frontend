@@ -32,7 +32,7 @@ define("io.ox/mail/actions", ["io.ox/core/extensions"], function (ext) {
             return context.collection.has("some", "delete");
         },
         action: function (data) {
-            console.log("Action: delete");
+            console.debug("Action: delete");
             //api.remove(grid.selection.get());
             //grid.selection.selectNext();
         }
@@ -44,7 +44,7 @@ define("io.ox/mail/actions", ["io.ox/core/extensions"], function (ext) {
             return context.collection.has("some");
         },
         action: function (data) {
-            console.log("Action: reply All");
+            console.debug("Action: reply All");
         }
     });
 
@@ -54,7 +54,7 @@ define("io.ox/mail/actions", ["io.ox/core/extensions"], function (ext) {
             return context.collection.has("some");
         },
         action: function (data) {
-            console.log("Action: reply");
+            console.debug("Action: reply");
         }
     });
 
@@ -64,7 +64,7 @@ define("io.ox/mail/actions", ["io.ox/core/extensions"], function (ext) {
             return context.collection.has("some");
         },
         action: function (data) {
-            console.log("Action: forward");
+            console.debug("Action: forward");
         }
     });
 
@@ -73,7 +73,7 @@ define("io.ox/mail/actions", ["io.ox/core/extensions"], function (ext) {
     ext.point("io.ox/mail/links/toolbar").extend(new ext.Link({
         index: 100,
         id: "write",
-        label: "Write new e-mail",
+        label: "Compose",
         ref: "io.ox/mail/actions/write"
     }));
 

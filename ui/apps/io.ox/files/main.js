@@ -251,7 +251,7 @@ define("io.ox/files/main",
 
             var showUploadField = function () {
                 pane.show().done(function (action) {
-                    console.log("Action: " + action);
+                    console.debug("Action: " + action);
                     actions[action]();
                 });
             };

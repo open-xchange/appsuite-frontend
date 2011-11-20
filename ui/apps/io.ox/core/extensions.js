@@ -54,6 +54,14 @@ define("io.ox/core/extensions",
                         return !disabled[obj.id];
                     });
             },
+            // look for existing extension
+            has = function (id) {
+                return _(extensions)
+                    .select(function (o) {
+                        return o.id === id;
+                    })
+                    .length > 0;
+            },
             self = this;
 
         event.Dispatcher.extend(this);
@@ -85,6 +93,7 @@ define("io.ox/core/extensions",
         }
 
         this.extend = function (extension) {
+
             if (extension.invoke) {
                 throw "Extensions must not have their own invoke method";
             }
@@ -92,17 +101,21 @@ define("io.ox/core/extensions",
                 throw "Extensions must have an id!";
             }
 
-            extension.invoke = createInvoke(this, extension);
+            // skip duplicates (= same id)
+            if (!has(extension.id)) {
 
-            if (replacements[extension.id]) {
-                _.extend(extension, replacements[extension.id]);
-                delete replacements[extension.id];
+                extension.invoke = createInvoke(this, extension);
+
+                if (replacements[extension.id]) {
+                    _.extend(extension, replacements[extension.id]);
+                    delete replacements[extension.id];
+                }
+
+                extensions.push(extension);
+                extensions.sort(pointSorter);
+
+                this.trigger("extended", extension);
             }
-
-            extensions.push(extension);
-            extensions.sort(pointSorter);
-
-            this.trigger("extended", extension);
 
             return this;
         };
@@ -200,7 +213,8 @@ define("io.ox/core/extensions",
 
         this.draw = function (context) {
             this.append(
-                $("<a>", { href: "#" }).addClass("io-ox-action-link")
+                $("<a>", { href: "#", tabindex: "1" })
+                .addClass("io-ox-action-link")
                 .data({ ref: self.ref, context: context })
                 .click(click)
                 .text(String(self.label))
@@ -229,7 +243,14 @@ define("io.ox/core/extensions",
                     node.addClass("empty");
                 } else {
                     // draw links
-                    _(links).invoke("invoke", "draw", node, context);
+                    _(links).each(function (link) {
+                        if (_.isFunction(link.draw)) {
+                            link.draw.call(node, context);
+                            if (_.isFunction(link.customize)) {
+                                link.customize.call(node.find('a'), context);
+                            }
+                        }
+                    });
                 }
             });
     };

@@ -14,24 +14,19 @@
  */
 
 define("io.ox/contacts/create",
-
     ["io.ox/contacts/util", "io.ox/contacts/api",
      "io.ox/core/tk/dialogs",
      "io.ox/core/config",
      "css!io.ox/contacts/style.css"
     ], function (util, api, dialogs, config) {
 
-    
     "use strict";
-    
-    
+
     function fieldHtml(label, id) {
         return $('<div/>').addClass('field').append('<label>' + label + '</label>')
         .append('<input class="' + id + '"type="text"> </input>');
-    
     }
-    
-    
+
  // create formblocks
     var $divblockName = $('<div/>').addClass('block new_contact name'),
     $divblockCompany = $('<div/>').addClass('block new_contact company'),
@@ -47,38 +42,39 @@ define("io.ox/contacts/create",
     $postalCodeBusiness = fieldHtml("postal code", "postal_code_business"),
     $cityBusiness = fieldHtml("city", "city_business"),
     $phoneBusiness1 = fieldHtml("tel.", "telephone_business1");
-       
+
     //assemble create form
     var newCreatePane = function () {
+
         var pane = new dialogs.CreateDialog();
         pane.getContentNode().addClass("create-contact");
-       
         pane.append($divblockName);
+
         $firstName.appendTo($divblockName);
         $lastName.appendTo($divblockName);
-           
+
         pane.append($divblockCompany);
         $company.appendTo($divblockCompany);
         $department.appendTo($divblockCompany);
         $position.appendTo($divblockCompany);
         $profession.appendTo($divblockCompany);
-           
+
         pane.append($divblockBAddress);
         $streetBusiness.appendTo($divblockBAddress);
         $postalCodeBusiness.appendTo($divblockBAddress);
         $cityBusiness.appendTo($divblockBAddress);
         $cityBusiness.appendTo($divblockBAddress);
-           
+
         pane.append($divblockBPhone);
         $phoneBusiness1.appendTo($divblockBPhone);
-           
+
         pane.addButton("resolveNewContact", "Save");
         pane.addButton("cancelNewContact", "Cancel");
-       
+
         $(".content .block .field:nth-child(even)").addClass('even');
-       
-       
+
         var actions = {
+
             resolveNewContact: function () {
                 var fId = config.get("folder.contacts"),
                 formdata = {},
@@ -95,30 +91,28 @@ define("io.ox/contacts/create",
                     formdata.display_name = util.createDisplayName(formdata);
                     api.create(formdata);
                 }
-                 
+
                   //clear the form
                 $(".content .new_contact input").each(function (index) {
                     $(this).val("");
                 });
             },
-      
+
             cancelNewContact: function () {
                 $(".content .new_contact input").each(function (index) {
                     $(this).val("");
                 });
             }
         };
-       
-        
-       
+
         pane.show().done(function (action) {
             actions[action]();
-          // console.log(actions);
+          // console.debug(actions);
         });
     };
-        
+
     return {
         show: newCreatePane
     };
-        
+
 });
