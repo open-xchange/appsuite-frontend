@@ -458,14 +458,12 @@ define('io.ox/mail/write/main',
             addSection('cc', 'Send copy to', false, true)
                 .append(createRecipientList('cc'))
                 .append(createField('cc'));
-
             addLink('cc', 'Send copy (CC) to ...');
 
             // BCC
             addSection('bcc', 'Send blind copy to', false, true)
                 .append(createRecipientList('bcc'))
                 .append(createField('bcc'));
-
             addLink('bcc', 'Send blind copy (BCC) to ...');
 
             // Attachments
