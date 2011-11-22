@@ -12,7 +12,8 @@
  */
 
 define("io.ox/mail/api",
-    ["io.ox/core/http", "io.ox/core/api/factory"], function (http, apiFactory) {
+    ["io.ox/core/http", "io.ox/core/config",
+     "io.ox/core/api/factory"], function (http, config, apiFactory) {
 
     "use strict";
 
@@ -165,6 +166,50 @@ define("io.ox/mail/api",
                 }
                 return data;
             });
+    };
+
+    api.send = function (data) {
+
+        var deferred = $.Deferred(),
+
+            cont = function () {
+
+                var formData = new FormData();
+                formData.append("json_0", JSON.stringify(data));
+
+                http.UPLOAD({
+                        module: 'mail',
+                        params: { action: 'new' },
+                        data: formData,
+                        dataType: 'text'
+                    })
+                    .done(function (text) {
+                        var a = text.indexOf('{'),
+                            b = text.lastIndexOf('}');
+                        if (a > -1 && b > -1) {
+                            deferred.resolve(JSON.parse(text.substr(a, b - a + 1)));
+                        } else {
+                            deferred.resolve({});
+                        }
+                    })
+                    .fail(deferred.reject);
+            };
+
+        if (!data.from) {
+            // get user
+            require(['io.ox/core/api/user'], function (userAPI) {
+                userAPI.get(config.get('identifier'))
+                    .done(function (sender) {
+                        // inject 'from'
+                        data.from = '"' + sender.display_name + '" <' + sender.email1 + '>';
+                        cont();
+                    });
+            });
+        } else {
+            cont();
+        }
+
+        return deferred;
     };
 
     return api;

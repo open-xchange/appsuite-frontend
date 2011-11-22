@@ -59,15 +59,12 @@ define('io.ox/mail/write/main',
             editorPrintMargin,
             priorityOverlay,
             sections = {},
-            state = {};
+            state = {},
+            ids = {};
 
         app = ox.ui.createApp({
             title: 'Compose'
         });
-
-        function sendMail() {
-            alert("Coming soon...");
-        }
 
         app.setLauncher(function () {
 
@@ -132,7 +129,7 @@ define('io.ox/mail/write/main',
                         .append(
                             // text editor
                             editor = $('<textarea>')
-                            .attr({ tabindex: '5' })
+                            .attr({ tabindex: '5', name: 'content' })
                             .addClass('text-editor')
                         )
                     )
@@ -143,6 +140,14 @@ define('io.ox/mail/write/main',
                     )
                 )
             );
+
+            function unique(id) {
+                return id;// + '[]';// + (ids[id] = (ids[id] || 0) + 1);
+            }
+
+            function serialize(obj) {
+                return '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + '>';
+            }
 
             function collapseSection(id) {
                 sections[id + 'Label'].add(sections[id])
@@ -240,6 +245,9 @@ define('io.ox/mail/write/main',
                     .addClass('contact-image')
                 )
                 .append(
+                    $('<input>', { type: 'hidden', name: unique(id), value: serialize(data) })
+                )
+                .append(
                     $('<a>', { href: '#' }).addClass('person-link')
                     .text(data.display_name + "\u00a0")
                     .on('click', {
@@ -301,7 +309,7 @@ define('io.ox/mail/write/main',
                 return $('<div>')
                 .addClass('fieldset')
                 .append(
-                    $('<input>', { type: 'text', name: id, tabindex: '2' })
+                    $('<input>', { type: 'text', tabindex: '2' })
                     .addClass('discreet')
                     .autocomplete({
                         source: function (query) {
@@ -420,7 +428,7 @@ define('io.ox/mail/write/main',
 
             // Attachments
 
-            var handleFileSelect, addUpload, uploadCount = 0;
+            var handleFileSelect, addUpload;
 
             handleFileSelect = function (e) {
                 _(e.target.files).each(function (file) {
@@ -437,7 +445,7 @@ define('io.ox/mail/write/main',
                 sections.attachments.append(
                     $('<div>').addClass('section-item upload')
                     .append(
-                        $('<input>', { type: 'file', name: 'upload_' + (uploadCount++) + '[]', multiple: 'multiple' })
+                        $('<input>', { type: 'file', name: unique('upload'), multiple: 'multiple' })
                         .on('change', handleFileSelect)
                     )
                 );
@@ -526,9 +534,9 @@ define('io.ox/mail/write/main',
                     .append(
                         $('<span>').addClass('group-label').text('Priority')
                     )
-                    .append(createRadio('priority', 'high', 'High'))
-                    .append(createRadio('priority', 'normal', 'Normal', true))
-                    .append(createRadio('priority', 'low', 'Low'))
+                    .append(createRadio('priority', '2', 'High'))
+                    .append(createRadio('priority', '3', 'Normal', true))
+                    .append(createRadio('priority', '4', 'Low'))
                     .on('change', 'input', function () {
                         var radio = $(this);
                         if (radio.attr('value') === 'high' && radio.prop('checked')) {
@@ -609,8 +617,62 @@ define('io.ox/mail/write/main',
             });
         });
 
-        app.send = app.proofread = function () {
+        app.proofread = function () {
             alert("Coming soon ...");
+        };
+
+/*
+{
+"from":"Matthias Biggeleben <matthias.biggeleben@open-xchange.com>",
+"to":"Matthias Biggeleben <matthias.biggeleben@open-xchange.com>, ",
+"cc":"","bcc":"",
+"subject":"Test Send mail",
+"priority":"2",
+"vcard":1,
+"attachments":[
+{"content_type":"ALTERNATIVE","content":"<p style=\u0022margin: 0;\u0022><span>YEAH! <strong>huhu</strong><span></span></span></p>\u000a<p style=\u0022margin: 0px; \u0022></p>"}
+],
+[{"content_type":"TEXT/PLAIN","content":"<span><span><span>dsfsdfsdfsdfsf</span></span></span><br/>\u000a<span></span><br/>"}],"datasources":[]}
+"datasources":[]}
+*/
+
+        app.send = function () {
+            var // proper form
+                form = win.nodes.main.find('form'),
+                // get relevant fields
+                fields = form
+                    .find(':input[name]')
+                    .filter('textarea, [type=text], [type=hidden], [type=radio]:checked, [type=checkbox]:checked'),
+                // get raw data
+                data = _(fields).inject(function (obj, field) {
+                    var key = field.name, pre = obj[key], val = $(field).val();
+                    if (pre !== undefined) {
+                        // make array or push to array
+                        (_.isArray(pre) ? pre : (obj[key] = [pre])).push(val);
+                    } else {
+                        obj[key] = val;
+                    }
+                    return obj;
+                }, {}),
+                mail;
+            // transform raw data
+            mail = {
+                from: '',
+                to: [].concat(data.to).join(', '),
+                cc: [].concat(data.cc).join(', '),
+                bcc: [].concat(data.bcc).join(', '),
+                subject: data.subject + '',
+                priority: data.priority,
+                vcard: data.vcard || "0",
+                disp_notification_to: data.deliveryReceipt || "0",
+                attachments: [{
+                    content_type: 'text/plain',
+                    content: data.content
+                }]
+            };
+            mailAPI.send(mail).always(function (result) {
+                alert("Yep. Your mail is sent!");
+            });
         };
 
         return app;

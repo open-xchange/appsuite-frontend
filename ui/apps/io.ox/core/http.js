@@ -14,9 +14,9 @@
  */
 
 define("io.ox/core/http", ["io.ox/core/event"], function (event) {
-    
+
     "use strict";
-    
+
     // default columns for each module
     var idMapping = {
         "common" : {
@@ -297,7 +297,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
             "1037": "personal"
         }
     };
-    
+
     // extend with commons (not all modules use common columns, e.g. folders)
     $.extend(idMapping.contacts, idMapping.common);
     $.extend(idMapping.calendar, idMapping.common);
@@ -306,9 +306,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
     delete idMapping.infostore["104"];
     $.extend(idMapping.tasks, idMapping.common);
     $.extend(idMapping.user, idMapping.contacts, idMapping.common);
-    
+
     var that = {};
-    
+
     // get all columns of a module
     var getAllColumns = function (module, join) {
         // get ids
@@ -323,7 +323,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         });
         return join === true ? tmp.join(",") : tmp;
     };
-    
+
     // transform arrays to objects
     var makeObject = function (data, module, columns) {
         // primitive types may be mixed with column arrays
@@ -345,7 +345,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         }
         return obj;
     };
-    
+
     var processOptions = function (options, type) {
         // defaults
         var o = $.extend({
@@ -400,7 +400,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         // done
         return o;
     };
-    
+
     var sanitize = function (data, module, columns) {
         // not array or no columns given?
         if (!_.isArray(data) || !columns) {
@@ -416,7 +416,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
             return sanitized;
         }
     };
-    
+
     var processResponse = function (deferred, response, o) {
         // server error?
         if (response && response.error !== undefined && !response.data) {
@@ -476,7 +476,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
             }
         }
     };
-    
+
     // internal queue
     var paused = false,
         queue = [],
@@ -484,7 +484,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         slow = _.url.hash("slow"),
         // fail mode
         fail = _.url.hash("fail");
-    
+
     var ajax = function (options, type) {
         // process options
         var o = processOptions(options, type);
@@ -545,9 +545,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         }
         return def;
     };
-    
+
     that = {
-        
+
         /**
          * Send a GET request
          * @param {Object} options Request options
@@ -560,7 +560,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         GET: function (options) {
             return ajax(options, "GET");
         },
-        
+
         /**
          * Send a POST request
          * @param {Object} options Request options
@@ -582,7 +582,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         PUT: function (options) {
             return ajax(options, "PUT");
         },
-        
+
         /**
          * Send a DELETE request
          * @param {Object} options Request options
@@ -593,7 +593,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         DELETE: function (options) {
             return ajax(options, "DELETE");
         },
-        
+
         /**
          * Send a POST request using a FormData object
          * @param {Object} options Request options
@@ -604,14 +604,14 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         UPLOAD: function (options) {
             return ajax(options, "UPLOAD");
         },
-        
+
         /**
          * Get all columns of a module
          * @param {string} module Module name
          * @returns {Array} All columns
          */
         getAllColumns: getAllColumns,
-        
+
         /**
          * Transform objects with array-based columns into key-value-based columns
          * @param {Array} data Data
@@ -620,7 +620,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
          * @returns {Object} Transformed object
          */
         makeObject: makeObject,
-        
+
         /**
          * Simplify objects in array for list requests
          */
@@ -642,12 +642,12 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
             }
             return tmp;
         },
-        
+
         /**
          * Fixes order of list requests (temp. fixes backend bug)
          */
         fixList: function (ids, deferred) {
-            
+
             return deferred
                 .pipe(function (data) {
                     // simplify
@@ -667,7 +667,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
                     return tmp;
                 });
         },
-        
+
         /**
          * Retry request
          */
@@ -676,7 +676,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
             var type = (request.type || "GET").toUpperCase();
             return this[type](request);
         },
-        
+
         /**
          * Collect requests
          */
@@ -684,7 +684,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
             paused = true;
             this.trigger("paused");
         },
-            
+
         /**
          * Resume HTTP API. Send all queued requests as one multiple
          */
@@ -775,8 +775,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
             }
         }
     };
-    
+
     event.Dispatcher.extend(that);
-    
+
     return that;
 });
