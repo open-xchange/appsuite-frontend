@@ -12,16 +12,16 @@
  */
 
 define("io.ox/core/i18n", ["gettext!io.ox/core/i18n"], function (gettext) {
-    
+
     "use strict";
-    
+
     // day names
     var n_day = [
             gettext("Sunday"), gettext("Monday"), gettext("Tuesday"),
             gettext("Wednesday"), gettext("Thursday"), gettext("Friday"),
             gettext("Saturday")
         ],
-        
+
         // month names
         n_month = [
             gettext("January"), gettext("February"), gettext("March"),
@@ -29,9 +29,9 @@ define("io.ox/core/i18n", ["gettext!io.ox/core/i18n"], function (gettext) {
             gettext("July"), gettext("August"), gettext("September"),
             gettext("October"), gettext("November"), gettext("December")
         ],
-        
+
         dRegex = /(\w+)/g,
-        
+
         dReplaceField = function (d, m) {
             switch (m) {
             case 'd':
@@ -65,14 +65,14 @@ define("io.ox/core/i18n", ["gettext!io.ox/core/i18n"], function (gettext) {
                 return m;
             }
         },
-        
+
         dReplace = function (d) {
             // return new closure - we just need date as reference
             return function (m) {
                 return dReplaceField(d, m);
             };
         },
-        
+
         dateFormats = {
             "fulldatetime": "EEE dd. MMM YYYY HH:mm",
             "datetime": "dd.MM.YYYY HH:mm",
@@ -80,19 +80,22 @@ define("io.ox/core/i18n", ["gettext!io.ox/core/i18n"], function (gettext) {
             "time": "HH:mm",
             "": "EEE dd. MMM YYYY HH:mm" // default
         },
-        
+
         getNamedFormat = function (f) {
             f = String(f || "");
             return dateFormats[f] || f;
-        };
-        
+        },
+
+        // sizes (kilo, mega, giga, tera, peta, ...)
+        n_size = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+
     return {
-        
+
         date: function (format, date) {
-            
+
             // special format?
             format = getNamedFormat(format);
-            
+
             // make sure we have a date object
             // default is current time
             if (date === undefined) {
@@ -100,17 +103,17 @@ define("io.ox/core/i18n", ["gettext!io.ox/core/i18n"], function (gettext) {
             } else if (_.isNumber(date)) {
                 date = new Date(date);
             }
-            
+
             return format.replace(dRegex, dReplace(date));
         },
-        
+
         // time-based greeting phrase
         getGreetingPhrase: function (time) {
-            
+
             time = time !== undefined ? time : _.utc();
-            
+
             var hour = new Date(time).getHours();
-            
+
             // find proper phrase
             if (hour >= 4 && hour <= 11) {
                 return gettext("Good morning");
@@ -119,6 +122,23 @@ define("io.ox/core/i18n", ["gettext!io.ox/core/i18n"], function (gettext) {
             } else {
                 return gettext("Hello");
             }
+        },
+
+        round: function (num, digits) {
+            // TODO: add localization (. vs ,)
+            digits = digits || 0;
+            var pow = Math.pow(10, digits);
+            return Math.round(num * pow) / pow;
+        },
+
+        // better place? even been i18n'd?
+        filesize: function (size) {
+            var i = 0, $i = n_size.length;
+            while (size > 1024 && i < $i) {
+                size = size / 1024;
+                i++;
+            }
+            return this.round(size, 1) + ' ' + n_size[i];
         }
     };
 });

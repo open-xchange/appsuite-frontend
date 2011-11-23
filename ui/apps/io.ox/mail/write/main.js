@@ -19,9 +19,10 @@ define('io.ox/mail/write/main',
      'io.ox/core/config',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
+     'io.ox/core/i18n',
      'io.ox/core/tk/autocomplete',
      'css!io.ox/mail/style.css',
-     'css!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil) {
+     'css!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n) {
 
     'use strict';
 
@@ -153,7 +154,7 @@ define('io.ox/mail/write/main',
                         .append(
                             // text editor
                             editor = $('<textarea>')
-                            .attr({ tabindex: '5', name: 'content' })
+                            .attr({ tabindex: '4', name: 'content' })
                             .addClass('text-editor')
                         )
                     )
@@ -173,16 +174,16 @@ define('io.ox/mail/write/main',
                 return '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + '>';
             }
 
-            function collapseSection(id) {
+            function hideSection(id) {
                 sections[id + 'Label'].add(sections[id]).hide();
                 $(this).trigger('hide');
                 sections[id + 'Link'].show();
             }
 
-            function fnCollapseSection(e) {
+            function fnHideSection(e) {
                 var id = e.data.id;
                 e.preventDefault();
-                collapseSection(id);
+                hideSection(id);
             }
 
             function focusSection(id) {
@@ -203,7 +204,7 @@ define('io.ox/mail/write/main',
                     );
 
                 if (collapsable) {
-                    sections[id + 'Label'].on('click', { id: id }, fnCollapseSection);
+                    sections[id + 'Label'].on('click', { id: id }, fnHideSection);
                 }
 
                 sidepanel
@@ -233,7 +234,7 @@ define('io.ox/mail/write/main',
                 return (sections[id + 'Link'] = $('<div>'))
                     .addClass('section-link')
                     .append(
-                        $('<a>', { href: '#', tabindex: '6' })
+                        $('<a>', { href: '#', tabindex: '5' })
                         .text(label + '')
                         .on('click', { id: id }, fnShowSection)
                     )
@@ -357,6 +358,7 @@ define('io.ox/mail/write/main',
                         }
                     })
                     .on('blur', function (e) {
+                        // copy valid recipients
                         copyRecipients.call(null, id, $(this));
                     })
                     .on('keyup', function (e) {
@@ -382,7 +384,7 @@ define('io.ox/mail/write/main',
 
             function createRadio(name, value, text, isChecked) {
                 var id = name + "_" + value + "_" + _.now(),
-                    radio = $('<input>', { type: 'radio', name: name, id: id, value: value, tabindex: '4' }),
+                    radio = $('<input>', { type: 'radio', name: name, id: id, value: value, tabindex: '5' }),
                     label = $('<label>', { 'for': id }).text("\u00A0" + text + "\u00A0\u00A0");
                 if (isChecked) {
                     radio.attr('checked', 'checked');
@@ -392,55 +394,13 @@ define('io.ox/mail/write/main',
 
             function createCheckbox(name, text, isChecked) {
                 var id = name + "_" + _.now(),
-                    box = $('<input>', { type: 'checkbox', name: name, id: id, value: '1', tabindex: '4' }),
+                    box = $('<input>', { type: 'checkbox', name: name, id: id, value: '1', tabindex: '5' }),
                     label = $('<label>', { 'for': id }).text("\u00A0" + text + "\u00A0\u00A0");
                 if (isChecked) {
                     box.attr('checked', 'checked');
                 }
                 return box.add(label);
             }
-
-            var autoHideSection = (function () {
-
-                var timer = {},
-
-                    clear = function (id) {
-                        if (timer[id]) {
-                            clearTimeout(timer[id]);
-                            timer[id] = null;
-                        }
-                    },
-
-                    defer = function (id) {
-                        clear(id);
-                        timer[id] = setTimeout(function () {
-                            collapseSection(id);
-                            clear(id);
-                        }, 3000);
-                    },
-
-                    update = function (e) {
-                        defer(e.data.id);
-                    },
-
-                    onShow = function (e) {
-                        defer(e.data.id);
-                        $(this).on('focus', 'input, a', { id: e.data.id }, update);
-                        $(this).on('mousedown mousemove', { id: e.data.id }, update);
-                    },
-
-                    onHide = function (e) {
-                        clear(e.data.id);
-                        $(this).off('focus', 'input, a', update);
-                        $(this).off('mousedown mousemove', update);
-                    };
-
-                return function (id) {
-                    sections[id]
-                        .on('show', { id: id }, onShow)
-                        .on('hide', { id: id }, onHide);
-                };
-            }());
 
             // side panel
             sidepanel = $('<div/>')
@@ -455,26 +415,85 @@ define('io.ox/mail/write/main',
                 .append(createField('to'));
 
             // CC
-            addSection('cc', 'Send copy to', false, true)
+            addSection('cc', 'Copy to', false, true)
                 .append(createRecipientList('cc'))
                 .append(createField('cc'));
-            addLink('cc', 'Send copy (CC) to ...');
+            addLink('cc', 'Copy (CC) to ...');
 
             // BCC
-            addSection('bcc', 'Send blind copy to', false, true)
+            addSection('bcc', 'Blind copy to', false, true)
                 .append(createRecipientList('bcc'))
                 .append(createField('bcc'));
-            addLink('bcc', 'Send blind copy (BCC) to ...');
+            addLink('bcc', 'Blind copy (BCC) to ...');
 
             // Attachments
 
-            var handleFileSelect, addUpload;
+            var handleFileSelect, addUpload, supportsPreview, createPreview;
+
+            supportsPreview = function (file) {
+                return window.FileReader &&
+                    (/^image\/(png|gif|jpe?g|bmp)$/i).test(file.type);
+            };
+
+            createPreview = function (file) {
+                return $($.txt(' ')).add(
+                        $('<a>', { href: '#' })
+                        .text('Preview')
+                        .on('click', { file: file }, function (e) {
+                            e.preventDefault();
+                            // open side popup
+                            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                                new dialogs.SidePopup().show(e, function (popup) {
+                                    // inject image as data-url
+                                    var reader = new FileReader();
+                                    reader.onload = function (e) {
+                                        popup.append(
+                                            $('<div>')
+                                            .css({
+                                                width: '100%',
+                                                height: '100%',
+                                                backgroundImage: 'url(' + e.target.result + ')',
+                                                backgroundRepeat: 'no-repeat',
+                                                backgroundPosition: 'center center',
+                                                backgroundSize: 'contain'
+                                            })
+                                        );
+                                        reader = reader.onload = null;
+                                    };
+                                    reader.readAsDataURL(e.data.file);
+                                });
+                            });
+                        })
+                    );
+            };
 
             handleFileSelect = function (e) {
                 _(e.target.files).each(function (file) {
                     sections.attachments.append(
                         $('<div>').addClass('section-item file')
-                        .text(file.name)
+                        .append($('<div>').text(file.name))
+                        .append(
+                            $('<div>')
+                            .append(
+                                $('<span>').addClass('filesize')
+                                .text(i18n.filesize(file.size))
+                            )
+                            .append(
+                                supportsPreview(file) ? createPreview(file) : $()
+                            )
+                        )
+                        .append(
+                            // remove
+                            $('<a>', { href: '#', tabindex: '6' })
+                            .addClass('remove')
+                            .append(
+                                $('<div>').addClass('icon').text('x')
+                            )
+                            .on('click', function (e) {
+                                e.preventDefault();
+                                $(this).parent().remove();
+                            })
+                        )
                     );
                 });
                 $(this).parent().hide();
@@ -485,7 +504,7 @@ define('io.ox/mail/write/main',
                 sections.attachments.append(
                     $('<div>').addClass('section-item upload')
                     .append(
-                        $('<input>', { type: 'file', name: 'upload', multiple: 'multiple' })
+                        $('<input>', { type: 'file', name: 'upload', multiple: 'multiple', tabindex: '2' })
                         .on('change', handleFileSelect)
                     )
                 );
@@ -548,7 +567,7 @@ define('io.ox/mail/write/main',
                                         $('<div>').addClass('section-item pointer')
                                         .addClass(index >= signatures.length ? 'signature-remove' : '')
                                         .append(
-                                            $('<a>', { href: '#', tabindex: '4' })
+                                            $('<a>', { href: '#', tabindex: '5' })
                                             .on('click dragstart', $.preventDefault)
                                             .text(o.signature_name)
                                         )
@@ -634,18 +653,6 @@ define('io.ox/mail/write/main',
             win.bind('hide', function () {
                 $(window).off('resize', adjustEditorMargin);
             });
-
-//            // load example text
-//            $.ajax({
-//                url: ox.base + '/apps/io.ox/mail/write/example.txt',
-//                dataType: 'text'
-//            })
-//            .done(function (txt) {
-//                win.show(function () {
-//                    editor.val(txt);
-//                    $('input[name=to]').focus().select();
-//                });
-//            });
 
             win.show(function () {
                 $('input[data-type=to]').focus().select();
