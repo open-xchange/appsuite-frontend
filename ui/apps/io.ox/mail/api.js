@@ -168,19 +168,24 @@ define("io.ox/mail/api",
             });
     };
 
-    api.send = function (data) {
+    api.send = function (data, files) {
 
         var deferred = $.Deferred(),
 
             cont = function () {
 
-                var formData = new FormData();
-                formData.append("json_0", JSON.stringify(data));
+                var form = new FormData();
+                // add mail data
+                form.append('json_0', JSON.stringify(data));
+                // add files
+                _(files).each(function (file, index) {
+                    form.append('file_' + index, file);
+                });
 
                 http.UPLOAD({
                         module: 'mail',
                         params: { action: 'new' },
-                        data: formData,
+                        data: form,
                         dataType: 'text'
                     })
                     .done(function (text) {

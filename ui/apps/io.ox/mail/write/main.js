@@ -124,6 +124,12 @@ define('io.ox/mail/write/main',
                             subject = $('<input>')
                             .attr({ type: 'text', name: 'subject', tabindex: '3' })
                             .addClass('subject')
+                            .on('keyup', function (e) {
+                                if (e.which === 13) {
+                                    // auto jump to editor on enter
+                                    editor.focus();
+                                }
+                            })
                         )
                     )
                     .append(
@@ -271,7 +277,7 @@ define('io.ox/mail/write/main',
 
                 node.addClass('io-ox-mail-write-contact section-item')
                 .append(
-                    contactsAPI.getPicture(data.email + "")
+                    contactsAPI.getPicture(data.email + '')
                     .addClass('contact-image')
                 )
                 .append(
@@ -384,7 +390,7 @@ define('io.ox/mail/write/main',
             }
 
             function createRadio(name, value, text, isChecked) {
-                var id = name + "_" + value + "_" + _.now(),
+                var id = name + '_' + value + '_' + _.now(),
                     radio = $('<input>', { type: 'radio', name: name, id: id, value: value, tabindex: '5' }),
                     label = $('<label>', { 'for': id }).text("\u00A0" + text + "\u00A0\u00A0");
                 if (isChecked) {
@@ -394,7 +400,7 @@ define('io.ox/mail/write/main',
             }
 
             function createCheckbox(name, text, isChecked) {
-                var id = name + "_" + _.now(),
+                var id = name + '_' + _.now(),
                     box = $('<input>', { type: 'checkbox', name: name, id: id, value: '1', tabindex: '5' }),
                     label = $('<label>', { 'for': id }).text("\u00A0" + text + "\u00A0\u00A0");
                 if (isChecked) {
@@ -565,7 +571,7 @@ define('io.ox/mail/write/main',
                     .append(
                         _(signatures.concat(dummySignature))
                             .inject(function (memo, o, index) {
-                                var preview = (o.signature_text || "")
+                                var preview = (o.signature_text || '')
                                     .replace(/\s\s+/g, ' ') // remove subsequent white-space
                                     .replace(/(\W\W\W)\W+/g, '$1 '); // reduce special char sequences
                                 preview = preview.length > 150 ? preview.substr(0, 150) + ' ...' : preview;
@@ -676,7 +682,7 @@ define('io.ox/mail/write/main',
         });
 
         app.proofread = function () {
-            alert("Coming soon ...");
+            alert('Coming soon ...');
         };
 
         app.send = function () {
@@ -695,7 +701,8 @@ define('io.ox/mail/write/main',
                     }
                     return obj;
                 }, {}),
-                mail;
+                mail,
+                files = [];
             // transform raw data
             mail = {
                 from: '',
@@ -704,16 +711,36 @@ define('io.ox/mail/write/main',
                 bcc: [].concat(data.bcc).join(', '),
                 subject: data.subject + '',
                 priority: data.priority,
-                vcard: data.vcard || "0",
-                disp_notification_to: data.deliveryReceipt || "0",
+                vcard: data.vcard || '0',
+                disp_notification_to: data.deliveryReceipt || '0',
                 attachments: [{
                     content_type: 'text/plain',
-                    content: data.content
+                    content: (data.content + '').replace(/\n/g, "<br>\n")
                 }]
             };
-            mailAPI.send(mail).always(function (result) {
-                alert("Yep. Your mail is sent!");
-            });
+            // get files
+            form.find(':input[name][type=file]')
+                .each(function () {
+                    // get file via property (DND) or files array and add to list
+                    var file = $(this).prop('file');
+                    if (file) {
+                        files.push(file);
+                    } else if (this.files && this.files.length) {
+                        _(this.files).each(function (file) {
+                            files.push(file);
+                        });
+                    }
+                });
+            // send!
+            mailAPI.send(mail, files)
+                .always(function (result) {
+                    if (result.error) {
+                        console.error(result);
+                        alert('Server error - see console :(');
+                    } else {
+                        alert('Yep. Your mail is sent! :)');
+                    }
+                });
         };
 
         return app;
