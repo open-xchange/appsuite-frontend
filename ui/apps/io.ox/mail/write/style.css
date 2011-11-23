@@ -23,12 +23,17 @@
 .io-ox-mail-write .priority-overlay {
     position: absolute;
     top: 0px;
-    right: 150px;
+    right: 140px;
     line-height: 30px;
     font-weight: bold;
-    font-size: 14px;
-    color: #fc0;
+    font-size: 16px;
+    color: #eee;
     z-index: 1;
+    cursor: pointer;
+}
+
+.io-ox-mail-write .priority-overlay.high {
+    color: #fc0;
 }
 
 .io-ox-mail-write .sendbutton-wrapper {
@@ -81,7 +86,7 @@
 }
 
 .io-ox-mail-write input[type=text].discreet {
-    border-color: #ddd;
+    border-color: #e0e0e0;
     background-color: #eee;
 }
 
@@ -96,10 +101,15 @@
     outline: 0;
 }
 
+.io-ox-mail-write input[type=file]:focus {
+    box-shadow: 0px 0px 4px 0px #08c;
+}
+
 .io-ox-mail-write .label {
-    color: #555;
-    line-height: 1em;
-    padding: 0px 0px 3px 0px;
+    color: #000;
+    line-height: 1.25em;
+    padding: 0px 0px 5px 0px;
+    font-family: OpenSans, Arial, Helvetica, sans-serif;
 }
 
 .io-ox-mail-write .collapse {
@@ -189,6 +199,10 @@
     margin-right: 1em;
 }
 
+.io-ox-mail-write .section-item.signature-remove a {
+    color: #800;
+}
+
 .io-ox-mail-write .section-item .signature-preview {
     font-style: italic;
     color: #888;
@@ -197,16 +211,21 @@
 
 .io-ox-mail-write .section-item.upload {
     background-color: #eee;
+    padding-right: 5px;
 }
 
 .io-ox-mail-write .section-item.file {
     background-image: url(../images/attachment.png);
     background-repeat: no-repeat;
     background-position: 10px center;
-    padding-left: 30px;
+    padding-left: 35px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.io-ox-mail-write .section-item .filesize {
+    color: #aaa;
 }
 
 .io-ox-mail-write .editor-outer-container {
