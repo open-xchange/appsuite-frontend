@@ -20,9 +20,10 @@ define('io.ox/mail/write/main',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/core/i18n',
+     'io.ox/core/tk/upload',
      'io.ox/core/tk/autocomplete',
      'css!io.ox/mail/style.css',
-     'css!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n) {
+     'css!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n, upload) {
 
     'use strict';
 
@@ -436,7 +437,7 @@ define('io.ox/mail/write/main',
             };
 
             createPreview = function (file) {
-                return $($.txt(' ')).add(
+                return $($.txt(" \u2013 ")).add( // ndash
                         $('<a>', { href: '#' })
                         .text('Preview')
                         .on('click', { file: file }, function (e) {
@@ -468,7 +469,12 @@ define('io.ox/mail/write/main',
             };
 
             handleFileSelect = function (e) {
-                _(e.target.files).each(function (file) {
+
+                // dropped files are stored in prop(file)
+                var file = $(this).prop('file'),
+                    list = file ? [file] : e.target.files;
+
+                _(list).each(function (file) {
                     sections.attachments.append(
                         $('<div>').addClass('section-item file')
                         .append($('<div>').text(file.name))
@@ -501,13 +507,13 @@ define('io.ox/mail/write/main',
             };
 
             addUpload = function () {
-                sections.attachments.append(
-                    $('<div>').addClass('section-item upload')
+                return $('<div>')
+                    .addClass('section-item upload')
                     .append(
                         $('<input>', { type: 'file', name: 'upload', multiple: 'multiple', tabindex: '2' })
                         .on('change', handleFileSelect)
                     )
-                );
+                    .appendTo(sections.attachments);
             };
 
             addSection('attachments', 'Attachments', true, true);
@@ -645,13 +651,23 @@ define('io.ox/mail/write/main',
                 }, 100);
             }());
 
+            var dropZone = upload.dnd.createDropZone();
+            dropZone.bind('drop', function (file) {
+                form.find('input[type=file]').last()
+                    .prop('file', file)
+                    .trigger('change');
+                showSection('attachments');
+            });
+
             win.bind('show', function () {
                 adjustEditorMargin();
                 $(window).on('resize', adjustEditorMargin);
+                dropZone.include();
             });
 
             win.bind('hide', function () {
                 $(window).off('resize', adjustEditorMargin);
+                dropZone.remove();
             });
 
             win.show(function () {
