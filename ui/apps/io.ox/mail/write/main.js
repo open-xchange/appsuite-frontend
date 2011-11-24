@@ -443,7 +443,8 @@ define('io.ox/mail/write/main',
             };
 
             createPreview = function (file) {
-                return $($.txt(" \u2013 ")).add( // ndash
+                return $($.txt(" \u2013 ")) // ndash
+                    .add(
                         $('<a>', { href: '#' })
                         .text('Preview')
                         .on('click', { file: file }, function (e) {

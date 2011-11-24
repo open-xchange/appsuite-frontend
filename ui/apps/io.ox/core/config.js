@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,21 +9,21 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- *
  */
 
-define("io.ox/core/config", ["io.ox/core/http", "io.ox/core/cache"], function (http, cache) {
-    
-    "use strict";
-    
+define('io.ox/core/config',
+    ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
+
+    'use strict';
+
     var config = {},
         configCache;
-    
+
     var get = function (key) {
-        var parts = typeof key === "string" ? key.split(/\./) : key,
+        var parts = typeof key === 'string' ? key.split(/\./) : key,
             tmp = config || {}, i = 0, $i = parts.length;
         for (; i < $i; i++) {
-            if (tmp[parts[i]] !== undefined) {
+            if (tmp !== null && tmp !== undefined && parts[i] in tmp) {
                 tmp = tmp[parts[i]];
             } else {
                 return null;
@@ -32,15 +31,15 @@ define("io.ox/core/config", ["io.ox/core/http", "io.ox/core/cache"], function (h
         }
         return tmp;
     };
-    
+
     var set = function (key, value) {
-        var parts = typeof key === "string" ? key.split(/\./) : key,
+        var parts = typeof key === 'string' ? key.split(/\./) : key,
             tmp = config || {}, i = 0, $i = parts.length;
         for (; i < $i; i++) {
             if (tmp[parts[i]]) {
                 tmp = tmp[parts[i]];
-                if (typeof tmp !== "object") {
-                    console.error("config.set: " + tmp + " is a value");
+                if (typeof tmp !== 'object') {
+                    console.error('config.set: ' + tmp + ' is a value');
                     return;
                 }
             } else {
@@ -49,12 +48,12 @@ define("io.ox/core/config", ["io.ox/core/http", "io.ox/core/cache"], function (h
         }
         tmp[parts[$i - 1]] = value;
     };
-    
+
     var contains = function (key) {
-        var parts = typeof key === "string" ? key.split(/\./) : key,
+        var parts = typeof key === 'string' ? key.split(/\./) : key,
             tmp = config || {}, i = 0, $i = parts.length;
         for (; i < $i; i++) {
-            if (tmp[parts[i]] !== undefined) {
+            if (tmp !== null && tmp !== undefined && parts[i] in tmp) {
                 tmp = tmp[parts[i]];
             } else {
                 return false;
@@ -62,15 +61,15 @@ define("io.ox/core/config", ["io.ox/core/http", "io.ox/core/cache"], function (h
         }
         return true;
     };
-    
+
     var remove = function (key) {
-        var parts = typeof key === "string" ? key.split(/\./) : key,
+        var parts = typeof key === 'string' ? key.split(/\./) : key,
             tmp = config || {}, i = 0, $i = parts.length - 1;
         for (; i < $i; i++) {
             if (tmp[parts[i]]) {
                 tmp = tmp[parts[i]];
-                if (typeof tmp !== "object") {
-                    console.error("config.set: " + tmp + " is a value");
+                if (typeof tmp !== 'object') {
+                    console.error('config.set: ' + tmp + ' is a value');
                     return;
                 }
             } else {
@@ -80,11 +79,11 @@ define("io.ox/core/config", ["io.ox/core/http", "io.ox/core/cache"], function (h
         // now, we have the right node, so...
         delete tmp[parts[$i]];
     };
-    
+
     return {
-        
+
         get: function (path, defaultValue) {
-            if (!path) { // undefined, null, ""
+            if (!path) { // undefined, null, ''
                 return config;
             } else {
                 if (defaultValue === undefined) {
@@ -94,14 +93,14 @@ define("io.ox/core/config", ["io.ox/core/http", "io.ox/core/cache"], function (h
                 }
             }
         },
-        
+
         set: function (path, value, permanent) {
             if (path) {
                 set(path, value);
                 if (permanent) {
                     // save configuration path on server
                     return http.PUT({
-                        module: "config/" + path,
+                        module: 'config/' + path,
                         appendColumns: false,
                         processResponse: false,
                         data: value
@@ -109,36 +108,36 @@ define("io.ox/core/config", ["io.ox/core/http", "io.ox/core/cache"], function (h
                 }
             }
         },
-        
+
         remove: function (path) {
             if (path) {
                 remove(path);
             }
         },
-        
+
         contains: function (path) {
             return contains(path);
         },
-        
+
         load: function () {
             // loader
             var load = function () {
                 return http.GET({
-                        module: "config",
+                        module: 'config',
                         appendColumns: false,
                         processResponse: false
                     })
                     .done(function (data) {
                         config = data !== undefined ? data.data : {};
-                        configCache.add("default", config);
+                        configCache.add('default', config);
                     });
             };
             // trick to be fast: cached?
             if (!configCache) {
-                configCache = new cache.SimpleCache("config", true);
+                configCache = new cache.SimpleCache('config', true);
             }
-            if (configCache.contains("default")) {
-                config = configCache.get("default");
+            if (configCache.contains('default')) {
+                config = configCache.get('default');
                 load();
                 return $.Deferred().resolve(config);
             } else {
