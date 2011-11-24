@@ -156,6 +156,11 @@
 	line-height: 15pt;
 }
 
+.create-contact #image1 {
+	margin-left: 28px;
+}
+
+
 .create-contact .block .field input {
 	width: 120px;
 	float: right;
