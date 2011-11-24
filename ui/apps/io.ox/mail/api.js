@@ -63,10 +63,6 @@ define("io.ox/mail/api",
                 }
             }
         },
-        pipe: {
-            all: function (data) {
-            }
-        },
         fail: {
             get: function (e, params) {
                 if (e.code === "MSG-0032") {
@@ -80,7 +76,7 @@ define("io.ox/mail/api",
     // extend API
 
     // ~ all
-    api.getAllThreads = function (options) {
+    api.getAllThreads = function (options, useCache) {
 
         options = options || {};
         options.columns = "601,600,610,612"; // +level, +received_date
@@ -89,7 +85,7 @@ define("io.ox/mail/api",
         // clear threads
         threads = {};
 
-        return this.getAll(options)
+        return this.getAll(options, useCache)
             .pipe(function (data) {
                 // loop over data
                 var i = 0, obj, tmp = null, all = [], first,
@@ -232,13 +228,21 @@ define("io.ox/mail/api",
                         dataType: 'text'
                     })
                     .done(function (text) {
+                        // process HTML-ish non-JSONP response
                         var a = text.indexOf('{'),
-                            b = text.lastIndexOf('}');
+                        b = text.lastIndexOf('}');
                         if (a > -1 && b > -1) {
                             deferred.resolve(JSON.parse(text.substr(a, b - a + 1)));
                         } else {
                             deferred.resolve({});
                         }
+                        // wait a moment, then update mail index
+                        setTimeout(function () {
+                            api.getAllThreads({}, false)
+                                .done(function (data) {
+                                    api.trigger('refresh.all');
+                                });
+                        }, 3000);
                     })
                     .fail(deferred.reject);
             };

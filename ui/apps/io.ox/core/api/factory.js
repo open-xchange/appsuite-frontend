@@ -27,8 +27,6 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
 
         // extend default options (deep)
         o = $.extend(true, {
-            // use cache
-            cache: true,
             // globally unique id for caches
             id: null,
             // for caches
@@ -58,11 +56,13 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
 
         var api = {
 
-            getAll: function (options) {
+            getAll: function (options, useCache) {
                 // merge defaults for "all"
                 var opt = $.extend({}, o.requests.all, options || {});
+                // use cache?
+                useCache = useCache === undefined ? true : !!useCache;
                 // cache miss?
-                if (!o.cache || !caches.all.contains(opt.folder)) {
+                if (!useCache || !caches.all.contains(opt.folder)) {
                     // call server and return deferred object
                     // TODO: special sort/order key stuff
                     return http.GET({
@@ -80,6 +80,8 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                                 );
                             caches.list.remove(diff);
                             caches.get.remove(diff);
+                            // clear cache
+                            caches.all.clear(); //TODO: remove affected folder only
                             // add to cache
                             caches.all.add(opt.folder, data, timestamp);
                         });
@@ -89,13 +91,15 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                 }
             },
 
-            getList: function (ids) {
+            getList: function (ids, useCache) {
                 // be robust
                 ids = ids || [];
+                // use cache?
+                useCache = useCache === undefined ? true : !!useCache;
                 // cache miss?
                 if (ids.length === 0) {
                     return $.Deferred().resolve([]);
-                } else if (!o.cache || !caches.list.contains(ids)) {
+                } else if (!useCache || !caches.list.contains(ids)) {
                     // call server and return deferred object
                     return http.fixList(ids, http.PUT({
                             module: o.module,
@@ -114,11 +118,13 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                 }
             },
 
-            get: function (options) {
+            get: function (options, useCache) {
                 // merge defaults for get
                 var opt = $.extend({}, o.requests.get, options || {});
+                // use cache?
+                useCache = useCache === undefined ? true : !!useCache;
                 // cache miss?
-                if (!o.cache || !caches.get.contains(opt)) {
+                if (!useCache || !caches.get.contains(opt)) {
                     // call server and return deferred object
                     return http.GET({
                             module: o.module,

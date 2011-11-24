@@ -189,12 +189,12 @@ define("io.ox/mail/main",
         });
 
         // bind all refresh
-        api.bind("refresh.all", function (data) {
+        api.bind("refresh.all", function () {
             grid.refresh();
         });
 
         // bind list refresh
-        api.bind("refresh.list", function (data) {
+        api.bind("refresh.list", function () {
             grid.repaint();
         });
 
