@@ -17,7 +17,7 @@ define("io.ox/files/main",
     ["io.ox/files/view-detail",
      "io.ox/files/api",
      "io.ox/core/tk/vgrid",
-     "io.ox/files/upload",
+     "io.ox/core/tk/upload",
      "io.ox/core/tk/dialogs",
      "io.ox/help/hints",
      "css!io.ox/files/style.css"

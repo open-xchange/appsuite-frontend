@@ -12,10 +12,10 @@
  */
 
 // TODO: Refactor this to make it usable by other OX upload scenarios (Mail Attachments, PIM Attachments)
-define("io.ox/files/upload", ["io.ox/core/event"], function (event) {
-    
+define("io.ox/core/tk/upload", ["io.ox/core/event"], function (event) {
+
     "use strict";
-    
+
     // Let's define a DropZone class, where files can be dropped
     // We leave the eyecandy to calling code, but provide a few events
     // "dragover" if someone threatens to drop a file into $node
@@ -30,7 +30,7 @@ define("io.ox/files/upload", ["io.ox/core/event"], function (event) {
             $node.appendTo("body");
             return false;
         };
-        
+
         if ($node) {
             $node = $($node);
         } else {
@@ -50,7 +50,7 @@ define("io.ox/files/upload", ["io.ox/core/event"], function (event) {
         }
         this.enabled = true;
         event.Dispatcher.extend(this);
-        
+
         // Now let's add the regular event handlers to fulfill our promises
         $node.on({
             dragenter: function () {
@@ -67,7 +67,7 @@ define("io.ox/files/upload", ["io.ox/core/event"], function (event) {
                 // We'll just hand this over. A few layers of indirection are always fun
                 self.trigger("dragend");
                 return false; // Prevent regular event handling
-                
+
             },
             dragleave: function () {
                 // We'll just hand this over. A few layers of indirection are always fun
@@ -76,7 +76,7 @@ define("io.ox/files/upload", ["io.ox/core/event"], function (event) {
                 }
                 self.trigger("dragleave");
                 return false; // Prevent regular event handling
-                
+
             },
             drop: function (event) {
                 if (globalMode) {
@@ -93,7 +93,7 @@ define("io.ox/files/upload", ["io.ox/core/event"], function (event) {
                 return false; // Prevent regular event handling
             }
         });
-        
+
         if (globalMode) {
             var included = false;
             this.remove = function () {
@@ -114,10 +114,10 @@ define("io.ox/files/upload", ["io.ox/core/event"], function (event) {
             this.remove = $.noop;
             this.include = $.noop;
         }
-        
+
         this.include();
     }
-    
+
     // And this is the duck type compatible version for browsers which don't support
     // the File API. You can define this DropZone but will never hear back.
     function DisabledDropZone($node) {
@@ -128,8 +128,8 @@ define("io.ox/files/upload", ["io.ox/core/event"], function (event) {
         this.include = $.noop;
         // Maybe add some more
     }
-    
-    
+
+
     // Next we'll need a file upload queue
     // This will simply store files and drain the queue by uploading one file after another
     // Events:
@@ -150,19 +150,19 @@ define("io.ox/files/upload", ["io.ox/core/event"], function (event) {
                 }
             };
         }
-        
+
         if (!delegate.processFile) {
             console.warn("The delegate to a queue should implement a 'processFile' method!");
             delegate.processFile = $.noop;
         }
-        
+
         event.Dispatcher.extend(this);
-        
+
         var files = [];
         var currentFile = null;
-        
+
         var processing = false;
-        
+
         this.nextFile = function () {
             if (processing) {
                 return;
@@ -180,12 +180,12 @@ define("io.ox/files/upload", ["io.ox/core/event"], function (event) {
                 self.queueChanged();
             });
         };
-        
+
         this.offer = function (file) {
             files.push(file);
             this.queueChanged();
         };
-        
+
         this.length = 0;
 
         this.queueChanged = function () {
@@ -193,22 +193,22 @@ define("io.ox/files/upload", ["io.ox/core/event"], function (event) {
             this.trigger("changed", this);
             this.nextFile();
         };
-        
+
         this.dump = function () {
             console.info("this", this, "files", files, "currentFile", currentFile);
         };
-        
+
         this.start = function (currentFile) {
             if (delegate.start) {
                 delegate.start(currentFile);
             }
             this.trigger("start", currentFile);
         };
-        
+
         this.processFile = function () {
             return delegate.processFile(currentFile);
         };
-        
+
         this.stop = function (currentFile) {
             if (delegate.stop) {
                 delegate.stop(currentFile);
@@ -216,7 +216,7 @@ define("io.ox/files/upload", ["io.ox/core/event"], function (event) {
             this.trigger("stop", currentFile);
         };
     }
-     
+
     return {
         dnd : {
             enabled: Modernizr.draganddrop,

@@ -138,7 +138,7 @@
     border: 1px solid #aaa;
     padding: 20px;
     margin: 20px auto 0px auto;
-    min-height: 70%;
+    min-height: 200px;
     max-width: 850px;
     -moz-box-shadow: 0px 5px 10px -3px black;
     -webkit-box-shadow: 0px 5px 10px -3px black;
@@ -195,10 +195,11 @@
 }
 
 .mail-detail .content.plain-text {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 10pt;
-    line-height: 1.25em;
-    max-width: 600px;
+    font-family: Monaco, monospace;
+    font-size: 13px;
+    line-height: 18px;
+    white-space: pre-wrap;
+    max-width: 700px;
 }
 
 .mail-detail blockquote {
