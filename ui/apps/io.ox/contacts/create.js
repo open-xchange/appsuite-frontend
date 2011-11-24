@@ -23,75 +23,64 @@ define("io.ox/contacts/create",
     "use strict";
 
     function fieldHtml(label, id) {
-        return $('<div/>').addClass('field').append('<label>' + label + '</label>')
-        .append('<input class="' + id + '"type="text"> </input>');
+        return $('<div>').addClass('field').append($('<label>').text(label))
+        .append($('<input>', {'class': id, type: 'text'}));
     }
-
- // create formblocks
-    var $divblockName = $('<div/>').addClass('block new_contact name'),
-    $divblockCompany = $('<div/>').addClass('block new_contact company'),
-    $divblockBAddress = $('<div/>').addClass('block new_contact address'),
-    $divblockBPhone = $('<div/>').addClass('block new_contact phone'),
-    $divblockImage = $('<div/>').addClass('block new_contact image'),
-    $firstName = fieldHtml("first name", "first_name"),
-    $lastName = fieldHtml("last name", "last_name"),
-    $company = fieldHtml("company", "company"),
-    $position = fieldHtml("position", "position"),
-    $profession = fieldHtml("profession", "profession"),
-    $department = fieldHtml("department", "department"),
-    $streetBusiness = fieldHtml("street", "street_business"),
-    $postalCodeBusiness = fieldHtml("postal code", "postal_code_business"),
-    $cityBusiness = fieldHtml("city", "city_business"),
-    $phoneBusiness1 = fieldHtml("tel.", "telephone_business1"),
-    $contactImageForm = $('<form/>').attr({
-        'accept-charset': 'UTF-8',
-        'enctype': 'multipart/form-data',
-        'id': 'contactUploadImage',
-        'method': 'POST',
-        'name': 'contactUploadImage',
-        'target': 'hiddenframePicture'
-    }),
-    $contactInputField = $('<input/>').attr({
-        'id': 'image1',
-        'name': 'file',
-        'type': 'file'
-    }),
-    $contactInputLabel = $('<label(>').text('contact image'),
-    $contactIframe = $('<iframe/>').attr({
-        'name': 'hiddenframePicture',
-        'src': ox.base + '/apps/io.ox/contacts/newInfoItemHidden.html'
-    }).css('display', 'none');
     
     //assemble create form
     var newCreatePane = function () {
-
+       
         var pane = new dialogs.CreateDialog();
         pane.getContentNode().addClass("create-contact");
-        pane.append($divblockName);
+        pane.append(
+            $('<div>').addClass('block new_contact name')
+            .append(fieldHtml('first name', 'first_name'))
+            .append(fieldHtml('last name', 'last_name'))
+        );
 
-        $firstName.appendTo($divblockName);
-        $lastName.appendTo($divblockName);
-
-        pane.append($divblockCompany);
-        $company.appendTo($divblockCompany);
-        $department.appendTo($divblockCompany);
-        $position.appendTo($divblockCompany);
-        $profession.appendTo($divblockCompany);
-
-        pane.append($divblockBAddress);
-        $streetBusiness.appendTo($divblockBAddress);
-        $postalCodeBusiness.appendTo($divblockBAddress);
-        $cityBusiness.appendTo($divblockBAddress);
-        $cityBusiness.appendTo($divblockBAddress);
-
-        pane.append($divblockBPhone);
-        $phoneBusiness1.appendTo($divblockBPhone);
+        pane.append(
+            $('<div>').addClass('block new_contact company')
+            .append(fieldHtml('company', 'company'))
+            .append(fieldHtml('department', 'department'))
+            .append(fieldHtml('position', 'position'))
+            .append(fieldHtml('profession', 'profession'))
+        );
         
-        pane.append($divblockImage);
-        $contactImageForm.appendTo($divblockImage);
-        $contactImageForm.append($contactInputLabel);
-        $contactImageForm.append($contactInputField);
-        $contactImageForm.append($contactIframe);
+        pane.append(
+            $('<div>').addClass('block new_contact address')
+            .append(fieldHtml('street', 'street_business'))
+            .append(fieldHtml('postal code', 'postal_code_business'))
+            .append(fieldHtml('city', 'city_business'))
+        );
+        
+        pane.append(
+            $('<div>').addClass('block new_contact phone')
+            .append(fieldHtml('tel.', 'telephone_business1'))
+        );
+        
+        pane.append(
+            $('<div>').addClass('block new_contact image')
+            .append($('<form>').attr({
+            'accept-charset': 'UTF-8',
+            'enctype': 'multipart/form-data',
+            'id': 'contactUploadImage',
+            'method': 'POST',
+            'name': 'contactUploadImage',
+            'target': 'hiddenframePicture'
+        })
+            
+            .append($('<label>').text('contact image'))
+            .append($('<input>').attr({
+            'id': 'image1',
+            'name': 'file',
+            'type': 'file'
+        })
+            .append($('<iframe>').attr({
+            'name': 'hiddenframePicture',
+            'src': ox.base + '/apps/io.ox/contacts/newInfoItemHidden.html'
+        }).css('display', 'none')))
+        
+        ));
         
         pane.addButton("resolveNewContact", "Save");
         pane.addButton("cancelNewContact", "Cancel");
