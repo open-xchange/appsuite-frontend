@@ -168,6 +168,49 @@ define("io.ox/mail/api",
             });
     };
 
+    var react = function (action, obj, view) {
+        return http.GET({
+                module: 'mail',
+                params: {
+                    action: action || '',
+                    id: obj.id,
+                    folder: obj.folder || obj.folder_id,
+                    view: view || 'text'
+                }
+            })
+            .pipe(function (data) {
+                // transform pseudo-plain text to real text
+                if (data.attachments && data.attachments.length) {
+                    var text = '';
+                    $('<div>')
+                        // escape everything but BR tags
+                        .html(data.attachments[0].content.replace(/<(?!br)/g, '&lt;'))
+                        .contents().each(function () {
+                            if (this.tagName === 'BR') {
+                                text += "\n";
+                            } else {
+                                text += $(this).text();
+                            }
+                        });
+                    // replace
+                    data.attachments[0].content = $.trim(text);
+                }
+                return data;
+            });
+    };
+
+    api.replyall = function (obj, view) {
+        return react('replyall', obj, view);
+    };
+
+    api.reply = function (obj, view) {
+        return react('reply', obj, view);
+    };
+
+    api.forward = function (obj, view) {
+        return react('forward', obj, view);
+    };
+
     api.send = function (data, files) {
 
         var deferred = $.Deferred(),

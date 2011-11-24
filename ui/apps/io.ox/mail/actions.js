@@ -11,99 +11,113 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/mail/actions", ["io.ox/core/extensions"], function (ext) {
+define('io.ox/mail/actions', ['io.ox/core/extensions'], function (ext) {
 
-    "use strict";
+    'use strict';
 
     // actions
 
-    ext.point("io.ox/mail/actions/write").extend({
-        id: "delete",
+    ext.point('io.ox/mail/actions/compose').extend({
+        id: 'delete',
         action: function (data) {
-            require(["io.ox/mail/write/main"], function (m) {
-                m.getApp().launch();
+            require(['io.ox/mail/write/main'], function (m) {
+                m.getApp().launch().done(function () {
+                    this.compose();
+                });
             });
         }
     });
 
-    ext.point("io.ox/mail/actions/delete").extend({
-        id: "delete",
+    ext.point('io.ox/mail/actions/delete').extend({
+        id: 'delete',
         requires: function (context) {
-            return context.collection.has("some", "delete");
+            return context.collection.has('some', 'delete');
         },
         action: function (data) {
-            console.debug("Action: delete");
+            console.debug('Action: delete');
             //api.remove(grid.selection.get());
             //grid.selection.selectNext();
         }
     });
 
-    ext.point("io.ox/mail/actions/reply-all").extend({
-        id: "reply-all",
+    ext.point('io.ox/mail/actions/reply-all').extend({
+        id: 'reply-all',
         requires: function (context) {
-            return context.collection.has("some");
+            return context.collection.has('some');
         },
         action: function (data) {
-            console.debug("Action: reply All");
+            require(['io.ox/mail/write/main'], function (m) {
+                m.getApp().launch().done(function () {
+                    this.replyall(data);
+                });
+            });
         }
     });
 
-    ext.point("io.ox/mail/actions/reply").extend({
-        id: "reply",
+    ext.point('io.ox/mail/actions/reply').extend({
+        id: 'reply',
         requires: function (context) {
-            return context.collection.has("some");
+            return context.collection.has('some');
         },
         action: function (data) {
-            console.debug("Action: reply");
+            require(['io.ox/mail/write/main'], function (m) {
+                m.getApp().launch().done(function () {
+                    this.reply(data);
+                });
+            });
         }
     });
 
-    ext.point("io.ox/mail/actions/forward").extend({
-        id: "forward",
+    ext.point('io.ox/mail/actions/forward').extend({
+        id: 'forward',
         requires: function (context) {
-            return context.collection.has("some");
+            return context.collection.has('some');
         },
         action: function (data) {
-            console.debug("Action: forward");
+            require(['io.ox/mail/write/main'], function (m) {
+                m.getApp().launch().done(function () {
+                    this.forward(data);
+                });
+            });
         }
     });
 
     // toolbar
 
-    ext.point("io.ox/mail/links/toolbar").extend(new ext.Link({
+    ext.point('io.ox/mail/links/toolbar').extend(new ext.Link({
         index: 100,
-        id: "write",
-        label: "Compose",
-        ref: "io.ox/mail/actions/write"
+        id: 'compose',
+        label: 'Compose',
+        ref: 'io.ox/mail/actions/compose'
     }));
 
     // inline links
 
-    ext.point("io.ox/mail/links/inline").extend(new ext.Link({
+    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
         index: 100,
-        id: "delete",
-        label: "Delete",
-        ref: "io.ox/mail/actions/delete"
+        id: 'delete',
+        label: 'Delete',
+        ref: 'io.ox/mail/actions/delete'
     }));
 
-    ext.point("io.ox/mail/links/inline").extend(new ext.Link({
+    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
         index: 200,
-        id: "reply-all",
-        label: "Reply All",
-        ref: "io.ox/mail/actions/reply-all"
+        id: 'reply-all',
+        label: 'Reply All',
+        ref: 'io.ox/mail/actions/reply-all'
     }));
 
-    ext.point("io.ox/mail/links/inline").extend(new ext.Link({
+    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
         index: 300,
-        id: "reply",
-        label: "Reply",
-        ref: "io.ox/mail/actions/reply"
+        id: 'reply',
+        label: 'Reply',
+        ref: 'io.ox/mail/actions/reply'
     }));
 
-    ext.point("io.ox/mail/links/inline").extend(new ext.Link({
+    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
         index: 400,
-        id: "forward",
-        label: "Forward",
-        ref: "io.ox/mail/actions/forward"
+        id: 'forward',
+        label: 'Forward',
+        ref: 'io.ox/mail/actions/forward'
     }));
 });

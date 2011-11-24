@@ -194,6 +194,9 @@ define("io.ox/core/desktop",
             };
 
             this.launch = function () {
+
+                var deferred;
+
                 if (!running) {
                     // mark as running
                     running = true;
@@ -204,13 +207,17 @@ define("io.ox/core/desktop",
                         );
                     }
                     // go!
-                    return (launchFn() || $.Deferred().resolve());
+                    deferred = launchFn() || $.when();
 
                 } else if (win) {
                     // toggle app window
                     win.show();
-                    return $.Deferred().resolve();
+                    deferred = $.when();
                 }
+
+                return deferred.pipe(function () {
+                    return $.Deferred().resolveWith(self, arguments);
+                });
             };
 
             this.quit = function () {
@@ -405,6 +412,7 @@ define("io.ox/core/desktop",
                     } else {
                         _.call(cont);
                     }
+                    return this;
                 };
 
                 this.hide = function () {
@@ -423,6 +431,7 @@ define("io.ox/core/desktop",
                     if (currentWindow === this) {
                         currentWindow = null;
                     }
+                    return this;
                 };
 
                 this.toggle = function () {
@@ -431,6 +440,7 @@ define("io.ox/core/desktop",
                     } else {
                         this.show();
                     }
+                    return this;
                 };
 
                 this.close = function () {
@@ -448,6 +458,7 @@ define("io.ox/core/desktop",
                         this.trigger("close");
                         ox.ui.windowManager.trigger("window.close", this);
                     }
+                    return this;
                 };
 
                 this.destroy = function () {
@@ -462,6 +473,7 @@ define("io.ox/core/desktop",
                     this.nodes.outer.remove();
                     this.nodes = null;
                     this.show = $.noop;
+                    return this;
                 };
 
                 this.setQuitOnClose = function (flag) {
@@ -482,6 +494,7 @@ define("io.ox/core/desktop",
                 this.setTitle = function (t) {
                     title = t;
                     applyTitle();
+                    return this;
                 };
 
                 this.addClass = function () {
@@ -519,6 +532,7 @@ define("io.ox/core/desktop",
                             this.nodes[currentView = id].show();
                         }
                     }
+                    return this;
                 };
             };
 
