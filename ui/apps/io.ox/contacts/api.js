@@ -148,6 +148,58 @@ define('io.ox/contacts/api',
         });
     };
 
+    var autocompleteCache = new cache.SimpleCache('contacts-autocomplete', true);
+
+    api.bind('refresh.all', function () {
+        autocompleteCache.clear();
+    });
+
+    api.autocomplete = function (query) {
+
+        function process(list, obj, field) {
+            var name;
+            if (obj[field]) {
+                if (obj.display_name) {
+                    // use display name
+                    name = obj.display_name + '';
+                } else {
+                    // use last_name & first_name
+                    name = [];
+                    if (obj.last_name) {
+                        name.push(obj.last_name);
+                    }
+                    if (obj.first_name) {
+                        name.push(obj.first_name);
+                    }
+                    name = name.join(', ');
+                }
+                list.push({
+                    display_name: name,
+                    email: obj[field],
+                    contact: obj
+                });
+            }
+        }
+
+        if (!autocompleteCache.contains(query)) {
+            return api.search(query, true)
+                .pipe(function (data) {
+                    var tmp = [];
+                    _(data).each(function (obj) {
+                        process(tmp, obj, 'email1');
+                        process(tmp, obj, 'email2');
+                        process(tmp, obj, 'email3');
+                    });
+                    return tmp;
+                })
+                .done(function (data) {
+                    autocompleteCache.add(query, data);
+                });
+        } else {
+            return $.Deferred().resolve(autocompleteCache.get(query));
+        }
+    };
+
     // simple contact picture cache
     var contactPictures = {};
 

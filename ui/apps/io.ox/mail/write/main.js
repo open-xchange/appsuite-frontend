@@ -877,7 +877,9 @@ define('io.ox/mail/write/main',
                 disp_notification_to: data.deliveryReceipt || '0',
                 attachments: [{
                     content_type: 'text/plain',
-                    content: (data.content + '').replace(/\n/g, "<br>\n")
+                    content: (data.content + '')
+                        .replace(/</g, '&lt;') // escape <
+                        .replace(/\n/g, "<br>\n") // escape line-breaks
                 }]
             };
             // add msgref?
@@ -914,14 +916,17 @@ define('io.ox/mail/write/main',
         app.send = function () {
             // get mail
             var mail = this.getMail();
+            // hide app
+            win.hide();
             // send!
             mailAPI.send(mail.data, mail.files)
                 .always(function (result) {
                     if (result.error) {
                         console.error(result);
+                        win.show();
                         alert('Server error - see console :(');
                     } else {
-                        alert('Yep. Your mail is sent! :)');
+                        app.quit();
                     }
                 });
         };
