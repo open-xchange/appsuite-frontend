@@ -55,8 +55,6 @@ define("io.ox/contacts/update_app",
                 title: "Update Contact",
                 toolbar: true
             });
-           
-          
             
             formContainer = $("<div/>").addClass("abs")
                 .css({
@@ -76,9 +74,7 @@ define("io.ox/contacts/update_app",
             app.setWindow(win);
             win.setQuitOnClose(true);
             
-            
             win.show(function () {
-                    
                     
     //              helper for fieldconstruct
                     function fieldHtml(label, id) {
@@ -184,6 +180,24 @@ define("io.ox/contacts/update_app",
                     $default_address = fieldHtml("default_address", "default_address"),
                     $internal_userid = fieldHtml("internal_userid", "internal_userid"),
                     $image1_url = fieldHtml("image1_url", "image1_url"),
+                    $contactImageForm = $('<form/>').attr({
+                        'accept-charset': 'UTF-8',
+                        'enctype': 'multipart/form-data',
+                        'id': 'contactUploadImage',
+                        'method': 'POST',
+                        'name': 'contactUploadImage',
+                        'target': 'hiddenframePicture'
+                    }),
+                    $contactInputField = $('<input/>').attr({
+                        'id': 'image1',
+                        'name': 'file',
+                        'type': 'file'
+                    }),
+                    $contactInputLabel = $('<label(>').text('contact image'),
+                    $contactIframe = $('<iframe/>').attr({
+                        'name': 'hiddenframePicture',
+                        'src': ox.base + '/apps/io.ox/contacts/newInfoItemHidden.html'
+                    }).css('display', 'none'),
                     
                     $firstName = fieldHtml("first name", "first_name"),
                     $lastName = fieldHtml("last name", "last_name"),
@@ -201,9 +215,6 @@ define("io.ox/contacts/update_app",
                     
                     var paneUpdate = $('<div/>').addClass('up1'),
                         paneUpdate2 = $('<div/>').addClass('up2');
-                    
-               
-    //              paneUpdate.getContentNode().addClass("create-contact");
                     
     //              assemble the form
                       
@@ -317,27 +328,44 @@ define("io.ox/contacts/update_app",
                     $default_address.appendTo($divblockUnsorted);
                     $internal_userid.appendTo($divblockUnsorted);
                     $image1_url.appendTo($divblockUnsorted);
+                    $contactImageForm.appendTo($divblockUnsorted);
+                    $contactImageForm.append($contactInputLabel);
+                    $contactImageForm.append($contactInputField);
+                    $contactImageForm.append($contactIframe);
                     
                     var actions = {
                         resolveEditContact: function () {
                             var fId = config.get("folder.contacts"),
-                            formdata = {};
+                            formdata = {},
+                            formdataString,
+                            image = $('form input#image1').val(),
+                            imagePur = document.getElementById("image1");
+                            
+//                          select the data
+                            
                             $(".contact_update_frame .edit_contact input")
                             .each(function (index) {
                                 var value =  $(this).val(),
                                 id = $(this).attr('class');
                                 api.caches.list.remove(id);
-                                if (value !== "") {
+                                if (id !== undefined && value !== "") {
                                     formdata[id] = value;
                                 }
                             });
-                            if (!_.isEmpty(formdata)) {
-                                var fDataId = parseInt(formdata.id, 10),
-                                timestamp = new Date().getTime();
-                                formdata.folderId = fId;
-                                formdata.id = fDataId;
-                                formdata.timestamp = timestamp;
-                                api.update(formdata);
+                            
+                            var fDataId = parseInt(formdata.id, 10),
+                            timestamp = new Date().getTime();
+                            formdata.folderId = fId;
+                            formdata.id = fDataId;
+                            formdata.timestamp = timestamp;
+                            
+                            if (image !== "") {
+                                formdataString = JSON.stringify(formdata);
+                                api.updateNewImage(formdataString, imagePur.files[0]);
+                            } else {
+                                if (!_.isEmpty(formdata)) {
+                                    api.update(formdata);
+                                }
                             }
                             app.quit();
                         },

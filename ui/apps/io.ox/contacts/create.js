@@ -32,6 +32,7 @@ define("io.ox/contacts/create",
     $divblockCompany = $('<div/>').addClass('block new_contact company'),
     $divblockBAddress = $('<div/>').addClass('block new_contact address'),
     $divblockBPhone = $('<div/>').addClass('block new_contact phone'),
+    $divblockImage = $('<div/>').addClass('block new_contact image'),
     $firstName = fieldHtml("first name", "first_name"),
     $lastName = fieldHtml("last name", "last_name"),
     $company = fieldHtml("company", "company"),
@@ -41,8 +42,26 @@ define("io.ox/contacts/create",
     $streetBusiness = fieldHtml("street", "street_business"),
     $postalCodeBusiness = fieldHtml("postal code", "postal_code_business"),
     $cityBusiness = fieldHtml("city", "city_business"),
-    $phoneBusiness1 = fieldHtml("tel.", "telephone_business1");
-
+    $phoneBusiness1 = fieldHtml("tel.", "telephone_business1"),
+    $contactImageForm = $('<form/>').attr({
+        'accept-charset': 'UTF-8',
+        'enctype': 'multipart/form-data',
+        'id': 'contactUploadImage',
+        'method': 'POST',
+        'name': 'contactUploadImage',
+        'target': 'hiddenframePicture'
+    }),
+    $contactInputField = $('<input/>').attr({
+        'id': 'image1',
+        'name': 'file',
+        'type': 'file'
+    }),
+    $contactInputLabel = $('<label(>').text('contact image'),
+    $contactIframe = $('<iframe/>').attr({
+        'name': 'hiddenframePicture',
+        'src': ox.base + '/apps/io.ox/contacts/newInfoItemHidden.html'
+    }).css('display', 'none');
+    
     //assemble create form
     var newCreatePane = function () {
 
@@ -67,7 +86,13 @@ define("io.ox/contacts/create",
 
         pane.append($divblockBPhone);
         $phoneBusiness1.appendTo($divblockBPhone);
-
+        
+        pane.append($divblockImage);
+        $contactImageForm.appendTo($divblockImage);
+        $contactImageForm.append($contactInputLabel);
+        $contactImageForm.append($contactInputField);
+        $contactImageForm.append($contactIframe);
+        
         pane.addButton("resolveNewContact", "Save");
         pane.addButton("cancelNewContact", "Cancel");
 
@@ -75,35 +100,41 @@ define("io.ox/contacts/create",
 
         var actions = {
 
-            resolveNewContact: function () {
-                var fId = config.get("folder.contacts"),
-                formdata = {},
-                displayName;
-                $(".content .new_contact input").each(function (index) {
-                    var value =  $(this).val();
-                    var id = $(this).attr('class');
-                    if (value !== "") {
-                        formdata[id] = value;
+                resolveNewContact: function () {
+                    var fId = config.get("folder.contacts"),
+                    formdata = {},
+                    formdataString,
+                    image = $('form input#image1').val(),
+                    imagePur = document.getElementById("image1");
+                    
+//                  collect the data
+                    
+                    $(".content .new_contact input").each(function (index) {
+                        var value =  $(this).val();
+                        var id = $(this).attr('class');
+                        if (id !== undefined && value !== "") { // no need for filefield in jsonstring
+                            formdata[id] = value;
+                        }
+                    });
+                    
+                    if (image !== "") {
+                        formdata.folder_id = fId;
+                        formdata.display_name = util.createDisplayName(formdata);
+                        formdataString = JSON.stringify(formdata);
+                        api.createNewImage(formdataString, imagePur.files[0]);
+                    } else {
+                        if (!_.isEmpty(formdata)) {
+                            formdata.folder_id = fId;
+                            formdata.display_name = util.createDisplayName(formdata);
+                            api.create(formdata);
+                        }
                     }
-                });
-                if (!_.isEmpty(formdata)) {
-                    formdata.folder_id = fId;
-                    formdata.display_name = util.createDisplayName(formdata);
-                    api.create(formdata);
+                },
+
+                cancelNewContact: function () {
+                    pane.close();// TODO needs to close the dialog
                 }
-
-                  //clear the form
-                $(".content .new_contact input").each(function (index) {
-                    $(this).val("");
-                });
-            },
-
-            cancelNewContact: function () {
-                $(".content .new_contact input").each(function (index) {
-                    $(this).val("");
-                });
-            }
-        };
+            };
 
         pane.show().done(function (action) {
             actions[action]();

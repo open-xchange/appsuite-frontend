@@ -70,7 +70,27 @@ define("io.ox/contacts/api",
             console.debug('connection lost');//what to do if fails?
         });
     };
-                    
+    
+    api.createNewImage = function (formdata, file) {
+        var formData = new FormData();
+        formData.append("file", file);
+        formData.append("json", formdata);
+        
+        return http.UPLOAD({
+            module: "contacts",
+            params: {action: "new"},
+            data: formData,
+            dataType: "text"
+        })
+        .done(function () {
+            api.caches.all.clear(); //TODO considere proper folder
+            api.trigger("refresh.all");
+        })
+        .fail(function () {
+            console.debug('connection lost');//what to do if fails?
+        });
+    };
+
     api.update =  function (formdata) {
         return http.PUT({
             module: "contacts",
@@ -87,7 +107,30 @@ define("io.ox/contacts/api",
             console.debug('connection lost');//what to do if fails?
         });
     };
-                       
+    
+    api.updateNewImage = function (formdata, file) {
+        
+        var formData = new FormData(),
+        formdataObj = $.parseJSON(formdata);
+        formData.append("file", file);
+        formData.append("json", formdata);
+       
+        return http.UPLOAD({
+            module: "contacts",
+            params: {action: "update", id: formdataObj.id, folder: formdataObj.folderId, timestamp: formdataObj.timestamp},
+            data: formData,
+            dataType: "text"
+        })
+        .done(function () {
+            api.caches.get.clear();
+            api.caches.list.clear();
+            api.trigger("refresh.list");
+        })
+        .fail(function () {
+            console.debug('connection lost');//what to do if fails?
+        });
+    };
+    
     api.remove =  function (formdata) {
         return http.PUT({
             module: "contacts",
