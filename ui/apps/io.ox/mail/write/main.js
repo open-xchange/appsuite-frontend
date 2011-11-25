@@ -651,7 +651,7 @@ define('io.ox/mail/write/main',
                 // trick to force document reflow
                 var alt = false;
                 return _.debounce(function () {
-                    var w = Math.max(10, editor.outerWidth() - 12 - 650);
+                    var w = Math.max(10, editor.outerWidth() - 12 - 750);
                     editor.css('paddingRight', w + 'px');
                     editorPrintMargin.css('right', Math.max(0, w - 10) + 'px');
                     // force reflow

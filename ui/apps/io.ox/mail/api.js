@@ -188,8 +188,20 @@ define("io.ox/mail/api",
                                 text += $(this).text();
                             }
                         });
+                    // remove white space
+                    text = $.trim(text);
+                    // fix reply/forward quoting
+                    // TODO: remove when backend does this properly
+                    if (action === 'replyall' || action === 'reply') {
+                        text = '> ' + text.replace(/\n/, "\n> ");
+                    } else if (action === 'forward') {
+                        text = '> ' + text.replace(/\n/g, "\n> ");
+                    }
                     // replace
                     data.attachments[0].content = $.trim(text);
+                } else {
+                    data.attachments = data.attachments || [{}];
+                    data.attachments[0].content = '';
                 }
                 return data;
             });
