@@ -66,7 +66,7 @@ define("io.ox/contacts/create",
             'id': 'contactUploadImage',
             'method': 'POST',
             'name': 'contactUploadImage',
-            'target': 'hiddenframePicture'
+            'target': 'blank.html'
         })
             
             .append($('<label>').text('contact image'))
@@ -77,7 +77,7 @@ define("io.ox/contacts/create",
         })
             .append($('<iframe>').attr({
             'name': 'hiddenframePicture',
-            'src': ox.base + '/apps/io.ox/contacts/newInfoItemHidden.html'
+            'src': 'blank.html'
         }).css('display', 'none')))
         
         ));
