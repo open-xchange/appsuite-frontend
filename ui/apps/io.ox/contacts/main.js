@@ -110,7 +110,7 @@ define("io.ox/contacts/main",
         ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
             index: 100,
             id: "update",
-            label: "update",
+            label: "edit",
             ref: "io.ox/contacts/main/update"
         }));
 
