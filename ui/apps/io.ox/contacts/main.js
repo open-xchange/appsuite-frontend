@@ -18,11 +18,11 @@ define("io.ox/contacts/main",
      "io.ox/core/tk/dialogs", "io.ox/help/hints",
      "io.ox/contacts/view-detail",
      "io.ox/core/config", "io.ox/contacts/create",
-     "io.ox/contacts/update_app",
+     "io.ox/contacts/edit/main",
      "io.ox/core/extensions",
      "css!io.ox/contacts/style.css"
      //"io.ox/contacts/actions" //TODO: where is it? or typo?
-    ], function (util, api, VGrid, dialogs, hints, viewDetail, config, create, update_app, ext) {
+    ], function (util, api, VGrid, dialogs, hints, viewDetail, config, create, edit_app, ext) {
 
     "use strict";
 
@@ -65,11 +65,11 @@ define("io.ox/contacts/main",
 
         ext.point("io.ox/contacts/main/update").extend({
             index: 100,
-            id: "update",
+            id: "edit",
             action: function () {
-                util.createUpdatePage();
+                util.createEditPage();
                 var data = grid.selection.get();
-                update_app.getContact(data[0]);
+                edit_app.getContact(data[0]);
             }
         });
 
@@ -107,19 +107,19 @@ define("io.ox/contacts/main",
             ref: "io.ox/contacts/main/create"
         }));
 
-        ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
-            index: 100,
-            id: "update",
-            label: "update",
-            ref: "io.ox/contacts/main/update"
-        }));
+//        ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
+//            index: 100,
+//            id: "update",
+//            label: "edit",
+//            ref: "io.ox/contacts/main/update"
+//        }));
 
-        ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
-            index: 100,
-            id: "delete",
-            label: "delete",
-            ref: "io.ox/contacts/main/delete"
-        }));
+//        ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
+//            index: 100,
+//            id: "delete",
+//            label: "delete",
+//            ref: "io.ox/contacts/main/delete"
+//        }));
 
         // left panel
         left = $("<div/>")

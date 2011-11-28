@@ -91,7 +91,7 @@ define('io.ox/contacts/api',
         });
     };
 
-    api.update =  function (formdata) {
+    api.edit =  function (formdata) {
         return http.PUT({
             module: 'contacts',
             params: {action: 'update', id: formdata.id, folder: formdata.folderId, timestamp: formdata.timestamp},
@@ -108,7 +108,7 @@ define('io.ox/contacts/api',
         });
     };
 
-    api.updateNewImage = function (formdata, file) {
+    api.editNewImage = function (formdata, file) {
 
         var formData = new FormData(),
         formdataObj = $.parseJSON(formdata);

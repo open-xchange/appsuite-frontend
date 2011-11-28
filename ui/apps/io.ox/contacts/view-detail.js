@@ -105,7 +105,7 @@ define("io.ox/contacts/view-detail",
             ext.point("io.ox/contacts/detail/head").invoke("draw", node, data);
         }
     });
-
+    
     ext.point("io.ox/contacts/detail/head").extend({
         index: 100,
         id: 'contact-picture',
@@ -142,6 +142,12 @@ define("io.ox/contacts/view-detail",
         }
     });
 
+    ext.point("io.ox/contacts/detail/head").extend(new ext.InlineLinks({
+        index: 200,
+        id: "inline-links",
+        ref: 'io.ox/contacts/links/inline'
+    }));
+    
     ext.point("io.ox/contacts/detail").extend({
         index: 100,
         id: "address",
@@ -181,7 +187,10 @@ define("io.ox/contacts/view-detail",
             ext.point("io.ox/contacts/detail/qr").invoke("draw", this, data);
         }
     });
-
+    
+   
+    
+    
     ext.point("io.ox/contacts/detail/address").extend({
         index: 100,
         id: 'contact-address',
@@ -282,7 +291,23 @@ define("io.ox/contacts/view-detail",
         }
 
     });
-
+    
+//    inline links
+    
+    ext.point("io.ox/contacts/links/inline").extend(new ext.Link({
+        index: 100,
+        id: 'delete',
+        label: 'delete',
+        ref: 'io.ox/contacts/main/delete'
+    }));
+    
+    ext.point("io.ox/contacts/links/inline").extend(new ext.Link({
+        index: 100,
+        id: 'update',
+        label: 'edit',
+        ref: 'io.ox/contacts/main/update'
+    }));
+    
     return {
         draw: function (data) {
             var node;
