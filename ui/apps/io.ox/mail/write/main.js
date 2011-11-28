@@ -11,7 +11,9 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/write/main',
+/*globals tinyMCE */
+
+define.async('io.ox/mail/write/main',
     ['io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/mail/write/textile',
@@ -20,10 +22,11 @@ define('io.ox/mail/write/main',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/core/i18n',
+     'io.ox/core/api/user',
      'io.ox/core/tk/upload',
      'io.ox/core/tk/autocomplete',
      'css!io.ox/mail/style.css',
-     'css!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n, upload) {
+     'css!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload) {
 
     'use strict';
 
@@ -49,6 +52,11 @@ define('io.ox/mail/write/main',
         label: 'Proofread',
         ref: 'io.ox/mail/write/actions/proofread'
     }));
+
+    // default sender (used to set from address)
+    var defaultSender,
+        // editor mode
+        editorMode = 'html';
 
     // multi instance pattern
     function createInstance() {
@@ -525,8 +533,8 @@ define('io.ox/mail/write/main',
                         .append(
                             // text editor
                             editor = $('<textarea>')
-                            .attr({ tabindex: '4', name: 'content' })
-                            .addClass('text-editor')
+                                .attr({ name: 'content', tabindex: '4' })
+                               .addClass('text-editor')
                         )
                     )
                     .append(
@@ -668,16 +676,205 @@ define('io.ox/mail/write/main',
             });
 
             win.bind('show', function () {
-                adjustEditorMargin();
-                $(window).on('resize', adjustEditorMargin);
+                if (editorMode === 'text') {
+                    adjustEditorMargin();
+                    $(window).on('resize', adjustEditorMargin);
+                }
                 dropZone.include();
             });
 
             win.bind('hide', function () {
-                $(window).off('resize', adjustEditorMargin);
+                if (editorMode === 'text') {
+                    $(window).off('resize', adjustEditorMargin);
+                }
                 dropZone.remove();
             });
         });
+
+        function initializeEditor() {
+            // html?
+            if (editorMode === 'html') {
+                editor.tinymce({
+
+                    script_url: ox.base + '/apps/moxiecode/tiny_mce/tiny_mce.js',
+                    plugins: 'paste',
+
+                    theme: 'advanced',
+                    theme_advanced_buttons1:
+                        'bold,italic,underline,|,' +
+                        'bullist,numlist,|,' +
+                        'justifyleft,justifycenter,justifyright,|,' +
+                        'forecolor,backcolor,|,' +
+                        'undo,redo',
+                    theme_advanced_buttons2: '',
+                    theme_advanced_buttons3: '',
+                    theme_advanced_toolbar_location: 'top',
+                    theme_advanced_toolbar_align: 'left',
+
+                    // colors
+                    theme_advanced_more_colors: false,
+                    theme_advanced_text_colors: "000000,555555,AAAAAA,0088CC,AA0000",
+                    theme_advanced_background_colors: "FFFFFF,FFFF00,00FFFF,00FF00,00FFFF,FFBE33",
+                    theme_advanced_default_foreground_color: "#000000",
+                    theme_advanced_default_background_color: "#FFFFFF",
+
+                    // for performance
+                    entity_encoding: 'raw',
+                    verify_html: false,
+
+                    // better paste
+                    paste_auto_cleanup_on_paste: true,
+                    paste_remove_styles: true,
+                    paste_remove_styles_if_webkit: true,
+                    paste_strip_class_attributes: 'all',
+                    paste_convert_headers_to_strong: true,
+
+                    // post processing (string-based)
+                    paste_preprocess: function (pl, o) {
+                        //console.log("pre", o.content);
+                        o.content = o.content
+                            // remove &nbsp;
+                            .replace(/&nbsp;/ig, ' ')
+                            // fix missing white-space before links
+                            .replace(/([^>\s])<a/ig, '$1 <a')
+                            // beautify dashes
+                            .replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
+                    },
+
+                    // post processing (DOM-based)
+                    paste_postprocess: function (pl, o) {
+
+                        var node = $(o.node), done;
+
+                        // remove iframes and other stuff that shouldn't be in an email
+                        // images too - doesn't work with copy/paste
+                        node.find(
+                            'iframe, object, applet, input, textarea, button, select, ' +
+                            'canvas, audio, video, img'
+                            ).remove();
+
+                        // fix references
+                        node.find('a').each(function () {
+                            var self = $(this), match;
+                            if (/^\[\d+\]$/.test(self.text()) && /^#/.test(self.attr('href'))) {
+                                match = (self.text() + "").match(/^\[(\d+)\]$/);
+                                self.replaceWith($('<sup>').text(match[1]).add($.txt(' ')));
+                            }
+                        });
+
+                        // beautify SUP tags
+                        node.find('sup').css('lineHeight', '0');
+
+                        // unwrap
+                        node.find('article, header, footer, section, form').each(function () {
+                            $(this).children().first().unwrap();
+                        });
+
+                        // simplify DOM tree
+                        function simplify() {
+                            var self = $(this),
+                                tagName = this.tagName,
+                                children = self.children(),
+                                text;
+                            // is closed tag?
+                            if (/^(BR|HR|IMG)$/.test(tagName)) {
+                                return;
+                            }
+                            // fix text nodes
+                            self.contents().each(function () {
+                                if (this.nodeType === 3) {
+                                    this.nodeValue = this.nodeValue
+                                        // fix space before quotes
+                                        .replace(/:$/, ': ');
+                                }
+                            });
+                            // has no children?
+                            if (children.length === 0) {
+                                text = $.trim(self.text());
+                                // has no text?
+                                if (text === '') {
+                                    // empty table cell?
+                                    if (tagName === 'TD') {
+                                        self.text('\u00A0');
+                                    } else {
+                                        // remove empty element
+                                        self.remove();
+                                        done = false;
+                                        return;
+                                    }
+                                } else {
+                                    // remove one-way spans & divs
+                                    if (/^(SPAN|DIV)$/.test(tagName) && self.siblings().length === 0) {
+                                        if (!self.attr('class') && !self.attr('style')) {
+                                            self.replaceWith($.txt(self.text()));
+                                            done = false;
+                                            return;
+                                        }
+                                    }
+                                    // is quote?
+                                    if (/^".+"$/.test(text)) {
+                                        self.text(text.replace(/^"/, '\u201E').replace(/"$/, '\u201D'));
+                                    }
+                                }
+                            } else {
+                                // extraneous DIV?
+                                if (tagName === 'DIV' && !self.attr('class') && !self.attr('style')) {
+                                    children.eq(0).unwrap();
+                                    done = false;
+                                }
+                            }
+                        }
+                        do {
+                            done = true;
+                            node.find('*').each(simplify);
+                        } while (!done);
+
+                        // beautify tables
+                        node.find('table').each(function () {
+                            var self = $(this);
+                            self.removeAttr('width')
+                                .attr({
+                                    border: "0",
+                                    cellSpacing: "0",
+                                    cellPadding: "0"
+                                })
+                                .css({
+                                    lineHeight: '1em',
+                                    margin: '0.5em auto 0.5em auto' // center!
+                                });
+                            self.find('th')
+                                .css({
+                                    fontWeight: 'bold',
+                                    textAlign: 'center',
+                                    borderBottom: '1px solid #555',
+                                    padding: '0.4em 1em 0.4em 1em'
+                                });
+                            self.find('td')
+                                .css({
+                                    borderBottom: '1px solid #aaa',
+                                    padding: '0.4em 1em 0.4em 1em'
+                                });
+                            self.find('tr').first()
+                                .find('td, th').css({
+                                    borderTop: '1px solid #555'
+                                });
+                            self.find('tr').last()
+                                .find('td, th').css({
+                                    borderBottom: '1px solid #555'
+                                });
+                        });
+
+                        // beautify headers
+                        node.find('h1, h2, h3, h4, h5, h6, 7').each(function () {
+                            $(this).css({
+                                fontFamily: 'Arial, Helvetica, sans-serif',
+                                margin: '1em 0 1em 0'
+                            });
+                        });
+                    }
+                });
+            }
+        }
 
         /**
          * Setters
@@ -794,6 +991,7 @@ define('io.ox/mail/write/main',
         app.compose = function () {
             win.setTitle('Compose new email')
                 .show(function () {
+                    initializeEditor();
                     $('input[data-type=to]').focus().select();
                 });
         };
@@ -806,6 +1004,7 @@ define('io.ox/mail/write/main',
                 app.setMail(data, 'replyall');
                 win.setTitle('Reply all')
                     .show(function () {
+                        initializeEditor();
                         editor.focus();
                     });
             });
@@ -819,6 +1018,7 @@ define('io.ox/mail/write/main',
                 app.setMail(data, 'reply');
                 win.setTitle('Reply')
                     .show(function () {
+                        initializeEditor();
                         editor.focus();
                     });
             });
@@ -832,6 +1032,7 @@ define('io.ox/mail/write/main',
                 app.setMail(data, 'forward');
                 win.setTitle('Forward')
                     .show(function () {
+                        initializeEditor();
                         $('input[data-type=to]').focus().select();
                     });
             });
@@ -841,7 +1042,21 @@ define('io.ox/mail/write/main',
          * Proof read view
          */
         app.proofread = function () {
-            alert('Coming soon ...');
+            // create reader
+            var reader = $('<div>').addClass('abs io-ox-mail-proofread');
+            // load detail view
+            require(['io.ox/mail/view-detail'], function (view) {
+                // get data
+                var mail = app.getMail();
+                // add missing data
+                _.extend(mail.data, {
+                    folder_id: 'default0/INBOX',
+                    received_date: _.now()
+                });
+                // draw mail
+                reader.append(view.draw(mail.data))
+                    .appendTo('body');
+            });
         };
 
         /**
@@ -864,13 +1079,16 @@ define('io.ox/mail/write/main',
                     return obj;
                 }, {}),
                 mail,
-                files = [];
+                files = [],
+                parse = function (list) {
+                    return mailUtil.parseRecipients([].concat(list).join(', '));
+                };
             // transform raw data
             mail = {
-                from: '',
-                to: [].concat(data.to).join(', '),
-                cc: [].concat(data.cc).join(', '),
-                bcc: [].concat(data.bcc).join(', '),
+                from: [defaultSender] || [],
+                to: parse(data.to),
+                cc: parse(data.cc),
+                bcc: parse(data.bcc),
                 subject: data.subject + '',
                 priority: data.priority,
                 vcard: data.vcard || '0',
@@ -934,8 +1152,29 @@ define('io.ox/mail/write/main',
         return app;
     }
 
-    return {
-        getApp: createInstance
-    };
+    var module = {
+            getApp: createInstance
+        };
 
+    // initialize
+    var loadUser, loadTinyMCE;
+
+    // load user
+    loadUser = userAPI.get(config.get('identifier'))
+        .done(function (sender) {
+            // inject 'from'
+            defaultSender = [sender.display_name, sender.email1];
+        });
+
+    // load tinyMCE?
+    if (editorMode === 'html') {
+        loadTinyMCE = $.getScript(ox.base + '/apps/moxiecode/tiny_mce/jquery.tinymce.js');
+    } else {
+        loadTinyMCE = $.when();
+    }
+
+    return $.when(loadUser, loadTinyMCE)
+        .pipe(function () {
+            return module;
+        });
 });

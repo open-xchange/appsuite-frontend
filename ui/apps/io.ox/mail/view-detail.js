@@ -92,6 +92,8 @@ define("io.ox/mail/view-detail",
                     .addClass("plain-text")
                     .html(
                         $.trim(text)
+                            // remove line breaks
+                            .replace(/\n|\r/g, '')
                             // replace leading BR
                             .replace(/^\s*(<br\/?>\s*)+/g, "")
                             // reduce long BR sequences

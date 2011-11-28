@@ -81,7 +81,7 @@ define('io.ox/contacts/create',
                     .append(
                         $('<iframe>',
                         {   name: 'hiddenframePicture',
-                            src: ox.base + '/apps/io.ox/contacts/newInfoItemHidden.html'
+                            src: 'blank.html'
                         })
                         .css('display', 'none')
                     )

@@ -269,6 +269,17 @@
     box-shadow: 0px 0px 4px 0px #08c;
 }
 
+/* Proofread */
+
+.io-ox-mail-proofread {
+    background-color: #555;
+    background-color: rgba(0, 0, 0, 0.40);
+    z-index: 10000;
+    overflow: auto;
+}
+
+
+/* -------------------- */
 
 .textile {
     font-family: Verdana, Arial, Helvetica, Geneva, sans-serif;
