@@ -107,19 +107,19 @@ define("io.ox/contacts/main",
             ref: "io.ox/contacts/main/create"
         }));
 
-        ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
-            index: 100,
-            id: "update",
-            label: "edit",
-            ref: "io.ox/contacts/main/update"
-        }));
+//        ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
+//            index: 100,
+//            id: "update",
+//            label: "edit",
+//            ref: "io.ox/contacts/main/update"
+//        }));
 
-        ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
-            index: 100,
-            id: "delete",
-            label: "delete",
-            ref: "io.ox/contacts/main/delete"
-        }));
+//        ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
+//            index: 100,
+//            id: "delete",
+//            label: "delete",
+//            ref: "io.ox/contacts/main/delete"
+//        }));
 
         // left panel
         left = $("<div/>")
