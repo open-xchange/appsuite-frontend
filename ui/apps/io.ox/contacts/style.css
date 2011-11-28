@@ -169,16 +169,16 @@
 
 /*update form*/
 
-.up1 {
+.edit1 {
 	float: left;
 	width: 400px;
 }
 
-.up2 {
+.edit2 {
 	float: right;
 	width: 400px;
 }
- .contact_update_frame {
+ .contact_edit_frame {
 	font-family: monospace;
 	font-size: 14px;
 	line-height: 21px;
@@ -198,7 +198,7 @@
 	-webkit-font-smoothing: antialiased;
 }
 
-.contact_update_frame .block .field {
+.contact_edit_frame .block .field {
 	
 	margin-bottom:5px;
 	padding-top: 2px;
@@ -206,19 +206,19 @@
 	overflow: hidden;
 }
 
-.contact_update_frame .block .field label {
+.contact_edit_frame .block .field label {
 	font-size: 10pt;
 	width: auto;
 	float: left;
 	line-height: 15pt;
 }
 
-.contact_update_frame .block .field input {
+.contact_edit_frame .block .field input {
 	width: 120px;
 	float: right;
 }
 
- .contact_update_frame .block {
+ .contact_edit_frame .block {
  width: 400px;
  margin-bottom: 25px;
  }

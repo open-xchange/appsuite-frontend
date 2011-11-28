@@ -13,7 +13,7 @@
  *
  */
 
-define("io.ox/contacts/update_app",
+define("io.ox/contacts/edit/main",
     ["io.ox/core/config", "io.ox/contacts/api", "css!io.ox/contacts/style.css"
      ], function (config, api) {
     
@@ -46,13 +46,13 @@ define("io.ox/contacts/update_app",
         formFrame, formContainer;
         
         app = ox.ui.createApp({
-            title: "Update Contact"
+            title: "Edit Contact"
         });
         
         app.setLauncher(function () {
             
             win = ox.ui.createWindow({
-                title: "Update Contact",
+                title: "Edit Contact",
                 toolbar: true
             });
             
@@ -64,7 +64,7 @@ define("io.ox/contacts/update_app",
                     left: "10px"
                 });
             
-            formFrame = $("<div/>").addClass("contact_update_frame")
+            formFrame = $("<div/>").addClass("contact_edit_frame")
                 .appendTo(formContainer);
                 
             win.nodes.main
@@ -84,16 +84,16 @@ define("io.ox/contacts/update_app",
                     
     //              assemble create form
                     
-                    var paneUpdate = $('<div/>').addClass('up1'),
-                        paneUpdate2 = $('<div/>').addClass('up2');
+                    var paneEdit = $('<div/>').addClass('edit1'),
+                        paneEdit2 = $('<div/>').addClass('edit2');
                       
-                    paneUpdate.append(
+                    paneEdit.append(
                             $('<div>').addClass('block edit_contact name')
                             .append(fieldHtml('first name', 'first_name'))
                             .append(fieldHtml('last name', 'last_name'))
                     );
                     
-                    paneUpdate.append(
+                    paneEdit.append(
                             $('<divb>').addClass('block edit_contact company')
                             .append(fieldHtml('company', 'company'))
                             .append(fieldHtml('position', 'position'))
@@ -101,21 +101,21 @@ define("io.ox/contacts/update_app",
                             .append(fieldHtml('department', 'department'))
                     );
                     
-                    paneUpdate.append(
+                    paneEdit.append(
                             $('<div>').addClass('block edit_contact address')
                             .append(fieldHtml('street', 'street_business'))
                             .append(fieldHtml('postal code', 'postal_code_business'))
                             .append(fieldHtml('city', 'city_business'))
                     );
                     
-                    paneUpdate.append(
+                    paneEdit.append(
                             $('<div>').addClass('block edit_contact phone')
                             .append(fieldHtml('tel.', 'telephone_business1'))
                             .append(fieldHtml('sales volume', 'sales_volume'))
                             .append($('<input>', {type: 'hidden', 'class': 'id'}))
                     );
                     
-                    paneUpdate2.append(
+                    paneEdit2.append(
                             $('<div>').addClass('block edit_contact unsortedfields')
                             .append(fieldHtml('suffix', 'suffix'))
                             .append(fieldHtml('title', 'title'))
@@ -238,7 +238,7 @@ define("io.ox/contacts/update_app",
                             
 //                          select the data
                             
-                            $(".contact_update_frame .edit_contact input")
+                            $(".contact_edit_frame .edit_contact input")
                             .each(function (index) {
                                 var value =  $(this).val(),
                                 id = $(this).attr('class');
@@ -256,10 +256,10 @@ define("io.ox/contacts/update_app",
                             
                             if (image !== "") {
                                 formdataString = JSON.stringify(formdata);
-                                api.updateNewImage(formdataString, imagePur.files[0]);
+                                api.editNewImage(formdataString, imagePur.files[0]);
                             } else {
                                 if (!_.isEmpty(formdata)) {
-                                    api.update(formdata);
+                                    api.edit(formdata);
                                 }
                             }
                             app.quit();
@@ -272,21 +272,21 @@ define("io.ox/contacts/update_app",
                     };
                     
                     $('<button>').text('save').addClass('io-ox-button')
-                    .appendTo(paneUpdate2).on('click', function () {
+                    .appendTo(paneEdit2).on('click', function () {
                         actions.resolveEditContact();
                     });
                     $('<button>').text('cancel').addClass('io-ox-button')
-                    .appendTo(paneUpdate2).on('click', function () {
+                    .appendTo(paneEdit2).on('click', function () {
                         actions.cancelEditContact();
                     });
                     
-                    paneUpdate.appendTo(formFrame);
-                    paneUpdate2.appendTo(formFrame);
+                    paneEdit.appendTo(formFrame);
+                    paneEdit2.appendTo(formFrame);
                    
-                    $(".contact_update_frame .block .field:nth-child(even)")
+                    $(".contact_edit_frame .block .field:nth-child(even)")
                     .addClass('even');
                    
-                    $('.contact_update_frame .edit_contact input')
+                    $('.contact_edit_frame .edit_contact input')
                     .each(function (index) {
                         var name = $(this).attr('class');
                         $(this).val(data[name]);
