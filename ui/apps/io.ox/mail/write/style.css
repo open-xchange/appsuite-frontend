@@ -110,6 +110,7 @@
     line-height: 1.25em;
     padding: 0px 0px 5px 0px;
     font-family: OpenSans, Arial, Helvetica, sans-serif;
+    cursor: pointer;
 }
 
 .io-ox-mail-write .collapse {
@@ -124,6 +125,7 @@
 }
 
 .io-ox-mail-write .section-link {
+    font-family: OpenSans, Arial, Helvetica, sans-serif;
     white-space: nowrap;
     line-height: 1em;
     margin-bottom: 1em;
@@ -151,7 +153,7 @@
     position: relative;
     line-height: 1.5em;
     background-color: white;
-    margin-bottom: 1px;
+    margin-bottom: 2px;
     padding: 4px 2.5em 4px 5px;
 }
 

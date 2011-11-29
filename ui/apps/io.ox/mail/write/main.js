@@ -70,8 +70,7 @@ define.async('io.ox/mail/write/main',
             editorPrintMargin,
             priorityOverlay,
             sections = {},
-            currentSignature,
-            ids = {};
+            currentSignature;
 
         app = ox.ui.createApp({
             title: 'Compose'
@@ -136,6 +135,8 @@ define.async('io.ox/mail/write/main',
 
             if (collapsable) {
                 sections[id + 'Label'].on('click', { id: id }, fnHideSection);
+            } else {
+                sections[id + 'Label'].css('cursor', 'default');
             }
 
             sidepanel
@@ -189,7 +190,7 @@ define.async('io.ox/mail/write/main',
             )
             .append(
                 $('<div>').addClass('person-link')
-                .text(data.display_name + "\u00a0")
+                .text(data.display_name + '\u00a0')
             )
             .append($('<div>').text(data.email));
         }
@@ -209,7 +210,7 @@ define.async('io.ox/mail/write/main',
             )
             .append(
                 $('<a>', { href: '#' }).addClass('person-link')
-                .text(data.display_name + "\u00a0")
+                .text(data.display_name + '\u00a0')
                 .on('click', {
                     display_name: data.display_name,
                     email1: data.email
@@ -262,6 +263,14 @@ define.async('io.ox/mail/write/main',
             if (list.length) {
                 addRecipients(id, list);
                 node.val('');
+            } else if ($.trim(node.val()) !== '') {
+                node.attr('disabled', 'disabled')
+                    .css({ border: '1px solid #a00', backgroundColor: '#fee' })
+                    .shake()
+                    .done(function () {
+                        node.css({ border: '', backgroundColor: '' })
+                            .removeAttr('disabled').focus();
+                    });
             }
         }
 
@@ -316,7 +325,7 @@ define.async('io.ox/mail/write/main',
         function createRadio(name, value, text, isChecked) {
             var id = name + '_' + value + '_' + _.now(),
                 radio = $('<input>', { type: 'radio', name: name, id: id, value: value, tabindex: '5' }),
-                label = $('<label>', { 'for': id }).text("\u00A0" + text + "\u00A0\u00A0");
+                label = $('<label>', { 'for': id }).text('\u00A0\u00A0' + text + '\u00A0\u00A0\u00A0\u00A0 ');
             if (isChecked) {
                 radio.attr('checked', 'checked');
             }
@@ -326,7 +335,7 @@ define.async('io.ox/mail/write/main',
         function createCheckbox(name, text, isChecked) {
             var id = name + '_' + _.now(),
                 box = $('<input>', { type: 'checkbox', name: name, id: id, value: '1', tabindex: '5' }),
-                label = $('<label>', { 'for': id }).text("\u00A0" + text + "\u00A0\u00A0");
+                label = $('<label>', { 'for': id }).text('\u00A0\u00A0' + text + '\u00A0\u00A0\u00A0\u00A0 ');
             if (isChecked) {
                 box.attr('checked', 'checked');
             }
@@ -341,7 +350,7 @@ define.async('io.ox/mail/write/main',
         };
 
         createPreview = function (file) {
-            return $($.txt(" \u2013 ")) // ndash
+            return $($.txt(' \u2013 ')) // ndash
                 .add(
                     $('<a>', { href: '#' })
                     .text('Preview')
@@ -452,11 +461,11 @@ define.async('io.ox/mail/write/main',
                 val = editor.val();
                 if (val.indexOf(text) === -1) {
                     // set
-                    editor.val(val + "\n" + text);
+                    editor.val(val + '\n' + text);
                     // scroll to bottom
                     editor.scrollTop(editor.get(0).scrollHeight);
                     // remember current signature
-                    currentSignature = "\n" + text;
+                    currentSignature = '\n' + text;
                 }
             }
         }
@@ -507,16 +516,16 @@ define.async('io.ox/mail/write/main',
                     .append(
                         priorityOverlay = $('<div>').addClass('priority-overlay')
                             .attr('title', 'Priority')
-                            .text("\u2605\u2605\u2605")
+                            .text('\u2605\u2605\u2605')
                             .on('click', togglePriority)
                     )
                     .append(
                         $('<div>').addClass('sendbutton-wrapper')
                         .append(
                             // send
-                            $('<a>', { href: '#', tabindex: '8' })
+                            $('<a>', { href: '#', tabindex: '8', accesskey: 's' })
                             .addClass('button default-action sendbutton')
-                            .text('Send')
+                            .html('<u>S</u>end')
                             .on('click', function (e) {
                                 e.preventDefault();
                                 ext.point('io.ox/mail/write/actions/send').invoke('action', null, app);
@@ -570,9 +579,9 @@ define.async('io.ox/mail/write/main',
             addLink('bcc', 'Blind copy (BCC) to ...');
 
             // Attachments
-            addSection('attachments', 'Attachments', true, true);
+            addSection('attachments', 'Attachments', false, true);
             addUpload();
-            addLink('attachments', 'Attachments').hide();
+            addLink('attachments', 'Attachments');
 
             // Signatures
             if (signatures.length) {
@@ -611,6 +620,7 @@ define.async('io.ox/mail/write/main',
                 .append(
                     // Priority
                     $('<div>').addClass('section-item')
+                    .css({ paddingTop: '0.5em', paddingBottom: '0.5em' })
                     .append(
                         $('<span>').addClass('group-label').text('Priority')
                     )
@@ -629,15 +639,17 @@ define.async('io.ox/mail/write/main',
                 .append(
                     // Delivery Receipt
                     $('<div>').addClass('section-item')
+                    .css({ paddingTop: '1em', paddingBottom: '1em' })
                     .append(createCheckbox('receipt', 'Delivery Receipt'))
                 )
                 .append(
                     // Attach vCard
                     $('<div>').addClass('section-item')
+                    .css({ paddingTop: '1em', paddingBottom: '1em' })
                     .append(createCheckbox('vcard', 'Attach vCard'))
                 );
 
-            addLink('options', 'Show further options');
+            addLink('options', 'More ...');
 
             // add panels to windows
             win.nodes.main
@@ -698,25 +710,29 @@ define.async('io.ox/mail/write/main',
 
                     script_url: ox.base + '/apps/moxiecode/tiny_mce/tiny_mce.js',
                     plugins: 'paste',
-
                     theme: 'advanced',
+                    skin: 'ox',
+
                     theme_advanced_buttons1:
                         'bold,italic,underline,|,' +
-                        'bullist,numlist,|,' +
+                        'undo,redo,|,' +
+                        'bullist,numlist,indent,outdent,|,' +
                         'justifyleft,justifycenter,justifyright,|,' +
-                        'forecolor,backcolor,|,' +
-                        'undo,redo',
+                        'forecolor,backcolor,|,formatselect',
                     theme_advanced_buttons2: '',
                     theme_advanced_buttons3: '',
                     theme_advanced_toolbar_location: 'top',
                     theme_advanced_toolbar_align: 'left',
 
+                    // formats
+                    theme_advanced_blockformats: 'h1,h2,h3,h4,p,blockquote',
+
                     // colors
                     theme_advanced_more_colors: false,
-                    theme_advanced_text_colors: "000000,555555,AAAAAA,0088CC,AA0000",
-                    theme_advanced_background_colors: "FFFFFF,FFFF00,00FFFF,00FF00,00FFFF,FFBE33",
-                    theme_advanced_default_foreground_color: "#000000",
-                    theme_advanced_default_background_color: "#FFFFFF",
+                    theme_advanced_text_colors: '000000,555555,AAAAAA,0088CC,AA0000',
+                    theme_advanced_background_colors: 'FFFFFF,FFFF00,00FFFF,00FF00,00FFFF,FFBE33',
+                    theme_advanced_default_foreground_color: '#000000',
+                    theme_advanced_default_background_color: '#FFFFFF',
 
                     // for performance
                     entity_encoding: 'raw',
@@ -727,16 +743,19 @@ define.async('io.ox/mail/write/main',
                     paste_remove_styles: true,
                     paste_remove_styles_if_webkit: true,
                     paste_strip_class_attributes: 'all',
-                    paste_convert_headers_to_strong: true,
+                    paste_block_drop: false,
 
                     // post processing (string-based)
                     paste_preprocess: function (pl, o) {
-                        //console.log("pre", o.content);
+                        //console.debug('pre', o.content);
                         o.content = o.content
                             // remove &nbsp;
                             .replace(/&nbsp;/ig, ' ')
-                            // fix missing white-space before links
+                            // fix missing white-space before/after links
                             .replace(/([^>\s])<a/ig, '$1 <a')
+                            .replace(/<\/\s?a>([^<\s])/ig, '</a> $1')
+                            // beautify simple quotes
+                            .replace(/([^=])"(\w+)"/g, '$1<em>\u201C$2\u201D</em>')
                             // beautify dashes
                             .replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
                     },
@@ -757,7 +776,7 @@ define.async('io.ox/mail/write/main',
                         node.find('a').each(function () {
                             var self = $(this), match;
                             if (/^\[\d+\]$/.test(self.text()) && /^#/.test(self.attr('href'))) {
-                                match = (self.text() + "").match(/^\[(\d+)\]$/);
+                                match = (self.text() + '').match(/^\[(\d+)\]$/);
                                 self.replaceWith($('<sup>').text(match[1]).add($.txt(' ')));
                             }
                         });
@@ -768,6 +787,20 @@ define.async('io.ox/mail/write/main',
                         // unwrap
                         node.find('article, header, footer, section, form').each(function () {
                             $(this).children().first().unwrap();
+                        });
+
+                        // unwrap dead links (usually javascript hooks)
+                        node.find('a').each(function () {
+                            var self = $(this);
+                            if (!self.attr('href')) {
+                                self.replaceWith(self.contents());
+                            }
+                        });
+
+                        // replace <code> by <em>
+                        node.find('code').each(function () {
+                            var self = $(this);
+                            self.replaceWith($('<em>').text(self.text()));
                         });
 
                         // simplify DOM tree
@@ -803,8 +836,8 @@ define.async('io.ox/mail/write/main',
                                         return;
                                     }
                                 } else {
-                                    // remove one-way spans & divs
-                                    if (/^(SPAN|DIV)$/.test(tagName) && self.siblings().length === 0) {
+                                    // remove simple <span>, <small>, and <pre>
+                                    if (/^(SPAN|SMALL|PRE)$/.test(tagName)) {
                                         if (!self.attr('class') && !self.attr('style')) {
                                             self.replaceWith($.txt(self.text()));
                                             done = false;
@@ -813,7 +846,7 @@ define.async('io.ox/mail/write/main',
                                     }
                                     // is quote?
                                     if (/^".+"$/.test(text)) {
-                                        self.text(text.replace(/^"/, '\u201E').replace(/"$/, '\u201D'));
+                                        self.text(text.replace(/^"/, '\u201C').replace(/"$/, '\u201D'));
                                     }
                                 }
                             } else {
@@ -834,9 +867,9 @@ define.async('io.ox/mail/write/main',
                             var self = $(this);
                             self.removeAttr('width')
                                 .attr({
-                                    border: "0",
-                                    cellSpacing: "0",
-                                    cellPadding: "0"
+                                    border: '0',
+                                    cellSpacing: '0',
+                                    cellPadding: '0'
                                 })
                                 .css({
                                     lineHeight: '1em',
@@ -865,7 +898,7 @@ define.async('io.ox/mail/write/main',
                         });
 
                         // beautify headers
-                        node.find('h1, h2, h3, h4, h5, h6, 7').each(function () {
+                        node.find('h1, h2, h3, h4, h5, h6, h7').each(function () {
                             $(this).css({
                                 fontFamily: 'Arial, Helvetica, sans-serif',
                                 margin: '1em 0 1em 0'
@@ -898,11 +931,11 @@ define.async('io.ox/mail/write/main',
             // set signature?
             if (ds) {
                 // yep
-                editor.val("\n\n" + (pos === 'above' ? text + "\n\n" + str : str + "\n\n" + text));
-                currentSignature = "\n" + text;
+                editor.val('\n\n' + (pos === 'above' ? text + '\n\n' + str : str + '\n\n' + text));
+                currentSignature = '\n' + text;
             } else {
                 // no signature
-                editor.val("\n" + str);
+                editor.val('\n' + str);
             }
         };
 
@@ -1097,7 +1130,7 @@ define.async('io.ox/mail/write/main',
                     content_type: 'text/plain',
                     content: (data.content + '')
                         .replace(/</g, '&lt;') // escape <
-                        .replace(/\n/g, "<br>\n") // escape line-breaks
+                        .replace(/\n/g, '<br>\n') // escape line-breaks
                 }]
             };
             // add msgref?
@@ -1147,6 +1180,11 @@ define.async('io.ox/mail/write/main',
                         app.quit();
                     }
                 });
+        };
+
+        window.heinz = app;
+        app.test = function () {
+            return editor.tinymce();
         };
 
         return app;

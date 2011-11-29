@@ -42,7 +42,8 @@ define('io.ox/core/tk/autocomplete', function () {
 
             update = function () {
                 // get data from current item and update input field
-                var data = popup.children().eq(index).data('data');
+                console.log("update", index, popup.children().eq(Math.min(0, index)).data('data'));
+                var data = popup.children().eq(Math.max(0, index)).data('data');
                 lastValue = o.toString(data) + '';
                 self.val(lastValue);
             },
