@@ -44,31 +44,36 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
 
     that = {
 
+        parseRecipient: function (s) {
+            var recipient = $.trim(s), match, name, email;
+            if ((match = recipient.match(rRecipient)) !== null) {
+                // case 1: display name plus email address
+                email = match[3].replace(rMailCleanup, '')
+                    .toLowerCase();
+                name = match[1].replace(rDisplayNameCleanup, '');
+            } else {
+                // case 2: assume plain email address
+                email = recipient.replace(rMailCleanup, '')
+                    .toLowerCase();
+                name = email.split(/@/)[0];
+            }
+            return [name, email];
+        },
+
         /**
          * Parse comma or semicolon separated list of recipients
          * Example: '"Doe, Jon" <jon@doe.foo>, "\'World, Hello\'" <hi@dom.tld>, urbi@orbi.tld'
          */
         parseRecipients: function (s) {
-            var list = [], match, recipient, name, email;
+            var list = [], match, recipient;
             while ((match = s.match(rRecipientList)) !== null) {
                 // look ahead for next round
                 s = s.substr(match[0].length).replace(rRecipientCleanup, '');
                 // get recipient
-                recipient = $.trim(match[0]);
-                if ((match = recipient.match(rRecipient)) !== null) {
-                    // case 1: display name plus email address
-                    email = match[3].replace(rMailCleanup, '')
-                        .toLowerCase();
-                    name = match[1].replace(rDisplayNameCleanup, '');
-                } else {
-                    // case 2: assume plain email address
-                    email = recipient.replace(rMailCleanup, '')
-                        .toLowerCase();
-                    name = email.split(/@/)[0];
-                }
+                recipient = this.parseRecipient(match[0]);
                 // add to list? (stupid check but avoids trash)
-                if (email.indexOf('@') > -1) {
-                    list.push([name, email]);
+                if (recipient[1].indexOf('@') > -1) {
+                    list.push(recipient);
                 }
             }
             return list;

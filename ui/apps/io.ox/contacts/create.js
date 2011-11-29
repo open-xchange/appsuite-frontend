@@ -26,10 +26,10 @@ define("io.ox/contacts/create",
         return $('<div>').addClass('field').append($('<label>').text(label))
         .append($('<input>', {'class': id, type: 'text'}));
     }
-    
+
     //assemble create form
     var newCreatePane = function () {
-       
+
         var pane = new dialogs.CreateDialog();
         pane.getContentNode().addClass("create-contact");
         pane.append(
@@ -45,19 +45,19 @@ define("io.ox/contacts/create",
             .append(fieldHtml('position', 'position'))
             .append(fieldHtml('profession', 'profession'))
         );
-        
+
         pane.append(
             $('<div>').addClass('block new_contact address')
             .append(fieldHtml('street', 'street_business'))
             .append(fieldHtml('postal code', 'postal_code_business'))
             .append(fieldHtml('city', 'city_business'))
         );
-        
+
         pane.append(
             $('<div>').addClass('block new_contact phone')
             .append(fieldHtml('tel.', 'telephone_business1'))
         );
-        
+
         pane.append(
             $('<div>').addClass('block new_contact image')
             .append($('<form>').attr({
@@ -68,7 +68,7 @@ define("io.ox/contacts/create",
             'name': 'contactUploadImage',
             'target': 'blank.html'
         })
-            
+
             .append($('<label>').text('contact image'))
             .append($('<input>').attr({
             'id': 'image1',
@@ -79,9 +79,9 @@ define("io.ox/contacts/create",
             'name': 'hiddenframePicture',
             'src': 'blank.html'
         }).css('display', 'none')))
-        
+
         ));
-        
+
         pane.addButton("resolveNewContact", "Save");
         pane.addButton("cancelNewContact", "Cancel");
 
@@ -95,9 +95,9 @@ define("io.ox/contacts/create",
                     formdataString,
                     image = $('form input#image1').val(),
                     imagePur = document.getElementById("image1");
-                    
+
 //                  collect the data
-                    
+
                     $(".content .new_contact input").each(function (index) {
                         var value =  $(this).val();
                         var id = $(this).attr('class');
@@ -105,7 +105,7 @@ define("io.ox/contacts/create",
                             formdata[id] = value;
                         }
                     });
-                    
+
                     if (image !== "") {
                         formdata.folder_id = fId;
                         formdata.display_name = util.createDisplayName(formdata);

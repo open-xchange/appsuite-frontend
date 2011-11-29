@@ -188,8 +188,20 @@ define("io.ox/mail/api",
                                 text += $(this).text();
                             }
                         });
+                    // remove white space
+                    text = $.trim(text);
+                    // fix reply/forward quoting
+                    // TODO: remove when backend does this properly
+                    if (action === 'replyall' || action === 'reply') {
+                        text = '> ' + text.replace(/\n/, "\n> ");
+                    } else if (action === 'forward') {
+                        text = '> ' + text.replace(/\n/g, "\n> ");
+                    }
                     // replace
                     data.attachments[0].content = $.trim(text);
+                } else {
+                    data.attachments = data.attachments || [{}];
+                    data.attachments[0].content = '';
                 }
                 return data;
             });
@@ -210,56 +222,47 @@ define("io.ox/mail/api",
     api.send = function (data, files) {
 
         var deferred = $.Deferred(),
+            form = new FormData();
 
-            cont = function () {
+        // clone data (to avoid side-effects)
+        data = _.clone(data);
 
-                var form = new FormData();
-                // add mail data
-                form.append('json_0', JSON.stringify(data));
-                // add files
-                _(files).each(function (file, index) {
-                    form.append('file_' + index, file);
-                });
+        // flatten to, cc, bcc
+        data.to = (data.to || []).join(', ');
+        data.cc = (data.cc || []).join(', ');
+        data.bcc = (data.bcc || []).join(', ');
 
-                http.UPLOAD({
-                        module: 'mail',
-                        params: { action: 'new' },
-                        data: form,
-                        dataType: 'text'
-                    })
-                    .done(function (text) {
-                        // process HTML-ish non-JSONP response
-                        var a = text.indexOf('{'),
-                        b = text.lastIndexOf('}');
-                        if (a > -1 && b > -1) {
-                            deferred.resolve(JSON.parse(text.substr(a, b - a + 1)));
-                        } else {
-                            deferred.resolve({});
-                        }
-                        // wait a moment, then update mail index
-                        setTimeout(function () {
-                            api.getAllThreads({}, false)
-                                .done(function (data) {
-                                    api.trigger('refresh.all');
-                                });
-                        }, 3000);
-                    })
-                    .fail(deferred.reject);
-            };
+        // add mail data
+        form.append('json_0', JSON.stringify(data));
+        // add files
+        _(files).each(function (file, index) {
+            form.append('file_' + index, file);
+        });
 
-        if (!data.from) {
-            // get user
-            require(['io.ox/core/api/user'], function (userAPI) {
-                userAPI.get(config.get('identifier'))
-                    .done(function (sender) {
-                        // inject 'from'
-                        data.from = '"' + sender.display_name + '" <' + sender.email1 + '>';
-                        cont();
-                    });
-            });
-        } else {
-            cont();
-        }
+        http.UPLOAD({
+                module: 'mail',
+                params: { action: 'new' },
+                data: form,
+                dataType: 'text'
+            })
+            .done(function (text) {
+                // process HTML-ish non-JSONP response
+                var a = text.indexOf('{'),
+                b = text.lastIndexOf('}');
+                if (a > -1 && b > -1) {
+                    deferred.resolve(JSON.parse(text.substr(a, b - a + 1)));
+                } else {
+                    deferred.resolve({});
+                }
+                // wait a moment, then update mail index
+                setTimeout(function () {
+                    api.getAllThreads({}, false)
+                        .done(function (data) {
+                            api.trigger('refresh.all');
+                        });
+                }, 3000);
+            })
+            .fail(deferred.reject);
 
         return deferred;
     };

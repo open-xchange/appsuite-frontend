@@ -165,12 +165,17 @@
         d = d || 25;
         // return deferred
         var def = $.Deferred(), count = 0, max = num * 3,
+            node = this.eq(0),
+            position = node.css('position'),
             inc = function () {
                 if (++count === max) {
+                    node.css('position', position);
                     def.resolve();
                 }
-            },
-            node = this.eq(0);
+            };
+        if (position !== 'absolute') {
+            node.css('position', 'relative');
+        }
         for (var i = 0; i < num; i++) {
             node.animate({ left: -dist }, d, inc)
                 .animate({ left: dist }, d * 2, inc)
