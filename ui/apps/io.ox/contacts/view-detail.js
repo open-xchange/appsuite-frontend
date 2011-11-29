@@ -14,8 +14,9 @@
 define("io.ox/contacts/view-detail",
     ["io.ox/core/extensions",
      "gettext!io.ox/contacts/contacts",
-     "io.ox/contacts/util"
-    ], function (ext, gt, util) {
+     "io.ox/contacts/util",
+     "io.ox/contacts/actions"
+    ], function (ext, gt, util, actions) {
 
     "use strict";
 
@@ -142,12 +143,6 @@ define("io.ox/contacts/view-detail",
         }
     });
 
-    
-    ext.point("io.ox/contacts/detail/actions").extend(new ext.InlineLinks({
-            index: 100,
-            id: "inline-links",
-            ref: 'io.ox/contacts/links/inline'
-        }));
 
     ext.point("io.ox/contacts/detail").extend({
         index: 50,
@@ -301,22 +296,6 @@ define("io.ox/contacts/view-detail",
 
     });
     
-//    inline links
-    
-    ext.point("io.ox/contacts/links/inline").extend(new ext.Link({
-        index: 100,
-        id: 'delete',
-        label: 'delete',
-        ref: 'io.ox/contacts/main/delete'
-        
-    }));
-    
-    ext.point("io.ox/contacts/links/inline").extend(new ext.Link({
-        index: 100,
-        id: 'update',
-        label: 'edit',
-        ref: 'io.ox/contacts/main/update'
-    }));
     
     return {
         draw: function (data) {
