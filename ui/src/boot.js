@@ -470,11 +470,13 @@ $(document).ready(function () {
         (function () {
 
             var ac = window.applicationCache,
-                clear, updateReady, cont;
+                clear, isOn, updateReady, cont, timer;
 
             clear = function () {
+                ac.removeEventListener("checking", isOn, false);
                 ac.removeEventListener("cached", cont, false);
                 ac.removeEventListener("noupdate", cont, false);
+                ac.removeEventListener("error", cont, false);
                 ac.removeEventListener("updateready", updateReady, false);
             };
 
@@ -490,10 +492,20 @@ $(document).ready(function () {
             cont = function (e) {
                 clear();
                 boot();
+                cont = $.noop;
             };
 
+            // fallback for denied caching
+            timer = setTimeout(cont, 500);
+
+            isOn = function (e) {
+                clearTimeout(timer);
+            };
+
+            ac.addEventListener("checking", isOn, false);
             ac.addEventListener("cached", cont, false);
             ac.addEventListener("noupdate", cont, false);
+            ac.addEventListener("error", cont, false);
             ac.addEventListener("updateready", updateReady, false);
 
         }());
