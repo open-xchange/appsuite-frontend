@@ -93,12 +93,10 @@ define("io.ox/contacts/create",
                     var fId = config.get("folder.contacts"),
                     formdata = {},
                     formdataString,
-                    image = $('form input#image1').val(),
-                    imagePur = document.getElementById("image1");
+                    image = document.getElementById("image1");
 
 //                  collect the data
-
-                    $(".content .new_contact input").each(function (index) {
+                    $('.io-ox-dialog-popup .create-contact').find(".new_contact input").each(function (index) {
                         var value =  $(this).val();
                         var id = $(this).attr('class');
                         if (id !== undefined && value !== "") { // no need for filefield in jsonstring
@@ -106,11 +104,11 @@ define("io.ox/contacts/create",
                         }
                     });
 
-                    if (image !== "") {
+                    if (image.files[0]) {
                         formdata.folder_id = fId;
                         formdata.display_name = util.createDisplayName(formdata);
                         formdataString = JSON.stringify(formdata);
-                        api.createNewImage(formdataString, imagePur.files[0]);
+                        api.createNewImage(formdataString, image.files[0]);
                     } else {
                         if (!_.isEmpty(formdata)) {
                             formdata.folder_id = fId;
@@ -121,7 +119,8 @@ define("io.ox/contacts/create",
                 },
 
                 cancelNewContact: function () {
-                    pane.close();// TODO needs to close the dialog
+//                    console.log(pane);
+//                    pane.close;// TODO needs to close the dialog
                 }
             };
 

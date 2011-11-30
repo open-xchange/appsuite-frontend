@@ -14,13 +14,13 @@
  */
 
 define("io.ox/contacts/edit/main",
-    ["io.ox/core/config", "io.ox/contacts/api", "css!io.ox/contacts/style.css"
-     ], function (config, api) {
+    ["io.ox/core/config", "io.ox/contacts/api", "io.ox/core/cache", "css!io.ox/contacts/style.css"
+     ], function (config, api, cache) {
     
     "use strict";
     
-    var getContact,
-        data;
+    var getContact;
+        
 
     function extendDeep(parent, child) {
         var i,
@@ -40,7 +40,7 @@ define("io.ox/contacts/edit/main",
     }
 
     // multi instance pattern
-    function createInstance() {
+    function createInstance(data) {
         
         var app, win, container,
         formFrame, formContainer;
@@ -233,12 +233,11 @@ define("io.ox/contacts/edit/main",
                             var fId = config.get("folder.contacts"),
                             formdata = {},
                             formdataString,
-                            image = $('form input#image1').val(),
-                            imagePur = document.getElementById("image1");
+                            image = document.getElementById("image1");
                             
 //                          select the data
                             
-                            $(".contact_edit_frame .edit_contact input")
+                            $('.contact_edit_frame').find(".edit_contact input")
                             .each(function (index) {
                                 var value =  $(this).val(),
                                 id = $(this).attr('class');
@@ -254,9 +253,9 @@ define("io.ox/contacts/edit/main",
                             formdata.id = fDataId;
                             formdata.timestamp = timestamp;
                             
-                            if (image !== "") {
+                            if (image.files[0]) {
                                 formdataString = JSON.stringify(formdata);
-                                api.editNewImage(formdataString, imagePur.files[0]);
+                                api.editNewImage(formdataString, image.files[0]);
                             } else {
                                 if (!_.isEmpty(formdata)) {
                                     api.edit(formdata);
@@ -297,17 +296,6 @@ define("io.ox/contacts/edit/main",
        
         return app;
     }
-    
-    var fillForm = function (selected) {
-        data = extendDeep(selected, data);
-      
-    };
-    
-    getContact = function (obj) {
-        api.get(obj)
-           .done(fillForm);
-           //.fail(drawFail, obj); // needs function
-    };
     
     return {
         getApp: createInstance,
