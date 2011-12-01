@@ -14,13 +14,11 @@
  */
 
 define("io.ox/contacts/edit/main",
-    ["io.ox/core/config", "io.ox/contacts/api", "io.ox/core/cache", "css!io.ox/contacts/style.css"
-     ], function (config, api, cache) {
+    ["io.ox/contacts/api", "io.ox/core/cache", "css!io.ox/contacts/style.css"
+     ], function (api, cache) {
     
     "use strict";
     
-    var getContact;
-        
 
     function extendDeep(parent, child) {
         var i,
@@ -76,10 +74,9 @@ define("io.ox/contacts/edit/main",
             
             win.show(function () {
                     
-    //              helper for fieldconstruct
                     function fieldHtml(label, id) {
-                        return $('<div/>').addClass('field').append('<label>' + label + '</label>')
-                        .append('<input class="' + id + '"type="text"> </input>');
+                        return $('<div>').addClass('field').append($('<label>').text(label))
+                        .append($('<input>', {'form-field': id, type: 'text'}));
                     }
                     
     //              assemble create form
@@ -112,7 +109,6 @@ define("io.ox/contacts/edit/main",
                             $('<div>').addClass('block edit_contact phone')
                             .append(fieldHtml('tel.', 'telephone_business1'))
                             .append(fieldHtml('sales volume', 'sales_volume'))
-                            .append($('<input>', {type: 'hidden', 'class': 'id'}))
                     );
                     
                     paneEdit2.append(
@@ -228,29 +224,27 @@ define("io.ox/contacts/edit/main",
                             
                     );
                     
+                    
                     var actions = {
                         resolveEditContact: function () {
-                            var fId = config.get("folder.contacts"),
-                            formdata = {},
+                            var formdata = {},
                             formdataString,
                             image = document.getElementById("image1");
                             
 //                          select the data
                             
-                            $('.contact_edit_frame').find(".edit_contact input")
+                            $('.contact_edit_frame').find(".edit_contact .field input")
                             .each(function (index) {
                                 var value =  $(this).val(),
-                                id = $(this).attr('class');
-                                api.caches.list.remove(id);
-                                if (id !== undefined && value !== "") {
+                                id = $(this).attr('form-field');
+                                if (value !== "") {
                                     formdata[id] = value;
                                 }
                             });
                             
-                            var fDataId = parseInt(formdata.id, 10),
-                            timestamp = new Date().getTime();
-                            formdata.folderId = fId;
-                            formdata.id = fDataId;
+                            var timestamp = new Date().getTime();
+                            formdata.folderId = data.folder_id;
+                            formdata.id = data.id;
                             formdata.timestamp = timestamp;
                             
                             if (image.files[0]) {
@@ -287,7 +281,7 @@ define("io.ox/contacts/edit/main",
                    
                     $('.contact_edit_frame .edit_contact input')
                     .each(function (index) {
-                        var name = $(this).attr('class');
+                        var name = $(this).attr('form-field');
                         $(this).val(data[name]);
                     });
                                          
@@ -298,8 +292,7 @@ define("io.ox/contacts/edit/main",
     }
     
     return {
-        getApp: createInstance,
-        getContact: getContact
+        getApp: createInstance
     };
     
 });

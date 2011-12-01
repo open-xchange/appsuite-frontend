@@ -24,7 +24,7 @@ define("io.ox/contacts/create",
 
     function fieldHtml(label, id) {
         return $('<div>').addClass('field').append($('<label>').text(label))
-        .append($('<input>', {'class': id, type: 'text'}));
+        .append($('<input>', {'form-field': id, type: 'text'}));
     }
 
     //assemble create form
@@ -90,16 +90,17 @@ define("io.ox/contacts/create",
         var actions = {
 
                 resolveNewContact: function () {
-                    var fId = config.get("folder.contacts"),
+                    var fId = config.get("folder.contacts"), // TODO workaround
                     formdata = {},
                     formdataString,
                     image = document.getElementById("image1");
 
 //                  collect the data
-                    $('.io-ox-dialog-popup .create-contact').find(".new_contact input").each(function (index) {
+                    $('.io-ox-dialog-popup .create-contact').find(".new_contact .field input")
+                    .each(function (index) {
                         var value =  $(this).val();
-                        var id = $(this).attr('class');
-                        if (id !== undefined && value !== "") { // no need for filefield in jsonstring
+                        var id = $(this).attr('form-field');
+                        if (value !== "") {
                             formdata[id] = value;
                         }
                     });
