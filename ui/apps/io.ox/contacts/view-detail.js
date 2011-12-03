@@ -106,7 +106,7 @@ define("io.ox/contacts/view-detail",
             ext.point("io.ox/contacts/detail/head").invoke("draw", node, data);
         }
     });
-    
+
     ext.point("io.ox/contacts/detail/head").extend({
         index: 100,
         id: 'contact-picture',
@@ -145,7 +145,7 @@ define("io.ox/contacts/view-detail",
 
 
     ext.point("io.ox/contacts/detail").extend({
-        index: 50,
+        index: 150,
         id: "inline-actions",
         draw: function (data) {
             var td = $('<td>', { colspan: '2' });
@@ -153,9 +153,9 @@ define("io.ox/contacts/view-detail",
             this.append($('<tr>').append(td));
         }
     });
-   
+
     ext.point("io.ox/contacts/detail").extend({
-        index: 100,
+        index: 160,
         id: "address",
         draw: function (data) {
             ext.point("io.ox/contacts/detail/address").invoke("draw", this, data);
@@ -193,8 +193,8 @@ define("io.ox/contacts/view-detail",
             ext.point("io.ox/contacts/detail/qr").invoke("draw", this, data);
         }
     });
-    
-    
+
+
     ext.point("io.ox/contacts/detail/address").extend({
         index: 100,
         id: 'contact-address',
@@ -295,8 +295,8 @@ define("io.ox/contacts/view-detail",
         }
 
     });
-    
-    
+
+
     return {
         draw: function (data) {
             var node;
