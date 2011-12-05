@@ -25,7 +25,7 @@ msgid "Inbox"
 msgstr "Eingang"
 
 msgid "Postbox"
-msgstr "Eingang"
+msgstr "Postfach"
 
 msgid "Contacts"
 msgstr "Kontakte"
