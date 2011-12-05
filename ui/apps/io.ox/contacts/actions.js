@@ -14,9 +14,9 @@
 define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
-    
+
 //  actions
-    
+
     ext.point("io.ox/contacts/main/delete").extend({
         index: 100,
         id: "delete",
@@ -35,7 +35,7 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
             });
         }
     });
-    
+
     ext.point("io.ox/contacts/main/update").extend({
         index: 100,
         id: "edit",
@@ -45,7 +45,7 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
             });
         }
     });
-   
+
     ext.point("io.ox/contacts/main/create").extend({
         index: 100,
         id: "create",
@@ -55,25 +55,25 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
             });
         }
     });
-    
-//     points
+
+//  points
 
     ext.point("io.ox/contacts/detail/actions").extend(new ext.InlineLinks({
         index: 100,
         id: "inline-links",
         ref: 'io.ox/contacts/links/inline'
     }));
-    
-//    inline links
-    
+
+//  inline links
+
     ext.point("io.ox/contacts/links/inline").extend(new ext.Link({
         index: 100,
         id: 'delete',
         label: 'delete',
         ref: 'io.ox/contacts/main/delete'
-        
+
     }));
-    
+
     ext.point("io.ox/contacts/links/inline").extend(new ext.Link({
         index: 100,
         id: 'update',
