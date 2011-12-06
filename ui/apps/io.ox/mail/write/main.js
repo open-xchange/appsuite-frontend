@@ -46,12 +46,12 @@ define.async('io.ox/mail/write/main',
     });
 
     // links
-    ext.point('io.ox/mail/write/links/toolbar').extend(new ext.Link({
-        index: 200,
-        id: 'proofread',
-        label: 'Proofread',
-        ref: 'io.ox/mail/write/actions/proofread'
-    }));
+//    ext.point('io.ox/mail/write/links/toolbar').extend(new ext.Link({
+//        index: 200,
+//        id: 'proofread',
+//        label: 'Proofread',
+//        ref: 'io.ox/mail/write/actions/proofread'
+//    }));
 
     // default sender (used to set from address)
     var defaultSender,
@@ -190,7 +190,7 @@ define.async('io.ox/mail/write/main',
             )
             .append(
                 $('<div>').addClass('person-link')
-                .text(data.display_name + '\u00a0')
+                .text(data.display_name + '\u00A0')
             )
             .append($('<div>').text(data.email));
         }
@@ -210,7 +210,7 @@ define.async('io.ox/mail/write/main',
             )
             .append(
                 $('<a>', { href: '#' }).addClass('person-link')
-                .text(data.display_name + '\u00a0')
+                .text(data.display_name + '\u00A0')
                 .on('click', {
                     display_name: data.display_name,
                     email1: data.email
@@ -539,6 +539,7 @@ define.async('io.ox/mail/write/main',
                     .append(
                         $('<div>')
                         .addClass('abs editor-inner-container')
+                        .css('overflow', 'hidden')
                         .append(
                             // text editor
                             editor = $('<textarea>')
@@ -667,17 +668,22 @@ define.async('io.ox/mail/write/main',
                 .append(sidepanel)
             );
 
-            var adjustEditorMargin = (function () {
-                // trick to force document reflow
-                var alt = false;
-                return _.debounce(function () {
-                    var w = Math.max(10, editor.outerWidth() - 12 - 750);
-                    editor.css('paddingRight', w + 'px');
-                    editorPrintMargin.css('right', Math.max(0, w - 10) + 'px');
-                    // force reflow
-                    editor.css('display', (alt = !alt) ? 'block' : '');
+            var resizeEditorMargin = (function () {
+                    // trick to force document reflow
+                    var alt = false;
+                    return _.debounce(function () {
+                        var w = Math.max(10, editor.outerWidth() - 12 - 750);
+                        editor.css('paddingRight', w + 'px');
+                        editorPrintMargin.css('right', Math.max(0, w - 10) + 'px');
+                        // force reflow
+                        editor.css('display', (alt = !alt) ? 'block' : '');
+                    }, 100);
+                }()),
+
+                resizeEditor = _.debounce(function () {
+                    var p = editor.parent(), w = p.width(), h = p.height();
+                    p.find('table.mceLayout').css({ width: w + 'px', height: h + 'px' });
                 }, 100);
-            }());
 
             var dropZone = upload.dnd.createDropZone();
             dropZone.bind('drop', function (file) {
@@ -689,21 +695,36 @@ define.async('io.ox/mail/write/main',
 
             win.bind('show', function () {
                 if (editorMode === 'text') {
-                    adjustEditorMargin();
-                    $(window).on('resize', adjustEditorMargin);
+                    resizeEditorMargin();
+                    $(window).on('resize', resizeEditorMargin);
+                } else {
+                    $(window).on('resize', resizeEditor);
                 }
                 dropZone.include();
             });
 
             win.bind('hide', function () {
                 if (editorMode === 'text') {
-                    $(window).off('resize', adjustEditorMargin);
+                    $(window).off('resize', resizeEditorMargin);
+                } else {
+                    $(window).off('resize', resizeEditor);
                 }
                 dropZone.remove();
             });
         });
 
         function initializeEditor() {
+
+            function makeParagraph() {
+                var self = $(this),
+                    style = self.attr('style'),
+                    p = $('<p>');
+                if (style) {
+                    p.attr('style', style);
+                }
+                self.replaceWith(p.append(self.contents()));
+            }
+
             // html?
             if (editorMode === 'html') {
                 editor.tinymce({
@@ -749,13 +770,17 @@ define.async('io.ox/mail/write/main',
                     paste_preprocess: function (pl, o) {
                         //console.debug('pre', o.content);
                         o.content = o.content
+                            // remove comments
+                            .replace(/<!--(.*?)-->/g, '')
+                            // remove custom attributes
+                            .replace(/ data-[^=]+="[^"]*"/g, '')
                             // remove &nbsp;
                             .replace(/&nbsp;/ig, ' ')
                             // fix missing white-space before/after links
                             .replace(/([^>\s])<a/ig, '$1 <a')
-                            .replace(/<\/\s?a>([^<\s])/ig, '</a> $1')
+                            .replace(/<\/\s?a>([^<\s,\.:;])/ig, '</a> $1')
                             // beautify simple quotes
-                            .replace(/([^=])"(\w+)"/g, '$1<em>\u201C$2\u201D</em>')
+                            .replace(/([^=])"([\w\- ]+)"/g, '$1\u201C$2\u201D')
                             // beautify dashes
                             .replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
                     },
@@ -764,22 +789,14 @@ define.async('io.ox/mail/write/main',
                     paste_postprocess: function (pl, o) {
 
                         var node = $(o.node), done;
+                        //console.debug('post', node.html());
 
                         // remove iframes and other stuff that shouldn't be in an email
                         // images too - doesn't work with copy/paste
                         node.find(
                             'iframe, object, applet, input, textarea, button, select, ' +
-                            'canvas, audio, video, img'
+                            'canvas, script, noscript, audio, video, img'
                             ).remove();
-
-                        // fix references
-                        node.find('a').each(function () {
-                            var self = $(this), match;
-                            if (/^\[\d+\]$/.test(self.text()) && /^#/.test(self.attr('href'))) {
-                                match = (self.text() + '').match(/^\[(\d+)\]$/);
-                                self.replaceWith($('<sup>').text(match[1]).add($.txt(' ')));
-                            }
-                        });
 
                         // beautify SUP tags
                         node.find('sup').css('lineHeight', '0');
@@ -789,11 +806,20 @@ define.async('io.ox/mail/write/main',
                             $(this).children().first().unwrap();
                         });
 
-                        // unwrap dead links (usually javascript hooks)
+                        // clean up links
                         node.find('a').each(function () {
-                            var self = $(this);
+                            var self = $(this), match;
                             if (!self.attr('href')) {
+                                // unwrap dead links (usually javascript hooks)
                                 self.replaceWith(self.contents());
+                            } else {
+                                // remove title & target
+                                self.removeAttr('title target');
+                                // fix references
+                                if (/^\[\d+\]$/.test(self.text()) && /^#/.test(self.attr('href'))) {
+                                    match = (self.text() + '').match(/^\[(\d+)\]$/);
+                                    self.replaceWith($('<sup>').text(match[1]).add($.txt(' ')));
+                                }
                             }
                         });
 
@@ -809,9 +835,15 @@ define.async('io.ox/mail/write/main',
                                 tagName = this.tagName,
                                 children = self.children(),
                                 text;
+                            // remove attributes
+                            self.removeAttr('id title alt rel');
                             // is closed tag?
                             if (/^(BR|HR|IMG)$/.test(tagName)) {
                                 return;
+                            }
+                            // fix text align
+                            if (self.attr('align')) {
+                                self.css('textAlign', self.attr('align')).removeAttr('align');
                             }
                             // fix text nodes
                             self.contents().each(function () {
@@ -897,12 +929,16 @@ define.async('io.ox/mail/write/main',
                                 });
                         });
 
-                        // beautify headers
-                        node.find('h1, h2, h3, h4, h5, h6, h7').each(function () {
-                            $(this).css({
-                                fontFamily: 'Arial, Helvetica, sans-serif',
-                                margin: '1em 0 1em 0'
-                            });
+                        // replace top-level <div> by <p>
+                        node.eq(0).children('div').each(makeParagraph);
+
+                        // remove <p> with just one <br> inside
+                        node.find('p').each(function () {
+                            var self = $(this),
+                                contents = self.contents();
+                            if (contents.length === 1 && contents.get(0).tagName === 'BR') {
+                                self.remove();
+                            }
                         });
                     }
                 });
@@ -1184,7 +1220,77 @@ define.async('io.ox/mail/write/main',
 
         window.heinz = app;
         app.test = function () {
-            return editor.tinymce();
+
+            var ed = window.horst = editor.tinymce(),
+                base = ox.base + '/apps/io.ox/mail/write';
+
+            function clear() {
+                ed.setContent('');
+                ed.execCommand('SelectAll');
+            }
+
+            function trim(str) {
+                return $.trim((str + '').replace(/[\r\n]+/g, ''));
+            }
+
+            function get() {
+                // get editor content (trim white-space and clean up pseudo XHTML)
+                return trim(ed.getContent()).replace(/<(\w+)[ ]?\/>/g, '<$1>');
+            }
+
+            function equals(a, b) {
+                if (a !== b) {
+                    console.error('Fail!', a, 'vs', b);
+                } else {
+                    console.log('Test passed!');
+                }
+            }
+
+            // basic test
+            clear();
+            ed.execCommand('mceInsertClipboardContent', false, {
+                content: '<p>Hello World</p>'
+            });
+            equals(get(), '<p>Hello World</p>');
+
+            // remove color
+            clear();
+            ed.execCommand('mceInsertClipboardContent', false, {
+                content: '<p style="color: red">Hello World</p>'
+            });
+            equals(get(), '<p>Hello World</p>');
+
+            // simple text
+            clear();
+            ed.execCommand('mceInsertClipboardContent', false, {
+                content: '<p>Hello<br />World</p><p>one empty line, then this one</p>'
+            });
+            equals(get(), '<p>Hello<br>World</p><p>one empty line, then this one</p>');
+
+            // complex test cases
+            $.when(
+                $.get(base + '/test_1a.html'),
+                $.get(base + '/test_1b.html')
+            )
+            .done(function (a, b) {
+                clear();
+                ed.execCommand('mceInsertClipboardContent', false, { content: a[0] });
+                equals(get(), trim(b[0]));
+            })
+            .done(function () {
+
+                $.when(
+                    $.get(base + '/test_2a.html'),
+                    $.get(base + '/test_2b.html')
+                )
+                .done(function (a, b) {
+                    clear();
+                    ed.execCommand('mceInsertClipboardContent', false, { content: a[0] });
+                    equals(get(), trim(b[0]));
+                });
+            });
+
+            return ed;
         };
 
         return app;
@@ -1216,3 +1322,5 @@ define.async('io.ox/mail/write/main',
             return module;
         });
 });
+
+

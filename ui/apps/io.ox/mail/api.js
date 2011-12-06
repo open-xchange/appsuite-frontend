@@ -180,7 +180,7 @@ define("io.ox/mail/api",
                     var text = '';
                     $('<div>')
                         // escape everything but BR tags
-                        .html(data.attachments[0].content.replace(/<(?!br)/g, '&lt;'))
+                        .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
                         .contents().each(function () {
                             if (this.tagName === 'BR') {
                                 text += "\n";
