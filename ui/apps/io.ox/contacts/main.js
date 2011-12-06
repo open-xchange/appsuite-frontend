@@ -295,3 +295,17 @@ define("io.ox/contacts/main",
         getApp: app.getInstance
     };
 });
+var getTestCreate = function () {
+    "use strict";
+    require(["io.ox/contacts/tests"], function (test) {
+    // test for create
+        test.testCreate();
+    });
+};
+var getTestEdit = function () {
+    "use strict";
+    require(["io.ox/contacts/tests"], function (test) {
+    // test for edit
+        test.testEdit();
+    });
+};

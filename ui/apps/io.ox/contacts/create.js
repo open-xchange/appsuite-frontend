@@ -21,10 +21,10 @@ define("io.ox/contacts/create",
 
     "use strict";
 
-    function fieldHtml(label, name) {
-        return $('<div>').addClass('field')
+    function fieldHtml(label, name, datatype) {
+        return $('<div>').addClass('field ' + datatype)
             .append($('<label>').text(label))
-            .append($('<input>', { name: name, type: 'text' }));
+            .append($('<input>', { name: name, type: 'text'}));
     }
 
     //assemble create form
@@ -35,25 +35,25 @@ define("io.ox/contacts/create",
 
         content.append(
                 $('<div>').addClass('block new_contact name')
-                .append(fieldHtml('first name', 'first_name'))
-                .append(fieldHtml('last name', 'last_name'))
+                .append(fieldHtml('first name', 'first_name', 'string'))
+                .append(fieldHtml('last name', 'last_name', 'string'))
             )
             .append(
                 $('<div>').addClass('block new_contact company')
-                .append(fieldHtml('company', 'company'))
-                .append(fieldHtml('department', 'department'))
-                .append(fieldHtml('position', 'position'))
-                .append(fieldHtml('profession', 'profession'))
+                .append(fieldHtml('company', 'company', 'string'))
+                .append(fieldHtml('department', 'department', 'string'))
+                .append(fieldHtml('position', 'position', 'string'))
+                .append(fieldHtml('profession', 'profession', 'string'))
             )
             .append(
                 $('<div>').addClass('block new_contact address')
-                .append(fieldHtml('street', 'street_business'))
-                .append(fieldHtml('postal code', 'postal_code_business'))
-                .append(fieldHtml('city', 'city_business'))
+                .append(fieldHtml('street', 'street_business', 'string'))
+                .append(fieldHtml('postal code', 'postal_code_business', 'string'))
+                .append(fieldHtml('city', 'city_business', 'string'))
             )
             .append(
                 $('<div>').addClass('block new_contact phone')
-                .append(fieldHtml('tel.', 'telephone_business1'))
+                .append(fieldHtml('tel.', 'telephone_business1', 'string'))
             )
             .append(
                 $('<div>').addClass('block new_contact image')
