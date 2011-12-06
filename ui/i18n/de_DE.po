@@ -1,307 +1,589 @@
+# translation of de_DE.po to deutsch
+# translation of ox.de_DE.po to
+# Antje Faber <antje.faber@open-xchange.com>, 2008, 2009, 2010, 2011.
+# Viktor Pracht <Viktor.Pracht@open-xchange.org>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: Open-Xchange 7\n"
-"POT-Creation-Date: Thu Oct 20 2011 16:44:44 GMT+0200 (CEST)\n"
-"PO-Revision-Date: Thu Sep 22 2011 11:38:57 GMT+0200 (CEST)\n"
-"Last-Translator: NAME <EMAIL>\n"
-"Language-Team: OX <i18n@open-xchange.com>\n"
-"Language: de_DE\n"
+"Project-Id-Version: de_DE\n"
+"POT-Creation-Date: 2011-12-01 16:15+0100\n"
+"PO-Revision-Date: 2011-12-05 09:45+0100\n"
+"Last-Translator: Antje Faber\n"
+"Language-Team: Japanese <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bits\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.0\n"
 
-#: apps/io.ox/core/main.js:122
-msgid "AJAX Requests"
-msgstr "AJAX Anfragen"
+msgid "stay logged in"
+msgstr "Angemeldet bleiben"
 
-#: apps/io.ox/calendar/util.js:37
-msgid "Absent"
-msgstr "Abwesend"
+msgid "About 1&1 Webmail"
+msgstr "Über 1&1 Webmail"
 
-#: apps/io.ox/core/main.js:101
-msgid "Address Book"
-msgstr "Adressbuch"
+msgid "Inbox"
+msgstr "Eingang"
 
-#: apps/io.ox/core/main.js:85
-msgid "Applications"
-msgstr "Anwendungen"
+msgid "Postbox"
+msgstr "Postfach"
 
-#: apps/io.ox/calendar/util.js:27
-msgid "April"
-msgstr "April"
+msgid "Contacts"
+msgstr "Kontakte"
 
-#: apps/io.ox/calendar/util.js:28
-msgid "August"
-msgstr "August"
+msgid "Appointments"
+msgstr "Termine"
 
-#: apps/io.ox/contacts/base.js:244
-#: apps/io.ox/contacts/view-detail.js:247
-msgid "Birthday"
-msgstr "Geburtstag"
+msgid "Settings"
+msgstr "Einstellungen"
 
-#: apps/io.ox/core/main.js:108
-msgid "Calendar"
-msgstr "Kalender"
+msgid "Overview"
+msgstr "Übersicht"
 
-#: apps/io.ox/calendar/util.js:213
-msgid "Day"
-msgstr "Tag"
+msgid "Sent Items"
+msgstr "Gesendete Objekte"
 
-#: apps/io.ox/calendar/util.js:29
-msgid "December"
-msgstr "Dezember"
+msgid "Drafts"
+msgstr "Entwürfe"
 
-#: apps/io.ox/contacts/base.js:195
-#: apps/io.ox/contacts/view-detail.js:184
-msgid "Department"
-msgstr "Abteilung"
+msgid "Spam"
+msgstr "Spam"
 
-#: apps/io.ox/contacts/base.js:99
-#: apps/io.ox/contacts/view-detail.js:129
-msgid "Distribution list"
-msgstr "Verteilerliste"
+msgid "Trash"
+msgstr "Papierkorb"
 
-#: apps/io.ox/contacts/base.js:227
-#: apps/io.ox/contacts/base.js:230
-#: apps/io.ox/contacts/base.js:234
-#: apps/io.ox/contacts/view-detail.js:224
-#: apps/io.ox/contacts/view-detail.js:227
-#: apps/io.ox/contacts/view-detail.js:231
-#: apps/io.ox/core/main.js:94
+msgid "Own folders"
+msgstr "Eigene Ordner"
+
+msgid "Own Folders"
+msgstr "Eigene Ordner"
+
+msgid "Back"
+msgstr "Zurück"
+
+msgid "From:"
+msgstr "Von:"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "To:"
+msgstr "An"
+
+msgid "Unread"
+msgstr "Ungelesen"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Folder"
+msgstr "Ordner"
+
+msgid "New E-Mail"
+msgstr "Neue E-Mail"
+
+msgid "Send"
+msgstr "Senden"
+
+msgid "Cc/Bcc:"
+msgstr "CC/BCC"
+
+msgid "Bcc:"
+msgstr "BCC"
+
+msgid "E-Mail folder"
+msgstr "E-Mail-Ordner"
+
+msgid "Contact folder"
+msgstr "Kontakte-Ordner"
+
+msgid "Legal Information"
+msgstr "Rechtliche Hinweise"
+
+msgid "System messages"
+msgstr "System-Meldungen"
+
+msgid "Logout"
+msgstr "Abmelden"
+
+msgid "E-Mail Folder"
+msgstr "E-Mail-Ordner"
+
+msgid "Please select the folders you want to access."
+msgstr "Bitte wählen Sie die Ordner aus, auf die sie zugreifen möchten."
+
+msgid "Appointment Limit"
+msgstr "Termin-Limit"
+
+msgid "Display future appointments for the timeframe specified."
+msgstr "Wie weit in die Zukunft soll auf Termine geprüft werden?"
+
+msgid "Contacts Folder"
+msgstr "Kontakte-Ordner"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Close"
+msgstr "Schließen"
+
+msgid "Contact list is empty."
+msgstr "Die Kontaktliste enthält keine Einträge."
+
+msgid "Search for contacts..."
+msgstr "Nach Kontakten suchen..."
+
 msgid "E-Mail"
 msgstr "E-Mail"
 
-#: apps/io.ox/calendar/util.js:251
-msgid "Each %s Day"
-msgstr "Jeden %s Tag"
+msgid "E-Mail 2"
+msgstr "E-Mail 2"
 
-#: apps/io.ox/calendar/util.js:256
-msgid "Each %s weeks on %s"
-msgstr "Alle %s Wochen am %s"
+msgid "E-Mail 3"
+msgstr "E-Mail 3"
 
-#: apps/io.ox/calendar/util.js:267
-msgid "Each %s. %s"
-msgstr "Jeden %s. %s"
-
-#: apps/io.ox/calendar/util.js:26
-msgid "February"
-msgstr "Februar"
-
-#: apps/io.ox/core/main.js:115
-msgid "Files"
-msgstr "Dateien"
-
-#: html/core_body.html:64
-msgid "Forgot your password?"
-msgstr "Passwort vergessen?"
-
-#: apps/io.ox/calendar/util.js:37
-msgid "Free"
-msgstr "Frei"
-
-#: apps/io.ox/calendar/util.js:22
-#: apps/io.ox/calendar/util.js:232
-msgid "Friday"
-msgstr "Freitag"
-
-#: apps/io.ox/core/main.js:71
-msgid "Help"
-msgstr "Hilfe"
-
-#: apps/io.ox/contacts/base.js:206
-#: apps/io.ox/contacts/view-detail.js:194
-msgid "Home"
-msgstr "Privat"
-
-#: apps/io.ox/calendar/util.js:26
-msgid "January"
-msgstr "Januar"
-
-#: apps/io.ox/calendar/util.js:28
-msgid "July"
-msgstr "Juli"
-
-#: apps/io.ox/calendar/util.js:27
-msgid "June"
-msgstr "Juni"
-
-#: html/core_body.html:78
-msgid "Languages"
-msgstr "Sprachen"
-
-#: apps/io.ox/calendar/util.js:26
-msgid "March"
-msgstr "März"
-
-#: apps/io.ox/calendar/util.js:27
-msgid "May"
-msgstr "Mai"
-
-#: apps/io.ox/contacts/base.js:218
-#: apps/io.ox/contacts/base.js:219
-#: apps/io.ox/contacts/view-detail.js:211
-#: apps/io.ox/contacts/view-detail.js:212
 msgid "Mobile"
 msgstr "Mobiltelefon"
 
-#: apps/io.ox/calendar/util.js:21
-#: apps/io.ox/calendar/util.js:220
-msgid "Monday"
-msgstr "Montag"
+msgid "Private"
+msgstr "Privat"
 
-#: apps/io.ox/calendar/util.js:29
-msgid "November"
-msgstr "November"
+msgid "Mobile 2"
+msgstr "Mobiltelefon 2"
 
-#: apps/io.ox/calendar/util.js:29
-msgid "October"
-msgstr "Oktober"
+msgid "Business"
+msgstr "Geschäftlich"
 
-#: apps/io.ox/calendar/util.js:262
-msgid "On %s %s each %s. months"
-msgstr "Am %s %s jeden %s. Monats"
+msgid "Privat"
+msgstr "Privat"
 
-#: apps/io.ox/calendar/util.js:269
-msgid "On %s %s in %s"
-msgstr "Am %s %s in %s"
+#. %1$s is the error code.
+#. %2$s is the formatted error message.
+#. %3$s is the unique error ID.
+#, c-format
+msgid "Error: %2$s (%1$s, %3$s)"
+msgstr "Fehlermeldung: %2$s (%1$s, %3$s)"
 
-#: apps/io.ox/calendar/util.js:260
-msgid "On %s. day every %s. month"
-msgstr "Am %s. Tag jeden %s Monat"
+msgid "January"
+msgstr "Januar"
 
-#: html/core_body.html:45
-msgid "Password"
-msgstr "Passwort"
+msgid "February"
+msgstr "Februar"
 
-#: apps/io.ox/contacts/base.js:214
-#: apps/io.ox/contacts/base.js:215
-#: apps/io.ox/contacts/view-detail.js:207
-#: apps/io.ox/contacts/view-detail.js:208
-msgid "Phone (business)"
-msgstr "Telefon (geschäftlich)"
+msgid "March"
+msgstr "März"
 
-#: apps/io.ox/contacts/base.js:216
-#: apps/io.ox/contacts/base.js:217
-#: apps/io.ox/contacts/view-detail.js:209
-#: apps/io.ox/contacts/view-detail.js:210
-msgid "Phone (private)"
-msgstr "Telefon (privat)"
+msgid "April"
+msgstr "April"
 
-#: apps/io.ox/core/main.js:87
-msgid "Portal"
-msgstr "Portal"
+msgid "May"
+msgstr "Mai"
 
-#: apps/io.ox/contacts/base.js:196
-#: apps/io.ox/contacts/view-detail.js:185
-msgid "Position"
-msgstr "Position"
+msgid "June"
+msgstr "Juni"
 
-#: apps/io.ox/contacts/base.js:197
-#: apps/io.ox/contacts/view-detail.js:186
-msgid "Profession"
-msgstr "Beruf"
+msgid "July"
+msgstr "Juli"
 
-#: apps/io.ox/core/main.js:73
-msgid "Refresh"
-msgstr "Aktualisieren"
+msgid "August"
+msgstr "August"
 
-#: apps/io.ox/calendar/util.js:36
-msgid "Reserved"
-msgstr "Reserviert"
-
-#: apps/io.ox/calendar/util.js:23
-#: apps/io.ox/calendar/util.js:235
-msgid "Saturday"
-msgstr "Samstag"
-
-#: apps/io.ox/calendar/util.js:28
 msgid "September"
 msgstr "September"
 
-#: apps/io.ox/contacts/base.js:256
-msgid "Show QR-code"
-msgstr "QR-Code zeigen"
+msgid "October"
+msgstr "Oktober"
 
-#: html/core_body.html:52
-msgid "Sign in"
-msgstr "Anmelden"
+msgid "November"
+msgstr "November"
 
-#: apps/io.ox/core/main.js:67
-msgid "Sign out"
-msgstr "Abmelden"
+msgid "December"
+msgstr "Dezember"
 
-#: html/core_body.html:60
-msgid "Stay signed in"
-msgstr "Angemeldet bleiben"
+msgid "Jan"
+msgstr "Jan"
 
-#: apps/io.ox/calendar/util.js:21
-#: apps/io.ox/calendar/util.js:217
+msgid "Feb"
+msgstr "Feb"
+
+msgid "Mar"
+msgstr "Mär"
+
+msgid "Apr"
+msgstr "Apr"
+
+msgid "Jun"
+msgstr "Jun"
+
+msgid "Jul"
+msgstr "Jul"
+
+msgid "Aug"
+msgstr "Aug"
+
+msgid "Sep"
+msgstr "Sep"
+
+msgid "Oct"
+msgstr "Okt"
+
+msgid "Nov"
+msgstr "Nov"
+
+msgid "Dec"
+msgstr "Dez"
+
 msgid "Sunday"
 msgstr "Sonntag"
 
-#: apps/io.ox/calendar/util.js:36
-msgid "Temporary"
-msgstr "Vorübergehend"
+msgid "Monday"
+msgstr "Montag"
 
-#: apps/io.ox/core/main.js:129
-msgid "Tests"
-msgstr "Tests"
-
-#: apps/io.ox/calendar/util.js:22
-#: apps/io.ox/calendar/util.js:229
-msgid "Thursday"
-msgstr "Donnerstag"
-
-#: apps/io.ox/calendar/util.js:21
-#: apps/io.ox/calendar/util.js:223
 msgid "Tuesday"
 msgstr "Dienstag"
 
-#: html/core_body.html:39
-msgid "User name"
-msgstr "Benutzername"
-
-#: apps/io.ox/calendar/util.js:22
-#: apps/io.ox/calendar/util.js:226
 msgid "Wednesday"
 msgstr "Mittwoch"
 
-#: apps/io.ox/calendar/util.js:210
-msgid "Weekend Day"
-msgstr "Wochenendtag"
+msgid "Thursday"
+msgstr "Donnerstag"
 
-#: apps/io.ox/calendar/util.js:255
-msgid "Weekly on %s"
-msgstr "Wöchentlich an %s"
+msgid "Friday"
+msgstr "Freitag"
 
-#: apps/io.ox/contacts/base.js:202
-#: apps/io.ox/contacts/view-detail.js:191
-msgid "Work"
-msgstr "Geschäftlich"
+msgid "Saturday"
+msgstr "Samstag"
 
-#: apps/io.ox/calendar/util.js:207
-msgid "Work Day"
-msgstr "Werktag"
+msgid "Sun"
+msgstr "So"
 
-#: apps/io.ox/calendar/util.js:32
-msgid "first"
-msgstr "ersten"
+msgid "Mon"
+msgstr "Mo"
 
-#: apps/io.ox/calendar/util.js:33
-msgid "fourth"
-msgstr "vierten"
+msgid "Tue"
+msgstr "Di"
 
-#: apps/io.ox/calendar/util.js:32
-#: apps/io.ox/calendar/util.js:33
-msgid "last"
-msgstr "letzten"
+msgid "Wed"
+msgstr "Mi"
 
-#: apps/io.ox/calendar/util.js:32
-msgid "second"
-msgstr "zweiten"
+msgid "Thu"
+msgstr "Do"
 
-#: apps/io.ox/calendar/util.js:33
-msgid "third"
-msgstr "dritten"
+msgid "Fri"
+msgstr "Fr"
+
+msgid "Sat"
+msgstr "Sa"
+
+msgid "BC"
+msgstr "BC"
+
+msgid "AD"
+msgstr "v. Chr."
+
+msgid "AM"
+msgstr "am"
+
+msgid "PM"
+msgstr "pm"
+
+# default time format
+msgid "HH:mm"
+msgstr "HH:mm"
+
+# default date format
+msgid "yyyy-MM-dd"
+msgstr "dd.MM.yyyy"
+
+#. Short date format (month and day only)
+#. MM is month, dd is day of the month
+msgid "MM/dd"
+msgstr "dd.MM."
+
+#. The relative position of date and time.
+#. %1$s is the date
+#. %2$s is the time
+#. The date with the day of the week.
+#. EEEE is the full day of the week,
+#. EEE is the short day of the week,
+#. %s is the date.
+#, c-format
+msgid "EEEE, %s"
+msgstr "EEEE, %s"
+
+#. The date with the day of the week.
+#. EEEE is the full day of the week,
+#. EEE is the short day of the week,
+#. %s is the date.
+#, c-format
+msgid "EEE, %s"
+msgstr "EEE, %s"
+
+msgid "%s, EEE"
+msgstr "%s, EEE"
+
+#. The format for calendar timescales
+#. when the interval is at least one hour.
+#. H is 1-24, HH is 01-24, h is 1-12, hh is 01-12, a is AM/PM,
+#. mm is minutes.
+#. The format for hours on calendar timescales
+#. when the interval is less than one hour.
+#. The format for minutes on calendar timescales
+#. when the interval is less than one hour.
+#. 12h formats should use AM/PM ("a").
+#. 24h formats should use minutes ("mm").
+#. The format for team view timescales
+#. HH is 01-24, hh is 01-12, H is 1-24, h 1-12, a is AM/PM
+#. Reminder (objective case): in X minutes
+#. %d is the number of minutes
+#, c-format
+msgctxt "in"
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d Minute"
+msgstr[1] "%d Minuten"
+
+#. General duration (nominative case): X minutes
+#. %d is the number of minutes
+#, c-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d Minute"
+msgstr[1] "%d Minuten"
+
+#. Reminder (objective case): in X hours
+#. %d is the number of hours
+#, c-format
+msgctxt "in"
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d Stunde"
+msgstr[1] "%d Stunden"
+
+#. General duration (nominative case): X hours
+#. %d is the number of hours
+#, c-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d Stunde"
+msgstr[1] "%d Stunden"
+
+#. Reminder (objective case): in X hours and Y minutes
+#. %1$d is the number of hours
+#. %2$s is the text for the remainder of the last hour
+#, c-format
+msgctxt "in"
+msgid "%1$d hour and %2$s"
+msgid_plural "%1$d hours and %2$s"
+msgstr[0] "%1$d Stunde und %2$s"
+msgstr[1] "%1$d Stunden und %2$s"
+
+#. General duration (nominative case): X hours and Y minutes
+#. %1$d is the number of hours
+#. %2$s is the text for the remainder of the last hour
+#, c-format
+msgid "%1$d hour and %2$s"
+msgid_plural "%1$d hours and %2$s"
+msgstr[0] "%1$d Stunde und %2$s"
+msgstr[1] "%1$d Stunden und %2$s"
+
+#. Reminder (objective case): in X days
+#. %d is the number of days
+#, c-format
+msgctxt "in"
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d Tag"
+msgstr[1] "%d Tagen"
+
+#. General duration (nominative case): X days
+#. %d is the number of days
+#, c-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d Tag"
+msgstr[1] "%d Tage"
+
+#. Reminder (objective case): in X days, Y hours and Z minutes
+#. %1$d is the number of days
+#. %2$s is the text for the remainder of the last day
+#, c-format
+msgctxt "in"
+msgid "%1$d day, %2$s"
+msgid_plural "%1$d days, %2$s"
+msgstr[0] "%1$d Tag, %2$s"
+msgstr[1] "%1$d Tage, %2$s"
+
+#. General duration (nominative case): X days, Y hours and Z minutes
+#. %1$d is the number of days
+#. %2$s is the text for the remainder of the last day
+#, c-format
+msgid "%1$d day, %2$s"
+msgid_plural "%1$d days, %2$s"
+msgstr[0] "%1$d Tag, %2$s"
+msgstr[1] "%1$d Tage, %2$s"
+
+#. Reminder (objective case): in X weeks
+#. %d is the number of weeks
+#, c-format
+msgctxt "in"
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d Woche"
+msgstr[1] "%d Wochen"
+
+#. General duration (nominative case): X weeks
+#. %d is the number of weeks
+#, c-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] "%d Woche"
+msgstr[1] "%d Wochen"
+
+msgid "Loading..."
+msgstr "Laden..."
+
+msgid "Password"
+msgstr "Passwort"
+
+msgid "Login"
+msgstr "Login"
+
+msgid ""
+"You have chosen a large number of contacts. This can significantly affect "
+"the response time."
+msgstr ""
+"Sie haben eine hohe Anzahl von Kontakten ausgewählt. Dies kann die "
+"Reaktionszeit erheblich beeinträchtigen"
+
+msgid "Synchronizing data."
+msgstr "Daten synchronisieren"
+
+msgid "Today"
+msgstr "Heute"
+
+msgid "Yesterday"
+msgstr "Gestern"
+
+msgid "Accept"
+msgstr "Akzeptieren"
+
+msgid "Decline"
+msgstr "Ablehnen"
+
+msgid "Please select a target folder."
+msgstr "Bitte wählen sie einen Zielordner aus."
+
+msgid "Your E-Mails have been moved."
+msgstr "Ihre E-Mails wurden verschoben."
+
+msgid "Permanently delete E-Mails?"
+msgstr "E-Mails endgültig löschen?"
+
+msgid "Delete"
+msgstr "Löschen"
+
+msgid "Answer"
+msgstr "Antworten"
+
+msgid "Forward"
+msgstr "Weiterleiten"
+
+msgid "Cc:"
+msgstr "CC"
+
+msgid "An error occurred"
+msgstr "Es trat ein Fehler auf"
+
+msgid "Ok"
+msgstr "OK"
+
+msgid "Your mail was sent"
+msgstr "Ihre E-Mail wurde gesendet"
+
+msgid "attachment"
+msgstr "Anlage"
+
+msgid "Reconnecting to server"
+msgstr "Erneuter Verbindungsaufbau zum Server"
+
+msgid "Your E-Mail address or password is wrong."
+msgstr "Ihre E-Mail-Adresse oder Ihr Passwort ist falsch."
+
+msgid "An error occurred. Please try again."
+msgstr "Ein Fehler ist aufgetreten. Bitte versuchen Sie es noch einmal."
+
+msgid "An error occurred."
+msgstr "Es trat ein Fehler auf."
+
+msgid "1 week"
+msgstr "1 Woche"
+
+msgid "2 weeks"
+msgstr "2 Wochen"
+
+msgid "1 month"
+msgstr "1 Monat"
+
+msgid "2 months"
+msgstr "2 Monate"
+
+msgid "Appointments: %s"
+msgstr "Termine: %s"
+
+msgid "Folder is empty"
+msgstr "Der Ordner ist leer."
+
+msgid "No subject"
+msgstr "Kein Betreff"
+
+#. Displayed in single mail view. This indicates the position of the currently
+#. displayed mail, i.e. "4 of 10"
+msgid "%n of %n"
+msgstr "%n von %n"
+
+msgid "Move"
+msgstr "Verschieben"
+
+msgid "Edit"
+msgstr "Bearbeiten"
+
+msgid "None"
+msgstr "Keine"
+
+msgid "Visible folder"
+msgstr "Sichtbarer Ordner"
+
+msgid "Create objects"
+msgstr "Objekte anlegen"
+
+msgid "Create subfolders"
+msgstr "Unterordner anlegen"
+
+msgid "Maximum"
+msgstr "Maximum"
+
+msgid "Read own"
+msgstr "Eigene lesen"
+
+msgid "Read all"
+msgstr "Alle lesen"
+
+msgid "Modify own"
+msgstr "Eigene ändern"
+
+msgid "Modify all"
+msgstr "Alle ändern"
+
+msgid "Delete own"
+msgstr "Eigene löschen"
+
+msgid "Delete all"
+msgstr "Alle löschen"
+
+msgid "No"
+msgstr "Nein"
+
+msgid "Yes"
+msgstr "Ja"
+
 
