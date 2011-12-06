@@ -67,9 +67,9 @@ define("io.ox/contacts/util",
                 obj.position || obj.company || "";
         },
         
-        createEditPage: function () {
+        createEditPage: function (obj) {
             require(["io.ox/contacts/edit/main"], function (u) {
-                u.getApp().launch();
+                u.getApp(obj).launch();
             });
         }
        

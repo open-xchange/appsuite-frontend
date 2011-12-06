@@ -14,13 +14,11 @@
  */
 
 define("io.ox/contacts/edit/main",
-    ["io.ox/core/config", "io.ox/contacts/api", "css!io.ox/contacts/style.css"
-     ], function (config, api) {
-    
+    ["io.ox/contacts/api", "io.ox/core/cache",
+     "css!io.ox/contacts/style.css"
+     ], function (api, cache) {
+
     "use strict";
-    
-    var getContact,
-        data;
 
     function extendDeep(parent, child) {
         var i,
@@ -40,22 +38,22 @@ define("io.ox/contacts/edit/main",
     }
 
     // multi instance pattern
-    function createInstance() {
-        
+    function createInstance(data) {
+
         var app, win, container,
         formFrame, formContainer;
-        
+
         app = ox.ui.createApp({
             title: "Edit Contact"
         });
-        
+
         app.setLauncher(function () {
-            
+
             win = ox.ui.createWindow({
                 title: "Edit Contact",
                 toolbar: true
             });
-            
+
             formContainer = $("<div/>").addClass("abs")
                 .css({
                     top: "10px",
@@ -63,255 +61,294 @@ define("io.ox/contacts/edit/main",
                     bottom: "10px",
                     left: "10px"
                 });
-            
+
             formFrame = $("<div/>").addClass("contact_edit_frame")
                 .appendTo(formContainer);
-                
+
             win.nodes.main
                 .css({ backgroundColor: "#f0f0f0" })
                 .append(formContainer);
-            
+
             app.setWindow(win);
             win.setQuitOnClose(true);
-            
+
             win.show(function () {
-                    
-    //              helper for fieldconstruct
-                    function fieldHtml(label, id) {
-                        return $('<div/>').addClass('field').append('<label>' + label + '</label>')
-                        .append('<input class="' + id + '"type="text"> </input>');
-                    }
-                    
+
+                function fieldHtml(label, name, datatype) {
+                    return $('<div>').addClass('field ' + datatype)
+                    .append($('<label>').text(label))
+                    .append($('<input>', { name: name, type: 'text'}));
+                }
+
     //              assemble create form
-                    
-                    var paneEdit = $('<div/>').addClass('edit1'),
-                        paneEdit2 = $('<div/>').addClass('edit2');
-                      
-                    paneEdit.append(
-                            $('<div>').addClass('block edit_contact name')
-                            .append(fieldHtml('first name', 'first_name'))
-                            .append(fieldHtml('last name', 'last_name'))
-                    );
-                    
-                    paneEdit.append(
-                            $('<divb>').addClass('block edit_contact company')
-                            .append(fieldHtml('company', 'company'))
-                            .append(fieldHtml('position', 'position'))
-                            .append(fieldHtml('profession', 'profession'))
-                            .append(fieldHtml('department', 'department'))
-                    );
-                    
-                    paneEdit.append(
-                            $('<div>').addClass('block edit_contact address')
-                            .append(fieldHtml('street', 'street_business'))
-                            .append(fieldHtml('postal code', 'postal_code_business'))
-                            .append(fieldHtml('city', 'city_business'))
-                    );
-                    
-                    paneEdit.append(
-                            $('<div>').addClass('block edit_contact phone')
-                            .append(fieldHtml('tel.', 'telephone_business1'))
-                            .append(fieldHtml('sales volume', 'sales_volume'))
-                            .append($('<input>', {type: 'hidden', 'class': 'id'}))
-                    );
-                    
-                    paneEdit2.append(
-                            $('<div>').addClass('block edit_contact unsortedfields')
-                            .append(fieldHtml('suffix', 'suffix'))
-                            .append(fieldHtml('title', 'title'))
-                            .append(fieldHtml('street_home', 'street_home'))
-                            .append(fieldHtml('postal_code_home', 'postal_code_home'))
-                            .append(fieldHtml('city_home', 'city_home'))
-                            .append(fieldHtml('state_home', 'state_home'))
-                            .append(fieldHtml('country_home', 'country_home'))
-                            .append(fieldHtml('birthday', 'birthday'))
-                            .append(fieldHtml('marital_status', 'marital_status'))
-                            .append(fieldHtml('number_of_children', 'number_of_children'))
-                            .append(fieldHtml('nickname', 'nickname'))
-                            .append(fieldHtml('spouse_name', 'spouse_name'))
-                            .append(fieldHtml('anniversary', 'anniversary'))
-                            .append(fieldHtml('note', 'note'))
-                            .append(fieldHtml('employee_type', 'employee_type'))
-                            .append(fieldHtml('room_number', 'room_number'))
-                            .append(fieldHtml('state_business', 'state_business'))
-                            .append(fieldHtml('country_business', 'country_business'))
-                            .append(fieldHtml('number_of_employees', 'number_of_employees'))
-                            .append(fieldHtml('tax_id', 'tax_id'))
-                            .append(fieldHtml('commercial_register', 'commercial_register'))
-                            .append(fieldHtml('branches', 'branches'))
-                            .append(fieldHtml('business_category', 'business_category'))
-                            .append(fieldHtml('info', 'info'))
-                            .append(fieldHtml('manager_name', 'manager_name'))
-                            .append(fieldHtml('assistant_name', 'assistant_name'))
-                            .append(fieldHtml('street_other', 'street_other'))
-                            .append(fieldHtml('city_other', 'city_other'))
-                            .append(fieldHtml('postal_code_other', 'postal_code_other'))
-                            .append(fieldHtml('country_other', 'country_other'))
-                            .append(fieldHtml('telephone_business2', 'telephone_business2'))
-                            .append(fieldHtml("fax_business", "fax_business"))
-                            .append(fieldHtml('telephone_callback', 'telephone_callback'))
-                            .append(fieldHtml('telephone_car', 'telephone_car'))
-                            .append(fieldHtml('telephone_company', 'telephone_company'))
-                            .append(fieldHtml('telephone_home1', 'telephone_home1'))
-                            .append(fieldHtml('telephone_home2', 'telephone_home2'))
-                            .append(fieldHtml('fax_home', 'fax_home'))
-                            .append(fieldHtml('cellular_telephone1', 'cellular_telephone1'))
-                            .append(fieldHtml('cellular_telephone2', 'cellular_telephone2'))
-                            .append(fieldHtml('telephone_other', 'telephone_other'))
-                            .append(fieldHtml('fax_other', 'fax_other'))
-                            .append(fieldHtml('email1', 'email1'))
-                            .append(fieldHtml('email2', 'email2'))
-                            .append(fieldHtml('email3', 'email3'))
-                            .append(fieldHtml('url', 'url'))
-                            .append(fieldHtml('telephone_isdn', 'telephone_isdn'))
-                            .append(fieldHtml('telephone_pager', 'telephone_pager'))
-                            .append(fieldHtml('telephone_primary', 'telephone_primary'))
-                            .append(fieldHtml('telephone_radio', 'telephone_radio'))
-                            .append(fieldHtml('telephone_telex', 'telephone_telex'))
-                            .append(fieldHtml('telephone_ttytdd', 'telephone_ttytdd'))
-                            .append(fieldHtml('instant_messenger1', 'instant_messenger1'))
-                            .append(fieldHtml('instant_messenger2', 'instant_messenger2'))
-                            .append(fieldHtml('telephone_ip', 'telephone_ip'))
-                            .append(fieldHtml('telephone_assistant', 'telephone_assistant'))
-                            .append(fieldHtml('userfield01', 'userfield01'))
-                            .append(fieldHtml('userfield02', 'userfield02'))
-                            .append(fieldHtml('userfield03', 'userfield03'))
-                            .append(fieldHtml('userfield04', 'userfield04'))
-                            .append(fieldHtml('userfield05', 'userfield05'))
-                            .append(fieldHtml('userfield06', 'userfield06'))
-                            .append(fieldHtml('userfield07', 'userfield07'))
-                            .append(fieldHtml('userfield08', 'userfield08'))
-                            .append(fieldHtml('userfield09', 'userfield09'))
-                            .append(fieldHtml('userfield10', 'userfield10'))
-                            .append(fieldHtml('userfield11', 'userfield11'))
-                            .append(fieldHtml('userfield12', 'userfield12'))
-                            .append(fieldHtml('userfield13', 'userfield13'))
-                            .append(fieldHtml('userfield14', 'userfield14'))
-                            .append(fieldHtml('userfield15', 'userfield15'))
-                            .append(fieldHtml('userfield16', 'userfield16'))
-                            .append(fieldHtml('userfield17', 'userfield17'))
-                            .append(fieldHtml('userfield18', 'userfield18'))
-                            .append(fieldHtml('userfield19', 'userfield19'))
-                            .append(fieldHtml('userfield20', 'userfield20'))
-                            .append(fieldHtml('distribution_list', 'distribution_list'))
-                            .append(fieldHtml('number_of_distribution_list', 'number_of_distribution_list'))
-                            .append(fieldHtml('contains_image1', 'contains_image1fix'))
-                            .append(fieldHtml('image_last_modified', 'image_last_modified'))
-                            .append(fieldHtml('state_other', 'state_other'))
-                            .append(fieldHtml('file_as', 'file_as'))
-                            .append(fieldHtml('number_of_attachments', 'number_of_attachments'))
-                            .append(fieldHtml('image1_content_type', 'image1_content_type'))
-                            .append(fieldHtml('mark_as_distributionlist', 'mark_as_distributionlist'))
-                            .append(fieldHtml('default_address', 'default_address'))
-                            .append(fieldHtml('internal_userid', 'internal_userid'))
-                            .append(fieldHtml('image1_url', 'image1_url'))
-                            
-                            .append($('<form/>').attr({
-                            'accept-charset': 'UTF-8',
+
+                var paneEdit = $('<div/>').addClass('edit1'),
+                    paneEdit2 = $('<div/>').addClass('edit2');
+
+                paneEdit.append(
+                    $('<div>').addClass('block edit_contact name')
+                    .append(fieldHtml('first name', 'first_name', 'string'))
+                    .append(fieldHtml('last name', 'last_name', 'string'))
+                )
+                .append(
+                    $('<divb>').addClass('block edit_contact company')
+                    .append(fieldHtml('company', 'company', 'string'))
+                    .append(fieldHtml('position', 'position', 'string'))
+                    .append(fieldHtml('profession', 'profession', 'string'))
+                    .append(fieldHtml('department', 'department', 'string'))
+                )
+                .append(
+                    $('<div>').addClass('block edit_contact address')
+                    .append(fieldHtml('street', 'street_business', 'string'))
+                    .append(fieldHtml('postal code', 'postal_code_business', 'string'))
+                    .append(fieldHtml('city', 'city_business', 'string'))
+                )
+                .append(
+                    $('<div>').addClass('block edit_contact phone')
+                    .append(fieldHtml('tel.', 'telephone_business1', 'string'))
+                    .append(fieldHtml('sales volume', 'sales_volume', 'string'))
+                );
+
+                paneEdit2.append(
+                    $('<div>').addClass('block edit_contact unsortedfields')
+                    .append(fieldHtml('suffix', 'suffix', 'string'))
+                    .append(fieldHtml('title', 'title', 'string'))
+                    .append(fieldHtml('street_home', 'street_home', 'string'))
+                    .append(fieldHtml('postal_code_home', 'postal_code_home', 'string'))
+                    .append(fieldHtml('city_home', 'city_home', 'string'))
+                    .append(fieldHtml('state_home', 'state_home', 'string'))
+                    .append(fieldHtml('country_home', 'country_home', 'string'))
+                    .append(fieldHtml('birthday', 'birthday', 'date'))
+                    .append(fieldHtml('marital_status', 'marital_status', 'string'))
+                    .append(fieldHtml('number_of_children', 'number_of_children', 'string'))
+                    .append(fieldHtml('nickname', 'nickname', 'string'))
+                    .append(fieldHtml('spouse_name', 'spouse_name', 'string'))
+                    .append(fieldHtml('anniversary', 'anniversary', 'date'))
+                    .append(fieldHtml('note', 'note', 'string'))
+                    .append(fieldHtml('employee_type', 'employee_type', 'string'))
+                    .append(fieldHtml('room_number', 'room_number', 'string'))
+                    .append(fieldHtml('state_business', 'state_business', 'string'))
+                    .append(fieldHtml('country_business', 'country_business', 'string'))
+                    .append(fieldHtml('number_of_employees', 'number_of_employees', 'string'))
+                    .append(fieldHtml('tax_id', 'tax_id', 'string'))
+                    .append(fieldHtml('commercial_register', 'commercial_register', 'string'))
+                    .append(fieldHtml('branches', 'branches', 'string'))
+                    .append(fieldHtml('business_category', 'business_category', 'string'))
+                    .append(fieldHtml('info', 'info', 'string'))
+                    .append(fieldHtml('manager_name', 'manager_name', 'string'))
+                    .append(fieldHtml('assistant_name', 'assistant_name', 'string'))
+                    .append(fieldHtml('street_other', 'street_other', 'string'))
+                    .append(fieldHtml('city_other', 'city_other', 'string'))
+                    .append(fieldHtml('postal_code_other', 'postal_code_other', 'string'))
+                    .append(fieldHtml('country_other', 'country_other', 'string'))
+                    .append(fieldHtml('telephone_business2', 'telephone_business2', 'string'))
+                    .append(fieldHtml('fax_business', 'fax_business', 'string'))
+                    .append(fieldHtml('telephone_callback', 'telephone_callback', 'string'))
+                    .append(fieldHtml('telephone_car', 'telephone_car', 'string'))
+                    .append(fieldHtml('telephone_company', 'telephone_company', 'string'))
+                    .append(fieldHtml('telephone_home1', 'telephone_home1', 'string'))
+                    .append(fieldHtml('telephone_home2', 'telephone_home2', 'string'))
+                    .append(fieldHtml('fax_home', 'fax_home', 'string'))
+                    .append(fieldHtml('cellular_telephone1', 'cellular_telephone1', 'string'))
+                    .append(fieldHtml('cellular_telephone2', 'cellular_telephone2', 'string'))
+                    .append(fieldHtml('telephone_other', 'telephone_other', 'string'))
+                    .append(fieldHtml('fax_other', 'fax_other', 'string'))
+                    .append(fieldHtml('email1', 'email1', 'mail'))
+                    .append(fieldHtml('email2', 'email2', 'mail'))
+                    .append(fieldHtml('email3', 'email3', 'mail'))
+                    .append(fieldHtml('url', 'url', 'string'))
+                    .append(fieldHtml('telephone_isdn', 'telephone_isdn', 'string'))
+                    .append(fieldHtml('telephone_pager', 'telephone_pager', 'string'))
+                    .append(fieldHtml('telephone_primary', 'telephone_primary', 'string'))
+                    .append(fieldHtml('telephone_radio', 'telephone_radio', 'string'))
+                    .append(fieldHtml('telephone_telex', 'telephone_telex', 'string'))
+                    .append(fieldHtml('telephone_ttytdd', 'telephone_ttytdd', 'string'))
+                    .append(fieldHtml('instant_messenger1', 'instant_messenger1', 'string'))
+                    .append(fieldHtml('instant_messenger2', 'instant_messenger2', 'string'))
+                    .append(fieldHtml('telephone_ip', 'telephone_ip', 'string'))
+                    .append(fieldHtml('telephone_assistant', 'telephone_assistant', 'string'))
+                    .append(fieldHtml('userfield01', 'userfield01', 'string'))
+                    .append(fieldHtml('userfield02', 'userfield02', 'string'))
+                    .append(fieldHtml('userfield03', 'userfield03', 'string'))
+                    .append(fieldHtml('userfield04', 'userfield04', 'string'))
+                    .append(fieldHtml('userfield05', 'userfield05', 'string'))
+                    .append(fieldHtml('userfield06', 'userfield06', 'string'))
+                    .append(fieldHtml('userfield07', 'userfield07', 'string'))
+                    .append(fieldHtml('userfield08', 'userfield08', 'string'))
+                    .append(fieldHtml('userfield09', 'userfield09', 'string'))
+                    .append(fieldHtml('userfield10', 'userfield10', 'string'))
+                    .append(fieldHtml('userfield11', 'userfield11', 'string'))
+                    .append(fieldHtml('userfield12', 'userfield12', 'string'))
+                    .append(fieldHtml('userfield13', 'userfield13', 'string'))
+                    .append(fieldHtml('userfield14', 'userfield14', 'string'))
+                    .append(fieldHtml('userfield15', 'userfield15', 'string'))
+                    .append(fieldHtml('userfield16', 'userfield16', 'string'))
+                    .append(fieldHtml('userfield17', 'userfield17', 'string'))
+                    .append(fieldHtml('userfield18', 'userfield18', 'string'))
+                    .append(fieldHtml('userfield19', 'userfield19', 'string'))
+                    .append(fieldHtml('userfield20', 'userfield20', 'string'))
+                    .append(fieldHtml('distribution_list', 'distribution_list', 'array'))
+                    .append(fieldHtml('number_of_distribution_list', 'number_of_distribution_list', 'number'))
+                    .append(fieldHtml('contains_image1', 'contains_image1fix', 'string'))
+                    .append(fieldHtml('image_last_modified', 'image_last_modified', 'timestamp'))
+                    .append(fieldHtml('state_other', 'state_other', 'string'))
+                    .append(fieldHtml('file_as', 'file_as', 'string'))
+                    .append(fieldHtml('number_of_attachments', 'number_of_attachments', 'number'))
+                    .append(fieldHtml('image1_content_type', 'image1_content_type', 'string'))
+                    .append(fieldHtml('mark_as_distributionlist', 'mark_as_distributionlist', 'boolean'))
+                    .append(fieldHtml('default_address', 'default_address', 'number'))
+//                    .append(fieldHtml('internal_userid', 'internal_userid', 'number'))
+//                    .append(fieldHtml('image1_url', 'image1_url', 'string'))
+
+                    .append(
+                        $('<form/>',
+                        {   'accept-charset': 'UTF-8',
                             'enctype': 'multipart/form-data',
                             'id': 'contactUploadImage',
                             'method': 'POST',
                             'name': 'contactUploadImage',
                             'target': 'blank.html'
                         })
-                            .append($('<label(>').text('contact image'))
-                            .append($('<iframe/>').attr({
-                            'name': 'hiddenframePicture',
-                            'src': 'blank.html'
-                        }).css('display', 'none'))
-                            .append($('<input/>').attr({
-                            'id': 'image1',
-                            'name': 'file',
-                            'type': 'file'
-                        })
-                            ))
-                            
-                    );
-                    
-                    var actions = {
-                        resolveEditContact: function () {
-                            var fId = config.get("folder.contacts"),
-                            formdata = {},
-                            formdataString,
-                            image = $('form input#image1').val(),
-                            imagePur = document.getElementById("image1");
-                            
-//                          select the data
-                            
-                            $(".contact_edit_frame .edit_contact input")
+                        .append(
+                            $('<label>').text('contact image')
+                        )
+                        .append(
+                            $('<input/>',
+                            {   'id': 'image1',
+                                'name': 'file',
+                                'type': 'file'
+                            })
+                        )
+                        .append(
+                            $('<iframe/>',
+                            {   'name': 'hiddenframePicture',
+                                'src': 'blank.html'
+                            })
+                            .css('display', 'none')
+                        )
+                    )
+                );
+
+                var actions = {
+                    save: function () {
+                        var formdata = {},
+                        image = paneEdit2.find("#image1").get(0);
+
+                        // select the data
+                        // collect all strings
+                        formFrame.find('.field.string input')
                             .each(function (index) {
                                 var value =  $(this).val(),
-                                id = $(this).attr('class');
-                                api.caches.list.remove(id);
-                                if (id !== undefined && value !== "") {
+                                    id = $(this).attr('name');
+                                if (value !== "") {
                                     formdata[id] = value;
                                 }
                             });
-                            
-                            var fDataId = parseInt(formdata.id, 10),
-                            timestamp = new Date().getTime();
-                            formdata.folderId = fId;
-                            formdata.id = fDataId;
-                            formdata.timestamp = timestamp;
-                            
-                            if (image !== "") {
-                                formdataString = JSON.stringify(formdata);
-                                api.editNewImage(formdataString, imagePur.files[0]);
-                            } else {
-                                if (!_.isEmpty(formdata)) {
-                                    api.edit(formdata);
-                                }
+                        // collect all dates
+                        formFrame.find('.field.date input')
+                        .each(function (index) {
+                            var value =  $(this).val(),
+                                id = $(this).attr('name'),
+                                dateArray = value.split('.');
+                            var date =  Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
+                            if (value !== "") {
+                                formdata[id] = date;
                             }
-                            app.quit();
-                        },
-                        
-    //                  cancel and quit the update app
-                        cancelEditContact: function () {
-                            app.quit();
+                        });
+                        // collect all mails
+                        formFrame.find('.field.mail input')
+                        .each(function (index) {
+                            var value =  $(this).val(),
+                                id = $(this).attr('name');
+                            if (value !== "") {
+                                formdata[id] = value;
+                            }
+                        });
+                     // collect all arrays
+//                        formFrame.find(".edit_contact input[data-type|='array']")
+//                        .each(function (index) {
+//                            var value =  $(this).val(),
+//                                id = $(this).attr('name');
+//                            if (value !== "") {
+//                                formdata[id] = value;
+//                            }
+//                        });
+                        // collect all numbers
+                        formFrame.find(".edit_contact input[data-type|='number']")
+                        .each(function (index) {
+                            var value =  $(this).val(),
+                                id = $(this).attr('name');
+                            if (value !== "") {
+                                formdata[id] = value;
+                            }
+                        });
+                        var timestamp = new Date().getTime();
+                        formdata.folderId = data.folder_id;
+                        formdata.id = data.id;
+                        formdata.timestamp = timestamp;
+
+                        if (image.files && image.files[0]) {
+                            api.editNewImage(JSON.stringify(formdata), image.files[0]);
+                        } else {
+                            if (!_.isEmpty(formdata)) {
+                                api.edit(formdata);
+                            }
                         }
-                    };
-                    
-                    $('<button>').text('save').addClass('io-ox-button')
-                    .appendTo(paneEdit2).on('click', function () {
-                        actions.resolveEditContact();
-                    });
-                    $('<button>').text('cancel').addClass('io-ox-button')
-                    .appendTo(paneEdit2).on('click', function () {
-                        actions.cancelEditContact();
-                    });
-                    
-                    paneEdit.appendTo(formFrame);
-                    paneEdit2.appendTo(formFrame);
-                   
-                    $(".contact_edit_frame .block .field:nth-child(even)")
-                    .addClass('even');
-                   
-                    $('.contact_edit_frame .edit_contact input')
-                    .each(function (index) {
-                        var name = $(this).attr('class');
-                        $(this).val(data[name]);
-                    });
-                                         
+                        app.quit();
+                    },
+
+//                  cancel and quit the update app
+                    cancel: function () {
+                        app.quit();
+                    }
+                };
+
+                $('<button>').text('save').addClass('io-ox-button')
+                .appendTo(paneEdit2).on('click', function () {
+                    actions.save();
                 });
+                $('<button>').text('cancel').addClass('io-ox-button')
+                .appendTo(paneEdit2).on('click', function () {
+                    actions.cancel();
+                });
+
+                paneEdit.appendTo(formFrame);
+                paneEdit2.appendTo(formFrame);
+
+                formFrame.find(".block .field:nth-child(even)")
+                .addClass('even');
+
+                // fill strings
+                formFrame.find('.field.string input')//TODO business_category isnt submitted
+                .each(function (index) {
+                    var name = $(this).attr('name');
+                    $(this).val(data[name]);
+                });
+                // fill dates
+                formFrame.find('.field.date input')
+                .each(function (index) {
+                    var name = $(this).attr('name');
+                    if (data[name]) {
+                        var date = new Date(data[name]);
+                        var dateFormated =  date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+                        $(this).val(dateFormated);
+                    }
+                });
+                // fill mails
+                formFrame.find('.field.mail input')
+                .each(function (index) {
+                    var name = $(this).attr('name');
+                    $(this).val(data[name]);
+                });
+
+            });
         });
-       
+
         return app;
     }
-    
-    var fillForm = function (selected) {
-        data = extendDeep(selected, data);
-      
-    };
-    
-    getContact = function (obj) {
-        api.get(obj)
-           .done(fillForm);
-           //.fail(drawFail, obj); // needs function
-    };
-    
+
     return {
-        getApp: createInstance,
-        getContact: getContact
+        getApp: createInstance
     };
-    
+
 });

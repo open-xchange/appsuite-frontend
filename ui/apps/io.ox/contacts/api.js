@@ -13,7 +13,7 @@
 
 define('io.ox/contacts/api',
     ['io.ox/core/http', 'io.ox/core/api/factory',
-     'io.ox/core/cache'], function (http, apiFactory, cache) {
+     'io.ox/core/cache', 'io.ox/contacts/main'], function (http, apiFactory, cache, main) {
 
     'use strict';
 
@@ -62,7 +62,7 @@ define('io.ox/contacts/api',
             data: formdata,
             datatype: 'text'
         })
-        .done(function () {
+        .done(function (data) {
             api.caches.all.clear(); //TODO considere proper folder
             api.trigger('refresh.all');
         })
