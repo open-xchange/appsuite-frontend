@@ -237,6 +237,10 @@ define("io.ox/core/desktop",
                     if (win) {
                         win.destroy();
                     }
+                    // remove app's properties
+                    for (var id in self) {
+                        delete self[id];
+                    }
                     // don't leak
                     self = win = launchFn = quitFn = null;
                 });

@@ -1250,6 +1250,16 @@ define.async('io.ox/mail/write/main',
             return editor.tinymce();
         };
 
+        // destroy
+        app.setQuit(function () {
+            // clean up tinyMCE
+            editor.tinymce().destroy();
+            editor.remove();
+            // clear all private vars
+            app = win = main = sidepanel = form = subject = editor = null;
+            editorPrintMargin = priorityOverlay = sections = currentSignature = null;
+        });
+
         return app;
     }
 
