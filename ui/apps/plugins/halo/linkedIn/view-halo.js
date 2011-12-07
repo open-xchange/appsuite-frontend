@@ -11,10 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("extensions/halo/linkedIn/view-halo", ["io.ox/linkedIn/view-detail", "css!io.ox/linkedIn/style.css"], function (viewer) {
-    
+define("plugins/halo/linkedIn/view-halo", ["io.ox/linkedIn/view-detail", "css!io.ox/linkedIn/style.css"], function (viewer) {
+
     "use strict";
-    
+
     return {
         draw: function (liResponse) {
             var $node = $("<div>").addClass("linkedIn");
@@ -25,7 +25,7 @@ define("extensions/halo/linkedIn/view-halo", ["io.ox/linkedIn/view-detail", "css
                 $node.append(viewer.draw(liResponse));
             }
             return $node;
-            
+
         }
     };
 });

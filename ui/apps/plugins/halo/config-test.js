@@ -11,21 +11,21 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("extensions/halo/config-test", ["extensions/halo/config"], function (haloConfig) {
-    
+define("plugins/halo/config-test", ["plugins/halo/config"], function (haloConfig) {
+
     "use strict";
-    
+
     return function (jasmine) {
         var describe = jasmine.describe;
         var it = jasmine.it;
         var expect = jasmine.expect;
-       
-        describe("extensions/halo/config", function () {
+
+        describe("plugins/halo/config", function () {
             it("defaults to all available halo modules", function () {
                 var activeProviders = haloConfig.interpret(null, ["halo1", "halo2", "halo3"]);
                 expect(activeProviders).toEqual(["halo1", "halo2", "halo3"]);
             });
-            
+
             it("filters according to chosenModules", function () {
                 var activeProviders = haloConfig.interpret({
                     halo1: {
@@ -44,10 +44,10 @@ define("extensions/halo/config-test", ["extensions/halo/config"], function (halo
                         enabled: true
                     }
                 }, ["halo1", "halo2", "halo3"]);
-                
+
                 expect(activeProviders).toEqual(["halo1", "halo3"]);
             });
-            
+
             it("discards chosen but unavailable modules", function () {
                 var activeProviders = new haloConfig.interpret({
                     halo1: {
@@ -61,10 +61,10 @@ define("extensions/halo/config-test", ["extensions/halo/config"], function (halo
                         enabled: true
                     }
                 }, ["halo1"]);
-                
+
                 expect(activeProviders).toEqual(["halo1"]);
             });
-            
+
             it("respects the order of chosenModules", function () {
                 var activeProviders = new haloConfig.interpret({
                     halo3: {
@@ -83,7 +83,7 @@ define("extensions/halo/config-test", ["extensions/halo/config"], function (halo
                         enabled: true
                     }
                 }, ["halo1", "halo2", "halo3"]);
-                
+
                 expect(activeProviders).toEqual(["halo1", "halo2", "halo3"]);
             });
         });

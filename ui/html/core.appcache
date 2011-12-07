@@ -27,8 +27,8 @@ CACHE:
 @base@/apps/io.ox/mail/view-detail.js
 @base@/apps/io.ox/core/api/factory.js
 @base@/apps/io.ox/core/tk/selection.js
-# extensions
-@base@/apps/extensions/halo/register.js
+# plugins
+@base@/apps/plugins/halo/register.js
 
 NETWORK:
 *

@@ -12,30 +12,30 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("extensions/halo/view-detail",
-    ["extensions/halo/api", "io.ox/core/extensions",
-     "css!extensions/halo/style.css"], function (api, ext) {
-    
+define("plugins/halo/view-detail",
+    ["plugins/halo/api", "io.ox/core/extensions",
+     "css!plugins/halo/style.css"], function (api, ext) {
+
     "use strict";
-    
+
     return {
-        
+
         draw: function (data) {
-            
+
             var $container = $("<div>").addClass("io-ox-halo");
-            
+
             if (api) {
                 var investigations = api.halo.investigate(data),
                     drawingFinished = [];
                 _(investigations).each(function (promise, providerName) {
-                    
+
                     var $node = $("<div/>")
                             .css({"min-width": "100px"})
                             .addClass("ray")
                             .busy()
                             .appendTo($container),
                         drawn = new $.Deferred();
-                    
+
                     drawingFinished.push(drawn);
                     promise.done(function (response) {
                         $node.idle();
@@ -48,7 +48,7 @@ define("extensions/halo/view-detail",
                     });
                 });
             }
-            
+
             return $container;
         }
     };

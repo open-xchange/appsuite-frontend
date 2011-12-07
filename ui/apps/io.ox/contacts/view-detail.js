@@ -114,7 +114,7 @@ define("io.ox/contacts/view-detail",
 
             this.append(
                 $("<td>")
-                .css({ verticalAlign: "top" })
+                .css({ verticalAlign: "top", paddingBottom: "0" })
                 .append(
                     $("<div>").addClass("picture")
                     .css({ backgroundImage: "url(" + util.getImage(data) + ")" })

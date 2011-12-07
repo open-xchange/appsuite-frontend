@@ -345,7 +345,7 @@ $(document).ready(function () {
 
         return $.when(
                 // load extensions
-                require("io.ox/core/extensions").load(),
+                require("io.ox/core/extensions").loadPlugins(),
                 // use browser language
                 setDefaultLanguage()
             )

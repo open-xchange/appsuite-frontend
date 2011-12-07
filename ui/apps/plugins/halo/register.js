@@ -11,25 +11,20 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
-    
+define("plugins/halo/register", ["io.ox/core/extensions"], function (ext) {
+
     "use strict";
-    
+
     ext.point("io.ox/core/person:action").extend({
         index: 10,
         id: "default",
         label: "Halo",
         action: function (data, e) {
-            // get all extensions
-            var tmp = _(ox.serverConfig.extensions.halo)
-                .map(function (obj) {
-                    return "extensions/" + obj + "/register";
-                });
             // require detail view, dialogs & all halo extensions
             require(
-                ["extensions/halo/view-detail", "io.ox/core/tk/dialogs",
+                ["plugins/halo/view-detail", "io.ox/core/tk/dialogs",
                  "io.ox/core/api/user"
-                ].concat(tmp), function (view, dialogs) {
+                ].concat(ext.getPlugins({ name: 'halo' })), function (view, dialogs) {
                     new dialogs.SidePopup()
                         .show(e, function (popup) {
                             popup.append(view.draw(data));
@@ -38,10 +33,10 @@ define("extensions/halo/register", ["io.ox/core/extensions"], function (ext) {
             );
         }
     });
-    
+
     ext.point("io.ox/testing/suite").extend({
         id: "default",
-        file: "extensions/halo/config-test",
+        file: "plugins/halo/config-test",
         title: "Halo Config"
     });
 });

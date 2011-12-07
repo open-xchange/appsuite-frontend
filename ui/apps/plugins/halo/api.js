@@ -14,9 +14,9 @@
 
 // TODO: Caching?
 
-define.async('extensions/halo/api',
+define.async('plugins/halo/api',
     ['io.ox/core/http', 'io.ox/core/config',
-     'extensions/halo/config', 'io.ox/core/extensions'
+     'plugins/halo/config', 'io.ox/core/extensions'
     ], function (http, config, haloConfigUtil, ext) {
 
     'use strict';

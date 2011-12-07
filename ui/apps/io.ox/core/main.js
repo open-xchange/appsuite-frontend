@@ -172,7 +172,7 @@ define("io.ox/core/main",
                 });
 
         $.when(
-                ext.load(),
+                ext.loadPlugins(),
                 require(autoLaunchModules),
                 def
             )

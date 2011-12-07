@@ -38,6 +38,14 @@ define("io.ox/core/extensions",
         // function wrappers
         wrappers = {};
 
+    // never leak
+    $(window).bind("unload", function () {
+        _(registry).each(function (ext) {
+            ext.clear();
+        });
+        registry = null;
+    });
+
     var Point = function (options) {
 
         this.id = String(options.id);
@@ -142,6 +150,10 @@ define("io.ox/core/extensions",
             }
 
             return this;
+        };
+
+        this.clear = function () {
+            extensions = [];
         };
 
         this.all = function () {
@@ -289,17 +301,25 @@ define("io.ox/core/extensions",
             return _.keys(registry);
         },
 
-        // extension loader
-        load: function () {
-            // get proper list
-            var ext = ox.serverConfig.extensions || {},
-                list = (ox.signin ? ext.signin : ext.core) || [];
-            // transform to proper urls
-            list = _(list).map(function (i) {
-                return "extensions/" + i + "/register";
-            });
-            // load extensions
-            return require(list);
+        getPlugins: function (options) {
+            // get options
+            var o = _.extend({
+                    name: ox.signin ? 'signin' : 'core',
+                    prefix: 'plugins/',
+                    suffix: 'register'
+                }, options),
+                // all plugins
+                plugins = ox.serverConfig.plugins || {};
+            // transform to proper URLs
+            return _(plugins[o.name] || []).map(function (i) {
+                    return o.prefix + i + '/' + o.suffix;
+                });
+        },
+
+        // plugin loader
+        loadPlugins: function (options) {
+            // require plugins
+            return require(this.getPlugins(options));
         },
 
         // add wrapper
