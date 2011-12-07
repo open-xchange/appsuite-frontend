@@ -1,5 +1,5 @@
 /** vim: et:ts=4:sw=4:sts=4
- * @license RequireJS 0.27.1 Copyright (c) 2010-2011, The Dojo Foundation All Rights Reserved.
+ * @license RequireJS 1.0.2 Copyright (c) 2010-2011, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/requirejs for details
  */
@@ -11,8 +11,8 @@
 var requirejs, require, define;
 (function () {
     //Change this version number for each release.
-    var version = "0.27.1",
-        commentRegExp = /(\/\*([\s\S]*?)\*\/|\/\/(.*)$)/mg,
+    var version = "1.0.2",
+        commentRegExp = /(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg,
         cjsRequireRegExp = /require\(\s*["']([^'"\s]+)["']\s*\)/g,
         currDirRegExp = /^\.\//,
         jsSuffixRegExp = /\.js$/,
@@ -268,6 +268,10 @@ var requirejs, require, define;
                     if (pkgConfig && name === pkgName + '/' + pkgConfig.main) {
                         name = pkgName;
                     }
+                } else if (name.indexOf("./") === 0) {
+                    // No baseName, so this is ID is resolved relative
+                    // to baseUrl, pull off the leading dot.
+                    name = name.substring(2);
                 }
             }
             return name;
@@ -402,65 +406,35 @@ var requirejs, require, define;
         }
 
         function execManager(manager) {
-            var i, ready, promise, cont, finalize, ret,
-                err, errFile, errModuleTree,
+            var i, ret, err, errFile, errModuleTree,
                 cb = manager.callback,
                 map = manager.map,
                 fullName = map.fullName,
                 args = manager.deps,
-                listeners = manager.listeners;
+                listeners = manager.listeners,
+                cjsModule;
 
-            finalize = function () {
-                //Clean up waiting. Do this before error calls, and before
-                //calling back listeners, so that bookkeeping is correct
-                //in the event of an error and error is reported in correct order,
-                //since the listeners will likely have errors if the
-                //onError function does not throw.
-                if (waiting[manager.id]) {
-                    delete waiting[manager.id];
-                    manager.isDone = true;
-                    context.waitCount -= 1;
-                    if (context.waitCount === 0) {
-                        //Clear the wait array used for cycles.
-                        waitAry = [];
+            //Call the callback to define the module, if necessary.
+            if (cb && isFunction(cb)) {
+                if (config.catchError.define) {
+                    try {
+                        ret = req.execCb(fullName, manager.callback, args, defined[fullName]);
+                    } catch (e) {
+                        err = e;
                     }
+                } else {
+                    ret = req.execCb(fullName, manager.callback, args, defined[fullName]);
                 }
 
-                //Do not need to track manager callback now that it is defined.
-                delete managerCallbacks[fullName];
-
-                //Allow instrumentation like the optimizer to know the order
-                //of modules executed and their dependencies.
-                if (req.onResourceLoad && !manager.placeholder) {
-                    req.onResourceLoad(context, map, manager.depArray);
-                }
-
-                if (err) {
-                    errFile = (fullName ? makeModuleMap(fullName).url : '') ||
-                               err.fileName || err.sourceURL;
-                    errModuleTree = err.moduleTree;
-                    err = makeError('defineerror', 'Error evaluating ' +
-                                    'module "' + fullName + '" at location "' +
-                                    errFile + '":\n' +
-                                    err + '\nfileName:' + errFile +
-                                    '\nlineNumber: ' + (err.lineNumber || err.line), err);
-                    err.moduleName = fullName;
-                    err.moduleTree = errModuleTree;
-                    return req.onError(err);
-                }
-
-                //Let listeners know of this manager's value.
-                for (i = 0; (cb = listeners[i]); i++) {
-                    cb(ret);
-                }
-            };
-            
-            cont = function () {
                 if (fullName) {
                     //If setting exports via "module" is in play,
                     //favor that over return value and exports. After that,
                     //favor a non-undefined return value over exports use.
-                    if (manager.cjsModule && manager.cjsModule.exports !== undefined) {
+                    cjsModule = manager.cjsModule;
+                    if (cjsModule &&
+                        cjsModule.exports !== undefined &&
+                        //Make sure it is not already the exports value
+                        cjsModule.exports !== defined[fullName]) {
                         ret = defined[fullName] = manager.cjsModule.exports;
                     } else if (ret === undefined && manager.usingExports) {
                         //exports already set the defined value.
@@ -475,41 +449,6 @@ var requirejs, require, define;
                         }
                     }
                 }
-                
-                finalize();
-            };
-            
-            ready = function () {
-                ret = promise;
-                cont();
-            };
-            
-            ready.defer = function (r) {
-                promise = r;
-                return false;
-            };
-            
-            args = args.concat(ready);
-            
-            //Call the callback to define the module, if necessary.
-            if (cb && isFunction(cb)) {
-                
-                if (config.catchError.define) {
-                    try {
-                        ret = req.execCb(fullName, manager.callback, args, defined[fullName]);
-                    } catch (e) {
-                        err = e;
-                    }
-                } else {
-                    ret = req.execCb(fullName, manager.callback, args, defined[fullName]);
-                }
-                
-                // if ret is false the module definition has to do some
-                // async work first and will call "ready" when done
-                if (ret !== false) {
-                    cont();
-                }
-                
             } else if (fullName) {
                 //May just be an object definition for the module. Only
                 //worry about defining if have a module name.
@@ -520,10 +459,49 @@ var requirejs, require, define;
                 if (needFullExec[fullName]) {
                     fullExec[fullName] = true;
                 }
-                
-                finalize();
-            } else {
-                finalize();
+            }
+
+            //Clean up waiting. Do this before error calls, and before
+            //calling back listeners, so that bookkeeping is correct
+            //in the event of an error and error is reported in correct order,
+            //since the listeners will likely have errors if the
+            //onError function does not throw.
+            if (waiting[manager.id]) {
+                delete waiting[manager.id];
+                manager.isDone = true;
+                context.waitCount -= 1;
+                if (context.waitCount === 0) {
+                    //Clear the wait array used for cycles.
+                    waitAry = [];
+                }
+            }
+
+            //Do not need to track manager callback now that it is defined.
+            delete managerCallbacks[fullName];
+
+            //Allow instrumentation like the optimizer to know the order
+            //of modules executed and their dependencies.
+            if (req.onResourceLoad && !manager.placeholder) {
+                req.onResourceLoad(context, map, manager.depArray);
+            }
+
+            if (err) {
+                errFile = (fullName ? makeModuleMap(fullName).url : '') ||
+                           err.fileName || err.sourceURL;
+                errModuleTree = err.moduleTree;
+                err = makeError('defineerror', 'Error evaluating ' +
+                                'module "' + fullName + '" at location "' +
+                                errFile + '":\n' +
+                                err + '\nfileName:' + errFile +
+                                '\nlineNumber: ' + (err.lineNumber || err.line), err);
+                err.moduleName = fullName;
+                err.moduleTree = errModuleTree;
+                return req.onError(err);
+            }
+
+            //Let listeners know of this manager's value.
+            for (i = 0; (cb = listeners[i]); i++) {
+                cb(ret);
             }
 
             return undefined;
@@ -1079,7 +1057,16 @@ var requirejs, require, define;
                             //Regular dependency.
                             if (!urlFetched[url] && !loaded[fullName]) {
                                 req.load(context, fullName, url);
-                                urlFetched[url] = true;
+
+                                //Mark the URL as fetched, but only if it is
+                                //not an empty: URL, used by the optimizer.
+                                //In that case we need to be sure to call
+                                //load() for each module that is mapped to
+                                //empty: so that dependencies are satisfied
+                                //correctly.
+                                if (url.indexOf('empty:') !== 0) {
+                                    urlFetched[url] = true;
+                                }
                             }
                         }
                     }

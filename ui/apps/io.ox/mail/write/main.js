@@ -11,8 +11,6 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-/*globals tinyMCE */
-
 define.async('io.ox/mail/write/main',
     ['io.ox/mail/api',
      'io.ox/mail/util',
@@ -715,6 +713,8 @@ define.async('io.ox/mail/write/main',
 
         function initializeEditor() {
 
+            var def = $.Deferred();
+
             function makeParagraph() {
                 var self = $(this),
                     style = self.attr('style'),
@@ -727,12 +727,15 @@ define.async('io.ox/mail/write/main',
 
             // html?
             if (editorMode === 'html') {
+
                 editor.tinymce({
 
                     script_url: ox.base + '/apps/moxiecode/tiny_mce/tiny_mce.js',
                     plugins: 'paste',
                     theme: 'advanced',
                     skin: 'ox',
+
+                    init_instance_callback: def.resolve,
 
                     theme_advanced_buttons1:
                         'bold,italic,underline,|,' +
@@ -942,7 +945,13 @@ define.async('io.ox/mail/write/main',
                         });
                     }
                 });
+
+            } else {
+                // plain text
+                def.resolve();
             }
+
+            return def;
         }
 
         /**
@@ -1058,53 +1067,69 @@ define.async('io.ox/mail/write/main',
          * Compose new mail
          */
         app.compose = function () {
+            var def = $.Deferred();
             win.setTitle('Compose new email')
                 .show(function () {
-                    initializeEditor();
-                    $('input[data-type=to]').focus().select();
+                    initializeEditor().done(function () {
+                        $('input[data-type=to]').focus().select();
+                        def.resolve();
+                    });
                 });
+            return def;
         };
 
         /**
          * Reply all
          */
         app.replyall = function (obj) {
+            var def = $.Deferred();
             mailAPI.replyall(obj).done(function (data) {
                 app.setMail(data, 'replyall');
                 win.setTitle('Reply all')
                     .show(function () {
-                        initializeEditor();
-                        editor.focus();
+                        initializeEditor().done(function () {
+                            editor.focus();
+                            def.resolve();
+                        });
                     });
             });
+            return def;
         };
 
         /**
          * Reply
          */
         app.reply = function (obj) {
+            var def = $.Deferred();
             mailAPI.reply(obj).done(function (data) {
                 app.setMail(data, 'reply');
                 win.setTitle('Reply')
                     .show(function () {
-                        initializeEditor();
-                        editor.focus();
+                        initializeEditor().done(function () {
+                            editor.focus();
+                            def.resolve();
+                        });
                     });
             });
+            return def;
         };
 
         /**
          * Forward
          */
         app.forward = function (obj) {
+            var def = $.Deferred();
             mailAPI.forward(obj).done(function (data) {
                 app.setMail(data, 'forward');
                 win.setTitle('Forward')
                     .show(function () {
-                        initializeEditor();
-                        $('input[data-type=to]').focus().select();
+                        initializeEditor().done(function () {
+                            $('input[data-type=to]').focus().select();
+                            def.resolve();
+                        });
                     });
             });
+            return def;
         };
 
         /**
@@ -1218,87 +1243,19 @@ define.async('io.ox/mail/write/main',
                 });
         };
 
-        window.heinz = app;
-        app.test = function () {
-
-            var ed = window.horst = editor.tinymce(),
-                base = ox.base + '/apps/io.ox/mail/write';
-
-            function clear() {
-                ed.setContent('');
-                ed.execCommand('SelectAll');
-            }
-
-            function trim(str) {
-                return $.trim((str + '').replace(/[\r\n]+/g, ''));
-            }
-
-            function get() {
-                // get editor content (trim white-space and clean up pseudo XHTML)
-                return trim(ed.getContent()).replace(/<(\w+)[ ]?\/>/g, '<$1>');
-            }
-
-            function equals(a, b) {
-                if (a !== b) {
-                    console.error('Fail!', a, 'vs', b);
-                } else {
-                    console.log('Test passed!');
-                }
-            }
-
-            // basic test
-            clear();
-            ed.execCommand('mceInsertClipboardContent', false, {
-                content: '<p>Hello World</p>'
-            });
-            equals(get(), '<p>Hello World</p>');
-
-            // remove color
-            clear();
-            ed.execCommand('mceInsertClipboardContent', false, {
-                content: '<p style="color: red">Hello World</p>'
-            });
-            equals(get(), '<p>Hello World</p>');
-
-            // simple text
-            clear();
-            ed.execCommand('mceInsertClipboardContent', false, {
-                content: '<p>Hello<br />World</p><p>one empty line, then this one</p>'
-            });
-            equals(get(), '<p>Hello<br>World</p><p>one empty line, then this one</p>');
-
-            // complex test cases
-            $.when(
-                $.get(base + '/test_1a.html'),
-                $.get(base + '/test_1b.html')
-            )
-            .done(function (a, b) {
-                clear();
-                ed.execCommand('mceInsertClipboardContent', false, { content: a[0] });
-                equals(get(), trim(b[0]));
-            })
-            .done(function () {
-
-                $.when(
-                    $.get(base + '/test_2a.html'),
-                    $.get(base + '/test_2b.html')
-                )
-                .done(function (a, b) {
-                    clear();
-                    ed.execCommand('mceInsertClipboardContent', false, { content: a[0] });
-                    equals(get(), trim(b[0]));
-                });
-            });
-
-            return ed;
+        /**
+         * Get tinyMCE
+         */
+        app.getTinyMCE = function () {
+            return editor.tinymce();
         };
 
         return app;
     }
 
     var module = {
-            getApp: createInstance
-        };
+        getApp: createInstance
+    };
 
     // initialize
     var loadUser, loadTinyMCE;

@@ -9,10 +9,13 @@
  * Mail: info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 // TODO: Add Convenience and niceties
-define("io.ox/internal/testing/main", ["io.ox/internal/testing/jasmine", "io.ox/core/extensions"], function (jasmine, ext) {
+define("io.ox/internal/testing/main",
+    ["io.ox/internal/testing/jasmine",
+     "io.ox/core/extensions"], function (jasmine, ext) {
 
     "use strict";
 
@@ -30,8 +33,7 @@ define("io.ox/internal/testing/main", ["io.ox/internal/testing/jasmine", "io.ox/
             search: true
         }));
 
-        function go() {
-            win.show();
+        function report() {
 
             var env = jasmine.jasmine.getEnv();
             var suiteNodes = {};
@@ -52,11 +54,12 @@ define("io.ox/internal/testing/main", ["io.ox/internal/testing/jasmine", "io.ox/
                     });
                 },
                 reportRunnerResults: function (runner) {
-                    //console.debug("reportRunnerResults", runner.results());
+                    //console.debug("Runner result", runner.results());
                     win.nodes.main.idle();
                 },
                 reportSuiteResults: function (suite) {
-                    //console.debug(suite);
+                    //console.debug("Suite result", suite);
+                    win.show();
                 },
                 reportSpecStarting: function (spec) {
                     //console.debug("spec starting", spec);
@@ -78,18 +81,30 @@ define("io.ox/internal/testing/main", ["io.ox/internal/testing/jasmine", "io.ox/
                     //console.debug("spec results", spec);
                 }
             });
+            // go!
             env.execute();
         }
 
-        ext.point("io.ox/testing/suite").each(function (ext) {
-            if (ext.file) {
-                require([ext.file], function (t) {
-                    t(jasmine);
-                    go(); //TODO: Multiple Files
+        win.show(function () {
+            // load all tests
+            ext.loadPlugins({ name: 'tests', prefix: '', suffix: 'test' })
+                .done(function () {
+                    // loop over all extensions
+                    ext.point("test/suite").each(function (e) {
+                        e.test(jasmine);
+                    });
+                    report();
                 });
-            }
         });
 
+//        ext.point("io.ox/testing/suite").each(function (ext) {
+//            if (ext.file) {
+//                require([ext.file], function (t) {
+//                    t(jasmine);
+//                    go(); //TODO: Multiple Files
+//                });
+//            }
+//        });
 
     });
 
