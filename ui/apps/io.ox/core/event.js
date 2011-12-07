@@ -180,6 +180,12 @@ define("io.ox/core/event", function () {
                     self.enabled = true;
                 };
 
+                /**
+                 * Remove call callbacks
+                 */
+                this.destroy = function () {
+                    this.handlers = this.data = null;
+                };
             };
 
             Dispatcher.extend = function (obj) {

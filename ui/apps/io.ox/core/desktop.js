@@ -466,14 +466,16 @@ define("io.ox/core/desktop",
                 };
 
                 this.destroy = function () {
-                    if (currentWindow === this) {
-                        currentWindow = null;
-                    }
+                    // hide window
+                    this.hide();
+                    // disconnect from app
                     if (this.app !== null) {
                         this.app.getLaunchBarIcon().removeClass("active");
                         this.app.win = null;
                         this.app = null;
                     }
+                    // destroy everything
+                    this.dispatcher.destroy();
                     this.nodes.outer.remove();
                     this.nodes = null;
                     this.show = $.noop;
