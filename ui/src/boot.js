@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,10 +9,7 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- *
  */
-
-var initializeAndDefine;
 
 // init require.js
 require({
@@ -65,7 +61,9 @@ $(document).ready(function () {
         if (ox.signin === true) {
             // show loader
             $("#background_loader").fadeIn(DURATION, function () {
-                _.url.redirect("#?" + encodeURIComponent(_.rot("session=" + ox.session + "&user=" + ox.user, 1)));
+                _.url.redirect("#?" + encodeURIComponent(
+                    _.rot("session=" + ox.session + "&user=" + ox.user + "&ref=" + encodeURIComponent(_.url.hash('ref')), 1)
+                ));
             });
         } else {
             loadCore();
@@ -263,11 +261,13 @@ $(document).ready(function () {
      */
     autoLogin = function () {
 
+        var ref;
+
         function fail() {
             if (ox.signin) {
                 initialize();
             } else {
-                _.url.redirect("signin");
+                _.url.redirect('signin#ref=' + encodeURIComponent(location.hash.replace(/^#/, '')));
             }
         }
 
@@ -275,7 +275,8 @@ $(document).ready(function () {
         if (_.url.hash("session")) {
             ox.session = _.url.hash("session");
             ox.user = _.url.hash("user");
-            _.url.redirect("#!"); // add some senseless characters to avoid unwanted scrolling
+            ref = _.url.hash("ref");
+            _.url.redirect('#' + (ref ? decodeURIComponent(ref) : '!')); // add some senseless characters to avoid unwanted scrolling
             loadCore();
         } else if (ox.serverConfig.autoLogin === true && ox.online) {
             // try auto login

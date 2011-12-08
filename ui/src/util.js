@@ -42,14 +42,10 @@
                 return String.fromCharCode(i.charCodeAt(0) + shift);
             }).join("");
         },
-        // get hash & query
+        // get query
         queryData = deserialize(document.location.search.substr(1), /&/),
-        hashData = document.location.hash.substr(1),
         // local timezone offset
         timezoneOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
-
-    // decode
-    hashData = deserialize(hashData.substr(0, 1) === "?" ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData);
 
     // add namespaces
     _.browser = {
@@ -83,6 +79,11 @@
          * @returns {Object} Value or all values
          */
         hash: function (name) {
+            // since the hash might change we decode it for every request
+            var hashData = document.location.hash.substr(1);
+            hashData = deserialize(
+                 hashData.substr(0, 1) === "?" ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData
+            );
             return name === undefined ? hashData : hashData[name];
         },
 
