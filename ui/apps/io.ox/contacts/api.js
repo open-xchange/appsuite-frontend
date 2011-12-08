@@ -71,7 +71,7 @@ define('io.ox/contacts/api',
             api.caches.all.clear(); //TODO considere proper folder
             api.trigger('refresh.all');
             api.trigger('created', { // TODO needs a switch for created by hand or by test
-                folder: 11179,
+                folder: 6,
                 id: data.id
             });
         })
