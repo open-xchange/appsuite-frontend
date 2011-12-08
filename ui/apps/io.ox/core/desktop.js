@@ -164,6 +164,9 @@ define("io.ox/core/desktop",
                 // self
                 self = this;
 
+            // add dispatcher
+            event.Dispatcher.extend(this);
+
             this.getInstance = function () {
                 return self; // not this!
             };
@@ -191,6 +194,10 @@ define("io.ox/core/desktop",
                 win = w;
                 win.app = this;
                 return this;
+            };
+
+            this.getWindow = function () {
+                return win;
             };
 
             this.launch = function () {
@@ -233,6 +240,8 @@ define("io.ox/core/desktop",
                             launchbarIcon = null;
                         });
                     }
+                    // destroy dispatcher
+                    self.dispatcher.destroy();
                     // destroy window
                     if (win) {
                         win.destroy();
@@ -468,6 +477,8 @@ define("io.ox/core/desktop",
                 this.destroy = function () {
                     // hide window
                     this.hide();
+                    // trigger event
+                    this.trigger("destroy");
                     // disconnect from app
                     if (this.app !== null) {
                         this.app.getLaunchBarIcon().removeClass("active");

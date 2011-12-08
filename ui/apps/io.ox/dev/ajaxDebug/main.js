@@ -13,10 +13,12 @@
  *
  */
 
-define("io.ox/internal/ajaxDebug/main", [ "io.ox/core/tk/vgrid", "io.ox/internal/ajaxDebug/callHandling", "io.ox/internal/ajaxDebug/callViews"], function (VGrid, callHandler, callViews) {
+define("io.ox/dev/ajaxDebug/main",
+    ["io.ox/core/tk/vgrid", "io.ox/dev/ajaxDebug/callHandling",
+     "io.ox/dev/ajaxDebug/callViews"], function (VGrid, callHandler, callViews) {
 
     "use strict";
-    
+
     // application object
     var app = ox.ui.createApp(),
         // app window
@@ -27,22 +29,22 @@ define("io.ox/internal/ajaxDebug/main", [ "io.ox/core/tk/vgrid", "io.ox/internal
         left,
         right,
         viewer;
-    
+
     // launcher
     app.setLauncher(function () {
-        
+
         // get window
         app.setWindow(win = ox.ui.createWindow({
             title: "AJAX Debugger",
             search: true
         }));
-    
+
         // toolbar
         /*win.addButton({
             label: "Repeat",
             action: deleteItems
         }); */
-    
+
         // left side
         left = $("<div/>").addClass("leftside border-right")
             .css({
@@ -50,15 +52,15 @@ define("io.ox/internal/ajaxDebug/main", [ "io.ox/core/tk/vgrid", "io.ox/internal
                 overflow: "auto"
             })
             .appendTo(win.nodes.main);
-    
+
         right = $("<div/>")
             .css({ left: "310px", overflow: "auto", padding: "20px 40px 20px 40px" })
             .addClass("rightside")
             .appendTo(win.nodes.main);
-    
-    
+
+
         viewer = new callViews.CallView(right, callHandler);
-            
+
         // Grid
         grid = new VGrid(left);
         // add template
@@ -74,7 +76,7 @@ define("io.ox/internal/ajaxDebug/main", [ "io.ox/core/tk/vgrid", "io.ox/internal
                 fields.name.text(data.query.module + "." + data.query.params.action);
             }
         });
-    
+
         // all request
         grid.setAllRequest(function () {
             var ids = _(callHandler.history.slice().reverse()).map(function (entry) {
@@ -82,7 +84,7 @@ define("io.ox/internal/ajaxDebug/main", [ "io.ox/core/tk/vgrid", "io.ox/internal
             });
             return new $.Deferred().resolve(ids);
         });
-      
+
         // list request
         grid.setListRequest(function (ids) {
             var entries = _(ids).map(function (id) {
@@ -90,19 +92,19 @@ define("io.ox/internal/ajaxDebug/main", [ "io.ox/core/tk/vgrid", "io.ox/internal
             });
             return new $.Deferred().resolve(entries);
         });
-    
-    
-    
+
+
+
         grid.selection.bind("change", function (selection) {
             if (selection.length === 1) {
                 viewer.draw(selection[0]);
             }
         });
-    
+
         // explicit keyboard support
         //win.bind("show", function () { grid.selection.keyboard(true); });
         //win.bind("hide", function () { grid.selection.keyboard(false); });
-        
+
         callHandler.bind("historychanged", function () {
             grid.refresh();
             grid.selection.set(_(callHandler.history).last());
@@ -124,14 +126,14 @@ define("io.ox/internal/ajaxDebug/main", [ "io.ox/core/tk/vgrid", "io.ox/internal
                 }
             }
         });
-        
+
         var autorepeat = false;
         function repeat() {
             if (autorepeat) {
                 callHandler.perform(viewer.getQuery(), repeat);
             }
         }
-        
+
         win.addButton({
             label: "Autorepeat",
             action: function () {
@@ -139,15 +141,15 @@ define("io.ox/internal/ajaxDebug/main", [ "io.ox/core/tk/vgrid", "io.ox/internal
                 repeat();
             }
         });
-        
-        
+
+
         // go!
         win.show(function () {
             grid.paint();
         });
-        
+
     });
-    
+
     return {
         getApp: app.getInstance
     };

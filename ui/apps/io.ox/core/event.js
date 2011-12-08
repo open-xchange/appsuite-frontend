@@ -43,6 +43,8 @@ define("io.ox/core/event", function () {
 
                 this.handlers = {};
                 this.data = {};
+                this.once = {};
+
                 this.has = false;
 
                 this.enabled = true;
@@ -86,6 +88,16 @@ define("io.ox/core/event", function () {
                     });
                 };
 
+                this.once = function (type, data, fn) {
+                    // parameter shift?
+                    if (_.isFunction(data)) {
+                        fn = data;
+                        data = undefined;
+                    }
+                    self.bind(type, data, fn);
+                    self.once[fn.oxGuid] = true;
+                };
+
                 /**
                  * Unbind event
                  * @param {string} type Event name
@@ -101,6 +113,7 @@ define("io.ox/core/event", function () {
                         try {
                             // remove listener
                             delete h[fn.oxGuid];
+                            delete self.once[fn.oxGuid];
                         } catch (e) { }
                     });
                 };
@@ -123,6 +136,7 @@ define("io.ox/core/event", function () {
                         // execute function
                         try {
                             handler.fn.call(target, d, type);
+                            delete self.once[handler.fn.oxGuid];
                         } catch (ex_1) {
                             try {
                                 console.error("Dispatcher.trigger(" + type + ") " + ex_1);
@@ -184,7 +198,7 @@ define("io.ox/core/event", function () {
                  * Remove call callbacks
                  */
                 this.destroy = function () {
-                    this.handlers = this.data = null;
+                    self = self.handlers = self.data = self.once = null;
                 };
             };
 

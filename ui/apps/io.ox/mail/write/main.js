@@ -52,7 +52,7 @@ define.async('io.ox/mail/write/main',
 //    }));
 
     // default sender (used to set from address)
-    var defaultSender,
+    var defaultSender = [],
         // editor mode
         editorMode = 'html';
 
@@ -85,7 +85,7 @@ define.async('io.ox/mail/write/main',
         }
 
         function togglePriority(e) {
-            var high = form.find('input[name=priority][value=2]'),
+            var high = form.find('input[name=priority][value=1]'),
                 normal = form.find('input[name=priority][value=3]');
             if (high.prop('checked')) {
                 high.prop('checked', false);
@@ -121,6 +121,7 @@ define.async('io.ox/mail/write/main',
         function addSection(id, label, show, collapsable) {
 
             sections[id + 'Label'] = $('<div>')
+                .attr('data-section-label', id)
                 .addClass('label')
                 .text(label + '')
                 .prepend(
@@ -137,13 +138,16 @@ define.async('io.ox/mail/write/main',
                 sections[id + 'Label'].css('cursor', 'default');
             }
 
-            sidepanel
-                .append(sections[id + 'Label'])
-                .append(sections[id] = $('<div>').addClass('section'));
+            sections[id] = $('<div>').addClass('section')
+                .attr('data-section', id);
+
+            sidepanel.append(sections[id + 'Label']).append(sections[id]);
+
             if (show === false) {
                 sections[id + 'Label'].hide();
                 sections[id].hide();
             }
+
             return sections[id];
         }
 
@@ -165,6 +169,7 @@ define.async('io.ox/mail/write/main',
                 .addClass('section-link')
                 .append(
                     $('<a>', { href: '#', tabindex: '5' })
+                    .attr('data-section-link', id)
                     .text(label + '')
                     .on('click', { id: id }, fnShowSection)
                 )
@@ -259,9 +264,11 @@ define.async('io.ox/mail/write/main',
         function copyRecipients(id, node) {
             var list = mailUtil.parseRecipients(node.val());
             if (list.length) {
+                // add
                 addRecipients(id, list);
                 node.val('');
             } else if ($.trim(node.val()) !== '') {
+                // not accepted but has content -> shake
                 node.attr('disabled', 'disabled')
                     .css({ border: '1px solid #a00', backgroundColor: '#fee' })
                     .shake()
@@ -277,7 +284,7 @@ define.async('io.ox/mail/write/main',
             .addClass('fieldset')
             .append(
                 $('<input>', { type: 'text', tabindex: '2' })
-                .attr('data-type', id)
+                .attr('data-type', id) // not name=id!
                 .addClass('discreet')
                 .autocomplete({
                     source: function (query) {
@@ -623,12 +630,12 @@ define.async('io.ox/mail/write/main',
                     .append(
                         $('<span>').addClass('group-label').text('Priority')
                     )
-                    .append(createRadio('priority', '2', 'High'))
+                    .append(createRadio('priority', '1', 'High'))
                     .append(createRadio('priority', '3', 'Normal', true))
-                    .append(createRadio('priority', '4', 'Low'))
+                    .append(createRadio('priority', '5', 'Low'))
                     .on('change', 'input', function () {
                         var radio = $(this);
-                        if (radio.attr('value') === '2' && radio.prop('checked')) {
+                        if (radio.attr('value') === '1' && radio.prop('checked')) {
                             applyHighPriority(true);
                         } else {
                             applyHighPriority(false);
@@ -1021,12 +1028,13 @@ define.async('io.ox/mail/write/main',
         app.setPriority = function (prio) {
             // be robust
             prio = parseInt(prio, 10) || 3;
-            prio = prio >= 2 && prio <= 4 ? prio : 3;
+            prio = prio < 3 ? 1 : prio;
+            prio = prio > 3 ? 5 : prio;
             // set
             form.find('input[name=priority][value=' + prio + ']')
                 .prop('checked', true);
             // high priority?
-            if (prio === 2) {
+            if (prio === 1) {
                 priorityOverlay.addClass('high');
             }
         };
@@ -1172,11 +1180,29 @@ define.async('io.ox/mail/write/main',
                     }
                     return obj;
                 }, {}),
+                content,
                 mail,
                 files = [],
                 parse = function (list) {
-                    return mailUtil.parseRecipients([].concat(list).join(', '));
+                    return _(mailUtil.parseRecipients([].concat(list).join(', ')))
+                        .map(function (recipient) {
+                            return ['"' + recipient[0] + '"', recipient[1]];
+                        });
                 };
+            // get content
+            if (editorMode === 'html') {
+                content = {
+                    content_type: 'text/html',
+                    content: String(data.content)
+                };
+            } else {
+                content = {
+                    content_type: 'text/plain',
+                    content: String(data.content)
+                        .replace(/</g, '&lt;') // escape <
+                        .replace(/\n/g, '<br>\n') // escape line-breaks
+                };
+            }
             // transform raw data
             mail = {
                 from: [defaultSender] || [],
@@ -1184,15 +1210,10 @@ define.async('io.ox/mail/write/main',
                 cc: parse(data.cc),
                 bcc: parse(data.bcc),
                 subject: data.subject + '',
-                priority: data.priority,
-                vcard: data.vcard || '0',
-                disp_notification_to: data.deliveryReceipt || '0',
-                attachments: [{
-                    content_type: 'text/plain',
-                    content: (data.content + '')
-                        .replace(/</g, '&lt;') // escape <
-                        .replace(/\n/g, '<br>\n') // escape line-breaks
-                }]
+                priority: parseInt(data.priority, 10) || 3,
+                vcard: parseInt(data.vcard, 10) || 0,
+                disp_notification_to: parseInt(data.deliveryReceipt, 10) || 0,
+                attachments: [content]
             };
             // add msgref?
             if (data.msgref) {
@@ -1274,7 +1295,7 @@ define.async('io.ox/mail/write/main',
     loadUser = userAPI.get(config.get('identifier'))
         .done(function (sender) {
             // inject 'from'
-            defaultSender = [sender.display_name, sender.email1];
+            defaultSender = ['"' + sender.display_name + '"', sender.email1];
         });
 
     // load tinyMCE?

@@ -12,8 +12,8 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/internal/testing/main',
-    ['io.ox/internal/testing/jasmine',
+define('io.ox/dev/testing/main',
+    ['io.ox/dev/testing/jasmine',
      'io.ox/core/extensions'], function (jasmine, ext) {
 
     'use strict';
@@ -21,7 +21,6 @@ define('io.ox/internal/testing/main',
     var app = ox.ui.createApp({
             title: 'Unit Tests'
         }),
-        // app window
         win;
 
     app.setLauncher(function () {
@@ -34,54 +33,73 @@ define('io.ox/internal/testing/main',
         function report() {
 
             var env = jasmine.jasmine.getEnv();
-            var suiteNodes = {};
-            var specNodes = {};
 
             env.addReporter({
+                /*
+                 * Draws suites and their specs. Specs have an attribute
+                 * data-spec-<id> that allows updating them once the test result
+                 * is available.
+                 */
                 reportRunnerStarting: function (runner) {
+                    // be busy
                     win.nodes.main.busy();
+                    // add all suites
                     _(runner.suites()).each(function (suite) {
-                        var $node = $('<div>').appendTo(win.nodes.main);
-                        $node.append($('<h1>').text(suite.description));
-                        suiteNodes[suite.id] = $node;
-                        var $listContainer = $('<div>').appendTo($node);
-                        var $list = $('<ul>').appendTo($listContainer);
-                        _(suite.specs()).each(function (spec) {
-                            specNodes[spec.id] = $('<li>').appendTo($list).text(spec.description);
-                        });
+                        $('<div>')
+                            .attr('data-suite-id', suite.id)
+                            .append(
+                                $('<h1>')
+                                .addClass('clear-title')
+                                .text(String(suite.description))
+                            )
+                            .append(
+                                $('<ol>').append(
+                                    _(suite.specs()).inject(function (set, spec) {
+                                        return set.add(
+                                            $('<li>')
+                                            .attr('data-spec-id', spec.id)
+                                            .text(String(spec.description))
+                                        );
+                                    }, $())
+                                )
+                            )
+                            .appendTo(win.nodes.main);
                     });
                 },
                 reportRunnerResults: function (runner) {
-                    //console.debug('Runner result', runner.results());
+                    // stop being busy
                     win.nodes.main.idle();
                 },
                 reportSuiteResults: function (suite) {
-                    //console.debug('Suite result', suite);
                     win.show();
                 },
                 reportSpecStarting: function (spec) {
-                    //console.debug('spec starting', spec);
                 },
                 reportSpecResults: function (spec) {
-                    var $node = specNodes[spec.id];
-                    $node.idle();
-                    var result = spec.results();
+                    // find spec DOM node by id
+                    var node = win.nodes.main.find(
+                            '[data-suite-id=' + spec.suite.id + '] [data-spec-id=' + spec.id + ']'
+                        ),
+                        result = spec.results();
                     if (result.failedCount === 0) {
-                        $node.css('color', 'green');
+                        // ok!
+                        node.css('color', 'green');
                     } else {
-                        $node.css({ color: 'red', fontWeight: 'bold' });
+                        // fail!
+                        node.css({ color: 'red', fontWeight: 'bold' });
                         _(result.items_).each(function (item) {
                             if (!item.passed()) {
-                                $('<div>').appendTo($node).text(item.toString());
+                                $('<div>').text(item + '').appendTo(node);
                             }
                         });
                     }
-                    //console.debug('spec results', spec);
                 }
             });
             // go!
             env.execute();
         }
+
+        win.nodes.main.css('overflow', 'auto').addClass('selectable-text');
 
         win.show(function () {
             // load all tests

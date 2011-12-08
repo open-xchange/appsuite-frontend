@@ -14,14 +14,14 @@
 
 /*global escape:true, unescape:true */
 
-define("io.ox/internal/ajaxDebug/callViews", function () {
+define("io.ox/dev/ajaxDebug/callViews", function () {
 
     "use strict";
-    
+
     function CallView($node, callHandling) {
         var self = this;
         $node = $("<form/>").appendTo($node);
-        
+
         var $address = $('<input/>').css({
             width: "500px",
             "margin-left": "2px" // ???
@@ -32,12 +32,12 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
         var $body = $('<textarea cols="80" rows="20"/>').attr("placeholder", "['the', 'body']"),
             $resp = $('<textarea cols="80", rows="30" readonly="readonly"/>').hide(),
             $submit = $('<button>').text("Send");
-        
+
         $node.append($("<div/>").append($address));
         $node.append($("<div/>").append($body));
         $node.append($("<div/>").append($submit));
         $node.append($("<div/>").append($resp));
-                
+
         this.draw = function (entry, options) {
             if (!options) {
                 options = {};
@@ -56,7 +56,7 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
                 addressText += "?" + queryString.substring(1);
             }
             $address.val(addressText);
-            
+
             // Body
             if (entry.query.data) {
                 if (_.isString(entry.query.data)) {
@@ -67,7 +67,7 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
             } else {
                 $body.val("");
             }
-            
+
             // Result
             if (entry.response) {
                 $resp.idle();
@@ -78,14 +78,14 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
             } else {
                 $resp.hide();
             }
-            
-            
+
+
             this.dirty = false;
             $address.css("border", '');
             $body.css("border", '');
-            
+
         };
-        
+
         var addrRegex = /((\w|\/)+?)\.(\w+)(\?(.*))?/;
 
         this.getQuery = function () {
@@ -108,7 +108,7 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
             } else {
                 alert("Can't parse query: " + $address.val() + ". Please use the following format: module.action?param1=value1&param2=value2");
             }
-            
+
             if ($body.val()) {
                 try {
                     query.data = new Function("return " + $body.val())(); // The JSON parser is too anal
@@ -118,15 +118,15 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
             }
             return query;
         };
-        
+
         function submit() {
             var query = self.getQuery();
             var entry = callHandling.perform(query);
             self.draw(entry, {inProgress: true});
             return false;
         }
-        
-        
+
+
         function changed() {
             if ($address.val().match(addrRegex)) {
                 $address.css("border", "green solid 3px");
@@ -143,21 +143,21 @@ define("io.ox/internal/ajaxDebug/callViews", function () {
             }
             self.dirty = true;
         }
-        
+
         $submit.click(submit);
-        
+
         $address.change(changed);
         $body.change(changed);
-        
+
         callHandling.bind("entrychanged", function (entry) {
             if (entry.id === self.id && !self.dirty) {
                 self.draw(entry);
             }
         });
-        
-        
+
+
     }
-    
+
     return {
         CallView: CallView
     };
