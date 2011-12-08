@@ -384,9 +384,11 @@ define("io.ox/core/desktop",
                     firstShow = true;
 
                 this.show = function (cont) {
-                    if (currentWindow !== this) {
+                    // get node and its parent node
+                    var node = this.nodes.outer, parent = node.parent();
+                    // if not current window or if detached (via funny race conditions)
+                    if (currentWindow !== this || parent.length === 0) {
                         // show
-                        var node = this.nodes.outer;
                         if (firstShow) {
                             node.data("index", guid - 1).css("left", ((guid - 1) * 101) + "%");
                         }
@@ -407,7 +409,7 @@ define("io.ox/core/desktop",
                         ox.ui.windowManager.trigger("window.beforeshow", self);
                         node.show();
                         scrollTo(node, function () {
-                            if (currentWindow) {
+                            if (currentWindow && currentWindow !== self) {
                                 currentWindow.hide();
                             }
                             currentWindow = self;

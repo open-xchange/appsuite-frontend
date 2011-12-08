@@ -105,9 +105,33 @@ define('io.ox/dev/testing/main',
             // load all tests
             ext.loadPlugins({ name: 'tests', prefix: '', suffix: 'test' })
                 .done(function () {
+                    // show ids
+                    var ids = $('<div>').append($('<b>').text('Available suites: ')).appendTo(win.nodes.main),
+                        suites = _.url.hash('suites'),
+                        url = '#launch=io.ox/dev/testing/main',
+                        fnClick = function (e) {
+                            e.preventDefault();
+                            location.href = url + (e.data.id !== 'all' ? '&suites=' + e.data.id : '');
+                            location.reload();
+                        },
+                        addLink = function (id) {
+                            ids.append(
+                                $('<a>', { href: '#' }).on('click', { id: id }, fnClick).text(id)
+                            )
+                            .append($.txt(' '));
+                        };
+                    // split suites string
+                    suites = suites ? String(suites).split(/,/) : [];
+                    // link to run all suites
+                    addLink('all');
                     // loop over all extensions
                     ext.point('test/suite').each(function (e) {
-                        e.test(jasmine);
+                        // show id
+                        addLink(e.id);
+                        // run test
+                        if (suites.length === 0 || _(suites).indexOf(e.id) > -1) {
+                            e.test(jasmine);
+                        }
                     });
                     report();
                 });

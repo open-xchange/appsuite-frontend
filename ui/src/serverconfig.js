@@ -26,7 +26,7 @@ define(function () {
             core: ["halo"],
             halo: ["halo/contacts", "halo/appointments", "halo/linkedIn"],
             portal: ["appointments", "linkedIn", "mail", "rss"],
-            tests: ["io.ox/mail/write"]
+            tests: ["io.ox/mail/write", "plugins/halo"]
         },
 
         previewMimeTypes : {

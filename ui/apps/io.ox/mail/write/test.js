@@ -53,6 +53,7 @@ define('io.ox/mail/write/test',
      */
     ext.point('test/suite').extend({
         id: 'mail-compose',
+        index: 100,
         test: function (j) {
 
             j.describe('Compose email', function () {
@@ -194,7 +195,7 @@ define('io.ox/mail/write/test',
                     j.expect(get(ed)).toEqual('<p>Lorem ipsum</p>');
                 });
 
-                j.it('has correct mail content (getMail)', function () {
+                j.it('has correct mail body', function () {
                     var data = app.getMail().data;
                     j.expect(true).toEqual(
                         data.attachments &&
@@ -320,6 +321,7 @@ define('io.ox/mail/write/test',
      */
     ext.point('test/suite').extend({
         id: 'mail-paste',
+        index: 200,
         test: function (j) {
 
             j.describe('Paste HTML content into TinyMCE', function () {
