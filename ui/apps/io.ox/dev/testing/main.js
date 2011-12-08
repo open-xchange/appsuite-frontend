@@ -123,13 +123,13 @@ define('io.ox/dev/testing/main',
                     // split suites string
                     suites = suites ? String(suites).split(/,/) : [];
                     // link to run all suites
-                    addLink('all');
+                    addLink('ALL');
                     // loop over all extensions
                     ext.point('test/suite').each(function (e) {
                         // show id
                         addLink(e.id);
                         // run test
-                        if (suites.length === 0 || _(suites).indexOf(e.id) > -1) {
+                        if (_('ALL').indexOf(e.id) > -1 || _(suites).indexOf(e.id) > -1) {
                             e.test(jasmine);
                         }
                     });

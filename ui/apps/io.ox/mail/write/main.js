@@ -184,13 +184,20 @@ define.async('io.ox/mail/write/main',
         };
 
         function drawAutoCompleteItem(node, data) {
+
+            var img = $('<div>').addClass('contact-image'),
+                url = contactsUtil.getImage(data.contact);
+
+            if (Modernizr.backgroundsize) {
+                img.css('backgroundImage', 'url(' + url + ')');
+            } else {
+                img.append(
+                    $('<img>', { src: url, alt: '' }).css({ width: '100%', height: '100%' })
+                );
+            }
+
             node.addClass('io-ox-mail-write-contact')
-            .append(
-                $('<div>').addClass('contact-image')
-                .css({
-                    backgroundImage: 'url(' + contactsUtil.getImage(data.contact) + ')'
-                })
-            )
+            .append(img)
             .append(
                 $('<div>').addClass('person-link')
                 .text(data.display_name + '\u00A0')
@@ -290,7 +297,7 @@ define.async('io.ox/mail/write/main',
                     source: function (query) {
                         return contactsAPI.autocomplete(query);
                     },
-                    toString: function (data) {
+                    stringify: function (data) {
                         return data.display_name ?
                             '"' + data.display_name + '" <' + data.email + '>' :
                             data.email;

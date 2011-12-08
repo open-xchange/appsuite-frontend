@@ -13,9 +13,9 @@
 
 html {
     height: 100%;
-    margin: 0px;
-    padding: 0px;
-    border: 0px none;
+    margin: 0;
+    padding: 0;
+    border: 0;
     overflow: hidden;
     font-size: 100%;
     -webkit-text-size-adjust: 100%;
@@ -23,9 +23,9 @@ html {
 }
 
 body {
-    margin: 0px;
-    padding: 0px;
-    border: 0px none;
+    margin: 0;
+    padding: 0;
+    border: 0;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
     color: black;

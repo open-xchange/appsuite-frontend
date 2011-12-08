@@ -26,7 +26,7 @@ define('io.ox/core/tk/autocomplete', function () {
             source: null,
             draw: null,
             click: $.noop,
-            toString: JSON.stringify
+            stringify: JSON.stringify
         }, o || {});
 
         var self = $(this),
@@ -43,7 +43,7 @@ define('io.ox/core/tk/autocomplete', function () {
             update = function () {
                 // get data from current item and update input field
                 var data = popup.children().eq(Math.max(0, index)).data('data');
-                lastValue = o.toString(data) + '';
+                lastValue = o.stringify(data) + '';
                 self.val(lastValue);
             },
 

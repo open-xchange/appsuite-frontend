@@ -292,7 +292,13 @@ define('io.ox/contacts/api',
             };
         api.getPictureURL(obj)
             .done(function (url) {
-                node.css('backgroundImage', 'url(' + url + ')');
+                if (Modernizr.backgroundsize) {
+                    node.css('backgroundImage', 'url(' + url + ')');
+                } else {
+                    node.append(
+                        $('<img>', { src: url, alt: '' }).css({ width: '100%', height: '100%' })
+                    );
+                }
             })
             .always(clear);
         return node;

@@ -15,8 +15,13 @@
 require({
     // inject version
     baseUrl: ox.base + "/apps",
-    waitSeconds: 10
+    waitSeconds: _.browser.IE ? 20 : 10
 });
+
+// add fake console (esp. for IE)
+if (typeof window.console === 'undefined') {
+    window.console = { log: $.noop, debug: $.noop, error: $.noop };
+}
 
 $(document).ready(function () {
 
@@ -61,8 +66,10 @@ $(document).ready(function () {
         if (ox.signin === true) {
             // show loader
             $("#background_loader").fadeIn(DURATION, function () {
+                var ref = _.url.hash('ref');
                 _.url.redirect("#?" + encodeURIComponent(
-                    _.rot("session=" + ox.session + "&user=" + ox.user + "&ref=" + encodeURIComponent(_.url.hash('ref')), 1)
+                    _.rot("session=" + ox.session + "&user=" + ox.user +
+                    (ref ? "&ref=" + encodeURIComponent(ref) : ''), 1)
                 ));
             });
         } else {
@@ -267,7 +274,8 @@ $(document).ready(function () {
             if (ox.signin) {
                 initialize();
             } else {
-                _.url.redirect('signin#ref=' + encodeURIComponent(location.hash.replace(/^#/, '')));
+                ref = (location.hash || '').replace(/^#/, '');
+                _.url.redirect('signin' + (ref ? '#ref=' + encodeURIComponent(ref) : ''));
             }
         }
 
