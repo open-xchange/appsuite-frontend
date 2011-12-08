@@ -14,9 +14,10 @@
  */
 
 define("io.ox/contacts/tests",
-    [], function () {
+    ["io.ox/contacts/api"], function (api) {
 
     "use strict";
+
     var testObject = {
         first_name: 'Georg',
         last_name: 'Tester',
@@ -194,20 +195,21 @@ define("io.ox/contacts/tests",
     };
 
     var testEditCheck = function (data) {
-        require(["io.ox/contacts/api"], function (api) {
-            api.get(data).done(function (obj) {
-                console.log(testObjectLong);
-                console.log(obj); //TODO all dates going to fail because wrong format
-                for (var i in testObjectLong) {
-                    if (testObjectLong[i] === obj[i]) {
-                        console.log(i + " is correct filled");
-                    } else {
-                        console.log(i + " is not correct filled");
-                    }
+        api.get(data).done(function (obj) {
+            console.log(testObjectLong);
+            console.log(obj); //TODO all dates going to fail because wrong format
+            for (var i in testObjectLong) {
+                if (testObjectLong[i] === obj[i]) {
+                    console.log(i + " is correct filled");
+                } else {
+                    console.log(i + " is not correct filled");
                 }
-            });
+            }
         });
     };
+
+    api.bind('created', testCreateCheck);
+    api.bind('edit', testEditCheck);
 
     return {
         testCreate: testCreate,

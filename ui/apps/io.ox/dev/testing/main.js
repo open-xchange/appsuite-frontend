@@ -65,6 +65,8 @@ define('io.ox/dev/testing/main',
                             )
                             .appendTo(win.nodes.main);
                     });
+                    // add spacer (esp. for IE)
+                    win.nodes.main.append($('<div>').text('\u00A0'));
                 },
                 reportRunnerResults: function (runner) {
                     // stop being busy
@@ -99,7 +101,9 @@ define('io.ox/dev/testing/main',
             env.execute();
         }
 
-        win.nodes.main.css('overflow', 'auto').addClass('selectable-text');
+        win.nodes.main
+            .addClass('selectable-text')
+            .css({ overflow: 'auto', padding: '1.5em 13px 1.5em 13px' });
 
         win.show(function () {
             // load all tests
@@ -129,7 +133,7 @@ define('io.ox/dev/testing/main',
                         // show id
                         addLink(e.id);
                         // run test
-                        if (_('ALL').indexOf(e.id) > -1 || _(suites).indexOf(e.id) > -1) {
+                        if (_(suites).indexOf('ALL') > -1 || _(suites).indexOf(e.id) > -1) {
                             e.test(jasmine);
                         }
                     });

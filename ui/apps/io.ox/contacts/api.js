@@ -15,9 +15,8 @@ define('io.ox/contacts/api',
 
     ['io.ox/core/http',
      'io.ox/core/api/factory',
-     'io.ox/core/cache',
-      'io.ox/contacts/tests'
-     ], function (http, apiFactory, cache, test) {
+     'io.ox/core/cache'
+     ], function (http, apiFactory, cache) {
 
 
     'use strict';
@@ -28,7 +27,7 @@ define('io.ox/contacts/api',
         requests: {
             all: {
                 action: 'all',
-                folder: '6',
+                folder: '30',//'6',
                 columns: '20,1,500,502',
                 sort: '607', // magic field
                 order: 'asc'
@@ -167,13 +166,6 @@ define('io.ox/contacts/api',
         autocompleteCache.clear();
     });
 
-    api.bind('created', function (data) {
-        test.testCreateCheck(data);
-    });
-
-    api.bind('edit', function (data) {
-        test.testEditCheck(data);
-    });
     api.autocomplete = function (query) {
 
         function process(list, obj, field) {
