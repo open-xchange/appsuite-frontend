@@ -1,8 +1,8 @@
 //#NOJSHINT
 // Adapted Jasmine Testing Framework for OX7 Environment
 
-define("io.ox/internal/testing/jasmine", function () {
-    
+define("io.ox/dev/testing/jasmine", function () {
+
     var exports = {};
 
     var isCommonJS = true;
@@ -1555,7 +1555,7 @@ define("io.ox/internal/testing/jasmine", function () {
             "reportSpecResults",
             "log"
         ];
-        
+
         var wrap = function (functionName) {
             return function () {
                 for (var j = 0; j < this.subReporters_.length; j++) {
@@ -1566,7 +1566,7 @@ define("io.ox/internal/testing/jasmine", function () {
                 }
             };
         };
-        
+
         for (var i = 0; i < functionNames.length; i++) {
             var functionName = functionNames[i];
             jasmine.MultiReporter.prototype[functionName] = wrap(functionName);
@@ -1811,7 +1811,7 @@ define("io.ox/internal/testing/jasmine", function () {
     jasmine.Queue.LOOP_DONT_RECURSE = true;
 
     jasmine.Queue.prototype.next_ = function () {
-        
+
         var self = this;
         var goAgain = true;
         var calledSynchronously = true;
@@ -1844,22 +1844,22 @@ define("io.ox/internal/testing/jasmine", function () {
                 }
             }
         };
-        
+
         while (goAgain) {
-            
+
             goAgain = false;
             calledSynchronously = true;
             completedSynchronously = false;
-            
+
             if (self.index < self.blocks.length && !this.abort) {
-                
+
                 self.blocks[self.index].execute(onComplete);
-                
+
                 calledSynchronously = false;
                 if (completedSynchronously) {
                     onComplete();
                 }
-                
+
             } else {
                 self.running = false;
                 if (self.onComplete) {
@@ -2541,7 +2541,7 @@ define("io.ox/internal/testing/jasmine", function () {
         "build": 0,
         "revision": 1315677058
     };
-    
+
     return exports;
 
 });

@@ -12,10 +12,11 @@
  *
  */
 
-define("io.ox/internal/ajaxDebug/callHandling", ["io.ox/core/http", "io.ox/core/event"], function (http, event) {
-    
+define("io.ox/dev/ajaxDebug/callHandling",
+    ["io.ox/core/http", "io.ox/core/event"], function (http, event) {
+
     "use strict";
-    
+
     var callHandler = {
         history: [],
         perform: function (options, cb) {
@@ -28,7 +29,7 @@ define("io.ox/internal/ajaxDebug/callHandling", ["io.ox/core/http", "io.ox/core/
             this.trigger("historychanged", this);
             options.appendColumns = false;
             options.processResponse = false;
-            
+
             function process(data) {
                 entry.response = data;
                 if (cb) {
@@ -36,7 +37,7 @@ define("io.ox/internal/ajaxDebug/callHandling", ["io.ox/core/http", "io.ox/core/
                 }
                 callHandler.trigger("entrychanged", entry);
             }
-            
+
             if (options.data) {
                 http.PUT(options).done(process);
                 http.PUT(options).fail(process);
@@ -47,10 +48,10 @@ define("io.ox/internal/ajaxDebug/callHandling", ["io.ox/core/http", "io.ox/core/
             return entry;
         }
     };
-    
+
     event.Dispatcher.extend(callHandler);
-    
+
     return callHandler;
-    
-    
+
+
 });

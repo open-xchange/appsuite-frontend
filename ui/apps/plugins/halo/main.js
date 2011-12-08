@@ -12,20 +12,20 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("extensions/halo/main",
-    ["extensions/halo/api", "io.ox/core/extensions",
-     "css!extensions/halo/style.css"], function (api, ext) {
-    
+define("plugins/halo/main",
+    ["plugins/halo/api", "io.ox/core/extensions",
+     "css!plugins/halo/style.css"], function (api, ext) {
+
     "use strict";
-    
+
     function show(data) {
-        
+
         var app = ox.ui.createApp({
             title: data.display_name || "Halo"
         });
-        
+
         app.setLauncher(function () {
-            
+
             var win = ox.ui.createWindow({
                 title: data.display_name || "Halo",
                 toolbar: true
@@ -33,7 +33,7 @@ define("extensions/halo/main",
             win.nodes.main.addClass("io-ox-halo");
             app.setWindow(win);
             win.setQuitOnClose(true);
-            
+
             win.nodes.main.css({overflow: "auto"});
             // Trigger Server Halo API
             if (api) {
@@ -56,13 +56,13 @@ define("extensions/halo/main",
                     });
                 });
             }
-            
+
             win.show();
         });
-        
+
         app.launch();
     }
-    
+
     return {
         show: show
     };

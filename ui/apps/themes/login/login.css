@@ -41,6 +41,13 @@ body {
     user-select: none;
 }
 
+.selectable-text {
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    user-select: text;
+    cursor: default;
+}
+
 a, a:visited, .link {
     color: #08c;
     text-decoration: none;

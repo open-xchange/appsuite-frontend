@@ -12,9 +12,13 @@
  */
 
 define('io.ox/contacts/api',
-    ['io.ox/core/http', 'io.ox/core/api/factory',
-     'io.ox/core/cache', 'io.ox/contacts/main', 'io.ox/contacts/tests'],
-     function (http, apiFactory, cache, main, test) {
+
+    ['io.ox/core/http',
+     'io.ox/core/api/factory',
+     'io.ox/core/cache',
+      'io.ox/contacts/tests'
+     ], function (http, apiFactory, cache, test) {
+
 
     'use strict';
 

@@ -180,7 +180,7 @@ define("io.ox/mail/api",
                     var text = '';
                     $('<div>')
                         // escape everything but BR tags
-                        .html(data.attachments[0].content.replace(/<(?!br)/g, '&lt;'))
+                        .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
                         .contents().each(function () {
                             if (this.tagName === 'BR') {
                                 text += "\n";
@@ -222,15 +222,19 @@ define("io.ox/mail/api",
     api.send = function (data, files) {
 
         var deferred = $.Deferred(),
-            form = new FormData();
+            form = new FormData(),
+            flatten = function (recipient) {
+                return '"' + recipient[0] + '" <' + recipient[1] + '>';
+            };
 
         // clone data (to avoid side-effects)
         data = _.clone(data);
 
-        // flatten to, cc, bcc
-        data.to = (data.to || []).join(', ');
-        data.cc = (data.cc || []).join(', ');
-        data.bcc = (data.bcc || []).join(', ');
+        // flatten from, to, cc, bcc
+        data.from = _(data.from).map(flatten).join(', ');
+        data.to = _(data.to).map(flatten).join(', ');
+        data.cc = _(data.cc).map(flatten).join(', ');
+        data.bcc = _(data.bcc).map(flatten).join(', ');
 
         // add mail data
         form.append('json_0', JSON.stringify(data));

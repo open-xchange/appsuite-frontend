@@ -11,8 +11,6 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-/*globals tinyMCE */
-
 define.async('io.ox/mail/write/main',
     ['io.ox/mail/api',
      'io.ox/mail/util',
@@ -46,15 +44,15 @@ define.async('io.ox/mail/write/main',
     });
 
     // links
-    ext.point('io.ox/mail/write/links/toolbar').extend(new ext.Link({
-        index: 200,
-        id: 'proofread',
-        label: 'Proofread',
-        ref: 'io.ox/mail/write/actions/proofread'
-    }));
+//    ext.point('io.ox/mail/write/links/toolbar').extend(new ext.Link({
+//        index: 200,
+//        id: 'proofread',
+//        label: 'Proofread',
+//        ref: 'io.ox/mail/write/actions/proofread'
+//    }));
 
     // default sender (used to set from address)
-    var defaultSender,
+    var defaultSender = [],
         // editor mode
         editorMode = 'html';
 
@@ -87,7 +85,7 @@ define.async('io.ox/mail/write/main',
         }
 
         function togglePriority(e) {
-            var high = form.find('input[name=priority][value=2]'),
+            var high = form.find('input[name=priority][value=1]'),
                 normal = form.find('input[name=priority][value=3]');
             if (high.prop('checked')) {
                 high.prop('checked', false);
@@ -123,6 +121,7 @@ define.async('io.ox/mail/write/main',
         function addSection(id, label, show, collapsable) {
 
             sections[id + 'Label'] = $('<div>')
+                .attr('data-section-label', id)
                 .addClass('label')
                 .text(label + '')
                 .prepend(
@@ -139,13 +138,16 @@ define.async('io.ox/mail/write/main',
                 sections[id + 'Label'].css('cursor', 'default');
             }
 
-            sidepanel
-                .append(sections[id + 'Label'])
-                .append(sections[id] = $('<div>').addClass('section'));
+            sections[id] = $('<div>').addClass('section')
+                .attr('data-section', id);
+
+            sidepanel.append(sections[id + 'Label']).append(sections[id]);
+
             if (show === false) {
                 sections[id + 'Label'].hide();
                 sections[id].hide();
             }
+
             return sections[id];
         }
 
@@ -167,6 +169,7 @@ define.async('io.ox/mail/write/main',
                 .addClass('section-link')
                 .append(
                     $('<a>', { href: '#', tabindex: '5' })
+                    .attr('data-section-link', id)
                     .text(label + '')
                     .on('click', { id: id }, fnShowSection)
                 )
@@ -190,7 +193,7 @@ define.async('io.ox/mail/write/main',
             )
             .append(
                 $('<div>').addClass('person-link')
-                .text(data.display_name + '\u00a0')
+                .text(data.display_name + '\u00A0')
             )
             .append($('<div>').text(data.email));
         }
@@ -210,7 +213,7 @@ define.async('io.ox/mail/write/main',
             )
             .append(
                 $('<a>', { href: '#' }).addClass('person-link')
-                .text(data.display_name + '\u00a0')
+                .text(data.display_name + '\u00A0')
                 .on('click', {
                     display_name: data.display_name,
                     email1: data.email
@@ -261,9 +264,11 @@ define.async('io.ox/mail/write/main',
         function copyRecipients(id, node) {
             var list = mailUtil.parseRecipients(node.val());
             if (list.length) {
+                // add
                 addRecipients(id, list);
                 node.val('');
             } else if ($.trim(node.val()) !== '') {
+                // not accepted but has content -> shake
                 node.attr('disabled', 'disabled')
                     .css({ border: '1px solid #a00', backgroundColor: '#fee' })
                     .shake()
@@ -279,7 +284,7 @@ define.async('io.ox/mail/write/main',
             .addClass('fieldset')
             .append(
                 $('<input>', { type: 'text', tabindex: '2' })
-                .attr('data-type', id)
+                .attr('data-type', id) // not name=id!
                 .addClass('discreet')
                 .autocomplete({
                     source: function (query) {
@@ -539,6 +544,7 @@ define.async('io.ox/mail/write/main',
                     .append(
                         $('<div>')
                         .addClass('abs editor-inner-container')
+                        .css('overflow', 'hidden')
                         .append(
                             // text editor
                             editor = $('<textarea>')
@@ -624,12 +630,12 @@ define.async('io.ox/mail/write/main',
                     .append(
                         $('<span>').addClass('group-label').text('Priority')
                     )
-                    .append(createRadio('priority', '2', 'High'))
+                    .append(createRadio('priority', '1', 'High'))
                     .append(createRadio('priority', '3', 'Normal', true))
-                    .append(createRadio('priority', '4', 'Low'))
+                    .append(createRadio('priority', '5', 'Low'))
                     .on('change', 'input', function () {
                         var radio = $(this);
-                        if (radio.attr('value') === '2' && radio.prop('checked')) {
+                        if (radio.attr('value') === '1' && radio.prop('checked')) {
                             applyHighPriority(true);
                         } else {
                             applyHighPriority(false);
@@ -667,17 +673,22 @@ define.async('io.ox/mail/write/main',
                 .append(sidepanel)
             );
 
-            var adjustEditorMargin = (function () {
-                // trick to force document reflow
-                var alt = false;
-                return _.debounce(function () {
-                    var w = Math.max(10, editor.outerWidth() - 12 - 750);
-                    editor.css('paddingRight', w + 'px');
-                    editorPrintMargin.css('right', Math.max(0, w - 10) + 'px');
-                    // force reflow
-                    editor.css('display', (alt = !alt) ? 'block' : '');
+            var resizeEditorMargin = (function () {
+                    // trick to force document reflow
+                    var alt = false;
+                    return _.debounce(function () {
+                        var w = Math.max(10, editor.outerWidth() - 12 - 750);
+                        editor.css('paddingRight', w + 'px');
+                        editorPrintMargin.css('right', Math.max(0, w - 10) + 'px');
+                        // force reflow
+                        editor.css('display', (alt = !alt) ? 'block' : '');
+                    }, 100);
+                }()),
+
+                resizeEditor = _.debounce(function () {
+                    var p = editor.parent(), w = p.width(), h = p.height();
+                    p.find('table.mceLayout').css({ width: w + 'px', height: h + 'px' });
                 }, 100);
-            }());
 
             var dropZone = upload.dnd.createDropZone();
             dropZone.bind('drop', function (file) {
@@ -689,29 +700,49 @@ define.async('io.ox/mail/write/main',
 
             win.bind('show', function () {
                 if (editorMode === 'text') {
-                    adjustEditorMargin();
-                    $(window).on('resize', adjustEditorMargin);
+                    resizeEditorMargin();
+                    $(window).on('resize', resizeEditorMargin);
+                } else {
+                    $(window).on('resize', resizeEditor);
                 }
                 dropZone.include();
             });
 
             win.bind('hide', function () {
                 if (editorMode === 'text') {
-                    $(window).off('resize', adjustEditorMargin);
+                    $(window).off('resize', resizeEditorMargin);
+                } else {
+                    $(window).off('resize', resizeEditor);
                 }
                 dropZone.remove();
             });
         });
 
         function initializeEditor() {
+
+            var def = $.Deferred();
+
+            function makeParagraph() {
+                var self = $(this),
+                    style = self.attr('style'),
+                    p = $('<p>');
+                if (style) {
+                    p.attr('style', style);
+                }
+                self.replaceWith(p.append(self.contents()));
+            }
+
             // html?
             if (editorMode === 'html') {
+
                 editor.tinymce({
 
                     script_url: ox.base + '/apps/moxiecode/tiny_mce/tiny_mce.js',
                     plugins: 'paste',
                     theme: 'advanced',
                     skin: 'ox',
+
+                    init_instance_callback: def.resolve,
 
                     theme_advanced_buttons1:
                         'bold,italic,underline,|,' +
@@ -749,13 +780,17 @@ define.async('io.ox/mail/write/main',
                     paste_preprocess: function (pl, o) {
                         //console.debug('pre', o.content);
                         o.content = o.content
+                            // remove comments
+                            .replace(/<!--(.*?)-->/g, '')
+                            // remove custom attributes
+                            .replace(/ data-[^=]+="[^"]*"/g, '')
                             // remove &nbsp;
                             .replace(/&nbsp;/ig, ' ')
                             // fix missing white-space before/after links
                             .replace(/([^>\s])<a/ig, '$1 <a')
-                            .replace(/<\/\s?a>([^<\s])/ig, '</a> $1')
+                            .replace(/<\/\s?a>([^<\s,\.:;])/ig, '</a> $1')
                             // beautify simple quotes
-                            .replace(/([^=])"(\w+)"/g, '$1<em>\u201C$2\u201D</em>')
+                            .replace(/([^=])"([\w\- ]+)"/g, '$1\u201C$2\u201D')
                             // beautify dashes
                             .replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
                     },
@@ -764,22 +799,14 @@ define.async('io.ox/mail/write/main',
                     paste_postprocess: function (pl, o) {
 
                         var node = $(o.node), done;
+                        //console.debug('post', node.html());
 
                         // remove iframes and other stuff that shouldn't be in an email
                         // images too - doesn't work with copy/paste
                         node.find(
                             'iframe, object, applet, input, textarea, button, select, ' +
-                            'canvas, audio, video, img'
+                            'canvas, script, noscript, audio, video, img'
                             ).remove();
-
-                        // fix references
-                        node.find('a').each(function () {
-                            var self = $(this), match;
-                            if (/^\[\d+\]$/.test(self.text()) && /^#/.test(self.attr('href'))) {
-                                match = (self.text() + '').match(/^\[(\d+)\]$/);
-                                self.replaceWith($('<sup>').text(match[1]).add($.txt(' ')));
-                            }
-                        });
 
                         // beautify SUP tags
                         node.find('sup').css('lineHeight', '0');
@@ -789,11 +816,20 @@ define.async('io.ox/mail/write/main',
                             $(this).children().first().unwrap();
                         });
 
-                        // unwrap dead links (usually javascript hooks)
+                        // clean up links
                         node.find('a').each(function () {
-                            var self = $(this);
+                            var self = $(this), match;
                             if (!self.attr('href')) {
+                                // unwrap dead links (usually javascript hooks)
                                 self.replaceWith(self.contents());
+                            } else {
+                                // remove title & target
+                                self.removeAttr('title target');
+                                // fix references
+                                if (/^\[\d+\]$/.test(self.text()) && /^#/.test(self.attr('href'))) {
+                                    match = (self.text() + '').match(/^\[(\d+)\]$/);
+                                    self.replaceWith($('<sup>').text(match[1]).add($.txt(' ')));
+                                }
                             }
                         });
 
@@ -809,9 +845,15 @@ define.async('io.ox/mail/write/main',
                                 tagName = this.tagName,
                                 children = self.children(),
                                 text;
+                            // remove attributes
+                            self.removeAttr('id title alt rel');
                             // is closed tag?
                             if (/^(BR|HR|IMG)$/.test(tagName)) {
                                 return;
+                            }
+                            // fix text align
+                            if (self.attr('align')) {
+                                self.css('textAlign', self.attr('align')).removeAttr('align');
                             }
                             // fix text nodes
                             self.contents().each(function () {
@@ -897,16 +939,26 @@ define.async('io.ox/mail/write/main',
                                 });
                         });
 
-                        // beautify headers
-                        node.find('h1, h2, h3, h4, h5, h6, h7').each(function () {
-                            $(this).css({
-                                fontFamily: 'Arial, Helvetica, sans-serif',
-                                margin: '1em 0 1em 0'
-                            });
+                        // replace top-level <div> by <p>
+                        node.eq(0).children('div').each(makeParagraph);
+
+                        // remove <p> with just one <br> inside
+                        node.find('p').each(function () {
+                            var self = $(this),
+                                contents = self.contents();
+                            if (contents.length === 1 && contents.get(0).tagName === 'BR') {
+                                self.remove();
+                            }
                         });
                     }
                 });
+
+            } else {
+                // plain text
+                def.resolve();
             }
+
+            return def;
         }
 
         /**
@@ -976,12 +1028,13 @@ define.async('io.ox/mail/write/main',
         app.setPriority = function (prio) {
             // be robust
             prio = parseInt(prio, 10) || 3;
-            prio = prio >= 2 && prio <= 4 ? prio : 3;
+            prio = prio < 3 ? 1 : prio;
+            prio = prio > 3 ? 5 : prio;
             // set
             form.find('input[name=priority][value=' + prio + ']')
                 .prop('checked', true);
             // high priority?
-            if (prio === 2) {
+            if (prio === 1) {
                 priorityOverlay.addClass('high');
             }
         };
@@ -1022,53 +1075,69 @@ define.async('io.ox/mail/write/main',
          * Compose new mail
          */
         app.compose = function () {
+            var def = $.Deferred();
             win.setTitle('Compose new email')
                 .show(function () {
-                    initializeEditor();
-                    $('input[data-type=to]').focus().select();
+                    initializeEditor().done(function () {
+                        $('input[data-type=to]').focus().select();
+                        def.resolve();
+                    });
                 });
+            return def;
         };
 
         /**
          * Reply all
          */
         app.replyall = function (obj) {
+            var def = $.Deferred();
             mailAPI.replyall(obj).done(function (data) {
                 app.setMail(data, 'replyall');
                 win.setTitle('Reply all')
                     .show(function () {
-                        initializeEditor();
-                        editor.focus();
+                        initializeEditor().done(function () {
+                            editor.focus();
+                            def.resolve();
+                        });
                     });
             });
+            return def;
         };
 
         /**
          * Reply
          */
         app.reply = function (obj) {
+            var def = $.Deferred();
             mailAPI.reply(obj).done(function (data) {
                 app.setMail(data, 'reply');
                 win.setTitle('Reply')
                     .show(function () {
-                        initializeEditor();
-                        editor.focus();
+                        initializeEditor().done(function () {
+                            editor.focus();
+                            def.resolve();
+                        });
                     });
             });
+            return def;
         };
 
         /**
          * Forward
          */
         app.forward = function (obj) {
+            var def = $.Deferred();
             mailAPI.forward(obj).done(function (data) {
                 app.setMail(data, 'forward');
                 win.setTitle('Forward')
                     .show(function () {
-                        initializeEditor();
-                        $('input[data-type=to]').focus().select();
+                        initializeEditor().done(function () {
+                            $('input[data-type=to]').focus().select();
+                            def.resolve();
+                        });
                     });
             });
+            return def;
         };
 
         /**
@@ -1111,11 +1180,29 @@ define.async('io.ox/mail/write/main',
                     }
                     return obj;
                 }, {}),
+                content,
                 mail,
                 files = [],
                 parse = function (list) {
-                    return mailUtil.parseRecipients([].concat(list).join(', '));
+                    return _(mailUtil.parseRecipients([].concat(list).join(', ')))
+                        .map(function (recipient) {
+                            return ['"' + recipient[0] + '"', recipient[1]];
+                        });
                 };
+            // get content
+            if (editorMode === 'html') {
+                content = {
+                    content_type: 'text/html',
+                    content: String(data.content)
+                };
+            } else {
+                content = {
+                    content_type: 'text/plain',
+                    content: String(data.content)
+                        .replace(/</g, '&lt;') // escape <
+                        .replace(/\n/g, '<br>\n') // escape line-breaks
+                };
+            }
             // transform raw data
             mail = {
                 from: [defaultSender] || [],
@@ -1123,15 +1210,10 @@ define.async('io.ox/mail/write/main',
                 cc: parse(data.cc),
                 bcc: parse(data.bcc),
                 subject: data.subject + '',
-                priority: data.priority,
-                vcard: data.vcard || '0',
-                disp_notification_to: data.deliveryReceipt || '0',
-                attachments: [{
-                    content_type: 'text/plain',
-                    content: (data.content + '')
-                        .replace(/</g, '&lt;') // escape <
-                        .replace(/\n/g, '<br>\n') // escape line-breaks
-                }]
+                priority: parseInt(data.priority, 10) || 3,
+                vcard: parseInt(data.vcard, 10) || 0,
+                disp_notification_to: parseInt(data.deliveryReceipt, 10) || 0,
+                attachments: [content]
             };
             // add msgref?
             if (data.msgref) {
@@ -1182,17 +1264,29 @@ define.async('io.ox/mail/write/main',
                 });
         };
 
-        window.heinz = app;
-        app.test = function () {
+        /**
+         * Get tinyMCE
+         */
+        app.getTinyMCE = function () {
             return editor.tinymce();
         };
+
+        // destroy
+        app.setQuit(function () {
+            // clean up tinyMCE
+            editor.tinymce().destroy();
+            editor.remove();
+            // clear all private vars
+            app = win = main = sidepanel = form = subject = editor = null;
+            editorPrintMargin = priorityOverlay = sections = currentSignature = null;
+        });
 
         return app;
     }
 
     var module = {
-            getApp: createInstance
-        };
+        getApp: createInstance
+    };
 
     // initialize
     var loadUser, loadTinyMCE;
@@ -1201,7 +1295,7 @@ define.async('io.ox/mail/write/main',
     loadUser = userAPI.get(config.get('identifier'))
         .done(function (sender) {
             // inject 'from'
-            defaultSender = [sender.display_name, sender.email1];
+            defaultSender = ['"' + sender.display_name + '"', sender.email1];
         });
 
     // load tinyMCE?
@@ -1216,3 +1310,5 @@ define.async('io.ox/mail/write/main',
             return module;
         });
 });
+
+

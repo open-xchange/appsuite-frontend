@@ -15,12 +15,12 @@ define("io.ox/core/main",
     ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http",
      "io.ox/core/api/apps", "io.ox/core/extensions", "io.ox/core/i18n",
     "gettext!io.ox/core/main"], function (desktop, session, http, appAPI, ext, i18n, gt) {
-    
+
     "use strict";
-    
+
     var PATH = ox.base + "/apps/io.ox/core",
         DURATION = 250;
-    
+
     var logout = function () {
         return session.logout()
             .always(function () {
@@ -30,17 +30,17 @@ define("io.ox/core/main",
                 });
             });
     };
-    
+
     function initRefreshAnimation() {
-        
+
         var count = 0, timer = null;
-        
+
         function off() {
             if (count === 0 && timer === null) {
                 $("#io-ox-refresh-icon").removeClass("progress");
             }
         }
-        
+
         http.bind("start", function () {
             if (count === 0) {
                 if (timer === null) {
@@ -54,21 +54,21 @@ define("io.ox/core/main",
             }
             count++;
         });
-        
+
         http.bind("stop", function () {
             count = Math.max(0, count - 1);
             off();
         });
     }
-    
+
     function launch() {
-        
+
         desktop.addLauncher("right", gt("Sign out"), function (e) {
             return logout();
         });
-        
+
         desktop.addLauncher("right", gt("Help"));
-        
+
         desktop.addLauncher("right", gt("Refresh"), function () {
                 // trigger global event
                 if (ox.online) {
@@ -77,17 +77,17 @@ define("io.ox/core/main",
                 return $.Deferred().resolve();
             })
             .attr("id", "io-ox-refresh-icon");
-        
+
         // refresh animation
         initRefreshAnimation();
-        
+
         desktop.addLauncher("right", gt("Applications"), function () {
             var node = this;
             return require(["io.ox/applications/main"], function (m) {
                 m.getApp().setLaunchBarIcon(node).launch();
             });
         });
-        
+
         var addLauncher = function (app) {
             desktop.addLauncher("left", app.title, function () {
                 var node = this;
@@ -96,11 +96,11 @@ define("io.ox/core/main",
                 });
             });
         };
-        
+
         _(appAPI.getFavorites()).each(addLauncher);
-        
+
         // initialize empty desktop
-        
+
         ext.point("io.ox/core/desktop").extend({
             id: "upsell",
             draw: function () {
@@ -124,13 +124,13 @@ define("io.ox/core/main",
                 );
             }
         });
-        
+
         ext.point("io.ox/core/desktop").extend({
             id: "welcome",
             draw: function () {
-                
+
                 var date, update;
-                
+
                 this.append(
                     $("<div>", { id: "io-ox-welcome" })
                     .addClass("abs")
@@ -147,37 +147,52 @@ define("io.ox/core/main",
                         date = $("<div>").addClass("clock clear-title").text("")
                     )
                 );
-                
+
                 update = function () {
                     date.text(i18n.date("EEE dd. MMM YYYY HH:mm"));
                 };
-                
+
                 update();
                 _.every(1, "minute", update);
             }
         });
-        
+
         ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
-        
+
         ox.ui.windowManager.bind("empty", function (flag) {
             $("#io-ox-desktop")[flag ? "show" : "hide"]();
             $("#io-ox-windowmanager")[flag ? "hide" : "show"]();
         });
-        
+
         var def = $.Deferred(),
-            autoLaunch = _.url.hash("launch") ? _.url.hash("launch").split(/,/) : [];
-        
+            autoLaunch = _.url.hash("launch") ? _.url.hash("launch").split(/,/) : [],
+            autoLaunchModules = _(autoLaunch)
+                .map(function (m) {
+                    return m.split(/:/)[0];
+                });
+
         $.when(
-                ext.load(),
-                require(autoLaunch),
+                ext.loadPlugins(),
+                require(autoLaunchModules),
                 def
             )
             .done(function () {
                 _(autoLaunch).each(function (id) {
-                    require(id).getApp().launch();
+                    // split app/call
+                    var pair = id.split(/:/),
+                        launch = require(pair[0]).getApp().launch(),
+                        call = pair[1];
+                    // explicit call?
+                    if (call) {
+                        launch.done(function () {
+                            if (this[call]) {
+                                this[call]();
+                            }
+                        });
+                    }
                 });
             });
-        
+
         if (autoLaunch.length) {
             $("#background_loader").removeClass("busy").hide();
             def.resolve();
@@ -185,7 +200,7 @@ define("io.ox/core/main",
             $("#background_loader").removeClass("busy").fadeOut(DURATION, def.resolve);
         }
     }
-    
+
     return {
         launch: launch
     };

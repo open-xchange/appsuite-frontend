@@ -11,10 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("extensions/halo/config", function () {
-    
+define("plugins/halo/config", function () {
+
     "use strict";
-    
+
     return {
         interpret: function (providersConfig, activeProviders) {
 
@@ -30,7 +30,7 @@ define("extensions/halo/config", function () {
             providersConfig = _(providersConfig).map(function (val) {
                 return val;
             });
-            
+
             providersConfig.sort(function (a, b) {
                 return a.position - b.position;
             });

@@ -164,6 +164,9 @@ define("io.ox/core/desktop",
                 // self
                 self = this;
 
+            // add dispatcher
+            event.Dispatcher.extend(this);
+
             this.getInstance = function () {
                 return self; // not this!
             };
@@ -191,6 +194,10 @@ define("io.ox/core/desktop",
                 win = w;
                 win.app = this;
                 return this;
+            };
+
+            this.getWindow = function () {
+                return win;
             };
 
             this.launch = function () {
@@ -233,9 +240,15 @@ define("io.ox/core/desktop",
                             launchbarIcon = null;
                         });
                     }
+                    // destroy dispatcher
+                    self.dispatcher.destroy();
                     // destroy window
                     if (win) {
                         win.destroy();
+                    }
+                    // remove app's properties
+                    for (var id in self) {
+                        delete self[id];
                     }
                     // don't leak
                     self = win = launchFn = quitFn = null;
@@ -371,9 +384,11 @@ define("io.ox/core/desktop",
                     firstShow = true;
 
                 this.show = function (cont) {
-                    if (currentWindow !== this) {
+                    // get node and its parent node
+                    var node = this.nodes.outer, parent = node.parent();
+                    // if not current window or if detached (via funny race conditions)
+                    if (currentWindow !== this || parent.length === 0) {
                         // show
-                        var node = this.nodes.outer;
                         if (firstShow) {
                             node.data("index", guid - 1).css("left", ((guid - 1) * 101) + "%");
                         }
@@ -394,7 +409,7 @@ define("io.ox/core/desktop",
                         ox.ui.windowManager.trigger("window.beforeshow", self);
                         node.show();
                         scrollTo(node, function () {
-                            if (currentWindow) {
+                            if (currentWindow && currentWindow !== self) {
                                 currentWindow.hide();
                             }
                             currentWindow = self;
@@ -462,14 +477,18 @@ define("io.ox/core/desktop",
                 };
 
                 this.destroy = function () {
-                    if (currentWindow === this) {
-                        currentWindow = null;
-                    }
+                    // hide window
+                    this.hide();
+                    // trigger event
+                    this.trigger("destroy");
+                    // disconnect from app
                     if (this.app !== null) {
                         this.app.getLaunchBarIcon().removeClass("active");
                         this.app.win = null;
                         this.app = null;
                     }
+                    // destroy everything
+                    this.dispatcher.destroy();
                     this.nodes.outer.remove();
                     this.nodes = null;
                     this.show = $.noop;

@@ -6,7 +6,7 @@ define(function () {
         installed: [
             "io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar",
             "io.ox/files", "io.ox/conversations",
-            "io.ox/internal/ajaxDebug", "io.ox/internal/testing"
+            "io.ox/dev/ajaxDebug", "io.ox/dev/testing"
         ],
 
         favorites: [
@@ -60,14 +60,14 @@ define(function () {
                 category: "Productivity"
             },
 
-            "io.ox/internal/ajaxDebug": {
+            "io.ox/dev/ajaxDebug": {
                 title: "Ajax Debugger",
                 company: "CompuGlobalHyperMegaNet",
                 icon: "default.png",
                 category: "Dev"
             },
 
-            "io.ox/internal/testing": {
+            "io.ox/dev/testing": {
                 title: "UI Test Suite",
                 company: "CompuGlobalHyperMegaNet",
                 icon: "default.png",

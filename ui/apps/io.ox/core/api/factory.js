@@ -74,7 +74,7 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                             // TODO: consider folder_id
                             var diff = _(caches.get.keys())
                                 .difference(
-                                    data.map(function (obj) {
+                                    _(data).map(function (obj) {
                                         return caches.get.keyGenerator(obj);
                                     })
                                 );

@@ -11,10 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("extensions/halo/contacts/register", ["io.ox/core/extensions"], function (ext) {
-    
+define("plugins/halo/contacts/register", ["io.ox/core/extensions"], function (ext) {
+
     "use strict";
-    
+
     ext.point("io.ox/halo/contact:renderer").extend({
         id: "contacts",
         handles: function (type) {
@@ -32,7 +32,7 @@ define("extensions/halo/contacts/register", ["io.ox/core/extensions"], function 
             return deferred;
         }
     });
-    
+
     ext.point("io.ox/halo/contact:requestEnhancement").extend({
         id: "contacts-request",
         enhances: function (type) {

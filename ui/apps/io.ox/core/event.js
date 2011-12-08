@@ -16,40 +16,47 @@
 define("io.ox/core/event", function () {
 
     "use strict";
-    
+
     var that = {
 
         Dispatcher: (function () {
-            
+
             var guid = 1,
-                
+
                 trim = function (type) {
                     // events should be string and lower case
                     return (type + "").toLowerCase().replace(/(^\s+|\s+$)/g, "");
                 },
-                
+
                 split = function (type) {
                     type = trim(type);
                     // split?
                     return type.search(/\s/) > -1 ? type.split(/\s+/) : [type];
                 };
-            
+
             /**
              * @name Dispatcher
              * @param {Object} target Target object
              * @class Event Dispatcher
              */
             var Dispatcher = function (target) {
-                
+
                 this.handlers = {};
                 this.data = {};
+                this.once = {};
+
                 this.has = false;
-                
+
                 this.enabled = true;
-                
+
                 // make robust for lazy mixins
                 var self = this;
-                
+
+                // never leak
+                $(window).bind("unload", function () {
+                    self.data = self.handlers = null;
+                });
+
                 /**
                  * Bind event
                  * @param {string} type Event name
@@ -57,20 +64,20 @@ define("io.ox/core/event", function () {
                  * @param {function (data, type)} fn Event handler
                  */
                 this.bind = function (type, data, fn) {
-                    
+
                     // parameter shift?
                     if (_.isFunction(data)) {
                         fn = data;
                         data = undefined;
                     }
-                    
+
                     _(split(type)).each(function (t) {
-                        
+
                         // get/create queue
                         var h = self.handlers[t] || (self.handlers[t] = {});
-                        
+
                         fn.oxGuid = fn.oxGuid !== undefined ? fn.oxGuid : String(guid++);
-                        
+
                         // add event once
                         if (h[fn.oxGuid] === undefined) {
                             // add
@@ -80,37 +87,48 @@ define("io.ox/core/event", function () {
                         }
                     });
                 };
-                
+
+                this.once = function (type, data, fn) {
+                    // parameter shift?
+                    if (_.isFunction(data)) {
+                        fn = data;
+                        data = undefined;
+                    }
+                    self.bind(type, data, fn);
+                    self.once[fn.oxGuid] = true;
+                };
+
                 /**
                  * Unbind event
                  * @param {string} type Event name
                  * @param {function ()} fn Event handler
                  */
                 this.unbind = function (type, fn) {
-                    
+
                     _(split(type)).each(function (t) {
-                        
+
                         var h = self.handlers[t] || {};
-                        
+
                         // prevent IE from throwing unnecessary errors
                         try {
                             // remove listener
                             delete h[fn.oxGuid];
+                            delete self.once[fn.oxGuid];
                         } catch (e) { }
                     });
                 };
-                
+
                 /**
                  * Trigger event
                  * @param {string} type Event name
                  * @param {Object} [data] Event data
                  */
                 this.trigger = function (type, data) {
-                    
+
                     if (self.has === false || self.enabled === false) {
                         return;
                     }
-                    
+
                     // call handler
                     function call(handler, type) {
                         // merge data?
@@ -118,6 +136,7 @@ define("io.ox/core/event", function () {
                         // execute function
                         try {
                             handler.fn.call(target, d, type);
+                            delete self.once[handler.fn.oxGuid];
                         } catch (ex_1) {
                             try {
                                 console.error("Dispatcher.trigger(" + type + ") " + ex_1);
@@ -129,17 +148,17 @@ define("io.ox/core/event", function () {
                             }
                         }
                     }
-                    
+
                     _(split(type)).each(function (t) {
-                        
+
                         var h = self.handlers[t] || {}, id = "";
-                        
+
                         for (id in h) {
                             call(h[id], t);
                         }
                     });
                 };
-                
+
                 /**
                  * List all event handlers
                  * @param {string} [type] List only events of given type
@@ -148,7 +167,7 @@ define("io.ox/core/event", function () {
                 this.list = function (type) {
                     return type === undefined ? self.handlers : self.handlers[type];
                 };
-                
+
                 /**
                  * Get the number of bound handlers
                  * @return {number} Number of bound handlers
@@ -160,7 +179,7 @@ define("io.ox/core/event", function () {
                     }
                     return i;
                 };
-                
+
                 /**
                  * Disable dispatcher
                  */
@@ -174,9 +193,15 @@ define("io.ox/core/event", function () {
                 this.enable = function () {
                     self.enabled = true;
                 };
-                
+
+                /**
+                 * Remove call callbacks
+                 */
+                this.destroy = function () {
+                    self = self.handlers = self.data = self.once = null;
+                };
             };
-            
+
             Dispatcher.extend = function (obj) {
                 // create new dispatcher
                 obj.dispatcher = new Dispatcher(obj);
@@ -186,14 +211,14 @@ define("io.ox/core/event", function () {
                 obj.trigger = obj.dispatcher.trigger;
                 return obj;
             };
-            
+
             return Dispatcher;
-            
+
         }())
     };
-    
+
     // add global dispatcher
     that.Dispatcher.extend(ox);
-    
+
     return that;
 });

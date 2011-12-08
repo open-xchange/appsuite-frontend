@@ -1,33 +1,34 @@
 
 define(function () {
-    
+
     return {
-        
+
         pageTitle: "OX7",
         pageHeader: "open xchange 7",
-        
+
         autoLogin: true,
         forgotPassword: "https://iforgot.apple.com",
-        
+
         languages: {
             en_US: "English",
             de_DE: "Deutsch",
             fr_FR: "Français"
         },
-        
+
         defaultContext: "1337",
-        
+
         copyright: "&copy; 2011 open xchange.",
         version: "7.0.0 dev",
         buildDate: "2010-10-21",
-        
-        extensions: {
+
+        plugins: {
             signin: [],
             core: ["halo"],
             halo: ["halo/contacts", "halo/appointments", "halo/linkedIn"],
-            portal: ["appointments", "linkedIn", "mail", "rss"]
+            portal: ["appointments", "linkedIn", "mail", "rss"],
+            tests: ["io.ox/mail/write", "plugins/halo"]
         },
-        
+
         previewMimeTypes : {
             "doc": "application/msword",
             "dot": "application/msword",

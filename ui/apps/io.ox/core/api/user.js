@@ -62,11 +62,10 @@ define("io.ox/core/api/user",
     };
 
     api.getPictureURL = function (id) {
-
         return $.when(api.get({ id: id }), require(["io.ox/contacts/api"]))
             .pipe(
                 function (data, contactsAPI) {
-                    return contactsAPI.getPictureURL(data);
+                    return contactsAPI[0].getPictureURL(data[0]);
                 },
                 function () {
                     return ox.base + "/apps/themes/default/dummypicture.png";
