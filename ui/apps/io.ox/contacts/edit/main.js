@@ -74,8 +74,8 @@ define("io.ox/contacts/edit/main",
 
             win.show(function () {
 
-                function fieldHtml(label, name, datatype) {
-                    return $('<div>').addClass('field ' + datatype)
+                function fieldHtml(label, name) {
+                    return $('<div>').addClass('field ')
                     .append($('<label>').text(label))
                     .append($('<input>', { name: name, type: 'text'}));
                 }
@@ -87,116 +87,116 @@ define("io.ox/contacts/edit/main",
 
                 paneEdit.append(
                     $('<div>').addClass('block edit_contact name')
-                    .append(fieldHtml('first name', 'first_name', 'string'))
-                    .append(fieldHtml('last name', 'last_name', 'string'))
+                    .append(fieldHtml('first name', 'first_name'))
+                    .append(fieldHtml('last name', 'last_name'))
                 )
                 .append(
                     $('<divb>').addClass('block edit_contact company')
-                    .append(fieldHtml('company', 'company', 'string'))
-                    .append(fieldHtml('position', 'position', 'string'))
-                    .append(fieldHtml('profession', 'profession', 'string'))
-                    .append(fieldHtml('department', 'department', 'string'))
+                    .append(fieldHtml('company', 'company'))
+                    .append(fieldHtml('position', 'position'))
+                    .append(fieldHtml('profession', 'profession'))
+                    .append(fieldHtml('department', 'department'))
                 )
                 .append(
                     $('<div>').addClass('block edit_contact address')
-                    .append(fieldHtml('street', 'street_business', 'string'))
-                    .append(fieldHtml('postal code', 'postal_code_business', 'string'))
-                    .append(fieldHtml('city', 'city_business', 'string'))
+                    .append(fieldHtml('street', 'street_business'))
+                    .append(fieldHtml('postal code', 'postal_code_business'))
+                    .append(fieldHtml('city', 'city_business'))
                 )
                 .append(
                     $('<div>').addClass('block edit_contact phone')
-                    .append(fieldHtml('tel.', 'telephone_business1', 'string'))
-                    .append(fieldHtml('sales volume', 'sales_volume', 'string'))
+                    .append(fieldHtml('tel.', 'telephone_business1'))
+                    .append(fieldHtml('sales volume', 'sales_volume'))
                 );
 
                 paneEdit2.append(
                     $('<div>').addClass('block edit_contact unsortedfields')
-                    .append(fieldHtml('suffix', 'suffix', 'string'))
-                    .append(fieldHtml('title', 'title', 'string'))
-                    .append(fieldHtml('street_home', 'street_home', 'string'))
-                    .append(fieldHtml('postal_code_home', 'postal_code_home', 'string'))
-                    .append(fieldHtml('city_home', 'city_home', 'string'))
-                    .append(fieldHtml('state_home', 'state_home', 'string'))
-                    .append(fieldHtml('country_home', 'country_home', 'string'))
-                    .append(fieldHtml('birthday', 'birthday', 'date'))
-                    .append(fieldHtml('marital_status', 'marital_status', 'string'))
-                    .append(fieldHtml('number_of_children', 'number_of_children', 'string'))
-                    .append(fieldHtml('nickname', 'nickname', 'string'))
-                    .append(fieldHtml('spouse_name', 'spouse_name', 'string'))
-                    .append(fieldHtml('anniversary', 'anniversary', 'date'))
-                    .append(fieldHtml('note', 'note', 'string'))
-                    .append(fieldHtml('employee_type', 'employee_type', 'string'))
-                    .append(fieldHtml('room_number', 'room_number', 'string'))
-                    .append(fieldHtml('state_business', 'state_business', 'string'))
-                    .append(fieldHtml('country_business', 'country_business', 'string'))
-                    .append(fieldHtml('number_of_employees', 'number_of_employees', 'string'))
-                    .append(fieldHtml('tax_id', 'tax_id', 'string'))
-                    .append(fieldHtml('commercial_register', 'commercial_register', 'string'))
-                    .append(fieldHtml('branches', 'branches', 'string'))
-                    .append(fieldHtml('business_category', 'business_category', 'string'))
-                    .append(fieldHtml('info', 'info', 'string'))
-                    .append(fieldHtml('manager_name', 'manager_name', 'string'))
-                    .append(fieldHtml('assistant_name', 'assistant_name', 'string'))
-                    .append(fieldHtml('street_other', 'street_other', 'string'))
-                    .append(fieldHtml('city_other', 'city_other', 'string'))
-                    .append(fieldHtml('postal_code_other', 'postal_code_other', 'string'))
-                    .append(fieldHtml('country_other', 'country_other', 'string'))
-                    .append(fieldHtml('telephone_business2', 'telephone_business2', 'string'))
-                    .append(fieldHtml('fax_business', 'fax_business', 'string'))
-                    .append(fieldHtml('telephone_callback', 'telephone_callback', 'string'))
-                    .append(fieldHtml('telephone_car', 'telephone_car', 'string'))
-                    .append(fieldHtml('telephone_company', 'telephone_company', 'string'))
-                    .append(fieldHtml('telephone_home1', 'telephone_home1', 'string'))
-                    .append(fieldHtml('telephone_home2', 'telephone_home2', 'string'))
-                    .append(fieldHtml('fax_home', 'fax_home', 'string'))
-                    .append(fieldHtml('cellular_telephone1', 'cellular_telephone1', 'string'))
-                    .append(fieldHtml('cellular_telephone2', 'cellular_telephone2', 'string'))
-                    .append(fieldHtml('telephone_other', 'telephone_other', 'string'))
-                    .append(fieldHtml('fax_other', 'fax_other', 'string'))
-                    .append(fieldHtml('email1', 'email1', 'mail'))
-                    .append(fieldHtml('email2', 'email2', 'mail'))
-                    .append(fieldHtml('email3', 'email3', 'mail'))
-                    .append(fieldHtml('url', 'url', 'string'))
-                    .append(fieldHtml('telephone_isdn', 'telephone_isdn', 'string'))
-                    .append(fieldHtml('telephone_pager', 'telephone_pager', 'string'))
-                    .append(fieldHtml('telephone_primary', 'telephone_primary', 'string'))
-                    .append(fieldHtml('telephone_radio', 'telephone_radio', 'string'))
-                    .append(fieldHtml('telephone_telex', 'telephone_telex', 'string'))
-                    .append(fieldHtml('telephone_ttytdd', 'telephone_ttytdd', 'string'))
-                    .append(fieldHtml('instant_messenger1', 'instant_messenger1', 'string'))
-                    .append(fieldHtml('instant_messenger2', 'instant_messenger2', 'string'))
-                    .append(fieldHtml('telephone_ip', 'telephone_ip', 'string'))
-                    .append(fieldHtml('telephone_assistant', 'telephone_assistant', 'string'))
-                    .append(fieldHtml('userfield01', 'userfield01', 'string'))
-                    .append(fieldHtml('userfield02', 'userfield02', 'string'))
-                    .append(fieldHtml('userfield03', 'userfield03', 'string'))
-                    .append(fieldHtml('userfield04', 'userfield04', 'string'))
-                    .append(fieldHtml('userfield05', 'userfield05', 'string'))
-                    .append(fieldHtml('userfield06', 'userfield06', 'string'))
-                    .append(fieldHtml('userfield07', 'userfield07', 'string'))
-                    .append(fieldHtml('userfield08', 'userfield08', 'string'))
-                    .append(fieldHtml('userfield09', 'userfield09', 'string'))
-                    .append(fieldHtml('userfield10', 'userfield10', 'string'))
-                    .append(fieldHtml('userfield11', 'userfield11', 'string'))
-                    .append(fieldHtml('userfield12', 'userfield12', 'string'))
-                    .append(fieldHtml('userfield13', 'userfield13', 'string'))
-                    .append(fieldHtml('userfield14', 'userfield14', 'string'))
-                    .append(fieldHtml('userfield15', 'userfield15', 'string'))
-                    .append(fieldHtml('userfield16', 'userfield16', 'string'))
-                    .append(fieldHtml('userfield17', 'userfield17', 'string'))
-                    .append(fieldHtml('userfield18', 'userfield18', 'string'))
-                    .append(fieldHtml('userfield19', 'userfield19', 'string'))
-                    .append(fieldHtml('userfield20', 'userfield20', 'string'))
-                    .append(fieldHtml('distribution_list', 'distribution_list', 'array'))
-                    .append(fieldHtml('number_of_distribution_list', 'number_of_distribution_list', 'number'))
-                    .append(fieldHtml('contains_image1', 'contains_image1fix', 'string'))
-                    .append(fieldHtml('image_last_modified', 'image_last_modified', 'timestamp'))
-                    .append(fieldHtml('state_other', 'state_other', 'string'))
-                    .append(fieldHtml('file_as', 'file_as', 'string'))
-                    .append(fieldHtml('number_of_attachments', 'number_of_attachments', 'number'))
-                    .append(fieldHtml('image1_content_type', 'image1_content_type', 'string'))
-                    .append(fieldHtml('mark_as_distributionlist', 'mark_as_distributionlist', 'boolean'))
-                    .append(fieldHtml('default_address', 'default_address', 'number'))
+                    .append(fieldHtml('suffix', 'suffix'))
+                    .append(fieldHtml('title', 'title'))
+                    .append(fieldHtml('street_home', 'street_home'))
+                    .append(fieldHtml('postal_code_home', 'postal_code_home'))
+                    .append(fieldHtml('city_home', 'city_home'))
+                    .append(fieldHtml('state_home', 'state_home'))
+                    .append(fieldHtml('country_home', 'country_home'))
+                    .append(fieldHtml('birthday', 'birthday'))
+                    .append(fieldHtml('marital_status', 'marital_status'))
+                    .append(fieldHtml('number_of_children', 'number_of_children'))
+                    .append(fieldHtml('nickname', 'nickname'))
+                    .append(fieldHtml('spouse_name', 'spouse_name'))
+                    .append(fieldHtml('anniversary', 'anniversary'))
+                    .append(fieldHtml('note', 'note'))
+                    .append(fieldHtml('employee_type', 'employee_type'))
+                    .append(fieldHtml('room_number', 'room_number'))
+                    .append(fieldHtml('state_business', 'state_business'))
+                    .append(fieldHtml('country_business', 'country_business'))
+                    .append(fieldHtml('number_of_employees', 'number_of_employees'))
+                    .append(fieldHtml('tax_id', 'tax_id'))
+                    .append(fieldHtml('commercial_register', 'commercial_register'))
+                    .append(fieldHtml('branches', 'branches'))
+                    .append(fieldHtml('business_category', 'business_category'))
+                    .append(fieldHtml('info', 'info'))
+                    .append(fieldHtml('manager_name', 'manager_name'))
+                    .append(fieldHtml('assistant_name', 'assistant_name'))
+                    .append(fieldHtml('street_other', 'street_other'))
+                    .append(fieldHtml('city_other', 'city_other'))
+                    .append(fieldHtml('postal_code_other', 'postal_code_other'))
+                    .append(fieldHtml('country_other', 'country_other'))
+                    .append(fieldHtml('telephone_business2', 'telephone_business2'))
+                    .append(fieldHtml('fax_business', 'fax_business'))
+                    .append(fieldHtml('telephone_callback', 'telephone_callback'))
+                    .append(fieldHtml('telephone_car', 'telephone_car'))
+                    .append(fieldHtml('telephone_company', 'telephone_company'))
+                    .append(fieldHtml('telephone_home1', 'telephone_home1'))
+                    .append(fieldHtml('telephone_home2', 'telephone_home2'))
+                    .append(fieldHtml('fax_home', 'fax_home'))
+                    .append(fieldHtml('cellular_telephone1', 'cellular_telephone1'))
+                    .append(fieldHtml('cellular_telephone2', 'cellular_telephone2'))
+                    .append(fieldHtml('telephone_other', 'telephone_other'))
+                    .append(fieldHtml('fax_other', 'fax_other'))
+                    .append(fieldHtml('email1', 'email1'))
+                    .append(fieldHtml('email2', 'email2'))
+                    .append(fieldHtml('email3', 'email3'))
+                    .append(fieldHtml('url', 'url'))
+                    .append(fieldHtml('telephone_isdn', 'telephone_isdn'))
+                    .append(fieldHtml('telephone_pager', 'telephone_pager'))
+                    .append(fieldHtml('telephone_primary', 'telephone_primary'))
+                    .append(fieldHtml('telephone_radio', 'telephone_radio'))
+                    .append(fieldHtml('telephone_telex', 'telephone_telex'))
+                    .append(fieldHtml('telephone_ttytdd', 'telephone_ttytdd'))
+                    .append(fieldHtml('instant_messenger1', 'instant_messenger1'))
+                    .append(fieldHtml('instant_messenger2', 'instant_messenger2'))
+                    .append(fieldHtml('telephone_ip', 'telephone_ip'))
+                    .append(fieldHtml('telephone_assistant', 'telephone_assistant'))
+                    .append(fieldHtml('userfield01', 'userfield01'))
+                    .append(fieldHtml('userfield02', 'userfield02'))
+                    .append(fieldHtml('userfield03', 'userfield03'))
+                    .append(fieldHtml('userfield04', 'userfield04'))
+                    .append(fieldHtml('userfield05', 'userfield05'))
+                    .append(fieldHtml('userfield06', 'userfield06'))
+                    .append(fieldHtml('userfield07', 'userfield07'))
+                    .append(fieldHtml('userfield08', 'userfield08'))
+                    .append(fieldHtml('userfield09', 'userfield09'))
+                    .append(fieldHtml('userfield10', 'userfield10'))
+                    .append(fieldHtml('userfield11', 'userfield11'))
+                    .append(fieldHtml('userfield12', 'userfield12'))
+                    .append(fieldHtml('userfield13', 'userfield13'))
+                    .append(fieldHtml('userfield14', 'userfield14'))
+                    .append(fieldHtml('userfield15', 'userfield15'))
+                    .append(fieldHtml('userfield16', 'userfield16'))
+                    .append(fieldHtml('userfield17', 'userfield17'))
+                    .append(fieldHtml('userfield18', 'userfield18'))
+                    .append(fieldHtml('userfield19', 'userfield19'))
+                    .append(fieldHtml('userfield20', 'userfield20'))
+                   // .append(fieldHtml('distribution_list', 'distribution_list', 'array'))
+                   // .append(fieldHtml('number_of_distribution_list', 'number_of_distribution_list', 'number'))
+                  //  .append(fieldHtml('contains_image1', 'contains_image1fix', 'string'))
+                   // .append(fieldHtml('image_last_modified', 'image_last_modified', 'timestamp'))
+                    .append(fieldHtml('state_other', 'state_other'))
+                   // .append(fieldHtml('file_as', 'file_as', 'string'))
+                   // .append(fieldHtml('number_of_attachments', 'number_of_attachments', 'number'))
+                   // .append(fieldHtml('image1_content_type', 'image1_content_type', 'string'))
+                   // .append(fieldHtml('mark_as_distributionlist', 'mark_as_distributionlist', 'boolean'))
+                   // .append(fieldHtml('default_address', 'default_address', 'number'))
 //                    .append(fieldHtml('internal_userid', 'internal_userid', 'number'))
 //                    .append(fieldHtml('image1_url', 'image1_url', 'string'))
 
@@ -236,7 +236,7 @@ define("io.ox/contacts/edit/main",
 
                         // select the data
                         // collect all strings
-                        formFrame.find('.field.string input')
+                        formFrame.find('.field input')
                             .each(function (index) {
                                 var value =  $(this).val(),
                                     id = $(this).attr('name');
@@ -244,8 +244,8 @@ define("io.ox/contacts/edit/main",
                                     formdata[id] = value;
                                 }
                             });
-                        // collect all dates
-                        formFrame.find('.field.date input')
+                        // collect anniversary
+                        formFrame.find('.field input[name="anniversary"]')
                         .each(function (index) {
                             var value =  $(this).val(),
                                 id = $(this).attr('name'),
@@ -255,33 +255,19 @@ define("io.ox/contacts/edit/main",
                                 formdata[id] = date;
                             }
                         });
-                        // collect all mails
-                        formFrame.find('.field.mail input')
+
+                        // collect birthday
+                        formFrame.find('.field input[name="birthday"]')
                         .each(function (index) {
                             var value =  $(this).val(),
-                                id = $(this).attr('name');
+                                id = $(this).attr('name'),
+                                dateArray = value.split('.');
+                            var date =  Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
                             if (value !== "") {
-                                formdata[id] = value;
+                                formdata[id] = date;
                             }
                         });
-                     // collect all arrays
-//                        formFrame.find(".edit_contact input[data-type|='array']")
-//                        .each(function (index) {
-//                            var value =  $(this).val(),
-//                                id = $(this).attr('name');
-//                            if (value !== "") {
-//                                formdata[id] = value;
-//                            }
-//                        });
-                        // collect all numbers
-                        formFrame.find(".edit_contact input[data-type|='number']")
-                        .each(function (index) {
-                            var value =  $(this).val(),
-                                id = $(this).attr('name');
-                            if (value !== "") {
-                                formdata[id] = value;
-                            }
-                        });
+
                         var timestamp = new Date().getTime();
                         formdata.folderId = data.folder_id;
                         formdata.id = data.id;
@@ -319,13 +305,15 @@ define("io.ox/contacts/edit/main",
                 .addClass('even');
 
                 // fill strings
-                formFrame.find('.field.string input')//TODO business_category isnt submitted
+                formFrame.find('.field input')//TODO business_category isnt submitted
                 .each(function (index) {
                     var name = $(this).attr('name');
                     $(this).val(data[name]);
                 });
-                // fill dates
-                formFrame.find('.field.date input')
+
+                // need a better way to fill the dates
+                // fill anniversary
+                formFrame.find('.field input[name="anniversary"]')
                 .each(function (index) {
                     var name = $(this).attr('name');
                     if (data[name]) {
@@ -334,13 +322,16 @@ define("io.ox/contacts/edit/main",
                         $(this).val(dateFormated);
                     }
                 });
-                // fill mails
-                formFrame.find('.field.mail input')
+             // fill birthday
+                formFrame.find('.field input[name="birthday"]')
                 .each(function (index) {
                     var name = $(this).attr('name');
-                    $(this).val(data[name]);
+                    if (data[name]) {
+                        var date = new Date(data[name]);
+                        var dateFormated =  date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+                        $(this).val(dateFormated);
+                    }
                 });
-
             });
         });
 

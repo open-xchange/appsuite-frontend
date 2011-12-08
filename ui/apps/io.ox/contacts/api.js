@@ -12,10 +12,13 @@
  */
 
 define('io.ox/contacts/api',
+
     ['io.ox/core/http',
      'io.ox/core/api/factory',
-     'io.ox/core/cache'
-    ], function (http, apiFactory, cache) {
+     'io.ox/core/cache',
+      'io.ox/contacts/tests'
+     ], function (http, apiFactory, cache, test) {
+
 
     'use strict';
 
@@ -67,6 +70,10 @@ define('io.ox/contacts/api',
         .done(function (data) {
             api.caches.all.clear(); //TODO considere proper folder
             api.trigger('refresh.all');
+            api.trigger('created', { // TODO needs a switch for created by hand or by test
+                folder: 6,
+                id: data.id
+            });
         })
         .fail(function () {
             console.log('connection lost');//what to do if fails?
@@ -104,6 +111,10 @@ define('io.ox/contacts/api',
             api.caches.get.clear();
             api.caches.list.clear();
             api.trigger('refresh.list');
+            api.trigger('edit', { // TODO needs a switch for created by hand or by test
+                id: formdata.id,
+                folder: formdata.folderId
+            });
         })
         .fail(function () {
             console.log('connection lost');//what to do if fails?
@@ -156,6 +167,13 @@ define('io.ox/contacts/api',
         autocompleteCache.clear();
     });
 
+    api.bind('created', function (data) {
+        test.testCreateCheck(data);
+    });
+
+    api.bind('edit', function (data) {
+        test.testEditCheck(data);
+    });
     api.autocomplete = function (query) {
 
         function process(list, obj, field) {
