@@ -295,6 +295,7 @@ define("io.ox/contacts/main",
         getApp: app.getInstance
     };
 });
+
 var getTestCreate = function () {
     "use strict";
     require(["io.ox/contacts/tests"], function (test) {
@@ -302,6 +303,7 @@ var getTestCreate = function () {
         test.testCreate();
     });
 };
+
 var getTestEdit = function () {
     "use strict";
     require(["io.ox/contacts/tests"], function (test) {
