@@ -402,17 +402,13 @@ $(document).ready(function () {
                         name = deps = callback = null;
                     });
                 };
-            },
-
-            identity = function (x) {
-                return x;
             };
 
         return function (name, deps, callback) {
             // use loader plugin to defer module definition
             define(name + ':init', { load: getLoader(name, deps, callback) });
             // define real module - will wait for promise
-            define(name, [name + ':init!'], identity);
+            define(name, [name + ':init!'], _.identity);
         };
     }());
 

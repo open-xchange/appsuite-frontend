@@ -21,18 +21,52 @@ define('io.ox/dev/testing/main',
     var app = ox.ui.createApp({
             title: 'Unit Tests'
         }),
-        win;
+        win,
+        env;
 
     app.setLauncher(function () {
 
         // get window
-        app.setWindow(win = ox.ui.createWindow({
+        win = ox.ui.createWindow({
             title: 'Jasmine Tests'
-        }));
+        });
 
-        function report() {
+        app.setWindow(win);
 
-            var env = jasmine.jasmine.getEnv();
+        var suites = _.url.hash('suites'),
+            url = '#launch=io.ox/dev/testing/main',
+            // handles click to select suite
+            fnClick = function (e) {
+                e.preventDefault();
+                location.href = url + (e.data.id !== 'all' ? '&suites=' + e.data.id : '');
+                location.reload();
+            },
+            // show link to run suite
+            addLink = function (node, id) {
+                node.append(
+                    $('<a>', { href: '#' }).on('click', { id: id }, fnClick).text(id)
+                )
+                .append($.txt(' '));
+            },
+
+            runSuite,
+            initializeReporter;
+
+        runSuite = function () {
+            // loop over all extensions
+            ext.point('test/suite').each(function (e) {
+                // run test
+                if (_(suites).indexOf('ALL') > -1 || _(suites).indexOf(e.id) > -1) {
+                    e.test(jasmine);
+                }
+            });
+            // go!
+            env.execute();
+        };
+
+        initializeReporter = function () {
+
+            env = jasmine.jasmine.getEnv();
 
             env.addReporter({
                 /*
@@ -42,10 +76,12 @@ define('io.ox/dev/testing/main',
                  */
                 reportRunnerStarting: function (runner) {
                     // be busy
-                    win.nodes.main.busy();
+                    win.nodes.main.busy().find('.results').empty();
                     // add all suites
                     _(runner.suites()).each(function (suite) {
-                        $('<div>')
+                        win.nodes.main.find('.results')
+                        .append(
+                            $('<div>')
                             .attr('data-suite-id', suite.id)
                             .append(
                                 $('<h1>')
@@ -63,19 +99,13 @@ define('io.ox/dev/testing/main',
                                     }, $())
                                 )
                             )
-                            .appendTo(win.nodes.main);
+                        );
                     });
-                    // add spacer (esp. for IE)
-                    win.nodes.main.append($('<div>').text('\u00A0'));
                 },
                 reportRunnerResults: function (runner) {
                     // stop being busy
                     win.nodes.main.idle();
-                },
-                reportSuiteResults: function (suite) {
                     win.show();
-                },
-                reportSpecStarting: function (spec) {
                 },
                 reportSpecResults: function (spec) {
                     // find spec DOM node by id
@@ -97,49 +127,44 @@ define('io.ox/dev/testing/main',
                     }
                 }
             });
-            // go!
-            env.execute();
-        }
+        };
 
         win.nodes.main
-            .addClass('selectable-text')
-            .css({ overflow: 'auto', padding: '1.5em 13px 1.5em 13px' });
+            .addClass('io-ox-testing selectable-text')
+            .css({ overflow: 'auto', padding: '1.5em 13px 1.5em 13px' })
+            .append($('<div>').addClass('header'))
+            .append($('<div>').addClass('results'));
 
-        win.show(function () {
+        win.bind('open', function () {
             // load all tests
             ext.loadPlugins({ name: 'tests', prefix: '', suffix: 'test' })
                 .done(function () {
                     // show ids
-                    var ids = $('<div>').append($('<b>').text('Available suites: ')).appendTo(win.nodes.main),
-                        suites = _.url.hash('suites'),
-                        url = '#launch=io.ox/dev/testing/main',
-                        fnClick = function (e) {
-                            e.preventDefault();
-                            location.href = url + (e.data.id !== 'all' ? '&suites=' + e.data.id : '');
-                            location.reload();
-                        },
-                        addLink = function (id) {
-                            ids.append(
-                                $('<a>', { href: '#' }).on('click', { id: id }, fnClick).text(id)
-                            )
-                            .append($.txt(' '));
-                        };
+                    var ids = $('<div>').append(
+                            $('<b>').text('Available suites: ')
+                        ).appendTo(win.nodes.main.find('.header'));
                     // split suites string
                     suites = suites ? String(suites).split(/,/) : [];
-                    // link to run all suites
-                    addLink('ALL');
                     // loop over all extensions
-                    ext.point('test/suite').each(function (e) {
-                        // show id
-                        addLink(e.id);
-                        // run test
-                        if (_(suites).indexOf('ALL') > -1 || _(suites).indexOf(e.id) > -1) {
-                            e.test(jasmine);
-                        }
-                    });
-                    report();
+                    _(['ALL'].concat(
+                            ext.point('test/suite').map(function (e) {
+                                return e.id;
+                            }).value())
+                        )
+                        .each(function (id, i, list) {
+                            // show id
+                            addLink(ids, id);
+                            if (i < list.length - 1) {
+                                ids.append($.txt(' \u2013 ')); // ndash
+                            }
+                        });
+                    // go
+                    initializeReporter();
+                    runSuite();
                 });
         });
+
+        win.show();
     });
 
     return {

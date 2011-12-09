@@ -418,6 +418,7 @@ define("io.ox/core/desktop",
                             self.state.open = true;
                             self.trigger("show");
                             if (firstShow) {
+                                self.trigger("open");
                                 self.state.running = true;
                                 ox.ui.windowManager.trigger("window.open", self);
                                 firstShow = false;

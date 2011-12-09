@@ -23,7 +23,7 @@ define("io.ox/mail/view-detail",
     // define global iframe resize handler
     window.iframeResize = function (guid, body) {
         var height = $(body).outerHeight(true);
-        $("#tmp-iframe-" + guid).css("height", height + 20 + "px");
+        $("#tmp-iframe-" + guid).css("height", height + 30 + "px");
     };
 
     var that = {

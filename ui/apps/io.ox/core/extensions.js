@@ -178,8 +178,7 @@ define("io.ox/core/extensions",
         };
 
         this.map = function (cb) {
-            list().map(cb);
-            return this;
+            return list().map(cb);
         };
 
         this.select = function (cb) {
