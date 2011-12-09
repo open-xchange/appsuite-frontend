@@ -65,37 +65,29 @@ define("io.ox/core/event", function () {
                  */
                 this.bind = function (type, data, fn) {
 
-                    // parameter shift?
-                    if (_.isFunction(data)) {
-                        fn = data;
-                        data = undefined;
-                    }
-
-                    _(split(type)).each(function (t) {
-
-                        // get/create queue
-                        var h = self.handlers[t] || (self.handlers[t] = {});
-
-                        fn.oxGuid = fn.oxGuid !== undefined ? fn.oxGuid : String(guid++);
-
-                        // add event once
-                        if (h[fn.oxGuid] === undefined) {
-                            // add
-                            h[fn.oxGuid] = { fn: fn, data: data };
-                            // heuristic
-                            self.has = true;
+                    if (self) {
+                        // parameter shift?
+                        if (_.isFunction(data)) {
+                            fn = data;
+                            data = undefined;
                         }
-                    });
-                };
 
-                this.once = function (type, data, fn) {
-                    // parameter shift?
-                    if (_.isFunction(data)) {
-                        fn = data;
-                        data = undefined;
+                        _(split(type)).each(function (t) {
+
+                            // get/create queue
+                            var h = self.handlers[t] || (self.handlers[t] = {});
+
+                            fn.oxGuid = fn.oxGuid !== undefined ? fn.oxGuid : String(guid++);
+
+                            // add event once
+                            if (h[fn.oxGuid] === undefined) {
+                                // add
+                                h[fn.oxGuid] = { fn: fn, data: data };
+                                // heuristic
+                                self.has = true;
+                            }
+                        });
                     }
-                    self.bind(type, data, fn);
-                    self.once[fn.oxGuid] = true;
                 };
 
                 /**
@@ -105,17 +97,18 @@ define("io.ox/core/event", function () {
                  */
                 this.unbind = function (type, fn) {
 
-                    _(split(type)).each(function (t) {
+                    if (self) {
+                        _(split(type)).each(function (t) {
 
-                        var h = self.handlers[t] || {};
+                            var h = self.handlers[t] || {};
 
-                        // prevent IE from throwing unnecessary errors
-                        try {
-                            // remove listener
-                            delete h[fn.oxGuid];
-                            delete self.once[fn.oxGuid];
-                        } catch (e) { }
-                    });
+                            // prevent IE from throwing unnecessary errors
+                            try {
+                                // remove listener
+                                delete h[fn.oxGuid];
+                            } catch (e) { }
+                        });
+                    }
                 };
 
                 /**
@@ -125,7 +118,7 @@ define("io.ox/core/event", function () {
                  */
                 this.trigger = function (type, data) {
 
-                    if (self.has === false || self.enabled === false) {
+                    if (!self || self.has === false || self.enabled === false) {
                         return;
                     }
 
@@ -136,7 +129,6 @@ define("io.ox/core/event", function () {
                         // execute function
                         try {
                             handler.fn.call(target, d, type);
-                            delete self.once[handler.fn.oxGuid];
                         } catch (ex_1) {
                             try {
                                 console.error("Dispatcher.trigger(" + type + ") " + ex_1);

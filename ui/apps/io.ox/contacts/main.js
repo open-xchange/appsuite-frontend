@@ -30,7 +30,7 @@ define("io.ox/contacts/main",
         win,
         // grid
         grid,
-        GRID_WIDTH = 290,
+        GRID_WIDTH = 310,
         // nodes
         left,
         thumbs,
@@ -49,28 +49,6 @@ define("io.ox/contacts/main",
         });
 
         app.setWindow(win);
-
-//      create extensionpoints
-//      link actions
-
-//        ext.point("io.ox/contacts/main/create").extend({
-//            index: 100,
-//            id: "create",
-//            action: function () {
-//                create.show();
-//            }
-//        });
-
-//      ext.point link creation
-
-        ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
-            index: 100,
-            id: "create",
-            label: "create",
-            ref: "io.ox/contacts/main/create"
-        }));
-
-
 
         // left panel
         left = $("<div/>")

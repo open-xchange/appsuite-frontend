@@ -177,28 +177,54 @@ define("io.ox/mail/api",
             .pipe(function (data) {
                 // transform pseudo-plain text to real text
                 if (data.attachments && data.attachments.length) {
-                    var text = '';
-                    $('<div>')
-                        // escape everything but BR tags
-                        .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
-                        .contents().each(function () {
-                            if (this.tagName === 'BR') {
-                                text += "\n";
-                            } else {
-                                text += $(this).text();
-                            }
-                        });
-                    // remove white space
-                    text = $.trim(text);
-                    // fix reply/forward quoting
-                    // TODO: remove when backend does this properly
-                    if (action === 'replyall' || action === 'reply') {
-                        text = '> ' + text.replace(/\n/, "\n> ");
-                    } else if (action === 'forward') {
-                        text = '> ' + text.replace(/\n/g, "\n> ");
+                    var text = '', tmp = '', quote = '';
+                    if (data.attachments[0].content_type === 'text/plain') {
+                        $('<div>')
+                            // escape everything but BR tags
+                            .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
+                            .contents().each(function () {
+                                if (this.tagName === 'BR') {
+                                    text += "\n";
+                                } else {
+                                    text += $(this).text();
+                                }
+                            });
+                        // remove white space
+                        text = $.trim(text);
+                        // fix reply/forward quoting
+                        // TODO: remove when backend does this properly
+                        if (action === 'replyall' || action === 'reply') {
+                            text = '> ' + text.replace(/\n/, "\n> ");
+                        } else if (action === 'forward') {
+                            text = '> ' + text.replace(/\n/g, "\n> ");
+                        }
+                        // polish for html editing
+                        if (view === 'html') {
+                            // escape '<'
+                            text = text.replace(/</ig, '&lt;');
+                            // replace '\n>' sequences by blockquote-tags
+                            _(text.split(/\n/).concat('\n')).each(function (line) {
+                                if (/^> /.test(line)) {
+                                    quote += line.substr(2) + '\n';
+                                } else {
+                                    tmp += (quote !== '' ? '<blockquote><p>' + quote + '</p></blockquote>' : '') + line + '\n';
+                                    quote = '';
+                                }
+                            });
+                            // transform line-feeds back to BR
+                            data.attachments[0].content = $.trim(tmp).replace(/\n/g, '<br>');
+                        } else {
+                            // replace
+                            data.attachments[0].content = $.trim(text);
+                        }
+                    } else if (data.attachments[0].content_type === 'text/html') {
+
+                        data.attachments[0].content = $('<div>')
+                            .html(data.attachments[0].content)
+                            .find('blockquote').removeAttr('style')
+                            .end()
+                            .html();
                     }
-                    // replace
-                    data.attachments[0].content = $.trim(text);
                 } else {
                     data.attachments = data.attachments || [{}];
                     data.attachments[0].content = '';

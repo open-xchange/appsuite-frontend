@@ -54,7 +54,9 @@ define.async('io.ox/mail/write/main',
     // default sender (used to set from address)
     var defaultSender = [],
         // editor mode
-        editorMode = 'html';
+        editorMode = 'html',
+        // editor class
+        Editor;
 
     // multi instance pattern
     function createInstance() {
@@ -64,6 +66,7 @@ define.async('io.ox/mail/write/main',
             GRID_WIDTH = 330,
             form,
             subject,
+            textarea,
             editor,
             editorPrintMargin,
             priorityOverlay,
@@ -455,30 +458,17 @@ define.async('io.ox/mail/write/main',
 
             if (currentSignature !== undefined) {
                 // remove current signature from editor
-                val = editor.val();
-                if ((pos = val.indexOf(currentSignature)) > -1) {
-                    // remove signature
-                    $l = currentSignature.length;
-                    top = editor.scrollTop();
-                    editor.val(val.substr(0, pos) + '' + val.substr(pos + $l));
-                    editor.scrollTop(top);
-                    currentSignature = undefined;
-                }
+                editor.replaceParagraph(currentSignature, '');
+                currentSignature = undefined;
             }
 
             // add signature?
             if (index < signatures.length) {
                 signature = signatures[index];
                 text = $.trim(signature.signature_text);
-                val = editor.val();
-                if (val.indexOf(text) === -1) {
-                    // set
-                    editor.val(val + '\n' + text);
-                    // scroll to bottom
-                    editor.scrollTop(editor.get(0).scrollHeight);
-                    // remember current signature
-                    currentSignature = '\n' + text;
-                }
+                editor.appendContent(text);
+                editor.scrollTop('bottom');
+                currentSignature = text;
             }
         }
 
@@ -554,7 +544,7 @@ define.async('io.ox/mail/write/main',
                         .css('overflow', 'hidden')
                         .append(
                             // text editor
-                            editor = $('<textarea>')
+                            textarea = $('<textarea>')
                                 .attr({ name: 'content', tabindex: '4' })
                                .addClass('text-editor')
                         )
@@ -690,12 +680,7 @@ define.async('io.ox/mail/write/main',
                         // force reflow
                         editor.css('display', (alt = !alt) ? 'block' : '');
                     }, 100);
-                }()),
-
-                resizeEditor = _.debounce(function () {
-                    var p = editor.parent(), w = p.width(), h = p.height();
-                    p.find('table.mceLayout').css({ width: w + 'px', height: h + 'px' });
-                }, 100);
+                }());
 
             var dropZone = upload.dnd.createDropZone();
             dropZone.bind('drop', function (file) {
@@ -709,8 +694,6 @@ define.async('io.ox/mail/write/main',
                 if (editorMode === 'text') {
                     resizeEditorMargin();
                     $(window).on('resize', resizeEditorMargin);
-                } else {
-                    $(window).on('resize', resizeEditor);
                 }
                 dropZone.include();
             });
@@ -718,255 +701,10 @@ define.async('io.ox/mail/write/main',
             win.bind('hide', function () {
                 if (editorMode === 'text') {
                     $(window).off('resize', resizeEditorMargin);
-                } else {
-                    $(window).off('resize', resizeEditor);
                 }
                 dropZone.remove();
             });
         });
-
-        function initializeEditor() {
-
-            var def = $.Deferred();
-
-            function makeParagraph() {
-                var self = $(this),
-                    style = self.attr('style'),
-                    p = $('<p>');
-                if (style) {
-                    p.attr('style', style);
-                }
-                self.replaceWith(p.append(self.contents()));
-            }
-
-            // html?
-            if (editorMode === 'html') {
-
-                editor.tinymce({
-
-                    script_url: ox.base + '/apps/moxiecode/tiny_mce/tiny_mce.js',
-                    plugins: 'paste',
-                    theme: 'advanced',
-                    skin: 'ox',
-
-                    init_instance_callback: def.resolve,
-
-                    theme_advanced_buttons1:
-                        'bold,italic,underline,|,' +
-                        'undo,redo,|,' +
-                        'bullist,numlist,indent,outdent,|,' +
-                        'justifyleft,justifycenter,justifyright,|,' +
-                        'forecolor,backcolor,|,formatselect',
-                    theme_advanced_buttons2: '',
-                    theme_advanced_buttons3: '',
-                    theme_advanced_toolbar_location: 'top',
-                    theme_advanced_toolbar_align: 'left',
-
-                    // formats
-                    theme_advanced_blockformats: 'h1,h2,h3,h4,p,blockquote',
-
-                    // colors
-                    theme_advanced_more_colors: false,
-                    theme_advanced_text_colors: '000000,555555,AAAAAA,0088CC,AA0000',
-                    theme_advanced_background_colors: 'FFFFFF,FFFF00,00FFFF,00FF00,00FFFF,FFBE33',
-                    theme_advanced_default_foreground_color: '#000000',
-                    theme_advanced_default_background_color: '#FFFFFF',
-
-                    // for performance
-                    entity_encoding: 'raw',
-                    verify_html: false,
-
-                    // better paste
-                    paste_auto_cleanup_on_paste: true,
-                    paste_remove_styles: true,
-                    paste_remove_styles_if_webkit: true,
-                    paste_strip_class_attributes: 'all',
-                    paste_block_drop: false,
-
-                    // post processing (string-based)
-                    paste_preprocess: function (pl, o) {
-                        //console.debug('pre', o.content);
-                        o.content = o.content
-                            // remove comments
-                            .replace(/<!--(.*?)-->/g, '')
-                            // remove custom attributes
-                            .replace(/ data-[^=]+="[^"]*"/g, '')
-                            // remove &nbsp;
-                            .replace(/&nbsp;/ig, ' ')
-                            // fix missing white-space before/after links
-                            .replace(/([^>\s])<a/ig, '$1 <a')
-                            .replace(/<\/\s?a>([^<\s,\.:;])/ig, '</a> $1')
-                            // beautify simple quotes
-                            .replace(/([^=])"([\w\- ]+)"/g, '$1\u201C$2\u201D')
-                            // beautify dashes
-                            .replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
-                    },
-
-                    // post processing (DOM-based)
-                    paste_postprocess: function (pl, o) {
-
-                        var node = $(o.node), done;
-                        //console.debug('post', node.html());
-
-                        // remove iframes and other stuff that shouldn't be in an email
-                        // images too - doesn't work with copy/paste
-                        node.find(
-                            'iframe, object, applet, input, textarea, button, select, ' +
-                            'canvas, script, noscript, audio, video, img'
-                            ).remove();
-
-                        // beautify SUP tags
-                        node.find('sup').css('lineHeight', '0');
-
-                        // unwrap
-                        node.find('article, header, footer, section, form').each(function () {
-                            $(this).children().first().unwrap();
-                        });
-
-                        // clean up links
-                        node.find('a').each(function () {
-                            var self = $(this), match;
-                            if (!self.attr('href')) {
-                                // unwrap dead links (usually javascript hooks)
-                                self.replaceWith(self.contents());
-                            } else {
-                                // remove title & target
-                                self.removeAttr('title target');
-                                // fix references
-                                if (/^\[\d+\]$/.test(self.text()) && /^#/.test(self.attr('href'))) {
-                                    match = (self.text() + '').match(/^\[(\d+)\]$/);
-                                    self.replaceWith($('<sup>').text(match[1]).add($.txt(' ')));
-                                }
-                            }
-                        });
-
-                        // replace <code> by <em>
-                        node.find('code').each(function () {
-                            var self = $(this);
-                            self.replaceWith($('<em>').text(self.text()));
-                        });
-
-                        // simplify DOM tree
-                        function simplify() {
-                            var self = $(this),
-                                tagName = this.tagName,
-                                children = self.children(),
-                                text;
-                            // remove attributes
-                            self.removeAttr('id title alt rel');
-                            // is closed tag?
-                            if (/^(BR|HR|IMG)$/.test(tagName)) {
-                                return;
-                            }
-                            // fix text align
-                            if (self.attr('align')) {
-                                self.css('textAlign', self.attr('align')).removeAttr('align');
-                            }
-                            // fix text nodes
-                            self.contents().each(function () {
-                                if (this.nodeType === 3) {
-                                    this.nodeValue = this.nodeValue
-                                        // fix space before quotes
-                                        .replace(/:$/, ': ');
-                                }
-                            });
-                            // has no children?
-                            if (children.length === 0) {
-                                text = $.trim(self.text());
-                                // has no text?
-                                if (text === '') {
-                                    // empty table cell?
-                                    if (tagName === 'TD') {
-                                        self.text('\u00A0');
-                                    } else {
-                                        // remove empty element
-                                        self.remove();
-                                        done = false;
-                                        return;
-                                    }
-                                } else {
-                                    // remove simple <span>, <small>, and <pre>
-                                    if (/^(SPAN|SMALL|PRE)$/.test(tagName)) {
-                                        if (!self.attr('class') && !self.attr('style')) {
-                                            self.replaceWith($.txt(self.text()));
-                                            done = false;
-                                            return;
-                                        }
-                                    }
-                                    // is quote?
-                                    if (/^".+"$/.test(text)) {
-                                        self.text(text.replace(/^"/, '\u201C').replace(/"$/, '\u201D'));
-                                    }
-                                }
-                            } else {
-                                // extraneous DIV?
-                                if (tagName === 'DIV' && !self.attr('class') && !self.attr('style')) {
-                                    children.eq(0).unwrap();
-                                    done = false;
-                                }
-                            }
-                        }
-                        do {
-                            done = true;
-                            node.find('*').each(simplify);
-                        } while (!done);
-
-                        // beautify tables
-                        node.find('table').each(function () {
-                            var self = $(this);
-                            self.removeAttr('width')
-                                .attr({
-                                    border: '0',
-                                    cellSpacing: '0',
-                                    cellPadding: '0'
-                                })
-                                .css({
-                                    lineHeight: '1em',
-                                    margin: '0.5em auto 0.5em auto' // center!
-                                });
-                            self.find('th')
-                                .css({
-                                    fontWeight: 'bold',
-                                    textAlign: 'center',
-                                    borderBottom: '1px solid #555',
-                                    padding: '0.4em 1em 0.4em 1em'
-                                });
-                            self.find('td')
-                                .css({
-                                    borderBottom: '1px solid #aaa',
-                                    padding: '0.4em 1em 0.4em 1em'
-                                });
-                            self.find('tr').first()
-                                .find('td, th').css({
-                                    borderTop: '1px solid #555'
-                                });
-                            self.find('tr').last()
-                                .find('td, th').css({
-                                    borderBottom: '1px solid #555'
-                                });
-                        });
-
-                        // replace top-level <div> by <p>
-                        node.eq(0).children('div').each(makeParagraph);
-
-                        // remove <p> with just one <br> inside
-                        node.find('p').each(function () {
-                            var self = $(this),
-                                contents = self.contents();
-                            if (contents.length === 1 && contents.get(0).tagName === 'BR') {
-                                self.remove();
-                            }
-                        });
-                    }
-                });
-
-            } else {
-                // plain text
-                def.resolve();
-            }
-
-            return def;
-        }
 
         /**
          * Setters
@@ -976,7 +714,7 @@ define.async('io.ox/mail/write/main',
         };
 
         app.setRawBody = function (str) {
-            editor.val(str);
+            editor.setContent(str);
         };
 
         app.setBody = function (str) {
@@ -989,12 +727,22 @@ define.async('io.ox/mail/write/main',
                 pos = ds ? ds.position : 'below';
             // set signature?
             if (ds) {
+                // remember as current signature
+                currentSignature = text;
                 // yep
-                editor.val('\n\n' + (pos === 'above' ? text + '\n\n' + str : str + '\n\n' + text));
-                currentSignature = '\n' + text;
+                if (editorMode === 'html') {
+                    // prepare signature for html
+                    text = '<p>' + text.replace(/\n/g, '<br>') + '</p>';
+                    // html
+                    editor.setContent('<p></p>' + (pos === 'above' ? text + str : str + text));
+                } else {
+                    // plain text
+                    editor.setContent('\n\n' + (pos === 'above' ? text + '\n\n' + str : str + '\n\n' + text));
+                }
+
             } else {
                 // no signature
-                editor.val('\n' + str);
+                editor.setContent((editorMode === 'html' ? '<p></p>' : '\n\n') + str);
             }
         };
 
@@ -1085,7 +833,8 @@ define.async('io.ox/mail/write/main',
             var def = $.Deferred();
             win.setTitle('Compose new email')
                 .show(function () {
-                    initializeEditor().done(function () {
+                    editor = window.heinz = new Editor(textarea);
+                    editor.done(function () {
                         $('input[data-type=to]').focus().select();
                         def.resolve();
                     });
@@ -1098,16 +847,18 @@ define.async('io.ox/mail/write/main',
          */
         app.replyall = function (obj) {
             var def = $.Deferred();
-            mailAPI.replyall(obj).done(function (data) {
-                app.setMail(data, 'replyall');
-                win.setTitle('Reply all')
-                    .show(function () {
-                        initializeEditor().done(function () {
-                            editor.focus();
-                            def.resolve();
+            mailAPI.replyall(obj, editorMode)
+                .done(function (data) {
+                    win.setTitle('Reply all')
+                        .show(function () {
+                            editor = new Editor(textarea);
+                            editor.done(function () {
+                                app.setMail(data, 'replyall');
+                                editor.focus();
+                                def.resolve();
+                            });
                         });
-                    });
-            });
+                });
             return def;
         };
 
@@ -1116,16 +867,18 @@ define.async('io.ox/mail/write/main',
          */
         app.reply = function (obj) {
             var def = $.Deferred();
-            mailAPI.reply(obj).done(function (data) {
-                app.setMail(data, 'reply');
-                win.setTitle('Reply')
-                    .show(function () {
-                        initializeEditor().done(function () {
-                            editor.focus();
-                            def.resolve();
+            mailAPI.reply(obj, editorMode)
+                .done(function (data) {
+                    win.setTitle('Reply')
+                        .show(function () {
+                            editor = new Editor(textarea);
+                            editor.done(function () {
+                                app.setMail(data, 'reply');
+                                editor.focus();
+                                def.resolve();
+                            });
                         });
-                    });
-            });
+                });
             return def;
         };
 
@@ -1134,16 +887,18 @@ define.async('io.ox/mail/write/main',
          */
         app.forward = function (obj) {
             var def = $.Deferred();
-            mailAPI.forward(obj).done(function (data) {
-                app.setMail(data, 'forward');
-                win.setTitle('Forward')
-                    .show(function () {
-                        initializeEditor().done(function () {
-                            $('input[data-type=to]').focus().select();
-                            def.resolve();
+            mailAPI.forward(obj, editorMode)
+                .done(function (data) {
+                    win.setTitle('Forward')
+                        .show(function () {
+                            editor = new Editor(textarea);
+                            editor.done(function () {
+                                app.setMail(data, 'forward');
+                                $('input[data-type=to]').focus().select();
+                                def.resolve();
+                            });
                         });
-                    });
-            });
+                });
             return def;
         };
 
@@ -1272,17 +1027,16 @@ define.async('io.ox/mail/write/main',
         };
 
         /**
-         * Get tinyMCE
+         * Get editor
          */
-        app.getTinyMCE = function () {
-            return editor.tinymce();
+        app.getEditor = function () {
+            return editor;
         };
 
         // destroy
         app.setQuit(function () {
             // clean up tinyMCE
-            editor.tinymce().destroy();
-            editor.remove();
+            editor.destroy();
             // clear all private vars
             app = win = main = sidepanel = form = subject = editor = null;
             editorPrintMargin = priorityOverlay = sections = currentSignature = null;
@@ -1296,7 +1050,7 @@ define.async('io.ox/mail/write/main',
     };
 
     // initialize
-    var loadUser, loadTinyMCE;
+    var loadUser, editorSrc, loadEditor;
 
     // load user
     loadUser = userAPI.get(config.get('identifier'))
@@ -1305,14 +1059,13 @@ define.async('io.ox/mail/write/main',
             defaultSender = ['"' + sender.display_name + '"', sender.email1];
         });
 
-    // load tinyMCE?
-    if (editorMode === 'html') {
-        loadTinyMCE = $.getScript(ox.base + '/apps/moxiecode/tiny_mce/jquery.tinymce.js');
-    } else {
-        loadTinyMCE = $.when();
-    }
+    // load editor
+    editorSrc = editorMode === 'html' ? 'io.ox/core/tk/html-editor' : 'io.ox/core/tk/text-editor';
+    loadEditor = require([editorSrc], function (EditorClass) {
+        Editor = EditorClass;
+    });
 
-    return $.when(loadUser, loadTinyMCE)
+    return $.when(loadUser, loadEditor)
         .pipe(function () {
             return module;
         });

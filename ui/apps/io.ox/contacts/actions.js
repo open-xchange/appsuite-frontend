@@ -56,7 +56,7 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
         }
     });
 
-//  points
+    //  points
 
     ext.point("io.ox/contacts/detail/actions").extend(new ext.InlineLinks({
         index: 100,
@@ -64,20 +64,28 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
         ref: 'io.ox/contacts/links/inline'
     }));
 
-//  inline links
+    // toolbar
 
-    ext.point("io.ox/contacts/links/inline").extend(new ext.Link({
+    ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
         index: 100,
-        id: 'delete',
-        label: 'delete',
-        ref: 'io.ox/contacts/main/delete'
-
+        id: "create",
+        label: "Add contact",
+        ref: "io.ox/contacts/main/create"
     }));
+
+    //  inline links
 
     ext.point("io.ox/contacts/links/inline").extend(new ext.Link({
         index: 100,
         id: 'update',
-        label: 'edit',
+        label: 'Edit',
         ref: 'io.ox/contacts/main/update'
+    }));
+
+    ext.point("io.ox/contacts/links/inline").extend(new ext.Link({
+        index: 200,
+        id: 'delete',
+        label: 'Delete',
+        ref: 'io.ox/contacts/main/delete'
     }));
 });

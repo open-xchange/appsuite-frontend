@@ -51,13 +51,6 @@ define("io.ox/conversations/main",
         win.addClass("io-ox-conversations-main");
         app.setWindow(win);
 
-        // add "create" link
-        ext.point('io.ox/conversations/toolbar').extend(new ext.ToolbarLinks({
-            index: 100,
-            id: 'inline-links',
-            ref: 'io.ox/conversations/links/toolbar'
-        }));
-
         // use notifications?
         if (notifications && document.webkitHidden !== undefined) {
             // get permission (0 = granted, 1 = ask, 2 = off)
@@ -131,7 +124,7 @@ define("io.ox/conversations/main",
             pollTimer = null,
             firstPoll = true,
             // const
-            POLL_FREQ = 5000,
+            POLL_FREQ = 2000,
             // current user id
             myself = String(config.get("identifier")),
             // DOM nodes
@@ -180,6 +173,9 @@ define("io.ox/conversations/main",
         };
 
         processMessages = function (list) {
+
+            // remove stupid new unread object
+            list.pop();
 
             // get most recent message
             var last = _(list).last() || { id: null, timestamp: 0 };

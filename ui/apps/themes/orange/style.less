@@ -60,13 +60,13 @@
     position: absolute;
     top: 0px;
     right: 0px;
-    height: 34px;
+    height: 50px;
     left: 0px;
     
     border-top: 1px solid mix(@head-color, @head-background, 75%);
     border-top-color: fade(@head-color, 30%);
     background-color: mix(@head-color, @head-background, 100%/15);
-    background-color: fade(@head-background, 100%);
+    background-color: fade(@head-background, 30%);
     
     color: @head-color;
     font-family: Lucida Grande, Arial;
@@ -78,28 +78,49 @@
 }
 
 .window-title {
-    position: relative;
-    top: 0px;
-    right: 0px;
-    height: 18px;
+    position: absolute;
+    top: 10px;
+    height: 36px;
     left: 0px;
-    padding: 6px 10px 4px 13px;
-    line-height: 18px;
-    /*text-align: center;*/
-    color: @head-color;
+    padding: 0 10px 0 13px;
+    width: 300px;
+    color: #fff;
     font-family: Helvetica, Arial, sans-serif;
     font-weight: 200;
-    font-size: 18pt;
-    line-height: 18pt;
-    text-shadow: 0px 0px 1px mix(@head-color, @head-background, 1400%/15);
+    font-size: 24px;
+    line-height: 30px;
+    /*text-shadow: 0px 0px 1px mix(@head-color, @head-background, 1400%/15);*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .window-toolbar {
-    position: relative;
-    top: 0px;
-    right: 0px;
-    left: 0px;
-    padding: 2px 7px 5px 13px;
+    position: absolute;
+    top: 10px;
+    right: 40px;
+    left: 300px;
+    padding: 0 0 0 13px;
+    height: 30px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.window-toolbar a, a.button {
+    font-size: 12px;
+    line-height: 18px;
+    color: #555;
+    text-align: center;
+    display: inline-block;
+    margin: 0 10px 0 0;
+    cursor: pointer;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px 1.5em 4px 1.5em;
+    white-space: nowrap;
+    vertical-align: middle;
+    outline: none;
+    text-decoration: none;
 }
 
 /* vGrid */

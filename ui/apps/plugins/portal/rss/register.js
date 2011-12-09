@@ -13,11 +13,11 @@
 
 define("io.ox/portal/rss/register",
     ["io.ox/core/extensions"], function (ext, api) {
-    
+
     "use strict";
-    
+
     var feeds = [];
-    
+
     // SPIEGEL Online
     feeds.push({
         id: "rss-spiegel",
@@ -25,7 +25,7 @@ define("io.ox/portal/rss/register",
         index: 400,
         cssClass: "spiegel"
     });
-    
+
     // Engadget
     feeds.push({
         id: "rss-engadget",
@@ -33,7 +33,7 @@ define("io.ox/portal/rss/register",
         num: 2,
         index: 500
     });
-    
+
     // Another one...
     feeds.push({
         id: "rss-a",
@@ -42,14 +42,14 @@ define("io.ox/portal/rss/register",
     });
 
     // Another one...
-    feeds.push({
-        id: "rss-handelsblatt",
-        url: "http://www.handelsblatt.com/contentexport/feed/schlagzeilen",
-        index: 600
-    });
-    
+//    feeds.push({
+//        id: "rss-handelsblatt",
+//        url: "http://www.handelsblatt.com/contentexport/feed/schlagzeilen",
+//        index: 600
+//    });
+
     _(feeds).each(function (extension) {
-    
+
         ext.point("io.ox/portal/widget").extend({
             id: extension.id,
             index: extension.index,
@@ -64,9 +64,9 @@ define("io.ox/portal/rss/register",
                     });
             },
             draw: function (feed) {
-                
+
                 var self = this;
-                
+
                 this.addClass(
                         "io-ox-portal-rss" + (extension.cssClass ? " " + extension.cssClass : "")
                     )
@@ -74,7 +74,7 @@ define("io.ox/portal/rss/register",
                         $("<div/>").addClass("clear-title")
                             .text(feed.title || "RSS")
                     );
-                
+
                 _(feed.entries).each(function (entry) {
                     self.append(
                         $("<div>").addClass("rss-entry")
@@ -105,7 +105,7 @@ define("io.ox/portal/rss/register",
                         )
                     );
                 });
-                
+
                 return $.Deferred().resolve();
             }
         });

@@ -27,7 +27,7 @@ define('io.ox/contacts/api',
         requests: {
             all: {
                 action: 'all',
-                folder: '30',//'6',
+                folder: '6',
                 columns: '20,1,500,502',
                 sort: '607', // magic field
                 order: 'asc'

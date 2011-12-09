@@ -33,18 +33,9 @@ define('io.ox/mail/write/test',
         };
         return f;
     }
-    function clear(ed) {
-        ed.setContent('');
-        ed.execCommand('SelectAll');
-    }
 
     function trim(str) {
         return $.trim((str + '').replace(/[\r\n]+/g, ''));
-    }
-
-    function get(ed) {
-        // get editor content (trim white-space and clean up pseudo XHTML)
-        return trim(ed.getContent()).replace(/<(\w+)[ ]?\/>/g, '<$1>');
     }
 
     /*
@@ -68,7 +59,7 @@ define('io.ox/mail/write/test',
                     writer.getApp().launch().done(function () {
                         app = this;
                         app.compose().done(function () {
-                            ed = app.getTinyMCE();
+                            ed = app.getEditor();
                             form = app.getWindow().nodes.main.find('form');
                             loaded.yep();
                             j.expect(ed).toBeDefined();
@@ -189,8 +180,7 @@ define('io.ox/mail/write/test',
 
                 j.it('sets editor content', function () {
                     ed.setContent(' <p>Lorem ipsum</p>\r\n ');
-                    ed.execCommand('SelectAll');
-                    j.expect(get(ed)).toEqual('<p>Lorem ipsum</p>');
+                    j.expect(ed.getContent()).toEqual('<p>Lorem ipsum</p>');
                 });
 
                 j.it('has correct mail body', function () {
@@ -310,7 +300,7 @@ define('io.ox/mail/write/test',
 
                 j.it('closes compose dialog', function () {
                     app.quit();
-                    j.expect(app.getTinyMCE).toBeUndefined();
+                    j.expect(app.getEditor).toBeUndefined();
                     app = ed = form = null;
                 });
             });
@@ -337,7 +327,7 @@ define('io.ox/mail/write/test',
                     writer.getApp().launch().done(function () {
                         app = this;
                         app.compose().done(function () {
-                            ed = app.getTinyMCE();
+                            ed = app.getEditor();
                             loaded.yep();
                             j.expect(ed).toBeDefined();
                         });
@@ -347,32 +337,26 @@ define('io.ox/mail/write/test',
                 j.it('inserts simple example', function () {
                     j.runs(function () {
                         // basic test
-                        clear(ed);
-                        ed.execCommand('mceInsertClipboardContent', false, {
-                            content: '<p>Hello World</p>'
-                        });
-                        j.expect(get(ed)).toEqual('<p>Hello World</p>');
+                        ed.clear();
+                        ed.paste('<p>Hello World</p>');
+                        j.expect(ed.getContent()).toEqual('<p>Hello World</p>');
                     });
                 });
 
                 j.it('removes text color', function () {
                     j.runs(function () {
                         // remove color
-                        clear(ed);
-                        ed.execCommand('mceInsertClipboardContent', false, {
-                            content: '<p style="color: red">Hello World</p>'
-                        });
-                        j.expect(get(ed)).toEqual('<p>Hello World</p>');
+                        ed.clear();
+                        ed.paste('<p style="color: red">Hello World</p>');
+                        j.expect(ed.getContent()).toEqual('<p>Hello World</p>');
                     });
                 });
 
                 j.it('does not mess up paragraphs and line-breaks', function () {
                     // mixed p/br
-                    clear(ed);
-                    ed.execCommand('mceInsertClipboardContent', false, {
-                        content: '<p>Hello<br />World</p><p>one empty line, then this one</p>'
-                    });
-                    j.expect(get(ed)).toEqual('<p>Hello<br>World</p><p>one empty line, then this one</p>');
+                    ed.clear();
+                    ed.paste('<p>Hello<br />World</p><p>one empty line, then this one</p>');
+                    j.expect(ed.getContent()).toEqual('<p>Hello<br>World</p><p>one empty line, then this one</p>');
                 });
 
                 j.it('handles complex HTML right #1', function () {
@@ -385,9 +369,9 @@ define('io.ox/mail/write/test',
                     )
                     .done(function (a, b) {
                         loaded.yep();
-                        clear(ed);
-                        ed.execCommand('mceInsertClipboardContent', false, { content: a[0] });
-                        j.expect(get(ed)).toEqual(trim(b[0]));
+                        ed.clear();
+                        ed.paste(a[0]);
+                        j.expect(ed.getContent()).toEqual(trim(b[0]));
                     });
                 });
 
@@ -401,15 +385,15 @@ define('io.ox/mail/write/test',
                     )
                     .done(function (a, b) {
                         loaded.yep();
-                        clear(ed);
-                        ed.execCommand('mceInsertClipboardContent', false, { content: a[0] });
-                        j.expect(get(ed)).toEqual(trim(b[0]));
+                        ed.clear();
+                        ed.paste(a[0]);
+                        j.expect(ed.getContent()).toEqual(trim(b[0]));
                     });
                 });
 
                 j.it('closes compose dialog', function () {
                     app.quit();
-                    j.expect(app.getTinyMCE).toBeUndefined();
+                    j.expect(app.getEditor).toBeUndefined();
                     app = ed = null;
                 });
             });
