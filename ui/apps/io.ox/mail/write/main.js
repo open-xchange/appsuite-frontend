@@ -11,6 +11,8 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+/*global tinyMCE */
+
 define.async('io.ox/mail/write/main',
     ['io.ox/mail/api',
      'io.ox/mail/util',
@@ -52,11 +54,7 @@ define.async('io.ox/mail/write/main',
 //    }));
 
     // default sender (used to set from address)
-    var defaultSender = [],
-        // editor mode
-        editorMode = 'html',
-        // editor class
-        Editor;
+    var defaultSender = [];
 
     // multi instance pattern
     function createInstance() {
@@ -68,10 +66,11 @@ define.async('io.ox/mail/write/main',
             subject,
             textarea,
             editor,
-            editorPrintMargin,
+            editorHash = {},
             priorityOverlay,
             sections = {},
-            currentSignature;
+            currentSignature,
+            editorMode = 'text';
 
         app = ox.ui.createApp({
             title: 'Compose'
@@ -454,8 +453,6 @@ define.async('io.ox/mail/write/main',
                 signature, val, pos, $l, text,
                 top;
 
-            e.preventDefault();
-
             if (currentSignature !== undefined) {
                 // remove current signature from editor
                 editor.replaceParagraph(currentSignature, '');
@@ -470,6 +467,11 @@ define.async('io.ox/mail/write/main',
                 editor.scrollTop('bottom');
                 currentSignature = text;
             }
+        }
+        function fnSetSignature(e) {
+            e.preventDefault();
+            setSignature(e);
+            editor.focus();
         }
 
         // launcher
@@ -507,9 +509,10 @@ define.async('io.ox/mail/write/main',
                             subject = $('<input>')
                             .attr({ type: 'text', name: 'subject', tabindex: '3' })
                             .addClass('subject')
-                            .on('keyup', function (e) {
-                                if (e.which === 13) {
-                                    // auto jump to editor on enter
+                            .on('keydown', function (e) {
+                                if (e.which === 13 || e.which === 9) {
+                                    // auto jump to editor on enter/tab
+                                    e.preventDefault();
                                     editor.focus();
                                 }
                             })
@@ -539,20 +542,23 @@ define.async('io.ox/mail/write/main',
                     $('<div/>')
                     .addClass('abs editor-outer-container')
                     .append(
+                        // white background
+                        $('<div>').addClass('abs editor-background')
+                    )
+                    .append(
+                        // editor's print margin
+                        $('<div/>').addClass('abs editor-print-margin')
+                    )
+                    .append(
                         $('<div>')
                         .addClass('abs editor-inner-container')
                         .css('overflow', 'hidden')
                         .append(
                             // text editor
                             textarea = $('<textarea>')
-                                .attr({ name: 'content', tabindex: '4' })
+                               .attr({ name: 'content', tabindex: '4', disabled: 'disabled' })
                                .addClass('text-editor')
                         )
-                    )
-                    .append(
-                        // editor's print margin
-                        editorPrintMargin = $('<div/>')
-                        .addClass('abs editor-print-margin')
                     )
                 )
             );
@@ -589,31 +595,31 @@ define.async('io.ox/mail/write/main',
             // Signatures
             if (signatures.length) {
                 addSection('signatures', 'Signatures', false, true)
-                    .append(
-                        _(signatures.concat(dummySignature))
-                            .inject(function (memo, o, index) {
-                                var preview = (o.signature_text || '')
-                                    .replace(/\s\s+/g, ' ') // remove subsequent white-space
-                                    .replace(/(\W\W\W)\W+/g, '$1 '); // reduce special char sequences
-                                preview = preview.length > 150 ? preview.substr(0, 150) + ' ...' : preview;
-                                return memo.add(
-                                        $('<div>').addClass('section-item pointer')
-                                        .addClass(index >= signatures.length ? 'signature-remove' : '')
-                                        .append(
-                                            $('<a>', { href: '#', tabindex: '5' })
-                                            .on('click dragstart', $.preventDefault)
-                                            .text(o.signature_name)
-                                        )
-                                        .append(
-                                            preview.length ?
-                                                $('<div>').addClass('signature-preview')
-                                                .text(' ' + preview) :
-                                                $()
-                                        )
-                                        .on('click', { index: index }, setSignature)
-                                    );
-                            }, $())
-                    );
+                .append(
+                    _(signatures.concat(dummySignature))
+                    .inject(function (memo, o, index) {
+                        var preview = (o.signature_text || '')
+                            .replace(/\s\s+/g, ' ') // remove subsequent white-space
+                            .replace(/(\W\W\W)\W+/g, '$1 '); // reduce special char sequences
+                        preview = preview.length > 150 ? preview.substr(0, 150) + ' ...' : preview;
+                        return memo.add(
+                            $('<div>').addClass('section-item pointer')
+                            .addClass(index >= signatures.length ? 'signature-remove' : '')
+                            .append(
+                                $('<a>', { href: '#', tabindex: '5' })
+                                .on('click dragstart', $.preventDefault)
+                                .text(o.signature_name)
+                            )
+                            .append(
+                                preview.length ?
+                                    $('<div>').addClass('signature-preview')
+                                    .text(' ' + preview) :
+                                    $()
+                            )
+                            .on('click', { index: index }, fnSetSignature)
+                        );
+                    }, $())
+                );
 
                 addLink('signatures', 'Signatures');
             }
@@ -670,17 +676,7 @@ define.async('io.ox/mail/write/main',
                 .append(sidepanel)
             );
 
-            var resizeEditorMargin = (function () {
-                    // trick to force document reflow
-                    var alt = false;
-                    return _.debounce(function () {
-                        var w = Math.max(10, editor.outerWidth() - 12 - 750);
-                        editor.css('paddingRight', w + 'px');
-                        editorPrintMargin.css('right', Math.max(0, w - 10) + 'px');
-                        // force reflow
-                        editor.css('display', (alt = !alt) ? 'block' : '');
-                    }, 100);
-                }());
+
 
             var dropZone = upload.dnd.createDropZone();
             dropZone.bind('drop', function (file) {
@@ -691,16 +687,15 @@ define.async('io.ox/mail/write/main',
             });
 
             win.bind('show', function () {
-                if (editorMode === 'text') {
-                    resizeEditorMargin();
-                    $(window).on('resize', resizeEditorMargin);
+                if (editor) {
+                    editor.handleShow();
                 }
                 dropZone.include();
             });
 
             win.bind('hide', function () {
-                if (editorMode === 'text') {
-                    $(window).off('resize', resizeEditorMargin);
+                if (editor) {
+                    editor.handleHide();
                 }
                 dropZone.remove();
             });
@@ -709,6 +704,85 @@ define.async('io.ox/mail/write/main',
         /**
          * Setters
          */
+        app.setMode = (function () {
+
+            function load(mode, content) {
+                var editorSrc = 'io.ox/core/tk/' + (mode === 'html' ? 'html-editor' : 'text-editor');
+                return require([editorSrc]).pipe(function (Editor) {
+                    return (editor = editorHash[mode] = new Editor(textarea))
+                        .done(function () {
+                            editor.setPlainText(content);
+                            editor.handleShow();
+                        });
+                });
+            }
+
+            function reuse(mode, content) {
+                editor = editorHash[mode];
+                editor.setPlainText(content);
+                editor.handleShow();
+                return $.when();
+            }
+
+            function changeMode(mode) {
+                // be busy
+                textarea.attr('disabled', 'disabled').busy();
+                if (editor) {
+                    var content = editor.getPlainText();
+                    editor.clear();
+                    editor.handleHide();
+                    if (editor.tinymce) {
+                        // changing from HTML to TEXT
+                        if (!editorHash.text) {
+                            // load TEXT editor for the first time
+                            return load('text', content);
+                        } else {
+                            // reuse TEXT editor
+                            return reuse('text', content);
+                        }
+                    } else {
+                        // changing from TEXT to HTML
+                        if (!editorHash.html) {
+                            // load HTML editor for the first time
+                            return load('html', content);
+                        } else {
+                            // reuse HTML editor
+                            return reuse('html', content);
+                        }
+                    }
+                } else {
+                    // initial editor
+                    return load(mode);
+                }
+            }
+
+            // make robust against too frequent calls
+            var queue = [$.when()];
+
+            return function (mode) {
+                var last = _(queue).last(), def = $.Deferred();
+                queue.push(def);
+                last.done(function () {
+                    // change?
+                    (mode === editorMode ?
+                        $.when() :
+                        changeMode(mode || editorMode).done(function () {
+                            editorMode = mode || editorMode;
+                        })
+                    )
+                    .done(function () {
+                        setTimeout(function () {
+                            queue = _(queue).without(def);
+                            def.resolve();
+                        }, 250);
+                    });
+                });
+                return def;
+            };
+        }());
+
+        window.heinz = app;
+
         app.setSubject = function (str) {
             subject.val(str || '');
         };
@@ -833,8 +907,7 @@ define.async('io.ox/mail/write/main',
             var def = $.Deferred();
             win.setTitle('Compose new email')
                 .show(function () {
-                    editor = window.heinz = new Editor(textarea);
-                    editor.done(function () {
+                    app.setMode().done(function () {
                         $('input[data-type=to]').focus().select();
                         def.resolve();
                     });
@@ -851,8 +924,7 @@ define.async('io.ox/mail/write/main',
                 .done(function (data) {
                     win.setTitle('Reply all')
                         .show(function () {
-                            editor = new Editor(textarea);
-                            editor.done(function () {
+                            app.setMode().done(function () {
                                 app.setMail(data, 'replyall');
                                 editor.focus();
                                 def.resolve();
@@ -871,8 +943,7 @@ define.async('io.ox/mail/write/main',
                 .done(function (data) {
                     win.setTitle('Reply')
                         .show(function () {
-                            editor = new Editor(textarea);
-                            editor.done(function () {
+                            app.setMode().done(function () {
                                 app.setMail(data, 'reply');
                                 editor.focus();
                                 def.resolve();
@@ -891,8 +962,7 @@ define.async('io.ox/mail/write/main',
                 .done(function (data) {
                     win.setTitle('Forward')
                         .show(function () {
-                            editor = new Editor(textarea);
-                            editor.done(function () {
+                            app.setMode().done(function () {
                                 app.setMail(data, 'forward');
                                 $('input[data-type=to]').focus().select();
                                 def.resolve();
@@ -955,12 +1025,12 @@ define.async('io.ox/mail/write/main',
             if (editorMode === 'html') {
                 content = {
                     content_type: 'text/html',
-                    content: String(data.content)
+                    content: editor.getContent()
                 };
             } else {
                 content = {
                     content_type: 'text/plain',
-                    content: String(data.content)
+                    content: editor.getContent()
                         .replace(/</g, '&lt;') // escape <
                         .replace(/\n/g, '<br>\n') // escape line-breaks
                 };
@@ -1035,11 +1105,13 @@ define.async('io.ox/mail/write/main',
 
         // destroy
         app.setQuit(function () {
-            // clean up tinyMCE
-            editor.destroy();
+            // clean up editors
+            for (var id in editorHash) {
+                editorHash[id].destroy();
+            }
             // clear all private vars
             app = win = main = sidepanel = form = subject = editor = null;
-            editorPrintMargin = priorityOverlay = sections = currentSignature = null;
+            priorityOverlay = sections = currentSignature = null;
         });
 
         return app;
@@ -1049,23 +1121,12 @@ define.async('io.ox/mail/write/main',
         getApp: createInstance
     };
 
-    // initialize
-    var loadUser, editorSrc, loadEditor;
-
     // load user
-    loadUser = userAPI.get(config.get('identifier'))
+    return userAPI.get(config.get('identifier'))
         .done(function (sender) {
             // inject 'from'
             defaultSender = ['"' + sender.display_name + '"', sender.email1];
-        });
-
-    // load editor
-    editorSrc = editorMode === 'html' ? 'io.ox/core/tk/html-editor' : 'io.ox/core/tk/text-editor';
-    loadEditor = require([editorSrc], function (EditorClass) {
-        Editor = EditorClass;
-    });
-
-    return $.when(loadUser, loadEditor)
+        })
         .pipe(function () {
             return module;
         });

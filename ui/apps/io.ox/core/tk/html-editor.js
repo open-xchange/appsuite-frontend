@@ -206,7 +206,7 @@ define.async('io.ox/core/tk/html-editor', [], function () {
 
         var def = $.Deferred(), ed;
 
-        textarea.tinymce({
+        (textarea = $(textarea)).tinymce({
 
             script_url: ox.base + '/apps/moxiecode/tiny_mce/tiny_mce.js',
             plugins: 'paste',
@@ -214,7 +214,17 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             skin: 'ox',
 
             init_instance_callback: function () {
+                // get internal editor reference
                 ed = textarea.tinymce();
+                // add handler for focus/blur
+                $(ed.getWin())
+                    .on('focus', function (e) {
+                        $('#' + ed.id + '_tbl').addClass('focused');
+                    })
+                    .on('blur', function (e) {
+                        $('#' + ed.id + '_tbl').removeClass('focused');
+                    });
+                // done!
                 def.resolve();
             },
 
@@ -257,8 +267,10 @@ define.async('io.ox/core/tk/html-editor', [], function () {
         });
 
         var resizeEditor = _.debounce(function () {
-                var p = textarea.parent(), w = p.width(), h = p.height();
+                var p = textarea.parent(), w = p.width(), h = p.height(),
+                    iframeHeight = h - p.find('td.mceToolbar').outerHeight() - 2;
                 p.find('table.mceLayout').css({ width: w + 'px', height: h + 'px' });
+                p.find('iframe').css('height', iframeHeight + 'px');
             }, 100),
 
             trim = function (str) {
@@ -267,8 +279,6 @@ define.async('io.ox/core/tk/html-editor', [], function () {
 
             set = function (str) {
                 ed.setContent(str + '');
-                ed.execCommand('SelectAll');
-                ed.selection.collapse(true);
             },
 
             clear = function () {
@@ -276,16 +286,24 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             },
 
             ln2br = function (str) {
-                return String(str).replace(/\n/g, '<br>');
+                return String(str || '').replace(/\r/g, '')
+                    .replace('\n', '<br>'); // '\n' is for IE
             },
 
-            // get editor content (trim white-space and clean up pseudo XHTML)
+            // get editor content
+            // trim white-space and clean up pseudo XHTML
+            // remove empty paragraphs at the end
             get = function () {
-                return trim(ed.getContent()).replace(/<(\w+)[ ]?\/>/g, '<$1>');
+                return trim(ed.getContent())
+                    .replace(/<(\w+)[ ]?\/>/g, '<$1>')
+                    .replace(/(<p>(<br>)?<\/p>)+$/, '');
             };
 
         // publish internal 'done'
-        this.done = def.done;
+        this.done = function (fn) {
+            def.done(fn);
+            return def;
+        };
 
         this.focus = function () {
             ed.focus();
@@ -295,7 +313,31 @@ define.async('io.ox/core/tk/html-editor', [], function () {
 
         this.getContent = get;
 
+        this.getPlainText = function () {
+            if (_.browser.IE) {
+                // IE ignores paragraphs, so we help a bit
+                $('p', ed.getBody()).append('<br>');
+            }
+            // return via selection
+            ed.selection.select(ed.getBody(), true);
+            return ed.selection.getContent({ format: 'text' });
+        };
+
         this.setContent = set;
+
+        this.setPlainText = function (str) {
+            var text = '', tmp = '', lines = $.trim(str).split('\n').concat('');
+            _(lines).each(function (line, i) {
+                line = $.trim(line);
+                if (line === '') {
+                    text += tmp !== '' ? '<p>' + tmp.replace(/<br>$/, '') + '</p>' : '';
+                    tmp = '';
+                } else {
+                    tmp += line + '<br>';
+                }
+            });
+            set(text);
+        };
 
         this.paste = function (str) {
             ed.execCommand('mceInsertClipboardContent', false, { content: str });
@@ -347,7 +389,7 @@ define.async('io.ox/core/tk/html-editor', [], function () {
                 ed.selection.setContent(rep || '');
             }
 
-            ed.execCommand('SelectAll');
+            ed.selection.select(ed.getBody(), true);
             ed.selection.collapse(true);
 
             if (_.browser.IE) {
@@ -369,12 +411,19 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             return found;
         };
 
+        this.getMode = function () {
+            return 'html';
+        };
+
         // convenience access
         this.tinymce = function () {
-            return textarea.tinymce();
+            return textarea.tinymce ? textarea.tinymce() : {};
         };
 
         this.handleShow = function () {
+            textarea.removeAttr('disabled').idle().next().show();
+            textarea.hide();
+            resizeEditor();
             $(window).on('resize', resizeEditor);
         };
 
@@ -384,9 +433,10 @@ define.async('io.ox/core/tk/html-editor', [], function () {
 
         this.destroy = function () {
             this.handleHide();
-            textarea.tinymce().destroy();
-            textarea.remove();
-            textarea = def = ed = null;
+            this.setContent('');
+            $(ed.getWin()).off('focus blur');
+            textarea.tinymce().remove();
+            textarea = textarea.tinymce = def = ed = null;
         };
     }
 

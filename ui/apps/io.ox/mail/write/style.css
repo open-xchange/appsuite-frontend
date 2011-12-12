@@ -231,20 +231,27 @@
 }
 
 .io-ox-mail-write .editor-outer-container {
-    top: 71px;
-    right: 13px;
-    bottom: 13px;
-    left: 13px;
-    background-color: white;
+    top: 67px;
+    right: 9px;
+    bottom: 9px;
+    left: 9px;
 }
 
-.io-ox-mail-write .editor-inner-container {
-    z-index: 2;
+.io-ox-mail-write .editor-background {
+    top: 4px; right: 4px; bottom: 4px; left: 4px;
+    background-color: white;
+    z-index: 1;
 }
 
 .io-ox-mail-write .editor-print-margin {
+    top: 4px; bottom: 4px;
     border-right: 1px dotted #ddd;
-    z-index: 1;
+    z-index: 2;
+}
+
+.io-ox-mail-write .editor-inner-container {
+    padding: 4px;
+    z-index: 3;
 }
 
 .io-ox-mail-write .text-editor {
@@ -267,7 +274,7 @@
 }
 
 .io-ox-mail-write .text-editor:focus {
-    border-color: white;
+    border-color: #fff;
     box-shadow: 0px 0px 4px 0px #08c;
 }
 
@@ -280,6 +287,21 @@
     overflow: auto;
 }
 
+/* tinyMCE polishing */
+
+.oxSkin table.mceLayout.focused {
+    border-left-color: #fff;
+    border-right-color: #fff;
+    box-shadow: 0px 0px 4px 0px #08c;
+}
+
+.oxSkin table.mceLayout.focused tr.mceFirst td {
+    border-top-color: #fff;
+}
+
+.oxSkin table.mceLayout.focused tr.mceLast td {
+    border-bottom-color: #fff;
+}
 
 /* -------------------- */
 
