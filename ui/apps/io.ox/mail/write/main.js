@@ -11,8 +11,6 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-/*global tinyMCE */
-
 define.async('io.ox/mail/write/main',
     ['io.ox/mail/api',
      'io.ox/mail/util',
@@ -481,10 +479,10 @@ define.async('io.ox/mail/write/main',
                 name: 'io.ox/mail/write',
                 title: '',
                 titleWidth: GRID_WIDTH + 'px',
-                toolbar: true
+                toolbar: true,
+                close: true
             });
             app.setWindow(win);
-            win.setQuitOnClose(true);
 
             // main panel
             main = $('<div>')
@@ -660,6 +658,25 @@ define.async('io.ox/mail/write/main',
 
             addLink('options', 'More ...');
 
+            var fnChangeFormat = function (e) {
+                e.preventDefault();
+                app.setMode(e.data.format).done(function () {
+                    editor.focus();
+                });
+            };
+
+            addSection('format', 'Text format', true, false)
+                .append(
+                    $('<div>').css('textAlign', 'right')
+                    .append(
+                        $('<a>', { href: '#' }).text('Text').on('click', { format: 'text' }, fnChangeFormat)
+                    )
+                    .append($.txt(' \u00A0\u2013\u00A0 ')) // &ndash;
+                    .append(
+                        $('<a>', { href: '#' }).text('HTML').on('click', { format: 'html' }, fnChangeFormat)
+                    )
+                );
+
             // add panels to windows
             win.nodes.main
             .addClass('io-ox-mail-write')
@@ -756,29 +773,15 @@ define.async('io.ox/mail/write/main',
                 }
             }
 
-            // make robust against too frequent calls
-            var queue = [$.when()];
-
-            return function (mode) {
-                var last = _(queue).last(), def = $.Deferred();
-                queue.push(def);
-                last.done(function () {
-                    // change?
-                    (mode === editorMode ?
-                        $.when() :
-                        changeMode(mode || editorMode).done(function () {
-                            editorMode = mode || editorMode;
-                        })
-                    )
-                    .done(function () {
-                        setTimeout(function () {
-                            queue = _(queue).without(def);
-                            def.resolve();
-                        }, 250);
-                    });
-                });
-                return def;
-            };
+            return _.queued(function (mode) {
+                // change?
+                return (mode === editorMode ?
+                    $.when() :
+                    changeMode(mode || editorMode).done(function () {
+                        editorMode = mode || editorMode;
+                    })
+                );
+            });
         }());
 
         window.heinz = app;
@@ -840,16 +843,18 @@ define.async('io.ox/mail/write/main',
 
         app.setAttachments = function (list) {
             // look for real attachments
+            var found = false;
             _(list || []).each(function (attachment) {
                 if (attachment.disp === 'attachment') {
                     // add as linked attachment
                     attachment.type = 'file';
+                    found = true;
                     form.find('input[type=file]').last()
                         .prop('attachment', attachment)
                         .trigger('change');
                 }
             });
-            if (list && list.length) {
+            if (found) {
                 showSection('attachments');
             }
         };

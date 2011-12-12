@@ -333,7 +333,7 @@ define.async('io.ox/core/tk/html-editor', [], function () {
                     text += tmp !== '' ? '<p>' + tmp.replace(/<br>$/, '') + '</p>' : '';
                     tmp = '';
                 } else {
-                    tmp += line + '<br>';
+                    tmp += line.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '<br>';
                 }
             });
             set(text);

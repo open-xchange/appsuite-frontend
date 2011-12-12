@@ -51,7 +51,8 @@ define("io.ox/contacts/edit/main",
 
             win = ox.ui.createWindow({
                 title: "Edit Contact",
-                toolbar: true
+                toolbar: true,
+                close: true
             });
 
             formContainer = $("<div/>").addClass("abs")
@@ -70,7 +71,6 @@ define("io.ox/contacts/edit/main",
                 .append(formContainer);
 
             app.setWindow(win);
-            win.setQuitOnClose(true);
 
             win.show(function () {
 

@@ -455,7 +455,7 @@ define('io.ox/mail/write/test',
 
                 j.it('switches back to TEXT mode', function () {
 
-                    ed.setContent('<p><b>Paragraph #1</b><br>Line #2<br>Line #3</p><p>Paragraph #2</p>');
+                    ed.setContent('<p><b>Paragraph &lt;#1&gt;</b><br>Line #2<br>Line #3</p><p>Paragraph #2</p>');
 
                     var changed = new Done();
                     j.waitsFor(changed, 'TEXT mode', TIMEOUT);
@@ -465,7 +465,7 @@ define('io.ox/mail/write/test',
                         changed.yep();
                         j.expect(ed.getMode()).toEqual('text');
                         j.expect(ed.getContent())
-                            .toEqual('Paragraph #1\nLine #2\nLine #3\n\nParagraph #2');
+                            .toEqual('Paragraph <#1>\nLine #2\nLine #3\n\nParagraph #2');
                     });
                 });
 
@@ -478,7 +478,7 @@ define('io.ox/mail/write/test',
                         ed = app.getEditor();
                         changed.yep();
                         j.expect(ed.getContent())
-                            .toEqual('<p>Paragraph #1<br>Line #2<br>Line #3</p><p>Paragraph #2</p>');
+                            .toEqual('<p>Paragraph &lt;#1&gt;<br>Line #2<br>Line #3</p><p>Paragraph #2</p>');
                     });
                 });
 
@@ -498,7 +498,7 @@ define('io.ox/mail/write/test',
                         ed = app.getEditor();
                         check1.yep();
                         j.expect(ed.getContent())
-                            .toEqual('Paragraph #1\nLine #2\nLine #3\n\nParagraph #2');
+                            .toEqual('Paragraph <#1>\nLine #2\nLine #3\n\nParagraph #2');
                     });
 
                     var check2 = new Done();
@@ -508,8 +508,14 @@ define('io.ox/mail/write/test',
                         ed = app.getEditor();
                         check2.yep();
                         j.expect(ed.getContent())
-                            .toEqual('<p>Paragraph #1<br>Line #2<br>Line #3</p><p>Paragraph #2</p>');
+                            .toEqual('<p>Paragraph &lt;#1&gt;<br>Line #2<br>Line #3</p><p>Paragraph #2</p>');
                     });
+                });
+
+                j.it('closes compose dialog', function () {
+                    app.quit();
+                    j.expect(app.getEditor).toBeUndefined();
+                    app = ed = null;
                 });
             });
         }

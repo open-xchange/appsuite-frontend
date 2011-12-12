@@ -236,6 +236,35 @@
         },
 
         /**
+         * Queued (for functions that return deferred objects and must be blocked during operation)
+         */
+        queued: function (fn, timeout) {
+
+            var hash = {};
+
+            return function () {
+
+                var def = $.Deferred(),
+                    queue = hash[fn] || (hash[fn] = [$.when()]),
+                    last = _(queue).last(),
+                    args = $.makeArray(arguments);
+
+                queue.push(def);
+
+                last.done(function () {
+                    fn.apply(null, args).done(function () {
+                        setTimeout(function () {
+                            queue = _(queue).without(def);
+                            def.resolve();
+                        }, timeout || 250);
+                    });
+                });
+
+                return def;
+            };
+        },
+
+        /**
          * format/printf
          */
         printf: function (str, params) {

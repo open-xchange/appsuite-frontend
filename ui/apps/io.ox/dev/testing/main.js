@@ -36,10 +36,12 @@ define('io.ox/dev/testing/main',
         var args = _(arguments).map(function (arg) {
             return readable(arg);
         });
-        if (_.browser.IE) {
-            console.error(args.join(' '));
-        } else {
-            console.error.apply(null, args);
+        if (console && console.error) {
+            if (_.browser.IE) {
+                console.error(args.join(' '));
+            } else {
+                console.error.apply(console, args);
+            }
         }
     }
 

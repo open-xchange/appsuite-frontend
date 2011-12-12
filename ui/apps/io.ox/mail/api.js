@@ -58,7 +58,7 @@ define("io.ox/mail/api",
                 getData: function (query) {
                     return [
                         { col: 603, pattern: query }, // from
-                        { col: 607, pattern: query } // subject
+                        { col: 607, pattern: query }  // subject
                     ];
                 }
             }
@@ -72,8 +72,6 @@ define("io.ox/mail/api",
             }
         }
     });
-
-    // extend API
 
     // ~ all
     api.getAllThreads = function (options, useCache) {
