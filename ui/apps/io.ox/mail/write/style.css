@@ -33,7 +33,7 @@
 }
 
 .io-ox-mail-write .priority-overlay.high {
-    color: #fc0;
+    color: @mail-priority;
 }
 
 .io-ox-mail-write .sendbutton-wrapper {
@@ -82,12 +82,12 @@
 
 .io-ox-mail-write input[type=text]:focus {
     border-color: white;
-    box-shadow: 0px 0px 4px 0px #08c;
+    box-shadow: 0px 0px 4px 0px @link-color;
 }
 
 .io-ox-mail-write input[type=text].discreet {
     border-color: #e0e0e0;
-    background-color: #eee;
+    background-color: #fafafa;
 }
 
 .io-ox-mail-write input[type=text].subject {
@@ -102,7 +102,7 @@
 }
 
 .io-ox-mail-write input[type=file]:focus {
-    box-shadow: 0px 0px 4px 0px #08c;
+    box-shadow: 0px 0px 4px 0px @link-color;
 }
 
 .io-ox-mail-write .label {
@@ -275,7 +275,7 @@
 
 .io-ox-mail-write .text-editor:focus {
     border-color: #fff;
-    box-shadow: 0px 0px 4px 0px #08c;
+    box-shadow: 0px 0px 4px 0px @link-color;
 }
 
 /* Proofread */
@@ -292,7 +292,7 @@
 .oxSkin table.mceLayout.focused {
     border-left-color: #fff;
     border-right-color: #fff;
-    box-shadow: 0px 0px 4px 0px #08c;
+    box-shadow: 0px 0px 4px 0px @link-color;
 }
 
 .oxSkin table.mceLayout.focused tr.mceFirst td {
@@ -367,7 +367,7 @@
 }
 
 .textile-url {
-    color: #08c;
+    color: @link-color;
     text-decoration: none;
 }
 
@@ -420,6 +420,6 @@ h6.textile-headline, h7.textile-headline {
 
 .textile-address:hover {
     color: #888;
-    border-bottom: 1px dotted #08c;
+    border-bottom: 1px dotted @link-color;
 }
 

@@ -15,11 +15,11 @@ define("io.ox/calendar/view-detail",
     ["io.ox/core/extensions", "io.ox/calendar/util",
      "gettext!io.ox/calendar/calendar", "io.ox/core/api/user",
      "io.ox/core/api/group", "io.ox/core/api/resource",
-     "css!io.ox/calendar/style.css"
+     "less!io.ox/calendar/style.css"
     ], function (ext, util, gettext, userAPI, groupAPI, resourceAPI) {
-    
+
     "use strict";
-    
+
     var fnClickPerson = function (e) {
         ext.point("io.ox/core/person:action").each(function (ext) {
             _.call(ext.action, e.data, e);
@@ -27,7 +27,7 @@ define("io.ox/calendar/view-detail",
     };
 
     // draw via extension points
-    
+
     // draw appointment date & time
     ext.point("io.ox/calendar/detail").extend({
         index: 100,
@@ -37,7 +37,7 @@ define("io.ox/calendar/view-detail",
             ext.point("io.ox/calendar/detail/date").invoke("draw", node, data);
         }
     });
-    
+
     // draw appointment time
     ext.point("io.ox/calendar/detail/date").extend({
         index: 100,
@@ -48,7 +48,7 @@ define("io.ox/calendar/view-detail",
             );
         }
     });
-    
+
     // draw date and series information
     ext.point("io.ox/calendar/detail/date").extend({
         index: 200,
@@ -63,7 +63,7 @@ define("io.ox/calendar/view-detail",
             );
         }
     });
-    
+
     // draw title
     ext.point("io.ox/calendar/detail").extend({
         index: 200,
@@ -74,7 +74,7 @@ define("io.ox/calendar/view-detail",
             );
         }
     });
-    
+
     // draw location
     ext.point("io.ox/calendar/detail").extend({
         index: 300,
@@ -85,7 +85,7 @@ define("io.ox/calendar/view-detail",
             );
         }
     });
-    
+
     // draw note/comment
     ext.point("io.ox/calendar/detail").extend({
         index: 400,
@@ -98,9 +98,9 @@ define("io.ox/calendar/view-detail",
             }
         }
     });
-    
+
     // draw participants
-    
+
     function drawParticipant(obj, hash) {
         // initialize vars
         var key = obj.mail || obj.id,
@@ -138,22 +138,22 @@ define("io.ox/calendar/view-detail",
         }
         return node;
     }
-    
+
     ext.point("io.ox/calendar/detail").extend({
         index: 500,
         id: "participants",
         draw: function (data) {
-            
+
             var list = data.participants, $i = list.length,
                 participants = $i > 1 ? $("<div>").addClass("participants") : $(),
                 confirmations = {};
-            
+
             // has more than one participant?
             if ($i > 1) {
-                
+
                 confirmations = util.getConfirmations(data);
                 participants.busy();
-                
+
                 // get internal users
                 var users = _(list)
                     .chain()
@@ -194,13 +194,13 @@ define("io.ox/calendar/view-detail",
                         return obj.mail;
                     })
                     .value();
-                
-                
+
+
                 participants.append($("<div>")
                         .addClass("label").text("Participants"));
-                    
+
                 var plist = $("<div>").addClass("participant-list").appendTo(participants);
-                
+
                 $.when(userAPI.getList(users), groupAPI.getList(groups), resourceAPI.getList(resources))
                 .done(function (userList, groupList, resourceList) {
                     // loop over internal users
@@ -267,11 +267,11 @@ define("io.ox/calendar/view-detail",
                         .append($("<div>").addClass("participants-clear"));
                 });
             }
-            
+
             this.append(participants);
         }
     });
-    
+
     // draw details
     ext.point("io.ox/calendar/detail").extend({
         index: 600,
@@ -283,7 +283,7 @@ define("io.ox/calendar/view-detail",
             ext.point("io.ox/calendar/detail/details").invoke("draw", node, data);
         }
     });
-    
+
     // show as
     ext.point("io.ox/calendar/detail/details").extend({
         index: 100,
@@ -307,7 +307,7 @@ define("io.ox/calendar/view-detail",
             .append($("<br>"));
         }
     });
-    
+
     // folder
     ext.point("io.ox/calendar/detail/details").extend({
         index: 200,
@@ -324,7 +324,7 @@ define("io.ox/calendar/view-detail",
             .append($("<br>"));
         }
     });
-    
+
     // created on/by
     ext.point("io.ox/calendar/detail/details").extend({
         index: 200,
@@ -345,7 +345,7 @@ define("io.ox/calendar/view-detail",
              .append($("<br>"));
         }
     });
-    
+
     // modified on/by
     ext.point("io.ox/calendar/detail/details").extend({
         index: 200,
@@ -366,20 +366,20 @@ define("io.ox/calendar/view-detail",
              .append($("<br>"));
         }
     });
-    
+
     return {
-        
+
         draw: function (data) {
-            
+
             var node;
-            
+
             if (!data) {
                 node = $();
             } else {
                 node = $("<div>").addClass("calendar-detail");
                 ext.point("io.ox/calendar/detail").invoke("draw", node, data);
             }
-            
+
             return node;
         }
     };

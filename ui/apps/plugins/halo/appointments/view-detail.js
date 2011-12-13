@@ -12,7 +12,7 @@
  */
 
 define("plugins/halo/appointments/view-detail",
-    ["io.ox/calendar/view-detail", "css!io.ox/calendar/style.css"], function (viewer) {
+    ["io.ox/calendar/view-detail", "less!io.ox/calendar/style.css"], function (viewer) {
 
     "use strict";
 

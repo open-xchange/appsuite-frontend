@@ -23,7 +23,7 @@ body > *:first-child {
 }
 
 a {
-    color: #08c;
+    color: #00a0cd;
     text-decoration: none;
 }
 
@@ -51,7 +51,7 @@ h4 { font-size: 1.1em; }
 blockquote {
     color: #555;
     background-color: #f5f5f5;
-    border-left: 1px solid #08c;
+    border-left: 1px solid #00a0cd;
     margin-left: 0;
     margin-right: 0;
     padding: 1px 1em 1px 39px;

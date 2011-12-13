@@ -14,7 +14,7 @@
 define("io.ox/calendar/main",
     ["io.ox/calendar/api", "io.ox/calendar/util", "io.ox/calendar/view-detail",
      "io.ox/core/config", "io.ox/core/tk/vgrid", "io.ox/calendar/view-grid-template",
-     "css!io.ox/calendar/style.css"], function (api, util, viewDetail, config, VGrid, tmpl) {
+     "less!io.ox/calendar/style.css"], function (api, util, viewDetail, config, VGrid, tmpl) {
 
     "use strict";
 
@@ -24,7 +24,7 @@ define("io.ox/calendar/main",
         win,
         // grid
         grid,
-        gridWidth = 310,
+        GRID_WIDTH = 330,
         // nodes
         left,
         right;
@@ -46,14 +46,14 @@ define("io.ox/calendar/main",
         left = $("<div/>")
             .addClass("leftside border-right")
             .css({
-                width: gridWidth + "px",
+                width: GRID_WIDTH + "px",
                 overflow: "auto"
             })
             .appendTo(win.nodes.main);
 
         // right panel
         right = $("<div/>")
-            .css({ left: gridWidth + 1 + "px", overflow: "auto" })
+            .css({ left: GRID_WIDTH + 1 + "px", overflow: "auto" })
             .addClass("rightside default-content-padding calendar-detail-pane")
             .appendTo(win.nodes.main);
 

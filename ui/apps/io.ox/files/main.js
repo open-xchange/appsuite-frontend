@@ -20,7 +20,7 @@ define("io.ox/files/main",
      "io.ox/core/tk/upload",
      "io.ox/core/tk/dialogs",
      "io.ox/help/hints",
-     "css!io.ox/files/style.css"
+     "less!io.ox/files/style.css"
     ], function (viewDetail, api, VGrid, upload, dialogs, hints) {
 
     "use strict";
@@ -31,6 +31,7 @@ define("io.ox/files/main",
         win,
         // vgrid
         grid,
+        GRID_WIDTH = 330,
         // nodes
         left,
         right,
@@ -48,13 +49,13 @@ define("io.ox/files/main",
         // left side
         left = $("<div/>").addClass("leftside withStatusBar border-right")
             .css({
-                width: "309px",
+                width: GRID_WIDTH + "px",
                 overflow: "auto"
             })
             .appendTo(win.nodes.main);
 
         right = $("<div/>")
-            .css({ left: "310px", overflow: "auto" })
+            .css({ left: GRID_WIDTH + 1+ "px", overflow: "auto" })
             .addClass("rightside default-content-padding withStatusBar")
             .appendTo(win.nodes.main);
 
@@ -255,11 +256,11 @@ define("io.ox/files/main",
                     actions[action]();
                 });
             };
-            var uploadButton = win.addButton({
-                label: "Add File",
-                action: showUploadField
-            });
-            pane.relativeTo(uploadButton);
+//            var uploadButton = win.addButton({
+//                label: "Add File",
+//                action: showUploadField
+//            });
+//            pane.relativeTo(uploadButton);
         }());
 
     });

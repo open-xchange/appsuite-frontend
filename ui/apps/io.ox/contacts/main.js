@@ -19,7 +19,7 @@ define("io.ox/contacts/main",
      "io.ox/contacts/view-detail",
      "io.ox/core/config",
      "io.ox/core/extensions",
-     "css!io.ox/contacts/style.css"
+     "less!io.ox/contacts/style.css"
     ], function (util, api, VGrid, hints, viewDetail, config, ext) {
 
     "use strict";
@@ -30,7 +30,7 @@ define("io.ox/contacts/main",
         win,
         // grid
         grid,
-        GRID_WIDTH = 310,
+        GRID_WIDTH = 330,
         // nodes
         left,
         thumbs,
@@ -43,7 +43,7 @@ define("io.ox/contacts/main",
         win = ox.ui.createWindow({
             name: 'io.ox/contacts',
             title: "Global Address Book",
-            titleWidth: (GRID_WIDTH - 10) + "px",
+            titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true,
             search: true
         });
@@ -54,7 +54,7 @@ define("io.ox/contacts/main",
         left = $("<div/>")
             .addClass("leftside border-right")
             .css({
-                width: GRID_WIDTH + "px",
+                width: GRID_WIDTH - 35 + "px",
                 overflow: "auto"
             })
             .appendTo(win.nodes.main);
@@ -63,14 +63,14 @@ define("io.ox/contacts/main",
         thumbs = $("<div/>")
             .addClass("atb contact-grid-index border-left border-right")
             .css({
-                left: GRID_WIDTH + 3 + "px",
-                width: "34px"
+                left: GRID_WIDTH - 32 + "px",
+                width: "30px"
             })
             .appendTo(win.nodes.main);
 
         // right panel
         right = $("<div/>")
-            .css({ left: GRID_WIDTH + 39 + "px", overflow: "auto" })
+            .css({ left: GRID_WIDTH + "px", overflow: "auto" })
             .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main);
 

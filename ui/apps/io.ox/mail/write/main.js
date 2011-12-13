@@ -23,8 +23,8 @@ define.async('io.ox/mail/write/main',
      'io.ox/core/api/user',
      'io.ox/core/tk/upload',
      'io.ox/core/tk/autocomplete',
-     'css!io.ox/mail/style.css',
-     'css!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload) {
+     'less!io.ox/mail/style.css',
+     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload) {
 
     'use strict';
 
@@ -478,7 +478,7 @@ define.async('io.ox/mail/write/main',
             win = ox.ui.createWindow({
                 name: 'io.ox/mail/write',
                 title: '',
-                titleWidth: GRID_WIDTH + 'px',
+                titleWidth: (GRID_WIDTH + 10) + 'px',
                 toolbar: true,
                 close: true
             });

@@ -15,7 +15,7 @@
 
 define("io.ox/contacts/edit/main",
     ["io.ox/contacts/api", "io.ox/core/cache",
-     "css!io.ox/contacts/style.css"
+     "less!io.ox/contacts/style.css"
      ], function (api, cache) {
 
     "use strict";

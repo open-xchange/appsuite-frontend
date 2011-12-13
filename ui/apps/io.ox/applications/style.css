@@ -47,7 +47,7 @@
 
 .borderradius .vgrid-cell.application .count.highlight {
     color: white;
-    background-color: #b00;
+    background-color: @accent2;
 }
 
 .borderradius .vgrid-cell.application.selected .count {
@@ -84,7 +84,7 @@
     font-size: 80%;
     vertical-align: text-bottom;
     margin-left: 0.5em;
-    color: #fc0;
+    color: @app-favorites;
 }
 
 .io-ox-applications-main .app .company {

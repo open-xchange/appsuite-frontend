@@ -18,7 +18,7 @@ define("io.ox/conversations/main",
      "io.ox/core/api/user",
      "io.ox/core/config",
      "io.ox/core/extensions",
-     "css!io.ox/conversations/style.css",
+     "less!io.ox/conversations/style.css",
      "io.ox/conversations/actions"
     ], function (util, api, VGrid, userAPI, config, ext) {
 
@@ -30,7 +30,7 @@ define("io.ox/conversations/main",
         win,
         // grid
         grid,
-        gridWidth = 310,
+        GRID_WIDTH = 330,
         // nodes
         left,
         right,
@@ -45,6 +45,7 @@ define("io.ox/conversations/main",
         win = ox.ui.createWindow({
             name: 'io.ox/conversations',
             title: "Conversations",
+            titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true
         });
 
@@ -74,13 +75,13 @@ define("io.ox/conversations/main",
         left = $("<div/>")
             .addClass("leftside border-right")
             .css({
-                width: gridWidth + "px"
+                width: GRID_WIDTH + "px"
             })
             .appendTo(win.nodes.main);
 
         // right panel
         right = $("<div/>")
-            .css({ left: gridWidth + 1 + "px" })
+            .css({ left: GRID_WIDTH + 1 + "px" })
             .addClass("rightside io-ox-conversation")
             .appendTo(win.nodes.main);
 

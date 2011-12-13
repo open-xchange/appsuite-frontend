@@ -1,7 +1,6 @@
 
 .io-ox-conversation .centered-box {
     width: 550px;
-    margin: 0 auto 0 auto;
 }
 
 .io-ox-conversation .conversation {
@@ -20,7 +19,7 @@
 
 .io-ox-conversation .message .from {
     font-weight: normal;
-    color: #08c;
+    color: @link-color-dark;
 }
 
 .io-ox-conversation .message .from.me {
@@ -51,7 +50,7 @@
     top: auto;
     height: 80px;
     border-top: 1px solid #ccc;
-    padding-top: 10px;
+    padding: 10px 30px 0 30px;
     text-align: center;
     background-color: #f5f5f5;
 }

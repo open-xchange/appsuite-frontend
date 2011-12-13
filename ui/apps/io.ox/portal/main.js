@@ -24,7 +24,7 @@
             "io.ox/core/config",
             "io.ox/core/api/user",
             "io.ox/core/i18n",
-            "css!io.ox/portal/style.css"
+            "less!io.ox/portal/style.css"
         ].concat(ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' }));
 
     define("io.ox/portal/main", deps, function (ext, config, userAPI, i18n) {

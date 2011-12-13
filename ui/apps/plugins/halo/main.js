@@ -14,7 +14,7 @@
 
 define("plugins/halo/main",
     ["plugins/halo/api", "io.ox/core/extensions",
-     "css!plugins/halo/style.css"], function (api, ext) {
+     "less!plugins/halo/style.css"], function (api, ext) {
 
     "use strict";
 

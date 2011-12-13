@@ -19,15 +19,13 @@ define("io.ox/mail/main",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
      "io.ox/mail/actions",
-     "css!io.ox/mail/style.css"
+     "less!io.ox/mail/style.css"
     ], function (util, api, ext, VGrid, viewDetail, tmpl) {
 
     'use strict';
 
     var autoResolveThreads = function (e) {
-        // get mail api
         var self = $(this);
-        // get mail data
         api.get(e.data).done(function (data) {
             // replace placeholder with mail content
             self.replaceWith(viewDetail.draw(data));
@@ -40,7 +38,7 @@ define("io.ox/mail/main",
         win,
         // grid
         grid,
-        GRID_WIDTH = 310,
+        GRID_WIDTH = 330,
         // nodes
         left,
         right;
@@ -52,7 +50,7 @@ define("io.ox/mail/main",
         win = ox.ui.createWindow({
             name: 'io.ox/mail',
             title: "Inbox",
-            titleWidth: GRID_WIDTH + 10 + "px",
+            titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true,
             search: true
         });
@@ -151,11 +149,17 @@ define("io.ox/mail/main",
             // resolve visible
             nodes.slice(0, numVisible).trigger("resolve");
             // look for scroll
-            var autoResolve = function () {
-                nodes.trigger("resolve");
-                right.off("scroll", autoResolve);
+            var autoResolve = function (e) {
+                // determine visible nodes
+                e.data.nodes.each(function () {
+                    var self = $(this), bottom = right.scrollTop() + (2 * right.parent().height());
+                    if (bottom > self.position().top) {
+                        self.trigger('resolve');
+                    }
+                });
             };
-            right.on("scroll", autoResolve);
+            right.off("scroll").on("scroll", { nodes: nodes }, _.debounce(autoResolve, 250));
+            nodes = frag = null;
         };
 
         drawMail = function (data) {
