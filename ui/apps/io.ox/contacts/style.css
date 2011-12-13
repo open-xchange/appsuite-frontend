@@ -45,10 +45,12 @@
         color-stop(1.00, #eee)
     );
     background-image: -o-linear-gradient(
-        top, #fff 0%, #eee 80%
+        top,
+        #fff 0%,
+        #eee 80%
     );
     background-image: -moz-linear-gradient(
-        center bottom,
+        center top,
         #fff 20%,
         #eee 100%
     );

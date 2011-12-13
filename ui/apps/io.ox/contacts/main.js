@@ -52,19 +52,20 @@ define("io.ox/contacts/main",
 
         // left panel
         left = $("<div/>")
-            .addClass("leftside border-right")
+            .addClass("leftside border-left border-right")
             .css({
-                width: GRID_WIDTH - 35 + "px",
+                left: 38 + "px",
+                width: GRID_WIDTH - 40 + "px",
                 overflow: "auto"
             })
             .appendTo(win.nodes.main);
 
         // thumb index
         thumbs = $("<div/>")
-            .addClass("atb contact-grid-index border-left border-right")
+            .addClass("atb contact-grid-index border-right")
             .css({
-                left: GRID_WIDTH - 32 + "px",
-                width: "30px"
+                left: "0px",
+                width: "35px"
             })
             .appendTo(win.nodes.main);
 
