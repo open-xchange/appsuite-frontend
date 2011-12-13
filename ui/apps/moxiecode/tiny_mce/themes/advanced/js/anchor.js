@@ -1,4 +1,4 @@
-//#NOJSHINT
+// NOJSHINT
 tinyMCEPopup.requireLangPack();
 
 var AnchorDialog = {

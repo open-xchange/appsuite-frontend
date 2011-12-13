@@ -1,4 +1,4 @@
-//#NOJSHINT
+// NOJSHINT
 /**
  * editable_selects.js
  *

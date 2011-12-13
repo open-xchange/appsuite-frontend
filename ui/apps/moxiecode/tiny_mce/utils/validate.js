@@ -1,4 +1,4 @@
-//#NOJSHINT
+// NOJSHINT
 /**
  * validate.js
  *
