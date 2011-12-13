@@ -256,7 +256,7 @@ define.async('io.ox/mail/write/main',
             _(list).each(function (recipient) {
                 var node = $('<div>');
                 drawContact(id, node, {
-                    display_name: recipient[0],
+                    display_name: recipient[0] ? recipient[0].replace(/^('|")|('|")$/g, '') : recipient[0],
                     email: recipient[1],
                     contact: {}
                 });
@@ -667,7 +667,7 @@ define.async('io.ox/mail/write/main',
 
             addSection('format', 'Text format', true, false)
                 .append(
-                    $('<div>').css('textAlign', 'right')
+                    $('<div>').addClass('change-format')
                     .append(
                         $('<a>', { href: '#' }).text('Text').on('click', { format: 'text' }, fnChangeFormat)
                     )

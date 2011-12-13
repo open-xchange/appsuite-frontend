@@ -273,7 +273,11 @@ define.async('io.ox/core/tk/html-editor', [], function () {
                 p.find('iframe').css('height', iframeHeight + 'px');
             }, 100),
 
-            trim = function (str) {
+            trimIn = function (str) {
+                return String(str || '').replace(/^[^\S\n]+/, '').replace(/^\n{3,}/, '').replace(/\s+$/);
+            },
+
+            trimOut = function (str) {
                 return $.trim((str + '').replace(/[\r\n]+/g, ''));
             },
 
@@ -294,7 +298,7 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             // trim white-space and clean up pseudo XHTML
             // remove empty paragraphs at the end
             get = function () {
-                return trim(ed.getContent())
+                return trimOut(ed.getContent())
                     .replace(/<(\w+)[ ]?\/>/g, '<$1>')
                     .replace(/(<p>(<br>)?<\/p>)+$/, '');
             };
@@ -326,12 +330,26 @@ define.async('io.ox/core/tk/html-editor', [], function () {
         this.setContent = set;
 
         this.setPlainText = function (str) {
-            var text = '', tmp = '', lines = $.trim(str).split('\n').concat('');
-            _(lines).each(function (line, i) {
+            var text = '', quote = false, tmp = '', lTag, rTag;
+            // clean up
+            str = trimIn(str);
+            // needs leading empty paragraph?
+            if (str.substr(0, 2) === '\n\n') {
+                text += '<p></p>';
+                str = str.substr(2);
+            }
+            // split & loop
+            _(str.split('\n').concat('')).each(function (line, i) {
                 line = $.trim(line);
-                if (line === '') {
-                    text += tmp !== '' ? '<p>' + tmp.replace(/<br>$/, '') + '</p>' : '';
+                if (line === '' || (quote && line.substr(0, 1) !== '>')) {
+                    lTag = quote ? '<blockquote><p>' : '<p>';
+                    rTag = quote ? '</blockquote></p>' : '</p>';
+                    text += tmp !== '' ? lTag + tmp.replace(/<br>$/, '') + rTag : '';
                     tmp = '';
+                    quote = false;
+                } else if (line.substr(0, 1) === '>') {
+                    tmp += line.substr(2).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '<br>';
+                    quote = true;
                 } else {
                     tmp += line.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '<br>';
                 }

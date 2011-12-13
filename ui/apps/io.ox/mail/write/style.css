@@ -82,7 +82,7 @@
 
 .io-ox-mail-write input[type=text]:focus {
     border-color: white;
-    box-shadow: 0px 0px 4px 0px @link-color;
+    box-shadow: 0px 0px 4px 0px @outline-color;
 }
 
 .io-ox-mail-write input[type=text].discreet {
@@ -102,7 +102,7 @@
 }
 
 .io-ox-mail-write input[type=file]:focus {
-    box-shadow: 0px 0px 4px 0px @link-color;
+    box-shadow: 0px 0px 4px 0px @outline-color;
 }
 
 .io-ox-mail-write .label {
@@ -275,7 +275,15 @@
 
 .io-ox-mail-write .text-editor:focus {
     border-color: #fff;
-    box-shadow: 0px 0px 4px 0px @link-color;
+    box-shadow: 0px 0px 4px 0px @outline-color;
+}
+
+.io-ox-mail-write .change-format {
+    text-align: right;
+}
+
+.io-ox-mail-write .change-format a {
+    color: @action-link-color;
 }
 
 /* Proofread */
@@ -290,17 +298,17 @@
 /* tinyMCE polishing */
 
 .oxSkin table.mceLayout.focused {
-    border-left-color: #fff;
-    border-right-color: #fff;
-    box-shadow: 0px 0px 4px 0px @link-color;
+    border-left-color: #eee;
+    border-right-color: #eee;
+    box-shadow: 0px 0px 4px 0px @outline-color;
 }
 
 .oxSkin table.mceLayout.focused tr.mceFirst td {
-    border-top-color: #fff;
+    border-top-color: #eee;
 }
 
 .oxSkin table.mceLayout.focused tr.mceLast td {
-    border-bottom-color: #fff;
+    border-bottom-color: #eee;
 }
 
 /* -------------------- */

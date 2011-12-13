@@ -20,16 +20,11 @@
 
 #io-ox-topbar {
     bottom: auto;
-    height: 26px;
+    height: 30px;
     background-color: @menu-background;
     background-color: fade(@menu-background, 75%);
-    padding: 0px 1px 1px 1px;
     overflow: hidden;
-}
-
-.rgba #io-ox-topbar {
-    padding-bottom: 0px;
-    border-bottom: 1px solid fade(@menu-background, 30%);
+    border-bottom: 1px solid #555;
 }
 
 /* ipad: better fat finger support */
@@ -39,10 +34,9 @@
 .touch #io-ox-windowmanager .window-container-center { width: 100% !important; }
 
 #io-ox-topbar .launcher {
-    color: mix(@menu-color, @menu-background, 75%);
-    padding: 2px 12px 5px 12px;
-    margin: 0px 1px 0px 0px;
-    line-height: 20px;
+    color: @topbar-launcher-color;
+    padding: 0px 12px 0px 12px;
+    line-height: 30px;
     text-align: center;
     white-space: nowrap;
     display: inline-block !important;
@@ -55,29 +49,23 @@
 }
 
 #io-ox-topbar .launcher.hover {
-    color: @menu-color;
-    background-color: mix(@menu-color, @menu-background, 75%);
-    background-color: fade(@menu-background, 25%);
+    color: @topbar-launcher-color-hover;
+    background-color: @topbar-launcher-background-hover;
 }
 
 #io-ox-topbar .launcher.active {
     color: @menu-color;
-    background-color: #888;
-}
-
-.rgba #io-ox-topbar .launcher.active {
-    padding-bottom: 4px;
-    border-bottom: 1px solid fade(@menu-color, 12%);
+    background-color: @topbar-active-color;
 }
 
 @-webkit-keyframes launcherColours {
     from { background-color: fade(@menu-background, 0%); }
-      to { background-color: fade(@menu-color, 40%); }
+      to { background-color: @topbar-active-color; }
 }
 
 @-moz-keyframes launcherColours {
     from { background-color: fade(@menu-background, 0%); }
-      to { background-color: fade(@menu-color, 40%); }
+      to { background-color: @topbar-active-color; }
 }
 
 #io-ox-topbar .launcher.progress {
@@ -127,7 +115,7 @@
 /* window manager */
 
 #io-ox-windowmanager {
-    top: 27px;
+    top: 31px;
     overflow: hidden;
 }
 
@@ -1025,6 +1013,10 @@ div.token-input-dropdown ul li.token-input-selected-dropdown-item {
 
 .io-ox-inline-links.empty {
     padding: 0px;
+}
+
+.io-ox-inline-links a {
+    color: @inline-link-color;
 }
 
 .io-ox-action-link {
