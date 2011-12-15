@@ -281,6 +281,10 @@ define.async('io.ox/core/tk/html-editor', [], function () {
                 return $.trim((str + '').replace(/[\r\n]+/g, ''));
             },
 
+            quote = function (str) {
+                return '> ' + $.trim(str).replace(/\n/g, '\n> ');
+            },
+
             set = function (str) {
                 ed.setContent(str + '');
             },
@@ -318,13 +322,37 @@ define.async('io.ox/core/tk/html-editor', [], function () {
         this.getContent = get;
 
         this.getPlainText = function () {
+
             if (_.browser.IE) {
                 // IE ignores paragraphs, so we help a bit
                 $('p', ed.getBody()).append('<br>');
             }
-            // return via selection
-            ed.selection.select(ed.getBody(), true);
-            return ed.selection.getContent({ format: 'text' });
+            // fix headers
+            $(':header', ed.getBody()).append('<br>');
+            // loop over top-level nodes
+            var tmp = '';
+            $(ed.getBody()).children().each(function () {
+                var text = '';
+                // get text via selection
+                ed.selection.select(this, true);
+                text = ed.selection.getContent({ format: 'text' });
+                switch (this.tagName) {
+                case 'BLOCKQUOTE':
+                    tmp += quote(text) + '\n\n';
+                    break;
+                case 'P':
+                case 'H1':
+                case 'H2':
+                case 'H3':
+                case 'H4':
+                    tmp += text + '\n\n';
+                    break;
+                default:
+                    tmp += text + '\n';
+                    break;
+                }
+            });
+            return tmp;
         };
 
         this.setContent = set;

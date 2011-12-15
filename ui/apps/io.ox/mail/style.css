@@ -98,22 +98,6 @@
 
 .mail-detail-pane {
     background-color: #eee;
-    background-image: -webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0.50, #fff),
-        color-stop(1.00, #eee)
-    );
-    background-image: -o-linear-gradient(
-        top, #fff 50%, #eee 100%
-    );
-    background-image: -moz-linear-gradient(
-        center top,
-        #fff 50%,
-        #eee 100%
-    );
-    background-attachment: fixed;
 }
 
 .mail-detail-pane > div {
@@ -131,14 +115,14 @@
 }
 
 .mail-detail.page {
-    border: 1px solid #ddd;
+    border: 1px solid #bbb;
     padding: 20px;
     margin: 20px 0 0 0;
     min-height: 200px;
     max-width: 900px;
-    -moz-box-shadow: 0px 5px 8px -5px black;
-    -webkit-box-shadow: 0px 5px 8px -5px black;
-    box-shadow: 0px 5px 8px -5px black;
+    -moz-box-shadow: 0px 5px 8px -6px black;
+    -webkit-box-shadow: 0px 5px 8px -6px black;
+    box-shadow: 0px 5px 8px -6px black;
 }
 
 .mail-detail .date {

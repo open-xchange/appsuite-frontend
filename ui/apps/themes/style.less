@@ -55,17 +55,17 @@
 
 #io-ox-topbar .launcher.active {
     color: @menu-color;
-    background-color: @topbar-active-color;
+    background-color: @topbar-launcher-background-active;
 }
 
 @-webkit-keyframes launcherColours {
     from { background-color: fade(@menu-background, 0%); }
-      to { background-color: @topbar-active-color; }
+      to { background-color: @topbar-progress-color; }
 }
 
 @-moz-keyframes launcherColours {
     from { background-color: fade(@menu-background, 0%); }
-      to { background-color: @topbar-active-color; }
+      to { background-color: @topbar-progress-color; }
 }
 
 #io-ox-topbar .launcher.progress {

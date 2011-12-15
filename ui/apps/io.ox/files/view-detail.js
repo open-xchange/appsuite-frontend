@@ -23,7 +23,7 @@ define("io.ox/files/view-detail",
     "use strict";
 
     var draw = function (file) {
-        file.url = ox.ajaxRoot + "/infostore?action=document&id=" + file.id +
+        file.url = ox.apiRoot + "/infostore?action=document&id=" + file.id +
             "&folder=" + file.folder_id + "&session=" + ox.session; // TODO: Put this somewhere in the model
 
         // container & title

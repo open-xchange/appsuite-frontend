@@ -30,7 +30,7 @@ define('io.ox/core/tk/text-editor', [], function () {
             }, 100),
 
             trim = function (str) {
-                return String(str || '').replace(/^[^\S\n]+/, '').replace(/^\n{3,}/, '').replace(/\s+$/);
+                return String(str || '').replace(/^[^\S\n]+/, '').replace(/^\n{3,}/, '').replace(/\s+$/, '');
             },
 
             set = function (str) {

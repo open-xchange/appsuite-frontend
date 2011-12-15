@@ -142,7 +142,7 @@ define("io.ox/mail/main",
                     frag.appendChild(viewDetail.drawScaffold(obj, autoResolveThreads).get(0));
                 }
             }
-            right.idle().empty().get(0).appendChild(frag);
+            right.scrollTop(0).idle().empty().get(0).appendChild(frag);
             // show many to resolve?
             var nodes = right.find(".mail-detail"),
                 numVisible = (right.parent().height() / nodes.eq(0).outerHeight(true) >> 0) + 1;

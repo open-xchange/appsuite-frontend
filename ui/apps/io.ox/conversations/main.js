@@ -91,16 +91,20 @@ define("io.ox/conversations/main",
         // add template
         grid.addTemplate({
             build: function () {
-                var subject;
+                var subject, members;
                 this.addClass("conversation")
-                    .append(
-                        $("<div/>")
-                        .append(subject = $("<span/>").addClass("subject"))
-                    );
-                return { subject: subject };
+                    .append(subject = $("<div>").addClass("subject"))
+                    .append(members = $("<div>").addClass("members"));
+                return { subject: subject, members: members };
             },
             set: function (data, fields, index) {
-                fields.subject.text(data.subject || "#");
+                fields.subject.text(data.subject || '\u00A0');
+                fields.members.text(
+                    _(data.members).map(function (member) {
+                        return member.name;
+                    })
+                    .join(', ')
+                );
             }
         });
 
@@ -320,17 +324,7 @@ define("io.ox/conversations/main",
             pane.append(
                 $.inlineEdit()
                 .text(data.subject || "No subject")
-                .css({
-                    fontWeight: "bold",
-                    fontSize: "14pt",
-                    color: "#aaa",
-                    lineHeight: "1.5em",
-                    width: "500px",
-                    marginBottom: "1em",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis"
-                })
+                .addClass('subject')
                 .on("update", function (e, subject) {
                     api.update(data.id, { subject: subject });
                 })

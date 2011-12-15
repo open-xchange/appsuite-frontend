@@ -1,10 +1,27 @@
 
+.vgrid-cell.conversation .members {
+    color: #aaa;
+}
+
 .io-ox-conversation .centered-box {
     width: 550px;
 }
 
 .io-ox-conversation .conversation {
     bottom: 91px;
+}
+
+.io-ox-conversation .subject {
+    font-family: OpenSans, Helvetica, Arial, sans-serif;
+    font-weight: 200;
+    font-size: 16pt;
+    color: #555;
+    line-height: 1.5em;
+    width: 500px;
+    margin-bottom: 1em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .io-ox-conversation .conversation .message {
