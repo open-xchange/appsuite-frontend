@@ -63,6 +63,15 @@ define("io.ox/core/main",
 
     function launch() {
 
+        // add small logo to top bar
+        $("#io-ox-topbar").append(
+            $('<img>', {
+                id: 'io-ox-top-logo-small',
+                src: ox.base + '/apps/themes/default/logo-small.png',
+                alt: ''
+            })
+        );
+
         desktop.addLauncher("right", gt("Sign out"), function (e) {
             return logout();
         });
