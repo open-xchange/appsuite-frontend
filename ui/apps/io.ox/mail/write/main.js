@@ -800,26 +800,31 @@ define.async('io.ox/mail/write/main',
                     .find(function (o) {
                         return o.signature_default === true;
                     }),
-                text = ds ? $.trim(ds.signature_text) : '',
-                pos = ds ? ds.position : 'below';
+                signature = ds ? $.trim(ds.signature_text) : '',
+                pos = ds ? ds.position : 'below',
+                content = $.trim(str);
             // set signature?
             if (ds) {
                 // remember as current signature
-                currentSignature = text;
+                currentSignature = signature;
                 // yep
                 if (editorMode === 'html') {
                     // prepare signature for html
-                    text = '<p>' + text.replace(/\n/g, '<br>') + '</p>';
+                    signature = '<p>' + signature.replace(/\n/g, '<br>') + '</p>';
                     // html
-                    editor.setContent('<p></p>' + (pos === 'above' ? text + str : str + text));
+                    editor.setContent('<p></p>' + (pos === 'above' ? signature + content : content + signature));
                 } else {
                     // plain text
-                    editor.setContent('\n\n' + (pos === 'above' ? text + '\n\n' + str : str + '\n\n' + text));
+                    if (pos === 'above') {
+                        editor.setContent('\n\n' + signature + (content !== '' ? '\n\n' + content : ''));
+                    } else {
+                        editor.setContent('\n\n' + (content !== '' ? content + '\n\n' : '') + signature);
+                    }
                 }
 
             } else {
                 // no signature
-                editor.setContent((editorMode === 'html' ? '<p></p>' : '\n\n') + str);
+                editor.setContent(content !== '' ? (editorMode === 'html' ? '<p></p>' : '\n\n') + content : '');
             }
         };
 
@@ -908,12 +913,17 @@ define.async('io.ox/mail/write/main',
         /**
          * Compose new mail
          */
-        app.compose = function () {
+        app.compose = function (data) {
             var def = $.Deferred();
             win.setTitle('Compose new email')
                 .show(function () {
                     app.setMode().done(function () {
-                        $('input[data-type=to]').focus().select();
+                        app.setMail(data, 'compose');
+                        if (data && data.to) {
+                            $('input[name=subject]').focus().select();
+                        } else {
+                            $('input[data-type=to]').focus().select();
+                        }
                         def.resolve();
                     });
                 });
