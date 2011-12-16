@@ -1,4 +1,4 @@
-//#NOJSHINT
+// NOJSHINT
 tinyMCEPopup.requireLangPack();
 
 function init() {

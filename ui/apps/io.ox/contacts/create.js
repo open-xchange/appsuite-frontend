@@ -16,7 +16,7 @@
 define("io.ox/contacts/create",
     ["io.ox/contacts/util", "io.ox/contacts/api",
      "io.ox/core/tk/dialogs", "io.ox/core/config",
-     "css!io.ox/contacts/style.css"
+     "less!io.ox/contacts/style.css"
     ], function (util, api, dialogs, config) {
 
     "use strict";

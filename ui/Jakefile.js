@@ -40,7 +40,7 @@ var defineWalker = ast("define").asCall().walker();
 function jsFilter (data) {
     var self = this;
 
-    if (data.substr(0, 11) !== "//#NOJSHINT") {
+    if (data.substr(0, 11) !== "// NOJSHINT") {
         data = hint.call(this, data, this.getSrc);
     }
 

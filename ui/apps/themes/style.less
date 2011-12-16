@@ -20,16 +20,18 @@
 
 #io-ox-topbar {
     bottom: auto;
-    height: 26px;
+    height: 30px;
     background-color: @menu-background;
-    background-color: fade(@menu-background, 20%);
-    padding: 0px 1px 1px 1px;
-    /*overflow: hidden;*/
+    background-color: fade(@menu-background, 75%);
+    overflow: hidden;
+    border-bottom: 1px solid #555;
 }
 
-.rgba #io-ox-topbar {
-    padding-bottom: 0px;
-    border-bottom: 1px solid fade(@menu-background, 30%);
+#io-ox-top-logo-small {
+    width: 63px;
+    height: 22px;
+    margin: 2px 13px 0 13px;
+    float: right;
 }
 
 /* ipad: better fat finger support */
@@ -39,12 +41,9 @@
 .touch #io-ox-windowmanager .window-container-center { width: 100% !important; }
 
 #io-ox-topbar .launcher {
-    color: mix(@menu-color, @menu-background, 75%);
-    font-weight: bold;
-    text-shadow: 0px 1px 4px @menu-background;
-    padding: 2px 12px 5px 12px;
-    margin: 0px 1px 0px 0px;
-    line-height: 20px;
+    color: @topbar-launcher-color;
+    padding: 0px 12px 0px 12px;
+    line-height: 30px;
     text-align: center;
     white-space: nowrap;
     display: inline-block !important;
@@ -57,30 +56,23 @@
 }
 
 #io-ox-topbar .launcher.hover {
-    color: @menu-color;
-    background-color: mix(@menu-color, @menu-background, 75%);
-    background-color: fade(@menu-background, 25%);
+    color: @topbar-launcher-color-hover;
+    background-color: @topbar-launcher-background-hover;
 }
 
 #io-ox-topbar .launcher.active {
     color: @menu-color;
-    background-color: mix(@menu-color, @menu-background, 400%/15);
-    background-color: fade(@menu-background, 30%);
-}
-
-.rgba #io-ox-topbar .launcher.active {
-    padding-bottom: 4px;
-    border-bottom: 1px solid fade(@menu-color, 12%);
+    background-color: @topbar-launcher-background-active;
 }
 
 @-webkit-keyframes launcherColours {
     from { background-color: fade(@menu-background, 0%); }
-      to { background-color: fade(@menu-color, 40%); }
+      to { background-color: @topbar-progress-color; }
 }
 
 @-moz-keyframes launcherColours {
     from { background-color: fade(@menu-background, 0%); }
-      to { background-color: fade(@menu-color, 40%); }
+      to { background-color: @topbar-progress-color; }
 }
 
 #io-ox-topbar .launcher.progress {
@@ -96,27 +88,8 @@
     -webkit-animation-timing-function: ease-in-out;
 }
 
-@-webkit-keyframes upsellColours {
-    from { background-color: rgba(255, 255, 255, 1.0); }
-      to { background-color: rgba(255, 255, 255, 0.6); }
-}
-
-@-moz-keyframes upsellColours {
-    from { background-color: rgba(255, 255, 255, 1.0); }
-      to { background-color: rgba(255, 255, 255, 0.6); }
-}
-
 #io-ox-welcome-upsell {
-    -webkit-animation-direction: alternate;
-    -webkit-animation-duration: 1s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-name: upsellColours;
-    -webkit-animation-timing-function: ease-in-out;
-    -moz-animation-direction: alternate;
-    -moz-animation-duration: 1s;
-    -moz-animation-iteration-count: infinite;
-    -moz-animation-name: upsellColours;
-    -moz-animation-timing-function: ease-in-out;
+    background-color: white;
 }
 
 /* empty desktop */
@@ -126,30 +99,30 @@
 
 #io-ox-welcome {
     background-color: @welcome-background;
-    background-color: fade(@welcome-background, 50%);
+    background-color: @welcome-background-rgba;
     color: @welcome-color;
     top: auto;
     height: 70px;
     padding: 10px 13px 10px 13px;
-    text-shadow: 0px 0px 1px mix(@welcome-color, @welcome-background, 67%);
+    text-shadow: 0px 0px 1px #fff;
     text-align: right;
-    border-top: 1px solid fade(@welcome-background, 15%);
+    border-top: 1px solid @welcome-border-color;
 }
 
-#io-ox-welcome .at {
-    color: mix(@welcome-color, @welcome-background, 67%);
+#io-ox-welcome .accent {
+    color: @welcome-color-accent;
     display: inline-block;
     margin: 0 0.15em 0 0.15em;
 }
 
 #io-ox-welcome .clock {
-    color: mix(@welcome-color, @welcome-background, 75%);
+    color: @welcome-color-bright;
 }
 
 /* window manager */
 
 #io-ox-windowmanager {
-    top: 27px;
+    top: 31px;
     overflow: hidden;
 }
 
@@ -189,25 +162,20 @@
     position: absolute;
     top: 0px;
     right: 0px;
-    height: 50px;
+    height: 48px;
     left: 0px;
-    
-    border-top: 1px solid mix(@head-color, @head-background, 75%);
-    border-top-color: fade(@head-color, 30%);
-    background-color: mix(@head-color, @head-background, 100%/15);
-    background-color: fade(@head-background, 30%);
     
     color: @head-color;
     font-family: Lucida Grande, Arial;
     font-size: 9pt;
-    
+
+    border-top: 1px solid mix(@head-color, @head-background, 75%);
+    border-top-color: fade(@head-color, 30%);
+    border-bottom: 1px solid #bbb;
+
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
-}
-
-.window-head.larger {
-    height: 55px;
 }
 
 .window-title {
@@ -217,12 +185,12 @@
     left: 0px;
     padding: 0 10px 0 13px;
     width: 300px;
-    color: @head-color;
+    color: @window-title-color;
     font-family: Helvetica, Arial, sans-serif;
     font-weight: 200;
     font-size: 24px;
     line-height: 30px;
-    text-shadow: 0px 0px 1px mix(@head-color, @head-background, 1400%/15);
+    text-shadow: 0px 0px 3px #fff;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -239,7 +207,19 @@
     white-space: nowrap;
 }
 
-.window-toolbar a, a.button {
+.window-toolbar a {
+    font-size: 12px;
+    line-height: 32px;
+    color: @toolbar-link-color;
+    display: inline-block;
+    margin: 0 10px 0 0;
+    cursor: pointer;
+    white-space: nowrap;
+    outline: none;
+    text-decoration: none;
+}
+
+a.button {
     font-size: 12px;
     line-height: 18px;
     color: #fff;
@@ -257,24 +237,24 @@
 }
 
 .window-toolbar a:hover, a.button:hover {
-    text-decoration: none;
-    background-color: #888;
+    text-decoration: underline;
 }
 
+/*
 .window-toolbar a:focus, .window-toolbar a:hover,
 a.button:focus, a.button:hover {
     border-color: #555;
     box-shadow: 0px 0px 5px -1px #000;
 }
+*/
 
-.window-toolbar a.default-action,
 a.button.default-action {
     color: #fff;
     border: 1px solid #007CBA;
     background-color: #2DA6E3;
-    background-image: -moz-linear-gradient(center top, #2DA6E3, #08c);
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#2DA6E3), to(#08c));
-    background-image: -o-linear-gradient(top, #FFEE00 0%, #2DA6E3 100%);
+    background-image: -moz-linear-gradient(center top, @accent1-bright, @accent1);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(@accent1-bright), to(@accent1));
+    background-image: -o-linear-gradient(top, @accent1-bright 0%, @accent1 100%);
 }
 
 .window-controls {
@@ -284,9 +264,9 @@ a.button.default-action {
 }
 
 .window-control {
-    color: @head-color;
+    color: @window-control-color;
     font-weight: normal;
-    border: 2px solid #aaa;
+    border: 2px solid @window-control-border-color;
     background-color: transparent;
     -moz-border-radius: 20px;
     -webkit-border-radius: 20px;
@@ -302,9 +282,9 @@ a.button.default-action {
 }
 
 .window-control:hover {
-    background-color: #333;
-    border-color: #555;
-    color: #888;
+    background-color: @window-control-background-hover;
+    border-color: @window-control-border-color-hover;
+    color: @window-control-color-hover;
 }
 
 .window-body {
@@ -372,7 +352,7 @@ a.button.default-action {
 }
 
 @media screen and (min-height: 800px) {
-    .window-head { height: 70px; }
+    .window-head { height: 68px; }
     .window-title, .window-toolbar, .window-controls { top: 20px; }
     .window-body { top: 70px; }
 }
@@ -552,11 +532,11 @@ a.button.default-action {
     color: #888;
 }
 .email-address, .blue {
-    color: #08C;
+    color: #00a0cd;
 }
 
 .person, .person-link {
-    color: #07b;
+    color: #006897;
 }
 
 .person-link {
@@ -610,18 +590,13 @@ a.nolink {
     border-radius: 10px 10px 10px 10px;
     border: 1px solid #bbb;
     display: inline-block;
+    float: right;
 }
 
-/*
-.searchfield-wrapper input{
-	margin: 2px 2px 3px;
-	background-color: white;
-	border: 0 none;
-	font-size: 11px;
-	padding: 0;
-	width: 100px;
+
+.searchfield-wrapper {
+    margin: 6px 0 0 0;
 }
-*/
 
 input[type=search] {
     width: 220px;
@@ -1039,12 +1014,16 @@ div.token-input-dropdown ul li.token-input-selected-dropdown-item {
     text-align: right;
     padding: 0.25em 0 0.25em 0;
     margin: 0.5em 0px 1.5em 0px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid @inline-link-border-color;
     height: 1em;
 }
 
 .io-ox-inline-links.empty {
     padding: 0px;
+}
+
+.io-ox-inline-links a {
+    color: @inline-link-color;
 }
 
 .io-ox-action-link {
@@ -1136,7 +1115,7 @@ input.nice-input {
 }
 
 input.nice-input:focus {
-    box-shadow: 0px 0px 5px 1px #08c;
+    box-shadow: 0px 0px 5px 1px @accent1-bright;
 }
 
 /* auto complete */

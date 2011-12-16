@@ -29,12 +29,14 @@ define("io.ox/contacts/view-detail",
         .join(arguments[0] || "");
     };
 
-    function addField(label, value, context, fn) {
+    function addField(label, value, node, fn) {
         if (value) {
-            var node = $("<tr>").appendTo(context),
-                td = $("<td>").addClass("value");
-            node.append($("<td>").addClass("label").text(label));
-            node.append(td);
+            var td = $("<td>").addClass("value"),
+                tr = $("<tr>")
+                    .append(
+                        $("<td>").addClass("label").text(label)
+                    )
+                    .append(td);
             if (_.isFunction(fn)) {
                 fn(td);
             } else {
@@ -43,25 +45,39 @@ define("io.ox/contacts/view-detail",
                 }
                 td.text(value);
             }
+            tr.appendTo(node);
             return 1;
         } else {
             return 0;
         }
     }
 
-    function addMail(label, value, context) {
-        return addField(label, value, context, function (node) {
+    function clickMail(e) {
+        e.preventDefault();
+        // set recipient
+        var data = { to: [[e.data.display_name, e.data.email]] };
+        // open compose
+        require(['io.ox/mail/write/main'], function (m) {
+            m.getApp().launch().done(function () {
+                this.compose(data);
+            });
+        });
+    }
+
+    function addMail(label, value, data) {
+        return addField(label, value, this, function (node) {
             node
             .addClass("blue")
             .append(
                 $("<a>", { href: "mailto: " + value })
                 .addClass("blue").text(value)
+                .on('click', { email: value, display_name: data.display_name }, clickMail)
             );
         });
     }
 
-    function addPhone(label, value, context) {
-        return addField(label, value, context, function (node) {
+    function addPhone(label, value, node) {
+        return addField(label, value, node, function (node) {
             node
             .addClass("blue")
             .append(
@@ -71,8 +87,8 @@ define("io.ox/contacts/view-detail",
         });
     }
 
-    function addAddress(label, street, code, city, country, context) {
-        return addField(label, true, context, function (node) {
+    function addAddress(label, street, code, city, country, node) {
+        return addField(label, true, node, function (node) {
             var a = $("<a>", {
                     href: "http://www.google.de/maps?q=" + encodeURIComponent(join(", ", street, join(" ", code, city))),
                     target: "_blank"
@@ -241,14 +257,14 @@ define("io.ox/contacts/view-detail",
         draw: function (data) {
             var dupl = {},
                 r = 0;
-            r += addMail(gt("E-Mail"), data.email1, this);
+            r += addMail.call(this, gt("E-Mail"), data.email1, data);
             dupl[data.email1] = true;
             if (dupl[data.email2] !== true) {
-                r += addMail(gt("E-Mail"), data.email2, this);
+                r += addMail.call(this, gt("E-Mail"), data.email2, data);
                 dupl[data.email2] = true;
             }
             if (dupl[data.email3] !== true) {
-                r += addMail(gt("E-Mail"), data.email3, this);
+                r += addMail.call(this, gt("E-Mail"), data.email3, data);
             }
             if (r > 0) {
                 addField("", "\u00A0", this);

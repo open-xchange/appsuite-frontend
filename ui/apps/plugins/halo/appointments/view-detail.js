@@ -12,14 +12,15 @@
  */
 
 define("plugins/halo/appointments/view-detail",
-    ["io.ox/calendar/view-detail", "css!io.ox/calendar/style.css"], function (viewer) {
+    ["io.ox/calendar/view-detail", "less!io.ox/calendar/style.css"], function (viewer) {
 
     "use strict";
 
     function show(data) {
 
         var app = ox.ui.createApp({
-            title: data.title
+            title: data.title,
+            close: true
         });
 
         app.setLauncher(function () {
@@ -28,7 +29,6 @@ define("plugins/halo/appointments/view-detail",
             win.nodes.main.css("overflow", "auto");
 
             app.setWindow(win);
-            win.setQuitOnClose(true);
 
             win.nodes.main.append(viewer.draw(data));
 

@@ -13,12 +13,12 @@
 
 define("io.ox/calendar/view-grid-template",
     ["io.ox/calendar/util", "io.ox/core/tk/vgrid",
-     "css!io.ox/calendar/style.css"], function (util, VGrid) {
-    
+     "less!io.ox/calendar/style.css"], function (util, VGrid) {
+
     "use strict";
-    
+
     var that = {
-        
+
         // main grid template
         main: {
             build: function () {
@@ -39,7 +39,7 @@ define("io.ox/calendar/view-grid-template",
                 fields.shown_as.get(0).className = "abs shown_as " + util.getShownAsClass(data);
             }
         },
-        
+
         // template for labels
         label: {
             build: function () {
@@ -50,23 +50,23 @@ define("io.ox/calendar/view-grid-template",
                 this.text(d);
             }
         },
-        
+
         // detect new labels
         requiresLabel: function (i, data, current) {
             var d = util.getSmartDate(data.start_date);
             return (i === 0 || d !== current) ? d : false;
         },
-        
+
         // simple grid-based list for portal & halo
         drawSimpleGrid: function (list) {
-            
+
             // use template
             var tmpl = new VGrid.Template(),
                 $div = $("<div>");
-            
+
             // add template
             tmpl.add(that.main);
-            
+
             _(list).each(function (data, i) {
                 tmpl.getClone()
                     .update(data, i).appendTo($div).node
@@ -74,15 +74,15 @@ define("io.ox/calendar/view-grid-template",
                         .data("appointment", data)
                         .addClass("hover");
             });
-            
+
             return $div;
         },
-        
+
         // simple click handler used by several simple grids
         hOpenDetailPopup: function (e) {
-            
+
             var data = e.data || $(this).data("appointment");
-            
+
             require(["io.ox/calendar/view-detail", "io.ox/core/tk/dialogs"],
                 function (view, dialogs) {
                     new dialogs.ModalDialog({
@@ -95,10 +95,10 @@ define("io.ox/calendar/view-grid-template",
                     data = null;
                 }
             );
-            
+
             return false;
         }
     };
-    
+
     return that;
 });

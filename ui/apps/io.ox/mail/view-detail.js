@@ -65,7 +65,7 @@ define("io.ox/mail/view-detail",
                         var doc = this.contentDocument,
                             css = 'body { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; line-height: 12pt; }' + "\n" +
                                 'pre { white-space: pre; white-space: pre-wrap; }' + "\n" +
-                                'blockquote { margin: 1em 0 1em 0; padding: 1px 1em 1px 39px; border-left: 1px solid #08c; background-color: #f5f5f5; color: #555; }';
+                                'blockquote { margin: 1em 0 1em 0; padding: 1px 1em 1px 39px; border-left: 1px solid #00a0cd; background-color: #f5f5f5; color: #555; }';
                         // this timeout is needed for chrome. seems that there is some kind of
                         // recursion protection (too close "load" events triggered by the same object).
                         setTimeout(function () {
@@ -123,7 +123,7 @@ define("io.ox/mail/view-detail",
             return $("<div/>")
                 .addClass("mail-detail page")
                 .busy()
-                .on("resolve", obj, resolver);
+                .one("resolve", obj, resolver);
         },
 
         draw: function (data) {
@@ -197,7 +197,7 @@ define("io.ox/mail/view-detail",
                 $("<div/>")
                     .addClass("subject clear-title")
                     // inject some zero width spaces for better word-break
-                    .text(_.prewrap(data.subject))
+                    .text(_.prewrap(data.subject || '\u00A0'))
                     .append($("<span/>").addClass("priority").text(" " + util.getPriority(data)))
             );
         }

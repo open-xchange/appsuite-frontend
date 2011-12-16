@@ -14,7 +14,7 @@
 
 define("plugins/halo/main",
     ["plugins/halo/api", "io.ox/core/extensions",
-     "css!plugins/halo/style.css"], function (api, ext) {
+     "less!plugins/halo/style.css"], function (api, ext) {
 
     "use strict";
 
@@ -28,11 +28,11 @@ define("plugins/halo/main",
 
             var win = ox.ui.createWindow({
                 title: data.display_name || "Halo",
-                toolbar: true
+                toolbar: true,
+                close: true
             });
             win.nodes.main.addClass("io-ox-halo");
             app.setWindow(win);
-            win.setQuitOnClose(true);
 
             win.nodes.main.css({overflow: "auto"});
             // Trigger Server Halo API

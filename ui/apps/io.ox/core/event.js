@@ -54,7 +54,9 @@ define("io.ox/core/event", function () {
 
                 // never leak
                 $(window).bind("unload", function () {
-                    self.data = self.handlers = null;
+                    if (self) {
+                        self.data = self.handlers = null;
+                    }
                 });
 
                 /**

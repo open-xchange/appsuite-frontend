@@ -18,7 +18,7 @@ define("io.ox/conversations/main",
      "io.ox/core/api/user",
      "io.ox/core/config",
      "io.ox/core/extensions",
-     "css!io.ox/conversations/style.css",
+     "less!io.ox/conversations/style.css",
      "io.ox/conversations/actions"
     ], function (util, api, VGrid, userAPI, config, ext) {
 
@@ -30,7 +30,7 @@ define("io.ox/conversations/main",
         win,
         // grid
         grid,
-        gridWidth = 310,
+        GRID_WIDTH = 330,
         // nodes
         left,
         right,
@@ -45,6 +45,7 @@ define("io.ox/conversations/main",
         win = ox.ui.createWindow({
             name: 'io.ox/conversations',
             title: "Conversations",
+            titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true
         });
 
@@ -74,13 +75,13 @@ define("io.ox/conversations/main",
         left = $("<div/>")
             .addClass("leftside border-right")
             .css({
-                width: gridWidth + "px"
+                width: GRID_WIDTH + "px"
             })
             .appendTo(win.nodes.main);
 
         // right panel
         right = $("<div/>")
-            .css({ left: gridWidth + 1 + "px" })
+            .css({ left: GRID_WIDTH + 1 + "px" })
             .addClass("rightside io-ox-conversation")
             .appendTo(win.nodes.main);
 
@@ -90,16 +91,20 @@ define("io.ox/conversations/main",
         // add template
         grid.addTemplate({
             build: function () {
-                var subject;
+                var subject, members;
                 this.addClass("conversation")
-                    .append(
-                        $("<div/>")
-                        .append(subject = $("<span/>").addClass("subject"))
-                    );
-                return { subject: subject };
+                    .append(subject = $("<div>").addClass("subject"))
+                    .append(members = $("<div>").addClass("members"));
+                return { subject: subject, members: members };
             },
             set: function (data, fields, index) {
-                fields.subject.text(data.subject || "#");
+                fields.subject.text(data.subject || '\u00A0');
+                fields.members.text(
+                    _(data.members).map(function (member) {
+                        return member.name;
+                    })
+                    .join(', ')
+                );
             }
         });
 
@@ -282,7 +287,7 @@ define("io.ox/conversations/main",
             .appendTo(right);
 
         textarea = $("<textarea>")
-            .attr({ placeholder: "Type your message here..." })
+            .attr({ placeholder: "Type your message here...", tabindex: '1' })
             .css("resize", "none")
             .on("keydown", function (e) {
                 // don't bubble up to the vgrid
@@ -304,8 +309,10 @@ define("io.ox/conversations/main",
                 $("<div>").addClass("centered-box")
                 .append(textarea)
                 .append(
-                    $("<button>").addClass("send").text("Send")
-                    .on("click", sendMessage)
+                    $('<a>', { href: '#', tabindex: '2' })
+                    .addClass('button default-action')
+                    .text('Send')
+                    .on('click', sendMessage)
                 )
             )
             .appendTo(right);
@@ -317,17 +324,7 @@ define("io.ox/conversations/main",
             pane.append(
                 $.inlineEdit()
                 .text(data.subject || "No subject")
-                .css({
-                    fontWeight: "bold",
-                    fontSize: "14pt",
-                    color: "#aaa",
-                    lineHeight: "1.5em",
-                    width: "500px",
-                    marginBottom: "1em",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis"
-                })
+                .addClass('subject')
                 .on("update", function (e, subject) {
                     api.update(data.id, { subject: subject });
                 })

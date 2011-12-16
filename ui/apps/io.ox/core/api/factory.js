@@ -207,7 +207,7 @@ define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/
                 var opt = $.extend({}, o.requests.search, options || {}),
                     getData = opt.getData;
                 // remove getData functions
-                delete opt.data;
+                delete opt.getData;
                 // go!
                 return http.PUT({
                     module: o.module,

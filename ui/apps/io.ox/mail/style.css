@@ -44,7 +44,7 @@
 
 .vgrid-cell.mail .priority {
     font-weight: bold;
-    color: #fc0;
+    color: @mail-priority;
     float: right;
 }
 
@@ -53,7 +53,7 @@
 }
 
 .vgrid-cell.mail .from {
-    color: #08c;
+    color: @link-color-dark;
 }
 
 .vgrid-cell.mail.me .from {
@@ -96,28 +96,8 @@
 
 /* Detail view */
 
-.io-ox-mail-main .leftside.border-right {
-    border-color: #888;
-}
-
 .mail-detail-pane {
     background-color: #eee;
-    background-image: -webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0.50, #ccc),
-        color-stop(1.00, #f5f5f5)
-    );
-    background-image: -o-linear-gradient(
-        top, #ccc 50%, #f5f5f5 100%
-    );
-    background-image: -moz-linear-gradient(
-        center top,
-        #ccc 50%,
-        #f5f5f5 100%
-    );
-    background-attachment: fixed;
 }
 
 .mail-detail-pane > div {
@@ -135,14 +115,14 @@
 }
 
 .mail-detail.page {
-    border: 1px solid #aaa;
+    border: 1px solid #bbb;
     padding: 20px;
-    margin: 20px auto 0px auto;
+    margin: 20px 0 0 0;
     min-height: 200px;
-    max-width: 850px;
-    -moz-box-shadow: 0px 5px 10px -3px black;
-    -webkit-box-shadow: 0px 5px 10px -3px black;
-    box-shadow: 0px 5px 10px -3px black;
+    max-width: 900px;
+    -moz-box-shadow: 0px 5px 8px -6px black;
+    -webkit-box-shadow: 0px 5px 8px -6px black;
+    box-shadow: 0px 5px 8px -6px black;
 }
 
 .mail-detail .date {
@@ -160,7 +140,7 @@
 .mail-detail .priority {
     font-weight: bold;
     font-size: 80%;
-    color: #fc0;
+    color: @mail-priority;
 }
 
 .mail-detail .contact-picture {
@@ -196,7 +176,7 @@
 
 .mail-detail .content.plain-text {
     font-family: Monaco, monospace;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 18px;
     white-space: pre-wrap;
     max-width: 700px;

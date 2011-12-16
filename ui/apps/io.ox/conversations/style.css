@@ -1,11 +1,27 @@
 
+.vgrid-cell.conversation .members {
+    color: #aaa;
+}
+
 .io-ox-conversation .centered-box {
     width: 550px;
-    margin: 0 auto 0 auto;
 }
 
 .io-ox-conversation .conversation {
     bottom: 91px;
+}
+
+.io-ox-conversation .subject {
+    font-family: OpenSans, Helvetica, Arial, sans-serif;
+    font-weight: 200;
+    font-size: 16pt;
+    color: #555;
+    line-height: 1.5em;
+    width: 500px;
+    margin-bottom: 1em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .io-ox-conversation .conversation .message {
@@ -20,7 +36,7 @@
 
 .io-ox-conversation .message .from {
     font-weight: normal;
-    color: #08c;
+    color: @link-color-dark;
 }
 
 .io-ox-conversation .message .from.me {
@@ -51,7 +67,7 @@
     top: auto;
     height: 80px;
     border-top: 1px solid #ccc;
-    padding-top: 10px;
+    padding: 10px 30px 0 30px;
     text-align: center;
     background-color: #f5f5f5;
 }
@@ -63,13 +79,18 @@
     width: 360px;
     height: 40px;
     border: 1px solid #ccc;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
     outline: none;
     padding: 10px;
     margin: 0px 10px 0 48px;
     vertical-align: top;
+}
+
+.io-ox-conversation .controls textarea:focus {
+    border-color: transparent;
+    box-shadow: 0px 0px 4px 0px @outline-color; 
 }
 
 .io-ox-conversation .controls button {

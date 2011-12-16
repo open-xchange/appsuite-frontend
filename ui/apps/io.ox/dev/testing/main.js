@@ -24,6 +24,27 @@ define('io.ox/dev/testing/main',
         win,
         env;
 
+    function readable(arg) {
+        if (typeof arg === 'string') {
+            return arg.replace(/\r/g, '\\r').replace(/\n/g, '\\n');
+        } else {
+            return arg;
+        }
+    }
+
+    function consoleError() {
+        var args = _(arguments).map(function (arg) {
+            return readable(arg);
+        });
+        if (console && console.error) {
+            if (_.browser.IE) {
+                console.error(args.join(' '));
+            } else {
+                console.error.apply(console, args);
+            }
+        }
+    }
+
     app.setLauncher(function () {
 
         // get window
@@ -68,6 +89,8 @@ define('io.ox/dev/testing/main',
 
             env = jasmine.jasmine.getEnv();
 
+            var green = 0, red = 0;
+
             env.addReporter({
                 /*
                  * Draws suites and their specs. Specs have an attribute
@@ -77,6 +100,8 @@ define('io.ox/dev/testing/main',
                 reportRunnerStarting: function (runner) {
                     // be busy
                     win.nodes.main.busy().find('.results').empty();
+                    // reset counters
+                    green = red = 0;
                     // add all suites
                     _(runner.suites()).each(function (suite) {
                         win.nodes.main.find('.results')
@@ -106,6 +131,10 @@ define('io.ox/dev/testing/main',
                     // stop being busy
                     win.nodes.main.idle();
                     win.show();
+                    // show summary
+                    win.nodes.main.find('.summary').empty()
+                        .html('<b>Summary:</b> Total number of tests: <b>' + green + '</b> Failed: <b>' + red + '</b>')
+                        .css('color', red > 0 ? '#a00' : '#070');
                 },
                 reportSpecResults: function (spec) {
                     // find spec DOM node by id
@@ -115,15 +144,18 @@ define('io.ox/dev/testing/main',
                         result = spec.results();
                     if (result.failedCount === 0) {
                         // ok!
-                        node.css('color', 'green');
+                        node.css('color', '#070');
+                        green++;
                     } else {
                         // fail!
-                        node.css({ color: 'red', fontWeight: 'bold' });
+                        node.css({ color: '#a00', fontWeight: 'bold' });
                         _(result.items_).each(function (item) {
                             if (!item.passed()) {
-                                $('<div>').text(item + '').appendTo(node);
+                                $('<div>').text(readable(item + '')).appendTo(node);
+                                consoleError('Actual', item.actual, "Expected", item.expected);
                             }
                         });
+                        red++;
                     }
                 }
             });
@@ -133,6 +165,7 @@ define('io.ox/dev/testing/main',
             .addClass('io-ox-testing selectable-text')
             .css({ overflow: 'auto', padding: '1.5em 13px 1.5em 13px' })
             .append($('<div>').addClass('header'))
+            .append($('<div>').addClass('summary').css('lineHeight', '2em').text('\u00A0'))
             .append($('<div>').addClass('results'));
 
         win.bind('open', function () {

@@ -15,13 +15,13 @@ define("io.ox/linkedIn/view-detail",
     ["io.ox/core/extensions",
      "io.ox/core/tk/dialogs",
      "io.ox/core/http",
-     "css!io.ox/linkedIn/style.css"], function (ext, dialogs, http) {
-    
+     "less!io.ox/linkedIn/style.css"], function (ext, dialogs, http) {
+
     "use strict";
-    
+
     var actionPoint = ext.point("linkedIn/details/actions");
     var rendererPoint = ext.point("linkedIn/details/renderer");
-    
+
     function todo() {
         alert("TODO");
     }
@@ -33,17 +33,17 @@ define("io.ox/linkedIn/view-detail",
             $pictureNode = $table.find(".t10"),
             $nameNode = $table.find(".t11"),
             $relationNode = $table.find(".r2");
-        
+
         $pictureNode.append(
             $("<img>")
             .css({ margin: "0 5px 0 0" })
             .attr("src", data.pictureUrl || (ox.base + "/apps/themes/default/dummypicture.png"))
         );
-        
+
         $nameNode
             .append($("<div>").addClass("name").text(data.firstName + " " + data.lastName))
             .append($("<div>").addClass("headline").text(data.headline));
-        
+
         var $actionsNode = $("<div>").addClass("actions").appendTo($node);
         actionPoint.each(function (ext) {
             $actionsNode.append($("<a>", { href: '#' }).text(ext.label).click(function (e) {
@@ -51,14 +51,14 @@ define("io.ox/linkedIn/view-detail",
                 ext.action();
             }));
         });
-        
+
         rendererPoint.each(function (ext) {
             $node.append(ext.draw({data: data, win: $node}));
         });
-        
+
         return $node;
     }
-    
+
     // Mock Actions
     actionPoint.extend({
         id: "linkedin/details/connect",
@@ -66,16 +66,16 @@ define("io.ox/linkedIn/view-detail",
         action: todo,
         index: 100
     });
-    
+
     actionPoint.extend({
         id: "linkedin/details/compose",
         label: "Write a message",
         action: todo,
         index: 200
     });
-    
+
     // Detail renderers
-    
+
 
     // Past Engagements
     rendererPoint.extend({
@@ -83,11 +83,11 @@ define("io.ox/linkedIn/view-detail",
         draw: function (options) {
             var data = options.data;
             var win = options.win;
-            
+
             var $myNode = $("<div>").addClass("pastEngagements extension");
             if (data.positions && data.positions.values && data.positions.values.length !== 0) {
                 var pastEngagements = [];
-                
+
                 _(data.positions.values).each(function (position) {
                     var $posNode = $("<div>").addClass("position").appendTo($myNode);
                     if (position.isCurrent) {
@@ -132,26 +132,26 @@ define("io.ox/linkedIn/view-detail",
         },
         index: 100
     });
-    
+
     rendererPoint.extend({
         id: "linkein/details/renderer/relations",
         draw: function (options) {
-            
+
             var data = options.data,
                 $myNode = $("<div>").addClass("relations extension");
-            
+
             if (data.relationToViewer && data.relationToViewer.connections && data.relationToViewer.connections.values && data.relationToViewer.connections.values !== 0) {
-                
+
                 $("<div>")
                     .css({ marginBottom: "5px", fontWeight: "bold" }) // TODO: make CSS class
                     .text("Connections you share with " + data.firstName + " " + data.lastName)
                     .appendTo($myNode);
-                
+
                 var open = function (popup) {
                         var person = $(this).data("object-data");
                         popup.append(draw(person));
                         var busy = $("<div/>").css("min-height", "100px").busy().appendTo(popup);
-                        
+
                         http.GET({
                             module: "integrations/linkedin/portal",
                             params: {
@@ -165,10 +165,10 @@ define("io.ox/linkedIn/view-detail",
                                 .append(draw(completeProfile));
                         });
                     };
-                
+
                 new dialogs.SidePopup()
                     .delegate($myNode, ".linkedin-profile-picture", open);
-                
+
                 _(data.relationToViewer.connections.values).each(function (relation) {
                     var imageUrl;
                     if (relation.person && relation.person.pictureUrl) {
@@ -183,15 +183,15 @@ define("io.ox/linkedIn/view-detail",
                         .attr("alt", relation.person.firstName + " " + relation.person.lastName)
                         .data("object-data", relation.person)
                         .appendTo($myNode);
-                    
+
                 });
             }
-            
+
             return $myNode;
         },
         index: 200
     });
-    
+
     return {
         draw: draw
     };

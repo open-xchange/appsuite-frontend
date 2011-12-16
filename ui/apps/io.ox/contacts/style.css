@@ -35,6 +35,7 @@
     padding: 5px 10px 4px 10px;
     font-weight: bold;
     text-align: center;
+    cursor: pointer;
     background-color: #eee;
     background-image: -webkit-gradient(
         linear,
@@ -44,15 +45,16 @@
         color-stop(1.00, #eee)
     );
     background-image: -o-linear-gradient(
-        top, #fff 0%, #eee 80%
+        top,
+        #fff 0%,
+        #eee 80%
     );
     background-image: -moz-linear-gradient(
-        center bottom,
+        center top,
         #fff 20%,
         #eee 100%
     );
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee');
-    cursor: pointer;
+    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee');"
 }
 
 .contact-grid-index .thumb-index:hover {

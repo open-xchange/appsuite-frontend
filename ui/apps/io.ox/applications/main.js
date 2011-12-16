@@ -14,7 +14,7 @@
 define('io.ox/applications/main',
     ['io.ox/core/api/apps',
      'io.ox/core/tk/vgrid',
-     'css!io.ox/applications/style.css'
+     'less!io.ox/applications/style.css'
     ], function (api, VGrid) {
 
     'use strict';
@@ -25,7 +25,7 @@ define('io.ox/applications/main',
         win,
         // grid
         grid,
-        gridWidth = 250,
+        GRID_WIDTH = 250,
         // nodes
         left,
         right;
@@ -46,13 +46,13 @@ define('io.ox/applications/main',
         left = $('<div>')
             .addClass('leftside border-right')
             .css({
-                width: gridWidth + 'px'
+                width: GRID_WIDTH + 'px'
             })
             .appendTo(win.nodes.main);
 
         // right panel
         right = $('<div>')
-            .css({ left: gridWidth + 1 + 'px', overflow: 'auto', paddingRight: '0' })
+            .css({ left: GRID_WIDTH + 1 + 'px', overflow: 'auto', paddingRight: '0' })
             .addClass('rightside default-content-padding')
             .appendTo(win.nodes.main);
 

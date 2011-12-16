@@ -13,12 +13,12 @@
 
 define("io.ox/mail/view-grid-template",
     ["io.ox/mail/util", "io.ox/core/tk/vgrid",
-     "css!io.ox/mail/style.css"], function (util, VGrid) {
-    
+     "less!io.ox/mail/style.css"], function (util, VGrid) {
+
     "use strict";
-    
+
     var that = {
-        
+
         // main grid template
         main: {
             build: function () {
@@ -62,17 +62,17 @@ define("io.ox/mail/view-grid-template",
                 }
             }
         },
-        
+
         // simple grid-based list for portal & halo
         drawSimpleGrid: function (list) {
-            
+
             // use template
             var tmpl = new VGrid.Template(),
                 $div = $("<div>");
-            
+
             // add template
             tmpl.add(that.main);
-            
+
             _(list).each(function (data, i) {
                 tmpl.getClone()
                     .update(data, i).appendTo($div).node
@@ -80,10 +80,10 @@ define("io.ox/mail/view-grid-template",
                         .data("object-data", data)
                         .addClass("hover");
             });
-            
+
             return $div;
         }
     };
-    
+
     return that;
 });

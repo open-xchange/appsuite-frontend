@@ -1,4 +1,4 @@
-//#NOJSHINT
+// NOJSHINT
 
 var ImageDialog = {
 	preInit : function() {

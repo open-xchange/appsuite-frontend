@@ -33,7 +33,7 @@
 }
 
 .io-ox-mail-write .priority-overlay.high {
-    color: #fc0;
+    color: @mail-priority;
 }
 
 .io-ox-mail-write .sendbutton-wrapper {
@@ -82,12 +82,11 @@
 
 .io-ox-mail-write input[type=text]:focus {
     border-color: white;
-    box-shadow: 0px 0px 4px 0px #08c;
+    box-shadow: 0px 0px 4px 0px @outline-color;
 }
 
 .io-ox-mail-write input[type=text].discreet {
     border-color: #e0e0e0;
-    background-color: #eee;
 }
 
 .io-ox-mail-write input[type=text].subject {
@@ -102,7 +101,7 @@
 }
 
 .io-ox-mail-write input[type=file]:focus {
-    box-shadow: 0px 0px 4px 0px #08c;
+    box-shadow: 0px 0px 4px 0px @outline-color;
 }
 
 .io-ox-mail-write .label {
@@ -231,20 +230,27 @@
 }
 
 .io-ox-mail-write .editor-outer-container {
-    top: 71px;
-    right: 13px;
-    bottom: 13px;
-    left: 13px;
-    background-color: white;
+    top: 67px;
+    right: 9px;
+    bottom: 9px;
+    left: 9px;
 }
 
-.io-ox-mail-write .editor-inner-container {
-    z-index: 2;
+.io-ox-mail-write .editor-background {
+    top: 4px; right: 4px; bottom: 4px; left: 4px;
+    background-color: white;
+    z-index: 1;
 }
 
 .io-ox-mail-write .editor-print-margin {
+    top: 4px; bottom: 4px;
     border-right: 1px dotted #ddd;
-    z-index: 1;
+    z-index: 2;
+}
+
+.io-ox-mail-write .editor-inner-container {
+    padding: 4px;
+    z-index: 3;
 }
 
 .io-ox-mail-write .text-editor {
@@ -267,8 +273,16 @@
 }
 
 .io-ox-mail-write .text-editor:focus {
-    border-color: white;
-    box-shadow: 0px 0px 4px 0px #08c;
+    border-color: #fff;
+    box-shadow: 0px 0px 4px 0px @outline-color;
+}
+
+.io-ox-mail-write .change-format {
+    text-align: right;
+}
+
+.io-ox-mail-write .change-format a {
+    color: @action-link-color;
 }
 
 /* Proofread */
@@ -280,6 +294,21 @@
     overflow: auto;
 }
 
+/* tinyMCE polishing */
+
+.oxSkin table.mceLayout.focused {
+    border-left-color: #eee;
+    border-right-color: #eee;
+    box-shadow: 0px 0px 4px 0px @outline-color;
+}
+
+.oxSkin table.mceLayout.focused tr.mceFirst td {
+    border-top-color: #eee;
+}
+
+.oxSkin table.mceLayout.focused tr.mceLast td {
+    border-bottom-color: #eee;
+}
 
 /* -------------------- */
 
@@ -345,7 +374,7 @@
 }
 
 .textile-url {
-    color: #08c;
+    color: @link-color;
     text-decoration: none;
 }
 
@@ -398,6 +427,6 @@ h6.textile-headline, h7.textile-headline {
 
 .textile-address:hover {
     color: #888;
-    border-bottom: 1px dotted #08c;
+    border-bottom: 1px dotted @link-color;
 }
 

@@ -20,7 +20,7 @@ define("io.ox/files/main",
      "io.ox/core/tk/upload",
      "io.ox/core/tk/dialogs",
      "io.ox/help/hints",
-     "css!io.ox/files/style.css"
+     "less!io.ox/files/style.css"
     ], function (viewDetail, api, VGrid, upload, dialogs, hints) {
 
     "use strict";
@@ -31,6 +31,7 @@ define("io.ox/files/main",
         win,
         // vgrid
         grid,
+        GRID_WIDTH = 330,
         // nodes
         left,
         right,
@@ -46,22 +47,21 @@ define("io.ox/files/main",
         }));
 
         // left side
-        left = $("<div/>").addClass("leftside withStatusBar border-right")
+        left = $("<div>").addClass("leftside withStatusBar border-right")
             .css({
-                width: "309px",
+                width: GRID_WIDTH + "px",
                 overflow: "auto"
             })
             .appendTo(win.nodes.main);
 
-        right = $("<div/>")
-            .css({ left: "310px", overflow: "auto" })
+        right = $("<div>")
+            .css({ left: GRID_WIDTH + 1+ "px", overflow: "auto" })
             .addClass("rightside default-content-padding withStatusBar")
             .appendTo(win.nodes.main);
 
-
-        statusBar = $("<div/>")
-        .addClass("statusBar")
-        .appendTo(win.nodes.main);
+        statusBar = $("<div>")
+            .addClass("statusBar")
+            .appendTo(win.nodes.main);
 
         // Grid
         grid = new VGrid(left);
@@ -71,7 +71,7 @@ define("io.ox/files/main",
                 var name;
                 this
                     .addClass("file")
-                    .append(name = $("<div/>").addClass("name"));
+                    .append(name = $("<div>").addClass("name"));
                 return { name: name };
             },
             set: function (data, fields, index) {
@@ -171,12 +171,13 @@ define("io.ox/files/main",
 
         var dropZone = upload.dnd.createDropZone();
 
-        if (dropZone.enabled) {
-            statusBar.append(hints.createHint({
-                teaser: "Drag and Drop is enabled.",
-                explanation: "You can drag one or more files from your desktop and drop them in the browser window to upload them. Try it out!"
-            }));
-        }
+        // commented since it's broken
+//        if (dropZone.enabled) {
+//            statusBar.append(hints.createHint({
+//                teaser: "Drag and Drop is enabled.",
+//                explanation: "You can drag one or more files from your desktop and drop them in the browser window to upload them. Try it out!"
+//            }));
+//        }
 
         dropZone.bind("drop", function (file) {
             queue.offer(file);
@@ -192,8 +193,8 @@ define("io.ox/files/main",
 
         // Add status for uploads
 
-        var $uploadStatus = $("<span/>").css("margin-left", "30px");
-        var $filenameNode = $("<span/>").appendTo($uploadStatus);
+        var $uploadStatus = $("<span>").css("margin-left", "30px");
+        var $filenameNode = $("<span>").appendTo($uploadStatus);
 
         statusBar.append($uploadStatus);
         queue.bind("start", function (file) {
@@ -215,7 +216,7 @@ define("io.ox/files/main",
             var pane = new dialogs.SlidingPane();
             // Let's build our upload form. Nothing fancy here, but we'll allow multiple selection
             // TODO: Add a hint to the user, that multiple uploads are available and how to use them
-            var $divblock_filefield = $('<div/>').addClass('block new_file');
+            var $divblock_filefield = $('<div>').addClass('block new_file');
             var $fileField = $('<input type="file" multiple="multiple"></input>');
             var $hint = hints.createHint({
                     teaser: "Multiple uploads are available.",
@@ -255,11 +256,11 @@ define("io.ox/files/main",
                     actions[action]();
                 });
             };
-            var uploadButton = win.addButton({
-                label: "Add File",
-                action: showUploadField
-            });
-            pane.relativeTo(uploadButton);
+//            var uploadButton = win.addButton({
+//                label: "Add File",
+//                action: showUploadField
+//            });
+//            pane.relativeTo(uploadButton);
         }());
 
     });

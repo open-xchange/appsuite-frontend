@@ -63,6 +63,15 @@ define("io.ox/core/main",
 
     function launch() {
 
+        // add small logo to top bar
+        $("#io-ox-topbar").append(
+            $('<img>', {
+                id: 'io-ox-top-logo-small',
+                src: ox.base + '/apps/themes/default/logo-small.png',
+                alt: ''
+            })
+        );
+
         desktop.addLauncher("right", gt("Sign out"), function (e) {
             return logout();
         });
@@ -139,7 +148,7 @@ define("io.ox/core/main",
                         .append(
                             // split user into three parts, have to use inject here to get proper node set
                             _(String(ox.user).split(/(\@)/)).inject(function (tmp, s, i) {
-                                    return tmp.add($("<span>").text(String(s)).addClass(i === 1 ? "at": ""));
+                                    return tmp.add($("<span>").text(String(s)).addClass(i === 1 ? "accent": ""));
                                 }, $())
                         )
                     )

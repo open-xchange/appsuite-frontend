@@ -1,4 +1,4 @@
-//#NOJSHINT
+// NOJSHINT
 /**
  * form_utils.js
  *

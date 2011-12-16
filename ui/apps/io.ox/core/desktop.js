@@ -616,17 +616,17 @@ define("io.ox/core/desktop",
                     )
                     .append(
                         // controls
-                        $("<div/>")
+                        win.nodes.controls = $("<div/>")
                         .addClass("window-controls")
                         .append(
                             // settings
-                            win.nodes.settingsButton = $("<div/>")
+                            win.nodes.settingsButton = $("<div/>").hide()
                             .addClass("window-control")
                             .text("\u270E")
                         )
                         .append(
                             // close
-                            win.nodes.closeButton = $("<div/>")
+                            win.nodes.closeButton = $("<div/>").hide()
                             .addClass("window-control")
                             .text("\u2715")
                         )
@@ -754,7 +754,7 @@ define("io.ox/core/desktop",
                         }
                     })
                 )
-                .prependTo(win.nodes.toolbar);
+                .prependTo(win.nodes.controls);
             }
 
             // toolbar extension point
@@ -776,7 +776,10 @@ define("io.ox/core/desktop",
             } else {
 
                 // add close handler
-                win.nodes.closeButton.on("click", close);
+                if (opt.close === true) {
+                    win.nodes.closeButton.show().on("click", close);
+                    win.setQuitOnClose(true);
+                }
 
                 // set title
                 win.setTitle(opt.title);
@@ -791,8 +794,7 @@ define("io.ox/core/desktop",
                 // quick settings?
                 if (opt.settings) {
                     $.quickSettings(win.nodes.main, win.nodes.settings, win.nodes.settingsButton);
-                } else {
-                    win.nodes.settingsButton.hide();
+                    win.nodes.settingsButton.show();
                 }
             }
 
