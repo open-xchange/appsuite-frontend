@@ -70,9 +70,18 @@ define("io.ox/contacts/test",
                     });
                 });
 
+                j.waitsFor(function () {
+                    var button = $(".window-toolbar a[data-action='create']");
+                    if(button[0]) {
+                        return true;
+                    }
+                }, 'waits', 500);
+
+
                 j.it('looks for create button and hits', function () {
                     var button = $(".window-toolbar a[data-action='create']");
                     button.triggerHandler('click');
+                    console.log(button);
                     j.expect(button[0]).toBeTruthy();
                 });
 
