@@ -223,7 +223,7 @@ define("io.ox/contacts/main",
             .updateTitle(win)
             .updateGrid(grid)
             .setType('contacts')
-            .setDefault()
+            .set('6')
             .done(function () {
                 win.show(function () {
                     grid.paint();

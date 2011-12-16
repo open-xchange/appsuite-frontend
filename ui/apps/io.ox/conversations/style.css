@@ -36,7 +36,7 @@
 
 .io-ox-conversation .message .from {
     font-weight: normal;
-    color: @link-color-dark;
+    color: @link-color;
 }
 
 .io-ox-conversation .message .from.me {

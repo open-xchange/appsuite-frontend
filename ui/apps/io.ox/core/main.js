@@ -113,23 +113,46 @@ define("io.ox/core/main",
         ext.point("io.ox/core/desktop").extend({
             id: "upsell",
             draw: function () {
+                // run away
+                function run() {
+                    var self = $(this).off('mouseover mousemove', run);
+                    self.stop(false, true)
+                        .animate({
+                            right: ((self.parent().width() - 240) * Math.random() >> 0) + "px",
+                            bottom: ((self.parent().height() - 140) * Math.random() >> 0) + "px"
+                        }, 100)
+                        .on('mouseover mousemove', run);
+                }
                 // does nothing - just to demo an exemplary upsell path
-                this.append(
-                    $("<div>", { id: "io-ox-welcome-upsell" })
+                this
+                .append(
+                    $('<div>')
+                    .on('mouseover mousemove', run)
                     .css({
-                        width: "200px",
-                        height: "2.25em",
                         position: "absolute",
-                        right: "50px",
-                        bottom: "150px",
-                        border: "5px solid #555",
-                        webkitBorderRadius: "10px",
-                        boxShadow: "0px 0px 20px -5px white",
-                        padding: "40px",
-                        fontSize: "18pt",
-                        textAlign: "center"
+                        width: "270px",
+                        height: "140px",
+                        right: "70px",
+                        bottom: "150px"
                     })
-                    .text("Click here for a 90-day free trial!")
+                    .append(
+                        $("<div>", { id: "io-ox-welcome-upsell" })
+                        .addClass('abs')
+                        .css({
+                            padding: "40px",
+                            zIndex: 1
+                        })
+                        .text("Click me for a 90-day free trial!")
+                    )
+                    .append(
+                        $('<img>', { src: ox.base + '/apps/themes/default/xmas.png' })
+                        .css({
+                            position: "absolute",
+                            top: "-72px",
+                            right: "-60px",
+                            zIndex: 2
+                        })
+                    )
                 );
             }
         });
