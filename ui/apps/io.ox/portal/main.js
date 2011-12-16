@@ -49,7 +49,8 @@
 
             // get window
             app.setWindow(win = ox.ui.createWindow({
-                toolbar: true
+                toolbar: true,
+                titleWidth: '100%'
             }));
 
             updateTitle();
@@ -148,9 +149,6 @@
             // go!
             win.show();
         });
-
-
-        // TODO: Resize
 
         return {
             getApp: app.getInstance

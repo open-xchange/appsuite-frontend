@@ -18,7 +18,7 @@ define('io.ox/mail/actions', ['io.ox/core/extensions'], function (ext) {
     // actions
 
     ext.point('io.ox/mail/actions/compose').extend({
-        id: 'delete',
+        id: 'compose',
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
