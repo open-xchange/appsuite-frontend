@@ -13,11 +13,11 @@
 
 define("io.ox/core/api/folder",
     ["io.ox/core/http", "io.ox/core/cache"], function (http, cache) {
-    
+
     "use strict";
-    
+
     var keyGenerator = function (data) {
-            return String(data.id);
+            return String(data ? data.id : '');
         },
         // folder object cache
         folderCache = new cache.ObjectCache("folder", true, keyGenerator),
@@ -26,7 +26,7 @@ define("io.ox/core/api/folder",
         perm = function (bits, offset) {
             return (bits >> offset) & (offset >= 28 ? 1 : 127);
         },
-        
+
         // get single folder
         getFolder = function (opt, id) {
             // get cache
@@ -54,9 +54,9 @@ define("io.ox/core/api/folder",
                 return $.Deferred().resolve(cache.get(id));
             }
         };
-    
+
     return {
-        
+
         get: function (options) {
             // options
             var opt = _.extend({
@@ -95,16 +95,16 @@ define("io.ox/core/api/folder",
                 return getFolder(opt, opt.folder);
             }
         },
-        
+
         derive: {
-            
+
             bits: function (data, offset) {
                 return perm(_.firstOf(data.own_rights, data, 0), offset || 0);
             }
         },
-        
+
         folderCache: folderCache,
-        
+
         subFolderCache: subFolderCache
     };
 });

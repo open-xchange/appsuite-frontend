@@ -13,11 +13,11 @@
 
 define("io.ox/core/collection",
     ["io.ox/core/config", "io.ox/core/api/folder"], function (config, api) {
-    
+
     "use strict";
-    
+
     var myself = 0,
-        
+
         // helper
         getRight = function (folder, owner, offset) {
             // get bits
@@ -35,10 +35,10 @@ define("io.ox/core/collection",
                 return true;
             }
         },
-        
+
         // get properties of object collection (async)
         getProperties = function (collection) {
-            
+
             // selection length
             var $l = collection.length || 0,
                 /**
@@ -53,12 +53,23 @@ define("io.ox/core/collection",
                     "one": $l === 1,
                     "multiple": $l > 1
                 };
-            
+
             // get all folders first
-            var folders = _(collection).map(function (item) {
-                    return item.folder_id || item.folder;
-                });
-            
+            var folders = _(collection)
+                .chain()
+                .map(function (item) {
+                    // is app?
+                    if (_.isObject(item.folder) && _.isFunction(item.folder.get)) {
+                        return item.folder.get();
+                    } else {
+                        return item.folder_id || item.folder;
+                    }
+                })
+                .filter(function (item) {
+                    return item !== null && item !== undefined;
+                })
+                .value();
+
             return api.get({ folder: folders })
                 .done(function (hash) {
                     var i = 0, item = null, folder = null;
@@ -83,12 +94,12 @@ define("io.ox/core/collection",
                     return props;
                 });
         };
-    
+
     function Collection(list) {
-        
+
         var items = _.compact([].concat(list)),
             properties = {};
-        
+
         // resolve properties (async).
         // Must be done upfront before "has" checks for example
         this.getProperties = function () {
@@ -97,7 +108,7 @@ define("io.ox/core/collection",
                     properties = props;
                 });
         };
-        
+
         // check if collection satisfies a set of properties
         // e.g. has("some") or has("one", "read")
         this.has = function () {
@@ -106,7 +117,7 @@ define("io.ox/core/collection",
                 }, true);
         };
     }
-    
+
     // publish class
     return Collection;
 });

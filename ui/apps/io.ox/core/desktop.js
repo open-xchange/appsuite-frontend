@@ -167,6 +167,82 @@ define("io.ox/core/desktop",
             // add dispatcher
             event.Dispatcher.extend(this);
 
+            // add folder management
+            this.folder = (function () {
+
+                var folder = null, that, win = null, grid = null, type;
+
+                that = {
+
+                    set: function (id) {
+                        var def = new $.Deferred();
+                        if (id !== undefined && id !== null) {
+                            require(['io.ox/core/api/folder'], function (api) {
+                                api.get({ folder: id })
+                                .done(function (data) {
+                                    // remember
+                                    folder = String(id);
+                                    // update window title?
+                                    if (win) {
+                                        win.setTitle(data.title);
+                                    }
+                                    // update grid?
+                                    if (grid) {
+                                        grid.prop('folder', folder);
+                                        grid.refresh();
+                                    }
+                                    def.resolve(data);
+                                })
+                                .fail(def.reject);
+                            });
+                        } else {
+                            def.reject();
+                        }
+                        return def;
+                    },
+
+                    setType: function (t) {
+                        type = t;
+                        return this;
+                    },
+
+                    setDefault: function () {
+                        var def = new $.Deferred();
+                        require(['io.ox/core/config'], function HUMBABA (config) {
+                            var defaults = config.get('folder');
+                            if (defaults[type] !== undefined) {
+                                that.set(defaults[type])
+                                    .done(def.resolve)
+                                    .fail(def.reject);
+                            } else {
+                                def.reject();
+                            }
+                        });
+                        return def;
+                    },
+
+                    get: function () {
+                        return folder;
+                    },
+
+                    updateTitle: function (w) {
+                        win = w;
+                        return this;
+                    },
+
+                    updateGrid: function (g) {
+                        grid = g;
+                        return this;
+                    },
+
+                    destroy: function () {
+                        that = win = grid = null;
+                    }
+                };
+
+                return that;
+            }());
+
             this.getInstance = function () {
                 return self; // not this!
             };
@@ -240,9 +316,9 @@ define("io.ox/core/desktop",
                             launchbarIcon = null;
                         });
                     }
-                    // destroy dispatcher
+                    // destroy stuff
                     self.dispatcher.destroy();
-                    // destroy window
+                    self.folder.destroy();
                     if (win) {
                         win.destroy();
                     }
@@ -401,7 +477,6 @@ define("io.ox/core/desktop",
                         if (this.app !== null) {
                             this.app.getLaunchBarIcon().addClass("active");
                         }
-
                         // update toolbar
                         ext.point(this.name + "/toolbar")
                             .invoke('draw', this.nodes.toolbar.empty(), this.app || this);

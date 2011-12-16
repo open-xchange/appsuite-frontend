@@ -121,7 +121,7 @@ define("io.ox/contacts/main",
 
         // all request
         grid.setAllRequest(function () {
-            return api.getAll();
+            return api.getAll({ folder: this.prop('folder') });
         });
 
         // search request
@@ -219,54 +219,16 @@ define("io.ox/contacts/main",
         });
 
         // go!
-        win.show(function () {
-            grid.paint();
-
-            /* turn off for demo purposes
-            var searchAdapter = {
-                    search: function (options) {
-                        api.search(options.query)
-                            .done(_.lfo(options.success))
-                            .fail(_.lfo(options.fail));
-                    }
-                };
-            $("#autocomplete").tokenInput(searchAdapter, {
-                searchDelay: 500,
-                minChars: 3,
-                tokenLimit: 3,
-                propertyToSearch: 'display_name',
-                preventDuplicates: false,
-                theme: 'ox',
-                onResult: function (result, query) {
-                    //console.debug('on Result');
-                    console.debug(arguments);
-                    result.unshift({display_name: query, last_name: query});
-                    return result;
-                },
-                onAdd: function (input, tokenlist) {
-                    var q = "";
-                    console.debug("ONADD");
-                    console.debug(tokenlist);
-                    _.each(tokenlist, function (token) {
-                        q += " " + token.last_name;
-                    });
-                    $(this).val($.trim(q));
-                },
-                onDelete: function (token_data, tokenlist) {
-                    var q = "";
-                    console.debug('onDelete');
-                    console.debug(token_data);
-                    _.each(tokenlist, function (token) {
-                        q += " " + token.last_name;
-                    });
-                    $(this).val($.trim(q));
-                },
-                onReady: function () {
-                    console.debug('onReady');
-                }
+        app.folder
+            .updateTitle(win)
+            .updateGrid(grid)
+            .setType('contacts')
+            .setDefault()
+            .done(function () {
+                win.show(function () {
+                    grid.paint();
+                });
             });
-            */
-        });
     });
 
     return {
