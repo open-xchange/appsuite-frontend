@@ -247,9 +247,7 @@ define('io.ox/contacts/api',
                             return b.folder_id === '6' ? +1 : -1;
                         });
                         // remove host
-                        data[0].image1_url = data[0].image1_url
-                            .replace(/^https?\:\/\/[^\/]+/i, '')
-                            .replace(/^\/ajax/, ox.apiRoot);
+                        data[0].image1_url = data[0].image1_url.replace(/^https?\:\/\/[^\/]+/i, '');
                         // use first contact
                         return (contactPictures[address] = data[0].image1_url);
                     } else {
@@ -284,7 +282,7 @@ define('io.ox/contacts/api',
             api.get({ id: obj.contact_id || obj.id, folder: obj.folder_id || obj.folder })
                 .done(function (data) {
                     if (data.image1_url) {
-                        deferred.resolve(data.image1_url.replace(/^\/ajax/, ox.apiRoot));
+                        deferred.resolve(data.image1_url);
                     } else {
                         fail();
                     }
