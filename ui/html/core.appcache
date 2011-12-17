@@ -17,15 +17,15 @@ CACHE:
 @base@/apps/themes/default/style.less
 @base@/apps/themes/default/definitions.less
 @base@/apps/themes/default/dummypicture.png
+@base@/apps/themes/default/logo-small.png
 # mail
-@base@/apps/io.ox/mail/main.js
+@base@/apps/io.ox/mail/actions.js
 @base@/apps/io.ox/mail/api.js
+@base@/apps/io.ox/mail/main.js
 @base@/apps/io.ox/mail/style.css
-@base@/apps/io.ox/core/tk/vgrid.js
 @base@/apps/io.ox/mail/util.js
 @base@/apps/io.ox/mail/view-detail.js
-@base@/apps/io.ox/core/api/factory.js
-@base@/apps/io.ox/core/tk/selection.js
+@base@/apps/io.ox/mail/view-grid-template.js
 # plugins
 @base@/apps/plugins/halo/register.js
 

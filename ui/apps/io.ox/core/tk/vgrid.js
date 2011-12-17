@@ -198,9 +198,13 @@ define("io.ox/core/tk/vgrid", ["io.ox/core/tk/selection", "io.ox/core/event"], f
         scrollToLabel = function (index) {
             var obj = labels.list[index];
             if (obj !== undefined) {
-                node.stop().animate({
-                    scrollTop: obj.top
-                }, 250);
+                node.stop()
+                    .animate({
+                        scrollTop: obj.top
+                    }, 250, function () {
+                        self.selection.set(all[obj.pos]);
+                        obj = null;
+                    });
             }
         };
 

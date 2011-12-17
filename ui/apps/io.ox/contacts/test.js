@@ -54,8 +54,8 @@ define("io.ox/contacts/test",
 
             j.describe("Contact create", function () {
 
-                var app = null;
-                var id,  dataId , dataFolder,dataObj;
+                var app = null,
+                    id, dataId, dataFolder, dataObj;
 
                 j.it('opens contact app ', function () {
 
@@ -72,7 +72,7 @@ define("io.ox/contacts/test",
 
                 j.waitsFor(function () {
                     var button = $(".window-toolbar a[data-action='create']");
-                    if(button[0]) {
+                    if (button[0]) {
                         return true;
                     }
                 }, 'waits', TIMEOUT);
@@ -90,7 +90,7 @@ define("io.ox/contacts/test",
                     if (formFrame[0]) {
                         return true;
                     }
-                },'no form there', TIMEOUT);
+                }, 'no form there', TIMEOUT);
 
                 j.it('looks for the form and autofills', function () {
                     var formFrame =  $('.io-ox-dialog-popup');
@@ -107,16 +107,16 @@ define("io.ox/contacts/test",
                     j.expect(button[0]).toBeTruthy();
                 });
 
-                j.it('looks for the saved item and compares', function (){
+                j.it('looks for the saved item and compares', function () {
 
-                    j.runs(function() {
+                    j.runs(function () {
                         var me = this;
-                            me.ready = false;
+                        me.ready = false;
                         api.bind('created', function (data) {
                             if (data) {
                                 dataId = data.id;
                                 dataFolder = data.folder;
-                               me.ready = true;
+                                me.ready = true;
                             }
                         });
 
@@ -130,7 +130,7 @@ define("io.ox/contacts/test",
                         api.get({
                             id: dataId,
                             folder_id: dataFolder
-                        }).done(function(obj) {
+                        }).done(function (obj) {
                             dataObj = obj;
                         });
 
@@ -164,7 +164,7 @@ define("io.ox/contacts/test",
                     j.waitsFor(function () {
                         item = $('div[data-ox-id="' + phrase + '"]');
                         if (item[0]) {
-                           return true;
+                            return true;
                         }
                     }, 'looks for the list', TIMEOUT);
 

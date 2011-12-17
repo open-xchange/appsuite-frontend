@@ -361,6 +361,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
                 cursor: true
             }, options || {}),
             columns;
+        // store type for retry
+        o.type = type;
         // prepend root
         o.url = ox.apiRoot + "/" + o.module;
         // add session
@@ -485,66 +487,119 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         // fail mode
         fail = _.url.hash("fail");
 
-    var ajax = function (options, type) {
-        // process options
-        var o = processOptions(options, type);
-        // paused?
-        if (paused === true) {
-            queue.push(o);
-            return;
+    var ajax = (function () {
+
+        // helps joining identical requests
+        var requests = {};
+
+        function lowLevelSend(r) {
+            $.ajax(r.xhr)
+                .done(function (data) {
+                    if (r.o.processData) {
+                        processResponse(r.def, data, r.o, r.o.type);
+                    } else {
+                        r.def.resolve(data);
+                    }
+                    that.trigger("stop done", r.xhr);
+                    r = null;
+                })
+                .fail(function (xhr, textStatus, errorThrown) {
+                    r.def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
+                    that.trigger("stop fail", r.xhr);
+                    r = null;
+                });
         }
-        // store type for retry
-        o.type = type;
-        // ajax (return Deferred)
-        var def = $.Deferred(),
-            opt = {
-                // type (GET, POST, PUT, ...)
-                type: type === "UPLOAD" ? "POST" : type,
-                // url
-                url: o.url,
-                // data
-                data: o.data,
-                dataType: o.dataType,
-                processData: o.processData,
-                contentType: o.contentType !== undefined ? o.contentType : "application/x-www-form-urlencoded"
-            };
-        // use timeout?
-        if (typeof o.timeout === "number") {
-            opt.timeout = o.timeout;
-        }
-        // continuation
-        function cont() {
-            if (fail && o.module !== "login" && Math.random() < Number(fail)) {
-                // simulate broken connection
-                console.error("HTTP fail", o.url, opt);
-                def.reject({ error: "0 simulated fail" });
-                that.trigger("stop fail", opt);
-            } else {
-                // go!
-                $.ajax(opt)
-                    .done(function (data) {
-                        if (o.processData) {
-                            processResponse(def, data, o, type);
-                        } else {
-                            def.resolve(data);
-                        }
-                        that.trigger("stop done", opt);
-                    })
-                    .fail(function (xhr, textStatus, errorThrown) {
-                        def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
-                        that.trigger("stop fail", opt);
+
+        function send(r) {
+
+            var hash;
+
+            // look for concurrent identical GET requests
+            if (r.o.type === 'GET') {
+                // get hash value - we just use stringify here
+                hash = JSON.stringify(r.xhr);
+                if (requests[hash] !== undefined) {
+                    // enqueue callbacks
+                    requests[hash]
+                        .then(r.def.resolve, r.def.reject)
+                        .then(
+                            function () {
+                                that.trigger("stop done", r.xhr);
+                                r = null;
+                            },
+                            function () {
+                                that.trigger("stop fail", r.xhr);
+                                r  = null;
+                            }
+                        );
+                    hash = null;
+                } else {
+                    // create new request
+                    requests[hash] = r.def.always(function () {
+                        delete requests[hash];
+                        hash = null;
                     });
+                    lowLevelSend(r);
+                    r = null;
+                }
+            } else {
+                lowLevelSend(r);
+                r = null;
             }
         }
-        that.trigger("start", opt);
-        if (Number(slow)) {
-            // simulate slow connection
-            setTimeout(cont, 250 * Number(slow) + (Math.random() * 500 >> 0));
-        } else {
-            cont();
-        }
-        return def;
-    };
+
+        return function (o, type) {
+            // process options
+            o = processOptions(o, type);
+            // paused?
+            if (paused === true) {
+                queue.push(o);
+                return;
+            }
+            // build request object
+            var def = $.Deferred(),
+                r = {
+                    def: def,
+                    o: o,
+                    xhr: {
+                        // type (GET, POST, PUT, ...)
+                        type: type === "UPLOAD" ? "POST" : type,
+                        // url
+                        url: o.url,
+                        // data
+                        data: o.data,
+                        dataType: o.dataType,
+                        processData: o.processData,
+                        contentType: o.contentType !== undefined ? o.contentType : "application/x-www-form-urlencoded"
+                    }
+                };
+            // use timeout?
+            if (typeof o.timeout === "number") {
+                r.xhr.timeout = o.timeout;
+            }
+            // continuation
+            function cont() {
+                if (fail && o.module !== "login" && Math.random() < Number(fail)) {
+                    // simulate broken connection
+                    console.error("HTTP fail", r.o.url, r.xhr);
+                    r.def.reject({ error: "0 simulated fail" });
+                    that.trigger("stop fail", r.xhr);
+                } else {
+                    // go!
+                    send(r);
+                }
+                r = o = null;
+            }
+            that.trigger("start", r.xhr);
+            if (Number(slow)) {
+                // simulate slow connection
+                setTimeout(cont, 250 * Number(slow) + (Math.random() * 500 >> 0));
+            } else {
+                cont();
+            }
+            return def;
+        };
+    }());
 
     that = {
 

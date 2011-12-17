@@ -33,7 +33,7 @@ var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
     pad(t.getUTCSeconds());
 console.info("Build version: " + version);
 
-var debug = true || Boolean(process.env.debug);
+var debug = Boolean(process.env.debug);
 if (debug) console.info("Debug mode: on");
 
 var defineWalker = ast("define").asCall().walker();
@@ -189,7 +189,7 @@ utils.concat("boot.js", ["src/jquery.plugins.js", "lib/jquery.tokeninput.js", "s
     { to: "tmp", type: "source" });
 
 utils.copy(utils.list("src", "css.js"), {
-    to: "tmp", type: "source", filter: function(data) {
+    to: "tmp", /*type: "source",*/ filter: function(data) { // commented out since css.js does not survive uglifyJS
         var dest = this.task.name;
         utils.includes.set(dest, []);
         var dir = "lib/less.js/lib/less";
@@ -212,6 +212,7 @@ utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
         "event.js", "extensions.js", "cache.js", "http.js",
         "config.js", "session.js", "gettext.js", "i18n.js",
+        "tk/selection.js", "tk/vgrid.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js",
         "api/folder.js", "collection.js", "desktop.js", "main.js"
     ]), { type: "source" }

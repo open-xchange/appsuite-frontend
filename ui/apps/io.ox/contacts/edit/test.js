@@ -16,8 +16,7 @@ define("io.ox/contacts/edit/test",
 
     "use strict";
 
-
- // test objects
+    // test objects
     var testObject = {
             first_name: 'Georg',
             last_name: 'Tester',
@@ -30,8 +29,8 @@ define("io.ox/contacts/edit/test",
             city_business: 'Olpe',
             telephone_business1: '+49 2761-8385-0',
             folder_id: 11179
-        };
-        var testObjectLong = {
+        },
+        testObjectLong = {
             first_name: 'Georg',
             last_name: 'Tester',
             company: 'OX',
@@ -122,7 +121,7 @@ define("io.ox/contacts/edit/test",
             state_other: 'userfield'
         };
 
- // helpers
+    // helpers
     function Done() {
         var f = function () {
             return f.value;
@@ -135,14 +134,13 @@ define("io.ox/contacts/edit/test",
     }
 
     var testFactory = {
-            createSimpleContact: function(callback) {
-                api.create(testObject).done(function(data) {
-                    callback(data);
+        createSimpleContact: function (callback) {
+            api.create(testObject).done(function (data) {
+                callback(data);
 
-                });
-            }
+            });
+        }
     };
-
 
     /*
      * Suite: Contacts Test
@@ -151,7 +149,6 @@ define("io.ox/contacts/edit/test",
         id: 'contacts-edit-test',
         index: 100,
         test: function (j) {
-
 
             j.describe("Contact edit", function () {
 
@@ -183,24 +180,15 @@ define("io.ox/contacts/edit/test",
 
                         j.waitsFor(function () {
                             return this.ready;
-                        }, 'it happens' , 50);
+                        }, 'it happens', 50);
 
                         j.runs(function () {
                             var test = this.obj;
-                       j.expect(test).toBeTruthy();
+                            j.expect(test).toBeTruthy();
                         });
-
                     });
                 });
-
-
-
-
-
             });
-
-
-
         }
     });
 });
