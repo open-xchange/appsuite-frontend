@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,17 +9,16 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- * @ignore
  */
 
-define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
-    
-    "use strict";
-    
+define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
+
+    'use strict';
+
     var Selection = function (container) {
 
-        this.classFocus = "focussed";
-        this.classSelected = "selected";
+        this.classFocus = 'focussed';
+        this.classSelected = 'selected';
 
         // add dispatcher
         event.Dispatcher.extend(this);
@@ -46,15 +44,15 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
             selectPrevious,
             selectNext,
             fnKey;
-        
+
         isMultiple = function (e) {
             return multiple && (e && e.metaKey);
         };
-        
+
         isRange = function (e) {
             return e && e.shiftKey;
         };
-        
+
         // apply selection
         apply = function (id, e) {
             // range?
@@ -70,9 +68,9 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                 last = prev = id;
             }
             // event
-            self.trigger("change", self.get());
+            self.trigger('change', self.get());
         };
-        
+
         selectPrevious = function (e) {
             var index = (getIndex(last) || 0) - 1;
             if (index >= 0) {
@@ -80,7 +78,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                 apply(observedItems[index], e);
             }
         };
-        
+
         selectNext = function (e) {
             var index = (getIndex(last) || 0) + 1;
             if (index < observedItems.length) {
@@ -88,7 +86,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                 apply(observedItems[index], e);
             }
         };
-        
+
         // key handler
         fnKey = function (e) {
             switch (e.which) {
@@ -102,17 +100,17 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                 return false;
             }
         };
-        
+
         // click handler
         click = function (e) {
             var node = $(this),
-                key = node.attr("data-ox-id"),
+                key = node.attr('data-obj-id'),
                 id = observedItems[getIndex(key)];
             // exists?
             if (id !== undefined) {
                 // clear?
                 if (!isMultiple(e)) {
-                    if (self.serialize(id) !== self.serialize(last)) {
+                    if (!isSelected(id) || self.serialize(id) !== self.serialize(last)) {
                         clear();
                         apply(id, e);
                     }
@@ -122,32 +120,32 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                 }
             }
         };
-        
+
         getIndex = function (id) {
             return observedItemsIndex[self.serialize(id)];
         };
-        
+
         getNode = function (id) {
-            return container.find(".selectable[data-ox-id='" + self.serialize(id) + "']");
+            return container.find('.selectable[data-obj-id="' + self.serialize(id) + '"]');
         };
-        
+
         isSelected = function (id) {
             return selectedItems[self.serialize(id)] !== undefined;
         };
-        
+
         select = function (id) {
             var key = self.serialize(id);
             selectedItems[key] = id;
             getNode(key).addClass(self.classSelected).intoViewport(container);
             last = id;
         };
-        
+
         deselect = function (id) {
             var key = self.serialize(id);
             delete selectedItems[key];
             getNode(key).removeClass(self.classSelected);
         };
-        
+
         toggle = function (id) {
             if (isSelected(id)) {
                 deselect(id);
@@ -155,21 +153,21 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                 select(id);
             }
         };
-        
+
         clear = function () {
-            var id = "";
+            var id = '';
             for (id in selectedItems) {
                 deselect(id);
             }
         };
-        
+
         /**
          * Serialize object to get a flat key
          */
         this.serialize = function (obj) {
-            return typeof obj === "object" ? obj.folder_id + "." + obj.id : obj;
+            return typeof obj === 'object' ? obj.folder_id + '.' + obj.id : obj;
         };
-        
+
         /**
          * Initialize
          */
@@ -193,27 +191,27 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                 }
             }
             // event
-            self.trigger("change", self.get());
+            self.trigger('change', self.get());
             return this;
         };
-        
+
         /**
          * Update
          */
         this.update = function () {
             // get nodes
-            var nodes = container.find(".selectable"),
+            var nodes = container.find('.selectable'),
                 i = 0, $i = nodes.length, node = null;
             for (; i < $i; i++) {
                 node = $(nodes[i]);
                 // is selected?
-                if (isSelected(node.attr("data-ox-id"))) {
+                if (isSelected(node.attr('data-obj-id'))) {
                     node.addClass(self.classSelected);
                 }
             }
             return this;
         };
-        
+
         /**
          * Set multiple mode
          */
@@ -226,7 +224,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
          * Get selection
          */
         this.get = function () {
-            var list = [], id = "";
+            var list = [], id = '';
             for (id in selectedItems) {
                 list.push(selectedItems[id]);
             }
@@ -241,7 +239,7 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
             clear();
             // trigger event
             if (quiet !== true) {
-                this.trigger("change", []);
+                this.trigger('change', []);
             }
             return this;
         };
@@ -251,10 +249,10 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
          */
         this.select = function (id) {
             select(id);
-            this.trigger("change", this.get());
+            this.trigger('change', this.get());
             return this;
         };
-        
+
         /**
          * Set selection
          */
@@ -269,10 +267,10 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                 select(list[i]);
             }
             // event
-            this.trigger("change", list);
+            this.trigger('change', list);
             return this;
         };
-        
+
         this.selectRange = function (a, b) {
             // get indexes
             a = getIndex(a);
@@ -288,53 +286,53 @@ define("io.ox/core/tk/selection", ["io.ox/core/event"], function (event) {
                 select(observedItems[a]);
             }
             // event
-            this.trigger("change", this.get());
+            this.trigger('change', this.get());
             return this;
         };
-        
+
         this.selectFirst = function () {
             if (observedItems.length) {
                 clear();
                 select(observedItems[0]);
-                this.trigger("change", this.get());
+                this.trigger('change', this.get());
             }
             return this;
         };
-        
+
         this.selectSmart = function () {
             if (this.get().length === 0) {
                 this.selectFirst();
             }
             return this;
         };
-        
+
         this.selectNext = selectNext;
-        
+
         /**
          * Is selected?
          */
         this.isSelected = function (id) {
             return isSelected(id);
         };
-        
+
         /**
          * Keyboard support
          */
         this.keyboard = function (flag) {
             // keyboard support (use keydown! IE does not react on keypress with cursor keys)
-            $(document)[flag ? "on" : "off"]("keydown", fnKey);
+            $(document)[flag ? 'on' : 'off']('keydown', fnKey);
             return this;
         };
-        
+
         // bind general click handler
-        container.on("click", ".selectable", click);
+        container.on('click', '.selectable', click);
     };
 
     Selection.extend = function (obj, node) {
         // extend object
         obj.selection = new Selection(node);
     };
-    
+
     return Selection;
 
 });

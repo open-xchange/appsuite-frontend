@@ -162,7 +162,7 @@ define("io.ox/contacts/test",
                         phrase = dataFolder + '.' + dataId;
 
                     j.waitsFor(function () {
-                        item = $('div[data-ox-id="' + phrase + '"]');
+                        item = $('div[data-obj-id="' + phrase + '"]');
                         if (item[0]) {
                             return true;
                         }

@@ -92,17 +92,18 @@ $(document).ready(function () {
             .done(function () {
                 // Set user's language (as opposed to the browser's language)
                 var lang = config.get("language");
-                require(["io.ox/core/gettext"])
-                    .pipe(function (gt) {
-                        return gt.setLanguage(lang);
-                    }).pipe(function () {
-                        return require(["themes", "io.ox/core/main"]);
-                    }).done(function (themes, main) {
-                        themes.set("default");
-                        // go!
-                        $("#background_loader").idle();
-                        main.launch();
-                    });
+                require(["io.ox/core/gettext"], function (gt) {
+                    gt.setLanguage(lang)
+                        .pipe(function () {
+                            return require(["themes", "io.ox/core/main"]);
+                        })
+                        .done(function (themes, main) {
+                            themes.set("default").done(function () {
+                                // go!
+                                main.launch();
+                            });
+                        });
+                });
             });
     };
 
@@ -284,7 +285,7 @@ $(document).ready(function () {
             ox.session = _.url.hash("session");
             ox.user = _.url.hash("user");
             ref = _.url.hash("ref");
-            _.url.redirect('#' + (ref ? decodeURIComponent(ref) : '!')); // add some senseless characters to avoid unwanted scrolling
+            _.url.redirect('#' + (ref ? decodeURIComponent(ref) : ''));
             loadCore();
         } else if (ox.serverConfig.autoLogin === true && ox.online) {
             // try auto login

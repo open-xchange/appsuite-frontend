@@ -296,23 +296,35 @@ define('io.ox/contacts/api',
     };
 
     api.getPicture = function (obj) {
-        var node = $('<div>'),
-            clear = function () {
-                _.defer(function () { // use defer! otherwise we return null on cache hit
-                    node = clear = null; // don't leak
-                });
-            };
-        api.getPictureURL(obj)
-            .done(function (url) {
-                if (Modernizr.backgroundsize) {
-                    node.css('backgroundImage', 'url(' + url + ')');
-                } else {
-                    node.append(
-                        $('<img>', { src: url, alt: '' }).css({ width: '100%', height: '100%' })
-                    );
-                }
-            })
-            .always(clear);
+        var node, set, clear, cont;
+        node = $('<div>');
+        set = function (e) {
+            if (Modernizr.backgroundsize) {
+                node.css('backgroundImage', 'url(' + e.data.url + ')');
+            } else {
+                node.append(
+                    $('<img>', { src: e.data.url, alt: '' }).css({ width: '100%', height: '100%' })
+                );
+            }
+            clear();
+        };
+        clear = function () {
+            _.defer(function () { // use defer! otherwise we return null on cache hit
+                node = set = clear = cont = null; // don't leak
+            });
+        };
+        cont = function (url) {
+            // use image instance to make sure that the image exists
+            $(new Image())
+                .on('load', { url: url }, set)
+                .on('error', { url: ox.base + '/apps/themes/default/dummypicture.png' }, set)
+                .prop('src', url);
+        };
+        if (obj && obj.image1_url) {
+            cont(obj.image1_url.replace(/^\/ajax/, ox.apiRoot));
+        } else {
+            api.getPictureURL(obj).done(cont).fail(clear);
+        }
         return node;
     };
 

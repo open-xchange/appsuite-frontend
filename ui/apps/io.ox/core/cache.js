@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,147 +9,197 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- *
  */
 
-define("io.ox/core/cache", function () {
-    
-    "use strict";
-    
+define('io.ox/core/cache', function () {
+
+    'use strict';
+
     // default key generator
     var defaultKeyGenerator = function (data) {
-        if (typeof data === "object" && data) {
-            return (data.folder_id || data.folder || 0) + "." + data.id;
+        if (typeof data === 'object' && data) {
+            return (data.folder_id || data.folder || 0) + '.' + data.id;
         } else {
-            return "";
+            return '';
         }
     };
-    
+
     /**
      *  @class CacheStorage
      */
-    
+
     var CacheStorage = (function () {
-         
+
         // persistent storage?
-        var hasLocalStorage = Modernizr.localstorage && _.url.param("persistence") !== "false";
-        
+        var hasLocalStorage = Modernizr.localstorage && _.url.param('persistence') !== 'false';
+
         return function (name, persistent) {
-            
+
             // init fast storage
-            var id = "cache." + (ox.user || "_") + "." + (name || ""),
-                reg = new RegExp("^" + id.replace(/\./g, "\\.") + "\\."),
+            var id = 'cache.' + (ox.user || '_') + '.' + (name || ''),
+                reg = new RegExp('^' + id.replace(/\./g, '\\.') + '\\.'),
                 fast = {},
                 // use persistent storage?
-                persist = hasLocalStorage && ox.user !== "" && persistent === true;
-            
-            // copy from persistent storage? (much faster than working on local storage)
+                persist = hasLocalStorage && ox.user !== '' && persistent === true;
+
             if (persist) {
-                // loop over all keys
-                var i = 0, $i = localStorage.length, key;
-                for (; i < $i; i++) {
-                    // get key by index
-                    key = localStorage.key(i);
-                    // match?
-                    if (reg.test(key)) {
-                        fast[key.replace(reg, "")] = JSON.parse(localStorage.getItem(key));
+
+                this.clear = function () {
+                    // loop over all keys
+                    var i = 0, key;
+                    while (i < localStorage.length) {
+                        // get key by index
+                        key = localStorage.key(i);
+                        // match?
+                        if (reg.test(key)) {
+                            localStorage.removeItem(key);
+                        } else {
+                            i++;
+                        }
+                    }
+                };
+
+                this.get = function (key) {
+                    return JSON.parse(localStorage.getItem(id + '.' + key));
+                };
+
+                this.set = function (key, data) {
+                    localStorage.removeItem(id + '.' + key);
+                    localStorage.setItem(id + '.' + key, JSON.stringify(data));
+                };
+
+                this.contains = function (key) {
+                    return localStorage.getItem(id + '.' + key) !== null;
+                };
+
+                this.remove = function (key) {
+                    localStorage.removeItem(id + '.' + key);
+                };
+
+                this.keys = function () {
+                    // loop over all keys
+                    var i = 0, $i = localStorage.length, key, tmp = [];
+                    for (; i < $i; i++) {
+                        // get key by index
+                        key = localStorage.key(i);
+                        // match?
+                        if (reg.test(key)) {
+                            tmp.push(key);
+                        }
+                    }
+                    return tmp;
+                };
+
+            } else {
+
+                // copy from persistent storage? (much faster than working on local storage)
+                if (persist) {
+                    // loop over all keys
+                    var i = 0, $i = localStorage.length, key;
+                    for (; i < $i; i++) {
+                        // get key by index
+                        key = localStorage.key(i);
+                        // match?
+                        if (reg.test(key)) {
+                            fast[key.replace(reg, '')] = JSON.parse(localStorage.getItem(key));
+                        }
                     }
                 }
-            }
-            
-            this.clear = function () {
-                fast = {};
-                // persistent clear
-                if (persist) {
-                    // lazy update
-                    setTimeout(function () {
-                        // loop over all keys
-                        var i = 0, key;
-                        while (i < localStorage.length) {
-                            // get key by index
-                            key = localStorage.key(i);
-                            // match?
-                            if (reg.test(key)) {
-                                localStorage.removeItem(key);
-                            } else {
-                                i++;
+
+                this.clear = function () {
+                    fast = {};
+                    // persistent clear
+                    if (persist) {
+                        // lazy update
+                        setTimeout(function () {
+                            // loop over all keys
+                            var i = 0, key;
+                            while (i < localStorage.length) {
+                                // get key by index
+                                key = localStorage.key(i);
+                                // match?
+                                if (reg.test(key)) {
+                                    localStorage.removeItem(key);
+                                } else {
+                                    i++;
+                                }
                             }
-                        }
-                    }, 0);
-                }
-            };
-            
-            this.get = function (key) {
-                return fast[String(key)];
-            };
-            
-            this.set = function (key, data) {
-                // fast set
-                fast[String(key)] = data;
-                // persistent set
-                if (persist) {
-                    // serialize now (!)
-                    var str = JSON.stringify(data);
-                    // lazy update
-                    setTimeout(function () {
-                        localStorage.removeItem(id + "." + key);
-                        localStorage.setItem(id + "." + key, str);
-                    }, 0);
-                }
-            };
-            
-            this.contains = function (key) {
-                return fast[String(key)] !== undefined;
-            };
-            
-            this.remove = function (key) {
-                // fast remove
-                delete fast[String(key)];
-                // persistent remove
-                if (persist) {
-                    // lazy update
-                    setTimeout(function () {
-                        localStorage.removeItem(id + "." + key);
-                    }, 0);
-                }
-            };
-            
-            this.keys = function () {
-                var tmp = [], key = "";
-                for (key in fast) {
-                    tmp.push(key);
-                }
-                return tmp;
-            };
+                        }, 0);
+                    }
+                };
+
+                this.get = function (key) {
+                    return fast[String(key)];
+                };
+
+                this.set = function (key, data) {
+                    // fast set
+                    fast[String(key)] = data;
+                    // persistent set
+                    if (persist) {
+                        // serialize now (!)
+                        var str = JSON.stringify(data);
+                        // lazy update
+                        setTimeout(function () {
+                            localStorage.removeItem(id + '.' + key);
+                            localStorage.setItem(id + '.' + key, str);
+                        }, 0);
+                    }
+                };
+
+                this.contains = function (key) {
+                    return fast[String(key)] !== undefined;
+                };
+
+                this.remove = function (key) {
+                    // fast remove
+                    delete fast[String(key)];
+                    // persistent remove
+                    if (persist) {
+                        // lazy update
+                        setTimeout(function () {
+                            localStorage.removeItem(id + '.' + key);
+                        }, 0);
+                    }
+                };
+
+                this.keys = function () {
+                    var tmp = [], key = '';
+                    for (key in fast) {
+                        tmp.push(key);
+                    }
+                    return tmp;
+                };
+            }
         };
-        
+
     }());
-    
+
     /**
      *  @class Simple Cache
      */
     var SimpleCache = function (name, persistent) {
-        
+
         // private fields
-        var index = new CacheStorage(name + ".index", persistent);
-        
+        var index = new CacheStorage(name + '.index', persistent);
+
         if (!name) {
             // not funny!
-            throw "Each object cache needs a unique name!";
+            throw 'Each object cache needs a unique name!';
         }
-        
+
         // clear cache
         this.clear = function () {
             index.clear();
         };
-        
+
         this.add = function (key, data, timestamp) {
             // timestamp
             timestamp = timestamp !== undefined ? timestamp : _.now();
             // add/update?
             if (!index.contains(key) || timestamp >= index.get(key).timestamp) {
                 // type
-                var type = !index.contains(key) ? "add modify *" : "update modify *";
+                var type = !index.contains(key) ? 'add modify *' : 'update modify *';
                 // set
                 index.set(key, {
                     data: data,
@@ -158,25 +207,25 @@ define("io.ox/core/cache", function () {
                 });
             }
         };
-        
+
         // get from cache
         this.get = function (key) {
             var data = index.get(key);
             return data !== undefined ? data.data : undefined;
         };
-        
+
         // get timestamp of cached element
         this.time = function (key) {
             return index.contains(key) ? index.get(key).timestamp : 0;
         };
-        
+
         // private
         var remove = function (key) {
             if (index.contains(key)) {
                 index.remove(key);
             }
         };
-        
+
         // remove from cache (key|array of keys)
         this.remove = function (key) {
             // is array?
@@ -189,7 +238,7 @@ define("io.ox/core/cache", function () {
                 remove(key);
             }
         };
-        
+
         // grep remove
         this.grepRemove = function (pattern) {
             var i = 0, keys = index.keys(), $i = keys.length;
@@ -201,7 +250,7 @@ define("io.ox/core/cache", function () {
                 }
             }
         };
-        
+
         // list keys
         this.keys = function () {
             return index.keys();
@@ -219,7 +268,7 @@ define("io.ox/core/cache", function () {
             }
             return tmp;
         };
-        
+
         // grep contained keys
         this.grepContains = function (list) {
             var i = 0, $i = list.length, tmp = [];
@@ -241,29 +290,29 @@ define("io.ox/core/cache", function () {
             }
             return tmp;
         };
-        
+
         // get size
         this.size = function () {
             return index.keys().length;
         };
-        
+
         // contains
         this.contains = function (key) {
             return index.contains(key);
         };
     };
-    
+
     /**
      *  @class Flat Cache
      */
     var ObjectCache = function (name, persistent, keyGenerator) {
-        
+
         // inherit
         SimpleCache.call(this, name, persistent);
-        
+
         // key generator
         this.keyGenerator = _.isFunction(keyGenerator) ? keyGenerator : defaultKeyGenerator;
-        
+
         // get from cache
         var get = this.get;
         this.get = function (key) {
@@ -276,14 +325,14 @@ define("io.ox/core/cache", function () {
                 return tmp;
             } else {
                 // simple value
-                if (typeof key === "string" || typeof key === "number") {
+                if (typeof key === 'string' || typeof key === 'number') {
                     return get(key);
                 } else {
                     return get(String(this.keyGenerator(key)));
                 }
             }
         };
-        
+
         // add to cache
         var add = this.add;
         this.add = function (data, timestamp) {
@@ -302,7 +351,7 @@ define("io.ox/core/cache", function () {
                 return key;
             }
         };
-        
+
         // contains
         var contains = this.contains;
         this.contains = function (key) {
@@ -315,7 +364,7 @@ define("io.ox/core/cache", function () {
                 return found;
             } else {
                 // simple value
-                if (typeof key === "string" || typeof key === "number") {
+                if (typeof key === 'string' || typeof key === 'number') {
                     return contains(key);
                 } else {
                     // object, so get key
@@ -323,7 +372,7 @@ define("io.ox/core/cache", function () {
                 }
             }
         };
-        
+
         this.merge = function (data, timestamp) {
             var key, target, id, changed = false;
             if (_.isArray(data)) {
@@ -354,7 +403,7 @@ define("io.ox/core/cache", function () {
                 }
             }
         };
-        
+
         var remove = this.remove;
         this.remove = function (data) {
             if (_.isArray(data)) {
@@ -364,7 +413,7 @@ define("io.ox/core/cache", function () {
                 }
             } else {
                 // simple value
-                if (typeof data === "string" || typeof data === "number") {
+                if (typeof data === 'string' || typeof data === 'number') {
                     remove(data);
                 } else {
                     // object, so get key
@@ -373,29 +422,29 @@ define("io.ox/core/cache", function () {
             }
         };
     };
-    
+
     /**
      *  @class Folder Cache
      *  @augments ObjectCache
      */
     var FolderCache = function (name, persistent) {
-        
+
         // inherit
         ObjectCache.call(this, name, persistent, function (data) {
             return data.id;
         });
-        
+
         // private
-        var children = new CacheStorage(name + ".children", persistent),
-            isComplete = new CacheStorage(name + ".isComplete", persistent);
-        
-        // override "add"
+        var children = new CacheStorage(name + '.children', persistent),
+            isComplete = new CacheStorage(name + '.isComplete', persistent);
+
+        // override 'add'
         var add = this.add;
         this.add = function (data, timestamp, prepend) {
             // add to cache
             var key = add.call(this, data, timestamp),
                 // get parent id (to string)
-                p = _.firstOf(data.folder_id, data.folder) + "",
+                p = _.firstOf(data.folder_id, data.folder) + '',
                 list = children.get(p) || [],
                 pos;
             // avoid circular reference (root = 0 says parent = 0)
@@ -418,23 +467,23 @@ define("io.ox/core/cache", function () {
         this.prepend = function (data, timestamp) {
             this.add(data, timestamp, true);
         };
-        
+
         var clear = this.clear;
         this.clear = function () {
             children.clear();
             isComplete.clear();
             clear.call(this);
         };
-        
+
         // super class' remove
         var remove = this.remove;
-        
+
         var removeChild = function (key) {
             // remove from all children list
             var data = this.get(key), p, pos, list;
             if (data !== undefined) {
                 // get parent id (to string)
-                p = _.firstOf(data.folder_id, data.folder) + "";
+                p = _.firstOf(data.folder_id, data.folder) + '';
                 list = children.get(p) || [];
                 // remove from list
                 if ((pos = _.indexOf(key, list)) > -1) {
@@ -447,7 +496,7 @@ define("io.ox/core/cache", function () {
             // remove element
             remove.call(this, key);
         };
-        
+
         this.remove = function (key) {
             // is array?
             if (_.isArray(key)) {
@@ -459,7 +508,7 @@ define("io.ox/core/cache", function () {
                 removeChild.call(this, key);
             }
         };
-        
+
         this.removeChildren = function (parent, deep) {
             // has children?
             if (deep === true && children.contains(parent)) {
@@ -479,7 +528,7 @@ define("io.ox/core/cache", function () {
             // mark as incomplete
             this.setComplete(parent, false);
         };
-        
+
         this.children = function (parent) {
             var tmp = [];
             // exists?
@@ -492,11 +541,11 @@ define("io.ox/core/cache", function () {
             }
             return tmp;
         };
-        
+
         this.parents = function () {
             return children.keys();
         };
-        
+
         // helps debugging
         this.inspect = function (key) {
             return {
@@ -505,31 +554,32 @@ define("io.ox/core/cache", function () {
                 complete: this.isComplete(key)
             };
         };
-        
+
         // explicit cache
         this.setComplete = function (key, flag) {
             isComplete.set(key, flag === undefined ? true : !!flag);
         };
-        
+
         this.isComplete = function (key) {
             return isComplete.get(key) === true;
         };
     };
-    
+
     // debug!
     window.dumpStorage = function () {
         var i = 0, $i = localStorage.length, key;
         for (; i < $i; i++) {
             // get key by index
             key = localStorage.key(i);
-            console.info("key", key, "value", JSON.parse(localStorage.getItem(key)));
+            console.info('key', key, 'value', JSON.parse(localStorage.getItem(key)));
         }
     };
-    
+
     return {
+        defaultKeyGenerator: defaultKeyGenerator,
+        CacheStorage: CacheStorage,
         SimpleCache: SimpleCache,
         ObjectCache: ObjectCache,
-        FolderCache: FolderCache,
-        defaultKeyGenerator: defaultKeyGenerator
+        FolderCache: FolderCache
     };
 });

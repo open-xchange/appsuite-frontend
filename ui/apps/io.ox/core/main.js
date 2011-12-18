@@ -110,12 +110,27 @@ define("io.ox/core/main",
 
         // initialize empty desktop
 
+        /**
+         * Exemplary upsell widget
+         */
         ext.point("io.ox/core/desktop").extend({
             id: "upsell",
             draw: function () {
+                // create audio tag
+                var boing = (function () {
+                    var audio;
+                    return function () {
+                        if (audio) {
+                            audio.pause();
+                        }
+                        audio = new Audio(ox.base + '/apps/themes/default/boing.wav');
+                        audio.play();
+                    };
+                }());
                 // run away
                 function run() {
                     var self = $(this).off('mouseover mousemove', run);
+                    boing();
                     self.stop(false, true)
                         .animate({
                             right: ((self.parent().width() - 240) * Math.random() >> 0) + "px",
@@ -153,6 +168,7 @@ define("io.ox/core/main",
                             zIndex: 2
                         })
                     )
+                    //.append(audio)
                 );
             }
         });
@@ -196,7 +212,12 @@ define("io.ox/core/main",
             $("#io-ox-windowmanager")[flag ? "hide" : "show"]();
         });
 
-        var def = $.Deferred(),
+        var def = $.Deferred().done(function () {
+                // add some senseless characters to avoid unwanted scrolling
+                if (location.hash === '') {
+                    location.hash = '#!';
+                }
+            }),
             autoLaunch = _.url.hash("launch") ? _.url.hash("launch").split(/,/) : [],
             autoLaunchModules = _(autoLaunch)
                 .map(function (m) {
@@ -225,11 +246,13 @@ define("io.ox/core/main",
                 });
             });
 
-        if (autoLaunch.length) {
-            $("#background_loader").removeClass("busy").hide();
+        if (autoLaunch.length || location.hash === '#!') {
+            // instant fade out
+            $("#background_loader").idle().hide();
             def.resolve();
         } else {
-            $("#background_loader").removeClass("busy").fadeOut(DURATION, def.resolve);
+            // fade out animation
+            $("#background_loader").idle().fadeOut(DURATION, def.resolve);
         }
     }
 
