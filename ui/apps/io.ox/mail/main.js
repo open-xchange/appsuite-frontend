@@ -83,7 +83,7 @@ define("io.ox/mail/main",
 
         // all request
         grid.setAllRequest(function () {
-            return api.getAllThreads();
+            return api.getAllThreads({ folder: this.prop('folder') });
         });
 
         // list request
@@ -192,6 +192,12 @@ define("io.ox/mail/main",
             grid.selection.keyboard(false);
         });
 
+        win.bind('open', function () {
+            if (api.needsRefresh(app.folder.get())) {
+                api.trigger('refresh!', app.folder.get());
+            }
+        });
+
         // bind all refresh
         api.bind("refresh.all", function () {
             grid.refresh();
@@ -203,9 +209,16 @@ define("io.ox/mail/main",
         });
 
         // go!
-        win.show(function () {
-            grid.paint();
-        });
+        app.folder
+            .updateTitle(win)
+            .updateGrid(grid)
+            .setType('mail')
+            .setDefault()
+            .done(function () {
+                win.show(function () {
+                    grid.paint();
+                });
+            });
     });
 
     return {
