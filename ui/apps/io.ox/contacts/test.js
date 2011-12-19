@@ -48,7 +48,7 @@ define("io.ox/contacts/test",
      * Suite: Contacts Test
      */
     ext.point('test/suite').extend({
-        id: 'contacts-test',
+        id: 'contacts-create',
         index: 100,
         test: function (j) {
 
@@ -81,7 +81,7 @@ define("io.ox/contacts/test",
                 j.it('looks for create button and hits', function () {
                     var button = $(".window-toolbar a[data-action='create']");
                     button.triggerHandler('click');
-                    console.log(button);
+//                    console.log(button);
                     j.expect(button[0]).toBeTruthy();
                 });
 
@@ -102,7 +102,7 @@ define("io.ox/contacts/test",
 
                 j.it('looks for the save button and hits', function () {
                     var formFrame =  $('.io-ox-dialog-popup');
-                    var button = formFrame.find(".io-ox-button:contains('Save')");
+                    var button = formFrame.find(".io-ox-button[data-action='save']");
                     button.triggerHandler('click');
                     j.expect(button[0]).toBeTruthy();
                 });
@@ -172,6 +172,8 @@ define("io.ox/contacts/test",
                         item.trigger('click');
                     });
 
+                    j.waits(1000);
+
                     j.waitsFor(function () {
                         button = $('.io-ox-inline-links a[data-action="delete"]');
                         if (button[0]) {
@@ -184,7 +186,7 @@ define("io.ox/contacts/test",
                     });
 
                     j.waitsFor(function () {
-                        dialog = $('.io-ox-dialog-popup span:contains("Shut up and delete it!")');
+                        dialog = $('.io-ox-dialog-popup .io-ox-button[data-action="delete"]');
                         if (dialog[0]) {
                             return true;
                         }

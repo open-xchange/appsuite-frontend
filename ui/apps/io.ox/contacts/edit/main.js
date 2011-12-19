@@ -133,7 +133,7 @@ define("io.ox/contacts/edit/main",
                     .append(fieldHtml('tax_id', 'tax_id'))
                     .append(fieldHtml('commercial_register', 'commercial_register'))
                     .append(fieldHtml('branches', 'branches'))
-                    .append(fieldHtml('business_category', 'business_category'))
+//                    .append(fieldHtml('business_category', 'business_category'))
                     .append(fieldHtml('info', 'info'))
                     .append(fieldHtml('manager_name', 'manager_name'))
                     .append(fieldHtml('assistant_name', 'assistant_name'))
@@ -277,6 +277,7 @@ define("io.ox/contacts/edit/main",
                             api.editNewImage(JSON.stringify(formdata), image.files[0]);
                         } else {
                             if (!_.isEmpty(formdata)) {
+//                                console.log(formdata);
                                 api.edit(formdata);
                             }
                         }
@@ -289,11 +290,11 @@ define("io.ox/contacts/edit/main",
                     }
                 };
 
-                $('<button>').text('save').addClass('io-ox-button')
+                $('<button>').text('save').addClass('io-ox-button').attr('data-action', 'save')
                 .appendTo(paneEdit2).on('click', function () {
                     actions.save();
                 });
-                $('<button>').text('cancel').addClass('io-ox-button')
+                $('<button>').text('cancel').addClass('io-ox-button').attr('data-action', 'cancel')
                 .appendTo(paneEdit2).on('click', function () {
                     actions.cancel();
                 });

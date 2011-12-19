@@ -62,6 +62,11 @@
             button.attr("id", opt.id);
         }
 
+        // ad data-action
+        if (opt.dataaction !== undefined) {
+            button.attr("data-action", opt.dataaction);
+        }
+
         // add tabindex?
         if (opt.tabIndex !== undefined) {
             button.attr("tabindex", opt.tabIndex);

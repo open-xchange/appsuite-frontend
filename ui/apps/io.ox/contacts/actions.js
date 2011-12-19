@@ -24,8 +24,8 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
             require(["io.ox/contacts/api", "io.ox/core/tk/dialogs"], function (api, dialogs) {
                 new dialogs.ModalDialog()
             .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
-            .addButton("cancel", "No, rather not")
-            .addButton("delete", "Shut up and delete it!")
+            .addButton("cancel", "No, rather not", "cancel")
+            .addButton("delete", "Shut up and delete it!", "delete")
             .show()
             .done(function (action) {
                     if (action === "delete") {
