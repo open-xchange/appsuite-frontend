@@ -280,17 +280,26 @@ if (apps.rest) utils.copy(apps.rest);
     }
 
     function getTemplates() {
-        if (getTemplates.value) return getTemplates.value;
-        var t = getTemplates.value = {
-            definitions: less.parseFile("apps/themes/definitions.less"),
-            style: less.parseFile("apps/themes/style.less")
-        };
-        t.style.rules = t.definitions.clone().rules.concat(t.style.rules);
-        return t;
+        var t;
+        if (getTemplates.value) {
+            return getTemplates.value;
+        } else {
+            try {
+                t = getTemplates.value = {
+                    definitions: less.parseFile("apps/themes/definitions.less"),
+                    style: less.parseFile("apps/themes/style.less")
+                };
+                t.style.rules = t.definitions.clone().rules.concat(t.style.rules);
+            } catch (e) {
+                console.error("Probably a syntax error in a theme template file (style/definitions.less)!");
+                throw e;
+            }
+            return t;
+        }
     }
 
     function themeFilter(template) {
-        return function(tree) {
+        return function (tree) {
             var overrides = {};
             eachClause(tree, function(key, rule) { overrides[key] = true; });
             var inherited = [];

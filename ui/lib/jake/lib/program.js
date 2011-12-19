@@ -88,7 +88,7 @@ Program = function () {
 Program.prototype = new (function () {
   this.handleErr = function (err) {
     var msg;
-    console.error('jake aborted.', err);
+    console.error('jake aborted.');
     if (this.opts.trace && err.stack) {
       console.error(err.stack);
     }
