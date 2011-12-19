@@ -135,6 +135,8 @@ define('io.ox/dev/testing/main',
                     win.nodes.main.find('.summary').empty()
                         .html('<b>Summary:</b> Total number of tests: <b>' + green + '</b> Failed: <b>' + red + '</b>')
                         .css('color', red > 0 ? '#a00' : '#070');
+                    // reset hash
+                    location.hash = '#!';
                 },
                 reportSpecResults: function (spec) {
                     // find spec DOM node by id

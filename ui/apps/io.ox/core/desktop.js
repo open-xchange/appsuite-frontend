@@ -438,7 +438,7 @@ define("io.ox/core/desktop",
                         pane.stop().animate({ left: left + "%" }, 250, done);
                     }
                 } else {
-                    _.call(cont);
+                    done();
                 }
             },
 

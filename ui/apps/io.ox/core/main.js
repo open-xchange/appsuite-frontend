@@ -118,12 +118,12 @@ define("io.ox/core/main",
             draw: function () {
                 // create audio tag
                 var boing = (function () {
-                    var audio;
+                    var audio, url = ox.base + '/apps/themes/default/';
                     return function () {
                         if (audio) {
                             audio.pause();
                         }
-                        audio = new Audio(ox.base + '/apps/themes/default/boing.wav');
+                        audio = new Audio(url + (Math.random() < 0.7 ? 'spring.wav' : 'boing.wav'));
                         audio.play();
                     };
                 }());
@@ -205,11 +205,17 @@ define("io.ox/core/main",
             }
         });
 
-        ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
+        var drawDesktop = function () {
+            ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
+            drawDesktop = $.noop;
+        };
 
-        ox.ui.windowManager.bind("empty", function (flag) {
-            $("#io-ox-desktop")[flag ? "show" : "hide"]();
-            $("#io-ox-windowmanager")[flag ? "hide" : "show"]();
+        ox.ui.windowManager.bind("empty", function (isEmpty) {
+            if (isEmpty) {
+                drawDesktop();
+            }
+            $("#io-ox-desktop")[isEmpty ? "show" : "hide"]();
+            $("#io-ox-windowmanager")[isEmpty ? "hide" : "show"]();
         });
 
         var def = $.Deferred().done(function () {
@@ -245,6 +251,10 @@ define("io.ox/core/main",
                     }
                 });
             });
+
+        if (autoLaunch.length === 0) {
+            drawDesktop();
+        }
 
         if (autoLaunch.length || location.hash === '#!') {
             // instant fade out

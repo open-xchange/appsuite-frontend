@@ -35,18 +35,25 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 var height = Math.max(1, node.outerHeight(true));
                 node.remove();
                 return height;
-            };
+            },
+
+            isEmpty = true;
 
         this.node = $('<' + o.tagName + '>').addClass(o.defaultClassName);
 
         this.add = function (obj) {
             if (obj && obj.build) {
                 template.push(obj);
+                isEmpty = false;
             }
         };
 
+        this.isEmpty = function () {
+            return isEmpty;
+        };
+
         this.getHeight = function () {
-            return getHeight(this.getClone().node);
+            return isEmpty ? 0 : getHeight(this.getClone().node);
         };
 
         this.getDefaultClassName = function () {
@@ -98,18 +105,16 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 _.extend(row.fields, tmpl.build.call(row.node) || {});
                 row.set.push(tmpl.set || $.noop);
             }
-            // clean up template to avoid typical mistakes
+            // clean up template to avoid typical mistakes - once!
             row.node.add(row.node.find('div, span, p, td')).each(function () {
                 var node = $(this);
-                if (node.children().length === 0) {
-                    if (node.text() === '') {
-                        node.text('\u00A0');
-                    }
+                if (node.children().length === 0 && node.text() === '') {
+                    node.text('\u00A0');
                 }
             });
             row.node.find('img').each(function () {
                 if (this.style.width === '' || this.style.height === '') {
-                    console.warn('Image has no width/height. Set to (0, 0):', this);
+                    console.error('Image has no width/height. Set to (0, 0):', this);
                     this.style.width = this.style.height = '0px';
                 }
             });
@@ -138,7 +143,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             itemHeight = 0,
             labelHeight = 0,
             // counters
-            minRows = 100,
+            minRows = 20,
             numVisible = 0,
             numRows = 0,
             numLabels = 0,
@@ -162,7 +167,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             // bounds of currently visible area
             bounds = { top: 0, bottom: 0 },
             // multiplier defines how much detailed data is loaded
-            mult = 3,
+            mult = 1.5,
             // properties
             props = {},
             // reference for private functions
@@ -363,25 +368,28 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         resize = function () {
             // get num of rows
             numVisible = Math.max(1, ((node.height() / itemHeight) >> 0) + 2);
-            numRows = Math.max(numVisible * mult, minRows);
+            numRows = Math.max(numVisible * mult >> 0, minRows);
             // prepare pool
-            var  i = 0, clone;
+            var  i = 0, clone, frag = document.createDocumentFragment();
             for (; i < numRows; i++) {
                 if (i >= pool.length) {
                     // get clone
                     clone = template.getClone();
-                    clone.node.appendTo(container);
+                    frag.appendChild(clone.node[0]);
                     // add to pool
                     pool.push(clone);
                 } else {
                     // (re)add to container
-                    pool[i].node.appendTo(container);
+                    frag.appendChild(pool[i].node[0]);
                 }
             }
             // detach remaining templates
             for (; i < pool.length; i++) {
                 pool[i].node.detach();
             }
+            // add fragment to container
+            container[0].appendChild(frag);
+            frag = null;
         };
 
         loadAll = function () {

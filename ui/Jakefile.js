@@ -33,7 +33,7 @@ var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
     pad(t.getUTCSeconds());
 console.info("Build version: " + version);
 
-var debug = Boolean(process.env.debug);
+var debug = true || Boolean(process.env.debug);
 if (debug) console.info("Debug mode: on");
 
 var defineWalker = ast("define").asCall().walker();

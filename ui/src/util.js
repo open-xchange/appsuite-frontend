@@ -321,7 +321,17 @@
                 fn();
                 setInterval(fn, interval * (num || 1));
             }, interval - (_.utc() % interval) + 1);
-        }
+        },
+
+        // helper for benchmarking
+        clock: (function () {
+            var last = null, i = 1;
+            return function (label) {
+                var t = _.now();
+                console.debug('clock.t' + (i++), t - (last || ox.t0), label || '');
+                last = t;
+            };
+        }())
     });
 
 }());

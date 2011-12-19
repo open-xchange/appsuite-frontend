@@ -213,7 +213,7 @@ define('io.ox/contacts/api',
     };
 
     // simple contact picture cache
-    var contactPictures = {};
+    var contactPictures = new cache.SimpleCache('picture-by-mail', true);
 
     // get contact picture by email address
     api.getPictureByMailAddress = function (address) {
@@ -221,7 +221,7 @@ define('io.ox/contacts/api',
         // lower case!
         address = String(address).toLowerCase();
 
-        if (contactPictures[address] === undefined) {
+        if (!contactPictures.contains(address)) {
             // search for contact
             return http.PUT({
                     module: 'contacts',
@@ -251,16 +251,16 @@ define('io.ox/contacts/api',
                             .replace(/^https?\:\/\/[^\/]+/i, '')
                             .replace(/^\/ajax/, ox.apiRoot);
                         // use first contact
-                        return (contactPictures[address] = data[0].image1_url);
+                        return contactPictures.add(address, data[0].image1_url);
                     } else {
                         // no picture found
-                        return (contactPictures[address] = '');
+                        return contactPictures.add(address, '');
                     }
                 });
 
         } else {
             // return cached picture
-            return $.Deferred().resolve(contactPictures[address]);
+            return $.Deferred().resolve(contactPictures.get(address));
         }
     };
 
