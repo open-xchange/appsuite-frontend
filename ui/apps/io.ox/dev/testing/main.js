@@ -136,7 +136,7 @@ define('io.ox/dev/testing/main',
                         .html('<b>Summary:</b> Total number of tests: <b>' + green + '</b> Failed: <b>' + red + '</b>')
                         .css('color', red > 0 ? '#a00' : '#070');
                     // reset hash
-                    location.hash = '#!';
+                    location.hash = '#launch=io.ox/dev/testing/main';
                 },
                 reportSpecResults: function (spec) {
                     // find spec DOM node by id
