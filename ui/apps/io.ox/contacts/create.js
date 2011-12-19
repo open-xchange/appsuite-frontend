@@ -86,8 +86,8 @@ define("io.ox/contacts/create",
                 )
             );
 
-        pane.addButton("save", "Save");
-        pane.addButton("cancel", "Cancel");
+        pane.addButton("save", "Save", "save");
+        pane.addButton("cancel", "Cancel", "cancel");
 
         content.find(".block .field:nth-child(even)").addClass('even');
 

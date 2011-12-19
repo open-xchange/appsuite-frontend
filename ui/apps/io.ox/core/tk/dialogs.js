@@ -87,12 +87,13 @@ define("io.ox/core/tk/dialogs", function () {
             return this;
         };
 
-        this.addButton = function (action, label) {
+        this.addButton = function (action, label, dataaction) {
             nodes.popup.find(".controls").append(
                 $.button({
                     label: label,
                     data: { action: action },
-                    click: process
+                    click: process,
+                    dataaction: dataaction
                 })
             );
             return this;

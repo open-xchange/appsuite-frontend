@@ -48,7 +48,7 @@ define("io.ox/contacts/test",
      * Suite: Contacts Test
      */
     ext.point('test/suite').extend({
-        id: 'contacts-test',
+        id: 'contacts-create',
         index: 100,
         test: function (j) {
 
@@ -61,7 +61,7 @@ define("io.ox/contacts/test",
 
                     var loaded = new Done();
 
-                    j.waitsFor(loaded, 'Could not load app', 5000);
+                    j.waitsFor(loaded, 'Could not load app', 10000);
 
                     contacts.getApp().launch().done(function () {
                         app = this;
@@ -75,13 +75,13 @@ define("io.ox/contacts/test",
                     if(button[0]) {
                         return true;
                     }
-                }, 'waits', 500);
+                }, 'waits', 10000);
 
 
                 j.it('looks for create button and hits', function () {
                     var button = $(".window-toolbar a[data-action='create']");
                     button.triggerHandler('click');
-                    console.log(button);
+//                    console.log(button);
                     j.expect(button[0]).toBeTruthy();
                 });
 
@@ -90,7 +90,7 @@ define("io.ox/contacts/test",
                     if (formFrame[0]) {
                         return true;
                     }
-                },'no form there', 500);
+                },'no form there', 10000);
 
                 j.it('looks for the form and autofills', function () {
                     var formFrame =  $('.io-ox-dialog-popup');
@@ -102,7 +102,7 @@ define("io.ox/contacts/test",
 
                 j.it('looks for the save button and hits', function () {
                     var formFrame =  $('.io-ox-dialog-popup');
-                    var button = formFrame.find(".io-ox-button:contains('Save')");
+                    var button = formFrame.find(".io-ox-button[data-action='save']");
                     button.triggerHandler('click');
                     j.expect(button[0]).toBeTruthy();
                 });
@@ -116,13 +116,13 @@ define("io.ox/contacts/test",
                             if (data) {
                                 dataId = data.id;
                                 dataFolder = data.folder;
-                               me.ready = true;
+                                me.ready = true;
                             }
                         });
 
                         j.waitsFor(function () {
                             return this.ready;
-                        }, 'catches the id', 500);
+                        }, 'catches the id', 10000);
 
                     });
 
@@ -138,7 +138,7 @@ define("io.ox/contacts/test",
                             if (dataObj) {
                                 return true;
                             }
-                        }, 'looks for the object', 500);
+                        }, 'looks for the object', 10000);
 
                         j.runs(function () {
                             j.expect(dataObj.first_name).toEqual(testObject.first_name);
@@ -166,32 +166,34 @@ define("io.ox/contacts/test",
                         if (item[0]) {
                            return true;
                         }
-                    }, 'looks for the list', 500);
+                    }, 'looks for the list', 10000);
 
                     j.runs(function () {
                         item.trigger('click');
                     });
+
+                    j.waits(1000);
 
                     j.waitsFor(function () {
                         button = $('.io-ox-inline-links a[data-action="delete"]');
                         if (button[0]) {
                             return true;
                         }
-                    }, 'looks for delete button',1000);
+                    }, 'looks for delete button',10000);
 
                     j.runs(function () {
                         button.triggerHandler('click');
                     });
 
                     j.waitsFor(function () {
-                        dialog = $('.io-ox-dialog-popup span:contains("Shut up and delete it!")');
+                        dialog = $('.io-ox-dialog-popup .io-ox-button[data-action="delete"]');
                         if (dialog[0]) {
                             return true;
                         }
-                    }, 'delete dialog to be there', 500);
+                    }, 'delete dialog to be there', 10000);
 
                     j.runs(function () {
-                       // dialog.trigger('click');
+                        dialog.trigger('click');
                     });
 
                 });
