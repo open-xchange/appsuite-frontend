@@ -101,7 +101,7 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
             var i = 0, $i = list.length, tmp = $(), filename = '', href = '';
             for (; i < $i; i++) {
                 filename = list[i].filename || '';
-                href = '/ajax/mail?' + $.param({
+                href = ox.apiRoot + '/mail?' + $.param({
                     action: 'attachment',
                     folder: data.folder_id,
                     id: data.id,
@@ -110,7 +110,8 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
                     session: ox.session
                 });
                 tmp = tmp.add(
-                    $('<a>', { href: href, target: '_blank' }).addClass('attachment-link').text(filename)
+                    $('<a>', { href: href, target: '_blank' })
+                    .addClass('attachment-link').text(filename)
                 );
                 if (i < $i - 1) {
                     tmp = tmp.add(

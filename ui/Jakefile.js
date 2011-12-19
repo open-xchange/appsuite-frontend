@@ -189,7 +189,7 @@ utils.concat("boot.js", ["src/jquery.plugins.js", "lib/jquery.tokeninput.js", "s
     { to: "tmp", type: "source" });
 
 utils.copy(utils.list("src", "css.js"), {
-    to: "tmp", type: "source", filter: function(data) {
+    to: "tmp", /*type: "source",*/ filter: function(data) { // commented out since css.js does not survive uglifyJS
         var dest = this.task.name;
         utils.includes.set(dest, []);
         var dir = "lib/less.js/lib/less";
@@ -212,6 +212,7 @@ utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
         "event.js", "extensions.js", "cache.js", "http.js",
         "config.js", "session.js", "gettext.js", "i18n.js",
+        "tk/selection.js", "tk/vgrid.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js",
         "api/folder.js", "collection.js", "desktop.js", "main.js"
     ]), { type: "source" }
@@ -279,17 +280,26 @@ if (apps.rest) utils.copy(apps.rest);
     }
 
     function getTemplates() {
-        if (getTemplates.value) return getTemplates.value;
-        var t = getTemplates.value = {
-            definitions: less.parseFile("apps/themes/definitions.less"),
-            style: less.parseFile("apps/themes/style.less")
-        };
-        t.style.rules = t.definitions.clone().rules.concat(t.style.rules);
-        return t;
+        var t;
+        if (getTemplates.value) {
+            return getTemplates.value;
+        } else {
+            try {
+                t = getTemplates.value = {
+                    definitions: less.parseFile("apps/themes/definitions.less"),
+                    style: less.parseFile("apps/themes/style.less")
+                };
+                t.style.rules = t.definitions.clone().rules.concat(t.style.rules);
+            } catch (e) {
+                console.error("Probably a syntax error in a theme template file (style/definitions.less)!");
+                throw e;
+            }
+            return t;
+        }
     }
 
     function themeFilter(template) {
-        return function(tree) {
+        return function (tree) {
             var overrides = {};
             eachClause(tree, function(key, rule) { overrides[key] = true; });
             var inherited = [];

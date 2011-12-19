@@ -110,26 +110,65 @@ define("io.ox/core/main",
 
         // initialize empty desktop
 
+        /**
+         * Exemplary upsell widget
+         */
         ext.point("io.ox/core/desktop").extend({
             id: "upsell",
             draw: function () {
+                // create audio tag
+                var boing = (function () {
+                    var audio, url = ox.base + '/apps/themes/default/';
+                    return function () {
+                        if (audio) {
+                            audio.pause();
+                        }
+                        audio = new Audio(url + (Math.random() < 0.7 ? 'spring.wav' : 'boing.wav'));
+                        audio.play();
+                    };
+                }());
+                // run away
+                function run() {
+                    var self = $(this).off('mouseover mousemove', run);
+                    boing();
+                    self.stop(false, true)
+                        .animate({
+                            right: ((self.parent().width() - 240) * Math.random() >> 0) + "px",
+                            bottom: ((self.parent().height() - 140) * Math.random() >> 0) + "px"
+                        }, 100)
+                        .on('mouseover mousemove', run);
+                }
                 // does nothing - just to demo an exemplary upsell path
-                this.append(
-                    $("<div>", { id: "io-ox-welcome-upsell" })
+                this
+                .append(
+                    $('<div>')
+                    .on('mouseover mousemove', run)
                     .css({
-                        width: "200px",
-                        height: "2.25em",
                         position: "absolute",
-                        right: "50px",
-                        bottom: "150px",
-                        border: "5px solid #555",
-                        webkitBorderRadius: "10px",
-                        boxShadow: "0px 0px 20px -5px white",
-                        padding: "40px",
-                        fontSize: "18pt",
-                        textAlign: "center"
+                        width: "270px",
+                        height: "140px",
+                        right: "70px",
+                        bottom: "150px"
                     })
-                    .text("Click here for a 90-day free trial!")
+                    .append(
+                        $("<div>", { id: "io-ox-welcome-upsell" })
+                        .addClass('abs')
+                        .css({
+                            padding: "40px",
+                            zIndex: 1
+                        })
+                        .text("Click me for a 90-day free trial!")
+                    )
+                    .append(
+                        $('<img>', { src: ox.base + '/apps/themes/default/xmas.png' })
+                        .css({
+                            position: "absolute",
+                            top: "-72px",
+                            right: "-60px",
+                            zIndex: 2
+                        })
+                    )
+                    //.append(audio)
                 );
             }
         });
@@ -166,14 +205,25 @@ define("io.ox/core/main",
             }
         });
 
-        ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
+        var drawDesktop = function () {
+            ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
+            drawDesktop = $.noop;
+        };
 
-        ox.ui.windowManager.bind("empty", function (flag) {
-            $("#io-ox-desktop")[flag ? "show" : "hide"]();
-            $("#io-ox-windowmanager")[flag ? "hide" : "show"]();
+        ox.ui.windowManager.bind("empty", function (isEmpty) {
+            if (isEmpty) {
+                drawDesktop();
+            }
+            $("#io-ox-desktop")[isEmpty ? "show" : "hide"]();
+            $("#io-ox-windowmanager")[isEmpty ? "hide" : "show"]();
         });
 
-        var def = $.Deferred(),
+        var def = $.Deferred().done(function () {
+                // add some senseless characters to avoid unwanted scrolling
+                if (location.hash === '') {
+                    location.hash = '#!';
+                }
+            }),
             autoLaunch = _.url.hash("launch") ? _.url.hash("launch").split(/,/) : [],
             autoLaunchModules = _(autoLaunch)
                 .map(function (m) {
@@ -202,11 +252,17 @@ define("io.ox/core/main",
                 });
             });
 
-        if (autoLaunch.length) {
-            $("#background_loader").removeClass("busy").hide();
+        if (autoLaunch.length === 0) {
+            drawDesktop();
+        }
+
+        if (autoLaunch.length || location.hash === '#!') {
+            // instant fade out
+            $("#background_loader").idle().hide();
             def.resolve();
         } else {
-            $("#background_loader").removeClass("busy").fadeOut(DURATION, def.resolve);
+            // fade out animation
+            $("#background_loader").idle().fadeOut(DURATION, def.resolve);
         }
     }
 

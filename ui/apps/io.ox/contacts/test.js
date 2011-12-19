@@ -16,8 +16,7 @@ define("io.ox/contacts/test",
 
     "use strict";
 
-
- // test objects
+    // test objects
     var testObject = {
             first_name: 'Georg',
             last_name: 'Tester',
@@ -29,10 +28,11 @@ define("io.ox/contacts/test",
             postal_code_business: '57462',
             city_business: 'Olpe',
             telephone_business1: '+49 2761-8385-0'
-        };
+        },
 
+        TIMEOUT = 5000;
 
- // helpers
+    // helpers
     function Done() {
         var f = function () {
             return f.value;
@@ -54,14 +54,14 @@ define("io.ox/contacts/test",
 
             j.describe("Contact create", function () {
 
-                var app = null;
-                var id,  dataId , dataFolder,dataObj;
+                var app = null,
+                    id, dataId, dataFolder, dataObj;
 
                 j.it('opens contact app ', function () {
 
                     var loaded = new Done();
 
-                    j.waitsFor(loaded, 'Could not load app', 10000);
+                    j.waitsFor(loaded, 'Could not load app', TIMEOUT);
 
                     contacts.getApp().launch().done(function () {
                         app = this;
@@ -72,10 +72,10 @@ define("io.ox/contacts/test",
 
                 j.waitsFor(function () {
                     var button = $(".window-toolbar a[data-action='create']");
-                    if(button[0]) {
+                    if (button[0]) {
                         return true;
                     }
-                }, 'waits', 10000);
+                }, 'waits', TIMEOUT);
 
 
                 j.it('looks for create button and hits', function () {
@@ -90,7 +90,7 @@ define("io.ox/contacts/test",
                     if (formFrame[0]) {
                         return true;
                     }
-                },'no form there', 10000);
+                }, 'no form there', TIMEOUT);
 
                 j.it('looks for the form and autofills', function () {
                     var formFrame =  $('.io-ox-dialog-popup');
@@ -107,11 +107,11 @@ define("io.ox/contacts/test",
                     j.expect(button[0]).toBeTruthy();
                 });
 
-                j.it('looks for the saved item and compares', function (){
+                j.it('looks for the saved item and compares', function () {
 
-                    j.runs(function() {
+                    j.runs(function () {
                         var me = this;
-                            me.ready = false;
+                        me.ready = false;
                         api.bind('created', function (data) {
                             if (data) {
                                 dataId = data.id;
@@ -122,7 +122,7 @@ define("io.ox/contacts/test",
 
                         j.waitsFor(function () {
                             return this.ready;
-                        }, 'catches the id', 10000);
+                        }, 'catches the id', TIMEOUT);
 
                     });
 
@@ -130,7 +130,7 @@ define("io.ox/contacts/test",
                         api.get({
                             id: dataId,
                             folder_id: dataFolder
-                        }).done(function(obj) {
+                        }).done(function (obj) {
                             dataObj = obj;
                         });
 
@@ -138,7 +138,7 @@ define("io.ox/contacts/test",
                             if (dataObj) {
                                 return true;
                             }
-                        }, 'looks for the object', 10000);
+                        }, 'looks for the object', TIMEOUT);
 
                         j.runs(function () {
                             j.expect(dataObj.first_name).toEqual(testObject.first_name);
@@ -162,11 +162,11 @@ define("io.ox/contacts/test",
                         phrase = dataFolder + '.' + dataId;
 
                     j.waitsFor(function () {
-                        item = $('div[data-ox-id="' + phrase + '"]');
+                        item = $('div[data-obj-id="' + phrase + '"]');
                         if (item[0]) {
-                           return true;
+                            return true;
                         }
-                    }, 'looks for the list', 10000);
+                    }, 'looks for the list', TIMEOUT);
 
                     j.runs(function () {
                         item.trigger('click');
@@ -179,10 +179,10 @@ define("io.ox/contacts/test",
                         if (button[0]) {
                             return true;
                         }
-                    }, 'looks for delete button',10000);
+                    }, 'looks for delete button', TIMEOUT);
 
                     j.runs(function () {
-                        button.triggerHandler('click');
+                        button.trigger('click');
                     });
 
                     j.waitsFor(function () {
@@ -190,7 +190,7 @@ define("io.ox/contacts/test",
                         if (dialog[0]) {
                             return true;
                         }
-                    }, 'delete dialog to be there', 10000);
+                    }, 'delete dialog to be there', TIMEOUT);
 
                     j.runs(function () {
                         dialog.trigger('click');

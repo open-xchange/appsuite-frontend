@@ -208,7 +208,7 @@ define("io.ox/core/desktop",
 
                     setDefault: function () {
                         var def = new $.Deferred();
-                        require(['io.ox/core/config'], function HUMBABA (config) {
+                        require(['io.ox/core/config'], function (config) {
                             var defaults = config.get('folder');
                             if (defaults[type] !== undefined) {
                                 that.set(defaults[type])
@@ -438,7 +438,7 @@ define("io.ox/core/desktop",
                         pane.stop().animate({ left: left + "%" }, 250, done);
                     }
                 } else {
-                    _.call(cont);
+                    done();
                 }
             },
 

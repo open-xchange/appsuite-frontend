@@ -15,8 +15,9 @@ define("io.ox/contacts/view-detail",
     ["io.ox/core/extensions",
      "gettext!io.ox/contacts/contacts",
      "io.ox/contacts/util",
+     "io.ox/contacts/api",
      "io.ox/contacts/actions"
-    ], function (ext, gt, util, actions) {
+    ], function (ext, gt, util, api, actions) {
 
     "use strict";
 
@@ -132,8 +133,7 @@ define("io.ox/contacts/view-detail",
                 $("<td>")
                 .css({ verticalAlign: "top", paddingBottom: "0" })
                 .append(
-                    $("<div>").addClass("picture")
-                    .css({ backgroundImage: "url(" + util.getImage(data) + ")" })
+                    api.getPicture(data).addClass("picture")
                 )
             )
             .append(
@@ -296,9 +296,10 @@ define("io.ox/contacts/view-detail",
                 }
                 addField("\u00A0", true, this, function (td) {
                     td.append(
-                        $("<span>").addClass("link")
+                        $("<a>", { href: '#' }).addClass("action-link")
                             .text("Show QR-code")
-                            .on("click", function () {
+                            .on("click", function (e) {
+                                e.preventDefault();
                                 require(["io.ox/contacts/view-qrcode"], function (qr) {
                                     var vc = qr.getVCard(data);
                                     td.empty().qrcode(vc);

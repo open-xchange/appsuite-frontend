@@ -25,6 +25,7 @@
     background-color: fade(@menu-background, 75%);
     overflow: hidden;
     border-bottom: 1px solid #555;
+    z-index: 2;
 }
 
 #io-ox-top-logo-small {
@@ -89,12 +90,28 @@
 }
 
 #io-ox-welcome-upsell {
-    background-color: white;
+    font-size: 18pt;
+    text-align: center;
+    color: white;
+    border: 4px solid white;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 0px 0px 20px -5px #000;
+    background: rgb(169,3,41); /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  rgba(169,3,41,1) 0%, rgba(143,2,34,1) 44%, rgba(109,0,25,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(169,3,41,1)), color-stop(44%,rgba(143,2,34,1)), color-stop(100%,rgba(109,0,25,1))); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover,  rgba(169,3,41,1) 0%,rgba(143,2,34,1) 44%,rgba(109,0,25,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover,  rgba(169,3,41,1) 0%,rgba(143,2,34,1) 44%,rgba(109,0,25,1) 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover,  rgba(169,3,41,1) 0%,rgba(143,2,34,1) 44%,rgba(109,0,25,1) 100%); /* IE10+ */
+    background: radial-gradient(center, ellipse cover,  rgba(169,3,41,1) 0%,rgba(143,2,34,1) 44%,rgba(109,0,25,1) 100%); /* W3C */
 }
 
 /* empty desktop */
 #io-ox-desktop {
-    top: 28px;
+    top: 32px;
+    z-index: 1;
+    overflow: hidden;
 }
 
 #io-ox-welcome {
@@ -535,16 +552,20 @@ a.button.default-action {
 .bright-text {
     color: #888;
 }
+
 .email-address, .blue {
-    color: #00a0cd;
+    color: @accent1-bright;
 }
 
 .person, .person-link {
-    color: #006897;
+    color: @person-link-color;
 }
 
-.person-link {
-    /*border-bottom: 1px dotted #ddd;*/
+a.action-link {
+    font-size: 12px;
+    color: @action-link-color;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .delimiter {
@@ -555,7 +576,7 @@ a.button.default-action {
     padding: 30px 40px 30px 40px;
 }
 
-.attachment-link {
+a.attachment-link, a.attachment-link:visited {
     color: black;
     text-decoration: underline;
     cursor: pointer;
@@ -1016,7 +1037,7 @@ div.token-input-dropdown ul li.token-input-selected-dropdown-item {
 /* inline links */
 .io-ox-inline-links {
     text-align: right;
-    padding: 0.25em 0 0.25em 0;
+    padding: 0.25em 0 0.5em 0;
     margin: 0.5em 0px 1.5em 0px;
     border-bottom: 1px solid @inline-link-border-color;
     height: 1em;
@@ -1028,6 +1049,7 @@ div.token-input-dropdown ul li.token-input-selected-dropdown-item {
 
 .io-ox-inline-links a {
     color: @inline-link-color;
+    text-decoration: underline;
 }
 
 .io-ox-action-link {

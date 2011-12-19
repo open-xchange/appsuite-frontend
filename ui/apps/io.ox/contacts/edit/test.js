@@ -16,8 +16,7 @@ define("io.ox/contacts/edit/test",
 
     "use strict";
 
-
- // test objects
+    // test objects
     var testObject = {
             first_name: 'Georg',
             last_name: 'Tester',
@@ -29,8 +28,9 @@ define("io.ox/contacts/edit/test",
             postal_code_business: '57462',
             city_business: 'Olpe',
             telephone_business1: '+49 2761-8385-0'
-        };
-        var testObjectLong = {
+        },
+
+        testObjectLong = {
             first_name: 'Georg',
             last_name: 'Tester',
             company: 'OX',
@@ -121,7 +121,7 @@ define("io.ox/contacts/edit/test",
             state_other: 'userfield'
         };
 
- // helpers
+    // helpers
     function Done() {
         var f = function () {
             return f.value;
@@ -144,7 +144,6 @@ define("io.ox/contacts/edit/test",
             });
         }
     };
-
 
     /*
      * Suite: Contacts Test
@@ -194,7 +193,6 @@ define("io.ox/contacts/edit/test",
                             console.log('created ' + data.id);
                        j.expect(data).toBeTruthy();
                         });
-
                     });
                 });
 

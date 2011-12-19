@@ -16,12 +16,10 @@ define("io.ox/core/api/folder",
 
     "use strict";
 
-    var keyGenerator = function (data) {
-            return String(data ? data.id : '');
-        },
-        // folder object cache
-        folderCache = new cache.ObjectCache("folder", true, keyGenerator),
-        subFolderCache = new cache.SimpleCache("subfolder", true, keyGenerator),
+    var // folder object cache
+        folderCache = new cache.SimpleCache("folder", true),
+        subFolderCache = new cache.SimpleCache("subfolder", true),
+
         // magic permission check
         perm = function (bits, offset) {
             return (bits >> offset) & (offset >= 28 ? 1 : 127);
@@ -44,7 +42,7 @@ define("io.ox/core/api/folder",
                     })
                     .done(function (data, timestamp) {
                         // add to cache
-                        cache.add(data, timestamp);
+                        cache.add(data.id, data);
                     })
                     .fail(function (error) {
                         console.error("folder.get", id, error);
@@ -63,7 +61,7 @@ define("io.ox/core/api/folder",
                     folder: "1",
                     event: false,
                     cache: true,
-                    storage: undefined
+                    storage: null
                 }, options || {}),
                 // hash for fetching multiple folders
                 hash = {};

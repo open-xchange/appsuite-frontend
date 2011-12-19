@@ -59,7 +59,7 @@ define("io.ox/mail/main",
         app.setWindow(win);
 
         // left panel
-        left = $("<div/>")
+        left = $("<div>")
             .addClass("leftside border-right")
             .css({
                 width: GRID_WIDTH + "px"
@@ -67,11 +67,11 @@ define("io.ox/mail/main",
             .appendTo(win.nodes.main);
 
         // right panel
-        $("<div/>")
+        $("<div>")
             .css({ left: GRID_WIDTH + 1 + "px" })
             .addClass("rightside mail-detail-pane")
             .append(
-                right = $("<div/>").addClass("abs")
+                right = $("<div>").addClass("abs")
             )
             .appendTo(win.nodes.main);
 

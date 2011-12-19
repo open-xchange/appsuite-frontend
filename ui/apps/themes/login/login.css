@@ -137,7 +137,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
     top: 0;
     left: 0;
     z-index: 0;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #bbb;
 }
 
 #io-ox-login-form-background {
@@ -161,7 +161,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
     right: 0;
     margin-top: -1.5em;
     font-size: 28pt;
-    color: #aaa;
+    color: #555;
     text-align: right;
     text-shadow: 0px 1px 1px #fff;
     z-index: 1;

@@ -213,7 +213,7 @@ define('io.ox/contacts/api',
     };
 
     // simple contact picture cache
-    var contactPictures = {};
+    var contactPictures = new cache.SimpleCache('picture-by-mail', true);
 
     // get contact picture by email address
     api.getPictureByMailAddress = function (address) {
@@ -221,7 +221,7 @@ define('io.ox/contacts/api',
         // lower case!
         address = String(address).toLowerCase();
 
-        if (contactPictures[address] === undefined) {
+        if (!contactPictures.contains(address)) {
             // search for contact
             return http.PUT({
                     module: 'contacts',
@@ -247,18 +247,20 @@ define('io.ox/contacts/api',
                             return b.folder_id === '6' ? +1 : -1;
                         });
                         // remove host
-                        data[0].image1_url = data[0].image1_url.replace(/^https?\:\/\/[^\/]+/i, '');
+                        data[0].image1_url = data[0].image1_url
+                            .replace(/^https?\:\/\/[^\/]+/i, '')
+                            .replace(/^\/ajax/, ox.apiRoot);
                         // use first contact
-                        return (contactPictures[address] = data[0].image1_url);
+                        return contactPictures.add(address, data[0].image1_url);
                     } else {
                         // no picture found
-                        return (contactPictures[address] = '');
+                        return contactPictures.add(address, '');
                     }
                 });
 
         } else {
             // return cached picture
-            return $.Deferred().resolve(contactPictures[address]);
+            return $.Deferred().resolve(contactPictures.get(address));
         }
     };
 
@@ -282,7 +284,7 @@ define('io.ox/contacts/api',
             api.get({ id: obj.contact_id || obj.id, folder: obj.folder_id || obj.folder })
                 .done(function (data) {
                     if (data.image1_url) {
-                        deferred.resolve(data.image1_url);
+                        deferred.resolve(data.image1_url.replace(/^\/ajax/, ox.apiRoot));
                     } else {
                         fail();
                     }
@@ -294,23 +296,35 @@ define('io.ox/contacts/api',
     };
 
     api.getPicture = function (obj) {
-        var node = $('<div>'),
-            clear = function () {
-                _.defer(function () { // use defer! otherwise we return null on cache hit
-                    node = clear = null; // don't leak
-                });
-            };
-        api.getPictureURL(obj)
-            .done(function (url) {
-                if (Modernizr.backgroundsize) {
-                    node.css('backgroundImage', 'url(' + url + ')');
-                } else {
-                    node.append(
-                        $('<img>', { src: url, alt: '' }).css({ width: '100%', height: '100%' })
-                    );
-                }
-            })
-            .always(clear);
+        var node, set, clear, cont;
+        node = $('<div>');
+        set = function (e) {
+            if (Modernizr.backgroundsize) {
+                node.css('backgroundImage', 'url(' + e.data.url + ')');
+            } else {
+                node.append(
+                    $('<img>', { src: e.data.url, alt: '' }).css({ width: '100%', height: '100%' })
+                );
+            }
+            clear();
+        };
+        clear = function () {
+            _.defer(function () { // use defer! otherwise we return null on cache hit
+                node = set = clear = cont = null; // don't leak
+            });
+        };
+        cont = function (url) {
+            // use image instance to make sure that the image exists
+            $(new Image())
+                .on('load', { url: url }, set)
+                .on('error', { url: ox.base + '/apps/themes/default/dummypicture.png' }, set)
+                .prop('src', url);
+        };
+        if (obj && obj.image1_url) {
+            cont(obj.image1_url.replace(/^\/ajax/, ox.apiRoot));
+        } else {
+            api.getPictureURL(obj).done(cont).fail(clear);
+        }
         return node;
     };
 

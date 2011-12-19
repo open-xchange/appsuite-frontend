@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,10 +9,11 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- *
  */
 
-define("io.ox/core/api/factory", ["io.ox/core/http", "io.ox/core/cache", "io.ox/core/event"], function (http, cache, event) {
+define("io.ox/core/api/factory",
+    ["io.ox/core/http", "io.ox/core/cache",
+     "io.ox/core/event"], function (http, cache, event) {
 
     "use strict";
 

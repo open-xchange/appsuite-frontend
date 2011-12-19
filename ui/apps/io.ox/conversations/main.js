@@ -179,9 +179,6 @@ define("io.ox/conversations/main",
 
         processMessages = function (list) {
 
-            // remove stupid new unread object
-            list.pop();
-
             // get most recent message
             var last = _(list).last() || { id: null, timestamp: 0 };
             // got new messages?
