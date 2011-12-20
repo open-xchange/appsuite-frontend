@@ -6,7 +6,7 @@ define(function () {
         installed: [
             "io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar",
             "io.ox/files", "io.ox/conversations",
-            "io.ox/dev/ajaxDebug", "io.ox/dev/testing"
+            "io.ox/dev/ajaxDebug", "io.ox/dev/testing", "io.ox/dev/theme-maker"
         ],
 
         favorites: [
@@ -70,6 +70,13 @@ define(function () {
             "io.ox/dev/testing": {
                 title: "UI Test Suite",
                 company: "CompuGlobalHyperMegaNet",
+                icon: "default.png",
+                category: "Dev"
+            },
+
+            "io.ox/dev/theme-maker": {
+                title: "Theme Maker",
+                company: "Mattes Inc.",
                 icon: "default.png",
                 category: "Dev"
             }
