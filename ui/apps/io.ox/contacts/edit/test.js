@@ -202,7 +202,7 @@ define("io.ox/contacts/edit/test",
                         dataId = data.id;
                         phrase = fId + '.' + dataId;
                         console.log('Phrase: ' + phrase);
-                        itemFill = $('div[data-ox-id="' + phrase + '"]');
+                        itemFill = $('div[data-obj-id="' + phrase + '"]');
                         if (itemFill[0]) {
                             console.log(itemFill);
                            return true;
@@ -393,7 +393,7 @@ define("io.ox/contacts/edit/test",
                 j.it('looks for the edited item / selects and deletes', function () {
 
                     j.waitsFor(function () {
-                        itemDelete = $('div[data-ox-id="' + phrase + '"]');
+                        itemDelete = $('div[data-obj-id="' + phrase + '"]');
                         if (itemDelete[0]) {
                            return true;
                         }
