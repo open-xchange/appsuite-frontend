@@ -163,19 +163,44 @@ define("io.ox/core/desktop",
                 win = null,
                 // running
                 running = false,
+                // save/restore
+                savePointUniqueID = _.now(),
                 savePoint = '',
+                saveRestorePointTimer = null,
                 // self
                 self = this;
 
             function saveRestorePoint() {
                 if (self.failSave) {
-                    var list = appCache.get('savepoints') || [];
-                    list.push(self.failSave());
+                    var list = appCache.get('savepoints') || [],
+                        data = self.failSave(),
+                        ids = _(list).pluck('id'),
+                        pos = _(ids).indexOf(savePointUniqueID);
+                    // add unique id
+                    data.id = savePointUniqueID;
+                    if (pos > -1) {
+                        // replace
+                        list.splice(pos, 1, data);
+                    } else {
+                        // add
+                        list.push(data);
+                    }
                     appCache.add('savepoints', list);
                 }
             }
 
+            function removeRestorePoint() {
+                var list = appCache.get('savepoints') || [],
+                    ids = _(list).pluck('id'),
+                    pos = _(ids).indexOf(savePointUniqueID);
+                if (pos > -1) {
+                    list.splice(pos, 1);
+                }
+                appCache.add('savepoints', list);
+            }
+
             $(window).on('unload', saveRestorePoint);
+            saveRestorePointTimer = setInterval(saveRestorePoint, 10000);
 
             // add dispatcher
             event.Dispatcher.extend(this);
@@ -325,6 +350,8 @@ define("io.ox/core/desktop",
                     // mark as not running
                     running = false;
                     // don't save
+                    clearInterval(saveRestorePointTimer);
+                    removeRestorePoint();
                     $(window).off('unload', saveRestorePoint);
                     // destroy launchbar icon
                     if (launchbarIcon) {
