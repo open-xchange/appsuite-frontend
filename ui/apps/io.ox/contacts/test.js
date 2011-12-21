@@ -65,8 +65,10 @@ define("io.ox/contacts/test",
 
                     contacts.getApp().launch().done(function () {
                         app = this;
-                        loaded.yep();
-                        j.expect(app).toBeTruthy();
+                        app.folder.setDefault().done(function () {
+                            loaded.yep();
+                            j.expect(app).toBeTruthy();
+                        });
                     });
                 });
 
