@@ -119,7 +119,9 @@ define("io.ox/contacts/edit/test",
             userfield19: 'userfield',
             userfield20: 'userfield',
             state_other: 'userfield'
-        };
+        },
+
+        TIMEOUT = 5000;
 
     // helpers
     function Done() {
@@ -156,14 +158,15 @@ define("io.ox/contacts/edit/test",
             j.describe("Contact edit", function () {
 
                 var app = null,
-                    data, itemFill, itemDelete, buttonUpdate, buttonSave, buttonDelete, dialog, formFrame = null,
+                    data, itemFill, itemDelete, buttonUpdate, buttonSave,
+                    buttonDelete, dialog, formFrame = null,
                     dataId , dataFolder, dataObj, phrase;
 
                 j.it('opens contact app ', function () {
 
                     var loaded = new Done();
 
-                    j.waitsFor(loaded, 'Could not load app', 10000);
+                    j.waitsFor(loaded, 'Could not load app', TIMEOUT);
 
                     contacts.getApp().launch().done(function () {
                         app = this;
@@ -186,11 +189,11 @@ define("io.ox/contacts/edit/test",
 
                         j.waitsFor(function () {
                             return this.ready;
-                        }, 'it happens' , 10000);
+                        }, 'it happens' , TIMEOUT);
 
                         j.runs(function () {
                             data = this.obj;
-                            console.log('created ' + data.id);
+//                            console.log('created ' + data.id);
                        j.expect(data).toBeTruthy();
                         });
                     });
@@ -201,26 +204,25 @@ define("io.ox/contacts/edit/test",
                     j.waitsFor(function () {
                         dataId = data.id;
                         phrase = fId + '.' + dataId;
-                        console.log('Phrase: ' + phrase);
-                        itemFill = $('div[data-ox-id="' + phrase + '"]');
+//                        console.log('Phrase: ' + phrase);
+                        itemFill = $('div[data-obj-id="' + phrase + '"]');
                         if (itemFill[0]) {
-                            console.log(itemFill);
+//                            console.log(itemFill);
                            return true;
                         }
-                    }, 'looks for the listed item', 10000);
+                    }, 'looks for the listed item', TIMEOUT);
 
                     j.runs(function () {
                         itemFill.trigger('click');
                     });
 
-                    j.waits(1000); //TODO needs a flag when ready
 
                     j.waitsFor(function () {
-                        buttonUpdate = $('.io-ox-inline-links a[data-action="update"]');
+                        buttonUpdate = $('table[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="update"]');
                         if (buttonUpdate[0]) {
                             return true;
                         }
-                    }, 'looks for update button',10000);
+                    }, 'looks for update button',TIMEOUT);
 
                     j.runs(function () {
                         buttonUpdate.triggerHandler('click');
@@ -232,7 +234,7 @@ define("io.ox/contacts/edit/test",
                         if (buttonSave[0]) {
                             return true;
                         }
-                    }, 'waits for the form',10000);
+                    }, 'waits for the form',TIMEOUT);
 
                     j.runs(function () {
                         formFrame =  $('.contact_edit_frame ');
@@ -256,13 +258,13 @@ define("io.ox/contacts/edit/test",
                                 dataId = data.id;
                                 dataFolder = data.folder;
                                 me.ready = true;
-                                console.log('loaded in response' +  dataId);
+//                                console.log('loaded in response ' +  dataId);
                             }
                         });
 
                         j.waitsFor(function () {
                             return this.ready;
-                        }, 'catches the id', 1000);
+                        }, 'catches the id', TIMEOUT);
 
                     });
 
@@ -279,7 +281,7 @@ define("io.ox/contacts/edit/test",
 //                                console.log('loaded ' + dataObj.id);
                                 return true;
                             }
-                        }, 'looks for the object', 10000);
+                        }, 'looks for the object', TIMEOUT);
 
                         j.runs(function () {
 
@@ -380,7 +382,7 @@ define("io.ox/contacts/edit/test",
 
                     var loaded = new Done();
 
-                    j.waitsFor(loaded, 'Could not load app', 10000);
+                    j.waitsFor(loaded, 'Could not load app', TIMEOUT);
 
                     contacts.getApp().launch().done(function () {
                         app = this;
@@ -389,28 +391,25 @@ define("io.ox/contacts/edit/test",
                     });
                 });
 
-
                 j.it('looks for the edited item / selects and deletes', function () {
 
                     j.waitsFor(function () {
-                        itemDelete = $('div[data-ox-id="' + phrase + '"]');
+                        itemDelete = $('div[data-obj-id="' + phrase + '"]');
                         if (itemDelete[0]) {
                            return true;
                         }
-                    }, 'looks for the list', 10000);
+                    }, 'looks for the list', TIMEOUT);
 
                     j.runs(function () {
                         itemDelete.trigger('click');
                     });
 
-                    j.waits(1000);
-
                     j.waitsFor(function () {
-                        buttonDelete = $('.io-ox-inline-links a[data-action="delete"]');
+                        buttonDelete = $('table[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
                         if (buttonDelete[0]) {
                             return true;
                         }
-                    }, 'looks for delete button',10000);
+                    }, 'looks for delete button',TIMEOUT);
 
                     j.runs(function () {
                         buttonDelete.triggerHandler('click');
@@ -421,7 +420,7 @@ define("io.ox/contacts/edit/test",
                         if (dialog[0]) {
                             return true;
                         }
-                    }, 'delete dialog to be there', 10000);
+                    }, 'delete dialog to be there', TIMEOUT);
 
                     j.runs(function () {
                         dialog.trigger('click');
