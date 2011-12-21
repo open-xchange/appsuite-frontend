@@ -54,6 +54,9 @@ define('io.ox/dev/testing/main',
 
         app.setWindow(win);
 
+        // make jasmine less nervous (use 100 msec instead of 10 msec)
+        jasmine.jasmine.WaitsForBlock.TIMEOUT_INCREMENT = 100;
+
         var suites = _.url.hash('suites'),
             url = '#launch=io.ox/dev/testing/main',
             // handles click to select suite

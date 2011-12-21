@@ -160,21 +160,21 @@ define("io.ox/contacts/test",
                 j.it('looks for the created item / selects and deletes', function () {
 
                     var item, button, dialog,
-                        phrase = dataFolder + '.' + dataId;
+                        cid = dataFolder + '.' + dataId,
+                        grid = app.getGrid();
 
                     j.waitsFor(function () {
-                        item = $('div[data-obj-id="' + phrase + '"]');
-                        if (item[0]) {
+                        // grid contains item?
+                        if (grid.contains(cid)) {
+                            grid.selection.set({ folder_id: dataFolder, id: dataId });
                             return true;
+                        } else {
+                            return false;
                         }
                     }, 'looks for the list', TIMEOUT);
 
-                    j.runs(function () {
-                        item.trigger('click');
-                    });
-
                     j.waitsFor(function () {
-                        button = $('table[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
+                        button = $('table[data-obj-id="' + cid + '"] .io-ox-inline-links a[data-action="delete"]');
                         if (button[0]) {
                             return true;
                         }

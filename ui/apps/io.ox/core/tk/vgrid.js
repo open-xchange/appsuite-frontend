@@ -568,6 +568,16 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             return index !== undefined ? all[index] : all;
         };
 
+        this.contains = function (data) {
+            var sel = this.selection, id = sel.serialize(data), i = 0, $i = (all || []).length;
+            for (; i < $i; i++) {
+                if (id === sel.serialize(all[i])) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
         this.getLabels = function () {
             return labels;
         };

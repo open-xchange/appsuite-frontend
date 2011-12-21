@@ -218,6 +218,10 @@ define("io.ox/contacts/main",
             grid.repaint();
         });
 
+        app.getGrid = function () {
+            return grid;
+        };
+
         // go!
         app.folder
             .updateTitle(win)
