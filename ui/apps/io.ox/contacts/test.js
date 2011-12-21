@@ -77,8 +77,7 @@ define("io.ox/contacts/test",
                     }
                 }, 'waits', TIMEOUT);
 
-
-                j.it('looks for create button and hits', function () {
+                j.it('looks for create button and hits ', function () {
                     var button = $(".window-toolbar a[data-action='create']");
                     button.triggerHandler('click');
 //                    console.log(button);
@@ -92,7 +91,7 @@ define("io.ox/contacts/test",
                     }
                 }, 'no form there', TIMEOUT);
 
-                j.it('looks for the form and autofills', function () {
+                j.it('looks for the form and autofills ', function () {
                     var formFrame =  $('.io-ox-dialog-popup');
                     for (var i in testObject) {
                         formFrame.find(".field input[name='" + i + "']").val(testObject[i]);
@@ -172,10 +171,8 @@ define("io.ox/contacts/test",
                         item.trigger('click');
                     });
 
-                    j.waits(1000);
-
                     j.waitsFor(function () {
-                        button = $('.io-ox-inline-links a[data-action="delete"]');
+                        button = $('table[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
                         if (button[0]) {
                             return true;
                         }
