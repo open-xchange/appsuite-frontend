@@ -20,21 +20,33 @@ define("io.ox/dev/theme-maker/main", ["themes", "io.ox/core/tk/simple-colorpicke
             title: 'Theme maker'
         }),
         // app window
-        win;
+        win,
+        GRID_WIDTH = 330,
+        // nodes
+        left,
+        right,
+        out;
 
     function update(e) {
         var obj = {};
         obj[e.data.id + ''] = $(this).val();
-        console.log("alter", e.data.id, $(this).val());
         themes.alter(obj);
+        out.val(themes.getDefinitions());
+    }
+
+    function createSection(title) {
+        return $('<div>').css({
+            fontSize: '16px',
+            padding: '4px 13px 4px 13px',
+            color: '#000'
+        }).text(title + '');
     }
 
     function createPicker(title, id) {
         return $('<div>').css({
                 padding: '10px',
                 borderRadius: '5px',
-                width: '300px',
-                margin: '0 0 1em 0',
+                margin: '3px 3px 6px 3px',
                 backgroundColor: 'rgba(255, 255, 255, 0.90)'
             })
             .append(
@@ -47,7 +59,12 @@ define("io.ox/dev/theme-maker/main", ["themes", "io.ox/core/tk/simple-colorpicke
             .append($('<br>'))
             .append(
                 $('<input>', { type: 'text' })
-                .css('width', '8em').val('#000000')
+                .css({
+                    fontFamily: 'monospace',
+                    fontSize: '14px',
+                    width: '7em'
+                })
+                .val('')
                 .simpleColorPicker()
                 .on('change', { id: id }, update)
             );
@@ -61,34 +78,74 @@ define("io.ox/dev/theme-maker/main", ["themes", "io.ox/core/tk/simple-colorpicke
             title: "Theme maker",
             toolbar: true
         });
+
         app.setWindow(win);
 
-        win.nodes.main
+        // left panel
+        left = $("<div>")
+            .addClass("leftside")
             .css({
-                backgroundColor: 'transparent',
+                width: GRID_WIDTH + "px",
+                backgroundColor: 'transparent'
+            })
+            .appendTo(win.nodes.main);
+
+        // right panel
+        right = $("<div>")
+            .addClass("rightside")
+            .css({
+                left: GRID_WIDTH + 1 + "px",
+                backgroundColor: 'transparent'
+            })
+            .append(
+                out = $('<textarea>').css({
+                    fontFamily: 'monospace',
+                    fontSize: '14px',
+                    border: '0px none',
+                    width: '50%',
+                    height: '50%',
+                    padding: '13px',
+                    margin: '1em',
+                    'float': 'right',
+                    resize: 'none'
+                })
+            )
+            .appendTo(win.nodes.main);
+
+        win.nodes.main.css({
+            backgroundColor: 'transparent'
+        });
+
+        left.css({
                 overflow: 'auto'
             })
+
+            .append(createSection('Topbar'))
             .append(createPicker('Topbar background', 'menu-background'))
+            .append(createPicker('Topbar app background active', 'topbar-launcher-background-active'))
+            .append(createPicker('Topbar app background hover', 'topbar-launcher-background-hover'))
             .append(createPicker('Topbar app color', 'topbar-launcher-color'))
             .append(createPicker('Topbar app color active', 'topbar-launcher-color-active'))
-            .append(createPicker('Topbar app background active', 'topbar-launcher-background-active'))
             .append(createPicker('Topbar app color hover', 'topbar-launcher-color-hover'))
-            .append(createPicker('Topbar app background hover', 'topbar-launcher-background-hover'))
 
+            .append(createSection('Wallpaper'))
             .append(createPicker('Wallpaper color #1', 'wallpaper-color1'))
             .append(createPicker('Wallpaper color #2', 'wallpaper-color2'))
             .append(createPicker('Wallpaper color #3', 'wallpaper-color3'))
 
+            .append(createSection('Window'))
             .append(createPicker('Window title color', 'window-title-color'))
+            .append(createPicker('Toolbar link color', 'toolbar-link-color'))
 
+            .append(createSection('General'))
             .append(createPicker('Link color', 'link-color'))
             .append(createPicker('Inline link color', 'inline-link-color'))
             .append(createPicker('Person link color', 'person-link-color'))
-            .append(createPicker('Toolbar link color', 'toolbar-link-color'))
-
             .append(createPicker('Selection background', 'selected-background'));
 
-        win.show();
+        win.show(function () {
+            out.val(themes.getDefinitions());
+        });
     });
 
     return {

@@ -236,6 +236,7 @@ define("io.ox/core/main",
                 def
             )
             .done(function () {
+                // auto launch
                 _(autoLaunch).each(function (id) {
                     // split app/call
                     var pair = id.split(/:/),
@@ -250,6 +251,8 @@ define("io.ox/core/main",
                         });
                     }
                 });
+                // restore apps
+                ox.ui.App.restore();
             });
 
         if (autoLaunch.length === 0) {

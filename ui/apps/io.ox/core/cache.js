@@ -76,8 +76,12 @@ define('io.ox/core/cache', function () {
             };
 
             this.get = function (key) {
-                return persist() ? JSON.parse(localStorage.getItem(id + '.' + key)) :
-                    fast[String(key)];
+                if (persist()) {
+                    var item = localStorage.getItem(id + '.' + key);
+                    return item !== null ? JSON.parse(item) : undefined;
+                } else {
+                    return fast[String(key)];
+                }
             };
 
             this.set = function (key, data) {

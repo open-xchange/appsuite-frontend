@@ -68,7 +68,8 @@ define.async('io.ox/mail/write/main',
             priorityOverlay,
             sections = {},
             currentSignature,
-            editorMode = 'text';
+            editorMode = '',
+            composeMode;
 
         app = ox.ui.createApp({
             title: 'Compose'
@@ -660,7 +661,7 @@ define.async('io.ox/mail/write/main',
 
             var fnChangeFormat = function (e) {
                 e.preventDefault();
-                app.setMode(e.data.format).done(function () {
+                app.setFormat(e.data.format).done(function () {
                     editor.focus();
                 });
             };
@@ -721,7 +722,7 @@ define.async('io.ox/mail/write/main',
         /**
          * Setters
          */
-        app.setMode = (function () {
+        app.setFormat = (function () {
 
             function load(mode, content) {
                 var editorSrc = 'io.ox/core/tk/' + (mode === 'html' ? 'html-editor' : 'text-editor');
@@ -892,10 +893,22 @@ define.async('io.ox/mail/write/main',
             form.find('input[name=msgref]').val(ref || '');
         };
 
-        app.setMail = function (data, mode) {
+        var windowTitles = {
+            compose: 'Compose new email',
+            replyall: 'Reply all',
+            reply: 'Reply',
+            forward: 'Forward'
+        };
+
+        app.setMail = function (mail) {
             // be robust
-            data = data || {};
+            mail = mail || {};
+            mail.data = mail.data || {};
+            mail.mode = mail.mode || 'compose';
+            mail.format = mail.format || 'text';
+            mail.initial = mail.initial || false;
             // call setters
+            var data = mail.data;
             this.setSubject(data.subject);
             this.setTo(data.to);
             this.setCC(data.cc);
@@ -905,9 +918,38 @@ define.async('io.ox/mail/write/main',
             this.setAttachVCard(config.get('mail.vcard', false));
             this.setDeliveryReceipt(false);
             this.setMsgRef(data.msgref);
-            // set body
-            var content = data.attachments && data.attachments.length ? data.attachments[0].content : '';
-            this[mode !== 'edit' ? 'setBody' : 'setRawBody'](content);
+            // apply mode
+            win.setTitle(windowTitles[composeMode = mail.mode]);
+            // set format
+            return app.setFormat(mail.format)
+                .done(function () {
+                    // set body
+                    var content = data.attachments && data.attachments.length ? data.attachments[0].content : '';
+                    if (mail.format === 'text') {
+                        content = content.replace(/<br>\n?/g, '\n');
+                    }
+                    app[mail.initial ? 'setBody' : 'setRawBody'](content);
+                });
+        };
+
+        app.failSave = function () {
+            var mail = app.getMail();
+            return {
+                module: 'io.ox/mail/write/main',
+                point: { data: mail.data, mode: mail.mode, format: mail.format }
+            };
+        };
+
+        app.failRestore = function (point) {
+            var def = $.Deferred();
+            win.show(function () {
+                app.setMail({ data: point.data, mode: point.mode, format: point.format })
+                .done(function () {
+                    editor.focus();
+                    def.resolve();
+                });
+            });
+            return def;
         };
 
         /**
@@ -915,18 +957,17 @@ define.async('io.ox/mail/write/main',
          */
         app.compose = function (data) {
             var def = $.Deferred();
-            win.setTitle('Compose new email')
-                .show(function () {
-                    app.setMode().done(function () {
-                        app.setMail(data, 'compose');
-                        if (data && data.to) {
-                            $('input[name=subject]').focus().select();
-                        } else {
-                            $('input[data-type=to]').focus().select();
-                        }
-                        def.resolve();
-                    });
+            win.show(function () {
+                app.setMail({ data: data, mode: 'compose', initial: true })
+                .done(function () {
+                    if (data && data.to) {
+                        $('input[name=subject]').focus().select();
+                    } else {
+                        $('input[data-type=to]').focus().select();
+                    }
+                    def.resolve();
                 });
+            });
             return def;
         };
 
@@ -935,17 +976,16 @@ define.async('io.ox/mail/write/main',
          */
         app.replyall = function (obj) {
             var def = $.Deferred();
-            mailAPI.replyall(obj, editorMode)
+            win.show(function () {
+                mailAPI.replyall(obj, editorMode || 'text')
                 .done(function (data) {
-                    win.setTitle('Reply all')
-                        .show(function () {
-                            app.setMode().done(function () {
-                                app.setMail(data, 'replyall');
-                                editor.focus();
-                                def.resolve();
-                            });
-                        });
+                    app.setMail({ data: data, mode: 'replyall', initial: true })
+                    .done(function () {
+                        editor.focus();
+                        def.resolve();
+                    });
                 });
+            });
             return def;
         };
 
@@ -954,17 +994,16 @@ define.async('io.ox/mail/write/main',
          */
         app.reply = function (obj) {
             var def = $.Deferred();
-            mailAPI.reply(obj, editorMode)
+            win.show(function () {
+                mailAPI.reply(obj, editorMode || 'text')
                 .done(function (data) {
-                    win.setTitle('Reply')
-                        .show(function () {
-                            app.setMode().done(function () {
-                                app.setMail(data, 'reply');
-                                editor.focus();
-                                def.resolve();
-                            });
-                        });
+                    app.setMail({ data: data, mode: 'reply', initial: true })
+                    .done(function () {
+                        editor.focus();
+                        def.resolve();
+                    });
                 });
+            });
             return def;
         };
 
@@ -973,17 +1012,16 @@ define.async('io.ox/mail/write/main',
          */
         app.forward = function (obj) {
             var def = $.Deferred();
-            mailAPI.forward(obj, editorMode)
+            win.show(function () {
+                mailAPI.forward(obj, editorMode || 'text')
                 .done(function (data) {
-                    win.setTitle('Forward')
-                        .show(function () {
-                            app.setMode().done(function () {
-                                app.setMail(data, 'forward');
-                                $('input[data-type=to]').focus().select();
-                                def.resolve();
-                            });
-                        });
+                    app.setMail({ data: data, mode: 'forward', initial: true })
+                    .done(function () {
+                        $('input[data-type=to]').focus().select();
+                        def.resolve();
+                    });
                 });
+            });
             return def;
         };
 
@@ -1086,8 +1124,8 @@ define.async('io.ox/mail/write/main',
                         });
                     }
                 });
-            // return data & file references
-            return { data: mail, files: files };
+            // return data, file references, mode, format
+            return { data: mail, files: files, mode: composeMode, format: editorMode };
         };
 
         /**

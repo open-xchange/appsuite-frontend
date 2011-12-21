@@ -14,7 +14,7 @@
  */
 
 define("io.ox/core/desktop",
-    ["io.ox/core/event", "io.ox/core/extensions"], function (event, ext) {
+    ["io.ox/core/event", "io.ox/core/extensions", "io.ox/core/cache"], function (event, ext, cache) {
 
     "use strict";
 
@@ -140,6 +140,8 @@ define("io.ox/core/desktop",
      */
     ox.ui.createApp = (function () {
 
+        var appCache = new cache.SimpleCache('app-cache', true);
+
         function App(options) {
 
             var opt = $.extend({
@@ -161,8 +163,19 @@ define("io.ox/core/desktop",
                 win = null,
                 // running
                 running = false,
+                savePoint = '',
                 // self
                 self = this;
+
+            function saveRestorePoint() {
+                if (self.failSave) {
+                    var list = appCache.get('savepoints') || [];
+                    list.push(self.failSave());
+                    appCache.add('savepoints', list);
+                }
+            }
+
+            $(window).on('unload', saveRestorePoint);
 
             // add dispatcher
             event.Dispatcher.extend(this);
@@ -311,6 +324,8 @@ define("io.ox/core/desktop",
                 return def.done(function () {
                     // mark as not running
                     running = false;
+                    // don't save
+                    $(window).off('unload', saveRestorePoint);
                     // destroy launchbar icon
                     if (launchbarIcon) {
                         launchbarIcon.fadeOut(500, function () {
@@ -333,6 +348,21 @@ define("io.ox/core/desktop",
                 });
             };
         }
+
+        ox.ui.App = App;
+
+        App.restore = function () {
+            _(appCache.get('savepoints') || []).each(function (obj) {
+                require([obj.module], function (m) {
+                    m.getApp().launch().done(function () {
+                        if (this.failRestore) {
+                            this.failRestore(obj.point);
+                        }
+                    });
+                });
+            });
+            appCache.remove('savepoints');
+        };
 
         return function (options) {
             return new App(options);

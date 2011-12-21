@@ -189,6 +189,10 @@
                         }
                     )
                 );
+        },
+
+        getDefinitions: function () {
+            return (currentTheme || '').replace(/:/g, ': ');
         }
     });
 

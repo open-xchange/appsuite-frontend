@@ -49,16 +49,16 @@ define("io.ox/calendar/view-detail",
         }
     });
 
-    // draw date and series information
+    // draw date and recurrence information
     ext.point("io.ox/calendar/detail/date").extend({
         index: 200,
         id: "date",
         draw: function (data) {
-            var seriesString = util.getSeriesString(data);
+            var recurrenceString = util.getRecurrencetring(data);
             this.append(
                 $("<div>").addClass("day").text(
                     util.getDateInterval(data) +
-                    (seriesString !== "" ? " \u2013 " + seriesString : "")
+                    (recurrenceString !== "" ? " \u2013 " + recurrenceString : "")
                 )
             );
         }

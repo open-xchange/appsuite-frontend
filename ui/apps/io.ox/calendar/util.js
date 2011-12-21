@@ -13,9 +13,9 @@
 
 define("io.ox/calendar/util",
     ["gettext!io.ox/calendar/calendar"], function (gettext) {
-    
+
     "use strict";
-    
+
     // week day names
     var n_dayShort = "So Mo Di Mi Do Fr Sa".split(' '),
         n_day = [gettext("Sunday"), gettext("Monday"), gettext("Tuesday"),
@@ -55,34 +55,34 @@ define("io.ox/calendar/util",
         SATURDAY = 64,
         // week starts with (0=Sunday, 1=Monday, ..., 6=Saturday)
         firstWeekDay = 1;
-    
+
     var that = {
-        
+
         MINUTE: MINUTE,
-        
+
         HOUR: HOUR,
-        
+
         DAY: DAY,
-        
+
         WEEK: WEEK,
-        
+
         getFirstWeekDay: function () {
             return firstWeekDay;
         },
-        
+
         getDayNames: function () {
             return n_dayShort.slice(firstWeekDay).concat(n_dayShort.slice(0, firstWeekDay));
         },
-        
+
         getDaysInMonth: function (year, month) {
             // trick: month + 1 & day = zero -> last day in month
             return new Date(year, month + 1, 0).getDate();
         },
-        
+
         isToday: function (timestamp) {
             return new Date(timestamp).toDateString() === new Date().toDateString();
         },
-        
+
         floor: function (timestamp, step) {
             // set defaults
             timestamp = timestamp || 0;
@@ -103,33 +103,33 @@ define("io.ox/calendar/util",
                 }
             }
         },
-        
+
         getTime: function (timestamp) {
             var d = new Date(timestamp);
             return _.pad(d.getUTCHours(), 2) + ":" + _.pad(d.getUTCMinutes(), 2);
         },
-        
+
         getDate: function (timestamp) {
             var d = timestamp !== undefined ? new Date(timestamp) : new Date();
             return n_dayShort[d.getUTCDay()] + ", " + _.pad(d.getUTCDate(), 2) + "." + _.pad(d.getUTCMonth() + 1, 2) + "." + d.getUTCFullYear();
         },
-        
+
         getSmartDate: function (timestamp) {
-            
+
             var d = timestamp !== undefined ? new Date(timestamp) : new Date(),
                 now = new Date(),
                 weekStart = this.floor(now.getTime(), "week"),
                 diff = 0,
                 diffWeek = 0;
-            
+
             // normalize
             d.setUTCHours(0, 0, 0, 0);
             now.setUTCHours(0, 0, 0, 0);
-            
+
             // get difference
             diff = d - now;
             diffWeek = d - weekStart;
-            
+
             // past?
             if (diff < 0) {
                 if (diff >= -1 * DAY) {
@@ -149,11 +149,11 @@ define("io.ox/calendar/util",
                     return "Next week";
                 }
             }
-            
+
             // any other month
             return n_month[d.getUTCMonth()] + " " + d.getUTCFullYear();
         },
-        
+
         getDateInterval: function (data) {
             var length = (data.end_date - data.start_date) / DAY >> 0;
             if (data.full_time && length > 1) {
@@ -163,7 +163,7 @@ define("io.ox/calendar/util",
                 return this.getDate(data.start_date);
             }
         },
-        
+
         getTimeInterval: function (data) {
             var length;
             if (data.full_time) {
@@ -173,33 +173,33 @@ define("io.ox/calendar/util",
                 return this.getTime(data.start_date) + " \u2013 " + this.getTime(data.end_date);
             }
         },
-        
+
         getShownAsClass: function (data) {
             return shownAsClass[(data.shown_as || 1) - 1];
         },
-        
+
         getShownAs: function (data) {
             return n_shownAs[(data.shown_as || 1) - 1];
         },
-        
+
         getConfirmationSymbol: function (status) {
             return n_confirm[status || 0];
         },
-        
+
         getConfirmationClass: function (status) {
             return confirmClass[status || 0];
         },
-        
-        isSeries: function (data) {
+
+        isRecurring: function (data) {
             return !!data.recurrence_type;
         },
-        
-        getSeriesString: function (data) {
-            
+
+        getRecurrenceString: function (data) {
+
             function getCountString(i) {
                 return n_count[i + 1];
             }
-            
+
             function getDayString(i) {
                 var tmp = [];
                 switch (i) {
@@ -237,17 +237,17 @@ define("io.ox/calendar/util",
                 }
                 return tmp.join(", ");
             }
-            
+
             function getMonthString(i) {
                 return n_month[i];
             }
-            
+
             var str = "", f = _.printf,
                 interval = data.interval,
                 days = data.days || null,
                 month = data.month,
                 day_in_month = data.day_in_month;
-            
+
             switch (data.recurrence_type) {
             case 1:
                 str = f(gettext("Each %s Day"), interval);
@@ -276,17 +276,17 @@ define("io.ox/calendar/util",
                 }
                 break;
             }
-            
+
             return str;
         },
-        
+
         getNote: function (data) {
             return $.trim(data.note || "")
                 .replace(/\n{3,}/g, "\n\n")
                 .replace(/</g, "&lt;")
                 .replace(/(https?\:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
         },
-        
+
         getConfirmations: function (data) {
             var hash = {};
             // internal users
@@ -305,11 +305,11 @@ define("io.ox/calendar/util",
             });
             return hash;
         },
-        
+
         // returns a set of rows, each containing 7 days
         // helps at drawing a mini calendar or a month view
         getMonthScaffold: function (timestamp) {
-            
+
             // use timestamp or current time
             var d = new Date(timestamp || _.now()),
                 year = d.getUTCFullYear(),
@@ -325,7 +325,7 @@ define("io.ox/calendar/util",
                 day = Date.UTC(year, month, 1) - DAY * shift,
                 row,
                 obj;
-            
+
             for (; i < max || i % 7 !== 0; i += 1, day += DAY) {
                 if (i % 7 === 0) {
                     row = [];
@@ -347,10 +347,10 @@ define("io.ox/calendar/util",
                 // is out of current month?
                 obj.isOut = obj.year !== year || obj.month !== month;
             }
-            
+
             return rows;
         }
     };
-    
+
     return that;
 });

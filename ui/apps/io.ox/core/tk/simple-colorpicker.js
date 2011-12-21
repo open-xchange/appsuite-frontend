@@ -34,11 +34,13 @@ define('io.ox/core/tk/simple-colorpicker', [], function () {
 
     $.fn.simpleColorPicker = function () {
 
-        var node, self;
+        var node, self, preview;
 
         function set(e) {
+            var color = e.data.color + '';
             e.preventDefault();
-            self.val(e.data.color + '').trigger('change');
+            preview.css('backgroundColor', color).insertAfter(self);
+            self.val(color).trigger('change');
         }
 
         function focus(e) {
@@ -68,12 +70,21 @@ define('io.ox/core/tk/simple-colorpicker', [], function () {
 
         if (this.get(0).tagName === 'INPUT') {
 
-            self = this.attr({ maxLength: 7, size: 10 }).addClass('nice-input');
+            self = this.attr({ maxLength: 7 }).addClass('nice-input');
 
             node = $('<div>').css({
                 lineHeight: '8px',
                 margin: '0.5em 0 1em 0'
             });
+
+            preview = $('<div>').css({
+                    width: '16px',
+                    height: '16px',
+                    margin: '3px 0 3px 8px',
+                    backgroundColor: 'transparent',
+                    display: 'inline-block',
+                    verticalAlign: 'top'
+                });
 
             this.on('focus', { node: node }, focus);
             this.on('blur', { node: node }, blur);
