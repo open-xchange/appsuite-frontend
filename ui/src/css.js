@@ -21,22 +21,22 @@
     function dirname(filename) {
         return filename.replace(/(?:^|(\/))[^\/]+$/, "$1");
     }
-    
+
     function relativeCSS(path, css) {
         return css.replace(/url\((?!\/|[A-Za-z][A-Za-z0-9+.-]*\:)/g,
                            "url(" + path);
     }
-    
+
     function insert(name, css, selector) {
         return $('<style type="text/css">' + relativeCSS(dirname(name), css) +
                  '</style>')
             .attr("data-require-src", name).insertBefore($(selector).first());
     }
-    
+
     define("text", { load: function(name, parentRequire, load, config) {
         $.ajax({ url: config.baseUrl + name, dataType: "text" }).done(load);
     } });
-    
+
     // css plugin
     define("css", {
         load: function (name, parentRequire, load, config) {
@@ -45,11 +45,11 @@
             });
         }
     });
-    
+
     var currentTheme = "";
     var themeLess = {}, lessFiles = [themeLess];
     var themeCSS;
-    
+
     var less = (function () {
         var less = { tree: {} }, exports = less;
         function require (name) {
@@ -93,7 +93,7 @@
             return def.promise();
         };
     }());
-    
+
     define("less", {
         load: function (name, parentRequire, load, config) {
             require(["text!" + name]).pipe(function (data) {
@@ -118,7 +118,7 @@
             });
         }
     });
-    
+
     function setTheme(theme) {
         currentTheme = theme;
         return $.when.apply($, _.map(lessFiles, function (file) {
@@ -131,7 +131,7 @@
             });
         }));
     }
-    
+
     // themes module
     define("themes", {
         /**
@@ -141,12 +141,18 @@
          * @returns A promise which gets fulfilled when the theme finishes
          * loading. Please ignore the value of the promise.
          */
-        set: function (name) {
-            return require(["text!themes/" + name + "/definitions.less",
-                            "text!themes/" + name + "/style.css",
-                            "text!themes/" + name + "/style.less"])
-                .pipe(function(theme, css, less) {
+        set: function (name, customTheme) {
+            var list;
+            if (name) {
+                list = ["text!themes/" + name + "/definitions.less", "text!themes/" + name + "/style.less", "text!themes/" + name + "/style.css"];
+            } else {
+                list = ["text!themes/default/definitions.less", "text!themes/style.less"];
+                name = 'default';
+            }
+            return require(list)
+                .pipe(function(theme, less, css) {
                     var path = ox.base + "/apps/themes/" + name + "/";
+                    css = css || "";
                     if (themeCSS) {
                         themeCSS.text(relativeCSS(path, css));
                     } else {
@@ -155,7 +161,7 @@
                     themeLess.path = path;
                     themeLess.name = path + "dynamic.less";
                     themeLess.source = less;
-                    return setTheme(theme);
+                    return setTheme(customTheme || theme);
                 });
         },
         /**
@@ -165,7 +171,7 @@
          * @example
          * require(["themes"]).done(function(themes) {
          *     themes.alter({
-         *         "menu-background": "hsl(" + 360 * math.random() + ",1,0.5);"
+         *         "menu-background": "hsl(" + 360 * Math.random() + ",1,0.5);"
          *     });
          * });
          * @type Promise
@@ -173,15 +179,23 @@
          * loading. Please ignore the value of the promise.
          */
         alter: function (definitions) {
-            return setTheme(currentTheme.replace(/^\s*@([\w-]+)\s*:.*$/gm,
-                function (match, name) {
-                    return name in definitions ?
-                        "@" + name + ":" + definitions[name] + ";" :
-                        match;
-                }));
+            return this.set(
+                    '',
+                    currentTheme.replace(/^\s*@([\w-]+)\s*:.*$/gm,
+                        function (match, name) {
+                            return name in definitions ?
+                                "@" + name + ":" + definitions[name] + ";" :
+                                match;
+                        }
+                    )
+                );
+        },
+
+        getDefinitions: function () {
+            return (currentTheme || '').replace(/:/g, ': ');
         }
     });
-    
+
 }());
 
 define ("gettext", function (gettext) {

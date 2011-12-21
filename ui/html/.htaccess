@@ -5,7 +5,7 @@ AddType text/cache-manifest .appcache
 
 # Define pre-compressed files
 AddType text/javascript .jsz
-AddType text/css .cssz
+AddType text/css .cssz .less
 AddType text/xml .xmlz
 AddEncoding gzip .jsz .cssz .xmlz
 SetEnvIf Request_URI "\.(jsz|cssz|xmlz)$" no-gzip

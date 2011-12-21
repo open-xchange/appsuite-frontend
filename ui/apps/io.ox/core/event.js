@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,12 +9,11 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- *
  */
 
-define("io.ox/core/event", function () {
+define('io.ox/core/event', function () {
 
-    "use strict";
+    'use strict';
 
     var that = {
 
@@ -25,7 +23,7 @@ define("io.ox/core/event", function () {
 
                 trim = function (type) {
                     // events should be string and lower case
-                    return (type + "").toLowerCase().replace(/(^\s+|\s+$)/g, "");
+                    return (type + '').toLowerCase().replace(/(^\s+|\s+$)/g, '');
                 },
 
                 split = function (type) {
@@ -53,7 +51,7 @@ define("io.ox/core/event", function () {
                 var self = this;
 
                 // never leak
-                $(window).bind("unload", function () {
+                $(window).bind('unload', function () {
                     if (self) {
                         self.data = self.handlers = null;
                     }
@@ -133,11 +131,12 @@ define("io.ox/core/event", function () {
                             handler.fn.call(target, d, type);
                         } catch (ex_1) {
                             try {
-                                console.error("Dispatcher.trigger(" + type + ") " + ex_1);
+                                console.error('Dispatcher.trigger("' + type + '") ' + ex_1);
+                                console.debug(handler.fn);
                             } catch (ex_2) {
                                 // if u come around here, IE's console doesn't work
                                 if (ox.debug) {
-                                    alert("Dispatcher.trigger(" + type + ") " + ex_1);
+                                    alert('Dispatcher.trigger(' + type + ') ' + ex_1);
                                 }
                             }
                         }
@@ -145,7 +144,7 @@ define("io.ox/core/event", function () {
 
                     _(split(type)).each(function (t) {
 
-                        var h = self.handlers[t] || {}, id = "";
+                        var h = self.handlers[t] || {}, id = '';
 
                         for (id in h) {
                             call(h[id], t);
@@ -167,7 +166,7 @@ define("io.ox/core/event", function () {
                  * @return {number} Number of bound handlers
                  */
                 this.numHandlers = function () {
-                    var i = 0, id = "";
+                    var i = 0, id = '';
                     for (id in self.handlers) {
                         i++;
                     }

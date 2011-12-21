@@ -197,6 +197,11 @@ define("io.ox/core/api/factory",
                 }
             },
 
+            needsRefresh: function (folder) {
+                // has entries in 'all' cache for specific folder
+                return caches.all.contains(folder);
+            },
+
             caches: caches
         };
 

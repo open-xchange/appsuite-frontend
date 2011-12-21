@@ -60,7 +60,7 @@ define('io.ox/mail/write/test',
                     writer.getApp().launch().done(function () {
                         app = this;
                         app.compose().done(function () {
-                            app.setMode('html').done(function () {
+                            app.setFormat('html').done(function () {
                                 ed = app.getEditor();
                                 form = app.getWindow().nodes.main.find('form');
                                 loaded.yep();
@@ -343,7 +343,7 @@ define('io.ox/mail/write/test',
                     writer.getApp().launch().done(function () {
                         app = this;
                         app.compose().done(function () {
-                            app.setMode('text').done(function () {
+                            app.setFormat('text').done(function () {
                                 ed = app.getEditor();
                                 loaded.yep();
                                 j.expect(ed).toBeDefined();
@@ -399,7 +399,7 @@ define('io.ox/mail/write/test',
                     var changed = new Done();
                     j.waitsFor(changed, 'HTML mode', TIMEOUT);
 
-                    app.setMode('html').done(function () {
+                    app.setFormat('html').done(function () {
                         ed = app.getEditor();
                         changed.yep();
                         j.expect(ed.getContent())
@@ -460,7 +460,7 @@ define('io.ox/mail/write/test',
                     var changed = new Done();
                     j.waitsFor(changed, 'TEXT mode', TIMEOUT);
 
-                    app.setMode('text').done(function () {
+                    app.setFormat('text').done(function () {
                         ed = app.getEditor();
                         changed.yep();
                         j.expect(ed.getMode()).toEqual('text');
@@ -474,7 +474,7 @@ define('io.ox/mail/write/test',
                     var changed = new Done();
                     j.waitsFor(changed, 'HTML mode', TIMEOUT);
 
-                    app.setMode('html').done(function () {
+                    app.setFormat('html').done(function () {
                         ed = app.getEditor();
                         changed.yep();
                         j.expect(ed.getContent())
@@ -484,17 +484,17 @@ define('io.ox/mail/write/test',
 
                 j.it('switches back and forth between TEXT and HTML mode (robustness test)', function () {
 
-                    app.setMode('text');
-                    app.setMode('html');
-                    app.setMode('html');
-                    app.setMode('text');
-                    app.setMode('text');
-                    app.setMode('html');
+                    app.setFormat('text');
+                    app.setFormat('html');
+                    app.setFormat('html');
+                    app.setFormat('text');
+                    app.setFormat('text');
+                    app.setFormat('html');
 
                     var check1 = new Done();
                     j.waitsFor(check1, 'checkpoint #1', TIMEOUT);
 
-                    app.setMode('text').done(function () {
+                    app.setFormat('text').done(function () {
                         ed = app.getEditor();
                         check1.yep();
                         j.expect(ed.getContent())
@@ -504,7 +504,7 @@ define('io.ox/mail/write/test',
                     var check2 = new Done();
                     j.waitsFor(check2, 'checkpoint #2', TIMEOUT);
 
-                    app.setMode('html').done(function () {
+                    app.setFormat('html').done(function () {
                         ed = app.getEditor();
                         check2.yep();
                         j.expect(ed.getContent())
@@ -542,7 +542,7 @@ define('io.ox/mail/write/test',
                     writer.getApp().launch().done(function () {
                         app = this;
                         app.compose().done(function () {
-                            app.setMode('html').done(function () {
+                            app.setFormat('html').done(function () {
                                 ed = app.getEditor();
                                 loaded.yep();
                                 j.expect(ed).toBeDefined();

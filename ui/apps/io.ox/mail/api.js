@@ -295,5 +295,13 @@ define("io.ox/mail/api",
         return deferred;
     };
 
+    // refresh
+    api.bind('refresh!', function (folder) {
+        api.getAllThreads({ folder: folder }, false)
+            .done(function () {
+                api.trigger('refresh.all');
+            });
+    });
+
     return api;
 });

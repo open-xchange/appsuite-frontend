@@ -56,25 +56,32 @@ define('io.ox/core/cache', function () {
                         };
 
             this.clear = function () {
-                // loop over all keys
-                var i = 0, key;
-                while (i < localStorage.length) {
-                    // get key by index
-                    key = localStorage.key(i);
-                    // match?
-                    if (reg.test(key)) {
-                        localStorage.removeItem(key);
-                    } else {
-                        i++;
+                if (persist()) {
+                    // loop over all keys
+                    var i = 0, key;
+                    while (i < localStorage.length) {
+                        // get key by index
+                        key = localStorage.key(i);
+                        // match?
+                        if (reg.test(key)) {
+                            localStorage.removeItem(key);
+                        } else {
+                            i++;
+                        }
                     }
+                } else {
+                    // clear fast cache
+                    fast = {};
                 }
-                // clear fast cache
-                fast = {};
             };
 
             this.get = function (key) {
-                return persist() ? JSON.parse(localStorage.getItem(id + '.' + key)) :
-                    fast[String(key)];
+                if (persist()) {
+                    var item = localStorage.getItem(id + '.' + key);
+                    return item !== null ? JSON.parse(item) : undefined;
+                } else {
+                    return fast[String(key)];
+                }
             };
 
             this.set = function (key, data) {
