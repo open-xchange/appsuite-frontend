@@ -203,21 +203,19 @@ define("io.ox/contacts/edit/test",
 
                 j.it('catches the form and autofills', function () {
 
+                    var grid = app.getGrid();
+
+                    phrase = fId + '.' + data.id;
+
                     j.waitsFor(function () {
-                        dataId = data.id;
-                        phrase = fId + '.' + dataId;
-//                        console.log('Phrase: ' + phrase);
-                        itemFill = $('div[data-obj-id="' + phrase + '"]');
-                        if (itemFill[0]) {
-//                            console.log(itemFill);
-                           return true;
+                        // grid contains item?
+                        if (grid.contains(phrase)) {
+                            grid.selection.set({ folder_id: fId, id: data.id });
+                            return true;
+                        } else {
+                            return false;
                         }
                     }, 'looks for the listed item', TIMEOUT);
-
-                    j.runs(function () {
-                        itemFill.trigger('click');
-                    });
-
 
                     j.waitsFor(function () {
                         buttonUpdate = $('table[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="update"]');
@@ -395,16 +393,18 @@ define("io.ox/contacts/edit/test",
 
                 j.it('looks for the edited item / selects and deletes', function () {
 
+                    var grid = app.getGrid();
+                    phrase = dataFolder + '.' + dataId;
+
                     j.waitsFor(function () {
-                        itemDelete = $('div[data-obj-id="' + phrase + '"]');
-                        if (itemDelete[0]) {
-                           return true;
+                        // grid contains item?
+                        if (grid.contains(phrase)) {
+                            grid.selection.set({ folder_id: dataFolder, id: dataId });
+                            return true;
+                        } else {
+                            return false;
                         }
                     }, 'looks for the list', TIMEOUT);
-
-                    j.runs(function () {
-                        itemDelete.trigger('click');
-                    });
 
                     j.waitsFor(function () {
                         buttonDelete = $('table[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
