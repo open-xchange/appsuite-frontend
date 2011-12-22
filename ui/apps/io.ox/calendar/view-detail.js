@@ -54,7 +54,7 @@ define("io.ox/calendar/view-detail",
         index: 200,
         id: "date",
         draw: function (data) {
-            var recurrenceString = util.getRecurrencetring(data);
+            var recurrenceString = util.getRecurrenceString(data);
             this.append(
                 $("<div>").addClass("day").text(
                     util.getDateInterval(data) +

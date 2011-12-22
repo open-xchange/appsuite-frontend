@@ -321,7 +321,8 @@ define("io.ox/contacts/view-detail",
                 node = $();
             } else {
                 node = $("<table>", {border: 0, cellpadding: 0, cellspacing: 0})
-                    .addClass("contact-detail").attr('data-obj-id',data.folder_id + '.' + data.id);
+                    .addClass("contact-detail")
+                    .attr('data-obj-id', data.folder_id + '.' + data.id);
                 ext.point("io.ox/contacts/detail").invoke("draw", node, data);
             }
             return node;

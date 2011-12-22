@@ -67,7 +67,7 @@ define.async('io.ox/mail/write/main',
             editorHash = {},
             priorityOverlay,
             sections = {},
-            currentSignature,
+            currentSignature = '',
             editorMode = '',
             composeMode;
 
@@ -452,10 +452,10 @@ define.async('io.ox/mail/write/main',
                 signature, val, pos, $l, text,
                 top;
 
-            if (currentSignature !== undefined) {
+            if (currentSignature) {
                 // remove current signature from editor
                 editor.replaceParagraph(currentSignature, '');
-                currentSignature = undefined;
+                currentSignature = '';
             }
 
             // add signature?
@@ -509,7 +509,7 @@ define.async('io.ox/mail/write/main',
                             .attr({ type: 'text', name: 'subject', tabindex: '3' })
                             .addClass('subject')
                             .on('keydown', function (e) {
-                                if (e.which === 13 || e.which === 9) {
+                                if (e.which === 13 || (e.which === 9 && !e.shiftKey)) {
                                     // auto jump to editor on enter/tab
                                     e.preventDefault();
                                     editor.focus();
@@ -914,12 +914,14 @@ define.async('io.ox/mail/write/main',
             this.setCC(data.cc);
             this.setBCC(data.bcc);
             this.setAttachments(data.attachments);
-            this.setPriority(3);
-            this.setAttachVCard(config.get('mail.vcard', false));
-            this.setDeliveryReceipt(false);
+            this.setPriority(data.priority || 3);
+            this.setAttachVCard(data.vcard !== undefined ? data.vcard : config.get('mail.vcard', false));
+            this.setDeliveryReceipt(data.disp_notification_to !== undefined ? data.disp_notification_to : false);
             this.setMsgRef(data.msgref);
             // apply mode
             win.setTitle(windowTitles[composeMode = mail.mode]);
+            // set signature
+            currentSignature = mail.signature || '';
             // set format
             return app.setFormat(mail.format)
                 .done(function () {
@@ -934,16 +936,17 @@ define.async('io.ox/mail/write/main',
 
         app.failSave = function () {
             var mail = app.getMail();
+            delete mail.files;
             return {
                 module: 'io.ox/mail/write/main',
-                point: { data: mail.data, mode: mail.mode, format: mail.format }
+                point: mail
             };
         };
 
         app.failRestore = function (point) {
             var def = $.Deferred();
             win.show(function () {
-                app.setMail({ data: point.data, mode: point.mode, format: point.format })
+                app.setMail(point)
                 .done(function () {
                     editor.focus();
                     def.resolve();
@@ -1097,7 +1100,7 @@ define.async('io.ox/mail/write/main',
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,
                 vcard: parseInt(data.vcard, 10) || 0,
-                disp_notification_to: parseInt(data.deliveryReceipt, 10) || 0,
+                disp_notification_to: parseInt(data.receipt, 10) || 0,
                 attachments: [content]
             };
             // add msgref?
@@ -1125,7 +1128,13 @@ define.async('io.ox/mail/write/main',
                     }
                 });
             // return data, file references, mode, format
-            return { data: mail, files: files, mode: composeMode, format: editorMode };
+            return {
+                data: mail,
+                mode: composeMode,
+                format: editorMode,
+                signature: currentSignature,
+                files: files
+            };
         };
 
         /**

@@ -16,21 +16,21 @@ define('io.ox/core/tk/simple-colorpicker', [], function () {
     'use strict';
 
     var colors = [
-          // grey
-          '#FFFFFF', '#EEEEEE', '#DDDDDD', '#CCCCCC', '#BBBBBB', '#AAAAAA', '#888888', '#555555', '#333333', '#000000',
-          // blue
-          '#0B3861', '#084B8A', '#045FB4', '#0174DF', '#2E9AFE', '#81BEF7', '#A9D0F5', '#CEE3F6', '#E0ECF8', '#EFF5FB',
-          // green
-          '#38610B', '#4B8A08', '#5FB404', '#74DF00', '#80FF00', '#9AFE2E', '#ACFA58', '#BEF781', '#D0F5A9', '#E3F6CE',
-          // yellow
-          '#AEB404', '#D7DF01', '#FFFF00', '#F7FE2E', '#F4FA58', '#F3F781', '#F2F5A9', '#F5F6CE', '#F5F6CE', '#F7F8E0',
-          // red
-          '#3B0B0B', '#610B0B', '#8A0808', '#B40404', '#DF0101', '#FF0000', '#FE2E2E', '#FA5858', '#F78181', '#F5A9A9',
-          // pink
-          '#610B21', '#8A0829', '#B40431', '#DF013A', '#FF0040', '#FE2E64', '#FA5882', '#F7819F', '#F5A9BC', '#F6CED8',
-          // viollet
-          '#610B5E', '#8A0886', '#B404AE', '#DF01D7', '#FF00FF', '#FE2EF7', '#F781F3', '#F5A9F2', '#F6CEF5', '#F6CEF5'
-          ];
+        // grey
+        '#FFFFFF', '#EEEEEE', '#DDDDDD', '#CCCCCC', '#BBBBBB', '#AAAAAA', '#888888', '#555555', '#333333', '#000000',
+        // blue
+        '#0B3861', '#084B8A', '#045FB4', '#0174DF', '#2E9AFE', '#81BEF7', '#A9D0F5', '#CEE3F6', '#E0ECF8', '#EFF5FB',
+        // green
+        '#38610B', '#4B8A08', '#5FB404', '#74DF00', '#80FF00', '#9AFE2E', '#ACFA58', '#BEF781', '#D0F5A9', '#E3F6CE',
+        // yellow
+        '#AEB404', '#D7DF01', '#FFFF00', '#F7FE2E', '#F4FA58', '#F3F781', '#F2F5A9', '#F5F6CE', '#F5F6CE', '#F7F8E0',
+        // red
+        '#3B0B0B', '#610B0B', '#8A0808', '#B40404', '#DF0101', '#FF0000', '#FE2E2E', '#FA5858', '#F78181', '#F5A9A9',
+        // pink
+        '#610B21', '#8A0829', '#B40431', '#DF013A', '#FF0040', '#FE2E64', '#FA5882', '#F7819F', '#F5A9BC', '#F6CED8',
+        // viollet
+        '#610B5E', '#8A0886', '#B404AE', '#DF01D7', '#FF00FF', '#FE2EF7', '#F781F3', '#F5A9F2', '#F6CEF5', '#F6CEF5'
+    ];
 
     $.fn.simpleColorPicker = function () {
 

@@ -140,8 +140,8 @@ define("io.ox/contacts/edit/test",
     testObject.folder_id = fId;
 
     var testFactory = {
-        createSimpleContact: function(callback) {
-            api.create(testObject).done(function(data) {
+        createSimpleContact: function (callback) {
+            api.create(testObject).done(function (data) {
                 callback(data);
             });
         }
@@ -160,7 +160,7 @@ define("io.ox/contacts/edit/test",
                 var app = null,
                     data, itemFill, itemDelete, buttonUpdate, buttonSave,
                     buttonDelete, dialog, formFrame = null,
-                    dataId , dataFolder, dataObj, phrase;
+                    dataId, dataFolder, dataObj, phrase;
 
                 j.it('opens contact app ', function () {
 
@@ -191,12 +191,12 @@ define("io.ox/contacts/edit/test",
 
                         j.waitsFor(function () {
                             return this.ready;
-                        }, 'it happens' , TIMEOUT);
+                        }, 'it happens', TIMEOUT);
 
                         j.runs(function () {
                             data = this.obj;
 //                            console.log('created ' + data.id);
-                       j.expect(data).toBeTruthy();
+                            j.expect(data).toBeTruthy();
                         });
                     });
                 });
@@ -222,7 +222,7 @@ define("io.ox/contacts/edit/test",
                         if (buttonUpdate[0]) {
                             return true;
                         }
-                    }, 'looks for update button',TIMEOUT);
+                    }, 'looks for update button', TIMEOUT);
 
                     j.runs(function () {
                         buttonUpdate.triggerHandler('click');
@@ -234,7 +234,7 @@ define("io.ox/contacts/edit/test",
                         if (buttonSave[0]) {
                             return true;
                         }
-                    }, 'waits for the form',TIMEOUT);
+                    }, 'waits for the form', TIMEOUT);
 
                     j.runs(function () {
                         formFrame =  $('.contact_edit_frame ');
@@ -249,9 +249,9 @@ define("io.ox/contacts/edit/test",
 
                 j.it('loads the saved item and compares', function () {
 
-                    j.runs(function() {
+                    j.runs(function () {
                         var me = this;
-                            me.ready = false;
+                        me.ready = false;
                         api.bind('edit', function (data) {
                             if (data) {
 //                                console.log(data);
@@ -272,7 +272,7 @@ define("io.ox/contacts/edit/test",
                         api.get({
                             id: dataId,
                             folder_id: dataFolder
-                        }).done(function(obj) {
+                        }).done(function (obj) {
                             dataObj = obj;
                         });
 
@@ -303,12 +303,12 @@ define("io.ox/contacts/edit/test",
                             j.expect(dataObj.city_home).toEqual(testObjectLong.city_home);
                             j.expect(dataObj.state_home).toEqual(testObjectLong.state_home);
                             j.expect(dataObj.country_home).toEqual(testObjectLong.country_home);
-                            j.expect(require('io.ox/core/i18n').date('dd.MM.YYYY',dataObj.birthday)).toEqual(testObjectLong.birthday);
+                            j.expect(require('io.ox/core/i18n').date('dd.MM.YYYY', dataObj.birthday)).toEqual(testObjectLong.birthday);
                             j.expect(dataObj.marital_status).toEqual(testObjectLong.marital_status);
                             j.expect(dataObj.number_of_children).toEqual(testObjectLong.number_of_children);
                             j.expect(dataObj.nickname).toEqual(testObjectLong.nickname);
                             j.expect(dataObj.spouse_name).toEqual(testObjectLong.spouse_name);
-                            j.expect(require('io.ox/core/i18n').date('dd.MM.YYYY',dataObj.anniversary)).toEqual(testObjectLong.anniversary);
+                            j.expect(require('io.ox/core/i18n').date('dd.MM.YYYY', dataObj.anniversary)).toEqual(testObjectLong.anniversary);
                             j.expect(dataObj.note).toEqual(testObjectLong.note);
                             j.expect(dataObj.employee_type).toEqual(testObjectLong.employee_type);
                             j.expect(dataObj.room_number).toEqual(testObjectLong.room_number);
@@ -411,7 +411,7 @@ define("io.ox/contacts/edit/test",
                         if (buttonDelete[0]) {
                             return true;
                         }
-                    }, 'looks for delete button',TIMEOUT);
+                    }, 'looks for delete button', TIMEOUT);
 
                     j.runs(function () {
                         buttonDelete.triggerHandler('click');
