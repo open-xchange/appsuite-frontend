@@ -34,7 +34,9 @@ define("io.ox/contacts/main",
         // nodes
         left,
         thumbs,
-        right;
+        right,
+        // full thumb index
+        fullIndex = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
     // launcher
     app.setLauncher(function () {
@@ -184,21 +186,25 @@ define("io.ox/contacts/main",
          * Thumb index
          */
 
-        function drawThumb(char) {
-            return $("<div/>").addClass("thumb-index border-bottom")
-                .text(char)
-                .on("click", { text: char }, grid.scrollToLabelText);
+        function drawThumb(char, enabled) {
+            var node = $('<div>')
+                .addClass('thumb-index border-bottom' + (enabled ? '' : ' thumb-index-disabled'))
+                .text(char);
+            if (enabled) {
+                node.on('click', { text: char }, grid.scrollToLabelText);
+            }
+            return node;
         }
 
         // draw thumb index
-        grid.bind("ids-loaded", function () {
+        grid.bind('ids-loaded', function () {
             // get labels
             thumbs.empty();
-            var textIndex = grid.getLabels().textIndex, char = "";
-            for (char in textIndex) {
+            var textIndex = grid.getLabels().textIndex;
+            _(fullIndex).each(function (char) {
                 // add thumb
-                thumbs.append(drawThumb(char));
-            }
+                thumbs.append(drawThumb(char, char in textIndex));
+            });
         });
 
         win.bind("show", function () {

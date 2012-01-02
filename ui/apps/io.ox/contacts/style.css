@@ -57,6 +57,16 @@
     filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee');"
 }
 
+.contact-grid-index .thumb-index.thumb-index-disabled,
+.contact-grid-index .thumb-index.thumb-index-disabled:hover {
+    color: #ccc;
+    font-weight: normal;
+    background-color: #fff;
+    background-image: none;
+    border-bottom-color: #ddd;
+    cursor: default;
+}
+
 .contact-grid-index .thumb-index:hover {
     color: white;
     background-image: -webkit-gradient(

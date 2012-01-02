@@ -378,6 +378,10 @@ define("io.ox/core/desktop",
 
         ox.ui.App = App;
 
+        App.canRestore = function () {
+            return (appCache.get('savepoints') || []).length > 0;
+        };
+
         App.restore = function () {
             _(appCache.get('savepoints') || []).each(function (obj) {
                 require([obj.module], function (m) {
