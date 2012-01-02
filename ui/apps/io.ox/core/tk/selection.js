@@ -25,6 +25,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
 
         var self = this,
             multiple = true,
+            editable = false,
             selectedItems = {},
             observedItems = [],
             observedItemsIndex = {},
@@ -46,7 +47,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
             fnKey;
 
         isMultiple = function (e) {
-            return multiple && (e && e.metaKey);
+            return editable || (multiple && (e && e.metaKey));
         };
 
         isRange = function (e) {
@@ -136,14 +137,19 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
         select = function (id) {
             var key = self.serialize(id);
             selectedItems[key] = id;
-            getNode(key).addClass(self.classSelected).intoViewport(container);
+            getNode(key)
+                .addClass(self.classSelected)
+                .find('input.reflect-selection').attr('checked', 'checked').end()
+                .intoViewport(container);
             last = id;
         };
 
         deselect = function (id) {
             var key = self.serialize(id);
             delete selectedItems[key];
-            getNode(key).removeClass(self.classSelected);
+            getNode(key)
+                .find('input.reflect-selection').removeAttr('checked').end()
+                .removeClass(self.classSelected);
         };
 
         toggle = function (id) {
@@ -206,7 +212,9 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
                 node = $(nodes[i]);
                 // is selected?
                 if (isSelected(node.attr('data-obj-id'))) {
-                    node.addClass(self.classSelected);
+                    node
+                        .find('input.reflect-selection').attr('checked', 'checked').end()
+                        .addClass(self.classSelected);
                 }
             }
             return this;
@@ -217,6 +225,14 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
          */
         this.setMultiple = function (flag) {
             multiple = !!flag;
+            return this;
+        };
+
+        /**
+         * Set editable mode
+         */
+        this.setEditable = function (flag) {
+            editable = !!flag;
             return this;
         };
 

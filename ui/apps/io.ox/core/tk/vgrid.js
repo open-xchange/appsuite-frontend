@@ -39,7 +39,8 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
 
             isEmpty = true;
 
-        this.node = $('<' + o.tagName + '>').addClass(o.defaultClassName);
+        this.node = $('<' + o.tagName + '>')
+            .addClass(o.defaultClassName);
 
         this.add = function (obj) {
             if (obj && obj.build) {
@@ -129,10 +130,24 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
 
         // target node
         var node = $(target).empty().addClass('vgrid'),
+            // reference for private functions
+            self = this,
             // first run
             firstRun = true,
             // inner container
-            container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(node),
+            scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node),
+            container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
+            // bottom toolbar
+            fnToggleEditable = function (e) {
+                    var grid = e.data.grid;
+                    grid.setEditable(!grid.getEditable());
+                },
+            toolbar = $('<div>').addClass('vgrid-toolbar')
+                .append(
+                    $('<a>', { href: '#' }).addClass('action-link').text('Edit')
+                    .on('click', { grid: this }, fnToggleEditable)
+                )
+                .appendTo(node),
             // item template
             template = new Template(),
             // label template
@@ -170,17 +185,18 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             mult = 1.5,
             // properties
             props = {},
-            // reference for private functions
-            self = this,
             // shortcut
             isArray = _.isArray,
             // pending fetch
             pending = false,
+            // edit mode
+            editable = false,
             // private methods
             scrollToLabel,
             hScrollToLabel,
             paintLabels,
             processLabels,
+            cloneRow,
             paint,
             resize,
             loadAll,
@@ -201,7 +217,8 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         scrollToLabel = function (index) {
             var obj = labels.list[index];
             if (obj !== undefined) {
-                node.stop()
+                scrollpane
+                    .stop()
                     .animate({
                         scrollTop: obj.top
                     }, 250, function () {
@@ -243,6 +260,19 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 clone.node.appendTo(container);
             }
             clone = null;
+        };
+
+        cloneRow = function (template) {
+            // get clone
+            var clone = template.getClone();
+            // add checkbox for edit mode
+            clone.node.prepend(
+                $('<div>').addClass('vgrid-cell-checkbox')
+                .append(
+                    $('<input>', { type: 'checkbox' }).addClass('reflect-selection')
+                )
+            );
+            return clone;
         };
 
         processLabels = function () {
@@ -320,7 +350,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                     }
                     // no data? (happens if list request fails)
                     if (!data[i]) {
-                        pool[i] = clone = template.getClone();
+                        pool[i] = clone = cloneRow(template);
                     }
                     row = pool[i];
                     row.appendTo(container);
@@ -374,7 +404,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             for (; i < numRows; i++) {
                 if (i >= pool.length) {
                     // get clone
-                    clone = template.getClone();
+                    clone = cloneRow(template);
                     frag.appendChild(clone.node[0]);
                     // add to pool
                     pool.push(clone);
@@ -483,7 +513,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         };
 
         fnScroll = function () {
-            var top = node.scrollTop(),
+            var top = scrollpane.scrollTop(),
                 index = getIndex(top);
             // checks bounds
             if (index >= bounds.bottom - 2) {
@@ -529,7 +559,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
 
         this.paint = function () {
             if (firstRun) {
-                node.on('selectstart', false)
+                scrollpane.on('selectstart', false)
                     .on('scroll', fnScroll)
                     .on('click dblclick', '.vgrid-label', hScrollToLabel);
                 firstRun = false;
@@ -592,11 +622,31 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         };
 
         this.scrollTop = function () {
-            return node.scrollTop();
+            return scrollpane.scrollTop();
         };
 
         this.keyboard = function (flag) {
             this.selection.keyboard(flag);
+        };
+
+        this.getToolbar = function () {
+            return toolbar;
+        };
+
+        this.getEditable = function () {
+            return editable;
+        };
+
+        this.setEditable = function (flag) {
+            if (flag) {
+                node.addClass('editable');
+                this.selection.setEditable(true);
+                editable = true;
+            } else {
+                node.removeClass('editable');
+                this.selection.setEditable(false);
+                editable = false;
+            }
         };
 
         this.prop = function (key, value) {

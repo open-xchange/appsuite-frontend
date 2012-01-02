@@ -297,10 +297,12 @@ define("io.ox/mail/api",
 
     // refresh
     api.bind('refresh!', function (folder) {
-        api.getAllThreads({ folder: folder }, false)
-            .done(function () {
-                api.trigger('refresh.all');
-            });
+        if (ox.online) {
+            api.getAllThreads({ folder: folder }, false)
+                .done(function () {
+                    api.trigger('refresh.all');
+                });
+        }
     });
 
     return api;

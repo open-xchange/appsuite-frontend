@@ -391,13 +391,31 @@ a.button.default-action {
 /* vGrid */
 
 .vgrid {
+}
+
+.vgrid .vgrid-scrollpane {
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    z-index: 1;
+    bottom: 28px;
 }
 
 .vgrid, .vgrid:focus {
     outline: none;
+}
+
+.vgrid-toolbar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    line-height: 12px;
+    padding: 8px 13px 8px 13px;
+    overflow: hidden;
+    border-top: 1px solid mix(@color, @background, 200%/15);
+    background-color: #f5f5f5;
+    z-index: 2;
 }
 
 .vgrid-cell {
@@ -430,6 +448,21 @@ a.button.default-action {
 
 .no-ellipsis .vgrid-cell * {
     white-space: normal;
+}
+
+.vgrid-cell-checkbox {
+    width: 30px;
+    height: 100% !important;
+    float: left;
+    display: none;
+}
+
+.vgrid-cell-checkbox input {
+    border: 0px none;
+}
+
+.vgrid.editable .vgrid-cell-checkbox {
+    display: block;
 }
 
 .vgrid-cell.odd {

@@ -255,11 +255,11 @@ define("io.ox/core/main",
                 ox.ui.App.restore();
             });
 
-        if (autoLaunch.length === 0) {
+        if (autoLaunch.length === 0 && !ox.ui.App.canRestore()) {
             drawDesktop();
         }
 
-        if (autoLaunch.length || location.hash === '#!') {
+        if (autoLaunch.length || ox.ui.App.canRestore() || location.hash === '#!') {
             // instant fade out
             $("#background_loader").idle().hide();
             def.resolve();
