@@ -263,6 +263,19 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             clone = null;
         };
 
+        cloneRow = function (template) {
+            // get clone
+            var clone = template.getClone();
+            // add checkbox for edit mode
+            clone.node.prepend(
+                $('<div>').addClass('vgrid-cell-checkbox')
+                .append(
+                    $('<input>', { type: 'checkbox' }).addClass('reflect-selection')
+                )
+            );
+            return clone;
+        };
+
         cloneRow = (function () {
 
             var check = $('<div>')
