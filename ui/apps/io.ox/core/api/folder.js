@@ -11,14 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/api/folder",
-    ["io.ox/core/http", "io.ox/core/cache"], function (http, cache) {
+define('io.ox/core/api/folder',
+    ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
 
-    "use strict";
+    'use strict';
 
     var // folder object cache
-        folderCache = new cache.SimpleCache("folder", true),
-        subFolderCache = new cache.SimpleCache("subfolder", true),
+        folderCache = new cache.SimpleCache('folder', true),
+        subFolderCache = new cache.SimpleCache('subfolder', true),
 
         // magic permission check
         perm = function (bits, offset) {
@@ -33,11 +33,11 @@ define("io.ox/core/api/folder",
             if (opt.cache === false || !cache.contains(id)) {
                 // cache miss!
                 return http.GET({
-                        module: "folders",
+                        module: 'folders',
                         params: {
-                            action: "get",
+                            action: 'get',
                             id: id,
-                            tree: "1"
+                            tree: '1'
                         }
                     })
                     .done(function (data, timestamp) {
@@ -45,7 +45,7 @@ define("io.ox/core/api/folder",
                         cache.add(data.id, data);
                     })
                     .fail(function (error) {
-                        console.error("folder.get", id, error);
+                        console.error('folder.get', id, error);
                     });
             } else {
                 // cache hit
@@ -58,7 +58,7 @@ define("io.ox/core/api/folder",
         get: function (options) {
             // options
             var opt = _.extend({
-                    folder: "1",
+                    folder: '1',
                     event: false,
                     cache: true,
                     storage: null
@@ -92,6 +92,44 @@ define("io.ox/core/api/folder",
             } else {
                 return getFolder(opt, opt.folder);
             }
+        },
+
+        getSubFolders: function (options) {
+            // options
+            var opt = _.extend({
+                    folder: '1',
+                    all: false,
+                    event: false,
+                    cache: true,
+                    storage: null
+                }, options || {}),
+                // get cache
+                cache = opt.storage || subFolderCache;
+            // cache miss?
+            if (opt.cache === false || !cache.contains(opt.folder)) {
+                // cache miss!
+                return http.GET({
+                        module: 'folders',
+                        params: {
+                            action: 'list',
+                            parent: opt.folder,
+                            tree: '1',
+                            all: opt.all ? '1' : '0'
+                        },
+                        appendColumns: true
+                    })
+                    .done(function (data, timestamp) {
+                        // add to cache
+                        cache.add(data.id, data);
+                    })
+                    .fail(function (error) {
+                        console.error('folder.getSubFolders', opt.folder, error);
+                    });
+            } else {
+                // cache hit
+                return $.Deferred().resolve(cache.get(opt.folder));
+            }
+
         },
 
         derive: {

@@ -226,6 +226,7 @@ define("io.ox/core/desktop",
                                     }
                                     // update grid?
                                     if (grid) {
+                                        grid.clear();
                                         grid.prop('folder', folder);
                                         grid.refresh();
                                     }

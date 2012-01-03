@@ -5,7 +5,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) 2004-2009 Open-Xchange, Inc.
+ * Copyright (C) 2004-2012 Open-Xchange, Inc.
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -27,6 +27,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
             multiple = true,
             editable = false,
             selectedItems = {},
+            bHasIndex = true,
             observedItems = [],
             observedItemsIndex = {},
             last = {},
@@ -73,18 +74,24 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
         };
 
         selectPrevious = function (e) {
-            var index = (getIndex(last) || 0) - 1;
-            if (index >= 0) {
-                clear();
-                apply(observedItems[index], e);
+            var index;
+            if (bHasIndex) {
+                index = (getIndex(last) || 0) - 1;
+                if (index >= 0) {
+                    clear();
+                    apply(observedItems[index], e);
+                }
             }
         };
 
         selectNext = function (e) {
-            var index = (getIndex(last) || 0) + 1;
-            if (index < observedItems.length) {
-                clear();
-                apply(observedItems[index], e);
+            var index;
+            if (bHasIndex) {
+                index = (getIndex(last) || 0) + 1;
+                if (index < observedItems.length) {
+                    clear();
+                    apply(observedItems[index], e);
+                }
             }
         };
 
@@ -106,7 +113,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
         click = function (e) {
             var node = $(this),
                 key = node.attr('data-obj-id'),
-                id = observedItems[getIndex(key)];
+                id = bHasIndex ? observedItems[getIndex(key)] : key;
             // exists?
             if (id !== undefined) {
                 // clear?
@@ -123,7 +130,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
         };
 
         getIndex = function (id) {
-            return observedItemsIndex[self.serialize(id)];
+            return bHasIndex ? observedItemsIndex[self.serialize(id)] : 0;
         };
 
         getNode = function (id) {
@@ -174,6 +181,12 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
             return typeof obj === 'object' ? obj.folder_id + '.' + obj.id : obj;
         };
 
+        this.setSerializer = function (fn) {
+            this.serialize = function (obj) {
+                return typeof obj === 'object' ? fn(obj) : obj;
+            };
+        };
+
         /**
          * Initialize
          */
@@ -220,6 +233,26 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
             return this;
         };
 
+        this.clearIndex = function () {
+            observedItems = [];
+            observedItemsIndex = {};
+            return this;
+        };
+
+        this.addToIndex = function (obj) {
+            var key = this.serialize(obj);
+            if (observedItemsIndex[key] === undefined) {
+                observedItemsIndex[key] = observedItems.length;
+                observedItems.push(obj);
+            }
+            return this;
+        };
+
+        this.hasIndex = function (flag) {
+            bHasIndex = !!flag;
+            return this;
+        };
+
         /**
          * Set multiple mode
          */
@@ -233,6 +266,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
          */
         this.setEditable = function (flag) {
             editable = !!flag;
+            last = {};
             return this;
         };
 
@@ -288,26 +322,28 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
         };
 
         this.selectRange = function (a, b) {
-            // get indexes
-            a = getIndex(a);
-            b = getIndex(b);
-            // swap?
-            if (a > b) {
-                var tmp = a;
-                a = b;
-                b = tmp;
+            if (bHasIndex) {
+                // get indexes
+                a = getIndex(a);
+                b = getIndex(b);
+                // swap?
+                if (a > b) {
+                    var tmp = a;
+                    a = b;
+                    b = tmp;
+                }
+                // loop
+                for (; a <= b; a++) {
+                    select(observedItems[a]);
+                }
+                // event
+                this.trigger('change', this.get());
             }
-            // loop
-            for (; a <= b; a++) {
-                select(observedItems[a]);
-            }
-            // event
-            this.trigger('change', this.get());
             return this;
         };
 
         this.selectFirst = function () {
-            if (observedItems.length) {
+            if (bHasIndex && observedItems.length) {
                 clear();
                 select(observedItems[0]);
                 this.trigger('change', this.get());
@@ -346,7 +382,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
 
     Selection.extend = function (obj, node) {
         // extend object
-        obj.selection = new Selection(node);
+        return (obj.selection = new Selection(node));
     };
 
     return Selection;

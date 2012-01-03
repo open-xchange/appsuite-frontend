@@ -35,6 +35,7 @@ define("io.ox/contacts/main",
         left,
         thumbs,
         right,
+        foldertree,
         // full thumb index
         fullIndex = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
@@ -53,7 +54,7 @@ define("io.ox/contacts/main",
         app.setWindow(win);
 
         // left panel
-        left = $("<div/>")
+        left = $("<div>")
             .addClass("leftside border-left border-right")
             .css({
                 left: 38 + "px",
@@ -62,8 +63,46 @@ define("io.ox/contacts/main",
             })
             .appendTo(win.nodes.main);
 
+        // folder tree
+        foldertree = $("<div>").addClass('abs border-right')
+            .css({
+                backgroundColor: 'white',
+                right: 'auto',
+                width: GRID_WIDTH + 'px',
+                zIndex: 2
+            })
+            .hide()
+            .appendTo(win.nodes.main);
+
+        var foldertreeVisible = false;
+
+        var fnChangeFolder = function (selection) {
+            var folder = selection[0];
+            if (folder.module === 'contacts') {
+                app.folder.set(folder.id);
+                foldertree.hide();
+                foldertreeVisible = false;
+            }
+        };
+
+        win.nodes.title.on('click', { open: false, node: foldertree, tree: null }, function (e) {
+            if (foldertreeVisible) {
+                e.data.node.hide();
+            } else {
+                e.data.node.show();
+                if (e.data.tree === null) {
+                    require(['io.ox/core/tk/foldertree'], function (tree) {
+                        var t = e.data.tree = tree.create(e.data.node);
+                        t.selection.bind('change', fnChangeFolder);
+                        t.paint();
+                    });
+                }
+            }
+            foldertreeVisible = !foldertreeVisible;
+        });
+
         // thumb index
-        thumbs = $("<div/>")
+        thumbs = $("<div>")
             .addClass("atb contact-grid-index border-right")
             .css({
                 left: "0px",
@@ -72,7 +111,7 @@ define("io.ox/contacts/main",
             .appendTo(win.nodes.main);
 
         // right panel
-        right = $("<div/>")
+        right = $("<div>")
             .css({ left: GRID_WIDTH + "px", overflow: "auto" })
             .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main);
@@ -86,9 +125,9 @@ define("io.ox/contacts/main",
                 var name, email, job;
                 this
                     .addClass("contact")
-                    .append(name = $("<div/>").addClass("fullname"))
-                    .append(email = $("<div/>"))
-                    .append(job = $("<div/>").addClass("bright-text"));
+                    .append(name = $("<div>").addClass("fullname"))
+                    .append(email = $("<div>"))
+                    .append(job = $("<div>").addClass("bright-text"));
                 return { name: name, job: job, email: email };
             },
             set: function (data, fields, index) {
