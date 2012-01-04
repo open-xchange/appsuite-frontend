@@ -232,4 +232,5 @@ define('io.ox/core/tk/foldertree',
     }
 
     return FolderTree;
+
 });

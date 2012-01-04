@@ -36,6 +36,7 @@ define("io.ox/contacts/main",
         left,
         thumbs,
         right,
+        foldertree,
         // full thumb index
         fullIndex = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
