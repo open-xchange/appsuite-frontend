@@ -171,7 +171,9 @@ define('io.ox/core/commons', [], function () {
                 require(['io.ox/core/tk/foldertree'], initTree);
             };
 
-            app.getWindow().nodes.title.on('click', fnFirstShow);
+            app.getWindow().nodes.title
+                .css('cursor', 'pointer')
+                .on('click', fnFirstShow);
         }
     };
 });

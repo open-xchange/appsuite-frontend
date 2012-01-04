@@ -65,7 +65,11 @@ define('io.ox/core/tk/simple-colorpicker', [], function () {
         }
 
         function blur(e) {
+            var val = $.trim($(this).val());
             e.data.node.detach();
+            if (/^#([0-9A-F]{3}|[0-9A-F]{6})$/.test(val)) {
+                preview.css('backgroundColor', val).insertAfter(self);
+            }
         }
 
         if (this.get(0).tagName === 'INPUT') {
