@@ -140,6 +140,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             // bottom toolbar
             fnToggleEditable = function (e) {
                     var grid = e.data.grid;
+                    e.preventDefault();
                     grid.setEditable(!grid.getEditable());
                 },
             toolbar = $('<div>').addClass('vgrid-toolbar')
@@ -212,7 +213,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         event.Dispatcher.extend(this);
 
         // selection
-        Selection.extend(this, node);
+        Selection.extend(this, scrollpane);
 
         scrollToLabel = function (index) {
             var obj = labels.list[index];
@@ -274,6 +275,24 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             );
             return clone;
         };
+
+        cloneRow = (function () {
+
+            var check = $('<div>')
+                .addClass('vgrid-cell-checkbox')
+                .append(
+                    $('<input>', { type: 'checkbox' })
+                    .addClass('reflect-selection')
+                );
+
+            return function (template) {
+                // get clone
+                var clone = template.getClone();
+                // add checkbox for edit mode
+                clone.node.prepend(check.clone());
+                return clone;
+            };
+        }());
 
         processLabels = function () {
             // remove existing labels
@@ -422,29 +441,31 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             frag = null;
         };
 
-        loadAll = function () {
-
-            function apply(list) {
-                // changed?
-                if (list.length !== all.length || !_.isEqual(all, list)) {
-                    // store
-                    all = list;
-                    // initialize selection
-                    self.selection.init(all);
-                    // adjust container height and hide it
-                    container.css({
-                        height: (numLabels * labelHeight + all.length * itemHeight) + 'px'
-                    });
-                    // process labels
-                    processLabels();
-                    paintLabels();
-                }
-                // trigger event
-                self.trigger('ids-loaded');
-                // paint items
-                var offset = getIndex(node.scrollTop()) - (numRows - numVisible);
-                return paint(offset);
+        function apply(list, quiet) {
+            // changed?
+            if (list.length !== all.length || !_.isEqual(all, list)) {
+                // store
+                all = list;
+                // initialize selection
+                self.selection.init(all);
+                // adjust container height and hide it
+                container.css({
+                    height: (numLabels * labelHeight + all.length * itemHeight) + 'px'
+                });
+                // process labels
+                processLabels();
+                paintLabels();
             }
+            // trigger event
+            if (!quiet) {
+                self.trigger('ids-loaded');
+            }
+            // paint items
+            var offset = getIndex(node.scrollTop()) - (numRows - numVisible);
+            return paint(offset);
+        }
+
+        loadAll = function () {
 
             if (all.length === 0) {
                 // be busy
@@ -570,6 +591,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         this.repaint = function () {
             var offset = getIndex(node.scrollTop()) - (numRows - numVisible);
             return paint(offset);
+        };
+
+        this.clear = function () {
+            apply([], true);
         };
 
         this.refresh = function () {

@@ -16,12 +16,13 @@
 define("io.ox/files/main",
     ["io.ox/files/view-detail",
      "io.ox/files/api",
+     "io.ox/core/commons",
      "io.ox/core/tk/vgrid",
      "io.ox/core/tk/upload",
      "io.ox/core/tk/dialogs",
      "io.ox/help/hints",
      "less!io.ox/files/style.css"
-    ], function (viewDetail, api, VGrid, upload, dialogs, hints) {
+    ], function (viewDetail, api, commons, VGrid, upload, dialogs, hints) {
 
     "use strict";
 
@@ -46,6 +47,9 @@ define("io.ox/files/main",
             search: true
         }));
 
+        // folder tree
+        commons.addFolderTree(app, GRID_WIDTH, 'infostore');
+
         // left side
         left = $("<div>").addClass("leftside withStatusBar border-right")
             .css({
@@ -65,6 +69,7 @@ define("io.ox/files/main",
 
         // Grid
         grid = new VGrid(left);
+
         // add template
         grid.addTemplate({
             build: function () {
@@ -79,31 +84,8 @@ define("io.ox/files/main",
             }
         });
 
-        // all request
-        grid.setAllRequest(function () {
-            return api.getAll();
-        });
-
-        // search request
-        grid.setAllRequest("search", function () {
-            return api.search(win.search.query);
-        });
-
-        // list request
-        grid.setListRequest(function (ids) {
-            return api.getList(ids);
-        });
-
-        /*
-         * Search handling
-         */
-        win.bind("search", function (q) {
-            grid.setMode("search");
-        });
-
-        win.bind("cancel-search", function () {
-            grid.setMode("all");
-        });
+        commons.wireGridAndAPI(grid, api);
+        commons.wireGridAndSearch(grid, win, api);
 
         // LFO callback
         function drawDetail(data) {
@@ -122,24 +104,6 @@ define("io.ox/files/main",
             }
         });
 
-        // explicit keyboard support
-        win.bind("show", function () {
-            grid.selection.keyboard(true);
-        });
-        win.bind("hide", function () {
-            grid.selection.keyboard(false);
-        });
-
-        // bind all refresh
-        api.bind("refresh.all", function (data) {
-            grid.refresh();
-        });
-
-        // bind list refresh
-        api.bind("refresh.list", function (data) {
-            grid.repaint();
-        });
-
         // delete item
         api.bind("beforedelete", function () {
             statusBar.busy();
@@ -148,11 +112,6 @@ define("io.ox/files/main",
 
         api.bind("afterdelete", function () {
             statusBar.idle();
-        });
-
-        // go!
-        win.show(function () {
-            grid.paint();
         });
 
         // Uploads
@@ -167,7 +126,6 @@ define("io.ox/files/main",
                     });
             }
         });
-
 
         var dropZone = upload.dnd.createDropZone();
 
@@ -263,6 +221,13 @@ define("io.ox/files/main",
 //            pane.relativeTo(uploadButton);
         }());
 
+        commons.wireGridAndWindow(grid, win);
+        commons.wireFirstRefresh(app, api);
+        commons.wireGridAndRefresh(grid, api);
+
+        // go!
+        commons.addFolderSupport(app, grid, 'infostore')
+            .done(commons.showWindow(win, grid));
     });
 
     return {

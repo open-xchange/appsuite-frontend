@@ -19,8 +19,9 @@ define("io.ox/contacts/main",
      "io.ox/contacts/view-detail",
      "io.ox/core/config",
      "io.ox/core/extensions",
+     "io.ox/core/commons",
      "less!io.ox/contacts/style.css"
-    ], function (util, api, VGrid, hints, viewDetail, config, ext) {
+    ], function (util, api, VGrid, hints, viewDetail, config, ext, commons) {
 
     "use strict";
 
@@ -35,6 +36,7 @@ define("io.ox/contacts/main",
         left,
         thumbs,
         right,
+        foldertree,
         // full thumb index
         fullIndex = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
@@ -53,7 +55,7 @@ define("io.ox/contacts/main",
         app.setWindow(win);
 
         // left panel
-        left = $("<div/>")
+        left = $("<div>")
             .addClass("leftside border-left border-right")
             .css({
                 left: 38 + "px",
@@ -62,8 +64,11 @@ define("io.ox/contacts/main",
             })
             .appendTo(win.nodes.main);
 
+        // folder tree
+        commons.addFolderTree(app, GRID_WIDTH, 'contacts');
+
         // thumb index
-        thumbs = $("<div/>")
+        thumbs = $("<div>")
             .addClass("atb contact-grid-index border-right")
             .css({
                 left: "0px",
@@ -72,7 +77,7 @@ define("io.ox/contacts/main",
             .appendTo(win.nodes.main);
 
         // right panel
-        right = $("<div/>")
+        right = $("<div>")
             .css({ left: GRID_WIDTH + "px", overflow: "auto" })
             .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main);
@@ -86,9 +91,9 @@ define("io.ox/contacts/main",
                 var name, email, job;
                 this
                     .addClass("contact")
-                    .append(name = $("<div/>").addClass("fullname"))
-                    .append(email = $("<div/>"))
-                    .append(job = $("<div/>").addClass("bright-text"));
+                    .append(name = $("<div>").addClass("fullname"))
+                    .append(email = $("<div>"))
+                    .append(job = $("<div>").addClass("bright-text"));
                 return { name: name, job: job, email: email };
             },
             set: function (data, fields, index) {
@@ -121,31 +126,8 @@ define("io.ox/contacts/main",
             return (i === 0 || prefix !== current) ? prefix : false;
         };
 
-        // all request
-        grid.setAllRequest(function () {
-            return api.getAll({ folder: this.prop('folder') });
-        });
-
-        // search request
-        grid.setAllRequest("search", function () {
-            return api.search(win.search.query);
-        });
-
-        // list request
-        grid.setListRequest(function (ids) {
-            return api.getList(ids);
-        });
-
-        /*
-         * Search handling
-         */
-        win.bind("search", function (q) {
-            grid.setMode("search");
-        });
-
-        win.bind("cancel-search", function () {
-            grid.setMode("all");
-        });
+        commons.wireGridAndAPI(grid, api);
+        commons.wireGridAndSearch(grid, win, api);
 
         // LFO callback
         var showContact, drawContact, drawFail;
@@ -185,7 +167,6 @@ define("io.ox/contacts/main",
         /**
          * Thumb index
          */
-
         function drawThumb(char, enabled) {
             var node = $('<div>')
                 .addClass('thumb-index border-bottom' + (enabled ? '' : ' thumb-index-disabled'))
@@ -207,38 +188,17 @@ define("io.ox/contacts/main",
             });
         });
 
-        win.bind("show", function () {
-            grid.selection.keyboard(true);
-        });
-        win.bind("hide", function () {
-            grid.selection.keyboard(false);
-        });
-
-        // bind all refresh
-        api.bind("refresh.all", function (data) {
-            grid.refresh();
-        });
-
-        // bind list refresh
-        api.bind("refresh.list", function (data) {
-            grid.repaint();
-        });
+        commons.wireGridAndWindow(grid, win);
+        commons.wireFirstRefresh(app, api);
+        commons.wireGridAndRefresh(grid, api);
 
         app.getGrid = function () {
             return grid;
         };
 
         // go!
-        app.folder
-            .updateTitle(win)
-            .updateGrid(grid)
-            .setType('contacts')
-            .set('6')
-            .done(function () {
-                win.show(function () {
-                    grid.paint();
-                });
-            });
+        commons.addFolderSupport(app, grid, 'contacts', '6')
+            .done(commons.showWindow(win, grid));
     });
 
     return {

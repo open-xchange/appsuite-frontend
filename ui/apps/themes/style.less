@@ -398,7 +398,7 @@ a.button.default-action {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     z-index: 1;
-    bottom: 28px;
+    bottom: 34px;
 }
 
 .vgrid, .vgrid:focus {
@@ -410,7 +410,7 @@ a.button.default-action {
     right: 0;
     bottom: 0;
     left: 0;
-    line-height: 12px;
+    line-height: 18px;
     padding: 8px 13px 8px 13px;
     overflow: hidden;
     border-top: 1px solid mix(@color, @background, 200%/15);
@@ -429,7 +429,7 @@ a.button.default-action {
 }
 
 .vgrid-cell-padding {
-    padding: 8px 13px 8px 13px; /* for consinstent elements */
+    padding: 8px 13px 8px 13px; /* for consistent elements */
 }
 
 .vgrid-cell.hover {
@@ -1216,4 +1216,94 @@ input.nice-input {
 
 .autocomplete-popup .autocomplete-item.selected {
     background-color: #eee;
+}
+
+/* folder tree */
+
+.io-ox-foldertree {
+    overflow: auto;
+    padding: 13px 0 4px 0;
+}
+
+.io-ox-foldertree .folder {
+    line-height: 18px;
+    padding: 2px 13px 2px 13px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.io-ox-foldertree .folder .folder-label {
+    font-family: OpenSans, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+.io-ox-foldertree .folder.selected {
+    background-color: @selected-background !important;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, lighten(@selected-background, 20%)),
+        color-stop(1, darken(@selected-background, 5%))
+    ) !important;
+    background-image: -o-linear-gradient(top, lighten(@selected-background, 20%) 0%, darken(@selected-background, 5%) 100%) !important;
+    background-image: -moz-linear-gradient(
+        center top,
+        lighten(@selected-background, 20%) 0%,
+        darken(@selected-background, 5%) 100%
+    ) !important;
+    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@selected-background, 20%)", endColorstr="darken(@selected-background, 5%)~")";
+}
+
+.io-ox-foldertree .folder.selected .folder-label {
+    color: white;
+}
+
+.io-ox-foldertree .folder.greyed-out {
+    color: #bbb;
+}
+
+.io-ox-foldertree .folder.greyed-out .folder-icon {
+    opacity: 0.30;
+}
+
+.io-ox-foldertree .subfolders { }
+
+.io-ox-foldertree .folder-arrow {
+    float: left;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-position: 0px 4px;
+    background-image: none;
+}
+
+.io-ox-foldertree .folder-icon {
+    float: left;
+    width: 16px;
+    height: 16px;
+    border: 0px none;
+    margin: 0 6px 0 0;
+}
+
+.io-ox-foldertree .folder-counter {
+    color: #888;
+    font-size: 11px;
+    padding: 0 0.75em 0 0.75em;
+    text-align: right;
+    margin-left: 0.5em;
+    display: inline-block;
+    float: right;
+}
+
+.borderradius .io-ox-foldertree .folder-counter {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.borderradius .io-ox-foldertree .folder.selected .folder-counter {
+    color: white;
+    background-color: #035696;
 }

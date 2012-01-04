@@ -15,12 +15,13 @@ define("io.ox/mail/main",
     ["io.ox/mail/util",
      "io.ox/mail/api",
      "io.ox/core/extensions",
+     "io.ox/core/commons",
      "io.ox/core/tk/vgrid",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, VGrid, viewDetail, tmpl) {
+    ], function (util, api, ext, commons, VGrid, viewDetail, tmpl) {
 
     'use strict';
 
@@ -58,6 +59,9 @@ define("io.ox/mail/main",
         win.addClass("io-ox-mail-main");
         app.setWindow(win);
 
+        // folder tree
+        commons.addFolderTree(app, GRID_WIDTH, 'mail');
+
         // left panel
         left = $("<div>")
             .addClass("leftside border-right")
@@ -81,36 +85,8 @@ define("io.ox/mail/main",
         // add template
         grid.addTemplate(tmpl.main);
 
-        // all request
-        grid.setAllRequest(function () {
-            return api.getAllThreads({ folder: this.prop('folder') });
-        });
-
-        // list request
-        grid.setListRequest(function (ids) {
-            return api.getThreads(ids);
-        });
-
-        // search: all request
-        grid.setAllRequest("search", function () {
-            return api.search(win.search.query);
-        });
-
-        // search: list request
-        grid.setListRequest("search", function (ids) {
-            return api.getList(ids);
-        });
-
-        /*
-         * Search handling
-         */
-        win.bind("search", function (q) {
-            grid.setMode("search");
-        });
-
-        win.bind("cancel-search", function () {
-            grid.setMode("all");
-        });
+        commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads');
+        commons.wireGridAndSearch(grid, win, api);
 
         var showMail, drawThread, drawMail, drawFail;
 
@@ -185,40 +161,13 @@ define("io.ox/mail/main",
             }
         });
 
-        win.bind("show", function () {
-            grid.selection.keyboard(true);
-        });
-        win.bind("hide", function () {
-            grid.selection.keyboard(false);
-        });
-
-        win.bind('open', function () {
-            if (api.needsRefresh(app.folder.get())) {
-                api.trigger('refresh!', app.folder.get());
-            }
-        });
-
-        // bind all refresh
-        api.bind("refresh.all", function () {
-            grid.refresh();
-        });
-
-        // bind list refresh
-        api.bind("refresh.list", function () {
-            grid.repaint();
-        });
+        commons.wireGridAndWindow(grid, win);
+        commons.wireFirstRefresh(app, api);
+        commons.wireGridAndRefresh(grid, api);
 
         // go!
-        app.folder
-            .updateTitle(win)
-            .updateGrid(grid)
-            .setType('mail')
-            .setDefault()
-            .done(function () {
-                win.show(function () {
-                    grid.paint();
-                });
-            });
+        commons.addFolderSupport(app, grid, 'mail')
+            .done(commons.showWindow(win, grid));
     });
 
     return {
