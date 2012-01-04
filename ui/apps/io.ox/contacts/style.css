@@ -207,6 +207,7 @@
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	-webkit-font-smoothing: antialiased;
+	overflow: auto;
 }
 
 .contact_edit_frame .block .field {
@@ -243,4 +244,9 @@
 	width: 400px;
 	padding: 5px;
 	border: solid 1px #888;
+}
+
+
+.contact_edit_frame .hidden{
+	display: none;
 }
