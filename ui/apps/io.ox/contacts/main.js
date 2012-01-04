@@ -19,8 +19,9 @@ define("io.ox/contacts/main",
      "io.ox/contacts/view-detail",
      "io.ox/core/config",
      "io.ox/core/extensions",
+     "io.ox/core/commons",
      "less!io.ox/contacts/style.css"
-    ], function (util, api, VGrid, hints, viewDetail, config, ext) {
+    ], function (util, api, VGrid, hints, viewDetail, config, ext, commons) {
 
     "use strict";
 
@@ -53,7 +54,7 @@ define("io.ox/contacts/main",
         app.setWindow(win);
 
         // left panel
-        left = $("<div/>")
+        left = $("<div>")
             .addClass("leftside border-left border-right")
             .css({
                 left: 38 + "px",
@@ -62,8 +63,11 @@ define("io.ox/contacts/main",
             })
             .appendTo(win.nodes.main);
 
+        // folder tree
+        commons.addFolderTree(app, GRID_WIDTH, 'contacts');
+
         // thumb index
-        thumbs = $("<div/>")
+        thumbs = $("<div>")
             .addClass("atb contact-grid-index border-right")
             .css({
                 left: "0px",
@@ -72,7 +76,7 @@ define("io.ox/contacts/main",
             .appendTo(win.nodes.main);
 
         // right panel
-        right = $("<div/>")
+        right = $("<div>")
             .css({ left: GRID_WIDTH + "px", overflow: "auto" })
             .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main);
@@ -86,9 +90,9 @@ define("io.ox/contacts/main",
                 var name, email, job;
                 this
                     .addClass("contact")
-                    .append(name = $("<div/>").addClass("fullname"))
-                    .append(email = $("<div/>"))
-                    .append(job = $("<div/>").addClass("bright-text"));
+                    .append(name = $("<div>").addClass("fullname"))
+                    .append(email = $("<div>"))
+                    .append(job = $("<div>").addClass("bright-text"));
                 return { name: name, job: job, email: email };
             },
             set: function (data, fields, index) {
@@ -229,16 +233,8 @@ define("io.ox/contacts/main",
         };
 
         // go!
-        app.folder
-            .updateTitle(win)
-            .updateGrid(grid)
-            .setType('contacts')
-            .set('6')
-            .done(function () {
-                win.show(function () {
-                    grid.paint();
-                });
-            });
+        commons.addFolderSupport(app, grid, 'contacts', '6')
+            .done(commons.showWindow(win, grid));
     });
 
     return {

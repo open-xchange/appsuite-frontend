@@ -15,12 +15,13 @@ define("io.ox/mail/main",
     ["io.ox/mail/util",
      "io.ox/mail/api",
      "io.ox/core/extensions",
+     "io.ox/core/commons",
      "io.ox/core/tk/vgrid",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, VGrid, viewDetail, tmpl) {
+    ], function (util, api, ext, commons, VGrid, viewDetail, tmpl) {
 
     'use strict';
 
@@ -57,6 +58,9 @@ define("io.ox/mail/main",
 
         win.addClass("io-ox-mail-main");
         app.setWindow(win);
+
+        // folder tree
+        commons.addFolderTree(app, GRID_WIDTH, 'mail');
 
         // left panel
         left = $("<div>")

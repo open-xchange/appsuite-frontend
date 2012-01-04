@@ -26,15 +26,15 @@ define("io.ox/mail/view-grid-template",
                 this.addClass("mail")
                     .append(
                         $("<div>")
-                            .append(date = $("<span/>").addClass("date"))
-                            .append(from = $("<span/>").addClass("from"))
+                            .append(date = $("<span>").addClass("date"))
+                            .append(from = $("<span>").addClass("from"))
                     )
                     .append(
                         $("<div>")
-                            .append(threadSize = $("<div/>").addClass("threadSize"))
-                            .append(attachment = $("<span/>").addClass("attachment"))
-                            .append(priority = $("<span/>").addClass("priority"))
-                            .append(subject = $("<span/>").addClass("subject"))
+                            .append(threadSize = $("<div>").addClass("threadSize"))
+                            .append(attachment = $("<span>").addClass("attachment"))
+                            .append(priority = $("<span>").addClass("priority"))
+                            .append(subject = $("<span>").addClass("subject"))
                     )
                     .append(
                         flag = $("<div>").addClass("flag abs")

@@ -214,7 +214,7 @@ utils.concat("pre-core.js",
         "config.js", "session.js", "gettext.js", "i18n.js",
         "tk/selection.js", "tk/vgrid.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js",
-        "api/folder.js", "collection.js", "desktop.js", "main.js"
+        "api/folder.js", "collection.js", "desktop.js", "commons.js", "main.js"
     ]), { type: "source" }
 );
 

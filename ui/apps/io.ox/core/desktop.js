@@ -212,6 +212,19 @@ define("io.ox/core/desktop",
 
                 that = {
 
+                    unset: function () {
+                        // unset
+                        folder = null;
+                        // update window title?
+                        if (win) {
+                            win.setTitle('');
+                        }
+                        // update grid?
+                        if (grid) {
+                            grid.clear();
+                        }
+                    },
+
                     set: function (id) {
                         var def = new $.Deferred();
                         if (id !== undefined && id !== null) {
@@ -226,6 +239,7 @@ define("io.ox/core/desktop",
                                     }
                                     // update grid?
                                     if (grid) {
+                                        grid.clear();
                                         grid.prop('folder', folder);
                                         grid.refresh();
                                     }

@@ -16,12 +16,13 @@
 define("io.ox/files/main",
     ["io.ox/files/view-detail",
      "io.ox/files/api",
+     "io.ox/core/commons",
      "io.ox/core/tk/vgrid",
      "io.ox/core/tk/upload",
      "io.ox/core/tk/dialogs",
      "io.ox/help/hints",
      "less!io.ox/files/style.css"
-    ], function (viewDetail, api, VGrid, upload, dialogs, hints) {
+    ], function (viewDetail, api, commons, VGrid, upload, dialogs, hints) {
 
     "use strict";
 
@@ -45,6 +46,9 @@ define("io.ox/files/main",
             title: "Private files",
             search: true
         }));
+
+        // folder tree
+        commons.addFolderTree(app, GRID_WIDTH, 'infostore');
 
         // left side
         left = $("<div>").addClass("leftside withStatusBar border-right")
@@ -81,7 +85,7 @@ define("io.ox/files/main",
 
         // all request
         grid.setAllRequest(function () {
-            return api.getAll();
+            return api.getAll({ folder: this.prop('folder') });
         });
 
         // search request
@@ -151,9 +155,8 @@ define("io.ox/files/main",
         });
 
         // go!
-        win.show(function () {
-            grid.paint();
-        });
+        commons.addFolderSupport(app, grid, 'infostore')
+            .done(commons.showWindow(win, grid));
 
         // Uploads
         var queue = upload.createQueue({
