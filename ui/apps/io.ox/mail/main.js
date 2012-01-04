@@ -85,36 +85,8 @@ define("io.ox/mail/main",
         // add template
         grid.addTemplate(tmpl.main);
 
-        // all request
-        grid.setAllRequest(function () {
-            return api.getAllThreads({ folder: this.prop('folder') });
-        });
-
-        // list request
-        grid.setListRequest(function (ids) {
-            return api.getThreads(ids);
-        });
-
-        // search: all request
-        grid.setAllRequest("search", function () {
-            return api.search(win.search.query);
-        });
-
-        // search: list request
-        grid.setListRequest("search", function (ids) {
-            return api.getList(ids);
-        });
-
-        /*
-         * Search handling
-         */
-        win.bind("search", function (q) {
-            grid.setMode("search");
-        });
-
-        win.bind("cancel-search", function () {
-            grid.setMode("all");
-        });
+        commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads');
+        commons.wireGridAndSearch(grid, win, api);
 
         var showMail, drawThread, drawMail, drawFail;
 
@@ -189,40 +161,13 @@ define("io.ox/mail/main",
             }
         });
 
-        win.bind("show", function () {
-            grid.selection.keyboard(true);
-        });
-        win.bind("hide", function () {
-            grid.selection.keyboard(false);
-        });
-
-        win.bind('open', function () {
-            if (api.needsRefresh(app.folder.get())) {
-                api.trigger('refresh!', app.folder.get());
-            }
-        });
-
-        // bind all refresh
-        api.bind("refresh.all", function () {
-            grid.refresh();
-        });
-
-        // bind list refresh
-        api.bind("refresh.list", function () {
-            grid.repaint();
-        });
+        commons.wireGridAndWindow(grid, win);
+        commons.wireFirstRefresh(app, api);
+        commons.wireGridAndRefresh(grid, api);
 
         // go!
-        app.folder
-            .updateTitle(win)
-            .updateGrid(grid)
-            .setType('mail')
-            .setDefault()
-            .done(function () {
-                win.show(function () {
-                    grid.paint();
-                });
-            });
+        commons.addFolderSupport(app, grid, 'mail')
+            .done(commons.showWindow(win, grid));
     });
 
     return {

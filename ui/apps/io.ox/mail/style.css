@@ -87,7 +87,7 @@
     background-color: #e0e0e0;
     color: #888;
     text-align: center;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 .borderradius .vgrid-cell.mail.selected .threadSize {

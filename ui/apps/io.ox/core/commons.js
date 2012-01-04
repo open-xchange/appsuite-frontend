@@ -31,6 +31,82 @@ define('io.ox/core/commons', [], function () {
         },
 
         /**
+         * Wire grid & API
+         */
+        wireGridAndAPI: function (grid, api, getAll, getList) {
+            // all request
+            grid.setAllRequest(function () {
+                return api[getAll || 'getAll']({ folder: this.prop('folder') });
+            });
+            // list request
+            grid.setListRequest(function (ids) {
+                return api[getList || 'getList'](ids);
+            });
+        },
+
+        /**
+         * Wire grid & window
+         */
+        wireGridAndWindow: function (grid, win) {
+            // show
+            win.bind('show', function () {
+                grid.selection.keyboard(true);
+            });
+            // hide
+            win.bind('hide', function () {
+                grid.selection.keyboard(false);
+            });
+        },
+
+        /**
+         * Wire first refresh
+         */
+        wireFirstRefresh: function (app, api) {
+            // open (first show)
+            app.getWindow().bind('open', function () {
+                if (api.needsRefresh(app.folder.get())) {
+                    api.trigger('refresh!', app.folder.get());
+                }
+            });
+        },
+
+        /**
+         * Wire grid and API refresh
+         */
+        wireGridAndRefresh: function (grid, api) {
+            // bind all refresh
+            api.bind('refresh.all', function () {
+                grid.refresh();
+            });
+            // bind list refresh
+            api.bind('refresh.list', function () {
+                grid.repaint();
+            });
+        },
+
+        /**
+         * Wire Grid and window's search
+         */
+        wireGridAndSearch: function (grid, win, api) {
+            // search: all request
+            grid.setAllRequest('search', function () {
+                return api.search(win.search.query);
+            });
+            // search: list request
+            grid.setListRequest('search', function (ids) {
+                return api.getList(ids);
+            });
+            // on search
+            win.bind('search', function (q) {
+                grid.setMode('search');
+            });
+            // on cancel search
+            win.bind('cancel-search', function () {
+                grid.setMode('all');
+            });
+        },
+
+        /**
          * Add folder support
          */
         addFolderSupport: function (app, grid, type, defaultFolderId) {
@@ -54,7 +130,7 @@ define('io.ox/core/commons', [], function () {
                 visible = false,
                 fnChangeFolder, fnToggle, initTree, fnFirstShow;
 
-            container = $("<div>")
+            container = $('<div>')
                 .addClass('abs border-right')
                 .css(
                 {   backgroundColor: 'white',

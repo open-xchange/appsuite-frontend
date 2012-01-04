@@ -141,7 +141,7 @@ define('io.ox/core/tk/foldertree',
 
             nodes.folder = $('<div>')
                 .addClass('folder selectable')
-                .css('paddingLeft', (13 + level * 20) + 'px')
+                .css('paddingLeft', (13 + level * 22) + 'px')
                 .on('dblclick', toggleState);
 
             nodes.sub = $('<div>')
@@ -178,7 +178,7 @@ define('io.ox/core/tk/foldertree',
                     // draw children
                     def = isOpen ? paintChildren() : $.when();
                     // add to DOM
-                    nodes.folder.append(nodes.arrow, nodes.icon, nodes.label, nodes.counter);
+                    nodes.folder.append(nodes.arrow, nodes.icon, nodes.counter, nodes.label);
                     container.append(nodes.folder, nodes.sub);
                     // Done
                     return def;

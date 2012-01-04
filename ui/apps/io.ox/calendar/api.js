@@ -118,6 +118,11 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                         pattern: query
                     }
                 });
+        },
+
+        needsRefresh: function (folder) {
+            // has entries in 'all' cache for specific folder
+            return all_cache[folder] !== undefined;
         }
     };
 

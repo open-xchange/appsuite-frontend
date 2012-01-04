@@ -12,9 +12,14 @@
  */
 
 define("io.ox/calendar/main",
-    ["io.ox/calendar/api", "io.ox/calendar/util", "io.ox/calendar/view-detail",
-     "io.ox/core/config", "io.ox/core/tk/vgrid", "io.ox/calendar/view-grid-template",
-     "less!io.ox/calendar/style.css"], function (api, util, viewDetail, config, VGrid, tmpl) {
+    ["io.ox/calendar/api",
+     "io.ox/calendar/util",
+     "io.ox/calendar/view-detail",
+     "io.ox/core/config",
+     "io.ox/core/commons",
+     "io.ox/core/tk/vgrid",
+     "io.ox/calendar/view-grid-template",
+     "less!io.ox/calendar/style.css"], function (api, util, viewDetail, config, commons, VGrid, tmpl) {
 
     "use strict";
 
@@ -34,11 +39,13 @@ define("io.ox/calendar/main",
 
         // get window
         app.setWindow(win = ox.ui.createWindow({
-            title: util.getDate(),
             search: true
         }));
 
         win.addClass("io-ox-calendar-main");
+
+        // folder tree
+        commons.addFolderTree(app, GRID_WIDTH, 'calendar');
 
         // DOM scaffold
 
@@ -74,35 +81,12 @@ define("io.ox/calendar/main",
         // requires new label?
         grid.requiresLabel = tmpl.requiresLabel;
 
-        // all request
-        grid.setAllRequest(function () {
-            return api.getAll();
-        });
+        commons.wireGridAndAPI(grid, api);
+        commons.wireGridAndSearch(grid, win, api);
 
-        // list request
-        grid.setListRequest(function (ids) {
-            return api.getList(ids);
-        });
-
-        // search: all request
-        grid.setAllRequest("search", function () {
-            return api.search(win.search.query);
-        });
-
-        // search: list request
+        // special search: list request
         grid.setListRequest("search", function (ids) {
             return $.Deferred().resolve(ids);
-        });
-
-        /*
-         * Search handling
-         */
-        win.bind("search", function (q) {
-            grid.setMode("search");
-        });
-
-        win.bind("cancel-search", function () {
-            grid.setMode("all");
         });
 
         var showAppointment, drawAppointment, drawFail;
@@ -139,27 +123,13 @@ define("io.ox/calendar/main",
             }
         });
 
-        win.bind("show", function () {
-            grid.selection.keyboard(true);
-        });
-        win.bind("hide", function () {
-            grid.selection.keyboard(false);
-        });
-
-        // bind all refresh
-        api.bind("refresh.all", function (data) {
-            grid.refresh();
-        });
-
-        // bind list refresh
-        api.bind("refresh.list", function (data) {
-            grid.repaint();
-        });
+        commons.wireGridAndWindow(grid, win);
+        commons.wireFirstRefresh(app, api);
+        commons.wireGridAndRefresh(grid, api);
 
         // go!
-        win.show(function () {
-            grid.paint();
-        });
+        commons.addFolderSupport(app, grid, 'calendar')
+            .done(commons.showWindow(win, grid));
     });
 
     return {

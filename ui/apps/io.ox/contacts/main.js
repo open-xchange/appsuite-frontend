@@ -126,31 +126,8 @@ define("io.ox/contacts/main",
             return (i === 0 || prefix !== current) ? prefix : false;
         };
 
-        // all request
-        grid.setAllRequest(function () {
-            return api.getAll({ folder: this.prop('folder') });
-        });
-
-        // search request
-        grid.setAllRequest("search", function () {
-            return api.search(win.search.query);
-        });
-
-        // list request
-        grid.setListRequest(function (ids) {
-            return api.getList(ids);
-        });
-
-        /*
-         * Search handling
-         */
-        win.bind("search", function (q) {
-            grid.setMode("search");
-        });
-
-        win.bind("cancel-search", function () {
-            grid.setMode("all");
-        });
+        commons.wireGridAndAPI(grid, api);
+        commons.wireGridAndSearch(grid, win, api);
 
         // LFO callback
         var showContact, drawContact, drawFail;
@@ -190,7 +167,6 @@ define("io.ox/contacts/main",
         /**
          * Thumb index
          */
-
         function drawThumb(char, enabled) {
             var node = $('<div>')
                 .addClass('thumb-index border-bottom' + (enabled ? '' : ' thumb-index-disabled'))
@@ -212,22 +188,9 @@ define("io.ox/contacts/main",
             });
         });
 
-        win.bind("show", function () {
-            grid.selection.keyboard(true);
-        });
-        win.bind("hide", function () {
-            grid.selection.keyboard(false);
-        });
-
-        // bind all refresh
-        api.bind("refresh.all", function (data) {
-            grid.refresh();
-        });
-
-        // bind list refresh
-        api.bind("refresh.list", function (data) {
-            grid.repaint();
-        });
+        commons.wireGridAndWindow(grid, win);
+        commons.wireFirstRefresh(app, api);
+        commons.wireGridAndRefresh(grid, api);
 
         app.getGrid = function () {
             return grid;
