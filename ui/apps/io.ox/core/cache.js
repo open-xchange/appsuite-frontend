@@ -115,7 +115,7 @@ define('io.ox/core/cache', function () {
                         key = localStorage.key(i);
                         // match?
                         if (reg.test(key)) {
-                            tmp.push(key);
+                            tmp.push(key.substr(id.length + 1));
                         }
                     }
                 } else {
@@ -237,8 +237,8 @@ define('io.ox/core/cache', function () {
 
         // list values
         this.values = function () {
-            var i = 0, keys = index.keys(), $i = keys.length;
-            var tmp = [], key;
+            var i = 0, keys = index.keys(), $i = keys.length,
+                tmp = [], key;
             for (; i < $i; i++) {
                 key = keys[i];
                 tmp.push(index.get(key).data);

@@ -105,7 +105,7 @@ define("io.ox/core/tk/dialogs", function () {
             }
         };
 
-        this.show = function () {
+        this.show = function (callback) {
 
             var dim = {
                 width: o.width || nodes.popup.width(),
@@ -153,6 +153,10 @@ define("io.ox/core/tk/dialogs", function () {
 
             if (o.easyOut) {
                 $(document).on("keydown", closeViaEscapeKey);
+            }
+
+            if (callback) {
+                callback.call(nodes.popup);
             }
 
             return deferred;

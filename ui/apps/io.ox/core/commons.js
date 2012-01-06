@@ -128,7 +128,8 @@ define('io.ox/core/commons', [], function () {
 
             var container,
                 visible = false,
-                fnChangeFolder, fnToggle, initTree, fnFirstShow;
+                top = 0,
+                fnChangeFolder, fnShow, fnToggle, loadTree, initTree;
 
             container = $('<div>')
                 .addClass('abs border-right')
@@ -145,6 +146,7 @@ define('io.ox/core/commons', [], function () {
                 var folder = selection[0];
                 if (folder.module === type) {
                     app.folder.unset();
+                    top = container.scrollTop();
                     container.fadeOut('fast', function () {
                         app.folder.set(folder.id);
                     });
@@ -152,28 +154,50 @@ define('io.ox/core/commons', [], function () {
                 }
             };
 
+            fnShow = function () {
+                if (!visible) {
+                    container.show().scrollTop(top);
+                    visible = true;
+                }
+                return $.when();
+            };
+
             fnToggle = function () {
-                container[visible ? 'hide' : 'show']();
-                visible = !visible;
+                if (visible) {
+                    top = container.scrollTop();
+                    container.hide();
+                    visible = false;
+                } else {
+                    fnShow();
+                }
             };
 
             initTree = function (FolderTree) {
-                var tree = new FolderTree(container, { type: type });
+                var tree = app.folderTree = new FolderTree(container, { type: type });
                 tree.selection.bind('change', fnChangeFolder);
-                tree.paint();
-                fnToggle();
-                app.getWindow().nodes.title.on('click', fnToggle);
-                fnFirstShow = initTree = null;
+                return tree.paint()
+                    .done(function () {
+                        tree.selection.set(app.folder.get(), true);
+                        app.getWindow().nodes.title.on('click', fnToggle);
+                        container.idle();
+                        initTree = loadTree = null;
+                    });
             };
 
-            fnFirstShow = function () {
-                $(this).off('click', fnFirstShow);
-                require(['io.ox/core/tk/foldertree'], initTree);
+            loadTree = function () {
+                container.busy();
+                fnToggle();
+                app.showFolderTree = fnShow;
+                app.getWindow().nodes.title.off('click', loadTree);
+                return require(['io.ox/core/tk/foldertree']).pipe(initTree);
             };
+
+            app.showFolderTree = loadTree;
+            app.folderTree = null;
 
             app.getWindow().nodes.title
                 .css('cursor', 'pointer')
-                .on('click', fnFirstShow);
+                .on('click', loadTree);
         }
     };
 });

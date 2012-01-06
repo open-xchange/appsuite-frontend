@@ -182,8 +182,8 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             labels = { nodes: $() },
             // bounds of currently visible area
             bounds = { top: 0, bottom: 0 },
-            // multiplier defines how much detailed data is loaded
-            mult = 1.5,
+            // multiplier defines how much detailed data is loaded (must be >= 2)
+            mult = 3,
             // properties
             props = {},
             // shortcut
@@ -198,6 +198,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             paintLabels,
             processLabels,
             cloneRow,
+            currentOffset = null,
             paint,
             resize,
             loadAll,
@@ -322,30 +323,36 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             // keep positive
             offset = Math.max(0, offset);
 
+            if (offset === currentOffset) {
+                return $.when();
+            } else {
+                currentOffset = offset;
+            }
+
             // pending?
             var def;
-            if (pending) {
+            if (paint.pending) {
                 // enqueue latest paint
-                def = $.Deferred();
-                pending = [offset, def];
+                paint.pending = [offset, (def = $.Deferred())];
                 return def;
             } else {
-                pending = true;
+                paint.pending = true;
             }
 
             // continuation
             var cont = function (data) {
 
                 // pending?
-                if (isArray(pending)) {
+                if (isArray(paint.pending)) {
                     // process latest paint
-                    offset = pending[0];
-                    def = pending[1];
-                    pending = false;
+                    offset = paint.pending[0];
+                    def = paint.pending[1];
+                    paint.pending = false;
+                    //currentOffset = offset;
                     paint(offset).done(def.resolve);
                     return;
                 } else {
-                    pending = false;
+                    paint.pending = false;
                 }
 
                 // vars
@@ -398,7 +405,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
 
                 // remember bounds
                 bounds.top = offset;
-                bounds.bottom = offset + numRows - numVisible;
+                bounds.bottom = offset + numRows;
             };
 
             // get item
@@ -446,6 +453,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             if (list.length !== all.length || !_.isEqual(all, list)) {
                 // store
                 all = list;
+                currentOffset = null;
                 // initialize selection
                 self.selection.init(all);
                 // adjust container height and hide it
@@ -533,18 +541,20 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             return i;
         };
 
-        fnScroll = function () {
-            var top = scrollpane.scrollTop(),
-                index = getIndex(top);
-            // checks bounds
-            if (index >= bounds.bottom - 2) {
-                // below bottom
-                paint(index - (numVisible / 2 >> 0));
-            } else if (index < bounds.top + 2 && bounds.top !== 0) {
-                // above top
-                paint(index - numVisible);
+        fnScroll = _.throttle(function () {
+            if (paint.pending === false) {
+                var top = scrollpane.scrollTop(),
+                    index = getIndex(top);
+                // checks bounds
+                if (index >= bounds.bottom - numVisible - 2) {
+                    // below bottom
+                    paint(index - (numVisible >> 1));
+                } else if (index < bounds.top + 2 && bounds.top !== 0) {
+                    // above top
+                    paint(index - numVisible * 1.5);
+                }
             }
-        };
+        }, 100);
 
         // public methods
 

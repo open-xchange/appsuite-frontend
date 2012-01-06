@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/api/folder',
-    ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
+    ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/config'], function (http, cache, config) {
 
     'use strict';
 
@@ -129,7 +129,49 @@ define('io.ox/core/api/folder',
                 // cache hit
                 return $.Deferred().resolve(cache.get(opt.folder));
             }
+        },
 
+        create: function (options) {
+
+            // options
+            var opt = $.extend({
+                folder: '1',
+                tree: '1',
+                event: true
+            }, options || {});
+
+            // default data
+            opt.data = $.extend({
+                module: 'mail',
+                title: 'New Folder',
+                subscribed: 1
+            }, opt.data || {});
+
+            // get parent folder to inherit permissions
+            return this.get({ folder: opt.folder })
+                .pipe(function (parent) {
+                    // inherit rights only if folder isn't a system folder (type = 5)
+                    if (parent.type === 5) {
+                        opt.data.permissions = [{ group: false, bits: 403710016, entity: config.get('identifier') }];
+                    } else {
+                        opt.data.permissions = parent.permissions;
+                    }
+                    // go!
+                    return http.PUT({
+                            module: 'folders',
+                            params: {
+                                action: 'new',
+                                folder_id: opt.folder,
+                                tree: '1'
+                            },
+                            data: opt.data,
+                            appendColumns: false
+                        })
+                        .done(function () {
+                            // clear cache TODO: be smarter!
+                            subFolderCache.clear();
+                        });
+                });
         },
 
         derive: {
