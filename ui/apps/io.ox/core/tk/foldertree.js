@@ -19,7 +19,10 @@ define('io.ox/core/tk/foldertree',
     var PATH = ox.base + '/apps/themes/default/icons/',
         DEFAULT = PATH + 'folder-default.png',
         OPEN = 'url(' + PATH + 'folder-open.png)',
-        CLOSE = 'url(' + PATH + 'folder-close.png)';
+        CLOSE = 'url(' + PATH + 'folder-close.png)',
+
+        tmplFolder = $('<div>').addClass('folder selectable').css('paddingLeft', '13px'),
+        tmplSub = $('<div>').addClass('subfolders').hide();
 
     /**
      * Tree node class
@@ -32,13 +35,16 @@ define('io.ox/core/tk/foldertree',
             children = null,
             hasChildren = false,
             painted = false,
-            open = true, //false,
-            bSkip = false,
+            open = false,
             self = this,
 
             // internal functions
+            skip = function () {
+                return tree.root === self && tree.options.skipRoot;
+            },
+
             paintChildren = function () {
-                return self.getChildren()
+                return self.loadChildren()
                     .pipe(function (children) {
                         // tricky one liner: we invoke 'paint' for all child nodes.
                         // invoke returns a nice array of all returns values which are deferred objects.
@@ -49,7 +55,7 @@ define('io.ox/core/tk/foldertree',
             },
 
             updateArrow = function (node) {
-                var isOpen = hasChildren && (bSkip || open),
+                var isOpen = hasChildren && (skip() || open),
                     image = hasChildren ? (isOpen ? CLOSE : OPEN) : 'none';
                 node = node || nodes.folder.find('.folder-arrow');
                 node.css('backgroundImage', image);
@@ -74,14 +80,13 @@ define('io.ox/core/tk/foldertree',
                 }
             };
 
-        // skip folder? - used by root node
-        this.skip = function (flag) {
-            bSkip = !!flag;
-            return this;
+        // get sub folders
+        this.getChildren = function () {
+            return children;
         };
 
-        // get sub folders - creates instances of TreeNode - does not yet paint them
-        this.getChildren = function () {
+        // load sub folders - creates instances of TreeNode - does not yet paint them
+        this.loadChildren = function () {
             if (children === null) {
                 return api.getSubFolders({ folder: id })
                     .pipe(function (data) {
@@ -93,7 +98,7 @@ define('io.ox/core/tk/foldertree',
                                     return folder.module !== 'system' || folder.subfolders;
                                 })
                                 .map(function (folder) {
-                                    return new TreeNode(tree, folder.id, bSkip ? level : level + 1);
+                                    return new TreeNode(tree, folder.id, skip() ? level : level + 1);
                                 })
                                 .value()
                         );
@@ -139,15 +144,15 @@ define('io.ox/core/tk/foldertree',
         // paint tree node - loads and paints sub folder if open
         this.paint = function (container) {
 
-            nodes.folder = $('<div>')
-                .addClass('folder selectable')
-                .css('paddingLeft', (13 + level * 22) + 'px')
-                .on('dblclick', toggleState);
+            nodes.folder = tmplFolder.clone().on('dblclick', toggleState);
 
-            nodes.sub = $('<div>')
-                .addClass('subfolders').hide();
+            if (level > 0) {
+                nodes.folder.css('paddingLeft', (13 + level * 22) + 'px');
+            }
 
-            if (bSkip) {
+            nodes.sub = tmplSub.clone();
+
+            if (skip()) {
                 nodes.folder.hide();
             }
 
@@ -155,7 +160,8 @@ define('io.ox/core/tk/foldertree',
                 .pipe(function (data) {
                     // vars
                     hasChildren = data.subfolders || data.subscr_subflds;
-                    var isOpen = hasChildren && (bSkip || open),
+                    open = open || (data.module === 'system' || data.module === tree.options.type);
+                    var isOpen = hasChildren && (skip() || open),
                         def;
                     // create DOM nodes
                     updateArrow(
@@ -197,16 +203,17 @@ define('io.ox/core/tk/foldertree',
     function FolderTree(container, opt) {
 
         this.options = _.extend({
-                root: '1',
+                rootFolderId: '1',
+                skipRoot: true,
                 type: null
             }, opt);
 
-        // root node
-        var rootNode = new TreeNode(this, this.options.root, 0).skip(true),
-            painting = null,
+        // painting
+        var painting = null,
             // ref
             self = this;
 
+        this.root = new TreeNode(this, this.options.rootFolderId, 0);
         this.container = $(container);
 
         // selection
@@ -220,7 +227,7 @@ define('io.ox/core/tk/foldertree',
             if (painting === null) {
                 container.addClass('io-ox-foldertree').empty();
                 this.selection.clearIndex();
-                return (painting = rootNode.paint(this.container)
+                return (painting = this.root.paint(this.container)
                     .always(function () {
                         self.selection.update();
                         painting = null;

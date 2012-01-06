@@ -128,7 +128,7 @@ define('io.ox/core/commons', [], function () {
 
             var container,
                 visible = false,
-                fnChangeFolder, fnToggle, initTree, fnFirstShow;
+                fnChangeFolder, fnShow, fnToggle, loadTree, initTree;
 
             container = $('<div>')
                 .addClass('abs border-right')
@@ -152,26 +152,45 @@ define('io.ox/core/commons', [], function () {
                 }
             };
 
+            fnShow = function () {
+                if (!visible) {
+                    container.show();
+                    visible = true;
+                }
+                return $.when();
+            };
+
             fnToggle = function () {
                 container[visible ? 'hide' : 'show']();
                 visible = !visible;
             };
 
             initTree = function (FolderTree) {
-                var tree = new FolderTree(container, { type: type });
+                var tree = app.folderTree = new FolderTree(container, { type: type });
                 tree.selection.bind('change', fnChangeFolder);
-                tree.paint();
+                return tree.paint()
+                    .done(function () {
+                        tree.selection.set(app.folder.get());
+                        app.getWindow().nodes.title.on('click', fnToggle);
+                        container.idle();
+                        initTree = loadTree = null;
+                    });
+            };
+
+            loadTree = function () {
+                container.busy();
                 fnToggle();
-                app.getWindow().nodes.title.on('click', fnToggle);
-                fnFirstShow = initTree = null;
+                app.showFolderTree = fnShow;
+                app.getWindow().nodes.title.off('click', loadTree);
+                return require(['io.ox/core/tk/foldertree']).pipe(initTree);
             };
 
-            fnFirstShow = function () {
-                $(this).off('click', fnFirstShow);
-                require(['io.ox/core/tk/foldertree'], initTree);
-            };
+            app.showFolderTree = loadTree;
+            app.folderTree = null;
 
-            app.getWindow().nodes.title.on('click', fnFirstShow);
+            app.getWindow().nodes.title
+                .css('cursor', 'pointer')
+                .on('click', loadTree);
         }
     };
 });
