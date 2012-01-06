@@ -47,21 +47,24 @@ define("io.ox/contacts/edit/view-form",
         var field = $('<input>', {name: o.name})
         .on('change', {name: o.name, node: o.node}, function (event) {
             var tr = $(event.data.node).find('tr.' + event.data.name);
-            if (event.data.name === 'first_name' || 'last_name' || 'title' || 'company' || 'position' || 'profession') {
-                renewHeader();
-            }
             if (tr.find('input').val() === '') {
                 tr.removeClass('filled');
             } else {
                 tr.addClass('filled');
             }
         }),
-            td = $("<td>").addClass("value").append(field),
-            tr = $("<tr>").addClass(o.id + ' ' + o.name)
-            .append(
-                $("<td>").addClass("label").text(o.label)
-            )
-            .append(td);
+        td = $("<td>").addClass("value").append(field),
+        tr = $("<tr>").addClass(o.id + ' ' + o.name)
+        .append(
+        $("<td>").addClass("label").text(o.label)
+        )
+        .append(td);
+       // auto-update header?
+        if (/^(first_name|last_name|title|company|position|profession)$/.test(o.name)) {
+            field.on('change keyup', { name: o.name }, function (e) {
+                _.defer(renewHeader);
+            });
+        }
         if (!o.value) {
             if (_.isFunction(o.fn)) {
                 o.fn(td);
@@ -78,15 +81,15 @@ define("io.ox/contacts/edit/view-form",
     }
 
     function addSwitch(node, id) {
-        var button = $('<a>').addClass(id).text('+'),
-            tr = $('<tr>').append($('<td>'), $('<td>').text(id + ' ').append(button));
+        var button = $('<a>').addClass(id).text(id + ' +'),
+            tr = $('<tr>').append($('<td>'), $('<td>').append(button));
         button.on('click', {id: id}, function (event) {
-            if (button.text() === '+') {
+            if (button.text() === id + ' +') {
                 $(node).find('.' + event.data.id + '.hidden').removeClass('hidden').addClass('visible');
-                button.text('-');
+                button.text(id + ' -');
             } else {
                 $(node).find('.' + event.data.id + '.visible').removeClass('visible').addClass('hidden');
-                button.text('+');
+                button.text(id + ' +');
             }
         });
         tr.appendTo(node);
@@ -270,21 +273,21 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("first name"),
+                label: gt("First name"),
                 name: 'first_name',
                 value: data.first_name,
                 node: this,
                 id: id
             });
             addField({
-                label: gt("last name"),
+                label: gt("Last name"),
                 name: 'last_name',
                 value: data.last_name,
                 node: this,
                 id: id
             });
             addField({
-                label: gt("display name"),
+                label: gt("Display name"),
                 name: 'display_name',
                 value: data.display_name,
                 node: this,
@@ -304,7 +307,7 @@ define("io.ox/contacts/edit/view-form",
             }
 
             addField({
-                label: gt("second name"),
+                label: gt("Second name"),
                 name: 'second_name',
                 value: data.second_name,
                 node: this,
@@ -312,14 +315,15 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("suffix"),
+                label: gt("Suffix"),
                 name: 'suffix',
                 value: data.suffix,
                 node: this,
+                fn: 'hidden',
                 id: id
             });
             addField({
-                label: gt("nickname"),
+                label: gt("Nickname"),
                 name: 'nickname',
                 value: data.nickname,
                 node: this,
@@ -337,14 +341,14 @@ define("io.ox/contacts/edit/view-form",
         draw: function (data) {
             var id = 'contact-email';
             addField({
-                label: gt("email1"),
+                label: gt("Email 1"),
                 name: 'email1',
                 value: data.email1,
                 node: this,
                 id: id
             });
             addField({
-                label: gt("email2"),
+                label: gt("Email 2"),
                 name: 'email2',
                 value: data.email2,
                 node:  this,
@@ -352,7 +356,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("email3"),
+                label: gt("Email 3"),
                 name: 'email3',
                 value: data.email3,
                 node: this,
@@ -370,7 +374,7 @@ define("io.ox/contacts/edit/view-form",
         draw: function (data) {
             var id = 'contact-phone';
             addField({
-                label: gt("telephone business1"),
+                label: gt("Telephone business 1"),
                 name: 'telephone_business1',
                 value: data.telephone_business1,
                 node: this,
@@ -378,7 +382,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("telephone business2"),
+                label: gt("Telephone business 2"),
                 name: 'telephone_business2',
                 value: data.telephone_business2,
                 node: this,
@@ -386,7 +390,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("fax business"),
+                label: gt("Fax business"),
                 name: 'fax_business',
                 value: data.fax_business,
                 node: this,
@@ -394,7 +398,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("telephone callback"),
+                label: gt("Telephone callback"),
                 name: 'telephone_callback',
                 value: data.telephone_callback,
                 node: this,
@@ -402,7 +406,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("telephone car"),
+                label: gt("Telephone car"),
                 name: 'telephone_car',
                 value: data.telephone_car,
                 node: this,
@@ -410,14 +414,14 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("telephone company"),
+                label: gt("Telephone company"),
                 name: 'telephone_company',
                 value: data.telephone_company,
                 node: this,
                 id: id
             });
             addField({
-                label: gt("telephone home1"),
+                label: gt("Telephone home 1"),
                 name: 'telephone_home1',
                 value: data.telephone_home1,
                 node: this,
@@ -425,7 +429,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("telephone home2"),
+                label: gt("Telephone home 2"),
                 name: 'telephone_home2',
                 value: data.telephone_home2,
                 node: this,
@@ -433,7 +437,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("fax home"),
+                label: gt("Fax home"),
                 name: 'fax_home',
                 value: data.fax_home,
                 node: this,
@@ -441,14 +445,14 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("cellular telephone1"),
+                label: gt("Cellular telephone 1"),
                 name: 'cellular_telephone1',
                 value: data.cellular_telephone1,
                 node: this,
                 id: id
             });
             addField({
-                label: gt("cellular telephone2"),
+                label: gt("Cellular telephone 2"),
                 name: 'cellular_telephone2',
                 value: data.cellular_telephone2,
                 node: this,
@@ -456,7 +460,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("telephone other"),
+                label: gt("Telephone other"),
                 name: 'telephone_other',
                 value: data.telephone_other,
                 node: this,
@@ -464,7 +468,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("fax other"),
+                label: gt("Fax other"),
                 name: 'fax_other',
                 value: data.fax_other,
                 node: this,
@@ -472,7 +476,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("telephone isdn"),
+                label: gt("Telephone isdn"),
                 name: 'telephone_isdn',
                 value: data.telephone_isdn,
                 node: this,
@@ -480,7 +484,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("telephone pager"),
+                label: gt("Telephone pager"),
                 name: 'telephone_pager',
                 value: data.telephone_pager,
                 node: this,
@@ -488,7 +492,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("telephone primary"),
+                label: gt("Telephone primary"),
                 name: 'telephone_primary',
                 value: data.telephone_primary,
                 node: this,
@@ -496,7 +500,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("telephone radio"),
+                label: gt("Telephone radio"),
                 name: 'telephone_radio',
                 value: data.telephone_radio,
                 node: this,
@@ -504,7 +508,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("telephone telex"),
+                label: gt("Telephone telex"),
                 name: 'telephone_telex',
                 value: data.telephone_telex,
                 node: this,
@@ -512,7 +516,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("telephone ttytdd"),
+                label: gt("Telephone ttytdd"),
                 name: 'telephone_ttytdd',
                 value: data.telephone_ttytdd,
                 node: this,
@@ -520,15 +524,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("telephone ttytdd"),
-                name: 'telephone_ttytdd',
-                value: data.telephone_ttytdd,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("instant messenger1"),
+                label: gt("Instant messenger 1"),
                 name: 'instant_messenger1',
                 value: data.instant_messenger1,
                 node: this,
@@ -536,7 +532,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("instant messenger2"),
+                label: gt("Instant messenger 2"),
                 name: 'instant_messenger2',
                 value: data.instant_messenger2,
                 node: this,
@@ -544,7 +540,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("telephone ip"),
+                label: gt("Telephone ip"),
                 name: 'telephone_ip',
                 value: data.telephone_ip,
                 node: this,
@@ -552,7 +548,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("telephone_assistant"),
+                label: gt("Telephone_assistant"),
                 name: 'telephone_assistant',
                 value: data.telephone_assistant,
                 node: this,
@@ -570,7 +566,7 @@ define("io.ox/contacts/edit/view-form",
         draw: function (data) {
             var id = 'contact-home-address';
             addField({
-                label: gt("street home"),
+                label: gt("Street home"),
                 name: 'street_home',
                 value: data.street_home,
                 node: this,
@@ -578,7 +574,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("postal code home"),
+                label: gt("Postal code home"),
                 name: 'postal_code_home',
                 value: data.postal_code_home,
                 node: this,
@@ -586,7 +582,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("city home"),
+                label: gt("City home"),
                 name: 'city_home',
                 value: data.city_home,
                 node: this,
@@ -594,7 +590,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("state home"),
+                label: gt("State home"),
                 name: 'state_home',
                 value: data.state_home,
                 node: this,
@@ -602,7 +598,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("country home"),
+                label: gt("Country home"),
                 name: 'country_home',
                 value: data.country_home,
                 node: this,
@@ -620,21 +616,21 @@ define("io.ox/contacts/edit/view-form",
         draw: function (data) {
             var id = 'contact-job';
             addField({
-                label: gt("profession"),
+                label: gt("Profession"),
                 name: 'profession',
                 value: data.profession,
                 node: this,
                 id: id
             });
             addField({
-                label: gt("position"),
+                label: gt("Position"),
                 name: 'position',
                 value: data.position,
                 node:  this,
                 id: id
             });
             addField({
-                label: gt("company"),
+                label: gt("Company"),
                 name: 'company',
                 value: data.company,
                 node: this,

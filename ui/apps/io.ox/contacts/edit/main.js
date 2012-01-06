@@ -56,13 +56,17 @@ define("io.ox/contacts/edit/main",
                 close: true
             });
 
-            formContainer = $("<div/>").addClass("abs contact-edit")
-                .css({
-                    top: "10px",
-                    right: "10px",
-                    bottom: "10px",
-                    left: "10px"
-                });
+            formContainer = $("<div/>").css({
+                top: "10px",
+                right: "10px",
+                bottom: "10px",
+                left: "10px",
+                padding: "13px",
+                'max-width': "700px",
+                position: "absolute",
+                "overflow": "auto"
+
+            });
 
 //            formFrame = $("<div/>").addClass("contact_edit_frame")
 //                .appendTo(formContainer);
