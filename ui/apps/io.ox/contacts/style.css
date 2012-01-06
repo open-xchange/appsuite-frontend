@@ -180,17 +180,16 @@
 
 /*update form*/
 
-.edit1 {
+/*.edit1 {
 	float: left;
 	width: 400px;
-}
+}*/
 
-.edit2 {
+/*.edit2 {
 	float: right;
 	width: 400px;
-}
+}*/
  .contact_edit_frame {
-	font-family: monospace;
 	font-size: 14px;
 	line-height: 21px;
 	color: black;
@@ -249,4 +248,13 @@
 
 .contact_edit_frame .hidden{
 	display: none;
+}
+
+.contact_edit_frame .hidden.filled{
+	display: table-row;
+}
+
+.savebutton, .cancelbutton{
+	width: 40px;
+	float: right;
 }
