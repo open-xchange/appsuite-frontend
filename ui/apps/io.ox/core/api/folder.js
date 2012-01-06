@@ -53,7 +53,7 @@ define('io.ox/core/api/folder',
             }
         };
 
-    return {
+    var api = {
 
         get: function (options) {
             // options
@@ -121,6 +121,10 @@ define('io.ox/core/api/folder',
                     .done(function (data, timestamp) {
                         // add to cache
                         cache.add(opt.folder, data);
+                        // also add to folder cache
+                        _(data).each(function (folder) {
+                            folderCache.add(folder.id, folder);
+                        });
                     })
                     .fail(function (error) {
                         console.error('folder.getSubFolders', opt.folder, error);
@@ -148,7 +152,7 @@ define('io.ox/core/api/folder',
             }, opt.data || {});
 
             // get parent folder to inherit permissions
-            return this.get({ folder: opt.folder })
+            return api.get({ folder: opt.folder })
                 .pipe(function (parent) {
                     // inherit rights only if folder isn't a system folder (type = 5)
                     if (parent.type === 5) {
@@ -167,9 +171,13 @@ define('io.ox/core/api/folder',
                             data: opt.data,
                             appendColumns: false
                         })
-                        .done(function () {
-                            // clear cache TODO: be smarter!
-                            subFolderCache.clear();
+                        .pipe(function (data) {
+                            // wait for updating sub folder cache
+                            return api.getSubFolders({ folder: opt.folder, cache: false })
+                                .pipe(function () {
+                                    // return proper data
+                                    return data;
+                                });
                         });
                 });
         },
@@ -183,6 +191,12 @@ define('io.ox/core/api/folder',
 
         folderCache: folderCache,
 
-        subFolderCache: subFolderCache
+        subFolderCache: subFolderCache,
+
+        needsRefresh: function (folder) {
+            return subFolderCache.contains(folder);
+        }
     };
+
+    return api;
 });
