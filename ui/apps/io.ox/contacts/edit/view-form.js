@@ -20,6 +20,7 @@ define("io.ox/contacts/edit/view-form",
 
     "use strict";
 
+    var app = null;
     // smart join
     var join = function () {
         return _(arguments)
@@ -29,11 +30,34 @@ define("io.ox/contacts/edit/view-form",
         .join(arguments[0] || "");
     };
 
+    function renewHeader() {
+        var nameClearTitle = $('.name.clear-title'),
+            jobClearTitle = $('.job.clear-title'),
+            fieldValueFirstname = $('input[name="first_name"]').val(),
+            fieldValueNachname = $('input[name="last_name"]').val(),
+            fieldValueTitle = $('input[name="title"]').val(),
+            fieldValueCompany = $('input[name="company"]').val(),
+            fieldValuePosition = $('input[name="position"]').val(),
+            fieldValueProfession = $('input[name="profession"]').val();
+        nameClearTitle.text(fieldValueTitle + ' ' + fieldValueNachname + ', ' + fieldValueFirstname);
+        jobClearTitle.text(join(", ", fieldValueCompany, fieldValuePosition, fieldValueProfession));
+    }
 
     function addField(o) {
-        var field = $('<input>', {name: o.name}),
+        var field = $('<input>', {name: o.name})
+        .on('change', {name: o.name, node: o.node}, function (event) {
+            var tr = $(event.data.node).find('tr.' + event.data.name);
+            if (event.data.name === 'first_name' || 'last_name' || 'title' || 'company' || 'position' || 'profession') {
+                renewHeader();
+            }
+            if (tr.find('input').val() === '') {
+                tr.removeClass('filled');
+            } else {
+                tr.addClass('filled');
+            }
+        }),
             td = $("<td>").addClass("value").append(field),
-            tr = $("<tr>").addClass(o.id)
+            tr = $("<tr>").addClass(o.id + ' ' + o.name)
             .append(
                 $("<td>").addClass("label").text(o.label)
             )
@@ -70,8 +94,19 @@ define("io.ox/contacts/edit/view-form",
         tr.appendTo(node);
     }
 
+    function addSubheadline(node, id) {
+        var tr = $('<tr>').append(
+            $('<td>').text(id)
+        );
+        tr.appendTo(node);
+    }
 
-
+    function addSpacer(node) {
+        var tr = $('<tr>').append(
+            $('<td>')
+        );
+        tr.appendTo(node);
+    }
 
     // head
     ext.point("io.ox/contacts/edit/form").extend({
@@ -80,23 +115,27 @@ define("io.ox/contacts/edit/view-form",
         draw: function (data) {
             var node = $("<tr>").appendTo(this);
             ext.point("io.ox/contacts/edit/form/head").invoke("draw", node, data);
+            addSpacer(this);
         }
     });
-
 
     ext.point("io.ox/contacts/edit/form/head").extend({
         index: 100,
         id: 'contact-picture',
         draw: function (data) {
+            var node = $('<td>');
+            ext.point("io.ox/contacts/edit/form/head/button").invoke("draw", node, data);
             this.append(
-                $("<td>")
+                $('<td>')
                 .css({ verticalAlign: "top", paddingBottom: "0" })
                 .append(
                     api.getPicture(data).addClass("picture")
-                )
+                ).append($('<a>').attr('href', '#').text('change picture').on('click', function () {
+                    $('tr.contact-image').removeClass('hidden');
+                }))
             )
             .append(
-                $("<td>")
+                $(node)
                 .css({ verticalAlign: "top" })
                 .append(
                     $("<div>")
@@ -118,12 +157,115 @@ define("io.ox/contacts/edit/view-form",
         }
     });
 
+    ext.point("io.ox/contacts/edit/form").extend({
+        index: 120,
+        id: 'contact-image',
+        draw: function (data) {
+            var id = 'contact-image',
+                form = $('<form/>',
+                  {   'accept-charset': 'UTF-8',
+                      'enctype': 'multipart/form-data',
+                      'id': 'contactUploadImage',
+                      'method': 'POST',
+                      'name': 'contactUploadImage',
+                      'target': 'blank.html'
+
+                  })
+                  .append(
+                      $('<input/>',
+                      {   'id': 'image1',
+                          'name': 'file',
+                          'type': 'file'
+                      })
+                  )
+                  .append(
+                      $('<iframe/>',
+                      {   'name': 'hiddenframePicture',
+                          'src': 'blank.html'
+                      })
+                      .css('display', 'none')
+                  );
+            var td = $('<td>', { colspan: '2' }).append(form);
+            this.append($('<tr>').addClass(id + ' hidden').append(td));
+
+        }
+    });
+
+    ext.point("io.ox/contacts/edit/form/head/button").extend({
+        index: 100,
+        id: "inline-actions",
+        draw: function (data) {
+            var buttonCancel = $('<a>').attr({
+                'href': '#',
+                'class': 'button default-action cancelbutton'
+            }).text('cancel').on('click', {app: app}, function (event) {
+                event.data.app.quit();
+            });
+            var buttonSave = $('<a>').attr({
+                'href': '#',
+                'class': 'button default-action savebutton'
+            }).text('save').on('click', {app: app}, function (event) {
+                var formdata = {},
+                    formFrame = $('.contact_edit_frame'),
+                    image = formFrame.find("#image1").get(0);
+
+                formFrame.find('.value input').each(function (index) {
+                    var value =  $(this).val(),
+                       id = $(this).attr('name');
+                    formdata[id] = value;
+                });
+
+                   // collect anniversary
+                formFrame.find('.value input[name="anniversary"]')
+                    .each(function (index) {
+                        var value =  $(this).val(),
+                            id = $(this).attr('name'),
+                            dateArray = value.split('.');
+                        var date =  Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
+                        if (value !== "") {
+                            formdata[id] = date;
+                        }
+                    });
+
+                   // collect birthday
+                formFrame.find('.value input[name="birthday"]')
+                .each(function (index) {
+                    var value =  $(this).val(),
+                        id = $(this).attr('name'),
+                        dateArray = value.split('.'),
+                        date =  Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
+                    if (value !== "") {
+                        formdata[id] = date;
+                    }
+                });
+
+                var timestamp = new Date().getTime();
+                formdata.folderId = data.folder_id;
+                formdata.id = data.id;
+                formdata.timestamp = timestamp;
+
+                if (image.files && image.files[0]) {
+                    api.editNewImage(JSON.stringify(formdata), image.files[0]);
+                } else {
+                    if (!_.isEmpty(formdata)) {
+                        console.log(formdata);
+                        api.edit(formdata);
+                    }
+                }
+                event.data.app.quit();
+            });
+            this.append($('<div>').append(buttonCancel, buttonSave));
+//            var td = $('<td>', { colspan: '2' }).append(buttonCancel, buttonSave);
+//            this.append($('<tr>').append(td));
+        }
+    });
 
     ext.point("io.ox/contacts/edit/form").extend({
-        index: 100,
+        index: 120,
         id: 'contact-personal',
         draw: function (data) {
             var id = 'contact-personal';
+            addSubheadline(this, id);
             addField({
                 label: gt("Title"),
                 name: 'title',
@@ -189,16 +331,15 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addSwitch(this, id);
-
         }
     });
 
-
     ext.point("io.ox/contacts/edit/form").extend({
-        index: 100,
+        index: 120,
         id: 'contact-email',
         draw: function (data) {
             var id = 'contact-email';
+            addSubheadline(this, id);
             addField({
                 label: gt("email1"),
                 name: 'email1',
@@ -227,10 +368,11 @@ define("io.ox/contacts/edit/view-form",
     });
 
     ext.point("io.ox/contacts/edit/form").extend({
-        index: 100,
+        index: 120,
         id: 'contact-phone',
         draw: function (data) {
             var id = 'contact-phone';
+            addSubheadline(this, id);
             addField({
                 label: gt("telephone business1"),
                 name: 'telephone_business1',
@@ -425,8 +567,90 @@ define("io.ox/contacts/edit/view-form",
         }
     });
 
-    return {
+    ext.point("io.ox/contacts/edit/form").extend({
+        index: 120,
+        id: 'contact-home-address',
         draw: function (data) {
+            var id = 'contact-home-address';
+            addSubheadline(this, id);
+            addField({
+                label: gt("street home"),
+                name: 'street_home',
+                value: data.street_home,
+                node: this,
+                fn: 'hidden',
+                id: id
+            });
+            addField({
+                label: gt("postal code home"),
+                name: 'postal_code_home',
+                value: data.postal_code_home,
+                node: this,
+                fn: 'hidden',
+                id: id
+            });
+            addField({
+                label: gt("city home"),
+                name: 'city_home',
+                value: data.city_home,
+                node: this,
+                fn: 'hidden',
+                id: id
+            });
+            addField({
+                label: gt("state home"),
+                name: 'state_home',
+                value: data.state_home,
+                node: this,
+                fn: 'hidden',
+                id: id
+            });
+            addField({
+                label: gt("country home"),
+                name: 'country_home',
+                value: data.country_home,
+                node: this,
+                fn: 'hidden',
+                id: id
+            });
+            addSwitch(this, id);
+        }
+    });
+
+    ext.point("io.ox/contacts/edit/form").extend({
+        index: 120,
+        id: 'contact-job',
+        draw: function (data) {
+            var id = 'contact-job';
+            addSubheadline(this, id);
+            addField({
+                label: gt("profession"),
+                name: 'profession',
+                value: data.profession,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("position"),
+                name: 'position',
+                value: data.position,
+                node:  this,
+                id: id
+            });
+            addField({
+                label: gt("company"),
+                name: 'company',
+                value: data.company,
+                node: this,
+                id: id
+            });
+            addSwitch(this, id);
+        }
+    });
+
+    return {
+        draw: function (data, appdata) {
+            app = appdata;
             var node;
             if (!data) {
                 node = $();

@@ -83,9 +83,9 @@ define("io.ox/contacts/edit/main",
 
     //              assemble create form
 
-                var paneEdit = $('<div/>').addClass('edit1'),
-                    paneEdit2 = $('<div/>').addClass('edit2');
-                paneEdit.append(viewForm.draw(data));
+                var paneEdit = $('<div/>').addClass('edit1');
+                   // paneEdit2 = $('<div/>').addClass('edit2');
+                paneEdit.append(viewForm.draw(data, app));
 //                paneEdit.append(
 //                    $('<div>').addClass('block edit_contact name')
 //                    .append(fieldHtml('first name', 'first_name'))
@@ -289,17 +289,17 @@ define("io.ox/contacts/edit/main",
                     }
                 };
 
-                $('<button>').text('save').addClass('io-ox-button').attr('data-action', 'save')
-                .appendTo(paneEdit2).on('click', function () {
-                    actions.save();
-                });
-                $('<button>').text('cancel').addClass('io-ox-button').attr('data-action', 'cancel')
-                .appendTo(paneEdit2).on('click', function () {
-                    actions.cancel();
-                });
+//                $('<button>').text('save').addClass('io-ox-button').attr('data-action', 'save')
+//                .appendTo(paneEdit).on('click', function () {
+//                    actions.save();
+//                });
+//                $('<button>').text('cancel').addClass('io-ox-button').attr('data-action', 'cancel')
+//                .appendTo(paneEdit).on('click', function () {
+//                    actions.cancel();
+//                });
 
                 paneEdit.appendTo(formFrame);
-                paneEdit2.appendTo(formFrame);
+                //paneEdit2.appendTo(formFrame);
 
                 formFrame.find(".block .field:nth-child(even)")
                 .addClass('even');
@@ -332,10 +332,14 @@ define("io.ox/contacts/edit/main",
                         $(this).val(dateFormated);
                     }
                 });
+
             });
+
         });
 
         return app;
+
+
     }
 
     return {
