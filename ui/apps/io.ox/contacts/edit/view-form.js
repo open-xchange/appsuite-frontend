@@ -79,9 +79,7 @@ define("io.ox/contacts/edit/view-form",
 
     function addSwitch(node, id) {
         var button = $('<a>').addClass(id).text('+'),
-            tr = $('<tr>').append(
-                $('<td>').append(button)
-            );
+            tr = $('<tr>').append($('<td>'), $('<td>').text(id + ' ').append(button));
         button.on('click', {id: id}, function (event) {
             if (button.text() === '+') {
                 $(node).find('.' + event.data.id + '.hidden').removeClass('hidden').addClass('visible');
@@ -94,16 +92,10 @@ define("io.ox/contacts/edit/view-form",
         tr.appendTo(node);
     }
 
-    function addSubheadline(node, id) {
-        var tr = $('<tr>').append(
-            $('<td>', { colspan: '2' }).text(id)
-        );
-        tr.appendTo(node);
-    }
 
     function addSpacer(node) {
         var tr = $('<tr>').append(
-            $('<td>', { colspan: '2' })
+            $('<td>', { colspan: '2' }).text('\u00A0')
         );
         tr.appendTo(node);
     }
@@ -130,10 +122,15 @@ define("io.ox/contacts/edit/view-form",
                 .css({ verticalAlign: "top", paddingBottom: "0" })
                 .append(
                     api.getPicture(data).addClass("picture")
-                ).append($('<a>').attr('href', '#').text('change picture').on('click', function () {
+                ).append($('<a>').attr({
+                    'href': '#',
+                    'class': 'change-pic-link'
+                })
+                .text('change picture'))
+            ).on('click', function () {
                     $('tr.contact-image').removeClass('hidden');
-                }))
-            )
+                    $('.change-pic-link').remove();
+                })
             .append(
                 $(node)
                 .css({ verticalAlign: "top" })
@@ -195,18 +192,18 @@ define("io.ox/contacts/edit/view-form",
         index: 100,
         id: "inline-actions",
         draw: function (data) {
-            var buttonCancel = $('<a>').attr({
-                'href': '#',
-                'class': 'button default-action cancelbutton'
-            }).text('cancel').on('click', {app: app}, function (event) {
-                event.data.app.quit();
-            });
+//            var buttonCancel = $('<a>').attr({
+//                'href': '#',
+//                'class': 'button default-action cancelbutton'
+//            }).text('cancel').on('click', {app: app}, function (event) {
+//                event.data.app.quit();
+//            });
             var buttonSave = $('<a>').attr({
                 'href': '#',
                 'class': 'button default-action savebutton'
             }).text('save').on('click', {app: app}, function (event) {
                 var formdata = {},
-                    formFrame = $('.contact_edit_frame'),
+                    formFrame = $('.abs'),
                     image = formFrame.find("#image1").get(0);
 
                 formFrame.find('.value input').each(function (index) {
@@ -248,13 +245,13 @@ define("io.ox/contacts/edit/view-form",
                     api.editNewImage(JSON.stringify(formdata), image.files[0]);
                 } else {
                     if (!_.isEmpty(formdata)) {
-                        console.log(formdata);
+                        //console.log(formdata);
                         api.edit(formdata);
                     }
                 }
                 event.data.app.quit();
             });
-            this.append($('<div>').append(buttonCancel, buttonSave));
+            this.append($('<div>').append(buttonSave));
 //            var td = $('<td>', { colspan: '2' }).append(buttonCancel, buttonSave);
 //            this.append($('<tr>').append(td));
         }
@@ -265,7 +262,6 @@ define("io.ox/contacts/edit/view-form",
         id: 'contact-personal',
         draw: function (data) {
             var id = 'contact-personal';
-            addSubheadline(this, id);
             addField({
                 label: gt("Title"),
                 name: 'title',
@@ -331,6 +327,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addSwitch(this, id);
+            addSpacer(this);
         }
     });
 
@@ -339,7 +336,6 @@ define("io.ox/contacts/edit/view-form",
         id: 'contact-email',
         draw: function (data) {
             var id = 'contact-email';
-            addSubheadline(this, id);
             addField({
                 label: gt("email1"),
                 name: 'email1',
@@ -364,6 +360,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addSwitch(this, id);
+            addSpacer(this);
         }
     });
 
@@ -372,7 +369,6 @@ define("io.ox/contacts/edit/view-form",
         id: 'contact-phone',
         draw: function (data) {
             var id = 'contact-phone';
-            addSubheadline(this, id);
             addField({
                 label: gt("telephone business1"),
                 name: 'telephone_business1',
@@ -564,6 +560,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addSwitch(this, id);
+            addSpacer(this);
         }
     });
 
@@ -572,7 +569,6 @@ define("io.ox/contacts/edit/view-form",
         id: 'contact-home-address',
         draw: function (data) {
             var id = 'contact-home-address';
-            addSubheadline(this, id);
             addField({
                 label: gt("street home"),
                 name: 'street_home',
@@ -614,6 +610,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addSwitch(this, id);
+            addSpacer(this);
         }
     });
 
@@ -622,7 +619,6 @@ define("io.ox/contacts/edit/view-form",
         id: 'contact-job',
         draw: function (data) {
             var id = 'contact-job';
-            addSubheadline(this, id);
             addField({
                 label: gt("profession"),
                 name: 'profession',
@@ -645,6 +641,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addSwitch(this, id);
+            addSpacer(this);
         }
     });
 

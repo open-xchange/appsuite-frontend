@@ -246,15 +246,28 @@
 }
 
 
-.contact_edit_frame .hidden{
+.abs.contact-edit .hidden{
 	display: none;
 }
 
-.contact_edit_frame .hidden.filled{
+.abs.contact-edit .hidden.filled{
 	display: table-row;
 }
 
-.savebutton, .cancelbutton{
+.abs.contact-edit .savebutton,.abs.contact-edit .cancelbutton{
 	width: 40px;
 	float: right;
+}
+
+.abs.contact-edit{
+	overflow: auto;
+}
+
+.abs.contact-edit .change-pic-link {
+	width: auto;
+	float: right;
+}
+
+.abs.contact-edit .picture{
+	cursor: pointer;
 }

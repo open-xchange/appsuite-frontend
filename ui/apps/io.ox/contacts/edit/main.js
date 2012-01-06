@@ -56,7 +56,7 @@ define("io.ox/contacts/edit/main",
                 close: true
             });
 
-            formContainer = $("<div/>").addClass("abs")
+            formContainer = $("<div/>").addClass("abs contact-edit")
                 .css({
                     top: "10px",
                     right: "10px",
@@ -64,11 +64,11 @@ define("io.ox/contacts/edit/main",
                     left: "10px"
                 });
 
-            formFrame = $("<div/>").addClass("contact_edit_frame")
-                .appendTo(formContainer);
+//            formFrame = $("<div/>").addClass("contact_edit_frame")
+//                .appendTo(formContainer);
 
             win.nodes.main
-                .css({ backgroundColor: "#f0f0f0" })
+                .css({ backgroundColor: "#fff" }) //#f0f0f0
                 .append(formContainer);
 
             app.setWindow(win);
@@ -83,9 +83,9 @@ define("io.ox/contacts/edit/main",
 
     //              assemble create form
 
-                var paneEdit = $('<div/>').addClass('edit1');
+                //var paneEdit = $('<div/>').addClass('edit1');
                    // paneEdit2 = $('<div/>').addClass('edit2');
-                paneEdit.append(viewForm.draw(data, app));
+                formContainer.append(viewForm.draw(data, app));
 //                paneEdit.append(
 //                    $('<div>').addClass('block edit_contact name')
 //                    .append(fieldHtml('first name', 'first_name'))
@@ -298,40 +298,40 @@ define("io.ox/contacts/edit/main",
 //                    actions.cancel();
 //                });
 
-                paneEdit.appendTo(formFrame);
+                //paneEdit.appendTo(formFrame);
                 //paneEdit2.appendTo(formFrame);
 
-                formFrame.find(".block .field:nth-child(even)")
-                .addClass('even');
+//                formFrame.find(".block .field:nth-child(even)")
+//                .addClass('even');
 
                 // fill strings
-                formFrame.find('.field input')//TODO business_category isnt submitted
-                .each(function (index) {
-                    var name = $(this).attr('name');
-                    $(this).val(data[name]);
-                });
-
-                // need a better way to fill the dates
-                // fill anniversary
-                formFrame.find('.field input[name="anniversary"]')
-                .each(function (index) {
-                    var name = $(this).attr('name');
-                    if (data[name]) {
-                        var date = new Date(data[name]);
-                        var dateFormated =  date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
-                        $(this).val(dateFormated);
-                    }
-                });
-             // fill birthday
-                formFrame.find('.field input[name="birthday"]')
-                .each(function (index) {
-                    var name = $(this).attr('name');
-                    if (data[name]) {
-                        var date = new Date(data[name]);
-                        var dateFormated =  date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
-                        $(this).val(dateFormated);
-                    }
-                });
+//                formFrame.find('.field input')//TODO business_category isnt submitted
+//                .each(function (index) {
+//                    var name = $(this).attr('name');
+//                    $(this).val(data[name]);
+//                });
+//
+//                // need a better way to fill the dates
+//                // fill anniversary
+//                formFrame.find('.field input[name="anniversary"]')
+//                .each(function (index) {
+//                    var name = $(this).attr('name');
+//                    if (data[name]) {
+//                        var date = new Date(data[name]);
+//                        var dateFormated =  date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+//                        $(this).val(dateFormated);
+//                    }
+//                });
+//             // fill birthday
+//                formFrame.find('.field input[name="birthday"]')
+//                .each(function (index) {
+//                    var name = $(this).attr('name');
+//                    if (data[name]) {
+//                        var date = new Date(data[name]);
+//                        var dateFormated =  date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+//                        $(this).val(dateFormated);
+//                    }
+//                });
 
             });
 
