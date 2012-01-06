@@ -96,14 +96,14 @@ define("io.ox/contacts/edit/view-form",
 
     function addSubheadline(node, id) {
         var tr = $('<tr>').append(
-            $('<td>').text(id)
+            $('<td>', { colspan: '2' }).text(id)
         );
         tr.appendTo(node);
     }
 
     function addSpacer(node) {
         var tr = $('<tr>').append(
-            $('<td>')
+            $('<td>', { colspan: '2' })
         );
         tr.appendTo(node);
     }
@@ -645,6 +645,16 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addSwitch(this, id);
+        }
+    });
+
+    ext.point("io.ox/contacts/edit/form").extend({
+        index: 120,
+        id: 'bottom-line',
+        draw: function (data) {
+            var node = $('<td>', { colspan: '2' });
+            ext.point("io.ox/contacts/edit/form/head/button").invoke("draw", node, data);
+            this.append($('<tr>').append(node));
         }
     });
 
