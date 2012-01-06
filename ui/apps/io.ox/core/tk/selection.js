@@ -308,18 +308,22 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
         /**
          * Set selection
          */
-        this.set = function (list) {
+        this.set = function (list, quiet) {
             // clear
             clear();
-            // get array
-            list = _.isArray(list) ? list : [list];
             // loop
-            var i = 0, $i = list.length;
-            for (; i < $i; i++) {
-                select(list[i]);
-            }
+            _(_.isArray(list) ? list : [list]).each(function (elem) {
+                var obj;
+                if (typeof elem === 'string' && bHasIndex && (obj = observedItems[getIndex(elem)]) !== undefined) {
+                    select(obj);
+                } else {
+                    select(elem);
+                }
+            });
             // event
-            this.trigger('change', list);
+            if (quiet !== true) {
+                this.trigger('change', this.get());
+            }
             return this;
         };
 

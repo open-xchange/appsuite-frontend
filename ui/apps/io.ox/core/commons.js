@@ -128,6 +128,7 @@ define('io.ox/core/commons', [], function () {
 
             var container,
                 visible = false,
+                top = 0,
                 fnChangeFolder, fnShow, fnToggle, loadTree, initTree;
 
             container = $('<div>')
@@ -145,6 +146,7 @@ define('io.ox/core/commons', [], function () {
                 var folder = selection[0];
                 if (folder.module === type) {
                     app.folder.unset();
+                    top = container.scrollTop();
                     container.fadeOut('fast', function () {
                         app.folder.set(folder.id);
                     });
@@ -154,15 +156,20 @@ define('io.ox/core/commons', [], function () {
 
             fnShow = function () {
                 if (!visible) {
-                    container.show();
+                    container.show().scrollTop(top);
                     visible = true;
                 }
                 return $.when();
             };
 
             fnToggle = function () {
-                container[visible ? 'hide' : 'show']();
-                visible = !visible;
+                if (visible) {
+                    top = container.scrollTop();
+                    container.hide();
+                    visible = false;
+                } else {
+                    fnShow();
+                }
             };
 
             initTree = function (FolderTree) {
@@ -170,7 +177,7 @@ define('io.ox/core/commons', [], function () {
                 tree.selection.bind('change', fnChangeFolder);
                 return tree.paint()
                     .done(function () {
-                        tree.selection.set(app.folder.get());
+                        tree.selection.set(app.folder.get(), true);
                         app.getWindow().nodes.title.on('click', fnToggle);
                         container.idle();
                         initTree = loadTree = null;
