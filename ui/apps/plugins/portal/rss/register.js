@@ -42,6 +42,13 @@ define("io.ox/portal/rss/register",
     });
 
     // Another one...
+    feeds.push({
+        id: "rss-nyt",
+        url: "http://www.nytimes.com/services/xml/rss/nyt/GlobalHome.xml",
+        index: 550
+    });
+
+    // Another one...
 //    feeds.push({
 //        id: "rss-handelsblatt",
 //        url: "http://www.handelsblatt.com/contentexport/feed/schlagzeilen",
@@ -72,7 +79,7 @@ define("io.ox/portal/rss/register",
                     )
                     .append(
                         $("<div/>").addClass("clear-title")
-                            .text(feed.title || "RSS")
+                            .text(feed.title.replace(/&gt;/g, '>') || "RSS")
                     );
 
                 _(feed.entries).each(function (entry) {
