@@ -44,22 +44,27 @@ define("io.ox/contacts/edit/view-form",
     }
 
     function addField(o) {
-        var field = $('<input>', {name: o.name})
-        .on('change', {name: o.name, node: o.node}, function (event) {
-            var tr = $(event.data.node).find('tr.' + event.data.name);
-            if (tr.find('input').val() === '') {
-                tr.removeClass('filled');
-            } else {
-                tr.addClass('filled');
-            }
-        }),
-        td = $("<td>").addClass("value").append(field),
-        tr = $("<tr>").addClass(o.id + ' ' + o.name)
-        .append(
-        $("<td>").addClass("label").text(o.label)
-        )
-        .append(td);
-       // auto-update header?
+        var field = $('<input>', { name: o.name, type: 'text' })
+            .addClass('nice-input')
+            // TODO: add proper CSS class
+            .css({ fontSize: '14px', width: '300px', paddingTop: '0.25em', paddingBottom: '0.25em' })
+            .on('change', {name: o.name, node: o.node}, function (e) {
+                    var tr = $(e.data.node).find('tr.' + e.data.name);
+                    if (tr.find('input').val() === '') {
+                        tr.removeClass('filled');
+                    } else {
+                        tr.addClass('filled');
+                    }
+                }),
+            td = $("<td>").addClass("value").css('paddingBottom', '0.5em').append(field),
+            tr = $("<tr>").addClass(o.id + ' ' + o.name)
+                .append(
+                    $("<td>").addClass("label")
+                    .css({ paddingTop: '7px', width: '150px' })
+                    .text(o.label)
+                )
+                .append(td);
+        // auto-update header?
         if (/^(first_name|last_name|title|company|position|profession)$/.test(o.name)) {
             field.on('change keyup', { name: o.name }, function (e) {
                 _.defer(renewHeader);
@@ -80,16 +85,16 @@ define("io.ox/contacts/edit/view-form",
         }
     }
 
-    function addSwitch(node, id) {
-        var button = $('<a>').addClass(id).text(id + ' +'),
+    function addSwitch(node, id, title) {
+        var button = $('<a>').addClass(id).text('+ ' + title),
             tr = $('<tr>').append($('<td>'), $('<td>').append(button));
         button.on('click', {id: id}, function (event) {
-            if (button.text() === id + ' +') {
+            if (button.text() === '+ ' + title) {
                 $(node).find('.' + event.data.id + '.hidden').removeClass('hidden').addClass('visible');
-                button.text(id + ' -');
+                button.text('- ' + title);
             } else {
                 $(node).find('.' + event.data.id + '.visible').removeClass('visible').addClass('hidden');
-                button.text(id + ' +');
+                button.text('+ ' + title);
             }
         });
         tr.appendTo(node);
@@ -125,15 +130,17 @@ define("io.ox/contacts/edit/view-form",
                 .css({ verticalAlign: "top", paddingBottom: "0" })
                 .append(
                     api.getPicture(data).addClass("picture")
-                ).append($('<a>').attr({
-                    'href': '#',
-                    'class': 'change-pic-link'
-                })
-                .text('change picture'))
-            ).on('click', function () {
+                )
+                .append(
+                    $('<a>', { href: '#' }).addClass('change-pic-link')
+                    .text('change picture')
+                )
+                .on('click', function (e) {
+                    e.preventDefault();
                     $('tr.contact-image').removeClass('hidden');
                     $('.change-pic-link').remove();
                 })
+            )
             .append(
                 $(node)
                 .css({ verticalAlign: "top" })
@@ -162,34 +169,54 @@ define("io.ox/contacts/edit/view-form",
         id: 'contact-image',
         draw: function (data) {
             var id = 'contact-image',
-                form = $('<form/>',
-                  {   'accept-charset': 'UTF-8',
-                      'enctype': 'multipart/form-data',
-                      'id': 'contactUploadImage',
-                      'method': 'POST',
-                      'name': 'contactUploadImage',
-                      'target': 'blank.html'
-
-                  })
-                  .append(
-                      $('<input/>',
-                      {   'id': 'image1',
-                          'name': 'file',
+                form = $('<form>',
+                    {   'accept-charset': 'UTF-8',
+                        'enctype': 'multipart/form-data',
+                        'id': 'contactUploadImage',
+                        'method': 'POST',
+                        'name': 'contactUploadImage',
+                        'target': 'blank.html'
+                    })
+                    .append(
+                        $('<input>',
+                        {   'id': 'image1',
+                            'name': 'file',
                           'type': 'file'
-                      })
-                  )
-                  .append(
-                      $('<iframe/>',
-                      {   'name': 'hiddenframePicture',
-                          'src': 'blank.html'
-                      })
-                      .css('display', 'none')
-                  );
-            var td = $('<td>', { colspan: '2' }).append(form);
-            this.append($('<tr>').addClass(id + ' hidden').append(td));
-
+                        })
+                    )
+                    .append(
+                        $('<iframe/>',
+                        {   'name': 'hiddenframePicture',
+                            'src': 'blank.html'
+                        })
+                        .css('display', 'none')
+                    );
+            var td = $('<td>').append(form);
+            this.append($('<tr>').addClass(id + ' hidden').append($('<td>'), td));
         }
     });
+
+    function updateContact(data, form) {
+
+        var changes = {}, id, value;
+        for (id in form) {
+            value = $.trim(form[id]);
+            if (value !== '' && value !== data[id]) {
+                changes[id] = value;
+            } else if (value === '' && data[id] !== undefined && data[id] !== '') {
+                changes[id] = /^email[123]$/.test(id) ? null : '';
+            }
+        }
+
+        //console.warn('changes', changes);
+
+        return api.edit({
+            id: data.id,
+            folder: data.folder_id,
+            timestamp: _.now(),
+            data: changes
+        });
+    }
 
     ext.point("io.ox/contacts/edit/form/head/button").extend({
         index: 100,
@@ -204,7 +231,8 @@ define("io.ox/contacts/edit/view-form",
             var buttonSave = $('<a>').attr({
                 'href': '#',
                 'class': 'button default-action savebutton'
-            }).text('save').on('click', {app: app}, function (event) {
+            }).text('Save').on('click', {app: app}, function (event) {
+                event.preventDefault();
                 var formdata = {},
                     formFrame = $('.abs'),
                     image = formFrame.find("#image1").get(0);
@@ -240,19 +268,18 @@ define("io.ox/contacts/edit/view-form",
                 });
 
                 var timestamp = new Date().getTime();
-                formdata.folderId = data.folder_id;
-                formdata.id = data.id;
-                formdata.timestamp = timestamp;
 
                 if (image.files && image.files[0]) {
+                    formdata.folderId = data.folder_id;
+                    formdata.id = data.id;
+                    formdata.timestamp = timestamp;
                     api.editNewImage(JSON.stringify(formdata), image.files[0]);
+                    event.data.app.quit();
                 } else {
-                    if (!_.isEmpty(formdata)) {
-                        //console.log(formdata);
-                        api.edit(formdata);
-                    }
+                    updateContact(data, formdata).done(function () {
+                        event.data.app.quit();
+                    });
                 }
-                event.data.app.quit();
             });
             this.append($('<div>').append(buttonSave));
 //            var td = $('<td>', { colspan: '2' }).append(buttonCancel, buttonSave);
@@ -270,6 +297,7 @@ define("io.ox/contacts/edit/view-form",
                 name: 'title',
                 value: data.title,
                 node: this,
+                fn: 'hidden',
                 id: id
             });
             addField({
@@ -293,7 +321,6 @@ define("io.ox/contacts/edit/view-form",
                 node: this,
                 id: id
             });
-
 
             var date = new Date(data.birthday);
             if (!isNaN(date.getDate())) {
@@ -330,7 +357,7 @@ define("io.ox/contacts/edit/view-form",
                 fn: 'hidden',
                 id: id
             });
-            addSwitch(this, id);
+            addSwitch(this, id, 'Personal information');
             addSpacer(this);
         }
     });
@@ -341,14 +368,14 @@ define("io.ox/contacts/edit/view-form",
         draw: function (data) {
             var id = 'contact-email';
             addField({
-                label: gt("Email 1"),
+                label: gt("E-mail 1"),
                 name: 'email1',
                 value: data.email1,
                 node: this,
                 id: id
             });
             addField({
-                label: gt("Email 2"),
+                label: gt("E-mail 2"),
                 name: 'email2',
                 value: data.email2,
                 node:  this,
@@ -356,14 +383,14 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("Email 3"),
+                label: gt("E-mail 3"),
                 name: 'email3',
                 value: data.email3,
                 node: this,
                 fn: 'hidden',
                 id: id
             });
-            addSwitch(this, id);
+            addSwitch(this, id, 'E-Mail addresses');
             addSpacer(this);
         }
     });
@@ -414,14 +441,15 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("Telephone company"),
+                label: gt("Phone (Company)"),
                 name: 'telephone_company',
                 value: data.telephone_company,
                 node: this,
+                fn: 'hidden',
                 id: id
             });
             addField({
-                label: gt("Telephone home 1"),
+                label: gt("Phone (home)"),
                 name: 'telephone_home1',
                 value: data.telephone_home1,
                 node: this,
@@ -429,7 +457,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("Telephone home 2"),
+                label: gt("Phone (home)"),
                 name: 'telephone_home2',
                 value: data.telephone_home2,
                 node: this,
@@ -445,14 +473,14 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("Cellular telephone 1"),
+                label: gt("Cellphone"),
                 name: 'cellular_telephone1',
                 value: data.cellular_telephone1,
                 node: this,
                 id: id
             });
             addField({
-                label: gt("Cellular telephone 2"),
+                label: gt("Cellphone (2nd)"),
                 name: 'cellular_telephone2',
                 value: data.cellular_telephone2,
                 node: this,
@@ -460,7 +488,7 @@ define("io.ox/contacts/edit/view-form",
                 id: id
             });
             addField({
-                label: gt("Telephone other"),
+                label: gt("Phone (other)"),
                 name: 'telephone_other',
                 value: data.telephone_other,
                 node: this,
@@ -555,7 +583,7 @@ define("io.ox/contacts/edit/view-form",
                 fn: 'hidden',
                 id: id
             });
-            addSwitch(this, id);
+            addSwitch(this, id, 'Phone numbers');
             addSpacer(this);
         }
     });
@@ -605,7 +633,7 @@ define("io.ox/contacts/edit/view-form",
                 fn: 'hidden',
                 id: id
             });
-            addSwitch(this, id);
+            addSwitch(this, id, 'Home address');
             addSpacer(this);
         }
     });
@@ -636,7 +664,7 @@ define("io.ox/contacts/edit/view-form",
                 node: this,
                 id: id
             });
-            addSwitch(this, id);
+            addSwitch(this, id, 'Job information');
             addSpacer(this);
         }
     });
@@ -658,7 +686,7 @@ define("io.ox/contacts/edit/view-form",
             if (!data) {
                 node = $();
             } else {
-                node = $("<table>", {border: 0, cellpadding: 0, cellspacing: 0})
+                node = $("<table>", { border: 0, cellpadding: 0, cellspacing: 0 })
                     .addClass("contact-detail")
                     .attr('data-obj-id', data.folder_id + '.' + data.id);
                 ext.point("io.ox/contacts/edit/form").invoke("draw", node, data);

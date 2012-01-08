@@ -378,6 +378,7 @@ define("io.ox/core/desktop",
                     self.dispatcher.destroy();
                     self.folder.destroy();
                     if (win) {
+                        ox.ui.windowManager.trigger("window.quit", win);
                         win.destroy();
                     }
                     // remove app's properties
@@ -618,7 +619,7 @@ define("io.ox/core/desktop",
                                 self.trigger("quit");
                                 self.state.open = false;
                                 self.state.running = false;
-                                ox.ui.windowManager.trigger("window.quit", self);
+                                // event is triggered by app
                             });
                     } else {
                         this.hide();
