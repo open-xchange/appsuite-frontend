@@ -41,8 +41,7 @@ define("io.ox/contacts/edit/main",
     // multi instance pattern
     function createInstance(data) {
 
-        var app, win, container,
-        formFrame, formContainer;
+        var app, win, container;
 
         app = ox.ui.createApp({
             title: "Edit Contact"
@@ -56,28 +55,22 @@ define("io.ox/contacts/edit/main",
                 close: true
             });
 
-            formContainer = $("<div/>").css({
-                top: "10px",
-                right: "10px",
-                bottom: "10px",
-                left: "10px",
-                padding: "13px",
-                'max-width': "700px",
-                position: "absolute",
-                "overflow": "auto"
-
-            });
+            app.setWindow(win);
 
 //            formFrame = $("<div/>").addClass("contact_edit_frame")
 //                .appendTo(formContainer);
 
             win.nodes.main
-                .css({ backgroundColor: "#fff" }) //#f0f0f0
-                .append(formContainer);
-
-            app.setWindow(win);
+                .css({ backgroundColor: '#fff', overflow: 'auto' })
+                .append(
+                    container = $('<div>')
+                    .css({ maxWidth: '600px', margin: '20px auto 20px auto' })
+                );
 
             win.show(function () {
+
+                container.append(viewForm.draw(data, app));
+                container.find('input[type=text]:visible').eq(0).focus();
 //
 //                function fieldHtml(label, name) {
 //                    return $('<div>').addClass('field ')
@@ -89,7 +82,7 @@ define("io.ox/contacts/edit/main",
 
                 //var paneEdit = $('<div/>').addClass('edit1');
                    // paneEdit2 = $('<div/>').addClass('edit2');
-                formContainer.append(viewForm.draw(data, app));
+                //formContainer.append(viewForm.draw(data, app));
 //                paneEdit.append(
 //                    $('<div>').addClass('block edit_contact name')
 //                    .append(fieldHtml('first name', 'first_name'))
@@ -241,14 +234,14 @@ define("io.ox/contacts/edit/main",
 
                         // select the data
                         // collect all strings
-                        formFrame.find('.value input')
+                        container.find('.value input')
                             .each(function (index) {
                                 var value =  $(this).val(),
                                     id = $(this).attr('name');
                                 formdata[id] = value;
                             });
                         // collect anniversary
-                        formFrame.find('.value input[name="anniversary"]')
+                        container.find('.value input[name="anniversary"]')
                         .each(function (index) {
                             var value =  $(this).val(),
                                 id = $(this).attr('name'),
@@ -260,7 +253,7 @@ define("io.ox/contacts/edit/main",
                         });
 
                         // collect birthday
-                        formFrame.find('.value input[name="birthday"]')
+                        container.find('.value input[name="birthday"]')
                         .each(function (index) {
                             var value =  $(this).val(),
                                 id = $(this).attr('name'),

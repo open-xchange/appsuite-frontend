@@ -99,25 +99,39 @@ define('io.ox/contacts/api',
         });
     };
 
-    api.edit =  function (formdata) {
-        return http.PUT({
-            module: 'contacts',
-            params: {action: 'update', id: formdata.id, folder: formdata.folderId, timestamp: formdata.timestamp},
-            data: formdata,
-            datatype: 'text'
-        })
-        .done(function () {
-            api.caches.get.clear();
-            api.caches.list.clear();
-            api.trigger('refresh.list');
-            api.trigger('edit', { // TODO needs a switch for created by hand or by test
-                id: formdata.id,
-                folder: formdata.folderId
-            });
-        })
-        .fail(function () {
-            console.log('connection lost');//what to do if fails?
-        });
+    api.edit =  function (o) {
+
+        if (_.isEmpty(o.data)) {
+            return $.when();
+        } else {
+            return http.PUT({
+                    module: 'contacts',
+                    params: {
+                        action: 'update',
+                        id: o.id,
+                        folder: o.folder,
+                        timestamp: o.timestamp
+                    },
+                    data: o.data,
+                    appendColumns: false
+                })
+                .pipe(function () {
+                    // get updated contact
+                    return api.get({ id: o.id, folder: o.folder }, false)
+                        .done(function () {
+                            api.caches.all.remove(o.folder);
+                            api.caches.list.remove({ id: o.id, folder: o.folder });
+                            api.trigger('refresh.list');
+                            api.trigger('edit', { // TODO needs a switch for created by hand or by test
+                                id: o.id,
+                                folder: o.folder
+                            });
+                        });
+                })
+                .fail(function () {
+                    console.log('connection lost'); //what to do if fails?
+                });
+        }
     };
 
     api.editNewImage = function (formdata, file) {

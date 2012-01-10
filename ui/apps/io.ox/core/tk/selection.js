@@ -382,6 +382,13 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
             return this;
         };
 
+        /**
+         * Retrigger current selection
+         */
+        this.retrigger = function () {
+            this.trigger('change', this.get());
+        };
+
         // bind general click handler
         container.on('click contextmenu', '.selectable', click);
     };

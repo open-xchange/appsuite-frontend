@@ -600,6 +600,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
 
         this.repaint = function () {
             var offset = getIndex(node.scrollTop()) - (numRows - numVisible);
+            currentOffset = null;
             return paint(offset);
         };
 

@@ -22,34 +22,38 @@ define('io.ox/core/tk/foldertree',
         CLOSE = 'url(' + PATH + 'folder-close.png)',
 
         tmplFolder = $('<div>').addClass('folder selectable').css('paddingLeft', '13px'),
-        tmplSub = $('<div>').addClass('subfolders').hide();
+        tmplSub = $('<div>').addClass('subfolders').hide(),
+
+        refreshHash = {};
 
     /**
      * Tree node class
      */
-    function TreeNode(tree, id, level) {
+    function TreeNode(tree, id, container, level) {
 
         // load folder data immediately
         var ready = api.get({ folder: id }),
             nodes = {},
             children = null,
-            bHasChildren = false,
             painted = false,
-            open = false,
+            open,
             self = this,
+            data = {},
 
             // internal functions
             skip = function () {
                 return tree.root === self && tree.options.skipRoot;
             },
 
-            hasChildren = function (data) {
-                return (bHasChildren = data.subfolders || data.subscr_subflds);
+            hasChildren = function () {
+                return data.subfolders || data.subscr_subflds;
             },
 
-            isOpen = function (data) {
-                var open = open || (data.module === 'system' || data.module === tree.options.type);
-                return hasChildren(data) && (skip() || open);
+            isOpen = function () {
+                if (open === undefined) {
+                    open = (data.module === 'system' || data.module === tree.options.type);
+                }
+                return hasChildren() && (skip() || open);
             },
 
             drawChildren = function (reload, method) {
@@ -72,15 +76,14 @@ define('io.ox/core/tk/foldertree',
             },
 
             updateArrow = function () {
-                var isOpen = bHasChildren && (skip() || open),
-                    image = bHasChildren ? (isOpen ? CLOSE : OPEN) : 'none';
+                var image = hasChildren() ? (isOpen() ? CLOSE : OPEN) : 'none';
                 nodes.arrow.css('backgroundImage', image);
             },
 
             // open/close tree node
             toggleState = function (e) {
                 e.preventDefault();
-                if (bHasChildren()) {
+                if (hasChildren()) {
                     if (open) {
                         open = false;
                         nodes.sub.hide();
@@ -104,9 +107,14 @@ define('io.ox/core/tk/foldertree',
             return children;
         };
 
+        // update promise
+        this.reload = function () {
+            ready = api.get({ folder: id });
+        };
+
         // load sub folders - creates instances of TreeNode - does not yet paint them
         this.loadChildren = function (reload) {
-            var hash = {};
+            var hash = {}, needsRefresh;
             if (children === null || reload === true) {
                 // build hash?
                 if (children !== null && reload === true) {
@@ -114,8 +122,28 @@ define('io.ox/core/tk/foldertree',
                         hash[node.id] = node.detach();
                     });
                 }
+                // check cache
+                needsRefresh = refreshHash[id] === undefined && api.needsRefresh(id);
                 // get sub folders
                 return api.getSubFolders({ folder: id })
+                    .done(function (list) {
+                        // needs refresh?
+                        if (needsRefresh) {
+                            _.defer(function () {
+                                // get fresh data
+                                api.getSubFolders({ folder: id, cache: false })
+                                    .done(function (freshList) {
+                                        // compare
+                                        if (!_.isEqual(list, freshList)) {
+                                            self.reload();
+                                            _(children).invoke('reload');
+                                            self.repaint();
+                                        }
+                                        refreshHash[id] = false;
+                                    });
+                            });
+                        }
+                    })
                     .pipe(function (data) {
                         // create new children array
                         children = _.chain(data)
@@ -131,7 +159,7 @@ define('io.ox/core/tk/foldertree',
                                     return node;
                                 } else {
                                     // new node
-                                    return new TreeNode(tree, folder.id, skip() ? level : level + 1);
+                                    return new TreeNode(tree, folder.id, nodes.sub, skip() ? level : level + 1);
                                 }
                             })
                             .value();
@@ -202,34 +230,40 @@ define('io.ox/core/tk/foldertree',
                 child.destroy();
             });
             // clear
-            ready = children = nodes = tree = self = null;
+            ready = children = nodes = tree = self = container = data = null;
         };
 
-        this.repaint = function (container) {
+        this.repaint = function () {
             if (painted) {
                 // add now
                 container.append(nodes.folder, nodes.sub);
                 // get folder
                 return ready
-                    .pipe(function (data) {
-                        // re-add to index, customize, update arrow, append
+                    .pipe(function (promise) {
+                        // get data
+                        data = promise;
+                        // re-add to index, customize, update arrow
                         tree.selection.addToIndex(data);
                         self.customize(nodes, data);
                         updateArrow();
                         // draw children
-                        return isOpen(data) ? repaintChildren() : $.when();
+                        if (isOpen()) {
+                            return repaintChildren();
+                        } else {
+                            nodes.sub.empty().hide();
+                            return $.when();
+                        }
                     })
                     .done(function () {
                         container.idle();
-                        container = null;
                     });
             } else {
-                return this.paint(container);
+                return this.paint();
             }
         };
 
         // paint tree node - loads and paints sub folder if open
-        this.paint = function (container) {
+        this.paint = function () {
 
             nodes.folder = tmplFolder.clone().on('dblclick', toggleState);
 
@@ -247,9 +281,9 @@ define('io.ox/core/tk/foldertree',
             container.append(nodes.folder, nodes.sub);
 
             return ready
-                .pipe(function (data) {
-                    // vars
-                    var def;
+                .pipe(function (promise) {
+                    // store data
+                    data = promise;
                     // create DOM nodes
                     nodes.arrow = $('<div>').addClass('folder-arrow').on('click', toggleState);
                     nodes.icon = $('<img>', { src: '', alt: '' }).addClass('folder-icon');
@@ -261,7 +295,7 @@ define('io.ox/core/tk/foldertree',
                     // customize
                     self.customize(nodes, data);
                     // draw children
-                    def = isOpen(data) ? paintChildren() : $.when();
+                    var def = isOpen() ? paintChildren() : $.when();
                     updateArrow();
                     // add to DOM
                     nodes.folder.append(nodes.arrow, nodes.icon, nodes.counter, nodes.label);
@@ -270,7 +304,6 @@ define('io.ox/core/tk/foldertree',
                 })
                 .done(function () {
                     container.idle();
-                    container = null;
                     painted = true;
                 });
         };
@@ -293,14 +326,15 @@ define('io.ox/core/tk/foldertree',
             // ref
             self = this;
 
-        this.root = new TreeNode(this, this.options.rootFolderId, 0);
-
         $(container)
             .addClass('io-ox-foldertree')
             // add tree container
             .append(this.container = $('<div>'))
             // add link container
             .append(this.links = $('<div>').addClass('foldertree-links'));
+
+        // root tree node
+        this.root = new TreeNode(this, this.options.rootFolderId, this.container, 0);
 
         // selection
         Selection.extend(this, container) // not this.container!
@@ -312,7 +346,7 @@ define('io.ox/core/tk/foldertree',
         this.paint = function () {
             if (painting === null) {
                 this.selection.clearIndex();
-                painting = this.root.paint(this.container);
+                painting = this.root.paint();
                 painting.always(function () {
                     self.selection.update();
                     // paint links
@@ -329,7 +363,7 @@ define('io.ox/core/tk/foldertree',
         this.repaint = function () {
             if (painting === null) {
                 this.selection.clearIndex();
-                painting = this.root.repaint(this.container);
+                painting = this.root.repaint();
                 painting.always(function () {
                     self.selection.update();
                     painting = null;
@@ -380,10 +414,11 @@ define('io.ox/core/tk/foldertree',
                         }
                     })
                     .done(function (data) {
-                        e.data.tree.idle().repaint().done(function () {
-                            e.data.tree.selection.set(String(data));
-                            e.data = null;
-                        });
+                        e.data.tree.idle().repaint()
+                            .done(function () {
+                                e.data.tree.selection.set(String(data));
+                                e.data = null;
+                            });
                     });
                 }
             });

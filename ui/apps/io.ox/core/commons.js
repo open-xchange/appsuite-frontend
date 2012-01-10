@@ -80,7 +80,9 @@ define('io.ox/core/commons', [], function () {
             });
             // bind list refresh
             api.bind('refresh.list', function () {
-                grid.repaint();
+                grid.repaint().done(function () {
+                    grid.selection.retrigger();
+                });
             });
         },
 
