@@ -31,16 +31,19 @@ define("io.ox/contacts/edit/view-form",
     };
 
     function renewHeader() {
-        var nameClearTitle = $('.name.clear-title'),
-            jobClearTitle = $('.job.clear-title'),
-            fieldValueFirstname = $('input[name="first_name"]').val(),
-            fieldValueNachname = $('input[name="last_name"]').val(),
-            fieldValueTitle = $('input[name="title"]').val(),
-            fieldValueCompany = $('input[name="company"]').val(),
-            fieldValuePosition = $('input[name="position"]').val(),
-            fieldValueProfession = $('input[name="profession"]').val();
-        nameClearTitle.text(fieldValueTitle + ' ' + fieldValueNachname + ', ' + fieldValueFirstname);
-        jobClearTitle.text(join(", ", fieldValueCompany, fieldValuePosition, fieldValueProfession));
+        var newObj = {
+            title: $('input[name="title"]').val(),
+            last_name: $('input[name="last_name"]').val(),
+            first_name: $('input[name="first_name"]').val(),
+            position: $('input[name="position"]').val(),
+            company: $('input[name="company"]').val(),
+            profession: $('input[name="profession"]').val()
+        },
+            nameClearTitle = $('.name.clear-title'),
+            jobClearTitle = $('.job.clear-title');
+
+        nameClearTitle.text(util.getFullName(newObj));
+        jobClearTitle.text(util.getJob(newObj));
     }
 
     function addField(o) {
@@ -82,17 +85,20 @@ define("io.ox/contacts/edit/view-form",
 
     function addSwitch(node, id) {
         var button = $('<a>').addClass(id).text(id + ' +'),
-            tr = $('<tr>').append($('<td>'), $('<td>').append(button));
-        button.on('click', {id: id}, function (event) {
-            if (button.text() === id + ' +') {
-                $(node).find('.' + event.data.id + '.hidden').removeClass('hidden').addClass('visible');
-                button.text(id + ' -');
-            } else {
-                $(node).find('.' + event.data.id + '.visible').removeClass('visible').addClass('hidden');
-                button.text(id + ' +');
-            }
-        });
-        tr.appendTo(node);
+            tr = $('<tr>').append($('<td>'), $('<td>').append(button)),
+            block = $(node).find('.' + id + '.hidden');
+        if (block[0]) {
+            button.on('click', {id: id}, function (event) {
+                if (button.text() === id + ' +') {
+                    $(node).find('.' + event.data.id + '.hidden').removeClass('hidden').addClass('visible');
+                    button.text(id + ' -');
+                } else {
+                    $(node).find('.' + event.data.id + '.visible').removeClass('visible').addClass('hidden');
+                    button.text(id + ' +');
+                }
+            });
+            tr.appendTo(node);
+        }
     }
 
 
@@ -102,6 +108,7 @@ define("io.ox/contacts/edit/view-form",
         );
         tr.appendTo(node);
     }
+
 
     // head
     ext.point("io.ox/contacts/edit/form").extend({
@@ -125,15 +132,15 @@ define("io.ox/contacts/edit/view-form",
                 .css({ verticalAlign: "top", paddingBottom: "0" })
                 .append(
                     api.getPicture(data).addClass("picture")
-                ).append($('<a>').attr({
+                ).on('click', function () {
+                    $('tr.contact-image').removeClass('hidden');
+                    $('.change-pic-link').remove();
+                }).append($('<a>').attr({
                     'href': '#',
                     'class': 'change-pic-link'
                 })
                 .text('change picture'))
-            ).on('click', function () {
-                    $('tr.contact-image').removeClass('hidden');
-                    $('.change-pic-link').remove();
-                })
+            )
             .append(
                 $(node)
                 .css({ verticalAlign: "top" })
@@ -145,12 +152,7 @@ define("io.ox/contacts/edit/view-form",
                 .append(
                     $("<div>")
                     .addClass("job clear-title")
-                    .text(
-                        data.mark_as_distributionlist ?
-                        gt("Distribution list") :
-                        (data.company || data.position || data.profession) ?
-                        join(", ", data.company, data.position, data.profession) + "\u00A0" :
-                        (data.email1 || data.email2 || data.email3) + "\u00A0"
+                    .text(util.getJob(data)
                     )
                 )
             );
@@ -192,7 +194,7 @@ define("io.ox/contacts/edit/view-form",
     });
 
     ext.point("io.ox/contacts/edit/form/head/button").extend({
-        index: 100,
+        index: 200,
         id: "inline-actions",
         draw: function (data) {
 //            var buttonCancel = $('<a>').attr({
@@ -203,7 +205,8 @@ define("io.ox/contacts/edit/view-form",
 //            });
             var buttonSave = $('<a>').attr({
                 'href': '#',
-                'class': 'button default-action savebutton'
+                'class': 'button default-action savebutton',
+                'data-action': 'save'
             }).text('save').on('click', {app: app}, function (event) {
                 var formdata = {},
                     formFrame = $('.abs'),
@@ -612,9 +615,68 @@ define("io.ox/contacts/edit/view-form",
 
     ext.point("io.ox/contacts/edit/form").extend({
         index: 120,
-        id: 'contact-job',
+        id: 'contact-work-address',
         draw: function (data) {
-            var id = 'contact-job';
+            var id = 'contact-work-address';
+
+            addField({
+                label: gt("Room number"),
+                name: 'room_number',
+                value: data.room_number,
+                node: this,
+                fn: 'hidden',
+                id: id
+            });
+            addField({
+                label: gt("Street business"),
+                name: 'street_business',
+                value: data.street_business,
+                node: this,
+                fn: 'hidden',
+                id: id
+            });
+            addField({
+                label: gt("Postal code business"),
+                name: 'postal_code_business',
+                value: data.postal_code_business,
+                node: this,
+                fn: 'hidden',
+                id: id
+            });
+            addField({
+                label: gt("City business"),
+                name: 'city_business',
+                value: data.city_business,
+                node: this,
+                fn: 'hidden',
+                id: id
+            });
+            addField({
+                label: gt("State business"),
+                name: 'state_business',
+                value: data.state_business,
+                node: this,
+                fn: 'hidden',
+                id: id
+            });
+            addField({
+                label: gt("Country business"),
+                name: 'country_business',
+                value: data.country_business,
+                node: this,
+                fn: 'hidden',
+                id: id
+            });
+            addSwitch(this, id);
+            addSpacer(this);
+        }
+    });
+
+    ext.point("io.ox/contacts/edit/form").extend({
+        index: 120,
+        id: 'contact-job-descriptions',
+        draw: function (data) {
+            var id = 'contact-job-descriptions';
             addField({
                 label: gt("Profession"),
                 name: 'profession',
@@ -636,6 +698,99 @@ define("io.ox/contacts/edit/view-form",
                 node: this,
                 id: id
             });
+            addField({
+                label: gt("Department"),
+                name: 'department',
+                value: data.department,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Employee type"),
+                name: 'employee_type',
+                value: data.employee_type,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Employee type"),
+                name: 'employee_type',
+                value: data.employee_type,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Number of employees"),
+                name: 'number_of_employees',
+                value: data.number_of_employees,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Sales volume"),
+                name: 'sales_volume',
+                value: data.sales_volume,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Tax id"),
+                name: 'tax_id',
+                value: data.tax_id,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Commercial register"),
+                name: 'commercial_register',
+                value: data.commercial_register,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Branches"),
+                name: 'branches',
+                value: data.branches,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Business category"),
+                name: 'business_category',
+                value: data.business_category,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Info"),
+                name: 'info',
+                value: data.info,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Manager name"),
+                name: 'manager_name',
+                value: data.manager_name,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Assistant name"),
+                name: 'assistant_name',
+                value: data.assistant_name,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Assistant name"),
+                name: 'assistant_name',
+                value: data.assistant_name,
+                node: this,
+                id: id
+            });
+
+
             addSwitch(this, id);
             addSpacer(this);
         }
@@ -643,6 +798,262 @@ define("io.ox/contacts/edit/view-form",
 
     ext.point("io.ox/contacts/edit/form").extend({
         index: 120,
+        id: 'connect',
+        draw: function (data) {
+            var id = 'connect';
+
+
+            addSwitch(this, id);
+            addSpacer(this);
+        }
+    });
+
+
+    ext.point("io.ox/contacts/edit/form").extend({
+        index: 120,
+        id: 'special-information',
+        draw: function (data) {
+            var id = 'special-information';
+            addField({
+                label: gt("Street other"),
+                name: 'street_other',
+                value: data.street_other,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("City other"),
+                name: 'city_other',
+                value: data.city_other,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Postal code other"),
+                name: 'postal_code_other',
+                value: data.postal_code_other,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Country other"),
+                name: 'country_other',
+                value: data.country_other,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("State other"),
+                name: 'state_other',
+                value: data.state_other,
+                node: this,
+                id: id
+            });
+
+            addField({
+                label: gt("Marital status"),
+                name: 'marital_status',
+                value: data.marital_status,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Number of children"),
+                name: 'number_of_children',
+                value: data.number_of_children,
+                node: this,
+                id: id
+            });
+
+            addField({
+                label: gt("Spouse name"),
+                name: 'spouse_name',
+                value: data.spouse_name,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Note"),
+                name: 'note',
+                value: data.note,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Url"),
+                name: 'url',
+                value: data.url,
+                node: this,
+                id: id
+            });
+
+            addField({
+                label: gt("Birthday"),
+                name: 'birthday',
+                value: data.birthday,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Anniversary"),
+                name: 'anniversary',
+                value: data.anniversary,
+                node: this,
+                id: id
+            });
+
+            addField({
+                label: gt("Userfield 01"),
+                name: 'userfield01',
+                value: data.userfield01,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 02"),
+                name: 'userfield02',
+                value: data.userfield02,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 03"),
+                name: 'userfield03',
+                value: data.userfield03,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 04"),
+                name: 'userfield04',
+                value: data.userfield04,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 05"),
+                name: 'userfield05',
+                value: data.userfield05,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 06"),
+                name: 'userfield06',
+                value: data.userfield06,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 07"),
+                name: 'userfield07',
+                value: data.userfield07,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 08"),
+                name: 'userfield08',
+                value: data.userfield08,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 09"),
+                name: 'userfield09',
+                value: data.userfield09,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 10"),
+                name: 'userfield10',
+                value: data.userfield10,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 11"),
+                name: 'userfield11',
+                value: data.userfield11,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 12"),
+                name: 'userfield12',
+                value: data.userfield12,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 13"),
+                name: 'userfield13',
+                value: data.userfield13,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 14"),
+                name: 'userfield14',
+                value: data.userfield14,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 15"),
+                name: 'userfield15',
+                value: data.userfield15,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 16"),
+                name: 'userfield16',
+                value: data.userfield16,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 17"),
+                name: 'userfield17',
+                value: data.userfield17,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 18"),
+                name: 'userfield18',
+                value: data.userfield18,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 19"),
+                name: 'userfield19',
+                value: data.userfield19,
+                node: this,
+                id: id
+            });
+            addField({
+                label: gt("Userfield 20"),
+                name: 'userfield20',
+                value: data.userfield20,
+                node: this,
+                id: id
+            });
+
+            addSwitch(this, id);
+            addSpacer(this);
+        }
+    });
+
+
+
+
+
+    ext.point("io.ox/contacts/edit/form").extend({
+        index: 200,
         id: 'bottom-line',
         draw: function (data) {
             var node = $('<td>', { colspan: '2' });

@@ -229,18 +229,18 @@ define("io.ox/contacts/edit/test",
                     });
 
                     j.waitsFor(function () {
-                        formFrame =  $('.contact_edit_frame ');
-                        buttonSave = formFrame.find('.io-ox-button[data-action="save"]');
+                        formFrame =  $('table[data-obj-id="' + phrase + '"]');
+                        buttonSave = formFrame.find('.default-action.savebutton[data-action="save"]');
                         if (buttonSave[0]) {
                             return true;
                         }
                     }, 'waits for the form', TIMEOUT);
 
                     j.runs(function () {
-                        formFrame =  $('.contact_edit_frame ');
+                        formFrame =  $('table[data-obj-id="' + phrase + '"]');
                         var count = 0;
                         for (var i in testObjectLong) {
-                            formFrame.find(".field input[name='" + i + "']").val(testObjectLong[i]);
+                            formFrame.find(".value input[name='" + i + "']").val(testObjectLong[i]);
                         }
 //                        console.log(buttonSave);
                         buttonSave.trigger('click');
