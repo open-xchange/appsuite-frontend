@@ -112,6 +112,680 @@ define("io.ox/contacts/edit/view-form",
         tr.appendTo(node);
     }
 
+    var formFields = {
+        mailFields: {
+            fields: {
+                'email1': {
+                    label: gt('E-Mail 1'),
+                    name: 'email1',
+                    weight: 100,
+                    blockid: 'contact-email'
+                },
+                'email2': {
+                    label: 'E-Mail 2',
+                    name: 'email2',
+                    fn: 'hidden',
+                    weight: 110,
+                    blockid: 'contact-email'
+                },
+                'email3': {
+                    label: 'E-Mail 3',
+                    name: 'email3',
+                    fn: 'hidden',
+                    weight: 130,
+                    blockid: 'contact-email'
+                }
+            }
+        },
+        personalFields: {
+            fields: {
+                'titel' : {
+                    label: gt("Title"),
+                    name: 'title',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-personal'
+                },
+                'first_name': {
+                    label: gt("First name"),
+                    name: 'first_name',
+                    weight: 100,
+                    blockid: 'contact-personal'
+                },
+                'last_name': {
+                    label: gt("Last name"),
+                    name: 'last_name',
+                    weight: 100,
+                    blockid: 'contact-personal'
+                },
+                'display_name': {
+                    label: gt("Display name"),
+                    name: 'display_name',
+                    weight: 100,
+                    blockid: 'contact-personal'
+                },
+                'second_name': {
+                    label: gt("Second name"),
+                    name: 'second_name',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-personal'
+                },
+                'suffix': {
+                    label: gt("Suffix"),
+                    name: 'suffix',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-personal'
+                },
+                'nickname': {
+                    label: gt("Nickname"),
+                    name: 'nickname',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-personal'
+                },
+                'birthday': {
+                    label: gt("Birthday"),
+                    name: 'birthday',
+//                    value: date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear(),
+                    weight: 100,
+                    blockid: 'contact-personal'
+                }
+
+            }
+        },
+        phoneFields: {
+            fields: {
+                'telephone_business1': {
+                    label: gt("Telephone business 1"),
+                    name: 'telephone_business1',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'telephone_business2': {
+                    label: gt("Telephone business 2"),
+                    name: 'telephone_business2',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'fax_business': {
+                    label: gt("Fax business"),
+                    name: 'fax_business',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'telephone_callback': {
+                    label: gt("Telephone callback"),
+                    name: 'telephone_callback',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'telephone_car': {
+                    label: gt("Telephone car"),
+                    name: 'telephone_car',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'telephone_company': {
+                    label: gt("Phone (Company)"),
+                    name: 'telephone_company',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'telephone_home1': {
+                    label: gt("Phone (home)"),
+                    name: 'telephone_home1',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'telephone_home2': {
+                    label: gt("Phone (home 2nd)"),
+                    name: 'telephone_home2',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'fax_home': {
+                    label: gt("Fax home"),
+                    name: 'fax_home',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'cellular_telephone1': {
+                    label: gt("Cellphone"),
+                    name: 'cellular_telephone1',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'cellular_telephone2': {
+                    label: gt("Cellphone (2nd)"),
+                    name: 'cellular_telephone2',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'telephone_other': {
+                    label: gt("Phone (other)"),
+                    name: 'telephone_other',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'fax_other': {
+                    label: gt("Fax other"),
+                    name: 'fax_other',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'telephone_isdn': {
+                    label: gt("Telephone isdn"),
+                    name: 'telephone_isdn',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'telephone_pager': {
+                    label: gt("Telephone pager"),
+                    name: 'telephone_pager',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'telephone_primary': {
+                    label: gt("Telephone primary"),
+                    name: 'telephone_primary',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'telephone_radio': {
+                    label: gt("Telephone radio"),
+                    name: 'telephone_radio',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'telephone_telex': {
+                    label: gt("Telephone telex"),
+                    name: 'telephone_telex',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'telephone_ttytdd': {
+                    label: gt("Telephone ttytdd"),
+                    name: 'telephone_ttytdd',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'instant_messenger1': {
+                    label: gt("Instant messenger 1"),
+                    name: 'instant_messenger1',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'instant_messenger2': {
+                    label: gt("Instant messenger 2"),
+                    name: 'instant_messenger2',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'telephone_ip': {
+                    label: gt("Telephone ip"),
+                    name: 'telephone_ip',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                },
+                'telephone_assistant': {
+                    label: gt("Telephone_assistant"),
+                    name: 'telephone_assistant',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-phone'
+                }
+            }
+        },
+        homeFields: {
+            fields: {
+                'street_home': {
+                    label: gt("Street home"),
+                    name: 'street_home',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-home-address'
+                },
+                'postal_code_home': {
+                    label: gt("Postal code home"),
+                    name: 'postal_code_home',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-home-address'
+                },
+                'city_home': {
+                    label: gt("City home"),
+                    name: 'city_home',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-home-address'
+                },
+                'state_home': {
+                    label: gt("State home"),
+                    name: 'state_home',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-home-address'
+                },
+                'country_home': {
+                    label: gt("Country home"),
+                    name: 'country_home',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-home-address'
+                }
+
+            }
+        },
+        otherFields: {
+            fields: {
+                'street_other': {
+                    label: gt("Street other"),
+                    name: 'street_other',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-other-address'
+                },
+                'postal_code_other': {
+                    label: gt("Postal code other"),
+                    name: 'postal_code_other',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-other-address'
+                },
+                'city_other': {
+                    label: gt("City other"),
+                    name: 'city_other',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-other-address'
+                },
+                'state_other': {
+                    label: gt("State other"),
+                    name: 'state_other',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-other-address'
+                },
+                'country_other': {
+                    label: gt("Country other"),
+                    name: 'country_other',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-other-address'
+                }
+            }
+        },
+        workFields: {
+            fields: {
+                'room_number': {
+                    label: gt("Room number"),
+                    name: 'room_number',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-work-address'
+                },
+                'street_business': {
+                    label: gt("Street business"),
+                    name: 'street_business',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-work-address'
+                },
+                'postal_code_business': {
+                    label: gt("Postal code business"),
+                    name: 'postal_code_business',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-work-address'
+                },
+                'city_business': {
+                    label: gt("City business"),
+                    name: 'city_business',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-work-address'
+                },
+                'state_business': {
+                    label: gt("State business"),
+                    name: 'state_business',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-work-address'
+                },
+                'country_business': {
+                    label: gt("Country business"),
+                    name: 'country_business',
+                    fn: 'hidden',
+                    weight: 100,
+                    blockid: 'contact-work-address'
+                }
+            }
+        },
+        jobFields: {
+            fields: {
+                'profession': {
+                    label: gt("Profession"),
+                    name: 'profession',
+                    weight: 100,
+                    blockid: 'contact-job-descriptions'
+                },
+                'position': {
+                    label: gt("Position"),
+                    name: 'position',
+                    weight: 100,
+                    blockid: 'contact-job-descriptions'
+                },
+                'company': {
+                    label: gt("Company"),
+                    name: 'company',
+                    weight: 100,
+                    blockid: 'contact-job-descriptions'
+                },
+                'department': {
+                    label: gt("Department"),
+                    name: 'department',
+                    weight: 100,
+                    blockid: 'contact-job-descriptions'
+                },
+                'employee_type': {
+                    label: gt("Employee type"),
+                    name: 'employee_type',
+                    weight: 100,
+                    blockid: 'contact-job-descriptions'
+                },
+                'number_of_employees': {
+                    label: gt("Number of employees"),
+                    name: 'number_of_employees',
+                    weight: 100,
+                    blockid: 'contact-job-descriptions'
+                },
+                'sales_volume': {
+                    label: gt("Sales volume"),
+                    name: 'sales_volume',
+                    weight: 100,
+                    blockid: 'contact-job-descriptions'
+                },
+                'tax_id': {
+                    label: gt("Tax id"),
+                    name: 'tax_id',
+                    weight: 100,
+                    blockid: 'contact-job-descriptions'
+                },
+                'commercial_register': {
+                    label: gt("Commercial register"),
+                    name: 'commercial_register',
+                    weight: 100,
+                    blockid: 'contact-job-descriptions'
+                },
+                'branches': {
+                    label: gt("Branches"),
+                    name: 'branches',
+                    weight: 100,
+                    blockid: 'contact-job-descriptions'
+                },
+                'business_category': {
+                    label: gt("Business category"),
+                    name: 'business_category',
+                    weight: 100,
+                    blockid: 'contact-job-descriptions'
+                },
+                'info': {
+                    label: gt("Info"),
+                    name: 'info',
+                    weight: 100,
+                    blockid: 'contact-job-descriptions'
+                },
+                'manager_name': {
+                    label: gt("Manager name"),
+                    name: 'manager_name',
+                    weight: 100,
+                    blockid: 'contact-job-descriptions'
+                },
+                'assistant_name': {
+                    label: gt("Assistant name"),
+                    name: 'assistant_name',
+                    weight: 100,
+                    blockid: 'contact-job-descriptions'
+                }
+
+            }
+        },
+        specialFields: {
+            fields: {
+                'marital_status': {
+                    label: gt("Marital status"),
+                    name: 'marital_status',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'number_of_children': {
+                    label: gt("Number of children"),
+                    name: 'number_of_children',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'spouse_name': {
+                    label: gt("Spouse name"),
+                    name: 'spouse_name',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'note': {
+                    label: gt("Note"),
+                    name: 'note',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'url': {
+                    label: gt("Url"),
+                    name: 'url',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'anniversary': {
+                    label: gt("Anniversary"),
+                    name: 'anniversary',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield01': {
+                    label: gt("Userfield 01"),
+                    name: 'userfield01',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield02': {
+                    label: gt("Userfield 02"),
+                    name: 'userfield02',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield03': {
+                    label: gt("Userfield 03"),
+                    name: 'userfield03',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield04': {
+                    label: gt("Userfield 04"),
+                    name: 'userfield04',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield05': {
+                    label: gt("Userfield 05"),
+                    name: 'userfield05',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield06': {
+                    label: gt("Userfield 06"),
+                    name: 'userfield06',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield07': {
+                    label: gt("Userfield 07"),
+                    name: 'userfield07',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield08': {
+                    label: gt("Userfield 08"),
+                    name: 'userfield08',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield09': {
+                    label: gt("Userfield 09"),
+                    name: 'userfield09',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield10': {
+                    label: gt("Userfield 10"),
+                    name: 'userfield10',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield11': {
+                    label: gt("Userfield 11"),
+                    name: 'userfield11',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield12': {
+                    label: gt("Userfield 12"),
+                    name: 'userfield12',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield13': {
+                    label: gt("Userfield 13"),
+                    name: 'userfield13',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield14': {
+                    label: gt("Userfield 14"),
+                    name: 'userfield14',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield15': {
+                    label: gt("Userfield 15"),
+                    name: 'userfield15',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield16': {
+                    label: gt("Userfield 16"),
+                    name: 'userfield16',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield17': {
+                    label: gt("Userfield 17"),
+                    name: 'userfield17',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield18': {
+                    label: gt("Userfield 18"),
+                    name: 'userfield18',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield19': {
+                    label: gt("Userfield 19"),
+                    name: 'userfield19',
+                    weight: 100,
+                    blockid: 'special-information'
+                },
+                'userfield20': {
+                    label: gt("Userfield 20"),
+                    name: 'userfield20',
+                    weight: 100,
+                    blockid: 'special-information'
+                }
+            }
+        }
+    };
+
+
+    function createfields(fielddata) {
+        ext.point("io.ox/contacts/edit/form/" + fielddata.blockid).extend({
+            index: fielddata.weight,
+            id: 'contact-' + fielddata.name,
+            draw: function (data, id) {
+                var dateValue = data[fielddata.name];
+                if (/^(anniversary|birthday)$/.test(fielddata.name)) {
+                    var date = new Date(data[fielddata.name]);
+                    if (!isNaN(date.getDate())) {
+                        dateValue = date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
+                    }
+                }
+                addField({
+                    label: fielddata.label,
+                    name: fielddata.name,
+                    value: dateValue,
+                    node:  this,
+                    fn: fielddata.fn,
+                    id: fielddata.blockid
+                });
+
+            }
+        });
+    }
+
+
+
+    function loopformblocks(formBlock) {
+        for (var i in formBlock.fields) {
+            createfields(formBlock.fields[i]);
+        }
+    }
+
+
+    function loopformfields(formFields) {
+        for (var i in formFields) {
+            var formBlocks = formFields[i];
+            loopformblocks(formBlocks);
+        }
+    }
+
+
+
+//    function loopfieldform(formFields) {
+//        for (var i in fieldobj.fields) {
+//            createfields(fieldobj.fields[i]);
+//        }
+//    }
+
+    loopformfields(formFields);
 
     // head
     ext.point("io.ox/contacts/edit/form").extend({
@@ -143,8 +817,14 @@ define("io.ox/contacts/edit/view-form",
                 )
                 .on('click', function (e) {
                     e.preventDefault();
-                    $('tr.contact-image').removeClass('hidden');
-                    $('.change-pic-link').remove();
+                    var status = $('tr.contact-image.hidden');
+                    if (status[0]) {
+                        $('tr.contact-image').removeClass('hidden');
+                        $('.change-pic-link').remove();
+                    } else {
+                        $('tr.contact-image').addClass('hidden');
+                    }
+
                 })
             )
             .append(
@@ -166,7 +846,7 @@ define("io.ox/contacts/edit/view-form",
     });
 
     ext.point("io.ox/contacts/edit/form").extend({
-        index: 120,
+        index: 100,
         id: 'contact-image',
         draw: function (data) {
             var id = 'contact-image',
@@ -294,71 +974,17 @@ define("io.ox/contacts/edit/view-form",
         id: 'contact-personal',
         draw: function (data) {
             var id = 'contact-personal';
-            addField({
-                label: gt("Title"),
-                name: 'title',
-                value: data.title,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("First name"),
-                name: 'first_name',
-                value: data.first_name,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Last name"),
-                name: 'last_name',
-                value: data.last_name,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Display name"),
-                name: 'display_name',
-                value: data.display_name,
-                node: this,
-                id: id
-            });
-
-            var date = new Date(data.birthday);
-            if (!isNaN(date.getDate())) {
-                addField({
-                    label: gt("Birthday"),
-                    name: 'birthday',
-                    value: date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear(),
-                    node: this,
-                    id: id
-                });
-            }
-
-            addField({
-                label: gt("Second name"),
-                name: 'second_name',
-                value: data.second_name,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Suffix"),
-                name: 'suffix',
-                value: data.suffix,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Nickname"),
-                name: 'nickname',
-                value: data.nickname,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
+            ext.point("io.ox/contacts/edit/form/contact-personal").invoke("draw", this, data);
+//            var date = new Date(data.birthday);
+//            if (!isNaN(date.getDate())) {
+//                addField({
+//                    label: gt("Birthday"),
+//                    name: 'birthday',
+//                    value: date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear(),
+//                    node: this,
+//                    id: id
+//                });
+//            }
             addSwitch(this, id, 'Personal information');
             addSpacer(this);
         }
@@ -368,223 +994,23 @@ define("io.ox/contacts/edit/view-form",
         index: 120,
         id: 'contact-email',
         draw: function (data) {
+            ext.point("io.ox/contacts/edit/form/contact-email").invoke("draw", this, data);
             var id = 'contact-email';
-            addField({
-                label: gt("E-mail 1"),
-                name: 'email1',
-                value: data.email1,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("E-mail 2"),
-                name: 'email2',
-                value: data.email2,
-                node:  this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("E-mail 3"),
-                name: 'email3',
-                value: data.email3,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
             addSwitch(this, id, 'E-Mail addresses');
             addSpacer(this);
         }
     });
 
+
+
+
+
     ext.point("io.ox/contacts/edit/form").extend({
         index: 120,
         id: 'contact-phone',
         draw: function (data) {
+            ext.point("io.ox/contacts/edit/form/contact-phone").invoke("draw", this, data);
             var id = 'contact-phone';
-            addField({
-                label: gt("Telephone business 1"),
-                name: 'telephone_business1',
-                value: data.telephone_business1,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Telephone business 2"),
-                name: 'telephone_business2',
-                value: data.telephone_business2,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Fax business"),
-                name: 'fax_business',
-                value: data.fax_business,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Telephone callback"),
-                name: 'telephone_callback',
-                value: data.telephone_callback,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Telephone car"),
-                name: 'telephone_car',
-                value: data.telephone_car,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Phone (Company)"),
-                name: 'telephone_company',
-                value: data.telephone_company,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Phone (home)"),
-                name: 'telephone_home1',
-                value: data.telephone_home1,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Phone (home)"),
-                name: 'telephone_home2',
-                value: data.telephone_home2,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Fax home"),
-                name: 'fax_home',
-                value: data.fax_home,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Cellphone"),
-                name: 'cellular_telephone1',
-                value: data.cellular_telephone1,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Cellphone (2nd)"),
-                name: 'cellular_telephone2',
-                value: data.cellular_telephone2,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Phone (other)"),
-                name: 'telephone_other',
-                value: data.telephone_other,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Fax other"),
-                name: 'fax_other',
-                value: data.fax_other,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Telephone isdn"),
-                name: 'telephone_isdn',
-                value: data.telephone_isdn,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Telephone pager"),
-                name: 'telephone_pager',
-                value: data.telephone_pager,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Telephone primary"),
-                name: 'telephone_primary',
-                value: data.telephone_primary,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Telephone radio"),
-                name: 'telephone_radio',
-                value: data.telephone_radio,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Telephone telex"),
-                name: 'telephone_telex',
-                value: data.telephone_telex,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Telephone ttytdd"),
-                name: 'telephone_ttytdd',
-                value: data.telephone_ttytdd,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Instant messenger 1"),
-                name: 'instant_messenger1',
-                value: data.instant_messenger1,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Instant messenger 2"),
-                name: 'instant_messenger2',
-                value: data.instant_messenger2,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Telephone ip"),
-                name: 'telephone_ip',
-                value: data.telephone_ip,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Telephone_assistant"),
-                name: 'telephone_assistant',
-                value: data.telephone_assistant,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
             addSwitch(this, id, 'Phone numbers');
             addSpacer(this);
         }
@@ -594,48 +1020,20 @@ define("io.ox/contacts/edit/view-form",
         index: 120,
         id: 'contact-home-address',
         draw: function (data) {
+            ext.point("io.ox/contacts/edit/form/contact-home-address").invoke("draw", this, data);
             var id = 'contact-home-address';
-            addField({
-                label: gt("Street home"),
-                name: 'street_home',
-                value: data.street_home,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Postal code home"),
-                name: 'postal_code_home',
-                value: data.postal_code_home,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("City home"),
-                name: 'city_home',
-                value: data.city_home,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("State home"),
-                name: 'state_home',
-                value: data.state_home,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Country home"),
-                name: 'country_home',
-                value: data.country_home,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
             addSwitch(this, id, 'Home address');
+            addSpacer(this);
+        }
+    });
+
+    ext.point("io.ox/contacts/edit/form").extend({
+        index: 120,
+        id: 'contact-other-address',
+        draw: function (data) {
+            ext.point("io.ox/contacts/edit/form/contact-other-address").invoke("draw", this, data);
+            var id = 'contact-other-address';
+            addSwitch(this, id, 'Other address');
             addSpacer(this);
         }
     });
@@ -644,56 +1042,8 @@ define("io.ox/contacts/edit/view-form",
         index: 120,
         id: 'contact-work-address',
         draw: function (data) {
+            ext.point("io.ox/contacts/edit/form/contact-work-address").invoke("draw", this, data);
             var id = 'contact-work-address';
-
-            addField({
-                label: gt("Room number"),
-                name: 'room_number',
-                value: data.room_number,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Street business"),
-                name: 'street_business',
-                value: data.street_business,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Postal code business"),
-                name: 'postal_code_business',
-                value: data.postal_code_business,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("City business"),
-                name: 'city_business',
-                value: data.city_business,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("State business"),
-                name: 'state_business',
-                value: data.state_business,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
-            addField({
-                label: gt("Country business"),
-                name: 'country_business',
-                value: data.country_business,
-                node: this,
-                fn: 'hidden',
-                id: id
-            });
             addSwitch(this, id, 'Work address');
             addSpacer(this);
         }
@@ -703,121 +1053,8 @@ define("io.ox/contacts/edit/view-form",
         index: 120,
         id: 'contact-job-descriptions',
         draw: function (data) {
+            ext.point("io.ox/contacts/edit/form/contact-job-descriptions").invoke("draw", this, data);
             var id = 'contact-job-descriptions';
-            addField({
-                label: gt("Profession"),
-                name: 'profession',
-                value: data.profession,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Position"),
-                name: 'position',
-                value: data.position,
-                node:  this,
-                id: id
-            });
-            addField({
-                label: gt("Company"),
-                name: 'company',
-                value: data.company,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Department"),
-                name: 'department',
-                value: data.department,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Employee type"),
-                name: 'employee_type',
-                value: data.employee_type,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Employee type"),
-                name: 'employee_type',
-                value: data.employee_type,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Number of employees"),
-                name: 'number_of_employees',
-                value: data.number_of_employees,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Sales volume"),
-                name: 'sales_volume',
-                value: data.sales_volume,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Tax id"),
-                name: 'tax_id',
-                value: data.tax_id,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Commercial register"),
-                name: 'commercial_register',
-                value: data.commercial_register,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Branches"),
-                name: 'branches',
-                value: data.branches,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Business category"),
-                name: 'business_category',
-                value: data.business_category,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Info"),
-                name: 'info',
-                value: data.info,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Manager name"),
-                name: 'manager_name',
-                value: data.manager_name,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Assistant name"),
-                name: 'assistant_name',
-                value: data.assistant_name,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Assistant name"),
-                name: 'assistant_name',
-                value: data.assistant_name,
-                node: this,
-                id: id
-            });
-
-
             addSwitch(this, id, 'Job information');
             addSpacer(this);
         }
@@ -840,236 +1077,8 @@ define("io.ox/contacts/edit/view-form",
         index: 120,
         id: 'special-information',
         draw: function (data) {
+            ext.point("io.ox/contacts/edit/form/special-information").invoke("draw", this, data);
             var id = 'special-information';
-            addField({
-                label: gt("Street other"),
-                name: 'street_other',
-                value: data.street_other,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("City other"),
-                name: 'city_other',
-                value: data.city_other,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Postal code other"),
-                name: 'postal_code_other',
-                value: data.postal_code_other,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Country other"),
-                name: 'country_other',
-                value: data.country_other,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("State other"),
-                name: 'state_other',
-                value: data.state_other,
-                node: this,
-                id: id
-            });
-
-            addField({
-                label: gt("Marital status"),
-                name: 'marital_status',
-                value: data.marital_status,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Number of children"),
-                name: 'number_of_children',
-                value: data.number_of_children,
-                node: this,
-                id: id
-            });
-
-            addField({
-                label: gt("Spouse name"),
-                name: 'spouse_name',
-                value: data.spouse_name,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Note"),
-                name: 'note',
-                value: data.note,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Url"),
-                name: 'url',
-                value: data.url,
-                node: this,
-                id: id
-            });
-
-            addField({
-                label: gt("Birthday"),
-                name: 'birthday',
-                value: data.birthday,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Anniversary"),
-                name: 'anniversary',
-                value: data.anniversary,
-                node: this,
-                id: id
-            });
-
-            addField({
-                label: gt("Userfield 01"),
-                name: 'userfield01',
-                value: data.userfield01,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 02"),
-                name: 'userfield02',
-                value: data.userfield02,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 03"),
-                name: 'userfield03',
-                value: data.userfield03,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 04"),
-                name: 'userfield04',
-                value: data.userfield04,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 05"),
-                name: 'userfield05',
-                value: data.userfield05,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 06"),
-                name: 'userfield06',
-                value: data.userfield06,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 07"),
-                name: 'userfield07',
-                value: data.userfield07,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 08"),
-                name: 'userfield08',
-                value: data.userfield08,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 09"),
-                name: 'userfield09',
-                value: data.userfield09,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 10"),
-                name: 'userfield10',
-                value: data.userfield10,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 11"),
-                name: 'userfield11',
-                value: data.userfield11,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 12"),
-                name: 'userfield12',
-                value: data.userfield12,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 13"),
-                name: 'userfield13',
-                value: data.userfield13,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 14"),
-                name: 'userfield14',
-                value: data.userfield14,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 15"),
-                name: 'userfield15',
-                value: data.userfield15,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 16"),
-                name: 'userfield16',
-                value: data.userfield16,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 17"),
-                name: 'userfield17',
-                value: data.userfield17,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 18"),
-                name: 'userfield18',
-                value: data.userfield18,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 19"),
-                name: 'userfield19',
-                value: data.userfield19,
-                node: this,
-                id: id
-            });
-            addField({
-                label: gt("Userfield 20"),
-                name: 'userfield20',
-                value: data.userfield20,
-                node: this,
-                id: id
-            });
-
             addSwitch(this, id, 'Special information');
             addSpacer(this);
         }

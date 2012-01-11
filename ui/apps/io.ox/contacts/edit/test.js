@@ -425,7 +425,7 @@ define("io.ox/contacts/edit/test",
                     }, 'delete dialog to be there', TIMEOUT);
 
                     j.runs(function () {
-                        dialog.trigger('click');
+//                        dialog.trigger('click');
                     });
                 });
             });
