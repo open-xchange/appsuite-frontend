@@ -177,7 +177,7 @@ define("io.ox/contacts/edit/test",
                     });
                 });
 
-                j.it('creats a fresh obj', function () {
+                j.it('creates a fresh obj', function () {
 
                     j.runs(function () {
                         var me = this;
@@ -195,7 +195,6 @@ define("io.ox/contacts/edit/test",
 
                         j.runs(function () {
                             data = this.obj;
-//                            console.log('created ' + data.id);
                             j.expect(data).toBeTruthy();
                         });
                     });
@@ -253,11 +252,9 @@ define("io.ox/contacts/edit/test",
                         me.ready = false;
                         api.bind('edit', function (data) {
                             if (data) {
-//                                console.log(data);
                                 dataId = data.id;
                                 dataFolder = data.folder;
                                 me.ready = true;
-//                                console.log('loaded in response ' +  dataId);
                             }
                         });
 
@@ -277,7 +274,6 @@ define("io.ox/contacts/edit/test",
 
                         j.waitsFor(function () {
                             if (dataObj) {
-//                                console.log('loaded ' + dataObj.id);
                                 return true;
                             }
                         }, 'looks for the object', TIMEOUT);
@@ -391,7 +387,6 @@ define("io.ox/contacts/edit/test",
                 });
 
                 j.it('looks for the edited item / selects and deletes', function () {
-
                     var grid = app.getGrid();
                     phrase = dataFolder + '.' + dataId;
 
@@ -406,7 +401,7 @@ define("io.ox/contacts/edit/test",
                     }, 'looks for the list', TIMEOUT);
 
                     j.waitsFor(function () {
-                        buttonDelete = $('table[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
+                        buttonDelete = $('table.view[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
                         if (buttonDelete[0]) {
                             return true;
                         }
@@ -426,6 +421,9 @@ define("io.ox/contacts/edit/test",
                     j.runs(function () {
                         dialog.trigger('click');
                     });
+
+                    j.waits(500); // need a better solution
+
                 });
             });
         }
@@ -441,7 +439,7 @@ define("io.ox/contacts/edit/test",
             j.describe("Contact extpoint", function () {
                 var app = null,
                 data, itemFill, itemDelete, buttonUpdate, buttonSave,
-                buttonDelete, dialog, testfield, formFrame = null,
+                buttonDelete, dialog, testfield, testfield2, formFrame = null,
                 dataId, dataFolder, dataObj, phrase;
 
                 j.it('opens contact app ', function () {
@@ -452,6 +450,7 @@ define("io.ox/contacts/edit/test",
 
                     contacts.getApp().launch().done(function () {
                         app = this;
+                        //console.log(app);
                         app.folder.setDefault().done(function () {
                             loaded.yep();
                             j.expect(app).toBeTruthy();
@@ -459,7 +458,7 @@ define("io.ox/contacts/edit/test",
                     });
                 });
 
-                j.it('creats a fresh obj', function () {
+                j.it('creates a fresh obj', function () {
 
                     j.runs(function () {
                         var me = this;
@@ -477,7 +476,6 @@ define("io.ox/contacts/edit/test",
 
                         j.runs(function () {
                             data = this.obj;
-        //                        console.log('created ' + data.id);
                             j.expect(data).toBeTruthy();
                         });
                     });
@@ -520,24 +518,123 @@ define("io.ox/contacts/edit/test",
                         }
                     }, 'waits for the form', TIMEOUT);
 
+                    j.waitsFor(function () {
+                        formFrame =  $('table[data-obj-id="' + phrase + '"]');
+                        buttonSave = formFrame.find('.default-action.savebutton[data-action="save"]');
+                        if (buttonSave[0]) {
+                            return true;
+                        }
+                    }, 'waits for the form', TIMEOUT);
+
+                    j.runs(function () {
+                        $(buttonSave[0]).trigger('click');
+                    });
 
 
                 });
 
-                j.it('catches the form and checks again', function () {
+                j.it('opens contact app ', function () {
 
-//                    j.runs(function () {
-//                        ext.point("io.ox/contacts/edit/form/contact-phone").disable("contact-cellular_telephone1");
-//                    });
+                    var loaded = new Done();
+
+                    j.waitsFor(loaded, 'Could not load app', TIMEOUT);
+
+                    contacts.getApp().launch().done(function () {
+                        app = this;
+                        loaded.yep();
+                        j.expect(app).toBeTruthy();
+                    });
+                });
+
+                j.it('looks for the created item / selects and deletes', function () {
 
                     var grid = app.getGrid();
 
+                    j.waitsFor(function () {
+                        // grid contains item?
+                        if (grid.contains(phrase)) {
+                            grid.selection.set({ folder_id: dataFolder, id: dataId });
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }, 'looks for the list', TIMEOUT);
 
+                    j.waitsFor(function () {
+                        buttonDelete = $('table.view[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
+                        if (buttonDelete[0]) {
+                            return true;
+                        }
+                    }, 'looks for delete button', TIMEOUT);
 
+                    j.runs(function () {
+                        buttonDelete.trigger('click');
+                    });
+
+                    j.waitsFor(function () {
+                        dialog = $('.io-ox-dialog-popup .io-ox-button[data-action="delete"]');
+                        if (dialog[0]) {
+                            return true;
+                        }
+                    }, 'delete dialog to be there', TIMEOUT);
+
+                    j.runs(function () {
+                        dialog.trigger('click');
+                    });
+                });
+
+                j.it('opens contact app ', function () {
+
+                    var loaded = new Done();
+
+                    j.waitsFor(loaded, 'Could not load app', TIMEOUT);
+
+                    contacts.getApp().launch().done(function () {
+                        app = this;
+                        app.folder.setDefault().done(function () {
+                            loaded.yep();
+                            j.expect(app).toBeTruthy();
+                        });
+                    });
+                });
+
+                j.it('creates a fresh obj', function () {
+
+                    j.runs(function () {
+                        var me = this;
+                        me.ready = false;
+                        testFactory.createSimpleContact(function (data) {
+                            if (data) {
+                                me.ready = true;
+                                me.obj = data;
+                            }
+                        });
+
+                        j.waitsFor(function () {
+                            return this.ready;
+                        }, 'it happens', TIMEOUT);
+
+                        j.runs(function () {
+                            data = this.obj;
+                            j.expect(data).toBeTruthy();
+                        });
+                    });
+                });
+
+                j.it('catches the form and checks for absence of testfield', function () {
+
+                    app.launch();
+                    j.runs(function () {
+                        ext.point("io.ox/contacts/edit/form/contact-phone").disable("contact-cellular_telephone1");
+                    });
+
+                    var grid = app.getGrid();
                     phrase = fId + '.' + data.id;
+//                    console.log(grid);
 
                     j.waitsFor(function () {
                         // grid contains item?
+                        //console.log(data.id);
                         if (grid.contains(phrase)) {
                             grid.selection.set({ folder_id: fId, id: data.id });
                             return true;
@@ -558,14 +655,66 @@ define("io.ox/contacts/edit/test",
                     });
 
                     j.waitsFor(function () {
-                        formFrame =  $('table[data-obj-id="' + phrase + '"]');
-                        testfield = formFrame.find('input[name="cellular_telephone1"]');
-                        if (testfield[0]) {
+                        //console.log(phrase);
+                        formFrame = $('table.contact-detail.edit[data-obj-id="' + phrase + '"]');
+                        if (formFrame[0]) {
+                            //console.log('form');
                             return true;
                         }
                     }, 'waits for the form', TIMEOUT);
+
+                    j.runs(function () {
+                        testfield = $('input[name="cellular_telephone1"]');
+                        //console.log(testfield);
+                        j.expect(testfield[0]).toBeFalsy();
+                    });
+
+
                 });
 
+                j.runs(function () {
+                    buttonSave = $('.default-action.savebutton[data-action="save"]');
+                    $(buttonSave[0]).trigger('click');
+                });
+
+                j.it('looks for the created item / selects and deletes', function () {
+
+                    var grid = app.getGrid();
+
+                    j.waitsFor(function () {
+                        // grid contains item?
+                        if (grid.contains(phrase)) {
+                            grid.selection.set({ folder_id: dataFolder, id: dataId });
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }, 'looks for the list', TIMEOUT);
+
+                    j.waitsFor(function () {
+                        buttonDelete = $('table.view[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
+                        //console.log(buttonDelete);
+                        if (buttonDelete[0]) {
+                            return true;
+                        }
+                    }, 'looks for delete button', TIMEOUT);
+
+                    j.runs(function () {
+                        buttonDelete.trigger('click');
+                    });
+
+                    j.waitsFor(function () {
+                        dialog = $('.io-ox-dialog-popup .io-ox-button[data-action="delete"]');
+                        if (dialog[0]) {
+                            return true;
+                        }
+                    }, 'delete dialog to be there', TIMEOUT);
+
+                    j.runs(function () {
+                        dialog.trigger('click');
+                    });
+
+                });
 
 
             });

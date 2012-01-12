@@ -88,7 +88,7 @@
 
 /* Detail view */
 
-.contact-detail {
+.contact-detail, .contact-detail-edit  {
     width: 100%;
 }
 

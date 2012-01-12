@@ -1126,7 +1126,7 @@ define("io.ox/contacts/edit/view-form",
                 node = $();
             } else {
                 node = $("<table>", { border: 0, cellpadding: 0, cellspacing: 0 })
-                    .addClass("contact-detail")
+                    .addClass("contact-detail edit")
                     .attr('data-obj-id', data.folder_id + '.' + data.id);
                 ext.point("io.ox/contacts/edit/form").invoke("draw", node, data);
             }
