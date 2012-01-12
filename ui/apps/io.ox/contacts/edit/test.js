@@ -66,7 +66,7 @@ define("io.ox/contacts/edit/test",
             branches: 'IT',
             business_category: 'nothing',
             info: 'realy nothing',
-            manager_name: 'Barney Stinson  ',
+            manager_name: 'Barney Stinson',
             assistant_name: 'Ted Mosby',
             street_other: 'Elm street',
             city_other: 'Some',
@@ -242,8 +242,7 @@ define("io.ox/contacts/edit/test",
                         for (var i in testObjectLong) {
                             formFrame.find(".value input[name='" + i + "']").val(testObjectLong[i]);
                         }
-//                        console.log(buttonSave);
-                        buttonSave.trigger('click');
+                        $(buttonSave[0]).trigger('click');
                     });
                 });
 
@@ -414,7 +413,7 @@ define("io.ox/contacts/edit/test",
                     }, 'looks for delete button', TIMEOUT);
 
                     j.runs(function () {
-                        buttonDelete.triggerHandler('click');
+                        buttonDelete.trigger('click');
                     });
 
                     j.waitsFor(function () {
@@ -425,9 +424,150 @@ define("io.ox/contacts/edit/test",
                     }, 'delete dialog to be there', TIMEOUT);
 
                     j.runs(function () {
-//                        dialog.trigger('click');
+                        dialog.trigger('click');
                     });
                 });
+            });
+        }
+    });
+
+    /*
+     * Suite: Contacts Test
+     */
+    ext.point('test/suite').extend({
+        id: 'contacts-extpoint',
+        index: 100,
+        test: function (j) {
+            j.describe("Contact extpoint", function () {
+                var app = null,
+                data, itemFill, itemDelete, buttonUpdate, buttonSave,
+                buttonDelete, dialog, testfield, formFrame = null,
+                dataId, dataFolder, dataObj, phrase;
+
+                j.it('opens contact app ', function () {
+
+                    var loaded = new Done();
+
+                    j.waitsFor(loaded, 'Could not load app', TIMEOUT);
+
+                    contacts.getApp().launch().done(function () {
+                        app = this;
+                        app.folder.setDefault().done(function () {
+                            loaded.yep();
+                            j.expect(app).toBeTruthy();
+                        });
+                    });
+                });
+
+                j.it('creats a fresh obj', function () {
+
+                    j.runs(function () {
+                        var me = this;
+                        me.ready = false;
+                        testFactory.createSimpleContact(function (data) {
+                            if (data) {
+                                me.ready = true;
+                                me.obj = data;
+                            }
+                        });
+
+                        j.waitsFor(function () {
+                            return this.ready;
+                        }, 'it happens', TIMEOUT);
+
+                        j.runs(function () {
+                            data = this.obj;
+        //                        console.log('created ' + data.id);
+                            j.expect(data).toBeTruthy();
+                        });
+                    });
+                });
+
+                j.it('catches the form and checks for testfield', function () {
+
+                    var grid = app.getGrid();
+
+
+
+                    phrase = fId + '.' + data.id;
+
+                    j.waitsFor(function () {
+                        // grid contains item?
+                        if (grid.contains(phrase)) {
+                            grid.selection.set({ folder_id: fId, id: data.id });
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }, 'looks for the listed item', TIMEOUT);
+
+                    j.waitsFor(function () {
+                        buttonUpdate = $('table[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="update"]');
+                        if (buttonUpdate[0]) {
+                            return true;
+                        }
+                    }, 'looks for update button', TIMEOUT);
+
+                    j.runs(function () {
+                        buttonUpdate.triggerHandler('click');
+                    });
+
+                    j.waitsFor(function () {
+                        formFrame =  $('table[data-obj-id="' + phrase + '"]');
+                        testfield = formFrame.find('input[name="cellular_telephone1"]');
+                        if (testfield[0]) {
+                            return true;
+                        }
+                    }, 'waits for the form', TIMEOUT);
+
+
+
+                });
+
+                j.it('catches the form and checks again', function () {
+
+//                    j.runs(function () {
+//                        ext.point("io.ox/contacts/edit/form/contact-phone").disable("contact-cellular_telephone1");
+//                    });
+
+                    var grid = app.getGrid();
+
+
+
+                    phrase = fId + '.' + data.id;
+
+                    j.waitsFor(function () {
+                        // grid contains item?
+                        if (grid.contains(phrase)) {
+                            grid.selection.set({ folder_id: fId, id: data.id });
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }, 'looks for the listed item', TIMEOUT);
+
+                    j.waitsFor(function () {
+                        buttonUpdate = $('table[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="update"]');
+                        if (buttonUpdate[0]) {
+                            return true;
+                        }
+                    }, 'looks for update button', TIMEOUT);
+
+                    j.runs(function () {
+                        buttonUpdate.triggerHandler('click');
+                    });
+
+                    j.waitsFor(function () {
+                        formFrame =  $('table[data-obj-id="' + phrase + '"]');
+                        testfield = formFrame.find('input[name="cellular_telephone1"]');
+                        if (testfield[0]) {
+                            return true;
+                        }
+                    }, 'waits for the form', TIMEOUT);
+                });
+
+
+
             });
         }
     });

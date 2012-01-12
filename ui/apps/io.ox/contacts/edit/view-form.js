@@ -89,21 +89,15 @@ define("io.ox/contacts/edit/view-form",
     }
 
 
-    function addSwitch(node, id, title) {
-        var button = $('<a>').addClass(id).text('+ ' + title),
-            tr = $('<tr>').append($('<td>'), $('<td>').append(button));
-        button.on('click', {id: id}, function (event) {
-            if (button.text() === '+ ' + title) {
-                $(node).find('.' + event.data.id + '.hidden').removeClass('hidden').addClass('visible');
-                button.text('- ' + title);
-            } else {
-                $(node).find('.' + event.data.id + '.visible').removeClass('visible').addClass('hidden');
-                button.text('+ ' + title);
-            }
-        });
+
+
+
+    function addBlockheader(node, id, title) {
+        var headline = $('<div>').text(title),
+            tr = $('<tr>').addClass(id + ' headline hidden').append($('<td>'), $('<td>').append(headline));
+
         tr.appendTo(node);
     }
-
 
     function addSpacer(node) {
         var tr = $('<tr>').append(
@@ -131,7 +125,7 @@ define("io.ox/contacts/edit/view-form",
                 'email3': {
                     label: 'E-Mail 3',
                     name: 'email3',
-                    fn: 'hidden',
+                    //fn: 'hidden',
                     weight: 130,
                     blockid: 'contact-email'
                 }
@@ -188,7 +182,6 @@ define("io.ox/contacts/edit/view-form",
                 'birthday': {
                     label: gt("Birthday"),
                     name: 'birthday',
-//                    value: date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear(),
                     weight: 100,
                     blockid: 'contact-personal'
                 }
@@ -362,35 +355,35 @@ define("io.ox/contacts/edit/view-form",
         homeFields: {
             fields: {
                 'street_home': {
-                    label: gt("Street home"),
+                    label: gt("Street"),
                     name: 'street_home',
                     fn: 'hidden',
                     weight: 100,
                     blockid: 'contact-home-address'
                 },
                 'postal_code_home': {
-                    label: gt("Postal code home"),
+                    label: gt("Postal code"),
                     name: 'postal_code_home',
                     fn: 'hidden',
                     weight: 100,
                     blockid: 'contact-home-address'
                 },
                 'city_home': {
-                    label: gt("City home"),
+                    label: gt("City"),
                     name: 'city_home',
                     fn: 'hidden',
                     weight: 100,
                     blockid: 'contact-home-address'
                 },
                 'state_home': {
-                    label: gt("State home"),
+                    label: gt("State"),
                     name: 'state_home',
                     fn: 'hidden',
                     weight: 100,
                     blockid: 'contact-home-address'
                 },
                 'country_home': {
-                    label: gt("Country home"),
+                    label: gt("Country"),
                     name: 'country_home',
                     fn: 'hidden',
                     weight: 100,
@@ -402,35 +395,35 @@ define("io.ox/contacts/edit/view-form",
         otherFields: {
             fields: {
                 'street_other': {
-                    label: gt("Street other"),
+                    label: gt("Street"),
                     name: 'street_other',
                     fn: 'hidden',
                     weight: 100,
                     blockid: 'contact-other-address'
                 },
                 'postal_code_other': {
-                    label: gt("Postal code other"),
+                    label: gt("Postal code"),
                     name: 'postal_code_other',
                     fn: 'hidden',
                     weight: 100,
                     blockid: 'contact-other-address'
                 },
                 'city_other': {
-                    label: gt("City other"),
+                    label: gt("City"),
                     name: 'city_other',
                     fn: 'hidden',
                     weight: 100,
                     blockid: 'contact-other-address'
                 },
                 'state_other': {
-                    label: gt("State other"),
+                    label: gt("State"),
                     name: 'state_other',
                     fn: 'hidden',
                     weight: 100,
                     blockid: 'contact-other-address'
                 },
                 'country_other': {
-                    label: gt("Country other"),
+                    label: gt("Country"),
                     name: 'country_other',
                     fn: 'hidden',
                     weight: 100,
@@ -448,35 +441,35 @@ define("io.ox/contacts/edit/view-form",
                     blockid: 'contact-work-address'
                 },
                 'street_business': {
-                    label: gt("Street business"),
+                    label: gt("Street"),
                     name: 'street_business',
                     fn: 'hidden',
                     weight: 100,
                     blockid: 'contact-work-address'
                 },
                 'postal_code_business': {
-                    label: gt("Postal code business"),
+                    label: gt("Postal code"),
                     name: 'postal_code_business',
                     fn: 'hidden',
                     weight: 100,
                     blockid: 'contact-work-address'
                 },
                 'city_business': {
-                    label: gt("City business"),
+                    label: gt("City"),
                     name: 'city_business',
                     fn: 'hidden',
                     weight: 100,
                     blockid: 'contact-work-address'
                 },
                 'state_business': {
-                    label: gt("State business"),
+                    label: gt("State"),
                     name: 'state_business',
                     fn: 'hidden',
                     weight: 100,
                     blockid: 'contact-work-address'
                 },
                 'country_business': {
-                    label: gt("Country business"),
+                    label: gt("Country"),
                     name: 'country_business',
                     fn: 'hidden',
                     weight: 100,
@@ -735,6 +728,30 @@ define("io.ox/contacts/edit/view-form",
         }
     };
 
+    function addSwitch(node, id, title) {
+        var button = $('<a>').addClass(id).text('+ ' + title),
+            tr = $('<tr>').append($('<td>'), $('<td>').append(button)),
+            select = $(node).find('.' + id + '.hidden');
+        button.on('click', {id: id}, function (event) {
+            if (button.text() === '+ ' + title) {
+                $(node).find('.' + event.data.id + '.hidden').removeClass('hidden').addClass('visible');
+                button.text('- ' + title);
+            } else {
+                $(node).find('.' + event.data.id + '.visible').removeClass('visible').addClass('hidden');
+                button.text('+ ' + title);
+            }
+        });
+        var f = ($(node).find('.' + id + '.hidden')).length,
+            g = ($(node).find('.' + id)).length,
+            v = g - f;
+        if (v >= 1) {
+            $(node).find('.' + id + '.headline').removeClass('hidden');
+        }
+        if (select[0]) {
+            tr.appendTo(node);
+        }
+
+    }
 
     function createfields(fielddata) {
         ext.point("io.ox/contacts/edit/form/" + fielddata.blockid).extend({
@@ -994,8 +1011,8 @@ define("io.ox/contacts/edit/view-form",
         index: 120,
         id: 'contact-email',
         draw: function (data) {
-            ext.point("io.ox/contacts/edit/form/contact-email").invoke("draw", this, data);
             var id = 'contact-email';
+            ext.point("io.ox/contacts/edit/form/contact-email").invoke("draw", this, data);
             addSwitch(this, id, 'E-Mail addresses');
             addSpacer(this);
         }
@@ -1020,8 +1037,9 @@ define("io.ox/contacts/edit/view-form",
         index: 120,
         id: 'contact-home-address',
         draw: function (data) {
-            ext.point("io.ox/contacts/edit/form/contact-home-address").invoke("draw", this, data);
             var id = 'contact-home-address';
+            addBlockheader(this, id, 'Home address');
+            ext.point("io.ox/contacts/edit/form/contact-home-address").invoke("draw", this, data);
             addSwitch(this, id, 'Home address');
             addSpacer(this);
         }
@@ -1031,8 +1049,9 @@ define("io.ox/contacts/edit/view-form",
         index: 120,
         id: 'contact-other-address',
         draw: function (data) {
-            ext.point("io.ox/contacts/edit/form/contact-other-address").invoke("draw", this, data);
             var id = 'contact-other-address';
+            addBlockheader(this, id, 'Other address');
+            ext.point("io.ox/contacts/edit/form/contact-other-address").invoke("draw", this, data);
             addSwitch(this, id, 'Other address');
             addSpacer(this);
         }
@@ -1042,8 +1061,9 @@ define("io.ox/contacts/edit/view-form",
         index: 120,
         id: 'contact-work-address',
         draw: function (data) {
-            ext.point("io.ox/contacts/edit/form/contact-work-address").invoke("draw", this, data);
             var id = 'contact-work-address';
+            addBlockheader(this, id, 'Work address');
+            ext.point("io.ox/contacts/edit/form/contact-work-address").invoke("draw", this, data);
             addSwitch(this, id, 'Work address');
             addSpacer(this);
         }

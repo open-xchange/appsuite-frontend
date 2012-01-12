@@ -278,3 +278,11 @@ input#image1 {
 input{
 	width: 200px;
 }
+
+.headline {
+	font-size: 1.25em;
+	color: #888;
+	font-family: OpenSans, Helvetica, Arial, sans-serif;
+	font-weight: 200;
+	line-height: 1.15em;
+}
