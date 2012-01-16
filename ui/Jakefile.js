@@ -33,7 +33,7 @@ var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
     pad(t.getUTCSeconds());
 console.info("Build version: " + version);
 
-var debug = Boolean(process.env.debug);
+var debug = true || Boolean(process.env.debug);
 if (debug) console.info("Debug mode: on");
 
 var defineWalker = ast("define").asCall().walker();
@@ -100,8 +100,7 @@ var jshintOptions = {
     validthis: true,
     white: !debug,
     predef: [
-         "$", "_", "Modernizr", "define", "require", "ox",
-         "initializeAndDefine", "iScroll"
+         "$", "_", "Modernizr", "define", "require", "ox", "initializeAndDefine"
     ]
 };
 
@@ -203,9 +202,11 @@ utils.copy(utils.list("src", "css.js"), {
     }
 });
 
-utils.concat("boot.js", ["lib/jquery.min.js",
+utils.concat("boot.js", [
+        "lib/jquery.min.js",
         "lib/underscore.js", // load this before require.js to keep global object
-        "lib/require.js", "lib/modernizr.js",
+        "lib/require.js",
+        "lib/modernizr.js",
         "tmp/css.js", utils.string("\n"), "tmp/boot.js"]);
 
 utils.concat("pre-core.js",

@@ -19,7 +19,6 @@
 }
 
 .vgrid-cell.contact .fullname {
-    font-size: 10pt;
     font-weight: bold;
 }
 
@@ -101,8 +100,8 @@
 }
 
 .contact-detail td.label {
-    font-size: 9pt;
-    line-height: 10pt;
+    font-size: 0.9em;
+    line-height: 1em;
     color: #888;
     font-weight: normal;
     text-align: right;
@@ -111,7 +110,6 @@
 }
 
 .contact-detail .value {
-    font-size: 10pt;
     font-weight: normal;
     vertical-align: top;
 }
@@ -160,7 +158,6 @@
 }
 
 .create-contact .block .field label {
-	font-size: 10pt;
 	width: auto;
 	float: left;
 	line-height: 15pt;
@@ -217,7 +214,6 @@
 }
 
 .contact_edit_frame .block .field label {
-	font-size: 10pt;
 	width: auto;
 	float: left;
 	line-height: 15pt;

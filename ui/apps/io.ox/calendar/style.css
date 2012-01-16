@@ -70,8 +70,8 @@
 /* Detail view */
 
 .calendar-detail .date {
-    font-size: 11pt;
     color: #ccc;
+    font-size: 1.1em;
 }
 
 .calendar-detail .interval {
@@ -91,7 +91,6 @@
 }
 
 .calendar-detail .location {
-    font-size: 11pt;
     color: #888;
     margin-bottom: 1em;
 }
@@ -155,6 +154,10 @@
     width: 80px;
     white-space: nowrap;
     color: #666;
+}
+
+.calendar-detail .details {
+    font-size: 0.9em;
 }
 
 .calendar-detail .detail {

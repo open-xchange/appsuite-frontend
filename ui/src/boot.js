@@ -421,11 +421,6 @@ $(document).ready(function () {
     // do we have a mouse?
     if (!Modernizr.touch) {
         $("html").addClass("mouse");
-    } else {
-        // avoid body scroll for touch devices
-        $(document).on("touchmove", function (e) {
-            //e.preventDefault();
-        });
     }
 
     // no ellipsis? (firefox)

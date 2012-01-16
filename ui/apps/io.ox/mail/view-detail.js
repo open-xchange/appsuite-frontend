@@ -21,9 +21,16 @@ define("io.ox/mail/view-detail",
     'use strict';
 
     // define global iframe resize handler
-    window.iframeResize = function (guid, body) {
-        var height = $(body).outerHeight(true);
-        $("#tmp-iframe-" + guid).css("height", height + 30 + "px");
+    window.iframeResize = function (guid, doc) {
+        _.defer(function () {
+            var height = $(doc.body).outerHeight(true);
+            $("#tmp-iframe-" + guid).css("height", height + 30 + "px");
+        });
+        if (Modernizr.touch) {
+            $(doc).on("touchmove", function (e) {
+                e.preventDefault();
+            });
+        }
     };
 
     var that = {
@@ -36,7 +43,7 @@ define("io.ox/mail/view-detail",
 
             var att = data.attachments, i = 0, $i = att.length,
                 text = null, html = null,
-                content = $("<div/>").addClass("content");
+                content = $("<div>").addClass("content");
 
             for (; i < $i; i++) {
                 if (html === null && /^text\/html$/i.test(att[i].content_type)) {
@@ -51,7 +58,7 @@ define("io.ox/mail/view-detail",
 
                 var iframeGUID = _.now();
 
-                $("<iframe/>", {
+                $("<iframe>", {
                         id: "tmp-iframe-" + iframeGUID,
                         src: "blank.html",
                         frameborder: "0",
@@ -62,8 +69,10 @@ define("io.ox/mail/view-detail",
                         width: "100%"
                     })
                     .one("load", iframeGUID, function (e) {
-                        var doc = this.contentDocument,
-                            css = 'body { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; line-height: 12pt; }' + "\n" +
+                        var self = this,
+                            doc = this.contentDocument,
+                            fontSize = Modernizr.touch ? 14 : 12,
+                            css = 'body { font-family: Arial, Helvetica, sans-serif; font-size: ' + fontSize + 'px; line-height: ' + (fontSize + 2) + 'px; }' + "\n" +
                                 'pre { white-space: pre; white-space: pre-wrap; }' + "\n" +
                                 'blockquote { margin: 1em 0 1em 0; padding: 1px 1em 1px 39px; border-left: 1px solid #00a0cd; background-color: #f5f5f5; color: #555; }';
                         // this timeout is needed for chrome. seems that there is some kind of
@@ -72,7 +81,7 @@ define("io.ox/mail/view-detail",
                             // inject onload handler
                             html = html
                                 .replace(/<\/head>/, '  <style type="text/css">' + css + '</style>' + "\n</head>")
-                                .replace(/<body/, '<body onload="parent.iframeResize(' + e.data + ', document.body);"')
+                                .replace(/<body/, '<body onload="parent.iframeResize(' + e.data + ', document);"')
                                 .replace(/(>|\n)([ ]+)/g, "$1 ") // improve readability of <pre> blocks
                                 .replace(/\n[ ]/g, "\n");
                             // write content to document
@@ -97,9 +106,9 @@ define("io.ox/mail/view-detail",
                             // replace leading BR
                             .replace(/^\s*(<br\/?>\s*)+/g, "")
                             // reduce long BR sequences
-                            .replace(/(<br\/?>\s*){3,}/g, "<br/><br/>")
+                            .replace(/(<br\/?>\s*){3,}/g, "<br><br>")
                             // remove split block quotes
-                            .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, "<br/><br/>")
+                            .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, "<br><br>")
                     );
 
                 // get contents to split long character sequences for better wrapping
@@ -120,7 +129,7 @@ define("io.ox/mail/view-detail",
         },
 
         drawScaffold: function (obj, resolver) {
-            return $("<div/>")
+            return $("<div>")
                 .addClass("mail-detail page")
                 .busy()
                 .one("resolve", obj, resolver);
@@ -129,10 +138,10 @@ define("io.ox/mail/view-detail",
         draw: function (data) {
 
             if (!data) {
-                return $("<div/>");
+                return $("<div>");
             }
 
-            var node = $("<div/>").addClass("mail-detail page");
+            var node = $("<div>").addClass("mail-detail page");
             ext.point('io.ox/mail/detail').invoke('draw', node, data);
 
             return node;
@@ -155,7 +164,7 @@ define("io.ox/mail/view-detail",
         draw: function (data) {
             var picture;
             this.append(
-                picture = $("<div/>").addClass("contact-picture").hide()
+                picture = $("<div>").addClass("contact-picture").hide()
             );
             require(["io.ox/contacts/api"], function (api) {
                 // get contact picture
@@ -174,7 +183,7 @@ define("io.ox/mail/view-detail",
         id: 'receiveddate',
         draw: function (data) {
             this.append(
-                $("<div/>").addClass("date list").text(util.getSmartTime(data.received_date))
+                $("<div>").addClass("date list").text(util.getSmartTime(data.received_date))
             );
         }
     });
@@ -183,7 +192,7 @@ define("io.ox/mail/view-detail",
         id: 'fromlist',
         draw: function (data) {
             this.append(
-                $("<div/>")
+                $("<div>")
                 .addClass("from list")
                 .append(util.serializeList(data.from, true))
             );
@@ -194,11 +203,11 @@ define("io.ox/mail/view-detail",
         id: 'subject',
         draw: function (data) {
             this.append(
-                $("<div/>")
+                $("<div>")
                     .addClass("subject clear-title")
                     // inject some zero width spaces for better word-break
                     .text(_.prewrap(data.subject || '\u00A0'))
-                    .append($("<span/>").addClass("priority").text(" " + util.getPriority(data)))
+                    .append($("<span>").addClass("priority").text(" " + util.getPriority(data)))
             );
         }
     });
@@ -206,23 +215,24 @@ define("io.ox/mail/view-detail",
         index: 150,
         id: 'tocopy',
         draw: function (data) {
+
             var showCC = data.cc && data.cc.length > 0,
             showTO = (data.to && data.to.length > 1) || showCC;
 
             this.append(
                 showTO ?
-                    $("<div/>")
+                    $("<div>")
                         .addClass("list")
                         .append(
                             // TO
-                            $("<span/>").addClass("label").text("To:\u00A0")
+                            $("<span>").addClass("label").text("To:\u00A0")
                         )
                         .append(
                             util.serializeList(data.to, true)
                         )
                         .append(
                             // CC
-                            showCC ? $("<span/>").addClass("label").text(" Copy:\u00A0") : []
+                            showCC ? $("<span>").addClass("label").text(" Copy:\u00A0") : []
                         )
                         .append(
                             util.serializeList(data.cc, true)
@@ -250,11 +260,11 @@ define("io.ox/mail/view-detail",
             this.append(
                 // attachments
                 hasAttachments ?
-                    $("<div/>")
+                    $("<div>")
                         .addClass("list")
                         .append(
                              // TO
-                             $("<span/>").addClass("label").text("Attachments: ")
+                             $("<span>").addClass("label").text("Attachments: ")
                          )
                          .append(
                              util.serializeAttachments(data, attachments)

@@ -26,7 +26,7 @@ define("io.ox/mail/main",
     'use strict';
 
     var autoResolveThreads = function (e) {
-        var self = $(this);
+        var self = $(this), parents = self.parents();
         api.get(e.data).done(function (data) {
             // replace placeholder with mail content
             self.replaceWith(viewDetail.draw(data));
@@ -42,7 +42,8 @@ define("io.ox/mail/main",
         GRID_WIDTH = 330,
         // nodes
         left,
-        right;
+        right,
+        scrollpane;
 
     // launcher
     app.setLauncher(function () {
@@ -71,13 +72,12 @@ define("io.ox/mail/main",
             .appendTo(win.nodes.main);
 
         // right panel
-        $("<div>")
+        scrollpane = $("<div>")
             .css({ left: GRID_WIDTH + 1 + "px" })
             .addClass("rightside mail-detail-pane")
-            .append(
-                right = $("<div>").addClass("abs")
-            )
             .appendTo(win.nodes.main);
+
+        right = scrollpane.scrollable();
 
         // grid
         grid = new VGrid(left);
@@ -118,7 +118,8 @@ define("io.ox/mail/main",
                     frag.appendChild(viewDetail.drawScaffold(obj, autoResolveThreads).get(0));
                 }
             }
-            right.scrollTop(0).idle().empty().get(0).appendChild(frag);
+            scrollpane.scrollTop(0);
+            right.idle().empty().get(0).appendChild(frag);
             // show many to resolve?
             var nodes = right.find(".mail-detail"),
                 numVisible = (right.parent().height() / nodes.eq(0).outerHeight(true) >> 0) + 1;
@@ -128,13 +129,13 @@ define("io.ox/mail/main",
             var autoResolve = function (e) {
                 // determine visible nodes
                 e.data.nodes.each(function () {
-                    var self = $(this), bottom = right.scrollTop() + (2 * right.parent().height());
+                    var self = $(this), bottom = scrollpane.scrollTop() + (2 * right.parent().height());
                     if (bottom > self.position().top) {
                         self.trigger('resolve');
                     }
                 });
             };
-            right.off("scroll").on("scroll", { nodes: nodes }, _.debounce(autoResolve, 250));
+            scrollpane.off("scroll").on("scroll", { nodes: nodes }, _.debounce(autoResolve, 250));
             nodes = frag = null;
         };
 

@@ -52,6 +52,7 @@ a, a:visited, .link {
     color: #00a0cd;
     text-decoration: none;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .boxshadow a:focus {

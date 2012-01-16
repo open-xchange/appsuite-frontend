@@ -27,6 +27,13 @@ background: radial-gradient(center, ellipse cover,  @wallpaper-color1 0%,@wallpa
 filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#a8a8a8',GradientType=1 );"
 }
 
+/* scrollable for touch devices, esp. iOS */
+.scrollable {
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+    -webkit-tap-highlight-color: transparent;
+}
+
 /* top bar */
 
 #io-ox-topbar {
@@ -46,11 +53,20 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     float: right;
 }
 
+/* ------------------------------------- */
 /* ipad: better fat finger support */
+
 .touch #io-ox-topbar { height: 40px; }
 .touch #io-ox-topbar .launcher { font-size: 14px; line-height: 35px; padding: 2px 15px 5px 15px; }
 .touch #io-ox-windowmanager { top: 42px; }
 .touch #io-ox-windowmanager .window-container-center { width: 100% !important; }
+.touch #io-ox-top-logo-small { margin-top: 6px; }
+
+.touch body { font-size: @touch-font-size; }
+
+.touch .scrollable .scrollable-pane { -webkit-transform: translate3d(0, 0, 0); }
+
+/* ------------------------------------- */
 
 #io-ox-topbar .launcher {
     color: @topbar-launcher-color;
@@ -59,6 +75,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     text-align: center;
     white-space: nowrap;
     display: inline-block !important;
+    -webkit-tap-highlight-color: transparent;
     cursor: pointer;
 }
 
@@ -194,8 +211,6 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     left: 0px;
     
     color: @head-color;
-    font-family: Lucida Grande, Arial;
-    font-size: 9pt;
 
     border-top: 1px solid mix(@head-color, @head-background, 75%);
     border-top-color: fade(@head-color, 30%);
@@ -208,13 +223,13 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 
 .window-title {
     position: absolute;
-    top: 10px;
+    top: 8px;
     height: 36px;
     left: 0px;
     padding: 0 10px 0 13px;
     width: 300px;
     color: @window-title-color;
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: OpenSans, Helvetica, Arial, sans-serif;
     font-weight: 200;
     font-size: 24px;
     line-height: 30px;
@@ -240,7 +255,6 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 }
 
 .window-toolbar a {
-    font-size: 12px;
     line-height: 32px;
     color: @toolbar-link-color;
     display: inline-block;
@@ -251,8 +265,11 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     text-decoration: none;
 }
 
+.touch .window-toolbar a {
+    outline: 0;
+}
+
 a.button {
-    font-size: 12px;
     line-height: 18px;
     color: #fff;
     text-align: center;
@@ -361,19 +378,7 @@ a.button.default-action {
     left: 0px;
     z-index: 2;
     background-color: @background;
-    padding: 10px 15px 10px 15px;
     overflow: hidden;
-}
-
-.window-content.plain h1 {
-    font-family: Lucida Grande, Arial;
-    font-size: 12pt;
-    font-weight: bold;
-}
-
-.window-content.plain p {
-    font-family: Lucida Grande, Arial;
-    font-size: 10pt;
 }
 
 .window-content textarea {
@@ -397,6 +402,7 @@ a.button.default-action {
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    -webkit-tap-highlight-color: transparent;
     z-index: 1;
     bottom: 34px;
 }
@@ -470,7 +476,6 @@ a.button.default-action {
 }
 
 .vgrid-cell.vgrid-label {
-    font-size: 10pt;
     font-weight: bold;
     text-align: center;
     color: black;
@@ -590,6 +595,12 @@ a.button.default-action {
     right: 0px;
 }
 
+.abs-lr {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+}
+
 /* ---- */
 
 .bright-text {
@@ -604,8 +615,14 @@ a.button.default-action {
     color: @person-link-color;
 }
 
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 a.action-link {
-    font-size: 12px;
+    font-size: @font-size;
     color: @action-link-color;
     text-decoration: underline;
     cursor: pointer;
@@ -828,255 +845,6 @@ span.hint {
     vertical-align: middle;
 }
  
-
-/*styles for autocomplete*/
-
-/* Example tokeninput style #2: ox-style */
-ul.token-input-list-ox {
-    overflow: hidden; 
-    height: auto !important; 
-    height: 1%;
-    width: 300px;
-    cursor: text;
-    font-size: 12px;
-    font-family: Arial,Helvetica,sans-serif;
-    min-height: 1px;
-    z-index: 999;
-    margin: 0;
-    padding: 0;
-    background-color: #fff;
-    list-style-type: none;
-    clear: left;
-}
-
-ul.token-input-list-ox li input {
-    border: 0;
-    font-size: 11px;
-    width: 100px;
-    /*padding: 3px 8px;*/
-    padding: 0px;
-    background-color: white;
-   /* margin: 2px 0;*/
-   margin: 0px;
-    -webkit-appearance: caret;
-}
-
-li.token-input-token-ox {
-    overflow: hidden; 
-    height: auto !important; 
-    height: 15px;
-    /*margin: 1px 1x 0px;*/
-    margin: 0px 3px 0px 0px;
-    padding: 2px 3px 1px;
-    /*background-color: #eff2f7;*/
-    background-color: #3F9EFC;
-    /*color: #000;*/
-    color: #fff;
-    cursor: default;
-    border: 1px solid #ccd5e4;
-    font-size: 11px;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    float: left;
-    white-space: nowrap;
-}
-
-li.token-input-token-ox p {
-    display: inline;
-    padding: 0;
-    margin: 0;
-}
-
-li.token-input-token-ox span {
-    /*color: #a6b3cf;*/
-    color: #fff;
-    margin-left: 5px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-li.token-input-selected-token-ox {
-    /*background-color: #5670a6;*/
-    background-color: #026ABA;
-    border: 1px solid #3b5998;
-    color: #fff;
-}
-
-li.token-input-input-token-ox {
-    float: left;
-   /* margin: 0;*/
-   margin: 2px 2px 3px 2px;
-    padding: 0;
-    list-style-type: none;
-}
-
-div.token-input-dropdown-ox {
-    position: absolute;
-   /* width: 300px;*/
-   width: 297px;
-    background-color: #fff;
-    overflow: hidden;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    cursor: default;
-    font-size: 11px;
-    font-family: Arial,Helvetica,sans-serif;
-    z-index: 1;
-}
-
-div.token-input-dropdown-ox p {
-    margin: 0;
-    padding: 5px;
-    font-weight: bold;
-    color: #777;
-}
-
-div.token-input-dropdown-ox ul {
-    margin: 0;
-    padding: 0;
-}
-
-div.token-input-dropdown-ox ul li {
-    background-color: #fff;
-    padding: 3px;
-    margin: 0;
-    list-style-type: none;
-}
-
-div.token-input-dropdown-ox ul li.token-input-dropdown-item-ox {
-    background-color: #fff;
-}
-
-div.token-input-dropdown-ox ul li.token-input-dropdown-item2-ox {
-    background-color: #fff;
-}
-
-div.token-input-dropdown-ox ul li em {
-    font-weight: bold;
-    font-style: normal;
-}
-
-div.token-input-dropdown-ox ul li.token-input-selected-dropdown-item-ox {
-    /*background-color: #3b5998;*/
-    background-color: #3F9EFC;
-    color: #fff;
-}
-
-/* Example tokeninput style #1: Token vertical list*/
-ul.token-input-list {
-    overflow: hidden; 
-    height: auto !important; 
-    height: 1%;
-    width: 400px;
-    border: 1px solid #999;
-    cursor: text;
-    font-size: 12px;
-    font-family: Arial,Helvetica,sans-serif;
-    z-index: 999;
-    margin: 0;
-    padding: 0;
-    background-color: #fff;
-    list-style-type: none;
-    clear: left;
-}
-
-ul.token-input-list li {
-    list-style-type: none;
-}
-
-ul.token-input-list li input {
-    border: 0;
-    width: 350px;
-    padding: 3px 8px;
-    background-color: white;
-    -webkit-appearance: caret;
-}
-
-li.token-input-token {
-    overflow: hidden; 
-    height: auto !important; 
-    height: 1%;
-    margin: 3px;
-    padding: 3px 5px;
-    background-color: #d0efa0;
-    color: #000;
-    font-weight: bold;
-    cursor: default;
-    display: block;
-}
-
-li.token-input-token p {
-    float: left;
-    padding: 0;
-    margin: 0;
-}
-
-li.token-input-token span {
-    float: right;
-    color: #777;
-    cursor: pointer;
-}
-
-li.token-input-selected-token {
-    background-color: #08844e;
-    color: #fff;
-}
-
-li.token-input-selected-token span {
-    color: #bbb;
-}
-
-div.token-input-dropdown {
-    position: absolute;
-    width: 400px;
-    background-color: #fff;
-    overflow: hidden;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    cursor: default;
-    font-size: 12px;
-    font-family: Verdana;
-    z-index: 1;
-}
-
-div.token-input-dropdown p {
-    margin: 0;
-    padding: 5px;
-    font-weight: bold;
-    color: #777;
-}
-
-div.token-input-dropdown ul {
-    margin: 0;
-    padding: 0;
-}
-
-div.token-input-dropdown ul li {
-    background-color: #fff;
-    padding: 3px;
-    list-style-type: none;
-}
-
-div.token-input-dropdown ul li.token-input-dropdown-item {
-    background-color: #fafafa;
-}
-
-div.token-input-dropdown ul li.token-input-dropdown-item2 {
-    background-color: #fff;
-}
-
-div.token-input-dropdown ul li em {
-    font-weight: bold;
-    font-style: normal;
-}
-
-div.token-input-dropdown ul li.token-input-selected-dropdown-item {
-    background-color: #d0efa0;
-}
- 
 /* inline links */
 .io-ox-inline-links {
     text-align: right;
@@ -1114,7 +882,6 @@ div.token-input-dropdown ul li.token-input-selected-dropdown-item {
 }
 
 .io-ox-sidepopup-pane {
-    overflow: auto;
 }
 
 .io-ox-sidepopup.right {
@@ -1208,9 +975,6 @@ input.nice-input {
 .autocomplete-popup .autocomplete-item {
     padding: 0.5em 10px 0.5em 10px;
     line-height: 1.5em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     cursor: pointer;
 }
 
