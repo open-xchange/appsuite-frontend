@@ -101,8 +101,7 @@
 }
 
 .mail-detail-pane > div {
-    overflow: auto;
-    padding: 0px 20px 20px 20px;
+    xpadding: 0px 20px 20px 20px;
 }
 
 .mail-detail {
@@ -117,12 +116,16 @@
 .mail-detail.page {
     border: 1px solid #bbb;
     padding: 20px;
-    margin: 20px 0 0 0;
+    margin: 20px 20px 0px 20px;
     min-height: 200px;
     max-width: 900px;
     -moz-box-shadow: 0px 5px 8px -6px black;
     -webkit-box-shadow: 0px 5px 8px -6px black;
     box-shadow: 0px 5px 8px -6px black;
+}
+
+.mail-detail.page:last-child {
+    margin-bottom: 20px;
 }
 
 .mail-detail .date {
@@ -154,13 +157,13 @@
 }
 
 .mail-detail .list {
-    font-size: 10pt;
     line-height: 1.25em;
     padding: 0.2em 0 0.2em 0;
     vertical-align: top;
 }
 
 .mail-detail .label {
+    font-family: OpenSans, Arial, Helvetica, sans-serif;
     color: #aaa;
 }
 
@@ -176,10 +179,14 @@
 
 .mail-detail .content.plain-text {
     font-family: Monaco, monospace;
-    font-size: 12px;
+    font-size: @font-size;
     line-height: 18px;
     white-space: pre-wrap;
     max-width: 700px;
+}
+
+.touch .mail-detail .content.plain-text {
+    font-size: @touch-font-size;
 }
 
 .mail-detail blockquote {

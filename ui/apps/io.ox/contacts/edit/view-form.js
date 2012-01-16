@@ -50,7 +50,7 @@ define("io.ox/contacts/edit/view-form",
         var field = $('<input>', { name: o.name, type: 'text' })
             .addClass('nice-input')
             // TODO: add proper CSS class
-            .css({ fontSize: '14px', width: '300px', paddingTop: '0.25em', paddingBottom: '0.25em' })
+            .css({ fontSize: '14px', width: '300px', paddingTop: '0.25em', paddingBottom: '0.25em', webkitBorderRadius: 0, webkitAppearance: 'none' })
             .on('change', {name: o.name, node: o.node}, function (e) {
                     var tr = $(e.data.node).find('tr.' + e.data.name);
                     if (tr.find('input').val() === '') {

@@ -15,7 +15,8 @@ define('io.ox/core/tk/autocomplete', function () {
 
     'use strict';
 
-    var popup = $('<div>').addClass('autocomplete-popup');
+    var popup = $('<div>').addClass('autocomplete-popup'),
+        scrollpane = popup.scrollable();
 
     $.fn.autocomplete = function (o) {
 
@@ -25,6 +26,7 @@ define('io.ox/core/tk/autocomplete', function () {
             delay: 200,
             source: null,
             draw: null,
+            blur: $.noop,
             click: $.noop,
             stringify: JSON.stringify
         }, o || {});
@@ -42,14 +44,14 @@ define('io.ox/core/tk/autocomplete', function () {
 
             update = function () {
                 // get data from current item and update input field
-                var data = popup.children().eq(Math.max(0, index)).data('data');
+                var data = scrollpane.children().eq(Math.max(0, index)).data('data');
                 lastValue = o.stringify(data) + '';
                 self.val(lastValue);
             },
 
             select = function (i) {
                     var children;
-                    if (i >= 0 && i < (children = popup.children()).length) {
+                    if (i >= 0 && i < (children = scrollpane.children()).length) {
                         children.removeClass('selected')
                             .eq(i).addClass('selected')
                             .intoViewport(popup);
@@ -58,8 +60,24 @@ define('io.ox/core/tk/autocomplete', function () {
                     }
                 },
 
+            fnBlur = function (e) {
+                    setTimeout(close, 200);
+                },
+
+            blurOff = function (e) {
+                    self.off('blur', fnBlur).focus();
+                },
+
+            blurOn = function (e) {
+                    _.defer(function () {
+                        self.on('blur', fnBlur).focus();
+                    });
+                },
+
             open = function () {
                     if (!isOpen) {
+                        // toggle blur handlers
+                        self.off('blur', o.blur).on('blur', fnBlur);
                         // calculate position/dimension and show popup
                         var off = self.offset(),
                             w = self.outerWidth(),
@@ -72,16 +90,18 @@ define('io.ox/core/tk/autocomplete', function () {
 
             close = function () {
                     if (isOpen) {
-                        popup.empty().detach();
+                        // toggle blur handlers
+                        self.on('blur', o.blur).off('blur', fnBlur);
+                        scrollpane.empty();
+                        popup.detach();
                         isOpen = false;
                         index = -1;
                     }
                 },
 
             fnSelectItem = function (e) {
-                    e.preventDefault(); // avoids a full click to keep focus
                     select(e.data.index);
-                    o.click.apply(self.get(0), e);
+                    o.click.call(self.get(0), e);
                     close();
                 },
 
@@ -94,10 +114,9 @@ define('io.ox/core/tk/autocomplete', function () {
                             var node = $('<div>')
                                 .addClass('autocomplete-item')
                                 .data('data', data)
-                                // 'click' would steal the focus too early
-                                .on('mousedown', { index: index }, fnSelectItem);
+                                .on('click', { index: index }, fnSelectItem);
                             o.draw.call(node, data);
-                            node.appendTo(popup);
+                            node.appendTo(scrollpane);
                         });
                         // leads to results
                         emptyPrefix = "\u0000";
@@ -147,7 +166,8 @@ define('io.ox/core/tk/autocomplete', function () {
                         if (val !== lastValue && val.indexOf(emptyPrefix) === -1) {
                             // trigger search
                             lastValue = val;
-                            popup.empty().busy();
+                            scrollpane.empty();
+                            popup.busy();
                             open();
                             o.source(val).done(_.lfo(cbSearchResult, val));
                         }
@@ -164,8 +184,11 @@ define('io.ox/core/tk/autocomplete', function () {
                 $(this)
                     .on('keydown', fnKeyDown)
                     .on('keyup', fnKeyUp)
-                    .on('blur', close);
+                    .on('blur', o.blur)
+                    .on('blur', fnBlur);
             });
+
+            popup.on('touchstart mousedown', blurOff).on('touchend mouseup', blurOn);
         }
 
         return this;

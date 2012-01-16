@@ -243,6 +243,10 @@
         return $('<div>').on("dblclick", click);
     };
 
+    $.fn.scrollable = function () {
+        return $('<div>').addClass('scrollable-pane').appendTo(this.addClass('scrollable'));
+    };
+
 }());
 
 

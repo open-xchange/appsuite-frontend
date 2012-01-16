@@ -14,20 +14,20 @@
 
 (function () {
 
-    "use strict";
+    'use strict';
 
     // is defined!
     var ext = require('io.ox/core/extensions'),
         // dependencies
         deps = [
-            "io.ox/core/extensions",
-            "io.ox/core/config",
-            "io.ox/core/api/user",
-            "io.ox/core/i18n",
-            "less!io.ox/portal/style.css"
+            'io.ox/core/extensions',
+            'io.ox/core/config',
+            'io.ox/core/api/user',
+            'io.ox/core/i18n',
+            'less!io.ox/portal/style.css'
         ].concat(ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' }));
 
-    define("io.ox/portal/main", deps, function (ext, config, userAPI, i18n) {
+    define('io.ox/portal/main', deps, function (ext, config, userAPI, i18n) {
 
         // application object
         var app = ox.ui.createApp(),
@@ -37,10 +37,10 @@
             updateTitle = function () {
                 win.setTitle(
                     $($.txt(i18n.getGreetingPhrase()))
-                    .add($.txt(", "))
-                    .add(userAPI.getTextNode(config.get("identifier")))
-                    .add($.txt(" "))
-                    .add($("<small>").addClass("subtitle").text("(" + ox.user + ")"))
+                    .add($.txt(', '))
+                    .add(userAPI.getTextNode(config.get('identifier')))
+                    .add($.txt(' '))
+                    .add($('<small>').addClass('subtitle').text('(' + ox.user + ')'))
                 );
             };
 
@@ -54,17 +54,16 @@
             }));
 
             updateTitle();
-            _.every(1, "hour", updateTitle);
+            _.every(1, 'hour', updateTitle);
 
-            win.nodes.main.addClass("io-ox-portal").css({overflow: "auto"});
-
-            var widgets = $(),
+            var scrollpane = win.nodes.main.addClass('io-ox-portal').scrollable(),
+                widgets = $(),
                 lastCols = 0,
-                columnTemplate = $("<div>").addClass("io-ox-portal-column");
+                columnTemplate = $('<div>').addClass('io-ox-portal-column');
 
             var resize = function () {
 
-                var availWidth = win.nodes.main.width(),
+                var availWidth = scrollpane.width(),
                     numColumns = Math.max(1, availWidth / 400 >> 0),
                     width = 100 / numColumns,
                     columns = $(),
@@ -73,19 +72,19 @@
                 // create layout
                 if (numColumns !== lastCols) {
 
-                    win.nodes.main.find(".io-ox-portal-widget").detach();
+                    scrollpane.find('.io-ox-portal-widget').detach();
 
                     for (i = 0; i < numColumns; i++) {
                         last = i % numColumns === numColumns - 1;
                         columns = columns.add(
                             columnTemplate.clone().css({
-                                width: width - (last ? 0 : 5) + "%",
-                                marginRight: last ? "0%": "5%"
+                                width: width - (last ? 0 : 5) + '%',
+                                marginRight: last ? '0%': '5%'
                             })
                         );
                     }
 
-                    win.nodes.main.empty().append(columns);
+                    scrollpane.empty().append(columns);
 
                     widgets.each(function (i, node) {
                         columns.eq(i % numColumns).append(node);
@@ -104,46 +103,43 @@
                 },
                 draw: function (data) {
                     this.append(
-                        $("<img>")
-                        .attr("src", ox.base + "/apps/themes/default/ad2.jpg")
-                        .css({ width: "100%", height: "auto" })
+                        $('<img>')
+                        .attr('src', ox.base + '/apps/themes/default/ad2.jpg')
+                        .css({ width: '100%', height: 'auto' })
                     );
                     return $.when();
                 }
             });
 
             //TODO: Add Configurability
-            ext.point("io.ox/portal/widget").each(function (extension) {
+            ext.point('io.ox/portal/widget')
+                .each(function (extension) {
 
-                var $node = $("<div>")
-                    .addClass("io-ox-portal-widget")
-                    .busy();
+                    var $node = $('<div>')
+                        .addClass('io-ox-portal-widget')
+                        .busy();
 
-                widgets = widgets.add($node);
+                    widgets = widgets.add($node);
 
-                extension.invoke("load")
-                    .done(function (data) {
-                        var drawingDone = extension.invoke("draw", $node, [data]);
-                        if (drawingDone) {
-                            drawingDone.done(function () {
-                                $node.idle();
-                            });
-                        } else {
-                            $node.idle();
-                        }
-                    })
-                    .fail(function (e) {
-                        $node.idle().remove(); //idle().text(String(e.error));
-                    });
-            });
+                    return extension.invoke('load')
+                        .pipe(function (data) {
+                            return (extension.invoke('draw', $node, [data]) || $.Deferred())
+                                .done(function () {
+                                    $node.idle();
+                                });
+                        })
+                        .fail(function (e) {
+                            $node.idle().remove();
+                        });
+                });
 
-            win.bind("show", function () {
-                $(window).on("resize", resize);
+            win.bind('show', function () {
+                $(window).on('resize', resize);
                 resize();
             });
 
-            win.bind("hide", function () {
-                $(window).off("resize", resize);
+            win.bind('hide', function () {
+                $(window).off('resize', resize);
             });
 
             // go!

@@ -80,7 +80,8 @@ define("io.ox/contacts/main",
         right = $("<div>")
             .css({ left: GRID_WIDTH + "px", overflow: "auto" })
             .addClass("rightside default-content-padding")
-            .appendTo(win.nodes.main);
+            .appendTo(win.nodes.main)
+            .scrollable();
 
         // grid
         grid = new VGrid(left);
