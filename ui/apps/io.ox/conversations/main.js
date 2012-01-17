@@ -283,8 +283,8 @@ define("io.ox/conversations/main",
             )
             .appendTo(right);
 
-        textarea = $("<textarea>")
-            .attr({ placeholder: "Type your message here...", tabindex: '1' })
+        textarea = $('<textarea>')
+            .attr({ id: 'message-text', placeholder: "Type your message here...", tabindex: '1' })
             .css("resize", "none")
             .on("keydown", function (e) {
                 // don't bubble up to the vgrid
@@ -304,7 +304,9 @@ define("io.ox/conversations/main",
         controls = $("<div>").addClass("abs controls")
             .append(
                 $("<div>").addClass("centered-box")
-                .append(textarea)
+                .append(
+                    $('<label>', { 'for': 'message-text' }).append(textarea)
+                )
                 .append(
                     $('<a>', { href: '#', tabindex: '2' })
                     .addClass('button default-action')

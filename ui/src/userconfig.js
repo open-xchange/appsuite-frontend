@@ -79,7 +79,15 @@ define(function () {
                 company: "Mattes Inc.",
                 icon: "default.png",
                 category: "Dev"
-            }
+            },
+
+            "3rd.party/addr": {
+                title: "Plaxo Address Book",
+                company: "Plaxo Inc.",
+                icon: "addressbook.png",
+                category: "Productivity",
+                description: "The only address book that works for you. Plaxo keeps your contact info updated & your communication devices in sync."
+            },
         }
     };
 });

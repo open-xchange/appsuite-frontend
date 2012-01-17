@@ -87,7 +87,7 @@ define("io.ox/core/desktop",
         // add launcher
         addLauncher = function (side, label, fn) {
             // construct
-            var node = $("<div/>")
+            var node = $("<div>")
             .addClass("launcher")
             .text(label)
             .hover(
@@ -698,7 +698,7 @@ define("io.ox/core/desktop",
 
                 this.addView = function (id) {
                     if (this.nodes[id] === undefined) {
-                        var node = $("<div/>")
+                        var node = $("<div>")
                             .addClass("window-content").hide()
                             .appendTo(this.nodes.body);
                         return (this.nodes[id] = views[id] = node);
@@ -743,14 +743,14 @@ define("io.ox/core/desktop",
                 };
 
             // window container
-            win.nodes.outer = $("<div/>")
+            win.nodes.outer = $("<div>")
             .attr({
                 id: opt.id,
                 "data-window-nr": guid
             })
             .addClass("window-container")
             .append(
-                $("<div/>")
+                $("<div>")
                 .addClass("window-container-center")
                 .data({
                     width: width + unit
@@ -759,34 +759,34 @@ define("io.ox/core/desktop",
                 })
                 .append(
                 // window HEAD
-                win.nodes.head = $("<div/>")
+                win.nodes.head = $("<div>")
                     .addClass("window-head")
                     .append(
                         // title
-                        win.nodes.title = $("<div/>")
+                        win.nodes.title = $("<h1>")
                         .css("width", opt.titleWidth)
                         .addClass("window-title")
-                        .append($("<span/>"))
+                        .append($("<span>"))
                     )
                     .append(
                         // toolbar
-                        win.nodes.toolbar = $("<div/>")
+                        win.nodes.toolbar = $("<div>")
                         .css("left", opt.titleWidth)
                         .addClass("window-toolbar")
                     )
                     .append(
                         // controls
-                        win.nodes.controls = $("<div/>")
+                        win.nodes.controls = $("<div>")
                         .addClass("window-controls")
                         .append(
                             // settings
-                            win.nodes.settingsButton = $("<div/>").hide()
+                            win.nodes.settingsButton = $("<div>").hide()
                             .addClass("window-control")
                             .text("\u270E")
                         )
                         .append(
                             // close
-                            win.nodes.closeButton = $("<div/>").hide()
+                            win.nodes.closeButton = $("<div>").hide()
                             .addClass("window-control")
                             .text("\u2715")
                         )
@@ -794,18 +794,18 @@ define("io.ox/core/desktop",
                 )
                 .append(
                     // window BODY
-                    win.nodes.body = $("<div/>")
+                    win.nodes.body = $("<div>")
                     .addClass("window-body")
                     .append(
                         // quick settings
-                        win.nodes.settings = $("<div/>")
+                        win.nodes.settings = $("<div>")
                         .hide()
                         .addClass("window-settings")
                         .html("<h2>Each window can have a quick settings area</h2>")
                     )
                     .append(
                         // content
-                        win.nodes.main = $("<div/>")
+                        win.nodes.main = $("<div>")
                         .addClass("window-content")
                     )
                 )
@@ -822,14 +822,14 @@ define("io.ox/core/desktop",
                         // yeah, waiting for the one who reports this :)
                         if (/^porn$/i.test(query)) {
                             $("body").append(
-                                $("<div/>")
+                                $("<div>")
                                 .addClass("abs")
                                 .css({
                                     backgroundColor: "black",
                                     zIndex: 65000
                                 })
                                 .append(
-                                    $("<div/>")
+                                    $("<div>")
                                     .addClass("abs").css({
                                         top: "25%",
                                         textAlign: "center",
@@ -841,7 +841,7 @@ define("io.ox/core/desktop",
                                     .html('<span style="color: rgb(230,110,110)">YOU</span> SEARCHED FOR WHAT?')
                                 )
                                 .append(
-                                    $("<div/>")
+                                    $("<div>")
                                     .addClass("abs")
                                     .css({
                                         top: "50%",
@@ -881,14 +881,17 @@ define("io.ox/core/desktop",
                         win.trigger("search", query);
                     };
 
-                $("<div/>")
+                var searchId = 'search_' + _.now(); // acccessibility
+
+                $("<label>", { 'for': searchId })
                 .addClass("searchfield-wrapper")
                 .css({ "float": "right" })
                 .append(
                     $("<input>", {
                         type: "search",
                         placeholder: "Search...",
-                        size: "40"
+                        size: "40",
+                        id: searchId
                     })
                     .on({
                         keypress: function (e) {

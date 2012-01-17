@@ -70,7 +70,7 @@ define.async('io.ox/core/api/apps',
             obj = _.clone(obj);
             obj.id = id;
             obj.icon = ox.base + '/apps/io.ox/core/images/' + obj.icon;
-            obj.description = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat...';
+            obj.description = obj.description || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat...';
             return obj;
         },
 

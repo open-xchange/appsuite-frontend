@@ -57,8 +57,7 @@ define("io.ox/preview/main",
         },
         paint: function (file, node) {
             node.append(
-                $("<img/>")
-                .attr("src", file.dataURL + "&width=400&height=300")
+                $("<img>", { src: file.dataURL + "&width=400&height=300", alt: 'Preview' })
                 .css({
                     width: "400px",
                     maxWidth: "100%"
