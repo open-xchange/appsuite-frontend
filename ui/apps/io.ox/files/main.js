@@ -175,7 +175,7 @@ define("io.ox/files/main",
             // Let's build our upload form. Nothing fancy here, but we'll allow multiple selection
             // TODO: Add a hint to the user, that multiple uploads are available and how to use them
             var $divblock_filefield = $('<div>').addClass('block new_file');
-            var $fileField = $('<input type="file" multiple="multiple"></input>');
+            var $fileField = $('<label for="file_upload"><input type="file" multiple="multiple" id="file_upload"></label>');
             var $hint = hints.createHint({
                     teaser: "Multiple uploads are available.",
                     explanation: "You can select more than one file to upload at the same time in the file choosing dialog. If you want to select a whole range of files, hold down the shift key while selecting the start and end of the range of files. If you want to select multiple individual files, hold down control while clicking on the file names (or the function key, if you're on a mac)."
