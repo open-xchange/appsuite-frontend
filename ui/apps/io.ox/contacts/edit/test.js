@@ -239,7 +239,7 @@ define("io.ox/contacts/edit/test",
                         formFrame =  $('table[data-obj-id="' + phrase + '"]');
                         var count = 0;
                         for (var i in testObjectLong) {
-                            formFrame.find(".value input[name='" + i + "']").val(testObjectLong[i]);
+                            formFrame.find("input[name='" + i + "']").val(testObjectLong[i]);
                         }
                         $(buttonSave[0]).trigger('click');
                     });
