@@ -48,18 +48,19 @@ define("io.ox/contacts/edit/view-form",
 
     function addField(o) {
         var field = $('<input>', { name: o.name, type: 'text' })
-            .addClass('nice-input')
-            // TODO: add proper CSS class
-            .css({ fontSize: '14px', width: '300px', paddingTop: '0.25em', paddingBottom: '0.25em' })
-            .on('change', {name: o.name, node: o.node}, function (e) {
-                    var tr = $(e.data.node).find('tr.' + e.data.name);
-                    if (tr.find('input').val() === '') {
-                        tr.removeClass('filled');
-                    } else {
-                        tr.addClass('filled');
-                    }
-                }),
-            td = $("<td>").addClass("value").css('paddingBottom', '0.5em').append(field),
+                .addClass('nice-input')
+                // TODO: add proper CSS class
+                .css({ fontSize: '14px', width: '300px', paddingTop: '0.25em', paddingBottom: '0.25em', webkitBorderRadius: 0, webkitAppearance: 'none' })
+                .on('change', {name: o.name, node: o.node}, function (e) {
+                        var tr = $(e.data.node).find('tr.' + e.data.name);
+                        if (tr.find('input').val() === '') {
+                            tr.removeClass('filled');
+                        } else {
+                            tr.addClass('filled');
+                        }
+                    }),
+            td = $("<td>").addClass("value").css('paddingBottom', '0.5em')
+                .append($.labelize(field, 'field_' + o.name)),
             tr = $("<tr>").addClass(o.id + ' ' + o.name)
                 .append(
                     $("<td>").addClass("label")
@@ -1003,11 +1004,10 @@ define("io.ox/contacts/edit/view-form",
                         'target': 'blank.html'
                     })
                     .append(
-                        $('<input>',
-                        {   'id': 'image1',
-                            'name': 'file',
-                          'type': 'file'
-                        })
+                        $.labelize(
+                            $('<input>', { name: 'file', type: 'file' }),
+                            'contact_image_upload'
+                        )
                     )
                     .append(
                         $('<iframe/>',
@@ -1061,7 +1061,7 @@ define("io.ox/contacts/edit/view-form",
                 event.preventDefault();
                 var formdata = {},
                     formFrame = $('.abs'),
-                    image = formFrame.find("#image1").get(0);
+                    image = formFrame.find("input[type=file]").get(0);
 
                 formFrame.find('input').each(function (index) {
                     var value =  $(this).val(),

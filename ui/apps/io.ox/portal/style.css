@@ -1,4 +1,8 @@
 
+.io-ox-portal {
+    padding: 0 13px 0 13px;
+}
+
 .io-ox-portal .clear-title {
     margin: 0.5em 0 1em 0;
     font-size: 16pt;
@@ -31,6 +35,10 @@
     margin-bottom: 0.5em;
 }
 
+.io-ox-portal-linkedin-updates-entry {
+    margin-bottom: 0.5em;
+}
+
 .io-ox-portal-linkedin-updates-details {
     margin: 1em 0 1em 4em;
 }
@@ -42,7 +50,7 @@
 
 .io-ox-portal-rss .rss-title {
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 14px;
+    font-size: 1.2em;
     font-weight: bold;
     color: #000;
     margin: 2em 0 1em 0;
@@ -54,8 +62,7 @@
 
 .io-ox-portal-rss .rss-content {
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    line-height: 16px;
+    line-height: 1.2em;
 }
 
 .io-ox-portal-rss .rss-content img {

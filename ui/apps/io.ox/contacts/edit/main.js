@@ -60,12 +60,10 @@ define("io.ox/contacts/edit/main",
 //            formFrame = $("<div/>").addClass("contact_edit_frame")
 //                .appendTo(formContainer);
 
-            win.nodes.main
-                .css({ backgroundColor: '#fff', overflow: 'auto' })
-                .append(
-                    container = $('<div>')
-                    .css({ maxWidth: '600px', margin: '20px auto 20px auto' })
-                );
+            container = win.nodes.main
+                .css({ backgroundColor: '#fff' })
+                .scrollable()
+                .css({ maxWidth: '600px', margin: '20px auto 20px auto' });
 
             win.show(function () {
 

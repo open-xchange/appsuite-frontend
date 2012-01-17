@@ -22,11 +22,14 @@ define('io.ox/core/commons', [], function () {
          */
         showWindow: function (win, grid) {
             return function () {
+                var def = $.Deferred();
                 win.show(function () {
                     if (grid) {
                         grid.paint();
                     }
+                    def.resolve();
                 });
+                return def;
             };
         },
 

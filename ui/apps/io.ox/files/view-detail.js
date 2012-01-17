@@ -32,8 +32,8 @@ define("io.ox/files/view-detail",
 
         // Basic Info
         (function () {
-            var container = $("<div/>").addClass("basicInfo");
-            var line = $("<div/>");
+            var container = $("<div>").addClass("basicInfo");
+            var line = $("<div>");
             container.append(line);
             element.append(container);
 
@@ -41,12 +41,12 @@ define("io.ox/files/view-detail",
                 var count = 0;
                 _.each(extension.fields, function (index, field) {
                     var content = null;
-                    line.append($("<em/>").text(extension.label(field) + ":")).append(content = $("<span/>"));
+                    line.append($("<em>").text(extension.label(field) + ":")).append(content = $("<span>"));
                     extension.draw(field, file, content);
                     count++;
                     if (count === 5) {
                         count = 0;
-                        line = $("<div/>");
+                        line = $("<div>");
                         container.append(line);
                     }
                 });
@@ -61,7 +61,7 @@ define("io.ox/files/view-detail",
             if (!file.filename) {
                 return;
             }
-            var node = $("<div/>").addClass("preview");
+            var node = $("<div>").addClass("preview");
             element.append(node);
             var fileDescription = {
                 name: file.filename,
@@ -77,7 +77,7 @@ define("io.ox/files/view-detail",
 
         if (file.description) {
             element.append(
-                $("<div/>")
+                $("<div>")
                 .css({
                     // makes it readable
                     fontFamily: "monospace, 'Courier new'",

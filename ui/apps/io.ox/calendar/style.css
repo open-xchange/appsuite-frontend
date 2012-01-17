@@ -70,8 +70,8 @@
 /* Detail view */
 
 .calendar-detail .date {
-    font-size: 11pt;
     color: #ccc;
+    font-size: 1.1em;
 }
 
 .calendar-detail .interval {
@@ -91,7 +91,6 @@
 }
 
 .calendar-detail .location {
-    font-size: 11pt;
     color: #888;
     margin-bottom: 1em;
 }
@@ -134,19 +133,19 @@
 }
 
 .calendar-detail .participant {
-    line-height: 1.2em;
+    line-height: 2em;
     display: inline-block;
     width: 250px;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin: 0 20px 0.5em 0;
+    margin: 0 20px 0em 0;
     float: left;
     white-space: nowrap;
     cursor: pointer;
 }
 
 .csscolumns .calendar-detail .participant {
-    margin: 0 0 0.5em 0;
+    margin: 0 0 1px 0;
     float: none;
 }
 
@@ -155,6 +154,10 @@
     width: 80px;
     white-space: nowrap;
     color: #666;
+}
+
+.calendar-detail .details {
+    font-size: 0.9em;
 }
 
 .calendar-detail .detail {
@@ -177,6 +180,8 @@
     display: block;
     white-space: normal;
     padding-left: 1em;
+    line-height: 1.2em;
+    margin-bottom: 0.5em;
 }
 
 .calendar-detail .group {

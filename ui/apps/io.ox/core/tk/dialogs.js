@@ -225,6 +225,8 @@ define("io.ox/core/tk/dialogs", function () {
 
             self = this;
 
+        pane = pane.scrollable();
+
         // public nodes
         this.nodes = {};
         this.lastTrigger = null;
