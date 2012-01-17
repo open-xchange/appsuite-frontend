@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
-"POT-Creation-Date: Thu Sep 22 2011 11:38:57 GMT+0200 (CEST)\n"
+"POT-Creation-Date: Mon Jan 16 2012 14:30:29 GMT+0100 (CET)\n"
 "PO-Revision-Date: Thu Sep 22 2011 11:38:57 GMT+0200 (CEST)\n"
 "Last-Translator: NAME <EMAIL>\n"
 "Language-Team: OX <i18n@open-xchange.com>\n"
@@ -11,75 +11,597 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-msgid "Address Book"
+#: apps/io.ox/calendar/util.js:37
+msgid "Absent"
 msgstr ""
 
+#: apps/io.ox/contacts/edit/view-form.js:602
+msgid "Anniversary"
+msgstr ""
+
+#: apps/io.ox/core/main.js:93
 msgid "Applications"
 msgstr ""
 
+#: apps/io.ox/calendar/util.js:27 apps/io.ox/core/i18n.js:28
+msgid "April"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:561
+msgid "Assistant name"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:28 apps/io.ox/core/i18n.js:29
+msgid "August"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:183
+#: apps/io.ox/contacts/view-detail.js:283
 msgid "Birthday"
 msgstr "Date de naissance"
 
-msgid "Calendar"
+#: apps/io.ox/contacts/edit/view-form.js:537
+msgid "Branches"
 msgstr ""
 
+#: apps/io.ox/contacts/edit/view-form.js:543
+msgid "Business category"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:257
+msgid "Cellphone"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:263
+msgid "Cellphone (2nd)"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:372
+#: apps/io.ox/contacts/edit/view-form.js:412
+#: apps/io.ox/contacts/edit/view-form.js:458
+msgid "City"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:531
+msgid "Commercial register"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:495
+msgid "Company"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:386
+#: apps/io.ox/contacts/edit/view-form.js:426
+#: apps/io.ox/contacts/edit/view-form.js:472
+msgid "Country"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:213
+msgid "Day"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:29 apps/io.ox/core/i18n.js:30
+msgid "December"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:501
+#: apps/io.ox/contacts/view-detail.js:220
 msgid "Department"
 msgstr "Service"
 
+#: apps/io.ox/contacts/edit/view-form.js:156
+msgid "Display name"
+msgstr ""
+
+#: apps/io.ox/contacts/view-detail.js:152
 msgid "Distribution list"
 msgstr "Liste de diffusion"
 
+#: apps/io.ox/contacts/view-detail.js:260
+#: apps/io.ox/contacts/view-detail.js:263
+#: apps/io.ox/contacts/view-detail.js:267
 msgid "E-Mail"
 msgstr "Courrier électronique"
 
-msgid "Files"
+#: apps/io.ox/contacts/edit/view-form.js:113
+#, fuzzy
+msgid "E-Mail 1"
+msgstr "Courrier électronique"
+
+#: apps/io.ox/calendar/util.js:253
+msgid "Each %s Day"
 msgstr ""
 
+#: apps/io.ox/calendar/util.js:258
+msgid "Each %s weeks on %s"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:273
+msgid "Each %s. %s"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:507
+msgid "Employee type"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:208
+#, fuzzy
+msgid "Fax business"
+msgstr "Tél. (professionnel)"
+
+#: apps/io.ox/contacts/edit/view-form.js:250
+msgid "Fax home"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:277
+msgid "Fax other"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:26 apps/io.ox/core/i18n.js:27
+msgid "February"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:144
+#, fuzzy
+msgid "First name"
+msgstr "Nom d'utilisateur"
+
+#: html/core_body.html:64
 msgid "Forgot your password?"
 msgstr "Mot de passe oublié?"
 
+#: apps/io.ox/calendar/util.js:37
+msgid "Free"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:22 apps/io.ox/calendar/util.js:232
+#: apps/io.ox/core/i18n.js:21
+msgid "Friday"
+msgstr ""
+
+#: apps/io.ox/core/i18n.js:121
+msgid "Good evening"
+msgstr ""
+
+#: apps/io.ox/core/i18n.js:119
+msgid "Good morning"
+msgstr ""
+
+#: apps/io.ox/core/i18n.js:123
+msgid "Hello"
+msgstr ""
+
+#: apps/io.ox/core/main.js:79
 msgid "Help"
 msgstr ""
 
+#: apps/io.ox/contacts/view-detail.js:230
 msgid "Home"
 msgstr "Privé"
 
+#: apps/io.ox/contacts/edit/view-form.js:549
+msgid "Info"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:326
+msgid "Instant messenger 1"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:333
+msgid "Instant messenger 2"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:26 apps/io.ox/core/i18n.js:27
+msgid "January"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:28 apps/io.ox/core/i18n.js:29
+msgid "July"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:27 apps/io.ox/core/i18n.js:28
+msgid "June"
+msgstr ""
+
+#: html/core_body.html:78
 msgid "Languages"
 msgstr "Langues"
 
+#: apps/io.ox/contacts/edit/view-form.js:150
+#, fuzzy
+msgid "Last name"
+msgstr "Nom d'utilisateur"
+
+#: apps/io.ox/contacts/edit/view-form.js:555
+#, fuzzy
+msgid "Manager name"
+msgstr "Nom d'utilisateur"
+
+#: apps/io.ox/calendar/util.js:26 apps/io.ox/core/i18n.js:27
+msgid "March"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:572
+msgid "Marital status"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:27 apps/io.ox/core/i18n.js:28
+msgid "May"
+msgstr ""
+
+#: apps/io.ox/contacts/view-detail.js:247
+#: apps/io.ox/contacts/view-detail.js:248
 msgid "Mobile"
 msgstr "Tél. portable"
 
+#: apps/io.ox/calendar/util.js:21 apps/io.ox/calendar/util.js:220
+#: apps/io.ox/core/i18n.js:20
+msgid "Monday"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:176
+msgid "Nickname"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:590
+msgid "Note"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:29 apps/io.ox/core/i18n.js:30
+msgid "November"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:578
+msgid "Number of children"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:513
+msgid "Number of employees"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:29 apps/io.ox/core/i18n.js:30
+msgid "October"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:268
+msgid "On %s %s each %s. months"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:267
+msgid "On %s %s every month"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:275
+msgid "On %s %s in %s"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:264
+msgid "On %s. day every %s. month"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:263
+msgid "On %s. day every month"
+msgstr ""
+
+#: html/core_body.html:45
 msgid "Password"
 msgstr "Mot de passe"
 
+#: apps/io.ox/contacts/edit/view-form.js:229
+#, fuzzy
+msgid "Phone (Company)"
+msgstr "Tél. (privé)"
+
+#: apps/io.ox/contacts/view-detail.js:243
+#: apps/io.ox/contacts/view-detail.js:244
 msgid "Phone (business)"
 msgstr "Tél. (professionnel)"
 
+#: apps/io.ox/contacts/edit/view-form.js:243
+msgid "Phone (home 2nd)"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:236
+#, fuzzy
+msgid "Phone (home)"
+msgstr "Tél. (privé)"
+
+#: apps/io.ox/contacts/edit/view-form.js:270
+#, fuzzy
+msgid "Phone (other)"
+msgstr "Tél. (privé)"
+
+#: apps/io.ox/contacts/view-detail.js:245
+#: apps/io.ox/contacts/view-detail.js:246
 msgid "Phone (private)"
 msgstr "Tél. (privé)"
 
+#: apps/io.ox/contacts/edit/view-form.js:489
+#: apps/io.ox/contacts/view-detail.js:221
 msgid "Position"
 msgstr "Poste"
 
+#: apps/io.ox/contacts/edit/view-form.js:365
+#: apps/io.ox/contacts/edit/view-form.js:405
+#: apps/io.ox/contacts/edit/view-form.js:451
+msgid "Postal code"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:483
+#: apps/io.ox/contacts/view-detail.js:222
 msgid "Profession"
 msgstr "Profession"
 
+#: apps/io.ox/core/main.js:81
 msgid "Refresh"
 msgstr ""
 
+#: apps/io.ox/calendar/util.js:36
+msgid "Reserved"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:437
+msgid "Room number"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:519
+msgid "Sales volume"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:23 apps/io.ox/calendar/util.js:235
+#: apps/io.ox/core/i18n.js:22
+msgid "Saturday"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:162
+#, fuzzy
+msgid "Second name"
+msgstr "Nom d'utilisateur"
+
+#: apps/io.ox/calendar/util.js:28 apps/io.ox/core/i18n.js:29
+msgid "September"
+msgstr ""
+
+#: html/core_body.html:52
 msgid "Sign in"
 msgstr "Connexion"
 
+#: apps/io.ox/core/main.js:75
 msgid "Sign out"
 msgstr ""
 
+#: apps/io.ox/contacts/edit/view-form.js:584
+#, fuzzy
+msgid "Spouse name"
+msgstr "Nom d'utilisateur"
+
+#: apps/io.ox/contacts/edit/view-form.js:379
+#: apps/io.ox/contacts/edit/view-form.js:419
+#: apps/io.ox/contacts/edit/view-form.js:465
+msgid "State"
+msgstr ""
+
+#: html/core_body.html:60
 msgid "Stay signed in"
 msgstr "Rester connecté"
 
+#: apps/io.ox/contacts/edit/view-form.js:358
+#: apps/io.ox/contacts/edit/view-form.js:398
+#: apps/io.ox/contacts/edit/view-form.js:444
+msgid "Street"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:169
+msgid "Suffix"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:21 apps/io.ox/calendar/util.js:217
+#: apps/io.ox/core/i18n.js:20
+msgid "Sunday"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:525
+msgid "Tax id"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:194
+#, fuzzy
+msgid "Telephone business 1"
+msgstr "Tél. (professionnel)"
+
+#: apps/io.ox/contacts/edit/view-form.js:201
+#, fuzzy
+msgid "Telephone business 2"
+msgstr "Tél. (professionnel)"
+
+#: apps/io.ox/contacts/edit/view-form.js:215
+msgid "Telephone callback"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:222
+msgid "Telephone car"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:340
+msgid "Telephone ip"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:284
+msgid "Telephone isdn"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:291
+msgid "Telephone pager"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:298
+msgid "Telephone primary"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:305
+msgid "Telephone radio"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:312
+msgid "Telephone telex"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:319
+msgid "Telephone ttytdd"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:347
+msgid "Telephone_assistant"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:36
+msgid "Temporary"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:22 apps/io.ox/calendar/util.js:229
+#: apps/io.ox/core/i18n.js:21
+msgid "Thursday"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:137
+msgid "Title"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:21 apps/io.ox/calendar/util.js:223
+#: apps/io.ox/core/i18n.js:20
+msgid "Tuesday"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:596
+msgid "Url"
+msgstr ""
+
+#: html/core_body.html:39
 msgid "User name"
 msgstr "Nom d'utilisateur"
 
+#: apps/io.ox/contacts/edit/view-form.js:608
+msgid "Userfield 01"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:614
+msgid "Userfield 02"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:620
+msgid "Userfield 03"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:626
+msgid "Userfield 04"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:632
+msgid "Userfield 05"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:638
+msgid "Userfield 06"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:644
+msgid "Userfield 07"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:650
+msgid "Userfield 08"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:656
+msgid "Userfield 09"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:662
+msgid "Userfield 10"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:668
+msgid "Userfield 11"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:674
+msgid "Userfield 12"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:680
+msgid "Userfield 13"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:686
+msgid "Userfield 14"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:692
+msgid "Userfield 15"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:698
+msgid "Userfield 16"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:704
+msgid "Userfield 17"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:710
+msgid "Userfield 18"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:716
+msgid "Userfield 19"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:722
+msgid "Userfield 20"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:22 apps/io.ox/calendar/util.js:226
+#: apps/io.ox/core/i18n.js:21
+msgid "Wednesday"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:210
+msgid "Weekend Day"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:257
+msgid "Weekly on %s"
+msgstr ""
+
+#: apps/io.ox/contacts/view-detail.js:227
 msgid "Work"
 msgstr "Professionnel"
 
+#: apps/io.ox/calendar/util.js:207
+#, fuzzy
+msgid "Work Day"
+msgstr "Professionnel"
+
+#: apps/io.ox/calendar/util.js:32
+msgid "first"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:33
+msgid "fourth"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:32 apps/io.ox/calendar/util.js:33
+msgid "last"
+msgstr ""
+
+#: apps/io.ox/settings/view-detail.js:22
+msgid "nothing"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:32
+msgid "second"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:33
+msgid "third"
+msgstr ""

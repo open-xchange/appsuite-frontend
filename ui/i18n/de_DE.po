@@ -5,585 +5,1019 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: de_DE\n"
-"POT-Creation-Date: 2011-12-01 16:15+0100\n"
+"POT-Creation-Date: Mon Jan 16 2012 14:30:29 GMT+0100 (CET)\n"
 "PO-Revision-Date: 2011-12-05 09:45+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: Japanese <kde-i18n-de@kde.org>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 1.0\n"
 
-msgid "stay logged in"
-msgstr "Angemeldet bleiben"
+#: apps/io.ox/calendar/util.js:37
+msgid "Absent"
+msgstr ""
 
-msgid "About 1&1 Webmail"
-msgstr "Über 1&1 Webmail"
+#: apps/io.ox/contacts/edit/view-form.js:602
+msgid "Anniversary"
+msgstr ""
 
-msgid "Inbox"
-msgstr "Eingang"
+#: apps/io.ox/core/main.js:93
+msgid "Applications"
+msgstr ""
 
-msgid "Postbox"
-msgstr "Postfach"
-
-msgid "Contacts"
-msgstr "Kontakte"
-
-msgid "Appointments"
-msgstr "Termine"
-
-msgid "Settings"
-msgstr "Einstellungen"
-
-msgid "Overview"
-msgstr "Übersicht"
-
-msgid "Sent Items"
-msgstr "Gesendete Objekte"
-
-msgid "Drafts"
-msgstr "Entwürfe"
-
-msgid "Spam"
-msgstr "Spam"
-
-msgid "Trash"
-msgstr "Papierkorb"
-
-msgid "Own folders"
-msgstr "Eigene Ordner"
-
-msgid "Own Folders"
-msgstr "Eigene Ordner"
-
-msgid "Back"
-msgstr "Zurück"
-
-msgid "From:"
-msgstr "Von:"
-
-msgid "Details"
-msgstr "Details"
-
-msgid "To:"
-msgstr "An"
-
-msgid "Unread"
-msgstr "Ungelesen"
-
-msgid "Cancel"
-msgstr "Abbrechen"
-
-msgid "Folder"
-msgstr "Ordner"
-
-msgid "New E-Mail"
-msgstr "Neue E-Mail"
-
-msgid "Send"
-msgstr "Senden"
-
-msgid "Cc/Bcc:"
-msgstr "CC/BCC"
-
-msgid "Bcc:"
-msgstr "BCC"
-
-msgid "E-Mail folder"
-msgstr "E-Mail-Ordner"
-
-msgid "Contact folder"
-msgstr "Kontakte-Ordner"
-
-msgid "Legal Information"
-msgstr "Rechtliche Hinweise"
-
-msgid "System messages"
-msgstr "System-Meldungen"
-
-msgid "Logout"
-msgstr "Abmelden"
-
-msgid "E-Mail Folder"
-msgstr "E-Mail-Ordner"
-
-msgid "Please select the folders you want to access."
-msgstr "Bitte wählen Sie die Ordner aus, auf die sie zugreifen möchten."
-
-msgid "Appointment Limit"
-msgstr "Termin-Limit"
-
-msgid "Display future appointments for the timeframe specified."
-msgstr "Wie weit in die Zukunft soll auf Termine geprüft werden?"
-
-msgid "Contacts Folder"
-msgstr "Kontakte-Ordner"
-
-msgid "Version"
-msgstr "Version"
-
-msgid "Close"
-msgstr "Schließen"
-
-msgid "Contact list is empty."
-msgstr "Die Kontaktliste enthält keine Einträge."
-
-msgid "Search for contacts..."
-msgstr "Nach Kontakten suchen..."
-
-msgid "E-Mail"
-msgstr "E-Mail"
-
-msgid "E-Mail 2"
-msgstr "E-Mail 2"
-
-msgid "E-Mail 3"
-msgstr "E-Mail 3"
-
-msgid "Mobile"
-msgstr "Mobiltelefon"
-
-msgid "Private"
-msgstr "Privat"
-
-msgid "Mobile 2"
-msgstr "Mobiltelefon 2"
-
-msgid "Business"
-msgstr "Geschäftlich"
-
-msgid "Privat"
-msgstr "Privat"
-
-#. %1$s is the error code.
-#. %2$s is the formatted error message.
-#. %3$s is the unique error ID.
-#, c-format
-msgid "Error: %2$s (%1$s, %3$s)"
-msgstr "Fehlermeldung: %2$s (%1$s, %3$s)"
-
-msgid "January"
-msgstr "Januar"
-
-msgid "February"
-msgstr "Februar"
-
-msgid "March"
-msgstr "März"
-
+#: apps/io.ox/calendar/util.js:27 apps/io.ox/core/i18n.js:28
 msgid "April"
 msgstr "April"
 
-msgid "May"
-msgstr "Mai"
+#: apps/io.ox/contacts/edit/view-form.js:561
+msgid "Assistant name"
+msgstr ""
 
-msgid "June"
-msgstr "Juni"
-
-msgid "July"
-msgstr "Juli"
-
+#: apps/io.ox/calendar/util.js:28 apps/io.ox/core/i18n.js:29
 msgid "August"
 msgstr "August"
 
-msgid "September"
-msgstr "September"
+#: apps/io.ox/contacts/edit/view-form.js:183
+#: apps/io.ox/contacts/view-detail.js:283
+msgid "Birthday"
+msgstr ""
 
-msgid "October"
-msgstr "Oktober"
+#: apps/io.ox/contacts/edit/view-form.js:537
+msgid "Branches"
+msgstr ""
 
-msgid "November"
-msgstr "November"
+#: apps/io.ox/contacts/edit/view-form.js:543
+#, fuzzy
+msgid "Business category"
+msgstr "Geschäftlich"
 
+#: apps/io.ox/contacts/edit/view-form.js:257
+msgid "Cellphone"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:263
+msgid "Cellphone (2nd)"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:372
+#: apps/io.ox/contacts/edit/view-form.js:412
+#: apps/io.ox/contacts/edit/view-form.js:458
+msgid "City"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:531
+msgid "Commercial register"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:495
+msgid "Company"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:386
+#: apps/io.ox/contacts/edit/view-form.js:426
+#: apps/io.ox/contacts/edit/view-form.js:472
+msgid "Country"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:213
+#, fuzzy
+msgid "Day"
+msgstr "Mai"
+
+#: apps/io.ox/calendar/util.js:29 apps/io.ox/core/i18n.js:30
 msgid "December"
 msgstr "Dezember"
 
-msgid "Jan"
-msgstr "Jan"
+#: apps/io.ox/contacts/edit/view-form.js:501
+#: apps/io.ox/contacts/view-detail.js:220
+#, fuzzy
+msgid "Department"
+msgstr "Anlage"
 
-msgid "Feb"
-msgstr "Feb"
+#: apps/io.ox/contacts/edit/view-form.js:156
+msgid "Display name"
+msgstr ""
 
-msgid "Mar"
-msgstr "Mär"
+#: apps/io.ox/contacts/view-detail.js:152
+msgid "Distribution list"
+msgstr ""
 
-msgid "Apr"
-msgstr "Apr"
+#: apps/io.ox/contacts/view-detail.js:260
+#: apps/io.ox/contacts/view-detail.js:263
+#: apps/io.ox/contacts/view-detail.js:267
+msgid "E-Mail"
+msgstr "E-Mail"
 
-msgid "Jun"
-msgstr "Jun"
+#: apps/io.ox/contacts/edit/view-form.js:113
+#, fuzzy
+msgid "E-Mail 1"
+msgstr "E-Mail 2"
 
-msgid "Jul"
-msgstr "Jul"
+#: apps/io.ox/calendar/util.js:253
+msgid "Each %s Day"
+msgstr ""
 
-msgid "Aug"
-msgstr "Aug"
+#: apps/io.ox/calendar/util.js:258
+msgid "Each %s weeks on %s"
+msgstr ""
 
-msgid "Sep"
-msgstr "Sep"
+#: apps/io.ox/calendar/util.js:273
+msgid "Each %s. %s"
+msgstr ""
 
-msgid "Oct"
-msgstr "Okt"
+#: apps/io.ox/contacts/edit/view-form.js:507
+msgid "Employee type"
+msgstr ""
 
-msgid "Nov"
-msgstr "Nov"
+#: apps/io.ox/contacts/edit/view-form.js:208
+#, fuzzy
+msgid "Fax business"
+msgstr "Geschäftlich"
 
-msgid "Dec"
-msgstr "Dez"
+#: apps/io.ox/contacts/edit/view-form.js:250
+msgid "Fax home"
+msgstr ""
 
-msgid "Sunday"
-msgstr "Sonntag"
+#: apps/io.ox/contacts/edit/view-form.js:277
+msgid "Fax other"
+msgstr ""
 
-msgid "Monday"
-msgstr "Montag"
+#: apps/io.ox/calendar/util.js:26 apps/io.ox/core/i18n.js:27
+msgid "February"
+msgstr "Februar"
 
-msgid "Tuesday"
-msgstr "Dienstag"
+#: apps/io.ox/contacts/edit/view-form.js:144
+msgid "First name"
+msgstr ""
 
-msgid "Wednesday"
-msgstr "Mittwoch"
+#: html/core_body.html:64
+msgid "Forgot your password?"
+msgstr ""
 
-msgid "Thursday"
-msgstr "Donnerstag"
+#: apps/io.ox/calendar/util.js:37
+msgid "Free"
+msgstr ""
 
+#: apps/io.ox/calendar/util.js:22 apps/io.ox/calendar/util.js:232
+#: apps/io.ox/core/i18n.js:21
 msgid "Friday"
 msgstr "Freitag"
 
-msgid "Saturday"
-msgstr "Samstag"
+#: apps/io.ox/core/i18n.js:121
+msgid "Good evening"
+msgstr ""
 
-msgid "Sun"
-msgstr "So"
+#: apps/io.ox/core/i18n.js:119
+msgid "Good morning"
+msgstr ""
 
-msgid "Mon"
-msgstr "Mo"
+#: apps/io.ox/core/i18n.js:123
+msgid "Hello"
+msgstr ""
 
-msgid "Tue"
-msgstr "Di"
+#: apps/io.ox/core/main.js:79
+msgid "Help"
+msgstr ""
 
-msgid "Wed"
-msgstr "Mi"
+#: apps/io.ox/contacts/view-detail.js:230
+msgid "Home"
+msgstr ""
 
-msgid "Thu"
-msgstr "Do"
+#: apps/io.ox/contacts/edit/view-form.js:549
+msgid "Info"
+msgstr ""
 
-msgid "Fri"
-msgstr "Fr"
+#: apps/io.ox/contacts/edit/view-form.js:326
+msgid "Instant messenger 1"
+msgstr ""
 
-msgid "Sat"
-msgstr "Sa"
+#: apps/io.ox/contacts/edit/view-form.js:333
+msgid "Instant messenger 2"
+msgstr ""
 
-msgid "BC"
-msgstr "BC"
+#: apps/io.ox/calendar/util.js:26 apps/io.ox/core/i18n.js:27
+msgid "January"
+msgstr "Januar"
 
-msgid "AD"
-msgstr "v. Chr."
+#: apps/io.ox/calendar/util.js:28 apps/io.ox/core/i18n.js:29
+msgid "July"
+msgstr "Juli"
 
-msgid "AM"
-msgstr "am"
+#: apps/io.ox/calendar/util.js:27 apps/io.ox/core/i18n.js:28
+msgid "June"
+msgstr "Juni"
 
-msgid "PM"
-msgstr "pm"
+#: html/core_body.html:78
+msgid "Languages"
+msgstr ""
 
-# default time format
-msgid "HH:mm"
-msgstr "HH:mm"
+#: apps/io.ox/contacts/edit/view-form.js:150
+msgid "Last name"
+msgstr ""
 
-# default date format
-msgid "yyyy-MM-dd"
-msgstr "dd.MM.yyyy"
+#: apps/io.ox/contacts/edit/view-form.js:555
+msgid "Manager name"
+msgstr ""
 
-#. Short date format (month and day only)
-#. MM is month, dd is day of the month
-msgid "MM/dd"
-msgstr "dd.MM."
+#: apps/io.ox/calendar/util.js:26 apps/io.ox/core/i18n.js:27
+msgid "March"
+msgstr "März"
 
-#. The relative position of date and time.
-#. %1$s is the date
-#. %2$s is the time
-#. The date with the day of the week.
-#. EEEE is the full day of the week,
-#. EEE is the short day of the week,
-#. %s is the date.
-#, c-format
-msgid "EEEE, %s"
-msgstr "EEEE, %s"
+#: apps/io.ox/contacts/edit/view-form.js:572
+msgid "Marital status"
+msgstr ""
 
-#. The date with the day of the week.
-#. EEEE is the full day of the week,
-#. EEE is the short day of the week,
-#. %s is the date.
-#, c-format
-msgid "EEE, %s"
-msgstr "EEE, %s"
+#: apps/io.ox/calendar/util.js:27 apps/io.ox/core/i18n.js:28
+msgid "May"
+msgstr "Mai"
 
-msgid "%s, EEE"
-msgstr "%s, EEE"
+#: apps/io.ox/contacts/view-detail.js:247
+#: apps/io.ox/contacts/view-detail.js:248
+msgid "Mobile"
+msgstr "Mobiltelefon"
 
-#. The format for calendar timescales
-#. when the interval is at least one hour.
-#. H is 1-24, HH is 01-24, h is 1-12, hh is 01-12, a is AM/PM,
-#. mm is minutes.
-#. The format for hours on calendar timescales
-#. when the interval is less than one hour.
-#. The format for minutes on calendar timescales
-#. when the interval is less than one hour.
-#. 12h formats should use AM/PM ("a").
-#. 24h formats should use minutes ("mm").
-#. The format for team view timescales
-#. HH is 01-24, hh is 01-12, H is 1-24, h 1-12, a is AM/PM
-#. Reminder (objective case): in X minutes
-#. %d is the number of minutes
-#, c-format
-msgctxt "in"
-msgid "%d minute"
-msgid_plural "%d minutes"
-msgstr[0] "%d Minute"
-msgstr[1] "%d Minuten"
+#: apps/io.ox/calendar/util.js:21 apps/io.ox/calendar/util.js:220
+#: apps/io.ox/core/i18n.js:20
+msgid "Monday"
+msgstr "Montag"
 
-#. General duration (nominative case): X minutes
-#. %d is the number of minutes
-#, c-format
-msgid "%d minute"
-msgid_plural "%d minutes"
-msgstr[0] "%d Minute"
-msgstr[1] "%d Minuten"
+#: apps/io.ox/contacts/edit/view-form.js:176
+msgid "Nickname"
+msgstr ""
 
-#. Reminder (objective case): in X hours
-#. %d is the number of hours
-#, c-format
-msgctxt "in"
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d Stunde"
-msgstr[1] "%d Stunden"
+#: apps/io.ox/contacts/edit/view-form.js:590
+msgid "Note"
+msgstr ""
 
-#. General duration (nominative case): X hours
-#. %d is the number of hours
-#, c-format
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d Stunde"
-msgstr[1] "%d Stunden"
+#: apps/io.ox/calendar/util.js:29 apps/io.ox/core/i18n.js:30
+msgid "November"
+msgstr "November"
 
-#. Reminder (objective case): in X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#, c-format
-msgctxt "in"
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d Stunde und %2$s"
-msgstr[1] "%1$d Stunden und %2$s"
+#: apps/io.ox/contacts/edit/view-form.js:578
+msgid "Number of children"
+msgstr ""
 
-#. General duration (nominative case): X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#, c-format
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d Stunde und %2$s"
-msgstr[1] "%1$d Stunden und %2$s"
+#: apps/io.ox/contacts/edit/view-form.js:513
+msgid "Number of employees"
+msgstr ""
 
-#. Reminder (objective case): in X days
-#. %d is the number of days
-#, c-format
-msgctxt "in"
-msgid "%d day"
-msgid_plural "%d days"
-msgstr[0] "%d Tag"
-msgstr[1] "%d Tagen"
+#: apps/io.ox/calendar/util.js:29 apps/io.ox/core/i18n.js:30
+msgid "October"
+msgstr "Oktober"
 
-#. General duration (nominative case): X days
-#. %d is the number of days
-#, c-format
-msgid "%d day"
-msgid_plural "%d days"
-msgstr[0] "%d Tag"
-msgstr[1] "%d Tage"
+#: apps/io.ox/calendar/util.js:268
+msgid "On %s %s each %s. months"
+msgstr ""
 
-#. Reminder (objective case): in X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#, c-format
-msgctxt "in"
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d Tag, %2$s"
-msgstr[1] "%1$d Tage, %2$s"
+#: apps/io.ox/calendar/util.js:267
+msgid "On %s %s every month"
+msgstr ""
 
-#. General duration (nominative case): X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#, c-format
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d Tag, %2$s"
-msgstr[1] "%1$d Tage, %2$s"
+#: apps/io.ox/calendar/util.js:275
+msgid "On %s %s in %s"
+msgstr ""
 
-#. Reminder (objective case): in X weeks
-#. %d is the number of weeks
-#, c-format
-msgctxt "in"
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d Woche"
-msgstr[1] "%d Wochen"
+#: apps/io.ox/calendar/util.js:264
+msgid "On %s. day every %s. month"
+msgstr ""
 
-#. General duration (nominative case): X weeks
-#. %d is the number of weeks
-#, c-format
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d Woche"
-msgstr[1] "%d Wochen"
+#: apps/io.ox/calendar/util.js:263
+msgid "On %s. day every month"
+msgstr ""
 
-msgid "Loading..."
-msgstr "Laden..."
-
+#: html/core_body.html:45
 msgid "Password"
 msgstr "Passwort"
 
-msgid "Login"
-msgstr "Login"
-
-msgid ""
-"You have chosen a large number of contacts. This can significantly affect "
-"the response time."
+#: apps/io.ox/contacts/edit/view-form.js:229
+msgid "Phone (Company)"
 msgstr ""
-"Sie haben eine hohe Anzahl von Kontakten ausgewählt. Dies kann die "
-"Reaktionszeit erheblich beeinträchtigen"
 
-msgid "Synchronizing data."
-msgstr "Daten synchronisieren"
+#: apps/io.ox/contacts/view-detail.js:243
+#: apps/io.ox/contacts/view-detail.js:244
+msgid "Phone (business)"
+msgstr ""
 
-msgid "Today"
-msgstr "Heute"
+#: apps/io.ox/contacts/edit/view-form.js:243
+msgid "Phone (home 2nd)"
+msgstr ""
 
-msgid "Yesterday"
-msgstr "Gestern"
+#: apps/io.ox/contacts/edit/view-form.js:236
+msgid "Phone (home)"
+msgstr ""
 
-msgid "Accept"
-msgstr "Akzeptieren"
+#: apps/io.ox/contacts/edit/view-form.js:270
+msgid "Phone (other)"
+msgstr ""
 
-msgid "Decline"
-msgstr "Ablehnen"
+#: apps/io.ox/contacts/view-detail.js:245
+#: apps/io.ox/contacts/view-detail.js:246
+#, fuzzy
+msgid "Phone (private)"
+msgstr "Privat"
 
-msgid "Please select a target folder."
-msgstr "Bitte wählen sie einen Zielordner aus."
+#: apps/io.ox/contacts/edit/view-form.js:489
+#: apps/io.ox/contacts/view-detail.js:221
+msgid "Position"
+msgstr ""
 
-msgid "Your E-Mails have been moved."
-msgstr "Ihre E-Mails wurden verschoben."
+#: apps/io.ox/contacts/edit/view-form.js:365
+#: apps/io.ox/contacts/edit/view-form.js:405
+#: apps/io.ox/contacts/edit/view-form.js:451
+msgid "Postal code"
+msgstr ""
 
-msgid "Permanently delete E-Mails?"
-msgstr "E-Mails endgültig löschen?"
+#: apps/io.ox/contacts/edit/view-form.js:483
+#: apps/io.ox/contacts/view-detail.js:222
+msgid "Profession"
+msgstr ""
 
-msgid "Delete"
-msgstr "Löschen"
+#: apps/io.ox/core/main.js:81
+msgid "Refresh"
+msgstr ""
 
-msgid "Answer"
-msgstr "Antworten"
+#: apps/io.ox/calendar/util.js:36
+msgid "Reserved"
+msgstr ""
 
-msgid "Forward"
-msgstr "Weiterleiten"
+#: apps/io.ox/contacts/edit/view-form.js:437
+msgid "Room number"
+msgstr ""
 
-msgid "Cc:"
-msgstr "CC"
+#: apps/io.ox/contacts/edit/view-form.js:519
+msgid "Sales volume"
+msgstr ""
 
-msgid "An error occurred"
-msgstr "Es trat ein Fehler auf"
+#: apps/io.ox/calendar/util.js:23 apps/io.ox/calendar/util.js:235
+#: apps/io.ox/core/i18n.js:22
+msgid "Saturday"
+msgstr "Samstag"
 
-msgid "Ok"
-msgstr "OK"
+#: apps/io.ox/contacts/edit/view-form.js:162
+msgid "Second name"
+msgstr ""
 
-msgid "Your mail was sent"
-msgstr "Ihre E-Mail wurde gesendet"
+#: apps/io.ox/calendar/util.js:28 apps/io.ox/core/i18n.js:29
+msgid "September"
+msgstr "September"
 
-msgid "attachment"
-msgstr "Anlage"
+#: html/core_body.html:52
+msgid "Sign in"
+msgstr ""
 
-msgid "Reconnecting to server"
-msgstr "Erneuter Verbindungsaufbau zum Server"
+#: apps/io.ox/core/main.js:75
+msgid "Sign out"
+msgstr ""
 
-msgid "Your E-Mail address or password is wrong."
-msgstr "Ihre E-Mail-Adresse oder Ihr Passwort ist falsch."
+#: apps/io.ox/contacts/edit/view-form.js:584
+msgid "Spouse name"
+msgstr ""
 
-msgid "An error occurred. Please try again."
-msgstr "Ein Fehler ist aufgetreten. Bitte versuchen Sie es noch einmal."
+#: apps/io.ox/contacts/edit/view-form.js:379
+#: apps/io.ox/contacts/edit/view-form.js:419
+#: apps/io.ox/contacts/edit/view-form.js:465
+msgid "State"
+msgstr ""
 
-msgid "An error occurred."
-msgstr "Es trat ein Fehler auf."
+#: html/core_body.html:60
+#, fuzzy
+msgid "Stay signed in"
+msgstr "Angemeldet bleiben"
 
-msgid "1 week"
-msgstr "1 Woche"
+#: apps/io.ox/contacts/edit/view-form.js:358
+#: apps/io.ox/contacts/edit/view-form.js:398
+#: apps/io.ox/contacts/edit/view-form.js:444
+msgid "Street"
+msgstr ""
 
-msgid "2 weeks"
-msgstr "2 Wochen"
+#: apps/io.ox/contacts/edit/view-form.js:169
+msgid "Suffix"
+msgstr ""
 
-msgid "1 month"
-msgstr "1 Monat"
+#: apps/io.ox/calendar/util.js:21 apps/io.ox/calendar/util.js:217
+#: apps/io.ox/core/i18n.js:20
+msgid "Sunday"
+msgstr "Sonntag"
 
-msgid "2 months"
-msgstr "2 Monate"
+#: apps/io.ox/contacts/edit/view-form.js:525
+msgid "Tax id"
+msgstr ""
 
-msgid "Appointments: %s"
-msgstr "Termine: %s"
+#: apps/io.ox/contacts/edit/view-form.js:194
+msgid "Telephone business 1"
+msgstr ""
 
-msgid "Folder is empty"
-msgstr "Der Ordner ist leer."
+#: apps/io.ox/contacts/edit/view-form.js:201
+msgid "Telephone business 2"
+msgstr ""
 
-msgid "No subject"
-msgstr "Kein Betreff"
+#: apps/io.ox/contacts/edit/view-form.js:215
+msgid "Telephone callback"
+msgstr ""
 
-#. Displayed in single mail view. This indicates the position of the currently
-#. displayed mail, i.e. "4 of 10"
-msgid "%n of %n"
-msgstr "%n von %n"
+#: apps/io.ox/contacts/edit/view-form.js:222
+msgid "Telephone car"
+msgstr ""
 
-msgid "Move"
-msgstr "Verschieben"
+#: apps/io.ox/contacts/edit/view-form.js:340
+msgid "Telephone ip"
+msgstr ""
 
-msgid "Edit"
-msgstr "Bearbeiten"
+#: apps/io.ox/contacts/edit/view-form.js:284
+msgid "Telephone isdn"
+msgstr ""
 
-msgid "None"
-msgstr "Keine"
+#: apps/io.ox/contacts/edit/view-form.js:291
+msgid "Telephone pager"
+msgstr ""
 
-msgid "Visible folder"
-msgstr "Sichtbarer Ordner"
+#: apps/io.ox/contacts/edit/view-form.js:298
+msgid "Telephone primary"
+msgstr ""
 
-msgid "Create objects"
-msgstr "Objekte anlegen"
+#: apps/io.ox/contacts/edit/view-form.js:305
+msgid "Telephone radio"
+msgstr ""
 
-msgid "Create subfolders"
-msgstr "Unterordner anlegen"
+#: apps/io.ox/contacts/edit/view-form.js:312
+msgid "Telephone telex"
+msgstr ""
 
-msgid "Maximum"
-msgstr "Maximum"
+#: apps/io.ox/contacts/edit/view-form.js:319
+msgid "Telephone ttytdd"
+msgstr ""
 
-msgid "Read own"
-msgstr "Eigene lesen"
+#: apps/io.ox/contacts/edit/view-form.js:347
+msgid "Telephone_assistant"
+msgstr ""
 
-msgid "Read all"
-msgstr "Alle lesen"
+#: apps/io.ox/calendar/util.js:36
+msgid "Temporary"
+msgstr ""
 
-msgid "Modify own"
-msgstr "Eigene ändern"
+#: apps/io.ox/calendar/util.js:22 apps/io.ox/calendar/util.js:229
+#: apps/io.ox/core/i18n.js:21
+msgid "Thursday"
+msgstr "Donnerstag"
 
-msgid "Modify all"
-msgstr "Alle ändern"
+#: apps/io.ox/contacts/edit/view-form.js:137
+msgid "Title"
+msgstr ""
 
-msgid "Delete own"
-msgstr "Eigene löschen"
+#: apps/io.ox/calendar/util.js:21 apps/io.ox/calendar/util.js:223
+#: apps/io.ox/core/i18n.js:20
+msgid "Tuesday"
+msgstr "Dienstag"
 
-msgid "Delete all"
-msgstr "Alle löschen"
+#: apps/io.ox/contacts/edit/view-form.js:596
+msgid "Url"
+msgstr ""
 
-msgid "No"
-msgstr "Nein"
+#: html/core_body.html:39
+msgid "User name"
+msgstr ""
 
-msgid "Yes"
-msgstr "Ja"
+#: apps/io.ox/contacts/edit/view-form.js:608
+msgid "Userfield 01"
+msgstr ""
 
+#: apps/io.ox/contacts/edit/view-form.js:614
+msgid "Userfield 02"
+msgstr ""
 
+#: apps/io.ox/contacts/edit/view-form.js:620
+msgid "Userfield 03"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:626
+msgid "Userfield 04"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:632
+msgid "Userfield 05"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:638
+msgid "Userfield 06"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:644
+msgid "Userfield 07"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:650
+msgid "Userfield 08"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:656
+msgid "Userfield 09"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:662
+msgid "Userfield 10"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:668
+msgid "Userfield 11"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:674
+msgid "Userfield 12"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:680
+msgid "Userfield 13"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:686
+msgid "Userfield 14"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:692
+msgid "Userfield 15"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:698
+msgid "Userfield 16"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:704
+msgid "Userfield 17"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:710
+msgid "Userfield 18"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:716
+msgid "Userfield 19"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/view-form.js:722
+msgid "Userfield 20"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:22 apps/io.ox/calendar/util.js:226
+#: apps/io.ox/core/i18n.js:21
+msgid "Wednesday"
+msgstr "Mittwoch"
+
+#: apps/io.ox/calendar/util.js:210
+msgid "Weekend Day"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:257
+msgid "Weekly on %s"
+msgstr ""
+
+#: apps/io.ox/contacts/view-detail.js:227
+msgid "Work"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:207
+msgid "Work Day"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:32
+msgid "first"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:33
+msgid "fourth"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:32 apps/io.ox/calendar/util.js:33
+msgid "last"
+msgstr ""
+
+#: apps/io.ox/settings/view-detail.js:22
+msgid "nothing"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:32
+msgid "second"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:33
+msgid "third"
+msgstr ""
+
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d Tag, %2$s"
+#~ msgstr[1] "%1$d Tage, %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d Tag, %2$s"
+#~ msgstr[1] "%1$d Tage, %2$s"
+
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d Stunde und %2$s"
+#~ msgstr[1] "%1$d Stunden und %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d Stunde und %2$s"
+#~ msgstr[1] "%1$d Stunden und %2$s"
+
+#~ msgid "%d day"
+#~ msgid_plural "%d days"
+#~ msgstr[0] "%d Tag"
+#~ msgstr[1] "%d Tage"
+
+#~ msgctxt "in"
+#~ msgid "%d day"
+#~ msgid_plural "%d days"
+#~ msgstr[0] "%d Tag"
+#~ msgstr[1] "%d Tagen"
+
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d Stunde"
+#~ msgstr[1] "%d Stunden"
+
+#~ msgctxt "in"
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d Stunde"
+#~ msgstr[1] "%d Stunden"
+
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d Minute"
+#~ msgstr[1] "%d Minuten"
+
+#~ msgctxt "in"
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d Minute"
+#~ msgstr[1] "%d Minuten"
+
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d Woche"
+#~ msgstr[1] "%d Wochen"
+
+#~ msgctxt "in"
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d Woche"
+#~ msgstr[1] "%d Wochen"
+
+#~ msgid "%n of %n"
+#~ msgstr "%n von %n"
+
+#~ msgid "%s, EEE"
+#~ msgstr "%s, EEE"
+
+#~ msgid "1 month"
+#~ msgstr "1 Monat"
+
+#~ msgid "1 week"
+#~ msgstr "1 Woche"
+
+#~ msgid "2 months"
+#~ msgstr "2 Monate"
+
+#~ msgid "2 weeks"
+#~ msgstr "2 Wochen"
+
+#~ msgid "AD"
+#~ msgstr "v. Chr."
+
+#~ msgid "AM"
+#~ msgstr "am"
+
+#~ msgid "About 1&1 Webmail"
+#~ msgstr "Über 1&1 Webmail"
+
+#~ msgid "Accept"
+#~ msgstr "Akzeptieren"
+
+#~ msgid "An error occurred"
+#~ msgstr "Es trat ein Fehler auf"
+
+#~ msgid "An error occurred."
+#~ msgstr "Es trat ein Fehler auf."
+
+#~ msgid "An error occurred. Please try again."
+#~ msgstr "Ein Fehler ist aufgetreten. Bitte versuchen Sie es noch einmal."
+
+#~ msgid "Answer"
+#~ msgstr "Antworten"
+
+#~ msgid "Appointment Limit"
+#~ msgstr "Termin-Limit"
+
+#~ msgid "Appointments"
+#~ msgstr "Termine"
+
+#~ msgid "Appointments: %s"
+#~ msgstr "Termine: %s"
+
+#~ msgid "Apr"
+#~ msgstr "Apr"
+
+#~ msgid "Aug"
+#~ msgstr "Aug"
+
+#~ msgid "BC"
+#~ msgstr "BC"
+
+#~ msgid "Back"
+#~ msgstr "Zurück"
+
+#~ msgid "Bcc:"
+#~ msgstr "BCC"
+
+#~ msgid "Cancel"
+#~ msgstr "Abbrechen"
+
+#~ msgid "Cc/Bcc:"
+#~ msgstr "CC/BCC"
+
+#~ msgid "Cc:"
+#~ msgstr "CC"
+
+#~ msgid "Close"
+#~ msgstr "Schließen"
+
+#~ msgid "Contact folder"
+#~ msgstr "Kontakte-Ordner"
+
+#~ msgid "Contact list is empty."
+#~ msgstr "Die Kontaktliste enthält keine Einträge."
+
+#~ msgid "Contacts"
+#~ msgstr "Kontakte"
+
+#~ msgid "Contacts Folder"
+#~ msgstr "Kontakte-Ordner"
+
+#~ msgid "Create objects"
+#~ msgstr "Objekte anlegen"
+
+#~ msgid "Create subfolders"
+#~ msgstr "Unterordner anlegen"
+
+#~ msgid "Dec"
+#~ msgstr "Dez"
+
+#~ msgid "Decline"
+#~ msgstr "Ablehnen"
+
+#~ msgid "Delete"
+#~ msgstr "Löschen"
+
+#~ msgid "Delete all"
+#~ msgstr "Alle löschen"
+
+#~ msgid "Delete own"
+#~ msgstr "Eigene löschen"
+
+#~ msgid "Details"
+#~ msgstr "Details"
+
+#~ msgid "Display future appointments for the timeframe specified."
+#~ msgstr "Wie weit in die Zukunft soll auf Termine geprüft werden?"
+
+#~ msgid "Drafts"
+#~ msgstr "Entwürfe"
+
+#~ msgid "E-Mail 3"
+#~ msgstr "E-Mail 3"
+
+#~ msgid "E-Mail Folder"
+#~ msgstr "E-Mail-Ordner"
+
+#~ msgid "E-Mail folder"
+#~ msgstr "E-Mail-Ordner"
+
+#~ msgid "EEE, %s"
+#~ msgstr "EEE, %s"
+
+#~ msgid "EEEE, %s"
+#~ msgstr "EEEE, %s"
+
+#~ msgid "Edit"
+#~ msgstr "Bearbeiten"
+
+#~ msgid "Error: %2$s (%1$s, %3$s)"
+#~ msgstr "Fehlermeldung: %2$s (%1$s, %3$s)"
+
+#~ msgid "Feb"
+#~ msgstr "Feb"
+
+#~ msgid "Folder"
+#~ msgstr "Ordner"
+
+#~ msgid "Folder is empty"
+#~ msgstr "Der Ordner ist leer."
+
+#~ msgid "Forward"
+#~ msgstr "Weiterleiten"
+
+#~ msgid "Fri"
+#~ msgstr "Fr"
+
+#~ msgid "From:"
+#~ msgstr "Von:"
+
+# default time format
+#~ msgid "HH:mm"
+#~ msgstr "HH:mm"
+
+#~ msgid "Inbox"
+#~ msgstr "Eingang"
+
+#~ msgid "Jan"
+#~ msgstr "Jan"
+
+#~ msgid "Jul"
+#~ msgstr "Jul"
+
+#~ msgid "Jun"
+#~ msgstr "Jun"
+
+#~ msgid "Legal Information"
+#~ msgstr "Rechtliche Hinweise"
+
+#~ msgid "Loading..."
+#~ msgstr "Laden..."
+
+#~ msgid "Login"
+#~ msgstr "Login"
+
+#~ msgid "Logout"
+#~ msgstr "Abmelden"
+
+#~ msgid "MM/dd"
+#~ msgstr "dd.MM."
+
+#~ msgid "Mar"
+#~ msgstr "Mär"
+
+#~ msgid "Maximum"
+#~ msgstr "Maximum"
+
+#~ msgid "Mobile 2"
+#~ msgstr "Mobiltelefon 2"
+
+#~ msgid "Modify all"
+#~ msgstr "Alle ändern"
+
+#~ msgid "Modify own"
+#~ msgstr "Eigene ändern"
+
+#~ msgid "Mon"
+#~ msgstr "Mo"
+
+#~ msgid "Move"
+#~ msgstr "Verschieben"
+
+#~ msgid "New E-Mail"
+#~ msgstr "Neue E-Mail"
+
+#~ msgid "No"
+#~ msgstr "Nein"
+
+#~ msgid "No subject"
+#~ msgstr "Kein Betreff"
+
+#~ msgid "None"
+#~ msgstr "Keine"
+
+#~ msgid "Nov"
+#~ msgstr "Nov"
+
+#~ msgid "Oct"
+#~ msgstr "Okt"
+
+#~ msgid "Ok"
+#~ msgstr "OK"
+
+#~ msgid "Overview"
+#~ msgstr "Übersicht"
+
+#~ msgid "Own Folders"
+#~ msgstr "Eigene Ordner"
+
+#~ msgid "Own folders"
+#~ msgstr "Eigene Ordner"
+
+#~ msgid "PM"
+#~ msgstr "pm"
+
+#~ msgid "Permanently delete E-Mails?"
+#~ msgstr "E-Mails endgültig löschen?"
+
+#~ msgid "Please select a target folder."
+#~ msgstr "Bitte wählen sie einen Zielordner aus."
+
+#~ msgid "Please select the folders you want to access."
+#~ msgstr "Bitte wählen Sie die Ordner aus, auf die sie zugreifen möchten."
+
+#~ msgid "Postbox"
+#~ msgstr "Postfach"
+
+#~ msgid "Privat"
+#~ msgstr "Privat"
+
+#~ msgid "Read all"
+#~ msgstr "Alle lesen"
+
+#~ msgid "Read own"
+#~ msgstr "Eigene lesen"
+
+#~ msgid "Reconnecting to server"
+#~ msgstr "Erneuter Verbindungsaufbau zum Server"
+
+#~ msgid "Sat"
+#~ msgstr "Sa"
+
+#~ msgid "Search for contacts..."
+#~ msgstr "Nach Kontakten suchen..."
+
+#~ msgid "Send"
+#~ msgstr "Senden"
+
+#~ msgid "Sent Items"
+#~ msgstr "Gesendete Objekte"
+
+#~ msgid "Sep"
+#~ msgstr "Sep"
+
+#~ msgid "Settings"
+#~ msgstr "Einstellungen"
+
+#~ msgid "Spam"
+#~ msgstr "Spam"
+
+#~ msgid "Sun"
+#~ msgstr "So"
+
+#~ msgid "Synchronizing data."
+#~ msgstr "Daten synchronisieren"
+
+#~ msgid "System messages"
+#~ msgstr "System-Meldungen"
+
+#~ msgid "Thu"
+#~ msgstr "Do"
+
+#~ msgid "To:"
+#~ msgstr "An"
+
+#~ msgid "Today"
+#~ msgstr "Heute"
+
+#~ msgid "Trash"
+#~ msgstr "Papierkorb"
+
+#~ msgid "Tue"
+#~ msgstr "Di"
+
+#~ msgid "Unread"
+#~ msgstr "Ungelesen"
+
+#~ msgid "Version"
+#~ msgstr "Version"
+
+#~ msgid "Visible folder"
+#~ msgstr "Sichtbarer Ordner"
+
+#~ msgid "Wed"
+#~ msgstr "Mi"
+
+#~ msgid "Yes"
+#~ msgstr "Ja"
+
+#~ msgid "Yesterday"
+#~ msgstr "Gestern"
+
+#~ msgid ""
+#~ "You have chosen a large number of contacts. This can significantly affect "
+#~ "the response time."
+#~ msgstr ""
+#~ "Sie haben eine hohe Anzahl von Kontakten ausgewählt. Dies kann die "
+#~ "Reaktionszeit erheblich beeinträchtigen"
+
+#~ msgid "Your E-Mail address or password is wrong."
+#~ msgstr "Ihre E-Mail-Adresse oder Ihr Passwort ist falsch."
+
+#~ msgid "Your E-Mails have been moved."
+#~ msgstr "Ihre E-Mails wurden verschoben."
+
+#~ msgid "Your mail was sent"
+#~ msgstr "Ihre E-Mail wurde gesendet"
+
+# default date format
+#~ msgid "yyyy-MM-dd"
+#~ msgstr "dd.MM.yyyy"

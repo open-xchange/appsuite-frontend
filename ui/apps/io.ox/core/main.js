@@ -96,6 +96,12 @@ define("io.ox/core/main",
                 m.getApp().setLaunchBarIcon(node).launch();
             });
         });
+        desktop.addLauncher("right", gt("Settings"), function () {
+            var node = this;
+            return require(["io.ox/settings/main"], function (m) {
+                m.getApp().setLaunchBarIcon(node).launch();
+            });
+        });
 
         var addLauncher = function (app) {
             desktop.addLauncher("left", app.title, function () {
