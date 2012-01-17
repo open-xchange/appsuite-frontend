@@ -398,16 +398,23 @@ define("io.ox/core/desktop",
         };
 
         App.restore = function () {
-            _(appCache.get('savepoints') || []).each(function (obj) {
-                require([obj.module], function (m) {
-                    m.getApp().launch().done(function () {
-                        if (this.failRestore) {
-                            this.failRestore(obj.point);
-                        }
+            
+            
+            appCache.get('savepoints').done(function(data){
+                data = data || [];
+                
+                _(data).each(function (obj) {
+                    require([obj.module], function (m) {
+                        m.getApp().launch().done(function () {
+                            if (this.failRestore) {
+                                this.failRestore(obj.point);
+                            }
+                        });
                     });
                 });
+                
+                appCache.remove('savepoints');
             });
-            appCache.remove('savepoints');
         };
 
         return function (options) {

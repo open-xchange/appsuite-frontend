@@ -9,6 +9,7 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Martin Holzhauer <martin.holzhauer@open-xchange.com>
  */
 
 define('io.ox/core/cache', function () {
@@ -29,12 +30,19 @@ define('io.ox/core/cache', function () {
      */
 
     var CacheStorage = (function () {
-
+        
         // persistent storage?
         var hasLocalStorage = Modernizr.localstorage && _.url.param('persistence') !== 'false';
+        var hasindexedDB = Modernizr.indexeddb && _.url.param('persistence') !== 'false';
 
         return function (name, persistent) {
 
+            var preferedFluentCache = 'simple';
+            var preferedPersistentCache = 'localstorage';
+
+            var persitentCache = require('io.ox/core/cache/'+preferedPersistentCache);
+            var fluentCache = require('io.ox/core/cache/'+preferedFluentCache);
+            
             // init fast storage
             var id, reg, fast = {},
                 // use persistent storage?
@@ -42,10 +50,11 @@ define('io.ox/core/cache', function () {
                         function () {
                             if (ox.user !== '') {
                                 id = 'cache.' + (ox.user || '_') + '.' + (name || '');
-                                reg = new RegExp('^' + id.replace(/\./g, '\\.') + '\\.');
+                                
                                 persist = function () {
                                     return true;
                                 };
+                                
                                 return true;
                             } else {
                                 return false;
@@ -54,76 +63,41 @@ define('io.ox/core/cache', function () {
                         function () {
                             return false;
                         };
+                        
+            var getStorageLayer = function(){
+                var layer = null;
+                if (persist()) {
+                    layer = persitentCache;
+                } else {
+                    layer = fluentCache;
+                }
+                layer.setId(id);
+                
+                return layer;
+            };
 
             this.clear = function () {
-                if (persist()) {
-                    // loop over all keys
-                    var i = 0, key;
-                    while (i < localStorage.length) {
-                        // get key by index
-                        key = localStorage.key(i);
-                        // match?
-                        if (reg.test(key)) {
-                            localStorage.removeItem(key);
-                        } else {
-                            i++;
-                        }
-                    }
-                } else {
-                    // clear fast cache
-                    fast = {};
-                }
+                return getStorageLayer().clear();
             };
 
             this.get = function (key) {
-                if (persist()) {
-                    var item = localStorage.getItem(id + '.' + key);
-                    return item !== null ? JSON.parse(item) : undefined;
-                } else {
-                    return fast[String(key)];
-                }
+                return getStorageLayer().get(key);
             };
 
             this.set = function (key, data) {
-                if (persist()) {
-                    localStorage.removeItem(id + '.' + key);
-                    localStorage.setItem(id + '.' + key, JSON.stringify(data));
-                } else {
-                    fast[String(key)] = data;
-                }
+                return getStorageLayer().set(key,data);
             };
 
             this.contains = function (key) {
-                return persist() ? localStorage.getItem(id + '.' + key) !== null :
-                    fast[String(key)] !== undefined;
+                return getStorageLayer().contains(key);
             };
 
             this.remove = function (key) {
-                if (persist()) {
-                    localStorage.removeItem(id + '.' + key);
-                } else {
-                    delete fast[String(key)];
-                }
+                return getStorageLayer().remove(key);
             };
 
             this.keys = function () {
-                var i, $i, key, tmp = [];
-                if (persist()) {
-                    // loop over all keys
-                    for (i = 0, $i = localStorage.length; i < $i; i++) {
-                        // get key by index
-                        key = localStorage.key(i);
-                        // match?
-                        if (reg.test(key)) {
-                            tmp.push(key.substr(id.length + 1));
-                        }
-                    }
-                } else {
-                    for (key in fast) {
-                        tmp.push(key);
-                    }
-                }
-                return tmp;
+                return getStorageLayer().keys();
             };
         };
 
@@ -144,66 +118,143 @@ define('io.ox/core/cache', function () {
 
         // clear cache
         this.clear = function () {
-            index.clear();
+            return index.clear();
         };
 
         this.add = function (key, data, timestamp) {
+            var def = new $.Deferred();
             // timestamp
             timestamp = timestamp !== undefined ? timestamp : _.now();
             // add/update?
-            if (!index.contains(key) || timestamp >= index.get(key).timestamp) {
-                // type
-                var type = !index.contains(key) ? 'add modify *' : 'update modify *';
-                // set
-                index.set(key, {
-                    data: data,
-                    timestamp: timestamp
-                });
-            }
-            return data;
+            index.get(key).done(function(getdata){
+                var type = (_(getdata).isUndefined()) ? 'add modify *' : 'update modify *';
+                
+                if( !_(getdata).isUndefined() ){
+                    if( timestamp >= getdata.timestamp ){
+                        index.set(key, {
+                            data: data,
+                            timestamp: timestamp
+                        }).done(function(){
+                            def.resolve(data);
+                        }).fail(function(){
+                            def.reject();
+                        });
+                    } else {
+                        def.resolve(getdata.data);
+                    }
+                } else {
+                    index.set(key, {
+                        data: data,
+                        timestamp: timestamp
+                    }).done(function(){
+                        def.resolve(data);
+                    }).fail(function(){
+                        def.reject();
+                    });
+                }
+            });
+            
+            return def;//data;
         };
 
         // get from cache
         this.get = function (key) {
-            var data = index.get(key);
-            return data !== undefined ? data.data : undefined;
+            var def = new $.Deferred();
+            
+            index.get(key).done(function(data){
+                def.resolve( data !== undefined ? data.data : undefined );
+            }).fail(function(e){
+                def.reject(e);
+            });
+            
+            return def;
         };
 
         // get timestamp of cached element
         this.time = function (key) {
-            return index.contains(key) ? index.get(key).timestamp : 0;
-        };
-
-        // private
-        var remove = function (key) {
-            if (index.contains(key)) {
-                index.remove(key);
-            }
+            var def = new $.Deferred();
+            
+            index.get(key).done(function(data){
+                if( !_(data).isUndefined() ){
+                    def.resolve(data.timestamp);
+                } else {
+                    def.resolve(0);
+                }
+            }).fail(function(){
+                def.resolve(0);
+            });
+            
+            return def;
         };
 
         // remove from cache (key|array of keys)
         this.remove = function (key) {
             // is array?
             if (_.isArray(key)) {
-                var i = 0, $i = key.length;
+                var def = new $.Deferred();
+                var i = 0, $i = key.length,delCounter = 0;
+                
+                var resolver = function(){
+                    delCounter++;
+                    
+                    if(delCounter===$i){
+                        def.resolve();
+                    }
+                };
+                
+                var del = function(key){
+                    index.remove(key).done(function(){
+                        resolver();
+                    }).fail(function(){
+                        resolver();
+                    });
+                };
+                
                 for (; i < $i; i++) {
-                    remove(key[i]);
+                    del(key[i]);
                 }
+                
+                return def;
             } else {
-                remove(key);
+                return index.remove(key);
             }
         };
 
         // grep remove
         this.grepRemove = function (pattern) {
-            var i = 0, keys = index.keys(), $i = keys.length;
-            var key, reg = new RegExp(pattern);
-            for (; i < $i; i++) {
-                key = keys[i];
-                if (reg.test(key)) {
-                    remove(key);
+            var def = new $.Deferred();
+            var i = 0,$i = 0,removeCounter = 0;
+            var reg = new RegExp(pattern);
+            
+            
+            var resolver = function(){
+                removeCounter++;
+                if( removeCounter===$i ){
+                    def.resolve();
                 }
-            }
+            };
+            
+            var remover = function(key){
+                if (reg.test(key)) {
+                    index.remove(key).done(function(){
+                        resolver();
+                    }).fail(function(){
+                        resolver();
+                    });
+                }
+            };
+            
+            index.keys().done(function(keys){
+                $i = keys.length;
+                
+                for (; i < $i; i++) {
+                    remover( keys[i] );
+                }
+            }).fail(function(){
+                def.reject();
+            });
+            
+            return def;
         };
 
         // list keys
@@ -213,42 +264,107 @@ define('io.ox/core/cache', function () {
 
         // grep keys
         this.grepKeys = function (pattern) {
-            var i = 0, keys = index.keys(), $i = keys.length;
-            var tmp = [], key, reg = new RegExp(pattern);
-            for (; i < $i; i++) {
-                key = keys[i];
-                if (reg.test(key)) {
-                    tmp.push(key);
+            var def = new $.Deferred();
+            
+            index.keys().done(function(keys){
+                var $i = keys.length;
+                var i = 0;
+                var tmp = [], key, reg = new RegExp(pattern);
+                
+                for (; i < $i; i++) {
+                    key = keys[i];
+                    if (reg.test(key)) {
+                        tmp.push(key);
+                    }
                 }
-            }
-            return tmp;
+                def.resolve(tmp);
+            }).fail(function(e){
+                def.reject(e);
+            });
+            
+            return def;
         };
 
         // grep contained keys
         this.grepContains = function (list) {
+            var def = new $.Deferred();
+            
             var i = 0, $i = list.length, tmp = [];
+            var doneCounter = 0;
+            
+            var check = function( num ){
+                
+                index.contains(list[num]).done(function(check){
+                    doneCounter++;
+                    if (check) {
+                        tmp.push(list[num]);
+                    }
+                    
+                    if( doneCounter === $i ){
+                        def.resolve(tmp);
+                    }
+                }).fail(function(){
+                    doneCounter++;
+                    
+                    if( doneCounter === $i ){
+                        def.resolve(tmp);
+                    }
+                });
+            };
+            
             for (; i < $i; i++) {
-                if (this.contains(list[i])) {
-                    tmp.push(list[i]);
-                }
+                check(i);
             }
-            return tmp;
+            
+            return def;
         };
 
         // list values
         this.values = function () {
-            var i = 0, keys = index.keys(), $i = keys.length,
-                tmp = [], key;
-            for (; i < $i; i++) {
-                key = keys[i];
-                tmp.push(index.get(key).data);
-            }
-            return tmp;
+            
+            var def = new $.Deferred();
+            
+            index.keys().done(function(keys){
+                
+                var i = 0, $i = keys.length,
+                tmp = [], collectCounter = 0;
+                
+                var collect = function(key){
+                    index.get(key).done(function(data){
+                        collectCounter++;
+
+                        tmp.push(data.data);
+
+                        if(collectCounter===$i){
+                            def.resolve(tmp);
+                        }
+                    }).fail(function(){
+                        collectCounter++;
+                        if(collectCounter===$i){
+                            def.resolve(tmp);
+                        }
+                    });
+                };
+                
+                for (; i < $i; i++) {
+                    collect(keys[i]);
+                }
+            });
+            
+            return def;
         };
 
         // get size
         this.size = function () {
-            return index.keys().length;
+            var def = new $.Deferred();
+            
+            index.keys().done(function(keys){
+                def.resolve( keys.length );
+            }).fail(function(){
+                def.reject();
+            });
+
+            return def;
         };
 
         // contains
@@ -271,45 +387,95 @@ define('io.ox/core/cache', function () {
         // get from cache
         var get = this.get;
         this.get = function (key) {
+            var def = new $.Deferred();
             // array?
             if (_.isArray(key)) {
-                var i = 0, obj, tmp = new Array(key.length);
+                var i = 0, obj, tmp = new Array(key.length), max = key.length;
+                var getCounter = 0;
+                
+                var getResolver = function(){
+                    getCounter++;
+                    if(getCounter===max){
+                        def.resolve(tmp);
+                    }
+                };
+                
+                var getter = function(key){
+                    get(key).done(function(data){
+                        tmp[i] = data;
+                        getResolver();
+                    }).fail(getResolver);
+                };
+                
                 for (; (obj = key[i]); i++) {
-                    tmp[i] = this.get(obj);
+                    getter(obj,i);
                 }
-                return tmp;
             } else {
                 // simple value
                 if (typeof key === 'string' || typeof key === 'number') {
-                    return get(key);
+                    get(key).done(function(data){
+                        def.resolve(data);
+                    }).fail(function(e){
+                        def.reject(e);
+                    });
                 } else {
-                    return get(String(this.keyGenerator(key)));
+                    get(String(this.keyGenerator(key))).done(function(data){
+                        def.resolve(data);
+                    }).fail(function(e){
+                        def.reject(e);
+                    });
                 }
             }
+            
+            return def;
         };
 
         // add to cache
         var add = this.add;
         this.add = function (data, timestamp) {
-            var key;
+            var key, def = new $.Deferred();
             if (_.isArray(data)) {
+                
                 timestamp = timestamp !== undefined ? timestamp : _.now();
-                var i = 0, $i = data.length;
+                var i = 0, $i = data.length, addCounter = 0, tmp = [];
+                
+                var resolver = function(){
+                    addCounter++;
+                    if(addCounter===$i){
+                        def.resolve(tmp);
+                    }
+                };
+                
+                var adder = function(key,data,i,timestamp){
+                    add(key, data, timestamp).done(function(data){
+                        tmp.push(key);
+                        resolver();
+                    }).fail(resolver);
+                };
+                
                 for (; i < $i; i++) {
                     key = String(this.keyGenerator(data[i]));
-                    add.call(this, key, data[i], timestamp);
+                    adder(key,data[i],i,timestamp);
                 }
             } else {
                 // get key
                 key = String(this.keyGenerator(data));
-                add.call(this, key, data, timestamp);
-                return key;
+                
+                add(key, data, timestamp).done(function(result){
+                    def.resolve(key);
+                }).fail(function(e){
+                    def.reject(e);
+                });
             }
+            
+            return def;
         };
 
         // contains
         var contains = this.contains;
         this.contains = function (key) {
+            var def = new $.Deferred();
+            
             // array?
             if (_.isArray(key)) {
                 var i = 0, $i = key.length, found = true;
@@ -326,10 +492,12 @@ define('io.ox/core/cache', function () {
                     return contains(String(this.keyGenerator(key)));
                 }
             }
+            
+            return def;
         };
 
         this.merge = function (data, timestamp) {
-            var key, target, id, changed = false;
+            var key, target, id, changed = false, def = new $.Deferred();
             if (_.isArray(data)) {
                 timestamp = timestamp !== undefined ? timestamp : _.now();
                 var i = 0, $i = data.length;
@@ -357,6 +525,7 @@ define('io.ox/core/cache', function () {
                     return false;
                 }
             }
+            return def;
         };
 
         var remove = this.remove;
