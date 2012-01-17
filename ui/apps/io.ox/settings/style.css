@@ -186,3 +186,20 @@
   color: #444;
 }
 
+.settings-detail-pane input[type="text"] {
+  font-size: 12px;
+  line-height: 18px;
+  height: 29px;
+  border: 1px solid #DDD;
+  background-color: white;
+  color: black;
+  outline: 0;
+  margin: 0;
+  padding: 5px 5px 4px 5px;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  border-image: initial;
+}

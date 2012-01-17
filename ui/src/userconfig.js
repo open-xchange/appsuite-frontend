@@ -94,7 +94,7 @@ define(function () {
                 icon: "default.png",
                 category: "Dev",
                 settings: false
-            }
+            },
             "3rd.party/addr": {
                 title: "Plaxo Address Book",
                 company: "Plaxo Inc.",
