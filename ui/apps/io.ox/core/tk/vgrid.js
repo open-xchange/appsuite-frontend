@@ -270,33 +270,26 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             clone = null;
         };
 
-        cloneRow = function (template) {
-            // get clone
-            var clone = template.getClone();
-            // add checkbox for edit mode
-            clone.node.prepend(
-                $('<div>').addClass('vgrid-cell-checkbox')
-                .append(
-                    $('<input>', { type: 'checkbox' }).addClass('reflect-selection')
-                )
-            );
-            return clone;
-        };
-
         cloneRow = (function () {
 
-            var check = $('<div>')
-                .addClass('vgrid-cell-checkbox')
-                .append(
-                    $('<input>', { type: 'checkbox' })
-                    .addClass('reflect-selection')
-                );
+            var guid = 0,
+                createCheckbox = function () {
+                    var id = 'grid_cb_' + (guid++);
+                    return $('<div>')
+                        .addClass('vgrid-cell-checkbox')
+                        .append(
+                            $('<input>', { type: 'checkbox', id: id }).addClass('reflect-selection')
+                        )
+                        .append(
+                            $('<label>', { 'for': id }).text('\u00a0')
+                        );
+                };
 
             return function (template) {
                 // get clone
                 var clone = template.getClone();
                 // add checkbox for edit mode
-                clone.node.prepend(check.clone());
+                clone.node.prepend(createCheckbox());
                 return clone;
             };
         }());

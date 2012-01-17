@@ -104,7 +104,7 @@
                 draw: function (data) {
                     this.append(
                         $('<img>')
-                        .attr('src', ox.base + '/apps/themes/default/ad2.jpg')
+                        .attr({ src: ox.base + '/apps/themes/default/ad2.jpg', alt: 'ad' })
                         .css({ width: '100%', height: 'auto' })
                     );
                     return $.when();

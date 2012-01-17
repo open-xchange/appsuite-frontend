@@ -155,16 +155,6 @@ define("io.ox/core/main",
                         })
                         .text("Click me for a 90-day free trial!")
                     )
-//                    .append(
-//                        $('<img>', { src: ox.base + '/apps/themes/default/xmas.png' })
-//                        .css({
-//                            position: "absolute",
-//                            top: "-72px",
-//                            right: "-60px",
-//                            zIndex: 2
-//                        })
-//                    )
-                    //.append(audio)
                 );
             }
         });

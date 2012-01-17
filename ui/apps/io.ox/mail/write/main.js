@@ -291,47 +291,57 @@ define.async('io.ox/mail/write/main',
             return $('<div>')
             .addClass('fieldset')
             .append(
-                $('<input>', { type: 'text', tabindex: '2', autocapitalize: 'off', autocomplete: 'off', autocorrect: 'off' })
-                .attr('data-type', id) // not name=id!
-                .addClass('discreet')
-                .autocomplete({
-                    source: function (query) {
-                        return contactsAPI.autocomplete(query);
-                    },
-                    stringify: function (data) {
-                        return data.display_name ?
-                            '"' + data.display_name + '" <' + data.email + '>' :
-                            data.email;
-                    },
-                    draw: function (data) {
-                        drawAutoCompleteItem.call(null, this, data);
-                    },
-                    click: function (e) {
-                        copyRecipients.call(null, id, $(this));
-                    },
-                    blur: function (e) {
-                        // copy valid recipients
-                        copyRecipients.call(null, id, $(this));
-                    }
-                })
-                .on('keyup', function (e) {
-                    if (e.which === 13) {
-                        copyRecipients.call(null, id, $(this));
-                    } else {
-                        // look for special prefixes
-                        var val = $(this).val();
-                        if ((/^to:?\s/i).test(val)) {
-                            $(this).val('');
-                            showSection('to');
-                        } else if ((/^cc:?\s/i).test(val)) {
-                            $(this).val('');
-                            showSection('cc');
-                        } else if ((/^bcc:?\s/i).test(val)) {
-                            $(this).val('');
-                            showSection('bcc');
+                $('<label>', { 'for' : 'writer_field_' + id })
+                .append(
+                    $('<input>',
+                    {   type: 'text',
+                        tabindex: '2',
+                        autocapitalize: 'off',
+                        autocomplete: 'off',
+                        autocorrect: 'off',
+                        id: 'writer_field_' + id
+                    })
+                    .attr('data-type', id) // not name=id!
+                    .addClass('discreet')
+                    .autocomplete({
+                        source: function (query) {
+                            return contactsAPI.autocomplete(query);
+                        },
+                        stringify: function (data) {
+                            return data.display_name ?
+                                '"' + data.display_name + '" <' + data.email + '>' :
+                                data.email;
+                        },
+                        draw: function (data) {
+                            drawAutoCompleteItem.call(null, this, data);
+                        },
+                        click: function (e) {
+                            copyRecipients.call(null, id, $(this));
+                        },
+                        blur: function (e) {
+                            // copy valid recipients
+                            copyRecipients.call(null, id, $(this));
                         }
-                    }
-                })
+                    })
+                    .on('keyup', function (e) {
+                        if (e.which === 13) {
+                            copyRecipients.call(null, id, $(this));
+                        } else {
+                            // look for special prefixes
+                            var val = $(this).val();
+                            if ((/^to:?\s/i).test(val)) {
+                                $(this).val('');
+                                showSection('to');
+                            } else if ((/^cc:?\s/i).test(val)) {
+                                $(this).val('');
+                                showSection('cc');
+                            } else if ((/^bcc:?\s/i).test(val)) {
+                                $(this).val('');
+                                showSection('bcc');
+                            }
+                        }
+                    })
+                )
             );
         }
 
@@ -449,8 +459,11 @@ define.async('io.ox/mail/write/main',
             return $('<div>')
                 .addClass('section-item upload')
                 .append(
-                    $('<input>', { type: 'file', name: 'upload', multiple: 'multiple', tabindex: '2' })
-                    .on('change', handleFileSelect)
+                    $.labelize(
+                        $('<input>', { type: 'file', name: 'upload', multiple: 'multiple', tabindex: '2' })
+                        .on('change', handleFileSelect),
+                        'mail_attachment'
+                    )
                 )
                 .appendTo(sections.attachments);
         };
@@ -516,16 +529,20 @@ define.async('io.ox/mail/write/main',
                         $('<div>').addClass('subject-wrapper')
                         .append(
                             // subject
-                            subject = $('<input>')
-                            .attr({ type: 'text', name: 'subject', tabindex: '3' })
-                            .addClass('subject')
-                            .on('keydown', function (e) {
-                                if (e.which === 13 || (e.which === 9 && !e.shiftKey)) {
-                                    // auto jump to editor on enter/tab
-                                    e.preventDefault();
-                                    editor.focus();
-                                }
-                            })
+                            $.labelize(
+                                subject = $('<input>')
+                                .attr({ type: 'text', name: 'subject', tabindex: '3' })
+                                .addClass('subject')
+                                .val('')
+                                .on('keydown', function (e) {
+                                    if (e.which === 13 || (e.which === 9 && !e.shiftKey)) {
+                                        // auto jump to editor on enter/tab
+                                        e.preventDefault();
+                                        editor.focus();
+                                    }
+                                }),
+                                'mail_subject'
+                            )
                         )
                     )
                     .append(
@@ -565,9 +582,12 @@ define.async('io.ox/mail/write/main',
                         .css('overflow', 'hidden')
                         .append(
                             // text editor
-                            textarea = $('<textarea>')
+                            $.labelize(
+                               textarea = $('<textarea>')
                                .attr({ name: 'content', tabindex: '4', disabled: 'disabled' })
-                               .addClass('text-editor')
+                               .addClass('text-editor'),
+                               'mail_content'
+                            )
                         )
                     )
                 )

@@ -35,9 +35,11 @@ define("io.ox/linkedIn/view-detail",
             $relationNode = $table.find(".r2");
 
         $pictureNode.append(
-            $("<img>")
+            $("<img>", {
+                src: data.pictureUrl || (ox.base + "/apps/themes/default/dummypicture.png"),
+                alt: data.firstName + " " + data.lastName
+            })
             .css({ margin: "0 5px 0 0" })
-            .attr("src", data.pictureUrl || (ox.base + "/apps/themes/default/dummypicture.png"))
         );
 
         $nameNode
