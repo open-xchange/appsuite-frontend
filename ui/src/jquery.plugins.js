@@ -243,6 +243,24 @@
         return $('<div>').on("dblclick", click);
     };
 
+    $.fn.scrollable = function () {
+        return $('<div>').addClass('scrollable-pane').appendTo(this.addClass('scrollable'));
+    };
+
+    $.labelize = (function () {
+
+        var guid = 1;
+
+        return function (node, id) {
+            if (node.attr('id')) {
+                id = node.attr('id');
+            } else {
+                id = (id || 'field') + '_' + (guid++);
+            }
+            return $('<label>', { 'for': id }).append(node.attr('id', id));
+        };
+    }());
+
 }());
 
 

@@ -58,7 +58,7 @@ define.async('io.ox/mail/write/main',
     function createInstance() {
 
         var app, win,
-            main, sidepanel,
+            main, scrollpane, sidepanel,
             GRID_WIDTH = 330,
             form,
             subject,
@@ -200,10 +200,10 @@ define.async('io.ox/mail/write/main',
             node.addClass('io-ox-mail-write-contact')
             .append(img)
             .append(
-                $('<div>').addClass('person-link')
+                $('<div>').addClass('person-link ellipsis')
                 .text(data.display_name + '\u00A0')
             )
-            .append($('<div>').text(data.email));
+            .append($('<div>').addClass('ellipsis').text(data.email));
         }
 
         // drawAutoCompleteItem and drawContact
@@ -274,7 +274,7 @@ define.async('io.ox/mail/write/main',
             if (list.length) {
                 // add
                 addRecipients(id, list);
-                node.val('');
+                node.val('').focus();
             } else if ($.trim(node.val()) !== '') {
                 // not accepted but has content -> shake
                 node.attr('disabled', 'disabled')
@@ -291,47 +291,57 @@ define.async('io.ox/mail/write/main',
             return $('<div>')
             .addClass('fieldset')
             .append(
-                $('<input>', { type: 'text', tabindex: '2' })
-                .attr('data-type', id) // not name=id!
-                .addClass('discreet')
-                .autocomplete({
-                    source: function (query) {
-                        return contactsAPI.autocomplete(query);
-                    },
-                    stringify: function (data) {
-                        return data.display_name ?
-                            '"' + data.display_name + '" <' + data.email + '>' :
-                            data.email;
-                    },
-                    draw: function (data) {
-                        drawAutoCompleteItem.call(null, this, data);
-                    },
-                    click: function (e) {
-                        copyRecipients.call(null, id, $(this));
-                    }
-                })
-                .on('blur', function (e) {
-                    // copy valid recipients
-                    copyRecipients.call(null, id, $(this));
-                })
-                .on('keyup', function (e) {
-                    if (e.which === 13) {
-                        copyRecipients.call(null, id, $(this));
-                    } else {
-                        // look for special prefixes
-                        var val = $(this).val();
-                        if ((/^to:?\s/i).test(val)) {
-                            $(this).val('');
-                            showSection('to');
-                        } else if ((/^cc:?\s/i).test(val)) {
-                            $(this).val('');
-                            showSection('cc');
-                        } else if ((/^bcc:?\s/i).test(val)) {
-                            $(this).val('');
-                            showSection('bcc');
+                $('<label>', { 'for' : 'writer_field_' + id })
+                .append(
+                    $('<input>',
+                    {   type: 'text',
+                        tabindex: '2',
+                        autocapitalize: 'off',
+                        autocomplete: 'off',
+                        autocorrect: 'off',
+                        id: 'writer_field_' + id
+                    })
+                    .attr('data-type', id) // not name=id!
+                    .addClass('discreet')
+                    .autocomplete({
+                        source: function (query) {
+                            return contactsAPI.autocomplete(query);
+                        },
+                        stringify: function (data) {
+                            return data.display_name ?
+                                '"' + data.display_name + '" <' + data.email + '>' :
+                                data.email;
+                        },
+                        draw: function (data) {
+                            drawAutoCompleteItem.call(null, this, data);
+                        },
+                        click: function (e) {
+                            copyRecipients.call(null, id, $(this));
+                        },
+                        blur: function (e) {
+                            // copy valid recipients
+                            copyRecipients.call(null, id, $(this));
                         }
-                    }
-                })
+                    })
+                    .on('keyup', function (e) {
+                        if (e.which === 13) {
+                            copyRecipients.call(null, id, $(this));
+                        } else {
+                            // look for special prefixes
+                            var val = $(this).val();
+                            if ((/^to:?\s/i).test(val)) {
+                                $(this).val('');
+                                showSection('to');
+                            } else if ((/^cc:?\s/i).test(val)) {
+                                $(this).val('');
+                                showSection('cc');
+                            } else if ((/^bcc:?\s/i).test(val)) {
+                                $(this).val('');
+                                showSection('bcc');
+                            }
+                        }
+                    })
+                )
             );
         }
 
@@ -342,6 +352,12 @@ define.async('io.ox/mail/write/main',
             if (isChecked) {
                 radio.attr('checked', 'checked');
             }
+            if (Modernizr.touch) {
+                label.on('click', { id: id }, function (e) {
+                    var node = $(this).prev();
+                    node.prop('selected', !node.prop('selected')).trigger('change'); // selected, not checked!
+                });
+            }
             return radio.add(label);
         }
 
@@ -351,6 +367,12 @@ define.async('io.ox/mail/write/main',
                 label = $('<label>', { 'for': id }).text('\u00A0\u00A0' + text + '\u00A0\u00A0\u00A0\u00A0 ');
             if (isChecked) {
                 box.attr('checked', 'checked');
+            }
+            if (Modernizr.touch) {
+                label.on('click', { id: id }, function (e) {
+                    var node = $(this).prev();
+                    node.prop('selected', !node.prop('selected')).trigger('change'); // selected, not checked!
+                });
             }
             return box.add(label);
         }
@@ -437,8 +459,11 @@ define.async('io.ox/mail/write/main',
             return $('<div>')
                 .addClass('section-item upload')
                 .append(
-                    $('<input>', { type: 'file', name: 'upload', multiple: 'multiple', tabindex: '2' })
-                    .on('change', handleFileSelect)
+                    $.labelize(
+                        $('<input>', { type: 'file', name: 'upload', multiple: 'multiple', tabindex: '2' })
+                        .on('change', handleFileSelect),
+                        'mail_attachment'
+                    )
                 )
                 .appendTo(sections.attachments);
         };
@@ -470,7 +495,6 @@ define.async('io.ox/mail/write/main',
         function fnSetSignature(e) {
             e.preventDefault();
             setSignature(e);
-            editor.focus();
         }
 
         // launcher
@@ -505,16 +529,20 @@ define.async('io.ox/mail/write/main',
                         $('<div>').addClass('subject-wrapper')
                         .append(
                             // subject
-                            subject = $('<input>')
-                            .attr({ type: 'text', name: 'subject', tabindex: '3' })
-                            .addClass('subject')
-                            .on('keydown', function (e) {
-                                if (e.which === 13 || (e.which === 9 && !e.shiftKey)) {
-                                    // auto jump to editor on enter/tab
-                                    e.preventDefault();
-                                    editor.focus();
-                                }
-                            })
+                            $.labelize(
+                                subject = $('<input>')
+                                .attr({ type: 'text', name: 'subject', tabindex: '3' })
+                                .addClass('subject')
+                                .val('')
+                                .on('keydown', function (e) {
+                                    if (e.which === 13 || (e.which === 9 && !e.shiftKey)) {
+                                        // auto jump to editor on enter/tab
+                                        e.preventDefault();
+                                        editor.focus();
+                                    }
+                                }),
+                                'mail_subject'
+                            )
                         )
                     )
                     .append(
@@ -538,7 +566,7 @@ define.async('io.ox/mail/write/main',
                     )
                 )
                 .append(
-                    $('<div/>')
+                    $('<div>')
                     .addClass('abs editor-outer-container')
                     .append(
                         // white background
@@ -546,7 +574,7 @@ define.async('io.ox/mail/write/main',
                     )
                     .append(
                         // editor's print margin
-                        $('<div/>').addClass('abs editor-print-margin')
+                        $('<div>').addClass('abs editor-print-margin')
                     )
                     .append(
                         $('<div>')
@@ -554,18 +582,23 @@ define.async('io.ox/mail/write/main',
                         .css('overflow', 'hidden')
                         .append(
                             // text editor
-                            textarea = $('<textarea>')
+                            $.labelize(
+                               textarea = $('<textarea>')
                                .attr({ name: 'content', tabindex: '4', disabled: 'disabled' })
-                               .addClass('text-editor')
+                               .addClass('text-editor'),
+                               'mail_content'
+                            )
                         )
                     )
                 )
             );
 
             // side panel
-            sidepanel = $('<div/>')
+            var scrollpane = $('<div>')
                 .css({ width: (GRID_WIDTH - 26) + 'px' })
                 .addClass('leftside io-ox-mail-write-sidepanel');
+
+            sidepanel = scrollpane.scrollable();
 
             // sections
 
@@ -666,17 +699,19 @@ define.async('io.ox/mail/write/main',
                 });
             };
 
-            addSection('format', 'Text format', true, false)
-                .append(
-                    $('<div>').addClass('change-format')
+            if (!Modernizr.touch) {
+                addSection('format', 'Text format', true, false)
                     .append(
-                        $('<a>', { href: '#' }).text('Text').on('click', { format: 'text' }, fnChangeFormat)
-                    )
-                    .append($.txt(' \u00A0\u2013\u00A0 ')) // &ndash;
-                    .append(
-                        $('<a>', { href: '#' }).text('HTML').on('click', { format: 'html' }, fnChangeFormat)
-                    )
-                );
+                        $('<div>').addClass('change-format')
+                        .append(
+                            $('<a>', { href: '#' }).text('Text').on('click', { format: 'text' }, fnChangeFormat)
+                        )
+                        .append($.txt(' \u00A0\u2013\u00A0 ')) // &ndash;
+                        .append(
+                            $('<a>', { href: '#' }).text('HTML').on('click', { format: 'html' }, fnChangeFormat)
+                        )
+                    );
+            }
 
             // add panels to windows
             win.nodes.main
@@ -691,10 +726,8 @@ define.async('io.ox/mail/write/main',
                     $('<input>', { type: 'hidden', name: 'msgref', value: '' })
                 )
                 .append(main)
-                .append(sidepanel)
+                .append(scrollpane)
             );
-
-
 
             var dropZone = upload.dnd.createDropZone();
             dropZone.bind('drop', function (file) {

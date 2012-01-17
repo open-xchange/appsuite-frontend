@@ -183,7 +183,8 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             // bounds of currently visible area
             bounds = { top: 0, bottom: 0 },
             // multiplier defines how much detailed data is loaded (must be >= 2)
-            mult = 3,
+            // touch devices (esp. ipad) need higher multiplier due to momentum scrolling
+            mult = Modernizr.touch ? 6 : 3,
             // properties
             props = {},
             // shortcut
@@ -209,6 +210,11 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         // add label class
         template.node.addClass('selectable');
         label.node.addClass('vgrid-label');
+
+        // fix mobile safari bug (all content other than position=static is cut off)
+        if (Modernizr.touch) {
+            container.css('webkitTransform', 'translate3d(0, 0, 0)');
+        }
 
         // add dispatcher
         event.Dispatcher.extend(this);
@@ -264,33 +270,26 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             clone = null;
         };
 
-        cloneRow = function (template) {
-            // get clone
-            var clone = template.getClone();
-            // add checkbox for edit mode
-            clone.node.prepend(
-                $('<div>').addClass('vgrid-cell-checkbox')
-                .append(
-                    $('<input>', { type: 'checkbox' }).addClass('reflect-selection')
-                )
-            );
-            return clone;
-        };
-
         cloneRow = (function () {
 
-            var check = $('<div>')
-                .addClass('vgrid-cell-checkbox')
-                .append(
-                    $('<input>', { type: 'checkbox' })
-                    .addClass('reflect-selection')
-                );
+            var guid = 0,
+                createCheckbox = function () {
+                    var id = 'grid_cb_' + (guid++);
+                    return $('<div>')
+                        .addClass('vgrid-cell-checkbox')
+                        .append(
+                            $('<input>', { type: 'checkbox', id: id }).addClass('reflect-selection')
+                        )
+                        .append(
+                            $('<label>', { 'for': id }).text('\u00a0')
+                        );
+                };
 
             return function (template) {
                 // get clone
                 var clone = template.getClone();
                 // add checkbox for edit mode
-                clone.node.prepend(check.clone());
+                clone.node.prepend(createCheckbox());
                 return clone;
             };
         }());
@@ -456,12 +455,11 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 currentOffset = null;
                 // initialize selection
                 self.selection.init(all);
-                // adjust container height and hide it
+                // process labels first (determines numLabels), then set height
+                processLabels();
                 container.css({
                     height: (numLabels * labelHeight + all.length * itemHeight) + 'px'
                 });
-                // process labels
-                processLabels();
                 paintLabels();
             }
             // trigger event

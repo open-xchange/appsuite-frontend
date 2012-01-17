@@ -296,16 +296,17 @@ define("io.ox/contacts/view-detail",
                 }
                 addField("\u00A0", true, this, function (td) {
                     td.append(
-                        $("<a>", { href: '#' }).addClass("action-link")
-                            .text("Show QR-code")
-                            .on("click", function (e) {
-                                e.preventDefault();
-                                require(["io.ox/contacts/view-qrcode"], function (qr) {
-                                    var vc = qr.getVCard(data);
-                                    td.empty().qrcode(vc);
-                                    vc = td = qr = null;
-                                });
-                            })
+                        $("<a>").addClass("action-link")
+                        .text("Show QR-code")
+                        .on("click", function (e) {
+                            e.preventDefault();
+                            td.empty().busy();
+                            require(["io.ox/contacts/view-qrcode"], function (qr) {
+                                var vc = qr.getVCard(data);
+                                td.idle().qrcode(vc);
+                                vc = td = qr = null;
+                            });
+                        })
                     );
                 });
             }

@@ -54,7 +54,8 @@ define('io.ox/applications/main',
         right = $('<div>')
             .css({ left: GRID_WIDTH + 1 + 'px', overflow: 'auto', paddingRight: '0' })
             .addClass('rightside default-content-padding')
-            .appendTo(win.nodes.main);
+            .appendTo(win.nodes.main)
+            .scrollable();
 
         // grid
         grid = new VGrid(left);

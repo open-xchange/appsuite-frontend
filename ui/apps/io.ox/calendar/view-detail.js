@@ -277,7 +277,7 @@ define("io.ox/calendar/view-detail",
         index: 600,
         id: "details",
         draw: function (data) {
-            var node = $("<div>")
+            var node = $("<div>").addClass('details')
                 .append($("<div>").addClass("label").text("Details"))
                 .appendTo(this);
             ext.point("io.ox/calendar/detail/details").invoke("draw", node, data);

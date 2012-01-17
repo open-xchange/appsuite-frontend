@@ -77,7 +77,7 @@ define(function () {
                 company: "CompuGlobalHyperMegaNet",
                 icon: "default.png",
                 category: "Dev",
-                settins: false
+                settings: false
             },
 
             "io.ox/dev/testing": {
@@ -85,7 +85,7 @@ define(function () {
                 company: "CompuGlobalHyperMegaNet",
                 icon: "default.png",
                 category: "Dev",
-                settins: false
+                settings: false
             },
 
             "io.ox/dev/theme-maker": {
@@ -93,8 +93,15 @@ define(function () {
                 company: "Mattes Inc.",
                 icon: "default.png",
                 category: "Dev",
-                settins: false
+                settings: false
             }
+            "3rd.party/addr": {
+                title: "Plaxo Address Book",
+                company: "Plaxo Inc.",
+                icon: "addressbook.png",
+                category: "Productivity",
+                description: "The only address book that works for you. Plaxo keeps your contact info updated & your communication devices in sync."
+            },
         }
     };
 });
