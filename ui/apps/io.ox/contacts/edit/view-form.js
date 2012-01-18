@@ -107,31 +107,11 @@ define("io.ox/contacts/edit/view-form",
         tr.appendTo(node);
     }
 
+
+
+
+
     var formFields = {
-        mailFields: {
-            fields: {
-                'email1': {
-                    label: gt('E-Mail 1'),
-                    name: 'email1',
-                    weight: 100,
-                    blockid: 'contact-email'
-                },
-                'email2': {
-                    label: 'E-Mail 2',
-                    name: 'email2',
-                    fn: 'hidden',
-                    weight: 110,
-                    blockid: 'contact-email'
-                },
-                'email3': {
-                    label: 'E-Mail 3',
-                    name: 'email3',
-                    //fn: 'hidden',
-                    weight: 130,
-                    blockid: 'contact-email'
-                }
-            }
-        },
         personalFields: {
             fields: {
                 'titel' : {
@@ -144,49 +124,73 @@ define("io.ox/contacts/edit/view-form",
                 'first_name': {
                     label: gt("First name"),
                     name: 'first_name',
-                    weight: 100,
+                    weight: 110,
                     blockid: 'contact-personal'
                 },
                 'last_name': {
                     label: gt("Last name"),
                     name: 'last_name',
-                    weight: 100,
+                    weight: 120,
                     blockid: 'contact-personal'
                 },
                 'display_name': {
                     label: gt("Display name"),
                     name: 'display_name',
-                    weight: 100,
+                    weight: 130,
                     blockid: 'contact-personal'
                 },
                 'second_name': {
                     label: gt("Second name"),
                     name: 'second_name',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 140,
                     blockid: 'contact-personal'
                 },
                 'suffix': {
                     label: gt("Suffix"),
                     name: 'suffix',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 105,
                     blockid: 'contact-personal'
                 },
                 'nickname': {
                     label: gt("Nickname"),
                     name: 'nickname',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 160,
                     blockid: 'contact-personal'
                 },
                 'birthday': {
                     label: gt("Birthday"),
                     name: 'birthday',
-                    weight: 100,
+                    weight: 170,
                     blockid: 'contact-personal'
                 }
 
+            }
+        },
+        mailFields: {
+            fields: {
+                'email1': {
+                    label: gt('E-Mail 1'),
+                    name: 'email1',
+                    weight: 200,
+                    blockid: 'contact-email'
+                },
+                'email2': {
+                    label: 'E-Mail 2',
+                    name: 'email2',
+                    fn: 'hidden',
+                    weight: 210,
+                    blockid: 'contact-email'
+                },
+                'email3': {
+                    label: 'E-Mail 3',
+                    name: 'email3',
+                    fn: 'hidden',
+                    weight: 220,
+                    blockid: 'contact-email'
+                }
             }
         },
         phoneFields: {
@@ -195,160 +199,161 @@ define("io.ox/contacts/edit/view-form",
                     label: gt("Telephone business 1"),
                     name: 'telephone_business1',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 301,
                     blockid: 'contact-phone'
                 },
                 'telephone_business2': {
                     label: gt("Telephone business 2"),
                     name: 'telephone_business2',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 302,
                     blockid: 'contact-phone'
                 },
                 'fax_business': {
                     label: gt("Fax business"),
                     name: 'fax_business',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 303,
                     blockid: 'contact-phone'
                 },
                 'telephone_callback': {
                     label: gt("Telephone callback"),
                     name: 'telephone_callback',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 304,
                     blockid: 'contact-phone'
                 },
                 'telephone_car': {
                     label: gt("Telephone car"),
                     name: 'telephone_car',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 305,
                     blockid: 'contact-phone'
                 },
                 'telephone_company': {
                     label: gt("Phone (Company)"),
                     name: 'telephone_company',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 306,
                     blockid: 'contact-phone'
                 },
                 'telephone_home1': {
                     label: gt("Phone (home)"),
                     name: 'telephone_home1',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 307,
                     blockid: 'contact-phone'
                 },
                 'telephone_home2': {
                     label: gt("Phone (home 2nd)"),
                     name: 'telephone_home2',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 308,
                     blockid: 'contact-phone'
                 },
                 'fax_home': {
                     label: gt("Fax home"),
                     name: 'fax_home',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 309,
                     blockid: 'contact-phone'
                 },
                 'cellular_telephone1': {
                     label: gt("Cellphone"),
                     name: 'cellular_telephone1',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 310,
                     blockid: 'contact-phone'
                 },
                 'cellular_telephone2': {
                     label: gt("Cellphone (2nd)"),
                     name: 'cellular_telephone2',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 311,
                     blockid: 'contact-phone'
                 },
                 'telephone_other': {
                     label: gt("Phone (other)"),
                     name: 'telephone_other',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 312,
                     blockid: 'contact-phone'
                 },
                 'fax_other': {
                     label: gt("Fax other"),
                     name: 'fax_other',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 313,
                     blockid: 'contact-phone'
                 },
                 'telephone_isdn': {
                     label: gt("Telephone isdn"),
                     name: 'telephone_isdn',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 314,
                     blockid: 'contact-phone'
                 },
                 'telephone_pager': {
                     label: gt("Telephone pager"),
                     name: 'telephone_pager',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 315,
                     blockid: 'contact-phone'
                 },
                 'telephone_primary': {
                     label: gt("Telephone primary"),
                     name: 'telephone_primary',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 316,
                     blockid: 'contact-phone'
                 },
                 'telephone_radio': {
                     label: gt("Telephone radio"),
                     name: 'telephone_radio',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 317,
                     blockid: 'contact-phone'
                 },
                 'telephone_telex': {
                     label: gt("Telephone telex"),
                     name: 'telephone_telex',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 318,
                     blockid: 'contact-phone'
                 },
                 'telephone_ttytdd': {
                     label: gt("Telephone ttytdd"),
                     name: 'telephone_ttytdd',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 319,
                     blockid: 'contact-phone'
                 },
                 'instant_messenger1': {
                     label: gt("Instant messenger 1"),
                     name: 'instant_messenger1',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 320,
                     blockid: 'contact-phone'
                 },
                 'instant_messenger2': {
                     label: gt("Instant messenger 2"),
                     name: 'instant_messenger2',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 321,
                     blockid: 'contact-phone'
                 },
                 'telephone_ip': {
                     label: gt("Telephone ip"),
                     name: 'telephone_ip',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 322,
                     blockid: 'contact-phone'
                 },
                 'telephone_assistant': {
                     label: gt("Telephone_assistant"),
                     name: 'telephone_assistant',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 323,
                     blockid: 'contact-phone'
                 }
             }
@@ -359,38 +364,77 @@ define("io.ox/contacts/edit/view-form",
                     label: gt("Street"),
                     name: 'street_home',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 400,
                     blockid: 'contact-home-address'
                 },
                 'postal_code_home': {
                     label: gt("Postal code"),
                     name: 'postal_code_home',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 410,
                     blockid: 'contact-home-address'
                 },
                 'city_home': {
                     label: gt("City"),
                     name: 'city_home',
-                    fn: 'hidden',
-                    weight: 100,
+                   // fn: 'hidden',
+                    weight: 420,
                     blockid: 'contact-home-address'
                 },
                 'state_home': {
                     label: gt("State"),
                     name: 'state_home',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 430,
                     blockid: 'contact-home-address'
                 },
                 'country_home': {
                     label: gt("Country"),
                     name: 'country_home',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 440,
                     blockid: 'contact-home-address'
                 }
 
+            }
+        },
+        businessFields: {
+            fields: {
+                'street_business': {
+                    label: gt("Street"),
+                    name: 'street_business',
+                    fn: 'hidden',
+                    weight: 510,
+                    blockid: 'contact-work-address'
+                },
+                'postal_code_business': {
+                    label: gt("Postal code"),
+                    name: 'postal_code_business',
+                    fn: 'hidden',
+                    weight: 520,
+                    blockid: 'contact-work-address'
+                },
+                'city_business': {
+                    label: gt("City"),
+                    name: 'city_business',
+                    fn: 'hidden',
+                    weight: 530,
+                    blockid: 'contact-work-address'
+                },
+                'state_business': {
+                    label: gt("State"),
+                    name: 'state_business',
+                    fn: 'hidden',
+                    weight: 540,
+                    blockid: 'contact-work-address'
+                },
+                'country_business': {
+                    label: gt("Country"),
+                    name: 'country_business',
+                    fn: 'hidden',
+                    weight: 550,
+                    blockid: 'contact-work-address'
+                }
             }
         },
         otherFields: {
@@ -399,169 +443,144 @@ define("io.ox/contacts/edit/view-form",
                     label: gt("Street"),
                     name: 'street_other',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 600,
                     blockid: 'contact-other-address'
                 },
                 'postal_code_other': {
                     label: gt("Postal code"),
                     name: 'postal_code_other',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 610,
                     blockid: 'contact-other-address'
                 },
                 'city_other': {
                     label: gt("City"),
                     name: 'city_other',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 620,
                     blockid: 'contact-other-address'
                 },
                 'state_other': {
                     label: gt("State"),
                     name: 'state_other',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 630,
                     blockid: 'contact-other-address'
                 },
                 'country_other': {
                     label: gt("Country"),
                     name: 'country_other',
                     fn: 'hidden',
-                    weight: 100,
+                    weight: 640,
                     blockid: 'contact-other-address'
-                }
-            }
-        },
-        workFields: {
-            fields: {
-                'room_number': {
-                    label: gt("Room number"),
-                    name: 'room_number',
-                    fn: 'hidden',
-                    weight: 100,
-                    blockid: 'contact-work-address'
-                },
-                'street_business': {
-                    label: gt("Street"),
-                    name: 'street_business',
-                    fn: 'hidden',
-                    weight: 100,
-                    blockid: 'contact-work-address'
-                },
-                'postal_code_business': {
-                    label: gt("Postal code"),
-                    name: 'postal_code_business',
-                    fn: 'hidden',
-                    weight: 100,
-                    blockid: 'contact-work-address'
-                },
-                'city_business': {
-                    label: gt("City"),
-                    name: 'city_business',
-                    fn: 'hidden',
-                    weight: 100,
-                    blockid: 'contact-work-address'
-                },
-                'state_business': {
-                    label: gt("State"),
-                    name: 'state_business',
-                    fn: 'hidden',
-                    weight: 100,
-                    blockid: 'contact-work-address'
-                },
-                'country_business': {
-                    label: gt("Country"),
-                    name: 'country_business',
-                    fn: 'hidden',
-                    weight: 100,
-                    blockid: 'contact-work-address'
                 }
             }
         },
         jobFields: {
             fields: {
+                'room_number': {
+                    label: gt("Room number"),
+                    name: 'room_number',
+                    fn: 'hidden',
+                    weight: 500,
+                    blockid: 'contact-job-descriptions'
+                },
                 'profession': {
                     label: gt("Profession"),
                     name: 'profession',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 700,
                     blockid: 'contact-job-descriptions'
                 },
                 'position': {
                     label: gt("Position"),
                     name: 'position',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 705,
                     blockid: 'contact-job-descriptions'
                 },
                 'company': {
                     label: gt("Company"),
                     name: 'company',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 710,
                     blockid: 'contact-job-descriptions'
                 },
                 'department': {
                     label: gt("Department"),
                     name: 'department',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 715,
                     blockid: 'contact-job-descriptions'
                 },
                 'employee_type': {
                     label: gt("Employee type"),
                     name: 'employee_type',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 720,
                     blockid: 'contact-job-descriptions'
                 },
                 'number_of_employees': {
                     label: gt("Number of employees"),
                     name: 'number_of_employees',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 725,
                     blockid: 'contact-job-descriptions'
                 },
                 'sales_volume': {
                     label: gt("Sales volume"),
                     name: 'sales_volume',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 730,
                     blockid: 'contact-job-descriptions'
                 },
                 'tax_id': {
                     label: gt("Tax id"),
                     name: 'tax_id',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 735,
                     blockid: 'contact-job-descriptions'
                 },
                 'commercial_register': {
                     label: gt("Commercial register"),
                     name: 'commercial_register',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 740,
                     blockid: 'contact-job-descriptions'
                 },
                 'branches': {
                     label: gt("Branches"),
                     name: 'branches',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 745,
                     blockid: 'contact-job-descriptions'
                 },
                 'business_category': {
                     label: gt("Business category"),
                     name: 'business_category',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 750,
                     blockid: 'contact-job-descriptions'
                 },
                 'info': {
                     label: gt("Info"),
                     name: 'info',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 755,
                     blockid: 'contact-job-descriptions'
                 },
                 'manager_name': {
                     label: gt("Manager name"),
                     name: 'manager_name',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 760,
                     blockid: 'contact-job-descriptions'
                 },
                 'assistant_name': {
                     label: gt("Assistant name"),
                     name: 'assistant_name',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 765,
                     blockid: 'contact-job-descriptions'
                 }
 
@@ -572,157 +591,183 @@ define("io.ox/contacts/edit/view-form",
                 'marital_status': {
                     label: gt("Marital status"),
                     name: 'marital_status',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 801,
                     blockid: 'special-information'
                 },
                 'number_of_children': {
                     label: gt("Number of children"),
                     name: 'number_of_children',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 802,
                     blockid: 'special-information'
                 },
                 'spouse_name': {
                     label: gt("Spouse name"),
                     name: 'spouse_name',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 803,
                     blockid: 'special-information'
                 },
                 'note': {
                     label: gt("Note"),
                     name: 'note',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 804,
                     blockid: 'special-information'
                 },
                 'url': {
                     label: gt("Url"),
                     name: 'url',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 805,
                     blockid: 'special-information'
                 },
                 'anniversary': {
                     label: gt("Anniversary"),
                     name: 'anniversary',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 806,
                     blockid: 'special-information'
                 },
                 'userfield01': {
                     label: gt("Userfield 01"),
                     name: 'userfield01',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 807,
                     blockid: 'special-information'
                 },
                 'userfield02': {
                     label: gt("Userfield 02"),
                     name: 'userfield02',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 808,
                     blockid: 'special-information'
                 },
                 'userfield03': {
                     label: gt("Userfield 03"),
                     name: 'userfield03',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 809,
                     blockid: 'special-information'
                 },
                 'userfield04': {
                     label: gt("Userfield 04"),
                     name: 'userfield04',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 810,
                     blockid: 'special-information'
                 },
                 'userfield05': {
                     label: gt("Userfield 05"),
                     name: 'userfield05',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 811,
                     blockid: 'special-information'
                 },
                 'userfield06': {
                     label: gt("Userfield 06"),
                     name: 'userfield06',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 812,
                     blockid: 'special-information'
                 },
                 'userfield07': {
                     label: gt("Userfield 07"),
                     name: 'userfield07',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 813,
                     blockid: 'special-information'
                 },
                 'userfield08': {
                     label: gt("Userfield 08"),
                     name: 'userfield08',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 814,
                     blockid: 'special-information'
                 },
                 'userfield09': {
                     label: gt("Userfield 09"),
                     name: 'userfield09',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 815,
                     blockid: 'special-information'
                 },
                 'userfield10': {
                     label: gt("Userfield 10"),
                     name: 'userfield10',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 816,
                     blockid: 'special-information'
                 },
                 'userfield11': {
                     label: gt("Userfield 11"),
                     name: 'userfield11',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 817,
                     blockid: 'special-information'
                 },
                 'userfield12': {
                     label: gt("Userfield 12"),
                     name: 'userfield12',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 818,
                     blockid: 'special-information'
                 },
                 'userfield13': {
                     label: gt("Userfield 13"),
                     name: 'userfield13',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 819,
                     blockid: 'special-information'
                 },
                 'userfield14': {
                     label: gt("Userfield 14"),
                     name: 'userfield14',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 820,
                     blockid: 'special-information'
                 },
                 'userfield15': {
                     label: gt("Userfield 15"),
                     name: 'userfield15',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 821,
                     blockid: 'special-information'
                 },
                 'userfield16': {
                     label: gt("Userfield 16"),
                     name: 'userfield16',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 822,
                     blockid: 'special-information'
                 },
                 'userfield17': {
                     label: gt("Userfield 17"),
                     name: 'userfield17',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 823,
                     blockid: 'special-information'
                 },
                 'userfield18': {
                     label: gt("Userfield 18"),
                     name: 'userfield18',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 824,
                     blockid: 'special-information'
                 },
                 'userfield19': {
                     label: gt("Userfield 19"),
                     name: 'userfield19',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 825,
                     blockid: 'special-information'
                 },
                 'userfield20': {
                     label: gt("Userfield 20"),
                     name: 'userfield20',
-                    weight: 100,
+                    fn: 'hidden',
+                    weight: 826,
                     blockid: 'special-information'
                 }
             }
@@ -730,29 +775,38 @@ define("io.ox/contacts/edit/view-form",
     };
 
     function addSwitch(node, id, title) {
-        var button = $('<a>').addClass(id).text('+ ' + title),
-            tr = $('<tr>').append($('<td>'), $('<td>').append(button)),
-            select = $(node).find('.' + id + '.hidden');
-        button.on('click', {id: id}, function (event) {
-            if (button.text() === '+ ' + title) {
-                $(node).find('.' + event.data.id + '.hidden').removeClass('hidden').addClass('visible');
-                button.text('- ' + title);
-            } else {
-                $(node).find('.' + event.data.id + '.visible').removeClass('visible').addClass('hidden');
-                button.text('+ ' + title);
-            }
-        });
-        var f = ($(node).find('.' + id + '.hidden')).length,
+        var select = $(node).find('.' + id + '.hidden'),
+            f = ($(node).find('.' + id + '.hidden')).length,
             g = ($(node).find('.' + id)).length,
-            v = g - f;
+            v = g - f,
+            buttonTextOn,
+            buttonTextOff;
         if (v >= 1) {
             $(node).find('.' + id + '.headline').removeClass('hidden');
+            buttonTextOn = 'show more';
+            buttonTextOff = 'show less';
+        } else {
+            buttonTextOn = '+ ' + title;
+            buttonTextOff = '- ' + title;
         }
-        if (select[0]) {
+        var button = $('<a>').addClass(id).text(buttonTextOn),
+            tr = $('<tr>').append($('<td>'), $('<td>').append(button));
+        button.on('click', {id: id}, function (event) {
+            if (button.text() === buttonTextOn) {
+                $(node).find('.' + event.data.id + '.hidden').removeClass('hidden').addClass('visible');
+                button.text(buttonTextOff);
+            } else {
+                $(node).find('.' + event.data.id + '.visible').removeClass('visible').addClass('hidden');
+                button.text(buttonTextOn);
+            }
+        });
+
+        if (select[1]) {
             tr.appendTo(node);
         }
 
     }
+
 
     function createfields(fielddata) {
         ext.point("io.ox/contacts/edit/form/" + fielddata.blockid).extend({
@@ -779,7 +833,75 @@ define("io.ox/contacts/edit/view-form",
         });
     }
 
+    var addrBlock = 'street,postal_code/city,country,state'; //street,postal_code/city,country,state
 
+    function addAddrb(fields, name) {
+        var fieldArray = addrBlock.split(","),
+            nameBlock = name.slice(0, -6);
+        ext.point("io.ox/contacts/edit/form/contact-" + nameBlock + "-address").extend({
+            index: 100,
+            id: 'contact-home-block',
+            draw: function (data, id) {
+                for (var i = 0, len = fieldArray.length; i < len; ++i) {
+                    var inline = fieldArray[i].split("/"),
+                        tr = $('<tr>'),
+                        label = $('<td>').addClass('label').css({
+                            'padding-top': '7px',
+                            'width': '150px'
+                        }),
+                        td = $('<td>'),
+                        fieldname, fieldname2, labeltext, labeltext2;
+                    if (inline[1]) {
+                        fieldname = inline[0] + '_' + nameBlock;
+                        fieldname2 = inline[1] + '_' + nameBlock;
+                        labeltext = formFields[name].fields[fieldname].label;
+                        labeltext2 = formFields[name].fields[fieldname2].label;
+                        var input1 = $('<input>').attr('name', fieldname)
+                        .addClass('nice-input').val(data[inline[0] + '_' + nameBlock])
+                        .css({
+                            'font-size': '14px',
+                            'width': '100px',
+                            'padding-top': '0.25em',
+                            'padding-bottom': '0.25em'
+                        }),
+                            input2 = $('<input>').attr('name', fieldname2)
+                            .addClass('nice-input').val(data[inline[1] + '_' + nameBlock])
+                            .css({
+                                'font-size': '14px',
+                                'width': '177px',
+                                'padding-top': '0.25em',
+                                'padding-bottom': '0.25em',
+                                'margin-left': '0.5em'
+                            });
+                        label.text(labeltext + ' ' + labeltext2);
+                        td.css('padding-bottom', '0.5em').append(input1, input2);
+                        tr.addClass(formFields[name].fields[fieldname].blockid);
+                        if (!data[inline[0] + '_' + nameBlock]) {
+                            tr.addClass(formFields[name].fields[fieldname2].fn);
+                        }
+                        this.append(tr.append(label, td));
+                    } else {
+                        var drawData = data[fieldArray[i] + '_' + nameBlock];
+                        fieldname = fieldArray[i] + '_' + nameBlock;
+                        td.addClass('value').css('padding-bottom', '0.5em')
+                        .append($('<input>').addClass('nice-input').css({
+                            'font-size': '14px',
+                            'width': '300px',
+                            'padding-top': '0.25em',
+                            'padding-bottom': '0.25em'
+                        }).attr('name', fieldname).val(drawData));
+                        labeltext = formFields[name].fields[fieldname].label;
+                        tr.addClass(formFields[name].fields[fieldname].blockid + ' ' + fieldname);
+                        if (!drawData) {
+                            tr.addClass(formFields[name].fields[fieldname].fn);
+                        }
+                        label.text(labeltext);
+                        this.append(tr.append(label, td));
+                    }
+                }
+            }
+        });
+    }
 
     function loopformblocks(formBlock) {
         for (var i in formBlock.fields) {
@@ -787,11 +909,16 @@ define("io.ox/contacts/edit/view-form",
         }
     }
 
-
     function loopformfields(formFields) {
+        var formBlocks;
         for (var i in formFields) {
-            var formBlocks = formFields[i];
-            loopformblocks(formBlocks);
+            if (/^(homeFields|businessFields|otherFields)$/.test(i)) {
+                formBlocks = formFields[i];
+                addAddrb(formBlocks, i);
+            } else {
+                formBlocks = formFields[i];
+                loopformblocks(formBlocks);
+            }
         }
     }
 
@@ -936,7 +1063,7 @@ define("io.ox/contacts/edit/view-form",
                     formFrame = $('.abs'),
                     image = formFrame.find("input[type=file]").get(0);
 
-                formFrame.find('.value input').each(function (index) {
+                formFrame.find('input').each(function (index) {
                     var value =  $(this).val(),
                        id = $(this).attr('name');
                     formdata[id] = value;
@@ -991,6 +1118,7 @@ define("io.ox/contacts/edit/view-form",
         id: 'contact-personal',
         draw: function (data) {
             var id = 'contact-personal';
+            addBlockheader(this, id, 'Contact personal');
             ext.point("io.ox/contacts/edit/form/contact-personal").invoke("draw", this, data);
 //            var date = new Date(data.birthday);
 //            if (!isNaN(date.getDate())) {
@@ -1012,6 +1140,7 @@ define("io.ox/contacts/edit/view-form",
         id: 'contact-email',
         draw: function (data) {
             var id = 'contact-email';
+            addBlockheader(this, id, 'Mail');
             ext.point("io.ox/contacts/edit/form/contact-email").invoke("draw", this, data);
             addSwitch(this, id, 'E-Mail addresses');
             addSpacer(this);
@@ -1026,8 +1155,9 @@ define("io.ox/contacts/edit/view-form",
         index: 120,
         id: 'contact-phone',
         draw: function (data) {
-            ext.point("io.ox/contacts/edit/form/contact-phone").invoke("draw", this, data);
             var id = 'contact-phone';
+            addBlockheader(this, id, 'Phone');
+            ext.point("io.ox/contacts/edit/form/contact-phone").invoke("draw", this, data);
             addSwitch(this, id, 'Phone numbers');
             addSpacer(this);
         }
@@ -1063,7 +1193,7 @@ define("io.ox/contacts/edit/view-form",
         draw: function (data) {
             var id = 'contact-work-address';
             addBlockheader(this, id, 'Work address');
-            ext.point("io.ox/contacts/edit/form/contact-work-address").invoke("draw", this, data);
+            ext.point("io.ox/contacts/edit/form/contact-business-address").invoke("draw", this, data);
             addSwitch(this, id, 'Work address');
             addSpacer(this);
         }
@@ -1073,8 +1203,9 @@ define("io.ox/contacts/edit/view-form",
         index: 120,
         id: 'contact-job-descriptions',
         draw: function (data) {
-            ext.point("io.ox/contacts/edit/form/contact-job-descriptions").invoke("draw", this, data);
             var id = 'contact-job-descriptions';
+            addBlockheader(this, id, 'Job');
+            ext.point("io.ox/contacts/edit/form/contact-job-descriptions").invoke("draw", this, data);
             addSwitch(this, id, 'Job information');
             addSpacer(this);
         }
@@ -1097,8 +1228,9 @@ define("io.ox/contacts/edit/view-form",
         index: 120,
         id: 'special-information',
         draw: function (data) {
-            ext.point("io.ox/contacts/edit/form/special-information").invoke("draw", this, data);
             var id = 'special-information';
+            addBlockheader(this, id, 'Special');
+            ext.point("io.ox/contacts/edit/form/special-information").invoke("draw", this, data);
             addSwitch(this, id, 'Special information');
             addSpacer(this);
         }
@@ -1117,6 +1249,8 @@ define("io.ox/contacts/edit/view-form",
             this.append($('<tr>').append(node));
         }
     });
+
+
 
     return {
         draw: function (data, appdata) {
