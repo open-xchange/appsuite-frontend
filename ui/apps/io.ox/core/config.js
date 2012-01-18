@@ -22,6 +22,7 @@ define('io.ox/core/config',
     var get = function (key) {
         var parts = typeof key === 'string' ? key.split(/\./) : key,
             tmp = config || {}, i = 0, $i = parts.length;
+        
         for (; i < $i; i++) {
             if (tmp !== null && tmp !== undefined && parts[i] in tmp) {
                 tmp = tmp[parts[i]];
@@ -120,6 +121,8 @@ define('io.ox/core/config',
         },
 
         load: function () {
+            var def = new $.Deferred();
+            
             // loader
             var load = function () {
                 return http.GET({
@@ -136,6 +139,33 @@ define('io.ox/core/config',
             if (!configCache) {
                 configCache = new cache.SimpleCache('config', true);
             }
+            
+            
+            configCache.contains('default').done(function(check){
+                if(check){
+                    configCache.get('default').done(function(data){
+                        config = data;
+                        
+                        load();
+                        def.resolve(data);
+                    }).fail(function(e){
+                        def.reject(e);
+                    });
+                } else {
+                    load().done(function(data){
+                        def.resolve(data);
+                    });
+                }
+            }).fail(function(e){
+                def.reject(e);
+            });
+            
+            
+            
+            
+            return def;
+            
+            /**
             if (configCache.contains('default')) {
                 config = configCache.get('default');
                 load();
@@ -144,6 +174,7 @@ define('io.ox/core/config',
                 // load configuration
                 return load();
             }
+            **/
         }
     };
 });

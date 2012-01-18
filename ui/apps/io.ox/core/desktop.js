@@ -172,31 +172,38 @@ define("io.ox/core/desktop",
 
             function saveRestorePoint() {
                 if (self.failSave) {
-                    var list = appCache.get('savepoints') || [],
-                        data = self.failSave(),
-                        ids = _(list).pluck('id'),
-                        pos = _(ids).indexOf(savePointUniqueID);
-                    // add unique id
-                    data.id = savePointUniqueID;
-                    if (pos > -1) {
-                        // replace
-                        list.splice(pos, 1, data);
-                    } else {
-                        // add
-                        list.push(data);
-                    }
-                    appCache.add('savepoints', list);
+                    appCache.get('savepoints').done(function(list){
+                        list = list || [];
+                        
+                        var data = self.failSave(),
+                            ids = _(list).pluck('id'),
+                            pos = _(ids).indexOf(savePointUniqueID);
+                        
+                        data.id = savePointUniqueID;
+                        
+                        if (pos > -1) {
+                            // replace
+                            list.splice(pos, 1, data);
+                        } else {
+                            // add
+                            list.push(data);
+                        }
+                        appCache.add('savepoints', list);
+                    });
                 }
             }
 
             function removeRestorePoint() {
-                var list = appCache.get('savepoints') || [],
-                    ids = _(list).pluck('id'),
-                    pos = _(ids).indexOf(savePointUniqueID);
-                if (pos > -1) {
-                    list.splice(pos, 1);
-                }
-                appCache.add('savepoints', list);
+                appCache.get('savepoints').done(function(list){
+                    list = list || [];
+                    var ids = _(list).pluck('id'),
+                        pos = _(ids).indexOf(savePointUniqueID);
+
+                    if (pos > -1) {
+                        list.splice(pos, 1);
+                    }
+                    appCache.add('savepoints', list);
+                });
             }
 
             $(window).on('unload', saveRestorePoint);
@@ -394,20 +401,25 @@ define("io.ox/core/desktop",
         ox.ui.App = App;
 
         App.canRestore = function () {
-            return (appCache.get('savepoints') || []).length > 0;
+            return appCache.contains('savepoints');
         };
 
         App.restore = function () {
-            _(appCache.get('savepoints') || []).each(function (obj) {
-                require([obj.module], function (m) {
-                    m.getApp().launch().done(function () {
-                        if (this.failRestore) {
-                            this.failRestore(obj.point);
-                        }
+            appCache.get('savepoints').done(function(data){
+                data = data || [];
+                
+                _(data).each(function (obj) {
+                    require([obj.module], function (m) {
+                        m.getApp().launch().done(function () {
+                            if (this.failRestore) {
+                                this.failRestore(obj.point);
+                            }
+                        });
                     });
                 });
+                
+                appCache.remove('savepoints');
             });
-            appCache.remove('savepoints');
         };
 
         return function (options) {
