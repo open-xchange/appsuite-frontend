@@ -339,10 +339,14 @@ define('io.ox/core/cache', function () {
                 timestamp = timestamp !== undefined ? timestamp : _.now();
                 var i = 0, $i = data.length, self = this;
                                 
+                var adder = function(data,timestamp){
+                    return self.add(data,timestamp).pipe(function(){
+                        return self.keyGenerator(data);
+                    });
+                };
                 var c = [];
                 for (; i < $i; i++) {
-                    key = String(this.keyGenerator(data[i]));
-                    c.push( self.add(key,data[i],timestamp) );
+                    c.push( adder(data[i],timestamp) );
                 }
                 
                 return $.when.apply(null,c).pipe(function(){
@@ -361,7 +365,7 @@ define('io.ox/core/cache', function () {
         // contains
         var contains = this.contains;
         this.contains = function (key) {
-            var def = new $.Deferred(), keygen = this.keyGenerator, self = this;
+            var self = this;
             
             var getKey = function(key){
                 var tmpKey = null;
@@ -369,7 +373,7 @@ define('io.ox/core/cache', function () {
                     tmpKey = key;
                 } else {
                     // object, so get key
-                    tmpKey = String(keygen(key));
+                    tmpKey = String(self.keyGenerator(key));
                 }
                 return tmpKey;
             };

@@ -207,21 +207,7 @@ define("io.ox/core/test/cacheObjectCache",
                     var loaded = new Done();
                     j.waitsFor(loaded, 'Could not get key', TIMEOUT);
                     
-                    testStorage.contains(['A.ABD', 'A.ABE']).done(function(check){
-                        loaded.yep();
-                        j.expect(check).toBeTruthy();
-                    }).fail(function(e){
-                        loaded.yep();
-                        j.expect(e).not.toBeDefined();
-                    });
-                });
-                
-                
-                j.it('checking for array of key existence', function () {
-                    var loaded = new Done();
-                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
-                    
-                    testStorage.contains(['A.ABD', 'A.ABE']).done(function(check){
+                    testStorage.contains(['A.ABC','A.ABD']).done(function(check){
                         loaded.yep();
                         j.expect(check).toBeTruthy();
                     }).fail(function(e){
