@@ -31,22 +31,18 @@ define('io.ox/core/cache', function () {
 
     var CacheStorage = (function () {
         
-        // persistent storage?
-        var hasLocalStorage = Modernizr.localstorage && _.url.param('persistence') !== 'false';
-        var hasindexedDB = Modernizr.indexeddb && _.url.param('persistence') !== 'false';
+        return function (name, persistent,options) {
 
-        return function (name, persistent) {
-
-            var preferedFluentCache = 'simple';
-            var preferedPersistentCache = 'localstorage';
-
-            var persitentCache = require('io.ox/core/cache/'+preferedPersistentCache);
-            var fluentCache = require('io.ox/core/cache/'+preferedFluentCache);
-            
-            // init fast storage
-            var id, reg, fast = {},
+            var opt = _.extend({
+                    fluent: 'simple',
+                    persistent: 'localstorage'
+                }, options || {}),
+                
+                persitentCache = require('io.ox/core/cache/'+opt.persistent),
+                fluentCache = require('io.ox/core/cache/'+opt.fluent),
+                id,
                 // use persistent storage?
-                persist = hasLocalStorage && persistent === true ?
+                persist = (persitentCache.isUsable() && _.url.param('persistence') !== 'false' && persistent === true ?
                         function () {
                             if (ox.user !== '') {
                                 id = 'cache.' + (ox.user || '_') + '.' + (name || '');
@@ -62,19 +58,19 @@ define('io.ox/core/cache', function () {
                         } :
                         function () {
                             return false;
-                        };
+                        }),
                         
-            var getStorageLayer = function(){
-                var layer = null;
-                if (persist()) {
-                    layer = persitentCache;
-                } else {
-                    layer = fluentCache;
-                }
-                layer.setId(id);
-                
-                return layer;
-            };
+                getStorageLayer = function(){
+                    var layer = null;
+                    if (persist()) {
+                        layer = persitentCache;
+                    } else {
+                        layer = fluentCache;
+                    }
+                    layer.setId(id);
+                    
+                    return layer;
+                };
 
             this.clear = function () {
                 return getStorageLayer().clear();
@@ -122,99 +118,62 @@ define('io.ox/core/cache', function () {
         };
 
         this.add = function (key, data, timestamp) {
-            var def = new $.Deferred();
             // timestamp
             timestamp = timestamp !== undefined ? timestamp : _.now();
             // add/update?
-            index.get(key).done(function(getdata){
+            return index.get(key).pipe(function(getdata){
                 var type = (_(getdata).isUndefined()) ? 'add modify *' : 'update modify *';
                 
                 if( !_(getdata).isUndefined() ){
                     if( timestamp >= getdata.timestamp ){
-                        index.set(key, {
+                        return index.set(key, {
                             data: data,
                             timestamp: timestamp
-                        }).done(function(){
-                            def.resolve(data);
-                        }).fail(function(){
-                            def.reject();
+                        }).pipe(function(){
+                            return data;
                         });
                     } else {
-                        def.resolve(getdata.data);
+                        return getdata.data;
                     }
                 } else {
-                    index.set(key, {
+                    return index.set(key, {
                         data: data,
                         timestamp: timestamp
-                    }).done(function(){
-                        def.resolve(data);
-                    }).fail(function(){
-                        def.reject();
+                    }).pipe(function(){
+                        return data;
                     });
                 }
             });
-            
-            return def;//data;
         };
 
         // get from cache
         this.get = function (key) {
-            var def = new $.Deferred();
-            
-            index.get(key).done(function(data){
-                def.resolve( data !== undefined ? data.data : undefined );
-            }).fail(function(e){
-                def.reject(e);
+            return index.get(key).pipe(function(data){
+                return data !== undefined ? data.data : undefined;
             });
-            
-            return def;
         };
 
         // get timestamp of cached element
         this.time = function (key) {
-            var def = new $.Deferred();
-            
-            index.get(key).done(function(data){
+            return index.get(key).pipe(function(data){
                 if( !_(data).isUndefined() ){
-                    def.resolve(data.timestamp);
+                    return data.timestamp;
                 } else {
-                    def.resolve(0);
+                    return 0;
                 }
-            }).fail(function(){
-                def.resolve(0);
             });
-            
-            return def;
         };
 
         // remove from cache (key|array of keys)
         this.remove = function (key) {
             // is array?
             if (_.isArray(key)) {
-                var def = new $.Deferred();
-                var i = 0, $i = key.length,delCounter = 0;
-                
-                var resolver = function(){
-                    delCounter++;
-                    
-                    if(delCounter===$i){
-                        def.resolve();
-                    }
-                };
-                
-                var del = function(key){
-                    index.remove(key).done(function(){
-                        resolver();
-                    }).fail(function(){
-                        resolver();
-                    });
-                };
-                
+                var i = 0, $i = key.length, c = [];
                 for (; i < $i; i++) {
-                    del(key[i]);
+                    c.push(index.remove(key[i]));
                 }
                 
-                return def;
+                return $.when.apply(null,c);
             } else {
                 return index.remove(key);
             }
@@ -222,39 +181,24 @@ define('io.ox/core/cache', function () {
 
         // grep remove
         this.grepRemove = function (pattern) {
-            var def = new $.Deferred();
-            var i = 0,$i = 0,removeCounter = 0;
-            var reg = new RegExp(pattern);
-            
-            
-            var resolver = function(){
-                removeCounter++;
-                if( removeCounter===$i ){
-                    def.resolve();
-                }
-            };
+            var i = 0,$i = 0, reg = new RegExp(pattern);
             
             var remover = function(key){
                 if (reg.test(key)) {
-                    index.remove(key).done(function(){
-                        resolver();
-                    }).fail(function(){
-                        resolver();
-                    });
+                    return index.remove(key);
                 }
             };
             
-            index.keys().done(function(keys){
+            return index.keys().pipe(function(keys){
                 $i = keys.length;
                 
+                var c = [];
                 for (; i < $i; i++) {
-                    remover( keys[i] );
+                    c.push( remover( keys[i] ) );
                 }
-            }).fail(function(){
-                def.reject();
+                
+                return $.when.apply(null,c);
             });
-            
-            return def;
         };
 
         // list keys
@@ -264,12 +208,10 @@ define('io.ox/core/cache', function () {
 
         // grep keys
         this.grepKeys = function (pattern) {
-            var def = new $.Deferred();
-            
-            index.keys().done(function(keys){
-                var $i = keys.length;
-                var i = 0;
-                var tmp = [], key, reg = new RegExp(pattern);
+            return index.keys().done(function(keys){
+                var $i = keys.length, i = 0,
+                    tmp = [], key,
+                    reg = new RegExp(pattern);
                 
                 for (; i < $i; i++) {
                     key = keys[i];
@@ -277,94 +219,60 @@ define('io.ox/core/cache', function () {
                         tmp.push(key);
                     }
                 }
-                def.resolve(tmp);
-            }).fail(function(e){
-                def.reject(e);
+                return tmp;
             });
-            
-            return def;
         };
 
         // grep contained keys
         this.grepContains = function (list) {
-            var def = new $.Deferred();
+            var i = 0, $i = list.length, c = [];
             
-            var i = 0, $i = list.length, tmp = [];
-            var doneCounter = 0;
-            
-            var check = function( num ){
-                
-                index.contains(list[num]).done(function(check){
-                    doneCounter++;
+            var checker = function( num ){
+                return index.contains(list[num]).pipe(function(check){
                     if (check) {
-                        tmp.push(list[num]);
-                    }
-                    
-                    if( doneCounter === $i ){
-                        def.resolve(tmp);
-                    }
-                }).fail(function(){
-                    doneCounter++;
-                    
-                    if( doneCounter === $i ){
-                        def.resolve(tmp);
+                        return list[num];
+                    } else {
+                        return;
                     }
                 });
             };
-            
+
             for (; i < $i; i++) {
-                check(i);
+                c.push(checker(i));
             }
             
-            return def;
+            return $.when.apply(null,c).pipe(function(){
+                return _(arguments).without(undefined);
+            });
         };
 
         // list values
         this.values = function () {
             
-            var def = new $.Deferred();
-            
-            index.keys().done(function(keys){
+            return index.keys().pipe(function(keys){
+                var i = 0, $i = keys.length, c = [];
                 
-                var i = 0, $i = keys.length,
-                tmp = [], collectCounter = 0;
-                
-                var collect = function(key){
-                    index.get(key).done(function(data){
-                        collectCounter++;
-
-                        tmp.push(data.data);
-
-                        if(collectCounter===$i){
-                            def.resolve(tmp);
-                        }
-                    }).fail(function(){
-                        collectCounter++;
-                        if(collectCounter===$i){
-                            def.resolve(tmp);
-                        }
+                var collecter = function(key){
+                    return index.get(key).pipe(function(data){
+                        return data.data;
                     });
                 };
                 
                 for (; i < $i; i++) {
-                    collect(keys[i]);
+                    c.push( collecter(keys[i]) );
                 }
+                
+                return $.when.apply(null,c).pipe(function(){
+                    return _(arguments).without(undefined);
+                });
             });
-            
-            return def;
         };
 
         // get size
         this.size = function () {
-            var def = new $.Deferred();
-            
-            index.keys().done(function(keys){
-                def.resolve( keys.length );
-            }).fail(function(){
-                def.reject();
+            return index.keys().pipe(function(keys){
+                return keys.length;
             });
-
-            return def;
         };
 
         // contains
@@ -387,305 +295,196 @@ define('io.ox/core/cache', function () {
         // get from cache
         var get = this.get;
         this.get = function (key) {
-            var def = new $.Deferred();
             // array?
             if (_.isArray(key)) {
-                var i = 0, obj, tmp = new Array(key.length), max = key.length;
-                var getCounter = 0;
+                var i = 0, obj, tmp = new Array(key.length),
+                    c = [], self = this, def = new $.Deferred();
                 
-                var getResolver = function(){
-                    getCounter++;
-                    if(getCounter===max){
-                        def.resolve(tmp);
-                    }
-                };
-                
-                var getter = function(key){
-                    get(key).done(function(data){
+                var getter = function(obj,i){
+                    return self.get(obj).done(function(data){
                         tmp[i] = data;
-                        getResolver();
-                    }).fail(getResolver);
+                    });
                 };
                 
                 for (; (obj = key[i]); i++) {
-                    getter(obj,i);
+                    c.push( getter(obj,i) );
                 }
+
+                
+                $.when.apply(null,c).done(function(){
+                    def.resolve( tmp );
+                }).fail(function(e){
+                    def.reject(e);
+                });
+                
+                return def;
             } else {
                 // simple value
+                var tmpKey;
                 if (typeof key === 'string' || typeof key === 'number') {
-                    get(key).done(function(data){
-                        def.resolve(data);
-                    }).fail(function(e){
-                        def.reject(e);
-                    });
+                    tmpKey = key;
                 } else {
-                    get(String(this.keyGenerator(key))).done(function(data){
-                        def.resolve(data);
-                    }).fail(function(e){
-                        def.reject(e);
-                    });
+                    tmpKey = this.keyGenerator(key);
                 }
+                return get(tmpKey);
             }
-            
-            return def;
         };
 
         // add to cache
         var add = this.add;
         this.add = function (data, timestamp) {
-            var key, def = new $.Deferred();
+            
+            var key;
             if (_.isArray(data)) {
-                
                 timestamp = timestamp !== undefined ? timestamp : _.now();
-                var i = 0, $i = data.length, addCounter = 0, tmp = [];
-                
-                var resolver = function(){
-                    addCounter++;
-                    if(addCounter===$i){
-                        def.resolve(tmp);
-                    }
-                };
-                
-                var adder = function(key,data,i,timestamp){
-                    add(key, data, timestamp).done(function(data){
-                        tmp.push(key);
-                        resolver();
-                    }).fail(resolver);
-                };
-                
+                var i = 0, $i = data.length, self = this;
+                                
+                var c = [];
                 for (; i < $i; i++) {
                     key = String(this.keyGenerator(data[i]));
-                    adder(key,data[i],i,timestamp);
+                    c.push( self.add(key,data[i],timestamp) );
                 }
+                
+                return $.when.apply(null,c).pipe(function(){
+                    return _(arguments).without(undefined);
+                });
             } else {
                 // get key
                 key = String(this.keyGenerator(data));
                 
-                add(key, data, timestamp).done(function(result){
-                    def.resolve(key);
-                }).fail(function(e){
-                    def.reject(e);
+                return add(key, data, timestamp).pipe(function(result){
+                    return key;
                 });
             }
-            
-            return def;
         };
 
         // contains
         var contains = this.contains;
         this.contains = function (key) {
-            var def = new $.Deferred();
+            var def = new $.Deferred(), keygen = this.keyGenerator, self = this;
+            
+            var getKey = function(key){
+                var tmpKey = null;
+                if (typeof key === 'string' || typeof key === 'number') {
+                    tmpKey = key;
+                } else {
+                    // object, so get key
+                    tmpKey = String(keygen(key));
+                }
+                return tmpKey;
+            };
             
             // array?
             if (_.isArray(key)) {
                 var i = 0, $i = key.length, found = true;
-                for (; found && i < $i; i++) {
-                    found = found && this.contains(key[i]);
+                
+                var checker = function(key){
+                    var tmpKey = getKey(key);
+                    return self.contains( tmpKey ).pipe(function(result){
+                        found = found && result;
+                        return;
+                    });
+                };
+                
+                var c = [];
+                for (; i < $i; i++) {
+                    c.push( checker(key[i]) );
                 }
-                return found;
+                
+                return $.when.apply(null,c).pipe(function(){
+                    return found;
+                });
             } else {
                 // simple value
-                if (typeof key === 'string' || typeof key === 'number') {
-                    return contains(key);
-                } else {
-                    // object, so get key
-                    return contains(String(this.keyGenerator(key)));
-                }
+                return contains( getKey(key) );
             }
-            
-            return def;
         };
 
         this.merge = function (data, timestamp) {
-            var key, target, id, changed = false, def = new $.Deferred();
-            if (_.isArray(data)) {
+            var key, target, id, changed = false, self = this;
+            
+
+            if(_.isArray(data)) {
                 timestamp = timestamp !== undefined ? timestamp : _.now();
                 var i = 0, $i = data.length;
+                
+                var merger = function(check){
+                    changed = changed || check;
+                };
+
+                var c = [];
                 for (; i < $i; i++) {
-                    key = String(this.keyGenerator(data[i]));
-                    changed = changed || this.merge(data[i], timestamp);
+                    c.push( this.merge(data[i], timestamp).pipe(merger) );
                 }
-                return changed;
+                
+                return $.when.apply(null,c).pipe(function(){
+                    return changed;
+                });
             } else {
                 key = String(this.keyGenerator(data));
-                if (contains(key)) {
-                    target = get(key);
-                    // only merge properties of existing object
-                    for (id in target) {
-                        if (data[id] !== undefined) {
-                            changed = changed || !_.isEqual(target[id], data[id]);
-                            target[id] = data[id];
-                        }
+                
+                return contains(key).pipe(function(check) {
+                    if(check) {
+                        return get(key).pipe(function(target) {
+                            var id;
+                            for (id in target) {
+                                if (data[id] !== undefined) {
+                                    changed = changed || !_.isEqual(target[id], data[id]);
+                                    target[id] = data[id];
+                                }
+                            }
+
+                            if (changed) {
+                                return self.add(target, timestamp).pipe(function(addReturn){
+                                    return changed;
+                                });
+                            } else {
+                                return changed;
+                            }
+                        });
+                    } else {
+                        return false;
                     }
-                    if (changed) {
-                        this.add(target, timestamp);
-                    }
-                    return changed;
-                } else {
-                    return false;
-                }
+                });
             }
-            return def;
         };
 
         var remove = this.remove;
         this.remove = function (data) {
-            if (_.isArray(data)) {
-                var i = 0, $i = data.length;
-                for (; i < $i; i++) {
-                    this.remove(data[i]);
-                }
-            } else {
+            var def = new $.Deferred(), tmpGenerator = this.keyGenerator;
+            
+            var keygen = function(data){
                 // simple value
                 if (typeof data === 'string' || typeof data === 'number') {
-                    remove(data);
+                    return data;
                 } else {
                     // object, so get key
-                    remove(String(this.keyGenerator(data)));
+                    return String(tmpGenerator(data));
                 }
-            }
-        };
-    };
-
-    /**
-     *  @class Folder Cache
-     *  @augments ObjectCache
-     */
-    var FolderCache = function (name, persistent) {
-
-        // inherit
-        ObjectCache.call(this, name, persistent, function (data) {
-            return data.id;
-        });
-
-        // private
-        var children = new CacheStorage(name + '.children', persistent),
-            isComplete = new CacheStorage(name + '.isComplete', persistent);
-
-        // override 'add'
-        var add = this.add;
-        this.add = function (data, timestamp, prepend) {
-            // add to cache
-            var key = add.call(this, data, timestamp),
-                // get parent id (to string)
-                p = _.firstOf(data.folder_id, data.folder) + '',
-                list = children.get(p) || [],
-                pos;
-            // avoid circular reference (root = 0 says parent = 0)
-            if (data.id !== p) {
-                // add/replace
-                if ((pos = _.indexOf(key, list)) === -1) {
-                    // add
-                    if (prepend === true) {
-                        list.unshift(key);
-                    } else {
-                        list.push(key);
+            };
+            
+            if (_.isArray(data)) {
+                var i = 0, $i = data.length, doneCounter = 0;
+                
+                var resolver = function(){
+                    doneCounter++;
+                    if( doneCounter===$i ){
+                        def.resolve();
                     }
-                } else {
-                    // replace
-                    list.splice(pos, 1, key);
-                }
-                children.set(p, list);
-            }
-        };
-        this.prepend = function (data, timestamp) {
-            this.add(data, timestamp, true);
-        };
-
-        var clear = this.clear;
-        this.clear = function () {
-            children.clear();
-            isComplete.clear();
-            clear.call(this);
-        };
-
-        // super class' remove
-        var remove = this.remove;
-
-        var removeChild = function (key) {
-            // remove from all children list
-            var data = this.get(key), p, pos, list;
-            if (data !== undefined) {
-                // get parent id (to string)
-                p = _.firstOf(data.folder_id, data.folder) + '';
-                list = children.get(p) || [];
-                // remove from list
-                if ((pos = _.indexOf(key, list)) > -1) {
-                    list.splice(pos, 1);
-                }
-                children.set(p, list);
-            }
-            // remove its own children
-            this.removeChildren(key);
-            // remove element
-            remove.call(this, key);
-        };
-
-        this.remove = function (key) {
-            // is array?
-            if (_.isArray(key)) {
-                var i = 0, $i = key.length;
+                };
+                
+                var remover = function(key){
+                    remove( keygen(key) ).done(resolver).fail(resolver);
+                };
+                
                 for (; i < $i; i++) {
-                    removeChild.call(this, key[i]);
+                    remover(data[i]);
                 }
             } else {
-                removeChild.call(this, key);
+                remove( keygen(data) ).done(def.resolve).fail(def.reject);
             }
-        };
-
-        this.removeChildren = function (parent, deep) {
-            // has children?
-            if (deep === true && children.contains(parent)) {
-                // loop
-                var i = 0, keys = children.get(parent), $i = keys.length;
-                for (; i < $i; i++) {
-                    // remove its own children
-                    if (keys[i] !== parent) {
-                        this.removeChildren(keys[i], true);
-                    }
-                    // remove element
-                    remove.call(this, keys[i]);
-                }
-            }
-            // remove entry
-            children.remove(parent);
-            // mark as incomplete
-            this.setComplete(parent, false);
-        };
-
-        this.children = function (parent) {
-            var tmp = [];
-            // exists?
-            if (children.contains(parent)) {
-                // loop
-                var i = 0, keys = children.get(parent), $i = keys.length;
-                for (; i < $i; i++) {
-                    tmp.push(this.get(keys[i]));
-                }
-            }
-            return tmp;
-        };
-
-        this.parents = function () {
-            return children.keys();
-        };
-
-        // helps debugging
-        this.inspect = function (key) {
-            return {
-                keys: this.grepKeys(key),
-                children: this.children(key),
-                complete: this.isComplete(key)
-            };
-        };
-
-        // explicit cache
-        this.setComplete = function (key, flag) {
-            isComplete.set(key, flag === undefined ? true : !!flag);
-        };
-
-        this.isComplete = function (key) {
-            return isComplete.get(key) === true;
+            
+            return def;
         };
     };
 
@@ -703,7 +502,6 @@ define('io.ox/core/cache', function () {
         defaultKeyGenerator: defaultKeyGenerator,
         CacheStorage: CacheStorage,
         SimpleCache: SimpleCache,
-        ObjectCache: ObjectCache,
-        FolderCache: FolderCache
+        ObjectCache: ObjectCache
     };
 });

@@ -49,7 +49,7 @@ define('io.ox/core/api/folder',
                     });
             } else {
                 // cache hit
-                return $.Deferred().resolve(cache.get(id));
+                return cache.get(id);
             }
         };
 

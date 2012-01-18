@@ -201,6 +201,9 @@ define('io.ox/core/cache/indexeddb', function () {
         getStorageLayerName : function(){
             return 'cache/indexeddb';
         },
+        isUsable : function() {
+            return Modernizr.indexeddb;
+        },
         clear : function () {
             
             return getObjectstore().pipe(function(store){

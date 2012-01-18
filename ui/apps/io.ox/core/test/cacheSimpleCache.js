@@ -216,7 +216,7 @@ define("io.ox/core/test/cacheSimpleCache",
                     var loaded = new Done();
                     j.waitsFor(loaded, 'Could not get key', TIMEOUT);
                     
-                    testStorage.grepContains([testKey]).done(function(keys){
+                    testStorage.grepContains([testKey,'A.B']).done(function(keys){
                         loaded.yep();
                         j.expect(keys).toEqual([testKey]);
                     }).fail(function(e){

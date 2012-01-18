@@ -175,11 +175,240 @@ define("io.ox/core/test/cacheObjectCache",
                 });
                 
                 
+                j.it('checking for key existence', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.contains(testKey).done(function(check){
+                        loaded.yep();
+                        j.expect(check).toBeTruthy();
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
+                
+                j.it('checking for key existence on nonexisting key', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.contains('fdfsgagsdg').done(function(check){
+                        loaded.yep();
+                        j.expect(check).toBeFalsy();
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
+                
+                j.it('checking for array of key existence', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.contains(['A.ABD', 'A.ABE']).done(function(check){
+                        loaded.yep();
+                        j.expect(check).toBeTruthy();
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
+                
+                j.it('checking for array of key existence', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.contains(['A.ABD', 'A.ABE']).done(function(check){
+                        loaded.yep();
+                        j.expect(check).toBeTruthy();
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
+                
+                j.it('checking for object existence', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.contains(testData1).done(function(check){
+                        loaded.yep();
+                        j.expect(check).toBeTruthy();
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
+                
+                j.it('checking for array of object existence', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.contains([testData1,testDataA]).done(function(check){
+                        loaded.yep();
+                        j.expect(check).toBeTruthy();
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
+                
+                j.it('checking for array of mixed object/key existence', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.contains([testData1,'A.ABE']).done(function(check){
+                        loaded.yep();
+                        j.expect(check).toBeTruthy();
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
+                
+                j.it('checking for array of mixed object/key existence with nonexistent key', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.contains([testData1,'A.ABX']).done(function(check){
+                        loaded.yep();
+                        j.expect(check).toBeFalsy();
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
+                
+                j.it('checking cachesize before removing', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.size().done(function(size){
+                        loaded.yep();
+                        j.expect(size).toEqual(4);
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
+                
+                j.it('removing by single key', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.remove(testKey).done(function(){
+                        loaded.yep();
+                        j.expect(true).toBeTruthy();
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
+                
+                j.it('checking cachesize after removing', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.size().done(function(size){
+                        loaded.yep();
+                        j.expect(size).toEqual(3);
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
+                
+                j.it('removing by object', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.remove(testDataA).done(function(){
+                        loaded.yep();
+                        j.expect(true).toBeTruthy();
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
+                
+                j.it('checking cachesize after removing', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.size().done(function(size){
+                        loaded.yep();
+                        j.expect(size).toEqual(2);
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
+                
+                j.it('removing by array of keys', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.remove(['A.ABE','A.ABF']).done(function(){
+                        loaded.yep();
+                        j.expect(true).toBeTruthy();
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
+                
+                j.it('checking cachesize after removing', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.size().done(function(size){
+                        loaded.yep();
+                        j.expect(size).toEqual(0);
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
+                
+                j.it('merging objects', function () {
+                    var loaded = new Done();
+                    j.waitsFor(loaded, 'Could not get key', TIMEOUT);
+                    
+                    testStorage.add(testData1).pipe(function(){
+                        return testStorage.merge(testData2).pipe(function(test){
+                            return testStorage.get(testData1);
+                        });
+                    }).done(function(value){
+                        loaded.yep();
+                        j.expect(value).toEqual(testData2);
+                    }).fail(function(e){
+                        loaded.yep();
+                        j.expect(e).not.toBeDefined();
+                    });
+                });
+                
                 
             });
             
         }
     });
+    
+
     
     
 });

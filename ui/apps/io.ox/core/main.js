@@ -251,18 +251,27 @@ define("io.ox/core/main",
                 ox.ui.App.restore();
             });
 
-        if (autoLaunch.length === 0 && !ox.ui.App.canRestore()) {
-            drawDesktop();
-        }
+        
+        var restoreLauncher = function(canRestore){
+            if (autoLaunch.length === 0 && !canRestore) {
+                drawDesktop();
+            }
 
-        if (autoLaunch.length || ox.ui.App.canRestore() || location.hash === '#!') {
-            // instant fade out
-            $("#background_loader").idle().hide();
-            def.resolve();
-        } else {
-            // fade out animation
-            $("#background_loader").idle().fadeOut(DURATION, def.resolve);
-        }
+            if (autoLaunch.length || canRestore || location.hash === '#!') {
+                // instant fade out
+                $("#background_loader").idle().hide();
+                def.resolve();
+            } else {
+                // fade out animation
+                $("#background_loader").idle().fadeOut(DURATION, def.resolve);
+            }
+        };
+        
+        ox.ui.App.canRestore().done(function(check){
+            restoreLauncher(check);
+        }).fail(function(){
+            restoreLauncher(false);
+        });
     }
 
     return {

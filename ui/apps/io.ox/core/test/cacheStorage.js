@@ -49,6 +49,11 @@ define("io.ox/core/test/cacheStorage",
                     testStorage.setId('TEST');
                     
                     
+                    j.it('check storagelayer', function () {
+                        j.expect(testStorage.isUsable()).toBeTruthy();
+                    });
+                    
+                    
                     j.it('check for empty cache', function () {
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not get keys', TIMEOUT);

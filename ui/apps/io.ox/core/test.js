@@ -17,21 +17,6 @@ define("io.ox/core/test",
     
     "use strict";
 
-    // test objects
-    var TIMEOUT = 5000;
-
-    // helpers
-    function Done() {
-        var f = function () {
-            return f.value;
-        };
-        f.value = false;
-        f.yep = function () {
-            f.value = true;
-        };
-        return f;
-    }
-
-    
+    // placeholder for all other caches
     
 });

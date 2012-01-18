@@ -24,6 +24,9 @@ define('io.ox/core/cache/localstorage', function () {
         getStorageLayerName : function(){
             return 'cache/localstorage';
         },
+        isUsable : function() {
+            return Modernizr.localstorage;
+        },
         clear : function () {
             // loop over all keys
             var i = 0, key;

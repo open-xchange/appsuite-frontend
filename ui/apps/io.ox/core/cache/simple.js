@@ -28,6 +28,9 @@ define('io.ox/core/cache/simple', function () {
         getStorageLayerName : function(){
             return 'cache/simple';
         },
+        isUsable : function() {
+            return true;
+        },
         clear : function () {
             storage[ id ] = {};
             return $.Deferred().resolve();

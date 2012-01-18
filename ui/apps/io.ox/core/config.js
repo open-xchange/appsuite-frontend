@@ -153,8 +153,6 @@ define('io.ox/core/config',
                     });
                 } else {
                     load().done(function(data){
-                        console.log('get config from url',data);
-                        
                         def.resolve(data);
                     });
                 }
