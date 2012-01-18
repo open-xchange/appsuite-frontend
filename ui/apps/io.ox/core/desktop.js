@@ -416,6 +416,49 @@ define("io.ox/core/desktop",
 
     }());
 
+    ox.ui.screens = (function () {
+
+        var current = null,
+
+            that = {
+
+                add: function (id) {
+                    return $('<div>', { id: 'io-ox-' + id }).addClass('abs').hide()
+                        .appendTo('#io-ox-screens');
+                },
+
+                get: function (id) {
+                    return $('#io-ox-screens').find('#io-ox-' + id);
+                },
+
+                current: function () {
+                    return current;
+                },
+
+                hide: function (id) {
+                    this.get(id).hide();
+                    this.trigger('hide-' + id);
+                },
+
+                show: function (id) {
+                    $('#io-ox-screens').children().each(function (i, node) {
+                        var screenId = $(this).attr('id').substr(6);
+                        if (screenId !== id) {
+                            that.hide(screenId);
+                        }
+                    });
+                    this.get(id).show();
+                    current = id;
+                    this.trigger('show-' + id);
+                }
+            };
+
+        event.Dispatcher.extend(that);
+
+        return that;
+
+    }());
+
     ox.ui.windowManager = (function () {
 
         var that = event.Dispatcher.extend({}),
@@ -428,7 +471,22 @@ define("io.ox/core/desktop",
                 }, 0);
             };
 
+        ox.ui.screens.bind('hide-windowmanager', function () {
+            if (currentWindow) {
+                currentWindow.hide();
+            }
+        });
+
+        that.hide = function () {
+            ox.ui.screens.hide('windowmanager');
+        };
+
+        that.show = function () {
+            ox.ui.screens.show('windowmanager');
+        };
+
         that.bind("window.open", function (win) {
+            this.show();
             if (_(windows).indexOf(win) === -1) {
                 windows.push(win);
             }

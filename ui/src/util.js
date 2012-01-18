@@ -323,6 +323,15 @@
             }, interval - (_.utc() % interval) + 1);
         },
 
+        wait: function (t) {
+            var def = $.Deferred();
+            setTimeout(function () {
+                def.resolve();
+                def = null;
+            }, t || 0);
+            return def;
+        },
+
         // helper for benchmarking
         clock: (function () {
             var last = null, i = 1;

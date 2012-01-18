@@ -86,10 +86,17 @@ define("io.ox/core/main",
         // refresh animation
         initRefreshAnimation();
 
-        desktop.addLauncher("right", gt("Applications"), function () {
+//        desktop.addLauncher("right", gt("Applications"), function () {
+//            var node = this;
+//            return require(["io.ox/applications/main"], function (m) {
+//                m.getApp().setLaunchBarIcon(node).launch();
+//            });
+//        });
+
+        desktop.addLauncher("left", gt("Apps"), function () {
             var node = this;
-            return require(["io.ox/applications/main"], function (m) {
-                m.getApp().setLaunchBarIcon(node).launch();
+            return require(["io.ox/launchpad/main"], function (m) {
+                m.show();
             });
         });
 
@@ -112,21 +119,9 @@ define("io.ox/core/main",
         ext.point("io.ox/core/desktop").extend({
             id: "upsell",
             draw: function () {
-                // create audio tag
-                var boing = (function () {
-                    var audio, url = ox.base + '/apps/themes/default/';
-                    return function () {
-                        if (audio) {
-                            audio.pause();
-                        }
-                        audio = new Audio(url + (Math.random() < 0.7 ? 'spring.wav' : 'boing.wav'));
-                        audio.play();
-                    };
-                }());
                 // run away
                 function run() {
                     var self = $(this).off('mouseover mousemove', run);
-                    boing();
                     self.stop(false, true)
                         .animate({
                             right: ((self.parent().width() - 240) * Math.random() >> 0) + "px",
@@ -183,7 +178,7 @@ define("io.ox/core/main",
                 );
 
                 update = function () {
-                    date.text(i18n.date("EEE dd. MMM YYYY HH:mm"));
+                    date.text(i18n.date("EEE dd. MMM YYYY HH:mm:ss"));
                 };
 
                 update();
@@ -200,8 +195,11 @@ define("io.ox/core/main",
             if (isEmpty) {
                 drawDesktop();
             }
-            $("#io-ox-desktop")[isEmpty ? "show" : "hide"]();
-            $("#io-ox-windowmanager")[isEmpty ? "hide" : "show"]();
+            if (isEmpty) {
+                ox.ui.screens.show('desktop');
+            } else {
+                ox.ui.screens.show('windowmanager');
+            }
         });
 
         var def = $.Deferred().done(function () {

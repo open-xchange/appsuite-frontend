@@ -1,0 +1,78 @@
+
+#io-ox-launchpad .pad {
+    margin: 26px auto 26px auto;
+    width: 700px;
+}
+
+#io-ox-launchpad .section {
+    min-height: 50px;
+    clear: both;
+}
+
+#io-ox-launchpad h1 {
+    font-family: OpenSans, Helvetica, Arial, sans-serif;
+    font-size: 1.5em;
+    font-weight: normal;
+    line-height: 2em;
+    text-shadow: 1px 1px 2px #fff;
+    margin: 0 0 2em 0;
+    border-bottom: 1px solid #bbb;
+    clear: both;
+}
+
+#io-ox-launchpad h1 .button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: @font-size;
+    float: right;
+    text-shadow: none;
+}
+
+#io-ox-launchpad h1 .button:first-child {
+    margin-right: 0;
+}
+
+#io-ox-launchpad .app {
+    display: inline-block;
+    width: 120px;
+    min-height: 50px;
+    padding: 0 10px 0 10px;
+    margin: 0 0 2em 0;
+    text-align: center;
+    float: left;
+    color: black;
+}
+
+#io-ox-launchpad a.app:focus {
+    outline: 0;
+    box-shadow: none;
+}
+
+#io-ox-launchpad a.app:active {
+    opacity: 0.60;
+}
+
+#io-ox-launchpad .app:hover {
+    text-decoration: none;
+}
+
+#io-ox-launchpad .app .icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 0 0.25em 0;
+}
+
+#io-ox-launchpad .app .title {
+    font-size: 1.1em;
+    font-weight: normal;
+    line-height: 1.25em;
+    color: #555;
+    text-shadow: 0px 1px 2px #fff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* touch device */
+
+.touch #io-ox-launchpad .pad { width: 1000px; }
+.touch #io-ox-launchpad .app { width: 180px; font-size: @touch-font-size; }
+.touch #io-ox-launchpad .app .icon { width: 64px; height: 64px; }
