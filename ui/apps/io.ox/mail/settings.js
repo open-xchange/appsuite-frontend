@@ -15,26 +15,80 @@ define: true, _: true
 */
 define('io.ox/mail/settings',
        ['io.ox/core/extensions',
-        'io.ox/settings/utils'], function (ext, utils) {
+        'io.ox/settings/utils',
+        'io.ox/core/tk/dialogs'], function (ext, utils, dialogs) {
        
     'use strict';
 
-    function createLink (textStr, attrs, classStr) {
-      var link = $('<a>');
-      link.text(textStr);
-      if(classStr !== null) {
-        link.addClass(classStr);
-      }
-      if(typeof attrs !== "undefined" &&
-         attrs !== null &&
-         attrs.constructor.toString().indexOf('Object') !== -1) {
-        _.each(attrs, function (attr, key) {
-          link.attr(key, attr);
-        });
-      }
-      return link;
-    }
 
+    var accountDetail = {
+        dialog: null,
+        node: null,
+        draw: function (popup) {
+          popup.empty()
+            .addClass('settings-detail-pane')
+            .append(
+                $('<div>').addClass('clear-title').text('Marios Account')
+                  .append(utils.createSectionDelimiter())
+            )
+            .append(
+                utils.createSection()
+                  .append(utils.createSectionTitle('Account Settings'))
+                  .append(
+                      utils.createSectionContent()
+                        .append(utils.createLabeledTextField({label: 'Account Name:', dataId: 'mail-account-name', value: 'Marios Account'}))
+                        .append(utils.createLabeledTextField({label: 'E-Mail Address:', dataId: 'mail-account-name', value: 'Marios Account'}))
+                        .append(utils.createLabeledTextField({label: 'Account Name:', dataId: 'mail-account-name', value: 'Marios Account'}))
+                        .append(utils.createCheckbox('mail-common-selectfirst', 'Use Unified Mail for this account', false))
+                  )
+                  .append(utils.createSectionDelimiter())
+            )
+            .append(
+                utils.createSection()
+                  .append(utils.createSectionTitle('Server Settings'))
+                  .append(
+                      utils.createSectionContent()
+                        .append(
+                          utils.createSectionGroup()
+                            .append(
+                              utils.createSelectbox('mail-testselect', 'Server Type:', {
+                                    'IMAP mail server': 'option1',
+                                    'POP3 mail server': 'option2',
+                                    'V-split view 3': 'option3'
+                                  }, 'option1')
+                            )
+                        )
+                        .append(utils.createCheckbox('mail-common-selectfirst', 'Use SSL connection', false))
+                        .append(utils.createLabeledTextField({label: 'Server Name:', dataId: 'mail-account-name', value: 'Marios Account'}))
+                        .append(utils.createLabeledTextField({label: 'Server Port:', dataId: 'mail-account-name', value: 'Marios Account'}))
+                        .append(utils.createLabeledTextField({label: 'Login', dataId: 'mail-account-name', value: 'Marios Account'}))
+                        .append(utils.createLabeledPasswordField({label: 'Password', dataId: 'mail-account-name', value: 'Marios Account'}))
+                  )
+                  .append(utils.createSectionDelimiter())
+            )
+            .append(
+                utils.createSection()
+                  .append(utils.createSectionTitle('Outgoing Server Settings (SMTP)'))
+                  .append(
+                      utils.createSectionContent()
+                        .append(utils.createLabeledTextField({label: 'Account Name:', dataId: 'mail-account-name', value: 'Marios Account'}))
+                        .append(utils.createLabeledTextField({label: 'E-Mail Address:', dataId: 'mail-account-name', value: 'Marios Account'}))
+                        .append(utils.createLabeledTextField({label: 'Account Name:', dataId: 'mail-account-name', value: 'Marios Account'}))
+                        .append(utils.createCheckbox('mail-common-selectfirst', 'Use Unified Mail for this account', false))
+                  )
+                  .append(utils.createSectionDelimiter())
+            );
+
+        },
+        open: function (event) {
+            console.log("create Popup");
+            accountDetail.node = event.data.topnode.append($("<div>").addClass("accountDetail"));
+            accountDetail.dialog = new dialogs.SidePopup('800')
+                .delegate(accountDetail.node, '', accountDetail.draw);
+
+            return accountDetail.node;
+        }
+    };
 
     var settings = {
       draw: function (node, app) {
@@ -60,11 +114,12 @@ define('io.ox/mail/settings',
                       utils.createSectionGroup()
                         .append(
                           utils.createSelectbox('mail-testselect', 'Default view:', {
-                            'V-split view 1': 'option1',
-                            'V-split view 2': 'option2',
-                            'V-split view 3': 'option3'
-                          }, 'option1')
+                                'V-split view 1': 'option1',
+                                'V-split view 2': 'option2',
+                                'V-split view 3': 'option3'
+                              }, 'option1')
                         )
+                        .addClass('expertmode')
                     )
                     .append(
                       utils.createSectionGroup()
@@ -75,15 +130,16 @@ define('io.ox/mail/settings',
                             'V-split view 3': 'option3'
                           }, 'option3')
                         )
+                        .addClass('expertmode')
                     )
                     .append(utils.createSectionDelimiter())
 
-                    .append(utils.createCheckbox('mail-common-selectfirst', 'Automatically select first E-Mail?', false))
+                    .append(utils.createCheckbox('mail-common-selectfirst', 'Automatically select first E-Mail?', false).addClass('expertmode'))
                     .append(utils.createCheckbox('mail-common-removepermanently', 'Permanently remove deleted E-Mails?', false))
-                    .append(utils.createCheckbox('mail-common-notifyreceipt', 'Notify on delivery receipt?', true))
+                    .append(utils.createCheckbox('mail-common-notifyreceipt', 'Notify on delivery receipt?', true).addClass('expertmode'))
                     .append(utils.createCheckbox('mail-common-showsenderpic', 'Show sender image?', false))
-                    .append(utils.createCheckbox('mail-common-collectwhilesending', 'Automatically collect contacts in the folder "Collected addresses" while sending?', false))
-                    .append(utils.createCheckbox('mail-common-collectwhilereading', 'Automatically collect contacts in the folder "Collected addresses" while reading?', true))
+                    .append(utils.createCheckbox('mail-common-collectwhilesending', 'Automatically collect contacts in the folder "Collected addresses" while sending?', false).addClass('expertmode'))
+                    .append(utils.createCheckbox('mail-common-collectwhilereading', 'Automatically collect contacts in the folder "Collected addresses" while reading?', true).addClass('expertmode'))
                     
                     .append(utils.createSectionDelimiter())
 
@@ -100,20 +156,22 @@ define('io.ox/mail/settings',
                 .append(utils.createSectionTitle('Compose'))
                 .append(
                   utils.createSectionContent()
-                    .append(utils.createCheckbox('mail-common-selectfirst', 'Insert the original E-Mail text to a reply', false))
+                    .append(utils.createCheckbox('mail-common-selectfirst', 'Insert the original E-Mail text to a reply', false).addClass('expertmode'))
                     .append(utils.createCheckbox('mail-common-removepermanently', 'Append vcard', false))
-                    .append(utils.createCheckbox('mail-common-notifyreceipt', 'Enable auto completion of E-Mail addresses', true))
+                    .append(utils.createCheckbox('mail-common-notifyreceipt', 'Enable auto completion of E-Mail addresses', true).addClass('expertmode'))
                     .append(
                       utils.createSectionGroup()
                         .append(utils.createInfoText('Forward E-Mails as:'))
                         .append(utils.createRadioButton('mail-compose-forwardas-inline', 'Inline', 'mail-compose-forwardas', true, true))
                         .append(utils.createRadioButton('mail-compose-forwardas-attachment', 'Attachment', 'mail-compose-forwardas', false, false))
+                        .addClass('expertmode')
                     )
                     .append(
                       utils.createSectionGroup()
                         .append(utils.createInfoText('When "Reply all":'))
                         .append(utils.createRadioButton('mail-compose-whenreplyall-tofields', 'Add sender and recipients to "To", Cc to "Cc"', 'mail-compose-whenreplyall', "fields", "fields"))
                         .append(utils.createRadioButton('mail-compose-whenreplyall-tocc', 'Add sender to "To", recipients to "Cc"', 'mail-compose-whenreplyall', "cc", false, "fields"))
+                        .addClass('expertmode')
                     )
                     .append(
                       utils.createSectionGroup()
@@ -131,6 +189,7 @@ define('io.ox/mail/settings',
                             'Default': 'default'
                           }, 'enhanced')
                         )
+                        .addClass('expertmode')
                     )
                     .append(
                       utils.createSectionGroup()
@@ -143,6 +202,7 @@ define('io.ox/mail/settings',
                             'Book Antiqua': 'book_antiqua'
                           }, 'default')
                         )
+                        .addClass('expertmode')
                     )
                     .append(
                       utils.createSectionGroup()
@@ -153,6 +213,7 @@ define('io.ox/mail/settings',
                             '2 (10pt)': '10_pt'
                           }, 'default')
                         )
+                        .addClass('expertmode')
                     )
                     .append(
                       utils.createLabel()
@@ -165,6 +226,7 @@ define('io.ox/mail/settings',
                         .append(
                           utils.createText('characters')
                         )
+                        .addClass('expertmode')
                     )
                     .append(
                       utils.createSectionGroup()
@@ -187,6 +249,7 @@ define('io.ox/mail/settings',
                             '10 Minutes': '10_minutes'
                           }, '3_minutes')
                         )
+                        .addClass('expertmode')
                     )
                     .append(utils.createSectionDelimiter())
 
@@ -217,6 +280,7 @@ define('io.ox/mail/settings',
 
             .append(
               utils.createSection()
+                .addClass('expertmode')
                 .append(utils.createSectionTitle('Signatures'))
                 .append(
                   utils.createSectionContent()
@@ -231,24 +295,44 @@ define('io.ox/mail/settings',
                 .append(
                   utils.createSectionContent()
                     .append(
-                      $('<div>')
-                        .addClass('settings-listbox')
-                        .append(
-                          $('<div>')
-                        )
+                      utils.createListBox()
+                        .addClass('listbox')
+                        .append(utils.createListSpacer())
+                        .append(utils.createListItem({ dataId: 'myid', content: 'mario@sourcegarden.com' }))
+                        .append(utils.createListItem({ dataId: 'myid', content: 'mario@sourcegarden.com' }))
+                        .append(utils.createListItem({ dataId: 'myid', content: 'mario@sourcegarden.com' }))
+                        .append(utils.createListItem({ dataId: 'myid', content: 'mario@sourcegarden.com' }))
+                        .append(utils.createListItem({ dataId: 'myid', content: 'mario@sourcegarden.com' }))
+                        .append(utils.createListItem({ dataId: 'myid', content: 'mario@sourcegarden.com' }))
+                        .append(utils.createListItem({ dataId: 'myid', content: 'mario@sourcegarden.com' }))
+                        .append(utils.createListItem({ dataId: 'myid', content: 'mario@sourcegarden.com' }))
+                        .append(utils.createListItem({ dataId: 'myid', content: 'mario@sourcegarden.com' }))
+                        .append(utils.createListItem({ dataId: 'myid', content: 'mario@sourcegarden.com' }))
+                        .append(utils.createListSpacer())
+
+
                     )
+                    .append(utils.createButton('Add ...').css({'margin-right': '15px'}))
+                    .append(
+                      utils.createButton('Edit ...')
+                        .css({'margin-right': '15px'})
+                        .on('click', { topnode: node }, accountDetail.open)
+                    )
+                    .append(utils.createButton('Delete ...'))
                 )
                 .append(utils.createSectionDelimiter())
             )
 
             .append(
               utils.createSection()
+                .addClass('expertmode')
                 .append(utils.createSectionTitle('Filter'))
                 .append(
                   utils.createSectionContent()
                     .append(utils.createCheckbox('mail-display-namesinfields', 'Show name instead of E-Mail address in To and Cc fields', false))
                 )
                 .append(utils.createSectionDelimiter())
+
             )
 
             .append(

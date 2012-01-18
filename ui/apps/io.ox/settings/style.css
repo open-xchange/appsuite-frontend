@@ -45,6 +45,11 @@
     height: 1px;
 }
 
+
+.settings-detail-pane .expertmode {
+    
+}
+
 .settings-detail-pane .section {
     max-width: 800px;
 }
@@ -186,10 +191,11 @@
   color: #444;
 }
 
-.settings-detail-pane input[type="text"] {
+.settings-detail-pane input[type="text"],
+.settings-detail-pane input[type="password"] {
   font-size: 12px;
   line-height: 18px;
-  height: 29px;
+  height: 22px;
   border: 1px solid #DDD;
   background-color: white;
   color: black;
@@ -203,3 +209,103 @@
   box-sizing: border-box;
   border-image: initial;
 }
+
+
+.settings-detail-pane .listbox {
+  overflow: auto;
+  position: relative;
+  border: 1px solid #D9D9D9;
+  border-radius: 2px;
+  margin-bottom: 10px;
+}
+
+.settings-detail-pane .listbox > * {
+  height: 40px;
+  -webkit-transition: .15s background-color;
+  -webkit-user-select: none;
+  box-sizing: border-box;
+  border-radius: 0;
+  display: -webkit-box;
+  border: none;
+  margin: 0;
+
+  background-color: rgba(255, 255, 255, 0);
+  border: 1px solid rgba(255, 255, 255, 0);
+  border-radius: 2px;
+  cursor: default;
+  line-height: 20px;
+  margin: -1px 0;
+  overflow: hidden;
+  padding: 0px 3px;
+  position: relative; /* to allow overlap */
+  text-overflow: ellipsis;
+  white-space: pre;
+
+}
+.settings-detail-pane .listbox:focus {
+  border-color: hsl(214, 91%, 65%);
+  z-index: 2;
+}
+.settings-detail-pane .listbox > [selected] {
+  border-color: hsl(0, 0%, 85%);
+  background-color: hsl(0,0%,90%);
+  z-index: 2;
+  background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0.8),
+                                            rgba(255, 255, 255, 0));
+}
+.settings-detail-pane .listbox:not([disabled]) > :hover {
+  border-color: hsl(214, 91%, 85%);
+  z-index: 1;
+  background-color: hsl(214, 91%, 97%);
+}
+.settings-detail-pane .listbox:focus > [selected] {
+  background-color: hsl(214,91%,89%);
+  border-color: hsl(214, 91%, 65%);
+}
+.settings-detail-pane .listbox > .spacer {
+  border: 0;
+  box-sizing: border-box;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  margin: 0;
+}
+
+.settings-detail-pane .listbox .deletable-item {
+  -webkit-box-align: center;
+}
+.settings-detail-pane .listbox .deletable-item > :first-child {
+  -webkit-box-align: center;
+  -webkit-box-flex: 1;
+  -webkit-padding-end: 5px;
+  display: -webkit-box;
+}
+
+.settings-detail-pane .listbox .close-button {
+  -webkit-transition: .15s opacity;
+  background-color: transparent;
+  background-image: url(images/close_button.png);
+  border: none;
+  display: block;
+  height: 16px;
+  opacity: 1;
+  width: 16px;
+}
+
+.settings-detail-pane .listbox > *:not(:hover):not([lead]) .close-button,
+.settings-detail-pane .listbox > *:not(:hover):not([selected]) .close-button,
+.listbox:not([hasElementFocus]) > *:not(:hover) .close-button,
+.settings-detail-pane .listbox[disabled] .close-button,
+.settings-detail-pane .listbox .close-button[disabled] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.settings-detail-pane .listbox .close-button:hover {
+  background-image: url(images/close_button_hover.png);
+}
+
+.settings-detail-pane .listbox .close-button:active {
+  background-image: url(images/close_button_active.png);
+}
+

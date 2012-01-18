@@ -14,7 +14,8 @@ define('io.ox/settings/main',
      ['io.ox/core/tk/vgrid',
       'io.ox/core/api/apps',
       'io.ox/core/extensions',
-      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext) {
+      'io.ox/settings/utils',
+      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, utils) {
      
     'use strict';
 
@@ -56,15 +57,42 @@ define('io.ox/settings/main',
         GRID_WIDTH = 330,
         // nodes
         left,
-        right;
+        right,
+        expertmode = false;
 
-
+    function updateExpertMode() {
+        var nodes = $('.expertmode');
+        if (expertmode) {
+          nodes.show();
+        } else {
+          nodes.hide();
+        }
+    }
+    
     
     app.setLauncher(function () {
         app.setWindow(win = ox.ui.createWindow({
             title: 'Settings',
-            toolbar: true
+            toolbar: true,
+            titleWidth: (GRID_WIDTH + 27) + "px",
+            name: 'io.ox/settings'
         }));
+
+        ext.point('io.ox/settings/links/toolbar').extend({
+            id: 'io.ox/settings/expertcb',
+            draw: function (context) {
+              var cb  = utils.createCheckbox('settings-expertcb', 'Enable Expert Mode', expertmode);
+              $(cb).find('[data-item-id="settings-expertcb"]').on('click', function () {
+                  if ($(this).attr('checked')) {
+                    expertmode = true;
+                  } else {
+                    expertmode = false;
+                  }
+                  updateExpertMode();
+              });
+              this.append(cb);
+            }
+        });
     
 
         win.addClass('io-ox-settings-main');
@@ -101,6 +129,7 @@ define('io.ox/settings/main',
             right.empty().busy();
             require([ settingsID ], function (m) {
                 ext.point(settingsID + '/detail').invoke('draw', right, obj);
+                updateExpertMode();
                 right.idle();
             });
         };
