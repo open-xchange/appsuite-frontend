@@ -160,7 +160,7 @@ define('io.ox/mail/settings',
                           utils.createText('Line wrap when sending text mails after:')
                         )
                         .append(
-                          utils.createTextField('mail-compose-linewarpafter', 80)
+                          utils.createTextField('mail-compose-linewarpafter', 80).css({ width: '30px', display: 'inline-block'})
                         )
                         .append(
                           utils.createText('characters')
@@ -200,7 +200,66 @@ define('io.ox/mail/settings',
                 .append(utils.createSectionDelimiter())
             )
 
+            .append(
+              utils.createSection()
+                .append(utils.createSectionTitle('Display'))
+                .append(
+                  utils.createSectionContent()
+                    .append(utils.createCheckbox('mail-display-allowhtml', 'Allow html formatted E-Mails', false))
+                    .append(utils.createCheckbox('mail-display-blockimgs', 'Block pre-loading of externally linked images', false))
+                    .append(utils.createCheckbox('mail-display-emotionicons', 'Display emoticons as graphics in text E-Mails', true))
+                    .append(utils.createCheckbox('mail-display-colorquotes', 'Color quoted lines', false))
+                    .append(utils.createCheckbox('mail-display-namesinfields', 'Show name instead of E-Mail address in To and Cc fields', false))
+                )
+                .append(utils.createSectionDelimiter())
+            )
 
+
+            .append(
+              utils.createSection()
+                .append(utils.createSectionTitle('Signatures'))
+                .append(
+                  utils.createSectionContent()
+                    .append(utils.createCheckbox('mail-display-namesinfields', 'Show name instead of E-Mail address in To and Cc fields', false))
+                )
+                .append(utils.createSectionDelimiter())
+            )
+
+            .append(
+              utils.createSection()
+                .append(utils.createSectionTitle('Accounts'))
+                .append(
+                  utils.createSectionContent()
+                    .append(
+                      $('<div>')
+                        .addClass('settings-listbox')
+                        .append(
+                          $('<div>')
+                        )
+                    )
+                )
+                .append(utils.createSectionDelimiter())
+            )
+
+            .append(
+              utils.createSection()
+                .append(utils.createSectionTitle('Filter'))
+                .append(
+                  utils.createSectionContent()
+                    .append(utils.createCheckbox('mail-display-namesinfields', 'Show name instead of E-Mail address in To and Cc fields', false))
+                )
+                .append(utils.createSectionDelimiter())
+            )
+
+            .append(
+              utils.createSection()
+                .append(utils.createSectionTitle('Vacation Notice'))
+                .append(
+                  utils.createSectionContent()
+                    .append(utils.createCheckbox('mail-display-namesinfields', 'Show name instead of E-Mail address in To and Cc fields', false))
+                )
+                .append(utils.createSectionDelimiter())
+            )
 
             .append(
                 $("<span>")

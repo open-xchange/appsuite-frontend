@@ -20,7 +20,7 @@
       draw: function (node, app) {
             node
             .append(
-              utils.getSettingsHead(app)
+              utils.createSettingsHead(app)
             )
             .append(
                 $("<span>")
