@@ -541,6 +541,7 @@ define.async('io.ox/mail/write/main',
                                         e.preventDefault();
                                         editor.focus();
                                     }
+                                    app.getWindow().setTitle($.trim($(this).val()));
                                 }),
                                 'mail_subject'
                             )
@@ -819,8 +820,6 @@ define.async('io.ox/mail/write/main',
             });
         }());
 
-        window.heinz = app;
-
         app.setSubject = function (str) {
             subject.val(str || '');
         };
@@ -953,7 +952,7 @@ define.async('io.ox/mail/write/main',
             this.setDeliveryReceipt(data.disp_notification_to !== undefined ? data.disp_notification_to : false);
             this.setMsgRef(data.msgref);
             // apply mode
-            win.setTitle(windowTitles[composeMode = mail.mode]);
+            win.setTitle(data.subject ? data.subject : windowTitles[composeMode = mail.mode]);
             // set signature
             currentSignature = mail.signature || '';
             // set format
@@ -972,7 +971,7 @@ define.async('io.ox/mail/write/main',
             var mail = app.getMail();
             delete mail.files;
             return {
-                module: 'io.ox/mail/write/main',
+                module: 'io.ox/mail/write',
                 point: mail
             };
         };
@@ -1115,12 +1114,12 @@ define.async('io.ox/mail/write/main',
             if (editorMode === 'html') {
                 content = {
                     content_type: 'text/html',
-                    content: editor.getContent()
+                    content: editor ? editor.getContent() : ''
                 };
             } else {
                 content = {
                     content_type: 'text/plain',
-                    content: editor.getContent()
+                    content: (editor ? editor.getContent() : '')
                         .replace(/</g, '&lt;') // escape <
                         .replace(/\n/g, '<br>\n') // escape line-breaks
                 };

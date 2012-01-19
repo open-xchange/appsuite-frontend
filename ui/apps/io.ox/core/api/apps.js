@@ -67,9 +67,9 @@ define.async('io.ox/core/api/apps',
         },
 
         bless = function (obj, id) {
-            obj = _.clone(obj);
+            obj = _.clone(obj || {});
             obj.id = id;
-            obj.icon = ox.base + '/apps/io.ox/core/images/' + obj.icon;
+            obj.icon = ox.base + '/apps/io.ox/core/images/' + (obj.icon || 'default.png');
             obj.description = obj.description || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat...';
             return obj;
         },
@@ -96,8 +96,7 @@ define.async('io.ox/core/api/apps',
     api = {
 
         get: function (id) {
-            var app = appData.apps[id];
-            return app ? bless(app, id) : undefined;
+            return bless(appData.apps[id], id);
         },
 
         getCategories: getCategories,

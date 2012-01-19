@@ -57,13 +57,18 @@ define('io.ox/launchpad/main',
                     .appendTo(parent);
             // animate & launch
             parent.focus();
-            $.when(
-                require([e.data.id + "/main"]),
-                pad.fadeOut(FADE_DURATION >> 1)
-            )
-            .done(function (m) {
-                m.getApp().launch();
-            });
+            // relaunch or load?
+            if (e.data.app) {
+                e.data.app.launch();
+            } else {
+                $.when(
+                    require([e.data.id + "/main"]),
+                    pad.fadeOut(FADE_DURATION >> 1)
+                )
+                .done(function (m) {
+                    m.getApp().launch();
+                });
+            }
         },
 
         fnOpenAppStore = function (e) {
@@ -105,11 +110,11 @@ define('io.ox/launchpad/main',
                     return app.getName() !== undefined;
                 })
                 .map(function (app) {
-                    return api.get(app.getName());
-                })
-                .each(function (data) {
+                    var data = api.get(app.getName());
+                    data.title = data.title || app.getWindowTitle() || app.getName();
+                    // draw
                     running.append(
-                        drawApp(data).on('click', { id: data.id }, launchApp)
+                        drawApp(data).on('click', { id: data.id, app: app }, launchApp)
                     );
                 });
 

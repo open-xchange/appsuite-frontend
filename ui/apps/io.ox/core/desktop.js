@@ -342,6 +342,10 @@ define("io.ox/core/desktop",
                 return win;
             };
 
+            this.getWindowTitle = function () {
+                return win ? win.getTitle() : '';
+            };
+
             this.setState = function (obj) {
                 for (var id in obj) {
                     _.url.hash(id, String(obj[id]));
@@ -441,12 +445,16 @@ define("io.ox/core/desktop",
             return appCache.contains('savepoints');
         };
 
-        App.restore = function () {
-            appCache.get('savepoints').done(function(data){
-                data = data || [];
+        App.getSavePoints = function () {
+            return appCache.get('savepoints').pipe(function (list) {
+                return list || [];
+            });
+        };
 
+        App.restore = function () {
+            App.getSavePoints().done(function (data) {
                 _(data).each(function (obj) {
-                    require([obj.module], function (m) {
+                    require([obj.module + '/main'], function (m) {
                         m.getApp().launch().done(function () {
                             if (this.failRestore) {
                                 this.failRestore(obj.point);
@@ -454,7 +462,6 @@ define("io.ox/core/desktop",
                         });
                     });
                 });
-
                 appCache.remove('savepoints');
             });
         };
@@ -770,6 +777,10 @@ define("io.ox/core/desktop",
                             title
                     );
                 }
+
+                this.getTitle = function () {
+                    return self.nodes.title.find("span").eq(0).contents().text();
+                };
 
                 this.setTitle = function (t) {
                     title = t;

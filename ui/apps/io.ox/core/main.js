@@ -228,12 +228,10 @@ define("io.ox/core/main",
                 ox.ui.App.restore();
             });
 
-        
-        var restoreLauncher = function(canRestore){
+        var restoreLauncher = function (canRestore) {
             if (autoLaunch.length === 0 && !canRestore) {
                 drawDesktop();
             }
-
             if (autoLaunch.length || canRestore || location.hash === '#!') {
                 // instant fade out
                 $("#background_loader").idle().hide();
@@ -243,12 +241,17 @@ define("io.ox/core/main",
                 $("#background_loader").idle().fadeOut(DURATION, def.resolve);
             }
         };
-        
-        ox.ui.App.canRestore().done(function(check){
-            restoreLauncher(check);
-        }).fail(function(){
-            restoreLauncher(false);
-        });
+
+        ox.ui.App.canRestore()
+            .done(function () {
+                // clear auto start stuff (just conflicts)
+                autoLaunch = [];
+                autoLaunchModules = [];
+                restoreLauncher(true);
+            })
+            .fail(function () {
+                restoreLauncher(false);
+            });
     }
 
     return {
