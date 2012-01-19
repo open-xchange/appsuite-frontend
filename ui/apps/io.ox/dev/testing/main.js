@@ -59,7 +59,7 @@ define('io.ox/dev/testing/main',
         jasmine.jasmine.WaitsForBlock.TIMEOUT_INCREMENT = 100;
 
         var suites = _.url.hash('suites'),
-            url = '#app=io.ox/dev/testing/main',
+            url = '#app=io.ox/dev/testing',
             // handles click to select suite
             fnClick = function (e) {
                 e.preventDefault();
@@ -140,7 +140,7 @@ define('io.ox/dev/testing/main',
                         .html('<b>Summary:</b> Total number of tests: <b>' + green + '</b> Failed: <b>' + red + '</b>')
                         .css('color', red > 0 ? '#a00' : '#070');
                     // reset hash
-                    location.hash = '#app=io.ox/dev/testing/main';
+                    location.hash = '#app=io.ox/dev/testing';
                 },
                 reportSpecResults: function (spec) {
                     // find spec DOM node by id

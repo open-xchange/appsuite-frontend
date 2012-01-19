@@ -228,8 +228,8 @@ define("io.ox/core/main",
                 ox.ui.App.restore();
             });
 
-        
-        var restoreLauncher = function(canRestore){
+
+        var restoreLauncher = function (canRestore) {
             if (autoLaunch.length === 0 && !canRestore) {
                 drawDesktop();
             }
@@ -243,10 +243,10 @@ define("io.ox/core/main",
                 $("#background_loader").idle().fadeOut(DURATION, def.resolve);
             }
         };
-        
-        ox.ui.App.canRestore().done(function(check){
+
+        ox.ui.App.canRestore().done(function (check) {
             restoreLauncher(check);
-        }).fail(function(){
+        }).fail(function () {
             restoreLauncher(false);
         });
     }

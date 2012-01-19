@@ -207,8 +207,8 @@ define('io.ox/contacts/api',
             }
         }
 
-        return autocompleteCache.contains(query).pipe(function(check){
-            if(!check){
+        return autocompleteCache.contains(query).pipe(function (check) {
+            if (!check) {
                 return api.search(query, true)
                     .pipe(function (data) {
                         var tmp = [];
@@ -237,8 +237,8 @@ define('io.ox/contacts/api',
         // lower case!
         address = String(address).toLowerCase();
 
-        return contactPictures.contains(address).pipe(function(check){
-            if( !check ){
+        return contactPictures.contains(address).pipe(function (check) {
+            if (!check) {
                 return http.PUT({
                     module: 'contacts',
                     params: {

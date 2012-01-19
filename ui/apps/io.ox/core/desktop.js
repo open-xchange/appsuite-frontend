@@ -172,15 +172,15 @@ define("io.ox/core/desktop",
 
             function saveRestorePoint() {
                 if (self.failSave) {
-                    appCache.get('savepoints').done(function(list){
+                    appCache.get('savepoints').done(function (list) {
                         list = list || [];
-                        
+
                         var data = self.failSave(),
                             ids = _(list).pluck('id'),
                             pos = _(ids).indexOf(savePointUniqueID);
-                        
+
                         data.id = savePointUniqueID;
-                        
+
                         if (pos > -1) {
                             // replace
                             list.splice(pos, 1, data);
@@ -194,7 +194,7 @@ define("io.ox/core/desktop",
             }
 
             function removeRestorePoint() {
-                appCache.get('savepoints').done(function(list){
+                appCache.get('savepoints').done(function (list) {
                     list = list || [];
                     var ids = _(list).pluck('id'),
                         pos = _(ids).indexOf(savePointUniqueID);
@@ -430,9 +430,9 @@ define("io.ox/core/desktop",
         };
 
         App.restore = function () {
-            appCache.get('savepoints').done(function(data){
+            appCache.get('savepoints').done(function (data) {
                 data = data || [];
-                
+
                 _(data).each(function (obj) {
                     require([obj.module], function (m) {
                         m.getApp().launch().done(function () {
@@ -442,7 +442,7 @@ define("io.ox/core/desktop",
                         });
                     });
                 });
-                
+
                 appCache.remove('savepoints');
             });
         };
