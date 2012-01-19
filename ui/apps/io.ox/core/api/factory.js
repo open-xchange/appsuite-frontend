@@ -62,32 +62,44 @@ define("io.ox/core/api/factory",
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 // cache miss?
-                if (!useCache || !caches.all.contains(opt.folder)) {
-                    // call server and return deferred object
-                    // TODO: special sort/order key stuff
+
+                var getter = function () {
                     return http.GET({
-                            module: o.module,
-                            params: opt
-                        })
-                        .done(function (data, timestamp) {
-                            // remove deprecated entries
-                            // TODO: consider folder_id
-                            var diff = _(caches.get.keys())
-                                .difference(
-                                    _(data).map(function (obj) {
-                                        return caches.get.keyGenerator(obj);
-                                    })
-                                );
+                        module: o.module,
+                        params: opt
+                    })
+                    .done(function (data, timestamp) {
+                        // remove deprecated entries
+                        // TODO: consider folder_id
+                        caches.get.keys().done(function (keys) {
+                            var diff = _(keys)
+                            .difference(
+                                _(data).map(function (obj) {
+                                    return caches.get.keyGenerator(obj);
+                                })
+                            );
+
                             caches.list.remove(diff);
                             caches.get.remove(diff);
-                            // clear cache
-                            caches.all.clear(); //TODO: remove affected folder only
-                            // add to cache
-                            caches.all.add(opt.folder, data, timestamp);
                         });
+
+                        // clear cache
+                        caches.all.clear(); //TODO: remove affected folder only
+                        // add to cache
+                        caches.all.add(opt.folder, data, timestamp);
+                    });
+                };
+
+                if (useCache) {
+                    return caches.all.contains(opt.folder).pipe(function (check) {
+                        if (check) {
+                            return caches.all.get(opt.folder);
+                        } else {
+                            return getter();
+                        }
+                    });
                 } else {
-                    // cache hit
-                    return $.Deferred().resolve(caches.all.get(opt.folder));
+                    return getter();
                 }
             },
 
@@ -97,24 +109,35 @@ define("io.ox/core/api/factory",
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 // cache miss?
+
+                var getter = function () {
+                    return http.fixList(ids, http.PUT({
+                        module: o.module,
+                        params: o.requests.list,
+                        data: http.simplify(ids)
+                    }))
+                    .done(function (data) {
+                        // add to cache
+                        caches.list.add(data);
+                        // merge with "get" cache
+                        caches.get.merge(data);
+                    });
+                };
+
                 if (ids.length === 0) {
                     return $.Deferred().resolve([]);
-                } else if (!useCache || !caches.list.contains(ids)) {
-                    // call server and return deferred object
-                    return http.fixList(ids, http.PUT({
-                            module: o.module,
-                            params: o.requests.list,
-                            data: http.simplify(ids)
-                        }))
-                        .done(function (data) {
-                            // add to cache
-                            caches.list.add(data);
-                            // merge with "get" cache
-                            caches.get.merge(data);
-                        });
                 } else {
-                    // cache hit
-                    return $.Deferred().resolve(caches.list.get(ids));
+                    if (useCache) {
+                        return caches.list.contains(ids).pipe(function (check) {
+                            if (check) {
+                                return caches.list.get(ids);
+                            } else {
+                                return getter();
+                            }
+                        });
+                    } else {
+                        return getter();
+                    }
                 }
             },
 
@@ -124,27 +147,38 @@ define("io.ox/core/api/factory",
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 // cache miss?
-                if (!useCache || !caches.get.contains(opt)) {
-                    // call server and return deferred object
+
+                var getter = function () {
                     return http.GET({
-                            module: o.module,
-                            params: fix(opt)
-                        })
-                        .done(function (data, timestamp) {
-                            // add to cache
-                            caches.get.add(data, timestamp);
-                            // update list cache
-                            if (caches.list.merge(data)) {
-                                // trigger local event
+                        module: o.module,
+                        params: fix(opt)
+                    })
+                    .done(function (data, timestamp) {
+                        // add to cache
+                        caches.get.add(data, timestamp);
+                        // update list cache
+                        caches.list.merge(data).done(function (ok) {
+                            if (ok) {
                                 api.trigger("refresh.list", data);
                             }
-                        })
-                        .fail(function (e) {
-                            _.call(o.fail.get, e, opt, o);
                         });
+                    })
+                    .fail(function (e) {
+                        _.call(o.fail.get, e, opt, o);
+                    });
+                };
+
+
+                if (useCache) {
+                    return caches.get.contains(opt).pipe(function (check) {
+                        if (check) {
+                            return caches.get.get(opt);
+                        } else {
+                            return getter();
+                        }
+                    });
                 } else {
-                    // cache hit
-                    return $.Deferred().resolve(caches.get.get(opt));
+                    return getter();
                 }
             },
 
@@ -163,15 +197,17 @@ define("io.ox/core/api/factory",
                     });
                     // loop over each folder and look for items to remove
                     _(folders).each(function (value, folder_id) {
-                        var items = caches.all.get(folder_id);
-                        if (items) {
-                            caches.all.add(
-                                folder_id,
-                                _(items).select(function (o) {
-                                    return hash[getKey(o)] !== true;
-                                })
-                            );
-                        }
+
+                        caches.all.get(folder_id).done(function (items) {
+                            if (items) {
+                                caches.all.add(
+                                    folder_id,
+                                    _(items).select(function (o) {
+                                        return hash[getKey(o)] !== true;
+                                    })
+                                );
+                            }
+                        });
                     });
                     // clear
                     hash = folders = null;

@@ -211,8 +211,10 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
                     select(tmp[i]);
                 }
             }
-            // event
-            self.trigger('change', self.get());
+            // fire event?
+            if (!_.isEqual(tmp, self.get())) {
+                self.trigger('change', self.get());
+            }
             return this;
         };
 

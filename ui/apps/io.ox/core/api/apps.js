@@ -67,9 +67,9 @@ define.async('io.ox/core/api/apps',
         },
 
         bless = function (obj, id) {
-            obj = _.clone(obj);
+            obj = _.clone(obj || {});
             obj.id = id;
-            obj.icon = ox.base + '/apps/io.ox/core/images/' + obj.icon;
+            obj.icon = ox.base + '/apps/io.ox/core/images/' + (obj.icon || 'default.png');
             obj.description = obj.description || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat...';
             return obj;
         },
@@ -94,6 +94,10 @@ define.async('io.ox/core/api/apps',
 
     // public module interface
     api = {
+
+        get: function (id) {
+            return bless(appData.apps[id], id);
+        },
 
         getCategories: getCategories,
 
@@ -134,23 +138,23 @@ define.async('io.ox/core/api/apps',
 
     function fetch() {
         return require([ox.base + '/src/userconfig.js'])
-            .done(function (data) {
+            .pipe(function (data) {
                 // add to cache & local var
-                appCache.add('default', appData = data);
+                return appCache.add('default', appData = data);
             });
     }
 
-    if (!appCache.contains('default')) {
-        // fetch data from server
-        fetch().done(function () {
-            wait.resolve(api);
-        });
-    } else {
-        // use locally stored data but also fetch new stuff
-        appData = appCache.get('default');
-        fetch();
-        wait.resolve(api);
-    }
-
-    return wait;
+    return appCache.contains('default').pipe(function (check) {
+        if (check) {
+            return appCache.get('default').pipe(function (data) {
+                appData = data;
+                fetch();
+                return api;
+            });
+        } else {
+            return fetch().pipe(function () {
+                return api;
+            });
+        }
+    });
 });

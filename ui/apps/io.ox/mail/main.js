@@ -34,7 +34,7 @@ define("io.ox/mail/main",
     };
 
     // application object
-    var app = ox.ui.createApp(),
+    var app = ox.ui.createApp({ name: 'io.ox/mail' }),
         // app window
         win,
         // grid

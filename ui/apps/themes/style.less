@@ -60,7 +60,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 
 .touch #io-ox-topbar { height: 40px; }
 .touch #io-ox-topbar .launcher { font-size: 14px; line-height: 35px; padding: 2px 15px 5px 15px; }
-.touch #io-ox-windowmanager { top: 42px; }
+.touch #io-ox-screens { top: 42px; }
 .touch #io-ox-windowmanager .window-container-center { width: 100% !important; }
 .touch #io-ox-top-logo-small { margin-top: 6px; }
 
@@ -168,8 +168,12 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 
 /* window manager */
 
-#io-ox-windowmanager {
+#io-ox-screens {
     top: 31px;
+    overflow: hidden;
+}
+
+#io-ox-windowmanager {
     overflow: hidden;
 }
 
@@ -178,12 +182,10 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     width: 100%;
 }
 
-/*
-.csstransforms3d.mouse #io-ox-windowmanager-pane {
-    -webkit-transition-duration: 0.35s;
-    -webkit-transition-timing-function: linear;
-}
-*/
+/* .csstransforms3d.touch #io-ox-windowmanager-pane { */
+/*     -webkit-transition-duration: 0.35s; */
+/*     -webkit-transition-timing-function: linear; */
+/* } */
 
 .window-container {
     position: absolute;

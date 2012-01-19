@@ -503,8 +503,13 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                                 container.css({ visibility: '' }).parent().idle();
                             })
                             .done(function () {
-                                // select first or previous selection
-                                self.selection.selectSmart();
+                                // use url?
+                                if (_.url.hash('id') !== undefined) {
+                                    self.selection.set(_.url.hash('id').split(/,/));
+                                } else {
+                                    // select first or previous selection
+                                    self.selection.selectSmart();
+                                }
                             })
                             .done(def.resolve)
                             .fail(def.reject);
@@ -553,6 +558,14 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 }
             }
         }, 100);
+
+        // routing
+        this.selection.bind('change', function (list) {
+            var id = _(list).map(function (obj) {
+                    return self.selection.serialize(obj);
+                }).join(',');
+            _.url.hash('id', id !== '' ? id : null);
+        });
 
         // public methods
 
