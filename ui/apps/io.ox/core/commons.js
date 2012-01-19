@@ -54,6 +54,7 @@ define('io.ox/core/commons', [], function () {
             // show
             win.bind('show', function () {
                 grid.selection.keyboard(true);
+                grid.selection.retrigger();
             });
             // hide
             win.bind('hide', function () {
@@ -119,6 +120,13 @@ define('io.ox/core/commons', [], function () {
                 .updateTitle(app.getWindow())
                 .updateGrid(grid)
                 .setType(type);
+            // hash support
+            app.getWindow().bind('show', function () {
+                grid.selection.retrigger();
+                _.url.hash('folder', app.folder.get());
+            });
+            defaultFolderId = _.url.hash('folder') || defaultFolderId;
+            // explicit vs. default
             if (defaultFolderId !== undefined) {
                 return app.folder.set(defaultFolderId);
             } else {

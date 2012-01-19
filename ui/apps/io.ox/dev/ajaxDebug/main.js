@@ -20,7 +20,7 @@ define("io.ox/dev/ajaxDebug/main",
     "use strict";
 
     // application object
-    var app = ox.ui.createApp(),
+    var app = ox.ui.createApp({ name: 'io.ox/dev/ajaxDebug' }),
         // app window
         win,
         // vgrid

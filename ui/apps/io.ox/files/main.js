@@ -27,7 +27,7 @@ define("io.ox/files/main",
     "use strict";
 
     // application object
-    var app = ox.ui.createApp(),
+    var app = ox.ui.createApp({ name: 'io.ox/files' }),
         // app window
         win,
         // vgrid

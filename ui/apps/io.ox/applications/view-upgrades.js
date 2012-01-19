@@ -13,13 +13,13 @@
 
 define("io.ox/applications/view-upgrades",
     ["io.ox/core/api/apps", "io.ox/applications/view-common"], function (api, view) {
-    
+
     'use strict';
-    
+
     return {
-        
-        draw: function () {
-            
+
+        draw: function (context) {
+
             var node = $("<div>")
                 .append(
                     $("<div>").addClass("clear-title")
@@ -30,7 +30,7 @@ define("io.ox/applications/view-upgrades",
                         'Under construction ... Premium/Upsell etc.'
                     )
                 );
-            
+
             return node;
         }
     };

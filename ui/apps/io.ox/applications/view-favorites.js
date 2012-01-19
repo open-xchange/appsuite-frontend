@@ -13,27 +13,27 @@
 
 define("io.ox/applications/view-favorites",
     ["io.ox/core/api/apps", "io.ox/applications/view-common"], function (api, view) {
-    
+
     'use strict';
-    
+
     return {
-        
-        draw: function () {
-            
+
+        draw: function (context) {
+
             var node = $("<div>")
                 .append(
                     $("<div>").addClass("clear-title")
                     .text("Favorite applications")
                 );
-                
+
             var apps = $("<div>").addClass("apps");
-            
+
             _(api.getFavorites()).each(function (data) {
-                apps.append(view.drawApp(data));
+                apps.append(view.drawApp(data, context));
             });
-            
+
             node.children().eq(0).after(apps);
-            
+
             return node;
         }
     };

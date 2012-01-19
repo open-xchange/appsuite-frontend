@@ -249,6 +249,8 @@ define("io.ox/core/desktop",
                                         grid.clear();
                                         grid.prop('folder', folder);
                                         grid.refresh();
+                                        // update hash
+                                        _.url.hash('folder', folder);
                                     }
                                     def.resolve(data);
                                 })
@@ -337,9 +339,28 @@ define("io.ox/core/desktop",
                 return win;
             };
 
+            this.setState = function (obj) {
+                for (var id in obj) {
+                    _.url.hash(id, String(obj[id]));
+                }
+            };
+
+            this.getState = function () {
+                return _.url.hash();
+            };
+
             this.launch = function () {
 
                 var deferred;
+
+                // update hash
+                if (opt.name !== _.url.hash('app')) {
+                    _.url.hash('folder', null);
+                    _.url.hash('id', null);
+                }
+                if (opt.name) {
+                    _.url.hash('app', opt.name);
+                }
 
                 if (!running) {
                     // mark as running
@@ -365,6 +386,10 @@ define("io.ox/core/desktop",
             };
 
             this.quit = function () {
+                // update hash
+                _.url.hash('app', null);
+                _.url.hash('folder', null);
+                _.url.hash('id', null);
                 // call quit function
                 var def = quitFn() || $.Deferred().resolve();
                 return def.done(function () {
@@ -428,6 +453,49 @@ define("io.ox/core/desktop",
 
     }());
 
+    ox.ui.screens = (function () {
+
+        var current = null,
+
+            that = {
+
+                add: function (id) {
+                    return $('<div>', { id: 'io-ox-' + id }).addClass('abs').hide()
+                        .appendTo('#io-ox-screens');
+                },
+
+                get: function (id) {
+                    return $('#io-ox-screens').find('#io-ox-' + id);
+                },
+
+                current: function () {
+                    return current;
+                },
+
+                hide: function (id) {
+                    this.get(id).hide();
+                    this.trigger('hide-' + id);
+                },
+
+                show: function (id) {
+                    $('#io-ox-screens').children().each(function (i, node) {
+                        var screenId = $(this).attr('id').substr(6);
+                        if (screenId !== id) {
+                            that.hide(screenId);
+                        }
+                    });
+                    this.get(id).show();
+                    current = id;
+                    this.trigger('show-' + id);
+                }
+            };
+
+        event.Dispatcher.extend(that);
+
+        return that;
+
+    }());
+
     ox.ui.windowManager = (function () {
 
         var that = event.Dispatcher.extend({}),
@@ -440,7 +508,22 @@ define("io.ox/core/desktop",
                 }, 0);
             };
 
+        ox.ui.screens.bind('hide-windowmanager', function () {
+            if (currentWindow) {
+                currentWindow.hide();
+            }
+        });
+
+        that.hide = function () {
+            ox.ui.screens.hide('windowmanager');
+        };
+
+        that.show = function () {
+            ox.ui.screens.show('windowmanager');
+        };
+
         that.bind("window.open", function (win) {
+            this.show();
             if (_(windows).indexOf(win) === -1) {
                 windows.push(win);
             }
