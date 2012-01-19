@@ -30,26 +30,35 @@ define('io.ox/core/api/folder',
             // get cache
             var cache = opt.storage || folderCache;
             // cache miss?
-            if (opt.cache === false || !cache.contains(id)) {
-                // cache miss!
+            
+            var getter = function() {
                 return http.GET({
-                        module: 'folders',
-                        params: {
-                            action: 'get',
-                            id: id,
-                            tree: '1'
-                        }
-                    })
-                    .done(function (data, timestamp) {
-                        // add to cache
-                        cache.add(data.id, data);
-                    })
-                    .fail(function (error) {
-                        console.error('folder.get', id, error);
-                    });
+                    module: 'folders',
+                    params: {
+                        action: 'get',
+                        id: id,
+                        tree: '1'
+                    }
+                })
+                .done(function (data, timestamp) {
+                    // add to cache
+                    cache.add(data.id, data);
+                })
+                .fail(function (error) {
+                    console.error('folder.get', id, error);
+                });
+            };
+            
+            if( opt.cache === false ) {
+                return getter();
             } else {
-                // cache hit
-                return cache.get(id);
+                return cache.contains(id).pipe(function(check){
+                    if( check ) {
+                        return cache.get(id);
+                    } else {
+                        return getter();
+                    }
+                });
             }
         };
 
@@ -106,32 +115,41 @@ define('io.ox/core/api/folder',
                 // get cache
                 cache = opt.storage || subFolderCache;
             // cache miss?
-            if (opt.cache === false || !cache.contains(opt.folder)) {
-                // cache miss!
+            
+            var getter = function() {
                 return http.GET({
-                        module: 'folders',
-                        params: {
-                            action: 'list',
-                            parent: opt.folder,
-                            tree: '1',
-                            all: opt.all ? '1' : '0'
-                        },
-                        appendColumns: true
-                    })
-                    .done(function (data, timestamp) {
-                        // add to cache
-                        cache.add(opt.folder, data);
-                        // also add to folder cache
-                        _(data).each(function (folder) {
-                            folderCache.add(folder.id, folder);
-                        });
-                    })
-                    .fail(function (error) {
-                        console.error('folder.getSubFolders', opt.folder, error);
+                    module: 'folders',
+                    params: {
+                        action: 'list',
+                        parent: opt.folder,
+                        tree: '1',
+                        all: opt.all ? '1' : '0'
+                    },
+                    appendColumns: true
+                })
+                .done(function (data, timestamp) {
+                    // add to cache
+                    cache.add(opt.folder, data);
+                    // also add to folder cache
+                    _(data).each(function (folder) {
+                        folderCache.add(folder.id, folder);
                     });
+                })
+                .fail(function (error) {
+                    console.error('folder.getSubFolders', opt.folder, error);
+                });
+            };
+            
+            if( opt.cache === false ) {
+                return getter();
             } else {
-                // cache hit
-                return $.Deferred().resolve(cache.get(opt.folder));
+                return cache.contains(opt.folder).pipe(function(check){
+                    if( check ) {
+                        return cache.get(opt.folder);
+                    } else {
+                        return getter();
+                    }
+                });
             }
         },
 

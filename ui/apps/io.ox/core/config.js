@@ -161,20 +161,7 @@ define('io.ox/core/config',
             });
             
             
-            
-            
             return def;
-            
-            /**
-            if (configCache.contains('default')) {
-                config = configCache.get('default');
-                load();
-                return $.Deferred().resolve(config);
-            } else {
-                // load configuration
-                return load();
-            }
-            **/
         }
     };
 });
