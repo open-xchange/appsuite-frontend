@@ -119,21 +119,10 @@ define("io.ox/core/main",
         ext.point("io.ox/core/desktop").extend({
             id: "upsell",
             draw: function () {
-                // run away
-                function run() {
-                    var self = $(this).off('mouseover mousemove', run);
-                    self.stop(false, true)
-                        .animate({
-                            right: ((self.parent().width() - 240) * Math.random() >> 0) + "px",
-                            bottom: ((self.parent().height() - 140) * Math.random() >> 0) + "px"
-                        }, 100)
-                        .on('mouseover mousemove', run);
-                }
                 // does nothing - just to demo an exemplary upsell path
                 this
                 .append(
                     $('<div>')
-                    .on('mouseover mousemove', run)
                     .css({
                         position: "absolute",
                         width: "270px",
@@ -202,16 +191,16 @@ define("io.ox/core/main",
             }
         });
 
-        var def = $.Deferred().done(function () {
-                // add some senseless characters to avoid unwanted scrolling
-                if (location.hash === '') {
-                    location.hash = '#!';
-                }
-            }),
-            autoLaunch = _.url.hash("launch") ? _.url.hash("launch").split(/,/) : [],
+        // add some senseless characters to avoid unwanted scrolling
+        if (location.hash === '') {
+            location.hash = '#' + (_.getCookie('hash') || '!');
+        }
+
+        var def = $.Deferred(),
+            autoLaunch = _.url.hash("app") ? _.url.hash("app").split(/,/) : [],
             autoLaunchModules = _(autoLaunch)
                 .map(function (m) {
-                    return m.split(/:/)[0];
+                    return m.split(/:/)[0] + '/main';
                 });
 
         $.when(
@@ -224,7 +213,7 @@ define("io.ox/core/main",
                 _(autoLaunch).each(function (id) {
                     // split app/call
                     var pair = id.split(/:/),
-                        launch = require(pair[0]).getApp().launch(),
+                        launch = require(pair[0] + '/main').getApp().launch(),
                         call = pair[1];
                     // explicit call?
                     if (call) {

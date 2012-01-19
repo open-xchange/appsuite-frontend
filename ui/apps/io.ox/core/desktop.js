@@ -242,6 +242,8 @@ define("io.ox/core/desktop",
                                         grid.clear();
                                         grid.prop('folder', folder);
                                         grid.refresh();
+                                        // update hash
+                                        _.url.hash('folder', folder);
                                     }
                                     def.resolve(data);
                                 })
@@ -330,9 +332,28 @@ define("io.ox/core/desktop",
                 return win;
             };
 
+            this.setState = function (obj) {
+                for (var id in obj) {
+                    _.url.hash(id, String(obj[id]));
+                }
+            };
+
+            this.getState = function () {
+                return _.url.hash();
+            };
+
             this.launch = function () {
 
                 var deferred;
+
+                // update hash
+                if (opt.name !== _.url.hash('app')) {
+                    _.url.hash('folder', null);
+                    _.url.hash('id', null);
+                }
+                if (opt.name) {
+                    _.url.hash('app', opt.name);
+                }
 
                 if (!running) {
                     // mark as running
@@ -358,6 +379,10 @@ define("io.ox/core/desktop",
             };
 
             this.quit = function () {
+                // update hash
+                _.url.hash('app', null);
+                _.url.hash('folder', null);
+                _.url.hash('id', null);
                 // call quit function
                 var def = quitFn() || $.Deferred().resolve();
                 return def.done(function () {

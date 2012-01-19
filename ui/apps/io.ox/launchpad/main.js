@@ -99,12 +99,6 @@ define('io.ox/launchpad/main',
                 .text('Manage applications')
                 .on('click', fnOpenAppStore)
             );
-            hApps.prepend(
-                $('<a>', { href: 'http://apps.1und1.de/', target: '_blank', tabindex: '1' })
-                .addClass('button default-action')
-                .text('App store')
-            );
-
 
             _(api.getInstalled()).each(function (data) {
                 installed.append(

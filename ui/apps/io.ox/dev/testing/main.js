@@ -19,6 +19,7 @@ define('io.ox/dev/testing/main',
     'use strict';
 
     var app = ox.ui.createApp({
+            name: 'io.ox/dev/testing',
             title: 'Unit Tests'
         }),
         win,
@@ -58,7 +59,7 @@ define('io.ox/dev/testing/main',
         jasmine.jasmine.WaitsForBlock.TIMEOUT_INCREMENT = 100;
 
         var suites = _.url.hash('suites'),
-            url = '#launch=io.ox/dev/testing/main',
+            url = '#app=io.ox/dev/testing/main',
             // handles click to select suite
             fnClick = function (e) {
                 e.preventDefault();
@@ -139,7 +140,7 @@ define('io.ox/dev/testing/main',
                         .html('<b>Summary:</b> Total number of tests: <b>' + green + '</b> Failed: <b>' + red + '</b>')
                         .css('color', red > 0 ? '#a00' : '#070');
                     // reset hash
-                    location.hash = '#launch=io.ox/dev/testing/main';
+                    location.hash = '#app=io.ox/dev/testing/main';
                 },
                 reportSpecResults: function (spec) {
                     // find spec DOM node by id

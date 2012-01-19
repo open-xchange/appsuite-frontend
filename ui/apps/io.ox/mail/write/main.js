@@ -72,6 +72,7 @@ define.async('io.ox/mail/write/main',
             composeMode;
 
         app = ox.ui.createApp({
+            name: 'io.ox/mail/write',
             title: 'Compose'
         });
 

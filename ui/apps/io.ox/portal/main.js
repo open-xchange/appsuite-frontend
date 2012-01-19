@@ -30,7 +30,7 @@
     define('io.ox/portal/main', deps, function (ext, config, userAPI, i18n) {
 
         // application object
-        var app = ox.ui.createApp(),
+        var app = ox.ui.createApp({ name: 'io.ox/portal' }),
             // app window
             win,
             // update window title

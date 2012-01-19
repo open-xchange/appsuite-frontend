@@ -16,7 +16,7 @@ define('3rd.party/addr/main', [], function () {
     'use strict';
 
     // application object
-    var app = ox.ui.createApp(),
+    var app = ox.ui.createApp({ name: '3rd.party/addr' }),
         // app window
         win;
 
