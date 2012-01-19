@@ -304,8 +304,8 @@ define.async('io.ox/mail/write/main',
                     })
                     .attr('data-type', id) // not name=id!
                     .addClass('discreet')
-                    .autocomplete({
-                        source: function (query) {
+                    .autocomplete(
+                    {   source: function (query) {
                             return contactsAPI.autocomplete(query);
                         },
                         stringify: function (data) {

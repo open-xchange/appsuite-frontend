@@ -175,7 +175,7 @@ define("io.ox/core/desktop",
 
             function saveRestorePoint() {
                 if (self.failSave) {
-                    appCache.get('savepoints').done(function(list){
+                    appCache.get('savepoints').done(function (list) {
                         list = list || [];
 
                         var data = self.failSave(),
@@ -197,7 +197,7 @@ define("io.ox/core/desktop",
             }
 
             function removeRestorePoint() {
-                appCache.get('savepoints').done(function(list){
+                appCache.get('savepoints').done(function (list) {
                     list = list || [];
                     var ids = _(list).pluck('id'),
                         pos = _(ids).indexOf(savePointUniqueID);

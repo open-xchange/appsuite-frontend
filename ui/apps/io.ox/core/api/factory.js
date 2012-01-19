@@ -62,8 +62,8 @@ define("io.ox/core/api/factory",
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 // cache miss?
-                
-                var getter = function(){
+
+                var getter = function () {
                     return http.GET({
                         module: o.module,
                         params: opt
@@ -71,28 +71,28 @@ define("io.ox/core/api/factory",
                     .done(function (data, timestamp) {
                         // remove deprecated entries
                         // TODO: consider folder_id
-                        caches.get.keys().done(function(keys){
+                        caches.get.keys().done(function (keys) {
                             var diff = _(keys)
                             .difference(
                                 _(data).map(function (obj) {
                                     return caches.get.keyGenerator(obj);
                                 })
                             );
-                            
+
                             caches.list.remove(diff);
                             caches.get.remove(diff);
                         });
-                        
+
                         // clear cache
                         caches.all.clear(); //TODO: remove affected folder only
                         // add to cache
                         caches.all.add(opt.folder, data, timestamp);
                     });
                 };
-                
-                if( useCache ){
-                    return caches.all.contains(opt.folder).pipe(function(check){
-                        if( check ){
+
+                if (useCache) {
+                    return caches.all.contains(opt.folder).pipe(function (check) {
+                        if (check) {
                             return caches.all.get(opt.folder);
                         } else {
                             return getter();
@@ -109,8 +109,8 @@ define("io.ox/core/api/factory",
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 // cache miss?
-                
-                var getter = function(){
+
+                var getter = function () {
                     return http.fixList(ids, http.PUT({
                         module: o.module,
                         params: o.requests.list,
@@ -123,13 +123,13 @@ define("io.ox/core/api/factory",
                         caches.get.merge(data);
                     });
                 };
-                
+
                 if (ids.length === 0) {
                     return $.Deferred().resolve([]);
                 } else {
-                    if( useCache ){
-                        return caches.list.contains(ids).pipe(function(check){
-                            if( check ){
+                    if (useCache) {
+                        return caches.list.contains(ids).pipe(function (check) {
+                            if (check) {
                                 return caches.list.get(ids);
                             } else {
                                 return getter();
@@ -147,8 +147,8 @@ define("io.ox/core/api/factory",
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 // cache miss?
-                
-                var getter = function(){
+
+                var getter = function () {
                     return http.GET({
                         module: o.module,
                         params: fix(opt)
@@ -157,8 +157,8 @@ define("io.ox/core/api/factory",
                         // add to cache
                         caches.get.add(data, timestamp);
                         // update list cache
-                        caches.list.merge(data).done(function(ok){
-                            if(ok) {
+                        caches.list.merge(data).done(function (ok) {
+                            if (ok) {
                                 api.trigger("refresh.list", data);
                             }
                         });
@@ -167,11 +167,11 @@ define("io.ox/core/api/factory",
                         _.call(o.fail.get, e, opt, o);
                     });
                 };
-                
-                
-                if( useCache ){
-                    return caches.get.contains(opt).pipe(function(check){
-                        if( check ) {
+
+
+                if (useCache) {
+                    return caches.get.contains(opt).pipe(function (check) {
+                        if (check) {
                             return caches.get.get(opt);
                         } else {
                             return getter();
@@ -197,8 +197,8 @@ define("io.ox/core/api/factory",
                     });
                     // loop over each folder and look for items to remove
                     _(folders).each(function (value, folder_id) {
-                        
-                        caches.all.get(folder_id).done(function(items){
+
+                        caches.all.get(folder_id).done(function (items) {
                             if (items) {
                                 caches.all.add(
                                     folder_id,

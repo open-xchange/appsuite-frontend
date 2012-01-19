@@ -30,27 +30,27 @@ define('io.ox/core/cache', function () {
      */
 
     var CacheStorage = (function () {
-        
-        return function (name, persistent,options) {
+
+        return function (name, persistent, options) {
 
             var opt = _.extend({
                     fluent: 'simple',
                     persistent: 'localstorage'
                 }, options || {}),
-                
-                persitentCache = require('io.ox/core/cache/'+opt.persistent),
-                fluentCache = require('io.ox/core/cache/'+opt.fluent),
+
+                persitentCache = require('io.ox/core/cache/' + opt.persistent),
+                fluentCache = require('io.ox/core/cache/' + opt.fluent),
                 id,
                 // use persistent storage?
                 persist = (persitentCache.isUsable() && _.url.param('persistence') !== 'false' && persistent === true ?
                         function () {
                             if (ox.user !== '') {
                                 id = 'cache.' + (ox.user || '_') + '.' + (name || '');
-                                
+
                                 persist = function () {
                                     return true;
                                 };
-                                
+
                                 return true;
                             } else {
                                 return false;
@@ -59,8 +59,8 @@ define('io.ox/core/cache', function () {
                         function () {
                             return false;
                         }),
-                        
-                getStorageLayer = function(){
+
+                getStorageLayer = function () {
                     var layer = null;
                     if (persist()) {
                         layer = persitentCache;
@@ -68,7 +68,7 @@ define('io.ox/core/cache', function () {
                         layer = fluentCache;
                     }
                     layer.setId(id);
-                    
+
                     return layer;
                 };
 
@@ -81,7 +81,7 @@ define('io.ox/core/cache', function () {
             };
 
             this.set = function (key, data) {
-                return getStorageLayer().set(key,data);
+                return getStorageLayer().set(key, data);
             };
 
             this.contains = function (key) {
@@ -121,15 +121,15 @@ define('io.ox/core/cache', function () {
             // timestamp
             timestamp = timestamp !== undefined ? timestamp : _.now();
             // add/update?
-            return index.get(key).pipe(function(getdata){
+            return index.get(key).pipe(function (getdata) {
                 var type = (_(getdata).isUndefined()) ? 'add modify *' : 'update modify *';
-                
-                if( !_(getdata).isUndefined() ){
-                    if( timestamp >= getdata.timestamp ){
+
+                if (!_(getdata).isUndefined()) {
+                    if (timestamp >= getdata.timestamp) {
                         return index.set(key, {
                             data: data,
                             timestamp: timestamp
-                        }).pipe(function(){
+                        }).pipe(function () {
                             return data;
                         });
                     } else {
@@ -139,7 +139,7 @@ define('io.ox/core/cache', function () {
                     return index.set(key, {
                         data: data,
                         timestamp: timestamp
-                    }).pipe(function(){
+                    }).pipe(function () {
                         return data;
                     });
                 }
@@ -148,15 +148,15 @@ define('io.ox/core/cache', function () {
 
         // get from cache
         this.get = function (key) {
-            return index.get(key).pipe(function(data){
+            return index.get(key).pipe(function (data) {
                 return data !== undefined ? data.data : undefined;
             });
         };
 
         // get timestamp of cached element
         this.time = function (key) {
-            return index.get(key).pipe(function(data){
-                if( !_(data).isUndefined() ){
+            return index.get(key).pipe(function (data) {
+                if (!_(data).isUndefined()) {
                     return data.timestamp;
                 } else {
                     return 0;
@@ -172,8 +172,8 @@ define('io.ox/core/cache', function () {
                 for (; i < $i; i++) {
                     c.push(index.remove(key[i]));
                 }
-                
-                return $.when.apply(null,c);
+
+                return $.when.apply(null, c);
             } else {
                 return index.remove(key);
             }
@@ -181,23 +181,23 @@ define('io.ox/core/cache', function () {
 
         // grep remove
         this.grepRemove = function (pattern) {
-            var i = 0,$i = 0, reg = new RegExp(pattern);
-            
-            var remover = function(key){
+            var i = 0, $i = 0, reg = new RegExp(pattern);
+
+            var remover = function (key) {
                 if (reg.test(key)) {
                     return index.remove(key);
                 }
             };
-            
-            return index.keys().pipe(function(keys){
+
+            return index.keys().pipe(function (keys) {
                 $i = keys.length;
-                
+
                 var c = [];
                 for (; i < $i; i++) {
-                    c.push( remover( keys[i] ) );
+                    c.push(remover(keys[i]));
                 }
-                
-                return $.when.apply(null,c);
+
+                return $.when.apply(null, c);
             });
         };
 
@@ -208,11 +208,11 @@ define('io.ox/core/cache', function () {
 
         // grep keys
         this.grepKeys = function (pattern) {
-            return index.keys().done(function(keys){
+            return index.keys().done(function (keys) {
                 var $i = keys.length, i = 0,
                     tmp = [], key,
                     reg = new RegExp(pattern);
-                
+
                 for (; i < $i; i++) {
                     key = keys[i];
                     if (reg.test(key)) {
@@ -226,9 +226,9 @@ define('io.ox/core/cache', function () {
         // grep contained keys
         this.grepContains = function (list) {
             var i = 0, $i = list.length, c = [];
-            
-            var checker = function( num ){
-                return index.contains(list[num]).pipe(function(check){
+
+            var checker = function (num) {
+                return index.contains(list[num]).pipe(function (check) {
                     if (check) {
                         return list[num];
                     } else {
@@ -240,29 +240,29 @@ define('io.ox/core/cache', function () {
             for (; i < $i; i++) {
                 c.push(checker(i));
             }
-            
-            return $.when.apply(null,c).pipe(function(){
+
+            return $.when.apply(null, c).pipe(function () {
                 return _(arguments).without(undefined);
             });
         };
 
         // list values
         this.values = function () {
-            
-            return index.keys().pipe(function(keys){
+
+            return index.keys().pipe(function (keys) {
                 var i = 0, $i = keys.length, c = [];
-                
-                var collecter = function(key){
-                    return index.get(key).pipe(function(data){
+
+                var collecter = function (key) {
+                    return index.get(key).pipe(function (data) {
                         return data.data;
                     });
                 };
-                
+
                 for (; i < $i; i++) {
-                    c.push( collecter(keys[i]) );
+                    c.push(collecter(keys[i]));
                 }
-                
-                return $.when.apply(null,c).pipe(function(){
+
+                return $.when.apply(null, c).pipe(function () {
                     return _(arguments).without(undefined);
                 });
             });
@@ -270,7 +270,7 @@ define('io.ox/core/cache', function () {
 
         // get size
         this.size = function () {
-            return index.keys().pipe(function(keys){
+            return index.keys().pipe(function (keys) {
                 return keys.length;
             });
         };
@@ -299,24 +299,24 @@ define('io.ox/core/cache', function () {
             if (_.isArray(key)) {
                 var i = 0, obj, tmp = new Array(key.length),
                     c = [], self = this, def = new $.Deferred();
-                
-                var getter = function(obj,i){
-                    return self.get(obj).done(function(data){
+
+                var getter = function (obj, i) {
+                    return self.get(obj).done(function (data) {
                         tmp[i] = data;
                     });
                 };
-                
+
                 for (; (obj = key[i]); i++) {
-                    c.push( getter(obj,i) );
+                    c.push(getter(obj, i));
                 }
 
-                
-                $.when.apply(null,c).done(function(){
-                    def.resolve( tmp );
-                }).fail(function(e){
+
+                $.when.apply(null, c).done(function () {
+                    def.resolve(tmp);
+                }).fail(function (e) {
                     def.reject(e);
                 });
-                
+
                 return def;
             } else {
                 // simple value
@@ -333,30 +333,30 @@ define('io.ox/core/cache', function () {
         // add to cache
         var add = this.add;
         this.add = function (data, timestamp) {
-            
+
             var key;
             if (_.isArray(data)) {
                 timestamp = timestamp !== undefined ? timestamp : _.now();
                 var i = 0, $i = data.length, self = this;
-                                
-                var adder = function(data,timestamp){
-                    return self.add(data,timestamp).pipe(function(){
+
+                var adder = function (data, timestamp) {
+                    return self.add(data, timestamp).pipe(function () {
                         return self.keyGenerator(data);
                     });
                 };
                 var c = [];
                 for (; i < $i; i++) {
-                    c.push( adder(data[i],timestamp) );
+                    c.push(adder(data[i], timestamp));
                 }
-                
-                return $.when.apply(null,c).pipe(function(){
+
+                return $.when.apply(null, c).pipe(function () {
                     return _(arguments).without(undefined);
                 });
             } else {
                 // get key
                 key = String(this.keyGenerator(data));
-                
-                return add(key, data, timestamp).pipe(function(result){
+
+                return add(key, data, timestamp).pipe(function (result) {
                     return key;
                 });
             }
@@ -366,8 +366,8 @@ define('io.ox/core/cache', function () {
         var contains = this.contains;
         this.contains = function (key) {
             var self = this;
-            
-            var getKey = function(key){
+
+            var getKey = function (key) {
                 var tmpKey = null;
                 if (typeof key === 'string' || typeof key === 'number') {
                     tmpKey = key;
@@ -377,59 +377,59 @@ define('io.ox/core/cache', function () {
                 }
                 return tmpKey;
             };
-            
+
             // array?
             if (_.isArray(key)) {
                 var i = 0, $i = key.length, found = true;
-                
-                var checker = function(key){
+
+                var checker = function (key) {
                     var tmpKey = getKey(key);
-                    return self.contains( tmpKey ).pipe(function(result){
+                    return self.contains(tmpKey).pipe(function (result) {
                         found = found && result;
                         return;
                     });
                 };
-                
+
                 var c = [];
                 for (; i < $i; i++) {
-                    c.push( checker(key[i]) );
+                    c.push(checker(key[i]));
                 }
-                
-                return $.when.apply(null,c).pipe(function(){
+
+                return $.when.apply(null, c).pipe(function () {
                     return found;
                 });
             } else {
                 // simple value
-                return contains( getKey(key) );
+                return contains(getKey(key));
             }
         };
 
         this.merge = function (data, timestamp) {
             var key, target, id, changed = false, self = this;
-            
 
-            if(_.isArray(data)) {
+
+            if (_.isArray(data)) {
                 timestamp = timestamp !== undefined ? timestamp : _.now();
                 var i = 0, $i = data.length;
-                
-                var merger = function(check){
+
+                var merger = function (check) {
                     changed = changed || check;
                 };
 
                 var c = [];
                 for (; i < $i; i++) {
-                    c.push( this.merge(data[i], timestamp).pipe(merger) );
+                    c.push(this.merge(data[i], timestamp).pipe(merger));
                 }
-                
-                return $.when.apply(null,c).pipe(function(){
+
+                return $.when.apply(null, c).pipe(function () {
                     return changed;
                 });
             } else {
                 key = String(this.keyGenerator(data));
-                
-                return contains(key).pipe(function(check) {
-                    if(check) {
-                        return get(key).pipe(function(target) {
+
+                return contains(key).pipe(function (check) {
+                    if (check) {
+                        return get(key).pipe(function (target) {
                             var id;
                             for (id in target) {
                                 if (data[id] !== undefined) {
@@ -439,7 +439,7 @@ define('io.ox/core/cache', function () {
                             }
 
                             if (changed) {
-                                return self.add(target, timestamp).pipe(function(addReturn){
+                                return self.add(target, timestamp).pipe(function (addReturn) {
                                     return changed;
                                 });
                             } else {
@@ -456,8 +456,8 @@ define('io.ox/core/cache', function () {
         var remove = this.remove;
         this.remove = function (data) {
             var def = new $.Deferred(), tmpGenerator = this.keyGenerator;
-            
-            var keygen = function(data){
+
+            var keygen = function (data) {
                 // simple value
                 if (typeof data === 'string' || typeof data === 'number') {
                     return data;
@@ -466,28 +466,28 @@ define('io.ox/core/cache', function () {
                     return String(tmpGenerator(data));
                 }
             };
-            
+
             if (_.isArray(data)) {
                 var i = 0, $i = data.length, doneCounter = 0;
-                
-                var resolver = function(){
+
+                var resolver = function () {
                     doneCounter++;
-                    if( doneCounter===$i ){
+                    if (doneCounter === $i) {
                         def.resolve();
                     }
                 };
-                
-                var remover = function(key){
-                    remove( keygen(key) ).done(resolver).fail(resolver);
+
+                var remover = function (key) {
+                    remove(keygen(key)).done(resolver).fail(resolver);
                 };
-                
+
                 for (; i < $i; i++) {
                     remover(data[i]);
                 }
             } else {
-                remove( keygen(data) ).done(def.resolve).fail(def.reject);
+                remove(keygen(data)).done(def.resolve).fail(def.reject);
             }
-            
+
             return def;
         };
     };
