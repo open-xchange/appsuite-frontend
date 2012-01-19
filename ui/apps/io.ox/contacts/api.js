@@ -207,23 +207,25 @@ define('io.ox/contacts/api',
             }
         }
 
-        if (!autocompleteCache.contains(query)) {
-            return api.search(query, true)
-                .pipe(function (data) {
-                    var tmp = [];
-                    _(data).each(function (obj) {
-                        process(tmp, obj, 'email1');
-                        process(tmp, obj, 'email2');
-                        process(tmp, obj, 'email3');
+        return autocompleteCache.contains(query).pipe(function(check){
+            if(!check){
+                return api.search(query, true)
+                    .pipe(function (data) {
+                        var tmp = [];
+                        _(data).each(function (obj) {
+                            process(tmp, obj, 'email1');
+                            process(tmp, obj, 'email2');
+                            process(tmp, obj, 'email3');
+                        });
+                        return tmp;
+                    })
+                    .done(function (data) {
+                        autocompleteCache.add(query, data);
                     });
-                    return tmp;
-                })
-                .done(function (data) {
-                    autocompleteCache.add(query, data);
-                });
-        } else {
-            return $.Deferred().resolve(autocompleteCache.get(query));
-        }
+            } else {
+                return autocompleteCache.get(query);
+            }
+        });
     };
 
     // simple contact picture cache
@@ -235,9 +237,9 @@ define('io.ox/contacts/api',
         // lower case!
         address = String(address).toLowerCase();
 
-        if (!contactPictures.contains(address)) {
-            // search for contact
-            return http.PUT({
+        return contactPictures.contains(address).pipe(function(check){
+            if( !check ){
+                return http.PUT({
                     module: 'contacts',
                     params: {
                         action: 'search',
@@ -271,11 +273,10 @@ define('io.ox/contacts/api',
                         return contactPictures.add(address, '');
                     }
                 });
-
-        } else {
-            // return cached picture
-            return $.Deferred().resolve(contactPictures.get(address));
-        }
+            } else {
+                return contactPictures.get(address);
+            }
+        });
     };
 
     api.getPictureURL = function (obj) {
