@@ -58,7 +58,8 @@ define('io.ox/settings/main',
         // nodes
         left,
         right,
-        expertmode = false;
+        expertmode = false,
+        currentSelection = null;
 
     function updateExpertMode() {
         var nodes = $('.expertmode');
@@ -78,10 +79,19 @@ define('io.ox/settings/main',
             name: 'io.ox/settings'
         }));
 
+        var onHideSettingsPane = function () {
+            var settingsID = currentSelection.id + '/settings';
+            ext.point(settingsID + '/detail').invoke('save');
+        };
+        win.bind('hide', onHideSettingsPane);
+
+
+        
+
         ext.point('io.ox/settings/links/toolbar').extend({
             id: 'io.ox/settings/expertcb',
             draw: function (context) {
-              var cb  = utils.createCheckbox('settings-expertcb', 'Enable Expert Mode', expertmode);
+              var cb  = utils.createCheckbox({dataid: 'settings-expertcb', label: 'Enable Expert Mode', currentValue: expertmode});
               $(cb).find('[data-item-id="settings-expertcb"]').on('click', function () {
                   if ($(this).attr('checked')) {
                     expertmode = true;
@@ -135,8 +145,12 @@ define('io.ox/settings/main',
         };
         grid.selection.bind('change', function (selection) {
             if (selection.length === 1) {
-                showSettings(selection[0]);
-                // alert('aha');
+                var isOpenedTheFirstTime = (currentSelection === null);
+                if (!isOpenedTheFirstTime) {
+                    onHideSettingsPane();
+                }
+                currentSelection = selection[0];
+                showSettings(currentSelection);
             } else {
                 right.empty();
             }
