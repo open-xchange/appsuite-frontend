@@ -135,6 +135,9 @@ define("io.ox/core/desktop",
     // show
     core.show();
 
+    // TODO: imrpove this stupid approach
+    ox.ui.running = [];
+
     /**
      * Create app
      */
@@ -174,13 +177,13 @@ define("io.ox/core/desktop",
                 if (self.failSave) {
                     appCache.get('savepoints').done(function(list){
                         list = list || [];
-                        
+
                         var data = self.failSave(),
                             ids = _(list).pluck('id'),
                             pos = _(ids).indexOf(savePointUniqueID);
-                        
+
                         data.id = savePointUniqueID;
-                        
+
                         if (pos > -1) {
                             // replace
                             list.splice(pos, 1, data);
@@ -345,6 +348,10 @@ define("io.ox/core/desktop",
                 }
             };
 
+            this.getName = function () {
+                return opt.name;
+            };
+
             this.getState = function () {
                 return _.url.hash();
             };
@@ -372,7 +379,10 @@ define("io.ox/core/desktop",
                         );
                     }
                     // go!
-                    deferred = launchFn() || $.when();
+                    (deferred = launchFn() || $.when())
+                    .done(function () {
+                        ox.ui.running.push(self);
+                    });
 
                 } else if (win) {
                     // toggle app window
@@ -390,6 +400,8 @@ define("io.ox/core/desktop",
                 _.url.hash('app', null);
                 _.url.hash('folder', null);
                 _.url.hash('id', null);
+                // remove from list
+                ox.ui.running = _(ox.ui.running).without(this);
                 // call quit function
                 var def = quitFn() || $.Deferred().resolve();
                 return def.done(function () {
@@ -432,7 +444,7 @@ define("io.ox/core/desktop",
         App.restore = function () {
             appCache.get('savepoints').done(function(data){
                 data = data || [];
-                
+
                 _(data).each(function (obj) {
                     require([obj.module], function (m) {
                         m.getApp().launch().done(function () {
@@ -442,7 +454,7 @@ define("io.ox/core/desktop",
                         });
                     });
                 });
-                
+
                 appCache.remove('savepoints');
             });
         };

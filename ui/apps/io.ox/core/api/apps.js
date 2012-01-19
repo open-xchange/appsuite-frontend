@@ -95,6 +95,11 @@ define.async('io.ox/core/api/apps',
     // public module interface
     api = {
 
+        get: function (id) {
+            var app = appData.apps[id];
+            return app ? bless(app, id) : undefined;
+        },
+
         getCategories: getCategories,
 
         getByCategory: getByCategory,

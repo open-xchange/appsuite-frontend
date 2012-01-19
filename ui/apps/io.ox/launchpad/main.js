@@ -100,6 +100,19 @@ define('io.ox/launchpad/main',
                 .on('click', fnOpenAppStore)
             );
 
+            _.chain(ox.ui.running)
+                .filter(function (app) {
+                    return app.getName() !== undefined;
+                })
+                .map(function (app) {
+                    return api.get(app.getName());
+                })
+                .each(function (data) {
+                    running.append(
+                        drawApp(data).on('click', { id: data.id }, launchApp)
+                    );
+                });
+
             _(api.getInstalled()).each(function (data) {
                 installed.append(
                     drawApp(data).on('click', { id: data.id }, launchApp)
