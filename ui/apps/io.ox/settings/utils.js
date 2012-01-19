@@ -150,6 +150,7 @@ define('io.ox/settings/utils',
         createListBox: function () {
             return $('<div>').addClass('listbox');
         },
+
         createListItem: function (options) {
             options.classStr = options.classStr || 'deletable-item';
             var item = $('<div>');
