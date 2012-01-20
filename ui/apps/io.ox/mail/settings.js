@@ -117,7 +117,7 @@ define('io.ox/mail/settings',
                 .append(
                   utils.createSectionContent()
                     .append(
-                      utils.createInfoText({html: 'Melden Sie sich mit Ihrem OX-Konto in OX Chrome an, ' +
+                      utils.createInfoText({html: 'EVERYTHING IS JUST MENT TO BE AN EXAMPLE HERE::::: Melden Sie sich mit Ihrem OX-Konto in OX Chrome an, ' +
                                            'um Ihre personalisierten Browserfunktionen online zu ' +
                                            'speichern und über OX Chrome auf jedem Computer darauf ' +
                                            'zuzugreifen. Sie werden dann auch automatisch in Ihren ' +
