@@ -31,81 +31,9 @@ define('io.ox/mail/settings',
     };
    
 
-    var accountDetail = {
-        dialog: null,
-        node: null,
-        save: function () {
-            settings.save().done(function () {
-                console.log('saved for email');
-            });
-        },
-        draw: function (popup) {
-          popup.empty()
-            .addClass('settings-detail-pane')
-            .append(
-                $('<div>').addClass('clear-title').text('Marios Account')
-                  .append(utils.createSectionDelimiter())
-            )
-            .append(
-                utils.createSection()
-                  .append(utils.createSectionTitle({text: 'Account Settings'}))
-                  .append(
-                      utils.createSectionContent()
-                        .append(utils.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'E-Mail Address:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(utils.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', model: settings, validator: myValidator}))
-                  )
-                  .append(utils.createSectionDelimiter())
-            )
-            .append(
-                utils.createSection()
-                  .append(utils.createSectionTitle({text:'Server Settings'}))
-                  .append(
-                      utils.createSectionContent()
-                        .append(
-                          utils.createSectionGroup()
-                            .append(
-                              utils.createSelectbox({dataid: 'mail-testselect', label: 'Server Type:', items: {
-                                    'IMAP mail server': 'option1',
-                                    'POP3 mail server': 'option2',
-                                    'V-split view 3': 'option3'
-                                  }, currentValue: 'option1', model: settings, validator: myValidator})
-                            )
-                        )
-                        .append(utils.createCheckbox({ dataid: 'mail-common-selectfirst', label: 'Use SSL connection', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'Server Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'Server Port:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'Login', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledPasswordField({label: 'Password', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                  )
-                  .append(utils.createSectionDelimiter())
-            )
-            .append(
-                utils.createSection()
-                  .append(utils.createSectionTitle({text: 'Outgoing Server Settings (SMTP)'}))
-                  .append(
-                      utils.createSectionContent()
-                        .append(utils.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'E-Mail Address:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(utils.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', model: settings, validator: myValidator}))
-                  )
-                  .append(utils.createSectionDelimiter())
-            );
-
-        },
-        open: function (event) {
-            accountDetail.node = event.data.topnode.append($("<div>").addClass("accountDetail"));
-            accountDetail.dialog = new dialogs.SidePopup('800')
-                .delegate(accountDetail.node, '', accountDetail.draw);
-
-            return accountDetail.node;
-        }
-    };
 
     var mailSettings = {
-      draw: function (node, app) {
+        draw: function (node, app) {
             node
             .append(
               utils.createSettingsHead(app)
@@ -301,39 +229,7 @@ define('io.ox/mail/settings',
                 .append(utils.createSectionDelimiter())
             )
 
-            .append(
-              utils.createSection()
-                .append(utils.createSectionTitle({text: 'Accounts'}))
-                .append(
-                  utils.createSectionContent()
-                    .append(
-                      utils.createListBox()
-                        .addClass('listbox')
-                        .append(utils.createListSpacer())
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListSpacer())
 
-
-                    )
-                    .append(utils.createButton({label: 'Add ...'}).css({'margin-right': '15px'}))
-                    .append(
-                      utils.createButton({label: 'Edit ...'})
-                        .css({'margin-right': '15px'})
-                        .on('click', { topnode: node }, accountDetail.open)
-                    )
-                    .append(utils.createButton({label: 'Delete ...'}))
-                )
-                .append(utils.createSectionDelimiter())
-            )
 
             .append(
               utils.createSection()
@@ -372,7 +268,9 @@ define('io.ox/mail/settings',
             return mailSettings.draw(this, data);
         },
         save: function () {
-            return accountDetail.save();
+            settings.save().done(function () {
+                console.log('saved for email');
+            });
         }
     });
     
