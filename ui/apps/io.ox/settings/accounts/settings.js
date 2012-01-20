@@ -53,7 +53,7 @@ define('io.ox/settings/accounts/settings',
             )
             .append(
                 utils.createSection()
-                  .append(utils.createSectionTitle({text:'Server Settings'}))
+                  .append(utils.createSectionTitle({text: 'Server Settings'}))
                   .append(
                       utils.createSectionContent()
                         .append(
@@ -98,7 +98,6 @@ define('io.ox/settings/accounts/settings',
     };
 
     var accountsView =  {
-    
         draw: function (node, data) {
             node
             .append(
@@ -110,22 +109,18 @@ define('io.ox/settings/accounts/settings',
                 .append(
                   utils.createSectionContent()
                     .append(
-                      utils.createListBox()
-                        .addClass('listbox')
-                        .append(utils.createListSpacer())
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListItem({ dataid: 'myid', content: 'mario@sourcegarden.com' }))
-                        .append(utils.createListSpacer())
-
-
+                      utils.createListBox({dataid: 'accounts-list', model: {
+                          get: function () {
+                              var list = [
+                                    {dataid: 'email-2281', html: 'mario@sourcegarden.com (imap)'},
+                                    {dataid: 'facebook-2823', html: 'mario.scheliga (facebook)'},
+                                    {dataid: 'twitter-28311', html: 'marioscheliga (twitter)'},
+                                    {dataid: 'xing-288128', html: 'mario.scheliga (xing)'},
+                                    {dataid: 'linkedin-288111', html: 'mario.scheliga (linkedIn)'}
+                              ];
+                              return list;
+                          }
+                      }})
                     )
                     .append(utils.createButton({label: 'Add ...'}).css({'margin-right': '15px'}))
                     .append(
