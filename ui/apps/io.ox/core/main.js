@@ -242,11 +242,16 @@ define("io.ox/core/main",
             }
         };
 
-        ox.ui.App.canRestore().done(function (check) {
-            restoreLauncher(check);
-        }).fail(function () {
-            restoreLauncher(false);
-        });
+        ox.ui.App.canRestore()
+            .done(function () {
+                // clear auto start stuff (just conflicts)
+                autoLaunch = [];
+                autoLaunchModules = [];
+                restoreLauncher(true);
+            })
+            .fail(function () {
+                restoreLauncher(false);
+            });
     }
 
     return {
