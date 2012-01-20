@@ -321,7 +321,7 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
             if (path) {
                 path = (globalSubpath + settingsWrapper.settingsPath + '/' + path);
                 set(path, value);
-                
+                console.log('set ' +path + ':' + value);
                 if (permanent) {
                     // save settings path on server
                     settingsCache.add('settingsDefault', settings);

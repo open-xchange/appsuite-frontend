@@ -73,6 +73,7 @@ define('io.ox/settings/utils',
             sb.find('option[value="' + options.model.get(options.dataid) + '"]').attr('selected', 'selected');
             sb.on('change', function (evt) {
                 console.log(options.dataid + ':' + sb.val());
+                console.log(typeof sb.val());
                 options.model.set(options.dataid, sb.val());
             });
 
@@ -113,9 +114,14 @@ define('io.ox/settings/utils',
                         .attr('name', options.name)
                         .attr('data-item-id', options.dataid)
                         .val(options.value);
-          if (options.currentValue === options.value) {
+          if (options.model.get(options.dataid) === options.value) {
             radio.attr('checked', 'checked');
           }
+
+          radio.on('change', function () {
+              var val = $('input[name="' + options.name + '"]:checked').val();
+              options.model.set(options.dataid, val);
+          });
 
           label.append(radio);
           label.append(
@@ -130,14 +136,19 @@ define('io.ox/settings/utils',
             var tfdiv = $('<div>');
             var tf = $('<input type="text" maxlength="' + options.maxlength + '">');
             tf.attr('data-item-id', options.dataid);
-            tf.val(options.value);
+            tf.val(options.model.get(options.dataid));
+
+            tf.on('change', function () {
+                options.model.set(options.dataid, tf.val());
+            });
+
             tfdiv.append(tf);
             return tfdiv;
         },
         createLabeledTextField: function (options) {
             var l = utils.createLabel().css({width: '100%', display: 'inline-block'});
             l.append(utils.createText({text: options.label}));
-            l.append(utils.createTextField({dataid: options.dataid, value: options.value}).css({ width: options.width + 'px', display: 'inline-block'}));
+            l.append(utils.createTextField({dataid: options.dataid, value: options.value, model: options.model, validator: options.model}).css({ width: options.width + 'px', display: 'inline-block'}));
             return l;
         },
         createPasswordField: function (options) {
@@ -145,14 +156,19 @@ define('io.ox/settings/utils',
             var tfdiv = $('<div>');
             var tf = $('<input type="password" maxlength="' + options.maxlength + '">');
             tf.attr('data-item-id', options.dataid);
-            tf.val(options.value);
+
+            tf.val(options.model.get(options.dataid));
+            tf.on('change', function () {
+                options.model.set(options.dataid, tf.val());
+            });
+
             tfdiv.append(tf);
             return tfdiv;
         },
         createLabeledPasswordField: function (options) {
             var l = utils.createLabel().css({width: '100%', display: 'inline-block'});
             l.append(utils.createText({text: options.label}));
-            l.append(utils.createPasswordField({dataid: options.dataid, value: options.value}).css({ width: options.width + 'px', display: 'inline-block'}));
+            l.append(utils.createPasswordField({dataid: options.dataid, value: options.value, model: options.model, validator: options.model}).css({ width: options.width + 'px', display: 'inline-block'}));
             return l;
         },
         createListBox: function () {

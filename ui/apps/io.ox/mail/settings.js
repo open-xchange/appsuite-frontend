@@ -51,10 +51,10 @@ define('io.ox/mail/settings',
                   .append(utils.createSectionTitle({text: 'Account Settings'}))
                   .append(
                       utils.createSectionContent()
-                        .append(utils.createLabeledTextField({label: 'Account Name:', dataId: 'mail-account-name', value: 'Marios Account', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'E-Mail Address:', dataId: 'mail-account-name', value: 'Marios Account', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'Account Name:', dataId: 'mail-account-name', value: 'Marios Account', model: settings, validator: myValidator}))
-                        .append(utils.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', currentValue: false, model: settings, validator: myValidator}))
+                        .append(utils.createLabeledTextField({label: 'Account Name:', dataId: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(utils.createLabeledTextField({label: 'E-Mail Address:', dataId: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(utils.createLabeledTextField({label: 'Account Name:', dataId: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(utils.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', model: settings, validator: myValidator}))
                   )
                   .append(utils.createSectionDelimiter())
             )
@@ -73,11 +73,11 @@ define('io.ox/mail/settings',
                                   }, currentValue: 'option1', model: settings, validator: myValidator})
                             )
                         )
-                        .append(utils.createCheckbox({ dataid: 'mail-common-selectfirst', label: 'Use SSL connection', currentValue: false, model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'Server Name:', dataId: 'mail-account-name', value: 'Marios Account', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'Server Port:', dataId: 'mail-account-name', value: 'Marios Account', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'Login', dataId: 'mail-account-name', value: 'Marios Account', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledPasswordField({label: 'Password', dataId: 'mail-account-name', value: 'Marios Account', model: settings, validator: myValidator}))
+                        .append(utils.createCheckbox({ dataid: 'mail-common-selectfirst', label: 'Use SSL connection', model: settings, validator: myValidator}))
+                        .append(utils.createLabeledTextField({label: 'Server Name:', dataId: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(utils.createLabeledTextField({label: 'Server Port:', dataId: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(utils.createLabeledTextField({label: 'Login', dataId: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(utils.createLabeledPasswordField({label: 'Password', dataId: 'mail-account-name', model: settings, validator: myValidator}))
                   )
                   .append(utils.createSectionDelimiter())
             )
@@ -86,10 +86,10 @@ define('io.ox/mail/settings',
                   .append(utils.createSectionTitle({text: 'Outgoing Server Settings (SMTP)'}))
                   .append(
                       utils.createSectionContent()
-                        .append(utils.createLabeledTextField({label: 'Account Name:', dataId: 'mail-account-name', value: 'Marios Account', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'E-Mail Address:', dataId: 'mail-account-name', value: 'Marios Account', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'Account Name:', dataId: 'mail-account-name', value: 'Marios Account', model: settings, validator: myValidator}))
-                        .append(utils.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', currentValue: false, model: settings, validator: myValidator}))
+                        .append(utils.createLabeledTextField({label: 'Account Name:', dataId: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(utils.createLabeledTextField({label: 'E-Mail Address:', dataId: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(utils.createLabeledTextField({label: 'Account Name:', dataId: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(utils.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', model: settings, validator: myValidator}))
                   )
                   .append(utils.createSectionDelimiter())
             );
@@ -142,18 +142,18 @@ define('io.ox/mail/settings',
                             'V-split view 1': 'option1',
                             'V-split view 2': 'option2',
                             'V-split view 3': 'option3'
-                          }, currentValue: 'option3', model: settings, validator: myValidator})
+                          }, model: settings, validator: myValidator})
                         )
                         .addClass('expertmode')
                     )
                     .append(utils.createSectionDelimiter())
 
-                    .append(utils.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Automatically select first E-Mail?', currentValue: false, model: settings, validator: myValidator}).addClass('expertmode'))
-                    .append(utils.createCheckbox({dataid: 'mail-common-removepermanently', label: 'Permanently remove deleted E-Mails?', currentValue: false, model: settings, validator: myValidator}))
-                    .append(utils.createCheckbox({dataid: 'mail-common-notifyreceipt', label: 'Notify on delivery receipt?', currentValue: true, model: settings, validator: myValidator}).addClass('expertmode'))
-                    .append(utils.createCheckbox({dataid: 'mail-common-showsenderpic', label: 'Show sender image?', currentValue: false, model: settings, validator: myValidator}))
-                    .append(utils.createCheckbox({dataid: 'mail-common-collectwhilesending', label: 'Automatically collect contacts in the folder "Collected addresses" while sending?', currentValue: false, model: settings, validator: myValidator}).addClass('expertmode'))
-                    .append(utils.createCheckbox({dataid: 'mail-common-collectwhilereading', label: 'Automatically collect contacts in the folder "Collected addresses" while reading?', currentValue: true, model: settings, validator: myValidator}).addClass('expertmode'))
+                    .append(utils.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Automatically select first E-Mail?', model: settings, validator: myValidator}).addClass('expertmode'))
+                    .append(utils.createCheckbox({dataid: 'mail-common-removepermanently', label: 'Permanently remove deleted E-Mails?', model: settings, validator: myValidator}))
+                    .append(utils.createCheckbox({dataid: 'mail-common-notifyreceipt', label: 'Notify on delivery receipt?', model: settings, validator: myValidator}).addClass('expertmode'))
+                    .append(utils.createCheckbox({dataid: 'mail-common-showsenderpic', label: 'Show sender image?', model: settings, validator: myValidator}))
+                    .append(utils.createCheckbox({dataid: 'mail-common-collectwhilesending', label: 'Automatically collect contacts in the folder "Collected addresses" while sending?', model: settings, validator: myValidator}).addClass('expertmode'))
+                    .append(utils.createCheckbox({dataid: 'mail-common-collectwhilereading', label: 'Automatically collect contacts in the folder "Collected addresses" while reading?', model: settings, validator: myValidator}).addClass('expertmode'))
                     
                     .append(utils.createSectionDelimiter())
 
@@ -169,29 +169,29 @@ define('io.ox/mail/settings',
                 .append(utils.createSectionTitle({text: 'Compose'}))
                 .append(
                   utils.createSectionContent()
-                    .append(utils.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Insert the original E-Mail text to a reply', currentValue: false, model: settings, validator: myValidator}).addClass('expertmode'))
-                    .append(utils.createCheckbox({dataid: 'mail-common-removepermanently', label: 'Append vcard', currentValue: false, model: settings, validator: myValidator}))
-                    .append(utils.createCheckbox({dataid: 'mail-common-notifyreceipt', label: 'Enable auto completion of E-Mail addresses', currentValue: true, model: settings, validator: myValidator}).addClass('expertmode'))
+                    .append(utils.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Insert the original E-Mail text to a reply', model: settings, validator: myValidator}).addClass('expertmode'))
+                    .append(utils.createCheckbox({dataid: 'mail-common-removepermanently', label: 'Append vcard', model: settings, validator: myValidator}))
+                    .append(utils.createCheckbox({dataid: 'mail-common-notifyreceipt', label: 'Enable auto completion of E-Mail addresses', model: settings, validator: myValidator}).addClass('expertmode'))
                     .append(
                       utils.createSectionGroup()
                         .append(utils.createInfoText({text: 'Forward E-Mails as:'}))
-                        .append(utils.createRadioButton({dataid: 'mail-compose-forwardas-inline', label: 'Inline', name: 'mail-compose-forwardas', value: true, currentValue: true, model: settings, validator: myValidator}))
-                        .append(utils.createRadioButton({dataid: 'mail-compose-forwardas-attachment', label: 'Attachment', name: 'mail-compose-forwardas', value: false, currentValue: true, model: settings, validator: myValidator}))
+                        .append(utils.createRadioButton({dataid: 'mail-compose-forwardas', label: 'Inline', name: 'mail-compose-forwardas', value: true, model: settings, validator: myValidator}))
+                        .append(utils.createRadioButton({dataid: 'mail-compose-forwardas', label: 'Attachment', name: 'mail-compose-forwardas', value: false, model: settings, validator: myValidator}))
                         .addClass('expertmode')
                     )
                     .append(
                       utils.createSectionGroup()
                         .append(utils.createInfoText({text: 'When "Reply all":'}))
-                        .append(utils.createRadioButton({dataid: 'mail-compose-whenreplyall-tofields', label: 'Add sender and recipients to "To", Cc to "Cc"', name: 'mail-compose-whenreplyall', value: "fields", currentValue: "fields", model: settings, validator: myValidator}))
-                        .append(utils.createRadioButton({dataid: 'mail-compose-whenreplyall-tocc', label: 'Add sender to "To", recipients to "Cc"', name: 'mail-compose-whenreplyall', value: "cc", currentValue: "fields", model: settings, validator: myValidator}))
+                        .append(utils.createRadioButton({dataid: 'mail-compose-whenreplyall', label: 'Add sender and recipients to "To", Cc to "Cc"', name: 'mail-compose-whenreplyall', value: "fields", model: settings, validator: myValidator}))
+                        .append(utils.createRadioButton({dataid: 'mail-compose-whenreplyall', label: 'Add sender to "To", recipients to "Cc"', name: 'mail-compose-whenreplyall', value: "cc", model: settings, validator: myValidator}))
                         .addClass('expertmode')
                     )
                     .append(
                       utils.createSectionGroup()
                         .append(utils.createInfoText({text: 'Format E-Mails as:'}))
-                        .append(utils.createRadioButton({dataid: 'mail-compose-emailformat-html', label: 'HTML', name: 'mail-compose-emailformat', value: "html", currentValue: "html", model: settings, validator: myValidator}))
-                        .append(utils.createRadioButton({dataid: 'mail-compose-emailformat-plain', label: 'Plain text', name: 'mail-compose-emailformat', value: "plain", currentValue: "html", model: settings, validator: myValidator}))
-                        .append(utils.createRadioButton({dataid: 'mail-compose-emailformat-both', label: 'HTML and Plain text', name: 'mail-compose-emailformat', value: 'both', currentValue: 'html', model: settings, validator: myValidator}))
+                        .append(utils.createRadioButton({dataid: 'mail-compose-emailformat', label: 'HTML', name: 'mail-compose-emailformat', value: "html", model: settings, validator: myValidator}))
+                        .append(utils.createRadioButton({dataid: 'mail-compose-emailformat', label: 'Plain text', name: 'mail-compose-emailformat', value: "plain", model: settings, validator: myValidator}))
+                        .append(utils.createRadioButton({dataid: 'mail-compose-emailformat', label: 'HTML and Plain text', name: 'mail-compose-emailformat', value: 'both', model: settings, validator: myValidator}))
                     )
 
                     .append(
@@ -204,7 +204,7 @@ define('io.ox/mail/settings',
                                 'Enhanced': 'enhanced',
                                 'Default': 'default'
                             },
-                            currentValue: 'enhanced', model: settings, validator: myValidator
+                            model: settings, validator: myValidator
                           })
                         )
                         .addClass('expertmode')
@@ -218,7 +218,7 @@ define('io.ox/mail/settings',
                             'Arial': 'arial',
                             'Arial Black': 'arial_black',
                             'Book Antiqua': 'book_antiqua'
-                          }, currentValue: 'default', model: settings, validator: myValidator })
+                          }, model: settings, validator: myValidator })
                         )
                         .addClass('expertmode')
                     )
@@ -229,7 +229,7 @@ define('io.ox/mail/settings',
                             'Default': 'default',
                             '1 (8pt)': '8_pt',
                             '2 (10pt)': '10_pt'
-                          }, currentValue: 'default', model: settings, validator: myValidator})
+                          }, model: settings, validator: myValidator})
                         )
                         .addClass('expertmode')
                     )
@@ -239,7 +239,7 @@ define('io.ox/mail/settings',
                           utils.createText({text: 'Line wrap when sending text mails after:'})
                         )
                         .append(
-                          utils.createTextField({dataid: 'mail-compose-linewarpafter', value: 80, model: settings, validator: myValidator}).css({ width: '30px', display: 'inline-block'})
+                          utils.createTextField({dataid: 'mail-compose-linewarpafter', model: settings, validator: myValidator}).css({ width: '30px', display: 'inline-block'})
                         )
                         .append(
                           utils.createText({text: 'characters'})
@@ -253,7 +253,7 @@ define('io.ox/mail/settings',
                             'mario@sourcegarden.de': 'mario@sourcegarden.de',
                             'mario@sourcegarden.com': 'mario@sourcegarden.com',
                             'mario.scheliga@open-xchange.com': 'mario.scheliga@open-xchange.com'
-                          }, currentValue: 'mario.scheliga@open-xchange.com', model: settings, validator: myValidator})
+                          }, model: settings, validator: myValidator})
                         )
                     )
                     .append(
@@ -265,7 +265,7 @@ define('io.ox/mail/settings',
                             '3 Minutes': '3_minutes',
                             '5 Minutes': '5_minutes',
                             '10 Minutes': '10_minutes'
-                          }, currentValue: '3_minutes', model: settings, validator: myValidator})
+                          }, model: settings, validator: myValidator})
                         )
                         .addClass('expertmode')
                     )
@@ -280,11 +280,11 @@ define('io.ox/mail/settings',
                 .append(utils.createSectionTitle({text: 'Display' }))
                 .append(
                   utils.createSectionContent()
-                    .append(utils.createCheckbox({dataid: 'mail-display-allowhtml', label: 'Allow html formatted E-Mails', currentValue: false, model: settings, validator: myValidator}))
-                    .append(utils.createCheckbox({dataid: 'mail-display-blockimgs', label: 'Block pre-loading of externally linked images', currentValue: false, model: settings, validator: myValidator}))
-                    .append(utils.createCheckbox({dataid: 'mail-display-emotionicons', label: 'Display emoticons as graphics in text E-Mails', currentValue: true, model: settings, validator: myValidator}))
-                    .append(utils.createCheckbox({dataid: 'mail-display-colorquotes', label: 'Color quoted lines', currentValue: false, model: settings, validator: myValidator}))
-                    .append(utils.createCheckbox({dataid: 'mail-display-namesinfields', label: 'Show name instead of E-Mail address in To and Cc fields', currentValue: false, model: settings, validator: myValidator}))
+                    .append(utils.createCheckbox({dataid: 'mail-display-allowhtml', label: 'Allow html formatted E-Mails', model: settings, validator: myValidator}))
+                    .append(utils.createCheckbox({dataid: 'mail-display-blockimgs', label: 'Block pre-loading of externally linked images', model: settings, validator: myValidator}))
+                    .append(utils.createCheckbox({dataid: 'mail-display-emotionicons', label: 'Display emoticons as graphics in text E-Mails', model: settings, validator: myValidator}))
+                    .append(utils.createCheckbox({dataid: 'mail-display-colorquotes', label: 'Color quoted lines', model: settings, validator: myValidator}))
+                    .append(utils.createCheckbox({dataid: 'mail-display-namesinfields', label: 'Show name instead of E-Mail address in To and Cc fields', model: settings, validator: myValidator}))
                 )
                 .append(utils.createSectionDelimiter())
             )
@@ -296,7 +296,7 @@ define('io.ox/mail/settings',
                 .append(utils.createSectionTitle({text: 'Signatures'}))
                 .append(
                   utils.createSectionContent()
-                    .append(utils.createCheckbox({dataid: 'mail-display-namesinfields', label: 'Show name instead of E-Mail address in To and Cc fields', currentValue: false, model: settings, validator: myValidator}))
+                    .append(utils.createCheckbox({dataid: 'mail-display-namesinfields', label: 'Show name instead of E-Mail address in To and Cc fields', model: settings, validator: myValidator}))
                 )
                 .append(utils.createSectionDelimiter())
             )
@@ -341,7 +341,7 @@ define('io.ox/mail/settings',
                 .append(utils.createSectionTitle({text: 'Filter' }))
                 .append(
                   utils.createSectionContent()
-                    .append(utils.createCheckbox({dataid: 'mail-display-namesinfields', label: 'Show name instead of E-Mail address in To and Cc fields', currentValue: false, model: settings, validator: myValidator}))
+                    .append(utils.createCheckbox({dataid: 'mail-display-namesinfields', label: 'Show name instead of E-Mail address in To and Cc fields', model: settings, validator: myValidator}))
                 )
                 .append(utils.createSectionDelimiter())
 
@@ -352,7 +352,7 @@ define('io.ox/mail/settings',
                 .append(utils.createSectionTitle({text: 'Vacation Notice'}))
                 .append(
                   utils.createSectionContent()
-                    .append(utils.createCheckbox({dataid: 'mail-display-namesinfields', label: 'Show name instead of E-Mail address in To and Cc fields', currentValue: false, model: settings, validator: myValidator}))
+                    .append(utils.createCheckbox({dataid: 'mail-display-namesinfields', label: 'Show name instead of E-Mail address in To and Cc fields', model: settings, validator: myValidator}))
                 )
                 .append(utils.createSectionDelimiter())
             );
