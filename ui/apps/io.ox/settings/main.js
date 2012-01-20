@@ -95,15 +95,22 @@ define('io.ox/settings/main',
         ext.point('io.ox/settings/links/toolbar').extend({
             id: 'io.ox/settings/expertcb',
             draw: function (context) {
-              var cb  = utils.createCheckbox({dataid: 'settings-expertcb', label: 'Enable Expert Mode', currentValue: expertmode});
-              $(cb).find('[data-item-id="settings-expertcb"]').on('click', function () {
-                  if ($(this).attr('checked')) {
-                    expertmode = true;
-                  } else {
-                    expertmode = false;
+              var cb  = utils.createCheckbox({dataid: 'settings-expertcb', label: 'Enable Expert Mode', currentValue: expertmode, model:  {
+                  get: function (dataid, value) {
+                      return expertmode;
+                  },
+                  set: function (dataid, value) {
+                      expertmode = value;
+                      updateExpertMode();
+                  },
+                  save: function () {
+                      //nothing to do
+                      var d = new $.Deferred();
+                      d.resolve();
+                      return d;
                   }
-                  updateExpertMode();
-              });
+              
+              }});
               this.append(cb);
             }
         });

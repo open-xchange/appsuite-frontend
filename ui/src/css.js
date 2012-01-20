@@ -226,12 +226,14 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
     var get = function (key) {
 
         var parts = key.split(/\//),
-          tmp = settings;
+          tmp = settings || {};
 
         _.each(parts, function (partname, index) {
-            if (tmp !== null && tmp !== undefined && partname in tmp) {
+            var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
+            if (tmpHasSubNode) {
                 tmp = tmp[partname];
             } else {
+                tmp = null;
                 return null;
             }
         });
@@ -241,11 +243,12 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
     var set = function (key, value) {
 
         var parts = key.split(/\//),
-          tmp = settings,
+          tmp = settings || {},
           rkey = parts.pop();
 
         _.each(parts, function (partname, index) {
-            if (tmp.hasOwnProperty(partname)) {
+            var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
+            if (tmpHasSubNode) {
                 tmp = tmp[partname];
                 if (typeof tmp !== 'object') {
                     console.error('settings.set: ' + tmp + ' is a value');
@@ -261,10 +264,11 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
 
     var contains = function (key) {
         var parts = key.split(/\//),
-          tmp = settings;
+          tmp = settings || {};
 
         _.each(parts, function (partname, index) {
-            if (tmp !== null && tmp !== undefined && tmp.hasOwnProperty(parts[partname])) {
+            var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
+            if (tmpHasSubNode) {
                 tmp = tmp[partname];
             } else {
                 return false;
@@ -275,10 +279,11 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
 
     var remove = function (key) {
         var parts = key.split(/\//),
-          tmp = settings,
+          tmp = settings || {},
           rkey = parts.pop();
         _.each(parts, function (partname, index) {
-            if (tmp.hasOwnProperty(partname)) {
+            var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
+            if (tmpHasSubNode) {
                 tmp = tmp[partname];
                 if (typeof tmp !== 'object') {
                     console.error('settings.remove: ' + tmp + ' is a value');
@@ -293,7 +298,7 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
         return true;
     };
 
-    var globalSubpath = "wurst/";
+    var globalSubpath = "gui/wurst/";
 
 
     var settingsWrapper = {
@@ -303,6 +308,7 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
                 return settings;
             } else {
                 path = (globalSubpath + settingsWrapper.settingsPath + '/' + path);
+                console.log('getting: ' + path);
                 if (defaultValue === undefined) {
                     return get(path);
                 } else {
@@ -315,8 +321,10 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
             if (path) {
                 path = (globalSubpath + settingsWrapper.settingsPath + '/' + path);
                 set(path, value);
+                console.log('set ' +path + ':' + value);
                 if (permanent) {
                     // save settings path on server
+                    settingsCache.add('settingsDefault', settings);
                     return http.PUT({
                         module: 'config/gui',
                         appendColumns: false,
@@ -349,21 +357,36 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
                     })
                     .done(function (data) {
                         settings = data !== undefined ? data.data : {};
-                        settingsCache.add('default', settings);
+                        settingsCache.add('settingsDefault', settings);
                     });
             };
             // trick to be fast: cached?
             if (!settingsCache) {
-                settingsCache = new cache.SimpleCache('config', true);
+                settingsCache = new cache.SimpleCache('settings', true);
             }
-            if (settingsCache.contains('default')) {
-                settings = settingsCache.get('default');
-                load();
-                return $.Deferred().resolve(settings);
+            if (settingsCache.contains('settingsDefault')) {
+                return settingsCache.get('settingsDefault').pipe(function (mycached) {
+                    if(mycached !== undefined) {
+                        settings = mycached;
+                        load();
+                        return settings;
+                    } else {
+                      return load();
+                    }
+                });
             } else {
                 // load configuration
                 return load();
             }
+        },
+        save: function () {
+            settingsCache.add('settingsDefault', settings);
+            return http.PUT({
+                module: 'config/gui',
+                appendColumns: false,
+                processResponse: false,
+                data: settings
+            });
         }
     };
 
