@@ -39,20 +39,25 @@ define('io.ox/settings/utils',
                       .append(utils.createSectionDelimiter());
         },
         createCheckbox: function (options) {
-            var cb = $('<div>').addClass('checkbox');
-            var label = cb.append('<label>');
+            var cbdiv = $('<div>').addClass('checkbox');
+            var label = cbdiv.append('<label>');
+            var cb = $('<input type="checkbox" data-item-id="' + options.dataid + '"/>')
+                        .attr('checked', options.model.get(options.dataid));
 
-            label.append(
-              $('<input type="checkbox" data-item-id="' + options.dataid + '"/>')
-                .attr('checked', options.currentValue)
-            );
+            cb.on('change', function (evt) {
+                var val =  (typeof cb.attr('checked') !== 'undefined') ? true: false;
+                console.log(evt);
+                console.log(options.dataid + ":" + val);
+                options.model.set(options.dataid, val);
+            });
 
+            label.append(cb);
             label.append(
               $('<span>')
                 .text(options.label)
             );
 
-            return cb;
+            return cbdiv;
         },
         createSelectbox: function (options) {
             var label = $('<label>').addClass('select');
