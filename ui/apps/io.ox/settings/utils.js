@@ -46,7 +46,6 @@ define('io.ox/settings/utils',
 
             cb.on('change', function (evt) {
                 var val =  (typeof cb.attr('checked') !== 'undefined') ? true: false;
-                console.log(evt);
                 console.log(options.dataid + ":" + val);
                 options.model.set(options.dataid, val);
             });
@@ -71,7 +70,11 @@ define('io.ox/settings/utils',
                   $('<option>').attr('value', val).text(key)
                 );
             });
-            sb.find('option[value="' + options.currentValue + '"]').attr('selected', 'selected');
+            sb.find('option[value="' + options.model.get(options.dataid) + '"]').attr('selected', 'selected');
+            sb.on('change', function (evt) {
+                console.log(options.dataid + ':' + sb.val());
+                options.model.set(options.dataid, sb.val());
+            });
 
             label.append(sb.get());
             return label;
