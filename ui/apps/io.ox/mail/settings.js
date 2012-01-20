@@ -127,7 +127,7 @@ define('io.ox/mail/settings',
                     .append(
                       utils.createSectionGroup()
                         .append(
-                          utils.createSelectbox({dataid: 'mail-testselect', label: 'Default view:', items:{
+                          utils.createSelectbox({dataid: 'mail-common-defaultview', label: 'Default view:', items:{
                                 'V-split view 1': 'option1',
                                 'V-split view 2': 'option2',
                                 'V-split view 3': 'option3'
@@ -138,7 +138,7 @@ define('io.ox/mail/settings',
                     .append(
                       utils.createSectionGroup()
                         .append(
-                          utils.createSelectbox({dataid: 'mail-testselect', label: 'Default view for Spam folder', items: {
+                          utils.createSelectbox({dataid: 'mail-common-spamfolderview', label: 'Default view for Spam folder', items: {
                             'V-split view 1': 'option1',
                             'V-split view 2': 'option2',
                             'V-split view 3': 'option3'
@@ -212,7 +212,7 @@ define('io.ox/mail/settings',
                     .append(
                       utils.createSectionGroup()
                         .append(
-                          utils.createSelectbox({dataid: 'mail-testselect', label: 'Default E-Mail font:', items: {
+                          utils.createSelectbox({dataid: 'mail-compose-font', label: 'Default E-Mail font:', items: {
                             'Default': 'default',
                             'Andale Mono': 'andale_mono',
                             'Arial': 'arial',
@@ -225,7 +225,7 @@ define('io.ox/mail/settings',
                     .append(
                       utils.createSectionGroup()
                         .append(
-                          utils.createSelectbox({dataid: 'mail-testselect', label: 'Default E-Mail font size:', items: {
+                          utils.createSelectbox({dataid: 'mail-compose-fontsize', label: 'Default E-Mail font size:', items: {
                             'Default': 'default',
                             '1 (8pt)': '8_pt',
                             '2 (10pt)': '10_pt'
@@ -249,7 +249,7 @@ define('io.ox/mail/settings',
                     .append(
                       utils.createSectionGroup()
                         .append(
-                          utils.createSelectbox({dataid: 'mail-testselect', label: 'Default sender address:', items: {
+                          utils.createSelectbox({dataid: 'mail-compose-defaultsender', label: 'Default sender address:', items: {
                             'mario@sourcegarden.de': 'mario@sourcegarden.de',
                             'mario@sourcegarden.com': 'mario@sourcegarden.com',
                             'mario.scheliga@open-xchange.com': 'mario.scheliga@open-xchange.com'
@@ -259,7 +259,7 @@ define('io.ox/mail/settings',
                     .append(
                       utils.createSectionGroup()
                         .append(
-                          utils.createSelectbox({dataid: 'mail-testselect', label: 'Auto-save Email drafts?', items: {
+                          utils.createSelectbox({dataid: 'mail-compose-savedraftsinterval', label: 'Auto-save Email drafts?', items: {
                             'Disabled': 'disabled',
                             '1 Minute': '1_minute',
                             '3 Minutes': '3_minutes',
