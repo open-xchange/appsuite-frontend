@@ -13,15 +13,13 @@
 /*global
 define: true, _: true
 */
-define('io.ox/settings/accounts/settings',
+define('io.ox/settings/accounts/email/settings',
       ['io.ox/core/extensions',
        'io.ox/settings/utils',
-       'io.ox/core/tk/dialogs',
-       'settings!io.ox/settings/accounts'], function (ext, utils, dialogs, settings) {
-
-
+       'io.ox/core/tk/dialogs'], function (ext, utils, dialogs) {
     'use strict';
 
+    var settings = null; //should be initialized by the ext.point
     var myValidator = {
     
     };
@@ -92,7 +90,6 @@ define('io.ox/settings/accounts/settings',
 
         },
         open: function (options) {
-            accountDetailView.itemid = options.itemid;
             accountDetailView.node = options.topnode.append($("<div>").addClass("accountDetail"));
             accountDetailView.dialog = new dialogs.SidePopup('800')
                 .delegate(accountDetailView.node, '', accountDetailView.draw);
@@ -101,62 +98,18 @@ define('io.ox/settings/accounts/settings',
         }
     };
 
-    var accountsView =  {
-        draw: function (node, data) {
-            var listbox = null;
-            node
-            .append(
-                utils.createSettingsHead(data)
-            )
-            .append(
-              utils.createSection()
-                .append(utils.createSectionTitle({text: 'Accounts'}))
-                .append(
-                  utils.createSectionContent()
-                    .append(
-                      listbox = utils.createListBox({dataid: 'accounts-list', model: {
-                          get: function () {
-                              var list = [
-                                    {dataid: 'email/2281', html: 'mario@sourcegarden.com (imap)'},
-                                    {dataid: 'facebook/2823', html: 'mario.scheliga (facebook)'},
-                                    {dataid: 'twitter/28311', html: 'marioscheliga (twitter)'},
-                                    {dataid: 'xing/288128', html: 'mario.scheliga (xing)'},
-                                    {dataid: 'linkedin/288111', html: 'mario.scheliga (linkedIn)'}
-                              ];
-                              return list;
-                          }
-                      }})
-                    )
-                    .append(utils.createButton({label: 'Add ...'}).css({'margin-right': '15px'}))
-                    .append(
-                      utils.createButton({label: 'Edit ...'})
-                        .css({'margin-right': '15px'})
-                        .on('click', function (args) {
-                            var selectedItemID = listbox.find('div[selected="selected"]').attr('data-item-id');
-                            var type = selectedItemID.split(/\//)[0]; // first is the type (subpath)
-                            var dataid = selectedItemID.split(/\//)[1];
-                            require(['io.ox/settings/accounts/' + type + '/settings'], function (m) {
-                                console.log('ext: ' + 'io.ox/settings/accounts/' + type + '/settings/detail');
-                                ext.point('io.ox/settings/accounts/' + type + '/settings/detail').invoke('draw', node, dataid);
-
-                            });
-                            /*console.log('selected: ' + selectedItemID);
-                            accountDetailView.open({ topnode: node, itemid: selectedItemID});*/
-                        })
-                    )
-                    .append(utils.createButton({label: 'Delete ...'}))
-                )
-                .append(utils.createSectionDelimiter())
-            );
-        }
-    };
 
 
-    ext.point("io.ox/settings/accounts/settings/detail").extend({
+    ext.point("io.ox/settings/accounts/email/settings/detail").extend({
         index: 200,
-        id: "accountssettings",
-        draw: function (data) {
-            accountsView.draw(this, data);
+        id: "emailaccountssettings",
+        draw: function (dataid) {
+            var mynode = this;
+            console.log('i draw tha email view');
+            require(['settings!io.ox/settings/accounts/email/' + dataid], function (settingsWrapper) {
+                settings = settingsWrapper;
+                accountDetailView.open({topnode: mynode});
+            });
         },
         save: function () {
             console.log('now accounts get saved?');
@@ -164,6 +117,4 @@ define('io.ox/settings/accounts/settings',
     });
     
     return {}; //whoa return nothing at first
-
 });
-
