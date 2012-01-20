@@ -148,7 +148,7 @@ define('io.ox/settings/utils',
         createLabeledTextField: function (options) {
             var l = utils.createLabel().css({width: '100%', display: 'inline-block'});
             l.append(utils.createText({text: options.label}));
-            l.append(utils.createTextField({dataid: options.dataid, value: options.value, model: options.model, validator: options.model}).css({ width: options.width + 'px', display: 'inline-block'}));
+            l.append(utils.createTextField({dataid: options.dataid, value: options.value, model: options.model, validator: options.validator}).css({ width: options.width + 'px', display: 'inline-block'}));
             return l;
         },
         createPasswordField: function (options) {
@@ -168,7 +168,7 @@ define('io.ox/settings/utils',
         createLabeledPasswordField: function (options) {
             var l = utils.createLabel().css({width: '100%', display: 'inline-block'});
             l.append(utils.createText({text: options.label}));
-            l.append(utils.createPasswordField({dataid: options.dataid, value: options.value, model: options.model, validator: options.model}).css({ width: options.width + 'px', display: 'inline-block'}));
+            l.append(utils.createPasswordField({dataid: options.dataid, value: options.value, model: options.model, validator: options.validator}).css({ width: options.width + 'px', display: 'inline-block'}));
             return l;
         },
         createListBox: function () {
