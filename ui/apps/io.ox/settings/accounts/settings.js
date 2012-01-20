@@ -99,6 +99,7 @@ define('io.ox/settings/accounts/settings',
 
     var accountsView =  {
         draw: function (node, data) {
+            var listbox = null;
             node
             .append(
                 utils.createSettingsHead(data)
@@ -109,7 +110,7 @@ define('io.ox/settings/accounts/settings',
                 .append(
                   utils.createSectionContent()
                     .append(
-                      utils.createListBox({dataid: 'accounts-list', model: {
+                      listbox = utils.createListBox({dataid: 'accounts-list', model: {
                           get: function () {
                               var list = [
                                     {dataid: 'email-2281', html: 'mario@sourcegarden.com (imap)'},
@@ -126,7 +127,11 @@ define('io.ox/settings/accounts/settings',
                     .append(
                       utils.createButton({label: 'Edit ...'})
                         .css({'margin-right': '15px'})
-                        .on('click', { topnode: node }, accountDetailView.open)
+                        .on('click', { topnode: node }, function () {
+                            var selectedItemID = listbox.find('div[selected="selected"]').attr('data-item-id');
+                            console.log('selected: ' + selectedItemID);
+                            accountDetailView.open();
+                        })
                     )
                     .append(utils.createButton({label: 'Delete ...'}))
                 )
