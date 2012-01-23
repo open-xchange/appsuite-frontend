@@ -69,9 +69,10 @@ AMDs (<i>Asynchronous Module Definition</i>) and load them via require().
 
 <p>
 <b>Naming</b><br>
-Use camel-case for variables (e.g. variableName). Use upper-case/underscores
+Use camelCase for variables (e.g. variableName). Use upper-case/underscores
 for constants (e.g. MAX_WIDTH). Use camel-case with upper-case first char for
-class names (e.g. ClassDefinition).
+class names (e.g. ClassDefinition). Don't use special notations for jQuery-Objects:
+var node = $(…) is better than var $node = $(…);
 </p>
 
 <p>
@@ -103,6 +104,21 @@ Just use <i>$('&lt;div>')</i> plus proper helpers like addClass(), css(), text()
 </p>
 
 <p>
+Use <b>$('&lt;div>')</b> instead of <b>$('&lt;div/>')</b> - there's no need for XHTML
+</p>
+
+<p>
+Prefer <b>$('&lt;input>', { type: 'radio' });</b> over <b>$('&lt;input>').attr('type', 'radio');</b><br/>
+Actually there's a semantic difference (not just syntax) - IE will teach you this!<br>
+Never please write $('&lt;label ...>&lt;/label>'), $('&lt;div>&lt;/div>') or even $('&lt;input...>&lt;/input>')
+</p>
+
+<p>
+<b>Try to write <b>readable</b> code - even if JSHint is already happy.</b><br>
+Example: <i>{ a: 1000, b: 2000 }</i> has better readability than <i>{a:1000,b:2000}</i>.
+</p>
+
+<p>
 <b>Don't COPY/PASTE code you don't understand!<br>
 Never ever do COPY/PASTE inheritance</b><br>
 Always try to code stuff by yourself. Don't just imitate what others
@@ -117,8 +133,6 @@ the author if possible.
 Try to be smart. Look for patterns. Create local helper functions once you
 have to do stuff twice.
 </p>
-
-
 
 
 <h2>Quotes</h2>
@@ -214,36 +228,30 @@ function isPercentage(val) {
 }
 </script> 
 
+<h2>Creating instances</h2>
+<p>Simple one-time instances</p>
+<script type="text/example">
+var obj = { foo: 'bar' };
+</script>
 
-<!-- --------------------------------------------- -->
+<p>Classes. Must start with upper camel case (JSHint will bug you):</p>
+<script type="text/example">
+var Klass = function () {
+    var local = 'foo';
+    this.doSomething = function () {
+        // has access to private variable local
+    };
+};
+</script>
 
-<h1>Minor guidelines</h1>
-
-<p>
-Use $('&lt;div>') instead of $('&lt;div/>') - the latter one has no effect
-</p>
-
-<p>
-Use 'hello' instead of "Hello" because it's easier to read and write $('&lt;input type="radio">')
-</p>
-
-<p>
-Prefer $('&lt;input>', { type: 'radio' }); over $('&lt;input>').attr('type', 'radio'); -
-actually there's a semantic difference (not just syntax) - IE will teach you this!
-</p>
-
-<p>
-Never write $('&lt;label ...>&lt;/label>'), $('&lt;div>&lt;/div>') or even $('&lt;input...>&lt;/input>')
-</p>
-
-<p>
-Combine 'var foo; var bar;' to 'var foo, bar;' - and try to define them first in a function
-</p>
-
-<p>
-Try to write readable code - even if JSHint is already happy.
-Example: { a: 1000, b: 2000 } has better readability than {a:1000,b:2000}
-</p>
+<p>Do <b>NOT</b> use (except for really good performance reasons):</p>
+<script type="text/example">
+var Klass = function () {
+    this.local = 'foo';
+};
+Klass.prototype.doSomething = function () {
+};
+</script>
 
 <!-- --------------------------------------------- -->
 

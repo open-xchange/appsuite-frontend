@@ -224,28 +224,31 @@
         },
 
         /**
-         * Clone object
-         * @param {Object} elem Object to clone
+         * Copy object
+         * @param {Object} elem Object to copy
+         * @param {Boolean} deep Deep vs. Shallow copy
          * @returns {Object} Its clone
          */
-        deepClone: function (elem) {
-            if (typeof elem !== "object") {
-                return elem;
-            } else {
-                var subclone = function (elem) {
-                    if (!elem) {
-                        return null;
-                    } else {
-                        var tmp = _.isArray(elem) ? [] : {}, prop, i;
+        copy: (function () {
+
+            var isArray = _.isArray,
+                copy = function (elem, deep) {
+                        var tmp = isArray(elem) ? new Array(elem.length) : {}, prop, i;
                         for (i in elem) {
                             prop = elem[i];
-                            tmp[i] = typeof prop === "object" && !_.isElement(prop) ? subclone(prop) : prop;
+                            tmp[i] = deep && typeof prop === 'object' ? copy(prop, deep) : prop;
                         }
                         return tmp;
-                    }
-                };
-                return subclone(elem);
-            }
+                    };
+
+            return function (elem, deep) {
+                return elem !== 'object' ? elem : copy(elem, !!deep);
+            };
+        }()),
+
+        // legacy
+        deepClone: function (elem) {
+            return _.copy(elem, true);
         },
 
         /**
