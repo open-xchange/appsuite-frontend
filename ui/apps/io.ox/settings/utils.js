@@ -19,21 +19,21 @@ define('io.ox/settings/utils',
     'use strict';
     var utils = {
         createSectionDelimiter: function () {
-            return $('<div />')
+            return $('<div>')
                       .addClass('settings sectiondelimiter');
         },
         createApplicationIcon: function (options) {
-            return $('<img />')
+            return $('<img>')
                       .css({ float: 'left', padding: '0 1em 1em 0' })
                       .attr('src', options.icon);
         },
         createApplicationTitle: function (options) {
-            return $('<div />')
+            return $('<div>')
                       .addClass('clear-title')
                       .text(options.text);
         },
         createSettingsHead: function (app) {
-            return $('<div />')
+            return $('<div>')
                       .append(utils.createApplicationIcon({icon: app.icon}))
                       .append(utils.createApplicationTitle({text: app.title}))
                       .append(utils.createSectionDelimiter());

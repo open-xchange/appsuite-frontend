@@ -105,11 +105,8 @@ define('io.ox/settings/main',
                   },
                   save: function () {
                       //nothing to do
-                      var d = new $.Deferred();
-                      d.resolve();
-                      return d;
+                      return $.Deferred().resolve();
                   }
-              
               }});
               this.append(cb);
             }
