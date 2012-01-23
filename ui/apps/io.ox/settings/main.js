@@ -14,8 +14,8 @@ define('io.ox/settings/main',
      ['io.ox/core/tk/vgrid',
       'io.ox/core/api/apps',
       'io.ox/core/extensions',
-      'io.ox/settings/utils',
-      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, utils) {
+      'io.ox/core/tk/forms',
+      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms) {
      
     'use strict';
 
@@ -95,7 +95,7 @@ define('io.ox/settings/main',
         ext.point('io.ox/settings/links/toolbar').extend({
             id: 'io.ox/settings/expertcb',
             draw: function (context) {
-              var cb  = utils.createCheckbox({dataid: 'settings-expertcb', label: 'Enable Expert Mode', currentValue: expertmode, model:  {
+              var cb  = forms.createCheckbox({dataid: 'settings-expertcb', label: 'Enable Expert Mode', currentValue: expertmode, model:  {
                   get: function (dataid, value) {
                       return expertmode;
                   },
