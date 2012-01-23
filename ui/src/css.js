@@ -219,186 +219,188 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
 
     'use strict';
 
-    var settings = {},
-        settingsCache;
+    var settingsWrapper = function () {
+        var globalSubpath = "gui/wurst/";
+        var settings = {},
+            settingsCache;
 
 
-    var get = function (key) {
+        var get = function (key) {
 
-        var parts = key.split(/\//),
-          tmp = settings || {};
+            var parts = key.split(/\//),
+              tmp = settings || {};
 
-        _.each(parts, function (partname, index) {
-            var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
-            if (tmpHasSubNode) {
-                tmp = tmp[partname];
-            } else {
-                tmp = null;
-                return null;
-            }
-        });
-        return tmp;
-    };
-
-    var set = function (key, value) {
-
-        var parts = key.split(/\//),
-          tmp = settings || {},
-          rkey = parts.pop();
-
-        _.each(parts, function (partname, index) {
-            var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
-            if (tmpHasSubNode) {
-                tmp = tmp[partname];
-                if (typeof tmp !== 'object') {
-                    console.error('settings.set: ' + tmp + ' is a value');
-                    return false;
-                } 
-            } else {
-                tmp[partname] = {};
-                tmp = tmp[partname];
-            }
-        });
-        tmp[rkey] = value;
-    };
-
-    var contains = function (key) {
-        var parts = key.split(/\//),
-          tmp = settings || {};
-
-        _.each(parts, function (partname, index) {
-            var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
-            if (tmpHasSubNode) {
-                tmp = tmp[partname];
-            } else {
-                return false;
-            }
-        });
-        return true;
-    };
-
-    var remove = function (key) {
-        var parts = key.split(/\//),
-          tmp = settings || {},
-          rkey = parts.pop();
-        _.each(parts, function (partname, index) {
-            var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
-            if (tmpHasSubNode) {
-                tmp = tmp[partname];
-                if (typeof tmp !== 'object') {
-                    console.error('settings.remove: ' + tmp + ' is a value');
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        });
-
-        delete [tmp[rkey]];
-        return true;
-    };
-
-    var globalSubpath = "gui/wurst/";
-
-
-    var settingsWrapper = {
-        settingsPath: null,
-        get: function (path, defaultValue) {
-            if (!path) { // undefined, null, ''
-                return settings;
-            } else {
-                path = (globalSubpath + settingsWrapper.settingsPath + '/' + path);
-                console.log('getting: ' + path);
-                if (defaultValue === undefined) {
-                    return get(path);
+            _.each(parts, function (partname, index) {
+                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
+                if (tmpHasSubNode) {
+                    tmp = tmp[partname];
                 } else {
-                    return contains(path) ? get(path) : defaultValue;
+                    tmp = null;
+                    return null;
                 }
-            }
-        },
-
-        set: function (path, value, permanent) {
-            if (path) {
-                path = (globalSubpath + settingsWrapper.settingsPath + '/' + path);
-                set(path, value);
-                console.log('set ' +path + ':' + value);
-                if (permanent) {
-                    // save settings path on server
-                    settingsCache.add('settingsDefault', settings);
-                    return http.PUT({
-                        module: 'config/gui',
-                        appendColumns: false,
-                        processResponse: false,
-                        data: settings
-                    });
-                }
-            }
-        },
-
-        remove: function (path) {
-            if (path) {
-                path = (globalSubpath + settingsWrapper.settingsPath + '/' + path);
-                remove(path);
-            }
-        },
-
-        contains: function (path) {
-            path = (globalSubpath + settingsWrapper.settingsPath + '/' + path);
-            return contains(path);
-        },
-
-        load: function () {
-            // loader
-            var load = function () {
-                return http.GET({
-                        module: 'config/gui',
-                        appendColumns: false,
-                        processResponse: false
-                    })
-                    .done(function (data) {
-                        settings = data !== undefined ? data.data : {};
-                        settingsCache.add('settingsDefault', settings);
-                    });
-            };
-            // trick to be fast: cached?
-            if (!settingsCache) {
-                settingsCache = new cache.SimpleCache('settings', true);
-            }
-            if (settingsCache.contains('settingsDefault')) {
-                return settingsCache.get('settingsDefault').pipe(function (mycached) {
-                    if(mycached !== undefined) {
-                        settings = mycached;
-                        load();
-                        return settings;
-                    } else {
-                      return load();
-                    }
-                });
-            } else {
-                // load configuration
-                return load();
-            }
-        },
-        save: function () {
-            settingsCache.add('settingsDefault', settings);
-            return http.PUT({
-                module: 'config/gui',
-                appendColumns: false,
-                processResponse: false,
-                data: settings
             });
-        }
+            return tmp;
+        };
+
+        var set = function (key, value) {
+
+            var parts = key.split(/\//),
+              tmp = settings || {},
+              rkey = parts.pop();
+
+            _.each(parts, function (partname, index) {
+                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
+                if (tmpHasSubNode) {
+                    tmp = tmp[partname];
+                    if (typeof tmp !== 'object') {
+                        console.error('settings.set: ' + tmp + ' is a value');
+                        return false;
+                    } 
+                } else {
+                    tmp[partname] = {};
+                    tmp = tmp[partname];
+                }
+            });
+            tmp[rkey] = value;
+        };
+
+        var contains = function (key) {
+            var parts = key.split(/\//),
+              tmp = settings || {};
+
+            _.each(parts, function (partname, index) {
+                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
+                if (tmpHasSubNode) {
+                    tmp = tmp[partname];
+                } else {
+                    return false;
+                }
+            });
+            return true;
+        };
+
+        var remove = function (key) {
+            var parts = key.split(/\//),
+              tmp = settings || {},
+              rkey = parts.pop();
+            _.each(parts, function (partname, index) {
+                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
+                if (tmpHasSubNode) {
+                    tmp = tmp[partname];
+                    if (typeof tmp !== 'object') {
+                        console.error('settings.remove: ' + tmp + ' is a value');
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            });
+
+            delete [tmp[rkey]];
+            return true;
+        };
+
+        var that = {
+            settingsPath: null,
+            get: function (path, defaultValue) {
+                if (!path) { // undefined, null, ''
+                    return settings;
+                } else {
+                    path = (globalSubpath + that.settingsPath + '/' + path);
+                    console.log('getting: ' + path);
+                    if (defaultValue === undefined) {
+                        return get(path);
+                    } else {
+                        return contains(path) ? get(path) : defaultValue;
+                    }
+                }
+            },
+
+            set: function (path, value, permanent) {
+                if (path) {
+                    path = (globalSubpath + that.settingsPath + '/' + path);
+                    set(path, value);
+                    console.log('set ' +path + ':' + value);
+                    if (permanent) {
+                        // save settings path on server
+                        settingsCache.add('settingsDefault', settings);
+                        return http.PUT({
+                            module: 'config/gui',
+                            appendColumns: false,
+                            processResponse: false,
+                            data: settings
+                        });
+                    }
+                }
+            },
+
+            remove: function (path) {
+                if (path) {
+                    path = (globalSubpath + mywrapper.settingsPath + '/' + path);
+                    remove(path);
+                }
+            },
+
+            contains: function (path) {
+                path = (globalSubpath + mywrapper.settingsPath + '/' + path);
+                return contains(path);
+            },
+
+            load: function () {
+                // loader
+                var load = function () {
+                    return http.GET({
+                            module: 'config/gui',
+                            appendColumns: false,
+                            processResponse: false
+                        })
+                        .done(function (data) {
+                            settings = data !== undefined ? data.data : {};
+                            settingsCache.add('settingsDefault', settings);
+                        });
+                };
+                // trick to be fast: cached?
+                if (!settingsCache) {
+                    settingsCache = new cache.SimpleCache('settings', true);
+                }
+                if (settingsCache.contains('settingsDefault')) {
+                    return settingsCache.get('settingsDefault').pipe(function (mycached) {
+                        if(mycached !== undefined) {
+                            settings = mycached;
+                            load();
+                            return settings;
+                        } else {
+                          return load();
+                        }
+                    });
+                } else {
+                    // load configuration
+                    return load();
+                }
+            },
+            save: function () {
+                settingsCache.add('settingsDefault', settings);
+                return http.PUT({
+                    module: 'config/gui',
+                    appendColumns: false,
+                    processResponse: false,
+                    data: settings
+                });
+            }
+        };
+        return that;
     };
 
     return {
       load: function (name, req, load, config) {
-          settingsWrapper.settingsPath = name; //encodeURIComponent(name);
-          settingsWrapper.load()
+          var mywrapper = settingsWrapper();
+          mywrapper.settingsPath = name; //encodeURIComponent(name);
+          mywrapper.load()
             .done(function () {
-              load(settingsWrapper);
+              load(mywrapper);
             })
             .fail(function () {
-              console.error('failed to load settings for:' + settingsWrapper.settingsPath);
+              console.error('failed to load settings for:' + mywrapper.settingsPath);
             });
           
       }

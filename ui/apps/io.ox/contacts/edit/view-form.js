@@ -47,7 +47,8 @@ define("io.ox/contacts/edit/view-form",
     }
 
     function addField(o) {
-        var field = $('<input>', { name: o.name, type: 'text' })
+        var now = _.now(),
+            field = $('<input>', { name: o.name, type: 'text', id: o.name + "_" + now })
                 .addClass('nice-input')
                 // TODO: add proper CSS class
                 .css({ fontSize: '14px', width: '300px', paddingTop: '0.25em', paddingBottom: '0.25em', webkitBorderRadius: 0, webkitAppearance: 'none' })
@@ -60,12 +61,12 @@ define("io.ox/contacts/edit/view-form",
                         }
                     }),
             td = $("<td>").addClass("value").css('paddingBottom', '0.5em')
-                .append($.labelize(field, 'field_' + o.name)),
+                .append(field),
             tr = $("<tr>").addClass(o.id + ' ' + o.name)
                 .append(
                     $("<td>").addClass("label")
                     .css({ paddingTop: '7px', width: '150px' })
-                    .text(o.label)
+                    .append($('<label>').text(o.label).attr('for', o.name + "_" + now))
                 )
                 .append(td);
         // auto-update header?
@@ -163,6 +164,7 @@ define("io.ox/contacts/edit/view-form",
                 'birthday': {
                     label: gt("Birthday"),
                     name: 'birthday',
+                    fn: 'hidden',
                     weight: 170,
                     blockid: 'contact-personal'
                 }
@@ -198,7 +200,6 @@ define("io.ox/contacts/edit/view-form",
                 'telephone_business1': {
                     label: gt("Telephone business 1"),
                     name: 'telephone_business1',
-                    fn: 'hidden',
                     weight: 301,
                     blockid: 'contact-phone'
                 },
@@ -261,7 +262,6 @@ define("io.ox/contacts/edit/view-form",
                 'cellular_telephone1': {
                     label: gt("Cellphone"),
                     name: 'cellular_telephone1',
-                    fn: 'hidden',
                     weight: 310,
                     blockid: 'contact-phone'
                 },
@@ -377,7 +377,7 @@ define("io.ox/contacts/edit/view-form",
                 'city_home': {
                     label: gt("City"),
                     name: 'city_home',
-                   // fn: 'hidden',
+                   fn: 'hidden',
                     weight: 420,
                     blockid: 'contact-home-address'
                 },
@@ -774,13 +774,17 @@ define("io.ox/contacts/edit/view-form",
         }
     };
 
+
+
     function addSwitch(node, id, title) {
         var select = $(node).find('.' + id + '.hidden'),
             f = ($(node).find('.' + id + '.hidden')).length,
-            g = ($(node).find('.' + id)).length,
+            allInputsTr = $(node).find('tr.' + id),
+            g = $(node).find('.' + id).length,
             v = g - f,
             buttonTextOn,
-            buttonTextOff;
+            buttonTextOff,
+            oldP;
         if (v >= 1) {
             $(node).find('.' + id + '.headline').removeClass('hidden');
             buttonTextOn = 'show more';
@@ -791,14 +795,44 @@ define("io.ox/contacts/edit/view-form",
         }
         var button = $('<a>').addClass(id).text(buttonTextOn),
             tr = $('<tr>').append($('<td>'), $('<td>').append(button));
+
         button.on('click', {id: id}, function (event) {
             if (button.text() === buttonTextOn) {
+                oldP = $('.window-content').scrollTop();
                 $(node).find('.' + event.data.id + '.hidden').removeClass('hidden').addClass('visible');
                 button.text(buttonTextOff);
             } else {
                 $(node).find('.' + event.data.id + '.visible').removeClass('visible').addClass('hidden');
                 button.text(buttonTextOn);
+                $('.window-content').scrollTop(oldP);
             }
+        });
+        allInputsTr.on('change keyup', function () {
+            var values = {};
+            allInputsTr.not('.headline').each(function (index) {
+//                console.log($(this).find('input'));
+                if ($(this).find('input').val() !== '') {
+                    values[index] = $(this).find('input').val();
+                    $(this).addClass('filled');
+
+                } else {
+                    $(this).removeClass('filled');
+                }
+                });
+
+//            console.log(values);
+            if (!_.isEmpty(values)) {
+                buttonTextOff = 'show less';
+                buttonTextOn = 'show more';
+                button.text(buttonTextOff);
+                $('.' + id + '.headline').removeClass('visible filled');
+            }
+            else {
+                buttonTextOn = '+ ' + title;
+                buttonTextOff = '- ' + title;
+                button.text(buttonTextOn);
+                $('tr.' + id).removeClass('filled').addClass('hidden');
+                }
         });
 
         if (select[1]) {
@@ -850,13 +884,16 @@ define("io.ox/contacts/edit/view-form",
                             'width': '150px'
                         }),
                         td = $('<td>'),
+                        now = _.now(),
                         fieldname, fieldname2, labeltext, labeltext2;
                     if (inline[1]) {
                         fieldname = inline[0] + '_' + nameBlock;
                         fieldname2 = inline[1] + '_' + nameBlock;
                         labeltext = formFields[name].fields[fieldname].label;
                         labeltext2 = formFields[name].fields[fieldname2].label;
-                        var input1 = $('<input>').attr('name', fieldname)
+                        var input1 = $('<input>').attr({
+                            'name': fieldname,
+                            'id': fieldname + '_' + now})
                         .addClass('nice-input').val(data[inline[0] + '_' + nameBlock])
                         .css({
                             'font-size': '14px',
@@ -864,7 +901,10 @@ define("io.ox/contacts/edit/view-form",
                             'padding-top': '0.25em',
                             'padding-bottom': '0.25em'
                         }),
-                            input2 = $('<input>').attr('name', fieldname2)
+                            input2 = $('<input>').attr({
+                                'name': fieldname2,
+                                'id': fieldname2 + '_' + now
+                            })
                             .addClass('nice-input').val(data[inline[1] + '_' + nameBlock])
                             .css({
                                 'font-size': '14px',
@@ -872,8 +912,10 @@ define("io.ox/contacts/edit/view-form",
                                 'padding-top': '0.25em',
                                 'padding-bottom': '0.25em',
                                 'margin-left': '0.5em'
-                            });
-                        label.text(labeltext + ' ' + labeltext2);
+                            }),
+                            labelData1 = $('<label>').attr('for', fieldname + '_' + now).text(labeltext),
+                            labelData2 = $('<label>').attr('for', fieldname2 + '_' + now).text(labeltext2);
+                        label.append(labelData1, labelData2);
                         td.css('padding-bottom', '0.5em').append(input1, input2);
                         tr.addClass(formFields[name].fields[fieldname].blockid);
                         if (!data[inline[0] + '_' + nameBlock]) {
@@ -889,13 +931,16 @@ define("io.ox/contacts/edit/view-form",
                             'width': '300px',
                             'padding-top': '0.25em',
                             'padding-bottom': '0.25em'
-                        }).attr('name', fieldname).val(drawData));
+                        }).attr({
+                            'name': fieldname,
+                            'id': fieldname + '_' + now
+                            }).val(drawData));
                         labeltext = formFields[name].fields[fieldname].label;
                         tr.addClass(formFields[name].fields[fieldname].blockid + ' ' + fieldname);
                         if (!drawData) {
                             tr.addClass(formFields[name].fields[fieldname].fn);
                         }
-                        label.text(labeltext);
+                        label.append($('<label>').attr('for', fieldname + '_' + now).text(labeltext));
                         this.append(tr.append(label, td));
                     }
                 }

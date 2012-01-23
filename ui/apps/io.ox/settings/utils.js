@@ -171,22 +171,37 @@ define('io.ox/settings/utils',
             l.append(utils.createPasswordField({dataid: options.dataid, value: options.value, model: options.model, validator: options.validator}).css({ width: options.width + 'px', display: 'inline-block'}));
             return l;
         },
-        createListBox: function () {
-            return $('<div>').addClass('listbox');
+        createListBox: function (options) {
+            var ldiv = $('<div>').addClass('listbox');
+            ldiv.append(utils.createListSpacer());
+            _.each(options.model.get(options.dataid), function (item, k) {
+                console.log(k + ':' + item.dataid);
+                ldiv.append(utils.createListItem({dataid: item.dataid, html: item.html}));
+            });
+            ldiv.append(utils.createListSpacer());
+            return ldiv;
         },
 
         createListItem: function (options) {
             options.classStr = options.classStr || 'deletable-item';
             var item = $('<div>');
             item.addClass(options.classStr);
-            item.attr('data-item-id', options.dataId);
+            item.attr('data-item-id', options.dataid);
 
-            item.append($('<div>').text(options.content));
+            item.append($('<div>').html(options.html));
 
             item.append(
               $('<button>')
                 .addClass('close-button')
             );
+
+            item.on('click', function () {
+                console.log('click');
+                item.parent().find('div[selected="selected"]').attr('selected', null);
+                item.attr('selected', 'selected');
+            });
+
+
             return item;
         },
         createListSpacer: function () {
