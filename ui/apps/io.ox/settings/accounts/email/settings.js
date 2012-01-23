@@ -33,7 +33,6 @@ define('io.ox/settings/accounts/email/settings',
         },
         draw: function (popup) {
             console.log('opening');
-            console.log(accountDetailView.itemid);
             popup.empty()
             .addClass('settings-detail-pane')
             .append(
@@ -105,9 +104,9 @@ define('io.ox/settings/accounts/email/settings',
         id: "emailaccountssettings",
         draw: function (dataid) {
             var mynode = this;
-            console.log('i draw tha email view');
             require(['settings!io.ox/settings/accounts/email/' + dataid], function (settingsWrapper) {
                 settings = settingsWrapper;
+                console.log('open tha detail page');
                 accountDetailView.open({topnode: mynode});
             });
         },
