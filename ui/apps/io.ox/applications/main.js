@@ -20,7 +20,7 @@ define('io.ox/applications/main',
     'use strict';
 
     // application object
-    var app = ox.ui.createApp(),
+    var app = ox.ui.createApp({ name: 'io.ox/applications' }),
         // app window
         win,
         // grid

@@ -135,6 +135,9 @@ define("io.ox/core/desktop",
     // show
     core.show();
 
+    // TODO: imrpove this stupid approach
+    ox.ui.running = [];
+
     /**
      * Create app
      */
@@ -172,31 +175,38 @@ define("io.ox/core/desktop",
 
             function saveRestorePoint() {
                 if (self.failSave) {
-                    var list = appCache.get('savepoints') || [],
-                        data = self.failSave(),
-                        ids = _(list).pluck('id'),
-                        pos = _(ids).indexOf(savePointUniqueID);
-                    // add unique id
-                    data.id = savePointUniqueID;
-                    if (pos > -1) {
-                        // replace
-                        list.splice(pos, 1, data);
-                    } else {
-                        // add
-                        list.push(data);
-                    }
-                    appCache.add('savepoints', list);
+                    appCache.get('savepoints').done(function (list) {
+                        list = list || [];
+
+                        var data = self.failSave(),
+                            ids = _(list).pluck('id'),
+                            pos = _(ids).indexOf(savePointUniqueID);
+
+                        data.id = savePointUniqueID;
+
+                        if (pos > -1) {
+                            // replace
+                            list.splice(pos, 1, data);
+                        } else {
+                            // add
+                            list.push(data);
+                        }
+                        appCache.add('savepoints', list);
+                    });
                 }
             }
 
             function removeRestorePoint() {
-                var list = appCache.get('savepoints') || [],
-                    ids = _(list).pluck('id'),
-                    pos = _(ids).indexOf(savePointUniqueID);
-                if (pos > -1) {
-                    list.splice(pos, 1);
-                }
-                appCache.add('savepoints', list);
+                appCache.get('savepoints').done(function (list) {
+                    list = list || [];
+                    var ids = _(list).pluck('id'),
+                        pos = _(ids).indexOf(savePointUniqueID);
+
+                    if (pos > -1) {
+                        list.splice(pos, 1);
+                    }
+                    appCache.add('savepoints', list);
+                });
             }
 
             $(window).on('unload', saveRestorePoint);
@@ -242,6 +252,8 @@ define("io.ox/core/desktop",
                                         grid.clear();
                                         grid.prop('folder', folder);
                                         grid.refresh();
+                                        // update hash
+                                        _.url.hash('folder', folder);
                                     }
                                     def.resolve(data);
                                 })
@@ -330,9 +342,36 @@ define("io.ox/core/desktop",
                 return win;
             };
 
+            this.getWindowTitle = function () {
+                return win ? win.getTitle() : '';
+            };
+
+            this.setState = function (obj) {
+                for (var id in obj) {
+                    _.url.hash(id, String(obj[id]));
+                }
+            };
+
+            this.getName = function () {
+                return opt.name;
+            };
+
+            this.getState = function () {
+                return _.url.hash();
+            };
+
             this.launch = function () {
 
                 var deferred;
+
+                // update hash
+                if (opt.name !== _.url.hash('app')) {
+                    _.url.hash('folder', null);
+                    _.url.hash('id', null);
+                }
+                if (opt.name) {
+                    _.url.hash('app', opt.name);
+                }
 
                 if (!running) {
                     // mark as running
@@ -344,7 +383,10 @@ define("io.ox/core/desktop",
                         );
                     }
                     // go!
-                    deferred = launchFn() || $.when();
+                    (deferred = launchFn() || $.when())
+                    .done(function () {
+                        ox.ui.running.push(self);
+                    });
 
                 } else if (win) {
                     // toggle app window
@@ -358,6 +400,12 @@ define("io.ox/core/desktop",
             };
 
             this.quit = function () {
+                // update hash
+                _.url.hash('app', null);
+                _.url.hash('folder', null);
+                _.url.hash('id', null);
+                // remove from list
+                ox.ui.running = _(ox.ui.running).without(this);
                 // call quit function
                 var def = quitFn() || $.Deferred().resolve();
                 return def.done(function () {
@@ -394,25 +442,76 @@ define("io.ox/core/desktop",
         ox.ui.App = App;
 
         App.canRestore = function () {
-            return (appCache.get('savepoints') || []).length > 0;
+            return appCache.contains('savepoints');
+        };
+
+        App.getSavePoints = function () {
+            return appCache.get('savepoints').pipe(function (list) {
+                return list || [];
+            });
         };
 
         App.restore = function () {
-            _(appCache.get('savepoints') || []).each(function (obj) {
-                require([obj.module], function (m) {
-                    m.getApp().launch().done(function () {
-                        if (this.failRestore) {
-                            this.failRestore(obj.point);
-                        }
+            App.getSavePoints().done(function (data) {
+                _(data).each(function (obj) {
+                    require([obj.module + '/main'], function (m) {
+                        m.getApp().launch().done(function () {
+                            if (this.failRestore) {
+                                this.failRestore(obj.point);
+                            }
+                        });
                     });
                 });
+                appCache.remove('savepoints');
             });
-            appCache.remove('savepoints');
         };
 
         return function (options) {
             return new App(options);
         };
+
+    }());
+
+    ox.ui.screens = (function () {
+
+        var current = null,
+
+            that = {
+
+                add: function (id) {
+                    return $('<div>', { id: 'io-ox-' + id }).addClass('abs').hide()
+                        .appendTo('#io-ox-screens');
+                },
+
+                get: function (id) {
+                    return $('#io-ox-screens').find('#io-ox-' + id);
+                },
+
+                current: function () {
+                    return current;
+                },
+
+                hide: function (id) {
+                    this.get(id).hide();
+                    this.trigger('hide-' + id);
+                },
+
+                show: function (id) {
+                    $('#io-ox-screens').children().each(function (i, node) {
+                        var screenId = $(this).attr('id').substr(6);
+                        if (screenId !== id) {
+                            that.hide(screenId);
+                        }
+                    });
+                    this.get(id).show();
+                    current = id;
+                    this.trigger('show-' + id);
+                }
+            };
+
+        event.Dispatcher.extend(that);
+
+        return that;
 
     }());
 
@@ -428,7 +527,22 @@ define("io.ox/core/desktop",
                 }, 0);
             };
 
+        ox.ui.screens.bind('hide-windowmanager', function () {
+            if (currentWindow) {
+                currentWindow.hide();
+            }
+        });
+
+        that.hide = function () {
+            ox.ui.screens.hide('windowmanager');
+        };
+
+        that.show = function () {
+            ox.ui.screens.show('windowmanager');
+        };
+
         that.bind("window.open", function (win) {
+            this.show();
             if (_(windows).indexOf(win) === -1) {
                 windows.push(win);
             }
@@ -663,6 +777,10 @@ define("io.ox/core/desktop",
                             title
                     );
                 }
+
+                this.getTitle = function () {
+                    return self.nodes.title.find("span").eq(0).contents().text();
+                };
 
                 this.setTitle = function (t) {
                     title = t;

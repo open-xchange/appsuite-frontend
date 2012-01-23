@@ -13,13 +13,13 @@
 
 define("io.ox/applications/view-installed",
     ["io.ox/core/api/apps", "io.ox/applications/view-common"], function (api, view) {
-    
+
     'use strict';
-    
+
     return {
-        
-        draw: function () {
-            
+
+        draw: function (context) {
+
             var node = $("<div>")
                 .append(
                     $("<div>").addClass("clear-title")
@@ -32,16 +32,16 @@ define("io.ox/applications/view-installed",
                         'This allows a faster start of your favorites.'
                     )
                 );
-                
+
             // get apps
             var apps = $("<div>").addClass("apps");
-            
+
             _(api.getInstalled('installed')).each(function (data) {
-                apps.append(view.drawApp(data));
+                apps.append(view.drawApp(data, context));
             });
-            
+
             node.children().eq(1).after(apps);
-            
+
             return node;
         }
     };

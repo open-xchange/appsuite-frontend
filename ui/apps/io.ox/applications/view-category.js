@@ -11,29 +11,30 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/applications/view-category",
-    ["io.ox/core/api/apps", "io.ox/applications/view-common"], function (api, view) {
-    
+define('io.ox/applications/view-category',
+    ['io.ox/core/api/apps', 'io.ox/applications/view-common'], function (api, view) {
+
     'use strict';
-    
+
     return {
-        
+
         draw: function (context) {
-            
-            var node = $("<div>")
+
+            var node = $('<div>')
+                .addClass('category-' + context.id)
                 .append(
-                    $("<div>").addClass("clear-title")
-                    .text("Category: " + context.id)
+                    $('<div>').addClass('clear-title')
+                    .text(context.title + '')
                 );
-            
-            var apps = $("<div>").addClass("apps");
-            
+
+            var apps = $('<div>').addClass('apps');
+
             _(api.getByCategory(context.id)).each(function (data) {
-                apps.append(view.drawApp(data));
+                apps.append(view.drawApp(data, context));
             });
-            
+
             node.children().eq(0).after(apps);
-            
+
             return node;
         }
     };

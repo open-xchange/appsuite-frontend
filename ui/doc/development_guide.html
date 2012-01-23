@@ -118,6 +118,133 @@ Try to be smart. Look for patterns. Create local helper functions once you
 have to do stuff twice.
 </p>
 
+
+
+
+<h2>Quotes</h2>
+<p>Use single quotes, unless you are writing JSON.</p>
+<p><i>Right:</i></p>
+<script type="text/example">
+  var foo = 'bar';
+</script>
+<p><i>Wrong:</i></p>
+<script type="text/example">
+  var foo = "bar";
+</script>
+
+<h2>Braces</h2>
+<p>Your opening braces go on the same line as the statement.</p>
+<p><i>Right:</i></p>
+<script type="text/example">
+if (true) {
+  console.log('winning');
+}
+</script>  
+<p><i>Wrong:</i></p>
+<script type="text/example">
+if (true)
+{
+  console.log('losing');
+}
+</script>
+<p>Also, notice the use of whitespace before and after the condition
+statement.</p>
+
+
+<h2>Conditions</h2>
+<p>Any non-trivial conditions should be assigned to a descriptive
+variable:</p>
+<p><i>Right:</i></p>
+<script type="text/example">
+var isAuthorized = (user.isAdmin() || user.isModerator());
+if (isAuthorized) {
+  console.log('winning');
+}
+</script> 
+<p><i>Wrong:</i></p>
+<script type="text/example">
+if (user.isAdmin() || user.isModerator()) {
+  console.log('losing');
+}
+</script> 
+
+<h2>Function length</h2>
+<p>Keep your functions short. A good function fits on a slide that the
+people in the last row of a big room can comfortably read. So don't
+count on them having perfect vision and limit yourself to ~10 lines of
+code per function.</p>
+
+<h2>Return statements</h2>
+<p>To avoid deep nesting of if-statements, always return a functions
+value as early as possible.</p>
+
+<p><i>Right:</i></p>
+<script type="text/example">
+function isPercentage(val) {
+  if (val < 0) {
+    return false;
+  }
+
+  if (val > 100) {
+    return false;
+  }
+
+  return true;
+}
+</script> 
+<p><i>Wrong:</i></p>
+<script type="text/example">
+function isPercentage(val) {
+  if (val >= 0) {
+    if (val < 100) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+</script> 
+<p>Or for this particular example it may also be fine to shorten things even further:</p>
+<script type="text/example">
+function isPercentage(val) {
+  var isInRange = (val >= 0 && val <= 100);
+  return isInRange;
+}
+</script> 
+
+
+<!-- --------------------------------------------- -->
+
+<h1>Minor guidelines</h1>
+
+<p>
+Use $('&lt;div>') instead of $('&lt;div/>') - the latter one has no effect
+</p>
+
+<p>
+Use 'hello' instead of "Hello" because it's easier to read and write $('&lt;input type="radio">')
+</p>
+
+<p>
+Prefer $('&lt;input>', { type: 'radio' }); over $('&lt;input>').attr('type', 'radio'); -
+actually there's a semantic difference (not just syntax) - IE will teach you this!
+</p>
+
+<p>
+Never write $('&lt;label ...>&lt;/label>'), $('&lt;div>&lt;/div>') or even $('&lt;input...>&lt;/input>')
+</p>
+
+<p>
+Combine 'var foo; var bar;' to 'var foo, bar;' - and try to define them first in a function
+</p>
+
+<p>
+Try to write readable code - even if JSHint is already happy.
+Example: { a: 1000, b: 2000 } has better readability than {a:1000,b:2000}
+</p>
+
 <!-- --------------------------------------------- -->
 
 <h1>Educate yourself</h1>
@@ -168,5 +295,7 @@ Nice overview about lots of performance relevant issues.
 Nice to know. Mandatory if you have to create theme.
 </li>
 </ul>
+
+
 
 </div>

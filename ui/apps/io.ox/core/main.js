@@ -86,9 +86,22 @@ define("io.ox/core/main",
         // refresh animation
         initRefreshAnimation();
 
-        desktop.addLauncher("right", gt("Applications"), function () {
+//        desktop.addLauncher("right", gt("Applications"), function () {
+//            var node = this;
+//            return require(["io.ox/applications/main"], function (m) {
+//                m.getApp().setLaunchBarIcon(node).launch();
+//            });
+//        });
+
+        desktop.addLauncher("left", gt("Apps"), function () {
             var node = this;
-            return require(["io.ox/applications/main"], function (m) {
+            return require(["io.ox/launchpad/main"], function (m) {
+                m.show();
+            });
+        });
+        desktop.addLauncher("right", gt("Settings"), function () {
+            var node = this;
+            return require(["io.ox/settings/main"], function (m) {
                 m.getApp().setLaunchBarIcon(node).launch();
             });
         });
@@ -112,33 +125,10 @@ define("io.ox/core/main",
         ext.point("io.ox/core/desktop").extend({
             id: "upsell",
             draw: function () {
-                // create audio tag
-                var boing = (function () {
-                    var audio, url = ox.base + '/apps/themes/default/';
-                    return function () {
-                        if (audio) {
-                            audio.pause();
-                        }
-                        audio = new Audio(url + (Math.random() < 0.7 ? 'spring.wav' : 'boing.wav'));
-                        audio.play();
-                    };
-                }());
-                // run away
-                function run() {
-                    var self = $(this).off('mouseover mousemove', run);
-                    boing();
-                    self.stop(false, true)
-                        .animate({
-                            right: ((self.parent().width() - 240) * Math.random() >> 0) + "px",
-                            bottom: ((self.parent().height() - 140) * Math.random() >> 0) + "px"
-                        }, 100)
-                        .on('mouseover mousemove', run);
-                }
                 // does nothing - just to demo an exemplary upsell path
                 this
                 .append(
                     $('<div>')
-                    .on('mouseover mousemove', run)
                     .css({
                         position: "absolute",
                         width: "270px",
@@ -155,16 +145,6 @@ define("io.ox/core/main",
                         })
                         .text("Click me for a 90-day free trial!")
                     )
-//                    .append(
-//                        $('<img>', { src: ox.base + '/apps/themes/default/xmas.png' })
-//                        .css({
-//                            position: "absolute",
-//                            top: "-72px",
-//                            right: "-60px",
-//                            zIndex: 2
-//                        })
-//                    )
-                    //.append(audio)
                 );
             }
         });
@@ -193,7 +173,7 @@ define("io.ox/core/main",
                 );
 
                 update = function () {
-                    date.text(i18n.date("EEE dd. MMM YYYY HH:mm"));
+                    date.text(i18n.date("EEE dd. MMM YYYY HH:mm:ss"));
                 };
 
                 update();
@@ -210,20 +190,23 @@ define("io.ox/core/main",
             if (isEmpty) {
                 drawDesktop();
             }
-            $("#io-ox-desktop")[isEmpty ? "show" : "hide"]();
-            $("#io-ox-windowmanager")[isEmpty ? "hide" : "show"]();
+            if (isEmpty) {
+                ox.ui.screens.show('desktop');
+            } else {
+                ox.ui.screens.show('windowmanager');
+            }
         });
 
-        var def = $.Deferred().done(function () {
-                // add some senseless characters to avoid unwanted scrolling
-                if (location.hash === '') {
-                    location.hash = '#!';
-                }
-            }),
-            autoLaunch = _.url.hash("launch") ? _.url.hash("launch").split(/,/) : [],
+        // add some senseless characters to avoid unwanted scrolling
+        if (location.hash === '') {
+            location.hash = '#' + (_.getCookie('hash') || '!');
+        }
+
+        var def = $.Deferred(),
+            autoLaunch = _.url.hash("app") ? _.url.hash("app").split(/,/) : [],
             autoLaunchModules = _(autoLaunch)
                 .map(function (m) {
-                    return m.split(/:/)[0];
+                    return m.split(/:/)[0] + '/main';
                 });
 
         $.when(
@@ -236,7 +219,7 @@ define("io.ox/core/main",
                 _(autoLaunch).each(function (id) {
                     // split app/call
                     var pair = id.split(/:/),
-                        launch = require(pair[0]).getApp().launch(),
+                        launch = require(pair[0] + '/main').getApp().launch(),
                         call = pair[1];
                     // explicit call?
                     if (call) {
@@ -251,18 +234,30 @@ define("io.ox/core/main",
                 ox.ui.App.restore();
             });
 
-        if (autoLaunch.length === 0 && !ox.ui.App.canRestore()) {
-            drawDesktop();
-        }
+        var restoreLauncher = function (canRestore) {
+            if (autoLaunch.length === 0 && !canRestore) {
+                drawDesktop();
+            }
+            if (autoLaunch.length || canRestore || location.hash === '#!') {
+                // instant fade out
+                $("#background_loader").idle().hide();
+                def.resolve();
+            } else {
+                // fade out animation
+                $("#background_loader").idle().fadeOut(DURATION, def.resolve);
+            }
+        };
 
-        if (autoLaunch.length || ox.ui.App.canRestore() || location.hash === '#!') {
-            // instant fade out
-            $("#background_loader").idle().hide();
-            def.resolve();
-        } else {
-            // fade out animation
-            $("#background_loader").idle().fadeOut(DURATION, def.resolve);
-        }
+        ox.ui.App.canRestore()
+            .done(function () {
+                // clear auto start stuff (just conflicts)
+                autoLaunch = [];
+                autoLaunchModules = [];
+                restoreLauncher(true);
+            })
+            .fail(function () {
+                restoreLauncher(false);
+            });
     }
 
     return {

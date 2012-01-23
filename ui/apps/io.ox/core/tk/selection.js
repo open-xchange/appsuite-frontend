@@ -180,7 +180,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
          * Serialize object to get a flat key
          */
         this.serialize = function (obj) {
-            return typeof obj === 'object' ? obj.folder_id + '.' + obj.id : obj;
+            return typeof obj === 'object' ? (obj.folder_id !== undefined) ? obj.folder_id + '.' + obj.id : obj.id : obj;
         };
 
         this.setSerializer = function (fn) {
@@ -211,8 +211,10 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
                     select(tmp[i]);
                 }
             }
-            // event
-            self.trigger('change', self.get());
+            // fire event?
+            if (!_.isEqual(tmp, self.get())) {
+                self.trigger('change', self.get());
+            }
             return this;
         };
 

@@ -33,7 +33,9 @@ var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
     pad(t.getUTCSeconds());
 console.info("Build version: " + version);
 
+var debug = Boolean(process.env.debug);
 var debug = true || Boolean(process.env.debug);
+
 if (debug) console.info("Debug mode: on");
 
 var defineWalker = ast("define").asCall().walker();
@@ -211,7 +213,8 @@ utils.concat("boot.js", [
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
-        "event.js", "extensions.js", "cache.js", "http.js",
+        "event.js", "extensions.js", "http.js",
+        "cache.js", "cache/*.js", // cache + cache storage layers
         "config.js", "session.js", "gettext.js", "i18n.js",
         "tk/selection.js", "tk/vgrid.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js",

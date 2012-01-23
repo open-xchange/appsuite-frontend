@@ -30,7 +30,7 @@
     define('io.ox/portal/main', deps, function (ext, config, userAPI, i18n) {
 
         // application object
-        var app = ox.ui.createApp(),
+        var app = ox.ui.createApp({ name: 'io.ox/portal' }),
             // app window
             win,
             // update window title
@@ -104,7 +104,7 @@
                 draw: function (data) {
                     this.append(
                         $('<img>')
-                        .attr('src', ox.base + '/apps/themes/default/ad2.jpg')
+                        .attr({ src: ox.base + '/apps/themes/default/ad2.jpg', alt: 'ad' })
                         .css({ width: '100%', height: 'auto' })
                     );
                     return $.when();

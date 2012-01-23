@@ -14,7 +14,7 @@ define(function () {
             "io.ox/files", "io.ox/conversations"
         ],
 
-        categories: ["Basic", "Productivity", "Dev"],
+        categories: ["Basic", "Business", "Productivity", "Dev"],
 
         apps: {
 
@@ -22,65 +22,79 @@ define(function () {
                 title: "Portal",
                 company: "Open-Xchange",
                 icon: "default.png",
-                category: "Productivity"
+                category: "Productivity",
+                settings: false
             },
 
             "io.ox/mail": {
                 title: "E-Mail",
                 company: "Open-Xchange",
                 icon: "mail.png",
-                category: "Basic"
+                category: "Basic",
+                settings: true
             },
 
             "io.ox/contacts": {
                 title: "Address Book",
                 company: "Open-Xchange",
                 icon: "addressbook.png",
-                category: "Basic"
+                category: "Basic",
+                settings: false
             },
 
             "io.ox/calendar": {
                 title: "Calendar",
                 company: "Open-Xchange",
                 icon: "calendar.png",
-                category: "Productivity"
+                category: "Productivity",
+                settings: true
             },
 
             "io.ox/files": {
                 title: "Files",
                 company: "Open-Xchange",
                 icon: "files.png",
-                category: "Productivity"
+                category: "Productivity",
+                settings: false
             },
 
             "io.ox/conversations": {
                 title: "Conversations",
                 company: "Open-Xchange",
                 icon: "default.png",
-                category: "Productivity"
+                category: "Productivity",
+                settings: false
             },
-
+            "io.ox/settings": {
+                title: "Settings",
+                company: "Open-Xchange",
+                icon: "files.png",
+                category: "Basic",
+                settings: false
+            },
             "io.ox/dev/ajaxDebug": {
                 title: "Ajax Debugger",
                 company: "CompuGlobalHyperMegaNet",
                 icon: "default.png",
-                category: "Dev"
+                category: "Dev",
+                settings: false
             },
 
             "io.ox/dev/testing": {
                 title: "UI Test Suite",
                 company: "CompuGlobalHyperMegaNet",
                 icon: "default.png",
-                category: "Dev"
+                category: "Dev",
+                settings: false
             },
 
             "io.ox/dev/theme-maker": {
                 title: "Theme Maker",
                 company: "Mattes Inc.",
                 icon: "default.png",
-                category: "Dev"
+                category: "Dev",
+                settings: false
             },
-
             "3rd.party/addr": {
                 title: "Plaxo Address Book",
                 company: "Plaxo Inc.",
@@ -88,6 +102,40 @@ define(function () {
                 category: "Productivity",
                 description: "The only address book that works for you. Plaxo keeps your contact info updated & your communication devices in sync."
             },
+
+            // Examples from apps.1und1.de
+            "3rd.party/a1": {
+                title: "Scopevisio ERP",
+                company: "Scopevisio AG",
+                category: "Business",
+                icon: "a1.png",
+                description: "Vertrieb, Finanzen und Buchhaltung für Dienstleister: Greifen Sie von jedem Standort aus auf stets konsistente Daten zu und vermeiden Sie Doppeleingaben.",
+                link: "http://apps.1und1.de/Scopevisio-ERP-7257.html"
+            },
+            "3rd.party/a2": {
+                title: "myfactory.GO!",
+                company: "myfactory International GmbH",
+                category: "Business",
+                icon: "a2.png",
+                description: "Geschäftsprozesse effizient steuern: Warenwirtschaft (ERP), CRM und FiBu für Handel, produzierende Unternehmen, Handwerk und Dienstleister.",
+                link: "http://apps.1und1.de/myfactoryGO-6928.html"
+            },
+            "3rd.party/a3": {
+                title: "SEGAL ERP",
+                company: "SEGAL Systems GmbH",
+                category: "Business",
+                icon: "a3.png",
+                description: "Unternehmensziele erreichen: Machen Sie Ihr Business mit optimaler Projektplanung und zufriedenen Kunden noch erfolgreicher.",
+                link: "http://apps.1und1.de/SEGAL-ERP-6874.html"
+            },
+            "3rd.party/a4": {
+                title: "Actindo Commerce",
+                company: "Actindo GmbH",
+                category: "Business",
+                icon: "a4.png",
+                description: "Unternehmensziele erreichen: Machen Sie Ihr Business mit optimaler Projektplanung und zufriedenen Kunden noch erfolgreicher.",
+                link: "http://apps.1und1.de/Actindo-Commerce-6813.html"
+            }
         }
     };
 });

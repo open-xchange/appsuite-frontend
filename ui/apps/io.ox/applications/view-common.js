@@ -12,9 +12,9 @@
  */
 
 define("io.ox/applications/view-common", ["io.ox/core/api/apps"], function (api) {
-    
+
     'use strict';
-    
+
     var compiled = _.template(
         '<div class="app"><img src="<%= icon %>" class="icon" alt="">' +
         '<div class="title"><span><%= title %></span></div>' +
@@ -23,57 +23,65 @@ define("io.ox/applications/view-common", ["io.ox/core/api/apps"], function (api)
         '<div class="links"></div>' +
         '</div>'
     );
-    
+
     function fnStart(e) {
         e.preventDefault();
         require([e.data.id + "/main"], function (m) {
             m.getApp().launch();
         });
     }
-    
+
     function fnFavor(e) {
         e.preventDefault();
         api.markAsFavorite(e.data.id);
     }
-    
+
     function fnUnmark(e) {
         e.preventDefault();
         api.unmarkAsFavorite(e.data.id);
     }
-    
-    function drawApp(data) {
+
+    function drawApp(data, context) {
         var node = $(compiled(data));
         // add starter on icon
         node.find(".icon, .title").on("click", { id: data.id }, fnStart);
-        // add start link
-        node.find(".links").append(
-            $("<a>", { href: "#" }).text("Start")
-            .on("click", { id: data.id }, fnStart)
-            .add($.txt("\u00A0 "))
-        );
-        // favorite?
-        if (api.isFavorite(data)) {
-            node.find(".title").append(
-                $("<span/>")
-                .attr("title", "Favorite")
-                .addClass("favorite").text("\u2605")
-            );
+        if (context.id === 'installed') {
+            // add start link
             node.find(".links").append(
-                $("<a>", { href: "#" }).text("Unmark as favorite")
-                .on("click", { id: data.id }, fnUnmark)
+                $("<a>", { href: "#" }).text("Start")
+                .on("click", { id: data.id }, fnStart)
                 .add($.txt("\u00A0 "))
             );
-        } else {
-            // add favorite link
+            // favorite?
+            if (api.isFavorite(data)) {
+                node.find(".title").append(
+                    $("<span/>")
+                    .attr("title", "Favorite")
+                    .addClass("favorite").text("\u2605")
+                );
+                node.find(".links").append(
+                    $("<a>", { href: "#" }).text("Unmark as favorite")
+                    .on("click", { id: data.id }, fnUnmark)
+                    .add($.txt("\u00A0 "))
+                );
+            } else {
+                // add favorite link
+                node.find(".links").append(
+                    $("<a>", { href: "#" }).text("Mark as favorite")
+                    .on("click", { id: data.id }, fnFavor)
+                    .add($.txt("\u00A0 "))
+                );
+            }
+        } else if (data.link) {
+            // add link
             node.find(".links").append(
-                $("<a>", { href: "#" }).text("Mark as favorite")
-                .on("click", { id: data.id }, fnFavor)
+                $("<a>", { href: data.link, target: '_blank' }).text("Weiter")
                 .add($.txt("\u00A0 "))
             );
         }
         return node;
     }
-    
+
     return {
         drawApp: drawApp
     };

@@ -31,7 +31,7 @@
                 pair = pairs[i];
                 var keyValue = pair.split(/\=/), key = keyValue[0], value = keyValue[1];
                 if (key !== "" || value !== undefined) {
-                    obj[d(key)] = d(value);
+                    obj[d(key)] = value !== undefined ? d(value) : undefined;
                 }
             }
             return obj;
@@ -78,15 +78,29 @@
          * @param {string} [name] Name of the hash parameter
          * @returns {Object} Value or all values
          */
-        hash: function (name) {
+        hash: function (name, value) {
             // since the hash might change we decode it for every request
             var hashData = document.location.hash.substr(1);
             hashData = deserialize(
                  hashData.substr(0, 1) === "?" ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData
             );
-            return name === undefined ? hashData : hashData[name];
+            if (value !== undefined) {
+                if (value === null) {
+                    delete hashData[name];
+                } else {
+                    hashData[name] = value;
+                }
+                // update hash
+                var hashStr = _.serialize(hashData, '&', function (v) {
+                    return v.replace(/\=/g, '%3D').replace(/\&/g, '%26');
+                });
+                // be persistent
+                document.location.hash = hashStr;
+                _.setCookie('hash', hashStr);
+            } else {
+                return name === undefined ? hashData : hashData[name];
+            }
         },
-
         /**
          * Redirect
          */
@@ -107,13 +121,11 @@
          * @example
          * _.serialize({ a: 1, b: 2, c: "text" });
          */
-        serialize: function (obj, delimiter) {
-            var tmp = [], e = encodeURIComponent, id;
+        serialize: function (obj, delimiter, replacer) {
+            var tmp = [], e = replacer || encodeURIComponent, id;
             if (typeof obj === "object") {
                 for (id in (obj || {})) {
-                    if (obj[id] !== undefined) {
-                        tmp.push(e(id) + "=" + e(obj[id]));
-                    }
+                    tmp.push(e(id) + (obj[id] !== undefined ? "=" + e(obj[id]) : ""));
                 }
             }
             return tmp.join(delimiter === undefined ? "&" : delimiter);
@@ -132,6 +144,27 @@
         deserialize: deserialize,
 
         rot: rot,
+
+        /**
+         * Get cookie value
+         */
+        getCookie: function (key) {
+            key = String(key || '\u0000');
+            return _.chain(document.cookie.split(/; ?/))
+                .filter(function (pair) {
+                    return pair.substr(0, key.length) === key;
+                })
+                .map(function (pair) {
+                    return pair.substr(key.length + 1);
+                })
+                .first()
+                .value();
+        },
+
+        setCookie: function (key, value) {
+            // yep, works this way:
+            document.cookie = key + "=" + value;
+        },
 
         /**
          * This function simply writes its parameters to console.
@@ -321,6 +354,15 @@
                 fn();
                 setInterval(fn, interval * (num || 1));
             }, interval - (_.utc() % interval) + 1);
+        },
+
+        wait: function (t) {
+            var def = $.Deferred();
+            setTimeout(function () {
+                def.resolve();
+                def = null;
+            }, t || 0);
+            return def;
         },
 
         // helper for benchmarking

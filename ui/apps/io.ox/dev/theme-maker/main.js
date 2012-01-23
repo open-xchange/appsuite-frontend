@@ -17,6 +17,7 @@ define("io.ox/dev/theme-maker/main", ["themes", "io.ox/core/tk/simple-colorpicke
 
     // application object
     var app = ox.ui.createApp({
+            name: 'io.ox/dev/theme-maker',
             title: 'Theme maker'
         }),
         // app window
