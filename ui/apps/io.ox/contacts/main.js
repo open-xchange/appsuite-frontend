@@ -198,7 +198,7 @@ define("io.ox/contacts/main",
         };
 
         // go!
-        commons.addFolderSupport(app, grid, 'contacts', '6')
+        commons.addFolderSupport(app, grid, 'contacts', '11179')//'6'
             .done(commons.showWindow(win, grid));
     });
 

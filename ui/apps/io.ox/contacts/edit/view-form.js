@@ -869,6 +869,35 @@ define("io.ox/contacts/edit/view-form",
 
     var addrBlock = 'street,postal_code/city,country,state'; //street,postal_code/city,country,state
 
+
+//    function drawSingleFieldAdd(o) {
+//        var tr = $('<tr>'),
+//            td = $('<td>'),
+//            label = $('<td>').addClass('label').css({
+//                'padding-top': '7px',
+//                'width': '150px'
+//            });
+//
+//        td.addClass('value').css('padding-bottom', '0.5em')
+//        .append($('<input>').addClass('nice-input').css({
+//            'font-size': '14px',
+//            'width': '300px',
+//            'padding-top': '0.25em',
+//            'padding-bottom': '0.25em'
+//        }).attr({
+//            'name': o.fieldname,
+//            'id': o.labalFor
+//            }).val(o.data));
+//
+//        tr.addClass(o.className);
+//        if (!o.drawData) {
+//            tr.addClass(o.status);
+//        }
+//        label.append($('<label>').attr('for', o.labalFor).text(o.labeltext));
+//        this.append(tr.append(label, td));
+//    }
+
+
     function addAddrb(fields, name) {
         var fieldArray = addrBlock.split(","),
             nameBlock = name.slice(0, -6);
@@ -923,8 +952,15 @@ define("io.ox/contacts/edit/view-form",
                         }
                         this.append(tr.append(label, td));
                     } else {
-                        var drawData = data[fieldArray[i] + '_' + nameBlock];
                         fieldname = fieldArray[i] + '_' + nameBlock;
+                        labeltext = formFields[name].fields[fieldname].label;
+                        var drawData = data[fieldArray[i] + '_' + nameBlock],
+                            rowClassStatus = formFields[name].fields[fieldname].fn,
+                            rowClass = formFields[name].fields[fieldname].blockid + ' ' + fieldname,
+                            labalFor = fieldname + '_' + now;
+
+
+
                         td.addClass('value').css('padding-bottom', '0.5em')
                         .append($('<input>').addClass('nice-input').css({
                             'font-size': '14px',
@@ -933,15 +969,26 @@ define("io.ox/contacts/edit/view-form",
                             'padding-bottom': '0.25em'
                         }).attr({
                             'name': fieldname,
-                            'id': fieldname + '_' + now
+                            'id': labalFor
                             }).val(drawData));
-                        labeltext = formFields[name].fields[fieldname].label;
-                        tr.addClass(formFields[name].fields[fieldname].blockid + ' ' + fieldname);
+
+                        tr.addClass(rowClass);
                         if (!drawData) {
-                            tr.addClass(formFields[name].fields[fieldname].fn);
+                            tr.addClass(rowClassStatus);
                         }
-                        label.append($('<label>').attr('for', fieldname + '_' + now).text(labeltext));
+                        label.append($('<label>').attr('for', labalFor).text(labeltext));
                         this.append(tr.append(label, td));
+
+
+//                        drawSingleFieldAdd({
+//                            data: drawData,
+//                            status: rowClassStatus,
+//                            className: rowClass,
+//                            labelFor: labalFor,
+//                            name: fieldname,
+//                            label: labeltext
+//
+//                        });
                     }
                 }
             }
