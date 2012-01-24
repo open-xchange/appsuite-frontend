@@ -215,7 +215,7 @@ define('io.ox/mail/settings',
 
             .append(
               utils.createSection()
-                .append(utils.createSectionTitle({text: 'Display' }))
+                .append(utils.createSectionTitle({text: 'Display'}))
                 .append(
                   utils.createSectionContent()
                     .append(myView.createCheckbox({dataid: 'mail-display-allowhtml', label: 'Allow html formatted E-Mails',  validator: myValidator}))
