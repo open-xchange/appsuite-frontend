@@ -13,7 +13,8 @@
 define("io.ox/core/test",
     ["io.ox/core/extensions",
      "io.ox/core/test/cacheStorage", "io.ox/core/test/cacheSimpleCache",
-     "io.ox/core/test/cacheObjectCache"], function (ext) {
+     "io.ox/core/test/cacheObjectCache", "io.ox/core/test/date"],
+function (ext) {
     
     "use strict";
 

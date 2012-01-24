@@ -92,18 +92,15 @@ $(document).ready(function () {
             .done(function () {
                 // Set user's language (as opposed to the browser's language)
                 var lang = config.get("language");
-                require(["io.ox/core/gettext"], function (gt) {
-                    gt.setLanguage(lang)
-                        .pipe(function () {
-                            return require(["themes", "io.ox/core/main"]);
-                        })
-                        .done(function (themes, main) {
-                            themes.set("default").done(function () {
-                                // go!
-                                main.launch();
-                            });
-                        });
-                });
+                require(["io.ox/core/gettext"])
+                    .pipe(function (gt) {
+                        gt.setLanguage(lang);
+                        return require(["themes", "io.ox/core/main"]);
+                    }).done(function (themes, main) {
+                        themes.set("default");
+                        // go!
+                        main.launch();
+                    });
             });
     };
 
@@ -169,23 +166,18 @@ $(document).ready(function () {
     };
 
     changeLanguage = function (id) {
-        return require(["io.ox/core/gettext"])
-            .pipe(function (gettext) {
-                return gettext.setLanguage(id);
-            }).pipe(function () {
-                return require(["gettext!io.ox/core/login"]);
-            }).pipe(function (gt) {
-                // get all nodes
-                $("[data-i18n]").each(function () {
-                    var node = $(this),
-                        val = gt(node.attr("data-i18n"));
-                    if (this.tagName === "INPUT") {
-                        node.val(val);
-                    } else {
-                        node.text(val);
-                    }
-                });
+        return require(["io.ox/core/login." + id]).done(function (gt) {
+            // get all nodes
+            $("[data-i18n]").each(function () {
+                var node = $(this),
+                    val = gt(node.attr("data-i18n"));
+                if (this.tagName === "INPUT") {
+                    node.val(val);
+                } else {
+                    node.text(val);
+                }
             });
+        });
     };
 
     fnChangeLanguage = function (e) {

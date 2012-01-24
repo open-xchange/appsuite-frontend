@@ -34,7 +34,6 @@ var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
 console.info("Build version: " + version);
 
 var debug = Boolean(process.env.debug);
-var debug = true || Boolean(process.env.debug);
 
 if (debug) console.info("Debug mode: on");
 
@@ -85,7 +84,7 @@ function htmlFilter (data) {
 var jshintOptions = {
     bitwise: false,
     browser: true,
-    debug: true,
+    debug: debug,
     devel: true,
     eqeqeq: true,
     evil: true,
@@ -96,6 +95,7 @@ var jshintOptions = {
     onevar: false,
     plusplus: false,
     regexp: false,
+    shadow: true,
     strict: true,
     trailing: true,
     undef: true,
@@ -130,7 +130,7 @@ desc("Builds the GUI");
 utils.topLevelTask("default", ["ox.pot"], function() {
     utils.includes.save();
     i18n.modules.save();
-    utils.summary();
+    utils.summary("default")();
 });
 
 i18n.modules.load("tmp/i18n.json");
@@ -186,7 +186,8 @@ file(utils.dest("signin.appcache"), ["force"]);
 
 // js
 
-utils.concat("boot.js", ["src/jquery.plugins.js", "lib/jquery.tokeninput.js", "src/util.js", "src/boot.js"],
+utils.concat("boot.js", ["src/jquery.plugins.js", "lib/jquery.tokeninput.js",
+                         "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 
 utils.copy(utils.list("src", "css.js"), {
@@ -230,7 +231,7 @@ var depsPath = utils.dest("dependencies.json");
 utils.fileType("module").addHook("filter", jsFilter)
     .addHook("define", i18n.potScanner)
     .addHook("define", function(name, deps, f) {
-        moduleDeps[name] = _.pluck(deps[1], 1);
+        moduleDeps[name[1]] = _.pluck(deps[1], 1);
     })
     .addHook("handler", function(name) { file(depsPath, [name]); });
 
@@ -261,6 +262,15 @@ var apps = _.groupBy(utils.list("apps/"), function (f) {
 });
 if (apps.js) utils.copy(apps.js, { type: "module" });
 if (apps.rest) utils.copy(apps.rest);
+
+// time zone database
+
+var zoneinfo = utils.dest("apps/io.ox/core/tz/zoneinfo");
+utils.file(zoneinfo, [], function() {
+    if (!path.existsSync(zoneinfo)) {
+        fs.symlinkSync("/usr/share/zoneinfo", zoneinfo);
+    }
+});
 
 // themes
 
@@ -349,7 +359,7 @@ if (apps.rest) utils.copy(apps.rest);
 // doc task
 
 desc("Developer documentation");
-utils.topLevelTask("doc", [], utils.summary);
+utils.topLevelTask("doc", [], utils.summary("doc"));
 
 var titles = [];
 function docFile(file, title) {
@@ -397,3 +407,43 @@ task("merge", ["ox.pot"], function() {
             function() { if (!--count) complete(); });
     }
 }, true);
+
+// module dependency visualizazion
+
+desc("Prints module dependencies");
+task("deps", [depsPath], function() {
+    var deps = JSON.parse(fs.readFileSync(depsPath, "utf8"));
+    for (var i in deps) deps[i] = { name: i, children: deps[i], parents: [] };
+    _.each(deps, function(dep) {
+        dep.children = _.map(dep.children, function(name) {
+            var child = deps[name];
+            if (!child) {
+                child= deps[name] = { name: name, children: [], parents: [] };
+            }
+            child.parents.push(dep);
+            return child;
+        });
+    });
+    var down = "children", up = "parents";
+    if (process.env.reverse) { t = down; down = up; up = t; }
+    var root = process.env.root;
+    if (root) {
+        console.log("");
+        if (root in deps) print(deps[process.env.root], "", "");
+    } else {
+        _.each(deps, function(root) {
+            if (!root[up].length) {
+                console.log("");
+                print(root, "", "");
+            }
+        });
+    }
+    function print(node, indent1, indent2) {
+        console.log(indent1 + node.name);
+        var last = node[down].length - 1;
+        for (var i = 0; i < last; i++) {
+            print(node[down][i], indent2 + "├─", indent2 + "│ ");
+        }
+        if (last >= 0) print(node[down][last], indent2 + "└─", indent2 + "  ");
+    }
+});

@@ -201,13 +201,10 @@
 define ("gettext", function (gettext) {
     return {
         load: function (name, parentRequire, load, config) {
-            require(["io.ox/core/gettext"]).done(function (gettext) {
-               var module = gettext.getModule(name);
-               if (module) {
-                   parentRequire([module], load);
-               } else { // no language set yet
-                   load(gettext(name));
-               }
+            require(["io.ox/core/gettext"]).pipe(function (gettext) {
+                return gettext.getModule(name);
+            }).done(function (module) {
+                parentRequire([module], load);
             });
         }
     };
