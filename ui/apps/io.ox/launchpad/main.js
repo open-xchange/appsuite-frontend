@@ -11,6 +11,8 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+// huu
+
 define('io.ox/launchpad/main',
     ['io.ox/core/desktop',
      'io.ox/core/api/apps',
@@ -19,7 +21,9 @@ define('io.ox/launchpad/main',
 
     'use strict';
 
-    var FADE_DURATION = 500,
+    var FADE_DURATION = 1000,
+
+        firstRun = true,
 
         pad, container,
 
@@ -124,7 +128,8 @@ define('io.ox/launchpad/main',
                 );
             });
 
-            pad.append(hRunning, running, hApps, installed).fadeIn(FADE_DURATION);
+            pad.append(hRunning, running, hApps, installed).fadeIn(firstRun ? FADE_DURATION : 0);
+            firstRun = false;
         },
 
         // hide launch pad

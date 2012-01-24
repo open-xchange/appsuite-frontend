@@ -105,11 +105,8 @@ define('io.ox/settings/main',
                   },
                   save: function () {
                       //nothing to do
-                      var d = new $.Deferred();
-                      d.resolve();
-                      return d;
+                      return $.Deferred().resolve();
                   }
-              
               }});
               this.append(cb);
             }
@@ -142,13 +139,28 @@ define('io.ox/settings/main',
             var apps = _.filter(appsApi.getInstalled(), function (item) {
                 return item.settings;
             });
+
+            apps.push({
+              category: 'Basic',
+              company: 'Open-Xchange',
+              description: 'Manage Accounts',
+              icon: '',
+              id: 'io.ox/settings/accounts',
+              settings: true,
+              title: 'Accounts'
+            });
+            console.log('listing apps');
+            console.log(apps);
+
             return $.Deferred().resolve(apps);
         });
 
         var showSettings = function (obj) {
             var settingsID = obj.id + '/settings';
+            console.log('load:' + settingsID);
             right.empty().busy();
             require([ settingsID ], function (m) {
+                console.log("extpoint:" + settingsID + '/detail');
                 ext.point(settingsID + '/detail').invoke('draw', right, obj);
                 updateExpertMode();
                 right.idle();
