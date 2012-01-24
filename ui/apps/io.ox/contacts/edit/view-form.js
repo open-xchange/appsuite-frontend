@@ -15,8 +15,9 @@ define("io.ox/contacts/edit/view-form",
     ["io.ox/core/extensions",
      "gettext!io.ox/contacts/contacts",
      "io.ox/contacts/util",
-     "io.ox/contacts/api"
-    ], function (ext, gt, util, api) {
+     "io.ox/contacts/api",
+     'io.ox/core/tk/forms'
+    ], function (ext, gt, util, api, forms) {
 
     "use strict";
 
@@ -46,9 +47,34 @@ define("io.ox/contacts/edit/view-form",
         jobClearTitle.text(util.getJob(newObj));
     }
 
+    var getDataWrapper = function (data) {
+      var mydata = data;
+      var mywrapper = {
+        get: function (k) {
+            console.log('get:' + k + '('+mydata[k]+')');
+            console.log(mydata);
+          return mydata[k];
+        },
+        set: function (k, val) {
+            console.log(mydata);
+            mydata[k] = val;
+            $(mywrapper).trigger(k + '.changed', val);
+        },
+        getData: function () {
+            return mydata;
+        }
+      };
+      console.log(data);
+      return mywrapper;
+    };
+
+
     function addField(o) {
+        //o.node.append(forms.createLabeledTextField({name: o.name, label: o.label, model: { get: function () { return "whoaa";}, set: function () {}}}));
         var now = _.now(),
-            field = $('<input>', { name: o.name, type: 'text', id: o.name + "_" + now })
+            field = forms.createTextField({dataid: o.dataid, name: o.name, label: o.label, model: getDataWrapper(o.data)}),
+
+            /*$('<input>', { name: o.name, type: 'text', id: o.name + "_" + now })
                 .addClass('nice-input')
                 // TODO: add proper CSS class
                 .css({ fontSize: '14px', width: '300px', paddingTop: '0.25em', paddingBottom: '0.25em', webkitBorderRadius: 0, webkitAppearance: 'none' })
@@ -59,7 +85,7 @@ define("io.ox/contacts/edit/view-form",
                         } else {
                             tr.addClass('filled');
                         }
-                    }),
+                    }),*/
             td = $("<td>").addClass("value").css('paddingBottom', '0.5em')
                 .append(field),
             tr = $("<tr>").addClass(o.id + ' ' + o.name)
@@ -857,6 +883,8 @@ define("io.ox/contacts/edit/view-form",
                 addField({
                     label: fielddata.label,
                     name: fielddata.name,
+                    dataid: fielddata.name,
+                    'data': data,
                     value: dateValue,
                     node:  this,
                     fn: fielddata.fn,
