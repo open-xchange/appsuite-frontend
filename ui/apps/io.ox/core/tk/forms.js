@@ -15,9 +15,9 @@ define: true
 */
 define('io.ox/core/tk/forms', [], function () {
     'use strict';
-    
+
     /**
- 
+
     options = {
         class
         update
@@ -28,7 +28,7 @@ define('io.ox/core/tk/forms', [], function () {
         id
 
 
-    
+
     }
 
 */
@@ -48,14 +48,12 @@ define('io.ox/core/tk/forms', [], function () {
                 checkboxDiv.append(label);
                 checkboxDiv = label;
             }
-            
+
             checkbox = $('<input type="checkbox" data-item-id="' + options.dataid + '"/>');
-            
-            if (options.id !== undefined) {
-                checkbox.attr('id', options.id);
-            } else {
-                checkbox.attr('id', _.uniqueId('c'));
-            }
+
+            options.id = options.id || _.uniqueId('c');
+            checkbox.attr('id', options.id);
+
 
             checkboxDiv.append(checkbox);
             if (options.label) {
@@ -99,29 +97,65 @@ define('io.ox/core/tk/forms', [], function () {
             return label;
         },
         createRadioButton: function (options) {
-            var radioDiv = $('<div>').addClass('radio');
-            var label = radioDiv.append($('<label>'));
-            var radio = $('<input type="radio">')
-                          .attr('name', options.name)
-                          .attr('data-item-id', options.dataid)
-                          .val(options.value);
-            if (options.model.get(options.dataid) === options.value) {
-                radio.attr('checked', 'checked');
+            var radioDiv,
+                label,
+                radio;
+
+            radioDiv = $('<div>').addClass('radio');
+            if (options.classes) {
+                radioDiv.addClass(options.classes);
+            }
+            if (options.label) {
+                label = $('<label>');
+                label.addClass('radio');
+                radioDiv.append(label);
+                radioDiv = label;
             }
 
+            options.id = options.id || _.uniqueId('c');
+
+            radio = $('<input type="radio">');
+            radio.attr({
+                'name': options.name,
+                'data-item-id': options.dataid,
+                'id': options.id
+                });
+            if (options.value) {
+                radio.attr('value', options.value);
+            }
+
+
+
+            radioDiv.append(radio);
+            if (options.label) {
+                label.append($('<span>').text(options.label));
+            }
+
+
             radio.on('change', function () {
-                var val = $('input[name="' + options.name + '"]:checked').val();
-                options.model.set(options.dataid, val);
+                radio.trigger('update', {dataid: options.dataid, value: $('input[name="' + options.name + '"]:checked').val()});
             });
 
-            label.append(radio);
-            label.append(
-              $('<span>')
-                  .text(options.label)
-            );
+            if(options.modell !== undefined) {
+                radio.attr('checked', (options.model.get(options.dataid) === options.value)?'checked':null);
+                $(options.model).on(options.dataid + '.changed', function (evt, value) {
+                    radio.val(value);
+                    radio.attr('checked', (value === options.value)?'checked':null);
+                });
+            }
 
             return radioDiv;
         },
+
+
+
+
+
+
+
+
+
+
         createTextField: function (options) {
             options.maxlength = options.maxlength || 20;
             var tfdiv = $('<div>');
