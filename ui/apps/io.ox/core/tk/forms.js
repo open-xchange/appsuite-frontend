@@ -26,9 +26,6 @@ define('io.ox/core/tk/forms', [], function () {
         validator
         dataid
         id
-
-
-
     }
 
 */
@@ -91,7 +88,6 @@ define('io.ox/core/tk/forms', [], function () {
                 selectboxDiv.append(label);
                 container = label;
             }
-
             selectbox = $('<select>');
 
             selectbox.attr('data-item-id', options.dataid);
@@ -239,7 +235,30 @@ define('io.ox/core/tk/forms', [], function () {
             return $('<label>');
         },
         createText: function (options) {
-            return $('<span>').text(options.text);
+            var textContainer;
+            options.id = options.id || _.uniqueId('c');
+            textContainer = $('<span>');
+            textContainer.addClass('text');
+
+            if (options.classes) {
+                textContainer.addClass(options.classes);
+            }
+
+            var updateText = function () {
+                if (options.html === true) {
+                    textContainer.html(options.model.get(options.dataid));
+                } else {
+                    textContainer.text(options.model.get(options.dataid));
+                }
+            };
+
+            if (options.model) {
+                updateText();
+                $(options.model).on(options.dataid + '.changed', updateText);
+            }
+
+
+            return textContainer;
         }
     };
 

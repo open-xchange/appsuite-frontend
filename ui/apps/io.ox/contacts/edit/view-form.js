@@ -16,8 +16,9 @@ define("io.ox/contacts/edit/view-form",
      "gettext!io.ox/contacts/contacts",
      "io.ox/contacts/util",
      "io.ox/contacts/api",
-     'io.ox/core/tk/forms'
-    ], function (ext, gt, util, api, forms) {
+     'io.ox/core/tk/forms',
+     'io.ox/core/tk/view'
+    ], function (ext, gt, util, api, forms, View) {
 
     "use strict";
 
@@ -43,36 +44,51 @@ define("io.ox/contacts/edit/view-form",
             nameClearTitle = $('.name.clear-title'),
             jobClearTitle = $('.job.clear-title');
 
-        nameClearTitle.text(util.getFullName(newObj));
-        jobClearTitle.text(util.getJob(newObj));
+        /*nameClearTitle.text(util.getFullName(newObj));
+        jobClearTitle.text(util.getJob(newObj));*/
     }
 
     var getDataWrapper = function (data) {
-      var mydata = data;
-      var mywrapper = {
-        get: function (k) {
-            console.log('get:' + k + '('+mydata[k]+')');
-            console.log(mydata);
-          return mydata[k];
-        },
-        set: function (k, val) {
-            console.log(mydata);
-            mydata[k] = val;
-            $(mywrapper).trigger(k + '.changed', val);
-        },
-        getData: function () {
-            return mydata;
-        }
-      };
-      console.log(data);
-      return mywrapper;
+        var mydata = data;
+        var displaynameChange = /^(first_name|last_name|title)$/;
+        var jobChange = /^(company|position|profession)$/;
+        var originDisplayName = data.display_name;
+        var mywrapper = {
+            get: function (k) {
+                console.log('get:' + k + '('+mydata[k]+')');
+                console.log(mydata);
+                return mydata[k];
+            },
+            set: function (k, val) {
+                console.log(mydata);
+                var doUpdateDisplayName = (displaynameChange.test(k) && mydata.display_name !== originDisplayName);
+                if (doUpdateDisplayName) {
+                    mydata[k] = val;
+                    mydata.display_name = util.getFullName(mydata);
+                    $(mywrapper).trigger('display_name.changed', mydata.display_name);
+                }
+                mydata[k] = val;
+
+
+                $(mywrapper).trigger(k + '.changed', val);
+                console.log('trigger:' + k + '.changed, ' + val);
+                
+            },
+            getData: function () {
+                return mydata;
+            }
+        };
+        console.log(data);
+        return mywrapper;
     };
+
+    
 
 
     function addField(o) {
         //o.node.append(forms.createLabeledTextField({name: o.name, label: o.label, model: { get: function () { return "whoaa";}, set: function () {}}}));
         var now = _.now(),
-            field = forms.createTextField({dataid: o.dataid, name: o.name, label: o.label, model: getDataWrapper(o.data)}),
+            field = o.view.createTextField({dataid: o.dataid, name: o.name, label: o.label}),
 
             /*$('<input>', { name: o.name, type: 'text', id: o.name + "_" + now })
                 .addClass('nice-input')
@@ -872,19 +888,22 @@ define("io.ox/contacts/edit/view-form",
         ext.point("io.ox/contacts/edit/form/" + fielddata.blockid).extend({
             index: fielddata.weight,
             id: 'contact-' + fielddata.name,
-            draw: function (data, id) {
-                var dateValue = data[fielddata.name];
+            draw: function (options) {
+                console.log('creating field: ' + fielddata.name);
+                console.log(arguments);
+                var dateValue = options.data[fielddata.name];
                 if (/^(anniversary|birthday)$/.test(fielddata.name)) {
-                    var date = new Date(data[fielddata.name]);
+                    var date = new Date(options.data[fielddata.name]);
                     if (!isNaN(date.getDate())) {
                         dateValue = date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
                     }
                 }
                 addField({
+                    'view': options.view,
                     label: fielddata.label,
                     name: fielddata.name,
                     dataid: fielddata.name,
-                    'data': data,
+                    'data': options.data,
                     value: dateValue,
                     node:  this,
                     fn: fielddata.fn,
@@ -932,7 +951,7 @@ define("io.ox/contacts/edit/view-form",
         ext.point("io.ox/contacts/edit/form/contact-" + nameBlock + "-address").extend({
             index: 100,
             id: 'contact-home-block',
-            draw: function (data, id) {
+            draw: function (options) {
                 for (var i = 0, len = fieldArray.length; i < len; ++i) {
                     var inline = fieldArray[i].split("/"),
                         tr = $('<tr>'),
@@ -951,7 +970,7 @@ define("io.ox/contacts/edit/view-form",
                         var input1 = $('<input>').attr({
                             'name': fieldname,
                             'id': fieldname + '_' + now})
-                        .addClass('nice-input').val(data[inline[0] + '_' + nameBlock])
+                        .addClass('nice-input').val(options.data[inline[0] + '_' + nameBlock])
                         .css({
                             'font-size': '14px',
                             'width': '100px',
@@ -962,7 +981,7 @@ define("io.ox/contacts/edit/view-form",
                                 'name': fieldname2,
                                 'id': fieldname2 + '_' + now
                             })
-                            .addClass('nice-input').val(data[inline[1] + '_' + nameBlock])
+                            .addClass('nice-input').val(options.data[inline[1] + '_' + nameBlock])
                             .css({
                                 'font-size': '14px',
                                 'width': '177px',
@@ -975,14 +994,14 @@ define("io.ox/contacts/edit/view-form",
                         label.append(labelData1, labelData2);
                         td.css('padding-bottom', '0.5em').append(input1, input2);
                         tr.addClass(formFields[name].fields[fieldname].blockid);
-                        if (!data[inline[0] + '_' + nameBlock]) {
+                        if (!options.data[inline[0] + '_' + nameBlock]) {
                             tr.addClass(formFields[name].fields[fieldname2].fn);
                         }
                         this.append(tr.append(label, td));
                     } else {
                         fieldname = fieldArray[i] + '_' + nameBlock;
                         labeltext = formFields[name].fields[fieldname].label;
-                        var drawData = data[fieldArray[i] + '_' + nameBlock],
+                        var drawData = options.data[fieldArray[i] + '_' + nameBlock],
                             rowClassStatus = formFields[name].fields[fieldname].fn,
                             rowClass = formFields[name].fields[fieldname].blockid + ' ' + fieldname,
                             labalFor = fieldname + '_' + now;
@@ -1056,9 +1075,9 @@ define("io.ox/contacts/edit/view-form",
     ext.point("io.ox/contacts/edit/form").extend({
         index: 100,
         id: "contact-head",
-        draw: function (data) {
+        draw: function (options) {
             var node = $("<tr>").appendTo(this);
-            ext.point("io.ox/contacts/edit/form/head").invoke("draw", node, data);
+            ext.point("io.ox/contacts/edit/form/head").invoke("draw", node, options);
             addSpacer(this);
         }
     });
@@ -1066,14 +1085,14 @@ define("io.ox/contacts/edit/view-form",
     ext.point("io.ox/contacts/edit/form/head").extend({
         index: 100,
         id: 'contact-picture',
-        draw: function (data) {
+        draw: function (options) {
             var node = $('<td>');
-            ext.point("io.ox/contacts/edit/form/head/button").invoke("draw", node, data);
+            ext.point("io.ox/contacts/edit/form/head/button").invoke("draw", node, options);
             this.append(
                 $('<td>')
                 .css({ verticalAlign: "top", paddingBottom: "0" })
                 .append(
-                    api.getPicture(data).addClass("picture")
+                    api.getPicture(options.data).addClass("picture")
 
                 )
                 .append(
@@ -1096,24 +1115,28 @@ define("io.ox/contacts/edit/view-form",
                 $(node)
                 .css({ verticalAlign: "top" })
                 .append(
-                    $("<div>")
+                    options.view.createText({dataid: 'display_name', classes: 'name clear-title'})
+                    /*$("<div>")
                     .addClass("name clear-title")
-                    .text(util.getFullName(data))
+                    .text(util.getFullName(options.data))*/
                 )
-                .append(
+                /*.append(
+                    options.view.createText({dataid: 'position', classes: 'job clear-title'})
                     $("<div>")
                     .addClass("job clear-title")
-                    .text(util.getJob(data)
+                    .text(util.getJob(options.data)
                     )
-                )
+                )*/
             );
+            console.log('head');
+            console.log(options.view);
         }
     });
 
     ext.point("io.ox/contacts/edit/form").extend({
         index: 100,
         id: 'contact-image',
-        draw: function (data) {
+        draw: function (options) {
             var id = 'contact-image',
                 form = $('<form>',
                     {   'accept-charset': 'UTF-8',
@@ -1236,10 +1259,12 @@ define("io.ox/contacts/edit/view-form",
     ext.point("io.ox/contacts/edit/form").extend({
         index: 120,
         id: 'contact-personal',
-        draw: function (data) {
+        draw: function (options) {
+            console.log('contact-personal');
+            console.log(arguments);
             var id = 'contact-personal';
             addBlockheader(this, id, 'Contact personal');
-            ext.point("io.ox/contacts/edit/form/contact-personal").invoke("draw", this, data);
+            ext.point("io.ox/contacts/edit/form/contact-personal").invoke("draw", this, options);
 //            var date = new Date(data.birthday);
 //            if (!isNaN(date.getDate())) {
 //                addField({
@@ -1258,10 +1283,10 @@ define("io.ox/contacts/edit/view-form",
     ext.point("io.ox/contacts/edit/form").extend({
         index: 120,
         id: 'contact-email',
-        draw: function (data) {
+        draw: function (options) {
             var id = 'contact-email';
             addBlockheader(this, id, 'Mail');
-            ext.point("io.ox/contacts/edit/form/contact-email").invoke("draw", this, data);
+            ext.point("io.ox/contacts/edit/form/contact-email").invoke("draw", this, options);
             addSwitch(this, id, 'E-Mail addresses');
             addSpacer(this);
         }
@@ -1274,10 +1299,10 @@ define("io.ox/contacts/edit/view-form",
     ext.point("io.ox/contacts/edit/form").extend({
         index: 120,
         id: 'contact-phone',
-        draw: function (data) {
+        draw: function (options) {
             var id = 'contact-phone';
             addBlockheader(this, id, 'Phone');
-            ext.point("io.ox/contacts/edit/form/contact-phone").invoke("draw", this, data);
+            ext.point("io.ox/contacts/edit/form/contact-phone").invoke("draw", this, options);
             addSwitch(this, id, 'Phone numbers');
             addSpacer(this);
         }
@@ -1286,10 +1311,10 @@ define("io.ox/contacts/edit/view-form",
     ext.point("io.ox/contacts/edit/form").extend({
         index: 120,
         id: 'contact-home-address',
-        draw: function (data) {
+        draw: function (options) {
             var id = 'contact-home-address';
             addBlockheader(this, id, 'Home address');
-            ext.point("io.ox/contacts/edit/form/contact-home-address").invoke("draw", this, data);
+            ext.point("io.ox/contacts/edit/form/contact-home-address").invoke("draw", this, options);
             addSwitch(this, id, 'Home address');
             addSpacer(this);
         }
@@ -1298,10 +1323,10 @@ define("io.ox/contacts/edit/view-form",
     ext.point("io.ox/contacts/edit/form").extend({
         index: 120,
         id: 'contact-other-address',
-        draw: function (data) {
+        draw: function (options) {
             var id = 'contact-other-address';
             addBlockheader(this, id, 'Other address');
-            ext.point("io.ox/contacts/edit/form/contact-other-address").invoke("draw", this, data);
+            ext.point("io.ox/contacts/edit/form/contact-other-address").invoke("draw", this, options);
             addSwitch(this, id, 'Other address');
             addSpacer(this);
         }
@@ -1310,22 +1335,22 @@ define("io.ox/contacts/edit/view-form",
     ext.point("io.ox/contacts/edit/form").extend({
         index: 120,
         id: 'contact-work-address',
-        draw: function (data) {
+        draw: function (options) {
             var id = 'contact-work-address';
             addBlockheader(this, id, 'Work address');
-            ext.point("io.ox/contacts/edit/form/contact-business-address").invoke("draw", this, data);
+            ext.point("io.ox/contacts/edit/form/contact-business-address").invoke("draw", this, options);
             addSwitch(this, id, 'Work address');
             addSpacer(this);
         }
     });
-
+    
     ext.point("io.ox/contacts/edit/form").extend({
         index: 120,
         id: 'contact-job-descriptions',
-        draw: function (data) {
+        draw: function (options) {
             var id = 'contact-job-descriptions';
             addBlockheader(this, id, 'Job');
-            ext.point("io.ox/contacts/edit/form/contact-job-descriptions").invoke("draw", this, data);
+            ext.point("io.ox/contacts/edit/form/contact-job-descriptions").invoke("draw", this, options);
             addSwitch(this, id, 'Job information');
             addSpacer(this);
         }
@@ -1347,10 +1372,10 @@ define("io.ox/contacts/edit/view-form",
     ext.point("io.ox/contacts/edit/form").extend({
         index: 120,
         id: 'special-information',
-        draw: function (data) {
+        draw: function (options) {
             var id = 'special-information';
             addBlockheader(this, id, 'Special');
-            ext.point("io.ox/contacts/edit/form/special-information").invoke("draw", this, data);
+            ext.point("io.ox/contacts/edit/form/special-information").invoke("draw", this, options);
             addSwitch(this, id, 'Special information');
             addSpacer(this);
         }
@@ -1363,9 +1388,9 @@ define("io.ox/contacts/edit/view-form",
     ext.point("io.ox/contacts/edit/form").extend({
         index: 200,
         id: 'bottom-line',
-        draw: function (data) {
+        draw: function (options) {
             var node = $('<td>', { colspan: '2' });
-            ext.point("io.ox/contacts/edit/form/head/button").invoke("draw", node, data);
+            ext.point("io.ox/contacts/edit/form/head/button").invoke("draw", node, options);
             this.append($('<tr>').append(node));
         }
     });
@@ -1375,16 +1400,18 @@ define("io.ox/contacts/edit/view-form",
     return {
         draw: function (data, appdata) {
             app = appdata;
-            var node;
-            if (!data) {
-                node = $();
-            } else {
-                node = $("<table>", { border: 0, cellpadding: 0, cellspacing: 0 })
-                    .addClass("contact-detail edit")
-                    .attr('data-obj-id', data.folder_id + '.' + data.id);
-                ext.point("io.ox/contacts/edit/form").invoke("draw", node, data);
+            var myview = { node: $()};
+            if(data !== undefined && data !== null) {
+                myview = new View({model: getDataWrapper(data)});
+                var t = $("<table>", { border: 0, cellpadding: 0, cellspacing: 0 })
+                                      .addClass("contact-detail edit")
+                                      .attr('data-obj-id', data.folder_id + '.' + data.id);
+                myview.node.append( t );
+
+                ext.point("io.ox/contacts/edit/form").invoke("draw", t, {'data': data, view: myview});
             }
-            return node;
+            return myview.node;
+        
         }
     };
 });
