@@ -91,6 +91,11 @@
     margin: 5px 0px;
     display: block;
 }
+.settings-detail-pane .radio {
+    margin: 5px 0px;
+    display: block;
+
+}
 .settings-detail-pane input[type="checkbox"] {
     margin: 0px 5px 0px 0px;
 }

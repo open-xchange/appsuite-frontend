@@ -36,17 +36,17 @@ define('io.ox/core/tk/forms', [], function () {
         createCheckbox: function (options) {
             var checkboxDiv,
                 label,
-                checkbox;
+                checkbox,
+                container;
 
-            checkboxDiv = $('<div>').addClass('checkbox');
+            container = checkboxDiv = $('<div>').addClass('checkbox');
             if (options.classes) {
                 checkboxDiv.addClass(options.classes);
             }
             if (options.label) {
                 label = $('<label>');
-                label.addClass('checkbox');
                 checkboxDiv.append(label);
-                checkboxDiv = label;
+                container = label;
             }
 
             checkbox = $('<input type="checkbox" data-item-id="' + options.dataid + '"/>');
@@ -55,7 +55,7 @@ define('io.ox/core/tk/forms', [], function () {
             checkbox.attr('id', options.id);
 
 
-            checkboxDiv.append(checkbox);
+            container.append(checkbox);
             if (options.label) {
                 label.append($('<span>').text(options.label));
             }
@@ -75,102 +75,139 @@ define('io.ox/core/tk/forms', [], function () {
             return checkboxDiv;
         },
         createSelectbox: function (options) {
-            var label = $('<label>').addClass('select');
-            label.append(
-              $('<span>').text(options.label)
-            );
-            var sb = $('<select>');
-            sb.attr('data-item-id', options.dataid);
+            var selectboxDiv,
+                label,
+                selectbox,
+                container;
+
+            container = selectboxDiv = $('<div>').addClass('select');
+            if (options.classes) {
+                selectboxDiv.addClass(options.classes);
+            }
+
+            if (options.label) {
+                label = $('<label>')
+                          .append($('<span>').text(options.label));
+                selectboxDiv.append(label);
+                container = label;
+            }
+
+            selectbox = $('<select>');
+
+            selectbox.attr('data-item-id', options.dataid);
             _.each(options.items, function (val, key) {
-                sb.append(
-                  $('<option>').attr('value', val).text(key)
-                );
-            });
-            sb.find('option[value="' + options.model.get(options.dataid) + '"]').attr('selected', 'selected');
-            sb.on('change', function (evt) {
-                console.log(options.dataid + ':' + sb.val());
-                console.log(typeof sb.val());
-                options.model.set(options.dataid, sb.val());
+                var opt =  $('<option>').attr('value', val).text(key);
+                selectbox.append(opt);
             });
 
-            label.append(sb.get());
-            return label;
+            selectbox.on('change', function (evt) {
+                selectbox.trigger('update', {dataid: options.dataid, value: selectbox.val()});
+            });
+
+            if (options.model !== undefined) {
+                selectbox.find('option[value="' + options.model.get(options.dataid) + '"]').attr('selected', 'selected');
+                $(options.model).on(options.dataid + '.changed', function (evt, value) {
+                    selectbox.find('option[value="' + value + '"]').attr('selected', 'selected');
+                });
+            }
+            
+            container.append(selectbox);
+            return selectboxDiv;
         },
         createRadioButton: function (options) {
             var radioDiv,
                 label,
-                radio;
+                radio,
+                container;
 
-            radioDiv = $('<div>').addClass('radio');
+            options.id = options.id || _.uniqueId('c');
+
+            container = radioDiv = $('<div>').addClass('radio');
             if (options.classes) {
                 radioDiv.addClass(options.classes);
             }
             if (options.label) {
                 label = $('<label>');
-                label.addClass('radio');
                 radioDiv.append(label);
-                radioDiv = label;
+                container = label;
             }
 
-            options.id = options.id || _.uniqueId('c');
+            
 
             radio = $('<input type="radio">');
             radio.attr({
                 'name': options.name,
                 'data-item-id': options.dataid,
                 'id': options.id
-                });
+            });
             if (options.value) {
                 radio.attr('value', options.value);
             }
 
-
-
-            radioDiv.append(radio);
+            container.append(radio);
             if (options.label) {
                 label.append($('<span>').text(options.label));
             }
 
 
             radio.on('change', function () {
-                radio.trigger('update', {dataid: options.dataid, value: $('input[name="' + options.name + '"]:checked').val()});
+                var val = $('input[name="' + options.name + '"]:checked').val();
+                radio.trigger('update', {dataid: options.dataid, value: val});
             });
 
-            if(options.modell !== undefined) {
-                radio.attr('checked', (options.model.get(options.dataid) === options.value)?'checked':null);
+            if (options.model !== undefined) {
+                radio.attr('checked', (options.model.get(options.dataid) === options.value) ? 'checked' : null);
                 $(options.model).on(options.dataid + '.changed', function (evt, value) {
-                    radio.val(value);
-                    radio.attr('checked', (value === options.value)?'checked':null);
+                    console.log(value + ':' + options.value);
+                    if (value === options.value) {
+                        radio.attr('checked', 'checked');
+                    }
                 });
             }
-
             return radioDiv;
         },
 
 
-
-
-
-
-
-
-
-
         createTextField: function (options) {
-            options.maxlength = options.maxlength || 20;
-            var tfdiv = $('<div>');
-            var tf = $('<input type="text" maxlength="' + options.maxlength + '">');
-            tf.attr('data-item-id', options.dataid);
-            tf.val(options.model.get(options.dataid));
-            tf.addClass('nice-input');
-            tf.css({ fontSize: '14px', width: '300px', paddingTop: '0.25em', paddingBottom: '0.25em', webkitBorderRadius: 0, webkitAppearance: 'none' });
+            var textfieldDiv,
+                textfield,
+                label,
+                container;
 
-            tf.on('change', function () {
-                options.model.set(options.dataid, tf.val());
+            options.id = options.id || _.uniqueId('c');
+            options.maxlength = options.maxlength || 20;
+            container = textfieldDiv = $('<div>').addClass('input');
+            if (options.classes) {
+                textfieldDiv.addClass(options.classes);
+            }
+
+            if (options.label) {
+                label = $('<label>');
+                textfieldDiv.append(label);
+                container = label;
+            }
+
+            textfield = $('<input type="text" maxlength="' + options.maxlength + '">');
+
+            textfield.attr({
+                'data-item-id': options.dataid,
+                'id': options.id
+            });
+            
+
+            textfield.on('change', function () {
+                textfield.trigger('update', {dataid: options.dataid, value: textfield.val()});
             });
 
-            tfdiv.append(tf);
-            return tfdiv;
+            if (options.model !== undefined) {
+                textfield.val(options.model.get(options.dataid));
+                $(options.model).on(options.dataid + '.changed', function (evt, value) {
+                    textfield.val(value);
+                });
+            }
+
+            container.append(textfield);
+            return textfieldDiv;
         },
         createPasswordField: function (options) {
             options.maxlength = options.maxlength || 20;

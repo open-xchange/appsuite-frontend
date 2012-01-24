@@ -30,7 +30,7 @@ define('io.ox/mail/settings',
     };
    
 
-
+    window.settings = settings;
     var mailSettings = {
         draw: function (node, app) {
             var myView = new View({model: settings});
