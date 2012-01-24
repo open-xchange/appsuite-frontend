@@ -16,26 +16,65 @@ define: true
 define('io.ox/core/tk/forms', [], function () {
     'use strict';
     
+    /**
+ 
+    options = {
+        class
+        update
+        name
+        model
+        validator
+        dataid
+        id
+
+
+    
+    }
+
+*/
     var utils = {
         createCheckbox: function (options) {
-            var cbdiv = $('<div>').addClass('checkbox');
-            var label = cbdiv.append('<label>');
-            var cb = $('<input type="checkbox" data-item-id="' + options.dataid + '"/>')
-                        .attr('checked', options.model.get(options.dataid));
+            var checkboxDiv,
+                label,
+                checkbox;
 
-            cb.on('change', function (evt) {
-                var val =  (typeof cb.attr('checked') !== 'undefined') ? true: false;
-                console.log(options.dataid + ":" + val);
-                options.model.set(options.dataid, val);
+            checkboxDiv = $('<div>').addClass('checkbox');
+            if (options.classes) {
+                checkboxDiv.addClass(options.classes);
+            }
+            if (options.label) {
+                label = $('<label>');
+                label.addClass('checkbox');
+                checkboxDiv.append(label);
+                checkboxDiv = label;
+            }
+            
+            checkbox = $('<input type="checkbox" data-item-id="' + options.dataid + '"/>');
+            
+            if (options.id !== undefined) {
+                checkbox.attr('id', options.id);
+            } else {
+                checkbox.attr('id', _.uniqueId('c'));
+            }
+
+            checkboxDiv.append(checkbox);
+            if (options.label) {
+                label.append($('<span>').text(options.label));
+            }
+
+            checkbox.on('change', function (evt) {
+                checkbox.trigger('update', {dataid: options.dataid, value: ((typeof checkbox.attr('checked') !== 'undefined') ? true: false)});
             });
 
-            label.append(cb);
-            label.append(
-              $('<span>')
-                .text(options.label)
-            );
-
-            return cbdiv;
+            if (options.model !== undefined) {
+                checkbox.attr('checked', options.model.get(options.dataid));
+                $(options.model).on(options.dataid + '.changed', function (evt, value) {
+                    if (checkbox.attr('checked') !== value) {
+                        checkbox.attr('checked', value);
+                    }
+                });
+            }
+            return checkboxDiv;
         },
         createSelectbox: function (options) {
             var label = $('<label>').addClass('select');
@@ -89,6 +128,8 @@ define('io.ox/core/tk/forms', [], function () {
             var tf = $('<input type="text" maxlength="' + options.maxlength + '">');
             tf.attr('data-item-id', options.dataid);
             tf.val(options.model.get(options.dataid));
+            tf.addClass('nice-input');
+            tf.css({ fontSize: '14px', width: '300px', paddingTop: '0.25em', paddingBottom: '0.25em', webkitBorderRadius: 0, webkitAppearance: 'none' });
 
             tf.on('change', function () {
                 options.model.set(options.dataid, tf.val());
@@ -123,7 +164,7 @@ define('io.ox/core/tk/forms', [], function () {
             l.append(utils.createPasswordField({dataid: options.dataid, value: options.value, model: options.model, validator: options.validator}).css({ width: options.width + 'px', display: 'inline-block'}));
             return l;
         },
-        createLabel: function () {
+        createLabel: function (options) {
             return $('<label>');
         },
         createText: function (options) {
