@@ -140,12 +140,23 @@ define('io.ox/contacts/edit/view-form',
         });
     };
 
+    var createSaveButton = function (options) {
+        var saveButton = $('<a>');
+
+        saveButton.addClass('button default-action saveButton').text('Save');
+        saveButton.on('click', function () {
+            options.view.getModel().save();
+        });
+        return saveButton;
+    };
+
     var drawFormHead = function (options) {
         var section,
           picture,
           title,
           jobDescription,
-          calculatedModel;
+          calculatedModel,
+          saveButton;
 
         section = options.view.createSection({}).addClass('formheader');
         
@@ -171,9 +182,14 @@ define('io.ox/contacts/edit/view-form',
 
         jobDescription = options.view.createText({dataid: 'jobdescription.calculated', classes: 'job clear-title', model: calculatedModel});
 
+
+        saveButton = createSaveButton(options);
+
+
         section.append(picture);
         section.append(title);
         section.append(jobDescription);
+        section.append(saveButton);
 
         this.append(section);
     };
@@ -241,7 +257,21 @@ define('io.ox/contacts/edit/view-form',
                                 return this.data[key];
                             },
                             save: function () {
-                            
+                                console.log('i am saving now');
+                                // api edit? needs tracing the changes, no good!
+                                // api editNewImage uploades the whole form data, ughh
+                                // so just edit everything on change?
+                                api.edit({
+                                    id: this.data.id,
+                                    folder: this.data.folder_id,
+                                    timestamp: _.now(),
+                                    data: this.data
+                                }).done(function () {
+                                
+                                  console.log("SAVED");
+                                  alert("SAVED");
+                                  app.quit(); //close tha app???
+                                });
                             }
                         });
 
