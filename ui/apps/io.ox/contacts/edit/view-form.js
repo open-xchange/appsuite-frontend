@@ -160,7 +160,6 @@ define("io.ox/contacts/edit/view-form",
                         this.node.addClass('contact-detail edit').attr('data-item-id', self.model.get('folder_id') + '.' + self.model.get('id'));
                         ext.point("io.ox/contacts/edit/form").invoke("draw", self.node, {view: self});
                     }
-                    this.setModel(data);
                     return self;
                 }
             });

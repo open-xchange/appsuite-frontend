@@ -277,7 +277,7 @@ input#image1 {
 @media (min-width: 699px) {
 	
 	.contact-detail.edit .sectiontitle {
-		margin: 15px 0 15px 0;
+		margin: 25px 0 15px 0;
 		padding-left: 165px;
 		font-size: 1.25em;
 		color: #888;
@@ -304,10 +304,11 @@ input#image1 {
 	
 	.contact-detail.edit div.input.inline.nr0 input[type="text"] {
 		width: 75px;
+		margin-right: 10px;
 	}
 	
 	.contact-detail.edit div.input.inline.nr1 input[type="text"] {
-		width: 170px;
+		width: 199px;
 	}
 	
 	.contact-detail.edit .input > input[type="text"]:focus {
@@ -323,18 +324,26 @@ input#image1 {
 		text-align: right;
 	}
 	
-	.contact-detail.edit div.labelinline {
+	.contact-detail.edit div.inlinelabel {
 		margin-right: 15px;
 		padding-top: 7px;
 		width: 150px;
 		float:left;
 		text-align: right;
 	}
-	.contact-detail.edit div.labelinline {
-		margin-right: 15px;
-		padding-top: 7px;
-		width: 150px;
-		float:left;
-		text-align: right;
+	
+	.contact-detail.edit div.inlinelabel div.label{
+		margin-right: 0px;
+		padding-top: 0px;
+		width: auto;
+		display: inline;
+		float: none;
 	}
+	
+	.contact-detail.edit div.inlinelabel div.label:nth-child(1) {
+		margin-right: 5px;
+	}
+	
+	
+	
 }

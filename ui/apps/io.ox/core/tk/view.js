@@ -39,6 +39,7 @@ define('io.ox/core/tk/view',
     };
 
     View.prototype.onUpdateFormElement = function (evt, options) {
+        console.log(this);
         this.model.set(options.dataid, options.value);
         evt.stopPropagation();
     };
