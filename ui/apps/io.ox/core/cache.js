@@ -107,6 +107,8 @@ define('io.ox/core/cache', function () {
         // private fields
         var index = new CacheStorage(name + '.index', persistent);
 
+        var self = this;
+
         if (!name) {
             // not funny!
             throw 'Each object cache needs a unique name!';
@@ -149,6 +151,12 @@ define('io.ox/core/cache', function () {
         // get from cache
         this.get = function (key) {
             return index.get(key).pipe(function (data) {
+                if( data !== undefined ) {
+                    return data.data;
+                } else {
+                    return undefined;
+                }
+
                 return data !== undefined ? data.data : undefined;
             });
         };
