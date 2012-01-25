@@ -144,7 +144,6 @@ define("io.ox/contacts/main",
         drawContact = function (data) {
             //right.idle().empty().append(base.draw(data));
             right.idle().empty().append(viewDetail.draw(data));
-
         };
 
         drawFail = function (obj) {

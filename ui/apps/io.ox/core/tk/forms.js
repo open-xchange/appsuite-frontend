@@ -106,7 +106,7 @@ define('io.ox/core/tk/forms', [], function () {
                     selectbox.find('option[value="' + value + '"]').attr('selected', 'selected');
                 });
             }
-            
+
             container.append(selectbox);
             return selectboxDiv;
         },
@@ -128,7 +128,7 @@ define('io.ox/core/tk/forms', [], function () {
                 container = label;
             }
 
-            
+
 
             radio = $('<input type="radio">');
             radio.attr({
@@ -189,7 +189,7 @@ define('io.ox/core/tk/forms', [], function () {
                 'data-item-id': options.dataid,
                 'id': options.id
             });
-            
+
 
             textfield.on('change', function () {
                 textfield.trigger('update', {dataid: options.dataid, value: textfield.val()});
@@ -232,7 +232,24 @@ define('io.ox/core/tk/forms', [], function () {
             return l;
         },
         createLabel: function (options) {
-            return $('<label>');
+            var labelDiv,
+                label;
+            options.id = options.id || _.uniqueId('c');
+            options.text = options.text || "";
+
+            labelDiv = $('<div>');
+            labelDiv.addClass('label');
+            if(options.classes) {
+                labelDiv.addClass(options.classes);
+            }
+
+            label = $('<label>');
+            label.attr('for', options.id);
+            label.text(options.text);
+
+            labelDiv.append(label);
+
+            return labelDiv;
         },
         createText: function (options) {
             var textContainer;
@@ -259,6 +276,18 @@ define('io.ox/core/tk/forms', [], function () {
 
 
             return textContainer;
+        },
+        createSection: function (options) {
+            return $('<div>').addClass('section');
+        },
+        createSectionTitle: function (options) {
+            return $('<div>').addClass('sectiontitle').text(options.text);
+        },
+        createSectionContent: function (options) {
+             return $('<div>').addClass('sectioncontent');
+        },
+        createSectionGroup: function (options) {
+             return $('<div>').addClass('section-group');
         }
     };
 

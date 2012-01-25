@@ -20,15 +20,15 @@ define('io.ox/mail/settings',
         'io.ox/core/tk/forms',
         'io.ox/core/tk/view',
         'settings!io.ox/mail'], function (ext, utils, dialogs, forms, View, settings) {
-       
+
     'use strict';
 
-    
+
     var myValidator = {
-    
-    
+
+
     };
-   
+
 
     window.settings = settings;
     var mailSettings = {
@@ -36,7 +36,7 @@ define('io.ox/mail/settings',
             var myView = new View({model: settings});
             node.append(myView.node);
             //myView.createSectionTitle({text: 'Common'});
-            
+
 
 
             console.log(myView);
@@ -64,10 +64,11 @@ define('io.ox/mail/settings',
                     .append(
                       utils.createSectionGroup()
                         .append(
-                          myView.createSelectbox({dataid: 'mail-common-defaultview', label: 'Default view:', items:{
-                                'V-split view 1': 'option1',
-                                'V-split view 2': 'option2',
-                                'V-split view 3': 'option3'
+                          myView.createSelectbox({dataid: 'mail-common-defaultview', label: 'Default view:',
+                              items: {
+                                  'V-split view 1': 'option1',
+                                  'V-split view 2': 'option2',
+                                  'V-split view 3': 'option3'
                               }, currentValue: 'option1',  validator: myValidator})
                         )
                         .addClass('expertmode')
@@ -92,7 +93,7 @@ define('io.ox/mail/settings',
                     .append(myView.createCheckbox({dataid: 'mail-common-showsenderpic', label: 'Show sender image?',  validator: myValidator}))
                     .append(myView.createCheckbox({dataid: 'mail-common-collectwhilesending', label: 'Automatically collect contacts in the folder "Collected addresses" while sending?', validator: myValidator}).addClass('expertmode'))
                     .append(myView.createCheckbox({dataid: 'mail-common-collectwhilereading', label: 'Automatically collect contacts in the folder "Collected addresses" while reading?', validator: myValidator}).addClass('expertmode'))
-                    
+
                     .append(utils.createSectionDelimiter())
 
                     .append(
@@ -268,7 +269,7 @@ define('io.ox/mail/settings',
 
             return node;
       }
-    
+
     };
     // created on/by
     ext.point("io.ox/mail/settings/detail").extend({
@@ -283,6 +284,6 @@ define('io.ox/mail/settings',
             });
         }
     });
-    
-    return {}; //whoa return nothing at first
-});
+
+            return {}; // whoa return nothing at first
+        });

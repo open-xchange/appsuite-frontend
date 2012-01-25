@@ -15,26 +15,10 @@ define: true
 */
 
 define('io.ox/core/tk/view',
-      ['io.ox/core/tk/forms'], function (forms) {
-   
+      ['io.ox/core/tk/forms',
+       'io.ox/core/tk/model'], function (forms, SimpleModel) {
+
     'use strict';
-    
-    var SimpleModel = function (flatdata) {
-        this.data = flatdata;
-
-
-        this.get = function (key) {
-            console.log("getting from simple");
-            console.log(key);
-            return this.data[key];
-        };
-
-        this.set = function (key, value) {
-            this.data[key] = value;
-        };
-    };
-
-
 
     var View = function (options) {
         var self = this;
@@ -45,6 +29,14 @@ define('io.ox/core/tk/view',
         $(this.node).on('update', _.bind(this.onUpdateFormElement, this));
     };
 
+
+    View.prototype.setModel = function (model) {
+        this.model = model;
+    };
+
+    View.prototype.append = function (jqWrapped) {
+        this.node.append(jqWrapped);
+    };
 
     View.prototype.onUpdateFormElement = function (evt, options) {
         this.model.set(options.dataid, options.value);

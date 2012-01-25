@@ -231,8 +231,7 @@
 
 /*scrollabel unsortet*/
 
-.block.edit_contact.unsortedfields{
-	
+.block.edit_contact.unsortedfields{ 
 	overflow: scroll;
 	height: 300px;
 	width: 400px;
@@ -275,10 +274,67 @@ input#image1 {
 	width: 200px;
 }
 
-.headline {
-	font-size: 1.25em;
-	color: #888;
-	font-family: OpenSans, Helvetica, Arial, sans-serif;
-	font-weight: 200;
-	line-height: 1.15em;
+@media (min-width: 699px) {
+	
+	.contact-detail.edit .sectiontitle {
+		margin: 15px 0 15px 0;
+		padding-left: 165px;
+		font-size: 1.25em;
+		color: #888;
+		font-family: OpenSans, Helvetica, Arial, sans-serif;
+		font-weight: 200;
+		line-height: 1.15em;
+	}
+	.contact-detail.edit div.input > input[type="text"] {
+		font-size: 14px;
+		width: 300px;
+	    color: black;
+	    background-color: white;
+	    border: 1px solid #ccc;
+	    padding: 0.25em 0.5em 0.25em 0.5em;
+	    -webkit-appearance: 'none';
+	    -moz-appearance: 'none';
+	    border-radius: 0.25em;
+	    outline: 0; 	
+	}
+	
+	.contact-detail.edit div.input.inline{
+		display: inline;
+	}
+	
+	.contact-detail.edit div.input.inline.nr0 input[type="text"] {
+		width: 75px;
+	}
+	
+	.contact-detail.edit div.input.inline.nr1 input[type="text"] {
+		width: 170px;
+	}
+	
+	.contact-detail.edit .input > input[type="text"]:focus {
+		border-color: transparent;
+	    box-shadow: 0px 0px 5px 1px @accent1;
+	}
+	
+	.contact-detail.edit div.label {
+		margin-right: 15px;
+		padding-top: 7px;
+		width: 150px;
+		float:left;
+		text-align: right;
+	}
+	
+	.contact-detail.edit div.labelinline {
+		margin-right: 15px;
+		padding-top: 7px;
+		width: 150px;
+		float:left;
+		text-align: right;
+	}
+	.contact-detail.edit div.labelinline {
+		margin-right: 15px;
+		padding-top: 7px;
+		width: 150px;
+		float:left;
+		text-align: right;
+	}
 }

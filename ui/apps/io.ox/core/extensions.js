@@ -81,7 +81,7 @@ define("io.ox/core/extensions",
                 }
                 var fn = ext[name];
                 if (fn) {
-                    // wrap?
+                    // wrap
                     if (wrappers[name]) {
                         return wrappers[name].call(context, {
                             args: args,
@@ -204,6 +204,9 @@ define("io.ox/core/extensions",
         this.enable = function (id) {
             delete disabled[id];
             return this;
+        };
+        this.isEnabled = function (id) {
+            return !!disabled[id];
         };
     };
 

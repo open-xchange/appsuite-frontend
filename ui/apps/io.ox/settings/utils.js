@@ -15,7 +15,7 @@ define: true
 */
 define('io.ox/settings/utils',
       ['less!io.ox/settings/style.css'], function () {
-   
+
     'use strict';
     var utils = {
         createSectionDelimiter: function () {
@@ -38,6 +38,9 @@ define('io.ox/settings/utils',
                       .append(utils.createApplicationTitle({text: app.title}))
                       .append(utils.createSectionDelimiter());
         },
+
+
+
         createInfoText: function (options) {
             var d = $('<div>').addClass('informational-text');
             if (options.html) {
