@@ -28,12 +28,13 @@ console.info("Build path: " + utils.builddir);
 function pad (n) { return n < 10 ? "0" + n : n; }
 var t = utils.startTime;
 var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
-    pad(t.getUTCMonth()) + pad(t.getUTCDate()) + "." +
+    pad(t.getUTCMonth() + 1) + pad(t.getUTCDate()) + "." +
     pad(t.getUTCHours()) + pad(t.getUTCMinutes()) +
     pad(t.getUTCSeconds());
 console.info("Build version: " + version);
 
 var debug = Boolean(process.env.debug);
+var debug = true || Boolean(process.env.debug);
 
 if (debug) console.info("Debug mode: on");
 
