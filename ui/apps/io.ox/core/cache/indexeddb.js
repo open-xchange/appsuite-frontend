@@ -15,54 +15,72 @@ define('io.ox/core/cache/indexeddb', function () {
 
     'use strict';
 
-    var id, storeName, oxdb = null;
+    var id, storeName,
+        dbName = 'oxcache',
+        IDB_VERSION = (String(ox.base).split('='))[1].split('.').join(''),//ox.base;
 
-    var dbName = 'oxcache';
+        // Initialising the IndexedDB Objects
+        indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB,
+        IDBDatabase = window.IDBDatabase || window.mozIDBDatabase || window.webkitIDBDatabase,
+        IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange,
+        IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction,
 
-    var IDB_VERSION = ox.base;
+        connection = [],
 
-    // Initialising the IndexedDB Objects
-    var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB;
-    var IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange;
-    var IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
+        lastGCRun = {},
+        gcTimeout = 30 * 60 * 1000, // 30 Minutes
+        ts_cachetimeout = (2 * 24 * 60 * 60 * 1000); // 2 days
 
-    var connection = [];
+    function upgradeCallback (transaction ,oldVersion) {
+
+        var db = transaction.db;
+
+        if (db.objectStoreNames.contains(storeName)) {
+            db.deleteObjectStore(storeName);
+        }
+
+        var objectStore = db.createObjectStore(storeName, {
+            "keyPath": "key"
+        }, true);
+
+        objectStore.createIndex('accesstime','data.accesstime',{ unique: false });
+
+        db.transaction([], IDBTransaction.VERSION_CHANGE);
+    }
 
     function openDb(dbName) {
         var def = $.Deferred();
 
-        console.log('openDB', connection);
-
         try {
 
-            var req = indexedDB.open(dbName);
+            var req;
 
-            console.log('openDB -> req', req);
+            if( _.isFunction(IDBDatabase.prototype.setVersion) ) {
+                req = indexedDB.open(dbName);
+            } else {
+                req = indexedDB.open(dbName, IDB_VERSION, upgradeCallback);
+            }
 
             req.onsuccess = function (e) {
-
-                console.log('openDB.success');
-
                 var db = e.target.result;
 
                 connection[dbName] = db;
 
-                def.resolve(db);
-
                 db.onversionchange = function () {
                     db.close();
                     connection[dbName] = db = null;
-                    //delete db;
                 };
+
+                def.resolve(db);
             };
 
             req.onerror = function (e) {
-                console.log('openDB.error');
+                console.log('indexedDB.open error', e);
                 def.reject(e);
             };
 
         } catch ( e) {
-            console.log('openDB exception', e);
+            console.log('opendb EXCEPTION', e);
             def.reject(e);
         }
 
@@ -72,14 +90,13 @@ define('io.ox/core/cache/indexeddb', function () {
     function getConnection(dbName) {
         var def = new $.Deferred();
 
-        console.log('getConnection');
-
         if (!!connection[dbName] && connection[dbName].constuctor === window.IDBDatabase) {
             def.resolve(connection[dbName]);
         } else {
             openDb(dbName).done(function (con) {
                 def.resolve(con);
             }).fail(function (e) {
+                console.log('getConnection reject', e);
                 def.reject(e);
             });
         }
@@ -90,38 +107,47 @@ define('io.ox/core/cache/indexeddb', function () {
     function checkStore(dbName, storeName) {
         var def = new $.Deferred();
 
-        console.log('checkStore');
-
         getConnection(dbName).done(function (db) {
 
             if (!db.version || "" + db.version !== "" + IDB_VERSION || !db.objectStoreNames.contains(storeName)) {
 
-                var requestV = db.setVersion(IDB_VERSION);
-                requestV.onsuccess = function (e) {
+                if( _.isFunction(db.setVersion) ) {
+                    var requestV = db.setVersion(IDB_VERSION);
 
-                    if (db.objectStoreNames.contains(storeName)) {
-                        db.deleteObjectStore(storeName);
-                    }
+                    requestV.onsuccess = function (e) {
 
-                    var objectStore = db.createObjectStore(storeName, {
-                        "keyPath": "key"
-                    }, true);
+                        if (db.objectStoreNames.contains(storeName)) {
+                            db.deleteObjectStore(storeName);
+                        }
 
+                        var objectStore = db.createObjectStore(storeName, {
+                            "keyPath": "key"
+                        }, true);
+
+                        objectStore.createIndex('accesstime','accesstime',{ unique: false });
+
+                        def.resolve(db);
+                    };
+
+                    requestV.onerror = function (e) {
+                        console.log('checkStore requestV error', e);
+                        def.reject(e);
+                    };
+
+                    requestV.onblocked = function (e) {
+                        console.log('checkStore requestV block', e);
+                        def.reject(e);
+                    };
+                } else {
                     def.resolve(db);
-                };
+                }
 
-                requestV.onerror = function (e) {
-                    def.reject(e);
-                };
-
-                requestV.onblocked = function (e) {
-                    def.reject(e);
-                };
             } else {
                 def.resolve(db);
             }
 
         }).fail(function (e) {
+            console.log('checkStore reject',e);
             def.reject(e);
         });
 
@@ -134,41 +160,33 @@ define('io.ox/core/cache/indexeddb', function () {
     function getStore(dbName, storeName) {
         var def = new $.Deferred();
 
-        console.log('getStore');
-
         checkStore(dbName, storeName).done(function (db) {
-            console.log('getStore.done', db);
             try {
                 var transactionStartTime = (new Date()).getTime();
                 var transaction = db.transaction(storeName, IDBTransaction.READ_WRITE);
 
                 transaction.oncomplete = function (e) {
                     var transactionStopTime = (new Date()).getTime();
-                    console.log("===== Transaction Complete ", (transactionStopTime - transactionStartTime), e);
                 };
 
                 transaction.onabort = function (e) {
                     var transactionStopTime = (new Date()).getTime();
-                    console.log("===== Transaction Aborted ", (transactionStopTime - transactionStartTime), e);
                 };
 
                 transaction.onerror = function (e) {
                     var transactionStopTime = (new Date()).getTime();
-                    console.log("===== Transaction Error ", (transactionStopTime - transactionStartTime), e);
                 };
 
                 var objectStore = transaction.objectStore(storeName);
 
-                console.log('getStore -> objectsore', objectStore);
-
                 def.resolve(objectStore);
 
             } catch (e) {
-                console.log('getStore.done.catch', e);
+                console.log('getStore inner reject', e);
                 def.reject(e);
             }
         }).fail(function (e) {
-            console.log('getStore.fail', e);
+            console.log('getStore reject', e);
             def.reject(e);
         });
 
@@ -177,20 +195,10 @@ define('io.ox/core/cache/indexeddb', function () {
 
 
     function getObjectstore() {
-        console.log('GET OBJECTSTORE', storeName);
         return getStore('oxcache', storeName);
     }
 
-
-
-
-
-
-
-
-
-
-    return {
+    var that = {
         setId : function (theId) {
             id = theId;
             storeName = "cache_" + id;
@@ -203,6 +211,45 @@ define('io.ox/core/cache/indexeddb', function () {
         },
         isUsable : function () {
             return Modernizr.indexeddb;
+        },
+        gc : function () {
+            // keypath for accesstime data.accesstime
+            return getObjectstore().pipe(function (store) {
+
+                var lastRun = lastGCRun[store.name];
+                var now = _.now();
+
+                //console.log('#', store.name, lastRun, _(lastRun).isUndefined(), now , lastRun + gcTimeout, (now > lastRun + gcTimeout), lastGCRun);
+
+                if( (_(lastRun).isUndefined() || now > lastRun + gcTimeout) ) {
+                    lastGCRun[store.name] = now;
+                    console.log('GC RUN', store.name);
+
+                    var deleteRange = IDBKeyRange.upperBound(now - ts_cachetimeout);
+                    var index = store.index('accesstime');
+                    var deleteCursor = index.openKeyCursor(deleteRange);
+
+                    deleteCursor.onsuccess = function (event) {
+                        var cursor = event.target.result;
+
+                        //console.log('success event', event, cursor);
+                        if (cursor) {
+                            console.log('DELETE', cursor.primaryKey);
+                            store['delete'](cursor.primaryKey);
+                            cursor['continue']();
+                        }
+                    };
+
+                    deleteCursor.onerror = function (e) {
+                        console.log('cursor error',e);
+                    };
+
+                    return deleteCursor;
+                } else {
+                    //console.log('no gc run for ', store.name, now, lastRun);
+                    return null;
+                }
+            });
         },
         clear : function () {
 
@@ -219,14 +266,9 @@ define('io.ox/core/cache/indexeddb', function () {
             });
 
         },
-
         get : function (key) {
-
-            console.log('GET OUTER ', key);
-
+            that.gc();
             return getObjectstore().pipe(function (store) {
-
-                console.log('GET INNER ', store);
 
                 var def = new $.Deferred();
 
@@ -234,71 +276,64 @@ define('io.ox/core/cache/indexeddb', function () {
                     var getRequest = store.get(key);
 
                     getRequest.onsuccess = function (event) {
-                        console.log('GET success', event.target.result);
+
                         if (_.isUndefined(event.target.result) || _.isUndefined(event.target.result.data)) {
                             def.resolve(undefined);
                         } else {
+                            that.set(key,null,true);
                             def.resolve(event.target.result.data);
                         }
                     };
 
                     getRequest.onerror = function (event) {
-                        console.log('GET error', event);
                         def.reject(event);
                     };
 
                 } catch ( e) {
-                    console.log('get exception > ', e);
+                    console.error('get exception > ', e);
                 }
 
                 return def;
             });
         },
 
-        set : function (key, data) {
-
+        set : function (key, data, accessTimeUpdate) {
+            that.gc();
             return getObjectstore().pipe(function (store) {
-
-                console.log('SET INNER', key, data);
 
                 var def = $.Deferred();
 
                 var testRequest = store.get(key);
                 testRequest.onsuccess = function (e) {
 
-                    console.log('SET check.success');
-
                     var result = e.target.result;
 
                     if (_.isUndefined(result)) {
+                        if( accessTimeUpdate===true ){
+                            def.reject();
+                        } else {
+                            var addRequest = store.add({'key': key, 'data': data, 'accesstime':_.now()});
 
-                        console.log('SET check.success ADD');
+                            addRequest.onsuccess = function (e) {
+                                def.resolve(e.target.result);
+                            };
 
-                        var addRequest = store.add({'key': key, 'data': data});
-
-                        addRequest.onsuccess = function (e) {
-                            console.log('SET check.success ADD.success');
-                            def.resolve(e.target.result);
-                        };
-
-                        addRequest.onerror = function (e) {
-                            console.log('SET check.success ADD.error', e);
-                            def.reject(e);
-                        };
-
+                            addRequest.onerror = function (e) {
+                                def.reject(e);
+                            };
+                        }
                     } else {
+                        if( accessTimeUpdate === true ) {
+                            data = result.data;
+                        }
 
-                        console.log('SET check.success PUT');
-
-                        var putRequest = store.put({'key': key, 'data': data});
+                        var putRequest = store.put({'key': key, 'data': data, 'accesstime':_.now()});
 
                         putRequest.onsuccess = function (e) {
-                            console.log('SET check.success PUT.success', e.target.result);
                             def.resolve(e.target.result);
                         };
 
                         putRequest.onerror = function (e) {
-                            console.log('SET check.success PUT.error', e);
                             def.reject(e);
                         };
 
@@ -306,8 +341,6 @@ define('io.ox/core/cache/indexeddb', function () {
 
                 };
                 testRequest.onerror = function (e) {
-
-                    console.log('SET check.error', e);
                     def.reject(e);
                 };
 
@@ -316,7 +349,7 @@ define('io.ox/core/cache/indexeddb', function () {
         },
 
         contains : function (key) {
-
+            that.gc();
             return getObjectstore().pipe(function (store) {
                 var def = new $.Deferred();
 
@@ -354,6 +387,7 @@ define('io.ox/core/cache/indexeddb', function () {
         },
 
         keys : function () {
+            that.gc();
             return getObjectstore().pipe(function (store) {
                 var def = new $.Deferred();
 
@@ -380,6 +414,7 @@ define('io.ox/core/cache/indexeddb', function () {
 
                     theCursor.onsuccess = function (event) {
                         var cursor = event.target.result;
+
                         if (cursor) {
                             keys.push(cursor.key);
                             cursor['continue']();
@@ -397,4 +432,6 @@ define('io.ox/core/cache/indexeddb', function () {
             });
         }
     };
+
+    return that;
 });
