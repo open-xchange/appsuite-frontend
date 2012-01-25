@@ -43,11 +43,26 @@ define('io.ox/launchpad/main',
                 .addClass('pad');
         }),
 
+        getRunningApps = function (name) {
+            return _.chain(ox.ui.running)
+                .filter(function (app) {
+                    var appName = app.getName();
+                    return name !== undefined ? appName === name : appName !== undefined;
+                })
+                .map(function (app) {
+                    var data = api.get(app.getName());
+                    data.title = data.title || app.getWindowTitle() || app.getName();
+                    return { data: data, app: app };
+                })
+                .value();
+        },
+
         launchApp = function (e) {
             // stop link
             e.preventDefault();
             // create clone
             var self = $(this),
+                running,
                 parent = pad.parent().parent(),
                 p = self.offset(),
                 pp = parent.offset(),
@@ -61,9 +76,9 @@ define('io.ox/launchpad/main',
                     .appendTo(parent);
             // animate & launch
             parent.focus();
-            // relaunch or load?
-            if (e.data.app) {
-                e.data.app.launch();
+            // look for running app
+            if ((running = getRunningApps(e.data.id)).length) {
+                running[0].app.launch();
             } else {
                 $.when(
                     require([e.data.id + "/main"]),
@@ -97,38 +112,42 @@ define('io.ox/launchpad/main',
             clear();
 
             var hRunning = $('<h1>').text('Running applications'),
-                running = $('<div>').addClass('section'),
+                secRunning = $('<div>').addClass('section'),
                 hApps = $('<h1>').text('Your applications'),
-                installed = $('<div>').addClass('section');
+                secInstalled = $('<div>').addClass('section'),
+                running;
+
+            running = getRunningApps();
+            _(running).each(function (o) {
+                // draw running app
+                secRunning.append(
+                    drawApp(o.data).on('click', { id: o.data.id }, launchApp)
+                );
+            });
 
             // add link to app store
-            hApps.prepend(
-                $('<a>', { href: '#', tabindex: '1' })
-                .addClass('button default-action')
-                .text('Manage applications')
-                .on('click', fnOpenAppStore)
+            secInstalled.append(
+                $('<div>').addClass('manage-apps')
+                .append(
+                    $('<a>', { href: '#', tabindex: '1' })
+                    .addClass('button default-action')
+                    .text('Manage applications')
+                    .on('click', fnOpenAppStore)
+                )
             );
 
-            _.chain(ox.ui.running)
-                .filter(function (app) {
-                    return app.getName() !== undefined;
-                })
-                .map(function (app) {
-                    var data = api.get(app.getName());
-                    data.title = data.title || app.getWindowTitle() || app.getName();
-                    // draw
-                    running.append(
-                        drawApp(data).on('click', { id: data.id, app: app }, launchApp)
-                    );
-                });
-
             _(api.getInstalled()).each(function (data) {
-                installed.append(
+                // draw installed app
+                secInstalled.append(
                     drawApp(data).on('click', { id: data.id }, launchApp)
                 );
             });
 
-            pad.append(hRunning, running, hApps, installed).fadeIn(firstRun ? FADE_DURATION : 0);
+            if (running.length) {
+                pad.append(hRunning, secRunning);
+            }
+
+            pad.append(hApps, secInstalled).fadeIn(firstRun ? FADE_DURATION : 0);
             firstRun = false;
         },
 
