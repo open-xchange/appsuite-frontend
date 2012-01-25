@@ -26,6 +26,12 @@ define('io.ox/core/tk/model', [], function () {
         this.set = function (key, value) {
             this.data[key] = value;
         };
+        this.setData = function (data) {
+            this.data = data;
+        };
+        this.getData = function () {
+            return this.data;
+        };
     };
 
     return SimpleModel;

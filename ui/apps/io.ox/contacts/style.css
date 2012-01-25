@@ -99,7 +99,8 @@
     padding-right: 0em;
 }
 
-.contact-detail td.label {
+.contact-detail td.label,
+.contact-detail div.label {
     font-size: 0.9em;
     line-height: 1em;
     color: #888;

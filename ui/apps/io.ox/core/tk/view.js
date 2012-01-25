@@ -34,6 +34,10 @@ define('io.ox/core/tk/view',
         this.model = model;
     };
 
+    View.prototype.getModel = function () {
+        return this.model;
+    };
+
     View.prototype.append = function (jqWrapped) {
         this.node.append(jqWrapped);
     };
@@ -49,7 +53,7 @@ define('io.ox/core/tk/view',
             View.prototype[itemname] = function () {
                 var args = [].slice.call(arguments);
                 args[0] = args[0] || {};
-                args[0].model = this.model;
+                args[0].model = args[0].model || this.model; // injecting model is allowed
                 var el = item.apply(this, args);
                 return el;
             };

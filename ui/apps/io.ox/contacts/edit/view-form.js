@@ -11,17 +11,47 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define("io.ox/contacts/edit/view-form",
-    ["io.ox/core/extensions",
-     "gettext!io.ox/contacts/contacts",
-     "io.ox/contacts/util",
-     "io.ox/contacts/api",
+define('io.ox/contacts/edit/view-form',
+    ['io.ox/core/extensions',
+     'gettext!io.ox/contacts/contacts',
+     'io.ox/contacts/util',
+     'io.ox/contacts/api',
      'io.ox/core/tk/view',
      'io.ox/core/tk/model'
     ], function (ext, gt, util, api, View, Model) {
 
-    "use strict";
+    'use strict';
 
+    /*
+    * urgh, if you want to improve it, do it without that many dom operations
+    */
+    var toggleFields = function (evt) {
+        console.log(arguments);
+        var parent = $(evt.currentTarget).parent();
+        if (!parent.hasClass('expanded')) {
+            parent.find('.hidden').removeClass('hidden').addClass('visible');
+            parent.addClass('expanded');
+             $(evt.currentTarget).text('- less');
+        } else {
+            parent.removeClass('expanded');
+            parent.find('input:text').filter(function () { return $(this).val() !== ""; }).parent().parent().removeClass('visible');
+            parent.find('input:text').filter(function () { return $(this).val() === ""; }).parent().parent().removeClass('visible').addClass('hidden');
+            parent.find('.visible').removeClass('visible').addClass('hidden');
+            $(evt.currentTarget).text('+ more');
+        }
+
+    };
+    var toggleSection = function (evt) {
+        console.log(arguments);
+        var section = $(evt.currentTarget).parent().prev();
+        if (!section.hasClass('hidden')) {
+            section.addClass('hidden');
+        } else {
+            section.removeClass('hidden');
+            section.find('.hidden').removeClass('hidden').addClass('visible');
+        }
+
+    };
     var drawSection = function (pointName) {
         return function (options) {
             console.log('oben');
@@ -33,15 +63,19 @@ define("io.ox/contacts/edit/view-form",
             section.append(sectionContent);
             this.append(section);
 
-            if(/^(.*-address)$/.test(pointName)) {
+            if (/^(.*-address)$/.test(pointName)) {
                 options.pointName = pointName;
                 ext.point('io.ox/contacts/edit/form/address').invoke('draw', sectionContent, options);
 
             } else {
                 ext.point('io.ox/contacts/edit/form/' + pointName).invoke('draw', sectionContent, options);
             }
+
+            section.append($('<a>').addClass('switcher').text('+ more').on('click', toggleFields));
+            section.parent().append($('<div>').append($('<a>').addClass('switcher').text(pointName).on('click', toggleSection)));
         };
     };
+
     var drawField = function (subPointName) {
         return function (options) {
             console.log('unten');
@@ -52,6 +86,10 @@ define("io.ox/contacts/edit/view-form",
 
             sectionGroup.append(options.view.createLabel({id: myId, text: gt(subPointName)}));
             sectionGroup.append(options.view.createTextField({id: myId, dataid: subPointName}));
+
+            if (!options.view.getModel().get(subPointName)) {
+                sectionGroup.addClass('hidden');
+            }
         };
     };
 
@@ -75,13 +113,16 @@ define("io.ox/contacts/edit/view-form",
             } else {
                 var sectionGroup = options.view.createSectionGroup(),
                     labels = [],
-                    fields = [];
+                    fields = [],
+                    hide = true;
 
                 self.append(sectionGroup);
+              
                 _.each(lineFormat, function (multiline, index) {
                     var myId = _.uniqueId('c');
                     labels.push(options.view.createLabel({id: myId, text: gt(multiline)}));
                     fields.push(options.view.createTextField({id: myId, dataid: multiline}));
+                    hide = (options.view.getModel().get(multiline)) ? false : true;
                 });
                 var outterLabel = $('<div>').addClass('inlinelabel');
                 _.each(labels, function (label) {
@@ -91,8 +132,50 @@ define("io.ox/contacts/edit/view-form",
                 _.each(fields, function (field, index) {
                     sectionGroup.append(field.addClass('inline ' + 'nr' + index));
                 });
+                if (hide) {
+                    sectionGroup.addClass('hidden');
+                }
+
             }
         });
+    };
+
+    var drawFormHead = function (options) {
+        var section,
+          picture,
+          title,
+          jobDescription,
+          calculatedModel;
+
+        section = options.view.createSection({}).addClass('formheader');
+        
+        picture = api.getPicture(options.view.getModel().getData());
+        title = options.view.createText({dataid: 'display_name', classes: 'name clear-title'});
+
+
+        calculatedModel = new Model({});
+        _.extend(calculatedModel, {
+            get: function () {
+                return util.getJob(options.view.getModel().getData());
+            },
+            update: function () {
+                $(this).trigger('jobdescription.calculated.changed', util.getJob(this.data));
+            },
+            set: function () {}
+        });
+
+        // just bridge the event
+        $(options.view.getModel()).on('jobdescription.calculated.changed', function () {
+            calculatedModel.update();
+        });
+
+        jobDescription = options.view.createText({dataid: 'jobdescription.calculated', classes: 'job clear-title', model: calculatedModel});
+
+        section.append(picture);
+        section.append(title);
+        section.append(jobDescription);
+
+        this.append(section);
     };
 
     var handleField = function (pointName) {
@@ -108,14 +191,19 @@ define("io.ox/contacts/edit/view-form",
         };
     };
     var handleSection = function (section, pointName) {
-
         ext.point('io.ox/contacts/edit/form').extend({id: pointName, draw: drawSection(pointName), index: 120});
         _.each(section, handleField(pointName));
     };
 
-    var initExtensionPoints = function(meta) {
-        _.each(meta, handleSection);
+    var initExtensionPoints = function (meta) {
+        ext.point('io.ox/contacts/edit/form').extend({
+            index: 1,  //should be the first one
+            id: 'formhead',
+            draw: drawFormHead
+        });
 
+
+        _.each(meta, handleSection);
         ext.point('io.ox/contacts/edit/form/address').extend({
             id: 'address',
             draw: drawAddress
@@ -133,12 +221,27 @@ define("io.ox/contacts/edit/view-form",
                     if (data !== undefined && data !== null) {
                         this.model = new Model(data);
                         _.extend(this.model, {
+                            displaynameChange: /^(first_name|last_name|title)$/,
+                            jobDescriptionChange: /^(company|position|profession)$/,
                             set: function (key, value) {
+                                this.data[key] = value;
+                                if (this.displaynameChange.test(key)) {
+                                    this.data.display_name = util.getFullName(this.data);
+                                    $(this).trigger('display_name.changed', this.data.display_name);
+                                }
+
+                                // just to fire an update event for other listeners than the view itself
+                                if (this.jobDescriptionChange.test(key)) {
+                                    $(this).trigger('jobdescription.calculated.changed', util.getJob(this.data));
+                                }
                                 this.data[key] = value;
                                 $(this).trigger(key + '.changed', value);
                             },
                             get: function (key) {
                                 return this.data[key];
+                            },
+                            save: function () {
+                            
                             }
                         });
 
@@ -158,7 +261,8 @@ define("io.ox/contacts/edit/view-form",
 
 
                         this.node.addClass('contact-detail edit').attr('data-item-id', self.model.get('folder_id') + '.' + self.model.get('id'));
-                        ext.point("io.ox/contacts/edit/form").invoke("draw", self.node, {view: self});
+
+                        ext.point('io.ox/contacts/edit/form').invoke('draw', self.node, {view: self});
                     }
                     return self;
                 }
