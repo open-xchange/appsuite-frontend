@@ -1,6 +1,8 @@
 #!/bin/bash
 
-cd `dirname $0`
+cd $(dirname $0)
+
+if [ -f local.conf ]; then source ./local.conf; fi
 node lib/jake/bin/cli.js $*
 
 # echo -e "\033[0;35m"
