@@ -287,34 +287,31 @@ define("io.ox/mail/view-detail",
         index: 195,
         id: 'externalresources-warning',
         draw: function (data) {
-
             var self = this;
-
-            this.append(
-                // attachments
-                data.modified===1 ?
+            if (data.modified === 1) {
+                this.append(
                     $("<div>")
-                        .addClass("list")
-                        .addClass("infoblock")
-                        .append(
-                             $("<span>").addClass('label').css({'cursor':'pointer'})
-                             .text("Aus dieser Mail wurden die externen Bilder entfernt um missbrauch durch SPAM-Mails zu verhindern. Zum anzeigen der Bilder bitte hier klicken.")
+                    .addClass("list")
+                    .addClass("infoblock backstripes")
+                    .append(
+                         $('<a>').text('Bilder anzeigen.'),
+                         $('<i>').text(
+                              ' Aus dieser Mail wurden die externen Bilder entfernt, ' +
+                              'um missbrauch durch SPAM-Mails zu verhindern.'
                          )
-                        .on('click','span',function(event){
-
-                            require(["io.ox/mail/api"], function (api) {
-
-                                // get contact picture
-                                api.getUnmodified(data)
-                                    .done(function (unmodifiedData) {
-
-                                        //.closest('div.mail-detail.page')
-                                        self.replaceWith( that.draw(unmodifiedData) );
-                                    });
-                            });
-                        })
-                    : []
-            );
+                     )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        require(["io.ox/mail/api"], function (api) {
+                            // get contact picture
+                            api.getUnmodified(data)
+                                .done(function (unmodifiedData) {
+                                    self.replaceWith( that.draw(unmodifiedData) );
+                                });
+                        });
+                    })
+                );
+            }
         }
     });
 
