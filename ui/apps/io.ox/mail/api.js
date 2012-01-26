@@ -236,7 +236,12 @@ define("io.ox/mail/api",
     };
 
     api.getUnmodified = function ( obj ) {
-        return react( 'get', obj, 'html' );
+        return this.get({
+            action: 'get',
+            id: obj.id,
+            folder: obj.folder || obj.folder_id,
+            view: 'html'
+        },false);
     };
 
     api.replyall = function (obj, view) {
