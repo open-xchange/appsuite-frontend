@@ -47,6 +47,10 @@ define("io.ox/mail/api",
             },
             get: {
                 action: "get",
+                view: "noimg"
+            },
+            getUnmodified: {
+                action: "get",
                 view: "html"
             },
             search: {
@@ -229,6 +233,10 @@ define("io.ox/mail/api",
                 }
                 return data;
             });
+    };
+
+    api.getUnmodified = function ( obj ) {
+        return react( 'get', obj, 'html' );
     };
 
     api.replyall = function (obj, view) {
