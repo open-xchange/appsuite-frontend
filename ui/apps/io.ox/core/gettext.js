@@ -12,39 +12,41 @@
  */
 
 define("io.ox/core/gettext", [], function () {
-    
+
     "use strict";
-    
+
     var modules = {};
-    
+
     function gt(id, po) {
-        
+
         if (po) {
             po.plural = new Function("n", "return " + po.plural + ";");
         }
         modules[id] = po;
-        
+
         function gettext(text) {
             return gettext.pgettext("", text);
         }
-        
+
         gettext.enable = function () {
             modules[id] = po;
         };
-        
+
         gettext.noI18n = function (text) {
             return text;
         };
-        
+
         gettext.gettext = gettext;
+
         gettext.pgettext = function (context, text) {
             var key = context ? context + "\x00" + text : text;
             return modules[id].dictionary[key] || text;
         };
-        
+
         gettext.ngettext = function (singular, plural, n) {
             return gettext.npgettext("", singular, plural, n);
         };
+
         gettext.npgettext = function (context, singular, plural, n) {
             var key = (context ? context + "\x00" : "") +
                     singular + "\x01" + plural,
@@ -53,18 +55,18 @@ define("io.ox/core/gettext", [], function () {
                 translation[Number(modules[id].plural(Number(n)))] :
                 Number(n) !== 1 ? plural : singular;
         };
-        
+
         return gettext;
     }
-    
+
     var lang = "en_US"; // TODO: don't know if that's right - but it fixes runtime errors
-    
+
     gt.setLanguage = function (language) {
         function enableModule(module) {
             module.enable();
         }
         var deferreds = [];
-        if (language !== lang) {
+        if (language && language !== lang) {
             lang = language;
             for (var i in modules) {
                 deferreds.push(require([gt.getModule(i)], enableModule));
@@ -72,9 +74,10 @@ define("io.ox/core/gettext", [], function () {
         }
         return $.when.apply($, deferreds);
     };
+
     gt.getModule = function (name) {
         return lang ? name + "." + lang : undefined;
     };
-    
+
     return gt;
 });

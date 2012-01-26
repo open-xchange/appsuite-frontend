@@ -18,7 +18,7 @@ define('io.ox/game/main', [], function () {
     var app = ox.ui.createApp({ name: 'io.ox/game' }),
         PATH = ox.base + "/apps/io.ox/game",
         WIDTH = 1920,
-        DURATION = 5,
+        DURATION = 20,
         FONT_SIZE = 72,
         LINE_HEIGHT = FONT_SIZE * 1.2;
 
@@ -45,78 +45,80 @@ define('io.ox/game/main', [], function () {
                     left: '0px',
                     backgroundImage: 'url(' + PATH + '/wood.jpg)',
                     backgroundRepeat: 'no-repeat',
-                    backgroundSize: (WIDTH * 2) + 'px 2400px'
+                    backgroundSize: (WIDTH * 2) + 'px 2400px',
+                    zIndex: 1
                 })
                 .hide()
                 .appendTo(canvas),
 
-           // parallax layer #2
-           layer = $('<div>')
-               .css({
-                    position: 'absolute',
-                    top: 0, bottom: 0, left: 0,
-                    width: WIDTH * 4 + 'px',
+            // text layer
+            layer = $('<div>').addClass('abs')
+                .css({
                     whiteSpace: 'pre',
                     lineHeight: LINE_HEIGHT + 'px',
                     fontSize: FONT_SIZE + 'px',
-                    color: 'white'
+                    color: 'white',
+                    textAlign: 'center',
+                    '-webkit-transform': 'translate3d(0, 0, 0)',
+                    zIndex: 2
                 })
                 .appendTo(canvas),
 
-           // text #1
-           text1 = $('<div>').css({
-                   position: 'absolute',
-                   top: '50%',
-                   left: ($('body').width() * 1.1) + 'px',
-                   marginTop: -(LINE_HEIGHT >> 1) + 'px'
-               })
-               .text('OX7 - The Quest')
-               .appendTo(layer),
-
-            // text #2
-            text2 = $('<div>').css({
-                    position: 'absolute',
-                    top: '50%',
-                    left: ($('body').width() * 2) + 'px',
-                    marginTop: -(LINE_HEIGHT >> 1) + 'px'
-                })
-                .text('You start as a little unexperienced email user ...')
-                .appendTo(layer),
-
-            // text #3
-            text3 = $('<div>').css({
-                    position: 'absolute',
-                    top: '50%',
-                    left: ($('body').width() * 4) + 'px',
-                    marginTop: -(LINE_HEIGHT >> 1) + 'px'
-                })
-                .text('... fighting all the way up to become ...')
-                .appendTo(layer),
-
-            // text4
-            text4 = $('<div>').css({
-                    position: 'absolute',
-                    top: '50%',
-                    left: ($('body').width() * 5) + 'px',
-                    marginTop: -(LINE_HEIGHT >> 1) + 'px'
-                })
-                .text('A master of groupware')
-                .appendTo(layer);
+            showText = function (text, start, duration) {
+                    var numLines = text.split(/\n/).length,
+                        node = $('<div>').addClass('abs')
+                            .css({
+                                top: '50%',
+                                marginTop: -(numLines * LINE_HEIGHT >> 1) + 'px'
+                            })
+                            .text(text + '')
+                            .hide()
+                            .appendTo(layer);
+                    setTimeout(function () {
+                        node.fadeIn(500);
+                    }, start * 1000);
+                    setTimeout(function () {
+                        node.fadeOut(function () {
+                            node = null;
+                        });
+                    }, (start + duration) * 1000);
+                };
 
         canvas.appendTo('body');
 
         // intro animation
-        $.when(background.fadeIn(500))
+        $.when(background.fadeIn(500), require(['io.ox/mail/main']))
             .done(function () {
                 background.css({
                     '-webkit-transition-duration': DURATION + 's',
                     '-webkit-transition-timing-function': 'linear',
-                    '-webkit-transform': 'translate3d(-' + WIDTH + 'px, 0, 0)'
+                    '-webkit-transform': 'translate3d(-' + WIDTH / 2 + 'px, 0, 0)'
                 });
-                layer.css({
-                    '-webkit-transition-duration': DURATION + 's',
-                    '-webkit-transition-timing-function': 'linear',
-                    '-webkit-transform': 'translate3d(-' + (WIDTH * 3) + 'px, 0, 0)'
+                showText('OX7 - The Game', 5, 3);
+                showText('You start as a little\nunexperienced email user ...', 10, 3);
+                showText('... fighting all the way up\nto become ...', 15, 3);
+                showText('A master of groupware', 20, 5);
+                _.wait((DURATION + 7) * 1000).done(function () {
+                    background.css('-webkit-transition-duration', '0.5s').css('opacity', 0);
+                    _.wait(1000).done(function () {
+                        // launch email
+                            require('io.ox/mail/main').getApp().launch()
+                            .pipe(_.wait(2000))
+                            .done(function () {
+                                // show core
+                                $('#io-ox-core').css({
+                                        '-webkit-perspective': '200px',
+                                        '-webkit-transform': 'scale3d(100, 100, 1)'
+                                    })
+                                    .show();
+                                canvas.hide();
+                                // zoom out
+                                $('#io-ox-core').css({
+                                        '-webkit-transition-duration': '3s',
+                                        '-webkit-transform': 'scale3d(1, 1, 1)'
+                                    });
+                            });
+                    });
                 });
             });
     });
