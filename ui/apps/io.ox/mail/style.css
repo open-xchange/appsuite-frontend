@@ -128,6 +128,15 @@
     margin-bottom: 20px;
 }
 
+.mail-detail.page .infoblock {
+	background-color: #FFFFE0;
+	padding:10px;
+}
+
+.mail-detail.page .infoblock .label{
+	color:#000;
+}
+
 .mail-detail .date {
     color: #888;
     display: inline-block;
