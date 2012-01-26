@@ -44,6 +44,7 @@ define('io.ox/contacts/edit/view-form',
     var toggleSection = function (evt) {
         console.log(arguments);
         var section = $(evt.currentTarget).parent().prev();
+        console.log(section);
         if (!section.hasClass('hidden')) {
             section.addClass('hidden');
         } else {
@@ -117,7 +118,7 @@ define('io.ox/contacts/edit/view-form',
                     hide = true;
 
                 self.append(sectionGroup);
-              
+
                 _.each(lineFormat, function (multiline, index) {
                     var myId = _.uniqueId('c');
                     labels.push(options.view.createLabel({id: myId, text: gt(multiline)}));
@@ -150,17 +151,48 @@ define('io.ox/contacts/edit/view-form',
         return saveButton;
     };
 
+
+    var createPictureForm = function () {
+        var form = $('<form>', {
+            'accept-charset': 'UTF-8',
+            'enctype': 'multipart/form-data',
+            'id': 'contactUploadImage',
+            'method': 'POST',
+            'name': 'contactUploadImage',
+            'target': 'blank.html'
+        })
+        .append(
+                $('<input>', {
+                    name: 'file',
+                    type: 'file',
+                    accept: 'image/*'
+                })
+        ).append(
+                $('<iframe/>',{
+                    'name': 'hiddenframePicture',
+                    'src': 'blank.html'
+                }).css('display', 'none')
+        );
+        return form;
+    };
+
+    var picTrigger = function () {
+        $('input[type="file"]').trigger('click');
+    };
+
     var drawFormHead = function (options) {
         var section,
           picture,
+          picForm,
           title,
           jobDescription,
           calculatedModel,
           saveButton;
 
         section = options.view.createSection({}).addClass('formheader');
-        
-        picture = api.getPicture(options.view.getModel().getData());
+
+        picture = (api.getPicture(options.view.getModel().getData())).addClass('picture');
+        picture.on('click', picTrigger);
         title = options.view.createText({dataid: 'display_name', classes: 'name clear-title'});
 
 
@@ -185,11 +217,14 @@ define('io.ox/contacts/edit/view-form',
 
         saveButton = createSaveButton(options);
 
+        picForm = createPictureForm();
+
 
         section.append(picture);
         section.append(title);
         section.append(jobDescription);
         section.append(saveButton);
+        section.append(picForm);
 
         this.append(section);
     };
@@ -258,20 +293,37 @@ define('io.ox/contacts/edit/view-form',
                             },
                             save: function () {
                                 console.log('i am saving now');
+                                var image = $('#contactUploadImage').find("input[type=file]").get(0);
+                                    //formdata = this.data;
                                 // api edit? needs tracing the changes, no good!
                                 // api editNewImage uploades the whole form data, ughh
                                 // so just edit everything on change?
-                                api.edit({
-                                    id: this.data.id,
-                                    folder: this.data.folder_id,
-                                    timestamp: _.now(),
-                                    data: this.data
-                                }).done(function () {
-                                
-                                  console.log("SAVED");
-                                  alert("SAVED");
-                                  app.quit(); //close tha app???
-                                });
+
+                                if (image.files && image.files[0]) {
+                                    this.data.folderId = this.data.folder_id;
+                                    this.data.timestamp = _.now();
+                                    api.editNewImage(JSON.stringify(this.data), image.files[0])
+                                    .done(function () {
+
+                                        console.log("SAVED");
+                                        alert("SAVED");
+                                        app.quit(); //close tha app???
+                                      });
+
+                                } else {
+                                    api.edit({
+                                        id: this.data.id,
+                                        folder: this.data.folder_id,
+                                        timestamp: _.now(),
+                                        data: this.data
+                                    }).done(function () {
+
+                                      console.log("SAVED");
+                                      alert("SAVED");
+                                      app.quit(); //close tha app???
+                                    });
+                                }
+
                             }
                         });
 
