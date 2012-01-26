@@ -29,10 +29,10 @@ define('io.ox/game/main', [], function () {
 
         // canvas
         var canvas = $('<div>', { id: 'game-canvas' })
-                .addClass('abs')
-                .css({
-                    backgroundColor: 'white'
-                }),
+            .addClass('abs')
+            .css({
+                backgroundColor: 'white'
+            }),
 
             // moving background
             background = $('<div>')
@@ -67,8 +67,8 @@ define('io.ox/game/main', [], function () {
             showText = function (text, start, duration) {
                     var numLines = text.split(/\n/).length,
                         node = $('<div>').addClass('abs')
-                            .css({
-                                top: '50%',
+                            .css(
+                            {   top: '50%',
                                 marginTop: -(numLines * LINE_HEIGHT >> 1) + 'px'
                             })
                             .text(text + '')
@@ -102,22 +102,22 @@ define('io.ox/game/main', [], function () {
                     background.css('-webkit-transition-duration', '0.5s').css('opacity', 0);
                     _.wait(1000).done(function () {
                         // launch email
-                            require('io.ox/mail/main').getApp().launch()
-                            .pipe(_.wait(2000))
-                            .done(function () {
-                                // show core
-                                $('#io-ox-core').css({
-                                        '-webkit-perspective': '200px',
-                                        '-webkit-transform': 'scale3d(100, 100, 1)'
-                                    })
-                                    .show();
-                                canvas.hide();
-                                // zoom out
-                                $('#io-ox-core').css({
-                                        '-webkit-transition-duration': '3s',
-                                        '-webkit-transform': 'scale3d(1, 1, 1)'
-                                    });
-                            });
+                        require('io.ox/mail/main').getApp().launch()
+                        .pipe(_.wait(2000))
+                        .done(function () {
+                            // show core
+                            $('#io-ox-core').css({
+                                    '-webkit-perspective': '200px',
+                                    '-webkit-transform': 'scale3d(100, 100, 1)'
+                                })
+                                .show();
+                            canvas.hide();
+                            // zoom out
+                            $('#io-ox-core').css({
+                                    '-webkit-transition-duration': '3s',
+                                    '-webkit-transform': 'scale3d(1, 1, 1)'
+                                });
+                        });
                     });
                 });
             });

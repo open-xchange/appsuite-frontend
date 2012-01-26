@@ -151,12 +151,6 @@ define('io.ox/core/cache', function () {
         // get from cache
         this.get = function (key) {
             return index.get(key).pipe(function (data) {
-                if( data !== undefined ) {
-                    return data.data;
-                } else {
-                    return undefined;
-                }
-
                 return data !== undefined ? data.data : undefined;
             });
         };

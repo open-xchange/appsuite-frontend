@@ -35,13 +35,13 @@ define('io.ox/core/cache/localstorage', function () {
         gc: function (force) {
             var timeStamp = (new Date()).getTime();
 
-            if( timeStamp > lastGCrun + gcTimeout || force === true ) {
+            if (timeStamp > (lastGCrun + gcTimeout) || force === true) {
                 lastGCrun = timeStamp;
                 // TODO: make an awsome garbage collection
                 var i, $i, key, tmp = [], delCounter = 0;
 
                 // loop over all keys
-                for (i = localStorage.length-1; i >= 0; i--) {
+                for (i = localStorage.length - 1; i >= 0; i--) {
 
                     try {
                         // get key by index
@@ -51,8 +51,8 @@ define('io.ox/core/cache/localstorage', function () {
                             var rawData = localStorage.getItem(key);
                             var item = JSON.parse(rawData);
 
-                            if ( !!item && !!item.accesstime ) {
-                                if( item.accesstime <= ts_cachetimeout ){
+                            if (!!item && !!item.accesstime) {
+                                if (item.accesstime <= ts_cachetimeout) {
                                     delCounter++;
                                     localStorage.removeItem(key);
                                 }
@@ -66,9 +66,9 @@ define('io.ox/core/cache/localstorage', function () {
                 }
 
                 // if garbage collection does not kill any item, do something else
-                if( delCounter === 0 ){
+                if (delCounter === 0) {
                     console.log('GC: nothing killed');
-                    if( force === true ) {
+                    if (force === true) {
                         console.log('GC: forced -> clear current keyspace');
                         that.clear();
                     }
@@ -86,7 +86,6 @@ define('io.ox/core/cache/localstorage', function () {
                 // get key by index
                 key = localStorage.key(i);
                 // match?
-
                 var reg = new RegExp('^' + id.replace(/\./g, '\\.') + '\\.');
                 if (reg.test(key)) {
                     localStorage.removeItem(key);
@@ -102,11 +101,11 @@ define('io.ox/core/cache/localstorage', function () {
 
             var item = localStorage.getItem(id + '.' + key);
 
-            if( item !== null ) {
+            if (item !== null) {
                 item = JSON.parse(item);
                 that.set(key, item.data);
             } else {
-                item = {data:undefined};
+                item = { data: undefined };
             }
 
             return $.Deferred().resolve(item.data);
@@ -122,7 +121,7 @@ define('io.ox/core/cache/localstorage', function () {
                 var saveData = {
                         accesstime: _.now(),
                         data : data
-                };
+                    };
 
                 localStorage.setItem(id + '.' + key, JSON.stringify(saveData));
                 def.resolve(key);

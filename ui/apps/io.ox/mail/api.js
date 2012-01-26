@@ -235,13 +235,13 @@ define("io.ox/mail/api",
             });
     };
 
-    api.getUnmodified = function ( obj ) {
+    api.getUnmodified = function (obj) {
         return this.get({
             action: 'get',
             id: obj.id,
             folder: obj.folder || obj.folder_id,
             view: 'html'
-        },false);
+        }, false);
     };
 
     api.replyall = function (obj, view) {

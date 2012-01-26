@@ -306,7 +306,7 @@ define("io.ox/mail/view-detail",
                             // get contact picture
                             api.getUnmodified(data)
                                 .done(function (unmodifiedData) {
-                                    self.replaceWith( that.draw(unmodifiedData) );
+                                    self.replaceWith(that.draw(unmodifiedData));
                                 });
                         });
                     })

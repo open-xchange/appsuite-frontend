@@ -377,7 +377,7 @@ define("io.ox/contacts/edit/view-form",
                 'city_home': {
                     label: gt("City"),
                     name: 'city_home',
-                   fn: 'hidden',
+                    fn: 'hidden',
                     weight: 420,
                     blockid: 'contact-home-address'
                 },
@@ -818,7 +818,7 @@ define("io.ox/contacts/edit/view-form",
                 } else {
                     $(this).removeClass('filled');
                 }
-                });
+            });
 
 //            console.log(values);
             if (!_.isEmpty(values)) {
@@ -826,21 +826,18 @@ define("io.ox/contacts/edit/view-form",
                 buttonTextOn = 'show more';
                 button.text(buttonTextOff);
                 $('.' + id + '.headline').removeClass('visible filled');
-            }
-            else {
+            } else {
                 buttonTextOn = '+ ' + title;
                 buttonTextOff = '- ' + title;
                 button.text(buttonTextOn);
                 $('tr.' + id).removeClass('filled').addClass('hidden');
-                }
+            }
         });
 
         if (select[1]) {
             tr.appendTo(node);
         }
-
     }
-
 
     function createfields(fielddata) {
         ext.point("io.ox/contacts/edit/form/" + fielddata.blockid).extend({
@@ -891,28 +888,31 @@ define("io.ox/contacts/edit/view-form",
                         fieldname2 = inline[1] + '_' + nameBlock;
                         labeltext = formFields[name].fields[fieldname].label;
                         labeltext2 = formFields[name].fields[fieldname2].label;
-                        var input1 = $('<input>').attr({
-                            'name': fieldname,
-                            'id': fieldname + '_' + now})
-                        .addClass('nice-input').val(data[inline[0] + '_' + nameBlock])
-                        .css({
-                            'font-size': '14px',
-                            'width': '100px',
-                            'padding-top': '0.25em',
-                            'padding-bottom': '0.25em'
-                        }),
-                            input2 = $('<input>').attr({
-                                'name': fieldname2,
-                                'id': fieldname2 + '_' + now
-                            })
-                            .addClass('nice-input').val(data[inline[1] + '_' + nameBlock])
-                            .css({
-                                'font-size': '14px',
-                                'width': '177px',
-                                'padding-top': '0.25em',
-                                'padding-bottom': '0.25em',
-                                'margin-left': '0.5em'
-                            }),
+                        var input1 = $('<input>')
+                                .attr(
+                                {   'name': fieldname,
+                                    'id': fieldname + '_' + now
+                                })
+                                .addClass('nice-input').val(data[inline[0] + '_' + nameBlock])
+                                .css(
+                                {   'font-size': '14px',
+                                    'width': '100px',
+                                    'padding-top': '0.25em',
+                                    'padding-bottom': '0.25em'
+                                }),
+                            input2 = $('<input>')
+                                .attr(
+                                {   'name': fieldname2,
+                                    'id': fieldname2 + '_' + now
+                                })
+                                .addClass('nice-input').val(data[inline[1] + '_' + nameBlock])
+                                .css(
+                                {   'font-size': '14px',
+                                    'width': '177px',
+                                    'padding-top': '0.25em',
+                                    'padding-bottom': '0.25em',
+                                    'margin-left': '0.5em'
+                                }),
                             labelData1 = $('<label>').attr('for', fieldname + '_' + now).text(labeltext),
                             labelData2 = $('<label>').attr('for', fieldname2 + '_' + now).text(labeltext2);
                         label.append(labelData1, labelData2);
@@ -934,7 +934,7 @@ define("io.ox/contacts/edit/view-form",
                         }).attr({
                             'name': fieldname,
                             'id': fieldname + '_' + now
-                            }).val(drawData));
+                        }).val(drawData));
                         labeltext = formFields[name].fields[fieldname].label;
                         tr.addClass(formFields[name].fields[fieldname].blockid + ' ' + fieldname);
                         if (!drawData) {

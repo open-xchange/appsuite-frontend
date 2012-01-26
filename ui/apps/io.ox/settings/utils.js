@@ -15,7 +15,7 @@ define: true
 */
 define('io.ox/settings/utils',
       ['less!io.ox/settings/style.css'], function () {
-   
+
     'use strict';
     var utils = {
         createSectionDelimiter: function () {
@@ -82,7 +82,7 @@ define('io.ox/settings/utils',
         },
         createInfoText: function (options) {
             var d = $('<div>').addClass('informational-text');
-            if(options.html) {
+            if (options.html) {
                 d.html(options.html);
             } else {
                 d.text(options.text);
@@ -90,46 +90,46 @@ define('io.ox/settings/utils',
             return d;
         },
         createSection: function () {
-          return $('<div>').addClass('section');
+            return $('<div>').addClass('section');
         },
         createSectionTitle: function (options) {
-          return $('<div>').addClass('sectiontitle').text(options.text);
+            return $('<div>').addClass('sectiontitle').text(options.text);
         },
         createSectionContent: function () {
-          return $('<div>').addClass('sectioncontent');
+            return $('<div>').addClass('sectioncontent');
         },
         createSectionGroup: function () {
-          return $('<div>').addClass('section-group');
+            return $('<div>').addClass('section-group');
         },
         createText: function (options) {
-          return $('<span>').text(options.text);
+            return $('<span>').text(options.text);
         },
         createLabel: function () {
-          return $('<label>');
+            return $('<label>');
         },
         createRadioButton: function (options) {
-          var radioDiv = $('<div>').addClass('radio');
-          var label = radioDiv.append($('<label>'));
-          var radio = $('<input type="radio">')
+            var radioDiv = $('<div>').addClass('radio');
+            var label = radioDiv.append($('<label>'));
+            var radio = $('<input type="radio">')
                         .attr('name', options.name)
                         .attr('data-item-id', options.dataid)
                         .val(options.value);
-          if (options.model.get(options.dataid) === options.value) {
-            radio.attr('checked', 'checked');
-          }
+            if (options.model.get(options.dataid) === options.value) {
+                radio.attr('checked', 'checked');
+            }
 
-          radio.on('change', function () {
-              var val = $('input[name="' + options.name + '"]:checked').val();
-              options.model.set(options.dataid, val);
-          });
+            radio.on('change', function () {
+                var val = $('input[name="' + options.name + '"]:checked').val();
+                options.model.set(options.dataid, val);
+            });
 
-          label.append(radio);
-          label.append(
-            $('<span>')
-                .text(options.label)
-          );
+            label.append(radio);
+            label.append(
+              $('<span>')
+              .text(options.label)
+            );
 
-          return radioDiv;
+            return radioDiv;
         },
         createTextField: function (options) {
             options.maxlength = options.maxlength || 20;

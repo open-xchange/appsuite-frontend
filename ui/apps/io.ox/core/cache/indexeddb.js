@@ -31,7 +31,7 @@ define('io.ox/core/cache/indexeddb', function () {
         gcTimeout = 30 * 60 * 1000, // 30 Minutes
         ts_cachetimeout = (2 * 24 * 60 * 60 * 1000); // 2 days
 
-    function upgradeCallback (transaction ,oldVersion) {
+    function upgradeCallback(transaction, oldVersion) {
 
         var db = transaction.db;
 
@@ -43,19 +43,20 @@ define('io.ox/core/cache/indexeddb', function () {
             "keyPath": "key"
         }, true);
 
-        objectStore.createIndex('accesstime','data.accesstime',{ unique: false });
+        objectStore.createIndex('accesstime', 'data.accesstime', { unique: false });
 
         db.transaction([], IDBTransaction.VERSION_CHANGE);
     }
 
     function openDb(dbName) {
+
         var def = $.Deferred();
 
         try {
 
             var req;
 
-            if( _.isFunction(IDBDatabase.prototype.setVersion) ) {
+            if (_.isFunction(IDBDatabase.prototype.setVersion)) {
                 req = indexedDB.open(dbName);
             } else {
                 req = indexedDB.open(dbName, IDB_VERSION, upgradeCallback);
@@ -79,7 +80,7 @@ define('io.ox/core/cache/indexeddb', function () {
                 def.reject(e);
             };
 
-        } catch ( e) {
+        } catch (e) {
             console.log('opendb EXCEPTION', e);
             def.reject(e);
         }
@@ -111,7 +112,8 @@ define('io.ox/core/cache/indexeddb', function () {
 
             if (!db.version || "" + db.version !== "" + IDB_VERSION || !db.objectStoreNames.contains(storeName)) {
 
-                if( _.isFunction(db.setVersion) ) {
+                if (_.isFunction(db.setVersion)) {
+
                     var requestV = db.setVersion(IDB_VERSION);
 
                     requestV.onsuccess = function (e) {
@@ -124,7 +126,7 @@ define('io.ox/core/cache/indexeddb', function () {
                             "keyPath": "key"
                         }, true);
 
-                        objectStore.createIndex('accesstime','accesstime',{ unique: false });
+                        objectStore.createIndex('accesstime', 'accesstime', { unique: false });
 
                         def.resolve(db);
                     };
@@ -147,20 +149,19 @@ define('io.ox/core/cache/indexeddb', function () {
             }
 
         }).fail(function (e) {
-            console.log('checkStore reject',e);
+            console.log('checkStore reject', e);
             def.reject(e);
         });
-
 
         return def;
     }
 
-
-
     function getStore(dbName, storeName) {
+
         var def = new $.Deferred();
 
         checkStore(dbName, storeName).done(function (db) {
+
             try {
                 var transactionStartTime = (new Date()).getTime();
                 var transaction = db.transaction(storeName, IDBTransaction.READ_WRITE);
@@ -216,12 +217,12 @@ define('io.ox/core/cache/indexeddb', function () {
             // keypath for accesstime data.accesstime
             return getObjectstore().pipe(function (store) {
 
-                var lastRun = lastGCRun[store.name];
-                var now = _.now();
+                var lastRun = lastGCRun[store.name],
+                    now = _.now();
 
                 //console.log('#', store.name, lastRun, _(lastRun).isUndefined(), now , lastRun + gcTimeout, (now > lastRun + gcTimeout), lastGCRun);
 
-                if( (_(lastRun).isUndefined() || now > lastRun + gcTimeout) ) {
+                if (_(lastRun).isUndefined() || now > (lastRun + gcTimeout)) {
                     lastGCRun[store.name] = now;
                     console.log('GC RUN', store.name);
 
@@ -231,7 +232,6 @@ define('io.ox/core/cache/indexeddb', function () {
 
                     deleteCursor.onsuccess = function (event) {
                         var cursor = event.target.result;
-
                         //console.log('success event', event, cursor);
                         if (cursor) {
                             console.log('DELETE', cursor.primaryKey);
@@ -241,7 +241,7 @@ define('io.ox/core/cache/indexeddb', function () {
                     };
 
                     deleteCursor.onerror = function (e) {
-                        console.log('cursor error',e);
+                        console.log('cursor error', e);
                     };
 
                     return deleteCursor;
@@ -280,7 +280,7 @@ define('io.ox/core/cache/indexeddb', function () {
                         if (_.isUndefined(event.target.result) || _.isUndefined(event.target.result.data)) {
                             def.resolve(undefined);
                         } else {
-                            that.set(key,null,true);
+                            that.set(key, null, true);
                             def.resolve(event.target.result.data);
                         }
                     };
@@ -309,10 +309,10 @@ define('io.ox/core/cache/indexeddb', function () {
                     var result = e.target.result;
 
                     if (_.isUndefined(result)) {
-                        if( accessTimeUpdate===true ){
+                        if (accessTimeUpdate === true) {
                             def.reject();
                         } else {
-                            var addRequest = store.add({'key': key, 'data': data, 'accesstime':_.now()});
+                            var addRequest = store.add({ key: key, data: data, accesstime: _.now() });
 
                             addRequest.onsuccess = function (e) {
                                 def.resolve(e.target.result);
@@ -323,11 +323,11 @@ define('io.ox/core/cache/indexeddb', function () {
                             };
                         }
                     } else {
-                        if( accessTimeUpdate === true ) {
+                        if (accessTimeUpdate === true) {
                             data = result.data;
                         }
 
-                        var putRequest = store.put({'key': key, 'data': data, 'accesstime':_.now()});
+                        var putRequest = store.put({ key: key, data: data, accesstime: _.now() });
 
                         putRequest.onsuccess = function (e) {
                             def.resolve(e.target.result);
