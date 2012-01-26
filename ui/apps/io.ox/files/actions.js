@@ -97,7 +97,8 @@ define("io.ox/files/actions", ["io.ox/core/extensions"], function (ext) {
         id: "delete",
         index: 400,
         label: "Delete",
-        ref: "io.ox/files/actions/delete"
+        ref: "io.ox/files/actions/delete",
+        attention: true
     }));
 
 });

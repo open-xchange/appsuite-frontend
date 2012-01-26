@@ -86,6 +86,7 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
         index: 200,
         id: 'delete',
         label: 'Delete',
-        ref: 'io.ox/contacts/main/delete'
+        ref: 'io.ox/contacts/main/delete',
+        attention: true
     }));
 });
