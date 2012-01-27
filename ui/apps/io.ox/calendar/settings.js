@@ -10,28 +10,27 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
- define('io.ox/calendar/settings',
-       ['io.ox/core/extensions',
-        'io.ox/settings/utils'], function (ext, utils) {
-       
+define('io.ox/calendar/settings',
+      ['io.ox/core/extensions',
+       'io.ox/settings/utils'], function (ext, utils) {
     'use strict';
 
     var settings = {
-      draw: function (node, app) {
+        draw: function (node, app) {
             node
-            .append(
-              utils.createSettingsHead(app)
-            )
-            .append(
-                $("<span>")
+                .append(
+                  utils.createSettingsHead(app)
+                )
+                .append(
+                    $("<span>")
                     .addClass("detail")
                     .append($("<span>").text("I AM A SUPER FINE CALENDARSETTING WHOA"))
             )
             .append($("<br>"));
             return node;
-      }
-    
+        }
     };
+
     // created on/by
     ext.point("io.ox/calendar/settings/detail").extend({
         index: 200,
@@ -40,7 +39,7 @@
             return settings.draw(this, data);
         }
     });
-    
+
     return {}; //whoa return nothing at first
 });
 

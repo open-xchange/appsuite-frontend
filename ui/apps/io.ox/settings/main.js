@@ -14,9 +14,10 @@ define('io.ox/settings/main',
      ['io.ox/core/tk/vgrid',
       'io.ox/core/api/apps',
       'io.ox/core/extensions',
-      'io.ox/settings/utils',
-      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, utils) {
-     
+      'io.ox/core/tk/forms',
+      'io.ox/core/tk/view',
+      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View) {
+    
     'use strict';
 
     var tmpl = {
@@ -68,13 +69,13 @@ define('io.ox/settings/main',
     function updateExpertMode() {
         var nodes = $('.expertmode');
         if (expertmode) {
-          nodes.show();
+            nodes.show();
         } else {
-          nodes.hide();
+            nodes.hide();
         }
     }
-    
-    
+
+
     app.setLauncher(function () {
         app.setWindow(win = ox.ui.createWindow({
             title: 'Settings',
@@ -90,28 +91,21 @@ define('io.ox/settings/main',
         win.bind('hide', onHideSettingsPane);
 
 
-        
+
 
         ext.point('io.ox/settings/links/toolbar').extend({
             id: 'io.ox/settings/expertcb',
             draw: function (context) {
-              var cb  = utils.createCheckbox({dataid: 'settings-expertcb', label: 'Enable Expert Mode', currentValue: expertmode, model:  {
-                  get: function (dataid, value) {
-                      return expertmode;
-                  },
-                  set: function (dataid, value) {
-                      expertmode = value;
-                      updateExpertMode();
-                  },
-                  save: function () {
-                      //nothing to do
-                      return $.Deferred().resolve();
-                  }
-              }});
-              this.append(cb);
+                var cb  = forms.createCheckbox({dataid: 'settings-expertcb',  currentValue: expertmode, label: 'Expertmode' });
+                cb.on('update', function (evt, options) {
+                    expertmode = options.value;
+                    updateExpertMode();
+                });
+                cb.find('input[data-item-id="settings-expertcb"]').attr('checked', expertmode);
+                this.append(cb);
             }
         });
-    
+
 
         win.addClass('io-ox-settings-main');
 
@@ -141,13 +135,13 @@ define('io.ox/settings/main',
             });
 
             apps.push({
-              category: 'Basic',
-              company: 'Open-Xchange',
-              description: 'Manage Accounts',
-              icon: '',
-              id: 'io.ox/settings/accounts',
-              settings: true,
-              title: 'Accounts'
+                category: 'Basic',
+                company: 'Open-Xchange',
+                description: 'Manage Accounts',
+                icon: '',
+                id: 'io.ox/settings/accounts',
+                settings: true,
+                title: 'Accounts'
             });
             console.log('listing apps');
             console.log(apps);

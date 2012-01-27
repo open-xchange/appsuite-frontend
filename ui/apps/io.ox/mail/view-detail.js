@@ -22,6 +22,9 @@ define("io.ox/mail/view-detail",
 
     // define global iframe resize handler
     window.iframeResize = function (guid, doc) {
+
+        console.log(guid, doc);
+
         _.defer(function () {
             var height = $(doc.body).outerHeight(true);
             $("#tmp-iframe-" + guid).css("height", height + 30 + "px");
@@ -279,6 +282,38 @@ define("io.ox/mail/view-detail",
         id: 'inline-links',
         ref: 'io.ox/mail/links/inline'
     }));
+
+    ext.point('io.ox/mail/detail').extend({
+        index: 195,
+        id: 'externalresources-warning',
+        draw: function (data) {
+            var self = this;
+            if (data.modified === 1) {
+                this.append(
+                    $("<div>")
+                    .addClass("list")
+                    .addClass("infoblock backstripes")
+                    .append(
+                         $('<a>').text('Bilder anzeigen.'),
+                         $('<i>').text(
+                              ' Aus dieser Mail wurden die externen Bilder entfernt, ' +
+                              'um missbrauch durch SPAM-Mails zu verhindern.'
+                         )
+                     )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        require(["io.ox/mail/api"], function (api) {
+                            // get contact picture
+                            api.getUnmodified(data)
+                                .done(function (unmodifiedData) {
+                                    self.replaceWith(that.draw(unmodifiedData));
+                                });
+                        });
+                    })
+                );
+            }
+        }
+    });
 
     ext.point('io.ox/mail/detail').extend({
         index: 200,

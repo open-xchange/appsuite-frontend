@@ -856,9 +856,9 @@ span.hint {
 .io-ox-inline-links {
     text-align: right;
     padding: 0.25em 0 0.5em 0;
-    margin: 0.5em 0px 1.5em 0px;
+    margin: 0em 0 1.5em 0;
     border-bottom: 1px solid @inline-link-border-color;
-    height: 1em;
+    height: 2.2em;
 }
 
 .io-ox-inline-links.empty {
@@ -867,7 +867,17 @@ span.hint {
 
 .io-ox-inline-links a {
     color: @inline-link-color;
-    text-decoration: underline;
+    text-decoration: none;
+    background-color: #EFF4FB;
+    display: inline-block;
+    padding: 0.5em 1em 0.5em 1em;
+    border: 1px solid #D4E3FA;
+}
+
+.io-ox-inline-links a.attention {
+    color: #a00;
+    background-color: #FFEEEA;
+    border-color: #FFD7CF;
 }
 
 .io-ox-action-link {
