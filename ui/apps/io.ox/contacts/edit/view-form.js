@@ -31,11 +31,19 @@ define('io.ox/contacts/edit/view-form',
         if (!parent.hasClass('expanded')) {
             parent.find('.hidden').removeClass('hidden').addClass('visible');
             parent.addClass('expanded');
-             $(evt.currentTarget).text('- less');
+            $(evt.currentTarget).text('- less');
         } else {
             parent.removeClass('expanded');
-            parent.find('input:text').filter(function () { return $(this).val() !== ""; }).parent().parent().removeClass('visible');
-            parent.find('input:text').filter(function () { return $(this).val() === ""; }).parent().parent().removeClass('visible').addClass('hidden');
+            parent.find('input:text').filter(
+                function () {
+                    return $(this).val() !== "";
+                }
+            ).parent().parent().removeClass('visible');
+            parent.find('input:text').filter(
+                function () {
+                    return $(this).val() === "";
+                }
+            ).parent().parent().removeClass('visible').addClass('hidden');
             parent.find('.visible').removeClass('visible').addClass('hidden');
             $(evt.currentTarget).text('+ more');
         }
@@ -82,8 +90,6 @@ define('io.ox/contacts/edit/view-form',
             console.log('unten');
             var myId = _.uniqueId('c'),
                 sectionGroup = options.view.createSectionGroup();
-
-            this.append(sectionGroup);
 
             sectionGroup.append(options.view.createLabel({id: myId, text: gt(subPointName)}));
             sectionGroup.append(options.view.createTextField({id: myId, dataid: subPointName}));
@@ -162,16 +168,16 @@ define('io.ox/contacts/edit/view-form',
             'target': 'blank.html'
         })
         .append(
-                $('<input>', {
-                    name: 'file',
-                    type: 'file',
-                    accept: 'image/*'
-                })
+            $('<input>', {
+                name: 'file',
+                type: 'file',
+                accept: 'image/*'
+            })
         ).append(
-                $('<iframe/>',{
-                    'name': 'hiddenframePicture',
-                    'src': 'blank.html'
-                }).css('display', 'none')
+            $('<iframe/>', {
+                'name': 'hiddenframePicture',
+                'src': 'blank.html'
+            }).css('display', 'none')
         );
         return form;
     };
@@ -312,7 +318,7 @@ define('io.ox/contacts/edit/view-form',
                                         console.log("SAVED");
                                         alert("SAVED");
                                         app.quit(); //close tha app???
-                                      });
+                                    });
 
                                 } else {
                                     api.edit({
@@ -321,10 +327,10 @@ define('io.ox/contacts/edit/view-form',
                                         timestamp: _.now(),
                                         data: this.data
                                     }).done(function () {
-                                      self.dirty = false;
-                                      console.log("SAVED");
-                                      alert("SAVED");
-                                      app.quit(); //close tha app???
+                                        self.dirty = false;
+                                        console.log("SAVED");
+                                        alert("SAVED");
+                                        app.quit(); //close tha app???
                                     });
                                 }
 

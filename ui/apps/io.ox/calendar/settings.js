@@ -13,7 +13,6 @@
 define('io.ox/calendar/settings',
       ['io.ox/core/extensions',
        'io.ox/settings/utils'], function (ext, utils) {
-
     'use strict';
 
     var settings = {
@@ -30,8 +29,8 @@ define('io.ox/calendar/settings',
             .append($("<br>"));
             return node;
         }
-
     };
+
     // created on/by
     ext.point("io.ox/calendar/settings/detail").extend({
         index: 200,

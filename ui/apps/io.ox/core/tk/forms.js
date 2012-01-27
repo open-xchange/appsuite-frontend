@@ -239,7 +239,7 @@ define('io.ox/core/tk/forms', [], function () {
 
             labelDiv = $('<div>');
             labelDiv.addClass('label');
-            if(options.classes) {
+            if (options.classes) {
                 labelDiv.addClass(options.classes);
             }
 
@@ -284,10 +284,10 @@ define('io.ox/core/tk/forms', [], function () {
             return $('<div>').addClass('sectiontitle').text(options.text);
         },
         createSectionContent: function (options) {
-             return $('<div>').addClass('sectioncontent');
+            return $('<div>').addClass('sectioncontent');
         },
         createSectionGroup: function (options) {
-             return $('<div>').addClass('section-group');
+            return $('<div>').addClass('section-group');
         }
     };
 

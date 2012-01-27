@@ -22,7 +22,7 @@ define('io.ox/settings/accounts/email/settings',
 
     var settings = null; //should be initialized by the ext.point
     var myValidator = {
-    
+
     };
 
     var accountDetailView = {
@@ -30,10 +30,9 @@ define('io.ox/settings/accounts/email/settings',
         node: null,
         itemid: null,
         save: function () {
- 
+
         },
         draw: function (popup) {
-            console.log('opening');
             popup.empty()
             .addClass('settings-detail-pane')
             .append(
@@ -54,18 +53,23 @@ define('io.ox/settings/accounts/email/settings',
             )
             .append(
                 utils.createSection()
-                  .append(utils.createSectionTitle({text: 'Server Settings'}))
-                  .append(
-                      utils.createSectionContent()
+                .append(utils.createSectionTitle({text: 'Server Settings'}))
+                .append(
+                    utils.createSectionContent()
+                    .append(
+                        utils.createSectionGroup()
                         .append(
                           utils.createSectionGroup()
                             .append(
                               forms.createSelectbox({dataid: 'mail-testselect', label: 'Server Type:', items: {
-                                    'IMAP mail server': 'option1',
-                                    'POP3 mail server': 'option2',
-                                    'V-split view 3': 'option3'
-                                  }, currentValue: 'option1', model: settings, validator: myValidator})
-                            )
+                'IMAP mail server': 'option1',
+                'POP3 mail server': 'option2',
+                'V-split view 3': 'option3'
+            },
+                                currentValue: 'option1',
+                                model: settings,
+                                validator: myValidator
+                            })
                         )
                         .append(forms.createCheckbox({ dataid: 'mail-common-selectfirst', label: 'Use SSL connection', model: settings, validator: myValidator}))
                         .append(forms.createLabeledTextField({label: 'Server Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
@@ -74,7 +78,7 @@ define('io.ox/settings/accounts/email/settings',
                         .append(forms.createLabeledPasswordField({label: 'Password', dataid: 'mail-account-name', model: settings, validator: myValidator}))
                   )
                   .append(utils.createSectionDelimiter())
-            )
+            )))
             .append(
                 utils.createSection()
                   .append(utils.createSectionTitle({text: 'Outgoing Server Settings (SMTP)'}))
@@ -115,6 +119,6 @@ define('io.ox/settings/accounts/email/settings',
             console.log('now accounts get saved?');
         }
     });
-    
+
     return {}; //whoa return nothing at first
 });

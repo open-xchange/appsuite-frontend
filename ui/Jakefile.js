@@ -33,8 +33,7 @@ var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
     pad(t.getUTCSeconds());
 console.info("Build version: " + version);
 
-var debug = Boolean(process.env.debug);
-var debug = true || Boolean(process.env.debug);
+var debug = false || Boolean(process.env.debug);
 
 if (debug) console.info("Debug mode: on");
 
@@ -100,7 +99,7 @@ var jshintOptions = {
     trailing: true,
     undef: true,
     validthis: true,
-    white: false,
+    white: true, // THIS IS TURNED ON - otherwise we have too many dirty check-ins
     predef: [
          "$", "_", "Modernizr", "define", "require", "ox", "initializeAndDefine"
     ]

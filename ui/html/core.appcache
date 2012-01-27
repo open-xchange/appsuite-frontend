@@ -17,7 +17,7 @@ CACHE:
 @base@/apps/themes/default/style.less
 @base@/apps/themes/default/definitions.less
 @base@/apps/themes/default/dummypicture.png
-@base@/apps/themes/default/logo-small.png
+@base@/apps/themes/default/logo-small.xpng
 # mail
 @base@/apps/io.ox/mail/actions.js
 @base@/apps/io.ox/mail/api.js

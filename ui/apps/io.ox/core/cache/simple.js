@@ -31,6 +31,9 @@ define('io.ox/core/cache/simple',
                 isUsable: function () {
                     return true;
                 },
+                gc: function () {
+
+                },
                 clear: function () {
                     storage[id] = {};
                     return $.Deferred().resolve();

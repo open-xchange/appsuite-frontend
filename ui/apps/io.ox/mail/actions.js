@@ -95,29 +95,31 @@ define('io.ox/mail/actions', ['io.ox/core/extensions'], function (ext) {
 
     ext.point('io.ox/mail/links/inline').extend(new ext.Link({
         index: 100,
-        id: 'delete',
-        label: 'Delete',
-        ref: 'io.ox/mail/actions/delete'
-    }));
-
-    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
-        index: 200,
         id: 'reply-all',
         label: 'Reply All',
         ref: 'io.ox/mail/actions/reply-all'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new ext.Link({
-        index: 300,
+        index: 200,
         id: 'reply',
         label: 'Reply',
         ref: 'io.ox/mail/actions/reply'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new ext.Link({
-        index: 400,
+        index: 300,
         id: 'forward',
         label: 'Forward',
         ref: 'io.ox/mail/actions/forward'
     }));
+
+    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
+        index: 400,
+        id: 'delete',
+        label: 'Delete',
+        ref: 'io.ox/mail/actions/delete',
+        attention: true
+    }));
+
 });

@@ -249,14 +249,13 @@ define("io.ox/core/main",
         };
 
         ox.ui.App.canRestore()
-            .done(function () {
-                // clear auto start stuff (just conflicts)
-                autoLaunch = [];
-                autoLaunchModules = [];
-                restoreLauncher(true);
-            })
-            .fail(function () {
-                restoreLauncher(false);
+            .done(function (canRestore) {
+                if (canRestore) {
+                    // clear auto start stuff (just conflicts)
+                    autoLaunch = [];
+                    autoLaunchModules = [];
+                }
+                restoreLauncher(canRestore);
             });
     }
 

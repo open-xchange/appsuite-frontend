@@ -228,7 +228,7 @@ define("io.ox/core/extensions",
         this.draw = function (context) {
             this.append(
                 $("<a>", { href: "#", tabindex: "1", "data-action": self.id })
-                .addClass("io-ox-action-link")
+                .addClass('io-ox-action-link' + (options.attention === true ? ' attention': ''))
                 .data({ ref: self.ref, context: context })
                 .click(click)
                 .text(String(self.label))

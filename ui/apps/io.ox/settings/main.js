@@ -17,7 +17,7 @@ define('io.ox/settings/main',
       'io.ox/core/tk/forms',
       'io.ox/core/tk/view',
       'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View) {
-     
+    
     'use strict';
 
     var tmpl = {
@@ -69,13 +69,13 @@ define('io.ox/settings/main',
     function updateExpertMode() {
         var nodes = $('.expertmode');
         if (expertmode) {
-          nodes.show();
+            nodes.show();
         } else {
-          nodes.hide();
+            nodes.hide();
         }
     }
-    
-    
+
+
     app.setLauncher(function () {
         app.setWindow(win = ox.ui.createWindow({
             title: 'Settings',
@@ -91,7 +91,7 @@ define('io.ox/settings/main',
         win.bind('hide', onHideSettingsPane);
 
 
-        
+
 
         ext.point('io.ox/settings/links/toolbar').extend({
             id: 'io.ox/settings/expertcb',
@@ -105,7 +105,7 @@ define('io.ox/settings/main',
                 this.append(cb);
             }
         });
-    
+
 
         win.addClass('io-ox-settings-main');
 
@@ -135,13 +135,13 @@ define('io.ox/settings/main',
             });
 
             apps.push({
-              category: 'Basic',
-              company: 'Open-Xchange',
-              description: 'Manage Accounts',
-              icon: '',
-              id: 'io.ox/settings/accounts',
-              settings: true,
-              title: 'Accounts'
+                category: 'Basic',
+                company: 'Open-Xchange',
+                description: 'Manage Accounts',
+                icon: '',
+                id: 'io.ox/settings/accounts',
+                settings: true,
+                title: 'Accounts'
             });
             console.log('listing apps');
             console.log(apps);

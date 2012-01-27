@@ -57,14 +57,11 @@ define('io.ox/settings/utils',
             return $('<div>').addClass('sectiontitle').text(options.text);
         },
         createSectionContent: function () {
-             return $('<div>').addClass('sectioncontent');
+            return $('<div>').addClass('sectioncontent');
         },
         createSectionGroup: function () {
-             return $('<div>').addClass('section-group');
+            return $('<div>').addClass('section-group');
         },
-
-
-
         createListBox: function (options) {
             var ldiv = $('<div>').addClass('listbox');
             ldiv.append(utils.createListSpacer());

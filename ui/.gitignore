@@ -6,3 +6,4 @@
 /debian/open-xchange-gui/
 /debian/open-xchange-gui.debhelper.log
 /debian/open-xchange-gui.substvars
+/local.conf
