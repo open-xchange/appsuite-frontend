@@ -29,43 +29,7 @@ define('io.ox/core/tk/forms', [], function () {
     }
 
 
-    missing:
-    
-    var createSaveButton = function (options) {
-        var saveButton = $('<a>');
 
-        saveButton.addClass('button default-action saveButton').text('Save');
-        saveButton.on('click', function () {
-            options.view.getModel().save();
-        });
-        return saveButton;
-    };
-
-
-    var createPictureForm = function () {
-        var form = $('<form>', {
-            'accept-charset': 'UTF-8',
-            'enctype': 'multipart/form-data',
-            'id': 'contactUploadImage',
-            'method': 'POST',
-            'name': 'contactUploadImage',
-            'target': 'blank.html'
-        })
-        .append(
-            $('<input>', {
-                name: 'file',
-                type: 'file',
-                accept: 'image/*'
-            })
-        ).append(
-            $('<iframe/>', {
-                'name': 'hiddenframePicture',
-                'src': 'blank.html'
-            }).css('display', 'none')
-        );
-        return form;
-    };
-    */
 
 */
     var utils = {
