@@ -17,6 +17,7 @@ define('io.ox/core/tk/model', [], function () {
     "use strict";
     var SimpleModel = function (flatdata) {
         this.data = flatdata;
+        this.dirty = false;
         this.get = function (key) {
             console.log("getting from simple");
             console.log(key);
@@ -24,6 +25,7 @@ define('io.ox/core/tk/model', [], function () {
         };
 
         this.set = function (key, value) {
+            this.dirty = true;
             this.data[key] = value;
         };
         this.setData = function (data) {
@@ -31,6 +33,9 @@ define('io.ox/core/tk/model', [], function () {
         };
         this.getData = function () {
             return this.data;
+        };
+        this.isDirty = function () {
+            return this.dirty;
         };
     };
 

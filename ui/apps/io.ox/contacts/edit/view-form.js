@@ -261,6 +261,8 @@ define('io.ox/contacts/edit/view-form',
         });
     };
 
+    window.mymodel = null;
+
     // my happy place
     return {
         create: function () {
@@ -275,6 +277,7 @@ define('io.ox/contacts/edit/view-form',
                             displaynameChange: /^(first_name|last_name|title)$/,
                             jobDescriptionChange: /^(company|position|profession)$/,
                             set: function (key, value) {
+                                this.dirty = true;
                                 this.data[key] = value;
                                 if (this.displaynameChange.test(key)) {
                                     this.data.display_name = util.getFullName(this.data);
@@ -292,6 +295,7 @@ define('io.ox/contacts/edit/view-form',
                                 return this.data[key];
                             },
                             save: function () {
+                                var self = this;
                                 console.log('i am saving now');
                                 var image = $('#contactUploadImage').find("input[type=file]").get(0);
                                     //formdata = this.data;
@@ -304,7 +308,7 @@ define('io.ox/contacts/edit/view-form',
                                     this.data.timestamp = _.now();
                                     api.editNewImage(JSON.stringify(this.data), image.files[0])
                                     .done(function () {
-
+                                        self.dirty = false;
                                         console.log("SAVED");
                                         alert("SAVED");
                                         app.quit(); //close tha app???
@@ -317,7 +321,7 @@ define('io.ox/contacts/edit/view-form',
                                         timestamp: _.now(),
                                         data: this.data
                                     }).done(function () {
-
+                                      self.dirty = false;
                                       console.log("SAVED");
                                       alert("SAVED");
                                       app.quit(); //close tha app???
@@ -326,6 +330,8 @@ define('io.ox/contacts/edit/view-form',
 
                             }
                         });
+      
+                        window.mymodel = this.model;
 
                         meta = {
                             'contact-personal': ['title', 'first_name', 'last_name', 'display_name', 'second_name', 'suffix', 'nickname', 'birthday'],
