@@ -144,7 +144,6 @@ define("io.ox/contacts/main",
         drawContact = function (data) {
             //right.idle().empty().append(base.draw(data));
             right.idle().empty().append(viewDetail.draw(data));
-
         };
 
         drawFail = function (obj) {
@@ -198,7 +197,7 @@ define("io.ox/contacts/main",
         };
 
         // go!
-        commons.addFolderSupport(app, grid, 'contacts', '6')
+        commons.addFolderSupport(app, grid, 'contacts', '6')//'6'
             .done(commons.showWindow(win, grid));
     });
 

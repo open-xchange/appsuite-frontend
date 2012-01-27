@@ -16,7 +16,8 @@ define: true, _: true
 define('io.ox/settings/accounts/email/settings',
       ['io.ox/core/extensions',
        'io.ox/settings/utils',
-       'io.ox/core/tk/dialogs'], function (ext, utils, dialogs) {
+       'io.ox/core/tk/forms',
+       'io.ox/core/tk/dialogs'], function (ext, utils, forms, dialogs) {
     'use strict';
 
     var settings = null; //should be initialized by the ext.point
@@ -32,7 +33,6 @@ define('io.ox/settings/accounts/email/settings',
 
         },
         draw: function (popup) {
-            console.log('opening');
             popup.empty()
             .addClass('settings-detail-pane')
             .append(
@@ -44,10 +44,10 @@ define('io.ox/settings/accounts/email/settings',
                   .append(utils.createSectionTitle({text: 'Account Settings'}))
                   .append(
                       utils.createSectionContent()
-                        .append(utils.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'E-Mail Address:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(utils.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(utils.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', model: settings, validator: myValidator}))
+                        .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(forms.createLabeledTextField({label: 'E-Mail Address:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(forms.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', model: settings, validator: myValidator}))
                   )
                   .append(utils.createSectionDelimiter())
             )
@@ -59,39 +59,37 @@ define('io.ox/settings/accounts/email/settings',
                     .append(
                         utils.createSectionGroup()
                         .append(
-                            utils.createSelectbox(
-                            {   dataid: 'mail-testselect',
-                                label: 'Server Type:',
-                                items:
-                                {   'IMAP mail server': 'option1',
-                                    'POP3 mail server': 'option2',
-                                    'V-split view 3': 'option3'
-                                },
+                          utils.createSectionGroup()
+                            .append(
+                              forms.createSelectbox({dataid: 'mail-testselect', label: 'Server Type:', items: {
+                'IMAP mail server': 'option1',
+                'POP3 mail server': 'option2',
+                'V-split view 3': 'option3'
+            },
                                 currentValue: 'option1',
                                 model: settings,
                                 validator: myValidator
                             })
                         )
-                    )
-                    .append(utils.createCheckbox({ dataid: 'mail-common-selectfirst', label: 'Use SSL connection', model: settings, validator: myValidator}))
-                    .append(utils.createLabeledTextField({label: 'Server Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                    .append(utils.createLabeledTextField({label: 'Server Port:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                    .append(utils.createLabeledTextField({label: 'Login', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                    .append(utils.createLabeledPasswordField({label: 'Password', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                )
-                .append(utils.createSectionDelimiter())
-            )
+                        .append(forms.createCheckbox({ dataid: 'mail-common-selectfirst', label: 'Use SSL connection', model: settings, validator: myValidator}))
+                        .append(forms.createLabeledTextField({label: 'Server Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(forms.createLabeledTextField({label: 'Server Port:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(forms.createLabeledTextField({label: 'Login', dataid: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(forms.createLabeledPasswordField({label: 'Password', dataid: 'mail-account-name', model: settings, validator: myValidator}))
+                  )
+                  .append(utils.createSectionDelimiter())
+            )))
             .append(
                 utils.createSection()
-                .append(utils.createSectionTitle({text: 'Outgoing Server Settings (SMTP)'}))
-                .append(
-                    utils.createSectionContent()
-                    .append(utils.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                    .append(utils.createLabeledTextField({label: 'E-Mail Address:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                    .append(utils.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                    .append(utils.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', model: settings, validator: myValidator}))
-                )
-                .append(utils.createSectionDelimiter())
+                  .append(utils.createSectionTitle({text: 'Outgoing Server Settings (SMTP)'}))
+                  .append(
+                      utils.createSectionContent()
+                        .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(forms.createLabeledTextField({label: 'E-Mail Address:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(forms.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', model: settings, validator: myValidator}))
+                  )
+                  .append(utils.createSectionDelimiter())
             );
 
         },

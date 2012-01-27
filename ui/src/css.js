@@ -318,8 +318,10 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
 
             set: function (path, value, permanent) {
                 if (path) {
+                    var orgpath = path;
                     path = (globalSubpath + that.settingsPath + '/' + path);
                     set(path, value);
+                    $(that).trigger(orgpath+'.changed', value);
                     console.log('set ' +path + ':' + value);
                     if (permanent) {
                         // save settings path on server

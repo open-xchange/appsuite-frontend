@@ -10,21 +10,19 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
-
 define('io.ox/calendar/settings',
-   ['io.ox/core/extensions',
-    'io.ox/settings/utils'], function (ext, utils) {
-
+      ['io.ox/core/extensions',
+       'io.ox/settings/utils'], function (ext, utils) {
     'use strict';
 
     var settings = {
         draw: function (node, app) {
             node
-            .append(
-              utils.createSettingsHead(app)
-            )
-            .append(
-                $("<span>")
+                .append(
+                  utils.createSettingsHead(app)
+                )
+                .append(
+                    $("<span>")
                     .addClass("detail")
                     .append($("<span>").text("I AM A SUPER FINE CALENDARSETTING WHOA"))
             )
