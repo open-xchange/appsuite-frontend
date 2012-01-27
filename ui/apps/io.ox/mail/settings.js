@@ -21,12 +21,81 @@ define('io.ox/mail/settings',
         'io.ox/core/tk/view',
         'settings!io.ox/mail'], function (ext, utils, dialogs, forms, View, settings) {
 
-   'use strict';
+    'use strict';
+
     var myValidator = {
 
 
     };
 
+    var Builder = function () {
+
+        var nodes = [$()],
+            index = 0,
+            last = $(),
+            self = this,
+            wrap = function (module, id) {
+                return function () {
+                    console.log("call", id);
+                    nodes[index] = nodes[index][index === 0 ? 'add' : 'append'](
+                        last = module[id].apply(module, arguments)
+                    );
+                    return this;
+                };
+            };
+
+        // copy functions
+        _(arguments).each(function (module) {
+            if (module.constructor !== Object) {
+                module = _.extend({}, module, module.constructor.prototype);
+            }
+            _(module).each(function (prop, id) {
+                if (_.isFunction(prop)) {
+                    self[id] = wrap(module, id);
+                }
+            });
+        });
+
+        this.invoke = function () {
+            var args = $.makeArray(arguments), name = args.shift();
+            last[name].apply(last, args);
+            return this;
+        };
+
+        // add - increases nesting level
+        this.add = function () {
+            index++;
+            nodes.push(last);
+            return this;
+        };
+
+        // end - decreases nesting level
+        this.end = function () {
+            if (index > 0) {
+                index--;
+                nodes.pop();
+            }
+            return this;
+        };
+
+        // get outer jQuery object
+        this.get = function () {
+            return nodes[0];
+        };
+
+        // destructor - the final get
+        this.done = function () {
+            try {
+                return this.get();
+            } catch (e) {
+            } finally {
+                for (var id in this) {
+                    delete this[id];
+                }
+                nodes = last = self = null;
+            }
+        };
+    };
 
     window.settings = settings;
     var mailSettings = {
@@ -35,15 +104,64 @@ define('io.ox/mail/settings',
             node.append(myView.node);
             //myView.createSectionTitle({text: 'Common'});
 
-
-
             console.log(myView);
 
-
+            new Builder(utils, myView)
+                .createSettingsHead(app)
+                .createSection()
+                .add()
+                    .createSectionTitle({ text: 'Common' })
+                    .createSectionContent()
+                    .add()
+                        .createInfoText(
+                        {   html: 'EVERYTHING IS JUST MENT TO BE AN EXAMPLE HERE::::: Melden Sie sich mit Ihrem OX-Konto in OX Chrome an, ' +
+                                'um Ihre personalisierten Browserfunktionen online zu ' +
+                                'speichern und über OX Chrome auf jedem Computer darauf ' +
+                                'zuzugreifen. Sie werden dann auch automatisch in Ihren ' +
+                                'Lieblingsdiensten von OX angemeldet. Weitere Informationen' +
+                                'mehr Infos unter <a href="http://www.open-xchange.com" target="_blank">www.open-xchange.com</a>'
+                        })
+                        .createSectionGroup()
+                        .invoke('addClass', 'expertmode')
+                        .add()
+                            .createSelectbox(
+                            {   dataid: 'mail-common-defaultview',
+                                label: 'Default view:',
+                                items:
+                                {   'V-split view 1': 'option1',
+                                    'V-split view 2': 'option2',
+                                    'V-split view 3': 'option3'
+                                },
+                                currentValue: 'option1',
+                                validator: myValidator
+                            })
+                        .end()
+                        .createSectionGroup()
+                        .invoke('addClass', 'expertmode')
+                        .add()
+                            .createSelectbox(
+                            {   dataid: 'mail-common-spamfolderview',
+                                label: 'Default view for Spam folder',
+                                items:
+                                {   'V-split view 1': 'option1',
+                                    'V-split view 2': 'option2',
+                                    'V-split view 3': 'option3'
+                                },
+                                currentValue: 'option1',
+                                validator: myValidator
+                            })
+                        .end()
+                        .createSectionDelimiter()
+                        .add()
+                            .createButton({label: 'my button me'})
+                        .end()
+                    .end()
+                .get()
+                .appendTo(myView.node);
 
             myView.node
             .append(
-              utils.createSettingsHead(app)
+                utils.createSettingsHead(app)
             )
             //section
             .append(
