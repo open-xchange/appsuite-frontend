@@ -101,8 +101,6 @@ define('io.ox/settings/utils',
         createButton: function (options) {
             return $('<button>').text(options.label);
         }
-
-
     };
     return utils;
 });

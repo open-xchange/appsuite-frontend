@@ -288,6 +288,10 @@ define('io.ox/core/tk/forms', [], function () {
         },
         createSectionGroup: function (options) {
             return $('<div>').addClass('section-group');
+        },
+        createSectionDelimiter: function () {
+            return $('<div>')
+                      .addClass('settings sectiondelimiter');
         }
     };
 

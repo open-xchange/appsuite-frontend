@@ -91,6 +91,7 @@ define('io.ox/contacts/edit/view-form',
             var myId = _.uniqueId('c'),
                 sectionGroup = options.view.createSectionGroup();
 
+            this.append(sectionGroup);
             sectionGroup.append(options.view.createLabel({id: myId, text: gt(subPointName)}));
             sectionGroup.append(options.view.createTextField({id: myId, dataid: subPointName}));
 
@@ -231,6 +232,7 @@ define('io.ox/contacts/edit/view-form',
         section.append(jobDescription);
         section.append(saveButton);
         section.append(picForm);
+        section.append(options.view.createSectionDelimiter({}));
 
         this.append(section);
     };
