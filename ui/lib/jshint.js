@@ -3280,9 +3280,21 @@ loop:   for (;;) {
 
             b = token.line !== nexttoken.line;
             if (b) {
-                indent += option.indent;
-                if (nexttoken.from === indent + option.indent) {
+                // special check to handle parameter objects properly
+                var prevLine = lines[token.line - 1],
+                    isTrailingParameterObject = /(, |\(){$/.test(prevLine),
+                    prevPos = (prevLine.match(/^[ ]+/) || [''])[0].length + 1,
+                    currPos = nexttoken.from,
+                    isMultiple = ((currPos - 1) % option.indent) === 0;
+                if (isTrailingParameterObject && currPos > prevPos && isMultiple) {
+                    // ok, indentation is a multiple of option.indent and
+                    // greater than previos indentation
+                    indent = currPos;
+                } else {
                     indent += option.indent;
+                    if (nexttoken.from === indent + option.indent) {
+                        indent += option.indent;
+                    }
                 }
             }
             for (;;) {

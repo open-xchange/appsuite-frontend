@@ -36,7 +36,6 @@ define('io.ox/mail/settings',
             self = this,
             wrap = function (module, id) {
                 return function () {
-                    console.log("call", id);
                     nodes[index] = nodes[index][index === 0 ? 'add' : 'append'](
                         last = module[id].apply(module, arguments)
                     );
@@ -46,14 +45,12 @@ define('io.ox/mail/settings',
 
         // copy functions
         _(arguments).each(function (module) {
-            if (module.constructor !== Object) {
-                module = _.extend({}, module, module.constructor.prototype);
-            }
-            _(module).each(function (prop, id) {
-                if (_.isFunction(prop)) {
+            // do not use _().each here, since we need the prototype as well
+            for (var id in module) {
+                if (_.isFunction(module[id])) {
                     self[id] = wrap(module, id);
                 }
-            });
+            }
         });
 
         this.invoke = function () {
@@ -113,8 +110,8 @@ define('io.ox/mail/settings',
                     .createSectionTitle({ text: 'Common' })
                     .createSectionContent()
                     .add()
-                        .createInfoText(
-                        {   html: 'EVERYTHING IS JUST MENT TO BE AN EXAMPLE HERE::::: Melden Sie sich mit Ihrem OX-Konto in OX Chrome an, ' +
+                        .createInfoText({
+                            html: 'EVERYTHING IS JUST MENT TO BE AN EXAMPLE HERE::::: Melden Sie sich mit Ihrem OX-Konto in OX Chrome an, ' +
                                 'um Ihre personalisierten Browserfunktionen online zu ' +
                                 'speichern und über OX Chrome auf jedem Computer darauf ' +
                                 'zuzugreifen. Sie werden dann auch automatisch in Ihren ' +
@@ -124,11 +121,11 @@ define('io.ox/mail/settings',
                         .createSectionGroup()
                         .invoke('addClass', 'expertmode')
                         .add()
-                            .createSelectbox(
-                            {   dataid: 'mail-common-defaultview',
+                            .createSelectbox({
+                                dataid: 'mail-common-defaultview',
                                 label: 'Default view:',
-                                items:
-                                {   'V-split view 1': 'option1',
+                                items: {
+                                    'V-split view 1': 'option1',
                                     'V-split view 2': 'option2',
                                     'V-split view 3': 'option3'
                                 },
@@ -139,8 +136,8 @@ define('io.ox/mail/settings',
                         .createSectionGroup()
                         .invoke('addClass', 'expertmode')
                         .add()
-                            .createSelectbox(
-                            {   dataid: 'mail-common-spamfolderview',
+                            .createSelectbox({
+                                dataid: 'mail-common-spamfolderview',
                                 label: 'Default view for Spam folder',
                                 items:
                                 {   'V-split view 1': 'option1',
@@ -170,8 +167,8 @@ define('io.ox/mail/settings',
                 .append(
                     utils.createSectionContent()
                     .append(
-                        utils.createInfoText(
-                        {   html: 'EVERYTHING IS JUST MENT TO BE AN EXAMPLE HERE::::: Melden Sie sich mit Ihrem OX-Konto in OX Chrome an, ' +
+                        utils.createInfoText({
+                            html: 'EVERYTHING IS JUST MENT TO BE AN EXAMPLE HERE::::: Melden Sie sich mit Ihrem OX-Konto in OX Chrome an, ' +
                                   'um Ihre personalisierten Browserfunktionen online zu ' +
                                   'speichern und über OX Chrome auf jedem Computer darauf ' +
                                   'zuzugreifen. Sie werden dann auch automatisch in Ihren ' +
@@ -182,22 +179,33 @@ define('io.ox/mail/settings',
                     .append(
                         utils.createSectionGroup()
                         .append(
-                            myView.createSelectbox({dataid: 'mail-common-defaultview', label: 'Default view:', items: {
-                'V-split view 1': 'option1',
-                'V-split view 2': 'option2',
-                'V-split view 3': 'option3'
-            }, currentValue: 'option1',  validator: myValidator})
+                            myView.createSelectbox({
+                                dataid: 'mail-common-defaultview',
+                                label: 'Default view:',
+                                items: {
+                                    'V-split view 1': 'option1',
+                                    'V-split view 2': 'option2',
+                                    'V-split view 3': 'option3'
+                                },
+                                currentValue: 'option1',
+                                validator: myValidator
+                            })
                         )
                         .addClass('expertmode')
                     )
                     .append(
                         utils.createSectionGroup()
                         .append(
-                          myView.createSelectbox({dataid: 'mail-common-spamfolderview', label: 'Default view for Spam folder', items: {
-                'V-split view 1': 'option1',
-                'V-split view 2': 'option2',
-                'V-split view 3': 'option3'
-            },  validator: myValidator})
+                            myView.createSelectbox({
+                                dataid: 'mail-common-spamfolderview',
+                                label: 'Default view for Spam folder',
+                                items: {
+                                    'V-split view 1': 'option1',
+                                    'V-split view 2': 'option2',
+                                    'V-split view 3': 'option3'
+                                },
+                                validator: myValidator
+                            })
                         )
                         .addClass('expertmode')
                     )
@@ -251,39 +259,39 @@ define('io.ox/mail/settings',
                     .append(
                         utils.createSectionGroup()
                         .append(
-                          myView.createSelectbox({
-                dataid: 'mail-testselect',
-                label: 'Editor feature set',
-                items: {
-                    'Enhanced': 'enhanced',
-                    'Default': 'default'
-                },
-                validator: myValidator
-            })
+                            myView.createSelectbox({
+                                dataid: 'mail-testselect',
+                                label: 'Editor feature set',
+                                items: {
+                                    'Enhanced': 'enhanced',
+                                    'Default': 'default'
+                                },
+                                validator: myValidator
+                            })
                         )
                         .addClass('expertmode')
                     )
                     .append(
                         utils.createSectionGroup()
                         .append(
-                          myView.createSelectbox({dataid: 'mail-compose-font', label: 'Default E-Mail font:', items: {
-                'Default': 'default',
-                'Andale Mono': 'andale_mono',
-                'Arial': 'arial',
-                'Arial Black': 'arial_black',
-                'Book Antiqua': 'book_antiqua'
-            },  validator: myValidator })
+                            myView.createSelectbox({dataid: 'mail-compose-font', label: 'Default E-Mail font:', items: {
+                                'Default': 'default',
+                                'Andale Mono': 'andale_mono',
+                                'Arial': 'arial',
+                                'Arial Black': 'arial_black',
+                                'Book Antiqua': 'book_antiqua'
+                            },  validator: myValidator })
                         )
                         .addClass('expertmode')
                     )
                     .append(
                         utils.createSectionGroup()
                         .append(
-                          myView.createSelectbox({dataid: 'mail-compose-fontsize', label: 'Default E-Mail font size:', items: {
-                'Default': 'default',
-                '1 (8pt)': '8_pt',
-                '2 (10pt)': '10_pt'
-            },  validator: myValidator})
+                            myView.createSelectbox({dataid: 'mail-compose-fontsize', label: 'Default E-Mail font size:', items: {
+                                'Default': 'default',
+                                '1 (8pt)': '8_pt',
+                                '2 (10pt)': '10_pt'
+                            },  validator: myValidator})
                         )
                         .addClass('expertmode')
                     )
@@ -303,40 +311,45 @@ define('io.ox/mail/settings',
                     .append(
                         utils.createSectionGroup()
                         .append(
-                          myView.createSelectbox({dataid: 'mail-compose-defaultsender', label: 'Default sender address:', items: {
-                'mario@sourcegarden.de': 'mario@sourcegarden.de',
-                'mario@sourcegarden.com': 'mario@sourcegarden.com',
-                'mario.scheliga@open-xchange.com': 'mario.scheliga@open-xchange.com'
-            },  validator: myValidator})
+                            myView.createSelectbox({
+                                dataid: 'mail-compose-defaultsender',
+                                label: 'Default sender address:',
+                                items: {
+                                    'mario@sourcegarden.de': 'mario@sourcegarden.de',
+                                    'mario@sourcegarden.com': 'mario@sourcegarden.com',
+                                    'mario.scheliga@open-xchange.com': 'mario.scheliga@open-xchange.com'
+                                },
+                                validator: myValidator
+                            })
                         )
                     )
                     .append(
                         utils.createSectionGroup()
-                          .append(
+                        .append(
                             myView.createSelectbox({
-                dataid: 'mail-compose-savedraftsinterval',
-                label: 'Auto-save Email drafts?',
-                items: {
-                    'Disabled': 'disabled',
-                    '1 Minute': '1_minute',
-                    '3 Minutes': '3_minutes',
-                    '5 Minutes': '5_minutes',
-                    '10 Minutes': '10_minutes'
-                },
-                validator: myValidator
-            })
-                          )
-                          .addClass('expertmode')
+                                dataid: 'mail-compose-savedraftsinterval',
+                                label: 'Auto-save Email drafts?',
+                                items: {
+                                    'Disabled': 'disabled',
+                                    '1 Minute': '1_minute',
+                                    '3 Minutes': '3_minutes',
+                                    '5 Minutes': '5_minutes',
+                                    '10 Minutes': '10_minutes'
+                                },
+                                validator: myValidator
+                            })
+                        )
+                        .addClass('expertmode')
                     )
                     .append(utils.createSectionDelimiter())
                 )
                 .append(utils.createSectionDelimiter())
             )
             .append(
-              utils.createSection()
+                utils.createSection()
                 .append(utils.createSectionTitle({text: 'Display'}))
                 .append(
-                  utils.createSectionContent()
+                    utils.createSectionContent()
                     .append(myView.createCheckbox({dataid: 'mail-display-allowhtml', label: 'Allow html formatted E-Mails',  validator: myValidator}))
                     .append(myView.createCheckbox({dataid: 'mail-display-blockimgs', label: 'Block pre-loading of externally linked images',  validator: myValidator}))
                     .append(myView.createCheckbox({dataid: 'mail-display-emotionicons', label: 'Display emoticons as graphics in text E-Mails',  validator: myValidator}))
