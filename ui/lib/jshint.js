@@ -3288,7 +3288,7 @@ loop:   for (;;) {
                     isMultiple = ((currPos - 1) % option.indent) === 0;
                 if (isTrailingParameterObject && currPos > prevPos && isMultiple) {
                     // ok, indentation is a multiple of option.indent and
-                    // greater than previos indentation
+                    // greater than previous indentation
                     indent = currPos;
                 } else {
                     indent += option.indent;
