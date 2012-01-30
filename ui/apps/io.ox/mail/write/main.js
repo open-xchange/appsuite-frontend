@@ -23,8 +23,9 @@ define.async('io.ox/mail/write/main',
      'io.ox/core/api/user',
      'io.ox/core/tk/upload',
      'io.ox/core/tk/autocomplete',
+     'gettext!io.ox/mail/mail',
      'less!io.ox/mail/style.css',
-     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload) {
+     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload, autocomplete, gt) {
 
     'use strict';
 
@@ -1191,6 +1192,32 @@ define.async('io.ox/mail/write/main',
                 });
         };
 
+        app.saveDraft = function () {
+            // get mail
+            var mail = this.getMail(),
+                def = new $.Deferred();
+            // send!
+
+            mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
+            if (_(mail.data.flags).isUndefined()) {
+                mail.data.flags = mailAPI.FLAGS.DRAFT;
+            } else if (mail.data.flags & 4 === 0) {
+                mail.data.flags += mailAPI.FLAGS.DRAFT;
+            }
+
+            mailAPI.send(mail.data, mail.files)
+                .always(function (result) {
+                    if (result.error) {
+                        console.error(result);
+                        def.reject('Server error - see console :(');
+                    } else {
+                        def.resolve(mail);
+                    }
+                });
+
+            return def;
+        };
+
         /**
          * Get editor
          */
@@ -1200,17 +1227,57 @@ define.async('io.ox/mail/write/main',
 
         // destroy
         app.setQuit(function () {
-            // clean up editors
-            for (var id in editorHash) {
-                editorHash[id].destroy();
-            }
-            // clear all private vars
-            app = win = main = sidepanel = form = subject = editor = null;
-            priorityOverlay = sections = currentSignature = null;
+
+            var def = $.Deferred();
+
+            require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                new dialogs.ModalDialog()
+                    .text(gt("Are you really want to cancel editing this mail?"))
+                    .addButton("cancel", gt('No, rather not'))
+                    .addButton("delete", gt('Yes, and delete the mail.'))
+                    .addButton('savedraft', gt('Yes, and save as draft.'))
+                    .show()
+                    .done(function (action) {
+                        console.debug("Action", action);
+
+                        var theNewMail = app.getMail();
+
+                        console.log('QUIT', theNewMail.data);
+
+                        if (action === 'delete') {
+                            def.resolve();
+
+                            // clean up editors
+                            for (var id in editorHash) {
+                                editorHash[id].destroy();
+                            }
+                            // clear all private vars
+                            app = win = main = sidepanel = form = subject = editor = null;
+                            priorityOverlay = sections = currentSignature = null;
+
+                        } else if (action === 'savedraft') {
+
+                            app.saveDraft().done(function (mail) {
+                                console.log(mail);
+                                def.resolve();
+                            }).fail(function (e) {
+                                def.reject(e);
+                            });
+                        } else {
+                            def.reject();
+                        }
+                    });
+            });
+
+            return def;
         });
 
         return app;
     }
+
+
+
+
 
     var module = {
         getApp: createInstance
