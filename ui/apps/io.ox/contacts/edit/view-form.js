@@ -167,7 +167,7 @@ define('io.ox/contacts/edit/view-form',
 
             this.append(sectionGroup);
             sectionGroup.append(options.view.createLabel({id: myId, text: gt(subPointName)}));
-            sectionGroup.append(options.view.createTextField({id: myId, dataid: subPointName}));
+            sectionGroup.append(options.view.createTextField({id: myId, property: subPointName}));
 
             if (!options.view.getModel().get(subPointName)) {
                 sectionGroup.addClass('hidden');
@@ -203,7 +203,7 @@ define('io.ox/contacts/edit/view-form',
                 _.each(lineFormat, function (multiline, index) {
                     var myId = _.uniqueId('c');
                     labels.push(options.view.createLabel({id: myId, text: gt(multiline)}));
-                    fields.push(options.view.createTextField({id: myId, dataid: multiline}));
+                    fields.push(options.view.createTextField({id: myId, property: multiline}));
                     hide = (options.view.getModel().get(multiline)) ? false : true;
                 });
                 var outterLabel = $('<div>').addClass('inlinelabel');
@@ -286,7 +286,7 @@ define('io.ox/contacts/edit/view-form',
 
         picture = (api.getPicture(options.view.getModel().getData())).addClass('picture');
         picture.on('click', picTrigger);
-        title = options.view.createText({dataid: 'display_name', classes: 'name clear-title'});
+        title = options.view.createText({property: 'display_name', classes: 'name clear-title'});
 
 
         calculatedModel = new Model({});
@@ -305,7 +305,7 @@ define('io.ox/contacts/edit/view-form',
             calculatedModel.update();
         });
 
-        jobDescription = options.view.createText({dataid: 'jobdescription.calculated', classes: 'job clear-title', model: calculatedModel});
+        jobDescription = options.view.createText({property: 'jobdescription.calculated', classes: 'job clear-title', model: calculatedModel});
 
 
         saveButton = createSaveButton(options);
@@ -376,8 +376,12 @@ define('io.ox/contacts/edit/view-form',
                 'userfields': ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05', 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10', 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15', 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20']
             };
 
+            $(this.getModel()).on('validation.error', function (evt, error, fieldDesc) {
+                console.error(error);
+            });
+
             initExtensionPoints(meta);
-            this.node.addClass('contact-detail edit').attr('data-item-id', self.getModel().get('folder_id') + '.' + self.getModel().get('id'));
+            this.node.addClass('contact-detail edit').attr('data-property', self.getModel().get('folder_id') + '.' + self.getModel().get('id'));
             ext.point('io.ox/contacts/edit/form').invoke('draw', self.node, {view: self});
         }
         return self;

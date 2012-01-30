@@ -21,6 +21,7 @@ define('io.ox/core/tk/view',
     'use strict';
 
     var View = function (options) {
+
     };
 
     View.prototype.init = function (options) {
