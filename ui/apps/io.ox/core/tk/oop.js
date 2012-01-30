@@ -16,11 +16,6 @@ define: true
 define('io.ox/core/tk/oop', [], function () {
     'use strict';
 
-
-
-
-
-
     // Helpers
     // -------
 

@@ -15,13 +15,6 @@ define('io.ox/contacts/model',
 
     'use strict';
 
-    // validate                                               DONE
-    // consitency (nur bei save, dann trigger save event)     DONE
-    // prototype (wech: -> klassenfunction extend)            DONE
-    // contact model sauber (alles ins main wat geht)         DONE
-    // form->datefield
-    // node a la textfield img and so on
-
     var ContactModel = Model.extend({
         properties: {
             'display_name': {format: 'string', defaultValue: 'Mrs. Bean'},
