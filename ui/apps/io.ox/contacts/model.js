@@ -19,7 +19,8 @@ define('io.ox/contacts/model',
 
     var ContactModel = function (data) {
     };
-    ContactModel.prototype = _.clone(Model.prototype);
+    ContactModel.prototype = Model.prototype;
+
     ContactModel.prototype.displaynameChange =  /^(first_name|last_name|title)$/;
     ContactModel.prototype.jobDescriptionChange = /^(company|position|profession)$/;
     ContactModel.prototype.set = function (key, value) {

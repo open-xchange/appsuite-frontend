@@ -267,7 +267,7 @@ define('io.ox/contacts/edit/view-form',
     var ContactEditView = function () {
 
     };
-    ContactEditView.prototype = _.clone(View.prototype);
+    ContactEditView.prototype = View.prototype;
 
     ContactEditView.prototype.draw = function (app) {
         var self = this,

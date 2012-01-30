@@ -15,8 +15,8 @@ define: true
 */
 define('io.ox/core/tk/model', [], function () {
     "use strict";
-    var SimpleModel = function (flatdata) {
-    };
+
+    var SimpleModel = function () {};
 
     SimpleModel.prototype.data = null;
     SimpleModel.prototype.dataShadow = null;
@@ -37,7 +37,7 @@ define('io.ox/core/tk/model', [], function () {
     };
     SimpleModel.prototype.setData = function (data) {
         this.data = data;
-        this.dataShadow = _.clone(data);
+        this.dataShadow = _.clone(data); //Shallow Copy data
     };
     SimpleModel.prototype.getData = function () {
         return this.data;
