@@ -129,6 +129,7 @@ jake = new function () {
 
   this.createTask = function () {
     var args = Array.prototype.slice.call(arguments)
+      , constructor
       , task
       , type
       , name
@@ -165,24 +166,69 @@ jake = new function () {
     switch (type) {
       case 'directory':
         action = function () {
+          
+          // Recursive mkdir from https://gist.github.com/319051
+          // mkdirsSync(path, [mode=(0777^umask)]) -> pathsCreated
+          function mkdirsSync(dirname, mode) {
+            if (mode === undefined) mode = 0x1ff ^ process.umask();
+            var pathsCreated = [], pathsFound = [];
+            var fn = dirname;
+            while (true) {
+              try {
+                var stats = fs.statSync(fn);
+                if (stats.isDirectory())
+                  break;
+                throw new Error('Unable to create directory at '+fn);
+              }
+              catch (e) {
+                if (e.code === 'ENOENT') {
+                  pathsFound.push(fn);
+                  fn = path.dirname(fn);
+                }
+                else {
+                  throw e;
+                }
+              }
+            }
+            for (var i=pathsFound.length-1; i>-1; i--) {
+              var fn = pathsFound[i];
+              fs.mkdirSync(fn, mode);
+              pathsCreated.push(fn);
+            }
+            return pathsCreated;
+          };
+          
           if (!path.existsSync(name)) {
-            fs.mkdirSync(name, 0755);
+            mkdirsSync(name, 0755);
           }
         };
-        task = new DirectoryTask(name, prereqs, action, opts);
+        constructor = DirectoryTask;
         break;
       case 'file':
-        task = new FileTask(name, prereqs, action, opts);
+        constructor = FileTask;
         break;
       default:
-        task = new Task(name, prereqs, action, opts);
+        constructor = Task;
     }
-
+    
+    task = jake.Task[name];
+    if (task) {
+      if (task.type != type && type != "task") {
+        throw new Error('Cannot change type of task ' + name + ' from ' +
+                        task.type + ' to ' + type);
+      }
+      task.prereqs = task.prereqs.concat(prereqs);
+      if (action) task.action = action;
+    } else {
+      task = new constructor(name, prereqs, action, opts);
+      task.type = type;
+      jake.currentNamespace.tasks[name] = task;
+    }
+    
     if (jake.currentTaskDescription) {
       task.description = jake.currentTaskDescription;
       jake.currentTaskDescription = null;
     }
-    jake.currentNamespace.tasks[name] = task;
 
     // FIXME: Should only need to add a new entry for the current
     // task-definition, not reparse the entire structure
