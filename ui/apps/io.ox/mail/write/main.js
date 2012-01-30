@@ -37,6 +37,20 @@ define.async('io.ox/mail/write/main',
         }
     });
 
+    // actions (define outside of multi-instance app)
+    ext.point('io.ox/mail/write/actions/draft').extend({
+        id: 'send',
+        action: function (app) {
+            app.saveDraft().done(function (data) {
+                console.log(data);
+                app.setMsgRef(data.data);
+                console.log('DIE DRAFT MAIL', app.getMail());
+            }).fail(function (e) {
+
+            });
+        }
+    });
+
     ext.point('io.ox/mail/write/actions/proofread').extend({
         id: 'proofread',
         action: function (app) {
@@ -70,12 +84,32 @@ define.async('io.ox/mail/write/main',
             sections = {},
             currentSignature = '',
             editorMode = '',
+            mailState,
             composeMode;
 
         app = ox.ui.createApp({
             name: 'io.ox/mail/write',
             title: 'Compose'
         });
+
+        app.STATES = {
+            'CLEAN': 1,
+            'DIRTY': 2
+        };
+
+        mailState = app.STATES.CLEAN;
+
+        app.getState = function () {
+            return mailState;
+        };
+
+        app.markDirty = function () {
+            mailState = app.STATES.DIRTY;
+        };
+
+        app.markClean = function () {
+            mailState = app.STATES.CLEAN;
+        };
 
         // helper
 
@@ -255,6 +289,7 @@ define.async('io.ox/mail/write/main',
         }
 
         function addRecipients(id, list) {
+            app.markDirty();
             // loop over list and draw recipient
             _(list).each(function (recipient) {
                 var node = $('<div>');
@@ -567,6 +602,19 @@ define.async('io.ox/mail/write/main',
                             })
                         )
                     )
+                    .append(
+                        $('<div>').addClass('draftbutton-wrapper')
+                        .append(
+                            // send
+                            $('<a>', { href: '#', tabindex: '9' })
+                            .addClass('button action draftbutton')
+                            .html('Draft')
+                            .on('click', function (e) {
+                                e.preventDefault();
+                                ext.point('io.ox/mail/write/actions/draft').invoke('action', null, app);
+                            })
+                        )
+                    )
                 )
                 .append(
                     $('<div>')
@@ -760,6 +808,8 @@ define.async('io.ox/mail/write/main',
          */
         app.setFormat = (function () {
 
+            app.markDirty();
+
             function load(mode, content) {
                 var editorSrc = 'io.ox/core/tk/' + (mode === 'html' ? 'html-editor' : 'text-editor');
                 return require([editorSrc]).pipe(function (Editor) {
@@ -822,14 +872,17 @@ define.async('io.ox/mail/write/main',
         }());
 
         app.setSubject = function (str) {
+            app.markDirty();
             subject.val(str || '');
         };
 
         app.setRawBody = function (str) {
+            app.markDirty();
             editor.setContent(str);
         };
 
         app.setBody = function (str) {
+            app.markDirty();
             // get default signature
             var ds = _(signatures)
                     .find(function (o) {
@@ -882,6 +935,7 @@ define.async('io.ox/mail/write/main',
         };
 
         app.setAttachments = function (list) {
+            app.markDirty();
             // look for real attachments
             var found = false;
             _(list || []).each(function (attachment) {
@@ -900,6 +954,7 @@ define.async('io.ox/mail/write/main',
         };
 
         app.setPriority = function (prio) {
+            app.markDirty();
             // be robust
             prio = parseInt(prio, 10) || 3;
             prio = prio < 3 ? 1 : prio;
@@ -914,16 +969,19 @@ define.async('io.ox/mail/write/main',
         };
 
         app.setAttachVCard = function (bool) {
+            app.markDirty();
             // set
             form.find('input[name=vcard]').prop('checked', !!bool);
         };
 
         app.setDeliveryReceipt = function (bool) {
+            app.markDirty();
             // set
             form.find('input[name=receipt]').prop('checked', !!bool);
         };
 
         app.setMsgRef = function (ref) {
+            app.markDirty();
             form.find('input[name=msgref]').val(ref || '');
         };
 
@@ -1187,6 +1245,7 @@ define.async('io.ox/mail/write/main',
                         win.show();
                         alert('Server error - see console :(');
                     } else {
+                        app.markClean();
                         app.quit();
                     }
                 });
@@ -1212,7 +1271,8 @@ define.async('io.ox/mail/write/main',
                         console.error(result);
                         def.reject('Server error - see console :(');
                     } else {
-                        def.resolve(mail);
+                        def.resolve(result);
+                        app.markClean();
                     }
                 });
 
@@ -1231,46 +1291,51 @@ define.async('io.ox/mail/write/main',
 
             var def = $.Deferred();
 
-            require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                new dialogs.ModalDialog()
-                    .text(gt("Do you really want to cancel editing this mail?"))
-                    .addButton("cancel", gt('Cancel'))
-                    .addButton("delete", gt('Lose changes'))
-                    .addButton('savedraft', gt('Save as draft'))
-                    .show()
-                    .done(function (action) {
-                        console.debug("Action", action);
+            var clean = function () {
+                // clean up editors
+                for (var id in editorHash) {
+                    editorHash[id].destroy();
+                }
+                // clear all private vars
+                app = win = main = sidepanel = form = subject = editor = null;
+                priorityOverlay = sections = currentSignature = null;
+            };
 
-                        var clean = function () {
-                            // clean up editors
-                            for (var id in editorHash) {
-                                editorHash[id].destroy();
-                            }
-                            // clear all private vars
-                            app = win = main = sidepanel = form = subject = editor = null;
-                            priorityOverlay = sections = currentSignature = null;
-                        };
+            if (app.getState() === app.STATES.DIRTY) {
+                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(gt("Do you really want to cancel editing this mail?"))
+                        .addButton("cancel", gt('Cancel'))
+                        .addButton("delete", gt('Lose changes'))
+                        .addButton('savedraft', gt('Save as draft'))
+                        .show()
+                        .done(function (action) {
+                            console.debug("Action", action);
 
-                        var theNewMail = app.getMail();
+                            var theNewMail = app.getMail();
 
-                        console.log('QUIT', theNewMail.data);
+                            console.log('QUIT', theNewMail.data);
 
-                        if (action === 'delete') {
-                            def.resolve();
-                            clean();
-                        } else if (action === 'savedraft') {
-                            app.saveDraft().done(function (mail) {
-                                console.log(mail);
+                            if (action === 'delete') {
                                 def.resolve();
                                 clean();
-                            }).fail(function (e) {
-                                def.reject(e);
-                            });
-                        } else {
-                            def.reject();
-                        }
-                    });
-            });
+                            } else if (action === 'savedraft') {
+                                app.saveDraft().done(function (mail) {
+                                    console.log(mail);
+                                    def.resolve();
+                                    clean();
+                                }).fail(function (e) {
+                                    def.reject(e);
+                                });
+                            } else {
+                                def.reject();
+                            }
+                        });
+                });
+            } else {
+                clean();
+                def.resolve();
+            }
 
             return def;
         });
