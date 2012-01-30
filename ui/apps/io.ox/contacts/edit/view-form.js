@@ -37,7 +37,7 @@ define('io.ox/contacts/edit/view-form',
     };
 
 
-    var less = function (evt) {
+    var lessSwitch = function (evt) {
         var parent = $(evt.currentTarget).parent();
         parent.find('.hidden').removeClass('hidden').addClass('visible');
         parent.find('.sectiontitle').removeClass('hidden');
@@ -45,7 +45,7 @@ define('io.ox/contacts/edit/view-form',
         $(evt.currentTarget).text('- less');
     };
 
-    var leaveData = function (txt, evt) {
+    var namedSwitch = function (txt, evt) {
         var parent = $(evt.currentTarget).parent();
         parent.removeClass('expanded');
         parent.find('.sectiontitle').addClass('hidden');
@@ -58,13 +58,13 @@ define('io.ox/contacts/edit/view-form',
             function () {
                 return $(this).val() === "";
             }
-        ).parent().parent().removeClass('visible').addClass('hidden');
+        ).parent().parent().parent().removeClass('visible').addClass('hidden');
         parent.find('.visible').removeClass('visible').addClass('hidden');
         $(evt.currentTarget).text(txt);
     };
 
 
-    var more = function (txt, evt) {
+    var moreSwitch = function (txt, evt) {
         var parent = $(evt.currentTarget).parent();
         parent.removeClass('expanded');
         parent.find('.sectiontitle').addClass('visible');
@@ -86,50 +86,28 @@ define('io.ox/contacts/edit/view-form',
         var empty = checkEl(evt.currentTarget),
             parent = $(evt.currentTarget).parent(),
             status;
-        if (empty === 0 && parent.hasClass('expanded')) {
-            status = '1';
-        }
 
-        if (empty === 0 && !parent.hasClass('expanded')) {
-            status = '2';
+        if (empty === 0) {
+            status = parent.hasClass('expanded') ? '1' :  '2';
+        } else {
+            status = !parent.hasClass('expanded') ? '3' : '4';
         }
-
-        if (empty !== 0 && !parent.hasClass('expanded')) {
-            status = '3';
-        }
-
-        if (empty !== 0 && parent.hasClass('expanded')) {
-            status = '4';
-        }
-        console.log(status);
 
         switch (status) {
         case "1":
-            leaveData('+ ' + evt.data.pointName, evt);
+            namedSwitch('+ ' + evt.data.pointName, evt);
             break;
         case "2":
-            less(evt);
+            lessSwitch(evt);
             break;
         case "3":
-            less(evt);
+            lessSwitch(evt);
             break;
         case "4":
-            more('+ more', evt);
+            moreSwitch('+ more', evt);
             break;
         }
     };
-
-    var toggleSection = function (evt) {
-        var section = $(evt.currentTarget).parent().prev();
-        if (!section.hasClass('hidden')) {
-            section.addClass('hidden');
-        } else {
-            section.removeClass('hidden');
-            section.find('.hidden').removeClass('hidden').addClass('visible');
-        }
-
-    };
-
 
 
     var drawSection = function (pointName) {
@@ -156,7 +134,6 @@ define('io.ox/contacts/edit/view-form',
                 sectionTitle.addClass('hidden');
             }
 
-//            section.parent().append($('<div>').append($('<a>').addClass('switcher').text(pointName).on('click', toggleSection)));
         };
     };
 
