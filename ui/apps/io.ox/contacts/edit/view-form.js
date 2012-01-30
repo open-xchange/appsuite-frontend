@@ -148,7 +148,8 @@ define('io.ox/contacts/edit/view-form',
 
         saveButton.addClass('button default-action saveButton').text('Save');
         saveButton.on('click', function () {
-            options.view.getModel().save();
+            options.view.save();
+
         });
         return saveButton;
     };
@@ -204,7 +205,7 @@ define('io.ox/contacts/edit/view-form',
                 return util.getJob(options.view.getModel().getData());
             },
             update: function () {
-                $(this).trigger('jobdescription.calculated.changed', util.getJob(this.data));
+                $(this).trigger('jobdescription.calculated.changed', util.getJob(options.view.getModel().getData()));
             },
             set: function () {}
         });
@@ -264,37 +265,60 @@ define('io.ox/contacts/edit/view-form',
     };
 
 
-    var ContactEditView = function () {
-
+    var ContactEditView = function (options) {
+        this.__super.apply(this, arguments);
     };
-    ContactEditView.prototype = View.prototype;
+    View.extend(ContactEditView, {
 
-    ContactEditView.prototype.draw = function (app) {
-        var self = this,
-            meta;
-        if (this.getModel()) {
-            meta = {
-                'contact-personal': ['title', 'first_name', 'last_name', 'display_name', 'second_name', 'suffix', 'nickname', 'birthday'],
-                'contact-email': ['email1', 'email2', 'email3'],
-                'contact-phone': ['telephone_business1', 'telephone_business2', 'fax_business', 'telephone_car', 'telephone_company', 'telephone_home1', 'telephone_home2', 'fax_home', 'cellular_telephone1', 'cellular_telephone2', 'telephone_other', 'fax_other', 'telephone_isdn', 'telephone_pager', 'telephone_primary', 'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'instant_messenger1', 'instant_messenger2', 'telephone_ip', 'telephone_assistant'],
-                'contact-home-address': ['street_home', 'postal_code_home', 'city_home', 'state_home', 'country_home'],
-                'contact-work-address': ['street_business', 'postal_code_business', 'city_business', 'state_business', 'country_business'],
-                'contact-other-address': ['street_other', 'postal_code_other', 'city_other', 'state_other', 'country_other'],
-                'contact-job-descriptions': ['room_number', 'profession', 'position', 'company', 'department', 'employee_type', 'number_of_employees', 'sales_value', 'tax_id', 'commercial_register', 'branches', 'business_category', 'info', 'manager_name', 'assistant_name'],
-                'special-information': ['marital_status', 'number_of_children', 'spouse_name', 'note', 'url', 'anniversary'],
-                'userfields': ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05', 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10', 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15', 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20']
-            };
+        draw: function (app) {
+            var self = this,
+                meta;
+            if (this.getModel()) {
+                meta = {
+                    'contact-personal': ['title', 'first_name', 'last_name', 'display_name', 'second_name', 'suffix', 'nickname', 'birthday'],
+                    'contact-email': ['email1', 'email2', 'email3'],
+                    'contact-phone': ['telephone_business1', 'telephone_business2', 'fax_business', 'telephone_car', 'telephone_company', 'telephone_home1', 'telephone_home2', 'fax_home', 'cellular_telephone1', 'cellular_telephone2', 'telephone_other', 'fax_other', 'telephone_isdn', 'telephone_pager', 'telephone_primary', 'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'instant_messenger1', 'instant_messenger2', 'telephone_ip', 'telephone_assistant'],
+                    'contact-home-address': ['street_home', 'postal_code_home', 'city_home', 'state_home', 'country_home'],
+                    'contact-work-address': ['street_business', 'postal_code_business', 'city_business', 'state_business', 'country_business'],
+                    'contact-other-address': ['street_other', 'postal_code_other', 'city_other', 'state_other', 'country_other'],
+                    'contact-job-descriptions': ['room_number', 'profession', 'position', 'company', 'department', 'employee_type', 'number_of_employees', 'sales_value', 'tax_id', 'commercial_register', 'branches', 'business_category', 'info', 'manager_name', 'assistant_name'],
+                    'special-information': ['marital_status', 'number_of_children', 'spouse_name', 'note', 'url', 'anniversary'],
+                    'userfields': ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05', 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10', 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15', 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20']
+                };
 
-            $(this.getModel()).on('validation.error', function (evt, error, fieldDesc) {
-                console.error(error);
-            });
+                var updateDisplayName = function () {
+                    self.getModel().set('display_name', util.getFullName(self.getModel().getData()));
+                };
 
-            initExtensionPoints(meta);
-            this.node.addClass('contact-detail edit').attr('data-property', self.getModel().get('folder_id') + '.' + self.getModel().get('id'));
-            ext.point('io.ox/contacts/edit/form').invoke('draw', self.node, {view: self});
+                var updateJobDescription = function () {
+                    $(self.getModel()).trigger('jobdescription.calculated.changed', util.getJob(self.getModel().getData()));
+                };
+
+                $(this.getModel()).on('title.changed', updateDisplayName);
+                $(this.getModel()).on('first_name.changed', updateDisplayName);
+                $(this.getModel()).on('last_name.changed', updateDisplayName);
+
+                $(this.getModel()).on('company.changed', updateJobDescription);
+                $(this.getModel()).on('position.changed', updateJobDescription);
+                $(this.getModel()).on('profession.changed', updateJobDescription);
+
+
+
+                $(this.getModel()).on('validation.error', function (evt, error, fieldDesc) {
+                    console.error(error);
+                });
+
+                initExtensionPoints(meta);
+                this.node.addClass('contact-detail edit').attr('data-property', self.getModel().get('folder_id') + '.' + self.getModel().get('id'));
+                ext.point('io.ox/contacts/edit/form').invoke('draw', self.node, {view: self});
+            }
+            return self;
+        },
+        save: function () {
+            $(this).trigger('save');
         }
-        return self;
-    };
+
+    });
 
     // my happy place
     return ContactEditView;

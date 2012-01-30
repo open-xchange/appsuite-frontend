@@ -14,7 +14,8 @@
 /*global
 define: true
 */
-define('io.ox/core/tk/forms', [], function () {
+define('io.ox/core/tk/forms',
+      ['io.ox/core/i18n'], function (i18n) {
 
     'use strict';
 
@@ -51,7 +52,17 @@ define('io.ox/core/tk/forms', [], function () {
             self.prop('checked', self.attr('value') === value);
         },
         textChange = selectChange,
-        textChangeByModel = selectChangeByModel;
+        textChangeByModel = selectChangeByModel,
+        dateChange = function () {
+            var self = $(this),
+                val = self.val();
+            val = Date.parse(val).getTime();
+            self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
+        },
+        dateChangeByModel = function (e, value) {
+            value = i18n.date('fulldatetime', new Date(value));
+            $(this).val(value);
+        };
 
     /**
      * Very simple helper class to avoid always passing node & options around
@@ -75,8 +86,8 @@ define('io.ox/core/tk/forms', [], function () {
     Field.prototype.applyModel = function (handler) {
         var o = this.options, model = o.model, val = o.initialValue;
         if ((model || val) !== undefined) {
-            this.node.on('update.field', handler)
-                .triggerHandler('update.field', model !== undefined ? model.get(o.property) : val);
+            this.node.on('update.view', handler)
+                .triggerHandler('update.view', model !== undefined ? model.get(o.property) : val);
         }
     };
 

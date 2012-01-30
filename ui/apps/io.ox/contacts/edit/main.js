@@ -51,13 +51,45 @@ define('io.ox/contacts/edit/main',
 
             var cont = function (data) {
                 win.show(function () {
-                    var myModel = new ContactModel(),
-                        myView = new ContactEditView();
+                    var myModel = new ContactModel({data: data}),
+                        myView = new ContactEditView({model: myModel});
 
-                    myModel.init({data: data});
-                    myView.init({model: myModel});
+                    $(myView).on('save', function () {
+                        var consistency;
+                        if (!myModel.isDirty()) {
+                            return;
+                        }
+                        consistency = myModel.checkConsistency();
+                        if (consistency !== true || consistency.constructor.toString().indexOf('ConsistencyError') !== -1) {
+                            return console.error(consistency);
+                        }
+
+                        // TODO: replace image upload with a field in formsjs method
+                        var image = $('#contactUploadImage').find("input[type=file]").get(0);
+                        var data = null;
+                        if (image.files && image.files[0]) {
+                            data = myModel.getChanges();
+                            data.id = myModel.getData().id;
+                            data.folderId = myModel.getData().folder_id;
+                            data.timestamp = _.now();
+                            api.editNewImage(JSON.stringify(data), image.files[0])
+                            .done(function () {
+                                myModel.dirty = false;
+                            });
+                        } else {
+                            api.edit({
+                                id: myModel.getData().id,
+                                folder: myModel.getData().folder_id,
+                                timestamp: _.now(),
+                                data: myModel.getChanges()
+                            }).done(function () {
+                                myModel.dirty = false;
+                            });
+                        }
+                    });
 
                     window.model = myModel;
+                    window.view = myView;
 
                     container.append(myView.draw(app).node);
                     container.find('input[type=text]:visible').eq(0).focus();

@@ -16,15 +16,12 @@ define: true
 
 define('io.ox/core/tk/view',
       ['io.ox/core/tk/forms',
-       'io.ox/core/tk/model'], function (forms, SimpleModel) {
+       'io.ox/core/tk/model',
+       'io.ox/core/tk/oop'], function (forms, SimpleModel, OOPObject) {
 
     'use strict';
 
     var View = function (options) {
-
-    };
-
-    View.prototype.init = function (options) {
         options = options || {};
         options.node = options.node || $('<div>');
 
@@ -46,22 +43,24 @@ define('io.ox/core/tk/view',
             // loop over all elements - yes, manually!
             $('[data-property=' + name + ']', self.node).each(function () {
                 // triggerHandler does not bubble and is only triggered for the first element (aha!)
-                $(this).triggerHandler('update.field', value);
+                $(this).triggerHandler('update.view', value);
             });
         });
     };
-    View.prototype.setModel = function (model) {
-        this.model = model;
-    };
 
-    View.prototype.getModel = function () {
-        return this.model;
-    };
+    OOPObject.extend(View, {
+        setModel: function (model) {
+            this.model = model;
+        },
+        getModel: function () {
+            return this.model;
+        },
+        append: function (jqWrapped) {
+            this.node.append(jqWrapped);
+        }
+    });
 
-    View.prototype.append = function (jqWrapped) {
-        this.node.append(jqWrapped);
-    };
-
+    // still ugly
     _.each(forms, function (item, itemname) {
         if (_.isFunction(item)) {
             View.prototype[itemname] = function () {
