@@ -25,22 +25,22 @@ define('io.ox/core/tk/forms', [], function () {
         name
         model
         validator
-        dataid
+        property
         id
     }
 */
 
     // local handlers
     var boxChange = function () {
-            var self = $(this), dataid = self.attr('name'), value = self.prop('checked');
-            self.trigger('update', { dataid: dataid, value: value });
+            var self = $(this);
+            self.trigger('update.model', { property: self.attr('data-property'), value: self.prop('checked') });
         },
         boxChangeByModel = function (e, value) {
             $(this).prop('checked', !!value);
         },
         selectChange = function () {
-            var self = $(this), dataid = self.attr('name'), value = self.val();
-            self.trigger('update', { dataid: dataid, value: value });
+            var self = $(this);
+            self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
         },
         selectChangeByModel = function (e, value) {
             $(this).val(value);
@@ -67,17 +67,16 @@ define('io.ox/core/tk/forms', [], function () {
     Field.prototype.create = function (tag, onChange) {
         var o = this.options;
         this.node = $(tag)
-            .attr({ 'data-item-id': o.dataid, name: o.dataid, id: o.id })
+            .attr({ 'data-property': o.property, name: o.name, id: o.id, value: o.value })
             .on('change', onChange)
             .addClass(o.classes);
     };
 
     Field.prototype.applyModel = function (handler) {
-        var o = this.options, model = o.model;
-        if (model !== undefined) {
-            handler = $.proxy(handler, this.node.get(0));
-            handler({}, model.get(o.dataid));
-            $(model).on(o.dataid + '.changed', handler);
+        var o = this.options, model = o.model, val = o.initialValue;
+        if ((model || val) !== undefined) {
+            this.node.on('update.field', handler)
+                .triggerHandler('update.field', model !== undefined ? model.get(o.property) : val);
         }
     };
 
@@ -122,8 +121,6 @@ define('io.ox/core/tk/forms', [], function () {
         createRadioButton: function (options) {
             var f = new Field(options, 'radio');
             f.create('<input type="radio">', radioChange);
-            // set value
-            f.node.attr('value', options.value);
             f.applyModel(radioChangeByModel);
             return f.finish('append', 'radio');
         },
@@ -146,7 +143,7 @@ define('io.ox/core/tk/forms', [], function () {
             return utils.createLabel()
                 .css({ width: '100%', display: 'inline-block' })
                 .append(utils.createText({ text: options.label }))
-                .append(utils.createTextField({ dataid: options.dataid, value: options.value, model: options.model, validator: options.validator})
+                .append(utils.createTextField({ property: options.property, value: options.value, model: options.model, validator: options.validator})
                         .css({ width: options.width + 'px', display: 'inline-block' })
                 );
         },
@@ -154,7 +151,7 @@ define('io.ox/core/tk/forms', [], function () {
         createLabeledPasswordField: function (options) {
             var l = utils.createLabel().css({width: '100%', display: 'inline-block'});
             l.append(utils.createText({text: options.label}));
-            l.append(utils.createPasswordField({dataid: options.dataid, value: options.value, model: options.model, validator: options.validator}).css({ width: options.width + 'px', display: 'inline-block'}));
+            l.append(utils.createPasswordField({property: options.property, value: options.value, model: options.model, validator: options.validator}).css({ width: options.width + 'px', display: 'inline-block'}));
             return l;
         },
 
@@ -191,15 +188,15 @@ define('io.ox/core/tk/forms', [], function () {
 
             var updateText = function () {
                 if (options.html === true) {
-                    textContainer.html(options.model.get(options.dataid));
+                    textContainer.html(options.model.get(options.property));
                 } else {
-                    textContainer.text(options.model.get(options.dataid));
+                    textContainer.text(options.model.get(options.property));
                 }
             };
 
             if (options.model) {
                 updateText();
-                $(options.model).on(options.dataid + '.changed', updateText);
+                $(options.model).on(options.property + '.changed', updateText);
             }
 
             return textContainer;

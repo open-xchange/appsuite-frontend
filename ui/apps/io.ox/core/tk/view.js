@@ -22,8 +22,31 @@ define('io.ox/core/tk/view',
 
     var View = function (options) {
 
-    };
 
+        options = options || {};
+        options.model = options.model || new SimpleModel({});
+
+        this.node = $('<div>');
+        this.model = options.model;
+
+
+        var self = this;
+
+        // #1: capture all changes of form elements
+        $(this.node).on('update.model', function (e, o) {
+            e.stopPropagation();
+            self.model.set(o.property, o.value);
+        });
+
+        // #2: update form elements if model changes
+        $(this.model).on('change', function (e, name, value) {
+            // loop over all elements - yes, manually!
+            $('[data-property=' + name + ']', self.node).each(function () {
+                // triggerHandler does not bubble and is only triggered for the first element (aha!)
+                $(this).triggerHandler('update.field', value);
+            });
+        });
+    };
 
     View.prototype.init = function (options) {
         options = options || {};
@@ -45,12 +68,6 @@ define('io.ox/core/tk/view',
 
     View.prototype.append = function (jqWrapped) {
         this.node.append(jqWrapped);
-    };
-
-    View.prototype.onUpdateFormElement = function (evt, options) {
-        console.log(this);
-        this.model.set(options.dataid, options.value);
-        evt.stopPropagation();
     };
 
     _.each(forms, function (item, itemname) {
