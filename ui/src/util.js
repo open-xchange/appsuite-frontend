@@ -369,7 +369,7 @@
             return def;
         },
         // taken from backbone.js
-        makeExtendable: function (parent) {
+        makeExtendable: (function (parent) {
             var Ctor = function () { };
             var inherits = function (parent, protoProps, staticProps) {
                 var child;
@@ -412,15 +412,15 @@
 
                 return child;
             };
-            return (function (parent) {
+            return function (parent) {
                 parent.extend = function (protoProps, classProps) {
                     var child = inherits(this, protoProps, classProps);
                     child.extend = this.extend;
                     return child;
                 };
                 return parent;
-            } (parent));
-        },
+            };
+        }()),
         // helper for benchmarking
         clock: (function () {
             var last = null, i = 1;
