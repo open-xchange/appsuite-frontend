@@ -369,7 +369,7 @@
             return def;
         },
         // taken from backbone.js
-        makeExtendable: (function (parent) {
+        makeExtendable: (function () {
             var Ctor = function () { },
               inherits = function (parent, protoProps, staticProps) {
                 var child;
