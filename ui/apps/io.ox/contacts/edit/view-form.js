@@ -36,6 +36,52 @@ define('io.ox/contacts/edit/view-form',
         return empty;
     };
 
+
+    var less = function (evt) {
+        var parent = $(evt.currentTarget).parent();
+        parent.find('.hidden').removeClass('hidden').addClass('visible');
+        parent.find('.sectiontitle').removeClass('hidden');
+        parent.addClass('expanded');
+        $(evt.currentTarget).text('- less');
+    };
+
+    var leaveData = function (txt, evt) {
+        var parent = $(evt.currentTarget).parent();
+        parent.removeClass('expanded');
+        parent.find('.sectiontitle').addClass('hidden');
+        parent.find('input:text').filter(
+            function () {
+                return $(this).val() !== "";
+            }
+        ).parent().parent().removeClass('visible');
+        parent.find('input:text').filter(
+            function () {
+                return $(this).val() === "";
+            }
+        ).parent().parent().removeClass('visible').addClass('hidden');
+        parent.find('.visible').removeClass('visible').addClass('hidden');
+        $(evt.currentTarget).text(txt);
+    };
+
+
+    var more = function (txt, evt) {
+        var parent = $(evt.currentTarget).parent();
+        parent.removeClass('expanded');
+        parent.find('.sectiontitle').addClass('visible');
+        parent.find('input:text').filter(
+            function () {
+                return $(this).val() !== "";
+            }
+        ).parent().parent().removeClass('visible');
+        parent.find('input:text').filter(
+            function () {
+                return $(this).val() === "";
+            }
+        ).parent().parent().parent().removeClass('visible').addClass('hidden');
+        $(evt.currentTarget).text(txt);
+    };
+
+
     var toggleFields = function (evt) {
         var empty = checkEl(evt.currentTarget),
             parent = $(evt.currentTarget).parent(),
@@ -55,43 +101,20 @@ define('io.ox/contacts/edit/view-form',
         if (empty !== 0 && parent.hasClass('expanded')) {
             status = '4';
         }
-
-        function less() {
-            parent.find('.hidden').removeClass('hidden').addClass('visible');
-            parent.find('.sectiontitle').removeClass('hidden');
-            parent.addClass('expanded');
-            $(evt.currentTarget).text('- less');
-        }
-
-        function more(txt) {
-            parent.removeClass('expanded');
-            parent.find('.sectiontitle').addClass('hidden');
-            parent.find('input:text').filter(
-                function () {
-                    return $(this).val() !== "";
-                }
-            ).parent().parent().removeClass('visible');
-            parent.find('input:text').filter(
-                function () {
-                    return $(this).val() === "";
-                }
-            ).parent().parent().removeClass('visible').addClass('hidden');
-            parent.find('.visible').removeClass('visible').addClass('hidden');
-            $(evt.currentTarget).text(txt);
-        }
+        console.log(status);
 
         switch (status) {
         case "1":
-            more('+ ' + evt.data.pointName);
+            leaveData('+ ' + evt.data.pointName, evt);
             break;
         case "2":
-            less();
+            less(evt);
             break;
         case "3":
-            less();
+            less(evt);
             break;
         case "4":
-            more('+ more');
+            more('+ more', evt);
             break;
         }
     };
