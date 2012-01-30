@@ -68,8 +68,8 @@ define('io.ox/launchpad/main',
                 pp = parent.offset(),
                 clone = $(this).clone()
                     .addClass('io-ox-app-clone')
-                    .css(
-                    {   position: 'absolute',
+                    .css({
+                        position: 'absolute',
                         top: p.top - pp.top,
                         left: p.left - pp.left
                     })

@@ -294,10 +294,11 @@ define("io.ox/mail/view-detail",
                     .addClass("list")
                     .addClass("infoblock backstripes")
                     .append(
-                         $('<a>').text('Bilder anzeigen.'),
+                         $('<a>').text('Bilder anzeigen'),
                          $('<i>').text(
-                              ' Aus dieser Mail wurden die externen Bilder entfernt, ' +
-                              'um missbrauch durch SPAM-Mails zu verhindern.'
+                              ' \u2013 ' +
+                              'In dieser E-Mail wurden externe Bilder blockiert, ' +
+                              'um potenziellen Missbrauch durch SPAM zu verhindern.'
                          )
                      )
                     .on('click', function (e) {

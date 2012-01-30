@@ -26,7 +26,6 @@ define('io.ox/contacts/edit/view-form',
     * urgh, if you want to improve it, do it without that many dom operations
     */
     var toggleFields = function (evt) {
-        console.log(arguments);
         var parent = $(evt.currentTarget).parent();
         if (!parent.hasClass('expanded')) {
             parent.find('.hidden').removeClass('hidden').addClass('visible');
@@ -50,9 +49,7 @@ define('io.ox/contacts/edit/view-form',
 
     };
     var toggleSection = function (evt) {
-        console.log(arguments);
         var section = $(evt.currentTarget).parent().prev();
-        console.log(section);
         if (!section.hasClass('hidden')) {
             section.addClass('hidden');
         } else {
@@ -63,7 +60,6 @@ define('io.ox/contacts/edit/view-form',
     };
     var drawSection = function (pointName) {
         return function (options) {
-            console.log('oben');
             var section = options.view.createSection(),
                 sectionTitle = options.view.createSectionTitle({text: gt(pointName)}),
                 sectionContent = options.view.createSectionContent();
@@ -87,7 +83,6 @@ define('io.ox/contacts/edit/view-form',
 
     var drawField = function (subPointName) {
         return function (options) {
-            console.log('unten');
             var myId = _.uniqueId('c'),
                 sectionGroup = options.view.createSectionGroup();
 
@@ -226,7 +221,6 @@ define('io.ox/contacts/edit/view-form',
 
         picForm = createPictureForm();
 
-
         section.append(picture);
         section.append(title);
         section.append(jobDescription);
@@ -269,7 +263,6 @@ define('io.ox/contacts/edit/view-form',
         });
     };
 
-    window.mymodel = null;
 
     // my happy place
     return {
@@ -304,21 +297,16 @@ define('io.ox/contacts/edit/view-form',
                             },
                             save: function () {
                                 var self = this;
-                                console.log('i am saving now');
+                                if (!self.isDirty()) {
+                                    return app.quit();
+                                }
                                 var image = $('#contactUploadImage').find("input[type=file]").get(0);
-                                    //formdata = this.data;
-                                // api edit? needs tracing the changes, no good!
-                                // api editNewImage uploades the whole form data, ughh
-                                // so just edit everything on change?
-
                                 if (image.files && image.files[0]) {
                                     this.data.folderId = this.data.folder_id;
                                     this.data.timestamp = _.now();
                                     api.editNewImage(JSON.stringify(this.data), image.files[0])
                                     .done(function () {
                                         self.dirty = false;
-                                        console.log("SAVED");
-                                        alert("SAVED");
                                         app.quit(); //close tha app???
                                     });
 
@@ -330,16 +318,12 @@ define('io.ox/contacts/edit/view-form',
                                         data: this.data
                                     }).done(function () {
                                         self.dirty = false;
-                                        console.log("SAVED");
-                                        alert("SAVED");
                                         app.quit(); //close tha app???
                                     });
                                 }
 
                             }
                         });
-      
-                        window.mymodel = this.model;
 
                         meta = {
                             'contact-personal': ['title', 'first_name', 'last_name', 'display_name', 'second_name', 'suffix', 'nickname', 'birthday'],
@@ -350,14 +334,11 @@ define('io.ox/contacts/edit/view-form',
                             'contact-other-address': ['street_other', 'postal_code_other', 'city_other', 'state_other', 'country_other'],
                             'contact-job-descriptions': ['room_number', 'profession', 'position', 'company', 'department', 'employee_type', 'number_of_employees', 'sales_value', 'tax_id', 'commercial_register', 'branches', 'business_category', 'info', 'manager_name', 'assistant_name'],
                             'special-information': ['marital_status', 'number_of_children', 'spouse_name', 'note', 'url', 'anniversary'],
-                            'userfiels': ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05', 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10', 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15', 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20']
+                            'userfields': ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05', 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10', 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15', 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20']
                         };
 
                         initExtensionPoints(meta);
-
-
                         this.node.addClass('contact-detail edit').attr('data-item-id', self.model.get('folder_id') + '.' + self.model.get('id'));
-
                         ext.point('io.ox/contacts/edit/form').invoke('draw', self.node, {view: self});
                     }
                     return self;

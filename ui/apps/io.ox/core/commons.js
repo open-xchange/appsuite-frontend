@@ -146,8 +146,8 @@ define('io.ox/core/commons', [], function () {
 
             container = $('<div>')
                 .addClass('abs border-right')
-                .css(
-                {   backgroundColor: 'white',
+                .css({
+                    backgroundColor: 'white',
                     right: 'auto',
                     width: width + 'px',
                     zIndex: 3
