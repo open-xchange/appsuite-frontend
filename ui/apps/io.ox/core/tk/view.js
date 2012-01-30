@@ -24,7 +24,6 @@ define('io.ox/core/tk/view',
 
     };
 
-
     View.prototype.init = function (options) {
         options = options || {};
         options.node = options.node || $('<div>');
@@ -33,7 +32,23 @@ define('io.ox/core/tk/view',
             this.model = options.model;
         }
         this.node = options.node;
-        $(this.node).on('update', _.bind(this.onUpdateFormElement, this));
+
+        var self = this;
+
+        // #1: capture all changes of form elements
+        $(this.node).on('update.model', function (e, o) {
+            e.stopPropagation();
+            self.model.set(o.property, o.value);
+        });
+
+        // #2: update form elements if model changes
+        $(this.model).on('change', function (e, name, value) {
+            // loop over all elements - yes, manually!
+            $('[data-property=' + name + ']', self.node).each(function () {
+                // triggerHandler does not bubble and is only triggered for the first element (aha!)
+                $(this).triggerHandler('update.field', value);
+            });
+        });
     };
     View.prototype.setModel = function (model) {
         this.model = model;
@@ -45,12 +60,6 @@ define('io.ox/core/tk/view',
 
     View.prototype.append = function (jqWrapped) {
         this.node.append(jqWrapped);
-    };
-
-    View.prototype.onUpdateFormElement = function (evt, options) {
-        console.log(this);
-        this.model.set(options.dataid, options.value);
-        evt.stopPropagation();
     };
 
     _.each(forms, function (item, itemname) {
