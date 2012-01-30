@@ -418,6 +418,7 @@
                     child.extend = this.extend;
                     return child;
                 };
+                return parent;
             };
         }()),
         // helper for benchmarking
