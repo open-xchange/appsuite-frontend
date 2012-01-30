@@ -77,6 +77,24 @@ define("io.ox/mail/api",
         }
     });
 
+    api.SENDTYPE = {
+        'NORMAL': 1,
+        'REPLY': 2,
+        'FORWARD': 3,
+        'DRAFT': 4
+    };
+
+    api.FLAGS = {
+        'ANSWERD': 1,
+        'DELETED': 2,
+        'DRAFT': 4,
+        'FLAGGED': 8,
+        'RECENT': 16,
+        'SEEN': 32,
+        'USER': 64,
+        'FORWARDED': 128
+    };
+
     // ~ all
     api.getAllThreads = function (options, useCache) {
 
