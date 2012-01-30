@@ -11,12 +11,7 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 define('io.ox/contacts/model',
-      ['io.ox/core/tk/model',
-       'io.ox/contacts/util',
-       'io.ox/contacts/api',
-       'io.ox/core/i18n',
-       'io.ox/core/tk/schema',
-       'gettext!io.ox/contacts/contacts'], function (Model, util, api, i18n, Schema, gt) {
+      ['io.ox/core/tk/model'], function (Model) {
 
     'use strict';
 
@@ -27,7 +22,7 @@ define('io.ox/contacts/model',
     // form->datefield
     // node a la textfield img and so on
 
-    var ContactSchema = Schema.extend({
+    var ContactModel = Model.extend({
         properties: {
             'display_name': {format: 'string', defaultValue: 'Mrs. Bean'},
             'first_name': { format: 'string', mandatory: true},
@@ -43,11 +38,6 @@ define('io.ox/contacts/model',
             'birthday': { format: 'pastDate'},
             'email1': { format: 'email'}
         }
-    });
-
-
-    var ContactModel = Model.extend({
-        schema: new ContactSchema()
     });
 
     return ContactModel;

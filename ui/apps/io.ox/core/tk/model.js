@@ -31,8 +31,13 @@ define('io.ox/core/tk/model',
         init:  function (options) {
             options = options || {};
             options.data = options.data || {};
+            options.properties = options.properties || {};
+
             this.dirty = false;
             this.setData(options.data);
+
+            this.properties = options.properties;
+
         },
         get: function (key) {
             return this.data[key];
@@ -46,9 +51,6 @@ define('io.ox/core/tk/model',
             this.dirty = true;
             this.data[key] = value;
             $(this).trigger(key + '.changed', value);
-        },
-        validate: function (key, value) {
-            return this.schema.validate(key, value);
         },
         checkConsistency: function () {
             return true;
@@ -72,7 +74,39 @@ define('io.ox/core/tk/model',
                 }
             });
             return changes;
+        },
+        ValidationError: function ValidationError(msg) {
+            this.message = msg;
+        },
+        ConsistencyError: function ConsistencyError(msg) {
+            this.message = msg;
+        },
+        formats: {
+            string: function (key, val, fieldDesc) {
+                return true;
+            },
+            pastDate: function (key, val, fieldDesc) {
+                return true;
+            },
+            email: function (key, val, fieldDesc) {
+                var emailRegExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                if (!emailRegExp.test(val)) {
+                    return new this.ValidationError('should be a valid email address');
+                }
+                return true;
+            }
+        },
+        validate: function (key, value) {
+            var fieldDesc = this.properties[key];
+            if (value === "" && fieldDesc.mandatory !== true) {
+                return true;
+            }
+            if (fieldDesc && this.formats[fieldDesc.format] && _.isFunction(this.formats[fieldDesc.format])) {
+                return this.formats[fieldDesc.format].apply(this, [key, value, fieldDesc]);
+            }
+
         }
+
     };
     SimpleModel.extend = oop.extend;
     return SimpleModel;
