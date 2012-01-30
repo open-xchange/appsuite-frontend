@@ -15,28 +15,45 @@ define: true
 */
 define('io.ox/core/tk/model', [], function () {
     "use strict";
-    var SimpleModel = function (flatdata) {
-        this.data = flatdata;
-        this.dirty = false;
-        this.get = function (key) {
-            console.log("getting from simple");
-            console.log(key);
-            return this.data[key];
-        };
 
-        this.set = function (key, value) {
-            this.dirty = true;
-            this.data[key] = value;
-        };
-        this.setData = function (data) {
-            this.data = data;
-        };
-        this.getData = function () {
-            return this.data;
-        };
-        this.isDirty = function () {
-            return this.dirty;
-        };
+    var SimpleModel = function () {};
+
+    SimpleModel.prototype.data = null;
+    SimpleModel.prototype.dataShadow = null;
+    SimpleModel.prototype.init = function (options) {
+        options = options || {};
+        options.data = options.data || {};
+        this.dirty = false;
+        this.setData(options.data);
+    };
+
+    SimpleModel.prototype.get = function (key) {
+        return this.data[key];
+    };
+
+    SimpleModel.prototype.set = function (key, value) {
+        this.dirty = true;
+        this.data[key] = value;
+    };
+    SimpleModel.prototype.setData = function (data) {
+        this.data = data;
+        this.dataShadow = _.clone(data); //Shallow Copy data
+    };
+    SimpleModel.prototype.getData = function () {
+        return this.data;
+    };
+    SimpleModel.prototype.isDirty = function () {
+        return this.dirty;
+    };
+    SimpleModel.prototype.getChanges = function () {
+        var changes = {},
+            self = this;
+        _.each(this.data, function (val, k) {
+            if (val !== self.dataShadow[k]) {
+                changes[k] = val;
+            }
+        });
+        return changes;
     };
 
     return SimpleModel;

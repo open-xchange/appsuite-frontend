@@ -294,8 +294,8 @@ define.async('io.ox/mail/write/main',
             .append(
                 $('<label>', { 'for' : 'writer_field_' + id })
                 .append(
-                    $('<input>',
-                    {   type: 'text',
+                    $('<input>', {
+                        type: 'text',
                         tabindex: '2',
                         autocapitalize: 'off',
                         autocomplete: 'off',
@@ -304,8 +304,8 @@ define.async('io.ox/mail/write/main',
                     })
                     .attr('data-type', id) // not name=id!
                     .addClass('discreet')
-                    .autocomplete(
-                    {   source: function (query) {
+                    .autocomplete({
+                        source: function (query) {
                             return contactsAPI.autocomplete(query);
                         },
                         stringify: function (data) {

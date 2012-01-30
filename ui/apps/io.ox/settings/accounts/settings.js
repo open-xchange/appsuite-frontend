@@ -39,10 +39,10 @@ define('io.ox/settings/accounts/settings',
                 .append(
                     utils.createSectionContent()
                     .append(
-                        listbox = utils.createListBox(
-                        {   dataid: 'accounts-list',
-                            model:
-                            {   get: function () {
+                        listbox = utils.createListBox({
+                            dataid: 'accounts-list',
+                            model: {
+                                get: function () {
                                     var list = [
                                         {dataid: 'email/2281', html: 'mario@sourcegarden.com (imap)'},
                                         {dataid: 'facebook/2823', html: 'mario.scheliga (facebook)'},
@@ -52,8 +52,8 @@ define('io.ox/settings/accounts/settings',
                                     ];
                                     return list;
                                 }
-                           }
-                       })
+                            }
+                        })
                     )
                     .append(utils.createButton({label: 'Add ...'}).css({'margin-right': '15px'}))
                     .append(

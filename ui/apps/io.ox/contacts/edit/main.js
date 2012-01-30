@@ -13,14 +13,15 @@
  *
  */
 
-define("io.ox/contacts/edit/main",
-    ["io.ox/contacts/api",
-     "io.ox/core/cache",
-     "io.ox/contacts/edit/view-form",
-     "less!io.ox/contacts/style.css"
-     ], function (api, cache, viewForm) {
+define('io.ox/contacts/edit/main',
+    ['io.ox/contacts/api',
+     'io.ox/core/cache',
+     'io.ox/contacts/edit/view-form',
+     'io.ox/contacts/model',
+     'less!io.ox/contacts/style.css'
+     ], function (api, cache, ContactEditView, ContactModel) {
 
-    "use strict";
+    'use strict';
 
     // multi instance pattern
     function createInstance(data) {
@@ -28,7 +29,7 @@ define("io.ox/contacts/edit/main",
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/edit',
-            title: "Edit Contact"
+            title: 'Edit Contact'
         });
 
         app.setLauncher(function () {
@@ -36,7 +37,7 @@ define("io.ox/contacts/edit/main",
                 container;
 
             win = ox.ui.createWindow({
-                title: "Edit Contact",
+                title: 'Edit Contact',
                 toolbar: true,
                 close: true
             });
@@ -50,8 +51,15 @@ define("io.ox/contacts/edit/main",
 
             var cont = function (data) {
                 win.show(function () {
-                    var myView = viewForm.create();
-                    container.append(myView.draw(data, app).node);
+                    var myModel = new ContactModel(),
+                        myView = new ContactEditView();
+
+                    myModel.init({data: data});
+                    myView.init({model: myModel});
+
+                    window.model = myModel;
+
+                    container.append(myView.draw(app).node);
                     container.find('input[type=text]:visible').eq(0).focus();
                 });
             };
