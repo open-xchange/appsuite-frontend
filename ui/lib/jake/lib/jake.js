@@ -171,6 +171,7 @@ utils.mixin(jake, new (function () {
   this.createTask = function () {
     var args = Array.prototype.slice.call(arguments)
       , arg
+      , constructor
       , task
       , type
       , name
@@ -220,20 +221,33 @@ utils.mixin(jake, new (function () {
         action = function () {
           jake.mkdirP(name);
         };
-        task = new DirectoryTask(name, prereqs, action, opts);
+        constructor = DirectoryTask;
         break;
       case 'file':
-        task = new FileTask(name, prereqs, action, opts);
+        constructor = FileTask;
         break;
       default:
-        task = new Task(name, prereqs, action, opts);
+        constructor = Task;
     }
-
+    
+    task = jake.Task[name];
+    if (task) {
+      if (task.type != type && type != "task") {
+        throw new Error('Cannot change type of task ' + name + ' from ' +
+                        task.type + ' to ' + type);
+      }
+      task.prereqs = task.prereqs.concat(prereqs);
+      if (action) task.action = action;
+    } else {
+      task = new constructor(name, prereqs, action, opts);
+      task.type = type;
+      jake.currentNamespace.tasks[name] = task;
+    }
+    
     if (jake.currentTaskDescription) {
       task.description = jake.currentTaskDescription;
       jake.currentTaskDescription = null;
     }
-    jake.currentNamespace.tasks[name] = task;
     task.namespace = jake.currentNamespace;
 
     // FIXME: Should only need to add a new entry for the current
