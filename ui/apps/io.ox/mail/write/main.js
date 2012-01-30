@@ -1199,6 +1199,7 @@ define.async('io.ox/mail/write/main',
             // send!
 
             mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
+
             if (_(mail.data.flags).isUndefined()) {
                 mail.data.flags = mailAPI.FLAGS.DRAFT;
             } else if (mail.data.flags & 4 === 0) {
@@ -1232,21 +1233,15 @@ define.async('io.ox/mail/write/main',
 
             require(["io.ox/core/tk/dialogs"], function (dialogs) {
                 new dialogs.ModalDialog()
-                    .text(gt("Are you really want to cancel editing this mail?"))
-                    .addButton("cancel", gt('No, rather not'))
-                    .addButton("delete", gt('Yes, and delete the mail.'))
-                    .addButton('savedraft', gt('Yes, and save as draft.'))
+                    .text(gt("Do you really want to cancel editing this mail?"))
+                    .addButton("cancel", gt('Cancel'))
+                    .addButton("delete", gt('Lose changes'))
+                    .addButton('savedraft', gt('Save as draft'))
                     .show()
                     .done(function (action) {
                         console.debug("Action", action);
 
-                        var theNewMail = app.getMail();
-
-                        console.log('QUIT', theNewMail.data);
-
-                        if (action === 'delete') {
-                            def.resolve();
-
+                        var clean = function () {
                             // clean up editors
                             for (var id in editorHash) {
                                 editorHash[id].destroy();
@@ -1254,12 +1249,20 @@ define.async('io.ox/mail/write/main',
                             // clear all private vars
                             app = win = main = sidepanel = form = subject = editor = null;
                             priorityOverlay = sections = currentSignature = null;
+                        };
 
+                        var theNewMail = app.getMail();
+
+                        console.log('QUIT', theNewMail.data);
+
+                        if (action === 'delete') {
+                            def.resolve();
+                            clean();
                         } else if (action === 'savedraft') {
-
                             app.saveDraft().done(function (mail) {
                                 console.log(mail);
                                 def.resolve();
+                                clean();
                             }).fail(function (e) {
                                 def.reject(e);
                             });
