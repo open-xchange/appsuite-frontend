@@ -21,14 +21,16 @@ define('io.ox/core/tk/view',
     'use strict';
 
     var View = function (options) {
+    };
 
-
+    View.prototype.init = function (options) {
         options = options || {};
-        options.model = options.model || new SimpleModel({});
+        options.node = options.node || $('<div>');
 
-        this.node = $('<div>');
-        this.model = options.model;
-
+        if (options.model) {
+            this.model = options.model;
+        }
+        this.node = options.node;
 
         var self = this;
 
@@ -46,17 +48,6 @@ define('io.ox/core/tk/view',
                 $(this).triggerHandler('update.field', value);
             });
         });
-    };
-
-    View.prototype.init = function (options) {
-        options = options || {};
-        options.node = options.node || $('<div>');
-
-        if (options.model) {
-            this.model = options.model;
-        }
-        this.node = options.node;
-        $(this.node).on('update', _.bind(this.onUpdateFormElement, this));
     };
     View.prototype.setModel = function (model) {
         this.model = model;
