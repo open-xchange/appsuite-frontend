@@ -9,13 +9,13 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    right: 130px;
+    right: 210px;
 }
 
 .io-ox-mail-write .priority-overlay {
     position: absolute;
     top: 0px;
-    right: 140px;
+    right: 220px;
     line-height: 30px;
     font-weight: bold;
     font-size: 16px;
@@ -36,6 +36,17 @@
 
 .io-ox-mail-write .sendbutton {
     width: 80px;
+    margin: 0 85px 0 0;
+}
+
+.io-ox-mail-write .draftbutton-wrapper {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.io-ox-mail-write .draftbutton {
+    width: 40px;
     margin: 0;
 }
 
