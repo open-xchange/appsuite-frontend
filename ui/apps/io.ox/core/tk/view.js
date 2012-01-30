@@ -16,8 +16,7 @@ define: true
 
 define('io.ox/core/tk/view',
       ['io.ox/core/tk/forms',
-       'io.ox/core/tk/model',
-       'io.ox/core/tk/oop'], function (forms, SimpleModel, oop) {
+       'io.ox/core/tk/model'], function (forms, SimpleModel) {
 
     'use strict';
 
@@ -74,8 +73,7 @@ define('io.ox/core/tk/view',
             };
         }
     });
-
-    View.extend = oop.extend;
+    _.makeExtendable(View);
 
     return View;
 });

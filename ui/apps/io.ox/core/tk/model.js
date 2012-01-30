@@ -14,7 +14,7 @@
 define: true
 */
 define('io.ox/core/tk/model',
-      ['io.ox/core/tk/oop'], function (oop) {
+      [], function () {
     "use strict";
 
     function SimpleModel(options) {
@@ -108,6 +108,6 @@ define('io.ox/core/tk/model',
         }
 
     };
-    SimpleModel.extend = oop.extend;
+    _.makeExtendable(SimpleModel);
     return SimpleModel;
 });
