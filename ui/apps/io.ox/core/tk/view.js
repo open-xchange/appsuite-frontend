@@ -21,15 +21,20 @@ define('io.ox/core/tk/view',
     'use strict';
 
     var View = function (options) {
-        var self = this;
-        options = options || {};
-        options.model = options.model || new SimpleModel({});
-        this.node = $('<div>');
-        this.model = options.model;
-        $(this.node).on('update', _.bind(this.onUpdateFormElement, this));
+
     };
 
 
+    View.prototype.init = function (options) {
+        options = options || {};
+        options.node = options.node || $('<div>');
+
+        if (options.model) {
+            this.model = options.model;
+        }
+        this.node = options.node;
+        $(this.node).on('update', _.bind(this.onUpdateFormElement, this));
+    };
     View.prototype.setModel = function (model) {
         this.model = model;
     };
