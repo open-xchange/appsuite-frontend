@@ -28,7 +28,11 @@ define('io.ox/core/tk/view',
         this.node = $('<div>');
         this.model = options.model;
 
-        var self = this;
+        var self = this,
+
+            getPropertyNodes = function (name) {
+                return $('[data-property=' + name + ']', self.node);
+            };
 
         // #1: capture all changes of form elements
         $(this.node).on('update.model', function (e, o) {
@@ -39,9 +43,18 @@ define('io.ox/core/tk/view',
         // #2: update form elements if model changes
         $(this.model).on('change', function (e, name, value) {
             // loop over all elements - yes, manually!
-            $('[data-property=' + name + ']', self.node).each(function () {
+            getPropertyNodes(name).each(function () {
                 // triggerHandler does not bubble and is only triggered for the first element (aha!)
                 $(this).triggerHandler('update.field', value);
+            });
+        });
+
+        window.horst = this.model;
+
+        // delegate errors
+        $(this.model).on('invalid', function (e, name) {
+            getPropertyNodes(name).each(function () {
+                $(this).triggerHandler('invalid');
             });
         });
     };

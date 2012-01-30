@@ -51,7 +51,23 @@ define('io.ox/core/tk/forms', [], function () {
             self.prop('checked', self.attr('value') === value);
         },
         textChange = selectChange,
-        textChangeByModel = selectChangeByModel;
+        textChangeByModel = selectChangeByModel,
+
+        invalid = function (e) {
+            var node = $(this)
+                .addClass('invalid-value').css({
+                    backgroundColor: '#fee',
+                    borderColor: '#a00'
+                })
+                .focus();
+            setTimeout(function () {
+                node.removeClass('invalid-value').css({
+                    backgroundColor: '',
+                    borderColor: ''
+                });
+                node = null;
+            }, 5000);
+        };
 
     /**
      * Very simple helper class to avoid always passing node & options around
@@ -75,7 +91,9 @@ define('io.ox/core/tk/forms', [], function () {
     Field.prototype.applyModel = function (handler) {
         var o = this.options, model = o.model, val = o.initialValue;
         if ((model || val) !== undefined) {
-            this.node.on('update.field', handler)
+            this.node
+                .on('invalid', invalid)
+                .on('update.field', handler)
                 .triggerHandler('update.field', model !== undefined ? model.get(o.property) : val);
         }
     };
@@ -86,8 +104,9 @@ define('io.ox/core/tk/forms', [], function () {
         // wrap label tag around field
         if (o.label !== false) {
             var label = $('<label>', { 'for': o.id }),
+                space = $.txt(' '),
                 text = $.txt(o.label || '');
-            node = label.append.apply(label, order === 'append' ? [node, text] : [text, node]);
+            node = label.append.apply(label, order === 'append' ? [node, space, text] : [text, space, node]);
         }
         // wrap DIV around field & label
         if (this.options.wrap !== false) {
