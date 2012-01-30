@@ -18,18 +18,19 @@
 */
 
 var args = process.argv.slice(2)
-  , lib_path = __dirname + '/../lib/'
+  , libPath = __dirname + '/../lib'
   , fs = require('fs')
-  , sys = require('sys')
-  , jake = require(lib_path + 'jake.js')
-  , api = require(lib_path + 'api.js')
-  , Program = require(lib_path + 'program.js').Program
+  , jake = require(libPath + '/jake.js')
+  , api = require(libPath + '/api.js')
+  , utils = require(libPath + '/utils.js')
+  , Program = require(libPath + '/program.js').Program
   , program = new Program()
-  , Loader = require(lib_path + 'loader.js').Loader
+  , Loader = require(libPath + '/loader.js').Loader
   , loader = new Loader()
   , pkg = JSON.parse(fs.readFileSync(__dirname + '/../package.json').toString())
   , opts
-  , envVars;
+  , envVars
+  , taskNames;
 
 jake.version = pkg.version;
 
@@ -50,6 +51,15 @@ if (!program.preemptiveOption()) {
     global[p] = api[p];
   }
 
+  // Convenience aliases
+  jake.opts = opts;
+  for (var p in utils) {
+    jake[p] = utils[p];
+  }
+  jake.FileList = require(libPath + '/file_list').FileList;
+  jake.PackageTask = require(libPath + '/package_task').PackageTask;
+  jake.NpmPublishTask = require(libPath + '/npm_publish_task').NpmPublishTask;
+
   // Enhance env with any env vars passed in
   for (var p in envVars) { process.env[p] = envVars[p]; }
 
@@ -61,13 +71,15 @@ if (!program.preemptiveOption()) {
     process.chdir(dirname);
   }
 
-  jake.parseAllTasks();
+  taskNames = program.taskNames;
+  taskNames = taskNames.length ? taskNames : ['default'];
+  task('__root__', taskNames, function () {});
 
   if (opts.tasks) {
     jake.showAllTaskDescriptions(opts.tasks);
   }
   else {
-    jake.runTask(program.taskName || 'default', program.taskArgs, true);
+    jake.Task['__root__'].invoke();
   }
 }
 

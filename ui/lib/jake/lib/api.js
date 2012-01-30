@@ -15,6 +15,7 @@
  * limitations under the License.
  *
 */
+var exec = require('child_process').exec;
 
 var api = new (function () {
   this.task = function (name, prereqs, action, async) {
@@ -54,7 +55,10 @@ var api = new (function () {
   };
 
   this.complete = function () {
-    jake.runNextTask();
+    var current = jake._invocationChain.pop();
+    if (current) {
+      current.complete();
+    }
   };
 
   this.fail = function (err, code) {

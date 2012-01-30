@@ -18,54 +18,11 @@
 
 var jake
   , fs = require('fs')
-  , path = require('path');
-
-/**
- * @constructor
- * A Jake task
- */
-var Task = function () {
-  this.constructor.prototype.initialize.apply(this, arguments);
-};
-
-Task.prototype = new (function () {
-  this.initialize = function (name, prereqs, action, async, type) {
-    this.name = name;
-    this.prereqs = prereqs;
-    this.action = action;
-    this.async = (async === true);
-    this.type = type;
-    this.done = false;
-    this.fullName = null;
-    this.desription = null;
-  };
-
-  this.invoke = function () {
-    jake.runTask(this.fullName, arguments, true);
-  };
-
-  this.execute = function () {
-    jake.reenableTask(this.fullName, false);
-    jake.runTask(this.fullName, arguments, false);
-  };
-
-  this.reenable = function (deep) {
-    jake.reenableTask(this.fullName, deep);
-  };
-})();
-Task.prototype.constructor = Task;
-
-var FileTask = function (name, prereqs, action, async, type) {
-  this.constructor.prototype.initialize.apply(this, arguments);
-};
-FileTask.prototype = new Task();
-FileTask.prototype.constructor = FileTask;
-
-var DirectoryTask = function (name, prereqs, action, async, type) {
-  this.constructor.prototype.initialize.apply(this, arguments);
-};
-DirectoryTask.prototype = new Task();
-DirectoryTask.prototype.constructor = DirectoryTask;
+  , path = require('path')
+  , task = require('./task')
+  , Task = task.Task
+  , FileTask = task.FileTask
+  , DirectoryTask = task.DirectoryTask;
 
 var Namespace = function (name, parentNamespace) {
   this.name = name;
@@ -85,82 +42,12 @@ var Invocation = function (taskName, args) {
  */
 jake = new function () {
 
+  this._invocationChain = [];
+
   // Private variables
   // =================
   // Local reference for scopage
-  var _this = this
-
-    , _taskIndex = 0
-    , _modTimes = {}
-    , _workingTaskList = []
-  // The list of tasks/prerequisites to run, parsed recursively
-  // and run bottom-up, so prerequisites run first
-    , _taskList = []
-  // A dictionary of loaded tasks, to ensure that all tasks
-  // run once and only once
-   , _taskDict = {};
-  // The args passed to the 'jake' invocation, after the task name
-
-  // Private functions
-  // =================
-  /**
-   * Crockfordian Array-test
-   * @param {???} obj A value of indeterminate type that may
-   * or may not be an Array
-   */
-  var _isArray = function (obj) {
-        return obj &&
-          typeof obj === 'object' &&
-          typeof obj.length === 'number' &&
-          typeof obj.splice === 'function' &&
-          !(obj.propertyIsEnumerable('length'));
-      }
-
-    , _mixin = function (t, f) {
-        for (var p in f) {
-          t[p] = f[p];
-        }
-        return t;
-      }
-
-  /**
-   * Tells us if the task has any prerequisites
-   * @param {Array.<String>} prereqs An array of prerequisites
-   * @return {Boolean} true if prereqs is a non-empty Array
-   */
-    , _taskHasPrereqs = function (prereqs) {
-        return !!(prereqs && _isArray(prereqs) && prereqs.length);
-      }
-
-  /**
-   * Parses all prerequisites of a task (and their prerequisites, etc.)
-   * recursively -- depth-first, so prereqs run first
-   * @param {String} name The name of the current task whose
-   * prerequisites are being parsed.
-   * @param {Boolean} [isRoot] Is this the root task of a prerequisite tree or not
-   * @param {Boolean} [includePrereqs] Whether or not to descend into prerequs
-   */
-    , _parsePrereqs = function (name, opts) {
-        var task = _this.getTask(name)
-          , includePrereqs = opts.includePrereqs || false
-          , isRoot = opts.isRoot || false
-          , args = opts.args
-          , prereqs = task ? task.prereqs : [];
-
-        // No task found -- if it's the root, throw, because we know that
-        // *should* be an existing task. Otherwise it could be a file prereq
-        if (isRoot && !task) {
-          throw new Error('task not found');
-        }
-        else {
-          if (includePrereqs && _taskHasPrereqs(prereqs)) {
-            for (var i = 0, ii = prereqs.length; i < ii; i++) {
-              _parsePrereqs(prereqs[i], {isRoot: false, includePrereqs: includePrereqs});
-            }
-          }
-          _workingTaskList.push(new Invocation(name, args));
-        }
-      };
+  var self = this;
 
   // Public properties
   // =================
@@ -175,185 +62,6 @@ jake = new function () {
   // Saves the description created by a 'desc' call that prefaces a
   // 'task' call that defines a task.
   this.currentTaskDescription = null;
-
-  this.createTree = function (name, opts) {
-    _parsePrereqs(name, opts);
-  };
-
-  /**
-   * Initial function called to run the specified task. Parses all the
-   * prerequisites and then kicks off the queue-processing
-   * @param {String} name The name of the task to run
-   * @param {Array} args The list of command-line args passed after
-   * the task name -- may be a combination of plain positional args,
-   * or name/value pairs in the form of name:value or name=value to
-   * be placed in a final keyword/value object param
-   */
-  this.runTask = function (name, args, includePrereqs) {
-    this.createTree(name, {isRoot: true, includePrereqs: includePrereqs, args: args});
-    _taskList.splice.apply(_taskList, [_taskIndex, 0].concat(_workingTaskList));
-    _workingTaskList = [];
-    this.runNextTask();
-  };
-
-  this.reenableTask = function (name, includePrereqs) {
-    var invocation
-      , task;
-    _parsePrereqs(name, {isRoot: true, includePrereqs: includePrereqs});
-    if (!_workingTaskList.length) {
-      fail('No tasks to reenable.');
-    }
-    else {
-      for (var i = 0, ii = _workingTaskList.length; i < ii; i++) {
-        invocation = _workingTaskList[i];
-        task = this.getTask(invocation.taskName);
-        task.done = false;
-      }
-    }
-    _workingTaskList = [];
-  };
-
-  /**
-   * Looks up a function object based on its name or namespace:name
-   * @param {String} name The name of the task to look up
-   */
-  this.getTask = function (name) {
-    var nameArr = name.split(':')
-      , taskName = nameArr.pop()
-      , ns = jake.defaultNamespace
-      , currName;
-    while (nameArr.length) {
-      currName = nameArr.shift();
-      ns = ns.childNamespaces[currName];
-    }
-
-    var task = ns.tasks[taskName];
-    return task;
-  };
-
-  /**
-   * Runs the next task in the _taskList queue until none are left
-   * Synchronous tasks require calling "complete" afterward, and async
-   * ones are expected to do that themselves
-   * TODO Add a cancellable error-throw in a setTimeout to allow
-   * an async task to timeout instead of having the script hang
-   * indefinitely
-   */
-  this.runNextTask = function () {
-    var invocation = _taskList[_taskIndex]
-      , name
-      , task
-      , args
-      , prereqs
-      , prereqName
-      , prereqTask
-      , stats
-      , modTime;
-    
-    // If there are still tasks to run, do it
-    if (invocation) {
-      name = invocation.taskName;
-      args = invocation.args;
-
-      _taskIndex++;
-
-      task = this.getTask(name);
-
-      // Task, FileTask, DirectoryTask
-      if (task) {
-      prereqs = task.prereqs;
-
-        // Run tasks only once, even if it ends up in the task queue multiple times
-        if (task.done) {
-          complete();
-        }
-        // Okie, we haven't done this one
-        else {
-          // Flag this one as done, no repeatsies
-          task.done = true;
-
-          if (task instanceof FileTask) {
-            try {
-              stats = fs.statSync(name);
-              modTime = stats.ctime;
-            }
-            catch (e) {
-              // Assume there's a task to fall back to to generate the file
-            }
-
-            // Keep a record if action has been run
-            var actionRan = false;
-            // Compare mod-time of all the prereqs with the mod-time of this task
-            if (prereqs.length) {
-              for (var i = 0, ii = prereqs.length; i < ii; i++) {
-                prereqName = prereqs[i];
-                prereqTask = this.getTask(prereqName);
-                // Run the action if:
-                // 1. The prereq is a normal task
-                // 2. A file/directory task with a mod-date more recent than
-                // the one for this file (or this file doesn't exist yet)
-                if ((prereqTask && !(prereqTask instanceof FileTask || prereqTask instanceof DirectoryTask))
-                    || (!modTime || _modTimes[prereqName] >= modTime)) {
-                  if (typeof task.action == 'function') {
-                    actionRan = true;
-                    task.action.apply(task, args || []);
-                    // The action may have created/modified the file
-                    // ---------
-                    // If there's a valid file at the end of running the task,
-                    // use its mod-time as last modified
-                    try {
-                      stats = fs.statSync(name);
-                      modTime = stats.ctime;
-                    }
-                    // If there's still no actual file after running the file-task,
-                    // treat this simply as a plain task -- the current time will be
-                    // the mod-time for anything that depends on this file-task
-                    catch (e) {
-                      modTime = new Date();
-                    }
-                  }
-                  break;
-                }
-              }
-            }
-            else {
-              if (typeof task.action == 'function') {
-                task.action.apply(task, args || []);
-                modTime = new Date();
-              }
-            }
-
-            _modTimes[name] = modTime;
-
-            // Async tasks whose action has run call this themselves
-            if (!task.async || !actionRan) {
-              complete();
-            }
-
-          }
-          else {
-            // Run this mofo
-            if (typeof task.action == 'function') {
-              task.action.apply(task, args || []);
-            }
-
-            // Async tasks call this themselves
-            if (!task.async) {
-              complete();
-            }
-          }
-        }
-      }
-      // Task doesn't exist; assume file. Just get the mod-time if the file
-      // actually exists. If it doesn't exist, we're dealing with a missing
-      // task -- just blow up
-      else {
-        stats = fs.statSync(name);
-        _modTimes[name] = stats.ctime;
-        complete();
-      }
-    }
-  };
 
   this.parseAllTasks = function () {
     var _parseNs = function (name, ns) {
@@ -378,6 +86,7 @@ jake = new function () {
 
     _parseNs('default', jake.defaultNamespace);
   };
+
   /**
    * Displays the list of descriptions avaliable for tasks defined in
    * a Jakefile
@@ -410,117 +119,81 @@ jake = new function () {
       // Create padding-string with calculated length
       padding = (new Array(maxTaskNameLength - p.length + 2)).join(' ');
 
-      descr = task.description || '(No description)';
-      descr = '\033[90m # ' + descr + '\033[39m \033[37m \033[39m';
-
-      console.log('jake ' + name + padding + descr);
+      descr = task.description
+      if (descr) {
+        descr = '\033[90m # ' + descr + '\033[39m \033[37m \033[39m';
+        console.log('jake ' + name + padding + descr);
+      }
     }
   };
 
   this.createTask = function () {
     var args = Array.prototype.slice.call(arguments)
-      , constructor
       , task
       , type
       , name
       , action
-      , async
+      , opts
       , prereqs = [];
 
       type = args.shift()
 
-      // name, [deps], [action]
-      // Older name (string) + deps (array) format
-      if (typeof args[0] == 'string') {
-        name = args.shift();
-        if (_isArray(args[0])) {
-          prereqs = args.shift();
-        }
-        if (typeof args[0] == 'function') {
-          action = args.shift();
-          async =  args.shift();
-        }
+    // name, [deps], [action]
+    // Name (string) + deps (array) format
+    if (typeof args[0] == 'string') {
+      name = args.shift();
+      if (Array.isArray(args[0])) {
+        prereqs = args.shift();
       }
-      // name:deps, [action]
-      // Newer object-literal syntax, e.g.: {'name': ['depA', 'depB']}
-      else {
-        obj = args.shift()
-        for (var p in obj) {
-          prereqs = prereqs.concat(obj[p]);
-          name = p;
-        }
+      if (typeof args[0] == 'function') {
         action = args.shift();
-        async =  args.shift();
+        opts =  args.shift() || {};
       }
-
-    if (type == 'directory') {
-      action = function () {
-
-        // Recursive mkdir from https://gist.github.com/319051
-        // mkdirsSync(path, [mode=(0777^umask)]) -> pathsCreated
-        function mkdirsSync(dirname, mode) {
-          if (mode === undefined) mode = 0x1ff ^ process.umask();
-          var pathsCreated = [], pathsFound = [];
-          var fn = dirname;
-          while (true) {
-            try {
-              var stats = fs.statSync(fn);
-              if (stats.isDirectory())
-                break;
-              throw new Error('Unable to create directory at '+fn);
-            }
-            catch (e) {
-              if (e.code === 'ENOENT') {
-                pathsFound.push(fn);
-                fn = path.dirname(fn);
-              }
-              else {
-                throw e;
-              }
-            }
-          }
-          for (var i=pathsFound.length-1; i>-1; i--) {
-            var fn = pathsFound[i];
-            fs.mkdirSync(fn, mode);
-            pathsCreated.push(fn);
-          }
-          return pathsCreated;
-        };
-        
-        if (!path.existsSync(name)) {
-          mkdirsSync(name, 0755);
-        }
-      };
-      constructor = DirectoryTask;
     }
-    else if (type == 'file') {
-      constructor = FileTask;
-    }
+    // name:deps, [action]
+    // Legacy object-literal syntax, e.g.: {'name': ['depA', 'depB']}
     else {
-      constructor = Task;
-    }
-    task = jake.getTask(name);
-    if (task) {
-      if (task.type != type && type != "task") {
-        throw new Error('Cannot change type of task ' + name + ' from ' +
-                        task.type + ' to ' + type);
+      obj = args.shift()
+      for (var p in obj) {
+        prereqs = prereqs.concat(obj[p]);
+        name = p;
       }
-      task.prereqs = task.prereqs.concat(prereqs);
-      if (action) task.action = action;
-      if (async) task.async = async;
-    } else {
-      task = new constructor(name, prereqs, action, async, type);
-      jake.currentNamespace.tasks[name] = task;
+      action = args.shift();
+      opts =  args.shift() || {};
     }
+
+    switch (type) {
+      case 'directory':
+        action = function () {
+          if (!path.existsSync(name)) {
+            fs.mkdirSync(name, 0755);
+          }
+        };
+        task = new DirectoryTask(name, prereqs, action, opts);
+        break;
+      case 'file':
+        task = new FileTask(name, prereqs, action, opts);
+        break;
+      default:
+        task = new Task(name, prereqs, action, opts);
+    }
+
     if (jake.currentTaskDescription) {
       task.description = jake.currentTaskDescription;
       jake.currentTaskDescription = null;
     }
+    jake.currentNamespace.tasks[name] = task;
+
+    // FIXME: Should only need to add a new entry for the current
+    // task-definition, not reparse the entire structure
+    jake.parseAllTasks();
   };
 
 }();
 
 jake.Task = Task;
+jake.FileTask = FileTask;
+jake.DirectoryTask = DirectoryTask;
 jake.Namespace = Namespace;
 
 module.exports = jake;

@@ -18,7 +18,6 @@
 
 var path = require('path')
   , fs = require('fs')
-  , list = require('file_list')
   , exec = require('child_process').exec
   , currDir = process.cwd();
 
@@ -59,35 +58,30 @@ PackageTask.prototype = new (function () {
   this.define = function () {
     var self = this
       , packageDirPath = this.packageDirPath()
-      , taskObj = {}
       , compressTaskArr = [];
 
-    // Stub tasks
-    desc('Build all the packages');
-    task('package');
+    desc('Build the package for distribution');
+    task('package', ['clobberPackage', 'buildPackage']);
+    // Backward-compat alias
+    task('repackage', ['package']);
 
-    desc('Force a rebuild of the package files')
-    task({'repackage': ['clobberPackage', 'package']});
-
-    desc('Remove package products')
     task('clobberPackage', function () {
-      exec('rm -fr ' + self.packageDir, function (err, stdout, stderr) {
-        if (err) { throw err; }
+      jake.exec(['rm -fr ' + self.packageDir], function () {
         complete();
       });
-    }, true);
+    }, {async: true});
 
-    task({'clobber': ['clobberPackage']});
+    desc('Remove the package');
+    task('clobber', ['clobberPackage']);
 
     for (var p in _compressOpts) {
       if (this['need' + p]) {
         (function (p) {
-          var filename = self.packageDir + '/' + self.packageName() + _compressOpts[p].ext
-          ,   taskObj = {};
+          var filename = self.packageDir + '/' + self.packageName() +
+              _compressOpts[p].ext;
           compressTaskArr.push(filename);
 
-          taskObj[filename] = [packageDirPath];
-          file(taskObj, function () {
+          file(filename, [packageDirPath], function () {
             var opts = _compressOpts[p];
             // Move into the package dir to compress
             process.chdir(self.packageDir);
@@ -99,17 +93,17 @@ PackageTask.prototype = new (function () {
               process.chdir(currDir);
               complete();
             });
-          }, true);
+          }, {async: true});
         })(p);
       }
     }
 
-    task({'package': compressTaskArr}, function () {});
+    task('buildPackage', compressTaskArr, function () {});
 
     directory(this.packageDir);
 
-    taskObj[packageDirPath] = [this.packageDir].concat(self.packageFiles.toArray());
-    file(taskObj, function () {
+    file(packageDirPath,
+          [this.packageDir].concat(self.packageFiles.toArray()), function () {
       var fileList = [];
       self.packageFiles.forEach(function (name) {
         var f = path.join(self.packageDirPath(), name)
@@ -117,27 +111,28 @@ PackageTask.prototype = new (function () {
           , fDirArr = fDir.split('/')
           , baseDir = ''
           , stats;
+
+        // Make any necessary container directories
         fDirArr.forEach(function (dir) {
           baseDir += baseDir ? '/' + dir : dir;
           if (!path.existsSync(baseDir)) {
             fs.mkdirSync(baseDir, 0755);
           }
         });
-        stats = fs.statSync(name);
-        if (stats.isDirectory()) {
-          fs.mkdirSync(f, 0755);
-        }
-        else {
-          fileList.push({
-            to: name
-          , from: f
-          });
-        }
+
+        // Add both files and directories, will be copied with -R
+        fileList.push({
+          to: name
+        , from: f
+        });
       });
       var _copyFile = function () {
-        var file = fileList.pop();
+        var cmd
+          , file = fileList.pop();
         if (file) {
-          exec('cp ' + file.to + ' ' + file.from, function (err, stdout, stderr) {
+          // Do recursive copy of files and directories
+          cmd = 'cp -R ' + file.to + ' ' + file.from;
+          exec(cmd, function (err, stdout, stderr) {
             if (err) { throw err; }
             _copyFile();
           });
@@ -147,7 +142,7 @@ PackageTask.prototype = new (function () {
         }
       };
       _copyFile();
-    }, true);
+    }, {async: true});
 
 
   };
