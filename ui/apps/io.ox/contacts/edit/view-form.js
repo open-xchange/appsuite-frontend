@@ -25,14 +25,47 @@ define('io.ox/contacts/edit/view-form',
     /*
     * urgh, if you want to improve it, do it without that many dom operations
     */
+
+
+    var checkEl = function (c) {
+        var parent = $(c).parent(),
+        el = parent.find('input:text').filter(function () {
+            return $(this).val() !== "";
+        }),
+        empty = el.length;
+        return empty;
+    };
+
     var toggleFields = function (evt) {
-        var parent = $(evt.currentTarget).parent();
-        if (!parent.hasClass('expanded')) {
+        var empty = checkEl(evt.currentTarget),
+            parent = $(evt.currentTarget).parent(),
+            status;
+        if (empty === 0 && parent.hasClass('expanded')) {
+            status = '1';
+        }
+
+        if (empty === 0 && !parent.hasClass('expanded')) {
+            status = '2';
+        }
+
+        if (empty !== 0 && !parent.hasClass('expanded')) {
+            status = '3';
+        }
+
+        if (empty !== 0 && parent.hasClass('expanded')) {
+            status = '4';
+        }
+
+        function less() {
             parent.find('.hidden').removeClass('hidden').addClass('visible');
+            parent.find('.sectiontitle').removeClass('hidden');
             parent.addClass('expanded');
             $(evt.currentTarget).text('- less');
-        } else {
+        }
+
+        function more(txt) {
             parent.removeClass('expanded');
+            parent.find('.sectiontitle').addClass('hidden');
             parent.find('input:text').filter(
                 function () {
                     return $(this).val() !== "";
@@ -44,10 +77,25 @@ define('io.ox/contacts/edit/view-form',
                 }
             ).parent().parent().removeClass('visible').addClass('hidden');
             parent.find('.visible').removeClass('visible').addClass('hidden');
-            $(evt.currentTarget).text('+ more');
+            $(evt.currentTarget).text(txt);
         }
 
+        switch (status) {
+        case "1":
+            more('+ ' + evt.data.pointName);
+            break;
+        case "2":
+            less();
+            break;
+        case "3":
+            less();
+            break;
+        case "4":
+            more('+ more');
+            break;
+        }
     };
+
     var toggleSection = function (evt) {
         var section = $(evt.currentTarget).parent().prev();
         if (!section.hasClass('hidden')) {
@@ -58,6 +106,9 @@ define('io.ox/contacts/edit/view-form',
         }
 
     };
+
+
+
     var drawSection = function (pointName) {
         return function (options) {
             var section = options.view.createSection(),
@@ -75,9 +126,14 @@ define('io.ox/contacts/edit/view-form',
             } else {
                 ext.point('io.ox/contacts/edit/form/' + pointName).invoke('draw', sectionContent, options);
             }
+            if (checkEl(sectionContent) !== 0) {
+                section.append($('<a>').addClass('switcher').text('+ more').on('click', {pointName: pointName}, toggleFields));
+            } else {
+                section.append($('<a>').addClass('switcher').text('+ ' + pointName).on('click', {pointName: pointName}, toggleFields));
+                sectionTitle.addClass('hidden');
+            }
 
-            section.append($('<a>').addClass('switcher').text('+ more').on('click', toggleFields));
-            section.parent().append($('<div>').append($('<a>').addClass('switcher').text(pointName).on('click', toggleSection)));
+//            section.parent().append($('<div>').append($('<a>').addClass('switcher').text(pointName).on('click', toggleSection)));
         };
     };
 
@@ -153,6 +209,17 @@ define('io.ox/contacts/edit/view-form',
         return saveButton;
     };
 
+    function handleFileSelect(evt) {
+        var file = evt.target.files,
+            reader = new FileReader();
+        console.log(reader);
+        reader.onload = (function (theFile) {
+            return function (e) {
+                $('.picture').css('background-image', 'url(' + e.target.result + ')');
+            };
+        }(file[0]));
+        reader.readAsDataURL(file[0]);
+    }
 
     var createPictureForm = function () {
         var form = $('<form>', {
@@ -175,6 +242,7 @@ define('io.ox/contacts/edit/view-form',
                 'src': 'blank.html'
             }).css('display', 'none')
         );
+        form.on('change', handleFileSelect);
         return form;
     };
 
