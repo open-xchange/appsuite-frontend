@@ -38,6 +38,7 @@ var debug = false || Boolean(process.env.debug);
 if (debug) console.info("Debug mode: on");
 
 var defineWalker = ast("define").asCall().walker();
+var defineAsyncWalker = ast("define.async").asCall().walker();
 function jsFilter (data) {
     var self = this;
 
@@ -47,7 +48,10 @@ function jsFilter (data) {
 
     var tree = jsp.parse(data, false, true);
     var defineHooks = this.type.getHooks("define");
-    tree = ast.scanner(defineWalker, function(scope) {
+    tree = ast.scanner(defineWalker, defineHandler)
+        .scanner(defineAsyncWalker, defineHandler)
+        .scan(pro.ast_add_scope(tree));
+    function defineHandler(scope) {
         if (scope.refs.define !== undefined) return;
         var args = this[2];
         var name = _.detect(args, ast.is("string"));
@@ -57,7 +61,7 @@ function jsFilter (data) {
         for (var i = 0; i < defineHooks.length; i++) {
             defineHooks[i].call(self, name, deps, f);
         }
-    }).scan(pro.ast_add_scope(tree));
+    }
 
     // UglifyJS
     if (debug) return data;
