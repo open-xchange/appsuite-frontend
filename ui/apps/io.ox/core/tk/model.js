@@ -14,7 +14,7 @@
 define: true
 */
 define('io.ox/core/tk/model',
-      ['io.ox/core/tk/oop'], function (OOPObject) {
+      ['io.ox/core/tk/oop'], function (oop) {
     "use strict";
 
     function SimpleModel(options) {
@@ -24,7 +24,7 @@ define('io.ox/core/tk/model',
         this.setData(options.data);
     }
 
-    OOPObject.extend(SimpleModel, {
+    SimpleModel.prototype = {
         data: null,
         dataShadow: null,
         schema: {},
@@ -73,6 +73,7 @@ define('io.ox/core/tk/model',
             });
             return changes;
         }
-    });
+    };
+    SimpleModel.extend = oop.extend;
     return SimpleModel;
 });

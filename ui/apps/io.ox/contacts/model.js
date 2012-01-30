@@ -27,8 +27,7 @@ define('io.ox/contacts/model',
     // form->datefield
     // node a la textfield img and so on
 
-    function ContactSchema() {}
-    Schema.extend(ContactSchema, {
+    var ContactSchema = Schema.extend({
         properties: {
             'display_name': {format: 'string', defaultValue: 'Mrs. Bean'},
             'first_name': { format: 'string', mandatory: true},
@@ -46,11 +45,8 @@ define('io.ox/contacts/model',
         }
     });
 
-    function ContactModel(options) {
-        this.__super.apply(this, arguments);
-    }
 
-    Model.extend(ContactModel, {
+    var ContactModel = Model.extend({
         schema: new ContactSchema()
     });
 

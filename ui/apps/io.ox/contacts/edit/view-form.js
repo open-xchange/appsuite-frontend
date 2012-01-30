@@ -265,10 +265,7 @@ define('io.ox/contacts/edit/view-form',
     };
 
 
-    var ContactEditView = function (options) {
-        this.__super.apply(this, arguments);
-    };
-    View.extend(ContactEditView, {
+    var ContactEditView = View.extend({
 
         draw: function (app) {
             var self = this,

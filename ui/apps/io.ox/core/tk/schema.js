@@ -14,12 +14,12 @@
 define: true
 */
 define('io.ox/core/tk/schema',
-      ['io.ox/core/tk/oop'], function (OOPObject) {
+      ['io.ox/core/tk/oop'], function (oop) {
 
     'use strict';
 
     var Schema = function () {};
-    OOPObject.extend(Schema, {
+    Schema.prototype = {
         ValidationError: function ValidationError(msg) {
             this.message = msg;
         },
@@ -51,6 +51,7 @@ define('io.ox/core/tk/schema',
             }
 
         }
-    });
+    };
+    Schema.extend = oop.extend;
     return Schema;
 });

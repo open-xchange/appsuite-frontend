@@ -17,7 +17,7 @@ define: true
 define('io.ox/core/tk/view',
       ['io.ox/core/tk/forms',
        'io.ox/core/tk/model',
-       'io.ox/core/tk/oop'], function (forms, SimpleModel, OOPObject) {
+       'io.ox/core/tk/oop'], function (forms, SimpleModel, oop) {
 
     'use strict';
 
@@ -48,7 +48,7 @@ define('io.ox/core/tk/view',
         });
     };
 
-    OOPObject.extend(View, {
+    View.prototype = {
         setModel: function (model) {
             this.model = model;
         },
@@ -58,7 +58,9 @@ define('io.ox/core/tk/view',
         append: function (jqWrapped) {
             this.node.append(jqWrapped);
         }
-    });
+    };
+
+
 
     // still ugly
     _.each(forms, function (item, itemname) {
@@ -72,6 +74,8 @@ define('io.ox/core/tk/view',
             };
         }
     });
+
+    View.extend = oop.extend;
 
     return View;
 });
