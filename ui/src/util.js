@@ -370,8 +370,8 @@
         },
         // taken from backbone.js
         makeExtendable: (function (parent) {
-            var Ctor = function () { };
-            var inherits = function (parent, protoProps, staticProps) {
+            var Ctor = function () { },
+              inherits = function (parent, protoProps, staticProps) {
                 var child;
 
                 // The constructor function for the new subclass is either defined by you
@@ -418,7 +418,6 @@
                     child.extend = this.extend;
                     return child;
                 };
-                return parent;
             };
         }()),
         // helper for benchmarking
