@@ -255,7 +255,7 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
                     if (typeof tmp !== 'object') {
                         console.error('settings.set: ' + tmp + ' is a value');
                         return false;
-                    } 
+                    }
                 } else {
                     tmp[partname] = {};
                     tmp = tmp[partname];
@@ -321,8 +321,10 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
                     var orgpath = path;
                     path = (globalSubpath + that.settingsPath + '/' + path);
                     set(path, value);
-                    $(that).trigger(orgpath+'.changed', value);
-                    console.log('set ' +path + ':' + value);
+                    $(that)
+                        .trigger(orgpath + '.changed', value)
+                        .trigger('change', [orgpath, value]);
+                    console.log('set ' + path + ':' + value);
                     if (permanent) {
                         // save settings path on server
                         settingsCache.add('settingsDefault', settings);
@@ -404,7 +406,7 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
             .fail(function () {
               console.error('failed to load settings for:' + mywrapper.settingsPath);
             });
-          
+
       }
     };
 
