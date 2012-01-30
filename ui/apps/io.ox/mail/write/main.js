@@ -42,9 +42,7 @@ define.async('io.ox/mail/write/main',
         id: 'send',
         action: function (app) {
             app.saveDraft().done(function (data) {
-                console.log(data);
                 app.setMsgRef(data.data);
-                console.log('DIE DRAFT MAIL', app.getMail());
             }).fail(function (e) {
 
             });
@@ -1311,11 +1309,6 @@ define.async('io.ox/mail/write/main',
                         .show()
                         .done(function (action) {
                             console.debug("Action", action);
-
-                            var theNewMail = app.getMail();
-
-                            console.log('QUIT', theNewMail.data);
-
                             if (action === 'delete') {
                                 def.resolve();
                                 clean();
