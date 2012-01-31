@@ -273,13 +273,13 @@ define('io.ox/contacts/edit/view-form',
                 return util.getJob(options.view.getModel().getData());
             },
             update: function () {
-                $(this).trigger('change.calculated.jobdescription', util.getJob(options.view.getModel().getData()));
+                $(this).trigger('changeProperty.calculated.jobdescription', util.getJob(options.view.getModel().getData()));
             },
             set: function () {}
         });
 
         // just bridge the event
-        $(options.view.getModel()).on('change.calculated.jobdescription', function () {
+        $(options.view.getModel()).on('changeProperty.calculated.jobdescription', function () {
             calculatedModel.update();
         });
 
@@ -352,15 +352,16 @@ define('io.ox/contacts/edit/view-form',
                 };
 
                 var updateDisplayName = function () {
+                    console.log('update displayname');
                     self.getModel().set('display_name', util.getFullName(self.getModel().getData()));
                 };
 
                 var updateJobDescription = function () {
-                    $(self.getModel()).trigger('change.calculated.jobdescription', util.getJob(self.getModel().getData()));
+                    $(self.getModel()).trigger('changeProperty.calculated.jobdescription', util.getJob(self.getModel().getData()));
                 };
 
-                $(this.getModel()).on('change.title change.first_name change.last_name', updateDisplayName);
-                $(this.getModel()).on('change.company change.position change.profession', updateJobDescription);
+                $(this.getModel()).on('changeProperty.title changeProperty.first_name changeProperty.last_name', updateDisplayName);
+                $(this.getModel()).on('changeProperty.company changeProperty.position changeProperty.profession', updateJobDescription);
 
                 initExtensionPoints(meta);
                 this.node.addClass('contact-detail edit').attr('data-property', self.getModel().get('folder_id') + '.' + self.getModel().get('id'));

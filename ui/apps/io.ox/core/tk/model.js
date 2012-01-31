@@ -28,17 +28,6 @@ define('io.ox/core/tk/model',
         data: null,
         dataShadow: null,
         schema: {},
-        init:  function (options) {
-            options = options || {};
-            options.data = options.data || {};
-            options.properties = options.properties || {};
-
-            this.dirty = false;
-            this.setData(options.data);
-
-            this.properties = options.properties;
-
-        },
         get: function (key) {
             return this.data[key];
         },
@@ -48,14 +37,14 @@ define('io.ox/core/tk/model',
                 return $(this).trigger('error.validation', [validated]);
             }
 
-            if (value === this.data[key]) {
-                //return true;
+            if (_.isEqual(value, this.data[key])) {
+                return true;
             }
 
             this.dirty = true;
             this.data[key] = value;
-            $(this).trigger('change.' + key, value);
-            $(this).trigger('update', [key, value]);
+            $(this).trigger('changeProperty.' + key, [key, value]);
+            $(this).trigger('change', [key, value]);
         },
         checkConsistency: function () {
             return true;

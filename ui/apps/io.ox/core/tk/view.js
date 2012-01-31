@@ -38,8 +38,6 @@ define('io.ox/core/tk/view',
 
         // #1: capture all changes of form elements
         $(this.node).on('update.model', function (e, o) {
-            console.log('update.model');
-            console.log(arguments);
             e.stopPropagation();
             self.model.set(o.property, o.value);
         });
@@ -47,11 +45,12 @@ define('io.ox/core/tk/view',
         // #2: update form elements if model changes
         $(this.model).on('change', function (e, name, value) {
             // loop over all elements - yes, manually!
-            console.log('model changed');
+            console.log('update model  >>>>>');
             console.log(arguments);
             getPropertyNodes(name).each(function () {
                 // triggerHandler does not bubble and is only triggered for the first element (aha!)
                 // does nothing yet?
+                console.log('trigger update.view');
                 $(this).triggerHandler('update.view', value);
             });
         });
