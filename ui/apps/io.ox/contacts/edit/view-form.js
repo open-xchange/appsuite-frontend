@@ -234,7 +234,7 @@ define('io.ox/contacts/edit/view-form',
 
         section = options.view.createSection({}).addClass('formheader');
 
-                title = options.view.createText({property: 'display_name', classes: 'name clear-title'});
+        title = options.view.createText({property: 'display_name', classes: 'name clear-title'});
 
 
         calculatedModel = new Model({});
