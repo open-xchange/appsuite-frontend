@@ -255,13 +255,13 @@ define('io.ox/contacts/edit/view-form',
                 return util.getJob(options.view.getModel().getData());
             },
             update: function () {
-                $(this).trigger('jobdescription.calculated.changed', util.getJob(options.view.getModel().getData()));
+                $(this).trigger('changeProperty.calculated.jobdescription', util.getJob(options.view.getModel().getData()));
             },
             set: function () {}
         });
 
         // just bridge the event
-        $(options.view.getModel()).on('jobdescription.calculated.changed', function () {
+        $(options.view.getModel()).on('changeProperty.calculated.jobdescription', function () {
             calculatedModel.update();
         });
 
@@ -348,24 +348,16 @@ define('io.ox/contacts/edit/view-form',
                 };
 
                 var updateDisplayName = function () {
+                    console.log('update displayname');
                     self.getModel().set('display_name', util.getFullName(self.getModel().getData()));
                 };
 
                 var updateJobDescription = function () {
-                    $(self.getModel()).trigger('jobdescription.calculated.changed', util.getJob(self.getModel().getData()));
+                    $(self.getModel()).trigger('changeProperty.calculated.jobdescription', util.getJob(self.getModel().getData()));
                 };
 
-                $(this.getModel()).on('title.changed', updateDisplayName);
-                $(this.getModel()).on('first_name.changed', updateDisplayName);
-                $(this.getModel()).on('last_name.changed', updateDisplayName);
-
-                $(this.getModel()).on('company.changed', updateJobDescription);
-                $(this.getModel()).on('position.changed', updateJobDescription);
-                $(this.getModel()).on('profession.changed', updateJobDescription);
-
-                $(this.getModel()).on('validation.error', function (evt, error, fieldDesc) {
-                    console.error(error);
-                });
+                $(this.getModel()).on('changeProperty.title changeProperty.first_name changeProperty.last_name', updateDisplayName);
+                $(this.getModel()).on('changeProperty.company changeProperty.position changeProperty.profession', updateJobDescription);
 
                 initExtensionPoints(meta);
                 this.node.addClass('contact-detail edit').attr('data-property', self.getModel().get('folder_id') + '.' + self.getModel().get('id'));

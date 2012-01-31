@@ -53,15 +53,20 @@ define('io.ox/core/tk/forms',
         },
         textChange = selectChange,
         textChangeByModel = selectChangeByModel,
-        dateChange = function () {
-            var self = $(this),
-                val = self.val();
-            val = Date.parse(val).getTime();
-            self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
-        },
-        dateChangeByModel = function (e, value) {
-            value = i18n.date('fulldatetime', new Date(value));
-            $(this).val(value);
+        invalid = function (e) {
+            var node = $(this)
+                .addClass('invalid-value').css({
+                    backgroundColor: '#fee',
+                    borderColor: '#a00'
+                })
+                .focus();
+            setTimeout(function () {
+                node.removeClass('invalid-value').css({
+                    backgroundColor: '',
+                    borderColor: ''
+                });
+                node = null;
+            }, 5000);
         };
 
     /**
@@ -92,7 +97,9 @@ define('io.ox/core/tk/forms',
     Field.prototype.applyModel = function (handler) {
         var o = this.options, model = o.model, val = o.initialValue;
         if ((model || val) !== undefined) {
-            this.node.on('update.view', handler)
+            this.node
+                .on('invalid', invalid)
+                .on('update.view', handler)
                 .triggerHandler('update.view', model !== undefined ? model.get(o.property) : val);
         }
     };
@@ -103,8 +110,9 @@ define('io.ox/core/tk/forms',
         // wrap label tag around field
         if (o.label !== false) {
             var label = $('<label>', { 'for': o.id }),
+                space = $.txt(' '),
                 text = $.txt(o.label || '');
-            node = label.append.apply(label, order === 'append' ? [node, text] : [text, node]);
+            node = label.append.apply(label, order === 'append' ? [node, space, text] : [text, space, node]);
         }
         // wrap DIV around field & label
         if (this.options.wrap !== false) {
@@ -233,7 +241,7 @@ define('io.ox/core/tk/forms',
 
             if (options.model) {
                 updateText();
-                $(options.model).on(options.property + '.changed', updateText);
+                $(options.model).on('changeProperty.' + options.property, updateText);
             }
 
             return textContainer;

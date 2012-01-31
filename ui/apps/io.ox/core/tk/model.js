@@ -28,29 +28,23 @@ define('io.ox/core/tk/model',
         data: null,
         dataShadow: null,
         schema: {},
-        init:  function (options) {
-            options = options || {};
-            options.data = options.data || {};
-            options.properties = options.properties || {};
-
-            this.dirty = false;
-            this.setData(options.data);
-
-            this.properties = options.properties;
-
-        },
         get: function (key) {
             return this.data[key];
         },
         set: function (key, value) {
             var validated = this.validate(key, value);
             if (validated !== true || validated.constructor.toString().indexOf('ValidationError') !== -1) {
-                return $(this).trigger('validation.error', [validated]);
+                return $(this).trigger('error.validation', [validated]);
+            }
+
+            if (_.isEqual(value, this.data[key])) {
+                return true;
             }
 
             this.dirty = true;
             this.data[key] = value;
-            $(this).trigger(key + '.changed', value);
+            $(this).trigger('changeProperty.' + key, [key, value]);
+            $(this).trigger('change', [key, value]);
         },
         checkConsistency: function () {
             return true;
@@ -83,6 +77,31 @@ define('io.ox/core/tk/model',
         },
         formats: {
             string: function (key, val, fieldDesc) {
+                if (!_.isString(val)) {
+                    return new this.ValidationError('should be a valid string');
+                }
+                return true;
+            },
+            number: function (key, val, fieldDesc) {
+                if (!_.isNumber(val)) {
+                    return new this.ValidationError('should be a number');
+                }
+                return true;
+            },
+            array: function (key, val, fieldDesc) {
+                if (!_.isArray(val)) {
+                    return new this.ValidationError('should be an array');
+                }
+                return true;
+            },
+            boolean: function (key, val, fieldDesc) {
+                if (!_.isBoolean(val)) {
+                    return new this.ValidationError('should be an boolean');
+                }
+                return true;
+            },
+            date: function (key, val, fieldDesc) {
+
                 return true;
             },
             pastDate: function (key, val, fieldDesc) {
@@ -93,6 +112,9 @@ define('io.ox/core/tk/model',
                 if (!emailRegExp.test(val)) {
                     return new this.ValidationError('should be a valid email address');
                 }
+                return true;
+            },
+            url: function (key, val, fieldDesc) {
                 return true;
             }
         },
