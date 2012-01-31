@@ -45,12 +45,17 @@ define('io.ox/core/tk/model',
         set: function (key, value) {
             var validated = this.validate(key, value);
             if (validated !== true || validated.constructor.toString().indexOf('ValidationError') !== -1) {
-                return $(this).trigger('validation.error', [validated]);
+                return $(this).trigger('error.validation', [validated]);
+            }
+
+            if (value === this.data[key]) {
+                //return true;
             }
 
             this.dirty = true;
             this.data[key] = value;
-            $(this).trigger(key + '.changed', value);
+            $(this).trigger('change.' + key, value);
+            $(this).trigger('update', [key, value]);
         },
         checkConsistency: function () {
             return true;

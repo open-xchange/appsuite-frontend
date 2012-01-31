@@ -41,9 +41,11 @@ define('io.ox/core/tk/forms',
         },
         selectChange = function () {
             var self = $(this);
+            console.log('field:change: trigger update model');
             self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
         },
         selectChangeByModel = function (e, value) {
+            console.log('field:model change');
             $(this).val(value);
         },
         radioChange = selectChange,
@@ -215,7 +217,7 @@ define('io.ox/core/tk/forms',
 
             if (options.model) {
                 updateText();
-                $(options.model).on(options.property + '.changed', updateText);
+                $(options.model).on('change' + options.property, updateText);
             }
 
             return textContainer;

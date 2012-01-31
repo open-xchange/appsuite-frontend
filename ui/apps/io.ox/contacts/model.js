@@ -130,6 +130,5 @@ define('io.ox/contacts/model',
 
         }
     });
-
     return ContactModel;
 });
