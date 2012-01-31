@@ -83,6 +83,31 @@ define('io.ox/core/tk/model',
         },
         formats: {
             string: function (key, val, fieldDesc) {
+                if (!_.isString(val)) {
+                    return new this.ValidationError('should be a valid string');
+                }
+                return true;
+            },
+            number: function (key, val, fieldDesc) {
+                if (!_.isNumber(val)) {
+                    return new this.ValidationError('should be a number');
+                }
+                return true;
+            },
+            array: function (key, val, fieldDesc) {
+                if (!_.isArray(val)) {
+                    return new this.ValidationError('should be an array');
+                }
+                return true;
+            },
+            boolean: function (key, val, fieldDesc) {
+                if (!_.isBoolean(val)) {
+                    return new this.ValidationError('should be an boolean');
+                }
+                return true;
+            },
+            date: function (key, val, fieldDesc) {
+
                 return true;
             },
             pastDate: function (key, val, fieldDesc) {
@@ -93,6 +118,9 @@ define('io.ox/core/tk/model',
                 if (!emailRegExp.test(val)) {
                     return new this.ValidationError('should be a valid email address');
                 }
+                return true;
+            },
+            url: function (key, val, fieldDesc) {
                 return true;
             }
         },
