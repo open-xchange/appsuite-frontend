@@ -58,10 +58,9 @@ define('io.ox/core/tk/view',
         window.horst = this.model;
 
         // delegate errors
-        $(this.model).on('error.validation error.consistency', function (e, name) {
-            console.log(arguments);
-            getPropertyNodes(name).each(function () {
-                $(this).triggerHandler('invalid');
+        $(this.model).on('error:validation error:consistency', function (e, errorObj) {
+            getPropertyNodes(errorObj.name).each(function () {
+                $(this).triggerHandler('invalid', [errorObj]);
             });
         });
     };

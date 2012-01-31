@@ -241,7 +241,7 @@ define('io.ox/core/tk/forms',
 
             if (options.model) {
                 updateText();
-                $(options.model).on('changeProperty.' + options.property, updateText);
+                $(options.model).on('change:' + options.property, updateText);
             }
 
             return textContainer;

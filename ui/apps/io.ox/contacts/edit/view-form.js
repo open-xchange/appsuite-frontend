@@ -216,17 +216,7 @@ define('io.ox/contacts/edit/view-form',
         return saveButton;
     };
 
-    function handleFileSelect(evt) {
-        var file = evt.target.files,
-            reader = new FileReader();
-        console.log(reader);
-        reader.onload = (function (theFile) {
-            return function (e) {
-                $('.picture').css('background-image', 'url(' + e.target.result + ')');
-            };
-        }(file[0]));
-        reader.readAsDataURL(file[0]);
-    }
+
 
 
     var picTrigger = function () {
@@ -244,9 +234,7 @@ define('io.ox/contacts/edit/view-form',
 
         section = options.view.createSection({}).addClass('formheader');
 
-        picture = (api.getPicture(options.view.getModel().getData())).addClass('picture');
-        picture.on('click', picTrigger);
-        title = options.view.createText({property: 'display_name', classes: 'name clear-title'});
+                title = options.view.createText({property: 'display_name', classes: 'name clear-title'});
 
 
         calculatedModel = new Model({});
@@ -255,13 +243,13 @@ define('io.ox/contacts/edit/view-form',
                 return util.getJob(options.view.getModel().getData());
             },
             update: function () {
-                $(this).trigger('changeProperty.calculated.jobdescription', util.getJob(options.view.getModel().getData()));
+                $(this).trigger('change:calculated.jobdescription', util.getJob(options.view.getModel().getData()));
             },
             set: function () {}
         });
 
         // just bridge the event
-        $(options.view.getModel()).on('changeProperty.calculated.jobdescription', function () {
+        $(options.view.getModel()).on('change:calculated.jobdescription', function () {
             calculatedModel.update();
         });
 
@@ -270,6 +258,19 @@ define('io.ox/contacts/edit/view-form',
 
         saveButton = createSaveButton(options);
 
+        picture = (api.getPicture(options.view.getModel().getData())).addClass('picture');
+        picture.on('click', picTrigger);
+        function handleFileSelect(evt) {
+            var file = evt.target.files,
+                reader = new FileReader();
+            console.log(reader);
+            reader.onload = (function (theFile) {
+                return function (e) {
+                    $('.picture').css('background-image', 'url(' + e.target.result + ')');
+                };
+            }(file[0]));
+            reader.readAsDataURL(file[0]);
+        }
         picForm = options.view.createPicUpload({
             wrap: false,
             label: false,
@@ -282,7 +283,7 @@ define('io.ox/contacts/edit/view-form',
         });
         picForm.find('input').on('change', handleFileSelect);
         picForm.find('input').on('change', function () {
-            calculatedModel.dirty = true;
+            options.view.getModel().dirty = true;
         });
 
 
@@ -353,11 +354,11 @@ define('io.ox/contacts/edit/view-form',
                 };
 
                 var updateJobDescription = function () {
-                    $(self.getModel()).trigger('changeProperty.calculated.jobdescription', util.getJob(self.getModel().getData()));
+                    $(self.getModel()).trigger('change:calculated.jobdescription', util.getJob(self.getModel().getData()));
                 };
 
-                $(this.getModel()).on('changeProperty.title changeProperty.first_name changeProperty.last_name', updateDisplayName);
-                $(this.getModel()).on('changeProperty.company changeProperty.position changeProperty.profession', updateJobDescription);
+                $(this.getModel()).on('change:title change:first_name change:last_name', updateDisplayName);
+                $(this.getModel()).on('change:company change:position change:profession', updateJobDescription);
 
                 initExtensionPoints(meta);
                 this.node.addClass('contact-detail edit').attr('data-property', self.getModel().get('folder_id') + '.' + self.getModel().get('id'));
