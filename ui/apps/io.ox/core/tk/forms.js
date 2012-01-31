@@ -259,30 +259,6 @@ define('io.ox/core/tk/forms',
             return $('<div>').addClass('settings sectiondelimiter');
         },
 
-//        createPicUpload: function () {
-//            var form = $('<form>', {
-//                'accept-charset': 'UTF-8',
-//                'enctype': 'multipart/form-data',
-//                'id': 'contactUploadImage',
-//                'method': 'POST',
-//                'name': 'contactUploadImage',
-//                'target': 'blank.html'
-//            })
-//            .append(
-//                $('<input>', {
-//                    name: 'file',
-//                    type: 'file',
-//                    accept: 'image/*'
-//                })
-//            ).append(
-//                $('<iframe/>', {
-//                    'name': 'hiddenframePicture',
-//                    'src': 'blank.html'
-//                }).css('display', 'none')
-//            );
-//            return form;
-//        }
-
         createPicUpload: function (options) {
             var f = new Field(options, 'form'),
                 o = options;
