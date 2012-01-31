@@ -174,16 +174,6 @@ define('io.ox/core/tk/forms',
             return f.finish('prepend');
         },
 
-        createIframe: function (options) {
-            var f = new Field(options, 'iframe');
-            f.create('<iframe>', textChange);
-            f.node.attr({
-                'src': options.src
-            });
-            f.applyModel(textChangeByModel);
-            return f.finish('prepend');
-        },
-
         createLabeledTextField: function (options) {
             return utils.createLabel()
                 .css({ width: '100%', display: 'inline-block' })
@@ -268,28 +258,52 @@ define('io.ox/core/tk/forms',
         },
 
         createPicUpload: function (options) {
-            var f = new Field(options, 'form'),
-                o = options;
-            f.create('<form>', textChange);
-            f.applyModel(textChangeByModel);
-            f.node.attr({
+            var o = options,
+                form = $('<form>', {
+                'id': o.id,
+                'name': o.formname,
                 'accept-charset': o.charset,
                 'enctype': o.enctype,
                 'method': o.method,
                 'target': o.target
             });
-            f.node.append(utils.createFileField({
+            form.append(utils.createFileField({
                 'wrap': false,
                 id: 'file',
-                'accept': 'image/*'
+                'accept': 'image/*',
+                "data-property": o.name,
+                name: o.name
+
             }));
-            f.node.append(utils.createIframe({
-                'wrap': false,
-                label: false,
+            form.append($('<iframe>', {
                 name: 'hiddenframePicture',
                 'src': 'blank.html'
             }).css('display', 'none'));
-            return f.finish('prepend');
+
+            return form;
+
+//            var f = new Field(options, 'form'),
+//                o = options;
+//            f.create('<form>', textChange);
+//            f.applyModel(textChangeByModel);
+//            f.node.attr({
+//                'accept-charset': o.charset,
+//                'enctype': o.enctype,
+//                'method': o.method,
+//                'target': o.target
+//            });
+//            f.node.append(utils.createFileField({
+//                'wrap': false,
+//                id: 'file',
+//                'accept': 'image/*'
+//            }));
+//            f.node.append(utils.createIframe({
+//                'wrap': false,
+//                label: false,
+//                name: 'hiddenframePicture',
+//                'src': 'blank.html'
+//            }).css('display', 'none'));
+//            return f.finish('prepend');
         }
     };
 

@@ -59,6 +59,8 @@ define('io.ox/core/tk/view',
 
         // delegate errors
         $(this.model).on('error:validation error:consistency', function (e, errorObj) {
+            console.log('on validation error');
+            console.log(arguments);
             getPropertyNodes(errorObj.name).each(function () {
                 $(this).triggerHandler('invalid', [errorObj]);
             });
