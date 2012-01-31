@@ -359,7 +359,17 @@ define('io.ox/contacts/edit/view-form',
 
                 initExtensionPoints(meta);
                 this.node.addClass('contact-detail edit').attr('data-property', self.getModel().get('folder_id') + '.' + self.getModel().get('id'));
+
+
+
                 ext.point('io.ox/contacts/edit/form').invoke('draw', self.node, {view: self});
+                self.node.append($('<div>', {id: 'myGrowl'}).addClass('jGrowl').css({position: 'absolute', right: '0', top: '0'}));
+
+                $(this.getModel()).on('error:validation', function (evt, err) {
+                    console.log('error validation');
+                    console.log(arguments);
+                    $('#myGrowl').jGrowl(err.name + ' ' + err.message, {header: 'Make an educated guess!'});
+                });
             }
             return self;
         },
