@@ -25,39 +25,91 @@ define('io.ox/contacts/edit/view-form',
     /*
     * urgh, if you want to improve it, do it without that many dom operations
     */
-    var toggleFields = function (evt) {
+
+
+    var checkEl = function (c) {
+        var parent = $(c).parent(),
+        el = parent.find('input:text').filter(function () {
+            return $(this).val() !== "";
+        }),
+        empty = el.length;
+        return empty;
+    };
+
+
+    var lessSwitch = function (evt) {
         var parent = $(evt.currentTarget).parent();
-        if (!parent.hasClass('expanded')) {
-            parent.find('.hidden').removeClass('hidden').addClass('visible');
-            parent.addClass('expanded');
-            $(evt.currentTarget).text('- less');
+        parent.find('.hidden').removeClass('hidden').addClass('visible');
+        parent.find('.sectiontitle').removeClass('hidden');
+        parent.addClass('expanded');
+        $(evt.currentTarget).text('- less');
+    };
+
+    var namedSwitch = function (txt, evt) {
+        var parent = $(evt.currentTarget).parent();
+        parent.removeClass('expanded');
+        parent.find('.sectiontitle').addClass('hidden');
+        parent.find('input:text').filter(
+            function () {
+                return $(this).val() !== "";
+            }
+        ).parent().parent().removeClass('visible');
+        parent.find('input:text').filter(
+            function () {
+                return $(this).val() === "";
+            }
+        ).parent().parent().parent().removeClass('visible').addClass('hidden');
+        parent.find('.visible').removeClass('visible').addClass('hidden');
+        $(evt.currentTarget).text(txt);
+    };
+
+
+    var moreSwitch = function (txt, evt) {
+        var parent = $(evt.currentTarget).parent();
+        parent.removeClass('expanded');
+        parent.find('.sectiontitle').addClass('visible');
+        parent.find('input:text').filter(
+            function () {
+                return $(this).val() !== "";
+            }
+        ).parent().parent().removeClass('visible');
+        parent.find('input:text').filter(
+            function () {
+                return $(this).val() === "";
+            }
+        ).parent().parent().parent().removeClass('visible').addClass('hidden');
+        $(evt.currentTarget).text(txt);
+    };
+
+
+    var toggleFields = function (evt) {
+        var empty = checkEl(evt.currentTarget),
+            parent = $(evt.currentTarget).parent(),
+            status;
+
+        if (empty === 0) {
+            status = parent.hasClass('expanded') ? '1' :  '2';
         } else {
-            parent.removeClass('expanded');
-            parent.find('input:text').filter(
-                function () {
-                    return $(this).val() !== "";
-                }
-            ).parent().parent().removeClass('visible');
-            parent.find('input:text').filter(
-                function () {
-                    return $(this).val() === "";
-                }
-            ).parent().parent().removeClass('visible').addClass('hidden');
-            parent.find('.visible').removeClass('visible').addClass('hidden');
-            $(evt.currentTarget).text('+ more');
+            status = !parent.hasClass('expanded') ? '3' : '4';
         }
 
-    };
-    var toggleSection = function (evt) {
-        var section = $(evt.currentTarget).parent().prev();
-        if (!section.hasClass('hidden')) {
-            section.addClass('hidden');
-        } else {
-            section.removeClass('hidden');
-            section.find('.hidden').removeClass('hidden').addClass('visible');
+        switch (status) {
+        case "1":
+            namedSwitch('+ ' + evt.data.pointName, evt);
+            break;
+        case "2":
+            lessSwitch(evt);
+            break;
+        case "3":
+            lessSwitch(evt);
+            break;
+        case "4":
+            moreSwitch('+ more', evt);
+            break;
         }
-
     };
+
+
     var drawSection = function (pointName) {
         return function (options) {
             var section = options.view.createSection(),
@@ -75,9 +127,13 @@ define('io.ox/contacts/edit/view-form',
             } else {
                 ext.point('io.ox/contacts/edit/form/' + pointName).invoke('draw', sectionContent, options);
             }
+            if (checkEl(sectionContent) !== 0) {
+                section.append($('<a>').addClass('switcher').text('+ more').on('click', {pointName: pointName}, toggleFields));
+            } else {
+                section.append($('<a>').addClass('switcher').text('+ ' + pointName).on('click', {pointName: pointName}, toggleFields));
+                sectionTitle.addClass('hidden');
+            }
 
-            section.append($('<a>').addClass('switcher').text('+ more').on('click', toggleFields));
-            section.parent().append($('<div>').append($('<a>').addClass('switcher').text(pointName).on('click', toggleSection)));
         };
     };
 
@@ -154,6 +210,17 @@ define('io.ox/contacts/edit/view-form',
         return saveButton;
     };
 
+    function handleFileSelect(evt) {
+        var file = evt.target.files,
+            reader = new FileReader();
+        console.log(reader);
+        reader.onload = (function (theFile) {
+            return function (e) {
+                $('.picture').css('background-image', 'url(' + e.target.result + ')');
+            };
+        }(file[0]));
+        reader.readAsDataURL(file[0]);
+    }
 
     var createPictureForm = function () {
         var form = $('<form>', {
@@ -176,6 +243,7 @@ define('io.ox/contacts/edit/view-form',
                 'src': 'blank.html'
             }).css('display', 'none')
         );
+        form.on('change', handleFileSelect);
         return form;
     };
 

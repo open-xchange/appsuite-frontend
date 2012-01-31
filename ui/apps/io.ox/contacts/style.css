@@ -275,7 +275,9 @@ input#image1 {
 	width: 200px;
 }
 
-
+.contact-detail.edit .section {
+	margin-bottom: 20px;
+}
 	
 .contact-detail.edit .sectiontitle {
 	margin: 25px 0 15px 0;
@@ -289,7 +291,7 @@ input#image1 {
 
 
 .contact-detail.edit .sectioncontent {
-	margin-bottom: 15px;
+	margin-bottom: 5px;
 }
 
 .contact-detail.edit .section-group {
@@ -319,7 +321,7 @@ input#image1 {
 }
 
 .contact-detail.edit div.input.inline.nr1 input[type="text"] {
-	width: 199px;
+	width: 109px;
 }
 
 .contact-detail.edit .input > input[type="text"]:focus {
