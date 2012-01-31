@@ -104,9 +104,10 @@ define('io.ox/core/tk/model',
             if (fieldDesc && this.formats[fieldDesc.format] && _.isFunction(this.formats[fieldDesc.format])) {
                 return this.formats[fieldDesc.format].apply(this, [key, value, fieldDesc]);
             }
-
+        },
+        getProp: function (key) {
+            return this.properties[key];
         }
-
     };
     _.makeExtendable(SimpleModel);
     return SimpleModel;
