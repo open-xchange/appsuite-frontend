@@ -176,7 +176,7 @@ define('io.ox/contacts/api',
 
     var autocompleteCache = new cache.SimpleCache('contacts-autocomplete', true);
 
-    api.bind('refresh.all', function () {
+    api.on('refresh.all', function () {
         autocompleteCache.clear();
     });
 

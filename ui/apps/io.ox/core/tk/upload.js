@@ -12,7 +12,7 @@
  */
 
 // TODO: Refactor this to make it usable by other OX upload scenarios (Mail Attachments, PIM Attachments)
-define("io.ox/core/tk/upload", ["io.ox/core/event"], function (event) {
+define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
 
     "use strict";
 
@@ -49,7 +49,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (event) {
                 .text("Just drop the file anywhere...");
         }
         this.enabled = true;
-        event.Dispatcher.extend(this);
+        Events.extend(this);
 
         // Now let's add the regular event handlers to fulfill our promises
         $node.on({
@@ -156,7 +156,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (event) {
             delegate.processFile = $.noop;
         }
 
-        event.Dispatcher.extend(this);
+        Events.extend(this);
 
         var files = [];
         var currentFile = null;

@@ -156,7 +156,7 @@ define("io.ox/contacts/main",
         /*
          * Selection handling
          */
-        grid.selection.bind("change", function (selection) {
+        grid.selection.on("change", function (e, selection) {
             if (selection.length === 1) {
                 showContact(selection[0]);
             } else {
@@ -178,7 +178,7 @@ define("io.ox/contacts/main",
         }
 
         // draw thumb index
-        grid.bind('ids-loaded', function () {
+        grid.on('ids-loaded', function () {
             // get labels
             thumbs.empty();
             var textIndex = grid.getLabels().textIndex;

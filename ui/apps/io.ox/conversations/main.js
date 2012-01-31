@@ -336,7 +336,7 @@ define("io.ox/conversations/main",
         /*
          * Selection handling
          */
-        grid.selection.bind("change", function (selection) {
+        grid.selection.on("change", function (e, selection) {
             if (selection.length === 1) {
                 pane.busy();
                 api.get({ id: selection[0].id })
@@ -346,22 +346,22 @@ define("io.ox/conversations/main",
             }
         });
 
-        win.bind("show", function () {
+        win.on("show", function () {
             grid.selection.keyboard(true);
             resumePolling();
         });
-        win.bind("hide", function () {
+        win.on("hide", function () {
             grid.selection.keyboard(false);
             stopPolling();
         });
 
         // bind all refresh
-        api.bind("refresh.all", function (data) {
+        api.on("refresh.all", function (e, data) {
             grid.refresh();
         });
 
         // bind list refresh
-        api.bind("refresh.list", function (data) {
+        api.on("refresh.list", function (e, data) {
             grid.repaint();
         });
 

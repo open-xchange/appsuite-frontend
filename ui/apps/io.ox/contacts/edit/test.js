@@ -250,7 +250,7 @@ define("io.ox/contacts/edit/test",
                     j.runs(function () {
                         var me = this;
                         me.ready = false;
-                        api.bind('edit', function (data) {
+                        api.on('edit', function (e, data) {
                             if (data) {
                                 dataId = data.id;
                                 dataFolder = data.folder;

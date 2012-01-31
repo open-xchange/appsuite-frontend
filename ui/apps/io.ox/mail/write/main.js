@@ -779,21 +779,21 @@ define.async('io.ox/mail/write/main',
             );
 
             var dropZone = upload.dnd.createDropZone();
-            dropZone.bind('drop', function (file) {
+            dropZone.on('drop', function (file) {
                 form.find('input[type=file]').last()
                     .prop('file', file)
                     .trigger('change');
                 showSection('attachments');
             });
 
-            win.bind('show', function () {
+            win.on('show', function () {
                 if (editor) {
                     editor.handleShow();
                 }
                 dropZone.include();
             });
 
-            win.bind('hide', function () {
+            win.on('hide', function () {
                 if (editor) {
                     editor.handleHide();
                 }

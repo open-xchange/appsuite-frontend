@@ -112,7 +112,7 @@ define("io.ox/contacts/test",
                     j.runs(function () {
                         var me = this;
                         me.ready = false;
-                        api.bind('created', function (data) {
+                        api.on('created', function (e, data) {
                             if (data) {
                                 dataId = data.id;
                                 dataFolder = data.folder;
