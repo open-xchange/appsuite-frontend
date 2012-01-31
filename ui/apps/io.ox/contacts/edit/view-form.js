@@ -32,7 +32,9 @@ define('io.ox/contacts/edit/view-form',
         el = parent.find('input:text').filter(function () {
             return $(this).val() !== "";
         }),
-        empty = el.length;
+        man = (parent.find('.mandatory')).length,
+        empty = el.length + man;
+        console.log(empty);
         return empty;
     };
 
@@ -146,8 +148,12 @@ define('io.ox/contacts/edit/view-form',
             sectionGroup.append(options.view.createLabel({id: myId, text: gt(subPointName)}));
             sectionGroup.append(options.view.createTextField({id: myId, property: subPointName}));
 
-            if (!options.view.getModel().get(subPointName)) {
+            if (!options.view.getModel().get(subPointName) &&
+                !options.view.getModel().getProp(subPointName).mandatory) {
                 sectionGroup.addClass('hidden');
+            }
+            if (options.view.getModel().getProp(subPointName).mandatory) {
+                sectionGroup.addClass('mandatory');
             }
         };
     };
@@ -222,30 +228,6 @@ define('io.ox/contacts/edit/view-form',
         reader.readAsDataURL(file[0]);
     }
 
-    var createPictureForm = function () {
-        var form = $('<form>', {
-            'accept-charset': 'UTF-8',
-            'enctype': 'multipart/form-data',
-            'id': 'contactUploadImage',
-            'method': 'POST',
-            'name': 'contactUploadImage',
-            'target': 'blank.html'
-        })
-        .append(
-            $('<input>', {
-                name: 'file',
-                type: 'file',
-                accept: 'image/*'
-            })
-        ).append(
-            $('<iframe/>', {
-                'name': 'hiddenframePicture',
-                'src': 'blank.html'
-            }).css('display', 'none')
-        );
-        form.on('change', handleFileSelect);
-        return form;
-    };
 
     var picTrigger = function () {
         $('input[type="file"]').trigger('click');
@@ -288,7 +270,21 @@ define('io.ox/contacts/edit/view-form',
 
         saveButton = createSaveButton(options);
 
-        picForm = createPictureForm();
+        picForm = options.view.createPicUpload({
+            wrap: false,
+            label: false,
+            charset: 'UTF-8',
+            enctype: 'multipart/form-data',
+            id: 'contactUploadImage',
+            method: 'POST',
+            name: 'contactUploadImage',
+            target: 'blank.html'
+        });
+        picForm.find('input').on('change', handleFileSelect);
+        picForm.find('input').on('change', function () {
+            calculatedModel.dirty = true;
+        });
+
 
         section.append(picture);
         section.append(title);
@@ -366,8 +362,6 @@ define('io.ox/contacts/edit/view-form',
                 $(this.getModel()).on('company.changed', updateJobDescription);
                 $(this.getModel()).on('position.changed', updateJobDescription);
                 $(this.getModel()).on('profession.changed', updateJobDescription);
-
-
 
                 $(this.getModel()).on('validation.error', function (evt, error, fieldDesc) {
                     console.error(error);

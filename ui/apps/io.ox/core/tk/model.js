@@ -106,7 +106,7 @@ define('io.ox/core/tk/model',
             }
         },
         getProp: function (key) {
-            return this.properties[key];
+            return this.properties[key] || {};
         }
     };
     _.makeExtendable(SimpleModel);

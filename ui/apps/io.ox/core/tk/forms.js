@@ -78,10 +78,16 @@ define('io.ox/core/tk/forms',
     Field.prototype.create = function (tag, onChange) {
         var o = this.options;
         this.node = $(tag)
-            .attr({ 'data-property': o.property, name: o.name, id: o.id, value: o.value })
+            .attr({
+                'data-property': o.property,
+                name: o.name,
+                id: o.id,
+                value: o.value
+            })
             .on('change', onChange)
             .addClass(o.classes);
     };
+
 
     Field.prototype.applyModel = function (handler) {
         var o = this.options, model = o.model, val = o.initialValue;
@@ -146,6 +152,26 @@ define('io.ox/core/tk/forms',
         createPasswordField: function (options) {
             var f = new Field(options, 'text');
             f.create('<input type="password">', textChange);
+            f.applyModel(textChangeByModel);
+            return f.finish('prepend');
+        },
+
+        createFileField: function (options) {
+            var f = new Field(options, 'file');
+            f.create('<input type="file">', textChange);
+            f.node.attr({
+                'accept': options.accept
+            });
+            f.applyModel(textChangeByModel);
+            return f.finish('prepend');
+        },
+
+        createIframe: function (options) {
+            var f = new Field(options, 'iframe');
+            f.create('<iframe>', textChange);
+            f.node.attr({
+                'src': options.src
+            });
             f.applyModel(textChangeByModel);
             return f.finish('prepend');
         },
@@ -231,6 +257,55 @@ define('io.ox/core/tk/forms',
 
         createSectionDelimiter: function () {
             return $('<div>').addClass('settings sectiondelimiter');
+        },
+
+//        createPicUpload: function () {
+//            var form = $('<form>', {
+//                'accept-charset': 'UTF-8',
+//                'enctype': 'multipart/form-data',
+//                'id': 'contactUploadImage',
+//                'method': 'POST',
+//                'name': 'contactUploadImage',
+//                'target': 'blank.html'
+//            })
+//            .append(
+//                $('<input>', {
+//                    name: 'file',
+//                    type: 'file',
+//                    accept: 'image/*'
+//                })
+//            ).append(
+//                $('<iframe/>', {
+//                    'name': 'hiddenframePicture',
+//                    'src': 'blank.html'
+//                }).css('display', 'none')
+//            );
+//            return form;
+//        }
+
+        createPicUpload: function (options) {
+            var f = new Field(options, 'form'),
+                o = options;
+            f.create('<form>', textChange);
+            f.applyModel(textChangeByModel);
+            f.node.attr({
+                'accept-charset': o.charset,
+                'enctype': o.enctype,
+                'method': o.method,
+                'target': o.target
+            });
+            f.node.append(utils.createFileField({
+                'wrap': false,
+                id: 'file',
+                'accept': 'image/*'
+            }));
+            f.node.append(utils.createIframe({
+                'wrap': false,
+                label: false,
+                name: 'hiddenframePicture',
+                'src': 'blank.html'
+            }).css('display', 'none'));
+            return f.finish('prepend');
         }
     };
 

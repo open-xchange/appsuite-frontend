@@ -245,6 +245,10 @@
 	display: none;
 }
 
+.mandatory.hidden{
+	display: block;
+}
+
 .hidden.filled{
 	display: table-row;
 }
