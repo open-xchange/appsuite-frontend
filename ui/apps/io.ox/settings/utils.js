@@ -17,29 +17,34 @@ define('io.ox/settings/utils',
       ['less!io.ox/settings/style.css'], function () {
 
     'use strict';
+
     var utils = {
+
         createSectionDelimiter: function () {
             return $('<div>')
-                      .addClass('settings sectiondelimiter');
+                .addClass('settings sectiondelimiter');
         },
+
         createApplicationIcon: function (options) {
-            return $('<img>')
-                      .css({ float: 'left', padding: '0 1em 1em 0' })
-                      .attr('src', options.icon);
+            return $('<img>', {
+                    src: options.icon,
+                    alt: ''
+                })
+                .css({ float: 'left', padding: '0 1em 1em 0' });
         },
+
         createApplicationTitle: function (options) {
             return $('<div>')
-                      .addClass('clear-title')
-                      .text(options.text);
+                .addClass('clear-title')
+                .text(options.text);
         },
+
         createSettingsHead: function (app) {
             return $('<div>')
-                      .append(utils.createApplicationIcon({icon: app.icon}))
-                      .append(utils.createApplicationTitle({text: app.title}))
-                      .append(utils.createSectionDelimiter());
+                .append(utils.createApplicationIcon({ icon: app.icon }))
+                .append(utils.createApplicationTitle({ text: app.title }))
+                .append(utils.createSectionDelimiter());
         },
-
-
 
         createInfoText: function (options) {
             var d = $('<div>').addClass('informational-text');
@@ -50,24 +55,29 @@ define('io.ox/settings/utils',
             }
             return d;
         },
+
         createSection: function () {
             return $('<div>').addClass('section');
         },
+
         createSectionTitle: function (options) {
             return $('<div>').addClass('sectiontitle').text(options.text);
         },
+
         createSectionContent: function () {
             return $('<div>').addClass('sectioncontent');
         },
+
         createSectionGroup: function () {
             return $('<div>').addClass('section-group');
         },
+
         createListBox: function (options) {
             var ldiv = $('<div>').addClass('listbox');
             ldiv.append(utils.createListSpacer());
             _.each(options.model.get(options.dataid), function (item, k) {
                 console.log(k + ':' + item.dataid);
-                ldiv.append(utils.createListItem({dataid: item.dataid, html: item.html}));
+                ldiv.append(utils.createListItem({ dataid: item.dataid, html: item.html }));
             });
             ldiv.append(utils.createListSpacer());
             return ldiv;
@@ -91,16 +101,17 @@ define('io.ox/settings/utils',
                 item.parent().find('div[selected="selected"]').attr('selected', null);
                 item.attr('selected', 'selected');
             });
-
-
             return item;
         },
+
         createListSpacer: function () {
             return $('<div>').addClass('spacer').css({height: '0px'});
         },
+
         createButton: function (options) {
             return $('<button>').text(options.label);
         }
     };
+
     return utils;
 });

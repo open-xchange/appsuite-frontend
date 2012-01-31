@@ -38,6 +38,7 @@ define('io.ox/core/tk/forms', [], function () {
         boxChangeByModel = function (e, value) {
             $(this).prop('checked', !!value);
         },
+
         selectChange = function () {
             var self = $(this);
             self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
@@ -45,13 +46,19 @@ define('io.ox/core/tk/forms', [], function () {
         selectChangeByModel = function (e, value) {
             $(this).val(value);
         },
+
         radioChange = selectChange,
         radioChangeByModel = function (e, value) {
             var self = $(this);
             self.prop('checked', self.attr('value') === value);
         },
+
         textChange = selectChange,
         textChangeByModel = selectChangeByModel,
+
+        nodeChangeByModel = function (e, value) {
+            $(this).text(value);
+        },
 
         invalid = function (e) {
             var node = $(this)
@@ -117,6 +124,9 @@ define('io.ox/core/tk/forms', [], function () {
         return node;
     };
 
+    // allows global lookup
+    var lastLabelId = '';
+
     var utils = {
 
         createCheckbox: function (options) {
@@ -177,7 +187,7 @@ define('io.ox/core/tk/forms', [], function () {
         createLabel: function (options) {
             var labelDiv,
                 label;
-            options.id = options.id || _.uniqueId('c');
+            options.id = lastLabelId = options.id || _.uniqueId('label');
             options.text = options.text || "";
 
             labelDiv = $('<div>');
@@ -196,29 +206,19 @@ define('io.ox/core/tk/forms', [], function () {
         },
 
         createText: function (options) {
-            var textContainer;
-            options.id = options.id || _.uniqueId('c');
-            textContainer = $('<span>');
-            textContainer.addClass('text');
 
-            if (options.classes) {
-                textContainer.addClass(options.classes);
+            var node = $('<span>')
+                .addClass('text')
+                .addClass(options.classes)
+                .text(options.text || '');
+
+            if (options.model && options.property) {
+                node.attr('data-property', options.property)
+                    .on('update.field', nodeChangeByModel)
+                    .triggerHandler('update.field', options.model.get(options.property));
             }
 
-            var updateText = function () {
-                if (options.html === true) {
-                    textContainer.html(options.model.get(options.property));
-                } else {
-                    textContainer.text(options.model.get(options.property));
-                }
-            };
-
-            if (options.model) {
-                updateText();
-                $(options.model).on(options.property + '.changed', updateText);
-            }
-
-            return textContainer;
+            return node;
         },
 
         createSection: function (options) {
@@ -239,6 +239,10 @@ define('io.ox/core/tk/forms', [], function () {
 
         createSectionDelimiter: function () {
             return $('<div>').addClass('settings sectiondelimiter');
+        },
+
+        getLastLabelId: function () {
+            return lastLabelId;
         }
     };
 

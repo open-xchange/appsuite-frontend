@@ -54,7 +54,7 @@ define('io.ox/settings/main',
 
 
     // application object
-    var app = ox.ui.createApp(),
+    var app = ox.ui.createApp({ name: 'io.ox/settings' }),
         // app window
         win,
         // grid
