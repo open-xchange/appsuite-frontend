@@ -270,6 +270,7 @@ define('io.ox/contacts/edit/view-form',
                 };
             }(file[0]));
             reader.readAsDataURL(file[0]);
+            options.view.getModel().dirty = true;
         }
         picForm = options.view.createPicUpload({
             wrap: false,
@@ -282,10 +283,6 @@ define('io.ox/contacts/edit/view-form',
             target: 'blank.html'
         });
         picForm.find('input').on('change', handleFileSelect);
-        picForm.find('input').on('change', function () {
-            options.view.getModel().dirty = true;
-        });
-
 
         section.append(picture);
         section.append(title);
