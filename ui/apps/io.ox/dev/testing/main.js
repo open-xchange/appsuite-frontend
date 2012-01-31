@@ -174,7 +174,7 @@ define('io.ox/dev/testing/main',
             .append($('<div>').addClass('summary').css('lineHeight', '2em').text('\u00A0'))
             .append($('<div>').addClass('results'));
 
-        win.bind('open', function () {
+        win.on('open', function () {
             // load all tests
             ext.loadPlugins({ name: 'tests', prefix: '', suffix: 'test' })
                 .done(function () {

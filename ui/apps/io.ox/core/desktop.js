@@ -14,7 +14,7 @@
  */
 
 define("io.ox/core/desktop",
-    ["io.ox/core/event", "io.ox/core/extensions", "io.ox/core/cache"], function (event, ext, cache) {
+    ["io.ox/core/event", "io.ox/core/extensions", "io.ox/core/cache"], function (Events, ext, cache) {
 
     "use strict";
 
@@ -212,8 +212,8 @@ define("io.ox/core/desktop",
             $(window).on('unload', saveRestorePoint);
             saveRestorePointTimer = setInterval(saveRestorePoint, 10000);
 
-            // add dispatcher
-            event.Dispatcher.extend(this);
+            // add event hub
+            Events.extend(this);
 
             // add folder management
             this.folder = (function () {
@@ -423,7 +423,7 @@ define("io.ox/core/desktop",
                         });
                     }
                     // destroy stuff
-                    self.dispatcher.destroy();
+                    self.events.destroy();
                     self.folder.destroy();
                     if (win) {
                         ox.ui.windowManager.trigger("window.quit", win);
@@ -509,7 +509,7 @@ define("io.ox/core/desktop",
                 }
             };
 
-        event.Dispatcher.extend(that);
+        Events.extend(that);
 
         return that;
 
@@ -517,7 +517,7 @@ define("io.ox/core/desktop",
 
     ox.ui.windowManager = (function () {
 
-        var that = event.Dispatcher.extend({}),
+        var that = Events.extend({}),
             // list of windows
             windows = [],
             // get number of open windows
@@ -527,7 +527,7 @@ define("io.ox/core/desktop",
                 }, 0);
             };
 
-        ox.ui.screens.bind('hide-windowmanager', function () {
+        ox.ui.screens.on('hide-windowmanager', function () {
             if (currentWindow) {
                 currentWindow.hide();
             }
@@ -541,18 +541,19 @@ define("io.ox/core/desktop",
             ox.ui.screens.show('windowmanager');
         };
 
-        that.bind("window.open", function (win) {
+
+        that.on("window.open", function (e, win) {
             this.show();
             if (_(windows).indexOf(win) === -1) {
                 windows.push(win);
             }
         });
 
-        that.bind("window.beforeshow", function (win) {
+        that.on("window.beforeshow", function (e, win) {
             that.trigger("empty", false);
         });
 
-        that.bind("window.close window.quit", function (win, type) {
+        that.on("window.close window.quit", function (e, win, type) {
 
             var pos = _(windows).indexOf(win), i, $i, found = false;
 
@@ -756,7 +757,7 @@ define("io.ox/core/desktop",
                         this.app = null;
                     }
                     // destroy everything
-                    this.dispatcher.destroy();
+                    this.events.destroy();
                     this.nodes.outer.remove();
                     this.nodes = null;
                     this.show = $.noop;
@@ -922,8 +923,8 @@ define("io.ox/core/desktop",
                 )
             );
 
-            // add dispatcher
-            event.Dispatcher.extend(win);
+            // add event hub
+            Events.extend(win);
 
             // search?
             if (opt.search) {

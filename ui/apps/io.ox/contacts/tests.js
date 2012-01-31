@@ -208,8 +208,8 @@ define("io.ox/contacts/tests",
         });
     };
 
-    api.bind('created', testCreateCheck);
-    api.bind('edit', testEditCheck);
+    api.on('created', testCreateCheck);
+    api.on('edit', testEditCheck);
 
     return {
         testCreate: testCreate,
