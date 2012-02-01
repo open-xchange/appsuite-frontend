@@ -115,12 +115,16 @@ define('io.ox/core/tk/model',
             this._data = data = _.clone(data || {}, true);
             // apply defaults
             _(this.schema).each(function (def, key) {
-                if (data[key] === undefined && def.defaultValue !== undefined) {
-                    data[key] = def.defaultValue;
+                if (data[key] === undefined) {
+                    if (def.defaultValue !== undefined) {
+                        data[key] = def.defaultValue;
+                    } else if (def.mandatory === true) {
+                        data[key] = '';
+                    }
                 }
             });
             // due to defaultValues, data and previous might differ.
-            // however, the model is not dirty
+            // however, the model is not dirt
             this._dirty = false;
         },
 
@@ -142,16 +146,17 @@ define('io.ox/core/tk/model',
             return changes;
         },
 
-        validate: function (property, value) {
-            var def = this.schema[property] || {},
+        validate: function (prop, value) {
+            var def = this.schema[prop] || {},
                 format = def.format || 'string',
-                isValidEmpty = value === '' && def.mandatory !== true;
-
-            if (isValidEmpty || format === 'string') {
-                return true;
+                isEmpty = value === '',
+                isNotMandatory = def.mandatory !== true;
+            if (isEmpty) {
+                return isNotMandatory ||
+                    new Error(prop, _.printf('%s is mandatory', def.i18n || prop));
             }
             if (_.isFunction(this.formats[format])) {
-                return this.formats[format](property, value, def);
+                return this.formats[format](prop, value, def);
             }
             // undefined format
             console.error('Unknown format used in model schema', format);
@@ -191,7 +196,7 @@ define('io.ox/core/tk/model',
                 }, true);
 
             if (!valid) {
-                return;
+                return $.Deferred().reject();
             }
 
             // check consistency
@@ -199,7 +204,7 @@ define('io.ox/core/tk/model',
 
             if (consistent !== true) {
                 self.trigger('error:inconsistent', consistent);
-                return;
+                return $.Deferred().reject();
             }
 
             // trigger store - expects deferred object
@@ -259,10 +264,15 @@ define('io.ox/core/tk/model',
         m.set('num', 'hurz');
         m.save();
         m.set('num', 900);
+        m.set('huppi', 'fluppi');
         console.log('dirty?', m.isDirty());
-        m.save().done(function () {
-            console.log('Done: save. Is dirty?', m.isDirty());
-        });
+        m.save()
+            .done(function () {
+                console.log('Done: save. Is dirty?', m.isDirty());
+            })
+            .fail(function () {
+                console.log('Could not save!');
+            });
     };
 
     return Model;
