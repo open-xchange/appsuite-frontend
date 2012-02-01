@@ -149,10 +149,10 @@ define('io.ox/contacts/edit/view-form',
             sectionGroup.append(options.view.createTextField({id: myId, property: subPointName}));
 
             if (!options.view.getModel().get(subPointName) &&
-                !options.view.getModel().getProp(subPointName).mandatory) {
+                !options.view.getModel().isMandatory(subPointName)) {
                 sectionGroup.addClass('hidden');
             }
-            if (options.view.getModel().getProp(subPointName).mandatory) {
+            if (options.view.getModel().isMandatory(subPointName)) {
                 sectionGroup.addClass('mandatory');
             }
         };
@@ -210,7 +210,7 @@ define('io.ox/contacts/edit/view-form',
 
         saveButton.addClass('button default-action saveButton').text('Save');
         saveButton.on('click', function () {
-            options.view.save();
+            options.view.saveForm();
 
         });
         return saveButton;
@@ -279,7 +279,8 @@ define('io.ox/contacts/edit/view-form',
             enctype: 'multipart/form-data',
             id: 'contactUploadImage',
             method: 'POST',
-            name: 'contactUploadImage',
+            formname: 'contactUploadImage',
+            name: 'file',
             target: 'blank.html'
         });
         picForm.find('input').on('change', handleFileSelect);
@@ -318,7 +319,6 @@ define('io.ox/contacts/edit/view-form',
             draw: drawFormHead
         });
 
-
         _.each(meta, handleSection);
         ext.point('io.ox/contacts/edit/form/address').extend({
             id: 'address',
@@ -351,11 +351,11 @@ define('io.ox/contacts/edit/view-form',
                 };
 
                 var updateJobDescription = function () {
-                    $(self.getModel()).trigger('change:calculated.jobdescription', util.getJob(self.getModel().getData()));
+                    self.getModel().trigger('change:calculated.jobdescription', util.getJob(self.getModel().getData()));
                 };
 
-                $(this.getModel()).on('change:title change:first_name change:last_name', updateDisplayName);
-                $(this.getModel()).on('change:company change:position change:profession', updateJobDescription);
+                this.getModel().on('change:title change:first_name change:last_name', updateDisplayName);
+                this.getModel().on('change:company change:position change:profession', updateJobDescription);
 
                 initExtensionPoints(meta);
                 this.node.addClass('contact-detail edit').attr('data-property', self.getModel().get('folder_id') + '.' + self.getModel().get('id'));
@@ -365,15 +365,15 @@ define('io.ox/contacts/edit/view-form',
                 ext.point('io.ox/contacts/edit/form').invoke('draw', self.node, {view: self});
                 self.node.append($('<div>', {id: 'myGrowl'}).addClass('jGrowl').css({position: 'absolute', right: '0', top: '0'}));
 
-                $(this.getModel()).on('error:validation', function (evt, err) {
+                this.getModel().on('error:invalid', function (evt, err) {
                     console.log('error validation');
                     console.log(arguments);
-                    $('#myGrowl').jGrowl(err.name + ' ' + err.message, {header: 'Make an educated guess!', sticky: true});
+                    $('#myGrowl').jGrowl(err.message, {header: 'Make an educated guess!', sticky: true});
                 });
             }
             return self;
         },
-        save: function () {
+        saveForm: function () {
             $(this).trigger('save');
         }
 

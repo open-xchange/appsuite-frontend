@@ -167,6 +167,12 @@ define('io.ox/core/tk/forms',
             f.applyModel(textChangeByModel);
             return f.finish('prepend', 'input');
         },
+        createTextArea: function (options) {
+            var f = new Field(options, 'text');
+            f.create('<textarea >', textChange);
+            f.applyModel(textChangeByModel);
+            return f.finish('prepend', 'textarea');
+        },
 
         createPasswordField: function (options) {
             var f = new Field(options, 'text');
@@ -185,27 +191,26 @@ define('io.ox/core/tk/forms',
             return f.finish('prepend');
         },
 
-        createIframe: function (options) {
-            var f = new Field(options, 'iframe');
-            f.create('<iframe>', textChange);
-            f.node.attr({
-                'src': options.src
-            });
-            f.applyModel(textChangeByModel);
-            return f.finish('prepend');
-        },
-
         createLabeledTextField: function (options) {
-            return utils.createLabel()
+            return utils.createLabel(options)
                 .css({ width: '100%', display: 'inline-block' })
                 .append(utils.createText({ text: options.label }))
-                .append(utils.createTextField({ property: options.property, value: options.value, model: options.model, validator: options.validator})
+                .append(utils.createTextField({ property: options.property, value: options.value, model: options.model})
                         .css({ width: options.width + 'px', display: 'inline-block' })
                 );
         },
+        createLabeledTextArea: function (options) {
+            return utils.createLabel(options)
+                .css({ width: '100%', display: 'inline-block' })
+                .append(utils.createText({ text: options.label }))
+                .append(utils.createTextArea({ property: options.property, value: options.value, model: options.model})
+                        .css({ width: options.width + 'px', display: 'inline-block' })
+                );
+
+        },
 
         createLabeledPasswordField: function (options) {
-            var l = utils.createLabel().css({width: '100%', display: 'inline-block'});
+            var l = utils.createLabel(options).css({width: '100%', display: 'inline-block'});
             l.append(utils.createText({text: options.label}));
             l.append(utils.createPasswordField({property: options.property, value: options.value, model: options.model, validator: options.validator}).css({ width: options.width + 'px', display: 'inline-block'}));
             return l;
@@ -241,10 +246,9 @@ define('io.ox/core/tk/forms',
 
             if (options.model && options.property) {
                 node.attr('data-property', options.property)
-                    .on('update.field', nodeChangeByModel)
-                    .triggerHandler('update.field', options.model.get(options.property));
+                    .on('update.view', nodeChangeByModel)
+                    .triggerHandler('update.view', options.model.get(options.property));
             }
-
             return node;
         },
 
@@ -269,28 +273,29 @@ define('io.ox/core/tk/forms',
         },
 
         createPicUpload: function (options) {
-            var f = new Field(options, 'form'),
-                o = options;
-            f.create('<form>', textChange);
-            f.applyModel(textChangeByModel);
-            f.node.attr({
+            var o = options,
+                form = $('<form>', {
+                'id': o.id,
+                'name': o.formname,
                 'accept-charset': o.charset,
                 'enctype': o.enctype,
                 'method': o.method,
                 'target': o.target
             });
-            f.node.append(utils.createFileField({
+            form.append(utils.createFileField({
                 'wrap': false,
                 id: 'file',
-                'accept': 'image/*'
+                'accept': 'image/*',
+                "data-property": o.name,
+                name: o.name
+
             }));
-            f.node.append(utils.createIframe({
-                'wrap': false,
-                label: false,
+            form.append($('<iframe>', {
                 name: 'hiddenframePicture',
                 'src': 'blank.html'
             }).css('display', 'none'));
-            return f.finish('prepend');
+
+            return form;
         },
         getLastLabelId: function () {
             return lastLabelId;

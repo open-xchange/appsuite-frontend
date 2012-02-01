@@ -215,7 +215,7 @@ define ("gettext", function (gettext) {
 
 
 
-define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
+define("settings",['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'], function (http, cache, Model) {
 
     'use strict';
 
@@ -300,13 +300,38 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
             return true;
         };
 
+        var flatten = function (obj, result, path) {
+            result = result || {};
+            path = path || '';
+            _(obj).each(function (prop, id) {
+                if (!_.isArray(prop)) {
+                    if (typeof prop === 'object' && prop !== null) {
+                        flatten(prop, result, path + id + '/');
+                    } else {
+                        result[path + id] = prop;
+                    }
+                }
+            });
+            return result;
+        };
+
         var that = {
+
             settingsPath: null,
+
+            createModel: function (ModelClass) {
+                // create & return model instance
+                return new ModelClass({data: flatten(this.get())})
+                    .on('change', $.proxy(function (e, path, value) {
+                        this.set(path, value);
+                    }, this));
+            },
+
             get: function (path, defaultValue) {
                 if (!path) { // undefined, null, ''
-                    return settings;
+                    return get(globalSubpath + that.settingsPath);
                 } else {
-                    path = (globalSubpath + that.settingsPath + '/' + path);
+                    path = globalSubpath + that.settingsPath + '/' + path;
                     console.log('getting: ' + path);
                     if (defaultValue === undefined) {
                         return get(path);
@@ -321,10 +346,6 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
                     var orgpath = path;
                     path = (globalSubpath + that.settingsPath + '/' + path);
                     set(path, value);
-                    $(that)
-                        .trigger(orgpath + '.changed', value)
-                        .trigger('change', [orgpath, value]);
-                    console.log('set ' + path + ':' + value);
                     if (permanent) {
                         // save settings path on server
                         settingsCache.add('settingsDefault', settings);
@@ -340,13 +361,13 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
 
             remove: function (path) {
                 if (path) {
-                    path = (globalSubpath + mywrapper.settingsPath + '/' + path);
+                    path = (globalSubpath + that.settingsPath + '/' + path);
                     remove(path);
                 }
             },
 
             contains: function (path) {
-                path = (globalSubpath + mywrapper.settingsPath + '/' + path);
+                path = (globalSubpath + that.settingsPath + '/' + path);
                 return contains(path);
             },
 
@@ -369,12 +390,12 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
                 }
                 if (settingsCache.contains('settingsDefault')) {
                     return settingsCache.get('settingsDefault').pipe(function (mycached) {
-                        if(mycached !== undefined) {
+                        if (mycached !== undefined) {
                             settings = mycached;
                             load();
                             return settings;
                         } else {
-                          return load();
+                            return load();
                         }
                     });
                 } else {
@@ -396,16 +417,16 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache
     };
 
     return {
-      load: function (name, req, load, config) {
-          var mywrapper = settingsWrapper();
-          mywrapper.settingsPath = name; //encodeURIComponent(name);
-          mywrapper.load()
-            .done(function () {
-              load(mywrapper);
-            })
-            .fail(function () {
-              console.error('failed to load settings for:' + mywrapper.settingsPath);
-            });
+        load: function (name, req, load, config) {
+            var mywrapper = settingsWrapper();
+            mywrapper.settingsPath = name; //encodeURIComponent(name);
+            mywrapper.load()
+                .done(function () {
+                    load(mywrapper);
+                })
+                .fail(function () {
+                    console.error('failed to load settings for:' + mywrapper.settingsPath);
+                });
 
       }
     };
