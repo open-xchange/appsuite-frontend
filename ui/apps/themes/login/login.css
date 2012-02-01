@@ -28,7 +28,7 @@ body {
     border: 0;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
-    color: black;
+    color: #333; /* yep, not #000 */
     height: 100%;
     overflow: hidden;
     background-color: #000;
@@ -280,7 +280,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
     right: 0;
     bottom: 1em;
     left: 0;
-    color: black;
 }
 
 #io-ox-copyright {

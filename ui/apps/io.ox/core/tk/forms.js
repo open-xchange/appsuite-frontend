@@ -9,228 +9,187 @@
  * Mail: info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 /*global
 define: true
 */
-define('io.ox/core/tk/forms', [], function () {
+define('io.ox/core/tk/forms',
+      ['io.ox/core/i18n'], function (i18n) {
+
     'use strict';
 
     /**
-
     options = {
         class
         update
         name
         model
         validator
-        dataid
+        property
         id
     }
-
 */
+
+    // local handlers
+    var boxChange = function () {
+            var self = $(this);
+            self.trigger('update.model', { property: self.attr('data-property'), value: self.prop('checked') });
+        },
+        boxChangeByModel = function (e, value) {
+            $(this).prop('checked', !!value);
+        },
+        selectChange = function () {
+            var self = $(this);
+            self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
+        },
+        selectChangeByModel = function (e, value) {
+            $(this).val(value);
+        },
+        radioChange = selectChange,
+        radioChangeByModel = function (e, value) {
+            var self = $(this);
+            self.prop('checked', self.attr('value') === value);
+        },
+        textChange = selectChange,
+        textChangeByModel = selectChangeByModel,
+        invalid = function (e) {
+            var node = $(this)
+                .addClass('invalid-value').css({
+                    backgroundColor: '#fee',
+                    borderColor: '#a00'
+                })
+                .focus();
+            setTimeout(function () {
+                node.removeClass('invalid-value').css({
+                    backgroundColor: '',
+                    borderColor: ''
+                });
+                node = null;
+            }, 5000);
+        };
+
+    /**
+     * Very simple helper class to avoid always passing node & options around
+     */
+    var Field = function (options, type) {
+        // store options
+        this.options = options || {};
+        this.options.id = this.options.id || _.uniqueId(type);
+        // node
+        this.node = null;
+    };
+
+    Field.prototype.create = function (tag, onChange) {
+        var o = this.options;
+        this.node = $(tag)
+            .attr({
+                'data-property': o.property,
+                name: o.name,
+                id: o.id,
+                value: o.value
+            })
+            .on('change', onChange)
+            .addClass(o.classes);
+    };
+
+
+    Field.prototype.applyModel = function (handler) {
+        var o = this.options, model = o.model, val = o.initialValue;
+        if ((model || val) !== undefined) {
+            this.node
+                .on('invalid', invalid)
+                .on('update.view', handler)
+                .triggerHandler('update.view', model !== undefined ? model.get(o.property) : val);
+        }
+    };
+
+    Field.prototype.finish = function (order, classes) {
+        // local reference
+        var o = this.options, node = this.node;
+        // wrap label tag around field
+        if (o.label !== false) {
+            var label = $('<label>', { 'for': o.id }),
+                space = $.txt(' '),
+                text = $.txt(o.label || '');
+            node = label.append.apply(label, order === 'append' ? [node, space, text] : [text, space, node]);
+        }
+        // wrap DIV around field & label
+        if (this.options.wrap !== false) {
+            node = $('<div>').addClass(classes).append(node);
+        }
+        // clean up
+        this.node = this.options = o = null;
+        return node;
+    };
+
     var utils = {
+
         createCheckbox: function (options) {
-            var checkboxDiv,
-                label,
-                checkbox,
-                container;
-
-            container = checkboxDiv = $('<div>').addClass('checkbox');
-            if (options.classes) {
-                checkboxDiv.addClass(options.classes);
-            }
-            if (options.label) {
-                label = $('<label>');
-                checkboxDiv.append(label);
-                container = label;
-            }
-
-            checkbox = $('<input type="checkbox" data-item-id="' + options.dataid + '"/>');
-
-            options.id = options.id || _.uniqueId('c');
-            checkbox.attr('id', options.id);
-
-
-            container.append(checkbox);
-            if (options.label) {
-                label.append($('<span>').text(options.label));
-            }
-
-            checkbox.on('change', function (evt) {
-                checkbox.trigger('update', {dataid: options.dataid, value: ((typeof checkbox.attr('checked') !== 'undefined') ? true: false)});
-            });
-
-            if (options.model !== undefined) {
-                checkbox.attr('checked', options.model.get(options.dataid));
-                $(options.model).on(options.dataid + '.changed', function (evt, value) {
-                    if (checkbox.attr('checked') !== value) {
-                        checkbox.attr('checked', value);
-                    }
-                });
-            }
-            return checkboxDiv;
+            var f = new Field(options, 'box');
+            f.create('<input type="checkbox">', boxChange);
+            f.applyModel(boxChangeByModel);
+            return f.finish('append', 'checkbox');
         },
+
         createSelectbox: function (options) {
-            var selectboxDiv,
-                label,
-                selectbox,
-                container;
-
-            container = selectboxDiv = $('<div>').addClass('select');
-            if (options.classes) {
-                selectboxDiv.addClass(options.classes);
-            }
-
-            if (options.label) {
-                label = $('<label>')
-                          .append($('<span>').text(options.label));
-                selectboxDiv.append(label);
-                container = label;
-            }
-            selectbox = $('<select>');
-
-            selectbox.attr('data-item-id', options.dataid);
-            _.each(options.items, function (val, key) {
-                var opt =  $('<option>').attr('value', val).text(key);
-                selectbox.append(opt);
-            });
-
-            selectbox.on('change', function (evt) {
-                selectbox.trigger('update', {dataid: options.dataid, value: selectbox.val()});
-            });
-
-            if (options.model !== undefined) {
-                selectbox.find('option[value="' + options.model.get(options.dataid) + '"]').attr('selected', 'selected');
-                $(options.model).on(options.dataid + '.changed', function (evt, value) {
-                    selectbox.find('option[value="' + value + '"]').attr('selected', 'selected');
-                });
-            }
-
-            container.append(selectbox);
-            return selectboxDiv;
+            var f = new Field(options, 'select');
+            f.create('<select size="1">', selectChange);
+            // add options
+            f.node.append(_(options.items).inject(function (memo, text, value) {
+                return memo.add($('<option>').attr('value', value).text(text));
+            }, $()));
+            f.applyModel(selectChangeByModel);
+            return f.finish('prepend');
         },
+
         createRadioButton: function (options) {
-            var radioDiv,
-                label,
-                radio,
-                container;
-
-            options.id = options.id || _.uniqueId('c');
-
-            container = radioDiv = $('<div>').addClass('radio');
-            if (options.classes) {
-                radioDiv.addClass(options.classes);
-            }
-            if (options.label) {
-                label = $('<label>');
-                radioDiv.append(label);
-                container = label;
-            }
-
-
-
-            radio = $('<input type="radio">');
-            radio.attr({
-                'name': options.name,
-                'data-item-id': options.dataid,
-                'id': options.id
-            });
-            if (options.value) {
-                radio.attr('value', options.value);
-            }
-
-            container.append(radio);
-            if (options.label) {
-                label.append($('<span>').text(options.label));
-            }
-
-
-            radio.on('change', function () {
-                var val = $('input[name="' + options.name + '"]:checked').val();
-                radio.trigger('update', {dataid: options.dataid, value: val});
-            });
-
-            if (options.model !== undefined) {
-                radio.attr('checked', (options.model.get(options.dataid) === options.value) ? 'checked' : null);
-                $(options.model).on(options.dataid + '.changed', function (evt, value) {
-                    console.log(value + ':' + options.value);
-                    if (value === options.value) {
-                        radio.attr('checked', 'checked');
-                    }
-                });
-            }
-            return radioDiv;
+            var f = new Field(options, 'radio');
+            f.create('<input type="radio">', radioChange);
+            f.applyModel(radioChangeByModel);
+            return f.finish('append', 'radio');
         },
-
 
         createTextField: function (options) {
-            var textfieldDiv,
-                textfield,
-                label,
-                container;
-
-            options.id = options.id || _.uniqueId('c');
-            options.maxlength = options.maxlength || 20;
-            container = textfieldDiv = $('<div>').addClass('input');
-            if (options.classes) {
-                textfieldDiv.addClass(options.classes);
-            }
-
-            if (options.label) {
-                label = $('<label>');
-                textfieldDiv.append(label);
-                container = label;
-            }
-
-            textfield = $('<input type="text" maxlength="' + options.maxlength + '">');
-
-            textfield.attr({
-                'data-item-id': options.dataid,
-                'id': options.id
-            });
-
-
-            textfield.on('change', function () {
-                textfield.trigger('update', {dataid: options.dataid, value: textfield.val()});
-            });
-
-            if (options.model !== undefined) {
-                textfield.val(options.model.get(options.dataid));
-                $(options.model).on(options.dataid + '.changed', function (evt, value) {
-                    textfield.val(value);
-                });
-            }
-
-            container.append(textfield);
-            return textfieldDiv;
+            var f = new Field(options, 'text');
+            f.create('<input type="text">', textChange);
+            f.applyModel(textChangeByModel);
+            return f.finish('prepend', 'input');
         },
+
         createPasswordField: function (options) {
-            options.maxlength = options.maxlength || 20;
-            var tfdiv = $('<div>');
-            var tf = $('<input type="password" maxlength="' + options.maxlength + '">');
-            tf.attr('data-item-id', options.dataid);
+            var f = new Field(options, 'text');
+            f.create('<input type="password">', textChange);
+            f.applyModel(textChangeByModel);
+            return f.finish('prepend');
+        },
 
-            tf.val(options.model.get(options.dataid));
-            tf.on('change', function () {
-                options.model.set(options.dataid, tf.val());
+        createFileField: function (options) {
+            var f = new Field(options, 'file');
+            f.create('<input type="file">', textChange);
+            f.node.attr({
+                'accept': options.accept
             });
+            f.applyModel(textChangeByModel);
+            return f.finish('prepend');
+        },
 
-            tfdiv.append(tf);
-            return tfdiv;
-        },
         createLabeledTextField: function (options) {
-            var l = utils.createLabel().css({width: '100%', display: 'inline-block'});
-            l.append(utils.createText({text: options.label}));
-            l.append(utils.createTextField({dataid: options.dataid, value: options.value, model: options.model, validator: options.validator}).css({ width: options.width + 'px', display: 'inline-block'}));
-            return l;
+            return utils.createLabel()
+                .css({ width: '100%', display: 'inline-block' })
+                .append(utils.createText({ text: options.label }))
+                .append(utils.createTextField({ property: options.property, value: options.value, model: options.model, validator: options.validator})
+                        .css({ width: options.width + 'px', display: 'inline-block' })
+                );
         },
+
         createLabeledPasswordField: function (options) {
             var l = utils.createLabel().css({width: '100%', display: 'inline-block'});
             l.append(utils.createText({text: options.label}));
-            l.append(utils.createPasswordField({dataid: options.dataid, value: options.value, model: options.model, validator: options.validator}).css({ width: options.width + 'px', display: 'inline-block'}));
+            l.append(utils.createPasswordField({property: options.property, value: options.value, model: options.model, validator: options.validator}).css({ width: options.width + 'px', display: 'inline-block'}));
             return l;
         },
+
         createLabel: function (options) {
             var labelDiv,
                 label;
@@ -251,6 +210,7 @@ define('io.ox/core/tk/forms', [], function () {
 
             return labelDiv;
         },
+
         createText: function (options) {
             var textContainer;
             options.id = options.id || _.uniqueId('c');
@@ -263,35 +223,87 @@ define('io.ox/core/tk/forms', [], function () {
 
             var updateText = function () {
                 if (options.html === true) {
-                    textContainer.html(options.model.get(options.dataid));
+                    textContainer.html(options.model.get(options.property));
                 } else {
-                    textContainer.text(options.model.get(options.dataid));
+                    textContainer.text(options.model.get(options.property));
                 }
             };
 
             if (options.model) {
                 updateText();
-                $(options.model).on(options.dataid + '.changed', updateText);
+                $(options.model).on('change:' + options.property, updateText);
             }
-
 
             return textContainer;
         },
+
         createSection: function (options) {
             return $('<div>').addClass('section');
         },
+
         createSectionTitle: function (options) {
             return $('<div>').addClass('sectiontitle').text(options.text);
         },
+
         createSectionContent: function (options) {
             return $('<div>').addClass('sectioncontent');
         },
+
         createSectionGroup: function (options) {
             return $('<div>').addClass('section-group');
         },
+
         createSectionDelimiter: function () {
-            return $('<div>')
-                      .addClass('settings sectiondelimiter');
+            return $('<div>').addClass('settings sectiondelimiter');
+        },
+
+        createPicUpload: function (options) {
+            var o = options,
+                form = $('<form>', {
+                'id': o.id,
+                'name': o.formname,
+                'accept-charset': o.charset,
+                'enctype': o.enctype,
+                'method': o.method,
+                'target': o.target
+            });
+            form.append(utils.createFileField({
+                'wrap': false,
+                id: 'file',
+                'accept': 'image/*',
+                "data-property": o.name,
+                name: o.name
+
+            }));
+            form.append($('<iframe>', {
+                name: 'hiddenframePicture',
+                'src': 'blank.html'
+            }).css('display', 'none'));
+
+            return form;
+
+//            var f = new Field(options, 'form'),
+//                o = options;
+//            f.create('<form>', textChange);
+//            f.applyModel(textChangeByModel);
+//            f.node.attr({
+//                'accept-charset': o.charset,
+//                'enctype': o.enctype,
+//                'method': o.method,
+//                'target': o.target
+//            });
+//            f.node.append(utils.createFileField({
+//                'wrap': false,
+//                id: 'file',
+//                'accept': 'image/*'
+//            }));
+//            f.node.append(utils.createIframe({
+//                'wrap': false,
+//                label: false,
+//                name: 'hiddenframePicture',
+//                'src': 'blank.html'
+//            }).css('display', 'none'));
+//            return f.finish('prepend');
         }
     };
 

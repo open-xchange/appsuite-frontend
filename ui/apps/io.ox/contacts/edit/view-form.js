@@ -25,45 +25,95 @@ define('io.ox/contacts/edit/view-form',
     /*
     * urgh, if you want to improve it, do it without that many dom operations
     */
-    var toggleFields = function (evt) {
-        console.log(arguments);
+
+
+    var checkEl = function (c) {
+        var parent = $(c).parent(),
+        el = parent.find('input:text').filter(function () {
+            return $(this).val() !== "";
+        }),
+        man = (parent.find('.mandatory')).length,
+        empty = el.length + man;
+        console.log(empty);
+        return empty;
+    };
+
+
+    var lessSwitch = function (evt) {
         var parent = $(evt.currentTarget).parent();
-        if (!parent.hasClass('expanded')) {
-            parent.find('.hidden').removeClass('hidden').addClass('visible');
-            parent.addClass('expanded');
-            $(evt.currentTarget).text('- less');
+        parent.find('.hidden').removeClass('hidden').addClass('visible');
+        parent.find('.sectiontitle').removeClass('hidden');
+        parent.addClass('expanded');
+        $(evt.currentTarget).text('- less');
+    };
+
+    var namedSwitch = function (txt, evt) {
+        var parent = $(evt.currentTarget).parent();
+        parent.removeClass('expanded');
+        parent.find('.sectiontitle').addClass('hidden');
+        parent.find('input:text').filter(
+            function () {
+                return $(this).val() !== "";
+            }
+        ).parent().parent().removeClass('visible');
+        parent.find('input:text').filter(
+            function () {
+                return $(this).val() === "";
+            }
+        ).parent().parent().parent().removeClass('visible').addClass('hidden');
+        parent.find('.visible').removeClass('visible').addClass('hidden');
+        $(evt.currentTarget).text(txt);
+    };
+
+
+    var moreSwitch = function (txt, evt) {
+        var parent = $(evt.currentTarget).parent();
+        parent.removeClass('expanded');
+        parent.find('.sectiontitle').addClass('visible');
+        parent.find('input:text').filter(
+            function () {
+                return $(this).val() !== "";
+            }
+        ).parent().parent().removeClass('visible');
+        parent.find('input:text').filter(
+            function () {
+                return $(this).val() === "";
+            }
+        ).parent().parent().parent().removeClass('visible').addClass('hidden');
+        $(evt.currentTarget).text(txt);
+    };
+
+
+    var toggleFields = function (evt) {
+        var empty = checkEl(evt.currentTarget),
+            parent = $(evt.currentTarget).parent(),
+            status;
+
+        if (empty === 0) {
+            status = parent.hasClass('expanded') ? '1' :  '2';
         } else {
-            parent.removeClass('expanded');
-            parent.find('input:text').filter(
-                function () {
-                    return $(this).val() !== "";
-                }
-            ).parent().parent().removeClass('visible');
-            parent.find('input:text').filter(
-                function () {
-                    return $(this).val() === "";
-                }
-            ).parent().parent().removeClass('visible').addClass('hidden');
-            parent.find('.visible').removeClass('visible').addClass('hidden');
-            $(evt.currentTarget).text('+ more');
+            status = !parent.hasClass('expanded') ? '3' : '4';
         }
 
-    };
-    var toggleSection = function (evt) {
-        console.log(arguments);
-        var section = $(evt.currentTarget).parent().prev();
-        console.log(section);
-        if (!section.hasClass('hidden')) {
-            section.addClass('hidden');
-        } else {
-            section.removeClass('hidden');
-            section.find('.hidden').removeClass('hidden').addClass('visible');
+        switch (status) {
+        case "1":
+            namedSwitch('+ ' + evt.data.pointName, evt);
+            break;
+        case "2":
+            lessSwitch(evt);
+            break;
+        case "3":
+            lessSwitch(evt);
+            break;
+        case "4":
+            moreSwitch('+ more', evt);
+            break;
         }
-
     };
+
+
     var drawSection = function (pointName) {
         return function (options) {
-            console.log('oben');
             var section = options.view.createSection(),
                 sectionTitle = options.view.createSectionTitle({text: gt(pointName)}),
                 sectionContent = options.view.createSectionContent();
@@ -79,24 +129,31 @@ define('io.ox/contacts/edit/view-form',
             } else {
                 ext.point('io.ox/contacts/edit/form/' + pointName).invoke('draw', sectionContent, options);
             }
+            if (checkEl(sectionContent) !== 0) {
+                section.append($('<a>').addClass('switcher').text('+ more').on('click', {pointName: pointName}, toggleFields));
+            } else {
+                section.append($('<a>').addClass('switcher').text('+ ' + pointName).on('click', {pointName: pointName}, toggleFields));
+                sectionTitle.addClass('hidden');
+            }
 
-            section.append($('<a>').addClass('switcher').text('+ more').on('click', toggleFields));
-            section.parent().append($('<div>').append($('<a>').addClass('switcher').text(pointName).on('click', toggleSection)));
         };
     };
 
     var drawField = function (subPointName) {
         return function (options) {
-            console.log('unten');
             var myId = _.uniqueId('c'),
                 sectionGroup = options.view.createSectionGroup();
 
             this.append(sectionGroup);
             sectionGroup.append(options.view.createLabel({id: myId, text: gt(subPointName)}));
-            sectionGroup.append(options.view.createTextField({id: myId, dataid: subPointName}));
+            sectionGroup.append(options.view.createTextField({id: myId, property: subPointName}));
 
-            if (!options.view.getModel().get(subPointName)) {
+            if (!options.view.getModel().get(subPointName) &&
+                !options.view.getModel().getProp(subPointName).mandatory) {
                 sectionGroup.addClass('hidden');
+            }
+            if (options.view.getModel().getProp(subPointName).mandatory) {
+                sectionGroup.addClass('mandatory');
             }
         };
     };
@@ -129,7 +186,7 @@ define('io.ox/contacts/edit/view-form',
                 _.each(lineFormat, function (multiline, index) {
                     var myId = _.uniqueId('c');
                     labels.push(options.view.createLabel({id: myId, text: gt(multiline)}));
-                    fields.push(options.view.createTextField({id: myId, dataid: multiline}));
+                    fields.push(options.view.createTextField({id: myId, property: multiline}));
                     hide = (options.view.getModel().get(multiline)) ? false : true;
                 });
                 var outterLabel = $('<div>').addClass('inlinelabel');
@@ -153,35 +210,14 @@ define('io.ox/contacts/edit/view-form',
 
         saveButton.addClass('button default-action saveButton').text('Save');
         saveButton.on('click', function () {
-            options.view.getModel().save();
+            options.view.save();
+
         });
         return saveButton;
     };
 
 
-    var createPictureForm = function () {
-        var form = $('<form>', {
-            'accept-charset': 'UTF-8',
-            'enctype': 'multipart/form-data',
-            'id': 'contactUploadImage',
-            'method': 'POST',
-            'name': 'contactUploadImage',
-            'target': 'blank.html'
-        })
-        .append(
-            $('<input>', {
-                name: 'file',
-                type: 'file',
-                accept: 'image/*'
-            })
-        ).append(
-            $('<iframe/>', {
-                'name': 'hiddenframePicture',
-                'src': 'blank.html'
-            }).css('display', 'none')
-        );
-        return form;
-    };
+
 
     var picTrigger = function () {
         $('input[type="file"]').trigger('click');
@@ -198,9 +234,7 @@ define('io.ox/contacts/edit/view-form',
 
         section = options.view.createSection({}).addClass('formheader');
 
-        picture = (api.getPicture(options.view.getModel().getData())).addClass('picture');
-        picture.on('click', picTrigger);
-        title = options.view.createText({dataid: 'display_name', classes: 'name clear-title'});
+        title = options.view.createText({property: 'display_name', classes: 'name clear-title'});
 
 
         calculatedModel = new Model({});
@@ -209,23 +243,47 @@ define('io.ox/contacts/edit/view-form',
                 return util.getJob(options.view.getModel().getData());
             },
             update: function () {
-                $(this).trigger('jobdescription.calculated.changed', util.getJob(this.data));
+                $(this).trigger('change:calculated.jobdescription', util.getJob(options.view.getModel().getData()));
             },
             set: function () {}
         });
 
         // just bridge the event
-        $(options.view.getModel()).on('jobdescription.calculated.changed', function () {
+        $(options.view.getModel()).on('change:calculated.jobdescription', function () {
             calculatedModel.update();
         });
 
-        jobDescription = options.view.createText({dataid: 'jobdescription.calculated', classes: 'job clear-title', model: calculatedModel});
+        jobDescription = options.view.createText({property: 'jobdescription.calculated', classes: 'job clear-title', model: calculatedModel});
 
 
         saveButton = createSaveButton(options);
 
-        picForm = createPictureForm();
-
+        picture = (api.getPicture(options.view.getModel().getData())).addClass('picture');
+        picture.on('click', picTrigger);
+        function handleFileSelect(evt) {
+            var file = evt.target.files,
+                reader = new FileReader();
+            console.log(reader);
+            reader.onload = (function (theFile) {
+                return function (e) {
+                    $('.picture').css('background-image', 'url(' + e.target.result + ')');
+                };
+            }(file[0]));
+            reader.readAsDataURL(file[0]);
+            options.view.getModel().dirty = true;
+        }
+        picForm = options.view.createPicUpload({
+            wrap: false,
+            label: false,
+            charset: 'UTF-8',
+            enctype: 'multipart/form-data',
+            id: 'contactUploadImage',
+            method: 'POST',
+            formname: 'contactUploadImage',
+            name: 'file',
+            target: 'blank.html'
+        });
+        picForm.find('input').on('change', handleFileSelect);
 
         section.append(picture);
         section.append(title);
@@ -269,101 +327,49 @@ define('io.ox/contacts/edit/view-form',
         });
     };
 
-    window.mymodel = null;
+
+    var ContactEditView = View.extend({
+
+        draw: function (app) {
+            var self = this,
+                meta;
+            if (this.getModel()) {
+                meta = {
+                    'contact-personal': ['title', 'first_name', 'last_name', 'display_name', 'second_name', 'suffix', 'nickname', 'birthday'],
+                    'contact-email': ['email1', 'email2', 'email3'],
+                    'contact-phone': ['telephone_business1', 'telephone_business2', 'fax_business', 'telephone_car', 'telephone_company', 'telephone_home1', 'telephone_home2', 'fax_home', 'cellular_telephone1', 'cellular_telephone2', 'telephone_other', 'fax_other', 'telephone_isdn', 'telephone_pager', 'telephone_primary', 'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'instant_messenger1', 'instant_messenger2', 'telephone_ip', 'telephone_assistant'],
+                    'contact-home-address': ['street_home', 'postal_code_home', 'city_home', 'state_home', 'country_home'],
+                    'contact-work-address': ['street_business', 'postal_code_business', 'city_business', 'state_business', 'country_business'],
+                    'contact-other-address': ['street_other', 'postal_code_other', 'city_other', 'state_other', 'country_other'],
+                    'contact-job-descriptions': ['room_number', 'profession', 'position', 'company', 'department', 'employee_type', 'number_of_employees', 'sales_value', 'tax_id', 'commercial_register', 'branches', 'business_category', 'info', 'manager_name', 'assistant_name'],
+                    'special-information': ['marital_status', 'number_of_children', 'spouse_name', 'note', 'url', 'anniversary'],
+                    'userfields': ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05', 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10', 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15', 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20']
+                };
+
+                var updateDisplayName = function () {
+                    console.log('update displayname');
+                    self.getModel().set('display_name', util.getFullName(self.getModel().getData()));
+                };
+
+                var updateJobDescription = function () {
+                    $(self.getModel()).trigger('change:calculated.jobdescription', util.getJob(self.getModel().getData()));
+                };
+
+                $(this.getModel()).on('change:title change:first_name change:last_name', updateDisplayName);
+                $(this.getModel()).on('change:company change:position change:profession', updateJobDescription);
+
+                initExtensionPoints(meta);
+                this.node.addClass('contact-detail edit').attr('data-property', self.getModel().get('folder_id') + '.' + self.getModel().get('id'));
+                ext.point('io.ox/contacts/edit/form').invoke('draw', self.node, {view: self});
+            }
+            return self;
+        },
+        save: function () {
+            $(this).trigger('save');
+        }
+
+    });
 
     // my happy place
-    return {
-        create: function () {
-            var myView = new View({});
-            _.extend(myView, {
-                draw: function (data, app) {
-                    var self = this,
-                        meta;
-                    if (data !== undefined && data !== null) {
-                        this.model = new Model(data);
-                        _.extend(this.model, {
-                            displaynameChange: /^(first_name|last_name|title)$/,
-                            jobDescriptionChange: /^(company|position|profession)$/,
-                            set: function (key, value) {
-                                this.dirty = true;
-                                this.data[key] = value;
-                                if (this.displaynameChange.test(key)) {
-                                    this.data.display_name = util.getFullName(this.data);
-                                    $(this).trigger('display_name.changed', this.data.display_name);
-                                }
-
-                                // just to fire an update event for other listeners than the view itself
-                                if (this.jobDescriptionChange.test(key)) {
-                                    $(this).trigger('jobdescription.calculated.changed', util.getJob(this.data));
-                                }
-                                this.data[key] = value;
-                                $(this).trigger(key + '.changed', value);
-                            },
-                            get: function (key) {
-                                return this.data[key];
-                            },
-                            save: function () {
-                                var self = this;
-                                console.log('i am saving now');
-                                var image = $('#contactUploadImage').find("input[type=file]").get(0);
-                                    //formdata = this.data;
-                                // api edit? needs tracing the changes, no good!
-                                // api editNewImage uploades the whole form data, ughh
-                                // so just edit everything on change?
-
-                                if (image.files && image.files[0]) {
-                                    this.data.folderId = this.data.folder_id;
-                                    this.data.timestamp = _.now();
-                                    api.editNewImage(JSON.stringify(this.data), image.files[0])
-                                    .done(function () {
-                                        self.dirty = false;
-                                        console.log("SAVED");
-                                        alert("SAVED");
-                                        app.quit(); //close tha app???
-                                    });
-
-                                } else {
-                                    api.edit({
-                                        id: this.data.id,
-                                        folder: this.data.folder_id,
-                                        timestamp: _.now(),
-                                        data: this.data
-                                    }).done(function () {
-                                        self.dirty = false;
-                                        console.log("SAVED");
-                                        alert("SAVED");
-                                        app.quit(); //close tha app???
-                                    });
-                                }
-
-                            }
-                        });
-      
-                        window.mymodel = this.model;
-
-                        meta = {
-                            'contact-personal': ['title', 'first_name', 'last_name', 'display_name', 'second_name', 'suffix', 'nickname', 'birthday'],
-                            'contact-email': ['email1', 'email2', 'email3'],
-                            'contact-phone': ['telephone_business1', 'telephone_business2', 'fax_business', 'telephone_car', 'telephone_company', 'telephone_home1', 'telephone_home2', 'fax_home', 'cellular_telephone1', 'cellular_telephone2', 'telephone_other', 'fax_other', 'telephone_isdn', 'telephone_pager', 'telephone_primary', 'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'instant_messenger1', 'instant_messenger2', 'telephone_ip', 'telephone_assistant'],
-                            'contact-home-address': ['street_home', 'postal_code_home', 'city_home', 'state_home', 'country_home'],
-                            'contact-work-address': ['street_business', 'postal_code_business', 'city_business', 'state_business', 'country_business'],
-                            'contact-other-address': ['street_other', 'postal_code_other', 'city_other', 'state_other', 'country_other'],
-                            'contact-job-descriptions': ['room_number', 'profession', 'position', 'company', 'department', 'employee_type', 'number_of_employees', 'sales_value', 'tax_id', 'commercial_register', 'branches', 'business_category', 'info', 'manager_name', 'assistant_name'],
-                            'special-information': ['marital_status', 'number_of_children', 'spouse_name', 'note', 'url', 'anniversary'],
-                            'userfiels': ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05', 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10', 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15', 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20']
-                        };
-
-                        initExtensionPoints(meta);
-
-
-                        this.node.addClass('contact-detail edit').attr('data-item-id', self.model.get('folder_id') + '.' + self.model.get('id'));
-
-                        ext.point('io.ox/contacts/edit/form').invoke('draw', self.node, {view: self});
-                    }
-                    return self;
-                }
-            });
-            return myView;
-        }
-    };
+    return ContactEditView;
 });

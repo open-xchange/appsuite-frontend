@@ -128,20 +128,16 @@
     margin-bottom: 20px;
 }
 
-.mail-detail.page .infoblock a {
-    text-decoration: underline;
-}
-
 .mail-detail.page .infoblock {
 	padding: 13px;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
     margin-bottom: 1em;
     cursor: pointer;
 }
 
-.mail-detail.page .infoblock .label {
-	color:#000;
+.mail-detail.page .infoblock a {
+    text-decoration: underline;
 }
 
 .mail-detail .date {
@@ -160,6 +156,7 @@
     font-weight: bold;
     font-size: 80%;
     color: @mail-priority;
+    vertical-align: top;
 }
 
 .mail-detail .contact-picture {

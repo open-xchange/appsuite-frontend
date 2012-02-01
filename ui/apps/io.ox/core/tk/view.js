@@ -21,33 +21,67 @@ define('io.ox/core/tk/view',
     'use strict';
 
     var View = function (options) {
-        var self = this;
         options = options || {};
-        options.model = options.model || new SimpleModel({});
-        this.node = $('<div>');
-        this.model = options.model;
-        $(this.node).on('update', _.bind(this.onUpdateFormElement, this));
+        options.node = options.node || $('<div>');
+
+        if (options.model) {
+            this.model = options.model;
+        }
+        this.node = options.node;
+
+        var self = this,
+
+            getPropertyNodes = function (name) {
+                return $('[data-property=' + name + ']', self.node);
+            };
+
+
+        // #1: capture all changes of form elements
+        $(this.node).on('update.model', function (e, o) {
+            e.stopPropagation();
+            self.model.set(o.property, o.value);
+        });
+
+        // #2: update form elements if model changes
+        $(this.model).on('change', function (e, name, value) {
+            // loop over all elements - yes, manually!
+            console.log('update model  >>>>>');
+            console.log(arguments);
+            getPropertyNodes(name).each(function () {
+                // triggerHandler does not bubble and is only triggered for the first element (aha!)
+                // does nothing yet?
+                console.log('trigger update.view');
+                $(this).triggerHandler('update.view', value);
+            });
+        });
+
+        window.horst = this.model;
+
+        // delegate errors
+        $(this.model).on('error:validation error:consistency', function (e, errorObj) {
+            console.log('on validation error');
+            console.log(arguments);
+            getPropertyNodes(errorObj.name).each(function () {
+                $(this).triggerHandler('invalid', [errorObj]);
+            });
+        });
+    };
+
+    View.prototype = {
+        setModel: function (model) {
+            this.model = model;
+        },
+        getModel: function () {
+            return this.model;
+        },
+        append: function (jqWrapped) {
+            this.node.append(jqWrapped);
+        }
     };
 
 
-    View.prototype.setModel = function (model) {
-        this.model = model;
-    };
 
-    View.prototype.getModel = function () {
-        return this.model;
-    };
-
-    View.prototype.append = function (jqWrapped) {
-        this.node.append(jqWrapped);
-    };
-
-    View.prototype.onUpdateFormElement = function (evt, options) {
-        console.log(this);
-        this.model.set(options.dataid, options.value);
-        evt.stopPropagation();
-    };
-
+    // still ugly
     _.each(forms, function (item, itemname) {
         if (_.isFunction(item)) {
             View.prototype[itemname] = function () {
@@ -59,6 +93,7 @@ define('io.ox/core/tk/view',
             };
         }
     });
+    _.makeExtendable(View);
 
     return View;
 });

@@ -67,8 +67,8 @@ define('io.ox/game/main', [], function () {
             showText = function (text, start, duration) {
                     var numLines = text.split(/\n/).length,
                         node = $('<div>').addClass('abs')
-                            .css(
-                            {   top: '50%',
+                            .css({
+                                top: '50%',
                                 marginTop: -(numLines * LINE_HEIGHT >> 1) + 'px'
                             })
                             .text(text + '')
