@@ -491,6 +491,11 @@ define.async('io.ox/mail/write/main',
         };
 
         addUpload = function () {
+
+            if (Modernizr.file) {
+                // alert('YES FILEAPI');
+            }
+
             return $('<div>')
                 .addClass('section-item upload')
                 .append(

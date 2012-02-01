@@ -276,8 +276,15 @@ define("io.ox/mail/api",
 
     api.send = function (data, files) {
 
-        var deferred = $.Deferred(),
-            form = new FormData(),
+        var deferred = $.Deferred();
+
+        handleSendXHR2(data, files, deferred);
+
+        return deferred;
+    };
+
+    function handleSendXHR2(data, files, deferred) {
+        var form = new FormData(),
             flatten = function (recipient) {
                 return '"' + recipient[0] + '" <' + recipient[1] + '>';
             };
@@ -322,9 +329,54 @@ define("io.ox/mail/api",
                 }, 3000);
             })
             .fail(deferred.reject);
+    }
 
-        return deferred;
-    };
+    function handleSendTheGoodOldWay(data, files, deferred) {
+        var flatten = function (recipient) {
+                return '"' + recipient[0] + '" <' + recipient[1] + '>';
+            };
+
+        // clone data (to avoid side-effects)
+        data = _.clone(data);
+
+        // flatten from, to, cc, bcc
+        data.from = _(data.from).map(flatten).join(', ');
+        data.to = _(data.to).map(flatten).join(', ');
+        data.cc = _(data.cc).map(flatten).join(', ');
+        data.bcc = _(data.bcc).map(flatten).join(', ');
+
+        // add mail data
+        form.append('json_0', JSON.stringify(data));
+        // add files
+        _(files).each(function (file, index) {
+            form.append('file_' + index, file);
+        });
+
+        http.UPLOAD({
+                module: 'mail',
+                params: { action: 'new' },
+                data: form,
+                dataType: 'text'
+            })
+            .done(function (text) {
+                // process HTML-ish non-JSONP response
+                var a = text.indexOf('{'),
+                b = text.lastIndexOf('}');
+                if (a > -1 && b > -1) {
+                    deferred.resolve(JSON.parse(text.substr(a, b - a + 1)));
+                } else {
+                    deferred.resolve({});
+                }
+                // wait a moment, then update mail index
+                setTimeout(function () {
+                    api.getAllThreads({}, false)
+                        .done(function (data) {
+                            api.trigger('refresh.all');
+                        });
+                }, 3000);
+            })
+            .fail(deferred.reject);
+    }
 
     // refresh
     api.bind('refresh!', function (folder) {
