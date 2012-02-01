@@ -14,7 +14,7 @@
  */
 
 define("io.ox/core/extensions",
-    ["io.ox/core/event", "io.ox/core/collection"], function (event, Collection) {
+    ["io.ox/core/event", "io.ox/core/collection"], function (Events, Collection) {
 
     // A naive extension registry.
     "use strict";
@@ -39,7 +39,7 @@ define("io.ox/core/extensions",
         wrappers = {};
 
     // never leak
-    $(window).bind("unload", function () {
+    $(window).on("unload", function () {
         _(registry).each(function (ext) {
             ext.clear();
         });
@@ -72,7 +72,7 @@ define("io.ox/core/extensions",
             },
             self = this;
 
-        event.Dispatcher.extend(this);
+        Events.extend(this);
 
         function createInvoke(point, ext) {
             return function (name, context, args) {

@@ -39,6 +39,7 @@ define('io.ox/core/tk/forms',
         boxChangeByModel = function (e, value) {
             $(this).prop('checked', !!value);
         },
+
         selectChange = function () {
             var self = $(this);
             self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
@@ -46,13 +47,20 @@ define('io.ox/core/tk/forms',
         selectChangeByModel = function (e, value) {
             $(this).val(value);
         },
+
         radioChange = selectChange,
         radioChangeByModel = function (e, value) {
             var self = $(this);
             self.prop('checked', self.attr('value') === value);
         },
+
         textChange = selectChange,
         textChangeByModel = selectChangeByModel,
+
+        nodeChangeByModel = function (e, value) {
+            $(this).text(value);
+        },
+
         invalid = function (e) {
             var node = $(this)
                 .addClass('invalid-value').css({
@@ -122,6 +130,9 @@ define('io.ox/core/tk/forms',
         this.node = this.options = o = null;
         return node;
     };
+
+    // allows global lookup
+    var lastLabelId = '';
 
     var utils = {
 
@@ -193,7 +204,7 @@ define('io.ox/core/tk/forms',
         createLabel: function (options) {
             var labelDiv,
                 label;
-            options.id = options.id || _.uniqueId('c');
+            options.id = lastLabelId = options.id || _.uniqueId('label');
             options.text = options.text || "";
 
             labelDiv = $('<div>');
@@ -212,29 +223,19 @@ define('io.ox/core/tk/forms',
         },
 
         createText: function (options) {
-            var textContainer;
-            options.id = options.id || _.uniqueId('c');
-            textContainer = $('<span>');
-            textContainer.addClass('text');
 
-            if (options.classes) {
-                textContainer.addClass(options.classes);
+            var node = $('<span>')
+                .addClass('text')
+                .addClass(options.classes)
+                .text(options.text || '');
+
+            if (options.model && options.property) {
+                node.attr('data-property', options.property)
+                    .on('update.field', nodeChangeByModel)
+                    .triggerHandler('update.field', options.model.get(options.property));
             }
 
-            var updateText = function () {
-                if (options.html === true) {
-                    textContainer.html(options.model.get(options.property));
-                } else {
-                    textContainer.text(options.model.get(options.property));
-                }
-            };
-
-            if (options.model) {
-                updateText();
-                $(options.model).on('change:' + options.property, updateText);
-            }
-
-            return textContainer;
+            return node;
         },
 
         createSection: function (options) {
@@ -281,29 +282,9 @@ define('io.ox/core/tk/forms',
             }).css('display', 'none'));
 
             return form;
-
-//            var f = new Field(options, 'form'),
-//                o = options;
-//            f.create('<form>', textChange);
-//            f.applyModel(textChangeByModel);
-//            f.node.attr({
-//                'accept-charset': o.charset,
-//                'enctype': o.enctype,
-//                'method': o.method,
-//                'target': o.target
-//            });
-//            f.node.append(utils.createFileField({
-//                'wrap': false,
-//                id: 'file',
-//                'accept': 'image/*'
-//            }));
-//            f.node.append(utils.createIframe({
-//                'wrap': false,
-//                label: false,
-//                name: 'hiddenframePicture',
-//                'src': 'blank.html'
-//            }).css('display', 'none'));
-//            return f.finish('prepend');
+        },
+        getLastLabelId: function () {
+            return lastLabelId;
         }
     };
 

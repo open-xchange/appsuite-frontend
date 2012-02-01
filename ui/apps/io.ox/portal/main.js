@@ -133,12 +133,12 @@
                         });
                 });
 
-            win.bind('show', function () {
+            win.on('show', function () {
                 $(window).on('resize', resize);
                 resize();
             });
 
-            win.bind('hide', function () {
+            win.on('hide', function () {
                 $(window).off('resize', resize);
             });
 

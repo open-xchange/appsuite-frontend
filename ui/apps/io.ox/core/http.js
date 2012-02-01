@@ -13,7 +13,7 @@
  *
  */
 
-define("io.ox/core/http", ["io.ox/core/event"], function (event) {
+define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
 
     "use strict";
 
@@ -410,10 +410,11 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
             return data;
         } else {
             // POST/PUT - sanitize data
-            var i = 0, $l = data.length, sanitized = [];
-            var columnList = columns.split(",");
+            var i = 0, $l = data.length, sanitized = [], obj,
+                columnList = columns.split(",");
             for (; i < $l; i++) {
-                sanitized.push(makeObject(data[i], module, columnList));
+                obj = data[i];
+                sanitized.push(_.isArray(obj) ? makeObject(obj, module, columnList) : obj);
             }
             return sanitized;
         }
@@ -831,7 +832,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (event) {
         }
     };
 
-    event.Dispatcher.extend(that);
+    Events.extend(that);
 
     return that;
 });
