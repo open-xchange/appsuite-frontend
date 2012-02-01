@@ -105,7 +105,6 @@ define('io.ox/core/tk/model',
                 return true;
             },
             date: function (key, val, fieldDesc) {
-
                 return true;
             },
             pastDate: function (key, val, fieldDesc) {
@@ -124,7 +123,7 @@ define('io.ox/core/tk/model',
         },
         validate: function (key, value) {
             var fieldDesc = this.properties[key];
-            if (value === "" && (fieldDesc === undefined || fieldDesc.mandatory !== true)) {
+            if (key === undefined || value === "" && (fieldDesc === undefined || fieldDesc.mandatory !== true)) {
                 return true;
             }
             if (fieldDesc && this.formats[fieldDesc.format] && _.isFunction(this.formats[fieldDesc.format])) {
