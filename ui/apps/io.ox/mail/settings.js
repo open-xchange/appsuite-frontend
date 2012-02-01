@@ -18,8 +18,9 @@ define('io.ox/mail/settings',
         'io.ox/settings/utils',
         'io.ox/core/tk/dialogs',
         'io.ox/core/tk/forms',
+        'io.ox/core/tk/model',
         'io.ox/core/tk/view',
-        'settings!io.ox/mail'], function (ext, utils, dialogs, forms, View, settings) {
+        'settings!io.ox/mail'], function (ext, utils, dialogs, forms, Model, View, settings) {
 
     'use strict';
 
@@ -97,7 +98,11 @@ define('io.ox/mail/settings',
     window.settings = settings;
     var mailSettings = {
         draw: function (node, app) {
-            var myView = new View({model: settings});
+
+            var MailModel = Model.extend({}),
+                model = settings.createModel(MailModel),
+                myView = new View({ model: model });
+
             node.append(myView.node);
             //myView.createSectionTitle({text: 'Common'});
 
