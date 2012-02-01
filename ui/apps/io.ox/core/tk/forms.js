@@ -14,7 +14,8 @@
 /*global
 define: true
 */
-define('io.ox/core/tk/forms', [], function () {
+define('io.ox/core/tk/forms',
+      ['io.ox/core/i18n'], function (i18n) {
 
     'use strict';
 
@@ -90,18 +91,24 @@ define('io.ox/core/tk/forms', [], function () {
     Field.prototype.create = function (tag, onChange) {
         var o = this.options;
         this.node = $(tag)
-            .attr({ 'data-property': o.property, name: o.name, id: o.id, value: o.value })
+            .attr({
+                'data-property': o.property,
+                name: o.name,
+                id: o.id,
+                value: o.value
+            })
             .on('change', onChange)
             .addClass(o.classes);
     };
+
 
     Field.prototype.applyModel = function (handler) {
         var o = this.options, model = o.model, val = o.initialValue;
         if ((model || val) !== undefined) {
             this.node
                 .on('invalid', invalid)
-                .on('update.field', handler)
-                .triggerHandler('update.field', model !== undefined ? model.get(o.property) : val);
+                .on('update.view', handler)
+                .triggerHandler('update.view', model !== undefined ? model.get(o.property) : val);
         }
     };
 
@@ -164,6 +171,26 @@ define('io.ox/core/tk/forms', [], function () {
         createPasswordField: function (options) {
             var f = new Field(options, 'text');
             f.create('<input type="password">', textChange);
+            f.applyModel(textChangeByModel);
+            return f.finish('prepend');
+        },
+
+        createFileField: function (options) {
+            var f = new Field(options, 'file');
+            f.create('<input type="file">', textChange);
+            f.node.attr({
+                'accept': options.accept
+            });
+            f.applyModel(textChangeByModel);
+            return f.finish('prepend');
+        },
+
+        createIframe: function (options) {
+            var f = new Field(options, 'iframe');
+            f.create('<iframe>', textChange);
+            f.node.attr({
+                'src': options.src
+            });
             f.applyModel(textChangeByModel);
             return f.finish('prepend');
         },
@@ -241,6 +268,30 @@ define('io.ox/core/tk/forms', [], function () {
             return $('<div>').addClass('settings sectiondelimiter');
         },
 
+        createPicUpload: function (options) {
+            var f = new Field(options, 'form'),
+                o = options;
+            f.create('<form>', textChange);
+            f.applyModel(textChangeByModel);
+            f.node.attr({
+                'accept-charset': o.charset,
+                'enctype': o.enctype,
+                'method': o.method,
+                'target': o.target
+            });
+            f.node.append(utils.createFileField({
+                'wrap': false,
+                id: 'file',
+                'accept': 'image/*'
+            }));
+            f.node.append(utils.createIframe({
+                'wrap': false,
+                label: false,
+                name: 'hiddenframePicture',
+                'src': 'blank.html'
+            }).css('display', 'none'));
+            return f.finish('prepend');
+        },
         getLastLabelId: function () {
             return lastLabelId;
         }

@@ -213,7 +213,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     right: 0px;
     height: 48px;
     left: 0px;
-    
+
     color: @head-color;
 
     border-top: 1px solid mix(@head-color, @head-background, 75%);
@@ -850,7 +850,7 @@ span.hint {
     text-align: center;
     vertical-align: middle;
 }
- 
+
 /* inline links */
 .io-ox-inline-links {
     text-align: right;
@@ -886,7 +886,7 @@ span.hint {
 
 .io-ox-action-link:last-child {
     margin-right: 0;
-} 
+}
 
 /* side popups */
 .io-ox-sidepopup {
@@ -962,7 +962,7 @@ input.nice-input {
     border: 1px solid #ccc;
     padding: 0.10em 0.5em 0.10em 0.5em;
     border-radius: 0.25em;
-    outline: 0; 
+    outline: 0;
 }
 
 .boxshadow input.nice-input:focus {
@@ -1090,3 +1090,119 @@ input.nice-input {
 .io-ox-foldertree .foldertree-links {
     padding: 1em 13px 1em 29px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*OMG find better place*/
+div.jGrowl {
+	z-index: 			9999;
+	color: 				#fff;
+	font-size: 			12px;
+}
+
+/** Normal Style Positions **/
+div.jGrowl {
+	position:			absolute;
+}
+
+body > div.jGrowl {
+	position:			fixed;
+}
+
+div.jGrowl.top-left {
+	left: 				0px;
+	top: 				0px;
+}
+
+div.jGrowl.top-right {
+	right: 				0px;
+	top: 				0px;
+}
+
+div.jGrowl.bottom-left {
+	left: 				0px;
+	bottom:				0px;
+}
+
+div.jGrowl.bottom-right {
+	right: 				0px;
+	bottom: 			0px;
+}
+
+div.jGrowl.center {
+	top: 				0px;
+	width: 				50%;
+	left: 				25%;
+}
+
+/** Cross Browser Styling **/
+div.center div.jGrowl-notification, div.center div.jGrowl-closer {
+	margin-left: 		auto;
+	margin-right: 		auto;
+}
+
+div.jGrowl div.jGrowl-notification, div.jGrowl div.jGrowl-closer {
+	background-color: 		#000;
+	opacity: 				.85;
+	zoom: 					1;
+	width: 					235px;
+	padding: 				10px;
+	margin-top: 			5px;
+	margin-bottom: 			5px;
+	font-family: 			Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 				1em;
+	text-align: 			left;
+	display: 				none;
+	-moz-border-radius: 	5px;
+	-webkit-border-radius:	5px;
+}
+
+div.jGrowl div.jGrowl-notification {
+	min-height: 			40px;
+}
+
+div.jGrowl div.jGrowl-notification,
+div.jGrowl div.jGrowl-closer {
+	margin: 				10px;
+}
+
+div.jGrowl div.jGrowl-notification div.jGrowl-header {
+	font-weight: 			bold;
+	font-size:				.85em;
+}
+
+div.jGrowl div.jGrowl-notification div.jGrowl-close {
+	z-index:				99;
+	float: 					right;
+	font-weight: 			bold;
+	font-size: 				1em;
+	cursor:					pointer;
+}
+
+div.jGrowl div.jGrowl-closer {
+	padding-top: 			4px;
+	padding-bottom: 		4px;
+	cursor: 				pointer;
+	font-size:				.9em;
+	font-weight: 			bold;
+	text-align: 			center;
+}
+
+/** Hide jGrowl when printing **/
+@media print {
+	div.jGrowl {
+		display: 			none;
+	}
+}
+/** OMG END **/
