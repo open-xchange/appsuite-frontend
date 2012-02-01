@@ -16,12 +16,8 @@ define('io.ox/core/event', function () {
     'use strict';
 
     var shift = function (data, fn, context) {
-        var o = { data: data, fn: fn };
-        if (o.fn === undefined) {
-            o.fn = o.data;
-            o.data = {};
-        }
-        o.fn = context !== undefined ? $.proxy(o.fn, context) : o.fn;
+        var o = !fn ? { data: {}, fn: data } : { data: data, fn: fn };
+        o.fn = context ? $.proxy(o.fn, context) : o.fn;
         return o;
     };
 
@@ -44,8 +40,16 @@ define('io.ox/core/event', function () {
         };
 
         this.trigger = function () {
-            var args = $.makeArray(arguments), type = args.shift();
-            hub.trigger.call(hub, type, args);
+            var args = $.makeArray(arguments), types = args.shift();
+            _(types.split(/\s+/)).each(function (type) {
+                hub.triggerHandler.call(hub, type, args);
+            });
+        };
+
+        this.destroy = function () {
+            hub.off();
+            hub = context = null;
+            this.on = this.off = this.one = this.trigger = $.noop;
         };
     };
 
