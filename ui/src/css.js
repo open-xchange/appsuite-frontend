@@ -340,13 +340,13 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model']
 
             remove: function (path) {
                 if (path) {
-                    path = (globalSubpath + mywrapper.settingsPath + '/' + path);
+                    path = (globalSubpath + that.settingsPath + '/' + path);
                     remove(path);
                 }
             },
 
             contains: function (path) {
-                path = (globalSubpath + mywrapper.settingsPath + '/' + path);
+                path = (globalSubpath + that.settingsPath + '/' + path);
                 return contains(path);
             },
 
@@ -369,12 +369,12 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model']
                 }
                 if (settingsCache.contains('settingsDefault')) {
                     return settingsCache.get('settingsDefault').pipe(function (mycached) {
-                        if(mycached !== undefined) {
+                        if (mycached !== undefined) {
                             settings = mycached;
                             load();
                             return settings;
                         } else {
-                          return load();
+                            return load();
                         }
                     });
                 } else {
@@ -396,16 +396,16 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model']
     };
 
     return {
-      load: function (name, req, load, config) {
-          var mywrapper = settingsWrapper();
-          mywrapper.settingsPath = name; //encodeURIComponent(name);
-          mywrapper.load()
-            .done(function () {
-              load(mywrapper);
-            })
-            .fail(function () {
-              console.error('failed to load settings for:' + mywrapper.settingsPath);
-            });
+        load: function (name, req, load, config) {
+            var mywrapper = settingsWrapper();
+            mywrapper.settingsPath = name; //encodeURIComponent(name);
+            mywrapper.load()
+                .done(function () {
+                    load(mywrapper);
+                })
+                .fail(function () {
+                    console.error('failed to load settings for:' + mywrapper.settingsPath);
+                });
 
       }
     };

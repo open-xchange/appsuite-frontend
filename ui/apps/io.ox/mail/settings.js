@@ -71,7 +71,7 @@ function (ext, View, Model, util, gt, settings) {
                                         'mehr Infos unter <a href="http://www.open-xchange.com" target="_blank">www.open-xchange.com</a>'}),
                               util.createSectionGroup()
                                   .append(
-                                      this.createSelectbox({property: 'mail-common-defaultview',
+                                      this.createSelectbox({property: 'defaultMailView',
                                           label: 'Default view:',
                                           items: { 'V-split view 1': 'option1',
                                               'V-split view 2': 'option2',
@@ -82,7 +82,7 @@ function (ext, View, Model, util, gt, settings) {
                                   ).addClass('expertmode'),
                               util.createSectionGroup()
                                   .append(
-                                      this.createSelectbox({property: 'mail-common-spamfolderview',
+                                      this.createSelectbox({property: 'defaultSpamView',
                                           label: 'Default view for Spam folder:',
                                           items: { 'V-split view 1': 'option1',
                                               'V-split view 2': 'option2',
@@ -93,12 +93,12 @@ function (ext, View, Model, util, gt, settings) {
                                   ).addClass('expertmode'),
                               util.createSectionDelimiter(),
                               util.createButton({label: 'my button me'}),
-                              this.createCheckbox({property: 'mail-common-selectfirst', label: 'Automatically select first E-Mail?'}).addClass('expertmode'),
-                              this.createCheckbox({property: 'mail-common-removepermanently', label: 'Permanently remove deleted E-Mails?'}),
-                              this.createCheckbox({property: 'mail-common-notifyreceipt', label: 'Notify on delivery receipt?'}).addClass('expertmode'),
-                              this.createCheckbox({property: 'mail-common-showsenderpic', label: 'Show sender image?'}),
-                              this.createCheckbox({property: 'mail-common-collectwhilesending', label: 'Automatically collect contacts in the folder "Collected addresses" while sending?'}).addClass('expertmode'),
-                              this.createCheckbox({property: 'mail-common-collectwhilereading', label: 'Automatically collect contacts in the folder "Collected addresses" while reading?'}).addClass('expertmode'),
+                              this.createCheckbox({property: 'selectFirstMessage', label: 'Automatically select first E-Mail?'}).addClass('expertmode'),
+                              this.createCheckbox({property: 'removePermanently', label: 'Permanently remove deleted E-Mails?'}),
+                              this.createCheckbox({property: 'notifyAcknoledge', label: 'Notify on delivery receipt?'}).addClass('expertmode'),
+                              this.createCheckbox({property: 'showContactImage', label: 'Show sender image?'}),
+                              this.createCheckbox({property: 'contactCollectOnMailTransport', label: 'Automatically collect contacts in the folder "Collected addresses" while sending?'}).addClass('expertmode'),
+                              this.createCheckbox({property: 'contactCollectOnMailAccess', label: 'Automatically collect contacts in the folder "Collected addresses" while reading?'}).addClass('expertmode'),
                               util.createSectionDelimiter(),
                               util.createButton({label: 'click me'})
                           ),
