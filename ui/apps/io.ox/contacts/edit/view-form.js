@@ -368,7 +368,7 @@ define('io.ox/contacts/edit/view-form',
                 $(this.getModel()).on('error:validation', function (evt, err) {
                     console.log('error validation');
                     console.log(arguments);
-                    $('#myGrowl').jGrowl(err.name + ' ' + err.message, {header: 'Make an educated guess!'});
+                    $('#myGrowl').jGrowl(err.name + ' ' + err.message, {header: 'Make an educated guess!', sticky: true});
                 });
             }
             return self;
