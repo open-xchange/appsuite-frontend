@@ -58,6 +58,7 @@ define('io.ox/core/tk/view',
             getPropertyNodes(error.properties).each(function () {
                 $(this).triggerHandler('invalid', [error]);
             });
+            // TODO: remove - just for debugging
             if (e.type === 'error:inconsistent') {
                 console.error(error.message);
             }

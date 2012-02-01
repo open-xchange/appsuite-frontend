@@ -279,7 +279,8 @@ define('io.ox/contacts/edit/view-form',
             enctype: 'multipart/form-data',
             id: 'contactUploadImage',
             method: 'POST',
-            name: 'contactUploadImage',
+            formname: 'contactUploadImage',
+            name: 'file',
             target: 'blank.html'
         });
         picForm.find('input').on('change', handleFileSelect);
