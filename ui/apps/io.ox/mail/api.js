@@ -104,14 +104,12 @@ define("io.ox/mail/api",
     api.getAllThreads = function (options, useCache) {
 
         options = options || {};
-        options.sort = '612';
-
-        threads = {};
 
         if (2 > 1) {
 
             options.action = 'all';
             options.columns = '601,600,610,612'; // +level, +received_date
+            options.sort = 'thread';
 
             return this.getAll(options, useCache)
                 .pipe(function (data) {
@@ -147,6 +145,7 @@ define("io.ox/mail/api",
 
             options.action = 'threadedAll';
             options.columns = '601,600';
+            options.sort = '612';
 
             return this.getAll(options, useCache, api.caches.allThreaded)
                 .pipe(function (data) {

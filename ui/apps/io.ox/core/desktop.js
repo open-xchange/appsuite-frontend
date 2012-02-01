@@ -729,12 +729,11 @@ define("io.ox/core/desktop",
 
                 this.close = function () {
                     if (quitOnClose && this.app !== null) {
+                        this.trigger("quit");
                         this.app.quit()
                             .done(function () {
-                                self.trigger("quit");
                                 self.state.open = false;
                                 self.state.running = false;
-                                // event is triggered by app
                             });
                     } else {
                         this.hide();
