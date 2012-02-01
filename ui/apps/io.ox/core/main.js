@@ -41,7 +41,7 @@ define("io.ox/core/main",
             }
         }
 
-        http.bind("start", function () {
+        http.on("start", function () {
             if (count === 0) {
                 if (timer === null) {
                     $("#io-ox-refresh-icon").addClass("progress");
@@ -55,7 +55,7 @@ define("io.ox/core/main",
             count++;
         });
 
-        http.bind("stop", function () {
+        http.on("stop", function () {
             count = Math.max(0, count - 1);
             off();
         });
@@ -186,7 +186,7 @@ define("io.ox/core/main",
             drawDesktop = $.noop;
         };
 
-        ox.ui.windowManager.bind("empty", function (isEmpty) {
+        ox.ui.windowManager.on("empty", function (e, isEmpty) {
             if (isEmpty) {
                 drawDesktop();
             }

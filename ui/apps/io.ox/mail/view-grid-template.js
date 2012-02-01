@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/mail/view-grid-template",
-    ["io.ox/mail/util", "io.ox/core/tk/vgrid",
-     "less!io.ox/mail/style.css"], function (util, VGrid) {
+define('io.ox/mail/view-grid-template',
+    ['io.ox/mail/util', 'io.ox/core/tk/vgrid',
+     'less!io.ox/mail/style.css'], function (util, VGrid) {
 
-    "use strict";
+    'use strict';
 
     var that = {
 
@@ -23,21 +23,21 @@ define("io.ox/mail/view-grid-template",
         main: {
             build: function () {
                 var from, date, priority, subject, attachment, threadSize, flag;
-                this.addClass("mail")
+                this.addClass('mail')
                     .append(
-                        $("<div>")
-                            .append(date = $("<span>").addClass("date"))
-                            .append(from = $("<span>").addClass("from"))
+                        $('<div>')
+                            .append(date = $('<span>').addClass('date'))
+                            .append(from = $('<span>').addClass('from'))
                     )
                     .append(
-                        $("<div>")
-                            .append(threadSize = $("<div>").addClass("threadSize"))
-                            .append(attachment = $("<span>").addClass("attachment"))
-                            .append(priority = $("<span>").addClass("priority"))
-                            .append(subject = $("<span>").addClass("subject"))
+                        $('<div>')
+                            .append(threadSize = $('<div>').addClass('threadSize'))
+                            .append(attachment = $('<span>').addClass('attachment'))
+                            .append(priority = $('<span>').addClass('priority'))
+                            .append(subject = $('<span>').addClass('subject'))
                     )
                     .append(
-                        flag = $("<div>").addClass("flag abs")
+                        flag = $('<div>').addClass('flag abs')
                     );
                 return { from: from, date: date, priority: priority, subject: subject, attachment: attachment, threadSize: threadSize, flag: flag };
             },
@@ -45,22 +45,22 @@ define("io.ox/mail/view-grid-template",
                 fields.priority.text(util.getPriority(data));
                 fields.subject.text(_.prewrap(data.subject));
                 if (!data.threadSize || data.threadSize === 1) {
-                    fields.threadSize.text("").hide();
+                    fields.threadSize.text('').hide();
                 } else {
-                    fields.threadSize.text(data.threadSize).css("display", "");
+                    fields.threadSize.text(data.threadSize).css('display', '');
                 }
                 fields.from.empty().append(util.getFrom(data.from), true);
                 fields.date.text(util.getTime(data.received_date));
-                fields.flag.get(0).className = "flag abs flag_" + data.color_label;
-                fields.attachment.css("display", data.attachment ? "" : "none");
+                fields.flag.get(0).className = 'flag abs flag_' + data.color_label;
+                fields.attachment.css('display', data.attachment ? '' : 'none');
                 if (util.isUnread(data)) {
-                    this.addClass("unread");
+                    this.addClass('unread');
                 }
                 if (util.isMe(data)) {
-                    this.addClass("me");
+                    this.addClass('me');
                 }
                 if (util.isDeleted(data)) {
-                    this.addClass("deleted");
+                    this.addClass('deleted');
                 }
             }
         },
@@ -70,7 +70,7 @@ define("io.ox/mail/view-grid-template",
 
             // use template
             var tmpl = new VGrid.Template(),
-                $div = $("<div>");
+                $div = $('<div>');
 
             // add template
             tmpl.add(that.main);
@@ -78,9 +78,9 @@ define("io.ox/mail/view-grid-template",
             _(list).each(function (data, i) {
                 tmpl.getClone()
                     .update(data, i).appendTo($div).node
-                        .css("position", "relative")
-                        .data("object-data", data)
-                        .addClass("hover");
+                        .css('position', 'relative')
+                        .data('object-data', data)
+                        .addClass('hover');
             });
 
             return $div;

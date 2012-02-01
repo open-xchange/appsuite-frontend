@@ -95,17 +95,17 @@ define("io.ox/dev/ajaxDebug/main",
 
 
 
-        grid.selection.bind("change", function (selection) {
+        grid.selection.on("change", function (e, selection) {
             if (selection.length === 1) {
                 viewer.draw(selection[0]);
             }
         });
 
         // explicit keyboard support
-        //win.bind("show", function () { grid.selection.keyboard(true); });
-        //win.bind("hide", function () { grid.selection.keyboard(false); });
+        //win.on("show", function () { grid.selection.keyboard(true); });
+        //win.on("hide", function () { grid.selection.keyboard(false); });
 
-        callHandler.bind("historychanged", function () {
+        callHandler.on("historychanged", function () {
             grid.refresh();
             grid.selection.set(_(callHandler.history).last());
         });

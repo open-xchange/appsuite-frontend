@@ -15,203 +15,57 @@ define('io.ox/core/event', function () {
 
     'use strict';
 
-    var that = {
+    var shift = function (data, fn, context) {
+        var o = !fn ? { data: {}, fn: data } : { data: data, fn: fn };
+        o.fn = context ? $.proxy(o.fn, context) : o.fn;
+        return o;
+    };
 
-        Dispatcher: (function () {
+    var Events = function (context) {
 
-            var guid = 1,
+        var hub = $({});
 
-                trim = function (type) {
-                    // events should be string and lower case
-                    return (type + '').toLowerCase().replace(/(^\s+|\s+$)/g, '');
-                },
+        this.on = function (type, data, fn) {
+            var o = shift(data, fn, context);
+            hub.on(type, o.data, o.fn);
+        };
 
-                split = function (type) {
-                    type = trim(type);
-                    // split?
-                    return type.search(/\s/) > -1 ? type.split(/\s+/) : [type];
-                };
+        this.off = function (type, fn) {
+            hub.off(type, fn);
+        };
 
-            /**
-             * @name Dispatcher
-             * @param {Object} target Target object
-             * @class Event Dispatcher
-             */
-            var Dispatcher = function (target) {
+        this.one = function (type, data, fn) {
+            var o = shift(data, fn, context);
+            hub.one(type, o.data, o.fn);
+        };
 
-                this.handlers = {};
-                this.data = {};
-                this.once = {};
+        this.trigger = function () {
+            var args = $.makeArray(arguments), types = args.shift();
+            _(types.split(/\s+/)).each(function (type) {
+                hub.triggerHandler.call(hub, type, args);
+            });
+        };
 
-                this.has = false;
+        this.destroy = function () {
+            hub.off();
+            hub = context = null;
+            this.on = this.off = this.one = this.trigger = $.noop;
+        };
+    };
 
-                this.enabled = true;
-
-                // make robust for lazy mixins
-                var self = this;
-
-                // never leak
-                $(window).bind('unload', function () {
-                    if (self) {
-                        self.data = self.handlers = null;
-                    }
-                });
-
-                /**
-                 * Bind event
-                 * @param {string} type Event name
-                 * @param {Object} [data] Bound data
-                 * @param {function (data, type)} fn Event handler
-                 */
-                this.bind = function (type, data, fn) {
-
-                    if (self) {
-                        // parameter shift?
-                        if (_.isFunction(data)) {
-                            fn = data;
-                            data = undefined;
-                        }
-
-                        _(split(type)).each(function (t) {
-
-                            // get/create queue
-                            var h = self.handlers[t] || (self.handlers[t] = {});
-
-                            fn.oxGuid = fn.oxGuid !== undefined ? fn.oxGuid : String(guid++);
-
-                            // add event once
-                            if (h[fn.oxGuid] === undefined) {
-                                // add
-                                h[fn.oxGuid] = { fn: fn, data: data };
-                                // heuristic
-                                self.has = true;
-                            }
-                        });
-                    }
-                };
-
-                /**
-                 * Unbind event
-                 * @param {string} type Event name
-                 * @param {function ()} fn Event handler
-                 */
-                this.unbind = function (type, fn) {
-
-                    if (self) {
-                        _(split(type)).each(function (t) {
-
-                            var h = self.handlers[t] || {};
-
-                            // prevent IE from throwing unnecessary errors
-                            try {
-                                // remove listener
-                                delete h[fn.oxGuid];
-                            } catch (e) { }
-                        });
-                    }
-                };
-
-                /**
-                 * Trigger event
-                 * @param {string} type Event name
-                 * @param {Object} [data] Event data
-                 */
-                this.trigger = function (type, data) {
-
-                    if (!self || self.has === false || self.enabled === false) {
-                        return;
-                    }
-
-                    // call handler
-                    function call(handler, type) {
-                        // merge data?
-                        var d = handler.data ? $.extend({}, handler.data, data || {}) : data;
-                        // execute function
-                        try {
-                            handler.fn.call(target, d, type);
-                        } catch (ex_1) {
-                            try {
-                                console.error('Dispatcher.trigger("' + type + '") ' + ex_1);
-                                console.debug(handler.fn);
-                            } catch (ex_2) {
-                                // if u come around here, IE's console doesn't work
-                                if (ox.debug) {
-                                    alert('Dispatcher.trigger(' + type + ') ' + ex_1);
-                                }
-                            }
-                        }
-                    }
-
-                    _(split(type)).each(function (t) {
-
-                        var h = self.handlers[t] || {}, id = '';
-
-                        for (id in h) {
-                            call(h[id], t);
-                        }
-                    });
-                };
-
-                /**
-                 * List all event handlers
-                 * @param {string} [type] List only events of given type
-                 * @returns {Object} Bound handlers
-                 */
-                this.list = function (type) {
-                    return type === undefined ? self.handlers : self.handlers[type];
-                };
-
-                /**
-                 * Get the number of bound handlers
-                 * @return {number} Number of bound handlers
-                 */
-                this.numHandlers = function () {
-                    var i = 0, id = '';
-                    for (id in self.handlers) {
-                        i++;
-                    }
-                    return i;
-                };
-
-                /**
-                 * Disable dispatcher
-                 */
-                this.disable = function () {
-                    self.enabled = false;
-                };
-
-                /**
-                 * Enable dispatcher
-                 */
-                this.enable = function () {
-                    self.enabled = true;
-                };
-
-                /**
-                 * Remove call callbacks
-                 */
-                this.destroy = function () {
-                    self = self.handlers = self.data = self.once = null;
-                };
-            };
-
-            Dispatcher.extend = function (obj) {
-                // create new dispatcher
-                obj.dispatcher = new Dispatcher(obj);
-                // add bind, unbind, and trigger
-                obj.bind = obj.dispatcher.bind;
-                obj.unbind = obj.dispatcher.unbind;
-                obj.trigger = obj.dispatcher.trigger;
-                return obj;
-            };
-
-            return Dispatcher;
-
-        }())
+    Events.extend = function (obj) {
+        // create new event hub
+        obj = obj || {};
+        obj.events = new Events(obj);
+        // add on, off, and trigger
+        obj.on = obj.events.on;
+        obj.off = obj.events.off;
+        obj.trigger = obj.events.trigger;
+        return obj;
     };
 
     // add global dispatcher
-    that.Dispatcher.extend(ox);
+    Events.extend(ox);
 
-    return that;
+    return Events;
 });

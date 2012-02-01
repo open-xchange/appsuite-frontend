@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], function (Selection, event) {
+define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], function (Selection, Events) {
 
     'use strict';
 
@@ -216,8 +216,8 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             container.css('webkitTransform', 'translate3d(0, 0, 0)');
         }
 
-        // add dispatcher
-        event.Dispatcher.extend(this);
+        // add event hub
+        Events.extend(this);
 
         // selection
         Selection.extend(this, scrollpane);
@@ -560,7 +560,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         }, 100);
 
         // routing
-        this.selection.bind('change', function (list) {
+        this.selection.on('change', function (e, list) {
             var id = _(list).map(function (obj) {
                     return self.selection.serialize(obj);
                 }).join(',');

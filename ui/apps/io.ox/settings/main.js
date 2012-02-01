@@ -17,7 +17,7 @@ define('io.ox/settings/main',
       'io.ox/core/tk/forms',
       'io.ox/core/tk/view',
       'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View) {
-    
+
     'use strict';
 
     var tmpl = {
@@ -54,7 +54,7 @@ define('io.ox/settings/main',
 
 
     // application object
-    var app = ox.ui.createApp(),
+    var app = ox.ui.createApp({ name: 'io.ox/settings' }),
         // app window
         win,
         // grid
@@ -63,7 +63,7 @@ define('io.ox/settings/main',
         // nodes
         left,
         right,
-        expertmode = false,
+        expertmode = true, // for testing - better: false,
         currentSelection = null;
 
     function updateExpertMode() {
@@ -88,7 +88,7 @@ define('io.ox/settings/main',
             var settingsID = currentSelection.id + '/settings';
             ext.point(settingsID + '/detail').invoke('save');
         };
-        win.bind('hide', onHideSettingsPane);
+        win.on('hide', onHideSettingsPane);
 
 
 
@@ -96,13 +96,17 @@ define('io.ox/settings/main',
         ext.point('io.ox/settings/links/toolbar').extend({
             id: 'io.ox/settings/expertcb',
             draw: function (context) {
-                var cb  = forms.createCheckbox({dataid: 'settings-expertcb',  currentValue: expertmode, label: 'Expertmode' });
-                cb.on('update', function (evt, options) {
-                    expertmode = options.value;
-                    updateExpertMode();
-                });
-                cb.find('input[data-item-id="settings-expertcb"]').attr('checked', expertmode);
-                this.append(cb);
+                this.append(
+                    forms.createCheckbox({
+                        dataid: 'settings-expertcb',
+                        initialValue: expertmode,
+                        label: 'Expertmode'
+                    })
+                    .on('update.model', function (e, options) {
+                        expertmode = options.value;
+                        updateExpertMode();
+                    })
+                );
             }
         });
 
@@ -160,7 +164,7 @@ define('io.ox/settings/main',
                 right.idle();
             });
         };
-        grid.selection.bind('change', function (selection) {
+        grid.selection.on('change', function (e, selection) {
             if (selection.length === 1) {
                 var isOpenedTheFirstTime = (currentSelection === null);
                 if (!isOpenedTheFirstTime) {
@@ -174,10 +178,10 @@ define('io.ox/settings/main',
         });
 
 
-        win.bind('show', function () {
+        win.on('show', function () {
             grid.selection.keyboard(true);
         });
-        win.bind('hide', function () {
+        win.on('hide', function () {
             grid.selection.keyboard(false);
         });
 

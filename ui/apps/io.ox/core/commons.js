@@ -52,12 +52,12 @@ define('io.ox/core/commons', [], function () {
          */
         wireGridAndWindow: function (grid, win) {
             // show
-            win.bind('show', function () {
+            win.on('show', function () {
                 grid.selection.keyboard(true);
                 grid.selection.retrigger();
             });
             // hide
-            win.bind('hide', function () {
+            win.on('hide', function () {
                 grid.selection.keyboard(false);
             });
         },
@@ -67,7 +67,7 @@ define('io.ox/core/commons', [], function () {
          */
         wireFirstRefresh: function (app, api) {
             // open (first show)
-            app.getWindow().bind('open', function () {
+            app.getWindow().on('open', function () {
                 if (api.needsRefresh(app.folder.get())) {
                     api.trigger('refresh!', app.folder.get());
                 }
@@ -79,11 +79,11 @@ define('io.ox/core/commons', [], function () {
          */
         wireGridAndRefresh: function (grid, api) {
             // bind all refresh
-            api.bind('refresh.all', function () {
+            api.on('refresh.all', function () {
                 grid.refresh();
             });
             // bind list refresh
-            api.bind('refresh.list', function () {
+            api.on('refresh.list', function () {
                 grid.repaint().done(function () {
                     grid.selection.retrigger();
                 });
@@ -103,11 +103,11 @@ define('io.ox/core/commons', [], function () {
                 return api.getList(ids);
             });
             // on search
-            win.bind('search', function (q) {
+            win.on('search', function () {
                 grid.setMode('search');
             });
             // on cancel search
-            win.bind('cancel-search', function () {
+            win.on('cancel-search', function () {
                 grid.setMode('all');
             });
         },
@@ -121,7 +121,7 @@ define('io.ox/core/commons', [], function () {
                 .updateGrid(grid)
                 .setType(type);
             // hash support
-            app.getWindow().bind('show', function () {
+            app.getWindow().on('show', function () {
                 grid.selection.retrigger();
                 _.url.hash('folder', app.folder.get());
             });
@@ -146,8 +146,8 @@ define('io.ox/core/commons', [], function () {
 
             container = $('<div>')
                 .addClass('abs border-right')
-                .css(
-                {   backgroundColor: 'white',
+                .css({
+                    backgroundColor: 'white',
                     right: 'auto',
                     width: width + 'px',
                     zIndex: 3
@@ -155,7 +155,7 @@ define('io.ox/core/commons', [], function () {
                 .hide()
                 .appendTo(app.getWindow().nodes.main);
 
-            fnChangeFolder = function (selection) {
+            fnChangeFolder = function (e, selection) {
                 var folder = selection[0];
                 if (folder.module === type) {
                     app.folder.unset();
@@ -187,7 +187,7 @@ define('io.ox/core/commons', [], function () {
 
             initTree = function (FolderTree) {
                 var tree = app.folderTree = new FolderTree(container, { type: type });
-                tree.selection.bind('change', fnChangeFolder);
+                tree.selection.on('change', fnChangeFolder);
                 return tree.paint()
                     .done(function () {
                         tree.selection.set(app.folder.get(), true);
