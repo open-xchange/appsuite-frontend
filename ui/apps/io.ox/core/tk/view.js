@@ -16,55 +16,55 @@ define: true
 
 define('io.ox/core/tk/view',
       ['io.ox/core/tk/forms',
-       'io.ox/core/tk/model'], function (forms, SimpleModel) {
+       'io.ox/core/tk/model'], function (forms, Model) {
 
     'use strict';
 
     var View = function (options) {
+
         options = options || {};
         options.node = options.node || $('<div>');
 
         if (options.model) {
-            this.model = options.model;
+            this.model = options.model || new Model();
         }
-        this.node = options.node;
+
+        this.node = $(options.node);
 
         var self = this,
-
-            getPropertyNodes = function (name) {
-                return $('[data-property=' + name + ']', self.node);
+            getPropertyNodes = function (names) {
+                return _([].concat(names)).inject(function (memo, name) {
+                    return memo.add($('[data-property=' + name + ']', self.node));
+                }, $());
             };
 
-
         // #1: capture all changes of form elements
-        $(this.node).on('update.model', function (e, o) {
+        this.node.on('update.model', function (e, o) {
             e.stopPropagation();
             self.model.set(o.property, o.value);
         });
 
         // #2: update form elements if model changes
-        $(this.model).on('change', function (e, name, value) {
+        this.model.on('change', function (e, name, value) {
             // loop over all elements - yes, manually!
-            console.log('update model  >>>>>');
-            console.log(arguments);
             getPropertyNodes(name).each(function () {
                 // triggerHandler does not bubble and is only triggered for the first element (aha!)
-                // does nothing yet?
-                console.log('trigger update.view');
                 $(this).triggerHandler('update.view', value);
             });
         });
 
-        window.horst = this.model;
-
         // delegate errors
-        $(this.model).on('error:validation error:consistency', function (e, errorObj) {
-            console.log('on validation error');
-            console.log(arguments);
-            getPropertyNodes(errorObj.name).each(function () {
-                $(this).triggerHandler('invalid', [errorObj]);
+        this.model.on('error:invalid error:inconsistent', function (e, error) {
+            getPropertyNodes(error.properties).each(function () {
+                $(this).triggerHandler('invalid', [error]);
             });
+            // TODO: remove - just for debugging
+            if (e.type === 'error:inconsistent') {
+                console.error(error.message);
+            }
         });
+
+        window.horst = this.model;
     };
 
     View.prototype = {

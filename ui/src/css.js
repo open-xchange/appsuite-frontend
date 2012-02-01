@@ -300,13 +300,38 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model']
             return true;
         };
 
+        var flatten = function (obj, result, path) {
+            result = result || {};
+            path = path || '';
+            _(obj).each(function (prop, id) {
+                if (!_.isArray(prop)) {
+                    if (typeof prop === 'object' && prop !== null) {
+                        flatten(prop, result, path + id + '/');
+                    } else {
+                        result[path + id] = prop;
+                    }
+                }
+            });
+            return result;
+        };
+
         var that = {
+
             settingsPath: null,
+
+            createModel: function (ModelClass) {
+                // create & return model instance
+                return new ModelClass(flatten(this.get()))
+                    .on('change', $.proxy(function (e, path, value) {
+                        this.set(path, value);
+                    }, this));
+            },
+
             get: function (path, defaultValue) {
                 if (!path) { // undefined, null, ''
-                    return settings;
+                    return get(globalSubpath + that.settingsPath);
                 } else {
-                    path = (globalSubpath + that.settingsPath + '/' + path);
+                    path = globalSubpath + that.settingsPath + '/' + path;
                     console.log('getting: ' + path);
                     if (defaultValue === undefined) {
                         return get(path);
@@ -321,10 +346,10 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model']
                     var orgpath = path;
                     path = (globalSubpath + that.settingsPath + '/' + path);
                     set(path, value);
-                    $(that)
-                        .trigger(orgpath + '.changed', value)
-                        .trigger('change', [orgpath, value]);
-                    console.log('set ' + path + ':' + value);
+//                    $(that)
+//                        .trigger(orgpath + '.changed', value)
+//                        .trigger('change', [orgpath, value]);
+//                    console.log('set ' + path + ':' + value);
                     if (permanent) {
                         // save settings path on server
                         settingsCache.add('settingsDefault', settings);

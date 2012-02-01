@@ -30,28 +30,9 @@ function (ext, View, Model, util, gt, settings) {
         properties: {
 
 
-        },
-        set: function (key, value) {
-            var validated = this.validate(key, value);
-            console.log('validated');
-            console.log(validated);
-            if (validated !== true || validated.constructor.toString().indexOf('ValidationError') !== -1) {
-                return $(this).trigger('error:validation', [validated]);
-            }
-
-            if (_.isEqual(value, this.data[key])) {
-                return true;
-            }
-
-            this.data.set(key, value);
-            $(this).trigger('change:' + key, [key, value]);
-            $(this).trigger('change', [key, value]);
-        },
-        get: function (k) {
-            return this.data.get(k);
         }
-
     });
+
 
     ext.point('io.ox/mail/settings/detail/section').extend({
         index: 200,
@@ -92,15 +73,13 @@ function (ext, View, Model, util, gt, settings) {
                                       })
                                   ).addClass('expertmode'),
                               util.createSectionDelimiter(),
-                              util.createButton({label: 'my button me'}),
                               this.createCheckbox({property: 'selectFirstMessage', label: 'Automatically select first E-Mail?'}).addClass('expertmode'),
-                              this.createCheckbox({property: 'removePermanently', label: 'Permanently remove deleted E-Mails?'}),
+                              this.createCheckbox({property: 'removeDeletedPermanently', label: 'Permanently remove deleted E-Mails?'}),
                               this.createCheckbox({property: 'notifyAcknoledge', label: 'Notify on delivery receipt?'}).addClass('expertmode'),
                               this.createCheckbox({property: 'showContactImage', label: 'Show sender image?'}),
                               this.createCheckbox({property: 'contactCollectOnMailTransport', label: 'Automatically collect contacts in the folder "Collected addresses" while sending?'}).addClass('expertmode'),
                               this.createCheckbox({property: 'contactCollectOnMailAccess', label: 'Automatically collect contacts in the folder "Collected addresses" while reading?'}).addClass('expertmode'),
-                              util.createSectionDelimiter(),
-                              util.createButton({label: 'click me'})
+                              util.createSectionDelimiter()
                           ),
                       util.createSectionDelimiter()
                     )
@@ -119,43 +98,43 @@ function (ext, View, Model, util, gt, settings) {
                         util.createSectionTitle({ text: gt('Compose')}),
                         util.createSectionContent()
                             .append(
-                                this.createCheckbox({property: 'mail-common-selectfirst', label: 'Insert the original E-Mail text to a reply'}).addClass('expertmode'),
-                                this.createCheckbox({property: 'mail-common-removepermanently', label: 'Append vcard'}),
-                                this.createCheckbox({property: 'mail-common-notifyreceipt', label: 'Enable auto completion of E-Mail addresses'}),
+                                this.createCheckbox({property: 'appendMailTextOnReply', label: 'Insert the original E-Mail text to a reply'}).addClass('expertmode'),
+                                this.createCheckbox({property: 'appendVcard', label: 'Append vcard'}),
+                                this.createCheckbox({property: 'autocompleteEmailAddresses', label: 'Enable auto completion of E-Mail addresses'}),
                                 util.createSectionDelimiter(),
                                 util.createSectionGroup()
                                     .append(
                                         util.createInfoText({text: 'Forward E-Mails as:'}),
-                                        this.createRadioButton({property: 'mail-compose-forwardas', label: 'Inline', name: 'mail-compose-forwardas', value: true}),
-                                        this.createRadioButton({property: 'mail-compose-forwardas', label: 'Attachment', name: 'mail-compose-forwardas', value: false})
+                                        this.createRadioButton({property: 'forwardMessageAs', label: 'Inline', name: 'forwardMessageAs', value: 'Inline' }),
+                                        this.createRadioButton({property: 'forwardMessageAs', label: 'Attachment', name: 'forwardMessageAs', value: 'Attachment'})
                                     ),
                                 util.createSectionDelimiter(),
                                 util.createSectionGroup()
                                     .append(
                                         util.createInfoText({text: 'When "Reply all":'}),
-                                        this.createRadioButton({property: 'mail-compose-whenreplyall', label: 'Add sender and recipients to "To", Cc to "Cc"', name: 'mail-compose-whenreplyall', value: 'fields'}),
-                                        this.createRadioButton({property: 'mail-compose-whenreplyall', label: 'Add sender to "To", recipients to "Cc"', name: 'mail-compose-whenreplyall', value: 'cc'})
+                                        this.createRadioButton({property: 'replyAllCc', label: 'Add sender and recipients to "To", Cc to "Cc"', name: 'replyAllCc', value: false}),
+                                        this.createRadioButton({property: 'replyAllCc', label: 'Add sender to "To", recipients to "Cc"', name: 'replyAllCc', value: true})
                                     ),
                                 util.createSectionDelimiter(),
                                 util.createSectionGroup()
                                     .append(
                                         util.createInfoText({text: 'Format E-Mails as:'}),
-                                        this.createRadioButton({property: 'mail-compose-emailformat', label: 'HTML', name: 'mail-compose-emailformat', value: 'html'}),
-                                        this.createRadioButton({property: 'mail-compose-emailformat', label: 'Plain text', name: 'mail-compose-emailformat', value: 'plain'}),
-                                        this.createRadioButton({property: 'mail-compose-emailformat', label: 'HTML and Plain text', name: 'mail-compose-emailformat', value: 'both'})
+                                        this.createRadioButton({property: 'messageFormat', label: 'HTML', name: 'messageFormat', value: 'html'}),
+                                        this.createRadioButton({property: 'messageFormat', label: 'Plain text', name: 'messageFormat', value: 'plain'}),
+                                        this.createRadioButton({property: 'messageFormat', label: 'HTML and Plain text', name: 'messageFormat', value: 'both'})
                                     ),
                                 util.createSectionDelimiter(),
                                 util.createSectionGroup()
                                     .append(
-                                        this.createSelectbox({ property: 'mail-testselect', label: 'Editor feature set', items: {'Enhanced': 'enhanced', 'Default': 'default'}})
+                                        this.createSelectbox({ property: 'editorFeatureSet', label: 'Editor feature set', items: {'Enhanced': '2', 'Default': '1'}})
                                     ).addClass('expertmode'),
                                 util.createSectionGroup()
                                     .append(
-                                        this.createSelectbox({property: 'mail-compose-font', label: 'Default E-Mail font:', items: {'Default': 'default', 'Andale Mono': 'andale_mono', 'Arial': 'arial', 'Arial Black': 'arial_black', 'Book Antiqua': 'book_antiqua'}})
+                                        this.createSelectbox({property: 'defaultMailFont', label: 'Default E-Mail font:', items: {'Default': 'default', 'Andale Mono': 'andale_mono', 'Arial': 'arial', 'Arial Black': 'arial_black', 'Book Antiqua': 'book_antiqua'}})
                                     ).addClass('expertmode'),
                                 util.createSectionGroup()
                                     .append(
-                                        this.createSelectbox({property: 'mail-compose-fontsize', label: 'Default E-Mail font size:', items: {'Default': 'default', '1 (8pt)': '8_pt', '2 (10pt)': '10_pt'}})
+                                        this.createSelectbox({property: 'defaultMailFontSize', label: 'Default E-Mail font size:', items: {'Default': 'default', '1 (8pt)': '8_pt', '2 (10pt)': '10_pt'}})
                                     ).addClass('expertmode'),
                                 util.createSectionGroup()
                                     .append(
@@ -257,7 +236,7 @@ function (ext, View, Model, util, gt, settings) {
         index: 200,
         id: 'mailsettings',
         draw: function (data) {
-            var myModel = new MailSettingsModel({data: settings}),
+            var myModel = settings.createModel(MailSettingsModel),
                 myView = new MailSettingsView({model: myModel});
 
             this.append(myView.draw(data).node);

@@ -231,8 +231,8 @@ define('io.ox/core/tk/forms',
 
             if (options.model && options.property) {
                 node.attr('data-property', options.property)
-                    .on('update.field', nodeChangeByModel)
-                    .triggerHandler('update.field', options.model.get(options.property));
+                    .on('update.view', nodeChangeByModel)
+                    .triggerHandler('update.view', options.model.get(options.property));
             }
 
             return node;
