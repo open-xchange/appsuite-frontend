@@ -94,7 +94,7 @@ define("io.ox/files/main",
             right.parent().scrollTop(0);
         }
 
-        grid.selection.bind("change", function (selection) {
+        grid.selection.on("change", function (e, selection) {
             if (selection.length === 1) {
                 // get file
                 right.busy(true);
@@ -105,12 +105,12 @@ define("io.ox/files/main",
         });
 
         // delete item
-        api.bind("beforedelete", function () {
+        api.on("beforedelete", function () {
             statusBar.busy();
             grid.selection.selectNext();
         });
 
-        api.bind("afterdelete", function () {
+        api.on("afterdelete", function () {
             statusBar.idle();
         });
 
@@ -137,15 +137,15 @@ define("io.ox/files/main",
 //            }));
 //        }
 
-        dropZone.bind("drop", function (file) {
+        dropZone.on("drop", function (e, file) {
             queue.offer(file);
         });
 
-        win.bind("show", function () {
+        win.on("show", function () {
             dropZone.include();
         });
 
-        win.bind("hide", function () {
+        win.on("hide", function () {
             dropZone.remove();
         });
 
@@ -155,13 +155,13 @@ define("io.ox/files/main",
         var $filenameNode = $("<span>").appendTo($uploadStatus);
 
         statusBar.append($uploadStatus);
-        queue.bind("start", function (file) {
+        queue.on("start", function (e, file) {
             $filenameNode.text("Uploading: " + file.fileName);
             statusBar.busy();
         });
 
 
-        queue.bind("stop", function () {
+        queue.on("stop", function () {
             $filenameNode.text("");
             statusBar.idle();
         });

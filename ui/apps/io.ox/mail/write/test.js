@@ -314,6 +314,8 @@ define('io.ox/mail/write/test',
                 }
 
                 j.it('closes compose dialog', function () {
+                    // mark app as clean so no save as draft question will pop up
+                    app.markClean();
                     app.quit();
                     j.expect(app.getEditor).toBeUndefined();
                     app = ed = form = null;

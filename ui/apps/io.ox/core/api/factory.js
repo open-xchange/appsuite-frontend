@@ -12,8 +12,9 @@
  */
 
 define("io.ox/core/api/factory",
-    ["io.ox/core/http", "io.ox/core/cache",
-     "io.ox/core/event"], function (http, cache, event) {
+    ["io.ox/core/http",
+     "io.ox/core/cache",
+     "io.ox/core/event"], function (http, cache, Events) {
 
     "use strict";
 
@@ -56,13 +57,13 @@ define("io.ox/core/api/factory",
 
         var api = {
 
-            getAll: function (options, useCache) {
+            getAll: function (options, useCache, cache) {
                 // merge defaults for "all"
                 var opt = $.extend({}, o.requests.all, options || {});
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
+                cache = cache || caches.all;
                 // cache miss?
-
                 var getter = function () {
                     return http.GET({
                         module: o.module,
@@ -78,22 +79,20 @@ define("io.ox/core/api/factory",
                                     return caches.get.keyGenerator(obj);
                                 })
                             );
-
                             caches.list.remove(diff);
                             caches.get.remove(diff);
                         });
-
                         // clear cache
-                        caches.all.clear(); //TODO: remove affected folder only
+                        cache.clear(); //TODO: remove affected folder only
                         // add to cache
-                        caches.all.add(opt.folder, data, timestamp);
+                        cache.add(opt.folder, data, timestamp);
                     });
                 };
 
                 if (useCache) {
-                    return caches.all.contains(opt.folder).pipe(function (check) {
+                    return cache.contains(opt.folder).pipe(function (check) {
                         if (check) {
-                            return caches.all.get(opt.folder);
+                            return cache.get(opt.folder);
                         } else {
                             return getter();
                         }
@@ -258,10 +257,10 @@ define("io.ox/core/api/factory",
             };
         }
 
-        event.Dispatcher.extend(api);
+        Events.extend(api);
 
         // bind to global refresh
-        ox.bind("refresh", function () {
+        ox.on("refresh", function () {
             if (ox.online) {
                 // clear "all & list" caches
                 api.caches.all.clear();

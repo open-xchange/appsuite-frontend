@@ -13,7 +13,7 @@
 
 define.async('io.ox/core/api/apps',
     ['io.ox/core/cache',
-     'io.ox/core/event'], function (cache, event) {
+     'io.ox/core/event'], function (cache, Events) {
 
     'use strict';
 
@@ -132,7 +132,7 @@ define.async('io.ox/core/api/apps',
         }
     };
 
-    event.Dispatcher.extend(api);
+    Events.extend(api);
 
     // initialize
     appCache = new cache.SimpleCache('apps', true);

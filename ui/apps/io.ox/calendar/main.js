@@ -115,7 +115,7 @@ define("io.ox/calendar/main",
         /*
          * Selection handling
          */
-        grid.selection.bind("change", function (selection) {
+        grid.selection.on("change", function (e, selection) {
             if (selection.length === 1) {
                 showAppointment(selection[0]);
             } else {

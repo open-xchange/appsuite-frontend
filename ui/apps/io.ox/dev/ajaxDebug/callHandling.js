@@ -13,7 +13,7 @@
  */
 
 define("io.ox/dev/ajaxDebug/callHandling",
-    ["io.ox/core/http", "io.ox/core/event"], function (http, event) {
+    ["io.ox/core/http", "io.ox/core/event"], function (http, Events) {
 
     "use strict";
 
@@ -49,9 +49,7 @@ define("io.ox/dev/ajaxDebug/callHandling",
         }
     };
 
-    event.Dispatcher.extend(callHandler);
+    Events.extend(callHandler);
 
     return callHandler;
-
-
 });

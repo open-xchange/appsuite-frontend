@@ -149,7 +149,7 @@ define("io.ox/dev/ajaxDebug/callViews", function () {
         $address.change(changed);
         $body.change(changed);
 
-        callHandling.bind("entrychanged", function (entry) {
+        callHandling.on("entrychanged", function (entry) {
             if (entry.id === self.id && !self.dirty) {
                 self.draw(entry);
             }

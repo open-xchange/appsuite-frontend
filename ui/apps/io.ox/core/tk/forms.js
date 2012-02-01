@@ -14,7 +14,8 @@
 /*global
 define: true
 */
-define('io.ox/core/tk/forms', [], function () {
+define('io.ox/core/tk/forms',
+      ['io.ox/core/i18n'], function (i18n) {
 
     'use strict';
 
@@ -38,6 +39,7 @@ define('io.ox/core/tk/forms', [], function () {
         boxChangeByModel = function (e, value) {
             $(this).prop('checked', !!value);
         },
+
         selectChange = function () {
             var self = $(this);
             self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
@@ -45,13 +47,35 @@ define('io.ox/core/tk/forms', [], function () {
         selectChangeByModel = function (e, value) {
             $(this).val(value);
         },
+
         radioChange = selectChange,
         radioChangeByModel = function (e, value) {
             var self = $(this);
             self.prop('checked', self.attr('value') === value);
         },
+
         textChange = selectChange,
-        textChangeByModel = selectChangeByModel;
+        textChangeByModel = selectChangeByModel,
+
+        nodeChangeByModel = function (e, value) {
+            $(this).text(value);
+        },
+
+        invalid = function (e) {
+            var node = $(this)
+                .addClass('invalid-value').css({
+                    backgroundColor: '#fee',
+                    borderColor: '#a00'
+                })
+                .focus();
+            setTimeout(function () {
+                node.removeClass('invalid-value').css({
+                    backgroundColor: '',
+                    borderColor: ''
+                });
+                node = null;
+            }, 5000);
+        };
 
     /**
      * Very simple helper class to avoid always passing node & options around
@@ -67,16 +91,24 @@ define('io.ox/core/tk/forms', [], function () {
     Field.prototype.create = function (tag, onChange) {
         var o = this.options;
         this.node = $(tag)
-            .attr({ 'data-property': o.property, name: o.name, id: o.id, value: o.value })
+            .attr({
+                'data-property': o.property,
+                name: o.name,
+                id: o.id,
+                value: o.value
+            })
             .on('change', onChange)
             .addClass(o.classes);
     };
 
+
     Field.prototype.applyModel = function (handler) {
         var o = this.options, model = o.model, val = o.initialValue;
         if ((model || val) !== undefined) {
-            this.node.on('update.field', handler)
-                .triggerHandler('update.field', model !== undefined ? model.get(o.property) : val);
+            this.node
+                .on('invalid', invalid)
+                .on('update.view', handler)
+                .triggerHandler('update.view', model !== undefined ? model.get(o.property) : val);
         }
     };
 
@@ -86,8 +118,9 @@ define('io.ox/core/tk/forms', [], function () {
         // wrap label tag around field
         if (o.label !== false) {
             var label = $('<label>', { 'for': o.id }),
+                space = $.txt(' '),
                 text = $.txt(o.label || '');
-            node = label.append.apply(label, order === 'append' ? [node, text] : [text, node]);
+            node = label.append.apply(label, order === 'append' ? [node, space, text] : [text, space, node]);
         }
         // wrap DIV around field & label
         if (this.options.wrap !== false) {
@@ -97,6 +130,9 @@ define('io.ox/core/tk/forms', [], function () {
         this.node = this.options = o = null;
         return node;
     };
+
+    // allows global lookup
+    var lastLabelId = '';
 
     var utils = {
 
@@ -139,6 +175,16 @@ define('io.ox/core/tk/forms', [], function () {
             return f.finish('prepend');
         },
 
+        createFileField: function (options) {
+            var f = new Field(options, 'file');
+            f.create('<input type="file">', textChange);
+            f.node.attr({
+                'accept': options.accept
+            });
+            f.applyModel(textChangeByModel);
+            return f.finish('prepend');
+        },
+
         createLabeledTextField: function (options) {
             return utils.createLabel()
                 .css({ width: '100%', display: 'inline-block' })
@@ -158,7 +204,7 @@ define('io.ox/core/tk/forms', [], function () {
         createLabel: function (options) {
             var labelDiv,
                 label;
-            options.id = options.id || _.uniqueId('c');
+            options.id = lastLabelId = options.id || _.uniqueId('label');
             options.text = options.text || "";
 
             labelDiv = $('<div>');
@@ -177,29 +223,19 @@ define('io.ox/core/tk/forms', [], function () {
         },
 
         createText: function (options) {
-            var textContainer;
-            options.id = options.id || _.uniqueId('c');
-            textContainer = $('<span>');
-            textContainer.addClass('text');
 
-            if (options.classes) {
-                textContainer.addClass(options.classes);
+            var node = $('<span>')
+                .addClass('text')
+                .addClass(options.classes)
+                .text(options.text || '');
+
+            if (options.model && options.property) {
+                node.attr('data-property', options.property)
+                    .on('update.field', nodeChangeByModel)
+                    .triggerHandler('update.field', options.model.get(options.property));
             }
 
-            var updateText = function () {
-                if (options.html === true) {
-                    textContainer.html(options.model.get(options.property));
-                } else {
-                    textContainer.text(options.model.get(options.property));
-                }
-            };
-
-            if (options.model) {
-                updateText();
-                $(options.model).on(options.property + '.changed', updateText);
-            }
-
-            return textContainer;
+            return node;
         },
 
         createSection: function (options) {
@@ -220,6 +256,35 @@ define('io.ox/core/tk/forms', [], function () {
 
         createSectionDelimiter: function () {
             return $('<div>').addClass('settings sectiondelimiter');
+        },
+
+        createPicUpload: function (options) {
+            var o = options,
+                form = $('<form>', {
+                'id': o.id,
+                'name': o.formname,
+                'accept-charset': o.charset,
+                'enctype': o.enctype,
+                'method': o.method,
+                'target': o.target
+            });
+            form.append(utils.createFileField({
+                'wrap': false,
+                id: 'file',
+                'accept': 'image/*',
+                "data-property": o.name,
+                name: o.name
+
+            }));
+            form.append($('<iframe>', {
+                name: 'hiddenframePicture',
+                'src': 'blank.html'
+            }).css('display', 'none'));
+
+            return form;
+        },
+        getLastLabelId: function () {
+            return lastLabelId;
         }
     };
 
