@@ -321,7 +321,7 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model']
 
             createModel: function (ModelClass) {
                 // create & return model instance
-                return new ModelClass(flatten(this.get()))
+                return new ModelClass({data: flatten(this.get())})
                     .on('change', $.proxy(function (e, path, value) {
                         this.set(path, value);
                     }, this));
@@ -346,10 +346,6 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model']
                     var orgpath = path;
                     path = (globalSubpath + that.settingsPath + '/' + path);
                     set(path, value);
-//                    $(that)
-//                        .trigger(orgpath + '.changed', value)
-//                        .trigger('change', [orgpath, value]);
-//                    console.log('set ' + path + ':' + value);
                     if (permanent) {
                         // save settings path on server
                         settingsCache.add('settingsDefault', settings);

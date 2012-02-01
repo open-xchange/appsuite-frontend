@@ -27,10 +27,6 @@ function (ext, View, Model, util, gt, settings) {
 
 
     var MailSettingsModel = Model.extend({
-        properties: {
-
-
-        }
     });
 
 
@@ -44,42 +40,12 @@ function (ext, View, Model, util, gt, settings) {
                         util.createSectionTitle({ text: gt('Common')}),
                         util.createSectionContent()
                           .append(
-                              util.createInfoText({html: 'EVERYTHING IS JUST MENT TO BE AN EXAMPLE HERE::::: Melden Sie sich mit Ihrem OX-Konto in OX Chrome an, ' +
-                                        'um Ihre personalisierten Browserfunktionen online zu ' +
-                                        'speichern und über OX Chrome auf jedem Computer darauf ' +
-                                        'zuzugreifen. Sie werden dann auch automatisch in Ihren ' +
-                                        'Lieblingsdiensten von OX angemeldet. Weitere Informationen' +
-                                        'mehr Infos unter <a href="http://www.open-xchange.com" target="_blank">www.open-xchange.com</a>'}),
-                              util.createSectionGroup()
-                                  .append(
-                                      this.createSelectbox({property: 'defaultMailView',
-                                          label: 'Default view:',
-                                          items: { 'V-split view 1': 'option1',
-                                              'V-split view 2': 'option2',
-                                              'V-split view 3': 'option3'
-                                          },
-                                          currentValue: 'option1'
-                                      })
-                                  ).addClass('expertmode'),
-                              util.createSectionGroup()
-                                  .append(
-                                      this.createSelectbox({property: 'defaultSpamView',
-                                          label: 'Default view for Spam folder:',
-                                          items: { 'V-split view 1': 'option1',
-                                              'V-split view 2': 'option2',
-                                              'V-split view 3': 'option3'
-                                          },
-                                          currentValue: 'option1'
-                                      })
-                                  ).addClass('expertmode'),
-                              util.createSectionDelimiter(),
                               this.createCheckbox({property: 'selectFirstMessage', label: 'Automatically select first E-Mail?'}).addClass('expertmode'),
                               this.createCheckbox({property: 'removeDeletedPermanently', label: 'Permanently remove deleted E-Mails?'}),
                               this.createCheckbox({property: 'notifyAcknoledge', label: 'Notify on delivery receipt?'}).addClass('expertmode'),
                               this.createCheckbox({property: 'showContactImage', label: 'Show sender image?'}),
                               this.createCheckbox({property: 'contactCollectOnMailTransport', label: 'Automatically collect contacts in the folder "Collected addresses" while sending?'}).addClass('expertmode'),
-                              this.createCheckbox({property: 'contactCollectOnMailAccess', label: 'Automatically collect contacts in the folder "Collected addresses" while reading?'}).addClass('expertmode'),
-                              util.createSectionDelimiter()
+                              this.createCheckbox({property: 'contactCollectOnMailAccess', label: 'Automatically collect contacts in the folder "Collected addresses" while reading?'}).addClass('expertmode')
                           ),
                       util.createSectionDelimiter()
                     )
@@ -126,10 +92,6 @@ function (ext, View, Model, util, gt, settings) {
                                 util.createSectionDelimiter(),
                                 util.createSectionGroup()
                                     .append(
-                                        this.createSelectbox({ property: 'editorFeatureSet', label: 'Editor feature set', items: {'Enhanced': '2', 'Default': '1'}})
-                                    ).addClass('expertmode'),
-                                util.createSectionGroup()
-                                    .append(
                                         this.createSelectbox({property: 'defaultMailFont', label: 'Default E-Mail font:', items: {'Default': 'default', 'Andale Mono': 'andale_mono', 'Arial': 'arial', 'Arial Black': 'arial_black', 'Book Antiqua': 'book_antiqua'}})
                                     ).addClass('expertmode'),
                                 util.createSectionGroup()
@@ -139,16 +101,16 @@ function (ext, View, Model, util, gt, settings) {
                                 util.createSectionGroup()
                                     .append(
                                         this.createText({ text: 'Line wrap when sending text mails after: ' }),
-                                        this.createTextField({ property: 'mail-compose-linewarpafter'}).css({ width: '30px', display: 'inline-block'}),
+                                        this.createTextField({ property: 'lineWrapAfter'}).css({ width: '30px', display: 'inline-block'}),
                                         this.createText({ text: ' characters' })
                                     ),
                                 util.createSectionGroup()
                                     .append(
-                                        this.createSelectbox({property: 'mail-compose-defaultsender', label: 'Default sender address:', items: { 'mario@sourcegarden.de': 'mario@sourcegarden.de', 'mario@sourcegarden.com': 'mario@sourcegarden.com', 'mario.scheliga@open-xchange.com': 'mario.scheliga@open-xchange.com' }})
+                                        this.createSelectbox({property: 'defaultSendAddress', label: 'Default sender address:', items: { 'mario@sourcegarden.de': 'mario@sourcegarden.de', 'mario@sourcegarden.com': 'mario@sourcegarden.com', 'mario.scheliga@open-xchange.com': 'mario.scheliga@open-xchange.com' }})
                                     ),
                                 util.createSectionGroup()
                                     .append(
-                                        this.createSelectbox({property: 'mail-compose-savedraftsinterval', label: 'Auto-save Email drafts?', items: {'Disabled': 'disabled', '1 Minute': '1_minute', '3 Minutes': '3_minutes', '5 Minutes': '5_minutes', '10 Minutes': '10_minutes' }})
+                                        this.createSelectbox({property: 'autoSafeDraftsAfter', label: 'Auto-save Email drafts?', items: {'Disabled': 'disabled', '1 Minute': '1_minute', '3 Minutes': '3_minutes', '5 Minutes': '5_minutes', '10 Minutes': '10_minutes' }})
                                     )
                             ),
                         util.createSectionDelimiter()
@@ -167,11 +129,60 @@ function (ext, View, Model, util, gt, settings) {
                         util.createSectionTitle({ text: gt('Display')}),
                         util.createSectionContent()
                             .append(
-                                this.createCheckbox({property: 'mail-display-allowhtml', label: 'Allow html formatted E-Mails'}),
-                                this.createCheckbox({property: 'mail-display-blockimgs', label: 'Block pre-loading of externally linked images'}),
-                                this.createCheckbox({property: 'mail-display-emotionicons', label: 'Display emoticons as graphics in text E-Mails'}),
-                                this.createCheckbox({property: 'mail-display-colorquotes', label: 'Color quoted lines'}),
-                                this.createCheckbox({property: 'mail-display-namesinfields', label: 'Show name instead of E-Mail address in To and Cc fields'})
+                                this.createCheckbox({property: 'allowHtmlMessages', label: 'Allow html formatted E-Mails'}),
+                                this.createCheckbox({property: 'allowHtmlImages', label: 'Block pre-loading of externally linked images'}),
+                                this.createCheckbox({property: 'displayEmomticons', label: 'Display emoticons as graphics in text E-Mails'}),
+                                this.createCheckbox({property: 'isColorQuoted', label: 'Color quoted lines'}),
+                                this.createCheckbox({property: 'showName', label: 'Show name instead of E-Mail address in To and Cc fields'})
+                            ),
+                        util.createSectionDelimiter()
+                    )
+            );
+        }
+    });
+    ext.point('io.ox/mail/settings/detail/section').extend({
+        index: 200,
+        id: 'section_filter',
+        draw: function (options) {
+            var listbox,
+                addSignatureButton,
+                editSignatureButton,
+                deleteSignatureButton;
+
+
+            addSignatureButton = function () {
+                console.log('add Signature');
+            };
+            editSignatureButton = function () {
+                var selectedItemID =  listbox.find('div[selected="selected"]').attr('data-item-id');
+                console.log('edit signature:' + selectedItemID);
+            };
+            deleteSignatureButton = function () {
+                var selectedItemID =  listbox.find('div[selected="selected"]').attr('data-item-id');
+                console.log('delete signature:' +  selectedItemID);
+            };
+
+
+
+            this.append(
+                util.createSection()
+                    .append(
+                        util.createSectionTitle({ text: gt('Signatures')}),
+                        util.createSectionContent()
+                            .append(
+                                listbox = util.createListBox({ dataid: 'accounts-list',
+                                    model: { get: function () {
+                                            var list = [
+                                                {dataid: 'signature1', html: 'Halleluja....'},
+                                                {dataid: 'signature2', html: 'Mit freundlichem Gruss aus dem Labor ...'}
+                                            ];
+                                            return list;
+                                        }
+                                    }
+                                }),
+                                util.createButton({label: 'Add ...'}).css({'margin-right': '15px'}).on('click', addSignatureButton),
+                                util.createButton({label: 'Edit ...'}).css({'margin-right': '15px'}).on('click', editSignatureButton),
+                                util.createButton({label: 'Delete ...'}).css({'margin-right': '15px'}).on('click', deleteSignatureButton)
                             ),
                         util.createSectionDelimiter()
                     )
@@ -183,28 +194,54 @@ function (ext, View, Model, util, gt, settings) {
         index: 200,
         id: 'section_signatures',
         draw: function (options) {
-            this.append(
-                util.createSection()
-                    .append(
-                        util.createSectionTitle({ text: gt('Signatures')}),
-                        util.createSectionContent(),
-                        util.createSectionDelimiter()
-                    )
-            );
-        }
-    });
-    ext.point('io.ox/mail/settings/detail/section').extend({
-        index: 200,
-        id: 'section_filter',
-        draw: function (options) {
+            var listbox,
+                addFilterButton,
+                editFilterButton,
+                deleteFilterButton;
+
+
+            addFilterButton = function () {
+                console.log('add filter');
+            };
+            editFilterButton = function () {
+                var selectedItemID =  listbox.find('div[selected="selected"]').attr('data-item-id');
+                console.log('edit filter:' + selectedItemID);
+            };
+            deleteFilterButton = function () {
+                var selectedItemID =  listbox.find('div[selected="selected"]').attr('data-item-id');
+                console.log('delete filter:' +  selectedItemID);
+            };
+
+
+
             this.append(
                 util.createSection()
                     .append(
                         util.createSectionTitle({ text: gt('Filter')}),
-                        util.createSectionContent(),
+                        util.createSectionContent()
+                            .append(
+                                listbox = util.createListBox({ dataid: 'accounts-list',
+                                    model: { get: function () {
+                                            var list = [
+                                                {dataid: 'filter1', html: 'Wichtige Nachrichten'},
+                                                {dataid: 'filter2', html: 'Privat....'},
+                                                {dataid: 'filter3', html: '@googlemail.com'},
+                                                {dataid: 'filter4', html: '[couchdb-usergroup]'},
+                                                {dataid: 'filter5', html: 'techcrunch'},
+                                                {dataid: 'filter6', html: 'hackernews'}
+                                            ];
+                                            return list;
+                                        }
+                                    }
+                                }),
+                                util.createButton({label: 'Add ...'}).css({'margin-right': '15px'}).on('click', addFilterButton),
+                                util.createButton({label: 'Edit ...'}).css({'margin-right': '15px'}).on('click', editFilterButton),
+                                util.createButton({label: 'Delete ...'}).css({'margin-right': '15px'}).on('click', deleteFilterButton)
+                            ),
                         util.createSectionDelimiter()
                     )
             );
+
         }
     });
     ext.point('io.ox/mail/settings/detail/section').extend({
@@ -215,7 +252,17 @@ function (ext, View, Model, util, gt, settings) {
                 util.createSection()
                     .append(
                         util.createSectionTitle({ text: gt('Vacation Notice')}),
-                        util.createSectionContent(),
+                        util.createSectionContent()
+                            .append(
+                                this.createCheckbox({property: 'activateMailFilter', label: 'activate vacation notification'}),
+                                this.createLabeledTextField({ label: 'Subject', property: 'mailFilterSubject'}),
+                                this.createLabeledTextArea({ label: 'Message', property: 'mailFilterBody'}),
+                                this.createLabeledTextField({ label: 'Days', property: 'mailFilterResendDays'}),
+                                util.createSectionDelimiter(),
+                                this.createText({text: 'E-Mail Adressen'}),
+                                this.createCheckbox({property: 'emailAddress', label: 'bill.gates@microsoft.com'})
+
+                            ),
                         util.createSectionDelimiter()
                     )
             );
