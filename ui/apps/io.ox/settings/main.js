@@ -54,7 +54,7 @@ define('io.ox/settings/main',
 
 
     // application object
-    var app = ox.ui.createApp(),
+    var app = ox.ui.createApp({ name: 'io.ox/settings' }),
         // app window
         win,
         // grid
@@ -88,7 +88,7 @@ define('io.ox/settings/main',
             var settingsID = currentSelection.id + '/settings';
             ext.point(settingsID + '/detail').invoke('save');
         };
-        win.bind('hide', onHideSettingsPane);
+        win.on('hide', onHideSettingsPane);
 
 
 
@@ -164,7 +164,7 @@ define('io.ox/settings/main',
                 right.idle();
             });
         };
-        grid.selection.bind('change', function (selection) {
+        grid.selection.on('change', function (e, selection) {
             if (selection.length === 1) {
                 var isOpenedTheFirstTime = (currentSelection === null);
                 if (!isOpenedTheFirstTime) {
@@ -178,10 +178,10 @@ define('io.ox/settings/main',
         });
 
 
-        win.bind('show', function () {
+        win.on('show', function () {
             grid.selection.keyboard(true);
         });
-        win.bind('hide', function () {
+        win.on('hide', function () {
             grid.selection.keyboard(false);
         });
 

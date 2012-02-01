@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
+define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
 
     'use strict';
 
@@ -20,8 +20,8 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (event) {
         this.classFocus = 'focussed';
         this.classSelected = 'selected';
 
-        // add dispatcher
-        event.Dispatcher.extend(this);
+        // add event hub
+        Events.extend(this);
 
         var self = this,
             multiple = true,

@@ -154,7 +154,7 @@ define("io.ox/mail/main",
         /*
          * Selection handling
          */
-        grid.selection.bind("change", function (selection) {
+        grid.selection.on("change", function (e, selection) {
             if (selection.length === 1) {
                 showMail(selection[0]);
             } else {

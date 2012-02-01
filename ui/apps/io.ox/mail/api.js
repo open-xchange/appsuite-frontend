@@ -12,8 +12,10 @@
  */
 
 define("io.ox/mail/api",
-    ["io.ox/core/http", "io.ox/core/config",
-     "io.ox/core/api/factory"], function (http, config, apiFactory) {
+    ["io.ox/core/http",
+     "io.ox/core/config",
+     "io.ox/core/cache",
+     "io.ox/core/api/factory"], function (http, config, cache, apiFactory) {
 
     "use strict";
 
@@ -95,45 +97,66 @@ define("io.ox/mail/api",
         'FORWARDED': 128
     };
 
+    // add all thread cache
+    api.caches.allThreaded = new cache.SimpleCache('mail-all-threaded', true);
+
     // ~ all
     api.getAllThreads = function (options, useCache) {
 
         options = options || {};
-        options.columns = "601,600,610,612"; // +level, +received_date
-        options.sort = "thread";
 
-        // clear threads
-        threads = {};
+        if (2 > 1) {
 
-        return this.getAll(options, useCache)
-            .pipe(function (data) {
-                // loop over data
-                var i = 0, obj, tmp = null, all = [], first,
-                    // store thread
-                    store = function () {
-                        if (tmp) {
-                            // sort
-                            tmp.sort(dateSort);
-                            // add most recent element to list
-                            all.push(first = tmp[0]);
-                            // add to hash
-                            threads[first.folder_id + "." + first.id] = tmp;
+            options.action = 'all';
+            options.columns = '601,600,610,612'; // +level, +received_date
+            options.sort = 'thread';
+
+            return this.getAll(options, useCache)
+                .pipe(function (data) {
+                    // loop over data
+                    var i = 0, obj, tmp = null, all = [], first,
+                        // store thread
+                        store = function () {
+                            if (tmp) {
+                                // sort
+                                tmp.sort(dateSort);
+                                // add most recent element to list
+                                all.push(first = tmp[0]);
+                                // add to hash
+                                threads[first.folder_id + "." + first.id] = tmp;
+                            }
+                        };
+                    for (; (obj = data[i]); i++) {
+                        if (obj.level === 0) {
+                            store();
+                            tmp = [obj];
+                        } else if (tmp) {
+                            tmp.push(obj);
                         }
-                    };
-                for (; (obj = data[i]); i++) {
-                    if (obj.level === 0) {
-                        store();
-                        tmp = [obj];
-                    } else if (tmp) {
-                        tmp.push(obj);
                     }
-                }
-                // store last thread
-                store();
-                // resort all
-                all.sort(dateSort);
-                return all;
-            });
+                    // store last thread
+                    store();
+                    // resort all
+                    all.sort(dateSort);
+                    return all;
+                });
+
+        } else {
+
+            options.action = 'threadedAll';
+            options.columns = '601,600';
+            options.sort = '612';
+
+            return this.getAll(options, useCache, api.caches.allThreaded)
+                .pipe(function (data) {
+                    _(data).each(function (obj) {
+                        threads[obj.folder_id + "." + obj.id] = obj.thread;
+                    });
+                    console.log('yeah', data);
+                    console.log('threads', threads);
+                    return data;
+                });
+        }
     };
 
     // get mails in thread
@@ -327,7 +350,7 @@ define("io.ox/mail/api",
     };
 
     // refresh
-    api.bind('refresh!', function (folder) {
+    api.on('refresh!', function (e, folder) {
         if (ox.online) {
             api.getAllThreads({ folder: folder }, false)
                 .done(function () {

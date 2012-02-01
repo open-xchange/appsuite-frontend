@@ -296,15 +296,19 @@ define('io.ox/mail/settings',
                         .addClass('expertmode')
                     )
                     .append(
-                      myView.createLabel()
+                        utils.createSectionGroup()
                         .append(
-                          myView.createText({text: 'Line wrap when sending text mails after:'})
+                            myView.createText({ text: 'Line wrap when sending text mails after: ' })
                         )
                         .append(
-                          myView.createTextField({property: 'mail-compose-linewarpafter',  validator: myValidator}).css({ width: '30px', display: 'inline-block'})
+                            myView.createTextField({
+                                property: 'mail-compose-linewarpafter',
+                                validator: myValidator
+                            })
+                            .css({ width: '30px', display: 'inline-block'})
                         )
                         .append(
-                          myView.createText({text: 'characters'})
+                            myView.createText({ text: ' characters' })
                         )
                         .addClass('expertmode')
                     )
