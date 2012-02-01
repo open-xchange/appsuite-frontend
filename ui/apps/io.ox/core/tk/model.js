@@ -62,7 +62,7 @@ define('io.ox/core/tk/model',
         getChanges:  function () {
             var changes = {},
                 self = this;
-            _.each(this.data, function (val, k) {
+            _.each(this.getData(), function (val, k) {
                 if (val !== self.dataShadow[k]) {
                     changes[k] = val;
                 }
@@ -129,6 +129,7 @@ define('io.ox/core/tk/model',
             if (fieldDesc && this.formats[fieldDesc.format] && _.isFunction(this.formats[fieldDesc.format])) {
                 return this.formats[fieldDesc.format].apply(this, [key, value, fieldDesc]);
             }
+            return true;
         },
         getProp: function (key) {
             return this.properties[key] || {};

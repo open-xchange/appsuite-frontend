@@ -215,7 +215,7 @@ define ("gettext", function (gettext) {
 
 
 
-define("settings",['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
+define("settings",['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'], function (http, cache, Model) {
 
     'use strict';
 
