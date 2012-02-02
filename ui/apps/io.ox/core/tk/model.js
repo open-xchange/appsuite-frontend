@@ -69,6 +69,7 @@ define('io.ox/core/tk/model',
      * Model
      */
     function Model(options) {
+        options = options || {};
         this.setData(options.data);
         Events.extend(this);
     }
@@ -251,7 +252,7 @@ define('io.ox/core/tk/model',
             }
         });
 
-        var m = window.model = new M({ id: 1000, hey: 'ho' });
+        var m = window.model = new M({ data: { id: 1000, hey: 'ho' }});
 
         console.log('instance', m);
         console.log('data', m.getData());

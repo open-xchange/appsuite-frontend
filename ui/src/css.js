@@ -304,15 +304,17 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model']
             result = result || {};
             path = path || '';
             _(obj).each(function (prop, id) {
-                if (!_.isArray(prop)) {
-                    if (typeof prop === 'object' && prop !== null) {
-                        flatten(prop, result, path + id + '/');
-                    } else {
-                        result[path + id] = prop;
-                    }
+                if (_.isObject(prop) && !_.isArray(prop)) {
+                    flatten(prop, result, path + id + '/');
+                } else {
+                    result[path + id] = prop;
                 }
             });
             return result;
+        };
+
+        var fnChange = function (e, path, value) {
+            this.set(path, value);
         };
 
         var that = {
@@ -321,10 +323,8 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model']
 
             createModel: function (ModelClass) {
                 // create & return model instance
-                return new ModelClass({data: flatten(this.get())})
-                    .on('change', $.proxy(function (e, path, value) {
-                        this.set(path, value);
-                    }, this));
+                return new ModelClass({ data: flatten(this.get()) })
+                    .on('change', $.proxy(fnChange, this));
             },
 
             get: function (path, defaultValue) {
