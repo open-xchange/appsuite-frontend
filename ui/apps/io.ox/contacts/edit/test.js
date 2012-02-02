@@ -48,7 +48,7 @@ define("io.ox/contacts/edit/test",
             city_home: 'Olpe',
             state_home: 'NRW',
             country_home: 'Germany',
-            birthday: '10.10.1915',
+//            birthday: '10.10.1915',
             marital_status: 'married',
             number_of_children: '2',
             nickname: 'GG',
@@ -232,7 +232,6 @@ define("io.ox/contacts/edit/test",
                         formFrame =  $('.contact-detail.edit[data-property="' + phrase + '"]');
                         buttonSave = formFrame.find('.default-action.saveButton[data-action="save"]');
                         if (buttonSave[0]) {
-                            console.log('gefunden');
                             return true;
                         }
                     }, 'the form', TIMEOUT);
@@ -443,7 +442,7 @@ define("io.ox/contacts/edit/test",
         test: function (j) {
             j.describe("Contact extpoint", function () {
                 var app = null,
-                data, itemFill, itemDelete, buttonUpdate, buttonSave,
+                data, itemFill, itemDelete, buttonUpdate, buttonSave, buttonClose,
                 buttonDelete, dialog, testfield, testfield2, formFrame = null,
                 dataId, dataFolder, dataObj, phrase;
 
@@ -516,23 +515,24 @@ define("io.ox/contacts/edit/test",
                     });
 
                     j.waitsFor(function () {
-                        formFrame =  $('table[data-obj-id="' + phrase + '"]');
-                        testfield = formFrame.find('input[name="cellular_telephone1"]');
+                        formFrame =   $('.contact-detail.edit[data-property="' + phrase + '"]');
+                        testfield = formFrame.find('input[data-property="cellular_telephone1"]');
                         if (testfield[0]) {
                             return true;
                         }
-                    }, 'waits for the form', TIMEOUT);
+                    }, 'the form', TIMEOUT);
 
                     j.waitsFor(function () {
-                        formFrame =  $('table[data-obj-id="' + phrase + '"]');
-                        buttonSave = formFrame.find('.default-action.savebutton[data-action="save"]');
-                        if (buttonSave[0]) {
+                        formFrame =  $('.contact-detail.edit[data-property="' + phrase + '"]');
+                        buttonClose = $('.window-controls .window-control').text('x');
+                        console.log(buttonClose);
+                        if (buttonClose[1]) {
                             return true;
                         }
                     }, 'waits for the form', TIMEOUT);
 
                     j.runs(function () {
-                        $(buttonSave[0]).trigger('click');
+                        $(buttonClose[1]).trigger('click');
                     });
 
 
@@ -630,7 +630,7 @@ define("io.ox/contacts/edit/test",
 
                     app.launch();
                     j.runs(function () {
-                        ext.point("io.ox/contacts/edit/form/contact-phone").disable("contact-cellular_telephone1");
+                        ext.point("io.ox/contacts/edit/form/contact-phone").disable("cellular_telephone1");
                     });
 
                     var grid = app.getGrid();
@@ -661,31 +661,36 @@ define("io.ox/contacts/edit/test",
 
                     j.waitsFor(function () {
                         //console.log(phrase);
-                        formFrame = $('table.contact-detail.edit[data-obj-id="' + phrase + '"]');
+                        formFrame = $('.contact-detail.edit[data-property="' + phrase + '"]');
                         if (formFrame[0]) {
                             //console.log('form');
                             return true;
                         }
-                    }, 'waits for the form', TIMEOUT);
+                    }, 'the form', TIMEOUT);
 
                     j.runs(function () {
-                        testfield = $('input[name="cellular_telephone1"]');
-                        //console.log(testfield);
+                        testfield = $('input[data-property="cellular_telephone1"]');
+                        console.log(testfield);
                         j.expect(testfield[0]).toBeFalsy();
                     });
 
 
                 });
 
+
+
+
+
+
                 j.runs(function () {
-                    buttonSave = $('.default-action.savebutton[data-action="save"]');
-                    $(buttonSave[0]).trigger('click');
+                    buttonClose = $('.window-controls .window-control').text('x');
+                    $(buttonClose[1]).trigger('click');
                 });
 
                 j.it('looks for the created item / selects and deletes', function () {
 
                     var grid = app.getGrid();
-
+                    app.launch();
                     j.waitsFor(function () {
                         // grid contains item?
                         if (grid.contains(phrase)) {
@@ -695,6 +700,11 @@ define("io.ox/contacts/edit/test",
                             return false;
                         }
                     }, 'looks for the list', TIMEOUT);
+
+//                    j.runs(function () {
+//                        console.log($('.launcher').text('Address Book'));
+//                    });
+
 
                     j.waitsFor(function () {
                         buttonDelete = $('table.view[data-obj-id="' + phrase + '"] .io-ox-inline-links a[data-action="delete"]');
