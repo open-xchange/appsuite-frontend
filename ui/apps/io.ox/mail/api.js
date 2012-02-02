@@ -373,13 +373,25 @@ define("io.ox/mail/api",
         data.cc = _(data.cc).map(flatten).join(', ');
         data.bcc = _(data.bcc).map(flatten).join(', ');
 
+
+        var uploadCounter = 0;
+        $(':input:enabled', form).each(function (index, field) {
+            var jqField = $(field);
+            if (jqField.attr('type') === 'file') {
+                jqField.attr('name', 'file_' + uploadCounter);
+                uploadCounter++;
+            }
+        });
+
         // add mail data
-        $(form).append($('<input>', {'type': 'hidden', 'name': 'json_0', 'value': JSON.stringify(data)}));
+        if ($('input[name="json_0"]', form).length === 0) {
+            $(form).append($('<input>', {'type': 'hidden', 'name': 'json_0', 'value': JSON.stringify(data)}));
+        } else {
+            $('input[name="json_0"]', form).val(JSON.stringify(data));
+        }
 
-        console.log(data);
-
-        var tmpName = 'iframe_' + _.now();
-        var frame = $('<iframe>', {'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1});
+        var tmpName = 'iframe_' + _.now(),
+            frame = $('<iframe>', {'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1});
         $('.io-ox-mail-write').append(frame);
 
         $(form).attr({
@@ -391,11 +403,8 @@ define("io.ox/mail/api",
         $(form).submit();
 
         window.callback_new = function (newMailId) {
-
             $('#' + tmpName).remove();
-
             deferred.resolve(newMailId);
-
             window.callback_new = null;
         };
     }

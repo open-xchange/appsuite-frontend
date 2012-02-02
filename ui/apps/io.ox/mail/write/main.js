@@ -493,19 +493,21 @@ define.async('io.ox/mail/write/main',
         };
 
         addUpload = function () {
+            var inputOptions;
 
             if (Modernizr.file) {
-                // alert('YES FILEAPI');
+                inputOptions = { type: 'file', name: 'upload', multiple: 'multiple', tabindex: '2' };
+            } else {
+                inputOptions = { type: 'file', name: 'upload', tabindex: '2' };
             }
 
             return $('<div>')
                 .addClass('section-item upload')
                 .append(
                     $.labelize(
-                        $('<input>', { type: 'file', name: 'upload', multiple: 'multiple', tabindex: '2' })
+                        $('<input>', inputOptions)
                         .on('change', handleFileSelect),
-                        //'mail_attachment'
-                        'file'
+                        'mail_attachment'
                     )
                 )
                 .appendTo(sections.attachments);
