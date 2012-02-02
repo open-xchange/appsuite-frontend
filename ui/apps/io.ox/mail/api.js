@@ -301,7 +301,11 @@ define("io.ox/mail/api",
 
         var deferred = $.Deferred();
 
-        handleSendXHR2(data, files, deferred);
+        if (Modernizr.file) {
+            handleSendXHR2(data, files, deferred);
+        } else {
+            handleSendTheGoodOldWay(data, files, deferred);
+        }
 
         return deferred;
     };
@@ -355,7 +359,8 @@ define("io.ox/mail/api",
     }
 
     function handleSendTheGoodOldWay(data, files, deferred) {
-        var flatten = function (recipient) {
+        var form = $('.io-ox-mail-write form'),
+            flatten = function (recipient) {
                 return '"' + recipient[0] + '" <' + recipient[1] + '>';
             };
 
@@ -369,36 +374,30 @@ define("io.ox/mail/api",
         data.bcc = _(data.bcc).map(flatten).join(', ');
 
         // add mail data
-        form.append('json_0', JSON.stringify(data));
-        // add files
-        _(files).each(function (file, index) {
-            form.append('file_' + index, file);
+        $(form).append($('<input>', {'type': 'hidden', 'name': 'json_0', 'value': JSON.stringify(data)}));
+
+        console.log(data);
+
+        var tmpName = 'iframe_' + _.now();
+        var frame = $('<iframe>', {'name': tmpName, 'id': tmpName, 'height': 1, 'width': 1});
+        $('.io-ox-mail-write').append(frame);
+
+        $(form).attr({
+            'method': 'post',
+            'action': '/ox7/api/mail?action=new&session=' + ox.session,
+            'target': tmpName
         });
 
-        http.UPLOAD({
-                module: 'mail',
-                params: { action: 'new' },
-                data: form,
-                dataType: 'text'
-            })
-            .done(function (text) {
-                // process HTML-ish non-JSONP response
-                var a = text.indexOf('{'),
-                b = text.lastIndexOf('}');
-                if (a > -1 && b > -1) {
-                    deferred.resolve(JSON.parse(text.substr(a, b - a + 1)));
-                } else {
-                    deferred.resolve({});
-                }
-                // wait a moment, then update mail index
-                setTimeout(function () {
-                    api.getAllThreads({}, false)
-                        .done(function (data) {
-                            api.trigger('refresh.all');
-                        });
-                }, 3000);
-            })
-            .fail(deferred.reject);
+        $(form).submit();
+
+        window.callback_new = function (newMailId) {
+
+            $('#' + tmpName).remove();
+
+            deferred.resolve(newMailId);
+
+            window.callback_new = null;
+        };
     }
 
     // refresh
