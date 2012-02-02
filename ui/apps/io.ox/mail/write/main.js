@@ -10,7 +10,7 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-Modernizr.file = false;
+
 define.async('io.ox/mail/write/main',
     ['io.ox/mail/api',
      'io.ox/mail/util',
