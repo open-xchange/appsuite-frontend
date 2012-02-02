@@ -454,48 +454,58 @@ define.async('io.ox/mail/write/main',
 
         handleFileSelect = function (e) {
 
-            // look for linked attachments or dropped files
-            var item = $(this).prop('attachment') || $(this).prop('file'),
-                list = item ? [item] : e.target.files;
+            if (Modernizr.file) {
+                // look for linked attachments or dropped files
+                var item = $(this).prop('attachment') || $(this).prop('file'),
+                    list = item ? [item] : e.target.files;
 
-            _(list).each(function (file) {
-                sections.attachments.append(
-                    $('<div>').addClass('section-item file')
-                    .append($('<div>').text(file.filename || file.name || ''))
-                    .append(
-                        $('<div>')
+                _(list).each(function (file) {
+                    sections.attachments.append(
+                        $('<div>').addClass('section-item file')
+                        .append($('<div>').text(file.filename || file.name || ''))
                         .append(
-                            $('<span>').addClass('filesize')
-                            .text(i18n.filesize(file.size))
+                            $('<div>')
+                            .append(
+                                $('<span>').addClass('filesize')
+                                .text(i18n.filesize(file.size))
+                            )
+                            .append(
+                                supportsPreview(file) ? createPreview(file) : $()
+                            )
                         )
                         .append(
-                            supportsPreview(file) ? createPreview(file) : $()
+                            // remove
+                            $('<a>', { href: '#', tabindex: '6' })
+                            .addClass('remove')
+                            .append(
+                                $('<div>').addClass('icon').text('x')
+                            )
+                            .on('click', function (e) {
+                                e.preventDefault();
+                                $(this).parent().remove();
+                            })
                         )
-                    )
-                    .append(
-                        // remove
-                        $('<a>', { href: '#', tabindex: '6' })
-                        .addClass('remove')
-                        .append(
-                            $('<div>').addClass('icon').text('x')
-                        )
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            $(this).parent().remove();
-                        })
-                    )
-                );
-            });
-            $(this).parent().hide();
+                    );
+                });
+                $(this).parent().hide();
+            }
             addUpload();
         };
 
         addUpload = function () {
+            var inputOptions;
+
+            if (Modernizr.file) {
+                inputOptions = { type: 'file', name: 'upload', multiple: 'multiple', tabindex: '2' };
+            } else {
+                inputOptions = { type: 'file', name: 'upload', tabindex: '2' };
+            }
+
             return $('<div>')
                 .addClass('section-item upload')
                 .append(
                     $.labelize(
-                        $('<input>', { type: 'file', name: 'upload', multiple: 'multiple', tabindex: '2' })
+                        $('<input>', inputOptions)
                         .on('change', handleFileSelect),
                         'mail_attachment'
                     )
@@ -1234,7 +1244,7 @@ define.async('io.ox/mail/write/main',
             // get mail
             var mail = this.getMail();
             // hide app
-            win.hide();
+            //win.hide();
             // send!
             mailAPI.send(mail.data, mail.files)
                 .always(function (result) {
