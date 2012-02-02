@@ -166,11 +166,13 @@ define('io.ox/contacts/edit/view-form',
 
     var drawAddress = function (options) {
         var addressFormat = 'street,postal_code/city,country,state'.split(','),
+            addressGroop = '_' + (options.pointName.split('-'))[1],
             self = this;
-
+        console.log(addressGroop);
         _.each(addressFormat, function (line, index) {
             var lineFormat = line.split(/\//);
             if (lineFormat.length === 1) {
+                line = line + addressGroop;
                 //normal mode
                 //ext.point('io.ox/contacts/edit/form/' + options.pointName + '/' + line).invoke('draw', self, options);
                 var dr = drawField(line);
@@ -186,8 +188,8 @@ define('io.ox/contacts/edit/view-form',
                 _.each(lineFormat, function (multiline, index) {
                     var myId = _.uniqueId('c');
                     labels.push(options.view.createLabel({id: myId, text: gt(multiline)}));
-                    fields.push(options.view.createTextField({id: myId, property: multiline}));
-                    hide = (options.view.getModel().get(multiline)) ? false : true;
+                    fields.push(options.view.createTextField({id: myId, property: multiline + addressGroop}));
+                    hide = (options.view.getModel().get(multiline + addressGroop)) ? false : true;
                 });
                 var outterLabel = $('<div>').addClass('inlinelabel');
                 _.each(labels, function (label) {
@@ -208,10 +210,12 @@ define('io.ox/contacts/edit/view-form',
     var createSaveButton = function (options) {
         var saveButton = $('<a>');
 
+        window.ursel = saveButton;
+        saveButton.attr('data-action', 'save');
+        saveButton.attr('id', 'testid');
         saveButton.addClass('button default-action saveButton').text('Save');
         saveButton.on('click', function () {
-            options.view.save();
-
+            options.view.saveForm();
         });
         return saveButton;
     };
@@ -281,7 +285,7 @@ define('io.ox/contacts/edit/view-form',
             method: 'POST',
             formname: 'contactUploadImage',
             name: 'file',
-            target: 'blank.html'
+            target: 'hiddenframePicture'
         });
         picForm.find('input').on('change', handleFileSelect);
 
@@ -337,11 +341,11 @@ define('io.ox/contacts/edit/view-form',
                 meta = {
                     'contact-personal': ['title', 'first_name', 'last_name', 'display_name', 'second_name', 'suffix', 'nickname', 'birthday'],
                     'contact-email': ['email1', 'email2', 'email3'],
-                    'contact-phone': ['telephone_business1', 'telephone_business2', 'fax_business', 'telephone_car', 'telephone_company', 'telephone_home1', 'telephone_home2', 'fax_home', 'cellular_telephone1', 'cellular_telephone2', 'telephone_other', 'fax_other', 'telephone_isdn', 'telephone_pager', 'telephone_primary', 'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'instant_messenger1', 'instant_messenger2', 'telephone_ip', 'telephone_assistant'],
+                    'contact-phone': ['telephone_business1', 'telephone_business2', 'fax_business', 'telephone_car', 'telephone_company', 'telephone_home1', 'telephone_home2', 'fax_home', 'cellular_telephone1', 'cellular_telephone2', 'telephone_other', 'fax_other', 'telephone_isdn', 'telephone_pager', 'telephone_primary', 'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'instant_messenger1', 'instant_messenger2', 'telephone_ip', 'telephone_assistant', 'telephone_callback'],
                     'contact-home-address': ['street_home', 'postal_code_home', 'city_home', 'state_home', 'country_home'],
-                    'contact-work-address': ['street_business', 'postal_code_business', 'city_business', 'state_business', 'country_business'],
+                    'contact-business-address': ['street_business', 'postal_code_business', 'city_business', 'state_business', 'country_business'],
                     'contact-other-address': ['street_other', 'postal_code_other', 'city_other', 'state_other', 'country_other'],
-                    'contact-job-descriptions': ['room_number', 'profession', 'position', 'company', 'department', 'employee_type', 'number_of_employees', 'sales_value', 'tax_id', 'commercial_register', 'branches', 'business_category', 'info', 'manager_name', 'assistant_name'],
+                    'contact-job-descriptions': ['room_number', 'profession', 'position', 'company', 'department', 'employee_type', 'number_of_employees', 'sales_volume', 'tax_id', 'commercial_register', 'branches', 'business_category', 'info', 'manager_name', 'assistant_name'],
                     'special-information': ['marital_status', 'number_of_children', 'spouse_name', 'note', 'url', 'anniversary'],
                     'userfields': ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05', 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10', 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15', 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20']
                 };
@@ -374,7 +378,7 @@ define('io.ox/contacts/edit/view-form',
             }
             return self;
         },
-        save: function () {
+        saveForm: function () {
             $(this).trigger('save');
         }
 

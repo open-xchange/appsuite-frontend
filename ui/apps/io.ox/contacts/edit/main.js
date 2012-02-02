@@ -55,6 +55,8 @@ define('io.ox/contacts/edit/main',
                         myView = new ContactEditView({model: myModel});
 
                     $(myView).on('save', function () {
+                        console.log(myView);
+
                         var consistency;
                         if (!myModel.isDirty()) {
                             return;
@@ -63,7 +65,6 @@ define('io.ox/contacts/edit/main',
                         if (consistency !== true || consistency.constructor.toString().indexOf('ConsistencyError') !== -1) {
                             return console.error(consistency);
                         }
-
                         // TODO: replace image upload with a field in formsjs method
                         var image = $('#contactUploadImage').find("input[type=file]").get(0);
                         var data = null;

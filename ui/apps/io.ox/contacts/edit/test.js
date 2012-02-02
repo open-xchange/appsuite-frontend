@@ -40,7 +40,6 @@ define("io.ox/contacts/edit/test",
             street_business: 'Martinstr. 41',
             postal_code_business: '57462',
             city_business: 'Olpe',
-            telephone_business1: '+49 2761-8385-0',
             sales_volume: '10000',
             suffix: 'Sir',
             title: 'Dr.',
@@ -54,7 +53,7 @@ define("io.ox/contacts/edit/test",
             number_of_children: '2',
             nickname: 'GG',
             spouse_name: 'Johanna',
-            anniversary: '11.10.1980',
+//            anniversary: '11.10.1980',
             note: 'Much Ado about Nothing',
             employee_type: 'free',
             room_number: '4711',
@@ -71,10 +70,12 @@ define("io.ox/contacts/edit/test",
             street_other: 'Elm street',
             city_other: 'Some',
             postal_code_other: '33333',
+            state_other: 'New York',
             country_other: 'USA',
+            telephone_business1: '+49 2761-8385-0',
             telephone_business2: '0815-4711',
             fax_business: '0815-4711',
-            telephone_callback: '0815-4711',
+            telephone_callback: '0815-4711',//
             telephone_car: '0815-4711',
             telephone_company: '0815-4711',
             telephone_home1: '0815-4711',
@@ -117,8 +118,7 @@ define("io.ox/contacts/edit/test",
             userfield17: 'userfield',
             userfield18: 'userfield',
             userfield19: 'userfield',
-            userfield20: 'userfield',
-            state_other: 'userfield'
+            userfield20: 'userfield'
         },
 
         TIMEOUT = 5000;
@@ -177,6 +177,7 @@ define("io.ox/contacts/edit/test",
                     });
                 });
 
+
                 j.it('creates a fresh obj', function () {
 
                     j.runs(function () {
@@ -228,20 +229,24 @@ define("io.ox/contacts/edit/test",
                     });
 
                     j.waitsFor(function () {
-                        formFrame =  $('table[data-obj-id="' + phrase + '"]');
-                        buttonSave = formFrame.find('.default-action.savebutton[data-action="save"]');
+                        formFrame =  $('.contact-detail.edit[data-property="' + phrase + '"]');
+                        buttonSave = formFrame.find('.default-action.saveButton[data-action="save"]');
                         if (buttonSave[0]) {
+                            console.log('gefunden');
                             return true;
                         }
-                    }, 'waits for the form', TIMEOUT);
+                    }, 'the form', TIMEOUT);
 
                     j.runs(function () {
-                        formFrame =  $('table[data-obj-id="' + phrase + '"]');
-                        var count = 0;
-                        for (var i in testObjectLong) {
-                            formFrame.find("input[name='" + i + "']").val(testObjectLong[i]);
-                        }
-                        $(buttonSave[0]).trigger('click');
+                        formFrame =  $('.contact-detail.edit[data-property="' + phrase + '"]');
+//                        formFrame.find('input[data-property="first_name"]').val('test').trigger('change');
+
+                        _.each(testObjectLong, function (val, property) {
+                            console.log(property + ' ' + val);
+                            formFrame.find('input[data-property="' + property + '"]').val(val).trigger('change');
+                        });
+                        buttonSave.triggerHandler('click');
+
                     });
                 });
 
