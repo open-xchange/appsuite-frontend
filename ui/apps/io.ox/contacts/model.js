@@ -16,7 +16,7 @@ define('io.ox/contacts/model',
     'use strict';
 
     var ContactModel = Model.extend({
-        properties: {
+        schema: {
             'display_name': {format: 'string', defaultValue: 'Mrs. Bean'},
             'first_name': { format: 'string', mandatory: true},
             'last_name': {  format: 'string'},

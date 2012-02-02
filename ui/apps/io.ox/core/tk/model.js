@@ -9,131 +9,272 @@
  * Mail: info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 /*global
 define: true
 */
 define('io.ox/core/tk/model',
-      [], function () {
-    "use strict";
+    ['io.ox/core/event'], function (Events) {
 
-    function SimpleModel(options) {
-        options = options || {};
-        options.data = options.data || {};
-        this.dirty = false;
-        this.setData(options.data);
-    }
+    'use strict';
 
-    SimpleModel.prototype = {
-        data: null,
-        dataShadow: null,
-        schema: {},
-        get: function (key) {
-            return this.data[key];
-        },
-        set: function (key, value) {
-            var validated = this.validate(key, value);
-            if (validated !== true || validated.constructor.toString().indexOf('ValidationError') !== -1) {
-                return $(this).trigger('error:validation', [validated]);
-            }
+    /**
+     * General local Error class
+     */
+    var Error = function (props, message) {
+        this.properties = _.isArray(props) ? props : [props];
+        this.message = message;
+    };
 
-            if (_.isEqual(value, this.data[key])) {
+    /**
+     * Formats for validation
+     */
+    var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+        formats = {
+            string: function (prop, val, def) {
+                // always true!
+                return true;
+            },
+            number: function (prop, val, def) {
+                return _.isNumber(val) ||
+                    new Error(prop, _.printf('%s must be a number', def.i18n || prop));
+            },
+            array: function (prop, val, def) {
+                return _.isArray(val) ||
+                    new Error(prop, _.printf('%s must be an array', def.i18n || prop));
+            },
+            boolean: function (prop, val, def) {
+                return _.isBoolean(val) ||
+                    new Error(prop, _.printf('%s must be bool', def.i18n || prop));
+            },
+            date: function (prop, val, def) {
+                return true;
+            },
+            pastDate: function (prop, val, def) {
+                return true;
+            },
+            email: function (prop, val, def) {
+                console.log('is email?');
+                console.log(regEmail.test(val));
+                return regEmail.test(val) ||
+                    new Error(prop, _.printf('%s must be a valid email address', def.i18n || prop));
+            },
+            url: function (prop, val, def) {
                 return true;
             }
+        };
 
-            this.dirty = true;
-            this.data[key] = value;
-            $(this).trigger('change:' + key, [key, value]);
-            $(this).trigger('change', [key, value]);
+    /**
+     * Model
+     */
+    function Model(options) {
+        options = options || {};
+        this.setData(options.data);
+        Events.extend(this);
+    }
+
+    Model.prototype = {
+
+        _data: {},
+        _previous: {},
+        _dirty: false,
+
+        schema: {},
+        formats: formats,
+
+        get: function (key) {
+            console.log('getting ' + key + ': ' + this._data[key]);
+            return this._data[key];
         },
-        checkConsistency: function () {
-            return true;
+
+        set: function (key, value) {
+            // changed?
+            console.log('set ' + key + ':' + value);
+            if (_.isEqual(value, this._data[key])) {
+                // TODO: guess isEqual is too strict here, e.g. undefined vs. ''
+                return;
+            }
+            // validate only if really changed - yes, initial value might conflict with schema
+            // but we validate each field again during final consistency checks
+            var result = this.validate(key, value);
+            console.log('validated:' + result);
+            if (result !== true) {
+                this.trigger('error:invalid', result);
+                return;
+            }
+            // update
+            this._data[key] = value;
+            this._dirty = true;
+
+            this.trigger('change:' + key + ' change', key, value);
         },
+
         setData: function (data) {
-            this.data = data;
-            this.dataShadow = _.clone(data); //Shallow Copy data
+            // deep clone to avoid side effects
+            this._previous = _.clone(data || {}, true);
+            this._data = data = _.clone(data || {}, true);
+            // apply defaults
+            _(this.schema).each(function (def, key) {
+                if (data[key] === undefined) {
+                    if (def.defaultValue !== undefined) {
+                        data[key] = def.defaultValue;
+                    } else if (def.mandatory === true) {
+                        data[key] = '';
+                    }
+                }
+            });
+            // due to defaultValues, data and previous might differ.
+            // however, the model is not dirt
+            this._dirty = false;
         },
+
         getData: function () {
-            return this.data;
+            // return deep copy
+            return _.clone(this._data, true);
         },
+
         isDirty: function () {
-            return this.dirty;
+            return this._dirty;
         },
-        getChanges:  function () {
-            var changes = {},
-                self = this;
-            _.each(this.data, function (val, k) {
-                if (val !== self.dataShadow[k]) {
-                    changes[k] = val;
+        getChanges: function () {
+            var changes = {}, previous = this._previous;
+            _(this._data).each(function (value, key) {
+                if (!_.isEqual(value, previous[key])) {
+                    changes[key] = value;
                 }
             });
             return changes;
         },
-        ValidationError: function ValidationError(key, value, msg) {
-            this.message = msg;
-            this.name = key;
-            this.value = value;
-        },
-        ConsistencyError: function ConsistencyError(key, value, msg) {
-            this.message = msg;
-            this.name = key;
-            this.value = value;
-        },
-        formats: {
-            string: function (key, val, fieldDesc) {
-                if (!_.isString(val)) {
-                    return new this.ValidationError(key, val, 'should be a valid string');
-                }
-                return true;
-            },
-            number: function (key, val, fieldDesc) {
-                if (!_.isNumber(val)) {
-                    return new this.ValidationError(key, val, 'should be a number');
-                }
-                return true;
-            },
-            array: function (key, val, fieldDesc) {
-                if (!_.isArray(val)) {
-                    return new this.ValidationError(key, val, 'should be an array');
-                }
-                return true;
-            },
-            boolean: function (key, val, fieldDesc) {
-                if (!_.isBoolean(val)) {
-                    return new this.ValidationError(key, val, 'should be an boolean');
-                }
-                return true;
-            },
-            date: function (key, val, fieldDesc) {
-                return true;
-            },
-            pastDate: function (key, val, fieldDesc) {
-                return true;
-            },
-            email: function (key, val, fieldDesc) {
-                var emailRegExp = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                if (!emailRegExp.test(val)) {
-                    return new this.ValidationError(key, val, 'should be a valid email address');
-                }
-                return true;
-            },
-            url: function (key, val, fieldDesc) {
-                return true;
+
+        validate: function (prop, value) {
+            var def = this.schema[prop] || {},
+                format = def.format || 'string',
+                isEmpty = value === '',
+                isNotMandatory = def.mandatory !== true;
+            if (isEmpty) {
+                return isNotMandatory ||
+                    new Error(prop, _.printf('%s is mandatory', def.i18n || prop));
             }
-        },
-        validate: function (key, value) {
-            var fieldDesc = this.properties[key];
-            if (key === undefined || value === "" && (fieldDesc === undefined || fieldDesc.mandatory !== true)) {
-                return true;
+            if (_.isFunction(this.formats[format])) {
+                return this.formats[format](prop, value, def);
             }
-            if (fieldDesc && this.formats[fieldDesc.format] && _.isFunction(this.formats[fieldDesc.format])) {
-                return this.formats[fieldDesc.format].apply(this, [key, value, fieldDesc]);
-            }
+            // undefined format
+            console.error('Unknown format used in model schema', format);
         },
-        getProp: function (key) {
-            return this.properties[key] || {};
+
+        checkConsistency: function (data, Error) {
+            return true;
+        },
+        isMandatory: function (key) {
+            var f = this.getDefinition(key);
+            if (f) {
+                return !!f.mandatory;
+            }
+            return false;
+        },
+        getDefinition: function (key) {
+            var f = this.schema[key];
+            if (f !== undefined) {
+                return f;
+            }
+            return false;
+        },
+        save: function () {
+
+            var self = this, valid, consistent;
+
+            // check all properties
+            valid = _(this._data)
+                .inject(function (state, value, key) {
+                    var result = self.validate(key, value);
+                    if (result !== true) {
+                        self.trigger('error:invalid', result);
+                        return false;
+                    } else {
+                        return state;
+                    }
+                }, true);
+
+            if (!valid) {
+                return $.Deferred().reject();
+            }
+
+            // check consistency
+            consistent = this.checkConsistency(this._data, Error);
+
+            if (consistent !== true) {
+                self.trigger('error:inconsistent', consistent);
+                return $.Deferred().reject();
+            }
+
+            // trigger store - expects deferred object
+            return (this.store(this._data, this.getChanges()) || $.when())
+                .done(function () {
+                    self._dirty = false;
+                });
+        },
+
+        // store method must be replaced by custom handler
+        store: function (data, changes) { },
+
+        // destructor
+        destroy: function () {
+            this.events.destroy();
+            this._data = null;
+            this._previous = null;
+            this._dirty = false;
         }
     };
-    _.makeExtendable(SimpleModel);
-    return SimpleModel;
+
+    _.makeExtendable(Model);
+
+    /**
+     * Stupid test cases - will be removed
+     */
+    window.modelTest = function () {
+
+        var M = Model.extend({
+            schema: {
+                hallo: { format: 'string', defaultValue: 'welt' },
+                huppi: { format: 'string', mandatory: true },
+                num: { format: 'number', defaultValue: 1337, i18n: 'Hausnummer' },
+                mail: { format: 'email', i18n: 'E-Mail #1' }
+            },
+            checkConsistency: function (data, Error) {
+                if (data.num >= data.id) {
+                    return new Error(['num', 'id'], 'num must be less than id');
+                }
+                return true;
+            },
+            store: function (data, changes) {
+                console.warn('store!', data, changes);
+            }
+        });
+
+        var m = window.model = new M({ data: { id: 1000, hey: 'ho' }});
+
+        console.log('instance', m);
+        console.log('data', m.getData());
+
+        m.on('error:invalid error:inconsistent', function (e, error) {
+            console.log('Fail!', e.type, error.message, error.properties);
+        });
+
+        m.set('hallo', 'world');
+        m.set('num', 'hurz');
+        m.save();
+        m.set('num', 900);
+        m.set('huppi', 'fluppi');
+        console.log('dirty?', m.isDirty());
+        m.save()
+            .done(function () {
+                console.log('Done: save. Is dirty?', m.isDirty());
+            })
+            .fail(function () {
+                console.log('Could not save!');
+            });
+    };
+
+    return Model;
 });

@@ -36,17 +36,20 @@ define('io.ox/core/event', function () {
         this.on = function (type, data, fn) {
             var o = shift(data, fn, context);
             hub.on(type, o.data, o.fn);
+            return this;
         };
 
         // detach listener
         this.off = function (type, fn) {
             hub.off(type, fn);
+            return this;
         };
 
         // attach listener for a single execution
         this.one = function (type, data, fn) {
             var o = shift(data, fn, context);
             hub.one(type, o.data, o.fn);
+            return this;
         };
 
         // trigger event
@@ -55,13 +58,21 @@ define('io.ox/core/event', function () {
             _(types.split(/\s+/)).each(function (type) {
                 hub.triggerHandler.call(hub, type, args);
             });
+            return this;
         };
 
         // destroy event hub
         this.destroy = function () {
             hub.off();
+            try {
+                // remove shortcuts
+                delete context.events;
+                delete context.on;
+                delete context.off;
+                delete context.trigger;
+            } catch (e) { }
             hub = context = null;
-            this.on = this.off = this.one = this.trigger = $.noop;
+            this.on = this.off = this.one = this.trigger = null;
         };
     };
 
