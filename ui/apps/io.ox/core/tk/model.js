@@ -63,6 +63,12 @@ define('io.ox/core/tk/model',
             url: function (prop, val, def) {
                 return true;
             }
+        },
+
+        copyDefaults = function (def, key) {
+            if (def.defaultValue !== undefined) {
+                this._defaults[key] = def.defaultValue;
+            }
         };
 
     /**
@@ -70,22 +76,25 @@ define('io.ox/core/tk/model',
      */
     function Model(options) {
         options = options || {};
+        this._data = {};
+        this._previous = {};
+        this._defaults = {};
+        _(this.schema).each(_.bind(copyDefaults, this));
         this.setData(options.data);
         Events.extend(this);
     }
 
     Model.prototype = {
 
-        _data: {},
-        _previous: {},
-        _dirty: false,
-
         schema: {},
         formats: formats,
 
         get: function (key) {
-            console.log('getting ' + key + ': ' + this._data[key]);
-            return this._data[key];
+            if (key !== undefined) {
+                console.log('getting ' + key + ': ' + this._data[key]);
+            }
+            // return deep copy
+            return _.copy(key !== undefined ? this._data[key] : this._data, true);
         },
 
         set: function (key, value) {
@@ -98,45 +107,42 @@ define('io.ox/core/tk/model',
             // validate only if really changed - yes, initial value might conflict with schema
             // but we validate each field again during final consistency checks
             var result = this.validate(key, value);
-            console.log('validated:' + result);
             if (result !== true) {
                 this.trigger('error:invalid', result);
                 return;
             }
             // update
             this._data[key] = value;
-            this._dirty = true;
-
             this.trigger('change:' + key + ' change', key, value);
         },
 
         setData: function (data) {
-            // deep clone to avoid side effects
-            this._previous = _.clone(data || {}, true);
-            this._data = data = _.clone(data || {}, true);
-            // apply defaults
-            _(this.schema).each(function (def, key) {
-                if (data[key] === undefined) {
-                    if (def.defaultValue !== undefined) {
-                        data[key] = def.defaultValue;
-                    } else if (def.mandatory === true) {
-                        data[key] = '';
-                    }
-                }
-            });
+            // deep copy to avoid side effects
+            this._previous = _.copy(data || {}, true);
             // due to defaultValues, data and previous might differ.
-            // however, the model is not dirt
-            this._dirty = false;
+            // however, the model is not dirty
+            this._data = _.extend({}, this._defaults, _.copy(data || {}, true));
         },
 
+        /* DEPRECATED - get() without any parameter returns all data as well */
         getData: function () {
             // return deep copy
-            return _.clone(this._data, true);
+            return _.copy(this._data, true);
         },
 
         isDirty: function () {
-            return this._dirty;
+            // the model is dirty if any property differs from its previous or default value
+            var key, value, previous = this._previous, defaults = this._defaults, isEqual;
+            for (key in this._data) {
+                value = this._data[key];
+                isEqual = _.isEqual(value, previous[key]) || _.isEqual(value, defaults[key]);
+                if (!isEqual) {
+                    return true;
+                }
+            }
+            return false;
         },
+
         getChanges: function () {
             var changes = {}, previous = this._previous;
             _(this._data).each(function (value, key) {
@@ -166,20 +172,20 @@ define('io.ox/core/tk/model',
         checkConsistency: function (data, Error) {
             return true;
         },
+
         isMandatory: function (key) {
-            var f = this.getDefinition(key);
-            if (f) {
-                return !!f.mandatory;
-            }
-            return false;
+            return !!(this.getDefinition(key) || {}).mandatory;
         },
+
         getDefinition: function (key) {
             var f = this.schema[key];
-            if (f !== undefined) {
-                return f;
-            }
-            return false;
+            return f || false; // this could be undefined!?
         },
+
+        toString: function () {
+            return JSON.stringify(this._data);
+        },
+
         save: function () {
 
             var self = this, valid, consistent;
@@ -203,7 +209,7 @@ define('io.ox/core/tk/model',
             // check consistency
             consistent = this.checkConsistency(this._data, Error);
 
-            if (consistent !== true) {
+            if (typeof consistent === 'object') {
                 self.trigger('error:inconsistent', consistent);
                 return $.Deferred().reject();
             }
@@ -211,7 +217,7 @@ define('io.ox/core/tk/model',
             // trigger store - expects deferred object
             return (this.store(this._data, this.getChanges()) || $.when())
                 .done(function () {
-                    self._dirty = false;
+                    self.setData(self._data);
                 });
         },
 
@@ -223,58 +229,11 @@ define('io.ox/core/tk/model',
             this.events.destroy();
             this._data = null;
             this._previous = null;
-            this._dirty = false;
+            this._defaults = null;
         }
     };
 
     _.makeExtendable(Model);
-
-    /**
-     * Stupid test cases - will be removed
-     */
-    window.modelTest = function () {
-
-        var M = Model.extend({
-            schema: {
-                hallo: { format: 'string', defaultValue: 'welt' },
-                huppi: { format: 'string', mandatory: true },
-                num: { format: 'number', defaultValue: 1337, i18n: 'Hausnummer' },
-                mail: { format: 'email', i18n: 'E-Mail #1' }
-            },
-            checkConsistency: function (data, Error) {
-                if (data.num >= data.id) {
-                    return new Error(['num', 'id'], 'num must be less than id');
-                }
-                return true;
-            },
-            store: function (data, changes) {
-                console.warn('store!', data, changes);
-            }
-        });
-
-        var m = window.model = new M({ data: { id: 1000, hey: 'ho' }});
-
-        console.log('instance', m);
-        console.log('data', m.getData());
-
-        m.on('error:invalid error:inconsistent', function (e, error) {
-            console.log('Fail!', e.type, error.message, error.properties);
-        });
-
-        m.set('hallo', 'world');
-        m.set('num', 'hurz');
-        m.save();
-        m.set('num', 900);
-        m.set('huppi', 'fluppi');
-        console.log('dirty?', m.isDirty());
-        m.save()
-            .done(function () {
-                console.log('Done: save. Is dirty?', m.isDirty());
-            })
-            .fail(function () {
-                console.log('Could not save!');
-            });
-    };
 
     return Model;
 });
