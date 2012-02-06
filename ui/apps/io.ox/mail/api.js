@@ -283,6 +283,16 @@ define("io.ox/mail/api",
         }, false);
     };
 
+    api.getSource = function (obj) {
+        return this.get({
+            action: 'get',
+            id: obj.id,
+            src: 1,
+            folder: obj.folder || obj.folder_id,
+            view: 'html'
+        }, false);
+    };
+
     api.replyall = function (obj, view) {
         return react('replyall', obj, view);
     };
@@ -296,7 +306,6 @@ define("io.ox/mail/api",
     };
 
     api.send = function (data, files) {
-
         var deferred = $.Deferred();
 
         if (Modernizr.file) {
