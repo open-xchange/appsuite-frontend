@@ -106,7 +106,7 @@ define("io.ox/mail/api",
         options = options || {};
 
         if (2 > 1) {
-
+            // old manual request - wait for backend update
             options.action = 'all';
             options.columns = '601,600,610,612'; // +level, +received_date
             options.sort = 'thread';
@@ -142,7 +142,7 @@ define("io.ox/mail/api",
                 });
 
         } else {
-
+            // request for brand new thread support
             options.action = 'threadedAll';
             options.columns = '601,600';
             options.sort = '612';
@@ -152,8 +152,6 @@ define("io.ox/mail/api",
                     _(data).each(function (obj) {
                         threads[obj.folder_id + "." + obj.id] = obj.thread;
                     });
-                    console.log('yeah', data);
-                    console.log('threads', threads);
                     return data;
                 });
         }
