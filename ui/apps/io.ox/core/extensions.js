@@ -246,7 +246,7 @@ define("io.ox/core/extensions",
                     return that.point(link.ref).inject(function (flag, action) {
                         if (_.isFunction(action.requires)) {
                             // check requirements
-                            return flag && action.requires({ collection: collection });
+                            return flag && action.requires({ collection: collection, context: context });
                         } else {
                             return flag;
                         }
