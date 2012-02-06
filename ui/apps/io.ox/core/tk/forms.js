@@ -173,7 +173,12 @@ define('io.ox/core/tk/forms',
             f.applyModel(textChangeByModel);
             return f.finish('prepend', 'textarea');
         },
-
+        createDateField: function (options) {
+            var f = new Field(options, 'date');
+            f.create('<input type="date">', textChange);
+            f.applyModel(textChangeByModel);
+            return f.finish('prepend', 'input');
+        },
         createPasswordField: function (options) {
             var f = new Field(options, 'text');
             f.create('<input type="password">', textChange);

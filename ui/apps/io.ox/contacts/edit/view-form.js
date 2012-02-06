@@ -142,11 +142,27 @@ define('io.ox/contacts/edit/view-form',
     var drawField = function (subPointName) {
         return function (options) {
             var myId = _.uniqueId('c'),
-                sectionGroup = options.view.createSectionGroup();
+                sectionGroup = options.view.createSectionGroup(),
+                fieldType = options.view.getModel().getFieldtype(subPointName),
+                fieldTypeCreate;
+
+
+            switch (fieldType) {
+            case "string":
+                fieldTypeCreate = options.view.createTextField({id: myId, property: subPointName});
+                break;
+            case "pastDate":
+                fieldTypeCreate = options.view.createDateField({id: myId, property: subPointName});
+                break;
+            default:
+                fieldTypeCreate = options.view.createTextField({id: myId, property: subPointName});
+                break;
+            }
 
             this.append(sectionGroup);
             sectionGroup.append(options.view.createLabel({id: myId, text: gt(subPointName)}));
-            sectionGroup.append(options.view.createTextField({id: myId, property: subPointName}));
+            sectionGroup.append(fieldTypeCreate);
+
 
             if (!options.view.getModel().get(subPointName) &&
                 !options.view.getModel().isMandatory(subPointName)) {

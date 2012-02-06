@@ -177,6 +177,10 @@ define('io.ox/core/tk/model',
             return !!(this.getDefinition(key) || {}).mandatory;
         },
 
+        getFieldtype: function (key) {
+            return (this.getDefinition(key) || {}).format;
+        },
+
         getDefinition: function (key) {
             var f = this.schema[key];
             return f || false; // this could be undefined!?
