@@ -134,34 +134,33 @@ define('io.ox/contacts/api',
         }
     };
 
-    api.editNewImage = function (formdata, file) {
+    api.editNewImage = function (o, changes, file) {
 
-        var formData = new FormData(),
-        formdataObj = $.parseJSON(formdata);
-        formData.append('file', file);
-        formData.append('json', formdata);
+        var form = new FormData();
+        form.append('file', file);
+        form.append('json', JSON.stringify(changes));
 
         return http.UPLOAD({
-            module: 'contacts',
-            params: {action: 'update', id: formdataObj.id, folder: formdataObj.folderId, timestamp: formdataObj.timestamp},
-            data: formData,
-            dataType: 'text'
-        })
-        .done(function () {
-            api.caches.get.clear();
-            api.caches.list.clear();
-            api.trigger('refresh.list');
-        })
-        .fail(function () {
-            console.log('connection lost');//what to do if fails?
-        });
+                module: 'contacts',
+                params: { action: 'update', id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.now() },
+                data: form,
+                dataType: 'text'
+            })
+            .done(function () {
+                api.caches.get.clear();
+                api.caches.list.clear();
+                api.trigger('refresh.list');
+            })
+            .fail(function () {
+                console.log('connection lost');//what to do if fails?
+            });
     };
 
     api.remove =  function (formdata) {
         return http.PUT({
             module: 'contacts',
-            params: {action: 'delete', timestamp: formdata.last_modified},
-            data: {folder: formdata.folder_id, id: formdata.id},
+            params: { action: 'delete', timestamp: formdata.last_modified },
+            data: { folder: formdata.folder_id, id: formdata.id },
             datatype: 'text'
         })
        .done(function () {

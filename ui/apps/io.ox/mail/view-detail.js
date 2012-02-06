@@ -22,9 +22,6 @@ define("io.ox/mail/view-detail",
 
     // define global iframe resize handler
     window.iframeResize = function (guid, doc) {
-
-        console.log(guid, doc);
-
         _.defer(function () {
             var height = $(doc.body).outerHeight(true);
             $("#tmp-iframe-" + guid).css("height", height + 30 + "px");
