@@ -141,20 +141,25 @@ define('io.ox/contacts/edit/view-form',
 
     var drawField = function (subPointName) {
         return function (options) {
+
             var myId = _.uniqueId('c'),
-                sectionGroup = options.view.createSectionGroup();
+                view = options.view,
+                model = view.getModel(),
+                sectionGroup = view.createSectionGroup();
 
-            this.append(sectionGroup);
-            sectionGroup.append(options.view.createLabel({id: myId, text: gt(subPointName)}));
-            sectionGroup.append(options.view.createTextField({id: myId, property: subPointName}));
+            sectionGroup.append(
+                 view.createLabel({ id: myId, text: gt(subPointName) }),
+                 view.createTextField({ id: myId, property: subPointName, classes: 'nice-input' })
+            );
 
-            if (!options.view.getModel().get(subPointName) &&
-                !options.view.getModel().isMandatory(subPointName)) {
+            if (!model.get(subPointName) && !model.schema.isMandatory(subPointName)) {
                 sectionGroup.addClass('hidden');
             }
-            if (options.view.getModel().isMandatory(subPointName)) {
+            if (model.schema.isMandatory(subPointName)) {
                 sectionGroup.addClass('mandatory');
             }
+
+            this.append(sectionGroup);
         };
     };
 
@@ -187,8 +192,8 @@ define('io.ox/contacts/edit/view-form',
 
                 _.each(lineFormat, function (multiline, index) {
                     var myId = _.uniqueId('c');
-                    labels.push(options.view.createLabel({id: myId, text: gt(multiline)}));
-                    fields.push(options.view.createTextField({id: myId, property: multiline + addressGroop}));
+                    labels.push(options.view.createLabel({ id: myId, text: gt(multiline) }));
+                    fields.push(options.view.createTextField({ id: myId, property: multiline + addressGroop, classes: 'nice-input' }));
                     hide = (options.view.getModel().get(multiline + addressGroop)) ? false : true;
                 });
                 var outterLabel = $('<div>').addClass('inlinelabel');
@@ -245,10 +250,10 @@ define('io.ox/contacts/edit/view-form',
         calculatedModel = new Model({});
         _.extend(calculatedModel, {
             get: function () {
-                return util.getJob(options.view.getModel().getData());
+                return util.getJob(options.view.getModel().get());
             },
             update: function () {
-                $(this).trigger('change:calculated.jobdescription', util.getJob(options.view.getModel().getData()));
+                $(this).trigger('change:calculated.jobdescription', util.getJob(options.view.getModel().get()));
             },
             set: function () {}
         });
@@ -263,7 +268,7 @@ define('io.ox/contacts/edit/view-form',
 
         saveButton = createSaveButton(options);
 
-        picture = (api.getPicture(options.view.getModel().getData())).addClass('picture');
+        picture = (api.getPicture(options.view.getModel().get())).addClass('picture');
         picture.on('click', picTrigger);
         function handleFileSelect(evt) {
             var file = evt.target.files,
@@ -352,11 +357,11 @@ define('io.ox/contacts/edit/view-form',
 
                 var updateDisplayName = function () {
                     console.log('update displayname');
-                    self.getModel().set('display_name', util.getFullName(self.getModel().getData()));
+                    self.getModel().set('display_name', util.getFullName(self.getModel().get()));
                 };
 
                 var updateJobDescription = function () {
-                    self.getModel().trigger('change:calculated.jobdescription', util.getJob(self.getModel().getData()));
+                    self.getModel().trigger('change:calculated.jobdescription', util.getJob(self.getModel().get()));
                 };
 
                 this.getModel().on('change:title change:first_name change:last_name', updateDisplayName);
@@ -379,7 +384,9 @@ define('io.ox/contacts/edit/view-form',
             return self;
         },
         saveForm: function () {
-            $(this).trigger('save');
+            console.log('saveForm -> save', this);
+            this.getModel().save();
+            //$(this).trigger('save');
         }
 
     });

@@ -56,8 +56,7 @@ define("io.ox/core/extensions",
             disabled = {},
             // get enabled extensions
             list = function () {
-                return _(extensions)
-                    .chain()
+                return _.chain(extensions)
                     .select(function (obj) {
                         return !disabled[obj.id];
                     });
@@ -172,6 +171,10 @@ define("io.ox/core/extensions",
             return this;
         };
 
+        this.chain = function () {
+            return list();
+        };
+
         this.each = function (cb) {
             list().each(cb);
             return this;
@@ -205,6 +208,7 @@ define("io.ox/core/extensions",
             delete disabled[id];
             return this;
         };
+
         this.isEnabled = function (id) {
             return !!disabled[id];
         };

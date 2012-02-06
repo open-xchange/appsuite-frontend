@@ -28,12 +28,12 @@ define("io.ox/core/test/model",
                     familyName: '',
                     city: 'Dortmund'
                 },
-                schema = {
+                schema = new Model.Schema({
                     familyName: { mandatory: true },
                     country: { defaultValue: 'Germany' },
                     age: { format: 'number' },
                     email: { format: 'email' }
-                },
+                }),
                 model;
 
             j.describe('Simple model without schema', function () {
@@ -57,8 +57,8 @@ define("io.ox/core/test/model",
                 });
 
                 j.it('returns property as not mandatory', function () {
-                    j.expect(model.isMandatory('firstName')).toEqual(false);
-                    j.expect(model.isMandatory('country')).toEqual(false);
+                    j.expect(model.schema.isMandatory('firstName')).toEqual(false);
+                    j.expect(model.schema.isMandatory('country')).toEqual(false);
                 });
 
                 j.it('detects that model is not dirty', function () {
@@ -118,14 +118,12 @@ define("io.ox/core/test/model",
             j.describe('Model with schema', function () {
 
                 j.it('create instance', function () {
-                    var ComplexModel = Model.extend({
-                        schema: schema,
-                        checkConsistency: function (data, Error) {
-                            if (data.age < 0) {
-                                return new Error('age', 'Age must be greater than 0');
-                            }
+                    var ComplexModel = Model.extend({ schema: schema });
+                    schema.check = function (data, Error) {
+                        if (data.age < 0) {
+                            return new Error('age', 'Age must be greater than 0');
                         }
-                    });
+                    };
                     model = new ComplexModel({ data: data });
                     j.expect(model).toBeDefined();
                 });
@@ -135,7 +133,7 @@ define("io.ox/core/test/model",
                 });
 
                 j.it('returns property as mandatory', function () {
-                    j.expect(model.isMandatory('familyName')).toEqual(true);
+                    j.expect(model.schema.isMandatory('familyName')).toEqual(true);
                 });
 
                 j.it('detects that model is not dirty', function () {
@@ -208,6 +206,10 @@ define("io.ox/core/test/model",
                     });
                     j.expect(done).toEqual('Done');
                     j.expect(errors).toEqual('No errors');
+
+                    // CLEAN UP
+                    window.MODEL = model;
+                    model = null;
                 });
             });
         }

@@ -186,9 +186,16 @@ define('io.ox/dev/testing/main',
                     suites = suites ? String(suites).split(/,/) : [];
                     // loop over all extensions
                     _(['ALL'].concat(
-                            ext.point('test/suite').map(function (e) {
-                                return e.id;
-                            }).value())
+                            ext.point('test/suite')
+                                .chain()
+                                .sortBy(function (e) {
+                                    return e.id;
+                                })
+                                .map(function (e) {
+                                    return e.id;
+                                })
+                                .value()
+                            )
                         )
                         .each(function (id, i, list) {
                             // show id
