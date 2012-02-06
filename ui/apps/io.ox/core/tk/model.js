@@ -100,6 +100,10 @@ define('io.ox/core/tk/model',
             return !!this.get(key).mandatory;
         },
 
+        getFieldType: function (key) {
+            return this.get(key).format;
+        },
+
         isTrimmed: function (key) {
             return this.get(key).trim !== false;
         },

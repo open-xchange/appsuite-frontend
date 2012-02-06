@@ -146,11 +146,25 @@ define('io.ox/contacts/edit/view-form',
 
                 view = options.view,
                 model = view.getModel(),
-                sectionGroup = view.createSectionGroup();
+                sectionGroup = view.createSectionGroup(),
+                fieldtype = model.schema.getFieldType(subPointName),
+                createFunction;
+
+            switch (fieldtype) {
+            case "string":
+                createFunction = view.createTextField({ id: myId, property: subPointName, classes: 'nice-input' });
+                break;
+            case "pastDate":
+                createFunction = view.createDateField({ id: myId, property: subPointName, classes: 'nice-input' });
+                break;
+            default:
+                createFunction = view.createTextField({ id: myId, property: subPointName, classes: 'nice-input' });
+                break;
+            }
 
             sectionGroup.append(
                  view.createLabel({ id: myId, text: gt(subPointName) }),
-                 view.createTextField({ id: myId, property: subPointName, classes: 'nice-input' })
+                 createFunction
             );
 
             if (!model.get(subPointName) && !model.schema.isMandatory(subPointName)) {

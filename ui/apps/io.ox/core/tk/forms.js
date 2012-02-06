@@ -48,6 +48,17 @@ define('io.ox/core/tk/forms',
             $(this).val(value);
         },
 
+        dateChange = function () {
+            var self = $(this),
+                dateArray = self.val().split('.'),
+                date =  Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
+            self.trigger('update.model', { property: self.attr('data-property'), value: date });
+        },
+        dateChangeByModel = function (e, value) {
+            var formatetValue = require('io.ox/core/i18n').date('dd.MM.YYYY', value);
+            $(this).val(formatetValue);
+        },
+
         radioChange = selectChange,
         radioChangeByModel = function (e, value) {
             var self = $(this);
@@ -175,8 +186,8 @@ define('io.ox/core/tk/forms',
         },
         createDateField: function (options) {
             var f = new Field(options, 'date');
-            f.create('<input type="date">', textChange);
-            f.applyModel(textChangeByModel);
+            f.create('<input type="date">', dateChange);
+            f.applyModel(dateChangeByModel);
             return f.finish('prepend', 'input');
         },
         createPasswordField: function (options) {
