@@ -111,11 +111,15 @@ TaskBase = new (function () {
         }
       }
 
-      // Do when done
-      prereq.once('complete', function () {
-        self.handlePrereqComplete(prereq);
-      });
-      prereq.invoke.apply(prereq, parsed.args);
+      if (!prereq.done) {
+          // Do when done
+          prereq.once('complete', function () {
+            self.handlePrereqComplete(prereq);
+          });
+          prereq.invoke.apply(prereq, parsed.args);
+      } else {
+          self.handlePrereqComplete(prereq);
+      }
     }
   };
 
