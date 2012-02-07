@@ -14,9 +14,10 @@ define('io.ox/settings/main',
      ['io.ox/core/tk/vgrid',
       'io.ox/core/api/apps',
       'io.ox/core/extensions',
-      'io.ox/settings/utils',
-      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, utils) {
-     
+      'io.ox/core/tk/forms',
+      'io.ox/core/tk/view',
+      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View) {
+
     'use strict';
 
     var tmpl = {
@@ -53,7 +54,7 @@ define('io.ox/settings/main',
 
 
     // application object
-    var app = ox.ui.createApp(),
+    var app = ox.ui.createApp({ name: 'io.ox/settings' }),
         // app window
         win,
         // grid
@@ -62,19 +63,19 @@ define('io.ox/settings/main',
         // nodes
         left,
         right,
-        expertmode = false,
+        expertmode = true, // for testing - better: false,
         currentSelection = null;
 
     function updateExpertMode() {
         var nodes = $('.expertmode');
         if (expertmode) {
-          nodes.show();
+            nodes.show();
         } else {
-          nodes.hide();
+            nodes.hide();
         }
     }
-    
-    
+
+
     app.setLauncher(function () {
         app.setWindow(win = ox.ui.createWindow({
             title: 'Settings',
@@ -87,31 +88,28 @@ define('io.ox/settings/main',
             var settingsID = currentSelection.id + '/settings';
             ext.point(settingsID + '/detail').invoke('save');
         };
-        win.bind('hide', onHideSettingsPane);
+        win.on('hide', onHideSettingsPane);
 
 
-        
+
 
         ext.point('io.ox/settings/links/toolbar').extend({
             id: 'io.ox/settings/expertcb',
             draw: function (context) {
-              var cb  = utils.createCheckbox({dataid: 'settings-expertcb', label: 'Enable Expert Mode', currentValue: expertmode, model:  {
-                  get: function (dataid, value) {
-                      return expertmode;
-                  },
-                  set: function (dataid, value) {
-                      expertmode = value;
-                      updateExpertMode();
-                  },
-                  save: function () {
-                      //nothing to do
-                      return $.Deferred().resolve();
-                  }
-              }});
-              this.append(cb);
+                this.append(
+                    forms.createCheckbox({
+                        dataid: 'settings-expertcb',
+                        initialValue: expertmode,
+                        label: 'Expertmode'
+                    })
+                    .on('update.model', function (e, options) {
+                        expertmode = options.value;
+                        updateExpertMode();
+                    })
+                );
             }
         });
-    
+
 
         win.addClass('io-ox-settings-main');
 
@@ -141,13 +139,13 @@ define('io.ox/settings/main',
             });
 
             apps.push({
-              category: 'Basic',
-              company: 'Open-Xchange',
-              description: 'Manage Accounts',
-              icon: '',
-              id: 'io.ox/settings/accounts',
-              settings: true,
-              title: 'Accounts'
+                category: 'Basic',
+                company: 'Open-Xchange',
+                description: 'Manage Accounts',
+                icon: '',
+                id: 'io.ox/settings/accounts',
+                settings: true,
+                title: 'Accounts'
             });
             console.log('listing apps');
             console.log(apps);
@@ -166,7 +164,7 @@ define('io.ox/settings/main',
                 right.idle();
             });
         };
-        grid.selection.bind('change', function (selection) {
+        grid.selection.on('change', function (e, selection) {
             if (selection.length === 1) {
                 var isOpenedTheFirstTime = (currentSelection === null);
                 if (!isOpenedTheFirstTime) {
@@ -180,10 +178,10 @@ define('io.ox/settings/main',
         });
 
 
-        win.bind('show', function () {
+        win.on('show', function () {
             grid.selection.keyboard(true);
         });
-        win.bind('hide', function () {
+        win.on('hide', function () {
             grid.selection.keyboard(false);
         });
 

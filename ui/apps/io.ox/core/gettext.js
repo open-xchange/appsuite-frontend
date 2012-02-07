@@ -12,7 +12,7 @@
  */
 
 define("io.ox/core/gettext", [], function () {
-    
+
     "use strict";
     
     function gt(id, po) {
@@ -26,16 +26,18 @@ define("io.ox/core/gettext", [], function () {
         gettext.noI18n = function (text) {
             return text;
         };
-        
+
         gettext.gettext = gettext;
+
         gettext.pgettext = function (context, text) {
             var key = context ? context + "\x00" + text : text;
             return po.dictionary[key] || text;
         };
-        
+
         gettext.ngettext = function (singular, plural, n) {
             return gettext.npgettext("", singular, plural, n);
         };
+
         gettext.npgettext = function (context, singular, plural, n) {
             var key = (context ? context + "\x00" : "") +
                     singular + "\x01" + plural,
@@ -44,7 +46,7 @@ define("io.ox/core/gettext", [], function () {
                 translation[Number(po.plural(Number(n)))] :
                 Number(n) !== 1 ? plural : singular;
         };
-        
+
         return gettext;
     }
     
@@ -58,11 +60,12 @@ define("io.ox/core/gettext", [], function () {
         };
         lang.resolve(language);
     };
+
     gt.getModule = function (name) {
         return lang.pipe(function (lang) {
             return name + "." + lang;
         });
     };
-    
+
     return gt;
 });

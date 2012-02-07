@@ -14,7 +14,7 @@
  */
 
 define("io.ox/core/extensions",
-    ["io.ox/core/event", "io.ox/core/collection"], function (event, Collection) {
+    ["io.ox/core/event", "io.ox/core/collection"], function (Events, Collection) {
 
     // A naive extension registry.
     "use strict";
@@ -39,7 +39,7 @@ define("io.ox/core/extensions",
         wrappers = {};
 
     // never leak
-    $(window).bind("unload", function () {
+    $(window).on("unload", function () {
         _(registry).each(function (ext) {
             ext.clear();
         });
@@ -56,8 +56,7 @@ define("io.ox/core/extensions",
             disabled = {},
             // get enabled extensions
             list = function () {
-                return _(extensions)
-                    .chain()
+                return _.chain(extensions)
                     .select(function (obj) {
                         return !disabled[obj.id];
                     });
@@ -72,7 +71,7 @@ define("io.ox/core/extensions",
             },
             self = this;
 
-        event.Dispatcher.extend(this);
+        Events.extend(this);
 
         function createInvoke(point, ext) {
             return function (name, context, args) {
@@ -81,7 +80,7 @@ define("io.ox/core/extensions",
                 }
                 var fn = ext[name];
                 if (fn) {
-                    // wrap?
+                    // wrap
                     if (wrappers[name]) {
                         return wrappers[name].call(context, {
                             args: args,
@@ -172,6 +171,10 @@ define("io.ox/core/extensions",
             return this;
         };
 
+        this.chain = function () {
+            return list();
+        };
+
         this.each = function (cb) {
             list().each(cb);
             return this;
@@ -205,6 +208,10 @@ define("io.ox/core/extensions",
             delete disabled[id];
             return this;
         };
+
+        this.isEnabled = function (id) {
+            return !!disabled[id];
+        };
     };
 
     // common extension classes
@@ -225,7 +232,7 @@ define("io.ox/core/extensions",
         this.draw = function (context) {
             this.append(
                 $("<a>", { href: "#", tabindex: "1", "data-action": self.id })
-                .addClass("io-ox-action-link")
+                .addClass('io-ox-action-link' + (options.attention === true ? ' attention': ''))
                 .data({ ref: self.ref, context: context })
                 .click(click)
                 .text(String(self.label))
@@ -243,7 +250,7 @@ define("io.ox/core/extensions",
                     return that.point(link.ref).inject(function (flag, action) {
                         if (_.isFunction(action.requires)) {
                             // check requirements
-                            return flag && action.requires({ collection: collection });
+                            return flag && action.requires({ collection: collection, context: context });
                         } else {
                             return flag;
                         }

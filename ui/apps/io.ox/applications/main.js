@@ -35,7 +35,7 @@ define('io.ox/applications/main',
 
         // get window
         win = ox.ui.createWindow({
-            title: 'Applications',
+            title: 'Application Manager',
             toolbar: true
         });
 
@@ -116,16 +116,16 @@ define('io.ox/applications/main',
         };
 
         grid.selection.setMultiple(false)
-            .bind('change', function (selection) {
+            .on('change', function (e, selection) {
                 if (selection.length === 1) {
                     loadView(selection[0]);
                 }
             });
 
-        win.bind('show', function () {
+        win.on('show', function () {
             grid.selection.keyboard(true);
         });
-        win.bind('hide', function () {
+        win.on('hide', function () {
             grid.selection.keyboard(false);
         });
 
@@ -135,7 +135,7 @@ define('io.ox/applications/main',
         });
 
         // bind all refresh
-        api.bind('refresh.all', function (data) {
+        api.on('refresh.all', function (e, data) {
             grid.refresh();
         });
     });

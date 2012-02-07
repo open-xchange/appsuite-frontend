@@ -107,6 +107,8 @@ define('io.ox/core/cache', function () {
         // private fields
         var index = new CacheStorage(name + '.index', persistent);
 
+        var self = this;
+
         if (!name) {
             // not funny!
             throw 'Each object cache needs a unique name!';

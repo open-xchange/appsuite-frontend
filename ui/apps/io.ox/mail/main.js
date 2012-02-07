@@ -16,14 +16,17 @@ define("io.ox/mail/main",
      "io.ox/mail/api",
      "io.ox/core/extensions",
      "io.ox/core/commons",
+     "io.ox/core/config",
      "io.ox/core/tk/vgrid",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, commons, VGrid, viewDetail, tmpl) {
+    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl) {
 
     'use strict';
+
+    var draftFolderId = config.get('modules.mail.defaultFolder.drafts');
 
     var autoResolveThreads = function (e) {
         var self = $(this), parents = self.parents();
@@ -154,7 +157,7 @@ define("io.ox/mail/main",
         /*
          * Selection handling
          */
-        grid.selection.bind("change", function (selection) {
+        grid.selection.on("change", function (e, selection) {
             if (selection.length === 1) {
                 showMail(selection[0]);
             } else {

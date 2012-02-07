@@ -21,7 +21,7 @@ define(function () {
             "io.ox/portal": {
                 title: "Portal",
                 company: "Open-Xchange",
-                icon: "default.png",
+                icon: "portal.png",
                 category: "Productivity",
                 settings: false
             },
@@ -32,6 +32,24 @@ define(function () {
                 icon: "mail.png",
                 category: "Basic",
                 settings: true
+            },
+
+            "io.ox/mail/write": {
+                title: "Compose E-Mail",
+                company: "Open-Xchange",
+                icon: "mail-write.png",
+                category: "Basic",
+                settings: false,
+                visible: false
+            },
+
+            "io.ox/applications": {
+                title: "Application Manager",
+                company: "Open-Xchange",
+                icon: "apps.png",
+                category: "Basic",
+                settings: false,
+                visible: false
             },
 
             "io.ox/contacts": {
@@ -61,7 +79,7 @@ define(function () {
             "io.ox/conversations": {
                 title: "Conversations",
                 company: "Open-Xchange",
-                icon: "default.png",
+                icon: "conversations.png",
                 category: "Productivity",
                 settings: false
             },
@@ -91,7 +109,7 @@ define(function () {
             "io.ox/dev/theme-maker": {
                 title: "Theme Maker",
                 company: "Mattes Inc.",
-                icon: "default.png",
+                icon: "theme-maker.png",
                 category: "Dev",
                 settings: false
             },

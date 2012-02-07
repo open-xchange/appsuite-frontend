@@ -174,7 +174,7 @@ define('io.ox/dev/testing/main',
             .append($('<div>').addClass('summary').css('lineHeight', '2em').text('\u00A0'))
             .append($('<div>').addClass('results'));
 
-        win.bind('open', function () {
+        win.on('open', function () {
             // load all tests
             ext.loadPlugins({ name: 'tests', prefix: '', suffix: 'test' })
                 .done(function () {
@@ -186,9 +186,16 @@ define('io.ox/dev/testing/main',
                     suites = suites ? String(suites).split(/,/) : [];
                     // loop over all extensions
                     _(['ALL'].concat(
-                            ext.point('test/suite').map(function (e) {
-                                return e.id;
-                            }).value())
+                            ext.point('test/suite')
+                                .chain()
+                                .sortBy(function (e) {
+                                    return e.id;
+                                })
+                                .map(function (e) {
+                                    return e.id;
+                                })
+                                .value()
+                            )
                         )
                         .each(function (id, i, list) {
                             // show id

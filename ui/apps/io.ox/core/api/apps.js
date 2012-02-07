@@ -13,7 +13,7 @@
 
 define.async('io.ox/core/api/apps',
     ['io.ox/core/cache',
-     'io.ox/core/event'], function (cache, event) {
+     'io.ox/core/event'], function (cache, Events) {
 
     'use strict';
 
@@ -24,12 +24,21 @@ define.async('io.ox/core/api/apps',
         wait = $.Deferred(),
         api;
 
-    var getCategories = function () {
+    var bless = function (obj, id) {
+            obj = _.clone(obj || {});
+            obj.id = id;
+            obj.icon = ox.base + '/apps/io.ox/core/images/' + (obj.icon || 'default.png');
+            obj.description = obj.description || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat...';
+            obj.visible = obj.visible !== false;
+            return obj;
+        },
+
+        getCategories = function () {
             // loop over apps to figure out numbers per category
             var counts = {};
             _(appData.apps).each(function (app) {
                 var id = app.category || '---';
-                counts[id] = (counts[id] || 0) + 1;
+                counts[id] = (counts[id] || 0) + (app.visible !== false ? 1 : 0);
             });
             return [
                     {
@@ -66,14 +75,6 @@ define.async('io.ox/core/api/apps',
                 );
         },
 
-        bless = function (obj, id) {
-            obj = _.clone(obj || {});
-            obj.id = id;
-            obj.icon = ox.base + '/apps/io.ox/core/images/' + (obj.icon || 'default.png');
-            obj.description = obj.description || 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat...';
-            return obj;
-        },
-
         getByCategory = function (id) {
             return _(appData.apps)
                 .chain()
@@ -81,7 +82,7 @@ define.async('io.ox/core/api/apps',
                     return bless(obj, id);
                 })
                 .filter(function (obj) {
-                    return obj.category.toLowerCase() === id;
+                    return obj.visible && obj.category.toLowerCase() === id;
                 })
                 .value();
         },
@@ -131,7 +132,7 @@ define.async('io.ox/core/api/apps',
         }
     };
 
-    event.Dispatcher.extend(api);
+    Events.extend(api);
 
     // initialize
     appCache = new cache.SimpleCache('apps', true);

@@ -150,11 +150,7 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
                     return _.pad(d.getUTCDate(), 2) + '.' + _.pad(d.getUTCMonth() + 1, 2) + '.' + d.getUTCFullYear();
                 };
             // today?
-            if (d.getUTCDate() === now.getUTCDate()) {
-                return time();
-            } else {
-                return date();
-            }
+            return d.toString() === now.toString() ? time() : date();
         },
 
         getSmartTime: function (timestamp) {

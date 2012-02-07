@@ -13,46 +13,31 @@
  *
  */
 
-define("io.ox/contacts/edit/main",
-    ["io.ox/contacts/api",
-     "io.ox/core/cache",
-     "io.ox/contacts/edit/view-form",
-     "less!io.ox/contacts/style.css"
-     ], function (api, cache, viewForm) {
+define('io.ox/contacts/edit/main',
+    ['io.ox/contacts/api',
+     'io.ox/core/cache',
+     'io.ox/contacts/edit/view-form',
+     'io.ox/contacts/model',
+     'less!io.ox/contacts/style.css'
+     ], function (api, cache, ContactEditView, ContactModel) {
 
-    "use strict";
-
-    function extendDeep(parent, child) {
-        var i,
-        toStr = Object.prototype.toString, astr = "[object Array]";
-        child = child || {};
-        for (i in parent) {
-            if (parent.hasOwnProperty(i)) {
-                if (typeof parent[i] === "object") {
-                    child[i] = (toStr.call(parent[i]) === astr) ? [] : {};
-                    extendDeep(parent[i], child[i]);
-                } else {
-                    child[i] = parent[i];
-                }
-            }
-        }
-        return child;
-    }
+    'use strict';
 
     // multi instance pattern
     function createInstance(data) {
-
-        var app, win, container;
+        var app;
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/edit',
-            title: "Edit Contact"
+            title: 'Edit Contact'
         });
 
         app.setLauncher(function () {
+            var win,
+                container;
 
             win = ox.ui.createWindow({
-                title: "Edit Contact",
+                title: 'Edit Contact',
                 toolbar: true,
                 close: true
             });
@@ -68,67 +53,30 @@ define("io.ox/contacts/edit/main",
 
                 win.show(function () {
 
-                    container.append(viewForm.draw(data, app));
-                    container.find('input[type=text]:visible').eq(0).focus();
+                    // create model & view
+                    var myModel = new ContactModel({ data: data }),
+                        myView = new ContactEditView({ model: myModel });
 
-                    var actions = {
-                        save: function () {
-                            var formdata = {};
-                            // image = paneEdit2.find("#image1").get(0);
-
-                            // select the data
-                            // collect all strings
-                            container.find('.value input')
-                                .each(function (index) {
-                                    var value =  $(this).val(),
-                                        id = $(this).attr('name');
-                                    formdata[id] = value;
-                                });
-                            // collect anniversary
-                            container.find('.value input[name="anniversary"]')
-                            .each(function (index) {
-                                var value =  $(this).val(),
-                                    id = $(this).attr('name'),
-                                    dateArray = value.split('.');
-                                var date =  Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
-                                if (value !== "") {
-                                    formdata[id] = date;
-                                }
+                    myModel.store = function (data, changes) {
+                        // TODO: replace image upload with a field in formsjs method
+                        var image = $('#contactUploadImage').find("input[type=file]").get(0);
+                        if (image.files && image.files[0]) {
+                            return api.editNewImage(data, changes, image.files[0]);
+                        } else {
+                            return api.edit({
+                                id: data.id,
+                                folder: data.folder_id,
+                                timestamp: _.now(),
+                                data: changes
                             });
-
-                            // collect birthday
-                            container.find('.value input[name="birthday"]')
-                            .each(function (index) {
-                                var value =  $(this).val(),
-                                    id = $(this).attr('name'),
-                                    dateArray = value.split('.');
-                                var date =  Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
-                                if (value !== "") {
-                                    formdata[id] = date;
-                                }
-                            });
-
-                            var timestamp = new Date().getTime();
-                            formdata.folderId = data.folder_id;
-                            formdata.id = data.id;
-                            formdata.timestamp = timestamp;
-
-                          //  if (image.files && image.files[0]) {
-                           //     api.editNewImage(JSON.stringify(formdata), image.files[0]);
-                           // } else {
-                            if (!_.isEmpty(formdata)) {
-                                    //console.log(formdata);
-                                api.edit(formdata);
-                            }
-                          //  }
-                            app.quit();
-                        },
-
-    //                  cancel and quit the update app
-                        cancel: function () {
-                            app.quit();
                         }
                     };
+
+                    window.model = myModel;
+                    window.view = myView;
+
+                    container.append(myView.draw(app).node);
+                    container.find('input[type=text]:visible').eq(0).focus();
                 });
             };
 
@@ -140,10 +88,7 @@ define("io.ox/contacts/edit/main",
                 api.get(app.getState()).done(cont);
             }
         });
-
         return app;
-
-
     }
 
     return {

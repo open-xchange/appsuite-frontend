@@ -23,8 +23,9 @@ define.async('io.ox/mail/write/main',
      'io.ox/core/api/user',
      'io.ox/core/tk/upload',
      'io.ox/core/tk/autocomplete',
+     'gettext!io.ox/mail/mail',
      'less!io.ox/mail/style.css',
-     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload) {
+     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload, autocomplete, gt) {
 
     'use strict';
 
@@ -33,6 +34,18 @@ define.async('io.ox/mail/write/main',
         id: 'send',
         action: function (app) {
             app.send();
+        }
+    });
+
+    // actions (define outside of multi-instance app)
+    ext.point('io.ox/mail/write/actions/draft').extend({
+        id: 'send',
+        action: function (app) {
+            app.saveDraft().done(function (data) {
+                app.setMsgRef(data.data);
+            }).fail(function (e) {
+
+            });
         }
     });
 
@@ -69,12 +82,32 @@ define.async('io.ox/mail/write/main',
             sections = {},
             currentSignature = '',
             editorMode = '',
+            mailState,
             composeMode;
 
         app = ox.ui.createApp({
             name: 'io.ox/mail/write',
             title: 'Compose'
         });
+
+        app.STATES = {
+            'CLEAN': 1,
+            'DIRTY': 2
+        };
+
+        mailState = app.STATES.CLEAN;
+
+        app.getState = function () {
+            return mailState;
+        };
+
+        app.markDirty = function () {
+            mailState = app.STATES.DIRTY;
+        };
+
+        app.markClean = function () {
+            mailState = app.STATES.CLEAN;
+        };
 
         // helper
 
@@ -254,6 +287,7 @@ define.async('io.ox/mail/write/main',
         }
 
         function addRecipients(id, list) {
+            app.markDirty();
             // loop over list and draw recipient
             _(list).each(function (recipient) {
                 var node = $('<div>');
@@ -294,8 +328,8 @@ define.async('io.ox/mail/write/main',
             .append(
                 $('<label>', { 'for' : 'writer_field_' + id })
                 .append(
-                    $('<input>',
-                    {   type: 'text',
+                    $('<input>', {
+                        type: 'text',
                         tabindex: '2',
                         autocapitalize: 'off',
                         autocomplete: 'off',
@@ -304,8 +338,8 @@ define.async('io.ox/mail/write/main',
                     })
                     .attr('data-type', id) // not name=id!
                     .addClass('discreet')
-                    .autocomplete(
-                    {   source: function (query) {
+                    .autocomplete({
+                        source: function (query) {
                             return contactsAPI.autocomplete(query);
                         },
                         stringify: function (data) {
@@ -420,48 +454,58 @@ define.async('io.ox/mail/write/main',
 
         handleFileSelect = function (e) {
 
-            // look for linked attachments or dropped files
-            var item = $(this).prop('attachment') || $(this).prop('file'),
-                list = item ? [item] : e.target.files;
+            if (Modernizr.file) {
+                // look for linked attachments or dropped files
+                var item = $(this).prop('attachment') || $(this).prop('file'),
+                    list = item ? [item] : e.target.files;
 
-            _(list).each(function (file) {
-                sections.attachments.append(
-                    $('<div>').addClass('section-item file')
-                    .append($('<div>').text(file.filename || file.name || ''))
-                    .append(
-                        $('<div>')
+                _(list).each(function (file) {
+                    sections.attachments.append(
+                        $('<div>').addClass('section-item file')
+                        .append($('<div>').text(file.filename || file.name || ''))
                         .append(
-                            $('<span>').addClass('filesize')
-                            .text(i18n.filesize(file.size))
+                            $('<div>')
+                            .append(
+                                $('<span>').addClass('filesize')
+                                .text(i18n.filesize(file.size))
+                            )
+                            .append(
+                                supportsPreview(file) ? createPreview(file) : $()
+                            )
                         )
                         .append(
-                            supportsPreview(file) ? createPreview(file) : $()
+                            // remove
+                            $('<a>', { href: '#', tabindex: '6' })
+                            .addClass('remove')
+                            .append(
+                                $('<div>').addClass('icon').text('x')
+                            )
+                            .on('click', function (e) {
+                                e.preventDefault();
+                                $(this).parent().remove();
+                            })
                         )
-                    )
-                    .append(
-                        // remove
-                        $('<a>', { href: '#', tabindex: '6' })
-                        .addClass('remove')
-                        .append(
-                            $('<div>').addClass('icon').text('x')
-                        )
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            $(this).parent().remove();
-                        })
-                    )
-                );
-            });
-            $(this).parent().hide();
+                    );
+                });
+                $(this).parent().hide();
+            }
             addUpload();
         };
 
         addUpload = function () {
+            var inputOptions;
+
+            if (Modernizr.file) {
+                inputOptions = { type: 'file', name: 'upload', multiple: 'multiple', tabindex: '2' };
+            } else {
+                inputOptions = { type: 'file', name: 'upload', tabindex: '2' };
+            }
+
             return $('<div>')
                 .addClass('section-item upload')
                 .append(
                     $.labelize(
-                        $('<input>', { type: 'file', name: 'upload', multiple: 'multiple', tabindex: '2' })
+                        $('<input>', inputOptions)
                         .on('change', handleFileSelect),
                         'mail_attachment'
                     )
@@ -563,6 +607,19 @@ define.async('io.ox/mail/write/main',
                             .on('click', function (e) {
                                 e.preventDefault();
                                 ext.point('io.ox/mail/write/actions/send').invoke('action', null, app);
+                            })
+                        )
+                    )
+                    .append(
+                        $('<div>').addClass('draftbutton-wrapper')
+                        .append(
+                            // send
+                            $('<a>', { href: '#', tabindex: '9' })
+                            .addClass('button action draftbutton')
+                            .html('Draft')
+                            .on('click', function (e) {
+                                e.preventDefault();
+                                ext.point('io.ox/mail/write/actions/draft').invoke('action', null, app);
                             })
                         )
                     )
@@ -732,21 +789,21 @@ define.async('io.ox/mail/write/main',
             );
 
             var dropZone = upload.dnd.createDropZone();
-            dropZone.bind('drop', function (file) {
+            dropZone.on('drop', function (file) {
                 form.find('input[type=file]').last()
                     .prop('file', file)
                     .trigger('change');
                 showSection('attachments');
             });
 
-            win.bind('show', function () {
+            win.on('show', function () {
                 if (editor) {
                     editor.handleShow();
                 }
                 dropZone.include();
             });
 
-            win.bind('hide', function () {
+            win.on('hide', function () {
                 if (editor) {
                     editor.handleHide();
                 }
@@ -758,6 +815,8 @@ define.async('io.ox/mail/write/main',
          * Setters
          */
         app.setFormat = (function () {
+
+            app.markDirty();
 
             function load(mode, content) {
                 var editorSrc = 'io.ox/core/tk/' + (mode === 'html' ? 'html-editor' : 'text-editor');
@@ -821,14 +880,17 @@ define.async('io.ox/mail/write/main',
         }());
 
         app.setSubject = function (str) {
+            app.markDirty();
             subject.val(str || '');
         };
 
         app.setRawBody = function (str) {
+            app.markDirty();
             editor.setContent(str);
         };
 
         app.setBody = function (str) {
+            app.markDirty();
             // get default signature
             var ds = _(signatures)
                     .find(function (o) {
@@ -881,6 +943,7 @@ define.async('io.ox/mail/write/main',
         };
 
         app.setAttachments = function (list) {
+            app.markDirty();
             // look for real attachments
             var found = false;
             _(list || []).each(function (attachment) {
@@ -899,6 +962,7 @@ define.async('io.ox/mail/write/main',
         };
 
         app.setPriority = function (prio) {
+            app.markDirty();
             // be robust
             prio = parseInt(prio, 10) || 3;
             prio = prio < 3 ? 1 : prio;
@@ -913,16 +977,19 @@ define.async('io.ox/mail/write/main',
         };
 
         app.setAttachVCard = function (bool) {
+            app.markDirty();
             // set
             form.find('input[name=vcard]').prop('checked', !!bool);
         };
 
         app.setDeliveryReceipt = function (bool) {
+            app.markDirty();
             // set
             form.find('input[name=receipt]').prop('checked', !!bool);
         };
 
         app.setMsgRef = function (ref) {
+            app.markDirty();
             form.find('input[name=msgref]').val(ref || '');
         };
 
@@ -1177,7 +1244,7 @@ define.async('io.ox/mail/write/main',
             // get mail
             var mail = this.getMail();
             // hide app
-            win.hide();
+            //win.hide();
             // send!
             mailAPI.send(mail.data, mail.files)
                 .always(function (result) {
@@ -1186,9 +1253,38 @@ define.async('io.ox/mail/write/main',
                         win.show();
                         alert('Server error - see console :(');
                     } else {
+                        app.markClean();
                         app.quit();
                     }
                 });
+        };
+
+        app.saveDraft = function () {
+            // get mail
+            var mail = this.getMail(),
+                def = new $.Deferred();
+            // send!
+
+            mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
+
+            if (_(mail.data.flags).isUndefined()) {
+                mail.data.flags = mailAPI.FLAGS.DRAFT;
+            } else if (mail.data.flags & 4 === 0) {
+                mail.data.flags += mailAPI.FLAGS.DRAFT;
+            }
+
+            mailAPI.send(mail.data, mail.files)
+                .always(function (result) {
+                    if (result.error) {
+                        console.error(result);
+                        def.reject('Server error - see console :(');
+                    } else {
+                        def.resolve(result);
+                        app.markClean();
+                    }
+                });
+
+            return def;
         };
 
         /**
@@ -1200,17 +1296,59 @@ define.async('io.ox/mail/write/main',
 
         // destroy
         app.setQuit(function () {
-            // clean up editors
-            for (var id in editorHash) {
-                editorHash[id].destroy();
+
+            var def = $.Deferred();
+
+            var clean = function () {
+                // clean up editors
+                for (var id in editorHash) {
+                    editorHash[id].destroy();
+                }
+                // clear all private vars
+                app = win = main = sidepanel = form = subject = editor = null;
+                priorityOverlay = sections = currentSignature = null;
+            };
+
+            if (app.getState() === app.STATES.DIRTY) {
+                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(gt("Do you really want to cancel editing this mail?"))
+                        .addButton("cancel", gt('Cancel'))
+                        .addButton("delete", gt('Lose changes'))
+                        .addButton('savedraft', gt('Save as draft'))
+                        .show()
+                        .done(function (action) {
+                            console.debug("Action", action);
+                            if (action === 'delete') {
+                                def.resolve();
+                                clean();
+                            } else if (action === 'savedraft') {
+                                app.saveDraft().done(function (mail) {
+                                    console.log(mail);
+                                    def.resolve();
+                                    clean();
+                                }).fail(function (e) {
+                                    def.reject(e);
+                                });
+                            } else {
+                                def.reject();
+                            }
+                        });
+                });
+            } else {
+                clean();
+                def.resolve();
             }
-            // clear all private vars
-            app = win = main = sidepanel = form = subject = editor = null;
-            priorityOverlay = sections = currentSignature = null;
+
+            return def;
         });
 
         return app;
     }
+
+
+
+
 
     var module = {
         getApp: createInstance

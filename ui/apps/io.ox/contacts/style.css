@@ -99,7 +99,8 @@
     padding-right: 0em;
 }
 
-.contact-detail td.label {
+.contact-detail td.label,
+.contact-detail div.label {
     font-size: 0.9em;
     line-height: 1em;
     color: #888;
@@ -231,8 +232,7 @@
 
 /*scrollabel unsortet*/
 
-.block.edit_contact.unsortedfields{
-	
+.block.edit_contact.unsortedfields{ 
 	overflow: scroll;
 	height: 300px;
 	width: 400px;
@@ -243,6 +243,10 @@
 
  .hidden{
 	display: none;
+}
+
+.mandatory.hidden{
+	display: block;
 }
 
 .hidden.filled{
@@ -271,14 +275,118 @@ input#image1 {
 	width: 300px;
 }
 
-input{
+.contact-detail input{
 	width: 200px;
 }
 
-.headline {
+.contact-detail.edit .section {
+	margin-bottom: 20px;
+}
+	
+.contact-detail.edit .sectiontitle {
+	margin: 25px 0 15px 0;
+	padding-left: 165px;
 	font-size: 1.25em;
 	color: #888;
 	font-family: OpenSans, Helvetica, Arial, sans-serif;
 	font-weight: 200;
 	line-height: 1.15em;
+}
+
+
+.contact-detail.edit .sectioncontent {
+	margin-bottom: 5px;
+}
+
+.contact-detail.edit .section-group {
+	margin-bottom: 5px;
+}
+
+.contact-detail.edit div.input > input[type="text"] {
+	font-size: 14px;
+	width: 300px;
+    color: black;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 0.25em 0.5em 0.25em 0.5em;
+    -webkit-appearance: 'none';
+    -moz-appearance: 'none';
+    border-radius: 0.25em;
+    outline: 0; 	
+}
+
+.contact-detail.edit div.input.inline{
+	display: inline;
+}
+
+.contact-detail.edit div.input.inline.nr0 input[type="text"] {
+	width: 75px;
+	margin-right: 10px;
+}
+
+.contact-detail.edit div.input.inline.nr1 input[type="text"] {
+	width: 109px;
+}
+
+.contact-detail.edit .input > input[type="text"]:focus {
+	border-color: transparent;
+    box-shadow: 0px 0px 5px 1px @accent1;
+}
+
+.contact-detail.edit div.label {
+	margin-right: 15px;
+	padding-top: 7px;
+	width: 150px;
+	float:left;
+	text-align: right;
+}
+
+.contact-detail.edit div.inlinelabel {
+	margin-right: 15px;
+	padding-top: 7px;
+	width: 150px;
+	float:left;
+	text-align: right;
+}
+
+.contact-detail.edit div.inlinelabel div.label{
+	margin-right: 0px;
+	padding-top: 0px;
+	width: auto;
+	display: inline;
+	float: none;
+}
+
+.contact-detail.edit div.inlinelabel div.label:nth-child(1) {
+	margin-right: 5px;
+}
+	
+/*form head*/
+
+.contact-detail.edit .section.formheader {
+	height: 100px;
+	border-bottom: 1px solid #eee;
+}
+
+.contact-detail.edit .section.formheader .picture{
+	margin-right: 36px;
+	float: left;
+}
+
+.contact-detail.edit .section.formheader span{
+	display: block;
+}
+
+.contact-detail.edit .section.formheader .saveButton{
+	float: right;
+}
+
+.contact-detail.edit #contactUploadImage, .contact-detail.edit #contactUploadImage input{
+	width: 0px;
+	height: 0px;
+}
+
+/*switches*/
+.contact-detail.edit a.switcher {
+	padding-left: 165px;	
 }

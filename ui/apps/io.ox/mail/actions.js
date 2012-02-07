@@ -11,9 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/actions', ['io.ox/core/extensions'], function (ext) {
+define('io.ox/mail/actions',
+        ['io.ox/core/extensions',
+         'io.ox/core/config'], function (ext, config) {
 
     'use strict';
+
+    var defaultDraftFolder = config.get('modules.mail.defaultFolder.drafts');
 
     // actions
 
@@ -43,7 +47,7 @@ define('io.ox/mail/actions', ['io.ox/core/extensions'], function (ext) {
     ext.point('io.ox/mail/actions/reply-all').extend({
         id: 'reply-all',
         requires: function (context) {
-            return context.collection.has('some');
+            return context.collection.has('some') && context.context.folder_id !== defaultDraftFolder;
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -57,7 +61,7 @@ define('io.ox/mail/actions', ['io.ox/core/extensions'], function (ext) {
     ext.point('io.ox/mail/actions/reply').extend({
         id: 'reply',
         requires: function (context) {
-            return context.collection.has('some');
+            return context.collection.has('some') && context.context.folder_id !== defaultDraftFolder;
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -82,6 +86,26 @@ define('io.ox/mail/actions', ['io.ox/core/extensions'], function (ext) {
         }
     });
 
+    ext.point('io.ox/mail/actions/edit').extend({
+        id: 'edit',
+        requires: function (context) {
+            return context.context.folder_id === defaultDraftFolder;
+        },
+        action: function (data) {
+            console.debug('Action: edit', data);
+
+            require(['io.ox/mail/write/main'], function (m) {
+                m.getApp().launch().done(function () {
+                    var self = this;
+                    this.compose(data).done(function () {
+                        self.setMsgRef(data.folder_id + '/' + data.id);
+                        self.markClean();
+                    });
+                });
+            });
+        }
+    });
+
     // toolbar
 
     ext.point('io.ox/mail/links/toolbar').extend(new ext.Link({
@@ -95,29 +119,38 @@ define('io.ox/mail/actions', ['io.ox/core/extensions'], function (ext) {
 
     ext.point('io.ox/mail/links/inline').extend(new ext.Link({
         index: 100,
-        id: 'delete',
-        label: 'Delete',
-        ref: 'io.ox/mail/actions/delete'
-    }));
-
-    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
-        index: 200,
         id: 'reply-all',
         label: 'Reply All',
         ref: 'io.ox/mail/actions/reply-all'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new ext.Link({
-        index: 300,
+        index: 200,
         id: 'reply',
         label: 'Reply',
         ref: 'io.ox/mail/actions/reply'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new ext.Link({
-        index: 400,
+        index: 300,
         id: 'forward',
         label: 'Forward',
         ref: 'io.ox/mail/actions/forward'
     }));
+
+    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
+        index: 400,
+        id: 'edit',
+        label: 'Edit',
+        ref: 'io.ox/mail/actions/edit'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
+        index: 700,
+        id: 'delete',
+        label: 'Delete',
+        ref: 'io.ox/mail/actions/delete',
+        attention: true
+    }));
+
 });

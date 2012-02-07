@@ -45,7 +45,52 @@
         // get query
         queryData = deserialize(document.location.search.substr(1), /&/),
         // local timezone offset
-        timezoneOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
+        timezoneOffset = (new Date()).getTimezoneOffset() * 60 * 1000,
+
+        // taken from backbone
+        Class = function () {},
+        inherits = function (parent, protoProps, staticProps) {
+
+            var ExtendableClass;
+
+            // The constructor function for the new subclass is either defined by you
+            // (the "constructor" property in your `extend` definition), or defaulted
+            // by us to simply call the parent's constructor.
+            if (protoProps && protoProps.hasOwnProperty('constructor')) {
+                ExtendableClass = protoProps.constructor;
+            } else {
+                ExtendableClass = function () {
+                    parent.apply(this, arguments);
+                };
+            }
+
+            // Inherit class (static) properties from parent.
+            _.extend(ExtendableClass, parent);
+
+            // Set the prototype chain to inherit from `parent`, without calling
+            // `parent`'s constructor function.
+            Class.prototype = parent.prototype;
+            ExtendableClass.prototype = new Class();
+
+            // Add prototype properties (instance properties) to the subclass,
+            // if supplied.
+            if (protoProps) {
+                _.extend(ExtendableClass.prototype, protoProps);
+            }
+
+            // Add static properties to the constructor function, if supplied.
+            if (staticProps) {
+                _.extend(ExtendableClass, staticProps);
+            }
+
+            // Correctly set child's `prototype.constructor`.
+            ExtendableClass.prototype.constructor = ExtendableClass;
+
+            // Set a convenience property in case the parent's prototype is needed later.
+            ExtendableClass.__super__ = parent.prototype;
+
+            return ExtendableClass;
+        };
 
     // add namespaces
     _.browser = {
@@ -109,6 +154,7 @@
             location.href = href;
         }
     };
+
 
     // extend underscore utilities
     _.mixin({
@@ -367,6 +413,17 @@
             }, t || 0);
             return def;
         },
+
+        makeExtendable: (function () {
+            return function (parent) {
+                parent.extend = function (protoProps, classProps) {
+                    var child = inherits(this, protoProps, classProps);
+                    child.extend = this.extend;
+                    return child;
+                };
+                return parent;
+            };
+        }()),
 
         // helper for benchmarking
         clock: (function () {

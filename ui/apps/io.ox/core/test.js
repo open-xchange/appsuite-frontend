@@ -5,19 +5,22 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011 Mail: info@open-xchange.com
+ * Copyright (C) Open-Xchange Inc., 2006-2012 Mail: info@open-xchange.com
  *
  * @author Martin Holzhauer <martin.holzhauer@open-xchange.com>
  */
 
 define("io.ox/core/test",
-    ["io.ox/core/extensions",
-     "io.ox/core/test/cacheStorage", "io.ox/core/test/cacheSimpleCache",
-     "io.ox/core/test/cacheObjectCache", "io.ox/core/test/date"],
-function (ext) {
-    
-    "use strict";
+    ["io.ox/core/test/cacheStorage",
+     "io.ox/core/test/cacheSimpleCache",
+     "io.ox/core/test/cacheObjectCache",
+     "io.ox/core/test/date",
+     "io.ox/core/test/model"], function () {
 
-    // placeholder for all other caches
-    
+    'use strict';
+
+    /*
+     * placeholder for all other caches
+     *
+     */
 });

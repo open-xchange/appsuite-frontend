@@ -7,15 +7,17 @@ tree.Ruleset = function (selectors, rules) {
 };
 tree.Ruleset.prototype = {
     eval: function (env) {
-        var ruleset = new(tree.Ruleset)(this.selectors, this.rules.slice(0));
+        var selectors = this.selectors && this.selectors.map(function (s) { return s.eval(env) });
+        var ruleset = new(tree.Ruleset)(selectors, this.rules.slice(0));
 
         ruleset.root = this.root;
+        ruleset.allowImports = this.allowImports;
 
         // push the current ruleset to the frames stack
         env.frames.unshift(ruleset);
 
         // Evaluate imports
-        if (ruleset.root) {
+        if (ruleset.root || ruleset.allowImports) {
             for (var i = 0; i < ruleset.rules.length; i++) {
                 if (ruleset.rules[i] instanceof tree.Import) {
                     Array.prototype.splice
@@ -120,7 +122,7 @@ tree.Ruleset.prototype = {
             if (context.length === 0) {
                 paths = this.selectors.map(function (s) { return [s] });
             } else {
-                this.joinSelectors( paths, context, this.selectors );
+                this.joinSelectors(paths, context, this.selectors);
             }
         }
 
@@ -160,7 +162,8 @@ tree.Ruleset.prototype = {
                     return p.map(function (s) {
                         return s.toCSS(env);
                     }).join('').trim();
-                }).join(env.compress ? ',' : (paths.length > 3 ? ',\n' : ', '));
+                }).join( env.compress ? ',' : ',\n');
+
                 css.push(selector,
                         (env.compress ? '{' : ' {\n  ') +
                         rules.join(env.compress ? '' : '\n  ') +
@@ -184,7 +187,7 @@ tree.Ruleset.prototype = {
 
         for (var i = 0; i < selector.elements.length; i++) {
             el = selector.elements[i];
-            if (el.combinator.value[0] === '&') {
+            if (el.combinator.value.charAt(0) === '&') {
                 hasParentSelector = true;
             }
             if (hasParentSelector) afterElements.push(el);
@@ -209,4 +212,4 @@ tree.Ruleset.prototype = {
         }
     }
 };
-})(require('less/tree'));
+})(require('../tree'));

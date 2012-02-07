@@ -281,6 +281,39 @@ define("io.ox/mail/view-detail",
     }));
 
     ext.point('io.ox/mail/detail').extend({
+        index: 195,
+        id: 'externalresources-warning',
+        draw: function (data) {
+            var self = this;
+            if (data.modified === 1) {
+                this.append(
+                    $("<div>")
+                    .addClass("list")
+                    .addClass("infoblock backstripes")
+                    .append(
+                         $('<a>').text('Bilder anzeigen'),
+                         $('<i>').text(
+                              ' \u2013 ' +
+                              'In dieser E-Mail wurden externe Bilder blockiert, ' +
+                              'um potenziellen Missbrauch durch SPAM zu verhindern.'
+                         )
+                     )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        require(["io.ox/mail/api"], function (api) {
+                            // get contact picture
+                            api.getUnmodified(data)
+                                .done(function (unmodifiedData) {
+                                    self.replaceWith(that.draw(unmodifiedData));
+                                });
+                        });
+                    })
+                );
+            }
+        }
+    });
+
+    ext.point('io.ox/mail/detail').extend({
         index: 200,
         id: 'content',
         draw: function (data) {

@@ -34,11 +34,10 @@ var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
 console.info("Build version: " + version);
 
 var debug = Boolean(process.env.debug);
-var debug = true || Boolean(process.env.debug);
-
 if (debug) console.info("Debug mode: on");
 
 var defineWalker = ast("define").asCall().walker();
+var defineAsyncWalker = ast("define.async").asCall().walker();
 function jsFilter (data) {
     var self = this;
 
@@ -48,7 +47,10 @@ function jsFilter (data) {
 
     var tree = jsp.parse(data, false, true);
     var defineHooks = this.type.getHooks("define");
-    tree = ast.scanner(defineWalker, function(scope) {
+    tree = ast.scanner(defineWalker, defineHandler)
+        .scanner(defineAsyncWalker, defineHandler)
+        .scan(pro.ast_add_scope(tree));
+    function defineHandler(scope) {
         if (scope.refs.define !== undefined) return;
         var args = this[2];
         var name = _.detect(args, ast.is("string"));
@@ -58,7 +60,7 @@ function jsFilter (data) {
         for (var i = 0; i < defineHooks.length; i++) {
             defineHooks[i].call(self, name, deps, f);
         }
-    }).scan(pro.ast_add_scope(tree));
+    }
 
     // UglifyJS
     if (debug) return data;
@@ -101,7 +103,7 @@ var jshintOptions = {
     trailing: true,
     undef: true,
     validthis: true,
-    white: !debug,
+    white: true, // THIS IS TURNED ON - otherwise we have too many dirty check-ins
     predef: [
          "$", "_", "Modernizr", "define", "require", "ox", "initializeAndDefine"
     ]
@@ -187,8 +189,7 @@ file(utils.dest("signin.appcache"), ["force"]);
 
 // js
 
-utils.concat("boot.js", ["src/jquery.plugins.js", "lib/jquery.tokeninput.js",
-                         "src/util.js", "src/boot.js"],
+utils.concat("boot.js", ["src/jquery.plugins.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 
 utils.copy(utils.list("src", "css.js"), {

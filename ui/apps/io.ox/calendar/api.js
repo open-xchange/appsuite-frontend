@@ -13,7 +13,7 @@
  *
  */
 
-define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (http, event) {
+define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (http, Events) {
 
     "use strict";
 
@@ -126,10 +126,10 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
         }
     };
 
-    event.Dispatcher.extend(api);
+    Events.extend(api);
 
     // bind to global refresh
-    ox.bind("refresh", function () {
+    ox.on("refresh", function () {
         // clear caches
         all_cache = {};
         // trigger local refresh

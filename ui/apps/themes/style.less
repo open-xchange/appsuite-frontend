@@ -213,7 +213,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     right: 0px;
     height: 48px;
     left: 0px;
-    
+
     color: @head-color;
 
     border-top: 1px solid mix(@head-color, @head-background, 75%);
@@ -485,7 +485,6 @@ a.button.default-action {
 .vgrid-cell.vgrid-label {
     font-weight: bold;
     text-align: center;
-    color: black;
     line-height: 1em;
     padding: 5px 13px 4px 13px;
     background-color: mix(@color, @background, 100%/15);
@@ -644,13 +643,13 @@ a.action-link {
 }
 
 a.attachment-link, a.attachment-link:visited {
-    color: black;
+    color: @color;
     text-decoration: underline;
     cursor: pointer;
 }
 
 a.nolink {
-    color: black;
+    color: @color;
     text-decoration: none;
 }
 
@@ -706,7 +705,7 @@ input[type=search] {
     border-radius: 5px 5px 5px 5px;
     background-color: #f5f5f5;
     border: 1px solid #ccc;
-    color: black;
+    color: @color;
     cursor: pointer;
     padding: 5px 1.5em 5px 1.5em;
     margin: 2px 4px 2px 0px;
@@ -778,7 +777,7 @@ input[type=search] {
 .io-ox-dialog-popup .content .plain-text {
     font-size: 12pt;
     text-align: center;
-    color: black;
+    color: @color;
     padding: 10px;
 }
 
@@ -805,7 +804,7 @@ input[type=search] {
 .io-ox-dialog-pane .content {
     font-size: 12pt;
     text-align: center;
-    color: black;
+    color: @color;
     padding: 10px;
 }
 
@@ -851,14 +850,13 @@ span.hint {
     text-align: center;
     vertical-align: middle;
 }
- 
+
 /* inline links */
 .io-ox-inline-links {
     text-align: right;
-    padding: 0.25em 0 0.5em 0;
-    margin: 0.5em 0px 1.5em 0px;
-    border-bottom: 1px solid @inline-link-border-color;
-    height: 1em;
+    margin: 0.5em 0 1em 0;
+    height: 2.2em;
+    clear: both;
 }
 
 .io-ox-inline-links.empty {
@@ -867,18 +865,28 @@ span.hint {
 
 .io-ox-inline-links a {
     color: @inline-link-color;
-    text-decoration: underline;
+    text-decoration: none;
+    background-color: #EAF4FB;
+    display: inline-block;
+    padding: 0.5em 1em 0.5em 1em;
+    border: 1px solid #D4E3FA;
+}
+
+.io-ox-inline-links a.attention {
+    color: #a00;
+    background-color: #FFEEEA;
+    border-color: #FFD7CF;
 }
 
 .io-ox-action-link {
     display: inline-block;
     white-space: nowrap;
-    margin-right: 1em;
+    margin-right: 0.75em;
 }
 
 .io-ox-action-link:last-child {
     margin-right: 0;
-} 
+}
 
 /* side popups */
 .io-ox-sidepopup {
@@ -949,12 +957,12 @@ span.hint {
 /* input fields */
 
 input.nice-input {
-    color: black;
+    color: @color;
     background-color: white;
     border: 1px solid #ccc;
     padding: 0.10em 0.5em 0.10em 0.5em;
     border-radius: 0.25em;
-    outline: 0; 
+    outline: 0;
 }
 
 .boxshadow input.nice-input:focus {
@@ -1082,3 +1090,119 @@ input.nice-input {
 .io-ox-foldertree .foldertree-links {
     padding: 1em 13px 1em 29px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*OMG find better place*/
+div.jGrowl {
+	z-index: 			9999;
+	color: 				#fff;
+	font-size: 			12px;
+}
+
+/** Normal Style Positions **/
+div.jGrowl {
+	position:			absolute;
+}
+
+body > div.jGrowl {
+	position:			fixed;
+}
+
+div.jGrowl.top-left {
+	left: 				0px;
+	top: 				0px;
+}
+
+div.jGrowl.top-right {
+	right: 				0px;
+	top: 				0px;
+}
+
+div.jGrowl.bottom-left {
+	left: 				0px;
+	bottom:				0px;
+}
+
+div.jGrowl.bottom-right {
+	right: 				0px;
+	bottom: 			0px;
+}
+
+div.jGrowl.center {
+	top: 				0px;
+	width: 				50%;
+	left: 				25%;
+}
+
+/** Cross Browser Styling **/
+div.center div.jGrowl-notification, div.center div.jGrowl-closer {
+	margin-left: 		auto;
+	margin-right: 		auto;
+}
+
+div.jGrowl div.jGrowl-notification, div.jGrowl div.jGrowl-closer {
+	background-color: 		#000;
+	opacity: 				.85;
+	zoom: 					1;
+	width: 					235px;
+	padding: 				10px;
+	margin-top: 			5px;
+	margin-bottom: 			5px;
+	font-family: 			Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 				1em;
+	text-align: 			left;
+	display: 				none;
+	-moz-border-radius: 	5px;
+	-webkit-border-radius:	5px;
+}
+
+div.jGrowl div.jGrowl-notification {
+	min-height: 			40px;
+}
+
+div.jGrowl div.jGrowl-notification,
+div.jGrowl div.jGrowl-closer {
+	margin: 				10px;
+}
+
+div.jGrowl div.jGrowl-notification div.jGrowl-header {
+	font-weight: 			bold;
+	font-size:				.85em;
+}
+
+div.jGrowl div.jGrowl-notification div.jGrowl-close {
+	z-index:				99;
+	float: 					right;
+	font-weight: 			bold;
+	font-size: 				1em;
+	cursor:					pointer;
+}
+
+div.jGrowl div.jGrowl-closer {
+	padding-top: 			4px;
+	padding-bottom: 		4px;
+	cursor: 				pointer;
+	font-size:				.9em;
+	font-weight: 			bold;
+	text-align: 			center;
+}
+
+/** Hide jGrowl when printing **/
+@media print {
+	div.jGrowl {
+		display: 			none;
+	}
+}
+/** OMG END **/
