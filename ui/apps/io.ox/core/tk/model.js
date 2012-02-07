@@ -52,7 +52,9 @@ define('io.ox/core/tk/model',
                 return true;
             },
             pastDate: function (prop, val, def) {
-                return true;
+                var now = _.now();
+                return now > val ||
+                    new Error(prop, _.printf('%s must be in the past', def.i18n || prop));
             },
             email: function (prop, val, def) {
                 return regEmail.test(val) ||
