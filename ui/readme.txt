@@ -2,7 +2,7 @@
 How to get the UI running in Debian/Ubuntu
 ------------------------------------------
 
-1.  You need Apache and Node.js 0.4.x
+1.  You need Apache and Node.js 0.4 or later
 
         sudo apt-get install apache2 nodejs
 
