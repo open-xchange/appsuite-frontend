@@ -144,7 +144,7 @@ utils.copy(utils.list("src/"));
 // i18n
 
 file("ox.pot", ["Jakefile.js"], function() {
-    fs.writeFile(this.name, i18n.generatePOT(this.prereqs.slice(1)));
+    fs.writeFileSync(this.name, i18n.generatePOT(this.prereqs.slice(1)));
 });
 
 directory("tmp/pot");
@@ -383,7 +383,7 @@ utils.copyFile("lib/jquery.min.js", utils.dest("doc/jquery.min.js"));
 
 desc("Removes all generated files");
 task("clean", [], function() {
-    if (path.existsSync("i18n/ox.pot")) fs.unlinkSync("i18n/ox.pot");
+    if (path.existsSync("ox.pot")) fs.unlinkSync("ox.pot");
     rimraf("tmp", function() { rimraf(utils.builddir, complete); });
 }, true);
 
