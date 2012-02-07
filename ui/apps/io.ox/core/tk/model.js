@@ -53,8 +53,13 @@ define('io.ox/core/tk/model',
             },
             pastDate: function (prop, val, def) {
                 var now = _.now();
-                return now > val ||
+                if (isNaN(val) && val !== '') {
+                    return new Error(prop, _.printf('%s is not a valide date', def.i18n || prop));
+                } else {
+                    return now > val ||
                     new Error(prop, _.printf('%s must be in the past', def.i18n || prop));
+                }
+
             },
             email: function (prop, val, def) {
                 return regEmail.test(val) ||

@@ -49,14 +49,20 @@ define('io.ox/core/tk/forms',
         },
 
         dateChange = function () {
-            var self = $(this),
-                dateArray = self.val().split('.'),
+            var self = $(this);
+            if (self.val() !== '') {
+                var dateArray = self.val().split('.'),
                 date =  Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
-            self.trigger('update.model', { property: self.attr('data-property'), value: date });
+                self.trigger('update.model', { property: self.attr('data-property'), value: date });
+            } else {
+                self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
+            }
         },
         dateChangeByModel = function (e, value) {
-            var formatetValue = require('io.ox/core/i18n').date('dd.MM.YYYY', value);
-            $(this).val(formatetValue);
+            if (value) {
+                var formatetValue = require('io.ox/core/i18n').date('dd.MM.YYYY', value);
+                $(this).val(formatetValue);
+            }
         },
 
         radioChange = selectChange,
