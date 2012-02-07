@@ -1,22 +1,26 @@
-var PackageTask = require('package_task').PackageTask;
 
-var fs = require('fs')
-  , pkg = JSON.parse(fs.readFileSync('package.json').toString())
-  , version = pkg.version
-
-var t = new PackageTask('jake', 'v' + version, function () {
-  var fileList = [
-    'Makefile'
-  , 'Jakefile'
-  , 'README.md'
-  , 'package.json'
-  , 'lib/*'
-  , 'bin/*'
-  , 'tests/*'
+desc('Runs the Jake tests.');
+task('test', function () {
+  cmds = [
+    'node ./tests/parseargs.js'
+  , 'node ./tests/task_base.js'
+  , 'node ./tests/file_task.js'
   ];
-  this.packageFiles.include(fileList);
-  this.needTarGz = true;
-  this.needTarBz2 = true;
+  jake.exec(cmds, function () {
+    console.log('All tests passed.');
+    complete();
+  }, {stdout: true});
 });
 
+var p = new jake.NpmPublishTask('jake', [
+  'Makefile'
+, 'Jakefile'
+, 'README.md'
+, 'package.json'
+, 'lib/*'
+, 'bin/*'
+, 'tests/*'
+]);
+
+jake.Task['npm:definePackage'].invoke();
 

@@ -243,10 +243,8 @@ exports.potHandler = function(filename) {
     var dest = "tmp/pot/" + filename.replace(/\+/g, "++").replace(/\//g, "+-");
     file("ox.pot", [dest]);
     file(dest, ["tmp/pot", filename], function() {
-        if (filename in exports.potFiles) {
-            var data = JSON.stringify(exports.potFiles[filename] || {});
-            fs.writeFileSync(this.name, data);
-        }
+        var data = JSON.stringify(exports.potFiles[filename] || {});
+        fs.writeFileSync(this.name, data);
     });
 };
 
