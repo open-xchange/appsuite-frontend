@@ -29,7 +29,7 @@ define('io.ox/contacts/edit/view-form',
 
     var checkEl = function (c) {
         var parent = $(c).parent(),
-        el = parent.find('input:text').filter(function () {
+        el = parent.find('input').filter(function () {
             return $(this).val() !== "";
         }),
         man = (parent.find('.mandatory')).length,
@@ -51,12 +51,12 @@ define('io.ox/contacts/edit/view-form',
         var parent = $(evt.currentTarget).parent();
         parent.removeClass('expanded');
         parent.find('.sectiontitle').addClass('hidden');
-        parent.find('input:text').filter(
+        parent.find('input').filter(
             function () {
                 return $(this).val() !== "";
             }
         ).parent().parent().removeClass('visible');
-        parent.find('input:text').filter(
+        parent.find('input').filter(
             function () {
                 return $(this).val() === "";
             }
@@ -70,12 +70,12 @@ define('io.ox/contacts/edit/view-form',
         var parent = $(evt.currentTarget).parent();
         parent.removeClass('expanded');
         parent.find('.sectiontitle').addClass('visible');
-        parent.find('input:text').filter(
+        parent.find('input').filter(
             function () {
                 return $(this).val() !== "";
             }
         ).parent().parent().removeClass('visible');
-        parent.find('input:text').filter(
+        parent.find('input').filter(
             function () {
                 return $(this).val() === "";
             }
