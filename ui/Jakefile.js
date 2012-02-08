@@ -218,10 +218,10 @@ utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
         "event.js", "extensions.js", "http.js",
         "cache.js", "cache/*.js", // cache + cache storage layers
-        "config.js", "session.js", "gettext.js", "i18n.js",
+        "config.js", "session.js", "gettext.js",
         "tk/selection.js", "tk/vgrid.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js",
-        "api/folder.js", "collection.js", "desktop.js", "commons.js", "main.js"
+        "api/folder.js", "collection.js", "desktop.js", "commons.js"
     ]), { type: "source" }
 );
 
