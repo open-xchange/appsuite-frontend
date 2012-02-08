@@ -13,7 +13,8 @@
 
 define('io.ox/mail/actions',
         ['io.ox/core/extensions',
-         'io.ox/core/config'], function (ext, config) {
+         'io.ox/mail/api',
+         'io.ox/core/config'], function (ext, api, config) {
 
     'use strict';
 
@@ -106,24 +107,44 @@ define('io.ox/mail/actions',
 
 
     ext.point('io.ox/mail/actions/source').extend({
-        id: 'edit',
+        id: 'source',
         requires: function (context) {
             return context.context.folder_id !== defaultDraftFolder;
         },
         action: function (data) {
-            require(["io.ox/mail/api"], function (api) {
-                // get contact picture
-                api.getSource(data).done(function (srcData) {
+            api.getSource(data).done(function (srcData) {
 
-                    require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                        var dialog = new dialogs.ModalDialog()
-                            .addButton("ok", "OK");
+                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                    var dialog = new dialogs.ModalDialog()
+                        .addButton("ok", "OK");
 
-                        dialog.getContentNode().append($('<pre>').text(srcData));
-
-                        dialog.show();
-                    });
+                    dialog.getContentNode().append($('<pre>').text(srcData));
+                    dialog.show();
                 });
+            });
+        }
+    });
+
+    ext.point('io.ox/mail/actions/markunread').extend({
+        id: 'markunread',
+        requires: function (context) {
+            return _.isEqual(context.context.flags & api.FLAGS.SEEN, api.FLAGS.SEEN);
+        },
+        action: function (data) {
+            api.update(data, {flags: api.FLAGS.SEEN, value: false}).done(function (updateData) {
+                api.trigger('refresh.list');
+            });
+        }
+    });
+
+    ext.point('io.ox/mail/actions/markread').extend({
+        id: 'markread',
+        requires: function (context) {
+            return _.isEqual(context.context.flags & api.FLAGS.SEEN, 0);
+        },
+        action: function (data) {
+            api.update(data, {flags: api.FLAGS.SEEN, value: true}).done(function (updateData) {
+                api.trigger('refresh.list');
             });
         }
     });
@@ -168,7 +189,21 @@ define('io.ox/mail/actions',
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new ext.Link({
-        index: 700,
+        index: 500,
+        id: 'markunread',
+        label: 'Mark Unread',
+        ref: 'io.ox/mail/actions/markunread'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
+        index: 501,
+        id: 'markread',
+        label: 'Mark read',
+        ref: 'io.ox/mail/actions/markread'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
+        index: 600,
         id: 'source',
         label: 'View Source',
         ref: 'io.ox/mail/actions/source'
