@@ -60,6 +60,7 @@
             //@include parser.js
         }());
         //@include tree.js
+        //@include colors.js
         //@include functions.js
         //@include tree/*.js
         less.Parser.importer = function (file, paths, callback) {
