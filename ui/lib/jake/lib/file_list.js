@@ -16,14 +16,23 @@
  *
 */
 var fs = require('fs')
-  , glob;
+, path = require('path')
+, minimatch // Lazy-required
+, glob = {};
 
-try {
-  glob = require('glob');
-}
-catch(e) {
-  fail('FileList requires glob (https://github.com/isaacs/node-glob). Try `npm install glob`.');
-}
+glob.globSync = function (pat) {
+	var dirname = path.dirname(pat)
+    , files = fs.readdirSync(dirname)
+    , filePat = path.basename(pat)
+    , matches;
+	matches = minimatch.match(files, filePat, {'null': true});
+  if (matches && matches.length) {
+    for (var i = 0, ii = matches.length; i < ii; i++) {
+      matches[i] = dirname + '/' + matches[i];
+    }
+  }
+  return matches
+};
 
 // Constants
 // ---------------
@@ -72,6 +81,17 @@ var regexpEscape = (function() {
 var FileList = function () {
   var self = this
     , wrap;
+
+  // Lazy-require minimatch so that require of this file in cli.js won't bomb
+  if (!minimatch) {
+    try {
+      minimatch = require('minimatch');
+    }
+    catch(e) {
+      fail('FileList requires minimatch ' +
+          '(https://github.com/isaacs/minimatch). Try `npm install -g minimatch`.');
+    }
+  }
 
   // List of glob-patterns or specific filenames
   this.pendingAdd = [];
@@ -280,5 +300,4 @@ FileList.clone = function (list, items) {
   return clone;
 };
 
-jake.FileList = FileList;
 exports.FileList = FileList;

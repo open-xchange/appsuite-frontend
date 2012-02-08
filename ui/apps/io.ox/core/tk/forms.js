@@ -48,6 +48,23 @@ define('io.ox/core/tk/forms',
             $(this).val(value);
         },
 
+        dateChange = function () {
+            var self = $(this);
+            if (self.val() !== '') {
+                var dateArray = self.val().split('.'),
+                date =  Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
+                self.trigger('update.model', { property: self.attr('data-property'), value: date });
+            } else {
+                self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
+            }
+        },
+        dateChangeByModel = function (e, value) {
+            if (value) {
+                var formatetValue = require('io.ox/core/i18n').date('dd.MM.YYYY', value);
+                $(this).val(formatetValue);
+            }
+        },
+
         radioChange = selectChange,
         radioChangeByModel = function (e, value) {
             var self = $(this);
@@ -173,7 +190,12 @@ define('io.ox/core/tk/forms',
             f.applyModel(textChangeByModel);
             return f.finish('prepend', 'textarea');
         },
-
+        createDateField: function (options) {
+            var f = new Field(options, 'date');
+            f.create('<input type="date">', dateChange);
+            f.applyModel(dateChangeByModel);
+            return f.finish('prepend', 'input');
+        },
         createPasswordField: function (options) {
             var f = new Field(options, 'text');
             f.create('<input type="password">', textChange);

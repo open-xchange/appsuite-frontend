@@ -34,6 +34,11 @@ optsReg = [
   , preempts: false
   , expectValue: true
   }
+, { full: 'always-make'
+  , abbr: 'B'
+  , preempts: false
+  , expectValue: false
+  }
 , { full: 'tasks'
   , abbr: 'T'
   , preempts: true
@@ -72,6 +77,7 @@ usage = ''
     + '{Options}:\n'
     + '  -f, --jakefile FILE            Use FILE as the Jakefile\n'
     + '  -C, --directory DIRECTORY      Change to DIRECTORY before running tasks.\n'
+    + '  -B, --always-make              Unconditionally make all targets.\n'
     + '  -T, --tasks                    Display the tasks, with descriptions, then exit.\n'
     + '  -t, --trace                    Enable full backtrace.\n'
     + '  -h, --help                     Outputs help information\n'
@@ -80,7 +86,7 @@ usage = ''
 
 Program = function () {
   this.opts = {};
-  this.taskName = null;
+  this.taskNames = null;
   this.taskArgs = null;
   this.envVars = null;
 };
@@ -106,16 +112,10 @@ Program.prototype = new (function () {
   };
 
   this.parseArgs = function (args) {
-    var parser = new parseargs.Parser(optsReg)
-      , arr = ['opts', 'taskName', 'taskArgs', 'envVars']
-      , arrItem
-
-    parser.parse(args);
-    for (i = 0, ii = arr.length; i < ii; i++) {
-      arrItem = arr[i];
-      this[arrItem] = parser[arrItem];
-    }
-
+    var result = (new parseargs.Parser(optsReg)).parse(args);
+    this.opts = result.opts;
+    this.taskNames = result.taskNames;
+    this.envVars = result.envVars;
   };
 
   this.preemptiveOption = function () {

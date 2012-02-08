@@ -50,44 +50,27 @@ define('io.ox/contacts/edit/main',
                 .css({ maxWidth: '600px', margin: '20px auto 20px auto' });
 
             var cont = function (data) {
+
                 win.show(function () {
-                    var myModel = new ContactModel({data: data}),
-                        myView = new ContactEditView({model: myModel});
 
-                    $(myView).on('save', function () {
-                        console.log(myView);
+                    // create model & view
+                    var myModel = new ContactModel({ data: data }),
+                        myView = new ContactEditView({ model: myModel });
 
-                        var consistency;
-                        if (!myModel.isDirty()) {
-                            return;
-                        }
-                        consistency = myModel.checkConsistency();
-                        if (consistency !== true || consistency.constructor.toString().indexOf('ConsistencyError') !== -1) {
-                            return console.error(consistency);
-                        }
+                    myModel.store = function (data, changes) {
                         // TODO: replace image upload with a field in formsjs method
                         var image = $('#contactUploadImage').find("input[type=file]").get(0);
-                        var data = null;
                         if (image.files && image.files[0]) {
-                            data = myModel.getChanges();
-                            data.id = myModel.getData().id;
-                            data.folderId = myModel.getData().folder_id;
-                            data.timestamp = _.now();
-                            api.editNewImage(JSON.stringify(data), image.files[0])
-                            .done(function () {
-                                myModel.dirty = false;
-                            });
+                            return api.editNewImage(data, changes, image.files[0]);
                         } else {
-                            api.edit({
-                                id: myModel.getData().id,
-                                folder: myModel.getData().folder_id,
+                            return api.edit({
+                                id: data.id,
+                                folder: data.folder_id,
                                 timestamp: _.now(),
-                                data: myModel.getChanges()
-                            }).done(function () {
-                                myModel.dirty = false;
+                                data: changes
                             });
                         }
-                    });
+                    };
 
                     window.model = myModel;
                     window.view = myView;

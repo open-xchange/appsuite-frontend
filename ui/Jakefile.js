@@ -28,12 +28,12 @@ console.info("Build path: " + utils.builddir);
 function pad (n) { return n < 10 ? "0" + n : n; }
 var t = utils.startTime;
 var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
-    pad(t.getUTCMonth()) + pad(t.getUTCDate()) + "." +
+    pad(t.getUTCMonth() + 1) + pad(t.getUTCDate()) + "." +
     pad(t.getUTCHours()) + pad(t.getUTCMinutes()) +
     pad(t.getUTCSeconds());
 console.info("Build version: " + version);
 
-var debug = false || Boolean(process.env.debug);
+var debug = Boolean(process.env.debug);
 if (debug) console.info("Debug mode: on");
 
 var defineWalker = ast("define").asCall().walker();
@@ -87,7 +87,7 @@ function htmlFilter (data) {
 var jshintOptions = {
     bitwise: false,
     browser: true,
-    debug: true,
+    debug: debug,
     devel: true,
     eqeqeq: true,
     evil: true,
@@ -98,6 +98,7 @@ var jshintOptions = {
     onevar: false,
     plusplus: false,
     regexp: false,
+    shadow: true,
     strict: true,
     trailing: true,
     undef: true,
@@ -132,7 +133,7 @@ desc("Builds the GUI");
 utils.topLevelTask("default", ["ox.pot"], function() {
     utils.includes.save();
     i18n.modules.save();
-    utils.summary();
+    utils.summary("default")();
 });
 
 i18n.modules.load("tmp/i18n.json");
@@ -144,7 +145,7 @@ utils.copy(utils.list("src/"));
 // i18n
 
 file("ox.pot", ["Jakefile.js"], function() {
-    fs.writeFile(this.name, i18n.generatePOT(this.prereqs.slice(1)));
+    fs.writeFileSync(this.name, i18n.generatePOT(this.prereqs.slice(1)));
 });
 
 directory("tmp/pot");
@@ -217,10 +218,10 @@ utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
         "event.js", "extensions.js", "http.js",
         "cache.js", "cache/*.js", // cache + cache storage layers
-        "config.js", "session.js", "gettext.js", "i18n.js",
+        "config.js", "session.js", "gettext.js",
         "tk/selection.js", "tk/vgrid.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js",
-        "api/folder.js", "collection.js", "desktop.js", "commons.js", "main.js"
+        "api/folder.js", "collection.js", "desktop.js", "commons.js"
     ]), { type: "source" }
 );
 
@@ -232,7 +233,7 @@ var depsPath = utils.dest("dependencies.json");
 utils.fileType("module").addHook("filter", jsFilter)
     .addHook("define", i18n.potScanner)
     .addHook("define", function(name, deps, f) {
-        moduleDeps[name] = _.pluck(deps[1], 1);
+        moduleDeps[name[1]] = _.pluck(deps[1], 1);
     })
     .addHook("handler", function(name) { file(depsPath, [name]); });
 
@@ -263,6 +264,15 @@ var apps = _.groupBy(utils.list("apps/"), function (f) {
 });
 if (apps.js) utils.copy(apps.js, { type: "module" });
 if (apps.rest) utils.copy(apps.rest);
+
+// time zone database
+
+var zoneinfo = utils.dest("apps/io.ox/core/tz/zoneinfo");
+utils.file(zoneinfo, [], function() {
+    if (!path.existsSync(zoneinfo)) {
+        fs.symlinkSync("/usr/share/zoneinfo", zoneinfo);
+    }
+});
 
 // themes
 
@@ -351,7 +361,7 @@ if (apps.rest) utils.copy(apps.rest);
 // doc task
 
 desc("Developer documentation");
-utils.topLevelTask("doc", [], utils.summary);
+utils.topLevelTask("doc", [], utils.summary("doc"));
 
 var titles = [];
 function docFile(file, title) {
@@ -383,7 +393,7 @@ utils.copyFile("lib/jquery.min.js", utils.dest("doc/jquery.min.js"));
 
 desc("Removes all generated files");
 task("clean", [], function() {
-    if (path.existsSync("i18n/ox.pot")) fs.unlinkSync("i18n/ox.pot");
+    if (path.existsSync("ox.pot")) fs.unlinkSync("ox.pot");
     rimraf("tmp", function() { rimraf(utils.builddir, complete); });
 }, true);
 
@@ -399,3 +409,43 @@ task("merge", ["ox.pot"], function() {
             function() { if (!--count) complete(); });
     }
 }, true);
+
+// module dependency visualizazion
+
+desc("Prints module dependencies");
+task("deps", [depsPath], function() {
+    var deps = JSON.parse(fs.readFileSync(depsPath, "utf8"));
+    for (var i in deps) deps[i] = { name: i, children: deps[i], parents: [] };
+    _.each(deps, function(dep) {
+        dep.children = _.map(dep.children, function(name) {
+            var child = deps[name];
+            if (!child) {
+                child= deps[name] = { name: name, children: [], parents: [] };
+            }
+            child.parents.push(dep);
+            return child;
+        });
+    });
+    var down = "children", up = "parents";
+    if (process.env.reverse) { t = down; down = up; up = t; }
+    var root = process.env.root;
+    if (root) {
+        console.log("");
+        if (root in deps) print(deps[process.env.root], "", "");
+    } else {
+        _.each(deps, function(root) {
+            if (!root[up].length) {
+                console.log("");
+                print(root, "", "");
+            }
+        });
+    }
+    function print(node, indent1, indent2) {
+        console.log(indent1 + node.name);
+        var last = node[down].length - 1;
+        for (var i = 0; i < last; i++) {
+            print(node[down][i], indent2 + "├─", indent2 + "│ ");
+        }
+        if (last >= 0) print(node[down][last], indent2 + "└─", indent2 + "  ");
+    }
+});
