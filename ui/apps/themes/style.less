@@ -878,6 +878,35 @@ span.hint {
     border-color: #FFD7CF;
 }
 
+.io-ox-inline-links .dropdown {
+	display: none;
+	position: absolute;
+	
+    color: @inline-link-color;
+    text-decoration: none;
+    background-color: #EAF4FB;
+    padding: 0.5em 1em 0.5em 1em;
+    border: 1px solid #D4E3FA;
+}
+
+.io-ox-inline-links .dropdown ul {
+	list-style-type: none;
+	padding:0px;
+	margin:0px;
+}
+
+.io-ox-inline-links .dropdown ul li {
+	padding: 1px;
+}
+
+.io-ox-inline-links .dropdown ul li.active {
+	border-left: 5px solid #D4E3FA;
+}
+
+.io-ox-inline-links .dropdown ul li:hover {
+	background-color: #D4E3FA;
+}
+
 .io-ox-action-link {
     display: inline-block;
     white-space: nowrap;

@@ -188,6 +188,7 @@ define('io.ox/mail/actions',
         ref: 'io.ox/mail/actions/edit'
     }));
 
+
     ext.point('io.ox/mail/links/inline').extend(new ext.Link({
         index: 500,
         id: 'markunread',
@@ -201,6 +202,53 @@ define('io.ox/mail/actions',
         label: 'Mark read',
         ref: 'io.ox/mail/actions/markread'
     }));
+
+    function changeLabel(options, color) {
+        console.log('changeLabel', options, color);
+
+        api.update(options, {color_label: color, value: true}).done(function (updateData) {
+            api.trigger('refresh.list');
+        });
+    }
+
+    ext.point('io.ox/mail/links/inline').extend({
+        index: 503,
+        id: 'doofesDropDown',
+        draw: function (options) {
+            var labelList = $('<ul>'),
+
+                dropdown = $('<div>', {
+                    'class': 'labeldropdown dropdown'
+                }).append(labelList),
+
+                link = $('<a>', {
+                    'class': 'io-ox-action-link',
+                    //'href': '#',
+                    'tabindex': 1,
+                    'data-action': 'label'
+                }).text('Label')
+                .click(function (e) {
+                    var linkWidth = link.outerWidth(),
+                        dropDownWidth = dropdown.outerWidth(),
+                        coords = link.position();
+                    dropdown.css('left', coords.left + (linkWidth - dropDownWidth))
+                            .css('top', coords.top + link.outerHeight())
+                            .slideToggle("fast");
+                }).blur(function (e) {
+                    dropdown.slideUp('fast');
+                });
+
+            _(api.COLORS).each(function (index, color) {
+                var li = $('<li>').text(color).click(function (e) {changeLabel(options, api.COLORS[color]); link.blur(); });
+                if (_.isEqual(options.color_label, api.COLORS[color])) {
+                    li.addClass('active');
+                }
+                labelList.append(li);
+            });
+
+            this.append(link).append(dropdown);
+        }
+    });
 
     ext.point('io.ox/mail/links/inline').extend(new ext.Link({
         index: 600,
