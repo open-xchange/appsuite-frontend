@@ -6,7 +6,7 @@
 
 #https://github.com/mynyml/watchr
 
-watch("\.js$") { system("./build.sh") }
-watch("\.css$") { system("./build.sh") }
-watch("\.html$") { system("./build.sh") }
-watch("^doc") {system("./build.sh doc") }
+watch("\.js$") { system("./build.sh debug=true") }
+watch("\.css$") { system("./build.sh debug=true") }
+watch("\.html$") { system("./build.sh debug=true") }
+watch("^doc") {system("./build.sh debug=true doc") }

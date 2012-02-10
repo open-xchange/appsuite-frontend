@@ -172,60 +172,6 @@ define("io.ox/files/main",
         });
 
 
-        // Upload Button
-        // TODO: Make this IE compatible
-        (function () {
-
-            var pane = new dialogs.SlidingPane();
-            // Let's build our upload form. Nothing fancy here, but we'll allow multiple selection
-            // TODO: Add a hint to the user, that multiple uploads are available and how to use them
-            var $divblock_filefield = $('<div>').addClass('block new_file');
-            var $fileField = $('<label for="file_upload"><input type="file" multiple="multiple" id="file_upload"></label>');
-            var $hint = hints.createHint({
-                    teaser: "Multiple uploads are available.",
-                    explanation: "You can select more than one file to upload at the same time in the file choosing dialog. If you want to select a whole range of files, hold down the shift key while selecting the start and end of the range of files. If you want to select multiple individual files, hold down control while clicking on the file names (or the function key, if you're on a mac)."
-                });
-            var $clear = $('<div class="clear"></div>');
-            //pane.append($fileField);
-            //pane.append(hints.createHint({
-            //    teaser: "Multiple uploads are available.",
-            //    explanation: "You can select more than one file to upload at the same time in the file choosing dialog. If you want to select a whole range of files, hold down the shift key while selecting the start and end of the range of files. If you want to select multiple individual files, hold down control while clicking on the file names (or the function key, if you're on a mac)."
-            //}));
-
-            pane.append($divblock_filefield);
-            $fileField.appendTo($divblock_filefield);
-            $clear.appendTo($divblock_filefield);
-            $hint.appendTo($divblock_filefield);
-
-            pane.addButton("resolveUpload", "Upload");
-            pane.addButton("cancelUpload", "Cancel");
-
-            var actions = {
-                resolveUpload: function () {
-                    var files = $fileField[0].files; //TODO: Find clean way to do this
-                    _(files).each(function (file) {
-                        queue.offer(file);
-                    });
-                },
-
-                cancelUpload: function () {
-                    $fileField.val("");
-                }
-            };
-
-            var showUploadField = function () {
-                pane.show().done(function (action) {
-                    console.debug("Action: " + action);
-                    actions[action]();
-                });
-            };
-//            var uploadButton = win.addButton({
-//                label: "Add File",
-//                action: showUploadField
-//            });
-//            pane.relativeTo(uploadButton);
-        }());
-
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api);
@@ -234,7 +180,16 @@ define("io.ox/files/main",
         commons.addFolderSupport(app, grid, 'infostore')
             .done(commons.showWindow(win, grid));
     });
-
+    
+    app.invalidateFolder = function (data) {
+        console.log(data);
+        if (data) {
+            console.log(data);
+            grid.selection.set([data]);
+        }
+        grid.refresh();
+    };
+    
     return {
         getApp: app.getInstance
     };

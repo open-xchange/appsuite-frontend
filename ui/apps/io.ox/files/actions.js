@@ -19,9 +19,14 @@ define("io.ox/files/actions", ["io.ox/core/extensions"], function (ext) {
 
     ext.point("io.ox/files/actions/upload").extend({
         id: "upload",
-        action: function (data) {
+        action: function (app) {
+            var lastUploaded = null;
             require(["io.ox/files/views/create"], function (create) {
-                create.show();
+                create.show({
+                    uploadedFile: function (data) {
+                        app.invalidateFolder(data);
+                    }
+                });
             });
         }
     });

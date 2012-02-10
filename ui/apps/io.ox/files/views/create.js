@@ -1,4 +1,4 @@
-define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "text!io.ox/files/views/snippets.html"], function (dialogs, snippetsHTML) {
+define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/files/api", "text!io.ox/files/views/snippets.html"], function (dialogs, filesApi, snippetsHTML) {
     
     "use strict";
     
@@ -6,7 +6,10 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "text!io.ox/files/v
     
     //assemble create form
     var newCreatePane = function (delegate) {
-        var pane = new dialogs.CreateDialog(),
+        delegate = delegate || {};
+        var pane = new dialogs.CreateDialog({
+            easyOut: true
+        }),
         $content = pane.getContentNode().addClass("create-file"),
         nodes = {};
         
@@ -35,11 +38,33 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "text!io.ox/files/v
             });
             $content.find(".extendedForm").fadeIn();
             nodes.moreButton.remove();
+            $content.find("input:first").focus();
             return false; // Prevent Default
         });
         
         function save() {
-            alert("TODO");
+            // Firstly let's assemble the object
+            
+            _(nodes.fileField[0].files).each(function (file) {
+                var fileEntry = {
+                    title: nodes.titleField.val(),
+                    url: nodes.urlField.val(),
+                    file: file,
+                    description: nodes.commentField.val()
+                };
+                if (delegate.modifyFile) {
+                    delegate.modifyFile(fileEntry);
+                }
+                filesApi.uploadFile(fileEntry).done(function (data) {
+                    if (delegate.uploadedFile) {
+                        delegate.uploadedFile(data);
+                    }
+                });
+            });
+            
+            if (delegate.done) {
+                delegate.done();
+            }
         }
         
         
