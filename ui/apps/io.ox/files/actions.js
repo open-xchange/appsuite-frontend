@@ -20,6 +20,9 @@ define("io.ox/files/actions", ["io.ox/core/extensions"], function (ext) {
     ext.point("io.ox/files/actions/upload").extend({
         id: "upload",
         action: function (data) {
+            require(["io.ox/files/views/create"], function (create) {
+                create.show();
+            });
         }
     });
 

@@ -6,9 +6,7 @@
 
 #https://github.com/mynyml/watchr
 
-
-DEPLOY_DIR = "/Library/WebServer/Documents/ox7"
-
-watch("\.js$") { system("builddir=\"#{DEPLOY_DIR}\" ./build.sh") }
-watch("\.css$") { system("builddir=\"#{DEPLOY_DIR}\" ./build.sh") }
-watch("^doc") {system("builddir=\"#{DEPLOY_DIR}\" ./build.sh doc") }
+watch("\.js$") { system("./build.sh") }
+watch("\.css$") { system("./build.sh") }
+watch("\.html$") { system("./build.sh") }
+watch("^doc") {system("./build.sh doc") }

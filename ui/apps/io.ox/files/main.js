@@ -42,11 +42,16 @@ define("io.ox/files/main",
     app.setLauncher(function () {
 
         // get window
-        app.setWindow(win = ox.ui.createWindow({
-            title: "Private files",
+        win = ox.ui.createWindow({
+            name: 'io.ox/files',
+            title: "Files",
+            titleWidth: (GRID_WIDTH + 27) + "px",
+            toolbar: true,
             search: true
-        }));
+        });
 
+        app.setWindow(win);
+        
         // folder tree
         commons.addFolderTree(app, GRID_WIDTH, 'infostore');
 
