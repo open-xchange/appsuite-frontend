@@ -61,6 +61,7 @@ define("io.ox/files/api",
     // Upload a file and store it
     // As options, we expect:
     // "folder" - The folder ID to upload the file to. This is optional and defaults to the standard files folder
+    // "json" - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
     // "file" - the file object to upload
     // The method returns a deferred that is resolved once the file has been uploaded
     api.uploadFile = function (options) {
@@ -71,7 +72,7 @@ define("io.ox/files/api",
         
         var formData = new FormData();
         formData.append("file", options.file);
-        formData.append("json", "{folder_id: " + options.folder + "}");
+        formData.append("json", options.json || "{folder_id: " + options.folder + "}");
         
         return http.UPLOAD({
                 module: "infostore",
