@@ -134,14 +134,6 @@ define("io.ox/files/main",
 
         var dropZone = upload.dnd.createDropZone();
 
-        // commented since it's broken
-//        if (dropZone.enabled) {
-//            statusBar.append(hints.createHint({
-//                teaser: "Drag and Drop is enabled.",
-//                explanation: "You can drag one or more files from your desktop and drop them in the browser window to upload them. Try it out!"
-//            }));
-//        }
-
         dropZone.on("drop", function (e, file) {
             queue.offer(file);
         });
