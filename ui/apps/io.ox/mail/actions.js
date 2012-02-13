@@ -206,7 +206,7 @@ define('io.ox/mail/actions',
     function changeLabel(options, color) {
         console.log('changeLabel', options, color);
 
-        api.update(options, {color_label: color, value: true}).done(function (updateData) {
+        return api.update(options, {color_label: color, value: true}).done(function (updateData) {
             api.trigger('refresh.list');
         });
     }
@@ -233,13 +233,15 @@ define('io.ox/mail/actions',
                         coords = link.position();
                     dropdown.css('left', coords.left + (linkWidth - dropDownWidth))
                             .css('top', coords.top + link.outerHeight())
+                            .css('zIndex', 1)
                             .slideToggle("fast");
                 }).blur(function (e) {
-                    dropdown.slideUp('fast');
+                    console.log(e);
+                    dropdown.delay(100).slideUp('fast');
                 });
 
             _(api.COLORS).each(function (index, color) {
-                var li = $('<li>').text(color).click(function (e) {changeLabel(options, api.COLORS[color]); link.blur(); });
+                var li = $('<li>').text(color).click(function (e) {changeLabel(options, api.COLORS[color]); });
                 if (_.isEqual(options.color_label, api.COLORS[color])) {
                     li.addClass('active');
                 }

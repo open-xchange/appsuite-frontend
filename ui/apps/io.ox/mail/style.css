@@ -214,14 +214,14 @@
 
 /* flag colors */
 .flag_0  { background-color: transparent; visibility: hidden; }
-.flag_1  { background-color: #913F3F; } /* red */
+.flag_1  { background-color: #DC143C; } /* red old: 913F3F  Crimson*/
 .flag_2  { background-color: #3F6B91; } /* blue */
 .flag_3  { background-color: #6D913F; } /* green */
 .flag_4  { background-color: #888; } /* dark gray */
-.flag_5  { background-color: #aaa; }
-.flag_6  { background-color: #aaa; }
-.flag_7  { background-color: #aaa; }
-.flag_8  { background-color: #aaa; }
-.flag_9  { background-color: #aaa; }
-.flag_10 { background-color: #fc0; }
+.flag_5  { background-color: #8B4513; } /* brown */
+.flag_6  { background-color: #0FF; } /* aqua */
+.flag_7  { background-color: #FF8c00; } /* orange */
+.flag_8  { background-color: #FF69B4; } /* pink */
+.flag_9  { background-color: #87CEFA; } /* light blue */
+.flag_10 { background-color: #fc0; } /* yellow */
 
