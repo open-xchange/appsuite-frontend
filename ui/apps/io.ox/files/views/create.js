@@ -19,11 +19,14 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         
         controlStates = {},
         
-        buttonHandlers = {};
+        buttonHandlers = {},
+        
+        $table;
         
         
         $content.append($snippets.find(".fileForm").clone());
-        
+
+        $table = $content.find("table");
         controlsPoint.each(function (controlExtension) {
             var $formLine, state = {};
             
@@ -41,12 +44,14 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
             if (controlExtension.draw) {
                 controlExtension.draw($formLine.find(".inputCol"), state);
             }
-            
+
             if (controlExtension.extendedForm) {
                 $formLine.addClass("extendedForm");
             }
-            
+
             controlStates[controlExtension.id] = state;
+
+            $formLine.appendTo($table);
             
         });
         
@@ -73,18 +78,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
             return false; // Prevent Default
         });
         
-        /*function save() {
-            // Firstly let's assemble the object
-            
-            _(nodes.fileField[0].files).each(function (file) {
-                
-            });
-            
-            if (delegate.done) {
-                delegate.done();
-            }
-        } */
-        
+
         buttonsPoint.each(function (buttonExtension) {
             pane.addButton(buttonExtension.id, buttonExtension.label, buttonExtension.id);
             buttonHandlers[buttonExtension.id] = buttonExtension;
@@ -105,11 +99,8 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
                 if (delegate.modifyFile) {
                     delegate.modifyFile(fileEntry);
                 }
-                
-                /*filesApi.uploadFile(fileEntry).done(function (data) {
-                   
-                });*/
-                handler.perform(fileEntry).done(function (data) {
+
+                handler.perform(fileEntry, controlStates, function (data) {
                     if (delegate.uploadedFile) {
                         delegate.uploadedFile(data);
                     }
@@ -124,6 +115,103 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         });
         
     };
+    
+    // Title
+    controlsPoint.extend({
+        id: "title",
+        extendedForm: true,
+        index: 10,
+        label: "Title",
+        draw: function (element, state) {
+            state.node = $("<input type='text' name='title'></input>").css({
+                width: "100%"
+            });
+            element.append(state.node);
+        },
+        process: function (file, state) {
+            var val = state.node.val();
+            if (val) {
+                file.title = state.node.val();
+            }
+        }
+    });
+    
+    // URL
+    controlsPoint.extend({
+        id: "url",
+        extendedForm: true,
+        index: 20,
+        label: "Link / URL",
+        draw: function (element, state) {
+            state.node = $("<input type='text' name='title'></input>").css({
+                width: "100%"
+            });
+            element.append(state.node);
+        },
+        process: function (file, state) {
+            var val = state.node.val();
+            if (val) {
+                file.url = state.node.val();
+            }
+        }
+    });
+
+    // File
+    controlsPoint.extend({
+        id: "file",
+        index: 30,
+        draw: function (element, state) {
+            state.node = $("<input type='file' name='title'></input>");
+            element.append(state.node);
+        }
+    });
+    
+    // Comment
+    controlsPoint.extend({
+        id: "comment",
+        extendedForm: true,
+        index: 40,
+        label: "Comment",
+        style: "large",
+        draw: function (element, state) {
+            state.node = $("<textarea rows='10'></textarea>").css({
+                width: "100%"
+            });
+            element.append(state.node);
+        },
+        process: function (file, state) {
+            var val = state.node.val();
+            if (val) {
+                file.comment = state.node.val();
+            }
+        }
+    });
+    
+    // Save
+    buttonsPoint.extend({
+        id: "save",
+        label: "Save",
+        perform: function (fileEntry, states, cb) {
+            var savedOnce = false;
+            _(states.file.node[0].files).each(function (file) {
+                savedOnce = true;
+                filesApi.uploadFile({
+                    file: file,
+                    json: fileEntry
+                }).done(function (data) {
+                    cb(data);
+                });
+            });
+            if (!savedOnce && ! $.isEmptyObject(fileEntry)) {
+                filesApi.create({json: fileEntry}).done(function (data) {
+                    console.log("Tadaa", data);
+                    cb(data);
+                }).fail(function (r) {
+                    console.log("FAIL", r);
+                });
+            }
+        }
+    });
     
     return {
         show: newCreatePane
