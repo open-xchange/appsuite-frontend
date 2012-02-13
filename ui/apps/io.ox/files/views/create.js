@@ -1,8 +1,11 @@
-define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/files/api", "text!io.ox/files/views/snippets.html"], function (dialogs, filesApi, snippetsHTML) {
+define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensions", "io.ox/files/api", "text!io.ox/files/views/snippets.html"], function (dialogs, ext, filesApi, snippetsHTML) {
     
     "use strict";
     
-    var $snippets = $(snippetsHTML);
+    var $snippets = $(snippetsHTML),
+    controlsPoint = ext.point("io.ox/files/create/form"),
+    buttonsPoint = ext.point("io.ox/files/create/action");
+    
     
     //assemble create form
     var newCreatePane = function (delegate) {
@@ -11,15 +14,43 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/files/api", 
             easyOut: true
         }),
         $content = pane.getContentNode().addClass("create-file"),
-        nodes = {};
+        
+        nodes = {},
+        
+        controlStates = {},
+        
+        buttonHandlers = {};
+        
         
         $content.append($snippets.find(".fileForm").clone());
         
+        controlsPoint.each(function (controlExtension) {
+            var $formLine, state = {};
+            
+            if (controlExtension.label) {
+                if (controlExtension.style === "large") {
+                    $formLine = $snippets.find(".largeLabelField").clone();
+                } else {
+                    $formLine = $snippets.find(".regularLabelField").clone();
+                }
+                $formLine.find(".labelCol label").attr({"for": controlExtension.id}).text(controlExtension.label);
+            } else {
+                $formLine = $snippets.find(".noLabelField").clone();
+            }
+            
+            if (controlExtension.draw) {
+                controlExtension.draw($formLine.find(".inputCol"), state);
+            }
+            
+            if (controlExtension.extendedForm) {
+                $formLine.addClass("extendedForm");
+            }
+            
+            controlStates[controlExtension.id] = state;
+            
+        });
+        
         nodes.moreButton = $content.find(".more");
-        nodes.titleField = $content.find(".title");
-        nodes.urlField = $content.find(".url");
-        nodes.fileField = $content.find(".file");
-        nodes.commentField = $content.find(".comments");
         
         // Hide all extendedFormFields
         
@@ -42,43 +73,54 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/files/api", 
             return false; // Prevent Default
         });
         
-        function save() {
+        /*function save() {
             // Firstly let's assemble the object
             
             _(nodes.fileField[0].files).each(function (file) {
-                var fileEntry = {
-                    title: nodes.titleField.val(),
-                    url: nodes.urlField.val(),
-                    file: file,
-                    description: nodes.commentField.val()
-                };
-                if (delegate.modifyFile) {
-                    delegate.modifyFile(fileEntry);
-                }
-                filesApi.uploadFile(fileEntry).done(function (data) {
-                    if (delegate.uploadedFile) {
-                        delegate.uploadedFile(data);
-                    }
-                });
+                
             });
             
             if (delegate.done) {
                 delegate.done();
             }
-        }
+        } */
         
+        buttonsPoint.each(function (buttonExtension) {
+            pane.addButton(buttonExtension.id, buttonExtension.label, buttonExtension.id);
+            buttonHandlers[buttonExtension.id] = buttonExtension;
+        });
         
-        pane.addButton("save", "Save", "save");
         pane.addButton("cancel", "Cancel", "cancel");
         
         // And display it all
         pane.show().done(function (action) {
-            if (action === 'save') {
-                save();
+            var handler = buttonHandlers[action];
+            if (handler) {
+                var fileEntry = {};
+                controlsPoint.each(function (controlExtension) {
+                    if (controlExtension.process) {
+                        controlExtension.process(fileEntry, controlStates[controlExtension.id]);
+                    }
+                });
+                if (delegate.modifyFile) {
+                    delegate.modifyFile(fileEntry);
+                }
+                
+                /*filesApi.uploadFile(fileEntry).done(function (data) {
+                   
+                });*/
+                handler.perform(fileEntry).done(function (data) {
+                    if (delegate.uploadedFile) {
+                        delegate.uploadedFile(data);
+                    }
+                });
             }
             // clean up
             $content.empty();
             $content = pane = null;
+            if (delegate.done) {
+                delegate.done();
+            }
         });
         
     };
