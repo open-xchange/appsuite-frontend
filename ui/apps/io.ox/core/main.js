@@ -86,6 +86,13 @@ define("io.ox/core/main",
         // refresh animation
         initRefreshAnimation();
 
+        desktop.addLauncher("right", gt("Settings"), function () {
+            var node = this;
+            return require(["io.ox/settings/main"], function (m) {
+                m.getApp().setLaunchBarIcon(node).launch();
+            });
+        });
+
 //        desktop.addLauncher("right", gt("Applications"), function () {
 //            var node = this;
 //            return require(["io.ox/applications/main"], function (m) {
@@ -97,12 +104,6 @@ define("io.ox/core/main",
             var node = this;
             return require(["io.ox/launchpad/main"], function (m) {
                 m.show();
-            });
-        });
-        desktop.addLauncher("right", gt("Settings"), function () {
-            var node = this;
-            return require(["io.ox/settings/main"], function (m) {
-                m.getApp().setLaunchBarIcon(node).launch();
             });
         });
 

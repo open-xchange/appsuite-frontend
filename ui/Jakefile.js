@@ -105,7 +105,7 @@ var jshintOptions = {
     validthis: true,
     white: true, // THIS IS TURNED ON - otherwise we have too many dirty check-ins
     predef: [
-         "$", "_", "Modernizr", "define", "require", "ox", "initializeAndDefine"
+         "$", "_", "Modernizr", "define", "require", "ox"
     ]
 };
 
