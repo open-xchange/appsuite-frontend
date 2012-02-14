@@ -206,10 +206,91 @@ define("io.ox/core/test/model",
                     });
                     j.expect(done).toEqual('Done');
                     j.expect(errors).toEqual('No errors');
+                });
+            });
 
-                    // CLEAN UP
-                    window.MODEL = model;
-                    model = null;
+            j.describe('Model with computed properties', function () {
+
+                j.it('create instance with a, b, c and computed props x, y, z', function () {
+
+                    var CModel = Model
+                        .extend({ schema: schema })
+                        .addComputed('x', ['a', 'b'], function (a, b) {
+                            return '1234' + a + b;
+                        })
+                        .addComputed('y', ['c'], function (c) {
+                            return 1000 + c;
+                        })
+                        .addComputed('z', ['x', 'y'], function (x, y) {
+                            return x + '_' + y;
+                        });
+
+                    model = new CModel({ data: { a: '5678', b: 9, c: 111 } });
+                    j.expect(model).toBeDefined();
+                });
+
+                j.it('x has correct value', function () {
+                    j.expect(model.get('x')).toEqual('123456789');
+                });
+
+                j.it('y has correct value', function () {
+                    j.expect(model.get('y')).toEqual(1111);
+                });
+
+                j.it('z has correct value', function () {
+                    j.expect(model.get('z')).toEqual('123456789_1111');
+                });
+
+                j.it('check change event for x', function () {
+                    var called = false;
+                    model.on('change:x', function (e, key, value) {
+                        j.expect(e.type).toEqual('change:x');
+                        j.expect(key).toEqual('x');
+                        j.expect(value).toEqual('123400009');
+                        model.off();
+                        called = true;
+                    });
+                    model.set('a', '0000');
+                    j.expect(called).toEqual(true);
+                });
+
+                j.it('check change event for x', function () {
+                    var called = false;
+                    model.on('change:x', function (e, key, value) {
+                        j.expect(e.type).toEqual('change:x');
+                        j.expect(key).toEqual('x');
+                        j.expect(value).toEqual('12340000#');
+                        model.off();
+                        called = true;
+                    });
+                    model.set('b', '#');
+                    j.expect(called).toEqual(true);
+                });
+
+                j.it('check change event for y', function () {
+                    var called = false;
+                    model.on('change:y', function (e, key, value) {
+                        j.expect(e.type).toEqual('change:y');
+                        j.expect(key).toEqual('y');
+                        j.expect(value).toEqual(999);
+                        model.off();
+                        called = true;
+                    });
+                    model.set('c', -1);
+                    j.expect(called).toEqual(true);
+                });
+
+                j.it('check change event for combined z', function () {
+                    var called = 0;
+                    model.on('change:z', function (e, key, value) {
+                        j.expect(e.type).toEqual('change:z');
+                        j.expect(key).toEqual('z');
+                        j.expect(value).toEqual('1234----#_999');
+                        model.off();
+                        called++;
+                    });
+                    model.set('a', '----');
+                    j.expect(called).toEqual(1);
                 });
             });
         }
