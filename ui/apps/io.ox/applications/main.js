@@ -108,9 +108,10 @@ define('io.ox/applications/main',
 
         var loadView = function (obj) {
             var id = obj.id;
-            if (id !== 'installed' && id !== 'favorites' && id !== 'upgrades') {
+            if (id !== 'installed' && id !== 'favorites' && id !== 'upgrades' && id !== 'mockIntegration') {
                 id = 'category';
             }
+            console.log('io.ox/applications/view-' + id);
             require(['io.ox/applications/view-' + id])
                 .done(_.lfo(showView, obj));
         };
