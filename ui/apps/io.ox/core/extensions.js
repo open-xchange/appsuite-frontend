@@ -253,13 +253,23 @@ define("io.ox/core/extensions",
             };
 
         this.draw = function (context) {
-            this.append(
-                $("<button>", {"data-action": self.id })
-                .addClass('btn' + (options.special ? " btn-" + options.special : ''))
-                .data({ ref: self.ref, context: context })
-                .click(click)
-                .text(String(self.label))
-            );
+            var $button = $("<button>", {"data-action": self.id })
+            .addClass('btn')
+            .data({ ref: self.ref, context: context })
+            .click(click)
+            .text(String(self.label));
+            
+            if (options.special) {
+                if ($.isArray(options.special)) {
+                    _(options.special).each(function (special) {
+                        $button.addClass("btn-" + special);
+                    });
+                } else {
+                    $button.addClass("btn-" + options.special);
+                }
+            }
+            
+            this.append($button);
             this.append("&nbsp;");
         };
     };
