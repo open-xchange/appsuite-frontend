@@ -55,7 +55,7 @@ define("io.ox/mail/view-detail",
 
             // HTML content?
             if (html !== null) {
-
+                /**
                 var iframeGUID = _.now();
 
                 $("<iframe>", {
@@ -91,8 +91,10 @@ define("io.ox/mail/view-detail",
                             // don't leak
                             html = text = doc = data = att = content = null;
                         }, 1);
-                    })
-                    .appendTo(content);
+                    });
+                **/
+
+                $(html).appendTo(content);
 
             }
             else if (text !== null) {
