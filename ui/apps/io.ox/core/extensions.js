@@ -239,6 +239,30 @@ define("io.ox/core/extensions",
             );
         };
     };
+    
+    var Button = function (options) {
+
+        _.extend(this, options);
+
+        var self = this,
+            click = function (e) {
+                var node = $(this);
+                e.preventDefault();
+                // TODO: don't know if using self for context makes sense
+                that.point(node.data("ref")).invoke("action", self, node.data("context"));
+            };
+
+        this.draw = function (context) {
+            this.append(
+                $("<button>", {"data-action": self.id })
+                .addClass('btn' + (options.special ? " btn-" + options.special : ''))
+                .data({ ref: self.ref, context: context })
+                .click(click)
+                .text(String(self.label))
+            );
+            this.append("&nbsp;");
+        };
+    };
 
     var applyCollection = function (self, collection, node, context) {
         // resolve collection's properties
@@ -334,6 +358,7 @@ define("io.ox/core/extensions",
         },
 
         Link: Link,
+        Button: Button,
         InlineLinks: InlineLinks,
         ToolbarLinks: ToolbarLinks
     };
