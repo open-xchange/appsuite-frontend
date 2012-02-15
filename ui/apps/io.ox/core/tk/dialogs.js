@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/tk/dialogs", function () {
+define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
 
     'use strict';
 
