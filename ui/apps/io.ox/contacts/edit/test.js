@@ -525,7 +525,6 @@ define("io.ox/contacts/edit/test",
                     j.waitsFor(function () {
                         formFrame =  $('.contact-detail.edit[data-property="' + phrase + '"]');
                         buttonClose = $('.window-controls .window-control').text('x');
-                        console.log(buttonClose);
                         if (buttonClose[1]) {
                             return true;
                         }

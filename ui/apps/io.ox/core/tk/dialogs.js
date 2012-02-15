@@ -75,6 +75,10 @@ define("io.ox/core/tk/dialogs", function () {
             return nodes.popup.find(".content");
         };
 
+        this.getContentControls = function () {
+            return nodes.popup.find(".controls");
+        };
+
         this.text = function (str) {
             var p = nodes.popup.find(".content");
             p.find(".plain-text").remove();
@@ -87,13 +91,14 @@ define("io.ox/core/tk/dialogs", function () {
             return this;
         };
 
-        this.addButton = function (action, label, dataaction) {
+        this.addButton = function (action, label, dataaction, purelink) {
             nodes.popup.find(".controls").append(
                 $.button({
                     label: label,
                     data: { action: action },
                     click: process,
-                    dataaction: dataaction
+                    dataaction: dataaction,
+                    purelink: purelink
                 })
             );
             return this;
@@ -103,6 +108,10 @@ define("io.ox/core/tk/dialogs", function () {
             if (e.which === 27) {
                 process("cancel");
             }
+        };
+
+        this.close = function () {
+            process("cancel");
         };
 
         this.show = function (callback) {
@@ -139,6 +148,7 @@ define("io.ox/core/tk/dialogs", function () {
                 // use fixed top position
                 nodes.popup.css({
                     width: dim.width + "px",
+                    height: dim.height + "px",// TODO review the way of sizedetection
                     top: o.top || "0px"
                 });
             }

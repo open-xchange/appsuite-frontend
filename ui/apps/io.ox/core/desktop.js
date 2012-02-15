@@ -728,6 +728,9 @@ define("io.ox/core/desktop",
                 };
 
                 this.close = function () {
+
+                    $('#myGrowl').jGrowl('shutdown'); // maybe needs a better solution to trigger the jGrowl shutdown
+
                     if (quitOnClose && this.app !== null) {
                         this.trigger("quit");
                         this.app.quit()

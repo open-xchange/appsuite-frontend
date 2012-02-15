@@ -20,14 +20,15 @@ define("io.ox/contacts/test",
     var testObject = {
             first_name: 'Georg',
             last_name: 'Tester',
-            company: 'OX',
-            department: 'OX7-dev',
-            position: 'small cog in a big wheel',
-            profession: 'developer',
+            birthday: '10.10.1915',
+            email1: 'test@test-ox.de',
+            telephone_business1: '+49 2761-8385-0',
             street_business: 'Martinstr. 41',
             postal_code_business: '57462',
             city_business: 'Olpe',
-            telephone_business1: '+49 2761-8385-0'
+            state_business: 'NRW',
+            country_business: 'Germany',
+            url: 'http://www.test-ox.de'
         },
 
         TIMEOUT = 5000;
@@ -95,15 +96,15 @@ define("io.ox/contacts/test",
                 j.it('looks for the form and autofills ', function () {
                     var formFrame =  $('.io-ox-dialog-popup');
                     for (var i in testObject) {
-                        formFrame.find(".field input[name='" + i + "']").val(testObject[i]);
+                        formFrame.find(".input input[data-property='" + i + "']").val(testObject[i]).trigger('change');
                     }
                     j.expect(formFrame[0]).toBeTruthy();
                 });
 
                 j.it('looks for the save button and hits', function () {
                     var formFrame =  $('.io-ox-dialog-popup');
-                    var button = formFrame.find(".io-ox-button[data-action='save']");
-                    button.triggerHandler('click');
+                    var button = formFrame.find(".default-action[data-action='save']");
+                    button.trigger('click');
                     j.expect(button[0]).toBeTruthy();
                 });
 

@@ -72,9 +72,8 @@ define('io.ox/contacts/edit/main',
                         }
                     };
 
-                    window.model = myModel;
-                    window.view = myView;
-
+//                    window.model = myModel;
+//                    window.view = myView;
                     container.append(myView.draw(app).node);
                     container.find('input[type=text]:visible').eq(0).focus();
                 });

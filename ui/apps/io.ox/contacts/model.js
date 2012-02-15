@@ -17,7 +17,7 @@ define('io.ox/contacts/model',
 
     var contactSchema = new Model.Schema({
 
-        'display_name': {format: 'string', defaultValue: 'Mrs. Bean'},
+        'display_name': {format: 'string'}, //defaultValue: 'Mrs. Bean'
         'first_name': { format: 'string', mandatory: true},
         'last_name': {  format: 'string'},
         'second_name': { format: 'string'},

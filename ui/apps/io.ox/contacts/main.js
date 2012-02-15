@@ -197,7 +197,7 @@ define("io.ox/contacts/main",
         };
 
         // go!
-        commons.addFolderSupport(app, grid, 'contacts', '6')//'6'
+        commons.addFolderSupport(app, grid, 'contacts', '6')
             .done(commons.showWindow(win, grid));
     });
 
@@ -206,18 +206,3 @@ define("io.ox/contacts/main",
     };
 });
 
-var getTestCreate = function () {
-    "use strict";
-    require(["io.ox/contacts/tests"], function (test) {
-    // test for create
-        test.testCreate();
-    });
-};
-
-var getTestEdit = function () {
-    "use strict";
-    require(["io.ox/contacts/tests"], function (test) {
-    // test for edit
-        test.testEdit();
-    });
-};

@@ -34,7 +34,13 @@
         }, options || {});
 
         // class name
-        var className = "io-ox-button" + (!opt.enabled ? " disabled" : "");
+        var className;
+        if (opt.purelink === true) {
+            className = "button io-ox-action-link";
+        } else {
+            className = "io-ox-button " + (!opt.enabled ? " disabled" : "");
+        }
+
 
         if (opt.theme === "dark") {
             // dark theme
@@ -51,9 +57,16 @@
         }
 
         // create button
-        var button = $("<button/>").addClass(className).append(
-            $("<span/>").append(text)
-        ).on(
+        var button;
+        if (opt.purelink === true) {
+            button = $("<a>").addClass(className).append(text);
+
+        } else {
+            button = $("<button/>").addClass(className).append(
+                $("<span/>").append(text)
+                );
+        }
+        button.on(
         "click", opt.data, opt.click
         );
 
