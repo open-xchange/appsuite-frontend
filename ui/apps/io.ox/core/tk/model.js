@@ -145,23 +145,24 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
 
     // yep, this could be done once upfront but we no longer pay for CPU ticks, so ...
     var triggerTransitives = function (key) {
-            _(this.computed).each(function (o, computed) {
-                if (_(o.deps).indexOf(key) > -1) {
-                    this.trigger('change:' + computed, computed, this.get(computed));
+        _(this._computed).each(function (o, computed) {
+            if (_(o.deps).indexOf(key) > -1) {
+                var memo = this._memoize[computed],
+                    value = this.get(computed);
+                if (!_.isEqual(memo, value)) {
+                    this.trigger('change:' + computed, computed, value);
                     triggerTransitives.call(this, computed);
                 }
-            }, this);
-        },
-
-        getMultiple = function () {
-            return _(arguments).map(this.get, this);
-        };
+            }
+        }, this);
+    };
 
     Model = function (options) {
         options = options || {};
         this._data = {};
         this._previous = {};
         this._defaults = this.schema.getDefaults();
+        this._memoize = {};
         Events.extend(this);
         // TODO: we ALWAYS need data! do we have any options? I always forget to use key/value here
         this.initialize(options.data || options);
@@ -173,16 +174,16 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             deps = [];
         }
         if (key && _.isFunction(callback)) {
-            this.prototype.computed[key] = { deps: deps, callback: callback };
+            this.prototype._computed[key] = { deps: deps, callback: callback };
         }
         return this;
     };
 
     Model.prototype = {
 
-        schema: new Schema(),
+        _computed: {},
 
-        computed: {},
+        schema: new Schema(),
 
         initialize: function (data) {
             // deep copy to avoid side effects
@@ -190,20 +191,25 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             // due to defaultValues, data and previous might differ.
             // however, the model is not dirty
             this._data = _.extend({}, this._defaults, _.copy(data || {}, true));
+            // memoize computed properties
+            _(this._computed).each(function (o, key) {
+                this.get(key);
+            }, this);
         },
 
         get: function (key) {
             if (key === undefined) {
                 // get all values
                 return _.copy(this._data, true);
-            } else if (this.computed[key] === undefined) {
+            } else if (this._computed[key] === undefined) {
                 // get single value
                 return _.copy(this._data[key], true);
             } else {
                 // get computed value
-                var o = this.computed[key],
-                    params = _(o.deps).map(this.get, this);
-                return o.callback.apply(this, params);
+                var o = this._computed[key],
+                    params = _(o.deps).map(this.get, this),
+                    value = o.callback.apply(this, params);
+                return (this._memoize[key] = value);
             }
         },
 
@@ -357,6 +363,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             this._data = null;
             this._previous = null;
             this._defaults = null;
+            this._memoize = null;
         }
     };
 
