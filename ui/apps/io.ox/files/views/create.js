@@ -80,7 +80,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         
 
         buttonsPoint.each(function (buttonExtension) {
-            pane.addButton(buttonExtension.id, buttonExtension.label, buttonExtension.id);
+            pane.addButton(buttonExtension.id, buttonExtension.label, buttonExtension.id, buttonExtension.type);
             buttonHandlers[buttonExtension.id] = buttonExtension;
         });
         
@@ -191,6 +191,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
     buttonsPoint.extend({
         id: "save",
         label: "Save",
+        type: "primary",
         perform: function (fileEntry, states, cb) {
             var savedOnce = false;
             _(states.file.node[0].files).each(function (file) {

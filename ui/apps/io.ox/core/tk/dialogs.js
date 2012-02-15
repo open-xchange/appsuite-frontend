@@ -91,16 +91,22 @@ define("io.ox/core/tk/dialogs", function () {
             return this;
         };
 
-        this.addButton = function (action, label, dataaction, purelink) {
+
+        this.addButton = function (action, label, dataaction, options) {
+            var opt = {
+                label: label,
+                data: { action: action },
+                click: process,
+                dataaction: dataaction
+                purelink: options.purelink
+            };
+            if (options.type) {
+                options[type] = true;
+            }
+            
             nodes.popup.find(".controls").append(
-                $.button({
-                    label: label,
-                    data: { action: action },
-                    click: process,
-                    dataaction: dataaction,
-                    purelink: purelink
-                })
-            );
+                $.button(opt)
+            ).append("&nbsp;");
             return this;
         };
 

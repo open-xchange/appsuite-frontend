@@ -97,8 +97,13 @@ define("io.ox/contacts/test",
 
                 j.it('looks for the save button and hits', function () {
                     var formFrame =  $('.io-ox-dialog-popup');
+<<<<<<< HEAD
                     var button = formFrame.find(".default-action[data-action='save']");
                     button.trigger('click');
+=======
+                    var button = formFrame.find(".btn[data-action='save']");
+                    button.triggerHandler('click');
+>>>>>>> bootstrap-buttons
                     j.expect(button[0]).toBeTruthy();
                 });
 
@@ -179,7 +184,7 @@ define("io.ox/contacts/test",
                     });
 
                     j.waitsFor(function () {
-                        dialog = $('.io-ox-dialog-popup .io-ox-button[data-action="delete"]');
+                        dialog = $('.io-ox-dialog-popup .btn[data-action="delete"]');
                         if (dialog[0]) {
                             return true;
                         }
