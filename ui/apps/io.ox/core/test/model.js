@@ -80,11 +80,10 @@ define("io.ox/core/test/model",
 
                 j.it('triggers general change event', function () {
                     var called = false;
-                    model.on('change', function (e, key, value) {
+                    model.off().on('change', function (e, key, value) {
                         j.expect(e.type).toEqual('change');
                         j.expect(key).toEqual('firstName');
                         j.expect(value).toEqual('Matthias B.');
-                        model.off();
                         called = true;
                     });
                     model.set('firstName', 'Matthias B.');
@@ -93,11 +92,10 @@ define("io.ox/core/test/model",
 
                 j.it('triggers specific change event', function () {
                     var called = false;
-                    model.on('change:firstName', function (e, key, value) {
+                    model.off().on('change:firstName', function (e, key, value) {
                         j.expect(e.type).toEqual('change:firstName');
                         j.expect(key).toEqual('firstName');
                         j.expect(value).toEqual('Matthias');
-                        model.off();
                         called = true;
                     });
                     model.set('firstName', 'Matthias');
@@ -152,10 +150,9 @@ define("io.ox/core/test/model",
 
                 j.it('triggers invalid format event', function () {
                     var called = false;
-                    model.on('error:invalid', function (e, error) {
+                    model.off().on('error:invalid', function (e, error) {
                         j.expect(error.properties).toEqual(['familyName']);
                         j.expect(model.get('familyName')).toEqual('B.');
-                        model.off();
                         called = true;
                     });
                     model.set('familyName', '');
@@ -164,11 +161,10 @@ define("io.ox/core/test/model",
 
                 j.it('triggers inconsistency event', function () {
                     var called = false;
-                    model.on('error:invalid error:inconsistent', function (e, error) {
+                    model.off().on('error:invalid error:inconsistent', function (e, error) {
                         j.expect(e.type).toEqual('error:inconsistent');
                         j.expect(error.properties).toEqual(['age']);
                         j.expect(model.get('age')).toEqual(-1);
-                        model.off();
                         called = true;
                     });
                     model.set('age', -1);
@@ -195,7 +191,7 @@ define("io.ox/core/test/model",
 
                 j.it('passes save without errors', function () {
                     var errors = 'No errors', done = 'Not done';
-                    model.on('error:invalid error:inconsistent', function (e, error) {
+                    model.off().on('error:invalid error:inconsistent', function (e, error) {
                         console.log('Error', arguments);
                         errors = 'Errors';
                     });
@@ -206,10 +202,113 @@ define("io.ox/core/test/model",
                     });
                     j.expect(done).toEqual('Done');
                     j.expect(errors).toEqual('No errors');
+                });
+            });
 
-                    // CLEAN UP
-                    window.MODEL = model;
-                    model = null;
+            j.describe('Model with computed properties', function () {
+
+                j.it('create instance with a, b, c and computed props x, y, z, and mod', function () {
+
+                    var CModel = Model
+                        .extend({ schema: schema })
+                        .addComputed('x', ['a', 'b'], function (a, b) {
+                            return '1234' + a + b;
+                        })
+                        .addComputed('y', ['c'], function (c) {
+                            return 1000 + c;
+                        })
+                        .addComputed('z', ['x', 'y'], function (x, y) {
+                            return x + '_' + y;
+                        })
+                        .addComputed('mod', ['d'], function (d) {
+                            return d % 2;
+                        });
+
+                    model = new CModel({ data: { a: '5678', b: 9, c: 111, d: 0 } });
+                    j.expect(model).toBeDefined();
+                });
+
+                j.it('x has correct value', function () {
+                    j.expect(model.get('x')).toEqual('123456789');
+                });
+
+                j.it('y has correct value', function () {
+                    j.expect(model.get('y')).toEqual(1111);
+                });
+
+                j.it('z has correct value', function () {
+                    j.expect(model.get('z')).toEqual('123456789_1111');
+                });
+
+                j.it('check change event for x', function () {
+                    var called = false;
+                    model.off().on('change:x', function (e, key, value) {
+                        j.expect(e.type).toEqual('change:x');
+                        j.expect(key).toEqual('x');
+                        j.expect(value).toEqual('123400009');
+                        called = true;
+                    });
+                    model.set('a', '0000');
+                    j.expect(called).toEqual(true);
+                });
+
+                j.it('check change event for x', function () {
+                    var called = false;
+                    model.off().on('change:x', function (e, key, value) {
+                        j.expect(e.type).toEqual('change:x');
+                        j.expect(key).toEqual('x');
+                        j.expect(value).toEqual('12340000#');
+                        called = true;
+                    });
+                    model.set('b', '#');
+                    j.expect(called).toEqual(true);
+                });
+
+                j.it('check change event for y', function () {
+                    var called = false;
+                    model.off().on('change:y', function (e, key, value) {
+                        j.expect(e.type).toEqual('change:y');
+                        j.expect(key).toEqual('y');
+                        j.expect(value).toEqual(999);
+                        called = true;
+                    });
+                    model.set('c', -1);
+                    j.expect(called).toEqual(true);
+                });
+
+                j.it('check change event for combined z', function () {
+                    var called = 0;
+                    model.off().on('change:z', function (e, key, value) {
+                        j.expect(e.type).toEqual('change:z');
+                        j.expect(key).toEqual('z');
+                        j.expect(value).toEqual('1234----#_999');
+                        called++;
+                    });
+                    model.set('a', '----');
+                    j.expect(called).toEqual(1);
+                });
+
+                j.it('check for the right set of change events', function () {
+                    var called = 0;
+                    model.off().on('change:a change:b change:c change:x change:y change:z', function (e, key, value) {
+                        called++;
+                    });
+                    model.set('c', '1234');
+                    j.expect(called).toEqual(3);
+                });
+
+                j.it('check proper events for unchanged computed properties', function () {
+                    var called = 0;
+                    model.off().on('change:mod', function (e, key, value) {
+                        called++;
+                    });
+                    model.set('d', 0); // initial value -> no change, mod = 0
+                    model.set('d', 2); // no change, mod = 0
+                    model.set('d', 4); // no change, mod = 0
+                    model.set('d', 1); // change!, mod = 1
+                    model.set('d', 2); // change!, mod = 0
+                    model.set('d', 4); // no change, mod = 0
+                    j.expect(called).toEqual(2);
                 });
             });
         }

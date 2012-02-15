@@ -200,7 +200,8 @@ define("io.ox/contacts/main",
         commons.addFolderSupport(app, grid, 'contacts', '6')
             .done(commons.showWindow(win, grid));
     });
-
+    
+    
     return {
         getApp: app.getInstance
     };

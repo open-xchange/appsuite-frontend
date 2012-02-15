@@ -171,6 +171,55 @@ define("io.ox/core/tk/dialogs", function () {
 
             return deferred;
         };
+        
+        this.resize = function () {
+            // Reset
+            nodes.popup.find(".content").css({
+                width: "",
+                height: ""
+            });
+            var dim = {
+                width: o.width || nodes.popup.width(),
+                height: o.height || nodes.popup.height()
+            };
+
+            // limit width & height
+            _(["width", "height"]).each(function (d) {
+                // apply explicit limit
+                var id = o[$.camelCase("max-" + d)];
+                if (o[id] && dim[d] > o[id]) {
+                    dim[d] = o[id];
+                }
+                // apply document limits
+                var max = $(document)[d]() - 100;
+                if (dim[d] && dim[d] > max) {
+                    dim[d] = max;
+                }
+            });
+
+            // apply dimensions
+            if (o.center) {
+                // center vertically
+                nodes.popup.css({
+                    width: dim.width + "px",
+                    height: dim.height + "px",
+                    top: "50%",
+                    marginTop: 0 - ((dim.height + 60) / 2 >> 0) + "px"
+                });
+            } else {
+                // use fixed top position
+                nodes.popup.css({
+                    width: dim.width + "px",
+                    top: o.top || "0px"
+                });
+            }
+
+            // fix content height in case async requests draw later
+            var h1 = nodes.popup.height(),
+                h2 = nodes.popup.find(".controls").outerHeight(true);
+            nodes.popup.find(".content").css("height", (h1 - h2) + "px");
+            
+        };
 
         nodes.underlay.click(function () {
             if (o.underlayAction) {

@@ -49,7 +49,7 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
     ext.point("io.ox/contacts/main/create").extend({
         index: 100,
         id: "create",
-        action: function () {
+        action: function (app) {
             require(["io.ox/contacts/create"], function (create) {
                 create.show();
             });

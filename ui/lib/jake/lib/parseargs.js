@@ -28,8 +28,7 @@ var parseargs = {};
 parseargs.Parser = function (opts) {
   // A key/value object of matching options parsed out of the args
   this.opts = {};
-  this.taskName = null;
-  this.taskArgs = null;
+  this.taskNames = null;
   this.envVars = null;
 
   // Data structures used for parsing
@@ -71,9 +70,7 @@ parseargs.Parser.prototype = new function () {
       , argItem
       , argParts
       , cmdItems
-      , taskArr
-      , taskName
-      , taskArgs
+      , taskNames = []
       , preempt;
 
     while (args.length) {
@@ -84,7 +81,7 @@ parseargs.Parser.prototype = new function () {
         argParts = arg.split('=');
         argItem = this.longOpts[argParts[0]] || this.shortOpts[argParts[0]];
         if (argItem) {
-          // First-encountered preemptive opt take precedence -- no further opts
+          // First-encountered preemptive opt takes precedence -- no further opts
           // or possibility of ambiguity, so just look for a value, or set to
           // true and then bail
           if (argItem.preempts) {
@@ -92,9 +89,9 @@ parseargs.Parser.prototype = new function () {
             preempt = true;
             break;
           }
-          // If we find more opts, throw away any previous args that
-          // didn't serve as a val
-          cmds = [];
+          // If the opt requires a value, see if we can get a value from the
+          // next arg, or infer true from no-arg -- if it's followed by another
+          // opt, throw an error
           if (argItem.expectValue) {
             opts[argItem.full] = _trueOrNextVal(argParts, args);
             if (!opts[argItem.full]) {
@@ -107,39 +104,29 @@ parseargs.Parser.prototype = new function () {
         }
       }
       else {
-        cmds.push(arg);
+        cmds.unshift(arg);
       }
     }
 
     if (!preempt) {
       // Parse out any env-vars and task-name
-      while (!!(cmd = cmds.shift())) {
+      while (!!(cmd = cmds.pop())) {
         cmdItems = cmd.split('=');
         if (cmdItems.length > 1) {
           envVars[cmdItems[0]] = cmdItems[1];
         }
         else {
-          taskName = cmd;
-          break;
+          taskNames.push(cmd);
         }
       }
 
-      // Parse any positional args attached to the task-name
-      if (taskName) {
-        taskArr = taskName.split('[');
-        taskName = taskArr[0];
-        // Parse any task-args
-        if (taskArr[1]) {
-          taskArgs = taskArr[1].replace(/\]$/, '');
-          taskArgs = taskArgs.split(',');
-        }
-      }
     }
 
-    this.opts = opts
-    this.envVars = envVars;
-    this.taskName = taskName;
-    this.taskArgs = taskArgs;
+    return {
+      opts: opts
+    , envVars: envVars
+    , taskNames: taskNames
+    };
   };
 
 };

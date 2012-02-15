@@ -542,6 +542,11 @@ define.async('io.ox/mail/write/main',
             setSignature(e);
         }
 
+        function showMessage(msg, header, sticky) {
+            console.log(arguments);
+            $('#myGrowl').jGrowl(msg, {header: header, sticky: sticky});
+        }
+
         // launcher
         app.setLauncher(function () {
 
@@ -650,7 +655,7 @@ define.async('io.ox/mail/write/main',
                         )
                     )
                 )
-            );
+            ).append($('<div>', {id: 'myGrowl'}).addClass('jGrowl').css({position: 'absolute', right: '0', top: '0'}));
 
             // side panel
             var scrollpane = $('<div>')
@@ -1278,7 +1283,9 @@ define.async('io.ox/mail/write/main',
                     if (result.error) {
                         console.error(result);
                         def.reject('Server error - see console :(');
+                        showMessage('Mail is NOT saved', 'Mail Error', true);
                     } else {
+                        showMessage('Mail is saved', 'Mail', false);
                         def.resolve(result);
                         app.markClean();
                     }

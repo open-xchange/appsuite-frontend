@@ -61,6 +61,7 @@ define("io.ox/files/api",
     // Upload a file and store it
     // As options, we expect:
     // "folder" - The folder ID to upload the file to. This is optional and defaults to the standard files folder
+    // "json" - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
     // "file" - the file object to upload
     // The method returns a deferred that is resolved once the file has been uploaded
     api.uploadFile = function (options) {
@@ -71,7 +72,16 @@ define("io.ox/files/api",
         
         var formData = new FormData();
         formData.append("file", options.file);
-        formData.append("json", "{folder_id: " + options.folder + "}");
+        
+        if (options.json && ! $.isEmptyObject(options.json)) {
+            if (!options.json.folder_id) {
+                options.json.folder_id = options.folder;
+            }
+            formData.append("json", JSON.stringify(options.json));
+        } else {
+            formData.append("json", JSON.stringify({folder_id: options.folder}));
+        }
+        
         
         return http.UPLOAD({
                 module: "infostore",
@@ -87,6 +97,29 @@ define("io.ox/files/api",
             });
     };
     
+    
+    api.create = function (options) {
+         // Alright, let's simulate a multipart formdata form
+        options = $.extend({
+            folder: config.get("folder.infostore")
+        }, options || {});
+
+        
+        if (!options.json.folder_id) {
+            options.json.folder_id = options.folder;
+        }
+        
+        return http.PUT({
+                module: "infostore",
+                params: { action: "new" },
+                data: options.json
+            })
+            .pipe(function (data) {
+                // clear folder cache
+                api.caches.all.remove(options.folder);
+                return { folder_id: String(options.folder), id: String(data ? data : 0) };
+            });
+    };
     return api;
     
 });

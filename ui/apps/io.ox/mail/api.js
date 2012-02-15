@@ -80,21 +80,35 @@ define("io.ox/mail/api",
     });
 
     api.SENDTYPE = {
-        'NORMAL': 1,
-        'REPLY': 2,
+        'NORMAL':  1,
+        'REPLY':   2,
         'FORWARD': 3,
-        'DRAFT': 4
+        'DRAFT':   4
     };
 
     api.FLAGS = {
-        'ANSWERD': 1,
-        'DELETED': 2,
-        'DRAFT': 4,
-        'FLAGGED': 8,
-        'RECENT': 16,
-        'SEEN': 32,
-        'USER': 64,
+        'ANSWERD':     1,
+        'DELETED':     2,
+        'DRAFT':       4,
+        'FLAGGED':     8,
+        'RECENT':     16,
+        'SEEN':       32,
+        'USER':       64,
         'FORWARDED': 128
+    };
+
+    api.COLORS = {
+        'NONE':      0,
+        'RED':       1,
+        'BLUE':      2,
+        'GREEN':     3,
+        'GREY':      4,
+        'BROWN':     5,
+        'AQUA':      6,
+        'ORANGE':    7,
+        'PINK':      8,
+        'LIGHTBLUE': 9,
+        'YELLOW':   10
     };
 
     // add all thread cache
@@ -205,6 +219,24 @@ define("io.ox/mail/api",
             });
     };
 
+    api.update = function (obj, data) {
+        return http.PUT({
+            module: 'mail',
+            params: {
+                action: 'update',
+                id: obj.id,
+                folder: obj.folder || obj.folder_id
+            },
+            data: data
+        }).pipe(function (data) {
+            api.trigger('refresh.list');
+            if (ox.online) {
+                ox.trigger("refresh");
+            }
+            return data;
+        });
+    };
+
     var react = function (action, obj, view) {
         return http.GET({
                 module: 'mail',
@@ -283,6 +315,16 @@ define("io.ox/mail/api",
         }, false);
     };
 
+    api.getSource = function (obj) {
+        return this.get({
+            action: 'get',
+            id: obj.id,
+            src: 1,
+            folder: obj.folder || obj.folder_id,
+            view: 'html'
+        }, false);
+    };
+
     api.replyall = function (obj, view) {
         return react('replyall', obj, view);
     };
@@ -296,7 +338,6 @@ define("io.ox/mail/api",
     };
 
     api.send = function (data, files) {
-
         var deferred = $.Deferred();
 
         if (Modernizr.file) {

@@ -14,24 +14,15 @@
 define("io.ox/core/gettext", [], function () {
 
     "use strict";
-
-    var modules = {};
-
+    
     function gt(id, po) {
-
-        if (po) {
-            po.plural = new Function("n", "return " + po.plural + ";");
-        }
-        modules[id] = po;
-
+        
+        po.plural = new Function("n", "return " + po.plural + ";");
+        
         function gettext(text) {
             return gettext.pgettext("", text);
         }
-
-        gettext.enable = function () {
-            modules[id] = po;
-        };
-
+        
         gettext.noI18n = function (text) {
             return text;
         };
@@ -40,7 +31,7 @@ define("io.ox/core/gettext", [], function () {
 
         gettext.pgettext = function (context, text) {
             var key = context ? context + "\x00" + text : text;
-            return modules[id].dictionary[key] || text;
+            return po.dictionary[key] || text;
         };
 
         gettext.ngettext = function (singular, plural, n) {
@@ -50,33 +41,30 @@ define("io.ox/core/gettext", [], function () {
         gettext.npgettext = function (context, singular, plural, n) {
             var key = (context ? context + "\x00" : "") +
                     singular + "\x01" + plural,
-                translation = modules[id].dictionary[key];
+                translation = po.dictionary[key];
             return translation ?
-                translation[Number(modules[id].plural(Number(n)))] :
+                translation[Number(po.plural(Number(n)))] :
                 Number(n) !== 1 ? plural : singular;
         };
 
         return gettext;
     }
-
-    var lang = "en_US"; // TODO: don't know if that's right - but it fixes runtime errors
-
+    
+    var lang = new $.Deferred();
+    
     gt.setLanguage = function (language) {
-        function enableModule(module) {
-            module.enable();
-        }
-        var deferreds = [];
-        if (language && language !== lang) {
-            lang = language;
-            for (var i in modules) {
-                deferreds.push(require([gt.getModule(i)], enableModule));
+        gt.setLanguage = function (lang2) {
+            if (lang2 !== language) {
+                throw new Error("Multiple setLanguage calls");
             }
-        }
-        return $.when.apply($, deferreds);
+        };
+        lang.resolve(language);
     };
 
     gt.getModule = function (name) {
-        return lang ? name + "." + lang : undefined;
+        return lang.pipe(function (lang) {
+            return name + "." + lang;
+        });
     };
 
     return gt;

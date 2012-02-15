@@ -1,0 +1,650 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Viktor Pracht <viktor.pracht@open-xchange.com>
+ */
+
+define("io.ox/core/date", ["gettext!io.ox/core/main"],
+function (gt) {
+    /*jshint white:false */
+    
+    "use strict";
+    
+    var SECOND   =        1000; // ms / s
+    var MINUTE   =       60000; // ms / min
+    var HOUR     =     3600000; // ms / h
+    var DAY      =    86400000; // ms / day
+    var AVG_YEAR = 31556952000; // average ms / year
+    
+    var api = {
+        /**
+         * The first week with at least daysInFirstWeek days in a given year is
+         * defined as the first week of that year.
+         * @ignore
+         */
+        daysInFirstWeek: 4,
+        
+        /**
+         * First day of the week.
+         * 0 = Sunday, 1 = Monday and so on.
+         * @ignore
+         */
+        weekStart: 1,
+        
+        format: "yyyy-MM-dd HH:mm:ss",
+        
+        SECOND: SECOND,
+        MINUTE: MINUTE,
+        HOUR: HOUR,
+        DAY: DAY
+    };
+    
+    // TODO: Difference between server and client clocks.
+    var offset = 0;
+    
+    function getDays(d) {
+        return Math.floor(d / DAY);
+    }
+    
+    /**
+     * Computes the number of the first day of the specified week, taking into
+     * account weekStart.
+     * @param  {Date} d The date for which to calculate the first day of week
+     * number.
+     * @type Number
+     * @return First day in the week as the number of days since 1970-01-01.
+     * @ignore
+     */
+    function getWeekStart(d) {
+        return getDays(d.getTime()) - (d.getUTCDay() - api.weekStart + 7) % 7;
+    }
+
+    /**
+     * Returns the day of the week which decides the week number
+     * @return Day of week as the number of days since 1970-01-01.
+     */
+    function getKeyDayOfWeek(d) {
+        return (getWeekStart(d) + 7 - api.daysInFirstWeek);
+    }
+    
+    /**
+     * Computes the week number of the specified Date object, taking into
+     * account daysInFirstWeek and weekStart.
+     * @param {Date} d The date for which to calculate the week number.
+     * @param {Boolean} inMonth True to compute the week number in a month,
+     * False for the week number in a year
+     * @type Number
+     * @return Week number of the specified date.
+     * @ignore
+     */
+    function getWeek(d, inMonth) {
+        var keyDay = getKeyDayOfWeek(d);
+        var keyDate = new Date(keyDay * DAY);
+        var jan1st = Date.UTC(keyDate.getUTCFullYear(),
+                              inMonth ? keyDate.getUTCMonth() : 0);
+        return Math.floor((keyDay - getDays(jan1st)) / 7) + 1;
+    }
+    
+    function getWeekYear(d) {
+        var year = d.getUTCFullYear(),
+            month = d.getUTCMonth(),
+            week = getWeek(d);
+        if (month === 0 && week > 26) year--;
+        if (month === 11 && week < 26) year++;
+        return year;
+    }
+    
+    function isLeapYear(year) {
+        return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+    }
+    
+    var reLetters = "GyYMwWDdFEuaHkKhmsSzZX".split("").join("+|") + "+";
+    var regex = new RegExp("(" + reLetters + ")|'((?:[^']|'')+)'|('')", "g");
+    
+    function num(n, x) {
+        var s = x.toString();
+        n -= s.length;
+        if (n <= 0) return s;
+        var a = new Array(n + 1);
+        for (var i = 0; i < n; i++) a[i] = "0";
+        a[n] = s;
+        return a.join("");
+    }
+    function text(n, full, short) { return n >= 4 ? full : short; }
+    
+    var months = [
+        gt("January"),   gt("February"), gt("March"),    gt("April"),
+        gt("May"),       gt("June"),     gt("July"),     gt("August"),
+        gt("September"), gt("October"),  gt("November"), gt("December")
+    ];
+    var shortMonths = [
+        gt("Jan"), gt("Feb"), gt("Mar"), gt("Apr"), gt("May"), gt("Jun"),
+        gt("Jul"), gt("Aug"), gt("Sep"), gt("Oct"), gt("Nov"), gt("Dec")
+    ];
+    var days = [
+        gt("Sunday"),   gt("Monday"), gt("Tuesday"), gt("Wednesday"),
+        gt("Thursday"), gt("Friday"), gt("Saturday")
+    ];
+    var shortDays = [
+        gt("Sun"), gt("Mon"), gt("Tue"), gt("Wed"), gt("Thu"), gt("Fri"),
+        gt("Sat")
+    ];
+    var funs = {
+        a: function (n, d) {
+            return d.getUTCHours() < 12 ? _("AM") : _("PM");
+        },
+        D: function (n, d) {
+            return num(n,
+                getDays(d.getTime() - Date.UTC(d.getUTCFullYear(), 0)) + 1);
+        },
+        d: function (n, d) { return num(n, d.getUTCDate()); },
+        E: function (n, d) {
+            var m = d.getUTCDay();
+            return text(n, days[m], shortDays[m]);
+        },
+        F: function (n, d) {
+            return num(n, Math.floor(d.getUTCDate() / 7) + 1);
+        },
+        G: function (n, d) {
+            return d.getTime() < -621355968e5 ? gt("BC") : gt("AD");
+        },
+        H: function (n, d) { return num(n, d.getUTCHours()); },
+        h: function (n, d) { return num(n, d.getUTCHours() % 12 || 12); },
+        K: function (n, d) { return num(n, d.getUTCHours() % 12); },
+        k: function (n, d) { return num(n, d.getUTCHours() || 24); },
+        M: function (n, d) {
+            var m = d.getUTCMonth();
+            if (n >= 3) {
+                return text(n, months[m], shortMonths[m]);
+            } else {
+                return num(n, m + 1);
+            }
+        },
+        m: function (n, d) { return num(n, d.getUTCMinutes()); },
+        S: function (n, d) { return num(n, d.getMilliseconds()); },
+        s: function (n, d) { return num(n, d.getUTCSeconds()); },
+        u: function (n, d) { return num(n, (d.getUTCDay() + 6) % 7 + 1); },
+        W: function (n, d) { return num(n, getWeek(d, true)); },
+        w: function (n, d) { return num(n, getWeek(d)); },
+        X: function (n, d) {
+            
+        },
+        Y: function (n, d) {
+            var y = d.getUTCFullYear(), m = d.getUTCMonth(), w = getWeek(d);
+            if (m === 0 && w > 26) y--;
+            if (m === 11 && w < 26) y++;
+            if (y < 1) y = 1 - y;
+            return num(n, n === 2 ? y % 100 : y);
+        },
+        y: function (n, d) {
+            var y = d.getUTCFullYear();
+            if (y < 1) y = 1 - y;
+            return num(n, n === 2 ? y % 100 : y);
+        },
+        Z: function (n, d) {
+            
+        },
+        z: function (n, d) {
+            
+        }
+        // TODO: z, Z and X
+    };
+    function formatDateTime(format, date) {
+        return String(format).replace(regex,
+            function (match, fmt, text, quote) {
+                if (fmt) {
+                    return funs[fmt.charAt(0)](fmt.length, date);
+                } else if (text) {
+                    return text.replace(/''/g, "'");
+                } else if (quote) {
+                    return "'";
+                }
+            });
+    }
+    
+    var pregexStr = "(" + reLetters + ")(?!" + reLetters + ")|(" + reLetters +
+        ")(?=" + reLetters + ")|'((?:[^']|'')+)'|('')|([$^\\\\.*+?()[\\]{}|])";
+    var pregex = new RegExp(pregexStr, "g");
+    
+    function escape(rex) {
+        return String(rex).replace(/[$\^\\.*+?()\[\]{}|]/g, "\\$");
+    }
+    function makeRegex(names, shortNames) {
+        return "(" + _.map(names.concat(shortNames), escape).join("|") + ")";
+    }
+    function makeMap(names, shortNames) {
+        var map = {};
+        for (var i = 0; i < names.length; i++) {
+            map[names[i]] = i;
+            map[shortNames[i]] = i;
+        }
+        return map;
+    }
+    var monthRegex = makeRegex(months, shortMonths),
+        dayRegex = makeRegex(days, shortDays),
+        monthMap = makeMap(months, shortMonths),
+        dayMap = makeMap(days, shortDays);
+    var numRex = "([+-]?\\d+)";
+    function number(n) { return numRex; }
+    
+    var prexs = {
+        a: function (n) {
+            return "(" + escape(_("AM")) + "|" + escape(_("PM")) + ")";
+        },
+        E: function (n) { return dayRegex; },
+        G: function (n) {
+            return "(" + escape(_("BC")) + "|" + escape(_("AD")) + ")";
+        },
+        M: function (n) { return n >= 3 ? monthRegex : numRex; },
+        D: number, d: number, F: number, H: number, h: number, K: number,
+        k: number, m: number, S: number, s: number, u: number, W: number,
+        w: number, Y: number, y: number
+        // TODO: z, Z and X
+    };
+    
+    function mnum(n) {
+        return n > 1 ? "([-+\\d]\\d{1," + (n - 1) + "})" : "(\\d{1," + n + "})";
+    }
+    
+    var mrexs = {
+        M: function (n) { return n >= 3 ? monthRegex : mnum(n); },
+        a: prexs.a, D: mnum, d: mnum, E: prexs.E, F: mnum, G: prexs.G, H: mnum,
+        h: mnum, K: mnum, k: mnum, m: mnum, S: mnum, s: mnum, u: mnum, W: mnum,
+        w: mnum, Y: mnum, y: mnum
+        // TODO: z, Z and X
+    };
+
+    function nfun(field) {
+        return function (n) {
+            return function (s, d) { d[field] = Number(s); };
+        };
+    }
+    
+    var pfuns = {
+        a: function (n) { return function (s, d) { d.pm = s === gt("PM"); }; },
+        E: function (n) { return function (s, d) {  }; },
+        G: function (n) { return function (s, d) { d.bc = s === gt("BC"); }; },
+        h: function (n) {
+            return function (s, d) { d.h2 = s === "12" ? 0 : Number(s); };
+        },
+        k: function (n) {
+            return function (s, d) { d.h = s === "24" ? 0 : Number(s); };
+        },
+        M: function (n) {
+            return n >= 3 ? function (s, d) { d.m = monthMap[s]; }
+                          : function (s, d) { d.m = s - 1; };
+        },
+        Y: function(n) {
+            return function (s, d) {
+                d.wcentury = n === 2 && s.match(/^\d\d$/);
+                d.wy = Number(s);
+            };
+        },
+        y: function (n) {
+            return function (s, d) {
+                d.century = n === 2 && s.match(/^\d\d$/);
+                d.y = Number(s);
+            };
+        },
+        D: nfun("yd"), d: nfun("d"), F: $.noop, H: nfun("h"), K: nfun("h2"),
+        m: nfun("min"), S: nfun("ms"), s: nfun("s"), u: $.noop, W: $.noop,
+        w: nfun("w")
+        // TODO: z, Z and X
+    };
+    
+    var threshold = new Date();
+    var century = Math.floor((threshold.getUTCFullYear() + 20) / 100) * 100;
+    
+    function parseDateTime(formatMatch, string) {
+        var handlers = [];
+        var rex = formatMatch.replace(pregex,
+            function (match, pfmt, mfmt, text, quote, escape) {
+                if (pfmt) {
+                    handlers.push(pfuns[pfmt.charAt(0)](pfmt.length));
+                    return prexs[pfmt.charAt(0)](pfmt.length);
+                } else if (mfmt) {
+                    handlers.push(pfuns[mfmt.charAt(0)](mfmt.length));
+                    return mrexs[mfmt.charAt(0)](mfmt.length);
+                } else if (text) {
+                    return text;
+                } else if (quote) {
+                    return "'";
+                } else if (escape) {
+                    return "\\" + escape;
+                }
+            });
+        var match = string.match(new RegExp("^\\s*" + rex + "\\s*$", "i"));
+        if (!match) return null;
+        var d = { bc: false, century: false, pm: false,
+            y: 1970, m: 0, d: 1, h: 0, h2: 0, min: 0, s: 0, ms: 0,
+            w: 1, wd: 0 };
+        for (var i = 0; i < handlers.length; i++)
+            handlers[i](match[i + 1], d);
+        if (!d.h) d.h = Number(d.h2) + (d.pm ? 12 : 0);
+        if (d.h < 0 || d.h >= 24 || d.min < 0 || d.min >= 60 ||
+            d.s < 0 || d.s >= 60 || d.ms < 0 || d.ms >= 1000)
+        {
+            return null;
+        }
+        function adjustYear(year, isCentury) {
+            if (isCentury) {
+                year = Number(year) + century;
+                var date = new Date(0);
+                date.setUTCFullYear(year - 20, d.m, d.d);
+                date.setUTCHours(d.h, d.min, d.s, d.ms);
+                if (date.getTime() > threshold.getTime()) year -= 100;
+            }
+            if (d.bc) year = 1 - year;
+            return year;
+        }
+        d.y = adjustYear(d.y);
+        d.wy = adjustYear(d.wy);
+        var date = new Date(0);
+        if ("wy" in d) {
+            date.setUTCFullYear(d.wy);
+            var jan1st = getDays(date.getTime()), start = getWeekStart(date);
+            if (7 - (jan1st - start) < api.daysInFirstWeek) start += 7;
+            date.setTime(start + 7 * d.w - 7 + (d.wd - api.weekStart + 7) % 7);
+            if (getWeekYear(date) !== Number(d.wy) ||
+                getWeek(date)     !== Number(d.w)  ||
+                date.getUTCDay()  !== Number(d.wd))
+            {
+                return null;
+            }
+        } else if ("yd" in d) {
+            if (d.yd < 0 || d.yd > (isLeapYear(d.y) ? 366 : 365)) return null;
+            date.setUTCFullYear(d.y);
+            date.setTime(date.getTime() + DAY * d.yd - DAY);
+        } else {
+            date.setUTCFullYear(d.y, d.m, d.d);
+            if (date.getUTCFullYear() !== Number(d.y) ||
+                date.getUTCMonth()    !== Number(d.m) ||
+                date.getUTCDate()     !== Number(d.d))
+            {
+                return null;
+            }
+        }
+        date.setUTCHours(d.h, d.min, d.s, d.ms);
+        return date;
+    }
+    
+    // Time zone support
+    
+    var tzRegExp = (function () {
+        function opt(s) {
+            return "(?:" + s + ")?";
+        }
+        var abbr = "([^\\d,+-]{3,})",
+            time = "(\\d+)(?::(\\d+)(?::(\\d+))?)?",
+            offset = "([+-])?" + time,
+            when = ",(?:J(\\d+)|(\\d+)|M(\\d+)\\.(\\d+)\\.(\\d+))(?:\\/" +
+                   time + ")?";
+        return new RegExp("^" + abbr + offset +
+                          opt(abbr + opt(offset) + when + when) + "$");
+    }());
+    
+    function julian(day, time) {
+        var delta = (day - 1) * DAY + time, leap = day > 31 + 28 ? DAY : 0;
+        return function (year) {
+            return Date.UTC(year, 0) + delta + (isLeapYear(year) ? leap : 0);
+        };
+    }
+    function gregorian(day, time) {
+        var delta = day * DAY + time;
+        return function (year) {
+            return Date.UTC(year, 0) + delta;
+        };
+    }
+    function monthly(month, week, day, time) {
+        if (Number(week) === 5) {
+            return function (year) {
+                var last = Date.UTC(year, month) - DAY,
+                    dayOfLast = new Date(last).getUTCDay();
+                return last - (dayOfLast - day + 7) % 7 * DAY + time;
+            };
+        } else {
+            month--;
+            var delta = week * 7 * DAY + time;
+            return function (year) {
+                var first = Date.UTC(year, month),
+                    dayOfFirst = new Date(first).getUTCDay();
+                return first + (day - dayOfFirst + 7) % 7 * DAY + delta;
+            };
+        }
+    }
+    
+    function parseTZ(tz) {
+        var m = tzRegExp.exec(tz);
+        function time(i) {
+            return m[i++] * HOUR + (m[i++] || 0) * MINUTE +
+                (m[i] || 0) * SECOND;
+        }
+        function offset(i) {
+            return m[i] === "-" ? time(i + 1) : -time(i + 1);
+        }
+        function when(i) {
+            var t = m[i + 5] ? time(i + 5) : 72e5;
+            return m[i]     ? julian(m[i], t) :
+                   m[i + 1] ? gregorian(m[i + 1], t) :
+                              monthly(m[i + 2], m[i + 3], m[i + 4], t);
+        }
+        if (m) {
+            var std = {
+                abbr: m[1],
+                isdst: false,
+                gmtoff: offset(2)
+            };
+            if (m[6]) {
+                var dst = {
+                    abbr: m[6],
+                    isdst: true,
+                    gmtoff: m[8] ? offset(7) : std.gmtoff + HOUR
+                };
+                var start = when(11), end = when(19);
+                return function (t, local) {
+                    var year = new Date(t).getUTCFullYear(),
+                        s = start(year) - (local ? 0 : std.gmtoff),
+                        e = end(year) - (local ? 0 : dst.gmtoff),
+                        isdst = s < e ? t >= s && t < e : t >= s || t < e;
+                    return isdst ? dst : std;
+                };
+            } else {
+                return function () { return std; };
+            }
+        }
+    }
+    
+    function parseTZInfo(tzinfo) {
+        if (tzinfo.slice(0, 4) !== "TZif") {
+            throw new Error("Not a zoneinfo file.");
+        }
+        // Some ISO-6659-1 characters are not mapped 1:1 in Unicode.
+        // This is a map back from Unicode to the original byte values.
+        var map = { 8364: 128, 8218: 130, 402: 131, 8222: 132, 8230: 133,
+                    8224: 134, 8225: 135, 710: 136, 8240: 137, 352: 138,
+                    8249: 139, 338: 140, 381: 142, 8216: 145, 8217: 146,
+                    8220: 147, 8221: 148, 8226: 149, 8211: 150, 8212: 151,
+                    732: 152, 8482: 153, 353: 154, 8250: 155, 339: 156,
+                    382: 158, 376: 159 },
+            pos = 0, i;
+        
+        function byte() {
+            var b = tzinfo.charCodeAt(pos++);
+            return b < 0x100 ? b : map[b];
+        }
+        
+        function uint32() {
+            return byte() * 0x1000000 + byte() * 0x10000 +
+                   byte() * 0x100 + byte();
+        }
+        
+        function int32() {
+            var n = uint32();
+            return n < 0x80000000 ? n : n - 0x100000000;
+        }
+        
+        function int64() {
+            return int32() * 0x100000000 + uint32();
+        }
+        
+        // header
+        
+        function header() {
+            if (tzinfo.slice(pos, pos + 4) !== "TZif") {
+                throw new Error("Invalid zoneinfo header.");
+            }
+            pos += 20;
+            return {
+                ttisgmtcnt: int32(),
+                ttisstdcnt: int32(),
+                leapcnt: int32(),
+                timecnt: int32(),
+                typecnt: int32(),
+                charcnt: int32()
+            };
+        }
+        
+        var tzh = header(), time;
+        
+        // use 64 bit variant if available
+        
+        var version2 = tzinfo.charAt(4) >= "2";
+        
+        if (version2) {
+            time = int64;
+            pos += tzh.timecnt * 5 + tzh.typecnt * 6 + tzh.charcnt +
+                   tzh.leapcnt * 8 + tzh.ttisstdcnt + tzh.ttisgmtcnt;
+            tzh = header();
+        } else {
+            time = int32;
+        }
+        
+        // transition times
+        
+        var transitions = [];
+        for (i = 0; i < tzh.timecnt; i++) {
+            transitions.push({ start: time() * 1000 });
+        }
+        for (i = 0; i < tzh.timecnt; i++) {
+            transitions[i].index = byte();
+        }
+        
+        // types of local time
+        
+        var ttinfos = [];
+        for (i = 0; i < tzh.typecnt; i++) {
+            ttinfos.push({
+                gmtoff: int32() * SECOND,
+                isdst: byte(),
+                abbr: byte()
+            });
+        }
+        transitions = _.map(transitions, function (t) {
+            return { start: t.start, ttinfo: ttinfos[t.index] };
+        });
+        
+        // abbreviations
+        
+        for (i = 0; i < tzh.typecnt; i++) {
+            var start = pos + ttinfos[i].abbr;
+            ttinfos[i].abbr =
+                tzinfo.slice(start, tzinfo.indexOf("\x00", start));
+        }
+        pos += tzh.charcnt;
+        
+        // ignore leap seconds, isstd flags and isgmt flags
+        
+        pos += tzh.leapcnt * (version2 ? 12 : 8) +
+               tzh.ttisstdcnt + tzh.ttisgmtcnt;
+        
+        // precomputed stuff
+        
+        var initialTTInfo = _.find(ttinfos, function (ttinfo) {
+            return !ttinfo.isdst;
+        }) || _.first(ttinfos);
+        
+        var finalTTInfo = version2 && byte() === 10 ?
+                parseTZ(tzinfo.slice(pos, tzinfo.indexOf("\n", pos))) :
+                function () {
+                    return _.last(transitions).ttinfo;
+                };
+        
+        var BIN_SIZE = AVG_YEAR / 2;
+        
+        function makeGetTTInfo(transitions, local) {
+            var firstTransition = Infinity, lastTransition = -Infinity,
+                offset;
+            
+            function getBin(t) {
+                return Math.floor((t - offset) / BIN_SIZE);
+            }
+            
+            var hash = [];
+            if (transitions.length) {
+                firstTransition = _.first(transitions).start;
+                lastTransition = _.last(transitions).start;
+                offset = firstTransition + AVG_YEAR / 4;
+                var bin = -1;
+                for (var i = 0; i < transitions.length; i++) {
+                    var index = getBin(transitions[i].start);
+                    while (bin < index) hash[++bin] = i;
+                    hash[bin] = i;
+                }
+            }
+            
+            return function (t) {
+                if (t < firstTransition) {
+                    return initialTTInfo;
+                } else if (t >= lastTransition) {
+                    return finalTTInfo(t, local);
+                } else {
+                    for (var i = hash[getBin(t)]; transitions[i].start > t; --i) {}
+                    return transitions[i].ttinfo;
+                }
+            };
+        }
+        
+        // time zone specific Date class
+        
+        function D(y, m, d, h, min, s, ms) {
+            this.d = new Date(
+                arguments.length === 0 ? new Date().getTime() + offset :
+                arguments.length === 1 ? y :
+                D.utc(Date.UTC(y, m, d, h, min, s, ms)));
+        }
+        
+        D.getTTInfo = makeGetTTInfo(transitions);
+        
+        D.localTime = function (t) { return t + D.getTTInfo(t).gmtoff; };
+        
+        var prev = initialTTInfo;
+        D.getTTInfoLocal = makeGetTTInfo(_.map(transitions, function (tr) {
+            return { start: tr.start + prev.gmtoff, ttinfo: prev = tr.ttinfo };
+        }), true);
+        
+        D.utc = function (t) { return t - D.getTTInfoLocal(t).gmtoff; };
+        
+        D.parse = function (string, format) {
+            return parseDateTime(format || api.format, string);
+        };
+        
+        D.transitions = transitions;
+        
+        return D;
+    }
+    
+    api.getTimeZone = function (name) {
+        return require(["text!io.ox/core/tz/zoneinfo/" + name])
+            .pipe(parseTZInfo);
+    };
+    
+    return api;
+    
+});

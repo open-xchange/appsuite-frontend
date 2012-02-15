@@ -105,10 +105,12 @@ exports.fileType("*").addHook("handler", function(filename) {
  * Callback for top-level tasks to report the number of generated files and the
  * build time.
  */
-exports.summary = function() {
-    var seconds = ((new Date).getTime() - exports.startTime.getTime()) / 1000;
-    console.log("Generated " + counter + (counter == 1 ? " file" : " files") +
-        " in " + seconds.toFixed(3) + "s");
+exports.summary = function(name) {
+    return function() {
+        var ms = (new Date).getTime() - exports.startTime.getTime();
+        console.log("Generated " + counter + (counter == 1 ? " file" : " files")
+            + " in " + (ms / 1000).toFixed(3) + "s by " + name);
+    };
 };
 
 /**

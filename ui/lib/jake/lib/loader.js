@@ -53,10 +53,12 @@ Loader = function () {
         CoffeeScript = require('coffee-script');
       }
       catch (e) {
-        program.die('CoffeeScript is missing! Try `npm install coffee-script`');
+        fail('CoffeeScript is missing! Try `npm install coffee-script`');
       }
     }
-    jakefile = path.join(process.cwd(), jakefile);
+    if (jakefile.indexOf('/') != 0) {
+      jakefile = path.join(process.cwd(), jakefile);
+    }
     require(jakefile);
   };
 
