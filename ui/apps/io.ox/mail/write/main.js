@@ -157,7 +157,7 @@ define.async('io.ox/mail/write/main',
 
             sections[id + 'Label'] = $('<div>')
                 .attr('data-section-label', id)
-                .addClass('label')
+                .addClass('io-ox-label')
                 .text(label + '')
                 .prepend(
                     collapsable ?
@@ -570,7 +570,7 @@ define.async('io.ox/mail/write/main',
                 $('<div>')
                 .addClass('abs io-ox-mail-write-main')
                 .append(
-                    $('<div>').addClass('label').text('Subject')
+                    $('<div>').addClass('io-ox-label').text('Subject')
                 )
                 .append(
                     $('<div>')
