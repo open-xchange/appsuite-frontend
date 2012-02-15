@@ -83,15 +83,9 @@ define('io.ox/contacts/create-view',
             var self = this,
                 meta = ['first_name',
                         'last_name',
-                        'birthday',
+                        'display_name',
                         'email1',
-                        'telephone_business1',
-                        'street_business',
-                        'postal_code_business',
-                        'city_business',
-                        'state_business',
-                        'country_business',
-                        'url'],
+                        'cellular_telephone1'],
                  header = self.createSection();
             header.addClass('formheader').append(picDummy(), picform(self));
             self.node.append(header);

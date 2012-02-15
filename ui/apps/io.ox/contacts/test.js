@@ -20,15 +20,9 @@ define("io.ox/contacts/test",
     var testObject = {
             first_name: 'Georg',
             last_name: 'Tester',
-            birthday: '10.10.1915',
-            email1: 'test@test-ox.de',
-            telephone_business1: '+49 2761-8385-0',
-            street_business: 'Martinstr. 41',
-            postal_code_business: '57462',
-            city_business: 'Olpe',
-            state_business: 'NRW',
-            country_business: 'Germany',
-            url: 'http://www.test-ox.de'
+            display_name: 'Tester, Georg',
+            email1: 'tester@test.de',
+            cellular_telephone1: '0815123456789'
         },
 
         TIMEOUT = 5000;
