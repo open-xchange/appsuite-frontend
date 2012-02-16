@@ -174,6 +174,10 @@ define("io.ox/core/tk/dialogs", function () {
         
         this.resize = function () {
             // Reset
+            nodes.popup.css({
+                width: "",
+                height: ""
+            });
             nodes.popup.find(".content").css({
                 width: "",
                 height: ""
