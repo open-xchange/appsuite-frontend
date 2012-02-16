@@ -93,15 +93,17 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
 
 
         this.addButton = function (action, label, dataaction, options) {
+            options = options || {};
+            
             var opt = {
                 label: label,
                 data: { action: action },
                 click: process,
-                dataaction: dataaction
+                dataaction: dataaction,
                 purelink: options.purelink
             };
             if (options.type) {
-                opt[type] = true;
+                opt[options.type] = true;
             }
             
             nodes.popup.find(".form-actions").append(
@@ -180,6 +182,10 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
         
         this.resize = function () {
             // Reset
+            nodes.popup.css({
+                width: "",
+                height: ""
+            });
             nodes.popup.find(".content").css({
                 width: "",
                 height: ""

@@ -68,7 +68,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
             $extendedElements.css({
                 opacity: ""
             });
-            $content.find(".extendedForm").fadeIn();
+            $extendedElements.fadeIn();
             nodes.moreButton.remove();
             $content.find("input:first").focus();
             return false; // Prevent Default
@@ -76,7 +76,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         
 
         buttonsPoint.each(function (buttonExtension) {
-            pane.addButton(buttonExtension.id, buttonExtension.label, buttonExtension.id, buttonExtension.type);
+            pane.addButton(buttonExtension.id, buttonExtension.label, buttonExtension.id, {type: buttonExtension.type});
             buttonHandlers[buttonExtension.id] = buttonExtension;
         });
         

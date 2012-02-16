@@ -97,13 +97,9 @@ define("io.ox/contacts/test",
 
                 j.it('looks for the save button and hits', function () {
                     var formFrame =  $('.io-ox-dialog-popup');
-<<<<<<< HEAD
-                    var button = formFrame.find(".default-action[data-action='save']");
-                    button.trigger('click');
-=======
                     var button = formFrame.find(".btn[data-action='save']");
-                    button.triggerHandler('click');
->>>>>>> bootstrap-buttons
+                    button.trigger('click');
+
                     j.expect(button[0]).toBeTruthy();
                 });
 
