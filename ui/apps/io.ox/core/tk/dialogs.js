@@ -22,7 +22,7 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
                 $("<div/>").addClass("content")
             )
             .append(
-                $("<div/>").addClass("controls")
+                $("<div/>").addClass("form-actions")
             );
 
     var Dialog = function (options) {
@@ -101,10 +101,10 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
                 purelink: options.purelink
             };
             if (options.type) {
-                options[type] = true;
+                opt[type] = true;
             }
             
-            nodes.popup.find(".controls").append(
+            nodes.popup.find(".form-actions").append(
                 $.button(opt)
             ).append("&nbsp;");
             return this;
@@ -164,7 +164,7 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
 
             // fix content height in case async requests draw later
             var h1 = nodes.popup.height(),
-                h2 = nodes.popup.find(".controls").outerHeight(true);
+                h2 = nodes.popup.find(".form-actions").outerHeight(true);
             nodes.popup.find(".content").css("height", (h1 - h2) + "px");
 
             if (o.easyOut) {
@@ -222,7 +222,7 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
 
             // fix content height in case async requests draw later
             var h1 = nodes.popup.height(),
-                h2 = nodes.popup.find(".controls").outerHeight(true);
+                h2 = nodes.popup.find(".form-actions").outerHeight(true);
             nodes.popup.find(".content").css("height", (h1 - h2) + "px");
             
         };
@@ -460,7 +460,7 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
         $("<div/>").addClass("content")
     )
     .append(
-        $("<div/>").addClass("controls")
+        $("<div/>").addClass("form-actions")
     );
 
 
@@ -472,7 +472,7 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
         };
 
         nodes.content = nodes.pane.find('.content');
-        nodes.controls = nodes.pane.find('.controls');
+        nodes.controls = nodes.pane.find('.form-actions');
 
         this.visible = false;
 
