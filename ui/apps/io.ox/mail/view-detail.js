@@ -135,13 +135,18 @@ define("io.ox/mail/view-detail",
                 .one("resolve", obj, resolver);
         },
 
-        draw: function (data) {
+        draw: function (data, additionalClasses) {
 
             if (!data) {
                 return $("<div>");
             }
 
             var node = $("<div>").addClass("mail-detail page");
+
+            if (additionalClasses !== undefined) {
+                node.addClass(additionalClasses);
+            }
+            node.addClass("peeenis");
             ext.point('io.ox/mail/detail').invoke('draw', node, data);
 
             return node;

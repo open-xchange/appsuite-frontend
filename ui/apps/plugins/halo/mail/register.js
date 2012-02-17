@@ -12,7 +12,7 @@
  */
 
 define("plugins/halo/mail/register",
-    ["io.ox/core/extensions"], function (ext) {
+    ["io.ox/core/extensions", "less!plugins/halo/mail/style.css"], function (ext) {
     
     "use strict";
 
@@ -35,12 +35,12 @@ define("plugins/halo/mail/register",
                 deferred.resolve();
 
             } else {
-
                 // TODO: unify with portal code (copy/paste right now)
                 require(
                     ["io.ox/core/tk/dialogs", "io.ox/mail/view-grid-template", "io.ox/mail/api"],
                     function (dialogs, viewGrid, api) {
-
+                        var sent = [];
+                        var received = [];
                         viewGrid.drawSimpleGrid(mail).appendTo($node);
 
                         new dialogs.SidePopup()
@@ -49,7 +49,7 @@ define("plugins/halo/mail/register",
                                 var msgData = $(this).data("objectData");
                                 api.get(msgData).done(function (data) {
                                     require(["io.ox/mail/view-detail"], function (view) {
-                                        popup.append(view.draw(data));
+                                        popup.append(view.draw(data, "without-borders"));
                                         data = null;
                                     });
                                 });
@@ -72,6 +72,7 @@ define("plugins/halo/mail/register",
         enhance: function (request) {
             request.appendColumns = true;
             request.columnModule = "mail";
+            request.params.limit = 100;
             request.params.columns = "600,601,602,603,604,605,606,607,608,609,610,611,612,614,652";
         }
     });
