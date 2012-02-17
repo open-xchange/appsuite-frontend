@@ -72,7 +72,7 @@ define("plugins/halo/mail/register",
         enhance: function (request) {
             request.appendColumns = true;
             request.columnModule = "mail";
-            request.params.limit = 100;
+            request.params.limit = 10;
             request.params.columns = "600,601,602,603,604,605,606,607,608,609,610,611,612,614,652";
         }
     });
