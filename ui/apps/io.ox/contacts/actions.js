@@ -56,6 +56,17 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
         }
     });
 
+
+    ext.point("io.ox/contacts/main/create-dist").extend({
+        index: 100,
+        id: "create-dist",
+        action: function (app) {
+            require(["io.ox/contacts/create-dist"], function (createDist) {
+                createDist.show();
+            });
+        }
+    });
+
     //  points
 
     ext.point("io.ox/contacts/detail/actions").extend(new ext.InlineLinks({
@@ -71,6 +82,13 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
         id: "create",
         label: "Add contact",
         ref: "io.ox/contacts/main/create"
+    }));
+
+    ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
+        index: 100,
+        id: "create-dist",
+        label: "Add distributionlist",
+        ref: "io.ox/contacts/main/create-dist"
     }));
 
     //  inline links
