@@ -646,12 +646,10 @@ define.async('io.ox/mail/write/main',
                         .css('overflow', 'hidden')
                         .append(
                             // text editor
-                            $.labelize(
-                               textarea = $('<textarea>')
-                               .attr({ name: 'content', tabindex: '4', disabled: 'disabled' })
-                               .addClass('text-editor'),
-                               'mail_content'
-                            )
+                            // FIXME: Labelize Call?
+                            textarea = $('<textarea>')
+                            .attr({ name: 'content', tabindex: '4', disabled: 'disabled' })
+                            .addClass('text-editor')
                         )
                     )
                 )
