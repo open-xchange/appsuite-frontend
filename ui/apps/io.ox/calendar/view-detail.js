@@ -197,7 +197,7 @@ define("io.ox/calendar/view-detail",
 
 
                 participants.append($("<div>")
-                        .addClass("label").text("Participants"));
+                        .addClass("io-ox-label").text("Participants"));
 
                 var plist = $("<div>").addClass("participant-list").appendTo(participants);
 
@@ -248,7 +248,7 @@ define("io.ox/calendar/view-detail",
                     // resources
                     if (resourceList.length) {
                         participants
-                            .append($("<div>").addClass("label").text("Resources"))
+                            .append($("<div>").addClass("io-ox-label").text("Resources"))
                             .append(plist = $("<div>").addClass("participant-list"));
                         // loop over resources
                         _(resourceList)
@@ -278,7 +278,7 @@ define("io.ox/calendar/view-detail",
         id: "details",
         draw: function (data) {
             var node = $("<div>").addClass('details')
-                .append($("<div>").addClass("label").text("Details"))
+                .append($("<div>").addClass("io-ox-label").text("Details"))
                 .appendTo(this);
             ext.point("io.ox/calendar/detail/details").invoke("draw", node, data);
         }

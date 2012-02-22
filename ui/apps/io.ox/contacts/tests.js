@@ -142,7 +142,7 @@ define("io.ox/contacts/tests",
                 formFrame.find(".field input[name='" + i + "']").val(testObject[i]);
             }
          // test if save button exists
-            var button = formFrame.find(".io-ox-button:contains('Save')");
+            var button = formFrame.find(".btn:contains('Save')");
             if (_.isElement(button[0])) {
                 console.log('button save exists');
             }
@@ -184,7 +184,7 @@ define("io.ox/contacts/tests",
             }
 
          // test if save button exists
-            var button = formFrame.find(".io-ox-button:contains('save')");
+            var button = formFrame.find(".btn:contains('save')");
             if (_.isElement(button[0])) {
                 console.log('button save exists');
             }

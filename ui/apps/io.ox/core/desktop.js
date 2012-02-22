@@ -84,20 +84,15 @@ define("io.ox/core/desktop",
     var core = $("#io-ox-core"),
         // top bar
         topBar = $("#io-ox-topbar"),
+        launcherSection = $("<ul>").addClass("nav").appendTo(topBar),
+        rightLauncherSection = $("<ul>").addClass("nav pull-right").appendTo(topBar),
+        
         // add launcher
         addLauncher = function (side, label, fn) {
             // construct
-            var node = $("<div>")
-            .addClass("launcher")
+            var node = $("<li><a></li>");
+            node.find("a")
             .text(label)
-            .hover(
-                function () {
-                    $(this).addClass("hover");
-                },
-                function () {
-                    $(this).removeClass("hover");
-                }
-            )
             .on("click", function () {
                 var self = $(this);
                 if (!_.isFunction(fn)) {
@@ -110,11 +105,12 @@ define("io.ox/core/desktop",
                     // set fixed width, hide label, be busy
                     self.css("width", self.width() + "px").text("\u00A0").busy();
                     // call launcher
-                    fn.call(this).done(function () {
+                    fn.call(node).done(function () {
                         // revert visual changes
                         self.idle().text(label).css("height", "");
                     });
                 }
+                return false;
             });
             // add
             var c = currentWindow, target;
@@ -124,9 +120,9 @@ define("io.ox/core/desktop",
             } else {
                 // just add
                 if (side === "left") {
-                    node.appendTo(topBar);
+                    node.appendTo(launcherSection);
                 } else {
-                    node.addClass("right").appendTo(topBar);
+                    node.appendTo(rightLauncherSection);
                 }
             }
             return node;

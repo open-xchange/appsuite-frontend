@@ -21,28 +21,24 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         
         buttonHandlers = {},
         
-        $table;
+        $form;
         
         
         $content.append($snippets.find(".fileForm").clone());
 
-        $table = $content.find("table");
+        $form = $content.find("fieldset");
         controlsPoint.each(function (controlExtension) {
             var $formLine, state = {};
             
             if (controlExtension.label) {
-                if (controlExtension.style === "large") {
-                    $formLine = $snippets.find(".largeLabelField").clone();
-                } else {
-                    $formLine = $snippets.find(".regularLabelField").clone();
-                }
-                $formLine.find(".labelCol label").attr({"for": controlExtension.id}).text(controlExtension.label);
+                $formLine = $snippets.find(".field").clone();
+                $formLine.find("label").attr({"for": controlExtension.id}).text(controlExtension.label);
             } else {
                 $formLine = $snippets.find(".noLabelField").clone();
             }
             
             if (controlExtension.draw) {
-                controlExtension.draw($formLine.find(".inputCol"), state);
+                controlExtension.draw($formLine.find(".controls"), state);
             }
 
             if (controlExtension.extendedForm) {
@@ -51,7 +47,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
 
             controlStates[controlExtension.id] = state;
 
-            $formLine.appendTo($table);
+            $formLine.appendTo($form);
             
         });
         
@@ -72,7 +68,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
             $extendedElements.css({
                 opacity: ""
             });
-            $content.find(".extendedForm").fadeIn();
+            $extendedElements.fadeIn();
             nodes.moreButton.remove();
             $content.find("input:first").focus();
             return false; // Prevent Default
@@ -80,7 +76,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         
 
         buttonsPoint.each(function (buttonExtension) {
-            pane.addButton(buttonExtension.id, buttonExtension.label, buttonExtension.id);
+            pane.addButton(buttonExtension.id, buttonExtension.label, buttonExtension.id, {type: buttonExtension.type});
             buttonHandlers[buttonExtension.id] = buttonExtension;
         });
         
@@ -123,9 +119,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         index: 10,
         label: "Title",
         draw: function (element, state) {
-            state.node = $("<input type='text' name='title'></input>").css({
-                width: "100%"
-            });
+            state.node = $("<input type='text' name='title'></input>");
             element.append(state.node);
         },
         process: function (file, state) {
@@ -143,9 +137,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         index: 20,
         label: "Link / URL",
         draw: function (element, state) {
-            state.node = $("<input type='text' name='title'></input>").css({
-                width: "100%"
-            });
+            state.node = $("<input type='text' name='title'></input>");
             element.append(state.node);
         },
         process: function (file, state) {
@@ -172,11 +164,8 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         extendedForm: true,
         index: 40,
         label: "Comment",
-        style: "large",
         draw: function (element, state) {
-            state.node = $("<textarea rows='10'></textarea>").css({
-                width: "100%"
-            });
+            state.node = $("<textarea rows='10'></textarea>").addClass("input-xlarge");
             element.append(state.node);
         },
         process: function (file, state) {
@@ -191,6 +180,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
     buttonsPoint.extend({
         id: "save",
         label: "Save",
+        type: "primary",
         perform: function (fileEntry, states, cb) {
             var savedOnce = false;
             _(states.file.node[0].files).each(function (file) {
