@@ -24,7 +24,7 @@ define("io.ox/files/view-detail",
 
     var draw = function (file) {
 
-        file.url = ox.apiRoot + "/infostore?action=document&id=" + file.id +
+        file.documentUrl = ox.apiRoot + "/infostore?action=document&id=" + file.id +
             "&folder=" + file.folder_id + "&session=" + ox.session; // TODO: Put this somewhere in the model
 
         // container & title
@@ -68,7 +68,7 @@ define("io.ox/files/view-detail",
                 name: file.filename,
                 mimetype: file.file_mimetype,
                 size: file.file_size,
-                dataURL: file.url
+                dataURL: file.documentUrl
             };
 
             ext.point("io.ox/files/details/preview").invoke("draw", node, [ fileDescription, node ]);
