@@ -99,9 +99,9 @@
     padding-right: 0em;
 }
 
-.contact-detail td.label,
-.contact-detail div.label,
-.create-contact div.label {
+.contact-detail td.io-ox-label,
+.contact-detail div.io-ox-label,
+.create-contact div.io-ox-label {
     font-size: 0.9em;
     line-height: 1em;
     color: #888;
@@ -344,7 +344,7 @@ input#image1 {
     box-shadow: 0px 0px 5px 1px @accent1;
 }
 
-.contact-detail.edit div.label, .create-contact div.label{
+.contact-detail.edit div.io-ox-label {
 	margin-right: 15px;
 	padding-top: 7px;
 	width: 150px;
@@ -360,7 +360,7 @@ input#image1 {
 	text-align: right;
 }
 
-.contact-detail.edit div.inlinelabel div.label{
+.contact-detail.edit div.inlinelabel div.io-ox-label{
 	margin-right: 0px;
 	padding-top: 0px;
 	width: auto;
@@ -368,7 +368,7 @@ input#image1 {
 	float: none;
 }
 
-.contact-detail.edit div.inlinelabel div.label:nth-child(1) {
+.contact-detail.edit div.inlinelabel div.io-ox-label:nth-child(1) {
 	margin-right: 5px;
 }
 	

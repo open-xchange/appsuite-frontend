@@ -230,14 +230,14 @@ define("io.ox/mail/view-detail",
                         .addClass("list")
                         .append(
                             // TO
-                            $("<span>").addClass("label").text("To:\u00A0")
+                            $("<span>").addClass("io-ox-label").text("To:\u00A0")
                         )
                         .append(
                             util.serializeList(data.to, true)
                         )
                         .append(
                             // CC
-                            showCC ? $("<span>").addClass("label").text(" Copy:\u00A0") : []
+                            showCC ? $("<span>").addClass("io-ox-label").text(" Copy:\u00A0") : []
                         )
                         .append(
                             util.serializeList(data.cc, true)
@@ -269,7 +269,7 @@ define("io.ox/mail/view-detail",
                         .addClass("list")
                         .append(
                              // TO
-                             $("<span>").addClass("label").text("Attachments: ")
+                             $("<span>").addClass("io-ox-label").text("Attachments: ")
                          )
                          .append(
                              util.serializeAttachments(data, attachments)

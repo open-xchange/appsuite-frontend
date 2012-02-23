@@ -157,7 +157,7 @@ define.async('io.ox/mail/write/main',
 
             sections[id + 'Label'] = $('<div>')
                 .attr('data-section-label', id)
-                .addClass('label')
+                .addClass('io-ox-label')
                 .text(label + '')
                 .prepend(
                     collapsable ?
@@ -570,7 +570,7 @@ define.async('io.ox/mail/write/main',
                 $('<div>')
                 .addClass('abs io-ox-mail-write-main')
                 .append(
-                    $('<div>').addClass('label').text('Subject')
+                    $('<div>').addClass('io-ox-label').text('Subject')
                 )
                 .append(
                     $('<div>')
@@ -646,12 +646,10 @@ define.async('io.ox/mail/write/main',
                         .css('overflow', 'hidden')
                         .append(
                             // text editor
-                            $.labelize(
-                               textarea = $('<textarea>')
-                               .attr({ name: 'content', tabindex: '4', disabled: 'disabled' })
-                               .addClass('text-editor'),
-                               'mail_content'
-                            )
+                            // FIXME: Labelize Call?
+                            textarea = $('<textarea>')
+                            .attr({ name: 'content', tabindex: '4', disabled: 'disabled' })
+                            .addClass('text-editor')
                         )
                     )
                 )
