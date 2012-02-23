@@ -28,15 +28,14 @@ define("io.ox/files/view-detail",
             "&folder=" + file.folder_id + "&session=" + ox.session; // TODO: Put this somewhere in the model
 
         // container & title
-        var element = $("<div>").addClass("file-details view")
-            .append($("<div>").addClass("title clear-title").text(file.title));
-
+        var $element = $("<div>").addClass("file-details view");
+        
         // Basic Info
         (function () {
             var container = $("<div>").addClass("basicInfo");
             var line = $("<div>");
             container.append(line);
-            element.append(container);
+            $element.append(container);
 
             ext.point("io.ox/files/details/basicInfo").each(function (extension) {
                 var count = 0;
@@ -63,7 +62,7 @@ define("io.ox/files/view-detail",
                 return;
             }
             var node = $("<div>").addClass("preview");
-            element.append(node);
+            $element.append(node);
             var fileDescription = {
                 name: file.filename,
                 mimetype: file.file_mimetype,
@@ -76,7 +75,7 @@ define("io.ox/files/view-detail",
 
         // Render Description
         if (file.description) {
-            element.append(
+            $element.append(
                 $("<div>")
                 .css({
                     // makes it readable
@@ -91,10 +90,10 @@ define("io.ox/files/view-detail",
         // Render Additional
 
         ext.point("io.ox/files/details/additional").each(function (extension) {
-            extension(file, element);
+            extension(file, $element);
         });
 
-        return element;
+        return $element;
     };
 
 
@@ -117,8 +116,8 @@ define("io.ox/files/view-detail",
         label: function () {
             return "Size";
         },
-        draw: function (field, file, element) {
-            element.text(bytesToSize(file.file_size));
+        draw: function (field, file, $element) {
+            $element.text(bytesToSize(file.file_size));
         }
     });
 
@@ -129,8 +128,8 @@ define("io.ox/files/view-detail",
         label: function (field) {
             return "Version";
         },
-        draw: function (field, file, element) {
-            element.text(file.version);
+        draw: function (field, file, $element) {
+            $element.text(file.version);
         }
     });
 
@@ -141,8 +140,8 @@ define("io.ox/files/view-detail",
         label: function () {
             return "Last Modified";
         },
-        draw: function (field, file, element) {
-            element.text(i18n.date("fulldatetime", file.last_modified));
+        draw: function (field, file, $element) {
+            $element.text(i18n.date("fulldatetime", file.last_modified));
         }
     });
 
