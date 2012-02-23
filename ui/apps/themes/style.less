@@ -34,6 +34,32 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     -webkit-tap-highlight-color: transparent;
 }
 
+/* top bar */
+
+#io-ox-topbar {
+    bottom: auto;
+    height: 30px;
+    background-color: @menu-background;
+    background-color: fade(@menu-background, 75%);
+    overflow: hidden;
+    border-bottom: 1px solid #555;
+    z-index: 2;
+}
+
+#io-ox-top-logo-small {
+    width: 63px;
+    height: 22px;
+    margin: 2px 13px 0 13px;
+    float: right;
+    background-image: url(logo-small.xpng);
+    background-repeat: no-repeat;
+}
+
+/* ------------------------------------- */
+/* ipad: better fat finger support */
+
+.touch #io-ox-topbar { height: 40px; }
+.touch #io-ox-topbar .launcher { font-size: 14px; line-height: 35px; padding: 2px 15px 5px 15px; }
 .touch #io-ox-screens { top: 42px; }
 .touch #io-ox-windowmanager .window-container-center { width: 100% !important; }
 .touch #io-ox-top-logo-small { margin-top: 6px; }
@@ -43,6 +69,32 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 .touch .scrollable .scrollable-pane { -webkit-transform: translate3d(0, 0, 0); }
 
 /* ------------------------------------- */
+
+#io-ox-topbar .launcher {
+    color: @topbar-launcher-color;
+    padding: 0px 12px 0px 12px;
+    line-height: 30px;
+    text-align: center;
+    white-space: nowrap;
+    display: inline-block !important;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+}
+
+#io-ox-topbar .launcher.right {
+    float: right;
+    display: inline-block !important;
+}
+
+#io-ox-topbar .launcher.hover {
+    color: @topbar-launcher-color-hover;
+    background-color: @topbar-launcher-background-hover;
+}
+
+#io-ox-topbar .launcher.active {
+    color: @topbar-launcher-color-active;
+    background-color: @topbar-launcher-background-active;
+}
 
 @-webkit-keyframes launcherColours {
     from { background-color: fade(@menu-background, 0%); }

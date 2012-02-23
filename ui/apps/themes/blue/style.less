@@ -16,6 +16,23 @@
     background-image: url(blue.jpg);
 }
 
+/* top bar */
+
+#io-ox-topbar {
+    bottom: auto;
+    height: 26px;
+    background-color: @menu-background;
+    background-color: fade(@menu-background, 80%);
+    padding: 0px 1px 1px 1px;
+    /*overflow: hidden;*/
+}
+
+#io-ox-topbar .launcher.active {
+    color: @menu-color-active;
+    background-color: mix(@menu-color, @menu-background, 400%/15);
+    background-color: @menu-background-active;
+}
+
 @-webkit-keyframes upsellColours {
 }
 
