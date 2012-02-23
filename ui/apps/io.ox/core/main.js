@@ -13,8 +13,8 @@
 
 define("io.ox/core/main",
     ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http",
-     "io.ox/core/api/apps", "io.ox/core/extensions", "io.ox/core/i18n",
-    "gettext!io.ox/core/main", "apps/twitterBootstrap/basics.js"], function (desktop, session, http, appAPI, ext, i18n, gt) {
+     "io.ox/core/api/apps", "io.ox/core/extensions", "io.ox/core/i18n", "twitterBootstrap/basics",
+    "gettext!io.ox/core/main"], function (desktop, session, http, appAPI, ext, i18n, gt) {
 
     "use strict";
 
