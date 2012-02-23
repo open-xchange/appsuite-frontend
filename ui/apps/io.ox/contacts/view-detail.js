@@ -35,7 +35,7 @@ define("io.ox/contacts/view-detail",
             var td = $("<td>").addClass("value"),
                 tr = $("<tr>")
                     .append(
-                        $("<td>").addClass("label").text(label)
+                        $("<td>").addClass("io-ox-label").text(label)
                     )
                     .append(td);
             if (_.isFunction(fn)) {
@@ -215,7 +215,7 @@ define("io.ox/contacts/view-detail",
         index: 100,
         id: 'contact-address',
         draw: function (data) {
-            /*$("<td>").addClass("label").text("MEIN LABLE").appendTo(this);
+            /*$("<td>").addClass("io-ox-label").text("MEIN LABLE").appendTo(this);
             $("<td>").addClass("value").text(data.telephone_business1).appendTo(this);*/
             addField(gt("Department"), data.department, this);
             addField(gt("Position"), data.position, this);

@@ -80,33 +80,33 @@ define("io.ox/files/actions", ["io.ox/core/extensions"], function (ext) {
         ref: "io.ox/files/actions/upload"
     }));
 
-    ext.point("io.ox/files/links/inline").extend(new ext.Link({
+    ext.point("io.ox/files/links/inline").extend(new ext.Button({
         id: "open",
         index: 100,
         label: "Open",
         ref: "io.ox/files/actions/open"
     }));
 
-    ext.point("io.ox/files/links/inline").extend(new ext.Link({
+    ext.point("io.ox/files/links/inline").extend(new ext.Button({
         id: "download",
         index: 200,
         label: "Download",
         ref: "io.ox/files/actions/download"
     }));
 
-    ext.point("io.ox/files/links/inline").extend(new ext.Link({
+    ext.point("io.ox/files/links/inline").extend(new ext.Button({
         id: "send",
         index: 300,
         label: "Send by E-Mail",
         ref: "io.ox/files/actions/send"
     }));
 
-    ext.point("io.ox/files/links/inline").extend(new ext.Link({
+    ext.point("io.ox/files/links/inline").extend(new ext.Button({
         id: "delete",
         index: 400,
         label: "Delete",
         ref: "io.ox/files/actions/delete",
-        attention: true
+        special: "danger"
     }));
 
 });
