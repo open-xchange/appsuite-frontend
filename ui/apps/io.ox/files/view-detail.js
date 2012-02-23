@@ -75,7 +75,6 @@ define("io.ox/files/view-detail",
         }());
 
         // Render Description
-
         if (file.description) {
             element.append(
                 $("<div>")

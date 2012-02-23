@@ -171,7 +171,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         process: function (file, state) {
             var val = state.node.val();
             if (val) {
-                file.comment = state.node.val();
+                file.description = state.node.val();
             }
         }
     });
