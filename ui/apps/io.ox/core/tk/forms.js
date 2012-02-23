@@ -245,7 +245,7 @@ define('io.ox/core/tk/forms',
             options.text = options.text || "";
 
             labelDiv = $('<div>');
-            labelDiv.addClass('io-ox-label');
+            labelDiv.addClass('label');
             if (options.classes) {
                 labelDiv.addClass(options.classes);
             }

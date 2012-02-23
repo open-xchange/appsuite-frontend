@@ -107,7 +107,7 @@ define("io.ox/contacts/edit/view-form",
                 .append(field),
             tr = $("<tr>").addClass(o.id + ' ' + o.name)
                 .append(
-                    $("<td>").addClass("io-ox-label")
+                    $("<td>").addClass("label")
                     .css({ paddingTop: '7px', width: '150px' })
                     .append($('<label>').text(o.label).attr('for', o.name + "_" + now))
                 )
@@ -921,7 +921,7 @@ define("io.ox/contacts/edit/view-form",
 //    function drawSingleFieldAdd(o) {
 //        var tr = $('<tr>'),
 //            td = $('<td>'),
-//            label = $('<td>').addClass('io-ox-label').css({
+//            label = $('<td>').addClass('label').css({
 //                'padding-top': '7px',
 //                'width': '150px'
 //            });
@@ -956,7 +956,7 @@ define("io.ox/contacts/edit/view-form",
                 for (var i = 0, len = fieldArray.length; i < len; ++i) {
                     var inline = fieldArray[i].split("/"),
                         tr = $('<tr>'),
-                        label = $('<td>').addClass('io-ox-label').css({
+                        label = $('<td>').addClass('label').css({
                             'padding-top': '7px',
                             'width': '150px'
                         }),

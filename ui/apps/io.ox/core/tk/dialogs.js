@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
+define("io.ox/core/tk/dialogs", function () {
 
     'use strict';
 
@@ -22,7 +22,7 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
                 $("<div/>").addClass("content")
             )
             .append(
-                $("<div/>").addClass("form-actions")
+                $("<div/>").addClass("controls")
             );
 
     var Dialog = function (options) {
@@ -91,24 +91,16 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
             return this;
         };
 
-
-        this.addButton = function (action, label, dataaction, options) {
-            options = options || {};
-            
-            var opt = {
-                label: label,
-                data: { action: action },
-                click: process,
-                dataaction: dataaction,
-                purelink: options.purelink
-            };
-            if (options.type) {
-                opt[options.type] = true;
-            }
-            
-            nodes.popup.find(".form-actions").append(
-                $.button(opt)
-            ).append("&nbsp;");
+        this.addButton = function (action, label, dataaction, purelink) {
+            nodes.popup.find(".controls").append(
+                $.button({
+                    label: label,
+                    data: { action: action },
+                    click: process,
+                    dataaction: dataaction,
+                    purelink: purelink
+                })
+            );
             return this;
         };
 
@@ -166,7 +158,7 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
 
             // fix content height in case async requests draw later
             var h1 = nodes.popup.height(),
-                h2 = nodes.popup.find(".form-actions").outerHeight(true);
+                h2 = nodes.popup.find(".controls").outerHeight(true);
             nodes.popup.find(".content").css("height", (h1 - h2) + "px");
 
             if (o.easyOut) {
@@ -228,7 +220,7 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
 
             // fix content height in case async requests draw later
             var h1 = nodes.popup.height(),
-                h2 = nodes.popup.find(".form-actions").outerHeight(true);
+                h2 = nodes.popup.find(".controls").outerHeight(true);
             nodes.popup.find(".content").css("height", (h1 - h2) + "px");
             
         };
@@ -466,7 +458,7 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
         $("<div/>").addClass("content")
     )
     .append(
-        $("<div/>").addClass("form-actions")
+        $("<div/>").addClass("controls")
     );
 
 
@@ -478,7 +470,7 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
         };
 
         nodes.content = nodes.pane.find('.content');
-        nodes.controls = nodes.pane.find('.form-actions');
+        nodes.controls = nodes.pane.find('.controls');
 
         this.visible = false;
 

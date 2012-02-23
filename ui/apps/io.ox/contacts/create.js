@@ -155,7 +155,7 @@ define("io.ox/contacts/create",
             top: '-10px'
         })); // TODO needs a better way for placing the notification
 
-        pane.addButton("cancel", "Cancel", "cancel", {purelink: true});
+        pane.addButton("cancel", "Cancel", "cancel", true);
         controls.append(myView.drawButtons()).on('click', function () {
             pane.close();
         });

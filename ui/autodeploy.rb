@@ -8,6 +8,5 @@
 
 watch("\.js$") { system("./build.sh debug=true") }
 watch("\.css$") { system("./build.sh debug=true") }
-watch("\.less$") { system("./build.sh debug=true") }
 watch("\.html$") { system("./build.sh debug=true") }
 watch("^doc") {system("./build.sh debug=true doc") }

@@ -75,18 +75,18 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
 
     //  inline links
 
-    ext.point("io.ox/contacts/links/inline").extend(new ext.Button({
+    ext.point("io.ox/contacts/links/inline").extend(new ext.Link({
         index: 100,
         id: 'update',
         label: 'Edit',
         ref: 'io.ox/contacts/main/update'
     }));
 
-    ext.point("io.ox/contacts/links/inline").extend(new ext.Button({
+    ext.point("io.ox/contacts/links/inline").extend(new ext.Link({
         index: 200,
         id: 'delete',
         label: 'Delete',
         ref: 'io.ox/contacts/main/delete',
-        special: "danger"
+        attention: true
     }));
 });

@@ -27,23 +27,24 @@
             click: $.noop,
             enabled: true,
             data: {},
-            css: {},
-            primary: false,
-            info: false,
-            success: false,
-            warning: false,
-            danger: false
-            
+            theme: "bright",
+            css: {}
             // other options:
             // tabIndex, id, mousedown
         }, options || {});
+
         // class name
         var className;
         if (opt.purelink === true) {
             className = "button io-ox-action-link";
         } else {
-            className = "btn" + (!opt.enabled ? " btn-disabled" : "") + (opt.primary ? " btn-primary" : "") + (opt.info ? " btn-info" : "") + (opt.success ? " btn-success" : "") + (opt.warning ? " btn-warning" : "") + (opt.danger ? " btn-danger" : "");
-            
+            className = "io-ox-button " + (!opt.enabled ? " disabled" : "");
+        }
+
+
+        if (opt.theme === "dark") {
+            // dark theme
+            className += " dark";
         }
 
         // create text node

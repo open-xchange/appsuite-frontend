@@ -129,7 +129,7 @@
     box-shadow: 0px 0px 4px 0px @outline-color;
 }
 
-.io-ox-mail-write .io-ox-label {
+.io-ox-mail-write .label {
     color: #000;
     line-height: 1.25em;
     padding: 0px 0px 5px 0px;
