@@ -14,7 +14,7 @@
 define("io.ox/core/main",
     ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http",
      "io.ox/core/api/apps", "io.ox/core/extensions", "io.ox/core/i18n",
-    "gettext!io.ox/core/main", "apps/twitterBootstrap/basics.js"], function (desktop, session, http, appAPI, ext, i18n, gt) {
+    "gettext!io.ox/core/main", "twitterBootstrap/basics"], function (desktop, session, http, appAPI, ext, i18n, gt) {
 
     "use strict";
 
@@ -64,9 +64,9 @@ define("io.ox/core/main",
     function launch() {
 
         // add small logo to top bar
-       /* $("#io-ox-topbar").append(
+        $("#io-ox-topbar").append(
             $('<div>', { id: 'io-ox-top-logo-small' })
-        ); FIXME */
+        );
 
         desktop.addLauncher("right", gt("Sign out"), function (e) {
             return logout();
@@ -219,20 +219,17 @@ define("io.ox/core/main",
                 // auto launch
                 _(autoLaunch).each(function (id) {
                     // split app/call
-                    var pair = id.split(/:/);
-                    
-                    require([pair[0] + '/main'], function (main) {
-                        var launch = main.getApp().launch(),
+                    var pair = id.split(/:/),
+                        launch = require(pair[0] + '/main').getApp().launch(),
                         call = pair[1];
-                        // explicit call?
-                        if (call) {
-                            launch.done(function () {
-                                if (this[call]) {
-                                    this[call]();
-                                }
-                            });
-                        }
-                    });
+                    // explicit call?
+                    if (call) {
+                        launch.done(function () {
+                            if (this[call]) {
+                                this[call]();
+                            }
+                        });
+                    }
                 });
                 // restore apps
                 ox.ui.App.restore();
