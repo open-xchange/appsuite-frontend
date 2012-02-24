@@ -18,7 +18,8 @@
 define("io.ox/files/view-detail",
     ["io.ox/core/extensions",
      "io.ox/core/i18n",
-     "io.ox/files/actions"], function (ext, i18n) {
+     "io.ox/files/actions",
+     "io.ox/files/api"], function (ext, i18n, actions, filesAPI) {
 
     "use strict";
 
@@ -27,75 +28,58 @@ define("io.ox/files/view-detail",
         file.documentUrl = ox.apiRoot + "/infostore?action=document&id=" + file.id +
             "&folder=" + file.folder_id + "&session=" + ox.session; // TODO: Put this somewhere in the model
 
-        // container & title
         var $element = $("<div>").addClass("file-details view");
         
-        // Basic Info
-        (function () {
-            var container = $("<div>").addClass("basicInfo");
-            var line = $("<div>");
-            container.append(line);
-            $element.append(container);
-
+        ext.point("io.ox/files/details").each(function (extension) {
+            var $row = $("<div>").addClass("row-fluid");
+            if (extension.isEnabled && !extension.isEnabled(file)) {
+                return;
+            }
+            extension.draw.call($row, file);
+            $row.appendTo($element);
+        });
+        return $element;
+    };
+    
+    
+    // Details Extensions
+    // Title
+    ext.point("io.ox/files/details").extend({
+        id: "title",
+        index: 10,
+        draw: function (file) {
+            this.append($("<div>").addClass("title clear-title").text(file.title));
+        }
+    });
+    
+    
+    // Basic Info Table
+    ext.point("io.ox/files/details").extend({
+        id: "basicInfo",
+        index: 20,
+        draw: function (file) {
+            
+            this.addClass("basicInfo");
+            var $line = $("<div>");
+            this.append($line);
+            
             ext.point("io.ox/files/details/basicInfo").each(function (extension) {
                 var count = 0;
                 _.each(extension.fields, function (index, field) {
                     var content = null;
-                    line.append($("<em>").text(extension.label(field) + ":")).append(content = $("<span>"));
+                    $line.append($("<em>").text(extension.label(field) + ":")).append(content = $("<span>"));
                     extension.draw(field, file, content);
                     count++;
                     if (count === 5) {
                         count = 0;
-                        line = $("<div>");
-                        container.append(line);
+                        $line = $("<div>");
+                        this.append($line);
                     }
                 });
             });
-
-            ext.point("io.ox/files/details").invoke("draw", line, file);
-        }());
-
-        // Content Preview, if available
-
-        (function () {
-            if (!file.filename) {
-                return;
-            }
-            var node = $("<div>").addClass("preview");
-            $element.append(node);
-            var fileDescription = {
-                name: file.filename,
-                mimetype: file.file_mimetype,
-                size: file.file_size,
-                dataURL: file.documentUrl
-            };
-
-            ext.point("io.ox/files/details/preview").invoke("draw", node, [ fileDescription, node ]);
-        }());
-
-        // Render Description
-        if (file.description) {
-            $element.append(
-                $("<div>")
-                .css({
-                    // makes it readable
-                    fontFamily: "monospace, 'Courier new'",
-                    whiteSpace: "pre-wrap",
-                    paddingRight: "2em"
-                })
-                .text(file.description)
-            );
         }
-
-        // Render Additional
-
-        ext.point("io.ox/files/details/additional").each(function (extension) {
-            extension(file, $element);
-        });
-
-        return $element;
-    };
-
+    });
+    
 
     // Basic Info Fields
 
@@ -148,10 +132,31 @@ define("io.ox/files/view-detail",
     // Basic Actions
 
     ext.point('io.ox/files/details').extend(new ext.InlineLinks({
-        index: 40,
+        index: 30,
         id: 'inline-links',
         ref: 'io.ox/files/links/inline'
     }));
+    
+    // Preview
+    
+    ext.point("io.ox/files/details").extend({
+        id: "preview",
+        index: 40,
+        isEnabled: function (file) {
+            return !!file.filename;
+        },
+        draw: function (file) {
+            this.addClass("preview");
+            var fileDescription = {
+                name: file.filename,
+                mimetype: file.file_mimetype,
+                size: file.file_size,
+                dataURL: file.documentUrl
+            };
+            
+            ext.point("io.ox/files/details/preview").invoke("draw", this, [ fileDescription, this ]);
+        }
+    });
 
     ext.point("io.ox/files/details/preview").extend({
         id: "preview",
@@ -165,6 +170,108 @@ define("io.ox/files/view-detail",
             });
         }
     });
+    
+    // Description
+    
+    ext.point("io.ox/files/details").extend({
+        id: "description",
+        index: 50,
+        isEnabled: function (file) {
+            return !!file.description;
+        },
+        draw: function (file) {
+            this.addClass("description");
+            this.append(
+                $("<div>")
+                .css({
+                    // makes it readable
+                    fontFamily: "monospace, 'Courier new'",
+                    whiteSpace: "pre-wrap",
+                    paddingRight: "2em",
+                    marginBottom: "2em"
+                })
+                .text(file.description));
+        }
+    });
+    
+    // Version List
+    
+    ext.point("io.ox/files/details").extend({
+        id: "versions",
+        isEnabled: function (file) {
+            return file.current_version;
+        },
+        draw: function (file) {
+            var $link = $("<a>", {
+                href: '#'
+            }).appendTo(this),
+            $mainContent = $("<div />"),
+            $versionTable = $("<table/>");
+            
+            $mainContent.append("No versions");
+            
+            // first let's deal with the link
+            $link.text("Show all versions").on("click", function () {
+                this.empty().append($mainContent);
+                return false;
+            });
+            
+            $versionTable.append($("<tr>")
+                .append("<th>").text("Version")
+                .append("<th>").text("File Name")
+                .append("<th>").text("Created By")
+                .append("<th>").text("Comment")
+            ).addClass("table");
+            
+            // Then let's fetch all versions and update link and table accordingly
+            filesAPI.versions(file.id, {
+                columns: "705,702,709,2"
+            }).done(function (allVersions) {
+                $mainContent.clear().append($versionTable);
+                _(allVersions).each(function (version) {
+                    $versionTable.append($("<tr>")
+                        .append("<th>").text(version.version)
+                        .append("<th>").text(version.filename)
+                        .append("<th>").text(version.creaetd_by)
+                        .append("<th>").text(version.version_comment)
+                    );
+                });
+            });
+        }
+    });
+    
+    // Upload Field
+    
+    ext.point("io.ox/files/details").extend({
+        id: 70,
+        isEnabled: function (file) {
+            return file.current_version;
+        },
+        draw: function (file) {
+            var $node = $("<div>").addClass("span4 well").appendTo(this);
+            
+            var $input = $("<input>", {
+                type: "file"
+            }).appendTo($node);
+            $node.append("<br>");
+            $("<button/>").appendTo($node).text("Upload new version").addClass("btn").on("click", function () {
+                _($input[0].files).each(function (fileData) {
+                    filesAPI.uploadNewVersion({
+                        file: fileData,
+                        id: file.id,
+                        folder: file.folder,
+                        timestamp: file.last_modified
+                    }).done(function (data) {
+                        // TODO: Redraw Everything
+                    });
+                });
+                
+                return false;
+            });
+        }
+    });
+    
+    
 
     return {
         draw: draw
