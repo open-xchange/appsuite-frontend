@@ -97,11 +97,7 @@
 /* Detail view */
 
 .mail-detail-pane {
-    background-color: #eee;
-}
-
-.mail-detail-pane > div {
-    xpadding: 0px 20px 20px 20px;
+    background-color: #e5e5e5;
 }
 
 .mail-detail {
