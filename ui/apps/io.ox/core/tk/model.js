@@ -14,15 +14,16 @@
 /*global
 define: true
 */
-define('io.ox/core/tk/model',
-    ['io.ox/core/event'], function (Events) {
+define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
 
     'use strict';
+
+    var Error, regEmail, formats, isEqual, updateComputed, Schema, Model;
 
     /**
      * General local Error class
      */
-    var Error = function (props, message) {
+    Error = function (props, message) {
         this.properties = _.isArray(props) ? props : [props];
         this.message = message;
     };
@@ -30,60 +31,61 @@ define('io.ox/core/tk/model',
     /**
      * Formats for validation
      */
-    var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
-        formats = {
-            string: function (prop, val, def) {
-                // always true!
-                return true;
-            },
-            number: function (prop, val, def) {
-                return _.isNumber(val) ||
-                    new Error(prop, _.printf('%s must be a number', def.i18n || prop));
-            },
-            array: function (prop, val, def) {
-                return _.isArray(val) ||
-                    new Error(prop, _.printf('%s must be an array', def.i18n || prop));
-            },
-            boolean: function (prop, val, def) {
-                return _.isBoolean(val) ||
-                    new Error(prop, _.printf('%s must be bool', def.i18n || prop));
-            },
-            date: function (prop, val, def) {
-                return true;
-            },
-            pastDate: function (prop, val, def) {
-                var now = _.now();
-                if (isNaN(val) && val !== '') {
-                    return new Error(prop, _.printf('%s is not a valide date', def.i18n || prop));
-                } else {
-                    return now > val ||
-                    new Error(prop, _.printf('%s must be in the past', def.i18n || prop));
-                }
+    regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
-            },
-            email: function (prop, val, def) {
-                return regEmail.test(val) ||
-                    new Error(prop, _.printf('%s must be a valid email address', def.i18n || prop));
-            },
-            url: function (prop, val, def) {
-                return true;
-            }
+    formats = {
+        string: function (prop, val, def) {
+            // always true!
+            return true;
         },
-
-        isEqual = function (newValue, previousValue) {
-            if (newValue === '' && previousValue === undefined) {
-                return true;
+        number: function (prop, val, def) {
+            return _.isNumber(val) ||
+                new Error(prop, _.printf('%s must be a number', def.i18n || prop));
+        },
+        array: function (prop, val, def) {
+            return _.isArray(val) ||
+                new Error(prop, _.printf('%s must be an array', def.i18n || prop));
+        },
+        boolean: function (prop, val, def) {
+            return _.isBoolean(val) ||
+                new Error(prop, _.printf('%s must be bool', def.i18n || prop));
+        },
+        date: function (prop, val, def) {
+            return true;
+        },
+        pastDate: function (prop, val, def) {
+            var now = _.now();
+            if (isNaN(val) && val !== '') {
+                return new Error(prop, _.printf('%s is not a valide date', def.i18n || prop));
             } else {
-                return _.isEqual(newValue, previousValue);
+                return now > val ||
+                new Error(prop, _.printf('%s must be in the past', def.i18n || prop));
             }
-        };
+
+        },
+        email: function (prop, val, def) {
+            return regEmail.test(val) ||
+                new Error(prop, _.printf('%s must be a valid email address', def.i18n || prop));
+        },
+        url: function (prop, val, def) {
+            return true;
+        }
+    };
+
+    isEqual = function (newValue, previousValue) {
+        if (newValue === '' && previousValue === undefined) {
+            return true;
+        } else {
+            return _.isEqual(newValue, previousValue);
+        }
+    };
 
     /**
      * Schema class
      */
-    function Schema(definitions) {
+    Schema = function (definitions) {
         this._definitions = definitions || {};
-    }
+    };
 
     Schema.prototype = {
 
@@ -140,16 +142,46 @@ define('io.ox/core/tk/model',
     /**
      * Model
      */
-    function Model(options) {
+
+    // yep, this could be done once upfront but we no longer pay for CPU ticks, so ...
+    var triggerTransitives = function (key) {
+        _(this._computed).each(function (o, computed) {
+            if (_(o.deps).indexOf(key) > -1) {
+                var memo = this._memoize[computed],
+                    value = this.get(computed);
+                if (!_.isEqual(memo, value)) {
+                    this.trigger('change:' + computed, computed, value);
+                    triggerTransitives.call(this, computed);
+                }
+            }
+        }, this);
+    };
+
+    Model = function (options) {
         options = options || {};
         this._data = {};
         this._previous = {};
         this._defaults = this.schema.getDefaults();
-        this.initialize(options.data);
+        this._memoize = {};
         Events.extend(this);
-    }
+        // TODO: we ALWAYS need data! do we have any options? I always forget to use key/value here
+        this.initialize(options.data || options);
+    };
+
+    Model.addComputed = function (key, /* optional */ deps, callback) {
+        if (!callback) {
+            callback = deps;
+            deps = [];
+        }
+        if (key && _.isFunction(callback)) {
+            this.prototype._computed[key] = { deps: deps, callback: callback };
+        }
+        return this;
+    };
 
     Model.prototype = {
+
+        _computed: {},
 
         schema: new Schema(),
 
@@ -159,11 +191,26 @@ define('io.ox/core/tk/model',
             // due to defaultValues, data and previous might differ.
             // however, the model is not dirty
             this._data = _.extend({}, this._defaults, _.copy(data || {}, true));
+            // memoize computed properties
+            _(this._computed).each(function (o, key) {
+                this.get(key);
+            }, this);
         },
 
         get: function (key) {
-            // return deep copy
-            return _.copy(key !== undefined ? this._data[key] : this._data, true);
+            if (key === undefined) {
+                // get all values
+                return _.copy(this._data, true);
+            } else if (this._computed[key] === undefined) {
+                // get single value
+                return _.copy(this._data[key], true);
+            } else {
+                // get computed value
+                var o = this._computed[key],
+                    params = _(o.deps).map(this.get, this),
+                    value = o.callback.apply(this, params);
+                return (this._memoize[key] = value);
+            }
         },
 
         set: function (key, value) {
@@ -188,7 +235,10 @@ define('io.ox/core/tk/model',
             }
             // update
             this._data[key] = value;
+            // trigger change event for property and global change
             this.trigger('change:' + key + ' change', key, value);
+            // trigger change event for computed properties
+            triggerTransitives.call(this, key);
         },
 
         isDirty: function () {
@@ -305,8 +355,7 @@ define('io.ox/core/tk/model',
         }()),
 
         // store method must be replaced by custom handler
-        store: function (data, changes) {
-        },
+        store: function (data, changes) { },
 
         // destructor
         destroy: function () {
@@ -314,6 +363,7 @@ define('io.ox/core/tk/model',
             this._data = null;
             this._previous = null;
             this._defaults = null;
+            this._memoize = null;
         }
     };
 

@@ -1,0 +1,4 @@
+.without-borders {
+    border: none !important;
+    box-shadow: none !important;
+}

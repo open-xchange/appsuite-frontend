@@ -61,6 +61,13 @@ define.async('io.ox/core/api/apps',
                         title: 'Upgrades',
                         count: 1,
                         group: 'Your Apps'
+                    },
+                    {
+                        // special 'Augenwischerei' category
+                        id: 'mockIntegration',
+                        title: 'Parallels Marketplace',
+                        count: 2,
+                        group: 'Your Apps'
                     }
                 ].concat(
                     // loop over categories and add count per category

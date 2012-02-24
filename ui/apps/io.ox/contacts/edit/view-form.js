@@ -34,7 +34,7 @@ define('io.ox/contacts/edit/view-form',
         }),
         man = (parent.find('.mandatory')).length,
         empty = el.length + man;
-        console.log(empty);
+//        console.log(empty);
         return empty;
     };
 
@@ -188,7 +188,7 @@ define('io.ox/contacts/edit/view-form',
         var addressFormat = 'street,postal_code/city,country,state'.split(','),
             addressGroop = '_' + (options.pointName.split('-'))[1],
             self = this;
-        console.log(addressGroop);
+//        console.log(addressGroop);
         _.each(addressFormat, function (line, index) {
             var lineFormat = line.split(/\//);
             if (lineFormat.length === 1) {
@@ -357,6 +357,7 @@ define('io.ox/contacts/edit/view-form',
         draw: function (app) {
             var self = this,
                 meta;
+//            console.log(this);
             if (this.getModel()) {
                 meta = {
                     'contact-personal': ['title', 'first_name', 'last_name', 'display_name', 'second_name', 'suffix', 'nickname', 'birthday'],

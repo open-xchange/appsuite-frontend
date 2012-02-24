@@ -21,6 +21,7 @@ define("io.ox/files/main",
      "io.ox/core/tk/upload",
      "io.ox/core/tk/dialogs",
      "io.ox/help/hints",
+     "twitterBootstrap/basics",
      "less!io.ox/files/style.css"
     ], function (viewDetail, api, commons, VGrid, upload, dialogs, hints) {
 

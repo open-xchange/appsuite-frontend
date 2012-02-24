@@ -20,14 +20,9 @@ define("io.ox/contacts/test",
     var testObject = {
             first_name: 'Georg',
             last_name: 'Tester',
-            company: 'OX',
-            department: 'OX7-dev',
-            position: 'small cog in a big wheel',
-            profession: 'developer',
-            street_business: 'Martinstr. 41',
-            postal_code_business: '57462',
-            city_business: 'Olpe',
-            telephone_business1: '+49 2761-8385-0'
+            display_name: 'Tester, Georg',
+            email1: 'tester@test.de',
+            cellular_telephone1: '0815123456789'
         },
 
         TIMEOUT = 5000;
@@ -95,15 +90,16 @@ define("io.ox/contacts/test",
                 j.it('looks for the form and autofills ', function () {
                     var formFrame =  $('.io-ox-dialog-popup');
                     for (var i in testObject) {
-                        formFrame.find(".field input[name='" + i + "']").val(testObject[i]);
+                        formFrame.find(".input input[data-property='" + i + "']").val(testObject[i]).trigger('change');
                     }
                     j.expect(formFrame[0]).toBeTruthy();
                 });
 
                 j.it('looks for the save button and hits', function () {
                     var formFrame =  $('.io-ox-dialog-popup');
-                    var button = formFrame.find(".io-ox-button[data-action='save']");
-                    button.triggerHandler('click');
+                    var button = formFrame.find(".btn[data-action='save']");
+                    button.trigger('click');
+
                     j.expect(button[0]).toBeTruthy();
                 });
 
@@ -184,7 +180,7 @@ define("io.ox/contacts/test",
                     });
 
                     j.waitsFor(function () {
-                        dialog = $('.io-ox-dialog-popup .io-ox-button[data-action="delete"]');
+                        dialog = $('.io-ox-dialog-popup .btn[data-action="delete"]');
                         if (dialog[0]) {
                             return true;
                         }

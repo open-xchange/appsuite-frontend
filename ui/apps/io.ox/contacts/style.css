@@ -99,8 +99,9 @@
     padding-right: 0em;
 }
 
-.contact-detail td.label,
-.contact-detail div.label {
+.contact-detail td.io-ox-label,
+.contact-detail div.io-ox-label,
+.create-contact div.io-ox-label {
     font-size: 0.9em;
     line-height: 1em;
     color: #888;
@@ -174,6 +175,16 @@
 	float: right;
 }
 
+
+.create-contact .picture {
+    width: 100px;
+    height: 80px;
+    display: inline-block;
+    float: left;
+    background-position: right top;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 
 /*update form*/
 
@@ -275,11 +286,11 @@ input#image1 {
 	width: 300px;
 }
 
-.contact-detail input{
+.contact-detail input, .create-contact input{
 	width: 200px;
 }
 
-.contact-detail.edit .section {
+.contact-detail.edit .section, .create-contact .section {
 	margin-bottom: 20px;
 }
 	
@@ -298,11 +309,11 @@ input#image1 {
 	margin-bottom: 5px;
 }
 
-.contact-detail.edit .section-group {
+.contact-detail.edit .section-group, .create-contact .section-group{
 	margin-bottom: 5px;
 }
 
-.contact-detail.edit div.input > input[type="text"] {
+.contact-detail.edit div.input > input[type="text"]{
 	font-size: 14px;
 	width: 300px;
     color: black;
@@ -328,12 +339,12 @@ input#image1 {
 	width: 109px;
 }
 
-.contact-detail.edit .input > input[type="text"]:focus {
+.contact-detail.edit .input > input[type="text"]:focus{
 	border-color: transparent;
     box-shadow: 0px 0px 5px 1px @accent1;
 }
 
-.contact-detail.edit div.label {
+.contact-detail.edit div.io-ox-label {
 	margin-right: 15px;
 	padding-top: 7px;
 	width: 150px;
@@ -349,7 +360,7 @@ input#image1 {
 	text-align: right;
 }
 
-.contact-detail.edit div.inlinelabel div.label{
+.contact-detail.edit div.inlinelabel div.io-ox-label{
 	margin-right: 0px;
 	padding-top: 0px;
 	width: auto;
@@ -357,13 +368,13 @@ input#image1 {
 	float: none;
 }
 
-.contact-detail.edit div.inlinelabel div.label:nth-child(1) {
+.contact-detail.edit div.inlinelabel div.io-ox-label:nth-child(1) {
 	margin-right: 5px;
 }
 	
 /*form head*/
 
-.contact-detail.edit .section.formheader {
+.contact-detail.edit .section.formheader, .create-contact .section.formheader {
 	height: 100px;
 	border-bottom: 1px solid #eee;
 }
@@ -381,7 +392,13 @@ input#image1 {
 	float: right;
 }
 
-.contact-detail.edit #contactUploadImage, .contact-detail.edit #contactUploadImage input{
+ .create-contact .section.formheader .saveButton {
+ 	margin-top: 50px;
+ 	float: right;
+ }
+	
+.contact-detail.edit #contactUploadImage, .contact-detail.edit #contactUploadImage input,
+.create-contact #contactUploadImage, .create-contact #contactUploadImage input{
 	width: 0px;
 	height: 0px;
 }

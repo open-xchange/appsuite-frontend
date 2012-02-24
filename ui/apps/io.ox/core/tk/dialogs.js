@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/tk/dialogs", function () {
+define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
 
     'use strict';
 
@@ -22,7 +22,7 @@ define("io.ox/core/tk/dialogs", function () {
                 $("<div/>").addClass("content")
             )
             .append(
-                $("<div/>").addClass("controls")
+                $("<div/>").addClass("form-actions")
             );
 
     var Dialog = function (options) {
@@ -75,6 +75,10 @@ define("io.ox/core/tk/dialogs", function () {
             return nodes.popup.find(".content");
         };
 
+        this.getContentControls = function () {
+            return nodes.popup.find(".controls");
+        };
+
         this.text = function (str) {
             var p = nodes.popup.find(".content");
             p.find(".plain-text").remove();
@@ -87,15 +91,24 @@ define("io.ox/core/tk/dialogs", function () {
             return this;
         };
 
-        this.addButton = function (action, label, dataaction) {
-            nodes.popup.find(".controls").append(
-                $.button({
-                    label: label,
-                    data: { action: action },
-                    click: process,
-                    dataaction: dataaction
-                })
-            );
+
+        this.addButton = function (action, label, dataaction, options) {
+            options = options || {};
+            
+            var opt = {
+                label: label,
+                data: { action: action },
+                click: process,
+                dataaction: dataaction,
+                purelink: options.purelink
+            };
+            if (options.type) {
+                opt[options.type] = true;
+            }
+            
+            nodes.popup.find(".form-actions").append(
+                $.button(opt)
+            ).append("&nbsp;");
             return this;
         };
 
@@ -103,6 +116,10 @@ define("io.ox/core/tk/dialogs", function () {
             if (e.which === 27) {
                 process("cancel");
             }
+        };
+
+        this.close = function () {
+            process("cancel");
         };
 
         this.show = function (callback) {
@@ -139,6 +156,7 @@ define("io.ox/core/tk/dialogs", function () {
                 // use fixed top position
                 nodes.popup.css({
                     width: dim.width + "px",
+                    height: dim.height + "px",// TODO review the way of sizedetection
                     top: o.top || "0px"
                 });
             }
@@ -148,7 +166,7 @@ define("io.ox/core/tk/dialogs", function () {
 
             // fix content height in case async requests draw later
             var h1 = nodes.popup.height(),
-                h2 = nodes.popup.find(".controls").outerHeight(true);
+                h2 = nodes.popup.find(".form-actions").outerHeight(true);
             nodes.popup.find(".content").css("height", (h1 - h2) + "px");
 
             if (o.easyOut) {
@@ -164,6 +182,10 @@ define("io.ox/core/tk/dialogs", function () {
         
         this.resize = function () {
             // Reset
+            nodes.popup.css({
+                width: "",
+                height: ""
+            });
             nodes.popup.find(".content").css({
                 width: "",
                 height: ""
@@ -206,7 +228,7 @@ define("io.ox/core/tk/dialogs", function () {
 
             // fix content height in case async requests draw later
             var h1 = nodes.popup.height(),
-                h2 = nodes.popup.find(".controls").outerHeight(true);
+                h2 = nodes.popup.find(".form-actions").outerHeight(true);
             nodes.popup.find(".content").css("height", (h1 - h2) + "px");
             
         };
@@ -444,7 +466,7 @@ define("io.ox/core/tk/dialogs", function () {
         $("<div/>").addClass("content")
     )
     .append(
-        $("<div/>").addClass("controls")
+        $("<div/>").addClass("form-actions")
     );
 
 
@@ -456,7 +478,7 @@ define("io.ox/core/tk/dialogs", function () {
         };
 
         nodes.content = nodes.pane.find('.content');
-        nodes.controls = nodes.pane.find('.controls');
+        nodes.controls = nodes.pane.find('.form-actions');
 
         this.visible = false;
 

@@ -86,22 +86,20 @@ $(document).ready(function () {
         // hide login dialog
         $("#io-ox-login-screen").hide();
         $(this).busy();
-        // get configuration
-        var config = require("io.ox/core/config");
-        config.load()
-            .done(function () {
-                // Set user's language (as opposed to the browser's language)
-                var lang = config.get("language");
-                require(["io.ox/core/gettext"])
-                    .pipe(function (gt) {
-                        gt.setLanguage(lang);
-                        return require(["themes", "io.ox/core/main"]);
-                    }).done(function (themes, main) {
-                        themes.set("default");
-                        // go!
-                        main.launch();
-                    });
+        // get configuration & core
+        require("io.ox/core/config").load()
+        .done(function () {
+            // Set user's language (as opposed to the browser's language)
+            var lang = require("io.ox/core/config").get("language");
+            require("io.ox/core/gettext").setLanguage(lang);
+            $.when(
+                require(["io.ox/core/main"]),
+                require("themes").set("default")
+            ).done(function (core) {
+                // go!
+                core.launch();
             });
+        });
     };
 
     // default success handler

@@ -27,18 +27,23 @@
             click: $.noop,
             enabled: true,
             data: {},
-            theme: "bright",
-            css: {}
+            css: {},
+            primary: false,
+            info: false,
+            success: false,
+            warning: false,
+            danger: false
+            
             // other options:
             // tabIndex, id, mousedown
         }, options || {});
-
         // class name
-        var className = "io-ox-button" + (!opt.enabled ? " disabled" : "");
-
-        if (opt.theme === "dark") {
-            // dark theme
-            className += " dark";
+        var className;
+        if (opt.purelink === true) {
+            className = "button io-ox-action-link";
+        } else {
+            className = "btn" + (!opt.enabled ? " btn-disabled" : "") + (opt.primary ? " btn-primary" : "") + (opt.info ? " btn-info" : "") + (opt.success ? " btn-success" : "") + (opt.warning ? " btn-warning" : "") + (opt.danger ? " btn-danger" : "");
+            
         }
 
         // create text node
@@ -51,9 +56,16 @@
         }
 
         // create button
-        var button = $("<button/>").addClass(className).append(
-            $("<span/>").append(text)
-        ).on(
+        var button;
+        if (opt.purelink === true) {
+            button = $("<a>").addClass(className).append(text);
+
+        } else {
+            button = $("<button/>").addClass(className).append(
+                $("<span/>").append(text)
+                );
+        }
+        button.on(
         "click", opt.data, opt.click
         );
 

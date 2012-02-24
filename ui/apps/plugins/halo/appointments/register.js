@@ -15,7 +15,7 @@ define("plugins/halo/appointments/register",
     ["io.ox/core/extensions"], function (ext) {
 
     "use strict";
-
+    
     // Taken From Calendar API
     var DAY = 60000 * 60 * 24;
 
