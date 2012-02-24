@@ -37,14 +37,14 @@ define("io.ox/core/main",
 
         function off() {
             if (count === 0 && timer === null) {
-                $("#io-ox-refresh-icon").removeClass("progress");
+                $("#io-ox-refresh-icon").removeClass("io-ox-progress");
             }
         }
 
         http.on("start", function () {
             if (count === 0) {
                 if (timer === null) {
-                    $("#io-ox-refresh-icon").addClass("progress");
+                    $("#io-ox-refresh-icon").addClass("io-ox-progress");
                 }
                 clearTimeout(timer);
                 timer = setTimeout(function () {

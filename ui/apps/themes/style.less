@@ -106,16 +106,16 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 }
 
 @-webkit-keyframes launcherColours {
-    from { background-color: fade(@menu-background, 0%); }
-      to { background-color: @topbar-progress-color; }
+    from { background-color: transparent; color: #aaa; }
+      to { background-color: @topbar-progress-color; color: #fff; }
 }
 
 @-moz-keyframes launcherColours {
-    from { background-color: fade(@menu-background, 0%); }
-      to { background-color: @topbar-progress-color; }
+    from { background-color: transparent; color: #aaa; }
+      to { background-color: @topbar-progress-color; color: #fff; }
 }
 
-#io-ox-topbar .launcher.progress {
+#io-ox-topbar .launcher.io-ox-progress {
     -moz-animation-direction: alternate;
     -moz-animation-duration: 0.75s;
     -moz-animation-iteration-count: infinite;
