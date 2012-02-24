@@ -218,10 +218,17 @@ define.async('io.ox/mail/write/main',
             });
         };
 
-        function drawAutoCompleteItem(node, data) {
+        function highlight(text, query) {
+            return String(text).replace(/</g, '&lt;')
+                .replace(new RegExp(query, 'i'), '<b>' + query + '</b>');
+        }
+
+        function drawAutoCompleteItem(node, data, query) {
 
             var img = $('<div>').addClass('contact-image'),
-                url = contactsUtil.getImage(data.contact);
+                url = contactsUtil.getImage(data.contact),
+                name = highlight(data.display_name, query),
+                email = highlight(data.email, query);
 
             if (Modernizr.backgroundsize) {
                 img.css('backgroundImage', 'url(' + url + ')');
@@ -231,13 +238,11 @@ define.async('io.ox/mail/write/main',
                 );
             }
 
-            node.addClass('io-ox-mail-write-contact')
-            .append(img)
-            .append(
-                $('<div>').addClass('person-link ellipsis')
-                .text(data.display_name + '\u00A0')
-            )
-            .append($('<div>').addClass('ellipsis').text(data.email));
+            node.addClass('io-ox-mail-write-contact').append(
+                img,
+                $('<div>').addClass('person-link ellipsis').html(name + '\u00A0'),
+                $('<div>').addClass('ellipsis').html(email)
+            );
         }
 
         // drawAutoCompleteItem and drawContact
@@ -331,24 +336,32 @@ define.async('io.ox/mail/write/main',
                     $('<input>', {
                         type: 'text',
                         tabindex: '2',
-                        autocapitalize: 'off',
-                        autocomplete: 'off',
-                        autocorrect: 'off',
                         id: 'writer_field_' + id
                     })
                     .attr('data-type', id) // not name=id!
                     .addClass('discreet')
                     .autocomplete({
                         source: function (query) {
-                            return contactsAPI.autocomplete(query);
+                            return contactsAPI.autocomplete(query)
+                                .pipe(function (data) {
+                                    // remove duplicates
+                                    var hash = {};
+                                    $('input[name=' + id + ']').map(function () {
+                                        var rcpt = mailUtil.parseRecipient($(this).val())[1];
+                                        hash[rcpt] = true;
+                                    });
+                                    return _(data).filter(function (o) {
+                                        return hash[o.email] === undefined;
+                                    });
+                                });
                         },
                         stringify: function (data) {
                             return data.display_name ?
                                 '"' + data.display_name + '" <' + data.email + '>' :
                                 data.email;
                         },
-                        draw: function (data) {
-                            drawAutoCompleteItem.call(null, this, data);
+                        draw: function (data, query) {
+                            drawAutoCompleteItem.call(null, this, data, query);
                         },
                         click: function (e) {
                             copyRecipients.call(null, id, $(this));
@@ -519,8 +532,7 @@ define.async('io.ox/mail/write/main',
         function setSignature(e) {
 
             var index = e.data.index,
-                signature, val, pos, $l, text,
-                top;
+                signature, text;
 
             if (currentSignature) {
                 // remove current signature from editor
@@ -537,6 +549,7 @@ define.async('io.ox/mail/write/main',
                 currentSignature = text;
             }
         }
+
         function fnSetSignature(e) {
             e.preventDefault();
             setSignature(e);
@@ -590,6 +603,8 @@ define.async('io.ox/mail/write/main',
                                         e.preventDefault();
                                         editor.focus();
                                     }
+                                })
+                                .on('keyup', function () {
                                     app.getWindow().setTitle($.trim($(this).val()));
                                 }),
                                 'mail_subject'

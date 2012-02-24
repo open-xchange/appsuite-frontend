@@ -21,7 +21,7 @@ define('io.ox/core/tk/autocomplete', function () {
     $.fn.autocomplete = function (o) {
 
         o = $.extend({
-            minLength: 2,
+            minLength: 1,
             maxResults: 20,
             delay: 200,
             source: null,
@@ -115,7 +115,7 @@ define('io.ox/core/tk/autocomplete', function () {
                                 .addClass('autocomplete-item')
                                 .data('data', data)
                                 .on('click', { index: index }, fnSelectItem);
-                            o.draw.call(node, data);
+                            o.draw.call(node, data, query);
                             node.appendTo(scrollpane);
                         });
                         // leads to results
@@ -185,7 +185,12 @@ define('io.ox/core/tk/autocomplete', function () {
                     .on('keydown', fnKeyDown)
                     .on('keyup', fnKeyUp)
                     .on('blur', o.blur)
-                    .on('blur', fnBlur);
+                    .on('blur', fnBlur)
+                    .attr({
+                        autocapitalize: 'off',
+                        autocomplete: 'off',
+                        autocorrect: 'off'
+                    });
             });
 
             popup.on('touchstart mousedown', blurOff).on('touchend mouseup', blurOn);
