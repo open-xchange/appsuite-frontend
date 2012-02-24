@@ -55,45 +55,8 @@ define("io.ox/mail/view-detail",
 
             // HTML content?
             if (html !== null) {
-
-                var iframeGUID = _.now();
-
-                $("<iframe>", {
-                        id: "tmp-iframe-" + iframeGUID,
-                        src: "blank.html",
-                        frameborder: "0",
-                        marginwidth: "0",
-                        marginheight: "0"
-                    })
-                    .css({
-                        width: "100%"
-                    })
-                    .one("load", iframeGUID, function (e) {
-                        var self = this,
-                            doc = this.contentDocument,
-                            fontSize = Modernizr.touch ? 14 : 12,
-                            css = 'body { font-family: Arial, Helvetica, sans-serif; font-size: ' + fontSize + 'px; line-height: ' + (fontSize + 2) + 'px; }' + "\n" +
-                                'pre { white-space: pre; white-space: pre-wrap; }' + "\n" +
-                                'blockquote { margin: 1em 0 1em 0; padding: 1px 1em 1px 39px; border-left: 1px solid #00a0cd; background-color: #f5f5f5; color: #555; }';
-                        // this timeout is needed for chrome. seems that there is some kind of
-                        // recursion protection (too close "load" events triggered by the same object).
-                        setTimeout(function () {
-                            // inject onload handler
-                            html = html
-                                .replace(/<\/head>/, '  <style type="text/css">' + css + '</style>' + "\n</head>")
-                                .replace(/<body/, '<body onload="parent.iframeResize(' + e.data + ', document);"')
-                                .replace(/(>|\n)([ ]+)/g, "$1 ") // improve readability of <pre> blocks
-                                .replace(/\n[ ]/g, "\n");
-                            // write content to document
-                            doc.open();
-                            doc.write(html);
-                            doc.close();
-                            // don't leak
-                            html = text = doc = data = att = content = null;
-                        }, 1);
-                    })
-                    .appendTo(content);
-
+                // no need for iframe with the new api
+                $(html).appendTo(content);
             }
             else if (text !== null) {
 
