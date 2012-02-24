@@ -120,6 +120,8 @@ define('io.ox/core/commons', [], function () {
                 .updateTitle(app.getWindow())
                 .updateGrid(grid)
                 .setType(type);
+            // add visual caret
+            app.getWindow().nodes.title.append($('<b>').addClass('caret'));
             // hash support
             app.getWindow().on('show', function () {
                 grid.selection.retrigger();
