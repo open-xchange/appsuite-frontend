@@ -23,22 +23,19 @@ define('io.ox/mail/view-grid-template',
         main: {
             build: function () {
                 var from, date, priority, subject, attachment, threadSize, flag;
-                this.addClass('mail')
-                    .append(
-                        $('<div>')
-                            .append(date = $('<span>').addClass('date'))
-                            .append(from = $('<span>').addClass('from'))
+                this.addClass('mail').append(
+                    $('<div>').append(
+                        date = $('<span>').addClass('date'),
+                        from = $('<span>').addClass('from')
+                    ),
+                    $('<div>').append(
+                        threadSize = $('<div>').addClass('threadSize'),
+                        flag = $('<div>').addClass('flag').text('\u00A0'),
+                        attachment = $('<span>').addClass('attachment'),
+                        priority = $('<span>').addClass('priority'),
+                        subject = $('<span>').addClass('subject')
                     )
-                    .append(
-                        $('<div>')
-                            .append(threadSize = $('<div>').addClass('threadSize'))
-                            .append(attachment = $('<span>').addClass('attachment'))
-                            .append(priority = $('<span>').addClass('priority'))
-                            .append(subject = $('<span>').addClass('subject'))
-                    )
-                    .append(
-                        flag = $('<div>').addClass('flag abs')
-                    );
+                );
                 return { from: from, date: date, priority: priority, subject: subject, attachment: attachment, threadSize: threadSize, flag: flag };
             },
             set: function (data, fields, index) {
@@ -51,8 +48,9 @@ define('io.ox/mail/view-grid-template',
                 }
                 fields.from.empty().append(util.getFrom(data.from), true);
                 fields.date.text(util.getTime(data.received_date));
-                fields.flag.get(0).className = 'flag abs flag_' + data.color_label;
                 fields.attachment.css('display', data.attachment ? '' : 'none');
+                fields.flag.get(0).className = 'flag flag_' + data.color_label;
+                //this.addClass('flag_' + data.color_label);
                 if (util.isUnread(data)) {
                     this.addClass('unread');
                 }

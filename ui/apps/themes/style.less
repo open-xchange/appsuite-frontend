@@ -42,7 +42,6 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     background-color: @menu-background;
     background-color: fade(@menu-background, 75%);
     overflow: hidden;
-    border-bottom: 1px solid #555;
     z-index: 2;
     /* --- */
     background-color: #2C2C2C;
@@ -178,7 +177,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 /* window manager */
 
 #io-ox-screens {
-    top: 41px;
+    top: 40px;
     overflow: hidden;
 }
 
@@ -220,13 +219,11 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     position: absolute;
     top: 0px;
     right: 0px;
-    height: 48px;
+    height: 49px;
     left: 0px;
 
     color: @head-color;
 
-    border-top: 1px solid mix(@head-color, @head-background, 75%);
-    border-top-color: fade(@head-color, 30%);
     border-bottom: 1px solid #d5d5d5;
 
     -webkit-user-select: none;
@@ -830,9 +827,18 @@ span.hint {
 }
 
 .io-ox-inline-links a {
-    color: @inline-link-color;
-    text-decoration: underline;
+    color: #ccc;
+    text-decoration: none;
     padding: 0.5em 0.5em 0.5em 0em;
+    outline: 0;
+}
+
+div:hover > .io-ox-inline-links a {
+    color: @inline-link-color;
+}
+
+.io-ox-inline-links a:hover {
+    text-decoration: underline;
 }
 
 .io-ox-inline-links a.attention {

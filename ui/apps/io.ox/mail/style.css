@@ -26,12 +26,24 @@
     padding: 6px 2px 6px 2px;
 }
 
-.vgrid-cell.mail .flag {
-    left: auto;
-    bottom: -1px;
-    width: 4px;
-    border-left: 1px solid white;
-    height: auto;
+.vgrid-cell.mail .flag,
+.mail-detail .flag {
+    min-width: 2em;
+    padding: 0 0.5em 0 0.5em;
+    margin-left: 1em;
+    border-radius: 5px;
+    display: inline-block;
+    box-sizing: border-box;
+    float: right;
+}
+
+.rgba .vgrid-cell.mail .flag,
+.rgba .mail-detail .flag  {
+    border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.vgrid-cell.mail .flag.flag_0 {
+    display: none;
 }
 
 .vgrid-cell.mail.unread {
@@ -52,8 +64,11 @@
     font-weight: bold;
 }
 
-.vgrid-cell.mail .from {
-    color: @link-color-dark;
+.vgrid-cell.mail .from {}
+
+.vgrid-cell.mail .from span.person {
+    color: black;
+    font-weight: 500;
 }
 
 .vgrid-cell.mail.me .from {
@@ -62,7 +77,8 @@
 }
 
 .vgrid-cell.mail .date {
-    color: #888;
+    color: #777;
+    font-weight: 200;
     display: inline-block;
     float: right;
 }
@@ -75,17 +91,17 @@
 }
 
 .vgrid-cell.mail .threadSize {
-    color: #888;
-    font-weight: bold;
-    padding: 0 0.75em 0 0.75em;
+    color: #aaa;
+    min-width: 1em;
+    font-weight: normal;
+    padding: 0 0.5em 0 0.5em;
     margin-left: 1em;
     display: inline-block;
     float: right;
 }
 
 .borderradius .vgrid-cell.mail .threadSize {
-    background-color: #e0e0e0;
-    color: #888;
+    background-color: #f0f0f0;
     text-align: center;
     border-radius: 5px;
 }
@@ -97,7 +113,7 @@
 /* Detail view */
 
 .mail-detail-pane {
-    background-color: #e5e5e5;
+    background-color: #fff;
 }
 
 .mail-detail {
@@ -110,18 +126,13 @@
 }
 
 .mail-detail.page {
-    border: 1px solid #bbb;
-    padding: 20px;
-    margin: 20px 20px 0px 20px;
+    border-bottom: 1px solid #eee;
+    padding: 30px 40px 30px 40px;
     min-height: 200px;
-    max-width: 900px;
-    -moz-box-shadow: 0px 5px 8px -6px black;
-    -webkit-box-shadow: 0px 5px 8px -6px black;
-    box-shadow: 0px 5px 8px -6px black;
 }
 
 .mail-detail.page:last-child {
-    margin-bottom: 20px;
+    border-bottom: 0px none;
 }
 
 .mail-detail.page .infoblock {
@@ -142,11 +153,14 @@
     float: right;
 }
 
-.mail-detail .subject {
+.mail-detail .subject, .mail-detail .flag {
     font-size: 16pt;
     margin: 0.2em 0 0.4em 0;
     word-wrap: break-word;
 }
+
+.mail-detail .flag { min-width: 1.5em; }
+.mail-detail .flag_0 { display: none; }
 
 .mail-detail .priority {
     font-weight: bold;
@@ -203,21 +217,25 @@
     border-color: #888 !important;
 }
 
-.mail-detail .flag {
-    right: auto;
-    width: 4px;
-}
-
 /* flag colors */
-.flag_0  { background-color: transparent; visibility: hidden; }
-.flag_1  { background-color: #DC143C; } /* red old: 913F3F  Crimson*/
-.flag_2  { background-color: #3F6B91; } /* blue */
-.flag_3  { background-color: #6D913F; } /* green */
-.flag_4  { background-color: #888; } /* dark gray */
-.flag_5  { background-color: #8B4513; } /* brown */
-.flag_6  { background-color: #0FF; } /* aqua */
-.flag_7  { background-color: #FF8c00; } /* orange */
-.flag_8  { background-color: #FF69B4; } /* pink */
-.flag_9  { background-color: #87CEFA; } /* light blue */
-.flag_10 { background-color: #fc0; } /* yellow */
+.flag_1  { background-color:  #9d261d; } /* red old: 913F3F  Crimson*/
+.flag_2  { background-color:  darken(#049cdb, 5%); } /* blue */
+.flag_3  { background-color:  #46a546; } /* green */
+.flag_4  { background-color:  #aaa; } /* dark gray */
+.flag_5  { background-color:  #c09853; } /* brown */
+.flag_6  { background-color:  #d9edf7; } /* aqua */
+.flag_7  { background-color:  #f89406; } /* orange */
+.flag_8  { background-color:  #c3325f; } /* pink */
+.flag_9  { background-color:  lighten(#049cdb, 25%); } /* light blue */
+.flag_10 { background-color:  #ffc40d; } /* yellow */
 
+//.vgrid-cell.mail.flag_1  { background-color: lighten(#DC143C, 50%); } /* red old: 913F3F  Crimson*/
+//.vgrid-cell.mail.flag_2  { background-color: lighten(#3F6B91, 50%); } /* blue */
+//.vgrid-cell.mail.flag_3  { background-color: lighten(#6D913F, 50%); } /* green */
+//.vgrid-cell.mail.flag_4  { background-color: lighten(#888, 40%); } /* dark gray */
+//.vgrid-cell.mail.flag_5  { background-color: lighten(#8B4513, 60%); } /* brown */
+//.vgrid-cell.mail.flag_6  { background-color: lighten(#0FF, 40%); } /* aqua */
+//.vgrid-cell.mail.flag_7  { background-color: lighten(#FF8c00, 40%); } /* orange */
+//.vgrid-cell.mail.flag_8  { background-color: lighten(#FF69B4, 25%); } /* pink */
+//.vgrid-cell.mail.flag_9  { background-color: lighten(#87CEFA, 20%); } /* light blue */
+//.vgrid-cell.mail.flag_10 { background-color: lighten(#fc0, 40%); } /* yellow */
