@@ -23,11 +23,12 @@ define("io.ox/files/view-detail",
     "use strict";
 
     var draw = function (file) {
+
         file.url = ox.apiRoot + "/infostore?action=document&id=" + file.id +
             "&folder=" + file.folder_id + "&session=" + ox.session; // TODO: Put this somewhere in the model
 
         // container & title
-        var element = $("<div>").addClass("file-details")
+        var element = $("<div>").addClass("file-details view")
             .append($("<div>").addClass("title clear-title").text(file.title));
 
         // Basic Info

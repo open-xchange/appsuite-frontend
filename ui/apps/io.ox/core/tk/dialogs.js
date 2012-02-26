@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
+define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
 
     'use strict';
 
@@ -94,7 +94,7 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
 
         this.addButton = function (action, label, dataaction, options) {
             options = options || {};
-            
+
             var opt = {
                 label: label,
                 data: { action: action },
@@ -105,7 +105,7 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
             if (options.type) {
                 opt[options.type] = true;
             }
-            
+
             nodes.popup.find(".form-actions").append(
                 $.button(opt)
             ).append("&nbsp;");
@@ -179,7 +179,7 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
 
             return deferred;
         };
-        
+
         this.resize = function () {
             // Reset
             nodes.popup.css({
@@ -230,7 +230,7 @@ define("io.ox/core/tk/dialogs", ["twitterBootstrap/basics"], function () {
             var h1 = nodes.popup.height(),
                 h2 = nodes.popup.find(".form-actions").outerHeight(true);
             nodes.popup.find(".content").css("height", (h1 - h2) + "px");
-            
+
         };
 
         nodes.underlay.click(function () {

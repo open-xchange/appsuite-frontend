@@ -12,9 +12,14 @@
  */
 
 define("io.ox/core/main",
-    ["io.ox/core/desktop", "io.ox/core/session", "io.ox/core/http",
-     "io.ox/core/api/apps", "io.ox/core/extensions", "io.ox/core/i18n",
-    "gettext!io.ox/core/main", "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, i18n, gt) {
+    ["io.ox/core/desktop",
+     "io.ox/core/session",
+     "io.ox/core/http",
+     "io.ox/core/api/apps",
+     "io.ox/core/extensions",
+     "io.ox/core/i18n",
+     "gettext!io.ox/core/main",
+     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, i18n, gt) {
 
     "use strict";
 

@@ -109,7 +109,6 @@ define("io.ox/mail/view-detail",
             if (additionalClasses !== undefined) {
                 node.addClass(additionalClasses);
             }
-            node.addClass("peeenis");
             ext.point('io.ox/mail/detail').invoke('draw', node, data);
 
             return node;
@@ -117,15 +116,7 @@ define("io.ox/mail/view-detail",
     };
 
     //extensions
-    ext.point('io.ox/mail/detail').extend({
-        index: 120,
-        id: 'flag',
-        draw: function (data) {
-            this.append(
-                $("<div>").addClass("abs flag flag_" + util.getFlag(data))
-            );
-        }
-    });
+
     ext.point('io.ox/mail/detail').extend({
         index: 100,
         id: 'contact-picture',
@@ -146,6 +137,7 @@ define("io.ox/mail/view-detail",
             });
         }
     });
+
     ext.point('io.ox/mail/detail').extend({
         index: 110,
         id: 'receiveddate',
@@ -155,6 +147,7 @@ define("io.ox/mail/view-detail",
             );
         }
     });
+
     ext.point('io.ox/mail/detail').extend({
         index: 120,
         id: 'fromlist',
@@ -166,6 +159,17 @@ define("io.ox/mail/view-detail",
             );
         }
     });
+
+    ext.point('io.ox/mail/detail').extend({
+        index: 125,
+        id: 'flag',
+        draw: function (data) {
+            this.append(
+                $("<div>").addClass("flag flag_" + util.getFlag(data) + ' clear-title').text('\u00A0')
+            );
+        }
+    });
+
     ext.point('io.ox/mail/detail').extend({
         index: 130,
         id: 'subject',
@@ -179,6 +183,7 @@ define("io.ox/mail/view-detail",
             );
         }
     });
+
     ext.point('io.ox/mail/detail').extend({
         index: 150,
         id: 'tocopy',
@@ -285,7 +290,7 @@ define("io.ox/mail/view-detail",
         index: 200,
         id: 'content',
         draw: function (data) {
-            this.append(
+            this.addClass('view').append(
                 that.getContent(data)
             );
         }

@@ -21,7 +21,7 @@ define("io.ox/files/main",
      "io.ox/core/tk/upload",
      "io.ox/core/tk/dialogs",
      "io.ox/help/hints",
-     "twitterBootstrap/basics",
+     "io.ox/core/bootstrap/basics",
      "less!io.ox/files/style.css"
     ], function (viewDetail, api, commons, VGrid, upload, dialogs, hints) {
 
@@ -52,7 +52,7 @@ define("io.ox/files/main",
         });
 
         app.setWindow(win);
-        
+
         // folder tree
         commons.addFolderTree(app, GRID_WIDTH, 'infostore');
 
@@ -173,7 +173,7 @@ define("io.ox/files/main",
         commons.addFolderSupport(app, grid, 'infostore')
             .done(commons.showWindow(win, grid));
     });
-    
+
     app.invalidateFolder = function (data) {
         console.log(data);
         if (data) {
@@ -182,7 +182,7 @@ define("io.ox/files/main",
         }
         grid.refresh();
     };
-    
+
     return {
         getApp: app.getInstance
     };

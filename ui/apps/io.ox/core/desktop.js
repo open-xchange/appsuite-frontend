@@ -997,39 +997,51 @@ define("io.ox/core/desktop",
 
                 var searchId = 'search_' + _.now(); // acccessibility
 
-                $("<label>", { 'for': searchId })
-                .addClass("searchfield-wrapper")
-                .css({ "float": "right" })
+                $('<form>')
+                .on('submit', false)
+                .addClass('form-search')
+                .css({ 'float': 'right' })
                 .append(
-                    $("<input>", {
-                        type: "search",
-                        placeholder: "Search...",
-                        size: "40",
-                        id: searchId
-                    })
-                    .on({
-                        keypress: function (e) {
-                            e.stopPropagation();
-                        },
-                        search: function (e) {
-                            e.stopPropagation();
-                            if ($(this).val() === "") {
-                                $(this).blur();
-                            }
-                        },
-                        change: function (e) {
-                            e.stopPropagation();
-                            win.search.query = $(this).val();
-                            // trigger search?
-                            if (win.search.query !== "") {
-                                if (win.search.query !== lastQuery) {
-                                    triggerSearch(lastQuery = win.search.query);
+                    $('<label>', { 'for': searchId })
+                    .append(
+                        $("<input>", {
+                            type: "text",
+                            placeholder: "Search ...",
+                            tabindex: '1',
+                            size: "40",
+                            id: searchId
+                        })
+                        .tooltip({
+                            animation: false,
+                            title: 'Press enter to search',
+                            placement: 'bottom',
+                            trigger: 'focus'
+                        })
+                        .addClass('input-large search-query')
+                        .on({
+                            keypress: function (e) {
+                                e.stopPropagation();
+                            },
+                            search: function (e) {
+                                e.stopPropagation();
+                                if ($(this).val() === "") {
+                                    $(this).blur();
                                 }
-                            } else if (lastQuery !== "") {
-                                win.trigger("cancel-search", lastQuery = "");
+                            },
+                            change: function (e) {
+                                e.stopPropagation();
+                                win.search.query = $(this).val();
+                                // trigger search?
+                                if (win.search.query !== "") {
+                                    if (win.search.query !== lastQuery) {
+                                        triggerSearch(lastQuery = win.search.query);
+                                    }
+                                } else if (lastQuery !== "") {
+                                    win.trigger("cancel-search", lastQuery = "");
+                                }
                             }
-                        }
-                    })
+                        })
+                    )
                 )
                 .prependTo(win.nodes.controls);
             }
@@ -1060,13 +1072,6 @@ define("io.ox/core/desktop",
 
                 // set title
                 win.setTitle(opt.title);
-
-//                if (opt.toolbar || opt.search) {
-//                    win.nodes.head.addClass("larger");
-//                    win.nodes.body.addClass("movedown");
-//                } else {
-//                    win.nodes.toolbar.hide();
-//                }
 
                 // quick settings?
                 if (opt.settings) {

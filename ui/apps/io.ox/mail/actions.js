@@ -22,9 +22,25 @@ define('io.ox/mail/actions',
 
     // actions
 
+    ext.point('io.ox/mail/actions/reader').extend({
+        id: 'reader',
+        action: (function () {
+            var on = false;
+            return function (app) {
+                var nodes = app.getWindow().nodes,
+                    head = nodes.head, main = nodes.main,
+                    opacity = on ? 1.0 : 0.4,
+                    color = on ? '' : 'black';
+                head.add(main.find('.leftside')).css('opacity', opacity);
+                head.parent().add(main).css({ backgroundColor: color });
+                on = !on;
+            };
+        }())
+    });
+
     ext.point('io.ox/mail/actions/compose').extend({
         id: 'compose',
-        action: function (data) {
+        action: function (app) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
                     this.compose();
@@ -156,6 +172,13 @@ define('io.ox/mail/actions',
         id: 'compose',
         label: 'Compose new email',
         ref: 'io.ox/mail/actions/compose'
+    }));
+
+    ext.point('io.ox/mail/links/toolbar').extend(new ext.Link({
+        index: 200,
+        id: 'reader',
+        label: 'Reader',
+        ref: 'io.ox/mail/actions/reader'
     }));
 
     // inline links
