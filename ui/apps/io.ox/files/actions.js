@@ -108,5 +108,36 @@ define("io.ox/files/actions", ["io.ox/core/extensions"], function (ext) {
         ref: "io.ox/files/actions/delete",
         special: "danger"
     }));
+    
+    // version links
+    
+    ext.point("io.ox/files/versions/links/inline").extend(new ext.Link({
+        id: "open",
+        index: 100,
+        label: "Open",
+        ref: "io.ox/files/actions/open"
+    }));
+
+    ext.point("io.ox/files//versions/links/inline").extend(new ext.Link({
+        id: "download",
+        index: 200,
+        label: "Download",
+        ref: "io.ox/files/actions/download"
+    }));
+
+    ext.point("io.ox/files/versions/links/inline").extend(new ext.Link({
+        id: "send",
+        index: 300,
+        label: "Send by E-Mail",
+        ref: "io.ox/files/actions/send"
+    }));
+
+    ext.point("io.ox/files/versions/links/inline").extend(new ext.Link({
+        id: "delete",
+        index: 400,
+        label: "Delete",
+        ref: "io.ox/files/actions/delete",
+        special: "danger"
+    }));
 
 });

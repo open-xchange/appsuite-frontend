@@ -22,6 +22,8 @@ define("io.ox/files/api",
     
     "use strict";
     
+    
+    
     // generate basic API
     var api = apiFactory({
         module: "infostore",
@@ -158,6 +160,21 @@ define("io.ox/files/api",
                 return { folder_id: String(options.folder), id: String(data ? data : 0) };
             });
     };
+    
+    api.versions = function (options) {
+        var getOptions = {action: "versions"};
+        options = options || {};
+        if (!options.id) {
+            throw new Error("Please specify an id for which to fetch versions");
+        }
+        getOptions.id = options.id;
+        return http.GET({
+            module: "infostore",
+            params: getOptions,
+            appendColumns: true
+        });
+    };
+    
     return api;
     
 });

@@ -28,7 +28,7 @@ define("io.ox/files/view-detail",
         file.documentUrl = ox.apiRoot + "/infostore?action=document&id=" + file.id +
             "&folder=" + file.folder_id + "&session=" + ox.session; // TODO: Put this somewhere in the model
 
-        var $element = $("<div>").addClass("file-details view");
+        var $element = $("<div>").addClass("file-details view container-fluid");
         
         ext.point("io.ox/files/details").each(function (extension) {
             var $row = $("<div>").addClass("row-fluid");
@@ -162,11 +162,11 @@ define("io.ox/files/view-detail",
         id: "preview",
         draw: function (file, node) {
             require(["io.ox/preview/main"], function (Preview) {
-                var prev = new Preview(file);
+                /*var prev = new Preview(file);
                 if (prev.supportsPreview()) {
                     prev.appendTo(node);
                     node.show();
-                }
+                }*/
             });
         }
     });
@@ -182,7 +182,7 @@ define("io.ox/files/view-detail",
         draw: function (file) {
             this.addClass("description");
             this.append(
-                $("<div>")
+                $("<div>").addClass("well span6")
                 .css({
                     // makes it readable
                     fontFamily: "monospace, 'Courier new'",
@@ -191,6 +191,7 @@ define("io.ox/files/view-detail",
                     marginBottom: "2em"
                 })
                 .text(file.description));
+            this.append($("<div>").addClass("span6").append("&nbsp;"));
         }
     });
     
@@ -202,39 +203,121 @@ define("io.ox/files/view-detail",
             return file.current_version;
         },
         draw: function (file) {
+            var self = this;
             var $link = $("<a>", {
                 href: '#'
             }).appendTo(this),
-            $mainContent = $("<div />"),
-            $versionTable = $("<table/>");
+            $mainContent = $("<div />").addClass("versions");
             
             $mainContent.append("No versions");
             
             // first let's deal with the link
             $link.text("Show all versions").on("click", function () {
-                this.empty().append($mainContent);
+                self.empty().append($mainContent);
                 return false;
             });
             
-            $versionTable.append($("<tr>")
-                .append("<th>").text("Version")
-                .append("<th>").text("File Name")
-                .append("<th>").text("Created By")
-                .append("<th>").text("Comment")
-            ).addClass("table");
             
             // Then let's fetch all versions and update link and table accordingly
-            filesAPI.versions(file.id, {
-                columns: "705,702,709,2"
+            filesAPI.versions({
+                id: file.id
             }).done(function (allVersions) {
-                $mainContent.clear().append($versionTable);
+                $mainContent.empty().append($("<h4>").text("Versions")).append($("<br/>"));
                 _(allVersions).each(function (version) {
-                    $versionTable.append($("<tr>")
-                        .append("<th>").text(version.version)
-                        .append("<th>").text(version.filename)
-                        .append("<th>").text(version.creaetd_by)
-                        .append("<th>").text(version.version_comment)
-                    );
+                    
+                    var $entryRow = $("<div>").addClass("row-fluid version");
+                    var $detailsPane = $("<div>");
+                    var $currentRow, keepAround, side;
+                    
+                    $entryRow.append($("<div>").addClass("span1 versionLabel").text(version.version));
+                    
+                    $detailsPane.addClass("span10").appendTo($entryRow);
+                    
+                    
+                    side = 'left';
+                    
+                    function invokeExtension(ext) {
+                        var effectiveType, $element;
+                        
+                        effectiveType = ext.type;
+                        if (!effectiveType) {
+                            effectiveType = side;
+                        }
+                        if (effectiveType === 'row') {
+                            effectiveType = 'left';
+                        }
+                        if (effectiveType === side) {
+                            $element = $("<div>");
+                            if (ext.type !== 'row') {
+                                $element.addClass("span6");
+                            }
+                            ext.draw.call($element, version);
+                            
+                            $element.appendTo($currentRow);
+
+                            if (ext.type === 'right' || ext.type === 'row') {
+                                $currentRow = null;
+                            }
+                            if (ext.type === 'left') {
+                                side = 'right';
+                            }
+                            return true;
+                        }
+                        return false;
+                    }
+                    
+                    ext.point("io.ox/files/details/versions/details").each(function (ext) {
+                        var keepForNextRound = null;
+                        if (!$currentRow) {
+                            $currentRow = $("<div>").addClass("row-fluid").appendTo($detailsPane);
+                            side = 'left';
+                        }
+                        if (!invokeExtension(ext)) {
+                            if (keepAround) {
+                                // Draw blank
+                                if (side === 'left') {
+                                    $currentRow.append($("<div>").addClass("span6"));
+                                    side = 'right';
+                                    invokeExtension(keepAround);
+                                    keepAround = ext;
+                                } else {
+                                    $currentRow = null;
+                                    side = 'left';
+                                    keepForNextRound = ext;
+                                }
+                            } else {
+                                keepForNextRound = ext;
+                            }
+                        }
+                        
+                        if (!$currentRow) {
+                            $currentRow = $("<div>").addClass("row-fluid").appendTo($detailsPane);
+                            side = 'left';
+                        }
+                        
+                        if (keepAround) {
+                            invokeExtension(keepAround);
+                            keepAround = null;
+                        }
+                        if (keepForNextRound) {
+                            keepAround = keepForNextRound;
+                        }
+                        
+                    });
+                    
+                    if (keepAround) {
+                        if (keepAround.type === 'right') {
+                            $currentRow.append($("<div>").addClass("span6"));
+                            side = 'right';
+                            invokeExtension(keepAround);
+                        } else {
+                            $currentRow = $("<div>").addClass("row-fluid").appendTo($detailsPane);
+                            side = 'left';
+                            invokeExtension(keepAround);
+                        }
+                    }
+                    
+                    $mainContent.append($entryRow);
                 });
             });
         }
@@ -271,6 +354,67 @@ define("io.ox/files/view-detail",
         }
     });
     
+    // Extensions for the version detail table
+    
+    ext.point("io.ox/files/details/versions/details").extend({
+        index: 10,
+        id: "filename",
+        type: 'left',
+        draw: function (version) {
+            var $link = $("<a>", {href: '#'}).text(version.filename).on("click", function () {
+                return false;
+            });
+            
+            this.append($link);
+        }
+    });
+
+    ext.point("io.ox/files/details/versions/details").extend({
+        index: 20,
+        id: "created_by",
+        type: 'right',
+        draw: function (version) {
+            this.append($("<span>").text(version.created_by).addClass("pull-right"));
+        }
+    });
+    
+    ext.point("io.ox/files/details/versions/details").extend({
+        index: 30,
+        id: "size",
+        type: 'left',
+        draw: function (version) {
+            this.text(bytesToSize(version.file_size));
+        }
+    });
+    
+    ext.point("io.ox/files/details/versions/details").extend({
+        index: 40,
+        id: "creation_date",
+        type: 'right',
+        draw: function (version) {
+            this.append($("<span>").text(version.creation_date).addClass("pull-right"));
+        }
+    });
+    
+    ext.point("io.ox/files/details/versions/details").extend({
+        index: 50,
+        id: "comment",
+        type: 'row',
+        draw: function (version) {
+            this.text("Lorem Ipsum dolor sic amet...").css({
+                marginTop: "4px",
+                fontFamily: "monospace, 'Courier new'",
+                whiteSpace: "pre-wrap"
+            });
+        }
+    });
+    
+    ext.point("io.ox/files/details/versions/details").extend(new ext.InlineLinks({
+        index: 60,
+        id: 'inline-links',
+        type: 'row',
+        ref: 'io.ox/files/versions/links/inline'
+    }));
     
 
     return {
