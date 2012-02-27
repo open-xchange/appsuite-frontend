@@ -320,6 +320,9 @@ define('io.ox/contacts/api',
                     $('<img>', { src: e.data.url, alt: '' }).css({ width: '100%', height: '100%' })
                 );
             }
+            if (/dummypicture\.png$/.test(e.data.url)) {
+                node.addClass('default-picture');
+            }
             clear();
         };
         clear = function () {

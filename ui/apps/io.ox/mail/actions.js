@@ -28,11 +28,10 @@ define('io.ox/mail/actions',
             var on = false;
             return function (app) {
                 var nodes = app.getWindow().nodes,
-                    head = nodes.head, main = nodes.main,
-                    opacity = on ? 1.0 : 0.4,
-                    color = on ? '' : 'black';
-                head.add(main.find('.leftside')).css('opacity', opacity);
-                head.parent().add(main).css({ backgroundColor: color });
+                    head = nodes.head, main = nodes.main;
+                head.add(main.find('.leftside')).css('opacity', on ? 1.0 : 0.4);
+                head.parent().add(main).css({ backgroundColor: on ? '' : 'black' });
+                main[on ? 'removeClass' : 'addClass']('spotlight');
                 on = !on;
             };
         }())
@@ -177,7 +176,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/links/toolbar').extend(new ext.Link({
         index: 200,
         id: 'reader',
-        label: 'Reader',
+        label: 'Spotlight!',
         ref: 'io.ox/mail/actions/reader'
     }));
 

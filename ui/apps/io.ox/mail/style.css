@@ -254,3 +254,15 @@
 //.vgrid-cell.mail.flag_8  { background-color: lighten(#FF69B4, 25%); } /* pink */
 //.vgrid-cell.mail.flag_9  { background-color: lighten(#87CEFA, 20%); } /* light blue */
 //.vgrid-cell.mail.flag_10 { background-color: lighten(#fc0, 40%); } /* yellow */
+
+/* spotlight */
+
+.spotlight .mail-detail.page { border-bottom-color: #aaa; background-color: #eee; }
+.spotlight .content { background-color: white; padding: 30px 40px 30px 40px; margin: 0 -40px -30px -40px; min-height: 100px; }
+.spotlight .mail-detail .content.plain-text { max-width: 100%; }
+.spotlight .subject { color: #777; }
+.spotlight .person-link { color: #bbb; font-weight: 200; }
+.spotlight .io-ox-inline-links a,
+.spotlight .view:hover .io-ox-inline-links a { color: #bbb; font-weight: 200; }
+.spotlight .contact-picture { opacity: 0.50; }
+.spotlight .contact-picture.default-picture { display: none; }
