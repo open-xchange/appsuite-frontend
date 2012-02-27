@@ -143,7 +143,7 @@
 .mail-detail.page {
     border-bottom: 1px solid #eee;
     padding: 30px 40px 30px 40px;
-    min-height: 200px;
+    min-height: 400px;
 }
 
 .mail-detail.page:last-child {
@@ -213,6 +213,7 @@
 }
 
 .mail-detail .content {
+    min-height: 300px;
 }
 
 .mail-detail .content.plain-text {
@@ -244,13 +245,39 @@
 .flag_9  { background-color:  lighten(#049cdb, 25%); } /* light blue */
 .flag_10 { background-color:  #ffc40d; } /* yellow */
 
-//.vgrid-cell.mail.flag_1  { background-color: lighten(#DC143C, 50%); } /* red old: 913F3F  Crimson*/
-//.vgrid-cell.mail.flag_2  { background-color: lighten(#3F6B91, 50%); } /* blue */
-//.vgrid-cell.mail.flag_3  { background-color: lighten(#6D913F, 50%); } /* green */
-//.vgrid-cell.mail.flag_4  { background-color: lighten(#888, 40%); } /* dark gray */
-//.vgrid-cell.mail.flag_5  { background-color: lighten(#8B4513, 60%); } /* brown */
-//.vgrid-cell.mail.flag_6  { background-color: lighten(#0FF, 40%); } /* aqua */
-//.vgrid-cell.mail.flag_7  { background-color: lighten(#FF8c00, 40%); } /* orange */
-//.vgrid-cell.mail.flag_8  { background-color: lighten(#FF69B4, 25%); } /* pink */
-//.vgrid-cell.mail.flag_9  { background-color: lighten(#87CEFA, 20%); } /* light blue */
-//.vgrid-cell.mail.flag_10 { background-color: lighten(#fc0, 40%); } /* yellow */
+/* spotlight */
+
+.spotlight .window-head, .spotlight .leftside { opacity: 0.3; }
+.spotlight .window-content, .spotlight .window-container-center { background-color: #000; }
+.spotlight .mail-detail-pane { background-color: #444; }
+.spotlight .scrollable-pane { max-width: 900px; min-height: 100%; background-color: white; }
+
+.spotlight .mail-detail.page { border-color: #444; border-width: 5px; background-color: #eee; }
+.spotlight .content { background-color: white; padding: 30px 40px 30px 40px; margin: 0 -40px -30px -40px; }
+.spotlight .mail-detail .content.plain-text { max-width: 100%; }
+.spotlight .subject { color: #555; }
+.spotlight .person-link { color: #bbb; font-weight: 200; }
+.spotlight .io-ox-inline-links a,
+.spotlight .view:hover .io-ox-inline-links a { color: #bbb; font-weight: 200; }
+.spotlight .contact-picture { opacity: 0.50; }
+.spotlight .contact-picture.default-picture { display: none; }
+
+.spotlight-icon {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    width: 100px;
+    height: 100px;
+    display: none;
+    background-repeat: no-repeat;
+    background-position: 30px 25px;
+    background-color: #ccc;
+    background-color: rgba(128, 128, 128, 0.5);
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.spotlight .spotlight-icon {
+    display: block;
+    z-index: 3;
+}

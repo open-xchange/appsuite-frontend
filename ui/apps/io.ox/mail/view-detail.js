@@ -132,6 +132,9 @@ define("io.ox/mail/view-detail",
                         if (url) {
                             picture.css("background-image", "url(" + url + ")").show();
                         }
+                        if (/dummypicture\.png$/.test(url)) {
+                            picture.addClass('default-picture');
+                        }
                         url = picture = data = null;
                     });
             });
@@ -195,7 +198,7 @@ define("io.ox/mail/view-detail",
             this.append(
                 showTO ?
                     $("<div>")
-                        .addClass("list")
+                        .addClass("to-cc list")
                         .append(
                             // TO
                             $("<span>").addClass("io-ox-label").text("To:\u00A0")
@@ -214,6 +217,7 @@ define("io.ox/mail/view-detail",
             );
         }
     });
+
     ext.point('io.ox/mail/detail').extend({
         index: 160,
         id: 'attachments',
@@ -274,7 +278,7 @@ define("io.ox/mail/view-detail",
                     .on('click', function (e) {
                         e.preventDefault();
                         require(["io.ox/mail/api"], function (api) {
-                            // get contact picture
+                            // get unmodified mail
                             api.getUnmodified(data)
                                 .done(function (unmodifiedData) {
                                     self.replaceWith(that.draw(unmodifiedData));

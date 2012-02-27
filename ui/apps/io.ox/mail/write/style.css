@@ -9,13 +9,13 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    right: 210px;
+    right: 160px;
 }
 
 .io-ox-mail-write .priority-overlay {
     position: absolute;
     top: 0px;
-    right: 220px;
+    right: 180px;
     line-height: 30px;
     font-weight: bold;
     font-size: 16px;
@@ -127,6 +127,10 @@
 
 .io-ox-mail-write input[type=file]:focus {
     box-shadow: 0px 0px 4px 0px @outline-color;
+}
+
+.io-ox-mail-write .wrapping-label {
+    display: block;
 }
 
 .io-ox-mail-write .io-ox-label {

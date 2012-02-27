@@ -332,6 +332,7 @@ define.async('io.ox/mail/write/main',
             .addClass('fieldset')
             .append(
                 $('<label>', { 'for' : 'writer_field_' + id })
+                .addClass('wrapping-label')
                 .append(
                     $('<input>', {
                         type: 'text',
@@ -570,6 +571,7 @@ define.async('io.ox/mail/write/main',
                 toolbar: true,
                 close: true
             });
+
             app.setWindow(win);
 
             // main panel
@@ -594,7 +596,7 @@ define.async('io.ox/mail/write/main',
                             // subject
                             $.labelize(
                                 subject = $('<input>')
-                                .attr({ type: 'text', name: 'subject', tabindex: '3' })
+                                .attr({ type: 'text', name: 'subject', tabindex: '3', autocomplete: 'off' })
                                 .addClass('subject')
                                 .val('')
                                 .on('keydown', function (e) {
@@ -617,31 +619,54 @@ define.async('io.ox/mail/write/main',
                             .text('\u2605\u2605\u2605')
                             .on('click', togglePriority)
                     )
+
+//                    <div class="btn-group">
+//  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+//    Action
+//    <span class="caret"></span>
+//  </a>
+//  <ul class="dropdown-menu">
+//    <!-- dropdown menu links -->
+//  </ul>
+//</div>
                     .append(
-                        $('<div>').addClass('sendbutton-wrapper')
+                        // split button
+                        $('<div>').addClass('btn-group sendbutton-wrapper')
                         .append(
                             // send
-                            $('<a>', { href: '#', tabindex: '8', accesskey: 's' })
-                            .addClass('button default-action sendbutton')
-                            .html('<u>S</u>end')
+                            $('<a>', { href: '#', tabindex: '8' })
+                            .addClass('btn btn-primary')
+                            .css('width', '100px')
+                            .text('Send')
                             .on('click', function (e) {
                                 e.preventDefault();
                                 ext.point('io.ox/mail/write/actions/send').invoke('action', null, app);
                             })
+                            .button()
                         )
-                    )
-                    .append(
-                        $('<div>').addClass('draftbutton-wrapper')
                         .append(
-                            // send
                             $('<a>', { href: '#', tabindex: '9' })
-                            .addClass('button action draftbutton')
-                            .html('Draft')
-                            .on('click', function (e) {
-                                e.preventDefault();
-                                ext.point('io.ox/mail/write/actions/draft').invoke('action', null, app);
-                            })
+                            .attr('data-toggle', 'dropdown')
+                            .addClass('btn btn-primary dropdown-toggle')
+                            .append(
+                                $('<span>').addClass("caret")
+                            )
+                            .button()
                         )
+                        .append(
+                            $('<ul>').addClass('dropdown-menu')
+                            .append(
+                                $('<li>').append(
+                                    $('<a>', { href: '#' })
+                                    .text('Save as draft')
+                                    .on('click', function (e) {
+                                        e.preventDefault();
+                                        ext.point('io.ox/mail/write/actions/draft').invoke('action', null, app);
+                                    })
+                                )
+                            )
+                        )
+
                     )
                 )
                 .append(
@@ -799,11 +824,12 @@ define.async('io.ox/mail/write/main',
                     method: 'post',
                     enctype: 'multipart/form-data'
                 })
+                .addClass('form-inline')
                 .append(
-                    $('<input>', { type: 'hidden', name: 'msgref', value: '' })
+                    $('<input>', { type: 'hidden', name: 'msgref', value: '' }),
+                    main,
+                    scrollpane
                 )
-                .append(main)
-                .append(scrollpane)
             );
 
             var dropZone = upload.dnd.createDropZone();

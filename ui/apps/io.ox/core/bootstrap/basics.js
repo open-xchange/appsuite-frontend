@@ -8,6 +8,8 @@
     define(p + 'basics',
         [js + '-transition.js',
          js + '-tooltip.js',
+         js + '-dropdown.js',
+         js + '-button.js',
          'less!' + p + 'less/bootstrap.less'], $.noop);
 
 }());

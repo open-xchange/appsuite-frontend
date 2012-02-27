@@ -33,7 +33,7 @@
             success: false,
             warning: false,
             danger: false
-            
+
             // other options:
             // tabIndex, id, mousedown
         }, options || {});
@@ -43,7 +43,7 @@
             className = "button io-ox-action-link";
         } else {
             className = "btn" + (!opt.enabled ? " btn-disabled" : "") + (opt.primary ? " btn-primary" : "") + (opt.info ? " btn-info" : "") + (opt.success ? " btn-success" : "") + (opt.warning ? " btn-warning" : "") + (opt.danger ? " btn-danger" : "");
-            
+
         }
 
         // create text node
@@ -269,7 +269,7 @@
             } else {
                 id = (id || 'field') + '_' + (guid++);
             }
-            return $('<label>', { 'for': id }).append(node.attr('id', id));
+            return $('<label>', { 'for': id }).addClass('wrapping-label').append(node.attr('id', id));
         };
     }());
 

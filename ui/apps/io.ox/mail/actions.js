@@ -25,14 +25,23 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/actions/reader').extend({
         id: 'reader',
         action: (function () {
-            var on = false;
+            var on = false,
+                click = function (e) {
+                    ext.point('io.ox/mail/actions/reader').invoke('action', null, e.data.app);
+                },
+                init = _.once(function (app) {
+                    var nodes = app.getWindow().nodes;
+                    nodes.outer.append(
+                        $('<div>').addClass('spotlight-icon').css({
+                            backgroundImage: 'url(' + ox.base + '/apps/themes/default/glyphicons_064_lightbulb@2x.png)'
+                        })
+                        .on('click', { app: app }, click)
+                    );
+                });
             return function (app) {
-                var nodes = app.getWindow().nodes,
-                    head = nodes.head, main = nodes.main,
-                    opacity = on ? 1.0 : 0.4,
-                    color = on ? '' : 'black';
-                head.add(main.find('.leftside')).css('opacity', opacity);
-                head.parent().add(main).css({ backgroundColor: color });
+                init(app);
+                var nodes = app.getWindow().nodes;
+                nodes.outer[on ? 'removeClass' : 'addClass']('spotlight');
                 on = !on;
             };
         }())
@@ -177,7 +186,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/links/toolbar').extend(new ext.Link({
         index: 200,
         id: 'reader',
-        label: 'Reader',
+        label: 'Spotlight!',
         ref: 'io.ox/mail/actions/reader'
     }));
 
