@@ -37,12 +37,16 @@
     background-color: whiteSmoke;
 }
 
-.file-details .versions .current {
+.file-details .versionLabel {
+    font-size: 1.5em;
+}
+
+.file-details .version.current .versionLabel {
     font-weight: bold;
 }
 
-.file-details .versionLabel {
-    font-size: 1.5em;
+.file-details .version.current {
+    background-color: @list-highlight;
 }
 
 .file-details .version {

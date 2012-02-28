@@ -34,7 +34,7 @@ define("io.ox/files/actions", ["io.ox/core/extensions"], function (ext) {
     ext.point("io.ox/files/actions/download").extend({
         id: "download",
         action: function (file) {
-            window.open(file.url + "&content_type=application/octet-stream" +
+            window.open(file.documentUrl + "&content_type=application/octet-stream" +
                     "&content_disposition=attachment", file.title);
         }
     });
@@ -42,7 +42,7 @@ define("io.ox/files/actions", ["io.ox/core/extensions"], function (ext) {
     ext.point("io.ox/files/actions/open").extend({
         id: "open",
         action: function (file) {
-            window.open(file.url, file.title);
+            window.open(file.documentUrl, file.title);
         }
     });
 

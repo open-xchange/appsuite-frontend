@@ -26,7 +26,7 @@ define("io.ox/files/view-detail",
     var draw = function (file) {
 
         file.documentUrl = ox.apiRoot + "/infostore?action=document&id=" + file.id +
-            "&folder=" + file.folder_id + "&session=" + ox.session; // TODO: Put this somewhere in the model
+            "&folder=" + file.folder_id + "&version=" + file.version + "&session=" + ox.session; // TODO: Put this somewhere in the model
 
         var $element = $("<div>").addClass("file-details view container-fluid");
         
@@ -225,11 +225,11 @@ define("io.ox/files/view-detail",
                 $mainContent.empty().append($("<h4>").text("Versions")).append($("<br/>"));
                 _(allVersions).each(function (version) {
                     
-                    var $entryRow = $("<div>").addClass("row-fluid version");
+                    var $entryRow = $("<div>").addClass("row-fluid version " + (version.current_version ? 'current' : ''));
                     var $detailsPane = $("<div>");
                     var $currentRow, keepAround, side;
                     
-                    $entryRow.append($("<div>").addClass("span1 versionLabel").text(version.version));
+                    $entryRow.append($("<div>").addClass("span1 versionLabel ").text(version.version));
                     
                     $detailsPane.addClass("span10").appendTo($entryRow);
                     
