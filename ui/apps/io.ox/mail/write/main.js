@@ -1093,11 +1093,38 @@ define.async('io.ox/mail/write/main',
          * Compose new mail
          */
         app.compose = function (data) {
-            var def = $.Deferred();
+
+            // register mailto!
+            if (navigator.registerProtocolHandler) {
+                var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
+                navigator.registerProtocolHandler(
+                    'mailto', url + '#app=io.ox/mail/write:compose&mailto=%s', 'OX7 Mailer'
+                );
+            }
+
+            var mailto, tmp, params, def = $.Deferred();
+
+            // triggerd by mailto?
+            if (data === undefined && (mailto = _.url.hash('mailto'))) {
+                tmp = mailto.split(/\?/, 2);
+                params = _.deserialize(tmp[1]);
+                tmp = tmp[0].split(/\:/, 2);
+                // save data
+                data = {
+                    to: [['', tmp[1]]],
+                    subject: params.subject,
+                    attachments: [{ content: params.body }]
+                };
+                // clear hash
+                _.url.hash('mailto', null);
+            }
+
             win.show(function () {
                 app.setMail({ data: data, mode: 'compose', initial: true })
                 .done(function () {
-                    if (data && data.to) {
+                    if (mailto) {
+                        editor.focus();
+                    } else if (data && data.to) {
                         $('input[name=subject]').focus().select();
                     } else {
                         $('input[data-type=to]').focus().select();
@@ -1105,6 +1132,7 @@ define.async('io.ox/mail/write/main',
                     def.resolve();
                 });
             });
+
             return def;
         };
 
@@ -1381,10 +1409,6 @@ define.async('io.ox/mail/write/main',
 
         return app;
     }
-
-
-
-
 
     var module = {
         getApp: createInstance
