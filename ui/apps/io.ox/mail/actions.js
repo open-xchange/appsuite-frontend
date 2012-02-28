@@ -33,7 +33,7 @@ define('io.ox/mail/actions',
                     var nodes = app.getWindow().nodes;
                     nodes.outer.append(
                         $('<div>').addClass('spotlight-icon').css({
-                            backgroundImage: 'url(' + ox.base + '/apps/themes/default/glyphicons_064_lightbulb@2x.png)'
+                            backgroundImage: 'url(' + ox.base + '/apps/themes/default/glyphicons_064_lightbulb.png)'
                         })
                         .on('click', { app: app }, click)
                     );
@@ -186,7 +186,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/links/toolbar').extend(new ext.Link({
         index: 200,
         id: 'reader',
-        label: 'Spotlight!',
+        label: 'Reading Lamp!',
         ref: 'io.ox/mail/actions/reader'
     }));
 

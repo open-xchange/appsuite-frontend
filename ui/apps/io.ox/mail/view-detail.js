@@ -33,6 +33,23 @@ define("io.ox/mail/view-detail",
         }
     };
 
+    var addBlockquotes = function (text) {
+        var lines = String(text || '').split(/\n/), quoting = false, check = /^> /, i = 0, $i = lines.length,
+            tmp = [], line;
+        for (; i < $i; i++) {
+            line = lines[i];
+            if (quoting && check.test(line)) {
+                tmp.push(line);
+            } else if (quoting && !check.test(line)) {
+                break;
+            } else if (!quoting && check.test(line)) {
+                quoting = true;
+            }
+        }
+        // TODO: HIER WEITERMACHEN
+        var quote = false;
+    };
+
     var that = {
 
         getContent: function (data) {

@@ -619,16 +619,6 @@ define.async('io.ox/mail/write/main',
                             .text('\u2605\u2605\u2605')
                             .on('click', togglePriority)
                     )
-
-//                    <div class="btn-group">
-//  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-//    Action
-//    <span class="caret"></span>
-//  </a>
-//  <ul class="dropdown-menu">
-//    <!-- dropdown menu links -->
-//  </ul>
-//</div>
                     .append(
                         // split button
                         $('<div>').addClass('btn-group sendbutton-wrapper')
@@ -654,7 +644,7 @@ define.async('io.ox/mail/write/main',
                             .button()
                         )
                         .append(
-                            $('<ul>').addClass('dropdown-menu')
+                            $('<ul>').addClass('dropdown-menu dropdown-right')
                             .append(
                                 $('<li>').append(
                                     $('<a>', { href: '#' })
