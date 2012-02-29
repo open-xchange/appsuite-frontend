@@ -33,21 +33,30 @@ define("io.ox/mail/view-detail",
         }
     };
 
-    var addBlockquotes = function (text) {
-        var lines = String(text || '').split(/\n/), quoting = false, check = /^> /, i = 0, $i = lines.length,
-            tmp = [], line;
-        for (; i < $i; i++) {
+    var markupQuotes = function (text) {
+        var lines = String(text || '').split(/<br\s?\/?>/i),
+            quoting = false,
+            regQuoted = /^&gt;( |$)/i,
+            i = 0, $i = lines.length, tmp = [], line;
+        for (text = ''; i < $i; i++) {
             line = lines[i];
-            if (quoting && check.test(line)) {
-                tmp.push(line);
-            } else if (quoting && !check.test(line)) {
-                break;
-            } else if (!quoting && check.test(line)) {
-                quoting = true;
+            if (!regQuoted.test(line)) {
+                if (!quoting) {
+                    text += line + '<br>';
+                } else {
+                    text = text.replace(/<br>$/, '') + '<blockquote><p>' + tmp.join('<br>') + '</p></blockquote>' + line;
+                    quoting = false;
+                }
+            } else {
+                if (quoting) {
+                    tmp.push(line.replace(regQuoted, ''));
+                } else {
+                    quoting = true;
+                    tmp = [line.replace(regQuoted, '')];
+                }
             }
         }
-        // TODO: HIER WEITERMACHEN
-        var quote = false;
+        return text;
     };
 
     var that = {
@@ -72,24 +81,26 @@ define("io.ox/mail/view-detail",
 
             // HTML content?
             if (html !== null) {
-                // no need for iframe with the new api
+                // no need for iframe with the new API
                 $(html).appendTo(content);
             }
             else if (text !== null) {
 
                 content
-                    .addClass("plain-text")
-                    .html(
+                .addClass("plain-text")
+                .html(
+                    markupQuotes(
                         $.trim(text)
-                            // remove line breaks
-                            .replace(/\n|\r/g, '')
-                            // replace leading BR
-                            .replace(/^\s*(<br\/?>\s*)+/g, "")
-                            // reduce long BR sequences
-                            .replace(/(<br\/?>\s*){3,}/g, "<br><br>")
-                            // remove split block quotes
-                            .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, "<br><br>")
-                    );
+                        // remove line breaks
+                        .replace(/\n|\r/g, '')
+                        // replace leading BR
+                        .replace(/^\s*(<br\/?>\s*)+/g, '')
+                        // reduce long BR sequences
+                        .replace(/(<br\/?>\s*){3,}/g, '<br><br>')
+                        // remove split block quotes
+                        .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, '<br><br>')
+                    )
+                );
 
                 // get contents to split long character sequences for better wrapping
                 content.contents().each(function (i) {
@@ -99,12 +110,13 @@ define("io.ox/mail/view-detail",
                     }
                 });
 
-                // collapse block quotes
-                content.find("blockquote").each(function () {
-                    var quote = $(this);
-                    quote.text(quote.contents().text().substr(0, 150));
-                });
+//                // collapse block quotes
+//                content.find("blockquote").each(function () {
+//                    var quote = $(this);
+//                    quote.text(quote.contents().text().substr(0, 150));
+//                });
             }
+
             return content;
         },
 
