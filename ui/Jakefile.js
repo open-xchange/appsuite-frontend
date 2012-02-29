@@ -402,7 +402,11 @@ desc("Removes all generated files");
 task("clean", [], function() {
     if (path.existsSync("ox.pot")) fs.unlinkSync("ox.pot");
     rimraf("tmp", function() { rimraf(utils.builddir, complete); });
-}, true);
+}, { async: true });
+
+//update-i18n task
+
+require("./lib/build/cldr.js");
 
 // msgmerge task
 
