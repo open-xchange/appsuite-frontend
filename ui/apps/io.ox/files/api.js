@@ -19,11 +19,9 @@ define("io.ox/files/api",
      "io.ox/core/api/factory",
      "io.ox/core/config"
     ], function (http, apiFactory, config) {
-    
+
     "use strict";
-    
-    
-    
+
     // generate basic API
     var api = apiFactory({
         module: "infostore",
@@ -59,7 +57,7 @@ define("io.ox/files/api",
         var matches = /\((\{.*?\})\)/.exec(htmlpage);
         return matches && matches[1] ? JSON.parse(matches[1]) : null;
     }
-    
+
     // Upload a file and store it
     // As options, we expect:
     // "folder" - The folder ID to upload the file to. This is optional and defaults to the standard files folder
@@ -71,10 +69,10 @@ define("io.ox/files/api",
         options = $.extend({
             folder: config.get("folder.infostore")
         }, options || {});
-        
+
         var formData = new FormData();
         formData.append("file", options.file);
-        
+
         if (options.json && ! $.isEmptyObject(options.json)) {
             if (!options.json.folder_id) {
                 options.json.folder_id = options.folder;
@@ -83,8 +81,7 @@ define("io.ox/files/api",
         } else {
             formData.append("json", JSON.stringify({folder_id: options.folder}));
         }
-        
-        
+
         return http.UPLOAD({
                 module: "infostore",
                 params: { action: "new" },
@@ -99,7 +96,7 @@ define("io.ox/files/api",
                 return { folder_id: String(options.folder), id: String(tmp ? tmp.data : 0) };
             });
     };
-    
+
     // Upload a file and store it
     // As options, we expect:
     // "folder" - The folder ID to upload the file to. This is optional and defaults to the standard files folder
@@ -111,10 +108,10 @@ define("io.ox/files/api",
         options = $.extend({
             folder: config.get("folder.infostore")
         }, options || {});
-        
+
         var formData = new FormData();
         formData.append("file", options.file);
-        
+
         if (options.json && ! $.isEmptyObject(options.json)) {
             if (!options.json.folder_id) {
                 options.json.folder_id = options.folder;
@@ -123,8 +120,7 @@ define("io.ox/files/api",
         } else {
             formData.append("json", JSON.stringify({folder_id: options.folder}));
         }
-        
-        
+
         return http.UPLOAD({
                 module: "infostore",
                 params: { action: "update", timestamp: options.timestamp, id: options.id },
@@ -135,12 +131,12 @@ define("io.ox/files/api",
                 // clear folder cache
                 api.caches.all.remove(options.folder);
                 api.trigger("create.version update", {id: options.id, folder: options.folder});
-                
+
                 var tmp = fallbackForOX6BackendREMOVEME(data);
                 return { folder_id: String(options.folder), id: options.id, timestamp: tmp.timestamp};
             });
     };
-    
+
     api.update = function (file) {
         return http.PUT({
             module: "infostore",
@@ -151,17 +147,17 @@ define("io.ox/files/api",
             api.trigger("update", {id: file.id, folder: file.folder});
         });
     };
-    
+
     api.create = function (options) {
         options = $.extend({
             folder: config.get("folder.infostore")
         }, options || {});
 
-        
+
         if (!options.json.folder_id) {
             options.json.folder_id = options.folder;
         }
-        
+
         return http.PUT({
                 module: "infostore",
                 params: { action: "new" },
@@ -174,7 +170,7 @@ define("io.ox/files/api",
                 return { folder_id: String(options.folder), id: String(data ? data : 0) };
             });
     };
-    
+
     api.versions = function (options) {
         var getOptions = {action: "versions"};
         options = options || {};
@@ -188,12 +184,12 @@ define("io.ox/files/api",
             appendColumns: true
         });
     };
-    
+
     api.addDocumentLink = function (file) {
         file.documentUrl = ox.apiRoot + "/infostore?action=document&id=" + file.id +
             "&folder=" + file.folder_id + "&version=" + file.version + "&session=" + ox.session;
     };
-    
+
     api.detach = function (version) {
         return http.PUT({
             module: "infostore",
@@ -204,7 +200,7 @@ define("io.ox/files/api",
             api.trigger("delete.version update", {id: version.id, folder: version.folder, version: version.version});
         });
     };
-    
+
     return api;
-    
+
 });
