@@ -18,26 +18,70 @@
 define("io.ox/files/view-detail",
     ["io.ox/core/extensions",
      "io.ox/core/i18n",
+     "io.ox/core/event",
      "io.ox/files/actions",
-     "io.ox/files/api"], function (ext, i18n, actions, filesAPI) {
+     "io.ox/files/api"], function (ext, i18n, Event, actions, filesAPI) {
 
     "use strict";
-
+    
     var draw = function (file) {
-
         filesAPI.addDocumentLink(file);
 
         var $element = $("<div>").addClass("file-details view container-fluid");
+        var rows = {};
         
         ext.point("io.ox/files/details").each(function (extension) {
             var $row = $("<div>").addClass("row-fluid");
             if (extension.isEnabled && !extension.isEnabled(file)) {
                 return;
             }
-            extension.draw.call($row, file);
+            extension.draw.call($row, file, extension);
             $row.appendTo($element);
+            rows[extension.id] = $row;
         });
-        return $element;
+        
+        var blacklisted = {
+            "refresh.list": true
+        };
+        
+        return {
+            element: $element,
+            file: file,
+            trigger: function (type, evt) {
+                if (blacklisted[type]) {
+                    return;
+                }
+                var self = this;
+                if (evt && evt.id && evt.id === file.id && type !== "delete") {
+                    filesAPI.get({id: evt.id, folder: evt.folder}).done(function (file) {
+                        self.file = file;
+                        ext.point("io.ox/files/details").each(function (extension) {
+                            if (extension.on && extension.on[type]) {
+                                if (extension.isEnabled && !extension.isEnabled(file)) {
+                                    if (rows[extension.id]) {
+                                        rows[extension.id].empty();
+                                        delete rows[extension.id];
+                                    }
+                                    return;
+                                }
+                                if (rows[extension.id]) {
+                                    extension.on[type].call(rows[extension.id], file, extension);
+                                } else {
+                                    var $row = $("<div>").addClass("row-fluid");
+                                    extension.draw.call($row, file, extension);
+                                    $row.appendTo($element);
+                                    rows[extension.id] = $row;
+                                }
+                            }
+                        });
+                    });
+                }
+            },
+            destroy: function () {
+                $element.empty();
+                $element = rows = null;
+            }
+        };
     };
     
     
@@ -48,6 +92,12 @@ define("io.ox/files/view-detail",
         index: 10,
         draw: function (file) {
             this.append($("<div>").addClass("title clear-title").text(file.title));
+        },
+        on: {
+            update: function (file) {
+                this.empty();
+                this.append($("<div>").addClass("title clear-title").text(file.title));
+            }
         }
     });
     
@@ -76,6 +126,12 @@ define("io.ox/files/view-detail",
                     }
                 });
             });
+        },
+        on: {
+            update: function (file, extension) {
+                this.empty();
+                extension.draw.call(this, file);
+            }
         }
     });
     
@@ -191,6 +247,12 @@ define("io.ox/files/view-detail",
                 })
                 .text(file.description));
             this.append($("<div>").addClass("span6").append("&nbsp;"));
+        },
+        on: {
+            update: function (file, extension) {
+                this.empty();
+                extension.draw.call(this, file, extension);
+            }
         }
     });
     
@@ -201,7 +263,7 @@ define("io.ox/files/view-detail",
         isEnabled: function (file) {
             return file.current_version;
         },
-        draw: function (file) {
+        draw: function (file, extension, openVersions, allVersions) {
             var self = this;
             var $link = $("<a>", {
                 href: '#'
@@ -211,16 +273,14 @@ define("io.ox/files/view-detail",
             $mainContent.append("No versions");
             
             // first let's deal with the link
-            $link.text("Show all versions").on("click", function () {
-                self.empty().append($mainContent);
-                return false;
-            });
+            if (!openVersions) {
+                $link.text("Show all versions").on("click", function () {
+                    self.empty().append($mainContent);
+                    return false;
+                });
+            }
             
-            
-            // Then let's fetch all versions and update link and table accordingly
-            filesAPI.versions({
-                id: file.id
-            }).done(function (allVersions) {
+            function drawAllVersions(allVersions) {
                 $mainContent.empty().append($("<h4>").text("Versions")).append($("<br/>"));
                 _(allVersions).each(function (version) {
                     filesAPI.addDocumentLink(version);
@@ -319,7 +379,32 @@ define("io.ox/files/view-detail",
                     
                     $mainContent.append($entryRow);
                 });
-            });
+                
+                if (openVersions) {
+                    self.empty().append($mainContent);
+                }
+            }
+            
+            // Then let's fetch all versions and update link and table accordingly
+            if (!allVersions) {
+                filesAPI.versions({
+                    id: file.id
+                }).done(drawAllVersions);
+            } else {
+                drawAllVersions(allVersions);
+            }
+        },
+        
+        on: {
+            update: function (file, extension) {
+                var self = this, openVersions = this.find(".versions").is(":visible");
+                filesAPI.versions({
+                    id: file.id
+                }).done(function (allVersions) {
+                    self.empty();
+                    extension.draw.call(self, file, extension, openVersions, allVersions);
+                });
+            }
         }
     });
     
@@ -332,20 +417,32 @@ define("io.ox/files/view-detail",
         },
         draw: function (file) {
             var $node = $("<div>").addClass("span4 well").appendTo(this);
-            
             var $input = $("<input>", {
                 type: "file"
             }).appendTo($node);
+            
             $node.append("<br>");
-            $("<button/>").appendTo($node).text("Upload new version").addClass("btn").on("click", function () {
+            var $comment = $("<div>").hide().appendTo($node);
+            $comment.append("Provide a short description for the new version:").append("<br>");
+            var $commentArea = $("<textarea rows='3'></textarea>").appendTo($comment);
+            
+            $input.on("change", function () {
+                $comment.show();
+                $commentArea.focus();
+            });
+            
+            $node.append("<br>");
+            var $button = $("<button/>").appendTo($node).text("Upload new version").addClass("btn").on("click", function () {
                 _($input[0].files).each(function (fileData) {
+                    $button.addClass("disabled").text("Uploading...");
                     filesAPI.uploadNewVersion({
                         file: fileData,
                         id: file.id,
                         folder: file.folder,
-                        timestamp: file.last_modified
+                        timestamp: file.last_modified,
+                        json: {version_comment: $commentArea.val()}
                     }).done(function (data) {
-                        // TODO: Redraw Everything
+                        $button.removeClass("disabled").text("Upload new version");
                     });
                 });
                 
@@ -375,7 +472,10 @@ define("io.ox/files/view-detail",
         id: "created_by",
         type: 'right',
         draw: function (version) {
-            this.append($("<span>").text(version.created_by).addClass("pull-right"));
+            var $node = this;
+            require(["io.ox/core/api/user"], function (userAPI) {
+                $node.append($("<span>").append(userAPI.getTextNode(version.created_by)).addClass("pull-right"));
+            });
         }
     });
     
@@ -393,7 +493,7 @@ define("io.ox/files/view-detail",
         id: "creation_date",
         type: 'right',
         draw: function (version) {
-            this.append($("<span>").text(version.creation_date).addClass("pull-right"));
+            this.append($("<span>").text(i18n.date("fulldatetime", version.creation_date)).addClass("pull-right"));
         }
     });
     
@@ -402,7 +502,7 @@ define("io.ox/files/view-detail",
         id: "comment",
         type: 'row',
         draw: function (version) {
-            this.text("Lorem Ipsum dolor sic amet...").css({
+            this.text(version.version_comment || '').css({
                 marginTop: "4px",
                 fontFamily: "monospace, 'Courier new'",
                 whiteSpace: "pre-wrap"

@@ -57,6 +57,7 @@ define('io.ox/core/event', function () {
             var args = $.makeArray(arguments), types = args.shift();
             _(types.split(/\s+/)).each(function (type) {
                 hub.triggerHandler.call(hub, type, args);
+                hub.triggerHandler.call(hub, "triggered", _([type, args]).flatten()); // Allow stringing event hubs together
             });
             return this;
         };
@@ -86,6 +87,7 @@ define('io.ox/core/event', function () {
         // add on, off, and trigger
         obj.on = obj.events.on;
         obj.off = obj.events.off;
+        obj.one = obj.events.one;
         obj.trigger = obj.events.trigger;
         return obj;
     };

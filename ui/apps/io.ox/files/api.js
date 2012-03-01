@@ -94,6 +94,7 @@ define("io.ox/files/api",
             .pipe(function (data) {
                 // clear folder cache
                 api.caches.all.remove(options.folder);
+                api.trigger("create.file");
                 var tmp = fallbackForOX6BackendREMOVEME(data);
                 return { folder_id: String(options.folder), id: String(tmp ? tmp.data : 0) };
             });
@@ -133,11 +134,23 @@ define("io.ox/files/api",
             .pipe(function (data) {
                 // clear folder cache
                 api.caches.all.remove(options.folder);
+                api.trigger("create.version update", {id: options.id, folder: options.folder});
+                
                 var tmp = fallbackForOX6BackendREMOVEME(data);
                 return { folder_id: String(options.folder), id: options.id, timestamp: tmp.timestamp};
             });
     };
     
+    api.update = function (file) {
+        return http.PUT({
+            module: "infostore",
+            params: {action: "update", id: file.id, timestamp: file.last_modified},
+            data: file
+        }).done(function () {
+            api.caches.all.remove(file.folder);
+            api.trigger("update", {id: file.id, folder: file.folder});
+        });
+    };
     
     api.create = function (options) {
         options = $.extend({
@@ -157,6 +170,7 @@ define("io.ox/files/api",
             .pipe(function (data) {
                 // clear folder cache
                 api.caches.all.remove(options.folder);
+                api.trigger("create.file", {id: data, folder: options.folder});
                 return { folder_id: String(options.folder), id: String(data ? data : 0) };
             });
     };
@@ -178,6 +192,17 @@ define("io.ox/files/api",
     api.addDocumentLink = function (file) {
         file.documentUrl = ox.apiRoot + "/infostore?action=document&id=" + file.id +
             "&folder=" + file.folder_id + "&version=" + file.version + "&session=" + ox.session;
+    };
+    
+    api.detach = function (version) {
+        return http.PUT({
+            module: "infostore",
+            params: {action: "detach", id: version.id, folder: version.folder, timestamp: version.last_modified},
+            data: [version.version]
+        }).done(function () {
+            api.caches.all.remove(version.folder);
+            api.trigger("delete.version update", {id: version.id, folder: version.folder, version: version.version});
+        });
     };
     
     return api;
