@@ -1,4 +1,8 @@
 
+.file-details {
+    max-width: 900px;
+}
+
 .file-details .title {
     margin-bottom: 0.25em;
 }
@@ -24,3 +28,33 @@
 .file-details .buttons a {
     margin-right: 10px;
 }
+
+.file-details .io-ox-clickme {
+    cursor: pointer;
+}
+
+.file-details tr.io-ox-clickme:hover {
+    background-color: whiteSmoke;
+}
+
+.file-details .versionLabel {
+    font-size: 1.5em;
+}
+
+.file-details .version.current .versionLabel {
+    font-weight: bold;
+}
+
+.file-details .version.current {
+    background-color: @list-highlight;
+}
+
+.file-details .version {
+    margin-bottom: 10px;
+}
+
+.file-details .version:hover {
+    background-color: whiteSmoke;
+}
+
+

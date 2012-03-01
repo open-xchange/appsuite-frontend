@@ -6,8 +6,18 @@
 
 #https://github.com/mynyml/watchr
 
-watch("\.js$") { system("./build.sh debug=true") }
-watch("\.css$") { system("./build.sh debug=true") }
-watch("\.less$") { system("./build.sh debug=true") }
-watch("\.html$") { system("./build.sh debug=true") }
-watch("^doc") {system("./build.sh debug=true doc") }
+def build 
+  retval = system("./build.sh debug=true")
+  failure unless retval
+  true
+end
+
+def failure
+  system("growlnotify -n \"OX 7 UI Build\" -m \"Build failed!\"")
+end
+
+watch("\.js$") { build }
+watch("\.css$") { build }
+watch("\.less$") { build }
+watch("\.html$") { build }
+watch("^doc") { build }
