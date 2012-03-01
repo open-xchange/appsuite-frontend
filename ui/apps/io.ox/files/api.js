@@ -175,6 +175,11 @@ define("io.ox/files/api",
         });
     };
     
+    api.addDocumentLink = function (file) {
+        file.documentUrl = ox.apiRoot + "/infostore?action=document&id=" + file.id +
+            "&folder=" + file.folder_id + "&version=" + file.version + "&session=" + ox.session;
+    };
+    
     return api;
     
 });

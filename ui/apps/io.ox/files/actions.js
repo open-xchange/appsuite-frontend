@@ -113,12 +113,19 @@ define("io.ox/files/actions", ["io.ox/core/extensions"], function (ext) {
     
     ext.point("io.ox/files/versions/links/inline").extend(new ext.Link({
         id: "open",
+        index: 50,
+        label: "Make this the current version",
+        ref: "io.ox/files/versions/actions/makeCurrent"
+    }));
+
+    ext.point("io.ox/files/versions/links/inline").extend(new ext.Link({
+        id: "open",
         index: 100,
         label: "Open",
         ref: "io.ox/files/actions/open"
     }));
 
-    ext.point("io.ox/files//versions/links/inline").extend(new ext.Link({
+    ext.point("io.ox/files/versions/links/inline").extend(new ext.Link({
         id: "download",
         index: 200,
         label: "Download",
@@ -136,7 +143,7 @@ define("io.ox/files/actions", ["io.ox/core/extensions"], function (ext) {
         id: "delete",
         index: 400,
         label: "Delete",
-        ref: "io.ox/files/actions/delete",
+        ref: "io.ox/files/versions/actions/delete",
         special: "danger"
     }));
 

@@ -25,8 +25,7 @@ define("io.ox/files/view-detail",
 
     var draw = function (file) {
 
-        file.documentUrl = ox.apiRoot + "/infostore?action=document&id=" + file.id +
-            "&folder=" + file.folder_id + "&version=" + file.version + "&session=" + ox.session; // TODO: Put this somewhere in the model
+        filesAPI.addDocumentLink(file);
 
         var $element = $("<div>").addClass("file-details view container-fluid");
         
@@ -224,6 +223,7 @@ define("io.ox/files/view-detail",
             }).done(function (allVersions) {
                 $mainContent.empty().append($("<h4>").text("Versions")).append($("<br/>"));
                 _(allVersions).each(function (version) {
+                    filesAPI.addDocumentLink(version);
                     
                     var $entryRow = $("<div>").addClass("row-fluid version " + (version.current_version ? 'current' : ''));
                     var $detailsPane = $("<div>");
@@ -362,6 +362,7 @@ define("io.ox/files/view-detail",
         type: 'left',
         draw: function (version) {
             var $link = $("<a>", {href: '#'}).text(version.filename).on("click", function () {
+                ext.point("io.ox/files/actions/open").invoke("action", $link, [version]);
                 return false;
             });
             
