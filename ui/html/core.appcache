@@ -9,6 +9,12 @@ CACHE:
 @base@/blank.html
 @base@/src/serverconfig.js
 @base@/src/offline.js
+# core - bootstrap
+@base@/apps/io.ox/core/bootstrap/js/bootstrap-transition.js
+@base@/apps/io.ox/core/bootstrap/js/bootstrap-tooltip.js
+@base@/apps/io.ox/core/bootstrap/js/bootstrap-dropdown.js
+@base@/apps/io.ox/core/bootstrap/js/bootstrap-button.js
+@base@/apps/io.ox/core/bootstrap/less/bootstrap.less
 # theme
 @base@/apps/themes/login/login.css
 @base@/apps/themes/login/busy.gif
