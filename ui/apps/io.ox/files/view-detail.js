@@ -217,11 +217,11 @@ define("io.ox/files/view-detail",
         id: "preview",
         draw: function (file, node) {
             require(["io.ox/preview/main"], function (Preview) {
-                /*var prev = new Preview(file);
+                var prev = new Preview(file);
                 if (prev.supportsPreview()) {
                     prev.appendTo(node);
                     node.show();
-                } */
+                }
             });
         }
     });

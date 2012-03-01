@@ -94,7 +94,7 @@ define("io.ox/preview/util",
             if (filename === undefined) {
                 return null;
             }
-            var fileEnding = filename.match(/\.([a-z0-9]{2,4})$/i);
+            var fileEnding = filename.match(/\.([a-z0-9]{2,})$/i);
             if (fileEnding.length === 2) {
                 return fileEnding[1];
             }
