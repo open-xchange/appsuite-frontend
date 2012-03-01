@@ -27,7 +27,7 @@ define("io.ox/files/view-detail",
     var draw = function (file) {
         filesAPI.addDocumentLink(file);
 
-        var $element = $("<div>").addClass("file-details view container-fluid");
+        var $element = $("<div>").addClass("file-details view");
         var rows = {};
         
         ext.point("io.ox/files/details").each(function (extension) {
@@ -221,7 +221,7 @@ define("io.ox/files/view-detail",
                 if (prev.supportsPreview()) {
                     prev.appendTo(node);
                     node.show();
-                }*/
+                } */
             });
         }
     });
@@ -291,7 +291,7 @@ define("io.ox/files/view-detail",
                     
                     $entryRow.append($("<div>").addClass("span1 versionLabel ").text(version.version));
                     
-                    $detailsPane.addClass("span10").appendTo($entryRow);
+                    $detailsPane.addClass("span11").appendTo($entryRow);
                     
                     
                     side = 'left';
