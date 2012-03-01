@@ -212,6 +212,10 @@
     margin: 0.5em 0 1em 0;
 }
 
+.mail-detail .content {
+    padding-top: 2em;
+}
+
 .mail-detail .content.plain-text {
     font-family: Monaco, monospace;
     font-size: @font-size;

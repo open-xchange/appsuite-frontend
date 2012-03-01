@@ -44,7 +44,8 @@ define("io.ox/mail/view-detail",
                 if (!quoting) {
                     text += line + '<br>';
                 } else {
-                    text = text.replace(/<br>$/, '') + '<blockquote><p>' + tmp.join('<br>') + '</p></blockquote>' + line;
+                    tmp = $.trim(tmp.join('\n')).replace(/\n/g, '<br>');
+                    text = text.replace(/<br>$/, '') + '<blockquote><p>' + tmp + '</p></blockquote>' + line;
                     quoting = false;
                 }
             } else {
@@ -79,12 +80,22 @@ define("io.ox/mail/view-detail",
                 }
             }
 
+            // empty?
+            if ($.trim(html || text) === '') {
+                return content.append(
+                    $("<div>")
+                    .addClass("infoblock backstripes")
+                    .text('This email has no content')
+                );
+            }
+
             // HTML content?
             if (html !== null) {
                 // no need for iframe with the new API
-                $(html).appendTo(content);
+                return content.append($(html));
             }
-            else if (text !== null) {
+
+            if (text !== null) {
 
                 content
                 .addClass("plain-text")
@@ -102,13 +113,13 @@ define("io.ox/mail/view-detail",
                     )
                 );
 
-                // get contents to split long character sequences for better wrapping
-                content.contents().each(function (i) {
-                    var node = $(this), text = node.text(), length = text.length;
-                    if (length >= 60) {
-                        node.text(text.replace(/(\S{60})/g, "$1\u200B")); // zero width space
-                    }
-                });
+//                // get contents to split long character sequences for better wrapping
+//                content.contents().each(function (i) {
+//                    var node = $(this), text = node.text(), length = text.length;
+//                    if (length >= 60) {
+//                        node.text(text.replace(/(\S{60})/g, "$1\u200B")); // zero width space
+//                    }
+//                });
 
 //                // collapse block quotes
 //                content.find("blockquote").each(function () {
