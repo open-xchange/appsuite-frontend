@@ -94,15 +94,24 @@ define("io.ox/files/main",
         commons.wireGridAndSearch(grid, win, api);
 
         // LFO callback
+        var currentDetailView = null;
         function drawDetail(data) {
-            var detail = viewDetail.draw(data);
-            right.idle().empty().append(detail);
+            
+            if (currentDetailView) {
+                currentDetailView.destroy();
+            }
+            currentDetailView = viewDetail.draw(data);
+            right.idle().empty().append(currentDetailView.element);
             right.parent().scrollTop(0);
         }
 
         grid.selection.on("change", function (e, selection) {
             if (selection.length === 1) {
                 // get file
+                if (currentDetailView && currentDetailView.file.id === selection[0].id) {
+                    return;
+                }
+                
                 right.busy(true);
                 api.get(selection[0]).done(_.lfo(drawDetail));
             } else {
@@ -119,7 +128,14 @@ define("io.ox/files/main",
         api.on("afterdelete", function () {
             statusBar.idle();
         });
-
+        
+        api.on("triggered", function () {
+            var args = $.makeArray(arguments), source = args.shift();
+            if (currentDetailView) {
+                currentDetailView.trigger.apply(currentDetailView, args);
+            }
+        });
+        
         // Uploads
         var queue = upload.createQueue({
             processFile: function (file) {

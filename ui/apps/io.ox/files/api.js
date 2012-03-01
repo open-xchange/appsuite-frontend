@@ -22,6 +22,8 @@ define("io.ox/files/api",
     
     "use strict";
     
+    
+    
     // generate basic API
     var api = apiFactory({
         module: "infostore",
@@ -92,14 +94,65 @@ define("io.ox/files/api",
             .pipe(function (data) {
                 // clear folder cache
                 api.caches.all.remove(options.folder);
+                api.trigger("create.file");
                 var tmp = fallbackForOX6BackendREMOVEME(data);
                 return { folder_id: String(options.folder), id: String(tmp ? tmp.data : 0) };
             });
     };
     
+    // Upload a file and store it
+    // As options, we expect:
+    // "folder" - The folder ID to upload the file to. This is optional and defaults to the standard files folder
+    // "json" - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
+    // "file" - the file object to upload
+    // The method returns a deferred that is resolved once the file has been uploaded
+    api.uploadNewVersion = function (options) {
+        // Alright, let's simulate a multipart formdata form
+        options = $.extend({
+            folder: config.get("folder.infostore")
+        }, options || {});
+        
+        var formData = new FormData();
+        formData.append("file", options.file);
+        
+        if (options.json && ! $.isEmptyObject(options.json)) {
+            if (!options.json.folder_id) {
+                options.json.folder_id = options.folder;
+            }
+            formData.append("json", JSON.stringify(options.json));
+        } else {
+            formData.append("json", JSON.stringify({folder_id: options.folder}));
+        }
+        
+        
+        return http.UPLOAD({
+                module: "infostore",
+                params: { action: "update", timestamp: options.timestamp, id: options.id },
+                data: formData,
+                dataType: "text"
+            })
+            .pipe(function (data) {
+                // clear folder cache
+                api.caches.all.remove(options.folder);
+                api.trigger("create.version update", {id: options.id, folder: options.folder});
+                
+                var tmp = fallbackForOX6BackendREMOVEME(data);
+                return { folder_id: String(options.folder), id: options.id, timestamp: tmp.timestamp};
+            });
+    };
+    
+    api.update = function (file) {
+        return http.PUT({
+            module: "infostore",
+            params: {action: "update", id: file.id, timestamp: file.last_modified},
+            data: file
+        }).done(function () {
+            api.caches.all.remove(file.folder);
+            api.trigger("update", {id: file.id, folder: file.folder});
+        });
+    };
     
     api.create = function (options) {
-         // Alright, let's simulate a multipart formdata form
         options = $.extend({
             folder: config.get("folder.infostore")
         }, options || {});
@@ -117,9 +170,41 @@ define("io.ox/files/api",
             .pipe(function (data) {
                 // clear folder cache
                 api.caches.all.remove(options.folder);
+                api.trigger("create.file", {id: data, folder: options.folder});
                 return { folder_id: String(options.folder), id: String(data ? data : 0) };
             });
     };
+    
+    api.versions = function (options) {
+        var getOptions = {action: "versions"};
+        options = options || {};
+        if (!options.id) {
+            throw new Error("Please specify an id for which to fetch versions");
+        }
+        getOptions.id = options.id;
+        return http.GET({
+            module: "infostore",
+            params: getOptions,
+            appendColumns: true
+        });
+    };
+    
+    api.addDocumentLink = function (file) {
+        file.documentUrl = ox.apiRoot + "/infostore?action=document&id=" + file.id +
+            "&folder=" + file.folder_id + "&version=" + file.version + "&session=" + ox.session;
+    };
+    
+    api.detach = function (version) {
+        return http.PUT({
+            module: "infostore",
+            params: {action: "detach", id: version.id, folder: version.folder, timestamp: version.last_modified},
+            data: [version.version]
+        }).done(function () {
+            api.caches.all.remove(version.folder);
+            api.trigger("delete.version update", {id: version.id, folder: version.folder, version: version.version});
+        });
+    };
+    
     return api;
     
 });
