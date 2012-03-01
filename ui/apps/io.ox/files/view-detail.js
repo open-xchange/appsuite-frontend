@@ -415,7 +415,8 @@ define("io.ox/files/view-detail",
         isEnabled: function (file) {
             return file.current_version;
         },
-        draw: function (file) {
+        draw: function (file, extension) {
+            var self = this;
             var $node = $("<div>").addClass("span4 well").appendTo(this);
             var $input = $("<input>", {
                 type: "file"
@@ -443,6 +444,8 @@ define("io.ox/files/view-detail",
                         json: {version_comment: $commentArea.val()}
                     }).done(function (data) {
                         $button.removeClass("disabled").text("Upload new version");
+                        self.empty();
+                        extension.draw.call(self, $node);
                     });
                 });
                 
