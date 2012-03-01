@@ -73,6 +73,28 @@ define("io.ox/core/main",
             $('<div>', { id: 'io-ox-top-logo-small' })
         );
 
+        ox.on('application:launch application:resume', function (e, app) {
+            var name = app.getName(),
+                id = app.getId(),
+                topbar = $("#io-ox-topbar"),
+                launcher = $();
+            // remove active class
+            topbar.find('.launcher').removeClass('active');
+            // has named launcher?
+            launcher = topbar.find('.launcher[data-app-name=' + $.escape(name) + ']');
+            // has no launcher?
+            if (!launcher.length && !(launcher = topbar.find('.launcher[data-app-id=' + $.escape(id) + ']')).length) {
+                launcher = desktop.addLauncher('left', app.getTitle(), app.launch).attr('data-app-id', id);
+            }
+            // mark as active
+            launcher.addClass('active');
+        });
+
+        ox.on('application:quit', function (e, app) {
+            var id = app.getId();
+            $("#io-ox-topbar").find('.launcher[data-app-id=' + $.escape(id) + ']').remove();
+        });
+
         desktop.addLauncher("right", gt("Sign out"), function (e) {
             return logout();
         });
@@ -98,13 +120,6 @@ define("io.ox/core/main",
             });
         });
 
-//        desktop.addLauncher("right", gt("Applications"), function () {
-//            var node = this;
-//            return require(["io.ox/applications/main"], function (m) {
-//                m.getApp().setLaunchBarIcon(node).launch();
-//            });
-//        });
-
         desktop.addLauncher("left", gt("Apps"), function () {
             var node = this;
             return require(["io.ox/launchpad/main"], function (m) {
@@ -113,12 +128,14 @@ define("io.ox/core/main",
         });
 
         var addLauncher = function (app) {
-            desktop.addLauncher("left", app.title, function () {
-                var node = this;
+            var launcher = desktop.addLauncher("left", app.title, function () {
                 return require([app.id + '/main'], function (m) {
-                    m.getApp().setLaunchBarIcon(node).launch();
+                    var app = m.getApp();
+                    launcher.attr('data-app-id', app.getId());
+                    app.launch();
                 });
-            });
+            })
+            .attr('data-app-name', app.id);
         };
 
         _(appAPI.getFavorites()).each(addLauncher);

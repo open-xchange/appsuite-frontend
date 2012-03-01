@@ -19,6 +19,10 @@
         e.preventDefault();
     };
 
+    $.escape = function (str) {
+        return String(str).replace(/([!"#$%&'()*+,.\/:;<=>?@\[\]\^`{|}~])/g, '\\$1');
+    };
+
     $.button = function (options) {
 
         // options

@@ -80,6 +80,7 @@ define("io.ox/core/desktop",
 
     // current window
     var currentWindow = null;
+
     // ref to core screen
     var core = $("#io-ox-core"),
         // top bar
@@ -89,7 +90,7 @@ define("io.ox/core/desktop",
             // construct
             var node = $("<div>")
             .addClass("launcher")
-            .text(label)
+            .text(label + '')
             .hover(
                 function () {
                     $(this).addClass("hover");
@@ -110,15 +111,26 @@ define("io.ox/core/desktop",
                     // set fixed width, hide label, be busy
                     self.css("width", self.width() + "px").text("\u00A0").busy();
                     // call launcher
-                    fn.call(this).done(function () {
+                    (fn.call(this) || $.when()).done(function () {
                         // revert visual changes
-                        self.idle().text(label).css("height", "");
+                        self.idle().text(label + '').css("width", "");
                     });
                 }
             });
+
+            function getTarget(app) {
+                var topbar = $("#io-ox-topbar"), target,
+                    id = app.getName() || app.id;
+                if ((target = topbar.find('.launcher[data-app-id=' + $.escape(id) + ']')).length) {
+                    return target;
+                } else {
+                    return null;
+                }
+            }
+
             // add
             var c = currentWindow, target;
-            if (side === "left" && c && c.app && (target = c.app.getLaunchBarIcon())) {
+            if (side === "left" && c && c.app && (target = getTarget(c.app))) {
                 // animate space
                 node.hide().insertAfter(target).fadeIn(1000);
             } else {
@@ -129,13 +141,14 @@ define("io.ox/core/desktop",
                     node.addClass("right").appendTo(topBar);
                 }
             }
+
             return node;
         };
 
     // show
     core.show();
 
-    // TODO: imrpove this stupid approach
+    // TODO: improve this stupid approach
     ox.ui.running = [];
 
     /**
@@ -143,13 +156,15 @@ define("io.ox/core/desktop",
      */
     ox.ui.createApp = (function () {
 
-        var appCache = new cache.SimpleCache('app-cache', true);
+        var appCache = new cache.SimpleCache('app-cache', true),
+            appGuid = 0;
 
         function App(options) {
 
             var opt = $.extend({
                 title: "",
-                icon: null
+                icon: null,
+                id: 'app-' + (appGuid++)
             }, options || {});
 
             // dummy function
@@ -158,14 +173,13 @@ define("io.ox/core/desktop",
                 },
                 // launcher function
                 launchFn = dummyFn,
-                // launchbar icon
-                launchbarIcon = null,
                 // quit function
                 quitFn = dummyFn,
                 // app main window
                 win = null,
                 // running
                 running = false,
+                runningId = null,
                 // save/restore
                 savePointUniqueID = _.now(),
                 savePoint = '',
@@ -313,13 +327,8 @@ define("io.ox/core/desktop",
                 return self; // not this!
             };
 
-            this.setLaunchBarIcon = function (node) {
-                launchbarIcon = $(node);
-                return this;
-            };
-
-            this.getLaunchBarIcon = function () {
-                return launchbarIcon;
+            this.getId = function () {
+                return opt.id;
             };
 
             this.setLauncher = function (fn) {
@@ -336,6 +345,14 @@ define("io.ox/core/desktop",
                 win = w;
                 win.app = this;
                 return this;
+            };
+
+            this.getName = function () {
+                return opt.name;
+            };
+
+            this.getTitle = function () {
+                return opt.title;
             };
 
             this.getWindow = function () {
@@ -376,22 +393,18 @@ define("io.ox/core/desktop",
                 if (!running) {
                     // mark as running
                     running = true;
-                    // needs launch bar icon?
-                    if (!launchbarIcon) {
-                        launchbarIcon = addLauncher(
-                            "left", opt.title, self.launch
-                        );
-                    }
                     // go!
                     (deferred = launchFn() || $.when())
                     .done(function () {
                         ox.ui.running.push(self);
+                        ox.trigger('application:launch', self);
                     });
 
                 } else if (win) {
                     // toggle app window
                     win.show();
                     deferred = $.when();
+                    ox.trigger('application:resume', self);
                 }
 
                 return deferred.pipe(function () {
@@ -415,13 +428,8 @@ define("io.ox/core/desktop",
                     clearInterval(saveRestorePointTimer);
                     removeRestorePoint();
                     $(window).off('unload', saveRestorePoint);
-                    // destroy launchbar icon
-                    if (launchbarIcon) {
-                        launchbarIcon.fadeOut(500, function () {
-                            launchbarIcon.remove();
-                            launchbarIcon = null;
-                        });
-                    }
+                    // event
+                    ox.trigger('application:quit', self);
                     // destroy stuff
                     self.events.destroy();
                     self.folder.destroy();
@@ -664,12 +672,6 @@ define("io.ox/core/desktop",
                         if (node.parent().length === 0) {
                             node.appendTo(pane);
                         }
-                        if (currentWindow && currentWindow.app !== null) {
-                            currentWindow.app.getLaunchBarIcon().removeClass("active");
-                        }
-                        if (this.app !== null) {
-                            this.app.getLaunchBarIcon().addClass("active");
-                        }
                         // update toolbar
                         ext.point(this.name + "/toolbar")
                             .invoke('draw', this.nodes.toolbar.empty(), this.app || this);
@@ -700,9 +702,6 @@ define("io.ox/core/desktop",
                 };
 
                 this.hide = function () {
-                    if (this.app !== null) {
-                        this.app.getLaunchBarIcon().removeClass("active");
-                    }
                     // detach if there are no iframes
                     if (this.nodes.outer.find("iframe").length === 0) {
                         this.nodes.outer.detach();
@@ -754,7 +753,6 @@ define("io.ox/core/desktop",
                     this.trigger("destroy");
                     // disconnect from app
                     if (this.app !== null) {
-                        this.app.getLaunchBarIcon().removeClass("active");
                         this.app.win = null;
                         this.app = null;
                     }
