@@ -24,27 +24,9 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/actions/reader').extend({
         id: 'reader',
-        action: (function () {
-            var on = false,
-                click = function (e) {
-                    ext.point('io.ox/mail/actions/reader').invoke('action', null, e.data.app);
-                },
-                init = _.once(function (app) {
-                    var nodes = app.getWindow().nodes;
-                    nodes.outer.append(
-                        $('<div>').addClass('spotlight-icon').css({
-                            backgroundImage: 'url(' + ox.base + '/apps/themes/default/glyphicons_064_lightbulb.png)'
-                        })
-                        .on('click', { app: app }, click)
-                    );
-                });
-            return function (app) {
-                init(app);
-                var nodes = app.getWindow().nodes;
-                nodes.outer[on ? 'removeClass' : 'addClass']('spotlight');
-                on = !on;
-            };
-        }())
+        action: function (app) {
+            app.toggleLamp();
+        }
     });
 
     ext.point('io.ox/mail/actions/compose').extend({
