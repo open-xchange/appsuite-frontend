@@ -126,7 +126,8 @@ define('io.ox/core/config',
                         module: 'config',
                         appendColumns: false,
                         processResponse: false
-                    }).done(function (data) {
+                    })
+                    .done(function (data) {
                         config = data !== undefined ? data.data : {};
                         configCache.add('default', config);
                     });
@@ -148,7 +149,7 @@ define('io.ox/core/config',
                         })
                         .fail(def.reject);
                     } else {
-                        load().done(def.resovle);
+                        load().done(def.resolve);
                     }
                 })
                 .fail(def.reject);
