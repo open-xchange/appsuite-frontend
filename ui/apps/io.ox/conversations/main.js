@@ -303,13 +303,13 @@ define("io.ox/conversations/main",
 
         controls = $("<div>").addClass("abs controls")
             .append(
-                $("<div>").addClass("centered-box")
+                $("<form>").addClass("centered-box form-inline")
                 .append(
                     $('<label>', { 'for': 'message-text' }).append(textarea)
                 )
                 .append(
                     $('<a>', { href: '#', tabindex: '2' })
-                    .addClass('button default-action')
+                    .addClass('btn btn-primary')
                     .text('Send')
                     .on('click', sendMessage)
                 )

@@ -113,22 +113,8 @@ define("io.ox/core/main",
         // refresh animation
         initRefreshAnimation();
 
-        desktop.addLauncher("right", gt("Settings"), function () {
-            var node = this;
-            return require(["io.ox/settings/main"], function (m) {
-                m.getApp().setLaunchBarIcon(node).launch();
-            });
-        });
-
-        desktop.addLauncher("left", gt("Apps"), function () {
-            var node = this;
-            return require(["io.ox/launchpad/main"], function (m) {
-                m.show();
-            });
-        });
-
         var addLauncher = function (app) {
-            var launcher = desktop.addLauncher("left", app.title, function () {
+            var launcher = desktop.addLauncher(app.side || 'left', app.title, function () {
                 return require([app.id + '/main'], function (m) {
                     var app = m.getApp();
                     launcher.attr('data-app-id', app.getId());
@@ -137,6 +123,15 @@ define("io.ox/core/main",
             })
             .attr('data-app-name', app.id);
         };
+
+        addLauncher({ id: 'io.ox/settings', title: gt('Settings'), side: 'right' });
+
+        desktop.addLauncher("left", gt("Apps"), function () {
+            var node = this;
+            return require(["io.ox/launchpad/main"], function (m) {
+                m.show();
+            });
+        });
 
         _(appAPI.getFavorites()).each(addLauncher);
 
