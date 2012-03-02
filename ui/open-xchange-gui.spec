@@ -4,10 +4,10 @@ Release: 1
 Group: Applications/Productivity
 Vendor: Open-Xchange
 URL: http://open-xchange.com
-packager: Viktor Pracht <viktor.pracht@open-xchange.com>
+Packager: Viktor Pracht <viktor.pracht@open-xchange.com>
 License: CC-BY-NC-SA
 Summary: Open-Xchange HTML5 client
-Source: %{name}-%{version}.tar.gz
+Source: %{name}_%{version}.orig.tar.gz
 
 BuildArch: noarch
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -30,7 +30,7 @@ Requires:   httpd
 Open-Xchange HTML5 client
 
 %prep
-%setup -q
+%setup -q -n ui
 
 %build
 
