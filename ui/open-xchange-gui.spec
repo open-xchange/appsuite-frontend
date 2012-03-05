@@ -7,7 +7,7 @@ URL: http://open-xchange.com
 Packager: Viktor Pracht <viktor.pracht@open-xchange.com>
 License: CC-BY-NC-SA
 Summary: Open-Xchange HTML5 client
-Source: %{name}_%{version}.orig.tar.gz
+Source: %{name}_%{version}.orig.tar.bz2
 
 BuildArch: noarch
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
@@ -30,15 +30,15 @@ Requires:   httpd
 Open-Xchange HTML5 client
 
 %prep
-%setup -q -n ui
+%setup -q
 
 %build
 
 %install
-./build.sh builddir="%{buildroot}%{docroot}"
+sh build.sh builddir="%{buildroot}%{docroot}"
 
 %clean
-./build.sh clean builddir="%{buildroot}%{docroot}"
+sh build.sh clean builddir="%{buildroot}%{docroot}"
 
 %files
 %defattr(-,root,root)

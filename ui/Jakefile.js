@@ -11,7 +11,9 @@
  */
 
 var fs = require("fs");
+var http = require("http");
 var path = require("path");
+var util = require("util");
 var utils = require("./lib/build/fileutils");
 var _ = require("./lib/underscore.js");
 var jsp = require("./lib/uglify-js/uglify-js").parser;
@@ -27,7 +29,9 @@ console.info("Build path: " + utils.builddir);
 
 function pad (n) { return n < 10 ? "0" + n : n; }
 var t = utils.startTime;
-var version = (process.env.version || "7.0.0") + "." + t.getUTCFullYear() +
+var ver = (process.env.version || "7.0.0");
+var rev = ver + "-" + (process.env.revision || "1");
+version = rev + "." + t.getUTCFullYear() +
     pad(t.getUTCMonth() + 1) + pad(t.getUTCDate()) + "." +
     pad(t.getUTCHours()) + pad(t.getUTCMinutes()) +
     pad(t.getUTCSeconds());
@@ -404,8 +408,7 @@ task("merge", ["ox.pot"], function() {
     var files = _.without(utils.list("i18n/*.po"), "i18n/en_US.po");
     var count = files.length;
     for (var i = 0; i < files.length; i++) {
-        utils.exec("msgmerge",
-            ["-Us", "--backup=none", files[i], "ox.pot"],
+        utils.exec(["msgmerge", "-Us", "--backup=none", files[i], "ox.pot"],
             function() { if (!--count) complete(); });
     }
 }, true);
@@ -449,3 +452,55 @@ task("deps", [depsPath], function() {
         if (last >= 0) print(node[down][last], indent2 + "└─", indent2 + "  ");
     }
 });
+
+// upload task
+desc("Uploads source package to the build service");
+task("upload", ["clean", "tmp/packaging"], function () {
+    var toCopy = _.reject(fs.readdirSync("."), function(f) {
+        return /^(tmp|ox.pot|build)$/.test(f);
+    });
+    var name = "open-xchange-gui-" + ver;
+    var debName = "open-xchange-gui_" + ver;
+    var dest = "tmp/packaging/" + name;
+    fs.mkdirSync(dest);
+    utils.exec(["cp", "-r"].concat(toCopy, dest), tar);
+    function tar(code) {
+        if (code) return fail();
+        utils.exec(["tar", "cjf", debName + ".orig.tar.bz2", name],
+                   { cwd: "tmp/packaging" }, dpkgSource);
+    }
+    function dpkgSource(code) {
+        if (code) return fail();
+        utils.exec(["dpkg-source", "-Zbzip2", "-b", name],
+                   { cwd: "tmp/packaging" }, uploadAll);
+    }
+    var counter;
+    function uploadAll(code) {
+        if (code) return fail();
+        counter = 1;
+        upload("", debName + ".orig.tar.bz2");
+        upload("", "open-xchange-gui_" + rev + ".debian.tar.bz2");
+        upload("", "open-xchange-gui_" + rev + ".dsc");
+        upload(name + "/", "open-xchange-gui.spec");
+        done();
+    }
+    function upload(dir, name) {
+        counter++;
+        var req = http.request({
+            method: "PUT",
+            auth: (process.env.bsUser || "gast") + ":" +
+                  (process.env.bsPassword || "netline"),
+            hostname: (process.env.bsHostname || "buildapi.netline.de"),
+            path: "/source/" + (process.env.bsProject || "home:gast") +
+                  "/open-xchange-gui/" + name
+        }, uploaded).on("error", fail);
+        util.pump(fs.createReadStream("tmp/packaging/" + dir + name), req);
+    }
+    function uploaded(resp) {
+        if (resp.statusCode != 200) return fail();
+        resp.on("end", done);
+    }
+    function done() { if (!--counter) complete(); }
+}, true);
+
+directory("tmp/packaging", ["clean"]);

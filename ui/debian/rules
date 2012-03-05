@@ -9,11 +9,10 @@ ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),\
 endif
 
 override_dh_auto_build:
-	./build.sh $(FLAGS)
+	sh build.sh $(FLAGS)
 
 override_dh_auto_clean:
-	./build.sh clean $(FLAGS) && \
-	dh_auto_clean
+	sh build.sh clean $(FLAGS)
 
 %:
 	dh $@

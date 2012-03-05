@@ -336,14 +336,19 @@ exports.list = function(dir, globs) {
 /**
  * Asynchronously executes an external command.
  * stdin, stdout and stderr are passed through to the parent process.
- * @param {String} command The command to execute.
- * @param {Array} args An array of parameters.
+ * @param {Array} The command to execute and its arguments.
+ * @param {Object} options Options for child_process.spawn.
  * @param {Function} callback A callback which is called when the command
  * returns.
  */
-exports.exec = function(command, args, callback) {
-    var child = child_process.spawn("/usr/bin/env", [command].concat(args),
-        { customFds: [0, 1, 2] });
+exports.exec = function(command, options, callback) {
+    if (!callback) {
+        callback = options;
+        options = undefined;
+    };
+    var child = child_process.spawn("/usr/bin/env", command, options);
+    child.stdout.on("data", function(data) { process.stdout.write(data); });
+    child.stderr.on("data", function(data) { process.stderr.write(data); });
     child.on("exit", callback);
 };
 
