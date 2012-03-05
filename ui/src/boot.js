@@ -42,7 +42,9 @@ $(document).ready(function () {
         changeLanguage,
         setDefaultLanguage,
         autoLogin,
-        initialize;
+        initialize,
+        // shortcut
+        enc = encodeURIComponent;
 
     // continuation
     cont = function () {
@@ -62,15 +64,26 @@ $(document).ready(function () {
             changeLanguage = initialize = null;
     };
 
-    gotoCore = function () {
+    gotoCore = function (viaAutoLogin) {
         if (ox.signin === true) {
             // show loader
             $("#background_loader").fadeIn(DURATION, function () {
-                var ref = _.url.hash('ref');
-                _.url.redirect("#?" + encodeURIComponent(
-                    _.rot("session=" + ox.session + "&user=" + ox.user +
-                    (ref ? "&ref=" + encodeURIComponent(ref) : ''), 1)
-                ));
+                var ref = _.url.hash('ref'),
+                    location = "#?" + enc(
+                        _.rot("session=" + ox.session + "&user=" + ox.user + (ref ? "&ref=" + enc(ref) : ''), 1)
+                    );
+                // auto-login?
+                if (viaAutoLogin) {
+                    _.url.redirect(location);
+                } else {
+                    // use redirect servlet
+                    $("#io-ox-login-form")
+                        .off('submit')
+                        .attr('action', ox.apiRoot + '/redirect')
+                        .find('input[type=hidden][name=location]').val('/ox7/' + location)
+                        .end()
+                        .submit();
+                }
             });
         } else {
             loadCore();
@@ -266,7 +279,7 @@ $(document).ready(function () {
                 initialize();
             } else {
                 ref = (location.hash || '').replace(/^#/, '');
-                _.url.redirect('signin' + (ref ? '#ref=' + encodeURIComponent(ref) : ''));
+                _.url.redirect('signin' + (ref ? '#ref=' + enc(ref) : ''));
             }
         }
 
@@ -280,7 +293,11 @@ $(document).ready(function () {
         } else if (ox.serverConfig.autoLogin === true && ox.online) {
             // try auto login
             var session = require("io.ox/core/session");
-            session.autoLogin().done(gotoCore).fail(fail);
+            session.autoLogin()
+                .done(function () {
+                    gotoCore(true);
+                })
+                .fail(fail);
         } else {
             fail();
         }
