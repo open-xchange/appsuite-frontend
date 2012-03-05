@@ -556,12 +556,12 @@ define("io.ox/core/desktop",
             ox.ui.screens.show('windowmanager');
         };
 
-
-        that.on("window.open", function (e, win) {
+        that.on("window.open window.show", function (e, win) {
+            // show window managher
             this.show();
-            if (_(windows).indexOf(win) === -1) {
-                windows.push(win);
-            }
+            // move/add window to top of stack
+            windows = _(windows).without(win);
+            windows.unshift(win);
         });
 
         that.on("window.beforeshow", function (e, win) {
@@ -570,24 +570,23 @@ define("io.ox/core/desktop",
 
         that.on("window.close window.quit", function (e, win, type) {
 
-            var pos = _(windows).indexOf(win), i, $i, found = false;
-
+            var pos = _(windows).indexOf(win), i, $i, w;
             if (pos !== -1) {
-                // remove?
+                // quit?
                 if (type === "window.quit") {
                     windows.splice(pos, 1);
                 }
-                // look right
-                for (i = pos, $i = windows.length; i < $i && !found; i++) {
-                    if (windows[i].state.open) {
-                        windows[i].show();
-                        found = true;
-                    }
+                // close?
+                else if (type === "window.close") {
+                    windows = _(windows).without(win);
+                    windows.push(win);
                 }
-                // look left
-                for (i = pos - 1; i >= 0 && !found; i--) {
-                    if (windows[i].state.open) {
-                        windows[i].show();
+                // find first open window
+                for (i = 0, $i = windows.length; i < $i; i++) {
+                    w = windows[i];
+                    if (w !== win && w.state.open) {
+                        w.show();
+                        break;
                     }
                 }
             }

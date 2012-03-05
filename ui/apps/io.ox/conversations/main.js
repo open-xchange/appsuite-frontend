@@ -143,7 +143,14 @@ define("io.ox/conversations/main",
             processMessages,
             applyEmoticons,
             drawMessages,
-            sendMessage;
+            sendMessage,
+            fnClickPerson;
+
+        fnClickPerson = function (e) {
+            ext.point('io.ox/core/person:action').each(function (ext) {
+                _.call(ext.action, e.data, e);
+            });
+        };
 
         stopPolling = function () {
             if (pollTimer !== null) {
@@ -247,7 +254,8 @@ define("io.ox/conversations/main",
                         .addClass("picture")
                     )
                     .append(
-                        $("<div>").addClass("from" + (from.id === myself ? " me" : ""))
+                        $("<a>").addClass("from" + (from.id === myself ? " me" : ""))
+                        .on('click', { user_id: from.id }, fnClickPerson)
                         .text(from.name)
                     )
                     .append(
