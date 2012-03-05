@@ -13,7 +13,7 @@
 
 define("plugins/halo/mail/register",
     ["io.ox/core/extensions", "less!plugins/halo/mail/style.css"], function (ext) {
-    
+
     "use strict";
 
     ext.point("io.ox/halo/contact:renderer").extend({
@@ -26,7 +26,7 @@ define("plugins/halo/mail/register",
             var deferred = new $.Deferred();
 
             $node.append(
-                $("<div/>").addClass("widget-title clear-title").text("Previously exchanged e-mails")
+                $("<div/>").addClass("widget-title clear-title").text("Recent e-mail conversations")
             );
 
             if (mail.length === 0) {
@@ -45,7 +45,7 @@ define("plugins/halo/mail/register",
 
                         new dialogs.SidePopup()
                             .delegate($node, ".vgrid-cell", function (popup) {
-                                
+
                                 var msgData = $(this).data("objectData");
                                 api.get(msgData).done(function (data) {
                                     require(["io.ox/mail/view-detail"], function (view) {
@@ -73,7 +73,7 @@ define("plugins/halo/mail/register",
             request.appendColumns = true;
             request.columnModule = "mail";
             request.params.limit = 10;
-            request.params.columns = "600,601,602,603,604,605,606,607,608,609,610,611,612,614,652";
+            request.params.columns = "102,600,601,602,603,604,605,606,607,608,609,610,611,612,614,652";
         }
     });
 });

@@ -446,7 +446,8 @@ define.async('io.ox/mail/write/main',
                                 // inject image as data-url
                                 var reader = new FileReader();
                                 reader.onload = function (e) {
-                                    popup.append(
+                                    popup.css({ width: '100%', height: '100%' })
+                                    .append(
                                         $('<div>')
                                         .css({
                                             width: '100%',
@@ -472,7 +473,7 @@ define.async('io.ox/mail/write/main',
                 // look for linked attachments or dropped files
                 var item = $(this).prop('attachment') || $(this).prop('file'),
                     list = item ? [item] : e.target.files;
-
+                // loop over all attachments
                 _(list).each(function (file) {
                     sections.attachments.append(
                         $('<div>').addClass('section-item file')
@@ -501,7 +502,8 @@ define.async('io.ox/mail/write/main',
                         )
                     );
                 });
-                $(this).parent().hide();
+                // hide current upload field
+                $(this).closest('.section-item.upload').hide();
             }
             addUpload();
         };
@@ -607,7 +609,9 @@ define.async('io.ox/mail/write/main',
                                     }
                                 })
                                 .on('keyup', function () {
-                                    app.getWindow().setTitle($.trim($(this).val()));
+                                    var title = $.trim($(this).val());
+                                    app.getWindow().setTitle(title);
+                                    app.setTitle(title);
                                 }),
                                 'mail_subject'
                             )
@@ -823,7 +827,7 @@ define.async('io.ox/mail/write/main',
             );
 
             var dropZone = upload.dnd.createDropZone();
-            dropZone.on('drop', function (file) {
+            dropZone.on('drop', function (e, file) {
                 form.find('input[type=file]').last()
                     .prop('file', file)
                     .trigger('change');
@@ -1053,7 +1057,9 @@ define.async('io.ox/mail/write/main',
             this.setDeliveryReceipt(data.disp_notification_to !== undefined ? data.disp_notification_to : false);
             this.setMsgRef(data.msgref);
             // apply mode
-            win.setTitle(data.subject ? data.subject : windowTitles[composeMode = mail.mode]);
+            var title = data.subject ? data.subject : windowTitles[composeMode = mail.mode];
+            win.setTitle(title);
+            app.setTitle(title);
             // set signature
             currentSignature = mail.signature || '';
             // set format

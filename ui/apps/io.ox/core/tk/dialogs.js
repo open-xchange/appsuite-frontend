@@ -93,6 +93,7 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
 
 
         this.addButton = function (action, label, dataaction, options) {
+
             options = options || {};
 
             var opt = {
@@ -102,13 +103,15 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
                 dataaction: dataaction,
                 purelink: options.purelink
             };
+
             if (options.type) {
                 opt[options.type] = true;
             }
 
-            nodes.popup.find(".form-actions").append(
-                $.button(opt)
-            ).append("&nbsp;");
+            var button = $.button(opt);
+            button.addClass(options.classes);
+            nodes.popup.find(".form-actions").append(button).append("&nbsp;");
+
             return this;
         };
 

@@ -31,7 +31,7 @@ define('io.ox/launchpad/main',
         appTmpl = _.template(
             '<a href="#" class="app" tabindex="1">' +
             '  <img src="<%= icon %>" class="icon" alt="">' +
-            '  <div class="title ellipsis"><span><%= title %></span></div>' +
+            '  <div class="title ellipsis"><%= title %></div>' +
             '</a>'
         ),
 
@@ -51,7 +51,7 @@ define('io.ox/launchpad/main',
                 })
                 .map(function (app) {
                     var data = api.get(app.getName());
-                    data.title = data.title || app.getWindowTitle() || app.getName();
+                    data.title = app.getTitle() || data.title || app.getWindowTitle() || app.getName();
                     return { data: data, app: app };
                 })
                 .value();

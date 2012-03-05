@@ -46,9 +46,7 @@ define('io.ox/mail/actions',
             return context.collection.has('some', 'delete');
         },
         action: function (data) {
-            console.debug('Action: delete');
-            //api.remove(grid.selection.get());
-            //grid.selection.selectNext();
+            api.remove(data);
         }
     });
 
@@ -218,8 +216,6 @@ define('io.ox/mail/actions',
     }));
 
     function changeLabel(options, color) {
-        console.log('changeLabel', options, color);
-
         return api.update(options, {color_label: color, value: true}).done(function (updateData) {
             api.trigger('refresh.list');
         });
@@ -250,7 +246,6 @@ define('io.ox/mail/actions',
                             .css('zIndex', 1)
                             .slideToggle("fast");
                 }).blur(function (e) {
-                    console.log(e);
                     dropdown.delay(100).slideUp('fast');
                 });
 

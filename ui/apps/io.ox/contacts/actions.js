@@ -23,11 +23,11 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
         action:  function (data) {
             require(["io.ox/contacts/api", "io.ox/core/tk/dialogs"], function (api, dialogs) {
                 new dialogs.ModalDialog()
-            .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
-            .addButton("cancel", "No, rather not", "cancel")
-            .addButton("delete", "Shut up and delete it!", "delete")
-            .show()
-            .done(function (action) {
+                .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
+                .addButton("cancel", "No, rather not", "cancel")
+                .addButton("delete", "Shut up and delete it!", "delete", { classes: 'btn-primary' })
+                .show()
+                .done(function (action) {
                     if (action === "delete") {
                         api.remove(data);
                     }

@@ -54,8 +54,12 @@ define("io.ox/files/api",
 
     function fallbackForOX6BackendREMOVEME(htmlpage) {
         // Extract the JSON text
-        var matches = /\((\{.*?\})\)/.exec(htmlpage);
-        return matches && matches[1] ? JSON.parse(matches[1]) : null;
+        if (typeof htmlpage === 'string') {
+            var matches = /\((\{.*?\})\)/.exec(htmlpage);
+            return matches && matches[1] ? JSON.parse(matches[1]) : null;
+        } else {
+            return null;
+        }
     }
 
     // Upload a file and store it
@@ -85,15 +89,13 @@ define("io.ox/files/api",
         return http.UPLOAD({
                 module: "infostore",
                 params: { action: "new" },
-                data: formData,
-                dataType: "text"
+                data: formData
             })
             .pipe(function (data) {
                 // clear folder cache
                 api.caches.all.remove(options.folder);
                 api.trigger("create.file");
-                var tmp = fallbackForOX6BackendREMOVEME(data);
-                return { folder_id: String(options.folder), id: String(tmp ? tmp.data : 0) };
+                return { folder_id: String(options.folder), id: parseInt(data.data, 10) };
             });
     };
 

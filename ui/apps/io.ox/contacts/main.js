@@ -148,7 +148,7 @@ define("io.ox/contacts/main",
 
         drawFail = function (obj) {
             right.idle().empty().append(
-                $.fail("Connection lost.", function () {
+                $.fail("Couldn't load contact data.", function () {
                     showContact(obj);
                 })
             );
@@ -200,8 +200,8 @@ define("io.ox/contacts/main",
         commons.addFolderSupport(app, grid, 'contacts', '6')
             .done(commons.showWindow(win, grid));
     });
-    
-    
+
+
     return {
         getApp: app.getInstance
     };

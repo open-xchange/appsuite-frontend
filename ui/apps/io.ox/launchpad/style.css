@@ -67,8 +67,8 @@
     color: #555;
     text-shadow: 0px 1px 2px #fff;
     overflow: hidden;
-    text-overflow: ellipsis;
-    height: 2.5;
+    text-overflow: ellipsis; /* does not work in 2 line mode right now */
+    height: 2.5em;
 }
 
 #io-ox-launchpad .app .title.ellipsis {

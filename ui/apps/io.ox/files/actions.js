@@ -60,7 +60,7 @@ define("io.ox/files/actions", ["io.ox/core/extensions"], function (ext) {
                 new dialogs.ModalDialog()
                     .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
                     .addButton("cancel", "No, rather not")
-                    .addButton("delete", "Shut up and delete it!")
+                    .addButton("delete", "Shut up and delete it!", undefined, { classes: 'btn-primary' })
                     .show()
                     .done(function (action) {
                         if (action === "delete") {
@@ -70,9 +70,9 @@ define("io.ox/files/actions", ["io.ox/core/extensions"], function (ext) {
             });
         }
     });
-    
+
     // version specific actions
-    
+
     ext.point("io.ox/files/versions/actions/makeCurrent").extend({
         id: "makeCurrent",
         action: function (data) {
@@ -85,7 +85,7 @@ define("io.ox/files/actions", ["io.ox/core/extensions"], function (ext) {
             });
         }
     });
-    
+
     ext.point("io.ox/files/versions/actions/delete").extend({
         id: "delete",
         action: function (data) {
@@ -93,7 +93,7 @@ define("io.ox/files/actions", ["io.ox/core/extensions"], function (ext) {
                 new dialogs.ModalDialog()
                     .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
                     .addButton("cancel", "No, rather not")
-                    .addButton("delete", "Shut up and delete it!")
+                    .addButton("delete", "Shut up and delete it!", undefined, { classes: 'btn-primary' })
                     .show()
                     .done(function (action) {
                         if (action === "delete") {
@@ -103,7 +103,7 @@ define("io.ox/files/actions", ["io.ox/core/extensions"], function (ext) {
             });
         }
     });
-    
+
 
     // links
 
@@ -142,9 +142,9 @@ define("io.ox/files/actions", ["io.ox/core/extensions"], function (ext) {
         ref: "io.ox/files/actions/delete",
         special: "danger"
     }));
-    
+
     // version links
-    
+
     ext.point("io.ox/files/versions/links/inline").extend(new ext.Link({
         id: "makeCurrent",
         index: 50,

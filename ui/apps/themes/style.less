@@ -86,6 +86,9 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     white-space: nowrap;
     display: inline-block !important;
     -webkit-tap-highlight-color: transparent;
+    max-width: 10em;
+    overflow: hidden;
+    text-overflow: ellipsis;
     cursor: pointer;
 }
 
@@ -740,6 +743,10 @@ input[type=search] {
     -webkit-border-radius: 5px;
     border-radius: 5px 5px 5px 5px;
     z-index: 65001;
+}
+
+.io-ox-dialog-popup .form-actions {
+    text-align: right;
 }
 
 .boxshadow .io-ox-dialog-popup {

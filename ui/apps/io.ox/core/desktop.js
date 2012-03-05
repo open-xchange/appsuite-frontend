@@ -100,7 +100,7 @@ define("io.ox/core/desktop",
                 }
             )
             .on("click", function () {
-                var self = $(this);
+                var self = $(this), title;
                 if (!_.isFunction(fn)) {
                     // for development only - should never happen
                     self.css("backgroundColor", "#800000");
@@ -109,11 +109,12 @@ define("io.ox/core/desktop",
                     }, 500);
                 } else {
                     // set fixed width, hide label, be busy
+                    title = self.text() || label;
                     self.css("width", self.width() + "px").text("\u00A0").busy();
                     // call launcher
                     (fn.call(this) || $.when()).done(function () {
                         // revert visual changes
-                        self.idle().text(label + '').css("width", "");
+                        self.idle().text(title + '').css("width", "");
                     });
                 }
             });
@@ -349,6 +350,12 @@ define("io.ox/core/desktop",
 
             this.getName = function () {
                 return opt.name;
+            };
+
+            this.setTitle = function (title) {
+                opt.title = title;
+                ox.trigger('application:change:title', this, title);
+                return this;
             };
 
             this.getTitle = function () {
@@ -786,6 +793,7 @@ define("io.ox/core/desktop",
                 this.setTitle = function (t) {
                     title = t;
                     applyTitle();
+                    this.trigger('change:title');
                     return this;
                 };
 

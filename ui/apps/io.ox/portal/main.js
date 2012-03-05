@@ -105,7 +105,7 @@
                     this.append(
                         $('<img>')
                         .attr({ src: ox.base + '/apps/themes/default/ad2.jpg', alt: 'ad' })
-                        .css({ width: '100%', height: 'auto' })
+                        .css({ width: '100%', height: 'auto', marginTop: '1em' })
                     );
                     return $.when();
                 }

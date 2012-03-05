@@ -483,7 +483,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 apply([]);
                 // inform user
                 container.hide().parent().idle().append(
-                    $.fail('Connection lost.', function () {
+                    $.fail('Could not load content.', function () {
                         container.show();
                         loadAll();
                     })

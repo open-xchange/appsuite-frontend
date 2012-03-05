@@ -148,7 +148,7 @@ define("io.ox/mail/main",
 
         drawFail = function (obj) {
             right.idle().empty().append(
-                $.fail("Connection lost.", function () {
+                $.fail("Couldn't load that email.", function () {
                     showMail(obj);
                 })
             );

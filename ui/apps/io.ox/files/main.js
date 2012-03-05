@@ -96,7 +96,7 @@ define("io.ox/files/main",
         // LFO callback
         var currentDetailView = null;
         function drawDetail(data) {
-            
+
             if (currentDetailView) {
                 currentDetailView.destroy();
             }
@@ -111,7 +111,7 @@ define("io.ox/files/main",
                 if (currentDetailView && currentDetailView.file.id === selection[0].id) {
                     return;
                 }
-                
+
                 right.busy(true);
                 api.get(selection[0]).done(_.lfo(drawDetail));
             } else {
@@ -128,14 +128,14 @@ define("io.ox/files/main",
         api.on("afterdelete", function () {
             statusBar.idle();
         });
-        
+
         api.on("triggered", function () {
             var args = $.makeArray(arguments), source = args.shift();
             if (currentDetailView) {
                 currentDetailView.trigger.apply(currentDetailView, args);
             }
         });
-        
+
         // Uploads
         var queue = upload.createQueue({
             processFile: function (file) {
@@ -169,17 +169,16 @@ define("io.ox/files/main",
         var $filenameNode = $("<span>").appendTo($uploadStatus);
 
         statusBar.append($uploadStatus);
+
         queue.on("start", function (e, file) {
             $filenameNode.text("Uploading: " + file.fileName);
             statusBar.busy();
         });
 
-
         queue.on("stop", function () {
             $filenameNode.text("");
             statusBar.idle();
         });
-
 
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);

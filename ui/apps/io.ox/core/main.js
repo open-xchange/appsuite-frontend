@@ -95,6 +95,11 @@ define("io.ox/core/main",
             $("#io-ox-topbar").find('.launcher[data-app-id=' + $.escape(id) + ']').remove();
         });
 
+        ox.on('application:change:title', function (e, app) {
+            var id = app.getId(), title = app.getTitle();
+            $("#io-ox-topbar").find('.launcher[data-app-id=' + $.escape(id) + ']').text(title);
+        });
+
         desktop.addLauncher("right", gt("Sign out"), function (e) {
             return logout();
         });
@@ -127,7 +132,6 @@ define("io.ox/core/main",
         addLauncher({ id: 'io.ox/settings', title: gt('Settings'), side: 'right' });
 
         desktop.addLauncher("left", gt("Apps"), function () {
-            var node = this;
             return require(["io.ox/launchpad/main"], function (m) {
                 m.show();
             });

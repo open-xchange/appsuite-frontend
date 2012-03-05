@@ -26,15 +26,13 @@ define("io.ox/conversations/api",
         },
         requests: {
             all: {
+                folder: 'default'
             },
             list: {
+                folder: 'default'
             },
             get: {
                 action: "get"
-            }
-        },
-        pipe: {
-            all: function (data) {
             }
         }
     });
@@ -79,19 +77,13 @@ define("io.ox/conversations/api",
             userAPI.getAll()
                 .pipe(function (data) {
                     return _(data)
-                        .chain()
-                        .each(function (obj) {
-                            display_names.push(obj.display_name);
-                        })
                         .map(function (obj) {
+                            display_names.push(obj.display_name);
                             return obj.id;
                         })
-                        //TODO: backend must fix this (ignore existing users)
-                        .without(config.get("identifier"))
-                        .value();
+                        .sort();
                 })
                 .pipe(function (ids) {
-                    ids.sort();
                     // create new conversation
                     return create(ids)
                         .done(function (data) {

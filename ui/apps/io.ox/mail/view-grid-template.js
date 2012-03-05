@@ -51,7 +51,7 @@ define('io.ox/mail/view-grid-template',
                 fields.from.empty().append(util.getFrom(data.from), true);
                 fields.date.text(util.getTime(data.received_date));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
-                fields.flag.get(0).className = 'flag flag_' + data.color_label;
+                fields.flag.get(0).className = 'flag flag_' + (data.color_label || 0);
                 if (util.isUnread(data)) {
                     this.addClass('unread');
                 }
