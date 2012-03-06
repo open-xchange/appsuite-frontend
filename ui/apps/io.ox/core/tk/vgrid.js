@@ -139,8 +139,8 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
             // bottom toolbar
             fnToggleEditable = function (e) {
-                    var grid = e.data.grid;
                     e.preventDefault();
+                    var grid = e.data.grid;
                     grid.setEditable(!grid.getEditable());
                 },
             toolbar = $('<div>').addClass('vgrid-toolbar')
@@ -278,10 +278,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                     return $('<div>')
                         .addClass('vgrid-cell-checkbox')
                         .append(
-                            $('<input>', { type: 'checkbox', id: id }).addClass('reflect-selection')
-                        )
-                        .append(
-                            $('<label>', { 'for': id }).text('\u00a0')
+                            $('<label>', { 'for': id })
+                            .append(
+                                $('<input>', { type: 'checkbox', id: id }).addClass('reflect-selection')
+                            )
                         );
                 };
 
@@ -694,6 +694,11 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 this.selection.setEditable(false);
                 editable = false;
             }
+        };
+
+        this.setMultiple = function (flag) {
+            this.selection.setMultiple(flag);
+            toolbar[flag ? 'show' : 'detach']();
         };
 
         this.prop = function (key, value) {

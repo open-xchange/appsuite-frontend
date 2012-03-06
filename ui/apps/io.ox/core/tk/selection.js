@@ -52,7 +52,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         };
 
         isRange = function (e) {
-            return e && e.shiftKey;
+            return e && e.shiftKey && multiple;
         };
 
         // apply selection
