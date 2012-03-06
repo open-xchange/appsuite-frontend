@@ -32,7 +32,7 @@ define("io.ox/mail/main",
         var self = $(this), parents = self.parents();
         api.get(e.data).done(function (data) {
             // replace placeholder with mail content
-            self.replaceWith(viewDetail.draw(data));
+            self.replaceWith(viewDetail.draw(data).addClass('page'));
         });
     };
 
@@ -116,7 +116,7 @@ define("io.ox/mail/main",
             var i = 0, obj, frag = document.createDocumentFragment();
             for (; (obj = list[i]); i++) {
                 if (i === 0) {
-                    frag.appendChild(viewDetail.draw(mail).get(0));
+                    frag.appendChild(viewDetail.draw(mail).addClass('page').get(0));
                 } else {
                     frag.appendChild(viewDetail.drawScaffold(obj, autoResolveThreads).get(0));
                 }
@@ -143,7 +143,7 @@ define("io.ox/mail/main",
         };
 
         drawMail = function (data) {
-            right.idle().empty().append(viewDetail.draw(data));
+            right.idle().empty().append(viewDetail.draw(data).addClass('page'));
         };
 
         drawFail = function (obj) {
