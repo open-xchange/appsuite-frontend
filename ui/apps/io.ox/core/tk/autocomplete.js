@@ -47,6 +47,18 @@ define('io.ox/core/tk/autocomplete', function () {
                 var data = scrollpane.children().eq(Math.max(0, index)).data('data');
                 lastValue = o.stringify(data) + '';
                 self.val(lastValue);
+
+                // if two related Fields are needed
+                if (_.isFunction(o.related)) {
+                    var relatedField = o.related(),
+                        dataHolder = o.dataHolder(),
+                        relatedValue = o.stringifyrelated(data);
+                    relatedField.val(relatedValue);
+                    console.log(dataHolder);
+                    dataHolder.data(data);
+                }
+
+
             },
 
             select = function (i) {
@@ -114,7 +126,7 @@ define('io.ox/core/tk/autocomplete', function () {
                             var node = $('<div>')
                                 .addClass('autocomplete-item')
                                 .data('data', data)
-                                .on('click', { index: index }, fnSelectItem);
+                                .on('click', { index: index, contact: data.contact, email: data.email }, fnSelectItem);
                             o.draw.call(node, data);
                             node.appendTo(scrollpane);
                         });

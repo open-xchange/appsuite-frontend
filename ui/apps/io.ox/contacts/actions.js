@@ -40,9 +40,16 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
         index: 100,
         id: "edit",
         action: function (data) {
-            require(["io.ox/contacts/util", "io.ox/contacts/edit/main"], function (util, edit_app) {
-                util.createEditPage(data);
-            });
+            if (data.mark_as_distributionlist === true) {
+                require(["io.ox/contacts/distrib/main"], function (createDist) {
+                    createDist.getApp(data).launch();
+                });
+            } else {
+                require(["io.ox/contacts/util"], function (util) {
+                    util.createEditPage(data);
+                });
+            }
+
         }
     });
 
@@ -57,12 +64,12 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
     });
 
 
-    ext.point("io.ox/contacts/main/create-dist").extend({
+    ext.point("io.ox/contacts/main/distrib").extend({
         index: 100,
         id: "create-dist",
         action: function (app) {
-            require(["io.ox/contacts/create-dist"], function (createDist) {
-                createDist.show();
+            require(["io.ox/contacts/distrib/main"], function (createDist) {
+                createDist.getApp().launch();
             });
         }
     });
@@ -88,7 +95,7 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
         index: 100,
         id: "create-dist",
         label: "Add distributionlist",
-        ref: "io.ox/contacts/main/create-dist"
+        ref: "io.ox/contacts/main/distrib"
     }));
 
     //  inline links
