@@ -12,7 +12,7 @@
  */
 
 define("plugins/halo/mail/register",
-    ["io.ox/core/extensions", "less!plugins/halo/mail/style.css"], function (ext) {
+    ["io.ox/core/extensions"], function (ext) {
 
     "use strict";
 
@@ -49,7 +49,7 @@ define("plugins/halo/mail/register",
                                 var msgData = $(this).data("objectData");
                                 api.get(msgData).done(function (data) {
                                     require(["io.ox/mail/view-detail"], function (view) {
-                                        popup.append(view.draw(data, "without-borders"));
+                                        popup.append(view.draw(data).removeClass("page"));
                                         data = null;
                                     });
                                 });

@@ -18,9 +18,10 @@ define("io.ox/conversations/main",
      "io.ox/core/api/user",
      "io.ox/core/config",
      "io.ox/core/extensions",
+     "io.ox/core/i18n",
      "less!io.ox/conversations/style.css",
      "io.ox/conversations/actions"
-    ], function (util, api, VGrid, userAPI, config, ext) {
+    ], function (util, api, VGrid, userAPI, config, ext, i18n) {
 
     "use strict";
 
@@ -238,20 +239,34 @@ define("io.ox/conversations/main",
                 emoticons[str] + '.gif" class="emoticon">';
         };
 
+        var getTime = function (t) {
+            // copied from calendar/util -- should be all part of date.js soon
+            function isToday(timestamp) {
+                return new Date(timestamp).toDateString() === new Date().toDateString();
+            }
+            return isToday(t) ? i18n.date('HH:mm', t) : i18n.date('dd.MM.YY HH:mm', t);
+        };
+
         drawMessages = function (list) {
 
             _(list).each(function (msg) {
                 var html = String(msg.text)
+                        // escape HTML
                         .replace(/</g, '&lt;')
+                        // replace emoticons
                         .replace(/(\:D|\:\)|\(y\))/g, applyEmoticons)
+                        // textile stuff - bold
                         .replace(/\*(\w[^\*]*\w)\*/g, "<b>$1</b>")
+                        // detect links
                         .replace(/(http:\/\/\S+)/ig, '<a href="$1" target="_blank">$1</a>'),
                     from = msg.from || {};
                 pane.append(
                     $("<div>").addClass("message")
                     .append(
-                        userAPI.getPicture(from.id)
-                        .addClass("picture")
+                        userAPI.getPicture(from.id).addClass("picture")
+                    )
+                    .append(
+                        $('<div>').addClass('timestamp').text(getTime(msg.timestamp))
                     )
                     .append(
                         $("<a>").addClass("from" + (from.id === myself ? " me" : ""))
@@ -259,10 +274,10 @@ define("io.ox/conversations/main",
                         .text(from.name)
                     )
                     .append(
-                        $("<div>").addClass("text")
-                        .html(html)
+                        $("<div>").addClass("text").html(html)
                     )
                 );
+                console.log('msg', msg);
             });
 
             pane.parent().scrollTop(pane.height() + 100);
