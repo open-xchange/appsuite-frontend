@@ -1,8 +1,10 @@
 var fs = require("fs");
 var http = require("http");
+var util = require("util");
 var i18n = require("./i18n");
 var xml2js = require("../xml2js/lib/xml2js");
-var _ = require("../underscore.js");
+var $ = require("../jquery-deferred/index");
+var _ = require("../underscore");
 
 desc("Downloads the latest CLDR data and updates date translations for all " +
      "languages in i18n/*.po .");
@@ -50,88 +52,91 @@ function downloadFile(name, lang) {
 function processLanguage(lang) {
     var dest = "lib/cldr/" + lang + ".json";
     task("update-i18n", [dest]);
-    file(dest, ["tmp/cldr"], function () {
-        parse(lang, process);
-    }, { async: true });
-    
-    var files = {};
-    function parse(name, cb) {
-        if (!files[name]) {
-            var list = files[name] = [cb];
-            var parent = getParent(name);
-            if (parent) parse(parent, load); else load({});
-        } else if (_.isArray(files[name])) {
-            files[name].push(cb);
-        } else {
-            cb(files[name]);
-        }
-        
-        function load(parent) {
-            var xml = fs.readFileSync("tmp/cldr/" + name + ".xml", "utf8");
-            (new xml2js.Parser).parseString(xml, function (err, json) {
-                if (err) {
-                    fail("XML error: " + err.message);
-                } else {
-                    files[name] = merge(toKeys(json), parent);
-                    _.each(list, function (cb) { cb(files[name]); });
-                }
-            });
-        }
-    }
-    
-    function process(json) {
-        fs.writeFileSync(dest, JSON.stringify(json, null, 2));
-        complete();
+    file(dest, ["lib/build/cldr.js", "lib/cldr"], parse, { async: true });
+    function parse() {
+        loadLanguage(lang).done(function (cldr) {
+            var data = {
+                data: cldr.get("dates/calendars/calendar[@type='gregorian']/" +
+                    "months/monthContext[@type='format']/" +
+                    "monthWidth[@type='narrow']/month[@type='1']")
+            };
+            fs.writeFileSync(dest, JSON.stringify(data, null, 4));
+            complete();
+        });
     }
 }
 
-// distinguishing items
-var distItems = {
-    key: {}, request: {}, id: {}, _q: {}, registry: {}, alt: {}, iso4217: {},
-    iso3166: {}, mzone: {}, from: {}, to: {}, type: {}, numberSystem: {},
-    type: {
-        "default": true, measurementSystem: true, mapping: true,
-        abbreviationFallback: true, preferenceOrdering: true
-    }
-};
-
-function toKeys(xml, name) {
-    if (!xml || typeof xml !== "object") return xml;
-    var keys = {};
-    if (_.isArray(xml)) {
-        _.each(xml, convert);
-    } else if (xml["@"]) {
-        if (!convert(xml, true)) for (var i in xml) keys[i] = toKeys(xml[i]);
-    } else {
-        for (var i in xml) keys[i] = toKeys(xml[i]);
-    }
-    return keys;
-    
-    function convert(elem, single) {
-        var attrs = elem["@"], key = "";
-        if (attrs) for (var attr in attrs) {
-            if (distItems[attr] && !distItems[attr][name]) {
-                key = attrs[attr];
-                delete attrs[attr];
-                if (_.isEmpty(attrs)) {
-                    delete elem["@"];
-                    if ("#" in elem) return keys[key] = elem["#"];
+var loadLanguage = _.memoize(function (lang) {
+    var def = new $.Deferred();
+    var xml = fs.readFileSync("tmp/cldr/" + lang + ".xml", "utf8");
+    (new xml2js.Parser).parseString(xml, function (err, json) {
+        if (err) def.reject(err); else def.resolve(json);
+    });
+    var parent = getParent(lang);
+    var promise = parent ? $.when(def, loadLanguage(parent)) : def.promise();
+    return promise.pipe(function (xml, parent) {
+        return {
+            get: function (path) {
+                if (typeof path == "string") path = xpath(path);
+                var r = this.resolve(path);
+                while (r && r.alias) r = this.resolve(r.alias);
+                return r;
+            },
+            resolve: function (path) {
+                for (var n = xml, i = 0; n !== undefined && i < path.length;
+                     n = path[i++](n))
+                {
+                    if (n.alias) return {
+                        alias: xpath(n.alias["@"].path, path.slice(0, i))
+                               .concat(path.slice(i))
+                    };
                 }
-                break;
+                return n === undefined && parent ? parent.resolve(path) : n;
+            },
+            list: function (path) {
+                
             }
-        }
-        if (key || !single) keys[key] = toKeys(elem);
-        return key;
-    }
-}
+        };
+    });
+});
 
-function merge(target, src) {
-    for (var i in src) {
-        if (typeof src[i] == "object") {
-            target[i] = merge(target[i] || {}, src[i]);
-        } else if (!(i in target)) {
-            target[i] = src[i];
+function xpath(path, parents) {
+    var elements = parents || [];
+    function error() { throw new Error("Invalid path: " + path); }
+    path.replace(
+        /(?:^|\/)(?:(\.\.)(?=\/)|([^\/\[]+))|\[@([^=]+)=["'](.*?)["']\]|(.)/g,
+        function (m, up, tag, attr, value) {
+            if (up) {
+                if (elements.pop() === undefined) error();
+            } else if (tag) {
+                elements.push({ tag: tag });
+            } else if (attr) {
+                var i = elements.length - 1;
+                if (i < 0) error();
+                var attrs = elements[i].attrs || (elements[i].attrs = {});
+                attrs[attr] = value;
+            } else {
+                error();
+            }
+        });
+    return _.map(elements, function (matcher) {
+        if (typeof matcher === "function"){
+            return matcher;
+        } else if (matcher.attrs) {
+            return function (xml) {
+                xml = xml[matcher.tag];
+                if (!xml) return;
+                Check: for (var i = 0; i < xml.length; i++) {
+                    var attrs = xml[i]["@"];
+                    if (!attrs) continue;
+                    for (var j in matcher.attrs) {
+                        if (attrs[j] != matcher.attrs[j]) continue Check;
+                    }
+                    return xml[i];
+                }
+            };
+        } else {
+            return function (xml) { return xml[matcher.tag]; };
         }
-    }
-    return target;
+    });
 }

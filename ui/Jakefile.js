@@ -418,7 +418,7 @@ task("merge", ["ox.pot"], function() {
         utils.exec(["msgmerge", "-Us", "--backup=none", files[i], "ox.pot"],
             function() { if (!--count) complete(); });
     }
-}, true);
+}, { async: true });
 
 // module dependency visualizazion
 
@@ -508,6 +508,6 @@ task("upload", ["clean", "tmp/packaging"], function () {
         resp.on("end", done);
     }
     function done() { if (!--counter) complete(); }
-}, true);
+}, { async: true });
 
 directory("tmp/packaging", ["clean"]);
