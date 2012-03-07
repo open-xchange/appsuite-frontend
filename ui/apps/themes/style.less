@@ -39,18 +39,16 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 #io-ox-topbar {
     bottom: auto;
     height: 40px;
-    background-color: @menu-background;
-    background-color: fade(@menu-background, 75%);
     overflow: hidden;
     z-index: 2;
     /* --- */
     background-color: #2C2C2C;
-    background-image: -moz-linear-gradient(top, #333, #222);
-    background-image: -ms-linear-gradient(top, #333, #222);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#333), to(#222));
-    background-image: -webkit-linear-gradient(top, #333, #222);
-    background-image: -o-linear-gradient(top, #333, #222);
-    background-image: linear-gradient(top, #333, #222);
+    background-image: -moz-linear-gradient(top, @topbar-background-alt, @topbar-background);
+    background-image: -ms-linear-gradient(top, @topbar-background-alt, @topbar-background);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@topbar-background-alt), to(@topbar-background));
+    background-image: -webkit-linear-gradient(top, @topbar-background-alt, @topbar-background);
+    background-image: -o-linear-gradient(top, @topbar-background-alt, @topbar-background);
+    background-image: linear-gradient(top, @topbar-background-alt, @topbar-background);
     background-repeat: repeat-x;
 }
 

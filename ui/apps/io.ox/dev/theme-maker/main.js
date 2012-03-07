@@ -122,7 +122,7 @@ define("io.ox/dev/theme-maker/main", ["themes", "io.ox/core/tk/simple-colorpicke
             })
 
             .append(createSection('Topbar'))
-            .append(createPicker('Topbar background', 'menu-background'))
+            .append(createPicker('Topbar background', 'topbar-background'))
             .append(createPicker('Topbar app background active', 'topbar-launcher-background-active'))
             .append(createPicker('Topbar app background hover', 'topbar-launcher-background-hover'))
             .append(createPicker('Topbar app color', 'topbar-launcher-color'))
