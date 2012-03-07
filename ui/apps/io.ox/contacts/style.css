@@ -466,7 +466,7 @@ input#image1 {
 }
 
 .item-list .name.col {
-	margin-left: 50px;
+	margin-left: 55px;
 }
 
 .create-distributionlist .item-list{
@@ -500,7 +500,7 @@ input#image1 {
 }
 
 .create-distributionlist .fieldset.name{
-	width: 240px;
+	width: 238px;
 	margin-left: 50px;
 }
 
@@ -527,6 +527,6 @@ input#image1 {
 }
 
 .create-distributionlist .button.addButton{
-	margin-top: 20px;
+	margin-top: 33px;
 	margin-right: 0px;
 }

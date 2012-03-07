@@ -263,7 +263,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             sectiongroup.addClass('header')
             .append(self.createLabel({
                 id: myId,
-                text: gt('display_name')
+                text: gt('name')
             }), self.createTextField({property: 'display_name', id: myId, classes: 'nice-input'}));
 
             editSection.append(
