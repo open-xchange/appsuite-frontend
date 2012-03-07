@@ -54,7 +54,6 @@ define('io.ox/core/tk/autocomplete', function () {
                         dataHolder = o.dataHolder(),
                         relatedValue = o.stringifyrelated(data);
                     relatedField.val(relatedValue);
-                    console.log(dataHolder);
                     dataHolder.data(data);
                 }
 

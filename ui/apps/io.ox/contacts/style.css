@@ -438,7 +438,7 @@ input#image1 {
 	border: none;
 }
 
-.maillist{
+.item-list{
 }
 
 .sectiontitle{
@@ -450,7 +450,7 @@ input#image1 {
 	line-height: 1.15em;
 }
 
-.maillist-header {
+.item-list-header {
 	margin-bottom: 20px;
 	border-bottom: 1px solid #EEE;
 	overflow: hidden;
@@ -460,16 +460,16 @@ input#image1 {
 	float: right;
 }
 
-.maillist .col{
+.item-list .col{
 	width: 240px;
 	float: left;
 }
 
-.maillist .name.col {
+.item-list .name.col {
 	margin-left: 50px;
 }
 
-.create-distributionlist .maillist{
+.create-distributionlist .item-list{
 	/*height: 200px;*/
 	overflow-x: hidden;
 	overflow-y: auto;
@@ -483,7 +483,7 @@ input#image1 {
 	width: 200px;
 }
 
-.create-distributionlist .maillist .listet-item {
+.create-distributionlist .item-list .listet-item {
 	width: 572px;
 	float: left;
 	padding: 3px;
@@ -491,8 +491,8 @@ input#image1 {
 	height: 3em;
 	margin-bottom: 3px;
 }
-.create-distributionlist .maillist .listet-item .person-link.ellipsis,
-.create-distributionlist .maillist .listet-item .person-selected-mail,
+.create-distributionlist .item-list .listet-item .person-link.ellipsis,
+.create-distributionlist .item-list .listet-item .person-selected-mail,
 .fieldset{
 	width: 240px;
 	margin-top: 12px;
@@ -508,7 +508,7 @@ input#image1 {
 	width: 230px;
 }
 
-.create-distributionlist .maillist .listet-item .delete-button {
+.create-distributionlist .item-list .listet-item .delete-button {
 	margin-top: 12px;
 	margin-right: 12px;
 	float: right;
@@ -522,7 +522,7 @@ input#image1 {
 	opacity: 1;
 	width: 16px
 }
-.create-distributionlist .maillist .listet-item .delete-button:hover {
+.create-distributionlist .item-list .listet-item .delete-button:hover {
 	background-image: url(images/close_button_hover.png);
 }
 

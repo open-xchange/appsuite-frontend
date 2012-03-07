@@ -18,8 +18,9 @@ define('io.ox/contacts/distrib/create-dist-view',
      'io.ox/contacts/api',
      'io.ox/core/tk/view',
      'io.ox/core/tk/model',
-     'io.ox/core/tk/autocomplete'
-    ], function (ext, gt, util, api, View, Model, autocomplete) {
+     'io.ox/core/tk/autocomplete',
+     'io.ox/core/config'
+    ], function (ext, gt, util, api, View, Model, autocomplete, config) {
 
     'use strict';
 
@@ -36,12 +37,15 @@ define('io.ox/contacts/distrib/create-dist-view',
     };
 
     function drawListetItemClear(node, name, selectedMail, options) {
-        var frame = $('<div>').addClass('listet-item' + ' ' + _.uniqueId()).attr({
+        var frame = $('<div>').addClass('listet-item').attr({
                 'data-mail': selectedMail
             }),
             img = $('<div>').addClass('contact-image'),
-
-            button = $('<div>').addClass('delete-button').on('click', {options: options, mail: selectedMail, frame: frame}, removeContact);
+            button = $('<div>').addClass('delete-button').on('click', {
+                options: options,
+                mail: selectedMail,
+                frame: frame
+            }, removeContact);
 
         node.append(frame);
         frame.append(button);
@@ -52,7 +56,6 @@ define('io.ox/contacts/distrib/create-dist-view',
             $('<div>').addClass('person-selected-mail')
             .text(selectedMail)
         );
-
     }
 
     function insertNewContact(options, name, mail) {
@@ -67,7 +70,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         var button = $('<a>').attr({
             'data-action': 'add',
             'href': '#'
-        }).addClass('button  addButton').text('Add').on('click', function (e) {
+        }).addClass('button  addButton').text(gt('Add')).on('click', function (e) {
             var data = $('[data-holder="data-holder"]').data(),
                 mailValue = $('input#mail').val(),
                 nameValue = $('input#name').val();
@@ -76,21 +79,20 @@ define('io.ox/contacts/distrib/create-dist-view',
             } else {
                 insertNewContact(options, nameValue, mailValue);
             }
-            $('input#mail').val('');
+            // reset the fields
             $('[data-holder="data-holder"]').removeData();
+            $('input#mail').val('');
             $('input#name').val('');
         });
 
         return button;
     };
 
-    var displayBox = $('<div>').addClass('maillist').append(
-            $('<div>').addClass('maillist-header').append(
+    var displayBox = $('<div>').addClass('item-list').append(
+            $('<div>').addClass('item-list-header').append(
                 $('<div>').addClass('name col').text('name'), $('<div>').addClass('mail col').text('mail')
             )
         );
-
-
 
     function drawAutoCompleteItem(node, data) {
         var img = $('<div>').addClass('contact-image'),
@@ -146,12 +148,9 @@ define('io.ox/contacts/distrib/create-dist-view',
             $('<div>').addClass('person-selected-mail')
             .text((selectedMail))
         );
-
     }
 
-
-
-    function calcMailField(contact, selectedMail) { // TODO: needs abb better concept
+    function calcMailField(contact, selectedMail) { // TODO: needs ab better concept
         var field;
 
         if (selectedMail === contact.email1) {
@@ -166,7 +165,6 @@ define('io.ox/contacts/distrib/create-dist-view',
         return field;
     }
 
-
     function copyContact(options, contact, selectedMail) {
         drawListetItem(displayBox, contact, selectedMail, options);
         var mailNr = (calcMailField(contact, selectedMail));
@@ -179,15 +177,14 @@ define('io.ox/contacts/distrib/create-dist-view',
             mail: selectedMail,
             mail_field: mailNr
         });
-        console.log(options);
     }
 
-    function createInputFieldName(options, id) {
+    function createField(options, id, related) {
 
         return $('<div>')
-        .addClass('fieldset name')
+        .addClass('fieldset ' + id)
         .append(
-            $('<label>', { 'for' : 'writer_field_' + id }).text('name'),
+            $('<label>', { 'for' : 'input_field_' + id }).text(gt(id)),
             $('<input>', {
                 type: 'text',
                 tabindex: '2',
@@ -203,146 +200,38 @@ define('io.ox/contacts/distrib/create-dist-view',
                         return api.autocomplete(query);
                     },
                     stringify: function (data) {
-                        return data.display_name;  // '"' + data.display_name + '" <' + data.email + '>' :
-//                        return '';
-//                        console.log('not needed');
+                        if (related === 'input#mail') {
+                            return data.display_name;
+                        } else {
+                            return data.email;
+                        }
+
                     },
 
                     // for a second (related) Field
                     stringifyrelated: function (data) {
-                        return data.email;  // '"' + data.display_name + '" <' + data.email + '>' :
-//                        return '';
-//                        console.log('not needed');
+                        if (related === 'input#mail') {
+                            return data.email;
+                        } else {
+                            return data.display_name;
+                        }
+
                     },
                     draw: function (data) {
                         drawAutoCompleteItem.call(null, this, data);
                     },
-                    click: function (e) {
-                       // copyRecipients.call(null, id, $(this));
-                       // copyContact(options, e.data.contact, e.data.email);
-//                        console.log(e);
-                    },
-                    blur: function (e) {
-                        // copy valid recipients
-//                        copyRecipients.call(null, id, $(this));
-                        console.log('dead end :-)');
-                    },
                     // to specify the related Field
                     related: function () {
-                        var test = $('input#mail');
-                        return test;
+                        var field = $(related);
+                        return field;
                     },
                     dataHolder: function () {
                         var holder = $('[data-holder="data-holder"]');
                         return holder;
                     }
                 })
-                .on('keyup', function (e) {
-                    if (e.which === 13) {
-//                        copyRecipients.call(null, id, $(this));
-                        console.log('dead end :-)');
-                    } else {
-                        // look for special prefixes
-                        var val = $(this).val();
-                        if ((/^to:?\s/i).test(val)) {
-                            $(this).val('');
-//                            showSection('to');
-                            console.log('dead end :-)');
-                        } else if ((/^cc:?\s/i).test(val)) {
-                            $(this).val('');
-//                            showSection('cc');
-                            console.log('dead end :-)');
-                        } else if ((/^bcc:?\s/i).test(val)) {
-                            $(this).val('');
-//                            showSection('bcc');
-                            console.log('dead end :-)');
-                        }
-                    }
-                })
-
         );
     }
-    function createField(options, id) {
-
-        return $('<div>')
-        .addClass('fieldset mail')
-        .append(
-            $('<label>', { 'for' : 'writer_field_' + id }).text('mail'),
-            $('<input>', {
-                type: 'text',
-                tabindex: '2',
-                autocapitalize: 'off',
-                autocomplete: 'off',
-                autocorrect: 'off',
-                id: id
-            })
-                .attr('data-type', id) // not name=id!
-                .addClass('discreet')
-                .autocomplete({
-                    source: function (query) {
-                        return api.autocomplete(query);
-                    },
-                    stringify: function (data) {
-                        return data.email;// '"' + data.display_name + '" <' + data.email + '>' :
-//                        return '';
-//                        console.log('not needed');
-                    },
-
-                    // for a second (related) Field
-                    stringifyrelated: function (data) {
-                        return data.display_name;  // '"' + data.display_name + '" <' + data.email + '>' :
-//                        return '';
-//                        console.log('not needed');
-                    },
-                    draw: function (data) {
-                        drawAutoCompleteItem.call(null, this, data);
-                    },
-                    click: function (e) {
-                       // copyRecipients.call(null, id, $(this));
-                        //copyContact(options, e.data.contact, e.data.email);
-//                        console.log(e);
-                    },
-                    blur: function (e) {
-                        // copy valid recipients
-//                        copyRecipients.call(null, id, $(this));
-                        console.log('dead end :-)');
-                    },
-                    // to specify the related Field
-                    related: function () {
-                        var test = $('input#name');
-                        return test;
-                    },
-                    dataHolder: function () {
-                        var holder = $('[data-holder="data-holder"]');
-                        return holder;
-                    }
-                })
-                .on('keyup', function (e) {
-                    if (e.which === 13) {
-//                        copyRecipients.call(null, id, $(this));
-                        console.log('dead end :-)');
-                    } else {
-                        // look for special prefixes
-                        var val = $(this).val();
-                        if ((/^to:?\s/i).test(val)) {
-                            $(this).val('');
-//                            showSection('to');
-                            console.log('dead end :-)');
-                        } else if ((/^cc:?\s/i).test(val)) {
-                            $(this).val('');
-//                            showSection('cc');
-                            console.log('dead end :-)');
-                        } else if ((/^bcc:?\s/i).test(val)) {
-                            $(this).val('');
-//                            showSection('bcc');
-                            console.log('dead end :-)');
-                        }
-                    }
-                })
-
-        );
-    }
-
 
     var growl = $('<div>', {id: 'myGrowl'}).addClass('jGrowl').css({position: 'absolute', right: '0', top: '0'});
 
@@ -350,72 +239,50 @@ define('io.ox/contacts/distrib/create-dist-view',
 
         draw: function (app) {
             var self = this,
-                meta = ['display_name'];
+                model = self.getModel(),
+                myId = _.uniqueId('c'),
+                editSection = self.createSection(),
+                addSection = self.createSection(),
+                sectiongroup = self.createSectionGroup(),
+                dataHolder,
+                fId = config.get("folder.contacts");
+
             if (_.isArray(self.model._data.distribution_list)) {
                 _.each(self.model._data.distribution_list, function (key) {
                     if (key.id) {
-                        api.get({id: key.id, folder: '11179'}).done(function (obj) {
+                        api.get({id: key.id, folder: fId}).done(function (obj) {
                             drawListetItem(displayBox, obj, key.mail, self);
-                            console.log(displayBox);
                         });
                     } else {
                         drawListetItemClear(displayBox, key.display_name, key.mail, self);
-                        console.log(displayBox);
                     }
-
-
                 });
             }
 
-            _.each(meta, function (field) {
-                var myId = _.uniqueId('c'),
-                sectiongroup = self.createSectionGroup(),
-                model = self.getModel(),
-                fieldtype = model.schema.getFieldType(field),
-                createFunction;
+            self.node.append(sectiongroup.append(saveButton(self)));
+            sectiongroup.addClass('header')
+            .append(self.createLabel({
+                id: myId,
+                text: gt('display_name')
+            }), self.createTextField({property: 'display_name', id: myId, classes: 'nice-input'}));
 
-                switch (fieldtype) {
-                case "string":
-                    createFunction = self.createTextField({property: field, id: myId, classes: 'nice-input'});
-                    break;
-                case "pastDate":
-                    createFunction = self.createDateField({property: field, id: myId, classes: 'nice-input'});
-                    break;
-                default:
-                    createFunction = self.createTextField({property: field, id: myId, classes: 'nice-input'});
-                    break;
-                }
-                self.node.append(sectiongroup.append(saveButton(self)));
-                sectiongroup.addClass('header')
-                .append(self.createLabel({
-                    id: myId,
-                    text: gt(field)
-                }), createFunction);
-
-
-
-                var editSection = self.createSection();
-                editSection.append(
-                    self.createSectionTitle({text: gt('Members')}),
-                    displayBox
-
-                        );
-                self.node.append(editSection);
-
-                var dataHolder = $('<div>').attr('data-holder', 'data-holder')
-                .append(createInputFieldName(self, 'name'), createField(self, 'mail'));
-
-                var addSection = self.createSection();
-                addSection.addClass('last').append(
-                    self.createSectionTitle({text: gt('add new Member')}),
-                    dataHolder,
-                    addButton(self)
+            editSection.append(
+                self.createSectionTitle({text: gt('Members')}),
+                displayBox
                 );
+            self.node.append(editSection);
 
-                self.node.append(addSection);
+            dataHolder = $('<div>').attr('data-holder', 'data-holder')
+            .append(createField(self, 'name', 'input#mail'), createField(self, 'mail', 'input#name'));
 
 
-            });
+            addSection.addClass('last').append(
+                self.createSectionTitle({text: gt('add new Member')}),
+                dataHolder,
+                addButton(self)
+            );
+
+            self.node.append(addSection);
 
             this.getModel().on('error:invalid', function (evt, err) {
                 console.log('error validation');

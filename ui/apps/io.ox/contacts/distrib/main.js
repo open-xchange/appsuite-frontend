@@ -22,7 +22,6 @@ define('io.ox/contacts/distrib/main',
 
     'use strict';
 
- // multi instance pattern
     function createInstance(data) {
         var app;
         app = ox.ui.createApp({
@@ -57,8 +56,6 @@ define('io.ox/contacts/distrib/main',
 
                 if (data) {
                     myModel.store = function update(data, changes) {
-                        console.log(changes);
-                        // TODO: replace image upload with a field in formsjs method
                         return api.edit({
                             id: data.id,
                             folder: data.folder_id,
@@ -67,16 +64,13 @@ define('io.ox/contacts/distrib/main',
                         });
                     };
                 } else { myModel.store = function create(data, changes) {
-
                         var fId = config.get("folder.contacts");
-                // TODO: replace image upload with a field in formsjs method
                         if (!_.isEmpty(data)) {
                             data.folder_id = fId;
                             if (data.display_name === '') {
                                 data.display_name =  util.createDisplayName(data);
                             }
                             data.mark_as_distributionlist = true;
-                   // console.log(data);
                             return api.create(data);
                         }
                     };
@@ -90,8 +84,7 @@ define('io.ox/contacts/distrib/main',
         app.setQuit(function () {
 
             //clean
-            $('.maillist').empty();
-            console.log('beim quit');
+            $('.item-list').empty();
         });
         return app;
     }
