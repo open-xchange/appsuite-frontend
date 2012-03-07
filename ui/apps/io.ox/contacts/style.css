@@ -407,3 +407,126 @@ input#image1 {
 .contact-detail.edit a.switcher {
 	padding-left: 165px;	
 }
+
+.io-ox-contact-create-dist .contact-image,  .create-distributionlist .contact-image{
+    height: 3em;
+    width: 3em;
+    margin-right: 1em;
+    display: inline-block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    float: left;
+}
+
+
+/*create dist*/
+
+/*header*/
+.section-group.header {
+	padding-top: 20px;
+	padding-left: 10px;
+	height: 60px;
+	border-bottom: 1px solid #EEE;
+}
+
+.section{
+	padding: 0 10px 15px 10px;
+	border-bottom: 1px solid #EEE;
+}
+
+.section.last{
+	border: none;
+}
+
+.item-list{
+}
+
+.sectiontitle{
+	margin: 25px 0 15px 0;
+	font-size: 1.25em;
+	color: #888;
+	font-family: OpenSans, Helvetica, Arial, sans-serif;
+	font-weight: 200;
+	line-height: 1.15em;
+}
+
+.item-list-header {
+	margin-bottom: 20px;
+	border-bottom: 1px solid #EEE;
+	overflow: hidden;
+}
+
+.header a.button.default-action.saveButton{
+	float: right;
+}
+
+.item-list .col{
+	width: 240px;
+	float: left;
+}
+
+.item-list .name.col {
+	margin-left: 55px;
+}
+
+.create-distributionlist .item-list{
+	/*height: 200px;*/
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.create-distributionlist label{
+	display: block;
+}
+
+.create-distributionlist input{
+	width: 200px;
+}
+
+.create-distributionlist .item-list .listet-item {
+	width: 572px;
+	float: left;
+	padding: 3px;
+	border: 1px solid #ccc;
+	height: 3em;
+	margin-bottom: 3px;
+}
+.create-distributionlist .item-list .listet-item .person-link.ellipsis,
+.create-distributionlist .item-list .listet-item .person-selected-mail,
+.fieldset{
+	width: 240px;
+	margin-top: 12px;
+	float: left;
+}
+
+.create-distributionlist .fieldset.name{
+	width: 238px;
+	margin-left: 50px;
+}
+
+.create-distributionlist .fieldset.mail{
+	width: 230px;
+}
+
+.create-distributionlist .item-list .listet-item .delete-button {
+	margin-top: 12px;
+	margin-right: 12px;
+	float: right;
+	display: inline-block;
+	-webkit-transition: .15s opacity;
+	background-color: transparent;
+	background-image: url(images/close_button.png);
+	border: none;
+	display: block;
+	height: 16px;
+	opacity: 1;
+	width: 16px
+}
+.create-distributionlist .item-list .listet-item .delete-button:hover {
+	background-image: url(images/close_button_hover.png);
+}
+
+.create-distributionlist .button.addButton{
+	margin-top: 33px;
+	margin-right: 0px;
+}
