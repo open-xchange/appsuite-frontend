@@ -51,7 +51,6 @@
 
       $parent = $(selector)
       $parent.length || ($parent = $this.parent())
-
       isActive = $parent.hasClass('open')
 
       clearMenus()

@@ -360,7 +360,6 @@ define("io.ox/files/view-detail",
                     
                     $entryRow.append($("<div>").addClass("span1 versionLabel ").text(version.version));
                     $detailsPane.addClass("span11").appendTo($entryRow);
-                    console.log("=========");
                     new layouts.Grid({ref: "io.ox/files/details/versions/details"}).draw.call($detailsPane, version);
                     
                     $mainContent.append($entryRow);
@@ -403,12 +402,10 @@ define("io.ox/files/view-detail",
             span: 4
         },
         draw: function (version) {
-            var $link = $("<a>", {href: '#'}).text(version.filename).on("click", function () {
-                ext.point("io.ox/files/actions/open").invoke("action", $link, [version]);
-                return false;
-            });
-            
-            this.append($link);
+            new links.DropdownLinks({
+                label: version.filename,
+                ref: "io.ox/files/versions/links/inline"
+            }).draw.call(this, version);
         }
     });
 
@@ -465,15 +462,6 @@ define("io.ox/files/view-detail",
         }
     });
     
-    
-    
-    ext.point("io.ox/files/details/versions/details").extend(new links.InlineLinks({
-        index: 60,
-        id: 'inline-links',
-        ref: 'io.ox/files/versions/links/inline'
-    }));
-    
-
     return {
         draw: draw
     };
