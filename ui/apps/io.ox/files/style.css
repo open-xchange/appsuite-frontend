@@ -25,14 +25,6 @@
     margin-right: 10px;
 }
 
-.file-details .io-ox-clickme {
-    cursor: pointer;
-}
-
-.file-details tr.io-ox-clickme:hover {
-    background-color: whiteSmoke;
-}
-
 .file-details .versionLabel {
     font-size: 1.2em;
 }
@@ -48,9 +40,5 @@
 .file-details .version {
     padding: 5px 5px 10px 5px;
     margin-bottom: 10px;
-}
-
-.file-details .version:hover {
-    background-color: whiteSmoke;
 }
 

@@ -164,7 +164,10 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         id: "makeCurrent",
         index: 250,
         label: "Make this the current version",
-        ref: "io.ox/files/versions/actions/makeCurrent"
+        ref: "io.ox/files/versions/actions/makeCurrent",
+        isEnabled: function (file) {
+            return !file.current_version;
+        }
     }));
 
     ext.point("io.ox/files/versions/links/inline").extend(new links.Link({

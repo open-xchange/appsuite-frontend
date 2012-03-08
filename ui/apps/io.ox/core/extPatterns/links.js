@@ -26,13 +26,16 @@ define("io.ox/core/extPatterns/links", ["io.ox/core/extensions", "io.ox/core/col
         };
     };
 
-    var applyCollection = function (self, collection, node, context, bootstrapMode) {
+    var applyCollection = function (self, collection, node, context, args, bootstrapMode) {
         // resolve collection's properties
         collection.getProperties()
             .done(function () {
                 // get links (check for requirements)
                 var links = ext.point(self.ref).select(function (link) {
                     // process actions
+                    if (link.isEnabled && ! link.isEnabled.apply(link, args)) {
+                        return false;
+                    }
                     return ext.point(link.ref).inject(function (flag, action) {
                         if (_.isFunction(action.requires)) {
                             // check requirements
@@ -61,30 +64,36 @@ define("io.ox/core/extPatterns/links", ["io.ox/core/extensions", "io.ox/core/col
 
     var ToolbarLinks = function (options) {
         var self = _.extend(this, options);
-        this.draw = function (context) {
+        this.draw = function () {
             // paint on current node
-            applyCollection(self, new Collection(context), this, context);
+            var args = $.makeArray(arguments),
+                context = args.shift();
+            applyCollection(self, new Collection(context), this, context, args);
         };
     };
 
     var InlineLinks = function (options) {
         var self = _.extend(this, options);
-        this.draw = function (context) {
+        this.draw = function () {
             // create & add node first, since the rest is async
-            var node = $("<div>").addClass("io-ox-inline-links").appendTo(this);
-            applyCollection(self, new Collection(context), node, context);
+            var args = $.makeArray(arguments),
+                context = args.shift(),
+                node = $("<div>").addClass("io-ox-inline-links").appendTo(this);
+            applyCollection(self, new Collection(context), node, context, args);
         };
     };
     
     var DropdownLinks = function (options) {
         var self = _.extend(this, options);
-        this.draw = function (context) {
-            var $parent = $("<div>").addClass("dropdown").appendTo(this),
+        this.draw = function () {
+            var args = $.makeArray(arguments),
+                context = args.shift(),
+                $parent = $("<div>").addClass("dropdown").appendTo(this),
                 $toggle = $("<a>", {href: '#'}).text(options.label + " ").append($("<b>").addClass("caret")).appendTo($parent);
 
             // create & add node first, since the rest is async
             var node = $("<ul>").addClass("dropdown-menu").appendTo($parent);
-            applyCollection(self, new Collection(context), node, context, true);
+            applyCollection(self, new Collection(context), node, context, args, true);
             
             $toggle.dropdown();
             $toggle.on("click", function () {

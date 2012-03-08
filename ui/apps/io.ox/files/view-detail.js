@@ -345,22 +345,15 @@ define("io.ox/files/view-detail",
         isEnabled: function (file) {
             return file.current_version && file.version > 1;
         },
-        draw: function (file, openVersions, allVersions) {
+        draw: function (file, allVersions) {
             var self = this;
             var $link = $("<a>", {
                 href: '#'
             }).appendTo(this),
             $mainContent = $("<div />").addClass("versions");
             
-            $mainContent.append("No versions");
             
             // first let's deal with the link
-            if (!openVersions) {
-                $link.text("Show all versions").on("click", function () {
-                    self.empty().append($mainContent);
-                    return false;
-                });
-            }
             
             function drawAllVersions(allVersions) {
                 $mainContent.empty();
@@ -369,7 +362,6 @@ define("io.ox/files/view-detail",
                     
                     var $entryRow = $("<div>").addClass("row-fluid version " + (version.current_version ? 'current' : ''));
                     var $detailsPane = $("<div>");
-                    var $currentRow, keepAround, side;
                     
                     $entryRow.append($("<div>").addClass("span1 versionLabel ").text(version.version));
                     $detailsPane.addClass("span11").appendTo($entryRow);
@@ -378,9 +370,7 @@ define("io.ox/files/view-detail",
                     $mainContent.append($entryRow);
                 });
                 
-                if (openVersions) {
-                    self.empty().append($mainContent);
-                }
+                self.empty().append($mainContent);
             }
             
             // Then let's fetch all versions and update link and table accordingly
@@ -395,12 +385,12 @@ define("io.ox/files/view-detail",
         
         on: {
             update: function (file, extension) {
-                var self = this, openVersions = this.find(".versions").is(":visible");
+                var self = this;
                 filesAPI.versions({
                     id: file.id
                 }).done(function (allVersions) {
                     self.empty();
-                    extension.draw.call(self, file, openVersions, allVersions);
+                    extension.draw.call(self, file, allVersions);
                 });
             }
         }
@@ -418,7 +408,7 @@ define("io.ox/files/view-detail",
             new links.DropdownLinks({
                 label: version.filename,
                 ref: "io.ox/files/versions/links/inline"
-            }).draw.call(this, version);
+            }).draw.call(this, null, version);
         }
     });
 
