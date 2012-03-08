@@ -80,7 +80,7 @@ define("io.ox/core/extPatterns/links", ["io.ox/core/extensions", "io.ox/core/col
         var self = _.extend(this, options);
         this.draw = function (context) {
             var $parent = $("<div>").addClass("dropdown").appendTo(this),
-                $toggle = $("<a>", {href: '#'}).text(options.label).appendTo($parent);
+                $toggle = $("<a>", {href: '#'}).text(options.label + " ").append($("<b>").addClass("caret")).appendTo($parent);
 
             // create & add node first, since the rest is async
             var node = $("<ul>").addClass("dropdown-menu").appendTo($parent);
