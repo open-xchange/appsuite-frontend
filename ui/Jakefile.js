@@ -225,7 +225,8 @@ utils.concat("pre-core.js",
         "config.js", "session.js", "gettext.js",
         "tk/selection.js", "tk/vgrid.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js",
-        "api/folder.js", "collection.js", "desktop.js", "commons.js"
+        "api/folder.js", "desktop.js", "commons.js",
+        "collection.js", "extPatterns/links.js"
     ]), { type: "source" }
 );
 

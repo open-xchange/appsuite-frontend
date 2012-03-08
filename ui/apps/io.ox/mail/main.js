@@ -154,17 +154,7 @@ define("io.ox/mail/main",
             );
         };
 
-        /*
-         * Selection handling
-         */
-        grid.selection.on("change", function (e, selection) {
-            if (selection.length === 1) {
-                showMail(selection[0]);
-            } else {
-                right.empty();
-            }
-        });
-
+        commons.wireGridAndSelectionChange(grid, 'io.ox/mail', showMail, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api);

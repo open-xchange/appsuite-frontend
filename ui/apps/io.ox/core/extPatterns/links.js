@@ -1,4 +1,19 @@
-define("io.ox/core/extPatterns/links", ["io.ox/core/extensions", "io.ox/core/collection"], function (ext, Collection) {
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+define("io.ox/core/extPatterns/links",
+    ["io.ox/core/extensions", "io.ox/core/collection"], function (ext, Collection) {
 
     "use strict";
     // common extension classes
@@ -75,7 +90,7 @@ define("io.ox/core/extPatterns/links", ["io.ox/core/extensions", "io.ox/core/col
             applyCollection(self, new Collection(context), node, context);
         };
     };
-    
+
     var DropdownLinks = function (options) {
         var self = _.extend(this, options);
         this.draw = function (context) {
@@ -85,14 +100,14 @@ define("io.ox/core/extPatterns/links", ["io.ox/core/extensions", "io.ox/core/col
             // create & add node first, since the rest is async
             var node = $("<ul>").addClass("dropdown-menu").appendTo($parent);
             applyCollection(self, new Collection(context), node, context, true);
-            
+
             $toggle.dropdown();
             $toggle.on("click", function () {
                 $toggle.dropdown('toggle');
             });
         };
     };
-    
+
     return {
         Link: Link,
         ToolbarLinks: ToolbarLinks,

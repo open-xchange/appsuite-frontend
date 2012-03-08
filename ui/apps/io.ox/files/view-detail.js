@@ -25,20 +25,20 @@ define("io.ox/files/view-detail",
      "io.ox/files/api"], function (ext, links, layouts, i18n, Event, actions, filesAPI) {
 
     "use strict";
-    
+
     var draw = function (file) {
         filesAPI.addDocumentLink(file);
         var $element = $("<div>").addClass("file-details view"),
             sections = new layouts.Sections({
                 ref: "io.ox/files/details/sections"
             });
-        
+
         sections.draw.call($element, file);
-        
+
         var blacklisted = {
             "refresh.list": true
         };
-        
+
         return {
             element: $element,
             file: file,
@@ -62,27 +62,27 @@ define("io.ox/files/view-detail",
             }
         };
     };
-    
+
     // Let's define the standard sections
     ext.point("io.ox/files/details/sections").extend({
         id: "header",
         layout: "Grid",
         index: 100
     });
-    
+
     ext.point("io.ox/files/details/sections").extend({
         id: "content",
         layout: "Grid",
         index: 200
     });
-    
+
     ext.point("io.ox/files/details/sections").extend({
         id: "upload",
         title: "Upload a new version",
         layout: "Grid",
         index: 300
     });
-    
+
     ext.point("io.ox/files/details/sections").extend({
         id: "versions",
         title: "Versions",
@@ -92,12 +92,12 @@ define("io.ox/files/view-detail",
             return file.version > 1;
         }
     });
-    
-    
-    
+
+
+
     // Fill up the sections
-    
-    
+
+
     // Details Extensions
     // Title
     ext.point("io.ox/files/details/sections/header").extend({
@@ -113,8 +113,8 @@ define("io.ox/files/view-detail",
             }
         }
     });
-    
-    
+
+
     // Basic Info Table
     ext.point("io.ox/files/details/sections/header").extend({
         id: "basicInfo",
@@ -123,7 +123,7 @@ define("io.ox/files/view-detail",
             this.addClass("basicInfo");
             var $line = $("<div>");
             this.append($line);
-            
+
             ext.point("io.ox/files/details/sections/header/basicInfo").each(function (extension) {
                 var count = 0;
                 _.each(extension.fields, function (index, field) {
@@ -146,7 +146,7 @@ define("io.ox/files/view-detail",
             }
         }
     });
-    
+
 
     // Basic Info Fields
 
@@ -204,9 +204,9 @@ define("io.ox/files/view-detail",
         ref: 'io.ox/files/links/inline',
         orientation: 'right'
     }));
-    
-    
-    
+
+
+
     // Content Section
     // Preview
     require(["io.ox/preview/main"], function (Preview) {
@@ -255,9 +255,9 @@ define("io.ox/files/view-detail",
             }
         });
     });
-    
+
     // Description
-    
+
     ext.point("io.ox/files/details/sections/content").extend({
         id: "description",
         index: 20,
@@ -286,10 +286,10 @@ define("io.ox/files/view-detail",
             }
         }
     });
-    
-    
+
+
     // Upload Field
-    
+
     ext.point("io.ox/files/details/sections/upload").extend({
         id: "form",
         index: 10,
@@ -318,26 +318,26 @@ define("io.ox/files/view-detail",
                         $commentArea.val("");
                     });
                 });
-                
+
                 return false;
             });
-            
+
             $("<div>").addClass("row-fluid").append($("<div>").addClass("span6").append($input)).append($("<div>").addClass("span6 pull-right").append($button)).appendTo($node);
-            
+
             var $comment = $("<div>").addClass("row-fluid").hide().appendTo($node);
             var $commentArea = $("<textarea rows='5'></textarea>").addClass("span12").appendTo($comment);
-            
+
             $input.on("change", function () {
                 $comment.show();
                 $commentArea.focus();
             });
-            
+
             $node.append("<br>");
         }
     });
-    
+
     // Version List
-    
+
     ext.point("io.ox/files/details/sections/versions").extend({
         id: "table",
         index: 10,
@@ -350,9 +350,9 @@ define("io.ox/files/view-detail",
                 href: '#'
             }).appendTo(this),
             $mainContent = $("<div />").addClass("versions");
-            
+
             $mainContent.append("No versions");
-            
+
             // first let's deal with the link
             if (!openVersions) {
                 $link.text("Show all versions").on("click", function () {
@@ -360,28 +360,28 @@ define("io.ox/files/view-detail",
                     return false;
                 });
             }
-            
+
             function drawAllVersions(allVersions) {
                 $mainContent.empty();
                 _(allVersions).each(function (version) {
                     filesAPI.addDocumentLink(version);
-                    
+
                     var $entryRow = $("<div>").addClass("row-fluid version " + (version.current_version ? 'current' : ''));
                     var $detailsPane = $("<div>");
                     var $currentRow, keepAround, side;
-                    
+
                     $entryRow.append($("<div>").addClass("span1 versionLabel ").text(version.version));
                     $detailsPane.addClass("span11").appendTo($entryRow);
                     new layouts.Grid({ref: "io.ox/files/details/versions/details"}).draw.call($detailsPane, version);
-                    
+
                     $mainContent.append($entryRow);
                 });
-                
+
                 if (openVersions) {
                     self.empty().append($mainContent);
                 }
             }
-            
+
             // Then let's fetch all versions and update link and table accordingly
             if (!allVersions) {
                 filesAPI.versions({
@@ -391,7 +391,7 @@ define("io.ox/files/view-detail",
                 drawAllVersions(allVersions);
             }
         },
-        
+
         on: {
             update: function (file, extension) {
                 var self = this, openVersions = this.find(".versions").is(":visible");
@@ -404,9 +404,9 @@ define("io.ox/files/view-detail",
             }
         }
     });
-    
+
     // Extensions for the version detail table
-    
+
     ext.point("io.ox/files/details/versions/details").extend({
         index: 10,
         id: "filename",
@@ -446,7 +446,7 @@ define("io.ox/files/view-detail",
             });
         }
     });
-    
+
     ext.point("io.ox/files/details/versions/details").extend({
         index: 40,
         id: "comment",
@@ -461,7 +461,7 @@ define("io.ox/files/view-detail",
             });
         }
     });
-    
+
     ext.point("io.ox/files/details/versions/details").extend({
         index: 50,
         id: "creation_date",
@@ -473,7 +473,7 @@ define("io.ox/files/view-detail",
             this.append($("<span>").text(i18n.date("datetime", version.creation_date)).addClass("pull-right"));
         }
     });
-    
+
     return {
         draw: draw
     };

@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/commons', [], function () {
+define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLinks) {
 
     'use strict';
 
-    return {
+    var commons = {
 
         /**
          * Common show window routine
@@ -31,6 +31,48 @@ define('io.ox/core/commons', [], function () {
                 });
                 return def;
             };
+        },
+
+        /**
+         * Handle multi-selection
+         */
+        multiSelection: (function () {
+
+            var points = {};
+
+            return function (id, node, selection) {
+                if (selection.length > 1) {
+                    // clear
+                    node.empty();
+                    // inline links
+                    var links = $('<div>');
+                    (points[id] || (points[id] = new extLinks.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
+                        .draw.call(links, selection);
+                    // draw
+                    node.append(
+                        $('<div>')
+                        .addClass('io-ox-multi-selection')
+                        .append(
+                            $('<div>').addClass('summary').text(selection.length + ' elements selected'),
+                            links.children().first()
+                        )
+                        .center()
+                    );
+                }
+            };
+        }()),
+
+        wireGridAndSelectionChange: function (grid, id, draw, node) {
+            grid.selection.on('change', function (e, selection) {
+                var len = selection.length;
+                if (len === 1) {
+                    draw(selection[0]);
+                } else if (len > 1) {
+                    commons.multiSelection(id, node, selection);
+                } else {
+                    node.empty();
+                }
+            });
         },
 
         /**
@@ -215,4 +257,6 @@ define('io.ox/core/commons', [], function () {
                 .on('click', loadTree);
         }
     };
+
+    return commons;
 });

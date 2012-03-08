@@ -105,19 +105,16 @@ define("io.ox/files/main",
             right.parent().scrollTop(0);
         }
 
-        grid.selection.on("change", function (e, selection) {
-            if (selection.length === 1) {
-                // get file
-                if (currentDetailView && currentDetailView.file.id === selection[0].id) {
-                    return;
-                }
-
-                right.busy(true);
-                api.get(selection[0]).done(_.lfo(drawDetail));
-            } else {
-                right.empty();
+        var drawFile = function (obj) {
+            // get file
+            if (currentDetailView && currentDetailView.file.id === obj.id) {
+                return;
             }
-        });
+            right.busy(true);
+            api.get(obj).done(_.lfo(drawDetail));
+        };
+
+        commons.wireGridAndSelectionChange(grid, 'io.ox/files', drawFile, right);
 
         // delete item
         api.on("beforedelete", function () {
