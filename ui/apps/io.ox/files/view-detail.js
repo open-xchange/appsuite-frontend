@@ -470,7 +470,7 @@ define("io.ox/files/view-detail",
             orientation: 'right'
         },
         draw: function (version) {
-            this.append($("<span>").text(i18n.date("fulldatetime", version.creation_date)).addClass("pull-right"));
+            this.append($("<span>").text(i18n.date("datetime", version.creation_date)).addClass("pull-right"));
         }
     });
     
