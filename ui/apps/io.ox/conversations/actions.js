@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/conversations/actions", ["io.ox/core/extensions"], function (ext) {
+define("io.ox/conversations/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/links"], function (ext, links) {
 
     "use strict";
 
@@ -29,7 +29,7 @@ define("io.ox/conversations/actions", ["io.ox/core/extensions"], function (ext) 
 
     // links
 
-    ext.point("io.ox/conversations/links/toolbar").extend(new ext.Link({
+    ext.point("io.ox/conversations/links/toolbar").extend(new links.Link({
         index: 100,
         id: "create",
         label: "Start new conversation",

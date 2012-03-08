@@ -17,10 +17,11 @@
 
 define("io.ox/files/view-detail",
     ["io.ox/core/extensions",
+     "io.ox/core/extPatterns/links",
      "io.ox/core/i18n",
      "io.ox/core/event",
      "io.ox/files/actions",
-     "io.ox/files/api"], function (ext, i18n, Event, actions, filesAPI) {
+     "io.ox/files/api"], function (ext, links, i18n, Event, actions, filesAPI) {
 
     "use strict";
     
@@ -186,7 +187,7 @@ define("io.ox/files/view-detail",
 
     // Basic Actions
 
-    ext.point('io.ox/files/details').extend(new ext.InlineLinks({
+    ext.point('io.ox/files/details').extend(new links.InlineLinks({
         index: 30,
         id: 'inline-links',
         ref: 'io.ox/files/links/inline'
@@ -513,7 +514,7 @@ define("io.ox/files/view-detail",
         }
     });
     
-    ext.point("io.ox/files/details/versions/details").extend(new ext.InlineLinks({
+    ext.point("io.ox/files/details/versions/details").extend(new links.InlineLinks({
         index: 60,
         id: 'inline-links',
         type: 'row',

@@ -214,82 +214,6 @@ define("io.ox/core/extensions",
         };
     };
 
-    // common extension classes
-    // TODO: find a better place as it contains UI stuff
-
-    var Link = function (options) {
-
-        _.extend(this, options);
-
-        var self = this,
-            click = function (e) {
-                var node = $(this);
-                e.preventDefault();
-                // TODO: don't know if using self for context makes sense
-                that.point(node.data("ref")).invoke("action", self, node.data("context"));
-            };
-
-        this.draw = function (context) {
-            this.append(
-                $("<a>", { href: "#", tabindex: "1", "data-action": self.id })
-                .addClass('io-ox-action-link' + (options.attention === true ? ' attention': ''))
-                .data({ ref: self.ref, context: context })
-                .click(click)
-                .text(String(self.label))
-            );
-        };
-    };
-
-    var applyCollection = function (self, collection, node, context) {
-        // resolve collection's properties
-        collection.getProperties()
-            .done(function () {
-                // get links (check for requirements)
-                var links = that.point(self.ref).select(function (link) {
-                    // process actions
-                    return that.point(link.ref).inject(function (flag, action) {
-                        if (_.isFunction(action.requires)) {
-                            // check requirements
-                            return flag && action.requires({ collection: collection, context: context });
-                        } else {
-                            return flag;
-                        }
-                    }, true);
-                });
-                // empty?
-                if (links.length === 0) {
-                    node.addClass("empty");
-                } else {
-                    // draw links
-                    _(links).each(function (link) {
-                        if (_.isFunction(link.draw)) {
-                            link.draw.call(node, context);
-                            if (_.isFunction(link.customize)) {
-                                link.customize.call(node.find('a'), context);
-                            }
-                        }
-                    });
-                }
-            });
-    };
-
-    var ToolbarLinks = function (options) {
-        var self = _.extend(this, options);
-        this.draw = function (context) {
-            // paint on current node
-            applyCollection(self, new Collection(context), this, context);
-        };
-    };
-
-    var InlineLinks = function (options) {
-        var self = _.extend(this, options);
-        this.draw = function (context) {
-            // create & add node first, since the rest is async
-            var node = $("<div>").addClass("io-ox-inline-links").appendTo(this);
-            applyCollection(self, new Collection(context), node, context);
-        };
-    };
-
     that = {
 
         // get point
@@ -331,11 +255,7 @@ define("io.ox/core/extensions",
         // add wrapper
         addWrapper: function (name, fn) {
             wrappers[name] = fn;
-        },
-
-        Link: Link,
-        InlineLinks: InlineLinks,
-        ToolbarLinks: ToolbarLinks
+        }
     };
 
     return that;
