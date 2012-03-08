@@ -240,7 +240,8 @@ utils.fileType("lang.js").addHook("handler", function(name) {
 });
 
 exports.potHandler = function(filename) {
-    var dest = "tmp/pot/" + filename.replace(/\+/g, "++").replace(/\//g, "+-");
+    var dest = "tmp/pot/" +
+        filename.replace(/\+/g, "++").replace(/[\\\/]/g, "+-");
     file("ox.pot", [dest]);
     file(dest, ["tmp/pot", filename], function() {
         var data = JSON.stringify(exports.potFiles[filename] || {});
