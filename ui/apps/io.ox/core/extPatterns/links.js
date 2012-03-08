@@ -26,7 +26,7 @@ define("io.ox/core/extPatterns/links", ["io.ox/core/extensions", "io.ox/core/col
         };
     };
 
-    var applyCollection = function (self, collection, node, context) {
+    var applyCollection = function (self, collection, node, context, bootstrapMode) {
         // resolve collection's properties
         collection.getProperties()
             .done(function () {
@@ -49,7 +49,7 @@ define("io.ox/core/extPatterns/links", ["io.ox/core/extensions", "io.ox/core/col
                     // draw links
                     _(links).each(function (link) {
                         if (_.isFunction(link.draw)) {
-                            link.draw.call(node, context);
+                            link.draw.call(bootstrapMode ? $("<li>").appendTo(node) : node, context);
                             if (_.isFunction(link.customize)) {
                                 link.customize.call(node.find('a'), context);
                             }
@@ -76,9 +76,27 @@ define("io.ox/core/extPatterns/links", ["io.ox/core/extensions", "io.ox/core/col
         };
     };
     
+    var DropdownLinks = function (options) {
+        var self = _.extend(this, options);
+        this.draw = function (context) {
+            var $parent = $("<div>").addClass("dropdown").appendTo(this),
+                $toggle = $("<a>", {href: '#'}).text(options.label).appendTo($parent);
+
+            // create & add node first, since the rest is async
+            var node = $("<ul>").addClass("dropdown-menu").appendTo($parent);
+            applyCollection(self, new Collection(context), node, context, true);
+            
+            $toggle.dropdown();
+            $toggle.on("click", function () {
+                $toggle.dropdown('toggle');
+            });
+        };
+    };
+    
     return {
         Link: Link,
         ToolbarLinks: ToolbarLinks,
-        InlineLinks: InlineLinks
+        InlineLinks: InlineLinks,
+        DropdownLinks: DropdownLinks
     };
 });
