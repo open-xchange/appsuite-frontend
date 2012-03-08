@@ -330,7 +330,7 @@ define("io.ox/files/view-detail",
         id: "table",
         index: 10,
         isEnabled: function (file) {
-            return file.current_version;
+            return file.current_version && file.version > 1;
         },
         draw: function (file, extension, openVersions, allVersions) {
             var self = this;
@@ -359,92 +359,9 @@ define("io.ox/files/view-detail",
                     var $currentRow, keepAround, side;
                     
                     $entryRow.append($("<div>").addClass("span1 versionLabel ").text(version.version));
-                    
                     $detailsPane.addClass("span11").appendTo($entryRow);
-                    
-                    
-                    side = 'left';
-                    
-                    function invokeExtension(ext) {
-                        var effectiveType, $element;
-                        
-                        effectiveType = ext.type;
-                        if (!effectiveType) {
-                            effectiveType = side;
-                        }
-                        if (effectiveType === 'row') {
-                            effectiveType = 'left';
-                        }
-                        if (effectiveType === side) {
-                            $element = $("<div>");
-                            if (ext.type !== 'row') {
-                                $element.addClass("span6");
-                            }
-                            ext.draw.call($element, version);
-                            
-                            $element.appendTo($currentRow);
-
-                            if (ext.type === 'right' || ext.type === 'row') {
-                                $currentRow = null;
-                            }
-                            if (ext.type === 'left') {
-                                side = 'right';
-                            }
-                            return true;
-                        }
-                        return false;
-                    }
-                    
-                    ext.point("io.ox/files/details/versions/details").each(function (ext) {
-                        var keepForNextRound = null;
-                        if (!$currentRow) {
-                            $currentRow = $("<div>").addClass("row-fluid").appendTo($detailsPane);
-                            side = 'left';
-                        }
-                        if (!invokeExtension(ext)) {
-                            if (keepAround) {
-                                // Draw blank
-                                if (side === 'left') {
-                                    $currentRow.append($("<div>").addClass("span6"));
-                                    side = 'right';
-                                    invokeExtension(keepAround);
-                                    keepAround = ext;
-                                } else {
-                                    $currentRow = null;
-                                    side = 'left';
-                                    keepForNextRound = ext;
-                                }
-                            } else {
-                                keepForNextRound = ext;
-                            }
-                        }
-                        
-                        if (!$currentRow) {
-                            $currentRow = $("<div>").addClass("row-fluid").appendTo($detailsPane);
-                            side = 'left';
-                        }
-                        
-                        if (keepAround) {
-                            invokeExtension(keepAround);
-                            keepAround = null;
-                        }
-                        if (keepForNextRound) {
-                            keepAround = keepForNextRound;
-                        }
-                        
-                    });
-                    
-                    if (keepAround) {
-                        if (keepAround.type === 'right') {
-                            $currentRow.append($("<div>").addClass("span6"));
-                            side = 'right';
-                            invokeExtension(keepAround);
-                        } else {
-                            $currentRow = $("<div>").addClass("row-fluid").appendTo($detailsPane);
-                            side = 'left';
-                            invokeExtension(keepAround);
-                        }
-                    }
+                    console.log("=========");
+                    new layouts.Grid({ref: "io.ox/files/details/versions/details"}).draw.call($detailsPane, version);
                     
                     $mainContent.append($entryRow);
                 });
@@ -482,7 +399,9 @@ define("io.ox/files/view-detail",
     ext.point("io.ox/files/details/versions/details").extend({
         index: 10,
         id: "filename",
-        type: 'left',
+        dim: {
+            span: 4
+        },
         draw: function (version) {
             var $link = $("<a>", {href: '#'}).text(version.filename).on("click", function () {
                 ext.point("io.ox/files/actions/open").invoke("action", $link, [version]);
@@ -495,8 +414,22 @@ define("io.ox/files/view-detail",
 
     ext.point("io.ox/files/details/versions/details").extend({
         index: 20,
+        id: "size",
+        dim: {
+            span: 4
+        },
+        draw: function (version) {
+            this.text(bytesToSize(version.file_size));
+        }
+    });
+
+    ext.point("io.ox/files/details/versions/details").extend({
+        index: 30,
         id: "created_by",
-        type: 'right',
+        dim: {
+            span: 4,
+            orientation: 'right'
+        },
         draw: function (version) {
             var $node = this;
             require(["io.ox/core/api/user"], function (userAPI) {
@@ -506,27 +439,11 @@ define("io.ox/files/view-detail",
     });
     
     ext.point("io.ox/files/details/versions/details").extend({
-        index: 30,
-        id: "size",
-        type: 'left',
-        draw: function (version) {
-            this.text(bytesToSize(version.file_size));
-        }
-    });
-    
-    ext.point("io.ox/files/details/versions/details").extend({
         index: 40,
-        id: "creation_date",
-        type: 'right',
-        draw: function (version) {
-            this.append($("<span>").text(i18n.date("fulldatetime", version.creation_date)).addClass("pull-right"));
-        }
-    });
-    
-    ext.point("io.ox/files/details/versions/details").extend({
-        index: 50,
         id: "comment",
-        type: 'row',
+        dim: {
+            span: 8
+        },
         draw: function (version) {
             this.text(version.version_comment || '').css({
                 marginTop: "4px",
@@ -536,10 +453,23 @@ define("io.ox/files/view-detail",
         }
     });
     
+    ext.point("io.ox/files/details/versions/details").extend({
+        index: 50,
+        id: "creation_date",
+        dim: {
+            span: 4,
+            orientation: 'right'
+        },
+        draw: function (version) {
+            this.append($("<span>").text(i18n.date("fulldatetime", version.creation_date)).addClass("pull-right"));
+        }
+    });
+    
+    
+    
     ext.point("io.ox/files/details/versions/details").extend(new links.InlineLinks({
         index: 60,
         id: 'inline-links',
-        type: 'row',
         ref: 'io.ox/files/versions/links/inline'
     }));
     

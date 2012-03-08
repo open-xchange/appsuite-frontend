@@ -157,7 +157,7 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
             var args = $.makeArray(arguments),
                 $node = this,
                 $currentRow,
-                slotsLeft,
+                slotsLeft = 0,
                 stack,
                 keep,
                 extension,
@@ -181,7 +181,7 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
             function drawTiles(extension, dim) {
                 var tileSize = slotsLeft - dim.span;
                 if (dim.orientation === 'right' && tileSize > 0) {
-                    $("<div>").addClass("tile span" + tileSize).appendTo($currentRow);
+                    $("<div>").addClass("tile span" + tileSize).append("&nbsp;").appendTo($currentRow);
                     slotsLeft = slotsLeft - tileSize;
                 }
             }
@@ -197,9 +197,13 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
             point.each(function (ext) {
                 stack.push(ext);
             });
+            
             while (stack.length !== 0) {
+                if (slotsLeft === 0) {
+                    br();
+                }
                 keep = [];
-                extension = stack.pop();
+                extension = stack.shift();
                 if (extension.isEnabled && !extension.isEnabled.apply(extension, args)) {
                     continue;
                 }
@@ -213,7 +217,8 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
                 
                 while (stack.length !== 0 && !fits(extension, dimensions)) {
                     keep.push(extension);
-                    extension = stack.pop();
+                    extension = stack.shift();
+                    dimensions = metadata("dim", extension, args) || {span: 12};
                 }
                 if (!fits(extension, dimensions)) {
                     br();
