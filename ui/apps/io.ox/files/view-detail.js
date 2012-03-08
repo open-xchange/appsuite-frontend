@@ -303,7 +303,7 @@ define("io.ox/files/view-detail",
                 type: "file"
             });
 
-            var $button = $("<button/>").text("Upload").addClass("btn pull-right").on("click", function () {
+            var $button = $("<button/>").text("Upload").addClass("btn btn-primary pull-right").on("click", function () {
                 _($input[0].files).each(function (fileData) {
                     $button.addClass("disabled").text("Uploading...");
                     filesAPI.uploadNewVersion({
@@ -429,7 +429,7 @@ define("io.ox/files/view-detail",
             span: 4
         },
         draw: function (version) {
-            this.text(bytesToSize(version.file_size));
+            this.text(bytesToSize(version.file_size)).css({textAlign: "right"});
         }
     });
 
