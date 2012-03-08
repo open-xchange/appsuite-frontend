@@ -13,7 +13,7 @@
  */
 
 define('io.ox/portal/mail/register',
-    ['io.ox/core/extensions'], function (ext, api) {
+    ['io.ox/core/extensions', "io.ox/core/extPatterns/links"], function (ext, links, api) {
 
     'use strict';
 
@@ -30,7 +30,7 @@ define('io.ox/portal/mail/register',
     });
 
     // link
-    ext.point('io.ox/portal/widget/mail/links/inline').extend(new ext.Link({
+    ext.point('io.ox/portal/widget/mail/links/inline').extend(new links.Link({
         index: 100,
         id: 'compose',
         label: 'Compose new email',
@@ -38,7 +38,7 @@ define('io.ox/portal/mail/register',
     }));
 
     // inline links
-    ext.point('io.ox/portal/widget/mail').extend(new ext.InlineLinks({
+    ext.point('io.ox/portal/widget/mail').extend(new links.InlineLinks({
         index: 200,
         id: 'inline-links',
         ref: 'io.ox/portal/widget/mail/links/inline'

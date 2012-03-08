@@ -13,8 +13,9 @@
 
 define('io.ox/mail/actions',
         ['io.ox/core/extensions',
+         'io.ox/core/extPatterns/links',
          'io.ox/mail/api',
-         'io.ox/core/config'], function (ext, api, config) {
+         'io.ox/core/config'], function (ext, links, api, config) {
 
     'use strict';
 
@@ -156,14 +157,14 @@ define('io.ox/mail/actions',
 
     // toolbar
 
-    ext.point('io.ox/mail/links/toolbar').extend(new ext.Link({
+    ext.point('io.ox/mail/links/toolbar').extend(new links.Link({
         index: 100,
         id: 'compose',
         label: 'Compose new email',
         ref: 'io.ox/mail/actions/compose'
     }));
 
-    ext.point('io.ox/mail/links/toolbar').extend(new ext.Link({
+    ext.point('io.ox/mail/links/toolbar').extend(new links.Link({
         index: 200,
         id: 'reader',
         label: 'Reading Lamp!',
@@ -172,28 +173,28 @@ define('io.ox/mail/actions',
 
     // inline links
 
-    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 100,
         id: 'reply-all',
         label: 'Reply All',
         ref: 'io.ox/mail/actions/reply-all'
     }));
 
-    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 200,
         id: 'reply',
         label: 'Reply',
         ref: 'io.ox/mail/actions/reply'
     }));
 
-    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 300,
         id: 'forward',
         label: 'Forward',
         ref: 'io.ox/mail/actions/forward'
     }));
 
-    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 400,
         id: 'edit',
         label: 'Edit',
@@ -201,14 +202,14 @@ define('io.ox/mail/actions',
     }));
 
 
-    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 500,
         id: 'markunread',
         label: 'Mark Unread',
         ref: 'io.ox/mail/actions/markunread'
     }));
 
-    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 501,
         id: 'markread',
         label: 'Mark read',
@@ -261,14 +262,14 @@ define('io.ox/mail/actions',
         }
     });
 
-    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 600,
         id: 'source',
         label: 'View Source',
         ref: 'io.ox/mail/actions/source'
     }));
 
-    ext.point('io.ox/mail/links/inline').extend(new ext.Link({
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 700,
         id: 'delete',
         label: 'Delete',

@@ -14,9 +14,10 @@
 
 define("io.ox/mail/view-detail",
     ["io.ox/core/extensions",
+     "io.ox/core/extPatterns/links",
      "io.ox/mail/util",
      "io.ox/mail/actions"
-    ], function (ext, util, actions) {
+    ], function (ext, links, util, actions) {
 
     'use strict';
 
@@ -288,7 +289,7 @@ define("io.ox/mail/view-detail",
         }
     });
 
-    ext.point('io.ox/mail/detail').extend(new ext.InlineLinks({
+    ext.point('io.ox/mail/detail').extend(new links.InlineLinks({
         index: 170,
         id: 'inline-links',
         ref: 'io.ox/mail/links/inline'

@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
+define('io.ox/contacts/actions', ['io.ox/core/extensions', "io.ox/core/extPatterns/links"], function (ext, links) {
 
     'use strict';
 
@@ -77,7 +77,7 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
 
     //  points
 
-    ext.point("io.ox/contacts/detail/actions").extend(new ext.InlineLinks({
+    ext.point("io.ox/contacts/detail/actions").extend(new links.InlineLinks({
         index: 100,
         id: "inline-links",
         ref: 'io.ox/contacts/links/inline'
@@ -85,14 +85,14 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
 
     // toolbar
 
-    ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
+    ext.point("io.ox/contacts/links/toolbar").extend(new links.Link({
         index: 100,
         id: "create",
         label: "Add contact",
         ref: "io.ox/contacts/main/create"
     }));
 
-    ext.point("io.ox/contacts/links/toolbar").extend(new ext.Link({
+    ext.point("io.ox/contacts/links/toolbar").extend(new links.Link({
         index: 100,
         id: "create-dist",
         label: "Add distributionlist",
@@ -101,14 +101,14 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions'], function (ext) {
 
     //  inline links
 
-    ext.point("io.ox/contacts/links/inline").extend(new ext.Link({
+    ext.point("io.ox/contacts/links/inline").extend(new links.Link({
         index: 100,
         id: 'update',
         label: 'Edit',
         ref: 'io.ox/contacts/main/update'
     }));
 
-    ext.point("io.ox/contacts/links/inline").extend(new ext.Link({
+    ext.point("io.ox/contacts/links/inline").extend(new links.Link({
         index: 200,
         id: 'delete',
         label: 'Delete',
