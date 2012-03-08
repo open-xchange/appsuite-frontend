@@ -67,7 +67,7 @@ define("io.ox/core/extPatterns/links", ["io.ox/core/extensions", "io.ox/core/col
         this.draw = function () {
             // paint on current node
             var args = $.makeArray(arguments),
-                context = args.shift();
+                context = args[0];
             applyCollection(self, new Collection(context), this, context, args);
         };
     };
@@ -77,7 +77,7 @@ define("io.ox/core/extPatterns/links", ["io.ox/core/extensions", "io.ox/core/col
         this.draw = function () {
             // create & add node first, since the rest is async
             var args = $.makeArray(arguments),
-                context = args.shift(),
+                context = args[0],
                 node = $("<div>").addClass("io-ox-inline-links").appendTo(this);
             applyCollection(self, new Collection(context), node, context, args);
         };
@@ -87,7 +87,7 @@ define("io.ox/core/extPatterns/links", ["io.ox/core/extensions", "io.ox/core/col
         var self = _.extend(this, options);
         this.draw = function () {
             var args = $.makeArray(arguments),
-                context = args.shift(),
+                context = args[0],
                 $parent = $("<div>").addClass("dropdown").appendTo(this),
                 $toggle = $("<a>", {href: '#'}).text(options.label + " ").append($("<b>").addClass("caret")).appendTo($parent);
 

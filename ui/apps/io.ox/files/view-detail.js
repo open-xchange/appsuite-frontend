@@ -356,14 +356,29 @@ define("io.ox/files/view-detail",
             // first let's deal with the link
             
             function drawAllVersions(allVersions) {
+                allVersions = _(allVersions).sort(function (version1, version2) {
+                    if (version1.version === version2.version) {
+                        return 0;
+                    }
+                    if (version1.current_version) {
+                        return -1;
+                    }
+                    if (version2.current_version) {
+                        return 1;
+                    }
+                    return version2.version - version1.version;
+                });
                 $mainContent.empty();
                 _(allVersions).each(function (version) {
                     filesAPI.addDocumentLink(version);
                     
                     var $entryRow = $("<div>").addClass("row-fluid version " + (version.current_version ? 'current' : ''));
                     var $detailsPane = $("<div>");
-                    
-                    $entryRow.append($("<div>").addClass("span1 versionLabel ").text(version.version));
+                    if (version.current_version) {
+                        $entryRow.append($("<div>").addClass("span1").append($("<span>").text(version.version).addClass("versionLabel")).append($("<span>").text(" (current)")));
+                    } else {
+                        $entryRow.append($("<div>").addClass("span1").append($("<span>").text(version.version).addClass("versionLabel")));
+                    }
                     $detailsPane.addClass("span11").appendTo($entryRow);
                     new layouts.Grid({ref: "io.ox/files/details/versions/details"}).draw.call($detailsPane, version);
                     
@@ -408,7 +423,7 @@ define("io.ox/files/view-detail",
             new links.DropdownLinks({
                 label: version.filename,
                 ref: "io.ox/files/versions/links/inline"
-            }).draw.call(this, null, version);
+            }).draw.call(this, version);
         }
     });
 
