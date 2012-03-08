@@ -7,10 +7,6 @@
     margin-bottom: 0.25em;
 }
 
-.file-details .basicInfo {
-    margin-bottom: 15px;
-}
-
 .file-details .basicInfo em {
     font-weight: bold;
     font-style: normal;
@@ -29,44 +25,16 @@
     margin-right: 10px;
 }
 
-.file-details .io-ox-clickme {
-    cursor: pointer;
-}
-
-.file-details tr.io-ox-clickme:hover {
-    background-color: whiteSmoke;
-}
-
 .file-details .versionLabel {
-    font-size: 1.5em;
+    font-size: 1.2em;
 }
 
 .file-details .version.current .versionLabel {
     font-weight: bold;
 }
 
-.file-details .version.current {
-    background-color: @list-highlight;
-}
-
 .file-details .version {
     padding: 5px 5px 10px 5px;
     margin-bottom: 10px;
 }
-
-.file-details .version:hover {
-    background-color: whiteSmoke;
-}
-
-.file-details .preview {
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
-    background-color: whiteSmoke;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    text-align: center;
-    padding-top: 2em;
-    padding-bottom: 2em;
-}
-
 
