@@ -426,12 +426,10 @@ input#image1 {
 	padding-top: 20px;
 	padding-left: 10px;
 	height: 60px;
-	border-bottom: 1px solid #EEE;
 }
 
 .section{
 	padding: 0 10px 15px 10px;
-	border-bottom: 1px solid #EEE;
 }
 
 .section.last{
@@ -452,7 +450,6 @@ input#image1 {
 
 .item-list-header {
 	margin-bottom: 20px;
-	border-bottom: 1px solid #EEE;
 	overflow: hidden;
 }
 

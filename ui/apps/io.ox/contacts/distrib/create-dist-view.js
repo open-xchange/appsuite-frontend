@@ -70,7 +70,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         var button = $('<a>').attr({
             'data-action': 'add',
             'href': '#'
-        }).addClass('button  addButton').text(gt('Add')).on('click', function (e) {
+        }).addClass('button  addButton').text(gt('Add new member')).on('click', function (e) {
             var data = $('[data-holder="data-holder"]').data(),
                 mailValue = $('input#mail').val(),
                 nameValue = $('input#name').val();
@@ -263,7 +263,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             sectiongroup.addClass('header')
             .append(self.createLabel({
                 id: myId,
-                text: gt('name')
+                text: gt('List name')
             }), self.createTextField({property: 'display_name', id: myId, classes: 'nice-input'}));
 
             editSection.append(
@@ -277,7 +277,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
 
             addSection.addClass('last').append(
-                self.createSectionTitle({text: gt('add new Member')}),
+                //self.createSectionTitle({text: gt('add new Member')}),
                 dataHolder,
                 addButton(self)
             );
