@@ -29,6 +29,7 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
                 return 'draw';
             }
         }
+        return 'done';
     }
     
     var Flow = function (options) {
@@ -136,7 +137,7 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
                 type = args.shift();
             _(sublayouts).each(function (layout, sectionId) {
                 if (layout.trigger) {
-                    layout.trigger.apply(layout, _([nodes[sectionId], type, args]).flatten()); // TODO: Rethink _.flatten
+                    layout.trigger.apply(layout, _([nodes[sectionId], type, args]).flatten()); // TODO: Rethink _.flatten, destroys regularly passed arrays
                 }
             });
         };

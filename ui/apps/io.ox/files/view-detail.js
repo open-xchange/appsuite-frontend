@@ -49,6 +49,7 @@ define("io.ox/files/view-detail",
                 var self = this;
                 if (evt && evt.id && evt.id === file.id && type !== "delete") {
                     filesAPI.get({id: evt.id, folder: evt.folder}).done(function (file) {
+                        filesAPI.addDocumentLink(file);
                         self.file = file;
                         sections.trigger($element, type, file);
                     });
@@ -208,37 +209,51 @@ define("io.ox/files/view-detail",
     
     // Content Section
     // Preview
-    
-    ext.point("io.ox/files/details/sections/content").extend({
-        id: "preview",
-        index: 10,
-        dim: {
-            span: 6
-        },
-        isEnabled: function (file) {
-            return !!file.filename;
-        },
-        draw: function (file) {
-            this.addClass("preview");
-            
-            var fileDescription = {
-                name: file.filename,
-                mimetype: file.file_mimetype,
-                size: file.file_size,
-                dataURL: file.documentUrl
-            };
-            
-            var $node = this;
-            $node.hide();
-            require(["io.ox/preview/main"], function (Preview) {
+    require(["io.ox/preview/main"], function (Preview) {
+        ext.point("io.ox/files/details/sections/content").extend({
+            id: "preview",
+            index: 10,
+            dim: {
+                span: 6
+            },
+            isEnabled: function (file) {
+                if (!file.filename) {
+                    return false;
+                }
+                var fileDescription = {
+                    name: file.filename,
+                    mimetype: file.file_mimetype,
+                    size: file.file_size,
+                    dataURL: file.documentUrl
+                };
+                var prev = new Preview(fileDescription);
+                return prev.supportsPreview();
+            },
+            draw: function (file) {
+                this.addClass("preview");
+
+                var fileDescription = {
+                    name: file.filename,
+                    mimetype: file.file_mimetype,
+                    size: file.file_size,
+                    dataURL: file.documentUrl
+                };
+
+                var $node = this;
+                $node.hide();
                 var prev = new Preview(fileDescription);
                 if (prev.supportsPreview()) {
                     prev.appendTo($node);
                     $node.show();
                 }
-            });
-            
-        }
+            },
+            on: {
+                update: function (file, extension) {
+                    this.empty();
+                    extension.draw.call(this, file, extension);
+                }
+            }
+        });
     });
     
     // Description
@@ -281,7 +296,7 @@ define("io.ox/files/view-detail",
         dim: {
             span: 6
         },
-        draw: function (file, extension) {
+        draw: function (file) {
             var self = this;
             var $node = $("<div>").addClass("well").appendTo(this);
             var $input = $("<input>", {
@@ -299,8 +314,8 @@ define("io.ox/files/view-detail",
                         json: {version_comment: $commentArea.val()}
                     }).done(function (data) {
                         $button.removeClass("disabled").text("Upload new version");
-                        self.empty();
-                        extension.draw.call(self, $node);
+                        $comment.hide();
+                        $commentArea.val("");
                     });
                 });
                 
@@ -329,7 +344,7 @@ define("io.ox/files/view-detail",
         isEnabled: function (file) {
             return file.current_version && file.version > 1;
         },
-        draw: function (file, extension, openVersions, allVersions) {
+        draw: function (file, openVersions, allVersions) {
             var self = this;
             var $link = $("<a>", {
                 href: '#'
@@ -384,7 +399,7 @@ define("io.ox/files/view-detail",
                     id: file.id
                 }).done(function (allVersions) {
                     self.empty();
-                    extension.draw.call(self, file, extension, openVersions, allVersions);
+                    extension.draw.call(self, file, openVersions, allVersions);
                 });
             }
         }
