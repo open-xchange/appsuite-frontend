@@ -57,4 +57,15 @@
     background-color: whiteSmoke;
 }
 
+.file-details .preview {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+    background-color: whiteSmoke;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    text-align: center;
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
 
