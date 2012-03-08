@@ -270,7 +270,7 @@ define("io.ox/files/view-detail",
         draw: function (file) {
             this.addClass("description");
             this.append(
-                $("<div>").addClass("well")
+                $("<div>")
                 .css({
                     // makes it readable
                     fontFamily: "monospace, 'Courier new'",
@@ -298,7 +298,7 @@ define("io.ox/files/view-detail",
         },
         draw: function (file) {
             var self = this;
-            var $node = $("<div>").addClass("well").appendTo(this);
+            var $node = $("<form>").appendTo(this);
             var $input = $("<input>", {
                 type: "file"
             });
@@ -325,7 +325,8 @@ define("io.ox/files/view-detail",
             $("<div>").addClass("row-fluid").append($("<div>").addClass("span6").append($input)).append($("<div>").addClass("span6 pull-right").append($button)).appendTo($node);
             
             var $comment = $("<div>").addClass("row-fluid").hide().appendTo($node);
-            var $commentArea = $("<textarea rows='5'></textarea>").addClass("span12").appendTo($comment);
+            $comment.append($("<label>").text("Version Comment:"));
+            var $commentArea = $("<textarea rows='5'></textarea>").css({resize: 'none', width: "100%"}).appendTo($comment);
             
             $input.on("change", function () {
                 $comment.show();
