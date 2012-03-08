@@ -59,24 +59,28 @@ define('io.ox/contacts/api',
         }
     });
 
-    api.create = function (formdata) {
+    api.create = function (form) {
         return http.PUT({
-            module: 'contacts',
-            params: {action: 'new'},
-            data: formdata,
-            datatype: 'text'
-        })
-        .done(function (data) {
-            api.caches.all.clear(); //TODO considere proper folder
-            api.trigger('refresh.all');
-            api.trigger('created', { // TODO needs a switch for created by hand or by test
-                folder: formdata.folder_id,
-                id: data.id
+                module: 'contacts',
+                params: { action: 'new' },
+                data: form,
+                datatype: 'text',
+                appendColumns: false
+            })
+            .done(function (data) {
+                api.caches.all.clear(); //TODO consider proper folder
+                api.trigger('refresh.all');
+                api.trigger('created', { // TODO needs a switch for created by hand or by test
+                    folder: form.folder_id,
+                    id: data.id
+                });
+            })
+            .pipe(function (data) {
+                return api.get({ id: data.id, folder: form.folder_id });
+            })
+            .fail(function () {
+                console.log('connection lost');//what to do if fails?
             });
-        })
-        .fail(function () {
-            console.log('connection lost');//what to do if fails?
-        });
     };
 
     api.createNewImage = function (formdata, file) {
@@ -156,21 +160,28 @@ define('io.ox/contacts/api',
             });
     };
 
-    api.remove =  function (formdata) {
-        return http.PUT({
-            module: 'contacts',
-            params: { action: 'delete', timestamp: formdata.last_modified },
-            data: { folder: formdata.folder_id, id: formdata.id },
-            datatype: 'text'
-        })
-       .done(function () {
-            api.caches.all.clear();
-            api.caches.list.clear();
-            api.trigger('refresh.all');
-        })
-       .fail(function () {
-            console.log('connection lost');//what to do if fails?
+    api.remove =  function (list) {
+        // get array
+        list = _.isArray(list) ? list : [list];
+        // one request per object
+        var defs = [];
+        _(list).each(function (data) {
+            defs.push(http.PUT({
+                module: 'contacts',
+                params: { action: 'delete', timestamp: data.last_modified || _.now() },
+                data: { folder: data.folder_id, id: data.id }
+            }));
         });
+        // resume HTTP layer
+        $.when.apply($, defs)
+            .done(function () {
+                api.caches.all.clear();
+                api.caches.list.clear();
+                api.trigger('refresh.all');
+            })
+           .fail(function () {
+                console.log('connection lost'); //what to do if fails?
+            });
     };
 
     var autocompleteCache = new cache.SimpleCache('contacts-autocomplete', true);

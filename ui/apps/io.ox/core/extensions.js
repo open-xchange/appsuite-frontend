@@ -74,11 +74,10 @@ define("io.ox/core/extensions",
         Events.extend(this);
 
         function createInvoke(point, ext) {
-            return function (name, context, args) {
-                if (!_.isArray(args)) {
-                    args = [args];
-                }
-                var fn = ext[name];
+            return function (name, context) {
+                // get variable set of arguments
+                var args = $.makeArray(arguments).slice(2),
+                    fn = ext[name];
                 if (fn) {
                     // wrap
                     if (wrappers[name]) {
@@ -192,11 +191,10 @@ define("io.ox/core/extensions",
             return list().inject(cb, memo).value();
         };
 
-        this.invoke = function (name, context, args) {
-            if (!_.isArray(args)) {
-                args = [args];
-            }
-            return list().invoke("invoke", name, context, args);
+        this.invoke = function (name, context) {
+            var o = list(),
+                args = ["invoke"].concat($.makeArray(arguments));
+            return o.invoke.apply(o, args);
         };
 
         this.disable = function (id) {

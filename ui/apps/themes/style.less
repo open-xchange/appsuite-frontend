@@ -34,6 +34,11 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     -webkit-tap-highlight-color: transparent;
 }
 
+.scrollable-pane {
+    position: relative;
+    height: 100%;
+}
+
 /* top bar */
 
 #io-ox-topbar {
@@ -891,6 +896,20 @@ span.hint {
 
 .io-ox-action-link:last-child {
     margin-right: 0;
+}
+
+.io-ox-multi-selection .summary {
+    font-size: 14pt;
+    font-weight: 200;
+    color: #888;
+}
+
+.io-ox-multi-selection .io-ox-inline-links {
+    text-align: center;
+}
+
+.io-ox-multi-selection .io-ox-inline-links a {
+    color: @inline-link-color;
 }
 
 /* side popups */
