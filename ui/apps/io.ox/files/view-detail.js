@@ -86,7 +86,10 @@ define("io.ox/files/view-detail",
         id: "versions",
         title: "Versions",
         layout: "Grid",
-        index: 400
+        index: 400,
+        isEnabled: function (file) {
+            return file.version > 1;
+        }
     });
     
     
@@ -217,6 +220,7 @@ define("io.ox/files/view-detail",
         },
         draw: function (file) {
             this.addClass("preview");
+            
             var fileDescription = {
                 name: file.filename,
                 mimetype: file.file_mimetype,
@@ -224,20 +228,16 @@ define("io.ox/files/view-detail",
                 dataURL: file.documentUrl
             };
             
-            ext.point("io.ox/files/details/sections/content/preview").invoke("draw", this, [ fileDescription, this ]);
-        }
-    });
-
-    ext.point("io.ox/files/details/sections/content/preview").extend({
-        id: "preview",
-        draw: function (file, node) {
+            var $node = this;
+            $node.hide();
             require(["io.ox/preview/main"], function (Preview) {
-                var prev = new Preview(file);
+                var prev = new Preview(fileDescription);
                 if (prev.supportsPreview()) {
-                    prev.appendTo(node);
-                    node.show();
+                    prev.appendTo($node);
+                    $node.show();
                 }
             });
+            
         }
     });
     
@@ -280,9 +280,6 @@ define("io.ox/files/view-detail",
         index: 10,
         dim: {
             span: 6
-        },
-        isEnabled: function (file) {
-            return file.current_version;
         },
         draw: function (file, extension) {
             var self = this;
@@ -350,7 +347,7 @@ define("io.ox/files/view-detail",
             }
             
             function drawAllVersions(allVersions) {
-                $mainContent.empty().append($("<h4>").text("Versions")).append($("<br/>"));
+                $mainContent.empty();
                 _(allVersions).each(function (version) {
                     filesAPI.addDocumentLink(version);
                     

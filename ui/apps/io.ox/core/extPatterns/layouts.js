@@ -84,6 +84,9 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
             var args = $.makeArray(arguments),
                 $node = this;
             point.each(function (sectionDef) {
+                if (sectionDef.isEnabled && !sectionDef.isEnabled.apply(sectionDef, args)) {
+                    return;
+                }
                 var $sectionNode = $("<div>").addClass("section").appendTo($node);
                 nodes[sectionDef.id] = $sectionNode;
                 
