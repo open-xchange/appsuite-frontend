@@ -277,7 +277,6 @@ define("io.ox/conversations/main",
                         $("<div>").addClass("text").html(html)
                     )
                 );
-                console.log('msg', msg);
             });
 
             pane.parent().scrollTop(pane.height() + 100);

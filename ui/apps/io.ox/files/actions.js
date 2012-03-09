@@ -19,6 +19,9 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
 
     ext.point("io.ox/files/actions/upload").extend({
         id: "upload",
+        requires: function (e) {
+            return e.collection.has('create');
+        },
         action: function (app) {
             var lastUploaded = null;
             require(["io.ox/files/views/create"], function (create) {
@@ -145,12 +148,6 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
 
     // version links
 
-    ext.point("io.ox/files/versions/links/inline").extend(new links.Link({
-        id: "makeCurrent",
-        index: 50,
-        label: "Make this the current version",
-        ref: "io.ox/files/versions/actions/makeCurrent"
-    }));
 
     ext.point("io.ox/files/versions/links/inline").extend(new links.Link({
         id: "open",
@@ -164,6 +161,16 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         index: 200,
         label: "Download",
         ref: "io.ox/files/actions/download"
+    }));
+
+    ext.point("io.ox/files/versions/links/inline").extend(new links.Link({
+        id: "makeCurrent",
+        index: 250,
+        label: "Make this the current version",
+        ref: "io.ox/files/versions/actions/makeCurrent",
+        isEnabled: function (file) {
+            return !file.current_version;
+        }
     }));
 
     ext.point("io.ox/files/versions/links/inline").extend(new links.Link({

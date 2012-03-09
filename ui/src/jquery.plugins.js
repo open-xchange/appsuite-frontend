@@ -65,8 +65,8 @@
             button = $("<a>").addClass(className).append(text);
 
         } else {
-            button = $("<button/>").addClass(className).append(
-                $("<span/>").append(text)
+            button = $("<button>").addClass(className).append(
+                $("<span>").append(text)
                 );
         }
         button.on(
@@ -154,27 +154,28 @@
     };
 
     // center content via good old stupid table stuff
-    $.center = function (stuff) {
+    $.fn.center = function () {
         // probably does not run in IE properly
-        return $("<div/>")
-        .addClass("abs io-ox-center")
-        .append($("<div/>").append(stuff));
+        return this.wrap($('<div>').addClass('io-ox-center')).parent();
     };
 
     $.fail = function (msg, retry) {
-        var tmp = $("<span/>").addClass("io-ox-fail").text(msg);
+        var tmp = $("<div>").append(
+                $('<span>').addClass("io-ox-fail").text(msg)
+            );
         if (retry) {
-            tmp = tmp.add(
-                $("<span/>").text(" ")
-            ).add(
-            $("<span/>").text("Retry").addClass("link")
-            .on("click", function () {
-                $(this).parents(".io-ox-center").remove();
-                retry.apply(this, arguments);
-            })
+            tmp.append(
+                $('<span>').text(' ')
+            )
+            .append(
+                $('<span>').text('Retry').addClass('link')
+                .on('click', function () {
+                    $(this).parents('.io-ox-center').remove();
+                    retry.apply(this, arguments);
+                })
             );
         }
-        return $.center(tmp);
+        return tmp.center();
     };
 
     // simple shake effect

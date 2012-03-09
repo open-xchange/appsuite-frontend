@@ -128,7 +128,7 @@ function addMessage(filename, node, method, getSrc) {
 function languages() {
     if (!languages.value) {
         languages.value = _.map(utils.list("i18n/*.po"), function(s) {
-            return s.replace(/^i18n\/(.*)\.po$/, "$1");
+            return s.replace(/^i18n[\\\/](.*)\.po$/, "$1");
         });
     }
     return languages.value;

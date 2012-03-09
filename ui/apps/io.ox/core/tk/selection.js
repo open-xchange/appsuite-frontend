@@ -30,8 +30,9 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             bHasIndex = true,
             observedItems = [],
             observedItemsIndex = {},
-            last = {},
-            prev = {},
+            empty = {},
+            last = empty,
+            prev = empty,
             apply,
             click,
             clear,
@@ -45,7 +46,8 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             getNode,
             selectPrevious,
             selectNext,
-            fnKey;
+            fnKey,
+            hasMultiple;
 
         isMultiple = function (e) {
             return editable || (multiple && (e && e.metaKey));
@@ -53,6 +55,17 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
 
         isRange = function (e) {
             return e && e.shiftKey && multiple;
+        };
+
+        hasMultiple = function () {
+            var mult = 0, id;
+            for (id in selectedItems) {
+                mult++;
+                if (mult > 1) {
+                    return true;
+                }
+            }
+            return false;
         };
 
         // apply selection
@@ -119,7 +132,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                 if (id !== undefined) {
                     // clear?
                     if (!isMultiple(e)) {
-                        if (!isSelected(id) || self.serialize(id) !== self.serialize(last)) {
+                        if (!isSelected(id) || hasMultiple() || self.serialize(id) !== self.serialize(last)) {
                             clear();
                             apply(id, e);
                         }
@@ -151,6 +164,9 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                 .find('input.reflect-selection').attr('checked', 'checked').end()
                 .intoViewport(container);
             last = id;
+            if (prev === empty) {
+                prev = id;
+            }
         };
 
         deselect = function (id) {
@@ -199,6 +215,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             clear();
             observedItems = all;
             observedItemsIndex = {};
+            last = prev = empty;
             // build index
             var i = 0, $i = all.length, key;
             for (; i < $i; i++) {
@@ -270,7 +287,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
          */
         this.setEditable = function (flag) {
             editable = !!flag;
-            last = {};
+            last = prev = empty;
             return this;
         };
 
@@ -284,6 +301,11 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             }
             return list;
         };
+
+        /**
+         * Get complete selection. Useful for threaded mails, for example. Defaults to get().
+         */
+        this.unfold = this.get;
 
         /**
          * Clear selection

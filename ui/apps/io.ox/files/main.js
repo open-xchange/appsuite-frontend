@@ -36,8 +36,7 @@ define("io.ox/files/main",
         GRID_WIDTH = 330,
         // nodes
         left,
-        right,
-        statusBar;
+        right;
 
     // launcher
     app.setLauncher(function () {
@@ -57,7 +56,7 @@ define("io.ox/files/main",
         commons.addFolderTree(app, GRID_WIDTH, 'infostore');
 
         // left side
-        left = $("<div>").addClass("leftside withStatusBar border-right")
+        left = $("<div>").addClass("leftside border-right")
             .css({
                 width: GRID_WIDTH + "px",
                 overflow: "auto"
@@ -66,13 +65,10 @@ define("io.ox/files/main",
 
         right = $("<div>")
             .css({ left: GRID_WIDTH + 1 + "px", overflow: "auto" })
-            .addClass("rightside default-content-padding withStatusBar")
+            .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main);
 
-        statusBar = $("<div>")
-            .addClass("statusBar")
-            .appendTo(win.nodes.main);
-
+    
         // Grid
         grid = new VGrid(left);
 
@@ -105,28 +101,20 @@ define("io.ox/files/main",
             right.parent().scrollTop(0);
         }
 
-        grid.selection.on("change", function (e, selection) {
-            if (selection.length === 1) {
-                // get file
-                if (currentDetailView && currentDetailView.file.id === selection[0].id) {
-                    return;
-                }
-
-                right.busy(true);
-                api.get(selection[0]).done(_.lfo(drawDetail));
-            } else {
-                right.empty();
+        var drawFile = function (obj) {
+            // get file
+            if (currentDetailView && currentDetailView.file.id === obj.id) {
+                return;
             }
-        });
+            right.busy(true);
+            api.get(obj).done(_.lfo(drawDetail));
+        };
+
+        commons.wireGridAndSelectionChange(grid, 'io.ox/files', drawFile, right);
 
         // delete item
         api.on("beforedelete", function () {
-            statusBar.busy();
             grid.selection.selectNext();
-        });
-
-        api.on("afterdelete", function () {
-            statusBar.idle();
         });
 
         api.on("triggered", function () {
@@ -165,21 +153,6 @@ define("io.ox/files/main",
 
         // Add status for uploads
 
-        var $uploadStatus = $("<span>").css("margin-left", "30px");
-        var $filenameNode = $("<span>").appendTo($uploadStatus);
-
-        statusBar.append($uploadStatus);
-
-        queue.on("start", function (e, file) {
-            $filenameNode.text("Uploading: " + file.fileName);
-            statusBar.busy();
-        });
-
-        queue.on("stop", function () {
-            $filenameNode.text("");
-            statusBar.idle();
-        });
-
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api);
@@ -190,9 +163,7 @@ define("io.ox/files/main",
     });
 
     app.invalidateFolder = function (data) {
-        console.log(data);
         if (data) {
-            console.log(data);
             grid.selection.set([data]);
         }
         grid.refresh();

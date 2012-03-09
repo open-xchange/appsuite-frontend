@@ -14,7 +14,9 @@
  */
 
 define("io.ox/contacts/main",
-    ["io.ox/contacts/util", "io.ox/contacts/api", "io.ox/core/tk/vgrid",
+    ["io.ox/contacts/util",
+     "io.ox/contacts/api",
+     "io.ox/core/tk/vgrid",
      "io.ox/help/hints",
      "io.ox/contacts/view-detail",
      "io.ox/core/config",
@@ -153,16 +155,6 @@ define("io.ox/contacts/main",
                 })
             );
         };
-        /*
-         * Selection handling
-         */
-        grid.selection.on("change", function (e, selection) {
-            if (selection.length === 1) {
-                showContact(selection[0]);
-            } else {
-                right.empty();
-            }
-        });
 
         /**
          * Thumb index
@@ -181,13 +173,14 @@ define("io.ox/contacts/main",
         grid.on('ids-loaded', function () {
             // get labels
             thumbs.empty();
-            var textIndex = grid.getLabels().textIndex;
+            var textIndex = grid.getLabels().textIndex || {};
             _(fullIndex).each(function (char) {
                 // add thumb
                 thumbs.append(drawThumb(char, char in textIndex));
             });
         });
 
+        commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api);

@@ -60,6 +60,17 @@ define("io.ox/core/api/user",
             });
         return node;
     };
+    
+    api.getLink = function (id, options) {
+        return $("<a>", {href: '#'}).append(api.getTextNode(id)).on("click", function (e) {
+            e.preventDefault();
+            require(["io.ox/core/extensions"], function (ext) {
+                ext.point("io.ox/core/person:action").each(function (ext) {
+                    _.call(ext.action, {internal_userid: id}, e);
+                });
+            });
+        });
+    };
 
     api.getPictureURL = function (id) {
         return $.when(api.get({ id: id }), require(["io.ox/contacts/api"]))

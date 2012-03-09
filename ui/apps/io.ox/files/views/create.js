@@ -13,6 +13,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         var pane = new dialogs.CreateDialog({
             easyOut: true
         }),
+        
         $content = pane.getContentNode().addClass("create-file"),
         
         nodes = {},
@@ -82,11 +83,15 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         
         pane.addButton("cancel", "Cancel", "cancel");
         
+        
+        
         // And display it all
         pane.show().done(function (action) {
             var handler = buttonHandlers[action];
             if (handler) {
-                var fileEntry = {};
+                var fileEntry = {},
+                uploadIndicator = new dialogs.ModalDialog();
+                
                 controlsPoint.each(function (controlExtension) {
                     if (controlExtension.process) {
                         controlExtension.process(fileEntry, controlStates[controlExtension.id]);
@@ -95,8 +100,18 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
                 if (delegate.modifyFile) {
                     delegate.modifyFile(fileEntry);
                 }
+                
+                uploadIndicator.getContentControls().css({
+                    visibility: "hidden"
+                });
 
+                uploadIndicator.getContentNode().append($("<div>").text("Uploading...").addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
+                
+                uploadIndicator.show();
+                
                 handler.perform(fileEntry, controlStates, function (data) {
+                    uploadIndicator.close();
+                    
                     if (delegate.uploadedFile) {
                         delegate.uploadedFile(data);
                     }
