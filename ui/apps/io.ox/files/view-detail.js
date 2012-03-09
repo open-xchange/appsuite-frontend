@@ -270,7 +270,7 @@ define("io.ox/files/view-detail",
         draw: function (file) {
             this.addClass("description");
             this.append(
-                $("<div>").addClass("well")
+                $("<div>")
                 .css({
                     // makes it readable
                     fontFamily: "monospace, 'Courier new'",
@@ -298,12 +298,12 @@ define("io.ox/files/view-detail",
         },
         draw: function (file) {
             var self = this;
-            var $node = $("<div>").addClass("well").appendTo(this);
+            var $node = $("<form>").appendTo(this);
             var $input = $("<input>", {
                 type: "file"
             });
 
-            var $button = $("<button/>").text("Upload").addClass("btn pull-right").on("click", function () {
+            var $button = $("<button/>").text("Upload").addClass("btn btn-primary pull-right").on("click", function () {
                 _($input[0].files).each(function (fileData) {
                     $button.addClass("disabled").text("Uploading...");
                     filesAPI.uploadNewVersion({
@@ -325,8 +325,9 @@ define("io.ox/files/view-detail",
             $("<div>").addClass("row-fluid").append($("<div>").addClass("span6").append($input)).append($("<div>").addClass("span6 pull-right").append($button)).appendTo($node);
 
             var $comment = $("<div>").addClass("row-fluid").hide().appendTo($node);
-            var $commentArea = $("<textarea rows='5'></textarea>").addClass("span12").appendTo($comment);
-
+            $comment.append($("<label>").text("Version Comment:"));
+            var $commentArea = $("<textarea rows='5'></textarea>").css({resize: 'none', width: "100%"}).appendTo($comment);
+            
             $input.on("change", function () {
                 $comment.show();
                 $commentArea.focus();
@@ -344,42 +345,43 @@ define("io.ox/files/view-detail",
         isEnabled: function (file) {
             return file.current_version && file.version > 1;
         },
-        draw: function (file, openVersions, allVersions) {
+        draw: function (file, allVersions) {
             var self = this;
             var $link = $("<a>", {
                 href: '#'
             }).appendTo(this),
             $mainContent = $("<div />").addClass("versions");
 
-            $mainContent.append("No versions");
-
-            // first let's deal with the link
-            if (!openVersions) {
-                $link.text("Show all versions").on("click", function () {
-                    self.empty().append($mainContent);
-                    return false;
-                });
-            }
-
             function drawAllVersions(allVersions) {
+                allVersions = _(allVersions).sort(function (version1, version2) {
+                    if (version1.version === version2.version) {
+                        return 0;
+                    }
+                    if (version1.current_version) {
+                        return -1;
+                    }
+                    if (version2.current_version) {
+                        return 1;
+                    }
+                    return version2.version - version1.version;
+                });
                 $mainContent.empty();
                 _(allVersions).each(function (version) {
                     filesAPI.addDocumentLink(version);
 
                     var $entryRow = $("<div>").addClass("row-fluid version " + (version.current_version ? 'current' : ''));
                     var $detailsPane = $("<div>");
-                    var $currentRow, keepAround, side;
-
-                    $entryRow.append($("<div>").addClass("span1 versionLabel ").text(version.version));
+                    if (version.current_version) {
+                        $entryRow.append($("<div>").addClass("span1").append($("<span>").text(version.version).addClass("versionLabel")).append($("<span>").text(" (current)")));
+                    } else {
+                        $entryRow.append($("<div>").addClass("span1").append($("<span>").text(version.version).addClass("versionLabel")));
+                    }
                     $detailsPane.addClass("span11").appendTo($entryRow);
                     new layouts.Grid({ref: "io.ox/files/details/versions/details"}).draw.call($detailsPane, version);
 
                     $mainContent.append($entryRow);
                 });
-
-                if (openVersions) {
-                    self.empty().append($mainContent);
-                }
+                self.empty().append($mainContent);
             }
 
             // Then let's fetch all versions and update link and table accordingly
@@ -394,12 +396,12 @@ define("io.ox/files/view-detail",
 
         on: {
             update: function (file, extension) {
-                var self = this, openVersions = this.find(".versions").is(":visible");
+                var self = this;
                 filesAPI.versions({
                     id: file.id
                 }).done(function (allVersions) {
                     self.empty();
-                    extension.draw.call(self, file, openVersions, allVersions);
+                    extension.draw.call(self, file, allVersions);
                 });
             }
         }
@@ -428,7 +430,7 @@ define("io.ox/files/view-detail",
             span: 4
         },
         draw: function (version) {
-            this.text(bytesToSize(version.file_size));
+            this.text(bytesToSize(version.file_size)).css({textAlign: "right"});
         }
     });
 
