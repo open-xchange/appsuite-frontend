@@ -11,15 +11,19 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/actions', ['io.ox/core/extensions', "io.ox/core/extPatterns/links"], function (ext, links) {
+define('io.ox/contacts/actions',
+    ['io.ox/core/extensions', "io.ox/core/extPatterns/links"], function (ext, links) {
 
     'use strict';
 
-//  actions
+    //  actions
 
     ext.point("io.ox/contacts/main/delete").extend({
         index: 100,
         id: "delete",
+        requires: function (e) {
+            return e.collection.has('some', 'delete');
+        },
         action:  function (data) {
             require(["io.ox/contacts/api", "io.ox/core/tk/dialogs"], function (api, dialogs) {
                 new dialogs.ModalDialog()
@@ -39,6 +43,9 @@ define('io.ox/contacts/actions', ['io.ox/core/extensions', "io.ox/core/extPatter
     ext.point("io.ox/contacts/main/update").extend({
         index: 100,
         id: "edit",
+        requires: function (e) {
+            return e.collection.has('one');
+        },
         action: function (data) {
             console.log("DATA", data, 'list?', data.mark_as_distributionlist);
             if (data.mark_as_distributionlist === true) {

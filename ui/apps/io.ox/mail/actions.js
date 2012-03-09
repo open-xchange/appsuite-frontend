@@ -43,8 +43,8 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/actions/delete').extend({
         id: 'delete',
-        requires: function (context) {
-            return context.collection.has('some', 'delete');
+        requires: function (e) {
+            return e.collection.has('some', 'delete');
         },
         action: function (data) {
             api.remove(data);
@@ -53,8 +53,8 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/actions/reply-all').extend({
         id: 'reply-all',
-        requires: function (context) {
-            return context.collection.has('some') && context.context.folder_id !== defaultDraftFolder;
+        requires: function (e) {
+            return e.collection.has('one') && e.context.folder_id !== defaultDraftFolder;
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -67,8 +67,8 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/actions/reply').extend({
         id: 'reply',
-        requires: function (context) {
-            return context.collection.has('some') && context.context.folder_id !== defaultDraftFolder;
+        requires: function (e) {
+            return e.collection.has('one') && e.context.folder_id !== defaultDraftFolder;
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -81,8 +81,8 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/actions/forward').extend({
         id: 'forward',
-        requires: function (context) {
-            return context.collection.has('some');
+        requires: function (e) {
+            return e.collection.has('some');
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -95,8 +95,8 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/actions/edit').extend({
         id: 'edit',
-        requires: function (context) {
-            return context.context.folder_id === defaultDraftFolder;
+        requires: function (e) {
+            return e.collection.has('one') && e.context.folder_id === defaultDraftFolder;
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -114,8 +114,8 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/actions/source').extend({
         id: 'source',
-        requires: function (context) {
-            return context.context.folder_id !== defaultDraftFolder;
+        requires: function (e) {
+            return e.collection.has('one') && e.context.folder_id !== defaultDraftFolder;
         },
         action: function (data) {
             api.getSource(data).done(function (srcData) {
@@ -133,8 +133,8 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/actions/markunread').extend({
         id: 'markunread',
-        requires: function (context) {
-            return _.isEqual(context.context.flags & api.FLAGS.SEEN, api.FLAGS.SEEN);
+        requires: function (e) {
+            return _.isEqual(e.context.flags & api.FLAGS.SEEN, api.FLAGS.SEEN);
         },
         action: function (data) {
             api.update(data, {flags: api.FLAGS.SEEN, value: false}).done(function (updateData) {
@@ -145,8 +145,8 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/actions/markread').extend({
         id: 'markread',
-        requires: function (context) {
-            return _.isEqual(context.context.flags & api.FLAGS.SEEN, 0);
+        requires: function (e) {
+            return _.isEqual(e.context.flags & api.FLAGS.SEEN, 0);
         },
         action: function (data) {
             api.update(data, {flags: api.FLAGS.SEEN, value: true}).done(function (updateData) {
