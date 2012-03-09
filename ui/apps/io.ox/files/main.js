@@ -163,9 +163,7 @@ define("io.ox/files/main",
     });
 
     app.invalidateFolder = function (data) {
-        console.log(data);
         if (data) {
-            console.log(data);
             grid.selection.set([data]);
         }
         grid.refresh();
