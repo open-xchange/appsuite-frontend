@@ -8,7 +8,8 @@
 }
 
 .file-details .basicInfo em {
-    font-weight: bold;
+    font-family: OpenSans, Arial, Helvetica, sans-serif;
+    color: #aaa;
     font-style: normal;
 }
 
@@ -25,10 +26,6 @@
     margin-right: 10px;
 }
 
-.file-details .versionLabel {
-    font-size: 1.2em;
-}
-
 .file-details .version.current .versionLabel {
     font-weight: bold;
 }
@@ -38,3 +35,7 @@
     margin-bottom: 10px;
 }
 
+.file-details .version-comment {
+    font-family: monospace, 'Courier new';
+    white-space: pre-wrap;
+}

@@ -331,17 +331,28 @@ define("io.ox/files/view-detail",
             var $comment = $("<div>").addClass("row-fluid").hide().appendTo($node);
             $comment.append($("<label>").text("Version Comment:"));
             var $commentArea = $("<textarea rows='5'></textarea>").css({resize: 'none', width: "100%"}).appendTo($comment);
-            
+
             $input.on("change", function () {
                 $comment.show();
                 $commentArea.focus();
             });
-
-            $node.append("<br>");
         }
     });
 
     // Version List
+
+    var versionSorter = function (version1, version2) {
+        if (version1.version === version2.version) {
+            return 0;
+        }
+        if (version1.current_version) {
+            return -1;
+        }
+        if (version2.current_version) {
+            return 1;
+        }
+        return version2.version - version1.version;
+    };
 
     ext.point("io.ox/files/details/sections/versions").extend({
         id: "table",
@@ -350,39 +361,25 @@ define("io.ox/files/view-detail",
             return file.current_version && file.version > 1;
         },
         draw: function (file, allVersions) {
-            var self = this;
-            var $link = $("<a>", {
-                href: '#'
-            }).appendTo(this),
-            $mainContent = $("<div />").addClass("versions");
+            var self = this,
+                $link = $("<a>", {
+                    href: '#'
+                }).appendTo(this),
+                $mainContent = $("<div>").addClass("versions");
 
             function drawAllVersions(allVersions) {
-                allVersions = _(allVersions).sort(function (version1, version2) {
-                    if (version1.version === version2.version) {
-                        return 0;
-                    }
-                    if (version1.current_version) {
-                        return -1;
-                    }
-                    if (version2.current_version) {
-                        return 1;
-                    }
-                    return version2.version - version1.version;
-                });
                 $mainContent.empty();
-                _(allVersions).each(function (version) {
+                _.chain(allVersions).sort(versionSorter).each(function (version) {
                     filesAPI.addDocumentLink(version);
-
-                    var $entryRow = $("<div>").addClass("row-fluid version " + (version.current_version ? 'current' : ''));
-                    var $detailsPane = $("<div>");
-                    if (version.current_version) {
-                        $entryRow.append($("<div>").addClass("span1").append($("<span>").text(version.version).addClass("versionLabel")).append($("<span>").text(" (current)")));
-                    } else {
-                        $entryRow.append($("<div>").addClass("span1").append($("<span>").text(version.version).addClass("versionLabel")));
-                    }
-                    $detailsPane.addClass("span11").appendTo($entryRow);
+                    var $entryRow = $("<div>")
+                            .addClass("row-fluid version " + (version.current_version ? 'current' : ''))
+                            .append(
+                                $("<div>").addClass("span1").append(
+                                    $("<span>").text(version.version).addClass("versionLabel")
+                                )
+                            ),
+                        $detailsPane = $("<div>").addClass("span11").appendTo($entryRow);
                     new layouts.Grid({ref: "io.ox/files/details/versions/details"}).draw.call($detailsPane, version);
-
                     $mainContent.append($entryRow);
                 });
                 self.empty().append($mainContent);
@@ -460,11 +457,7 @@ define("io.ox/files/view-detail",
             span: 8
         },
         draw: function (version) {
-            this.text(version.version_comment || '').css({
-                marginTop: "4px",
-                fontFamily: "monospace, 'Courier new'",
-                whiteSpace: "pre-wrap"
-            });
+            this.addClass('version-comment').text(version.version_comment || '\u00A0');
         }
     });
 
