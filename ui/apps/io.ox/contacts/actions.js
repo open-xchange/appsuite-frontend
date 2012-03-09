@@ -44,7 +44,7 @@ define('io.ox/contacts/actions',
         index: 100,
         id: "edit",
         requires: function (e) {
-            return e.collection.has('one');
+            return e.collection.has('one', 'modify');
         },
         action: function (data) {
             console.log("DATA", data, 'list?', data.mark_as_distributionlist);
@@ -64,6 +64,9 @@ define('io.ox/contacts/actions',
     ext.point("io.ox/contacts/main/create").extend({
         index: 100,
         id: "create",
+        requires: function (e) {
+            return e.collection.has('create');
+        },
         action: function (app) {
             require(["io.ox/contacts/create"], function (create) {
                 create.show();
@@ -75,6 +78,9 @@ define('io.ox/contacts/actions',
     ext.point("io.ox/contacts/main/distrib").extend({
         index: 100,
         id: "create-dist",
+        requires: function (e) {
+            return e.collection.has('create');
+        },
         action: function (app) {
             require(["io.ox/contacts/distrib/main"], function (createDist) {
                 createDist.getApp().launch();

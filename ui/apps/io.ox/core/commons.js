@@ -53,7 +53,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                         $('<div>')
                         .addClass('io-ox-multi-selection')
                         .append(
-                            $('<div>').addClass('summary').text(selection.length + ' elements selected'),
+                            $('<div>').addClass('summary').html('<b>' + selection.length + '</b> elements selected'),
                             links.children().first()
                         )
                         .center()
@@ -68,7 +68,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                 if (len === 1) {
                     draw(selection[0]);
                 } else if (len > 1) {
-                    commons.multiSelection(id, node, selection);
+                    commons.multiSelection(id, node, this.unfold());
                 } else {
                     node.empty();
                 }

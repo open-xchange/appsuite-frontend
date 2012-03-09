@@ -156,20 +156,6 @@ define("io.ox/contacts/main",
             );
         };
 
-        /*
-         * Selection handling
-         */
-        grid.selection.on("change", function (e, selection) {
-            var len = selection.length;
-            if (len === 1) {
-                showContact(selection[0]);
-            } else if (len > 1) {
-                commons.multiSelection('io.ox/contacts', right, selection);
-            } else {
-                right.empty();
-            }
-        });
-
         /**
          * Thumb index
          */
@@ -194,6 +180,7 @@ define("io.ox/contacts/main",
             });
         });
 
+        commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api);

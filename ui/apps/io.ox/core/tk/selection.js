@@ -303,6 +303,11 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         };
 
         /**
+         * Get complete selection. Useful for threaded mails, for example. Defaults to get().
+         */
+        this.unfold = this.get;
+
+        /**
          * Clear selection
          */
         this.clear = function (quiet) {

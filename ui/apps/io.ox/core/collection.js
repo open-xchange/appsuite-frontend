@@ -11,10 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/collection",
-    ["io.ox/core/config", "io.ox/core/api/folder"], function (config, api) {
+define('io.ox/core/collection',
+    ['io.ox/core/config', 'io.ox/core/api/folder'], function (config, api) {
 
-    "use strict";
+    'use strict';
 
     var myself = 0,
 
@@ -28,11 +28,20 @@ define("io.ox/core/collection",
                 return false;
             } else if (bits === 1) {
                 // only own objects
-                myself = myself || config.get("identifier");
+                myself = myself || config.get('identifier');
                 return owner === myself;
             } else {
                 // all objects or admin
                 return true;
+            }
+        },
+
+        getFolderId = function (obj) {
+            // is app (pseudo collection used by window toolbar)?
+            if (_.isObject(obj.folder) && _.isFunction(obj.folder.get)) {
+                return obj.folder.get();
+            } else {
+                return obj.folder_id || obj.folder;
             }
         },
 
@@ -45,52 +54,42 @@ define("io.ox/core/collection",
                  * Property object
                  */
                 props = {
-                    "read": true,
-                    "modify": true,
-                    "delete": true,
-                    "none": $l === 0,
-                    "some": $l > 0,
-                    "one": $l === 1,
-                    "multiple": $l > 1
-                };
+                    'read': true,
+                    'modify': true,
+                    'delete': true,
+                    'create': true,
+                    'none': $l === 0,
+                    'some': $l > 0,
+                    'one': $l === 1,
+                    'multiple': $l > 1
+                },
 
-            // get all folders first
-            var folders = _(collection)
-                .chain()
-                .map(function (item) {
-                    // is app?
-                    if (_.isObject(item.folder) && _.isFunction(item.folder.get)) {
-                        return item.folder.get();
-                    } else {
-                        return item.folder_id || item.folder;
-                    }
-                })
-                .filter(function (item) {
-                    return item !== null && item !== undefined;
-                })
-                .value();
+                // get all folders first
+                folders = _.chain(collection)
+                    .map(getFolderId)
+                    .filter(function (item) {
+                        return item !== null && item !== undefined;
+                    })
+                    .value();
 
             return api.get({ folder: folders })
-                .done(function (hash) {
+                .pipe(function (hash) {
                     var i = 0, item = null, folder = null;
                     for (; i < $l; i++) {
                         item = collection[i];
-                        if ((folder = hash[item.folder_id || item.folder])) {
+                        if ((folder = hash[getFolderId(item)])) {
                             // get properties
                             props.read = props.read && getRight(folder, item.created_by, 7); // read
                             props.modify = props.modify && getRight(folder, item.created_by, 14); // write
-                            props["delete"] = props["delete"] && getRight(folder, item.created_by, 21); // delete
+                            props['delete'] = props['delete'] && getRight(folder, item.created_by, 21); // delete
+                            props.create = props.create && (folder.own_rights & 127) >= 2; // create new objects
                         } else {
                             // folder unknown
                             props.unknown = true;
-                            props.read = false;
-                            props.modify = false;
-                            props["delete"] = false;
+                            props.read = props.modify = props['delete'] = props.create = false;
                             break;
                         }
                     }
-                })
-                .pipe(function () {
                     return props;
                 });
         };
@@ -98,10 +97,11 @@ define("io.ox/core/collection",
     function Collection(list) {
 
         var items = _.compact([].concat(list)),
-            properties = {};
+            empty = {},
+            properties = empty;
 
         // resolve properties (async).
-        // Must be done upfront before "has" checks for example
+        // Must be done upfront before 'has' checks for example
         this.getProperties = function () {
             return getProperties(items)
                 .done(function (props) {
@@ -110,11 +110,14 @@ define("io.ox/core/collection",
         };
 
         // check if collection satisfies a set of properties
-        // e.g. has("some") or has("one", "read")
+        // e.g. has('some') or has('one', 'read')
         this.has = function () {
+            if (properties === empty) {
+                console.error('Using Collection.has before properties are resolved!', list, arguments);
+            }
             return _(arguments).inject(function (memo, key) {
-                    return memo && properties[key] === true;
-                }, true);
+                return memo && properties[key] === true;
+            }, true);
         };
     }
 

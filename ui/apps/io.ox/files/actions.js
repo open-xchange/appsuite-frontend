@@ -19,6 +19,9 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
 
     ext.point("io.ox/files/actions/upload").extend({
         id: "upload",
+        requires: function (e) {
+            return e.collection.has('create');
+        },
         action: function (app) {
             var lastUploaded = null;
             require(["io.ox/files/views/create"], function (create) {

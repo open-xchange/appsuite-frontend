@@ -26,18 +26,19 @@ define("io.ox/mail/main",
 
     'use strict';
 
-    var draftFolderId = config.get('modules.mail.defaultFolder.drafts');
+    var draftFolderId = config.get('modules.mail.defaultFolder.drafts'),
 
-    var autoResolveThreads = function (e) {
-        var self = $(this), parents = self.parents();
-        api.get(e.data).done(function (data) {
-            // replace placeholder with mail content
-            self.replaceWith(viewDetail.draw(data).addClass('page'));
-        });
-    };
+        autoResolveThreads = function (e) {
+            var self = $(this), parents = self.parents();
+            api.get(e.data).done(function (data) {
+                // replace placeholder with mail content
+                self.replaceWith(viewDetail.draw(data).addClass('page'));
+            });
+        },
 
-    // application object
-    var app = ox.ui.createApp({ name: 'io.ox/mail' }),
+        // application object
+        app = ox.ui.createApp({ name: 'io.ox/mail' }),
+
         // app window
         win,
         // grid
@@ -87,6 +88,13 @@ define("io.ox/mail/main",
 
         // add template
         grid.addTemplate(tmpl.main);
+
+        // customize selection
+        grid.selection.unfold = function () {
+            return _(this.get()).inject(function (memo, o) {
+                return memo.concat(api.getThread(o));
+            }, []);
+        };
 
         commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads');
         commons.wireGridAndSearch(grid, win, api);

@@ -156,7 +156,7 @@
     // center content via good old stupid table stuff
     $.fn.center = function () {
         // probably does not run in IE properly
-        return this.wrap($('<div>').addClass('abs io-ox-center')).parent();
+        return this.wrap($('<div>').addClass('io-ox-center')).parent();
     };
 
     $.fail = function (msg, retry) {

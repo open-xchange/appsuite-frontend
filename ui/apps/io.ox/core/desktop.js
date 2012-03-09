@@ -258,9 +258,10 @@ define("io.ox/core/desktop",
                                 .done(function (data) {
                                     // remember
                                     folder = String(id);
-                                    // update window title?
+                                    // update window title & toolbar?
                                     if (win) {
                                         win.setTitle(data.title);
+                                        win.updateToolbar();
                                     }
                                     // update grid?
                                     if (grid) {
@@ -666,6 +667,11 @@ define("io.ox/core/desktop",
                     self = this,
                     firstShow = true;
 
+                this.updateToolbar = function () {
+                    ext.point(this.name + "/toolbar")
+                        .invoke('draw', this.nodes.toolbar.empty(), this.app || this);
+                };
+
                 this.show = function (cont) {
                     // get node and its parent node
                     var node = this.nodes.outer, parent = node.parent();
@@ -678,10 +684,7 @@ define("io.ox/core/desktop",
                         if (node.parent().length === 0) {
                             node.appendTo(pane);
                         }
-                        // update toolbar
-                        ext.point(this.name + "/toolbar")
-                            .invoke('draw', this.nodes.toolbar.empty(), this.app || this);
-
+                        this.updateToolbar();
                         ox.ui.windowManager.trigger("window.beforeshow", self);
                         node.show();
                         scrollTo(node, function () {

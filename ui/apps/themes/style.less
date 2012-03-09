@@ -900,9 +900,14 @@ span.hint {
 }
 
 .io-ox-multi-selection .summary {
-    font-size: 14pt;
+    font-size: 24pt;
     font-weight: 200;
-    color: #888;
+    line-height: 1.2em;
+    color: #ccc;
+}
+
+.io-ox-multi-selection .summary b {
+    color: #aaa;
 }
 
 .io-ox-multi-selection .io-ox-inline-links {
@@ -911,6 +916,10 @@ span.hint {
 
 .io-ox-multi-selection .io-ox-inline-links a {
     color: @inline-link-color;
+}
+
+.io-ox-multi-selection .io-ox-inline-links.empty {
+    display: none;
 }
 
 /* side popups */
