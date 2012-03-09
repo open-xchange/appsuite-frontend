@@ -448,7 +448,7 @@ define("io.ox/files/view-detail",
         draw: function (version) {
             var $node = this;
             require(["io.ox/core/api/user"], function (userAPI) {
-                $node.append($("<span>").append(userAPI.getTextNode(version.created_by)).addClass("pull-right"));
+                $node.append($("<span>").append(userAPI.getLink(version.created_by)).addClass("pull-right"));
             });
         }
     });
