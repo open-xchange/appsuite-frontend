@@ -56,9 +56,9 @@ define("io.ox/files/api",
         // Extract the JSON text
         if (typeof htmlpage === 'string') {
             var matches = /\((\{.*?\})\)/.exec(htmlpage);
-            return matches && matches[1] ? JSON.parse(matches[1]) : null;
+            return matches && matches[1] ? JSON.parse(matches[1]) : JSON.parse(htmlpage);
         } else {
-            return null;
+            return htmlpage;
         }
     }
 

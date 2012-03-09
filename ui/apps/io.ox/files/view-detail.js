@@ -306,6 +306,8 @@ define("io.ox/files/view-detail",
             var $button = $("<button/>").text("Upload").addClass("btn btn-primary pull-right").on("click", function () {
                 _($input[0].files).each(function (fileData) {
                     $button.addClass("disabled").text("Uploading...");
+                    $commentArea.addClass("disabled");
+                    $input.addClass("disabled");
                     filesAPI.uploadNewVersion({
                         file: fileData,
                         id: file.id,
@@ -314,6 +316,8 @@ define("io.ox/files/view-detail",
                         json: {version_comment: $commentArea.val()}
                     }).done(function (data) {
                         $button.removeClass("disabled").text("Upload new version");
+                        $commentArea.removeClass("disabled");
+                        $input.removeClass("disabled");
                         $comment.hide();
                         $commentArea.val("");
                     });
