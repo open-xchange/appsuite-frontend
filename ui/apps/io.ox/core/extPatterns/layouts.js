@@ -88,7 +88,7 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
                 if (sectionDef.isEnabled && !sectionDef.isEnabled.apply(sectionDef, args)) {
                     return;
                 }
-                var $sectionNode = $("<div>").addClass("section").appendTo($node);
+                var $sectionNode = $("<div>").addClass("io-ox-section").appendTo($node);
                 nodes[sectionDef.id] = $sectionNode;
                 
                 var title = metadata("title", sectionDef, args);

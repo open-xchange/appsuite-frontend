@@ -56,9 +56,9 @@ define("io.ox/files/api",
         // Extract the JSON text
         if (typeof htmlpage === 'string') {
             var matches = /\((\{.*?\})\)/.exec(htmlpage);
-            return matches && matches[1] ? JSON.parse(matches[1]) : null;
+            return matches && matches[1] ? JSON.parse(matches[1]) : JSON.parse(htmlpage);
         } else {
-            return null;
+            return htmlpage;
         }
     }
 
@@ -89,13 +89,15 @@ define("io.ox/files/api",
         return http.UPLOAD({
                 module: "infostore",
                 params: { action: "new" },
-                data: formData
+                data: formData,
+                dataType: "text"
             })
             .pipe(function (data) {
+                var tmp = fallbackForOX6BackendREMOVEME(data);
                 // clear folder cache
                 api.caches.all.remove(options.folder);
                 api.trigger("create.file");
-                return { folder_id: String(options.folder), id: parseInt(data.data, 10) };
+                return { folder_id: String(options.folder), id: parseInt(tmp.data, 10) };
             });
     };
 
