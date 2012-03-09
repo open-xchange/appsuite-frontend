@@ -9,6 +9,7 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Martin Holzhauer <martin.holzhauer@open-xchange.com>
  */
 
 define.async('io.ox/mail/write/main',
@@ -23,9 +24,11 @@ define.async('io.ox/mail/write/main',
      'io.ox/core/api/user',
      'io.ox/core/tk/upload',
      'io.ox/core/tk/autocomplete',
+     'io.ox/mail/model',
+     'io.ox/mail/write/view-main',
      'gettext!io.ox/mail/mail',
      'less!io.ox/mail/style.css',
-     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload, autocomplete, gt) {
+     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload, autocomplete, MailModel, WriteView, gt) {
 
     'use strict';
 
@@ -71,24 +74,28 @@ define.async('io.ox/mail/write/main',
     function createInstance() {
 
         var app, win,
-            main, scrollpane, sidepanel,
-            GRID_WIDTH = 330,
-            form,
-            subject,
-            textarea,
             editor,
             editorHash = {},
-            priorityOverlay,
-            sections = {},
             currentSignature = '',
             editorMode = '',
             mailState,
-            composeMode;
+            composeMode,
+            view,
+            model;
+
+        model = new MailModel();
+        view = new WriteView({model: model});
 
         app = ox.ui.createApp({
             name: 'io.ox/mail/write',
             title: 'Compose'
         });
+
+        app.getView = function () {
+            return view;
+        };
+
+        window.newmailapp = function () { return app; };
 
         app.STATES = {
             'CLEAN': 1,
@@ -109,322 +116,10 @@ define.async('io.ox/mail/write/main',
             mailState = app.STATES.CLEAN;
         };
 
-        // helper
 
-        function applyHighPriority(flag) {
-            if (flag) {
-                priorityOverlay.addClass('high');
-            } else {
-                priorityOverlay.removeClass('high');
-            }
-        }
 
-        function togglePriority(e) {
-            var high = form.find('input[name=priority][value=1]'),
-                normal = form.find('input[name=priority][value=3]');
-            if (high.prop('checked')) {
-                high.prop('checked', false);
-                normal.prop('checked', true);
-                applyHighPriority(false);
-            } else {
-                high.prop('checked', true);
-                normal.prop('checked', false);
-                applyHighPriority(true);
-            }
-        }
 
-        function serialize(obj) {
-            return '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + '>';
-        }
 
-        function hideSection(id) {
-            sections[id + 'Label'].add(sections[id]).hide();
-            $(this).trigger('hide');
-            sections[id + 'Link'].show();
-        }
-
-        function fnHideSection(e) {
-            var id = e.data.id;
-            e.preventDefault();
-            hideSection(id);
-        }
-
-        function focusSection(id) {
-            sections[id].find('input[type!=hidden]').eq(0).focus();
-        }
-
-        function addSection(id, label, show, collapsable) {
-
-            sections[id + 'Label'] = $('<div>')
-                .attr('data-section-label', id)
-                .addClass('io-ox-label')
-                .text(label + '')
-                .prepend(
-                    collapsable ?
-                        $('<a>', { href: '#', tabindex: '7' })
-                        .addClass('collapse').text('Hide')
-                        .on('click', $.preventDefault) :
-                        $()
-                );
-
-            if (collapsable) {
-                sections[id + 'Label'].on('click', { id: id }, fnHideSection);
-            } else {
-                sections[id + 'Label'].css('cursor', 'default');
-            }
-
-            sections[id] = $('<div>').addClass('section')
-                .attr('data-section', id);
-
-            sidepanel.append(sections[id + 'Label']).append(sections[id]);
-
-            if (show === false) {
-                sections[id + 'Label'].hide();
-                sections[id].hide();
-            }
-
-            return sections[id];
-        }
-
-        function showSection(id) {
-            sections[id + 'Label'].show();
-            sections[id].show().trigger('show');
-            focusSection(id);
-            sections[id + 'Link'].hide();
-        }
-
-        function fnShowSection(e) {
-            var id = e.data.id;
-            e.preventDefault();
-            showSection(id);
-        }
-
-        function addLink(id, label) {
-            return (sections[id + 'Link'] = $('<div>'))
-                .addClass('section-link')
-                .append(
-                    $('<a>', { href: '#', tabindex: '5' })
-                    .attr('data-section-link', id)
-                    .text(label + '')
-                    .on('click', { id: id }, fnShowSection)
-                )
-                .appendTo(sidepanel);
-        }
-
-        var fnClickPerson = function (e) {
-            e.preventDefault(e);
-            ext.point('io.ox/core/person:action').each(function (ext) {
-                _.call(ext.action, e.data, e);
-            });
-        };
-
-        function highlight(text, query) {
-            return String(text).replace(/</g, '&lt;')
-                .replace(new RegExp(query, 'i'), '<b>' + query + '</b>');
-        }
-
-        function drawAutoCompleteItem(node, data, query) {
-
-            var img = $('<div>').addClass('contact-image'),
-                url = contactsUtil.getImage(data.contact),
-                name = highlight(data.display_name, query),
-                email = highlight(data.email, query);
-
-            if (Modernizr.backgroundsize) {
-                img.css('backgroundImage', 'url(' + url + ')');
-            } else {
-                img.append(
-                    $('<img>', { src: url, alt: '' }).css({ width: '100%', height: '100%' })
-                );
-            }
-
-            node.addClass('io-ox-mail-write-contact').append(
-                img,
-                $('<div>').addClass('person-link ellipsis').html(name + '\u00A0'),
-                $('<div>').addClass('ellipsis').html(email)
-            );
-        }
-
-        // drawAutoCompleteItem and drawContact
-        // are slightly different. it's easier just having two functions.
-
-        function drawContact(id, node, data) {
-
-            node.addClass('io-ox-mail-write-contact section-item')
-            .append(
-                contactsAPI.getPicture(data.email + '')
-                .addClass('contact-image')
-            )
-            .append(
-                $('<input>', { type: 'hidden', name: id, value: serialize(data) })
-            )
-            .append(
-                $('<a>', { href: '#' }).addClass('person-link')
-                .text(data.display_name + '\u00A0')
-                .on('click', {
-                    display_name: data.display_name,
-                    email1: data.email
-                }, fnClickPerson)
-            )
-            .append($('<div>').text(data.email))
-            .append(
-                // remove
-                $('<a>', { href: '#', tabindex: '6' })
-                .addClass('remove')
-                .append(
-                    $('<div>').addClass('icon').text('x')
-                )
-                .on('click', { id: id }, function (e) {
-                    e.preventDefault();
-                    var list = $(this).parents().find('.recipient-list');
-                    $(this).parent().remove();
-                    // hide section if empty
-                    if (list.children().length === 0) {
-                        list.hide();
-                    }
-                })
-            );
-        }
-
-        function createRecipientList(id) {
-            return (sections[id + 'List'] = $('<div>'))
-                .addClass('recipient-list').hide();
-        }
-
-        function addRecipients(id, list) {
-            app.markDirty();
-            // loop over list and draw recipient
-            _(list).each(function (recipient) {
-                var node = $('<div>');
-                drawContact(id, node, {
-                    display_name: recipient[0] ? recipient[0].replace(/^('|")|('|")$/g, '') : recipient[0],
-                    email: recipient[1],
-                    contact: {}
-                });
-                // add to proper section (to, CC, ...)
-                sections[id + 'List'].append(node);
-            });
-            if (list && list.length) {
-                sections[id + 'List'].show().trigger('show');
-            }
-        }
-
-        function copyRecipients(id, node) {
-            var list = mailUtil.parseRecipients(node.val());
-            if (list.length) {
-                // add
-                addRecipients(id, list);
-                node.val('').focus();
-            } else if ($.trim(node.val()) !== '') {
-                // not accepted but has content -> shake
-                node.attr('disabled', 'disabled')
-                    .css({ border: '1px solid #a00', backgroundColor: '#fee' })
-                    .shake()
-                    .done(function () {
-                        node.css({ border: '', backgroundColor: '' })
-                            .removeAttr('disabled').focus();
-                    });
-            }
-        }
-
-        function createField(id) {
-            return $('<div>')
-            .addClass('fieldset')
-            .append(
-                $('<label>', { 'for' : 'writer_field_' + id })
-                .addClass('wrapping-label')
-                .append(
-                    $('<input>', {
-                        type: 'text',
-                        tabindex: '2',
-                        id: 'writer_field_' + id
-                    })
-                    .attr('data-type', id) // not name=id!
-                    .addClass('discreet')
-                    .autocomplete({
-                        source: function (query) {
-                            return contactsAPI.autocomplete(query)
-                                .pipe(function (data) {
-                                    // remove duplicates
-                                    var hash = {};
-                                    $('input[name=' + id + ']').map(function () {
-                                        var rcpt = mailUtil.parseRecipient($(this).val())[1];
-                                        hash[rcpt] = true;
-                                    });
-                                    return _(data).filter(function (o) {
-                                        return hash[o.email] === undefined;
-                                    });
-                                });
-                        },
-                        stringify: function (data) {
-                            return data.display_name ?
-                                '"' + data.display_name + '" <' + data.email + '>' :
-                                data.email;
-                        },
-                        draw: function (data, query) {
-                            drawAutoCompleteItem.call(null, this, data, query);
-                        },
-                        click: function (e) {
-                            copyRecipients.call(null, id, $(this));
-                        },
-                        blur: function (e) {
-                            // copy valid recipients
-                            copyRecipients.call(null, id, $(this));
-                        }
-                    })
-                    .on('keyup', function (e) {
-                        if (e.which === 13) {
-                            copyRecipients.call(null, id, $(this));
-                        } else {
-                            // look for special prefixes
-                            var val = $(this).val();
-                            if ((/^to:?\s/i).test(val)) {
-                                $(this).val('');
-                                showSection('to');
-                            } else if ((/^cc:?\s/i).test(val)) {
-                                $(this).val('');
-                                showSection('cc');
-                            } else if ((/^bcc:?\s/i).test(val)) {
-                                $(this).val('');
-                                showSection('bcc');
-                            }
-                        }
-                    })
-                )
-            );
-        }
-
-        function createRadio(name, value, text, isChecked) {
-            var id = name + '_' + value + '_' + _.now(),
-                radio = $('<input>', { type: 'radio', name: name, id: id, value: value, tabindex: '5' }),
-                label = $('<label>', { 'for': id }).text('\u00A0\u00A0' + text + '\u00A0\u00A0\u00A0\u00A0 ');
-            if (isChecked) {
-                radio.attr('checked', 'checked');
-            }
-            if (Modernizr.touch) {
-                label.on('click', { id: id }, function (e) {
-                    var node = $(this).prev();
-                    node.prop('selected', !node.prop('selected')).trigger('change'); // selected, not checked!
-                });
-            }
-            return radio.add(label);
-        }
-
-        function createCheckbox(name, text, isChecked) {
-            var id = name + '_' + _.now(),
-                box = $('<input>', { type: 'checkbox', name: name, id: id, value: '1', tabindex: '5' }),
-                label = $('<label>', { 'for': id }).text('\u00A0\u00A0' + text + '\u00A0\u00A0\u00A0\u00A0 ');
-            if (isChecked) {
-                box.attr('checked', 'checked');
-            }
-            if (Modernizr.touch) {
-                label.on('click', { id: id }, function (e) {
-                    var node = $(this).prev();
-                    node.prop('selected', !node.prop('selected')).trigger('change'); // selected, not checked!
-                });
-            }
-            return box.add(label);
-        }
 
         var handleFileSelect, addUpload, supportsPreview, createPreview;
 
@@ -475,7 +170,7 @@ define.async('io.ox/mail/write/main',
                     list = item ? [item] : e.target.files;
                 // loop over all attachments
                 _(list).each(function (file) {
-                    sections.attachments.append(
+                    app.getView().sections.attachments.append(
                         $('<div>').addClass('section-item file')
                         .append($('<div>').text(file.filename || file.name || ''))
                         .append(
@@ -505,58 +200,33 @@ define.async('io.ox/mail/write/main',
                 // hide current upload field
                 $(this).closest('.section-item.upload').hide();
             }
-            addUpload();
+            app.getView().addUpload(handleFileSelect);
         };
 
-        addUpload = function () {
-            var inputOptions;
+        app.getView().signatures = config.get('gui.mail.signatures', []);
 
-            if (Modernizr.file) {
-                inputOptions = { type: 'file', name: 'upload', multiple: 'multiple', tabindex: '2' };
-            } else {
-                inputOptions = { type: 'file', name: 'upload', tabindex: '2' };
-            }
+        app.setSignature = function (e) {
 
-            return $('<div>')
-                .addClass('section-item upload')
-                .append(
-                    $.labelize(
-                        $('<input>', inputOptions)
-                        .on('change', handleFileSelect),
-                        'mail_attachment'
-                    )
-                )
-                .appendTo(sections.attachments);
-        };
-
-        var signatures = config.get('gui.mail.signatures', []),
-        dummySignature = { signature_name: 'No signature' };
-
-        function setSignature(e) {
+            var self = this;
 
             var index = e.data.index,
                 signature, text;
 
             if (currentSignature) {
                 // remove current signature from editor
-                editor.replaceParagraph(currentSignature, '');
+                self.getEditor().replaceParagraph(currentSignature, '');
                 currentSignature = '';
             }
 
             // add signature?
-            if (index < signatures.length) {
-                signature = signatures[index];
+            if (index < app.getView().signatures.length) {
+                signature = app.getView().signatures[index];
                 text = $.trim(signature.signature_text);
-                editor.appendContent(text);
-                editor.scrollTop('bottom');
+                self.getEditor().appendContent(text);
+                self.getEditor().scrollTop('bottom');
                 currentSignature = text;
             }
-        }
-
-        function fnSetSignature(e) {
-            e.preventDefault();
-            setSignature(e);
-        }
+        };
 
         function showMessage(msg, header, sticky) {
             console.log(arguments);
@@ -569,251 +239,24 @@ define.async('io.ox/mail/write/main',
             win = ox.ui.createWindow({
                 name: 'io.ox/mail/write',
                 title: '',
-                titleWidth: (GRID_WIDTH + 10) + 'px',
+                titleWidth: (app.getView().GRID_WIDTH + 10) + 'px',
                 toolbar: true,
                 close: true
             });
 
             app.setWindow(win);
 
-            // main panel
-            main = $('<div>')
-            .addClass('rightside')
-            .css({
-                left: GRID_WIDTH + 'px'
-            });
+            app.getView().render(app);
 
-            main.append(
-                $('<div>')
-                .addClass('abs io-ox-mail-write-main')
-                .append(
-                    $('<div>').addClass('io-ox-label').text('Subject')
-                )
-                .append(
-                    $('<div>')
-                    .css('position', 'relative')
-                    .append(
-                        $('<div>').addClass('subject-wrapper')
-                        .append(
-                            // subject
-                            $.labelize(
-                                subject = $('<input>')
-                                .attr({ type: 'text', name: 'subject', tabindex: '3', autocomplete: 'off' })
-                                .addClass('subject')
-                                .val('')
-                                .on('keydown', function (e) {
-                                    if (e.which === 13 || (e.which === 9 && !e.shiftKey)) {
-                                        // auto jump to editor on enter/tab
-                                        e.preventDefault();
-                                        editor.focus();
-                                    }
-                                })
-                                .on('keyup', function () {
-                                    var title = $.trim($(this).val());
-                                    app.getWindow().setTitle(title);
-                                    app.setTitle(title);
-                                }),
-                                'mail_subject'
-                            )
-                        )
-                    )
-                    .append(
-                        priorityOverlay = $('<div>').addClass('priority-overlay')
-                            .attr('title', 'Priority')
-                            .text('\u2605\u2605\u2605')
-                            .on('click', togglePriority)
-                    )
-                    .append(
-                        // split button
-                        $('<div>').addClass('btn-group sendbutton-wrapper')
-                        .append(
-                            // send
-                            $('<a>', { href: '#', tabindex: '8' })
-                            .addClass('btn btn-primary')
-                            .css('width', '100px')
-                            .text('Send')
-                            .on('click', function (e) {
-                                e.preventDefault();
-                                ext.point('io.ox/mail/write/actions/send').invoke('action', null, app);
-                            })
-                            .button()
-                        )
-                        .append(
-                            $('<a>', { href: '#', tabindex: '9' })
-                            .attr('data-toggle', 'dropdown')
-                            .addClass('btn btn-primary dropdown-toggle')
-                            .append(
-                                $('<span>').addClass("caret")
-                            )
-                            .button()
-                        )
-                        .append(
-                            $('<ul>').addClass('dropdown-menu dropdown-right')
-                            .append(
-                                $('<li>').append(
-                                    $('<a>', { href: '#' })
-                                    .text('Save as draft')
-                                    .on('click', function (e) {
-                                        e.preventDefault();
-                                        ext.point('io.ox/mail/write/actions/draft').invoke('action', null, app);
-                                    })
-                                )
-                            )
-                        )
 
-                    )
-                )
-                .append(
-                    $('<div>')
-                    .addClass('abs editor-outer-container')
-                    .append(
-                        // white background
-                        $('<div>').addClass('abs editor-background')
-                    )
-                    .append(
-                        // editor's print margin
-                        $('<div>').addClass('abs editor-print-margin')
-                    )
-                    .append(
-                        $('<div>')
-                        .addClass('abs editor-inner-container')
-                        .css('overflow', 'hidden')
-                        .append(
-                            // text editor
-                            // FIXME: Labelize Call?
-                            textarea = $('<textarea>')
-                            .attr({ name: 'content', tabindex: '4', disabled: 'disabled' })
-                            .addClass('text-editor')
-                        )
-                    )
-                )
-            ).append($('<div>', {id: 'myGrowl'}).addClass('jGrowl').css({position: 'absolute', right: '0', top: '0'}));
 
-            // side panel
-            var scrollpane = $('<div>')
-                .css({ width: (GRID_WIDTH - 26) + 'px' })
-                .addClass('leftside io-ox-mail-write-sidepanel');
 
-            sidepanel = scrollpane.scrollable();
-
-            // sections
-
-            // TO
-            addSection('to', 'To')
-                .append(createRecipientList('to'))
-                .append(createField('to'));
-
-            // CC
-            addSection('cc', 'Copy to', false, true)
-                .append(createRecipientList('cc'))
-                .append(createField('cc'));
-            addLink('cc', 'Copy (CC) to ...');
-
-            // BCC
-            addSection('bcc', 'Blind copy to', false, true)
-                .append(createRecipientList('bcc'))
-                .append(createField('bcc'));
-            addLink('bcc', 'Blind copy (BCC) to ...');
-
-            // Attachments
-            addSection('attachments', 'Attachments', false, true);
-            addUpload();
-            addLink('attachments', 'Attachments');
-
-            // Signatures
-            if (signatures.length) {
-                addSection('signatures', 'Signatures', false, true)
-                .append(
-                    _(signatures.concat(dummySignature))
-                    .inject(function (memo, o, index) {
-                        var preview = (o.signature_text || '')
-                            .replace(/\s\s+/g, ' ') // remove subsequent white-space
-                            .replace(/(\W\W\W)\W+/g, '$1 '); // reduce special char sequences
-                        preview = preview.length > 150 ? preview.substr(0, 150) + ' ...' : preview;
-                        return memo.add(
-                            $('<div>').addClass('section-item pointer')
-                            .addClass(index >= signatures.length ? 'signature-remove' : '')
-                            .append(
-                                $('<a>', { href: '#', tabindex: '5' })
-                                .on('click dragstart', $.preventDefault)
-                                .text(o.signature_name)
-                            )
-                            .append(
-                                preview.length ?
-                                    $('<div>').addClass('signature-preview')
-                                    .text(' ' + preview) :
-                                    $()
-                            )
-                            .on('click', { index: index }, fnSetSignature)
-                        );
-                    }, $())
-                );
-
-                addLink('signatures', 'Signatures');
-            }
-
-            // Options
-            addSection('options', 'Options', false, true)
-                .append(
-                    // Priority
-                    $('<div>').addClass('section-item')
-                    .css({ paddingTop: '0.5em', paddingBottom: '0.5em' })
-                    .append(
-                        $('<span>').addClass('group-label').text('Priority')
-                    )
-                    .append(createRadio('priority', '1', 'High'))
-                    .append(createRadio('priority', '3', 'Normal', true))
-                    .append(createRadio('priority', '5', 'Low'))
-                    .on('change', 'input', function () {
-                        var radio = $(this);
-                        if (radio.attr('value') === '1' && radio.prop('checked')) {
-                            applyHighPriority(true);
-                        } else {
-                            applyHighPriority(false);
-                        }
-                    })
-                )
-                .append(
-                    // Delivery Receipt
-                    $('<div>').addClass('section-item')
-                    .css({ paddingTop: '1em', paddingBottom: '1em' })
-                    .append(createCheckbox('receipt', 'Delivery Receipt'))
-                )
-                .append(
-                    // Attach vCard
-                    $('<div>').addClass('section-item')
-                    .css({ paddingTop: '1em', paddingBottom: '1em' })
-                    .append(createCheckbox('vcard', 'Attach vCard'))
-                );
-
-            addLink('options', 'More ...');
-
-            var fnChangeFormat = function (e) {
-                e.preventDefault();
-                app.setFormat(e.data.format).done(function () {
-                    editor.focus();
-                });
-            };
-
-            if (!Modernizr.touch) {
-                addSection('format', 'Text format', true, false)
-                    .append(
-                        $('<div>').addClass('change-format')
-                        .append(
-                            $('<a>', { href: '#' }).text('Text').on('click', { format: 'text' }, fnChangeFormat)
-                        )
-                        .append($.txt(' \u00A0\u2013\u00A0 ')) // &ndash;
-                        .append(
-                            $('<a>', { href: '#' }).text('HTML').on('click', { format: 'html' }, fnChangeFormat)
-                        )
-                    );
-            }
 
             // add panels to windows
             win.nodes.main
             .addClass('io-ox-mail-write')
             .append(
-                form = $('<form>', {
+                app.getView().form = $('<form>', {
                     name: 'compose',
                     method: 'post',
                     enctype: 'multipart/form-data'
@@ -821,29 +264,29 @@ define.async('io.ox/mail/write/main',
                 .addClass('form-inline')
                 .append(
                     $('<input>', { type: 'hidden', name: 'msgref', value: '' }),
-                    main,
-                    scrollpane
+                    app.getView().main,
+                    app.getView().scrollpane
                 )
             );
 
             var dropZone = upload.dnd.createDropZone();
             dropZone.on('drop', function (e, file) {
-                form.find('input[type=file]').last()
+                app.getView().form.find('input[type=file]').last()
                     .prop('file', file)
                     .trigger('change');
-                showSection('attachments');
+                app.getView().showSection('attachments');
             });
 
             win.on('show', function () {
-                if (editor) {
-                    editor.handleShow();
+                if (app.getEditor()) {
+                    app.getEditor().handleShow();
                 }
                 dropZone.include();
             });
 
             win.on('hide', function () {
-                if (editor) {
-                    editor.handleHide();
+                if (app && app.getEditor()) {
+                    app.getEditor().handleHide();
                 }
                 dropZone.remove();
             });
@@ -859,29 +302,30 @@ define.async('io.ox/mail/write/main',
             function load(mode, content) {
                 var editorSrc = 'io.ox/core/tk/' + (mode === 'html' ? 'html-editor' : 'text-editor');
                 return require([editorSrc]).pipe(function (Editor) {
-                    return (editor = editorHash[mode] = new Editor(textarea))
+                    return (editorHash[mode] = new Editor(app.getView().textarea))
                         .done(function () {
-                            editor.setPlainText(content);
-                            editor.handleShow();
+                            app.setEditor(editorHash[mode]);
+                            app.getEditor().setPlainText(content);
+                            app.getEditor().handleShow();
                         });
                 });
             }
 
             function reuse(mode, content) {
-                editor = editorHash[mode];
-                editor.setPlainText(content);
-                editor.handleShow();
+                app.setEditor(editorHash[mode]);
+                app.getEditor().setPlainText(content);
+                app.getEditor().handleShow();
                 return $.when();
             }
 
             function changeMode(mode) {
                 // be busy
-                textarea.attr('disabled', 'disabled').busy();
-                if (editor) {
-                    var content = editor.getPlainText();
-                    editor.clear();
-                    editor.handleHide();
-                    if (editor.tinymce) {
+                app.getView().textarea.attr('disabled', 'disabled').busy();
+                if (app.getEditor()) {
+                    var content = app.getEditor().getPlainText();
+                    app.getEditor().clear();
+                    app.getEditor().handleHide();
+                    if (app.getEditor().tinymce) {
                         // changing from HTML to TEXT
                         if (!editorHash.text) {
                             // load TEXT editor for the first time
@@ -919,18 +363,18 @@ define.async('io.ox/mail/write/main',
 
         app.setSubject = function (str) {
             app.markDirty();
-            subject.val(str || '');
+            app.getView().subject.val(str || '');
         };
 
         app.setRawBody = function (str) {
             app.markDirty();
-            editor.setContent(str);
+            app.getEditor().setContent(str);
         };
 
         app.setBody = function (str) {
             app.markDirty();
             // get default signature
-            var ds = _(signatures)
+            var ds = _(app.getView().signatures)
                     .find(function (o) {
                         return o.signature_default === true;
                     }),
@@ -946,37 +390,37 @@ define.async('io.ox/mail/write/main',
                     // prepare signature for html
                     signature = '<p>' + signature.replace(/\n/g, '<br>') + '</p>';
                     // html
-                    editor.setContent('<p></p>' + (pos === 'above' ? signature + content : content + signature));
+                    app.getEditor().setContent('<p></p>' + (pos === 'above' ? signature + content : content + signature));
                 } else {
                     // plain text
                     if (pos === 'above') {
-                        editor.setContent('\n\n' + signature + (content !== '' ? '\n\n' + content : ''));
+                        app.getEditor().setContent('\n\n' + signature + (content !== '' ? '\n\n' + content : ''));
                     } else {
-                        editor.setContent('\n\n' + (content !== '' ? content + '\n\n' : '') + signature);
+                        app.getEditor().setContent('\n\n' + (content !== '' ? content + '\n\n' : '') + signature);
                     }
                 }
 
             } else {
                 // no signature
-                editor.setContent(content !== '' ? (editorMode === 'html' ? '<p></p>' : '\n\n') + content : '');
+                app.getEditor().setContent(content !== '' ? (editorMode === 'html' ? '<p></p>' : '\n\n') + content : '');
             }
         };
 
         app.setTo = function (list) {
-            addRecipients('to', list || []);
+            app.getView().addRecipients('to', list || []);
         };
 
         app.setCC = function (list) {
-            addRecipients('cc', list || []);
+            app.getView().addRecipients('cc', list || []);
             if (list && list.length) {
-                showSection('cc');
+                app.getView().showSection('cc');
             }
         };
 
         app.setBCC = function (list) {
-            addRecipients('bcc', list || []);
+            app.getView().addRecipients('bcc', list || []);
             if (list && list.length) {
-                showSection('bcc');
+                app.getView().showSection('bcc');
             }
         };
 
@@ -989,13 +433,13 @@ define.async('io.ox/mail/write/main',
                     // add as linked attachment
                     attachment.type = 'file';
                     found = true;
-                    form.find('input[type=file]').last()
+                    app.getView().form.find('input[type=file]').last()
                         .prop('attachment', attachment)
                         .trigger('change');
                 }
             });
             if (found) {
-                showSection('attachments');
+                app.getView().showSection('attachments');
             }
         };
 
@@ -1006,29 +450,29 @@ define.async('io.ox/mail/write/main',
             prio = prio < 3 ? 1 : prio;
             prio = prio > 3 ? 5 : prio;
             // set
-            form.find('input[name=priority][value=' + prio + ']')
+            app.getView().form.find('input[name=priority][value=' + prio + ']')
                 .prop('checked', true);
             // high priority?
             if (prio === 1) {
-                priorityOverlay.addClass('high');
+                app.getView().priorityOverlay.addClass('high');
             }
         };
 
         app.setAttachVCard = function (bool) {
             app.markDirty();
             // set
-            form.find('input[name=vcard]').prop('checked', !!bool);
+            app.getView().form.find('input[name=vcard]').prop('checked', !!bool);
         };
 
         app.setDeliveryReceipt = function (bool) {
             app.markDirty();
             // set
-            form.find('input[name=receipt]').prop('checked', !!bool);
+            app.getView().form.find('input[name=receipt]').prop('checked', !!bool);
         };
 
         app.setMsgRef = function (ref) {
             app.markDirty();
-            form.find('input[name=msgref]').val(ref || '');
+            app.getView().form.find('input[name=msgref]').val(ref || '');
         };
 
         var windowTitles = {
@@ -1088,7 +532,7 @@ define.async('io.ox/mail/write/main',
             win.show(function () {
                 app.setMail(point)
                 .done(function () {
-                    editor.focus();
+                    app.getEditor().focus();
                     def.resolve();
                 });
             });
@@ -1129,7 +573,7 @@ define.async('io.ox/mail/write/main',
                 app.setMail({ data: data, mode: 'compose', initial: true })
                 .done(function () {
                     if (mailto) {
-                        editor.focus();
+                        app.getEditor().focus();
                     } else if (data && data.to) {
                         $('input[name=subject]').focus().select();
                     } else {
@@ -1152,7 +596,7 @@ define.async('io.ox/mail/write/main',
                 .done(function (data) {
                     app.setMail({ data: data, mode: 'replyall', initial: true })
                     .done(function () {
-                        editor.focus();
+                        app.getEditor().focus();
                         def.resolve();
                     });
                 });
@@ -1170,7 +614,7 @@ define.async('io.ox/mail/write/main',
                 .done(function (data) {
                     app.setMail({ data: data, mode: 'reply', initial: true })
                     .done(function () {
-                        editor.focus();
+                        app.getEditor().focus();
                         def.resolve();
                     });
                 });
@@ -1222,7 +666,7 @@ define.async('io.ox/mail/write/main',
          */
         app.getMail = function () {
             var // get relevant fields
-                fields = form
+                fields = app.getView().form
                     .find(':input[name]')
                     .filter('textarea, [type=text], [type=hidden], [type=radio]:checked, [type=checkbox]:checked'),
                 // get raw data
@@ -1249,12 +693,12 @@ define.async('io.ox/mail/write/main',
             if (editorMode === 'html') {
                 content = {
                     content_type: 'text/html',
-                    content: editor ? editor.getContent() : ''
+                    content: app.getEditor() ? app.getEditor().getContent() : ''
                 };
             } else {
                 content = {
                     content_type: 'text/plain',
-                    content: (editor ? editor.getContent() : '')
+                    content: (app.getEditor() ? app.getEditor().getContent() : '')
                         .replace(/</g, '&lt;') // escape <
                         .replace(/\n/g, '<br>\n') // escape line-breaks
                 };
@@ -1276,7 +720,7 @@ define.async('io.ox/mail/write/main',
                 mail.msgref = data.msgref;
             }
             // get files
-            form.find(':input[name][type=file]')
+            app.getView().form.find(':input[name][type=file]')
                 .each(function () {
                     // link to existing attachments (e.g. in forwards)
                     var attachment = $(this).prop('attachment'),
@@ -1364,6 +808,10 @@ define.async('io.ox/mail/write/main',
             return editor;
         };
 
+        app.setEditor = function (e) {
+            editor = e;
+        };
+
         // destroy
         app.setQuit(function () {
 
@@ -1375,8 +823,7 @@ define.async('io.ox/mail/write/main',
                     editorHash[id].destroy();
                 }
                 // clear all private vars
-                app = win = main = sidepanel = form = subject = editor = null;
-                priorityOverlay = sections = currentSignature = null;
+                app = win = editor = currentSignature = null;
             };
 
             if (app.getState() === app.STATES.DIRTY) {
