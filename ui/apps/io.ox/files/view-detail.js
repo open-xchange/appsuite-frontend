@@ -325,14 +325,9 @@ define("io.ox/files/view-detail",
             $("<div>").addClass("row-fluid").append($("<div>").addClass("span6").append($input)).append($("<div>").addClass("span6 pull-right").append($button)).appendTo($node);
 
             var $comment = $("<div>").addClass("row-fluid").hide().appendTo($node);
-<<<<<<< HEAD
-            var $commentArea = $("<textarea rows='5'></textarea>").addClass("span12").appendTo($comment);
-
-=======
             $comment.append($("<label>").text("Version Comment:"));
             var $commentArea = $("<textarea rows='5'></textarea>").css({resize: 'none', width: "100%"}).appendTo($comment);
             
->>>>>>> file_detail_overhaul2
             $input.on("change", function () {
                 $comment.show();
                 $commentArea.focus();
