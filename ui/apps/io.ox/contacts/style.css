@@ -265,7 +265,6 @@
 }
 
 .savebutton{
-	width: 40px;
 	float: right;
 }
 
@@ -424,13 +423,9 @@ input#image1 {
 /*header*/
 .section-group.header {
 	padding-top: 20px;
-	padding-left: 10px;
-	height: 60px;
+	min-height: 60px;
 }
 
-.section{
-	padding: 0 10px 15px 10px;
-}
 
 .section.last{
 	border: none;
@@ -453,7 +448,8 @@ input#image1 {
 	overflow: hidden;
 }
 
-.header a.button.default-action.saveButton{
+.create-distributionlist .btn.btn-primary.btn-small{
+	margin-top: 20px;
 	float: right;
 }
 
@@ -463,7 +459,11 @@ input#image1 {
 }
 
 .item-list .name.col {
-	margin-left: 55px;
+	margin-left: 75px;
+}
+
+.item-list .mail.col {
+	margin-left: 20px;
 }
 
 .create-distributionlist .item-list{
@@ -481,15 +481,26 @@ input#image1 {
 }
 
 .create-distributionlist .item-list .listet-item {
-	width: 572px;
+	width: 693px;
 	float: left;
 	padding: 3px;
 	border: 1px solid #ccc;
 	height: 3em;
 	margin-bottom: 3px;
 }
-.create-distributionlist .item-list .listet-item .person-link.ellipsis,
-.create-distributionlist .item-list .listet-item .person-selected-mail,
+.create-distributionlist .item-list .listet-item .person-link.ellipsis {
+	width: 240px;
+	margin-top: 12px;
+	margin-left: 20px;
+	float: left;
+}
+.create-distributionlist .item-list .listet-item .person-selected-mail{
+	width: 240px;
+	margin-top: 12px;
+	margin-left: 20px;
+	float: left;
+}
+
 .fieldset{
 	width: 240px;
 	margin-top: 12px;
@@ -497,8 +508,9 @@ input#image1 {
 }
 
 .create-distributionlist .fieldset.name{
-	width: 238px;
-	margin-left: 50px;
+	width: 237px;
+	margin-left: 75px;
+	margin-right: 25px;
 }
 
 .create-distributionlist .fieldset.mail{
@@ -523,7 +535,25 @@ input#image1 {
 	background-image: url(images/close_button_hover.png);
 }
 
-.create-distributionlist .button.addButton{
+.create-distributionlist .btn.btn-success.btn-small{
+	float: right;
 	margin-top: 33px;
 	margin-right: 0px;
+}
+
+.create-distributionlist .alert .close {
+position: relative;
+top: 1px;
+right: -20px;
+line-height: 18px;
+}
+
+a.close .delete-button{
+	float: right;
+	display: inline-block;
+	background-image: url(images/close_button.png);
+	border: none;
+	display: block;
+	height: 16px;
+	width: 16px
 }

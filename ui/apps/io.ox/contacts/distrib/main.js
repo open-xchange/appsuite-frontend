@@ -65,7 +65,7 @@ define('io.ox/contacts/distrib/main',
                 .css({ backgroundColor: '#fff' })
                 .addClass('create-distributionlist')
                 .scrollable()
-                .css({ maxWidth: '600px', margin: '20px auto 20px auto' });
+                .css({ maxWidth: '700px', margin: '20px auto 20px auto' });
 
             //what about the hash support?
             win.show(function () {

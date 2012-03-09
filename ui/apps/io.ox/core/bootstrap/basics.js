@@ -10,6 +10,7 @@
          js + '-tooltip.js',
          js + '-dropdown.js',
          js + '-button.js',
+         js + '-alert.js',
          'less!' + p + 'less/bootstrap.less'], $.noop);
 
 }());
