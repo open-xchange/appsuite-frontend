@@ -203,9 +203,9 @@ define ("gettext", function (gettext) {
     return {
         load: function (name, parentRequire, load, config) {
             require(["io.ox/core/gettext"]).pipe(function (gettext) {
-                return gettext.getModule(name);
-            }).done(function (module) {
-                parentRequire([module], load);
+                return gettext.language;
+            }).done(function (language) {
+                parentRequire([name + "." + language], load);
             });
         }
     };

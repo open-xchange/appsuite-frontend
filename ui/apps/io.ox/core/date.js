@@ -11,11 +11,11 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-define("io.ox/core/date", ["gettext!io.ox/core/main"],
-function (gt) {
+define('io.ox/core/date', ['io.ox/core/gettext', 'io.ox/core/config'],
+function (gettext, config, gt) {
     /*jshint white:false */
     
-    "use strict";
+    'use strict';
     
     var SECOND   =        1000; // ms / s
     var MINUTE   =       60000; // ms / min
@@ -23,7 +23,9 @@ function (gt) {
     var DAY      =    86400000; // ms / day
     var AVG_YEAR = 31556952000; // average ms / year
     
-    var api = {
+    var api = { SECOND: SECOND, MINUTE: MINUTE, HOUR: HOUR, DAY: DAY };
+    
+    var locale = {
         /**
          * The first week with at least daysInFirstWeek days in a given year is
          * defined as the first week of that year.
@@ -38,13 +40,17 @@ function (gt) {
          */
         weekStart: 1,
         
-        format: "yyyy-MM-dd HH:mm:ss",
-        
-        SECOND: SECOND,
-        MINUTE: MINUTE,
-        HOUR: HOUR,
-        DAY: DAY
+        format: 'yyyy-MM-dd HH:mm:ss'
     };
+    
+    var localeDeferred = new $.Deferred();
+    api.locale = localeDeferred.promise();
+    
+    $.when(gettext.language, config.load()).done(function (lang) {
+        var match = lang.split(/[_\-]/);
+        var language = match[1], territory = match[match.length > 2 ? 2 : 1];
+        
+    });
     
     // TODO: Difference between server and client clocks.
     var offset = 0;
