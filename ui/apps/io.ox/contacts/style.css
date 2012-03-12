@@ -448,7 +448,7 @@ input#image1 {
 	overflow: hidden;
 }
 
-.create-distributionlist .btn.btn-primary.btn-small{
+.create-distributionlist .btn.btn-primary{
 	margin-top: 20px;
 	float: right;
 }
@@ -509,11 +509,12 @@ input#image1 {
 
 .create-distributionlist .fieldset.name{
 	width: 237px;
-	margin-left: 75px;
+	margin-left: 0px;
 	margin-right: 25px;
 }
 
 .create-distributionlist .fieldset.mail{
+	margin-left:  60px;
 	width: 230px;
 }
 
@@ -535,7 +536,7 @@ input#image1 {
 	background-image: url(images/close_button_hover.png);
 }
 
-.create-distributionlist .btn.btn-success.btn-small{
+.create-distributionlist .btn.btn-success{
 	float: right;
 	margin-top: 33px;
 	margin-right: 0px;
