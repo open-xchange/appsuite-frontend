@@ -181,7 +181,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
         /**
          * Add visual folder tree
          */
-        addFolderTree: function (app, width, type) {
+        addFolderTree: function (app, width, type, rootFolderId) {
 
             var container,
                 visible = false,
@@ -230,7 +230,10 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             };
 
             initTree = function (FolderTree) {
-                var tree = app.folderTree = new FolderTree(container, { type: type });
+                var tree = app.folderTree = new FolderTree(container, {
+                    type: type,
+                    rootFolderId: rootFolderId
+                });
                 tree.selection.on('change', fnChangeFolder);
                 return tree.paint()
                     .done(function () {

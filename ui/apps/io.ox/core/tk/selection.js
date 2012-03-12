@@ -71,7 +71,6 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
 
         changed = function () {
             var list = self.get();
-            console.log('selection changed!', list);
             self.trigger('change', list);
             if (list.length === 0) {
                 self.trigger('empty');
