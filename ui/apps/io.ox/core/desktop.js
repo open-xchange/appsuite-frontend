@@ -14,7 +14,7 @@
  */
 
 define("io.ox/core/desktop",
-    ["io.ox/core/event", "io.ox/core/extensions", "io.ox/core/cache"], function (Events, ext, cache) {
+    ["io.ox/core/event", "io.ox/core/extensions", "io.ox/core/extPatterns/links", "io.ox/core/cache"], function (Events, ext, links, cache) {
 
     "use strict";
 
@@ -258,9 +258,10 @@ define("io.ox/core/desktop",
                                 .done(function (data) {
                                     // remember
                                     folder = String(id);
-                                    // update window title?
+                                    // update window title & toolbar?
                                     if (win) {
                                         win.setTitle(data.title);
+                                        win.updateToolbar();
                                     }
                                     // update grid?
                                     if (grid) {
@@ -666,6 +667,11 @@ define("io.ox/core/desktop",
                     self = this,
                     firstShow = true;
 
+                this.updateToolbar = function () {
+                    ext.point(this.name + "/toolbar")
+                        .invoke('draw', this.nodes.toolbar.empty(), this.app || this);
+                };
+
                 this.show = function (cont) {
                     // get node and its parent node
                     var node = this.nodes.outer, parent = node.parent();
@@ -678,10 +684,7 @@ define("io.ox/core/desktop",
                         if (node.parent().length === 0) {
                             node.appendTo(pane);
                         }
-                        // update toolbar
-                        ext.point(this.name + "/toolbar")
-                            .invoke('draw', this.nodes.toolbar.empty(), this.app || this);
-
+                        this.updateToolbar();
                         ox.ui.windowManager.trigger("window.beforeshow", self);
                         node.show();
                         scrollTo(node, function () {
@@ -1054,7 +1057,7 @@ define("io.ox/core/desktop",
             // toolbar extension point
             if (opt.toolbar === true && opt.name) {
                 // add "create" link
-                ext.point(opt.name + '/toolbar').extend(new ext.ToolbarLinks({
+                ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
                     id: 'links',
                     ref: opt.name + '/links/toolbar'
                 }));

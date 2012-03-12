@@ -177,6 +177,7 @@ define('io.ox/settings/main',
             }
         });
 
+        grid.setMultiple(false);
 
         win.on('show', function () {
             grid.selection.keyboard(true);

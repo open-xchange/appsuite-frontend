@@ -744,7 +744,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         /**
          * Resume HTTP API. Send all queued requests as one multiple
          */
-        resume: function (cont, error) {
+        resume: function () {
+            var def = $.Deferred();
             if (paused === true) {
                 // look for nested multiple requests
                 var i = 0, $l = queue.length, req, q = [], tmp, o, size = [];
@@ -804,31 +805,32 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                         module: "multiple",
                         "continue": true,
                         data: tmp,
-                        appendColumns: false,
-                        success: function (data) {
-                            // orchestrate callbacks and their data
-                            var i = 0, j = 0, $l = data.length, range;
-                            while (i < $l) {
-                                // get data range
-                                range = size[j] > 1 ? data.slice(i, i + size[j]) : data[i];
-                                // call
-                                processResponse(range, q[i]);
-                                // inc
-                                i = i + size[j];
-                                j = j + 1;
-                            }
-                            // continuation
-                            _.call(cont);
-                        },
-                        error: function (data) {
-                            return _.call(error, data);
+                        appendColumns: false
+                    })
+                    .done(function (data) {
+                        // orchestrate callbacks and their data
+                        var i = 0, j = 0, $l = data.length, range;
+                        while (i < $l) {
+                            // get data range
+                            range = size[j] > 1 ? data.slice(i, i + size[j]) : data[i];
+                            // call
+                            processResponse(range, q[i]);
+                            // inc
+                            i = i + size[j];
+                            j = j + 1;
                         }
-                    });
+                        // continuation
+                        def.resolve();
+                    })
+                    .fail(def.reject);
                 } else {
                     // continuation
-                    _.call(cont);
+                    def.resolve();
                 }
+            } else {
+                def.resolve();
             }
+            return def;
         }
     };
 

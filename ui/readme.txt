@@ -36,7 +36,7 @@ How to get the UI running on MacOS X
 
 3.  You need node.js to build the UI:
 
-    - Visit https://sites.google.com/site/nodejsmacosx/ and install stable version.
+    - Visit http://nodejs.org/ and install stable version.
     
     - Open terminal
     

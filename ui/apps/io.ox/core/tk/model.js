@@ -260,6 +260,13 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
                 if (!isEqual(value, previous[key])) {
                     changes[key] = value;
                 }
+                if (key === 'distribution_list') {
+                    console.log(value);
+                    console.log(previous[key]);
+//                    console.log(_.difference(value, previous[key]));
+//                    changes[key] = 'dirty';
+                }
+                console.log(changes);
             });
             return changes;
         },

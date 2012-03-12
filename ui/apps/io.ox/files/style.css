@@ -7,12 +7,9 @@
     margin-bottom: 0.25em;
 }
 
-.file-details .basicInfo {
-    margin-bottom: 15px;
-}
-
 .file-details .basicInfo em {
-    font-weight: bold;
+    font-family: OpenSans, Arial, Helvetica, sans-serif;
+    color: #aaa;
     font-style: normal;
 }
 
@@ -29,32 +26,16 @@
     margin-right: 10px;
 }
 
-.file-details .io-ox-clickme {
-    cursor: pointer;
-}
-
-.file-details tr.io-ox-clickme:hover {
-    background-color: whiteSmoke;
-}
-
-.file-details .versionLabel {
-    font-size: 1.5em;
-}
-
 .file-details .version.current .versionLabel {
     font-weight: bold;
 }
 
-.file-details .version.current {
-    background-color: @list-highlight;
-}
-
 .file-details .version {
+    padding: 5px 5px 10px 5px;
     margin-bottom: 10px;
 }
 
-.file-details .version:hover {
-    background-color: whiteSmoke;
+.file-details .version-comment {
+    font-family: monospace, 'Courier new';
+    white-space: pre-wrap;
 }
-
-

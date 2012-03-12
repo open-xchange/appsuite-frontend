@@ -123,7 +123,7 @@
 
                     return extension.invoke('load')
                         .pipe(function (data) {
-                            return (extension.invoke('draw', $node, [data]) || $.Deferred())
+                            return (extension.invoke('draw', $node, data) || $.Deferred())
                                 .done(function () {
                                     $node.idle();
                                 });

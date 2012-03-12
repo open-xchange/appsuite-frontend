@@ -76,7 +76,7 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
         };
 
         this.getContentControls = function () {
-            return nodes.popup.find(".controls");
+            return nodes.popup.find(".form-actions");
         };
 
         this.text = function (str) {

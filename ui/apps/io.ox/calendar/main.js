@@ -112,17 +112,7 @@ define("io.ox/calendar/main",
             );
         };
 
-        /*
-         * Selection handling
-         */
-        grid.selection.on("change", function (e, selection) {
-            if (selection.length === 1) {
-                showAppointment(selection[0]);
-            } else {
-                right.empty();
-            }
-        });
-
+        commons.wireGridAndSelectionChange(grid, 'io.ox/calendar', showAppointment, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api);
