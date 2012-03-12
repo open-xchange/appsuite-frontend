@@ -25,12 +25,21 @@ define("io.ox/files/view-detail",
 
     "use strict";
 
+    var supportsDragOut = Modernizr.draganddrop && _.browser.Chrome;
+
     var draw = function (file) {
         filesAPI.addDocumentLink(file);
         var $element = $("<div>").addClass("file-details view"),
             sections = new layouts.Sections({
                 ref: "io.ox/files/details/sections"
             });
+
+        // add drog-out delegate
+        if (supportsDragOut) {
+            $element.on('dragstart', '.dragout', function (e) {
+                e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
+            });
+        }
 
         sections.draw.call($element, file);
 
@@ -228,21 +237,27 @@ define("io.ox/files/view-detail",
             return prev.supportsPreview();
         },
         draw: function (file) {
+
             this.addClass("preview");
 
-            var fileDescription = {
-                name: file.filename,
-                mimetype: file.file_mimetype,
-                size: file.file_size,
-                dataURL: file.documentUrl
-            };
+            var desc = {
+                    name: file.filename,
+                    mimetype: file.file_mimetype,
+                    size: file.file_size,
+                    dataURL: file.documentUrl
+                },
+                link = $('<a>', { href: ox.abs + desc.dataURL, target: '_blank', draggable: true })
+                    .addClass('dragout')
+                    .attr('data-downloadurl', desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.dataURL),
+                self = this.hide(),
+                prev = new Preview(desc);
 
-            var $node = this;
-            $node.hide();
-            var prev = new Preview(fileDescription);
             if (prev.supportsPreview()) {
-                prev.appendTo($node);
-                $node.show();
+                prev.appendTo(link.appendTo(self));
+                if (supportsDragOut) {
+                    link.attr('title', 'Drag to desktop');
+                }
+                self.show();
             }
         },
         on: {

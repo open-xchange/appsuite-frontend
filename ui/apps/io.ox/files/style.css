@@ -47,3 +47,7 @@
     font-family: monospace, 'Courier new';
     white-space: pre-wrap;
 }
+
+.file-details .dragout {
+    cursor: pointer;
+}
