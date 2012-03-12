@@ -27,7 +27,7 @@ define('io.ox/contacts/distrib/main',
         var app;
         app = ox.ui.createApp({
             name: 'io.ox/contacts/distrib',
-            title: 'Create Distribution List'
+            title: 'Distribution List'
         });
 
         app.setLauncher(function () {
@@ -35,7 +35,7 @@ define('io.ox/contacts/distrib/main',
                 container, distribState;
 
             win = ox.ui.createWindow({
-                title: 'Create Distribution list',
+                title: 'Distribution list',
                 toolbar: true,
                 close: true
             });
