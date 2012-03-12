@@ -12,11 +12,15 @@
  */
 
 define("io.ox/calendar/view-detail",
-    ["io.ox/core/extensions", "io.ox/calendar/util",
-     "gettext!io.ox/calendar/calendar", "io.ox/core/api/user",
-     "io.ox/core/api/group", "io.ox/core/api/resource",
+    ["io.ox/core/extensions",
+     "io.ox/calendar/util",
+     "io.ox/core/api/user",
+     "io.ox/core/api/group",
+     "io.ox/core/api/resource",
+     "io.ox/core/api/folder",
+     "gettext!io.ox/calendar/calendar",
      "less!io.ox/calendar/style.css"
-    ], function (ext, util, gettext, userAPI, groupAPI, resourceAPI) {
+    ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI) {
 
     "use strict";
 
@@ -314,14 +318,10 @@ define("io.ox/calendar/view-detail",
         id: "folder",
         draw: function (data) {
             this.append(
-                $("<span>")
-                    .addClass("detail-label")
-                    .text("Folder" + ":\u00A0")
-            )
-            .append(
-                 $("<span>").addClass("detail").text(data.folder_id)
-            )
-            .append($("<br>"));
+                $("<span>").addClass("detail-label").text("Folder" + ":\u00A0"),
+                $("<span>").addClass("detail").append(folderAPI.getTextNode(data.folder_id)),
+                $("<br>")
+            );
         }
     });
 

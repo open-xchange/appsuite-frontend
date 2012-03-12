@@ -70,8 +70,10 @@
 /* Detail view */
 
 .calendar-detail .date {
-    color: #ccc;
+    font-family: @font-light;
+    font-weight: 200;
     font-size: 1.1em;
+    color: #ccc;
 }
 
 .calendar-detail .interval {
@@ -96,10 +98,12 @@
 }
 
 .calendar-detail .io-ox-label {
+    font-family: @font-light;
+    font-weight: 200;
     font-size: 9pt;
-    color: #888;
+    color: #333;
     clear: both;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #eee;
     padding: 1em 0 0.25em 0em;
     margin-bottom: 0.5em;
 }
@@ -150,10 +154,12 @@
 }
 
 .calendar-detail .detail-label {
+    font-family: @font-light;
+    font-weight: 200;
     display: inline-block;
     width: 80px;
     white-space: nowrap;
-    color: #666;
+    color: #aaa;
 }
 
 .calendar-detail .details {

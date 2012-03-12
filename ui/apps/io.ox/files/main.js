@@ -53,7 +53,7 @@ define("io.ox/files/main",
         app.setWindow(win);
 
         // folder tree
-        commons.addFolderTree(app, GRID_WIDTH, 'infostore');
+        commons.addFolderTree(app, GRID_WIDTH, 'infostore', 9);
 
         // left side
         left = $("<div>").addClass("leftside border-right")
@@ -68,7 +68,7 @@ define("io.ox/files/main",
             .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main);
 
-    
+
         // Grid
         grid = new VGrid(left);
 
@@ -92,7 +92,6 @@ define("io.ox/files/main",
         // LFO callback
         var currentDetailView = null;
         function drawDetail(data) {
-
             if (currentDetailView) {
                 currentDetailView.destroy();
             }
@@ -111,6 +110,13 @@ define("io.ox/files/main",
         };
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/files', drawFile, right);
+
+        grid.selection.on('empty', function () {
+            if (currentDetailView) {
+                currentDetailView.destroy();
+                currentDetailView = null;
+            }
+        });
 
         // delete item
         api.on("beforedelete", function () {

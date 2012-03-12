@@ -288,7 +288,7 @@
                     };
 
             return function (elem, deep) {
-                return elem !== 'object' ? elem : copy(elem, !!deep);
+                return typeof elem !== 'object' ? elem : copy(elem, !!deep);
             };
         }()),
 

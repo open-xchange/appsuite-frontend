@@ -48,8 +48,8 @@ body {
     cursor: default;
 }
 
-a, a:visited, .link {
-    color: #00a0cd;
+a, a:visited {
+    color: #08c;
     text-decoration: none;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;

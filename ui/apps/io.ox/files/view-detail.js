@@ -1,5 +1,4 @@
 /**
- *
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
@@ -10,7 +9,6 @@
  * Mail: info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
- *
  */
 
 // TODO: Render Versions
@@ -22,7 +20,8 @@ define("io.ox/files/view-detail",
      "io.ox/core/i18n",
      "io.ox/core/event",
      "io.ox/files/actions",
-     "io.ox/files/api"], function (ext, links, layouts, i18n, Event, actions, filesAPI) {
+     "io.ox/files/api",
+     "io.ox/preview/main"], function (ext, links, layouts, i18n, Event, actions, filesAPI, Preview) {
 
     "use strict";
 
@@ -209,51 +208,49 @@ define("io.ox/files/view-detail",
 
     // Content Section
     // Preview
-    require(["io.ox/preview/main"], function (Preview) {
-        ext.point("io.ox/files/details/sections/content").extend({
-            id: "preview",
-            index: 10,
-            dim: {
-                span: 6
-            },
-            isEnabled: function (file) {
-                if (!file.filename) {
-                    return false;
-                }
-                var fileDescription = {
-                    name: file.filename,
-                    mimetype: file.file_mimetype,
-                    size: file.file_size,
-                    dataURL: file.documentUrl
-                };
-                var prev = new Preview(fileDescription);
-                return prev.supportsPreview();
-            },
-            draw: function (file) {
-                this.addClass("preview");
-
-                var fileDescription = {
-                    name: file.filename,
-                    mimetype: file.file_mimetype,
-                    size: file.file_size,
-                    dataURL: file.documentUrl
-                };
-
-                var $node = this;
-                $node.hide();
-                var prev = new Preview(fileDescription);
-                if (prev.supportsPreview()) {
-                    prev.appendTo($node);
-                    $node.show();
-                }
-            },
-            on: {
-                update: function (file, extension) {
-                    this.empty();
-                    extension.draw.call(this, file, extension);
-                }
+    ext.point("io.ox/files/details/sections/content").extend({
+        id: "preview",
+        index: 10,
+        dim: {
+            span: 6
+        },
+        isEnabled: function (file) {
+            if (!file.filename) {
+                return false;
             }
-        });
+            var fileDescription = {
+                name: file.filename,
+                mimetype: file.file_mimetype,
+                size: file.file_size,
+                dataURL: file.documentUrl
+            };
+            var prev = new Preview(fileDescription);
+            return prev.supportsPreview();
+        },
+        draw: function (file) {
+            this.addClass("preview");
+
+            var fileDescription = {
+                name: file.filename,
+                mimetype: file.file_mimetype,
+                size: file.file_size,
+                dataURL: file.documentUrl
+            };
+
+            var $node = this;
+            $node.hide();
+            var prev = new Preview(fileDescription);
+            if (prev.supportsPreview()) {
+                prev.appendTo($node);
+                $node.show();
+            }
+        },
+        on: {
+            update: function (file, extension) {
+                this.empty();
+                extension.draw.call(this, file, extension);
+            }
+        }
     });
 
     // Description

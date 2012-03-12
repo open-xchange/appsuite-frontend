@@ -168,8 +168,9 @@
                 $('<span>').text(' ')
             )
             .append(
-                $('<span>').text('Retry').addClass('link')
-                .on('click', function () {
+                $('<a>', { href: '#' }).text('Retry')
+                .on('click', function (e) {
+                    e.preventDefault();
                     $(this).parents('.io-ox-center').remove();
                     retry.apply(this, arguments);
                 })

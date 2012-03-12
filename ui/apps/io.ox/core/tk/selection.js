@@ -33,6 +33,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             empty = {},
             last = empty,
             prev = empty,
+            changed,
             apply,
             click,
             clear,
@@ -68,6 +69,14 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             return false;
         };
 
+        changed = function () {
+            var list = self.get();
+            self.trigger('change', list);
+            if (list.length === 0) {
+                self.trigger('empty');
+            }
+        };
+
         // apply selection
         apply = function (id, e) {
             // range?
@@ -83,7 +92,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                 last = prev = id;
             }
             // event
-            self.trigger('change', self.get());
+            changed();
         };
 
         selectPrevious = function (e) {
@@ -230,7 +239,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             }
             // fire event?
             if (!_.isEqual(tmp, self.get())) {
-                self.trigger('change', self.get());
+                changed();
             }
             return this;
         };
@@ -315,7 +324,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             clear();
             // trigger event
             if (quiet !== true) {
-                this.trigger('change', []);
+                changed();
             }
             return this;
         };
@@ -325,7 +334,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
          */
         this.select = function (id) {
             select(id);
-            this.trigger('change', this.get());
+            changed();
             return this;
         };
 
@@ -346,7 +355,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             });
             // event
             if (quiet !== true) {
-                this.trigger('change', this.get());
+                changed();
             }
             return this;
         };
@@ -367,7 +376,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                     select(observedItems[a]);
                 }
                 // event
-                this.trigger('change', this.get());
+                changed();
             }
             return this;
         };
@@ -376,7 +385,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             if (bHasIndex && observedItems.length) {
                 clear();
                 select(observedItems[0]);
-                this.trigger('change', this.get());
+                changed();
             }
             return this;
         };
@@ -410,7 +419,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
          * Retrigger current selection
          */
         this.retrigger = function () {
-            this.trigger('change', this.get());
+            changed();
         };
 
         // bind general click handler

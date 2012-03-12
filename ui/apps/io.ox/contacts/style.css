@@ -304,11 +304,9 @@ input#image1 {
 }
 
 
-.contact-detail.edit .sectioncontent {
-	margin-bottom: 5px;
-}
-
-.contact-detail.edit .section-group, .create-contact .section-group{
+.contact-detail.edit .sectioncontent,
+.contact-detail.edit .section-group,
+.create-contact .section-group {
 	margin-bottom: 5px;
 }
 
@@ -501,13 +499,13 @@ input#image1 {
 	float: left;
 }
 
-.fieldset{
+.create-distributionlist .fieldset {
 	width: 240px;
 	margin-top: 12px;
 	float: left;
 }
 
-.create-distributionlist .fieldset.name{
+.create-distributionlist .fieldset.name {
 	width: 237px;
 	margin-left: 0px;
 	margin-right: 25px;
