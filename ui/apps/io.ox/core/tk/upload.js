@@ -11,11 +11,163 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-// TODO: Refactor this to make it usable by other OX upload scenarios (Mail Attachments, PIM Attachments)
 define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
 
     "use strict";
+    
+    // We provide a few events:
+    // "dragover" if someone threatens to drop a file into the window
+    // "dragend" when she released the file
+    // "drop" when she released the file
+    // options should contain a list of actions. The action id will be the first parameter to the event handlers
+    // { actions: [
+    //      {id: 'action1', displayName: 'Some cool Action'}, {id: 'action2', displayName: 'Some other cool action'}
+    // ]}
+    function MultiDropZone(options) {
+        require(["less!io.ox/core/tk/upload.less"]);
+        var self = this, $overlay, nodes = [], nodeGenerator, currentRow, height, showOverlay, highlightedAction, removeOverlay;
+        Events.extend(this);
+        
+        $overlay = $("<div/>")
+            .addClass("abs io-ox-dropzone-overlay")
+            .css({
+                backgroundColor: "#000",
+                color: "white",
+                textAlign: "center",
+                fontSize: "20pt",
+                opacity: "0.75",
+                zIndex: 65000
+            });
+        showOverlay = function () {
+            $overlay.appendTo("body").css({height: "100%"});
+            height = 100 / nodes.length;
+            height = height + "%";
 
+            _(nodes).each(function ($actionNode) {
+                $actionNode.css({height: height});
+            });
+            return false;
+        };
+
+        removeOverlay = function (event) {
+            $overlay.detach();
+            return false; // Prevent regular event handling
+        };
+        
+        // If we have more than 4 actions, do this in two columns, else do this in one column
+        if (options.actions.length < 4) {
+            nodeGenerator = function () {
+                var $actionNode = $("<div>").addClass("row-fluid io-ox-dropzone-action").appendTo($overlay);
+                nodes.push($actionNode);
+                return $actionNode;
+            };
+        } else {
+            nodeGenerator = function () {
+                var $actionTile = $("<div>").appendTo($overlay).addClass("span6 io-ox-dropzone-action").css({height: "100%"});
+                if (currentRow) {
+                    currentRow.append($actionTile);
+                    currentRow = null;
+                } else {
+                    currentRow = $("<div>").addClass("row-fluid").appendTo($overlay);
+                    
+                    nodes.push(currentRow);
+                    currentRow.append($actionTile);
+                }
+                
+                return $actionTile;
+            };
+        }
+        _(options.actions || []).each(function (action) {
+            var $actionNode = nodeGenerator();
+            $actionNode.text(action.displayName).on({
+                dragenter: function () {
+                    self.trigger("dragenter", action.id, action);
+                    if (highlightedAction) {
+                        highlightedAction.removeClass("io-ox-dropzone-hover");
+                    }
+                    $actionNode.addClass("io-ox-dropzone-hover");
+                    highlightedAction = $actionNode;
+                    return false; // Prevent regular event handling
+                },
+                dragover: function () {
+                    self.trigger("dragover", action.id, action);
+                    return false; // Prevent regular event handling
+                },
+                dragend: function () {
+                    self.trigger("dragend", action.id, action);
+                    if (highlightedAction) {
+                        highlightedAction.removeClass("io-ox-dropzone-hover");
+                    }
+                    return false; // Prevent regular event handling
+
+                },
+                dragleave: function () {
+                    self.trigger("dragleave", action.id, action);
+                    $actionNode.removeClass("io-ox-dropzone-hover");
+                    return false; // Prevent regular event handling
+
+                },
+                drop: function (event) {
+                    event = event.originalEvent || event;
+                    var files = event.dataTransfer.files;
+                    // And the pass them on
+                    if (highlightedAction) {
+                        highlightedAction.removeClass("io-ox-dropzone-hover");
+                    }
+                    $overlay.detach();
+                    for (var i = 0, l = files.length; i < l; i++) {
+                        self.trigger("drop", action.id, files[i], action);
+                    }
+                    return false; // Prevent regular event handling
+                }
+            });
+        });
+        
+        
+        
+        var included = false;
+        this.remove = function () {
+            if (!included) {
+                return;
+            }
+            included = false;
+            $("body").off("dragenter", showOverlay);
+            $("body").off("drop", removeOverlay);
+        };
+        this.include = function () {
+            if (included) {
+                return;
+            }
+            included = true;
+            $("body").on("dragenter", showOverlay);
+            $overlay.on({
+                dragenter: function () {
+                    return false; // Prevent regular event handling
+                },
+                dragover: function () {
+                    return false; // Prevent regular event handling
+                },
+                dragend: function () {
+                    return false; // Prevent regular event handling
+
+                },
+                dragleave: function () {
+                    return false; // Prevent regular event handling
+
+                },
+                drop: function (evt) {
+                    evt.preventDefault();
+                    removeOverlay();
+                    return false;
+                }
+            });
+            $overlay.on("dragleave", function () {
+                $overlay.detach();
+            });
+        };
+        
+    }
+    
     // Let's define a DropZone class, where files can be dropped
     // We leave the eyecandy to calling code, but provide a few events
     // "dragover" if someone threatens to drop a file into $node
@@ -45,8 +197,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                     fontSize: "42pt",
                     opacity: "0.75",
                     zIndex: 65000
-                })
-                .text("Just drop the file anywhere...");
+                }).text("Just drop the file anywhere...");
         }
         this.enabled = true;
         Events.extend(this);
@@ -220,11 +371,15 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
     return {
         dnd : {
             enabled: Modernizr.draganddrop,
-            createDropZone: function ($node) {
+            createDropZone: function (options) {
                 if (!this.enabled) {
-                    return new DisabledDropZone($node);
+                    return new DisabledDropZone(options.node);
                 }
-                return new DropZone($node);
+                if (options.type === 'multiple') {
+                    return new DropZone(options.node);
+                } else {
+                    return new MultiDropZone(options);
+                }
             }
         },
         createQueue: function (delegate) {

@@ -143,7 +143,19 @@ define("io.ox/files/main",
             }
         });
 
-        var dropZone = upload.dnd.createDropZone();
+        var dropZone = upload.dnd.createDropZone({
+            style: 'multiple',
+            actions: [
+                {
+                    id: 'newFile',
+                    displayName: 'Upload a new file'
+                },
+                {
+                    id: 'newVersion',
+                    displayName: 'Upload a new version'
+                }
+            ]
+        });
 
         dropZone.on("drop", function (e, file) {
             queue.offer(file);
