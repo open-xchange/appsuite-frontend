@@ -19,11 +19,13 @@ define("io.ox/files/main",
      "io.ox/core/commons",
      "io.ox/core/tk/vgrid",
      "io.ox/core/tk/upload",
+     "io.ox/core/extPatterns/dnd",
      "io.ox/core/tk/dialogs",
      "io.ox/help/hints",
      "io.ox/core/bootstrap/basics",
+     "io.ox/files/actions",
      "less!io.ox/files/style.css"
-    ], function (viewDetail, api, commons, VGrid, upload, dialogs, hints) {
+    ], function (viewDetail, api, commons, VGrid, upload, dnd, dialogs, hints) {
 
     "use strict";
 
@@ -98,6 +100,8 @@ define("io.ox/files/main",
             currentDetailView = viewDetail.draw(data);
             right.idle().empty().append(currentDetailView.element);
             right.parent().scrollTop(0);
+            app.currentFile = data;
+            dropZone.update();
         }
 
         var drawFile = function (obj) {
@@ -131,7 +135,9 @@ define("io.ox/files/main",
         });
 
         // Uploads
-        var queue = upload.createQueue({
+        app.queues = {};
+        
+        app.queues.create = upload.createQueue({
             processFile: function (file) {
                 return api.uploadFile({file: file})
                     .done(function (data) {
@@ -142,24 +148,26 @@ define("io.ox/files/main",
                     });
             }
         });
-
-        var dropZone = upload.dnd.createDropZone({
-            style: 'multiple',
-            actions: [
-                {
-                    id: 'newFile',
-                    displayName: 'Upload a new file'
-                },
-                {
-                    id: 'newVersion',
-                    displayName: 'Upload a new version'
-                }
-            ]
+        
+        app.queues.update = upload.createQueue({
+            processFile: function (fileData) {
+                return api.uploadNewVersion({
+                    file: fileData,
+                    id: app.currentFile.id,
+                    folder: app.currentFile.folder,
+                    timestamp: app.currentFile.last_modified
+                }).done(function (data) {
+                    // select new item
+                    grid.selection.set([data]);
+                    grid.refresh();
+                    // TODO: Error Handling
+                });
+            }
         });
 
-        dropZone.on("drop", function (e, file) {
-            queue.offer(file);
-        });
+        var dropZone = new dnd.UploadZone({
+            ref: "io.ox/files/dnd/actions"
+        }, app);
 
         win.on("show", function () {
             dropZone.include();

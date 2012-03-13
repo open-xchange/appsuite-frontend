@@ -180,5 +180,34 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         ref: "io.ox/files/versions/actions/delete",
         special: "danger"
     }));
+    
+    // Drag and Drop
+    
+    ext.point("io.ox/files/dnd/actions").extend({
+        id: "create",
+        index: 10,
+        label: "Upload a new file",
+        action: function (file, app) {
+            app.queues.create.offer(file);
+        }
+    });
+    
+    ext.point("io.ox/files/dnd/actions").extend({
+        id: "newVersion",
+        index: 20,
+        isEnabled: function (app) {
+            return !!app.currentFile;
+        },
+        label: function (app) {
+            if (app.currentFile.title) {
+                return "Upload a new version of '" + app.currentFile.title + "'";
+            } else {
+                return "Upload a new version";
+            }
+        },
+        action: function (file, app) {
+            app.queues.update.offer(file);
+        }
+    });
 
 });

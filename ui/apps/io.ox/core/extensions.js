@@ -118,6 +118,18 @@ define("io.ox/core/extensions",
 
                 extensions.push(extension);
                 extensions.sort(pointSorter);
+                
+                if (!extension.metadata) {
+                    extension.metadata = function (name, args) {
+                        if (this[name]) {
+                            if (_.isFunction(this[name])) {
+                                return this[name].apply(this, args);
+                            }
+                            return this[name];
+                        }
+                        return undefined;
+                    };
+                }
 
                 this.trigger("extended", extension);
             }

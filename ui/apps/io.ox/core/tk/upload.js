@@ -15,13 +15,19 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
 
     "use strict";
     
+    function hasLeftViewport(evt) {
+        evt = evt.originalEvent || evt;
+        
+        return evt.clientX === 0 && evt.clientY === 0;
+    }
+    
     // We provide a few events:
     // "dragover" if someone threatens to drop a file into the window
     // "dragend" when she released the file
     // "drop" when she released the file
     // options should contain a list of actions. The action id will be the first parameter to the event handlers
     // { actions: [
-    //      {id: 'action1', displayName: 'Some cool Action'}, {id: 'action2', displayName: 'Some other cool action'}
+    //      {id: 'action1', label: 'Some cool Action'}, {id: 'action2', label: 'Some other cool action'}
     // ]}
     function MultiDropZone(options) {
         require(["less!io.ox/core/tk/upload.less"]);
@@ -79,7 +85,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
         }
         _(options.actions || []).each(function (action) {
             var $actionNode = nodeGenerator();
-            $actionNode.text(action.displayName).on({
+            $actionNode.text(action.label).on({
                 dragenter: function () {
                     self.trigger("dragenter", action.id, action);
                     if (highlightedAction) {
@@ -104,7 +110,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                 dragleave: function () {
                     self.trigger("dragleave", action.id, action);
                     $actionNode.removeClass("io-ox-dropzone-hover");
-                    return false; // Prevent regular event handling
+                    return true; // Prevent regular event handling
 
                 },
                 drop: function (event) {
@@ -148,10 +154,14 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                     return false; // Prevent regular event handling
                 },
                 dragend: function () {
+                    removeOverlay();
                     return false; // Prevent regular event handling
 
                 },
-                dragleave: function () {
+                dragleave: function (evt) {
+                    if (hasLeftViewport(evt)) {
+                        removeOverlay();
+                    }
                     return false; // Prevent regular event handling
 
                 },
@@ -160,9 +170,6 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                     removeOverlay();
                     return false;
                 }
-            });
-            $overlay.on("dragleave", function () {
-                $overlay.detach();
             });
         };
         
