@@ -3,16 +3,6 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
     
     var that = {};
     
-    function metadata(name, extension, args) {
-        if (extension[name]) {
-            if (_.isFunction(extension[name])) {
-                return extension[name].apply(extension, args);
-            }
-            return extension[name];
-        }
-        return undefined;
-    }
-    
     function invokeEventHandler($node, extension, type, args) {
         if (extension.on && extension.on[type]) {
             if (extension.isEnabled && !extension.isEnabled.apply(extension, args)) {
@@ -91,7 +81,7 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
                 var $sectionNode = $("<div>").addClass("io-ox-section").appendTo($node);
                 nodes[sectionDef.id] = $sectionNode;
                 
-                var title = metadata("title", sectionDef, args);
+                var title = sectionDef.metadata("title", args);
                 if (title) {
                     $sectionNode.append($("<div>").addClass("io-ox-sectionTitle").text(title));
                 }
@@ -100,7 +90,7 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
                     return;
                 }
                 // Invoke Sublayout
-                var layout = metadata("layout", sectionDef, args) || 'Flow';
+                var layout = sectionDef.metadata("layout", args) || 'Flow';
                 var layoutName, layoutOptions;
                 
                 if (_.isString(layout) || _.isArray(layout)) {
@@ -211,7 +201,7 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
                 if (extension.isEnabled && !extension.isEnabled.apply(extension, args)) {
                     continue;
                 }
-                dimensions = metadata("dim", extension, args) || {span: 12};
+                dimensions = extension.metadata("dim", args) || {span: 12};
                 if (!dimensions.span) {
                     dimensions.span = 12;
                 }
@@ -222,7 +212,7 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
                 while (stack.length !== 0 && !fits(extension, dimensions)) {
                     keep.push(extension);
                     extension = stack.shift();
-                    dimensions = metadata("dim", extension, args) || {span: 12};
+                    dimensions = extension.metadata("dim", args) || {span: 12};
                 }
                 if (!fits(extension, dimensions)) {
                     br();
