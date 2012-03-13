@@ -18,13 +18,17 @@ define('io.ox/contacts/distrib/main',
      'io.ox/core/tk/dialogs', 'io.ox/core/config',
      'io.ox/core/tk/forms', 'io.ox/contacts/model',
      'io.ox/contacts/distrib/create-dist-view', 'gettext!io.ox/contacts/contacts',
-     'less!io.ox/contacts/style.css'
-     ], function (util, api, dialogs, config, forms, ContactModel, ContactCreateDistView, gt) {
+     "io.ox/core/commons",
+     'less!io.ox/contacts/distrib/style.css'
+     ], function (util, api, dialogs, config, forms, ContactModel, ContactCreateDistView, gt, commons) {
 
     'use strict';
 
-    function createInstance(data) {
-        var app;
+    function createInstance(data, mainapp) {
+        var app, getDirtyStatus,
+            dirtyStatus = {
+                byApi: true
+            };
         app = ox.ui.createApp({
             name: 'io.ox/contacts/distrib',
             title: 'Distribution List'
@@ -42,25 +46,6 @@ define('io.ox/contacts/distrib/main',
 
             app.setWindow(win);
 
-            app.STATES = {
-                    'CLEAN': 1,
-                    'DIRTY': 2
-                };
-
-            distribState = app.STATES.CLEAN;
-
-            app.getState = function () {
-                return distribState;
-            };
-
-            app.markDirty = function () {
-                distribState = app.STATES.DIRTY;
-            };
-
-            app.markClean = function () {
-                distribState = app.STATES.CLEAN;
-            };
-
             container = win.nodes.main
                 .css({ backgroundColor: '#fff' })
                 .addClass('create-distributionlist')
@@ -74,22 +59,25 @@ define('io.ox/contacts/distrib/main',
 
                 var myView = new ContactCreateDistView({model: myModel});
 
+                getDirtyStatus = function () {
+                    var test = myModel.isDirty();
+                    return test;
+                };
+
                 if (data) {
                     myModel.store = function update(data, changes) {
-                        console.log(myModel.isDirty());
                         return api.edit({
                             id: data.id,
                             folder: data.folder_id,
                             timestamp: _.now(),
                             data: data //needs a fix in the model for array
                         }).done(function () {
-                            app.markClean();
+                            dirtyStatus.byApi = false;
                             app.quit();
                         });
                     };
                 } else {myModel.store = function create(data, changes) {
-                        console.log(changes);
-                        var fId = config.get("folder.contacts");
+                        var fId = mainapp.folder.get();
                         if (!_.isEmpty(data)) {
                             data.folder_id = fId;
                             if (data.display_name === '') {
@@ -97,7 +85,7 @@ define('io.ox/contacts/distrib/main',
                             }
                             data.mark_as_distributionlist = true;
                             return api.create(data).done(function () {
-                                app.markClean();
+                                dirtyStatus.byApi = false;
                                 app.quit();
                             });
                         }
@@ -109,43 +97,47 @@ define('io.ox/contacts/distrib/main',
 
             });
 
+//            commons.addFolderSupport(app, null, 'contacts', '6');
         });
+
         app.setQuit(function () {
 
-            var def = $.Deferred();
-            var intemList =  $('.item-list');
+            var def = $.Deferred(),
+                listetItem =  $('.listet-item');
 
+            dirtyStatus.byModel = getDirtyStatus();
 
-            console.log(app.getState());
-
-            if (app.getState() !== app.STATES.CLEAN) {
-                require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                    new dialogs.ModalDialog()
-                        .text(gt("Do you really want to cancel editing this distributionlist?"))
-                        .addButton("cancel", gt('Cancel'))
-                        .addButton("delete", gt('Lose changes'))
-                        .show()
-                        .done(function (action) {
-                            console.debug("Action", action);
-                            if (action === 'delete') {
-                                def.resolve();
-                                intemList.empty();
-                            } else {
-                                def.reject();
-                            }
-                        });
-                });
+            if (dirtyStatus.byModel === true) {
+                if (dirtyStatus.byApi === true) {
+                    require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                        new dialogs.ModalDialog()
+                            .text(gt("Do you really want to cancel editing this distributionlist?"))
+                            .addButton("cancel", gt('Cancel'))
+                            .addButton("delete", gt('Lose changes'))
+                            .show()
+                            .done(function (action) {
+                                console.debug("Action", action);
+                                if (action === 'delete') {
+                                    def.resolve();
+                                    listetItem.remove();
+                                } else {
+                                    def.reject();
+                                }
+                            });
+                    });
+                } else {
+                    def.resolve();
+                    listetItem.remove();
+                }
             } else {
                 def.resolve();
-                intemList.empty();
+                listetItem.remove();
             }
-
-
-
-
             //clean
             return def;
         });
+
+
         return app;
     }
 
