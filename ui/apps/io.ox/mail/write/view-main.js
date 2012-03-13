@@ -20,8 +20,9 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/tk/model',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
-     'io.ox/mail/util'
-    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil) {
+     'io.ox/mail/util',
+     'io.ox/core/i18n'
+    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, i18n) {
 
     'use strict';
     var app;
@@ -91,7 +92,7 @@ define("io.ox/mail/write/view-main",
                 this.priorityOverlay.removeClass('high');
             }
         },
-        addUpload: function (handleFileSelect) {
+        addUpload: function () {
             var inputOptions, self = this;
 
             if (Modernizr.file) {
@@ -105,7 +106,7 @@ define("io.ox/mail/write/view-main",
                 .append(
                     $.labelize(
                         $('<input>', inputOptions)
-                        .on('change', handleFileSelect),
+                        .on('change', function (e) { handleFileSelect(e, self); }),
                         'mail_attachment'
                     )
                 )
@@ -460,15 +461,103 @@ define("io.ox/mail/write/view-main",
     theView.prototype.GRID_WIDTH = 330;
     theView.prototype.signatures = {};
 
+
+
+
+
+    var handleFileSelect, addUpload, supportsPreview, createPreview;
+
+    supportsPreview = function (file) {
+        return window.FileReader &&
+            (/^image\/(png|gif|jpe?g|bmp)$/i).test(file.type);
+    };
+
+    createPreview = function (file) {
+        return $($.txt(' \u2013 ')) // ndash
+            .add(
+                $('<a>', { href: '#' })
+                .text('Preview')
+                .on('click', { file: file }, function (e) {
+                    e.preventDefault();
+                    // open side popup
+                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        new dialogs.SidePopup().show(e, function (popup) {
+                            // inject image as data-url
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                popup.css({ width: '100%', height: '100%' })
+                                .append(
+                                    $('<div>')
+                                    .css({
+                                        width: '100%',
+                                        height: '100%',
+                                        backgroundImage: 'url(' + e.target.result + ')',
+                                        backgroundRepeat: 'no-repeat',
+                                        backgroundPosition: 'center center',
+                                        backgroundSize: 'contain'
+                                    })
+                                );
+                                reader = reader.onload = null;
+                            };
+                            reader.readAsDataURL(e.data.file);
+                        });
+                    });
+                })
+            );
+    };
+
+    handleFileSelect = function (e, view) {
+
+        if (Modernizr.file) {
+            // look for linked attachments or dropped files
+            var item = $(this).prop('attachment') || $(this).prop('file'),
+                list = item ? [item] : e.target.files;
+            // loop over all attachments
+            _(list).each(function (file) {
+                view.sections.attachments.append(
+                    $('<div>').addClass('section-item file')
+                    .append($('<div>').text(file.filename || file.name || ''))
+                    .append(
+                        $('<div>')
+                        .append(
+                            $('<span>').addClass('filesize')
+                            .text(i18n.filesize(file.size))
+                        )
+                        .append(
+                            supportsPreview(file) ? createPreview(file) : $()
+                        )
+                    )
+                    .append(
+                        // remove
+                        $('<a>', { href: '#', tabindex: '6' })
+                        .addClass('remove')
+                        .append(
+                            $('<div>').addClass('icon').text('x')
+                        )
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            $(this).parent().prev().remove();
+                            $(this).parent().remove();
+                        })
+                    )
+                );
+            });
+            // hide current upload field
+            $(e.target).closest('.section-item.upload').hide();
+        }
+        view.addUpload(handleFileSelect);
+    };
+
+
     function fnHideSection(e, view) {
         var id = e.data.id;
         e.preventDefault();
-        view.hideSection(id, this);
+        view.hideSection(id, e.target);
     }
     function fnShowSection(e, view) {
         var id = e.data.id;
         e.preventDefault();
-        view.showSection(id, this);
+        view.showSection(id, e.target);
     }
 
     function togglePriority(e, view) {

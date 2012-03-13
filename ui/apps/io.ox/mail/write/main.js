@@ -117,92 +117,6 @@ define.async('io.ox/mail/write/main',
         };
 
 
-
-
-
-
-        var handleFileSelect, addUpload, supportsPreview, createPreview;
-
-        supportsPreview = function (file) {
-            return window.FileReader &&
-                (/^image\/(png|gif|jpe?g|bmp)$/i).test(file.type);
-        };
-
-        createPreview = function (file) {
-            return $($.txt(' \u2013 ')) // ndash
-                .add(
-                    $('<a>', { href: '#' })
-                    .text('Preview')
-                    .on('click', { file: file }, function (e) {
-                        e.preventDefault();
-                        // open side popup
-                        require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                            new dialogs.SidePopup().show(e, function (popup) {
-                                // inject image as data-url
-                                var reader = new FileReader();
-                                reader.onload = function (e) {
-                                    popup.css({ width: '100%', height: '100%' })
-                                    .append(
-                                        $('<div>')
-                                        .css({
-                                            width: '100%',
-                                            height: '100%',
-                                            backgroundImage: 'url(' + e.target.result + ')',
-                                            backgroundRepeat: 'no-repeat',
-                                            backgroundPosition: 'center center',
-                                            backgroundSize: 'contain'
-                                        })
-                                    );
-                                    reader = reader.onload = null;
-                                };
-                                reader.readAsDataURL(e.data.file);
-                            });
-                        });
-                    })
-                );
-        };
-
-        handleFileSelect = function (e) {
-
-            if (Modernizr.file) {
-                // look for linked attachments or dropped files
-                var item = $(this).prop('attachment') || $(this).prop('file'),
-                    list = item ? [item] : e.target.files;
-                // loop over all attachments
-                _(list).each(function (file) {
-                    app.getView().sections.attachments.append(
-                        $('<div>').addClass('section-item file')
-                        .append($('<div>').text(file.filename || file.name || ''))
-                        .append(
-                            $('<div>')
-                            .append(
-                                $('<span>').addClass('filesize')
-                                .text(i18n.filesize(file.size))
-                            )
-                            .append(
-                                supportsPreview(file) ? createPreview(file) : $()
-                            )
-                        )
-                        .append(
-                            // remove
-                            $('<a>', { href: '#', tabindex: '6' })
-                            .addClass('remove')
-                            .append(
-                                $('<div>').addClass('icon').text('x')
-                            )
-                            .on('click', function (e) {
-                                e.preventDefault();
-                                $(this).parent().remove();
-                            })
-                        )
-                    );
-                });
-                // hide current upload field
-                $(this).closest('.section-item.upload').hide();
-            }
-            app.getView().addUpload(handleFileSelect);
-        };
-
         app.getView().signatures = config.get('gui.mail.signatures', []);
 
         app.setSignature = function (e) {
@@ -247,8 +161,6 @@ define.async('io.ox/mail/write/main',
             app.setWindow(win);
 
             app.getView().render(app);
-
-
 
 
 
