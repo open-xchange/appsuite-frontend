@@ -34,6 +34,15 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         }
     });
 
+    ext.point("io.ox/files/actions/share").extend({
+        id: "share",
+        action: function (app) {
+            require(['io.ox/publications/wizard'], function (wizard) {
+                wizard.oneClickAdd(app.folder.get());
+            });
+        }
+    });
+
     ext.point("io.ox/files/actions/download").extend({
         id: "download",
         action: function (file) {
@@ -115,6 +124,13 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         id: "upload",
         label: "Upload",
         ref: "io.ox/files/actions/upload"
+    }));
+
+    ext.point("io.ox/files/links/toolbar").extend(new links.Link({
+        index: 200,
+        id: "share",
+        label: "Share",
+        ref: "io.ox/files/actions/share"
     }));
 
     ext.point("io.ox/files/links/inline").extend(new links.Link({

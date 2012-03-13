@@ -89,15 +89,13 @@ define("io.ox/files/api",
         return http.UPLOAD({
                 module: "infostore",
                 params: { action: "new" },
-                data: formData,
-                dataType: "text"
+                data: formData
             })
             .pipe(function (data) {
-                var tmp = fallbackForOX6BackendREMOVEME(data);
                 // clear folder cache
                 api.caches.all.remove(options.folder);
                 api.trigger("create.file");
-                return { folder_id: String(options.folder), id: parseInt(tmp.data, 10) };
+                return { folder_id: String(options.folder), id: parseInt(data.data, 10) };
             });
     };
 
