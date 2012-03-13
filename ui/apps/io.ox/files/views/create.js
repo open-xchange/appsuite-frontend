@@ -104,7 +104,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
                 uploadIndicator.getContentControls().css({
                     visibility: "hidden"
                 });
-
+                
                 uploadIndicator.getContentNode().append($("<div>").text("Uploading...").addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
                 
                 uploadIndicator.show();

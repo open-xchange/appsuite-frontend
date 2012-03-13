@@ -135,12 +135,18 @@ define("io.ox/files/main",
         });
 
         // Uploads
+        
+        
         app.queues = {};
         
         app.queues.create = upload.createQueue({
             processFile: function (file) {
+                var uploadIndicator = new dialogs.ModalDialog();
+                uploadIndicator.getContentNode().append($("<div>").text("Uploading...").addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
+                uploadIndicator.show();
                 return api.uploadFile({file: file})
                     .done(function (data) {
+                        uploadIndicator.close();
                         // select new item
                         grid.selection.set([data]);
                         grid.refresh();
@@ -151,6 +157,9 @@ define("io.ox/files/main",
         
         app.queues.update = upload.createQueue({
             processFile: function (fileData) {
+                var uploadIndicator = new dialogs.ModalDialog();
+                uploadIndicator.getContentNode().append($("<div>").text("Uploading...").addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
+                uploadIndicator.show();
                 return api.uploadNewVersion({
                     file: fileData,
                     id: app.currentFile.id,
@@ -158,6 +167,7 @@ define("io.ox/files/main",
                     timestamp: app.currentFile.last_modified
                 }).done(function (data) {
                     // select new item
+                    uploadIndicator.close();
                     grid.selection.set([data]);
                     grid.refresh();
                     // TODO: Error Handling
