@@ -552,28 +552,29 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         return function (o, type) {
             // process options
             o = processOptions(o, type);
+            // vars
+            var r, def = $.Deferred();
             // paused?
             if (paused === true) {
-                queue.push(o);
-                return;
+                queue.push({ deferred: def, options: o });
+                return def;
             }
             // build request object
-            var def = $.Deferred(),
-                r = {
-                    def: def,
-                    o: o,
-                    xhr: {
-                        // type (GET, POST, PUT, ...)
-                        type: type === "UPLOAD" ? "POST" : type,
-                        // url
-                        url: o.url,
-                        // data
-                        data: o.data,
-                        dataType: o.dataType,
-                        processData: o.processData,
-                        contentType: o.contentType !== undefined ? o.contentType : "application/x-www-form-urlencoded"
-                    }
-                };
+            r = {
+                def: def,
+                o: o,
+                xhr: {
+                    // type (GET, POST, PUT, ...)
+                    type: type === "UPLOAD" ? "POST" : type,
+                    // url
+                    url: o.url,
+                    // data
+                    data: o.data,
+                    dataType: o.dataType,
+                    processData: o.processData,
+                    contentType: o.contentType !== undefined ? o.contentType : "application/x-www-form-urlencoded"
+                }
+            };
             // use timeout?
             if (typeof o.timeout === "number") {
                 r.xhr.timeout = o.timeout;
@@ -745,45 +746,14 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
          * Resume HTTP API. Send all queued requests as one multiple
          */
         resume: function () {
-            var def = $.Deferred();
+            var def = $.Deferred(),
+                q = queue.slice();
             if (paused === true) {
-                // look for nested multiple requests
-                var i = 0, $l = queue.length, req, q = [], tmp, o, size = [];
-                for (; i < $l; i++) {
-                    // get request
-                    req = queue[i];
-                    // multiple?
-                    if (req.module === "multiple") {
-                        var j = 0, $lj = req.original.length, sub;
-                        for (; j < $lj; j++) {
-                            // create proper data structure
-                            sub = req.original[j];
-                            o = {
-                                module: sub.module,
-                                params: sub
-                            };
-                            delete o.params.module;
-                            delete o.params["continue"];
-                            // add handler
-                            o.success = j === 0 ? req.success : $.noop;
-                            o.error = j === 0 ? req.error : $.noop;
-                            o.complete = j === 0 ? req.complete : $.noop;
-                            // add
-                            q.push(o);
-                        }
-                        size.push($lj);
-                    } else {
-                        q.push(req);
-                        size.push(1);
-                    }
-                }
                 // create multiple request
-                i = 0;
-                $l = q.length;
-                tmp = [];
+                var i = 0, $l = q.length, req, o, tmp = [];
                 for (; i < $l; i++) {
                     // get request
-                    req = q[i];
+                    req = q[i].options;
                     // remove session
                     delete req.params.session;
                     // build request
@@ -809,26 +779,19 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                     })
                     .done(function (data) {
                         // orchestrate callbacks and their data
-                        var i = 0, j = 0, $l = data.length, range;
-                        while (i < $l) {
-                            // get data range
-                            range = size[j] > 1 ? data.slice(i, i + size[j]) : data[i];
-                            // call
-                            processResponse(range, q[i]);
-                            // inc
-                            i = i + size[j];
-                            j = j + 1;
+                        for (i = 0, $l = q.length; i < $l; i++) {
+                            q[i].deferred.resolve(data[i]);
                         }
                         // continuation
-                        def.resolve();
+                        def.resolve(data);
                     })
                     .fail(def.reject);
                 } else {
                     // continuation
-                    def.resolve();
+                    def.resolve([]);
                 }
             } else {
-                def.resolve();
+                def.resolve([]);
             }
             return def;
         }
