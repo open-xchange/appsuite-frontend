@@ -325,11 +325,11 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
             if (processing) {
                 return;
             }
-            processing = true;
-            var self = this;
             if (files.length <= 0) {
                 return;
             }
+            processing = true;
+            var self = this;
             currentFile = files.shift();
             this.start(currentFile);
             this.processFile(currentFile).done(function () {

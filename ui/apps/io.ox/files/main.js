@@ -143,6 +143,9 @@ define("io.ox/files/main",
             processFile: function (file) {
                 var uploadIndicator = new dialogs.ModalDialog();
                 uploadIndicator.getContentNode().append($("<div>").text("Uploading...").addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
+                uploadIndicator.getContentControls().css({
+                    visibility: "hidden"
+                });
                 uploadIndicator.show();
                 return api.uploadFile({file: file})
                     .done(function (data) {
@@ -159,6 +162,9 @@ define("io.ox/files/main",
             processFile: function (fileData) {
                 var uploadIndicator = new dialogs.ModalDialog();
                 uploadIndicator.getContentNode().append($("<div>").text("Uploading...").addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
+                uploadIndicator.getContentControls().css({
+                    visibility: "hidden"
+                });
                 uploadIndicator.show();
                 return api.uploadNewVersion({
                     file: fileData,
