@@ -48,7 +48,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
         };
 
         removeOverlay = function (event) {
-            //$overlay.detach();
+            $overlay.detach();
             return false; // Prevent regular event handling
         };
         
@@ -77,7 +77,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
         }
         _(options.actions || []).each(function (action) {
             var $actionNode = nodeGenerator();
-            $actionNode.text(action.label).on({
+            $actionNode.append($("<div>").text(action.label).center()).on({
                 dragenter: function () {
                     self.trigger("dragenter", action.id, action);
                     if (highlightedAction) {
