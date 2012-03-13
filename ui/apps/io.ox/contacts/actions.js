@@ -83,7 +83,7 @@ define('io.ox/contacts/actions',
         },
         action: function (app) {
             require(["io.ox/contacts/distrib/main"], function (createDist) {
-                createDist.getApp().launch();
+                createDist.getApp(null, app).launch();
             });
         }
     });
