@@ -313,7 +313,6 @@ define('io.ox/contacts/distrib/create-dist-view',
                 id: myId,
                 text: gt('List name')
             }), self.createTextField({property: 'display_name', id: myId, classes: 'form-vertical'}), saveButton(self));
-            console.log(self.displayBox);
             editSection.addClass('editsection').append(
 
                 self.createSectionTitle({text: gt('Members')}),

@@ -111,7 +111,7 @@ define('io.ox/contacts/distrib/main',
                 if (dirtyStatus.byApi === true) {
                     require(["io.ox/core/tk/dialogs"], function (dialogs) {
                         new dialogs.ModalDialog()
-                            .text(gt("Do you really want to cancel editing this distributionlist?"))
+                            .text(gt("Do you really want to lose your changes?"))
                             .addButton("cancel", gt('Cancel'))
                             .addButton("delete", gt('Lose changes'))
                             .show()
