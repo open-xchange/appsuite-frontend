@@ -271,7 +271,10 @@ define("io.ox/contacts/view-detail",
         index: 100,
         id: 'contact-mails',
         draw: function (data) {
-
+            // TMP backend bug fix
+            if (data.distribution_list && data.distribution_list.length) {
+                data.mark_as_distributionlist = true;
+            }
             if (data.mark_as_distributionlist === true) {
                 var i = 0, list = _.deepClone(data.distribution_list), $i = list.length,
                     that = this;
@@ -322,7 +325,7 @@ define("io.ox/contacts/view-detail",
         id: 'qr',
         draw: function (data) {
             var r = 0;
-            if (Modernizr.canvas) {
+            if (Modernizr.canvas && !data.mark_as_distributionlist) {
                 if (r > 0) {
                     addField("\u00A0", "\u00A0", this);
                     r = 0;
