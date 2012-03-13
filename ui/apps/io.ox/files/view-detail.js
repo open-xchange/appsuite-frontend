@@ -21,7 +21,8 @@ define("io.ox/files/view-detail",
      "io.ox/core/event",
      "io.ox/files/actions",
      "io.ox/files/api",
-     "io.ox/preview/main"], function (ext, links, layouts, i18n, Event, actions, filesAPI, Preview) {
+     "io.ox/preview/main",
+     "io.ox/core/tk/upload"], function (ext, links, layouts, i18n, Event, actions, filesAPI, Preview, upload) {
 
     "use strict";
 

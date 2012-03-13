@@ -48,7 +48,7 @@ body {
     cursor: default;
 }
 
-a, a:visited {
+a {
     color: #08c;
     text-decoration: none;
     cursor: pointer;
