@@ -163,6 +163,22 @@ define("io.ox/files/main",
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api);
 
+        app.on('change:folder', function (e, id, folder) {
+            // reset first
+            win.nodes.title.find('.has-publications').remove();
+            // published?
+            if (folder['com.openexchange.publish.publicationFlag']) {
+                win.nodes.title.prepend(
+                    $('<img>', {
+                        src: ox.base + '/apps/themes/default/glyphicons_232_cloud.png',
+                        title: 'This folder has publications',
+                        alt: ''
+                    })
+                    .addClass('has-publications')
+                );
+            }
+        });
+
         // go!
         commons.addFolderSupport(app, grid, 'infostore')
             .done(commons.showWindow(win, grid));

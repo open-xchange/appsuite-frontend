@@ -271,6 +271,7 @@ define("io.ox/core/desktop",
                                         // update hash
                                         _.url.hash('folder', folder);
                                     }
+                                    self.trigger('change:folder', folder, data);
                                     def.resolve(data);
                                 })
                                 .fail(def.reject);
