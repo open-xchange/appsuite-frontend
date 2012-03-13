@@ -40,7 +40,7 @@ define("plugins/halo/mail/register",
                     } else {
                         sent.push(elem);
                     }
-                });                
+                });
 
                 require(
                     ["io.ox/core/tk/dialogs", "io.ox/mail/view-grid-template", "io.ox/mail/api"],
