@@ -203,7 +203,7 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
     ext.point("io.ox/files/dnd/actions").extend({
         id: "create",
         index: 10,
-        label: "Upload a new file",
+        label: "Drop here to upload a new file",
         action: function (file, app) {
             app.queues.create.offer(file);
         }
@@ -217,9 +217,9 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         },
         label: function (app) {
             if (app.currentFile.title) {
-                return "Upload a new version of '" + app.currentFile.title + "'";
+                return "Drop here to upload a new version of '" + app.currentFile.title + "'";
             } else {
-                return "Upload a new version";
+                return "Drop here to upload a new version";
             }
         },
         action: function (file, app) {
