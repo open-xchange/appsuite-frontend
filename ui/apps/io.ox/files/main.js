@@ -147,7 +147,7 @@ define("io.ox/files/main",
                     visibility: "hidden"
                 });
                 uploadIndicator.show();
-                return api.uploadFile({file: file})
+                return api.uploadFile({file: file, folder: app.folder.get()})
                     .done(function (data) {
                         uploadIndicator.close();
                         // select new item

@@ -28,7 +28,8 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
                 create.show({
                     uploadedFile: function (data) {
                         app.invalidateFolder(data);
-                    }
+                    },
+                    folder: app.folder.get()
                 });
             });
         }
