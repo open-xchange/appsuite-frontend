@@ -20,11 +20,12 @@ define('io.ox/publications/wizard', ['io.ox/publications/api'], function (api) {
         // send email
         var pub = e.data.publication,
             data = { subject: 'New publication', attachments: [{ content: pub.url }] };
+        // hide dialog
+        e.data.dialog.modal('hide');
         // open compose
         require(['io.ox/mail/write/main'], function (m) {
             m.getApp().launch().done(function () {
                 this.compose(data);
-                e.data.dialog.modal('hide');
             });
         });
     };
