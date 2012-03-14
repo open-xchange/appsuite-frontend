@@ -81,6 +81,11 @@ define('io.ox/publications/api',
                             params: { action: 'new' },
                             data: data
                         })
+                        .done(function () {
+                            // trigger folder change event
+                            folderApi.folderCache.remove(folder.id);
+                            folderApi.trigger('change change:' + folder.id, folder.id, folder);
+                        })
                         .pipe(function (id) {
                             return api.get(id);
                         });
