@@ -38,11 +38,7 @@ define('io.ox/contacts/distrib/main',
             var win,
                 container, distribState;
 
-            win = ox.ui.createWindow({
-                title: 'Distribution list',
-                toolbar: true,
-                close: true
-            });
+            win =  data ? ox.ui.createWindow({title: gt(' Edit distribution list'), toolbar: true, close: true}) : ox.ui.createWindow({title: gt('Create distribution list'), toolbar: true, close: true});
 
             app.setWindow(win);
 
@@ -60,8 +56,8 @@ define('io.ox/contacts/distrib/main',
                 var myView = new ContactCreateDistView({model: myModel});
 
                 getDirtyStatus = function () {
-                    var test = myModel.isDirty();
-                    return test;
+                    var status = myModel.isDirty();
+                    return status;
                 };
 
                 if (data) {

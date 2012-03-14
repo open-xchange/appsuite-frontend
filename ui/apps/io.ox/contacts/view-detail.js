@@ -54,19 +54,19 @@ define("io.ox/contacts/view-detail",
     }
 
     function addDistribMail(label, name, mail, node) {
-        if (name) {
-            var td = $("<td>").addClass("value"),
-                tr = $("<tr>")
-                    .append(
-                        $("<td>").addClass("io-ox-label").text(label), td
-                    ),
-                blueName = $('<span>').addClass('blue').text(name);
-            td.append(blueName, ' ', mail);
-            tr.appendTo(node);
-            return 1;
-        } else {
-            return 0;
-        }
+//        if (name) {
+        var td = $("<td>").addClass("value"),
+            tr = $("<tr>")
+                .append(
+                    $("<td>").addClass("io-ox-label").text(label), td
+                ),
+            blueName = $('<span>').addClass('blue').text(name);
+        td.append(blueName, ' ', mail);
+        tr.appendTo(node);
+        return 1;
+//        } else {
+//            return 0;
+//        }
     }
 
     function clickMail(e) {
@@ -275,11 +275,13 @@ define("io.ox/contacts/view-detail",
             if (data.mark_as_distributionlist === true) {
                 var i = 0, list = _.deepClone(data.distribution_list), $i = list.length,
                     that = this;
-                _.each(list, function (key, value) {
-                    if (value === 0) {
-                        addDistribMail('Members', key.display_name, key.mail, that);
+                list = list.sort(util.nameSort);
+
+                _.each(list, function (val, key) {
+                    if (key === 0) {
+                        addDistribMail('Members', val.display_name, val.mail, that);
                     } else {
-                        addDistribMail('', key.display_name, key.mail, that);
+                        addDistribMail('', val.display_name, val.mail, that);
                     }
                 });
 
