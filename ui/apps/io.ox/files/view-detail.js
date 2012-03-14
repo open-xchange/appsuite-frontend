@@ -45,11 +45,7 @@ define("io.ox/files/view-detail",
         }
         
         $element.on("dblclick", function () {
-            if (mode === 'edit') {
-                self.endEdit();
-            } else {
-                self.edit();
-            }
+            self.edit();
         });
         
         var blacklisted = {
@@ -73,6 +69,9 @@ define("io.ox/files/view-detail",
                 }
             },
             edit: function () {
+                if (mode === 'edit') {
+                    return;
+                }
                 mode = 'edit';
                 sections.each(function (sublayout, $sectionNode) {
                     var hideSection = true;
@@ -82,6 +81,7 @@ define("io.ox/files/view-detail",
                             extension.edit.call($node, file, self, extension);
                         } else {
                             if (extension.deactivate) {
+                                hideSection = false;
                                 extension.deactivate.call($node, file, self, extension);
                             } else {
                                 // Dim the extension
@@ -100,6 +100,9 @@ define("io.ox/files/view-detail",
                 });
             },
             endEdit: function () {
+                if (mode === 'display') {
+                    return;
+                }
                 mode = 'display';
                 sections.each(function (sublayout, $sectionNode) {
                     sublayout.each(function (extension, $node) {
@@ -109,7 +112,7 @@ define("io.ox/files/view-detail",
                             if (extension.activate) {
                                 extension.activate.call($node, file, self, extension);
                             } else {
-                                // Dim the extension
+                                // Activate the extension
                                 if ($node) {
                                     $node.css({opacity: "" });
                                 }
@@ -122,6 +125,16 @@ define("io.ox/files/view-detail",
                         $sectionNode.data("io-ox-files-hidde", false);
                     }
                 });
+            },
+            getModifiedFile: function () {
+                sections.each(function (sublayout, $sectionNode) {
+                    sublayout.each(function (extension, $node) {
+                        if (extension.process) {
+                            extension.process.call($node, file, self, extension);
+                        }
+                    });
+                });
+                return file;
             },
             destroy: function () {
                 sections.destroy();
@@ -185,6 +198,9 @@ define("io.ox/files/view-detail",
         endEdit: function (file) {
             this.find(".title").empty().text(file.title);
         },
+        process: function (file) {
+            file.title = this.find("input").val();
+        },
         on: {
             update: function (file) {
                 this.empty();
@@ -219,7 +235,7 @@ define("io.ox/files/view-detail",
             });
         },
         on: {
-            update: function (file, detailView, extension) {
+            update: function (file, extension) {
                 this.empty();
                 extension.draw.call(this, file);
             }
@@ -360,7 +376,7 @@ define("io.ox/files/view-detail",
             }
         },
         on: {
-            update: function (file, detailView, extension) {
+            update: function (file, extension) {
                 this.empty();
                 extension.draw.call(this, file, extension);
             }
@@ -396,8 +412,11 @@ define("io.ox/files/view-detail",
         endEdit: function (file) {
             this.find(".description").empty().text(file.description);
         },
+        process: function (file) {
+            file.description = this.find("textarea").val();
+        },
         on: {
-            update: function (file, detailView, extension) {
+            update: function (file, extension) {
                 this.empty();
                 extension.draw.call(this, file, extension);
             }
@@ -412,12 +431,6 @@ define("io.ox/files/view-detail",
         index: 10,
         dim: {
             span: 6
-        },
-        deactivate: function (file) {
-            this.fadeOut();
-        },
-        activate: function (file) {
-            this.fadeIn();
         },
         draw: function (file) {
             var self = this;
@@ -483,12 +496,6 @@ define("io.ox/files/view-detail",
         isEnabled: function (file) {
             return file.current_version && file.version > 1;
         },
-        deactivate: function (file) {
-            this.fadeOut();
-        },
-        activate: function (file) {
-            this.fadeIn();
-        },
         draw: function (file, detailView, allVersions) {
             var self = this,
                 $link = $("<a>", {
@@ -525,13 +532,13 @@ define("io.ox/files/view-detail",
         },
 
         on: {
-            update: function (file, detailView, extension) {
+            update: function (file, extension) {
                 var self = this;
                 filesAPI.versions({
                     id: file.id
                 }).done(function (allVersions) {
                     self.empty();
-                    extension.draw.call(self, file, detailView, allVersions);
+                    extension.draw.call(self, file, null, allVersions);
                 });
             }
         }

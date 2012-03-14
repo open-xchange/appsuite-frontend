@@ -51,6 +51,16 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
                     "&content_disposition=attachment", file.title);
         }
     });
+    
+    ext.point("io.ox/files/actions/edit").extend({
+        id: "upload",
+        requires: function (e) {
+            return true; //e.collection.has('modify');
+        },
+        action: function (context) {
+            context.detailView.edit();
+        }
+    });
 
     ext.point("io.ox/files/actions/open").extend({
         id: "open",
@@ -88,7 +98,11 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
     ext.point("io.ox/files/actions/edit/save").extend({
         id: "save",
         action: function (context) {
-            context.detailView.endEdit();
+            require(["io.ox/files/api"], function (api) {
+                var updatedFile = context.detailView.getModifiedFile();
+                api.update(updatedFile).done();
+                context.detailView.endEdit();
+            });
         }
     });
     
@@ -149,7 +163,14 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         label: "Share",
         ref: "io.ox/files/actions/share"
     }));
-
+    
+    ext.point("io.ox/files/links/inline").extend(new links.Link({
+        id: "edit",
+        index: 50,
+        label: "Edit",
+        ref: "io.ox/files/actions/edit"
+    }));
+    
     ext.point("io.ox/files/links/inline").extend(new links.Link({
         id: "open",
         index: 100,
