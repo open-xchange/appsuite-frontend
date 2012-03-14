@@ -181,16 +181,21 @@ function getType(filename, options) {
  * @param {String} dest The destination file name.
  * @param {Array} deps An array with dependency names.
  * @param {Function} callback The callback parameter for file().
+ * @param {Object} options An optional object with options for file().
  * @param {String} type An optional file type. Defaults to the file
  * extension of the destination.
  */
-exports.file = function(dest, deps, callback, type) {
+exports.file = function(dest, deps, callback, options, type) {
+    if (typeof options !== "object") {
+        type = options;
+        options = {};
+    }
     var dir = path.dirname(dest);
     directory(dir);
     file(dest, deps, function() {
         callback.apply(this, arguments);
         counter++;
-    });
+    }, options);
     file(dest, [dir, "Jakefile.js"]);
     var obj = { type: exports.fileType(type || path.extname(dest)) };
     var handlers = obj.type.getHooks("handler");

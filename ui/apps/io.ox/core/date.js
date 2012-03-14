@@ -11,46 +11,55 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-define("io.ox/core/date", ["gettext!io.ox/core/main"],
-function (gt) {
+define.async('io.ox/core/date',
+['io.ox/core/gettext', 'gettext!io.ox/core/date', 'io.ox/core/config'],
+function (gettext, gt, config) {
     /*jshint white:false */
     
-    "use strict";
+    'use strict';
     
-    var SECOND   =        1000; // ms / s
-    var MINUTE   =       60000; // ms / min
-    var HOUR     =     3600000; // ms / h
-    var DAY      =    86400000; // ms / day
     var AVG_YEAR = 31556952000; // average ms / year
     
     var api = {
-        /**
-         * The first week with at least daysInFirstWeek days in a given year is
-         * defined as the first week of that year.
-         * @ignore
-         */
-        daysInFirstWeek: 4,
-        
-        /**
-         * First day of the week.
-         * 0 = Sunday, 1 = Monday and so on.
-         * @ignore
-         */
-        weekStart: 1,
-        
-        format: "yyyy-MM-dd HH:mm:ss",
-        
-        SECOND: SECOND,
-        MINUTE: MINUTE,
-        HOUR: HOUR,
-        DAY: DAY
+        SECOND:    1000, // ms / s
+        MINUTE:   60000, // ms / min
+        HOUR:   3600000, // ms / h
+        DAY:   86400000, // ms / day
+        WEEK: 604800000, // ms / week
+
+        locale: {
+            /**
+             * The first week with at least daysInFirstWeek days in a given year
+             * is defined as the first week of that year.
+             * @ignore
+             */
+            daysInFirstWeek: 1,
+            
+            /**
+             * First day of the week.
+             * 0 = Sunday, 1 = Monday and so on.
+             * @ignore
+             */
+            weekStart: 0,
+            
+            /**
+             * A list of days in a week; narrow; stand-alone.
+             * @ignore
+             */
+            daysNarrow: ['1', '2', '3', '4', '5', '6', '7'],
+            
+            /**
+             * A list of days in a week; abbreviated; format.
+             */
+            daysShort: ['1', '2', '3', '4', '5', '6', '7']
+        }
     };
     
     // TODO: Difference between server and client clocks.
     var offset = 0;
     
     function getDays(d) {
-        return Math.floor(d / DAY);
+        return Math.floor(d / api.DAY);
     }
     
     /**
@@ -86,7 +95,7 @@ function (gt) {
      */
     function getWeek(d, inMonth) {
         var keyDay = getKeyDayOfWeek(d);
-        var keyDate = new Date(keyDay * DAY);
+        var keyDate = new Date(keyDay * api.DAY);
         var jan1st = Date.UTC(keyDate.getUTCFullYear(),
                               inMonth ? keyDate.getUTCMonth() : 0);
         return Math.floor((keyDay - getDays(jan1st)) / 7) + 1;
@@ -119,23 +128,6 @@ function (gt) {
     }
     function text(n, full, short) { return n >= 4 ? full : short; }
     
-    var months = [
-        gt("January"),   gt("February"), gt("March"),    gt("April"),
-        gt("May"),       gt("June"),     gt("July"),     gt("August"),
-        gt("September"), gt("October"),  gt("November"), gt("December")
-    ];
-    var shortMonths = [
-        gt("Jan"), gt("Feb"), gt("Mar"), gt("Apr"), gt("May"), gt("Jun"),
-        gt("Jul"), gt("Aug"), gt("Sep"), gt("Oct"), gt("Nov"), gt("Dec")
-    ];
-    var days = [
-        gt("Sunday"),   gt("Monday"), gt("Tuesday"), gt("Wednesday"),
-        gt("Thursday"), gt("Friday"), gt("Saturday")
-    ];
-    var shortDays = [
-        gt("Sun"), gt("Mon"), gt("Tue"), gt("Wed"), gt("Thu"), gt("Fri"),
-        gt("Sat")
-    ];
     var funs = {
         a: function (n, d) {
             return d.getUTCHours() < 12 ? _("AM") : _("PM");
@@ -147,7 +139,7 @@ function (gt) {
         d: function (n, d) { return num(n, d.getUTCDate()); },
         E: function (n, d) {
             var m = d.getUTCDay();
-            return text(n, days[m], shortDays[m]);
+            return text(n, api.locale.days[m], api.locale.shortDays[m]);
         },
         F: function (n, d) {
             return num(n, Math.floor(d.getUTCDate() / 7) + 1);
@@ -162,7 +154,7 @@ function (gt) {
         M: function (n, d) {
             var m = d.getUTCMonth();
             if (n >= 3) {
-                return text(n, months[m], shortMonths[m]);
+                return text(n, api.locale.months[m], api.locale.shortMonths[m]);
             } else {
                 return num(n, m + 1);
             }
@@ -227,10 +219,7 @@ function (gt) {
         }
         return map;
     }
-    var monthRegex = makeRegex(months, shortMonths),
-        dayRegex = makeRegex(days, shortDays),
-        monthMap = makeMap(months, shortMonths),
-        dayMap = makeMap(days, shortDays);
+    var monthRegex, dayRegex, monthMap, dayMap;
     var numRex = "([+-]?\\d+)";
     function number(n) { return numRex; }
     
@@ -361,7 +350,7 @@ function (gt) {
         } else if ("yd" in d) {
             if (d.yd < 0 || d.yd > (isLeapYear(d.y) ? 366 : 365)) return null;
             date.setUTCFullYear(d.y);
-            date.setTime(date.getTime() + DAY * d.yd - DAY);
+            date.setTime(date.getTime() + api.DAY * d.yd - api.DAY);
         } else {
             date.setUTCFullYear(d.y, d.m, d.d);
             if (date.getUTCFullYear() !== Number(d.y) ||
@@ -391,13 +380,14 @@ function (gt) {
     }());
     
     function julian(day, time) {
-        var delta = (day - 1) * DAY + time, leap = day > 31 + 28 ? DAY : 0;
+        var delta = (day - 1) * api.DAY + time,
+            leap = day > 31 + 28 ? api.DAY : 0;
         return function (year) {
             return Date.UTC(year, 0) + delta + (isLeapYear(year) ? leap : 0);
         };
     }
     function gregorian(day, time) {
-        var delta = day * DAY + time;
+        var delta = day * api.DAY + time;
         return function (year) {
             return Date.UTC(year, 0) + delta;
         };
@@ -405,17 +395,17 @@ function (gt) {
     function monthly(month, week, day, time) {
         if (Number(week) === 5) {
             return function (year) {
-                var last = Date.UTC(year, month) - DAY,
+                var last = Date.UTC(year, month) - api.DAY,
                     dayOfLast = new Date(last).getUTCDay();
-                return last - (dayOfLast - day + 7) % 7 * DAY + time;
+                return last - (dayOfLast - day + 7) % 7 * api.DAY + time;
             };
         } else {
             month--;
-            var delta = week * 7 * DAY + time;
+            var delta = week * 7 * api.DAY + time;
             return function (year) {
                 var first = Date.UTC(year, month),
                     dayOfFirst = new Date(first).getUTCDay();
-                return first + (day - dayOfFirst + 7) % 7 * DAY + delta;
+                return first + (day - dayOfFirst + 7) % 7 * api.DAY + delta;
             };
         }
     }
@@ -423,8 +413,8 @@ function (gt) {
     function parseTZ(tz) {
         var m = tzRegExp.exec(tz);
         function time(i) {
-            return m[i++] * HOUR + (m[i++] || 0) * MINUTE +
-                (m[i] || 0) * SECOND;
+            return m[i++] * api.HOUR + (m[i++] || 0) * api.MINUTE +
+                (m[i] || 0) * api.SECOND;
         }
         function offset(i) {
             return m[i] === "-" ? time(i + 1) : -time(i + 1);
@@ -445,7 +435,7 @@ function (gt) {
                 var dst = {
                     abbr: m[6],
                     isdst: true,
-                    gmtoff: m[8] ? offset(7) : std.gmtoff + HOUR
+                    gmtoff: m[8] ? offset(7) : std.gmtoff + api.HOUR
                 };
                 var start = when(11), end = when(19);
                 return function (t, local) {
@@ -465,7 +455,7 @@ function (gt) {
         if (tzinfo.slice(0, 4) !== "TZif") {
             throw new Error("Not a zoneinfo file.");
         }
-        // Some ISO-6659-1 characters are not mapped 1:1 in Unicode.
+        // Some ISO-8859-1 characters are not mapped 1:1 in Unicode.
         // This is a map back from Unicode to the original byte values.
         var map = { 8364: 128, 8218: 130, 402: 131, 8222: 132, 8230: 133,
                     8224: 134, 8225: 135, 710: 136, 8240: 137, 352: 138,
@@ -541,7 +531,7 @@ function (gt) {
         var ttinfos = [];
         for (i = 0; i < tzh.typecnt; i++) {
             ttinfos.push({
-                gmtoff: int32() * SECOND,
+                gmtoff: int32() * api.SECOND,
                 isdst: byte(),
                 abbr: byte()
             });
@@ -620,8 +610,13 @@ function (gt) {
                 D.utc(Date.UTC(y, m, d, h, min, s, ms)));
         }
         
+        $.extend(D.prototype, DatePrototype);
+        
         D.getTTInfo = makeGetTTInfo(transitions);
         
+        /**
+         * Returns the local timestamp for a UTC timestamp
+         */
         D.localTime = function (t) { return t + D.getTTInfo(t).gmtoff; };
         
         var prev = initialTTInfo;
@@ -629,10 +624,13 @@ function (gt) {
             return { start: tr.start + prev.gmtoff, ttinfo: prev = tr.ttinfo };
         }), true);
         
+        /**
+         * Returns the UTC timestamp for a local timestamp
+         */
         D.utc = function (t) { return t - D.getTTInfoLocal(t).gmtoff; };
         
         D.parse = function (string, format) {
-            return parseDateTime(format || api.format, string);
+            return parseDateTime(format || api.locale.format, string);
         };
         
         D.transitions = transitions;
@@ -640,11 +638,36 @@ function (gt) {
         return D;
     }
     
-    api.getTimeZone = function (name) {
-        return require(["text!io.ox/core/tz/zoneinfo/" + name])
-            .pipe(parseTZInfo);
+    var DatePrototype = {
+        getDay: function () {
+            var t = this.constructor.localTime(this.d.getTime());
+            return Math.floor(t / api.DAY);
+        },
+        format: function (format) {
+            var d = new Date(this.constructor.localTime(this.d.getTime()));
+            return formatDateTime(format || api.locale.dateTime, d);
+        }
     };
     
-    return api;
+    api.getTimeZone = _.memoize(function (name) {
+        return require(["text!io.ox/core/tz/zoneinfo/" + name])
+            .pipe(parseTZInfo);
+    });
     
+    var locale = gettext.language.pipe(function (lang) {
+        return require(["text!io.ox/core/date." + lang + ".json"]);
+    }).done(function (locale) {
+        api.locale = JSON.parse(locale);
+        monthRegex = makeRegex(api.locale.months, api.locale.shortMonths);
+        dayRegex = makeRegex(api.locale.days, api.locale.shortDays);
+        monthMap = makeMap(api.locale.months, api.locale.shortMonths);
+        dayMap = makeMap(api.locale.days, api.locale.shortDays);
+    });
+    
+    // TODO: load the entire locale config
+    return $.when(api.getTimeZone('Europe/Berlin'), locale/*, config */)
+        .pipe(function (tz) {
+            api.Local = tz;
+            return api;
+        });
 });

@@ -3,7 +3,7 @@
 <h2>Introduction</h2>
 
 <p>Providing software for users in the whole world means providing it in
-multiple languages. consists of two steps:</p>
+multiple languages. This consists of two steps:</p>
 <ul>
     <li><em>Internationalization (i18n)</em> - Making the software
     international, i. e. preparing it to be adapted to different languages and
@@ -30,10 +30,10 @@ specified as a module dependency of the form
 a function which can be called to translate a string using the specified
 translation files:</p>
 <script type="text/example">
-define("com.example/example", ["gettext!com.example/example"],
+define('com.example/example', ['gettext!com.example/example'],
     function (gt) {
-        "use strict";
-        alert(gt("Hello, world!"));
+        'use strict';
+        alert(gt('Hello, world!'));
     });
 </script>
 <p>After building the module, the file ox.pot in the project's root directory
@@ -81,7 +81,7 @@ alert(gt.format(
     //#. %1$s is the given name
     //#. %2$s is the family name
     //#, c-format
-    gt("Welcome, %1$s %2$s!"), firstName, lastName);
+    gt('Welcome, %1$s %2$s!'), firstName, lastName);
 </script>
 <p>Results in:</p>
 <pre class="nocode prettyprint">
@@ -111,8 +111,8 @@ the individual translations apart, the method <code>gettext.pgettext</code>
 <code>gettext</code> directly. It takes the context as the first parameter
 and the text to translate as the second parameter:</p>
 <script type="text/example">
-alert(gt.pgettext("description", "Title"));
-alert(gt.pgettext("salutation", "Title"));
+alert(gt.pgettext('description', 'Title'));
+alert(gt.pgettext('salutation', 'Title'));
 </script>
 <p>Results in:</p>
 <pre class="nocode prettyprint">
@@ -139,7 +139,7 @@ form by using a piece of executable code embedded in the header of a PO file:
 alert(gt.format(
     //#. %1$d is the number of mails
     //#, c-format
-    gt.ngettext("You have %1$d mail", "You have %1$d mails", n),
+    gt.ngettext('You have %1$d mail', 'You have %1$d mails', n),
     n));
 </script>
 <p>The function <code>ngettext</code> accepts three parameters: the English

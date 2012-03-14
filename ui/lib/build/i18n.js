@@ -125,19 +125,19 @@ function addMessage(filename, node, method, getSrc) {
     return pro.MAP.skip;
 }
 
-function languages() {
-    if (!languages.value) {
-        languages.value = _.map(utils.list("i18n/*.po"), function(s) {
+exports.languages = function () {
+    if (!exports.languages.value) {
+        exports.languages.value = _.map(utils.list("i18n/*.po"), function(s) {
             return s.replace(/^i18n[\\\/](.*)\.po$/, "$1");
         });
     }
-    return languages.value;
-}
+    return exports.languages.value;
+};
 
 function poFiles() {
     if (!poFiles.value) {
         poFiles.value = {};
-        _.each(languages(), function(lang) {
+        _.each(exports.languages(), function(lang) {
             poFiles.value[lang] = exports.parsePO(
                 fs.readFileSync("i18n/" + lang + ".po", "utf8"));
         });
@@ -186,7 +186,7 @@ exports.modules = {
         if (!module) module = gtModules[dest] = { name: moduleName, files: {} };
         module.files[source] = _.keys(exports.potFiles[target] || {});
         modifiedModules[dest] = true;
-        _.each(languages(), function(lang) {
+        _.each(exports.languages(), function(lang) {
             utils.includes.set(dest + "." + lang + ".js",
                 ["i18n/" + lang + ".po"], "lang.js");
         });

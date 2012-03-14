@@ -35,18 +35,6 @@
 	float: right;
 }
 
-.item-list .col{
-	width: 240px;
-	float: left;
-}
-
-.item-list .name.col {
-	margin-left: 75px;
-}
-
-.item-list .mail.col {
-	margin-left: 20px;
-}
 
 .create-distributionlist .item-list{
 	/*height: 200px;*/
@@ -59,7 +47,7 @@
 }
 
 .create-distributionlist input{
-	width: 200px;
+	width: 280px;
 }
 
 .create-distributionlist .item-list .listet-item {
@@ -90,13 +78,13 @@
 }
 
 .create-distributionlist .fieldset.name {
-	width: 237px;
+	width: 290px;
 	margin-left: 0px;
 	margin-right: 25px;
 }
 
 .create-distributionlist .fieldset.mail{
-	margin-left:  60px;
+	margin-left:  20px;
 	width: 230px;
 }
 
