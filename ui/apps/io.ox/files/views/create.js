@@ -89,7 +89,9 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         pane.show().done(function (action) {
             var handler = buttonHandlers[action];
             if (handler) {
-                var fileEntry = {},
+                var fileEntry = {
+                    folder: delegate.folder
+                },
                 uploadIndicator = new dialogs.ModalDialog();
                 
                 controlsPoint.each(function (controlExtension) {
@@ -104,7 +106,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
                 uploadIndicator.getContentControls().css({
                     visibility: "hidden"
                 });
-
+                
                 uploadIndicator.getContentNode().append($("<div>").text("Uploading...").addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
                 
                 uploadIndicator.show();
@@ -202,17 +204,15 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
                 savedOnce = true;
                 filesApi.uploadFile({
                     file: file,
-                    json: fileEntry
+                    json: fileEntry,
+                    folder: fileEntry.folder
                 }).done(function (data) {
                     cb(data);
                 });
             });
             if (!savedOnce && ! $.isEmptyObject(fileEntry)) {
                 filesApi.create({json: fileEntry}).done(function (data) {
-                    console.log("Tadaa", data);
                     cb(data);
-                }).fail(function (r) {
-                    console.log("FAIL", r);
                 });
             }
         }

@@ -28,37 +28,33 @@ define("plugins/halo/appointments/register",
 
             var deferred = new $.Deferred();
 
+            if (appointments.length === 0) {
+                deferred.resolve();
+                return deferred;
+            }
             $node.append(
                 $("<div/>").addClass("widget-title clear-title").text("Shared Appointments")
             );
 
-            if (appointments.length === 0) {
+            // TODO: unify with portal code (copy/paste right now)
+            require(
+                ["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
+                function (dialogs, viewGrid) {
 
-                $node.append("<div>No Appointments found.</div>");
-                deferred.resolve();
+                    viewGrid.drawSimpleGrid(appointments).appendTo($node);
 
-            } else {
-
-                // TODO: unify with portal code (copy/paste right now)
-                require(
-                    ["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
-                    function (dialogs, viewGrid) {
-
-                        viewGrid.drawSimpleGrid(appointments).appendTo($node);
-
-                        new dialogs.SidePopup()
-                            .delegate($node, ".vgrid-cell", function (popup) {
-                                var data = $(this).data("appointment");
-                                require(["io.ox/calendar/view-detail"], function (view) {
-                                    popup.append(view.draw(data));
-                                    data = null;
-                                });
+                    new dialogs.SidePopup()
+                        .delegate($node, ".vgrid-cell", function (popup) {
+                            var data = $(this).data("appointment");
+                            require(["io.ox/calendar/view-detail"], function (view) {
+                                popup.append(view.draw(data));
+                                data = null;
                             });
+                        });
 
-                        deferred.resolve();
-                    }
-                );
-            }
+                    deferred.resolve();
+                }
+            );
 
             return deferred;
         }
