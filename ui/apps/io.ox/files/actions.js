@@ -83,7 +83,23 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
             });
         }
     });
-
+    
+    // edit mode actions
+    ext.point("io.ox/files/actions/edit/save").extend({
+        id: "save",
+        action: function (context) {
+            context.detailView.endEdit();
+        }
+    });
+    
+    ext.point("io.ox/files/actions/edit/cancel").extend({
+        id: "cancel",
+        action: function (context) {
+            context.detailView.endEdit();
+        }
+    });
+    
+    
     // version specific actions
 
     ext.point("io.ox/files/versions/actions/makeCurrent").extend({
@@ -159,8 +175,25 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         id: "delete",
         index: 400,
         label: "Delete",
-        ref: "io.ox/files/actions/delete",
-        special: "danger"
+        ref: "io.ox/files/actions/delete"
+    }));
+    
+    // edit links
+    
+    ext.point("io.ox/files/links/edit/inline").extend(new links.Button({
+        id: "save",
+        index: 100,
+        label: "Save",
+        ref: "io.ox/files/actions/edit/save",
+        cssClasses: "btn btn-primary"
+    }));
+
+    ext.point("io.ox/files/links/edit/inline").extend(new links.Button({
+        id: "cancel",
+        index: 200,
+        label: "Cancel",
+        ref: "io.ox/files/actions/edit/cancel",
+        cssClasses: "btn"
     }));
 
     // version links

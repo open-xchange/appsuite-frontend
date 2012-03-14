@@ -40,6 +40,30 @@ define("io.ox/core/extPatterns/links",
             );
         };
     };
+    
+    var Button = function (options) {
+
+        _.extend(this, options);
+
+        var self = this,
+            click = function (e) {
+                var node = $(this);
+                e.preventDefault();
+                // TODO: don't know if using self for context makes sense
+                ext.point(node.data("ref")).invoke("action", self, node.data("context"));
+            };
+
+        this.draw = function (context) {
+            this.append(
+                $("<button>", { "data-action": self.id })
+                .addClass(self.cssClasses || 'btn')
+                .data({ ref: self.ref, context: context })
+                .click(click)
+                .text(String(self.label))
+            ).append("&nbsp;");
+        };
+    };
+    
 
     var applyCollection = function (self, collection, node, context, args, bootstrapMode) {
         // resolve collection's properties
@@ -119,6 +143,7 @@ define("io.ox/core/extPatterns/links",
 
     return {
         Link: Link,
+        Button: Button,
         ToolbarLinks: ToolbarLinks,
         InlineLinks: InlineLinks,
         DropdownLinks: DropdownLinks

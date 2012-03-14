@@ -101,6 +101,7 @@ define("io.ox/files/main",
             right.idle().empty().append(currentDetailView.element);
             right.parent().scrollTop(0);
             app.currentFile = data;
+            app.detailView = currentDetailView;
             dropZone.update();
         }
 

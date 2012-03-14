@@ -59,6 +59,12 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
             }
         };
         
+        self.each = function (fn) {
+            point.each(function (extension) {
+                fn(extension, nodes[extension.id]);
+            });
+        };
+        
         self.destroy = function () {
             nodes = null;
         };
@@ -118,6 +124,12 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
                     return;
                 }
                 
+            });
+        };
+        
+        self.each = function (fn) {
+            _(sublayouts).each(function (sublayout, sectionId) {
+                fn(sublayout, nodes[sectionId]);
             });
         };
         
@@ -244,6 +256,13 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
                 self.draw.apply($node, args);
             }
         };
+        
+        self.each = function (fn) {
+            point.each(function (extension) {
+                fn(extension, nodes[extension.id]);
+            });
+        };
+        
         
         self.destroy = function () {
             nodes = null;
