@@ -167,7 +167,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/links/toolbar').extend(new links.Link({
         index: 200,
         id: 'reader',
-        label: 'Reading Lamp!',
+        label: 'Light!',
         ref: 'io.ox/mail/actions/reader'
     }));
 
