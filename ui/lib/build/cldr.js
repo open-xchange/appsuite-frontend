@@ -3,13 +3,13 @@ var path = require("path");
 var http = require("http");
 var util = require("util");
 var i18n = require("./i18n");
+var utils = require("./fileutils");
 var xml2js = require("../xml2js/lib/xml2js");
 var _ = require("../underscore");
 
 desc("Downloads the latest CLDR data and updates date translations for all " +
      "languages in i18n/*.po .");
-task("update-i18n", ["lib/build/cldr.js"]);
-directory("lib/cldr");
+utils.topLevelTask("update-i18n", ["lib/build/cldr.js"]);
 var svnPath = "/repos/cldr/" + (
         process.env.tag ? "tags/" + process.env.tag :
         process.env.branch ? "branches/" + process.env.branch :
@@ -22,29 +22,71 @@ function getParent(name) {
 }
 
 _.each(i18n.languages(), function (lang) {
-    processLanguage(lang);
+    var dest = processLanguage(lang);
     for (var name = lang; name; name = getParent(name)) {
-        file("lib/cldr/" + lang + ".json", ["tmp/cldr/main/" + name + ".json"]);
+        file(dest, ["tmp/cldr/main/" + name + ".json"]);
         downloadFile("main/" + name);
     }
 });
-downloadFile("supplemental/supplementalData");
-task("update-i18n", ["lib/cldr/date.json"]);
-file("lib/cldr/date.json",
-    ["lib/cldr", "tmp/cldr/supplemental/supplementalData.json"], function () {
-        var xml = JSON.parse(fs.readFileSync(
-            "tmp/cldr/supplemental/supplementalData.json", "utf8"));
-        fs.writeFileSync("lib/cldr/date.json", JSON.stringify({
-            weekData: xml.weekData
-        }));
-    });
 
-function downloadFile(name) {
-    var src = "tmp/cldr/" + name + ".json";
-    if (jake.Task[src]) return;
-    var dir = path.dirname(src);
-    directory(dir);
-    file(src, [dir], download, { async: true });
+function toObject(array, value) {
+    var object = {};
+    _.each(array, function (elem) { object[elem] = value; });
+    return object;
+}
+function objMap(o, iterator) {
+    var retval = {};
+    for (var i in o) retval[i] = iterator(o[i]);
+    return retval;
+}
+
+downloadFile("supplemental/supplementalData", function (supp) {
+    var territories = {};
+    _.each(supp.territoryContainment.group, function (group) {
+        territories[group["@"].type] =
+            toObject(group["@"].contains.split(" "), 1);
+    });
+    resolveTerritory("001");
+    function resolveTerritory(id) {
+        var parent = territories[id];
+        for (var child in parent) if (child in territories) {
+            var indirect = resolveTerritory(child);
+            for (var gchild in indirect) parent[gchild] = indirect[gchild] + 1;
+        }
+        return parent;
+    }
+    
+    return {
+        minDays: mapTerritories(supp.weekData.minDays, "count"),
+        firstDay: mapTerritories(supp.weekData.firstDay, "day")
+    };
+    
+    function mapTerritories(tags, attr) {
+        var map = {};
+        _.each(tags, function (tag) {
+            var value = tag["@"][attr];
+            _.each(tag["@"].territories.split(" "), function (id) {
+                var list = territories[id] || toObject([id], 0);
+                for (var t in list) {
+                    var old = map[t];
+                    if (!old || old.level > list[t]) {
+                        map[t] = { level: list[t], value: value };
+                    }
+                }
+            });
+        });
+        return objMap(map, function (elem) { return elem.value; });
+    }
+});
+var supplementalData = _.memoize(function () {
+    return JSON.parse(fs.readFileSync(
+        "tmp/cldr/supplemental/supplementalData.json", "utf8"));
+});
+
+function downloadFile(name, filter) {
+    var dest = "tmp/cldr/" + name + ".json";
+    if (jake.Task[dest]) return;
+    utils.file(dest, [], download, { async: true });
     
     function download() {
         http.get({ host: "unicode.org", path: svnPath + name + ".xml" },
@@ -61,23 +103,71 @@ function downloadFile(name) {
     }
     function save(err, json) {
         if (err) return fail("XML error: " + err.message);
-        fs.writeFileSync(src, JSON.stringify(json));
+        fs.writeFileSync(dest, JSON.stringify(filter ? filter(json) : json));
         complete();
     }
 }
 
 function processLanguage(lang) {
-    var dest = "lib/cldr/" + lang + ".json";
-    task("update-i18n", [dest]);
-    file(dest, ["lib/build/cldr.js", "lib/cldr"], function () {
-        var cldr = loadLanguage(lang);
-        var data = {
-            data: cldr.get("dates/calendars/calendar[@type='gregorian']/" +
-                "months/monthContext[@type='format']/" +
-                "monthWidth[@type='narrow']/month[@type='1']")
-        };
-        fs.writeFileSync(dest, JSON.stringify(data, null, 4));
-    });
+    var dest = "apps/io.ox/core/date." + lang + ".json";
+    utils.file(dest,
+        ["lib/build/cldr.js", "tmp/cldr/supplemental/supplementalData.json"],
+        function () {
+            var ldml = loadLanguage(lang), supp = supplementalData();
+            var gregorian = "dates/calendars/calendar[@type='gregorian']/";
+            var weekDays = { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5,
+                             sat: 6 };
+            var match = lang.split(/[_-]/),
+                territory = match[match.length > 2 ? 2 : 1];
+            
+            function format(s, params) {
+                return s.replace(/\{(\d+)\}/g,
+                                 function(_, n) { return params[n]; });
+            }
+            
+            function mapDays(context, width) {
+                var array = [];
+                var path = format("days/dayContext[@type='{0}']/" +
+                    "dayWidth[@type='{1}']/day", arguments);
+                _.each(ldml.get(gregorian + path), function (day) {
+                    array[weekDays[day["@"].type]] = day["#"];
+                });
+                return array;
+            }
+            function mapMonths(context, width) {
+                var array = [];
+                var path = format("months/monthContext[@type='{0}']/" +
+                    "monthWidth[@type='{1}']/month", arguments);
+                _.each(ldml.get(gregorian + path), function(month) {
+                    array[month["@"].type - 1] = month["#"];
+                });
+                return array;
+            }
+            
+            function getFormat(type) {
+                var choice = ldml.get(gregorian + format(
+                    "{0}Formats/default", [type]))["@"].choice;
+                return ldml.get(gregorian + format(
+                    "{0}Formats/{0}FormatLength[@type='{1}']/{0}Format/pattern",
+                    [type, choice]));
+            }
+                    
+            var data = {
+                daysInFirstWeek: Number(supp.minDays[territory]),
+                weekStart: weekDays[supp.firstDay[territory]],
+                days: mapDays("format", "wide"),
+                shortDays: mapDays("format", "abbreviated"),
+                narrowDays: mapDays("stand-alone", "narrow"),
+                months: mapMonths("format", "wide"),
+                shortMonths: mapMonths("format", "abbreviated"),
+                date: getFormat("date"),
+                time: getFormat("time"),
+                dateTime: getFormat("dateTime")
+            };
+            data.dateTime = format(data.dateTime, [data.time, data.date]);
+            fs.writeFileSync(this.name, JSON.stringify(data, null, 4));
+        });
+    return dest;
 }
 
 var loadLanguage = _.memoize(function (lang) {
@@ -133,6 +223,7 @@ function xpath(path, parents) {
             return function (xml) {
                 xml = xml[matcher.tag];
                 if (!xml) return;
+                if (!_.isArray(xml)) xml = [xml];
                 Check: for (var i = 0; i < xml.length; i++) {
                     var attrs = xml[i]["@"];
                     if (!attrs) continue;

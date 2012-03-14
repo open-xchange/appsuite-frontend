@@ -197,7 +197,7 @@ utils.concat("boot.js", ["src/jquery.plugins.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 
 utils.copy(utils.list("src", "css.js"), {
-    to: "tmp", /*type: "source",*/ filter: function(data) { // commented out since css.js does not survive uglifyJS
+    to: "tmp", type: "source", filter: function(data) {
         var dest = this.task.name;
         utils.includes.set(dest, []);
         var dir = "lib/less.js/lib/less";
@@ -216,7 +216,7 @@ utils.concat("boot.js", [
         "lib/underscore.js", // load this before require.js to keep global object
         "lib/require.js",
         "lib/modernizr.js",
-        "tmp/css.js", utils.string("\n"), "tmp/boot.js"]);
+        "tmp/css.js", utils.string(";"), "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
@@ -420,7 +420,7 @@ task("merge", ["ox.pot"], function() {
     }
 }, { async: true });
 
-// module dependency visualizazion
+// module dependency visualization
 
 desc("Prints module dependencies");
 task("deps", [depsPath], function() {

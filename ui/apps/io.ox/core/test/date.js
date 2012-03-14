@@ -11,7 +11,7 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-define("io.ox/core/test/date", ["io.ox/core/date", "io.ox/core/extensions"],
+define.async("io.ox/core/test/date", ["io.ox/core/date", "io.ox/core/extensions"],
 function (date, ext) {
     
     "use strict";
