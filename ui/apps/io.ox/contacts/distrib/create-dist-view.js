@@ -29,23 +29,32 @@ define('io.ox/contacts/distrib/create-dist-view',
         var button = $('<a>').attr({
             'data-action': 'save',
             'href': '#'
-//        }).addClass('button default-action saveButton').text('Save').on('click', function () {
-        }).addClass('btn btn-primary btn-small').text('Save').on('click', function () {
+        }).addClass('btn btn-primary').on('click', function () {
             options.saveForm();
         });
-
+        if (options.model._data.mark_as_distributionlist) {
+            button.text(gt('Save'));
+        } else {
+            button.text(gt('Create list'));
+        }
         return button;
     };
 
     var drawAlert = function () {
-        var alert = $('<div>').addClass('alert alert-block alert-error fade in').append(
+        var alert = $('<div>').addClass('alert alert-block fade in').append(
                 $('<a>').attr({
                     'href': '#',
                     'class': 'close',
                     'data-dismiss': 'alert'
-                }).append($('<div>').addClass('delete-button')), $('<p>').text(gt('this mailadress is already in the list'))
+                }).append($('<div>').addClass('delete-button')), $('<p>').text(gt('This mailadress is already in the list'))
             );
         return alert;
+    };
+
+    var fnClickPerson = function (e) {
+        ext.point('io.ox/core/person:action').each(function (ext) {
+            _.call(ext.action, e.data, e);
+        });
     };
 
     function drawListetItemClear(node, name, selectedMail, options) {
@@ -64,14 +73,22 @@ define('io.ox/contacts/distrib/create-dist-view',
         frame.append(img)
         .append(
             $('<div>').addClass('person-link ellipsis')
-            .text(name + '\u00A0'),
+            .text(name + '\u00A0').on('click', {display_name: name, email1: selectedMail}, fnClickPerson),
             $('<div>').addClass('person-selected-mail')
             .text(selectedMail)
         );
     }
 
+    function drawEmptyItem(node) {
+        var frame = $('<div>').addClass('listet-item backstripes').attr({
+            'data-mail': 'empty'
+        });
+        frame.text(gt('This list has no entries'));
+        node.append(frame);
+    }
+
     function insertNewContact(options, name, mail) {
-        drawListetItemClear(displayBox, name, mail, options);
+        drawListetItemClear(options.displayBox, name, mail, options);
         options.model._data.distribution_list.push({
             display_name: name,
             mail: mail
@@ -82,7 +99,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         var button = $('<a>').attr({
             'data-action': 'add',
             'href': '#'
-        }).addClass('btn btn-success btn-small').text(gt('Add new member')).on('click', function (e) {
+        }).addClass('btn btn-inverse').text(gt('Add')).on('click', function (e) { //TODO some css related issues with color
             var data = $('[data-holder="data-holder"]').data(),
                 mailValue = $('input#mail').val(),
                 nameValue = $('input#name').val();
@@ -91,6 +108,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             } else {
                 insertNewContact(options, nameValue, mailValue);
             }
+
             // reset the fields
             $('[data-holder="data-holder"]').removeData();
             $('input#mail').val('');
@@ -100,11 +118,13 @@ define('io.ox/contacts/distrib/create-dist-view',
         return button;
     };
 
-    var displayBox = $('<div>').addClass('item-list').append(
-            $('<div>').addClass('item-list-header').append(
-                $('<div>').addClass('name col').text('name'), $('<div>').addClass('mail col').text('mail')
-            )
-        );
+    function createDisplayBox() {
+        return $('<div>').attr('id', _.uniqueId('box_')).addClass('item-list').append(
+                $('<div>').addClass('item-list-header').append(
+                    $('<div>').addClass('name col').text('Name'), $('<div>').addClass('mail col').text('Mail')
+                )
+            );
+    }
 
     function drawAutoCompleteItem(node, data) {
         var img = $('<div>').addClass('contact-image'),
@@ -133,7 +153,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                 e.data.options.model._data.distribution_list.splice(key, 1);
             }
             if (_.isEmpty(e.data.options.model._data.distribution_list)) {
-                $('.editsection').addClass('hidden');
+                e.data.options.displayBox.append(drawEmptyItem(e.data.options.displayBox));
             }
         });
         e.data.frame.remove();
@@ -159,7 +179,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         frame.append(img)
         .append(
             $('<div>').addClass('person-link ellipsis')
-            .text(data.display_name + '\u00A0'),
+            .text(data.display_name + '\u00A0').on('click', {display_name: data.display_name, email1: data.email1, id: data.id}, fnClickPerson),
             $('<div>').addClass('person-selected-mail')
             .text((selectedMail))
         );
@@ -181,13 +201,13 @@ define('io.ox/contacts/distrib/create-dist-view',
     }
 
     function copyContact(options, contact, selectedMail) {
-        drawListetItem(displayBox, contact, selectedMail, options);
+        drawListetItem(options.displayBox, contact, selectedMail, options);
         var mailNr = (calcMailField(contact, selectedMail));
         if (!options.model._data.distribution_list) {
             options.model._data.distribution_list = [];
         }
         if ($('[data-mail="' + selectedMail + '"]')[1]) {
-            $('.header').append(drawAlert());
+            drawAlert().appendTo($('.editsection'));
         }
 
         options.model._data.distribution_list.push({
@@ -197,19 +217,19 @@ define('io.ox/contacts/distrib/create-dist-view',
             mail_field: mailNr
         });
         if (!_.isEmpty(options.model._data.distribution_list)) {
-            $('.editsection').removeClass('hidden');
+            options.displayBox.find('[data-mail="empty"]').remove();
         }
     }
 
-    function createField(options, id, related) {
+    function createField(options, id, related, label) {
 
         return $('<div>')
         .addClass('fieldset ' + id)
         .append(
-            $('<label>', { 'for' : 'input_field_' + id }).text(gt(id)),
+            $('<label>', { 'for' : 'input_field_' + id }).text(gt(label)),
             $('<input>', {
                 type: 'text',
-                tabindex: '2',
+//                tabindex: '3',
                 autocapitalize: 'off',
                 autocomplete: 'off',
                 autocorrect: 'off',
@@ -273,37 +293,38 @@ define('io.ox/contacts/distrib/create-dist-view',
                 dataHolder,
                 fId = config.get("folder.contacts");
 
+            self.displayBox = createDisplayBox();
+
             if (_.isArray(self.model._data.distribution_list)) {
                 _.each(self.model._data.distribution_list, function (key) {
                     if (key.id) {
                         api.get({id: key.id, folder: fId}).done(function (obj) {
-                            drawListetItem(displayBox, obj, key.mail, self);
+                            drawListetItem(self.displayBox, obj, key.mail, self);
                         });
                     } else {
-                        drawListetItemClear(displayBox, key.display_name, key.mail, self);
+                        drawListetItemClear(self.displayBox, key.display_name, key.mail, self);
                     }
                 });
             }
 
-            self.node.append(sectiongroup.append(saveButton(self)));
+            self.node.append(sectiongroup.append());
             sectiongroup.addClass('header')
             .append(self.createLabel({
                 id: myId,
                 text: gt('List name')
-            }), self.createTextField({property: 'display_name', id: myId, classes: 'form-vertical'}));
-
+            }), self.createTextField({property: 'display_name', id: myId, classes: 'form-vertical'}), saveButton(self));
             editSection.addClass('editsection').append(
 
                 self.createSectionTitle({text: gt('Members')}),
-                displayBox
+                self.displayBox
                 );
             if (_.isEmpty(self.model._data.distribution_list)) {
-                editSection.addClass('hidden');
+                drawEmptyItem(self.displayBox);
             }
             self.node.append(editSection);
 
             dataHolder = $('<div>').attr('data-holder', 'data-holder')
-            .append(createField(self, 'name', 'input#mail'), createField(self, 'mail', 'input#name'));
+            .append(createField(self, 'name', 'input#mail', 'Name'), createField(self, 'mail', 'input#name', 'Mail'));
 
 
             addSection.addClass('last').append(

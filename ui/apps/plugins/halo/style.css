@@ -21,3 +21,26 @@
     min-height: 100px;
     margin: 0px 0px 30px 0px;
 }
+.io-ox-subheader {
+    font-weight:300;
+    font-size: 13pt;
+}
+.io-ox-left-column, .io-ox-right-column {
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+.io-ox-left-column {
+    float: left;
+    width: 48%;
+    padding-right: 2%;
+}
+.io-ox-right-column {
+    float: right;
+    width: 48%;
+    padding-left: 2%;
+}
+
+.io-ox-halo .vgrid-cell {
+    padding: 6px 0;
+}

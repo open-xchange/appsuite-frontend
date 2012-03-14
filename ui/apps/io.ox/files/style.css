@@ -1,4 +1,12 @@
 
+.has-publications {
+    width: 27px;
+    height: 17px;
+    float: left;
+    padding-top: 7px;
+    margin-right: 0.5em;
+}
+
 .file-details {
     max-width: 900px;
 }
@@ -38,4 +46,8 @@
 .file-details .version-comment {
     font-family: monospace, 'Courier new';
     white-space: pre-wrap;
+}
+
+.file-details .dragout {
+    cursor: pointer;
 }

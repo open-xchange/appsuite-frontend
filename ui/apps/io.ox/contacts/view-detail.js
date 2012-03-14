@@ -53,6 +53,22 @@ define("io.ox/contacts/view-detail",
         }
     }
 
+    function addDistribMail(label, name, mail, node) {
+        if (name) {
+            var td = $("<td>").addClass("value"),
+                tr = $("<tr>")
+                    .append(
+                        $("<td>").addClass("io-ox-label").text(label), td
+                    ),
+                blueName = $('<span>').addClass('blue').text(name);
+            td.append(blueName, ' ', mail);
+            tr.appendTo(node);
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     function clickMail(e) {
         e.preventDefault();
         // set recipient
@@ -255,20 +271,40 @@ define("io.ox/contacts/view-detail",
         index: 100,
         id: 'contact-mails',
         draw: function (data) {
-            var dupl = {},
+            // TMP backend bug fix
+            if (data.distribution_list && data.distribution_list.length) {
+                data.mark_as_distributionlist = true;
+            }
+            if (data.mark_as_distributionlist === true) {
+                var i = 0, list = _.deepClone(data.distribution_list), $i = list.length,
+                    that = this;
+                _.each(list, function (key, value) {
+                    if (value === 0) {
+                        addDistribMail('Members', key.display_name, key.mail, that);
+                    } else {
+                        addDistribMail('', key.display_name, key.mail, that);
+                    }
+                });
+
+            } else {
+                var dupl = {},
                 r = 0;
-            r += addMail.call(this, gt("E-Mail"), data.email1, data);
-            dupl[data.email1] = true;
-            if (dupl[data.email2] !== true) {
-                r += addMail.call(this, gt("E-Mail"), data.email2, data);
-                dupl[data.email2] = true;
+                r += addMail.call(this, gt("E-Mail"), data.email1, data);
+                dupl[data.email1] = true;
+                if (dupl[data.email2] !== true) {
+                    r += addMail.call(this, gt("E-Mail"), data.email2, data);
+                    dupl[data.email2] = true;
+                }
+                if (dupl[data.email3] !== true) {
+                    r += addMail.call(this, gt("E-Mail"), data.email3, data);
+                }
+                if (r > 0) {
+                    addField("", "\u00A0", this);
+                }
             }
-            if (dupl[data.email3] !== true) {
-                r += addMail.call(this, gt("E-Mail"), data.email3, data);
-            }
-            if (r > 0) {
-                addField("", "\u00A0", this);
-            }
+
+
+
         }
 
     });
@@ -289,7 +325,7 @@ define("io.ox/contacts/view-detail",
         id: 'qr',
         draw: function (data) {
             var r = 0;
-            if (Modernizr.canvas) {
+            if (Modernizr.canvas && !data.mark_as_distributionlist) {
                 if (r > 0) {
                     addField("\u00A0", "\u00A0", this);
                     r = 0;

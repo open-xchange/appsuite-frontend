@@ -233,7 +233,11 @@ define("io.ox/core/desktop",
             // add folder management
             this.folder = (function () {
 
-                var folder = null, that, win = null, grid = null, type;
+                var folder = null, that, win = null, grid = null, type, hChanged;
+
+                hChanged = function (e) {
+                    that.set(e.data.folder);
+                };
 
                 that = {
 
@@ -251,13 +255,18 @@ define("io.ox/core/desktop",
                     },
 
                     set: function (id) {
-                        var def = new $.Deferred();
+                        var def = $.Deferred();
                         if (id !== undefined && id !== null) {
                             require(['io.ox/core/api/folder'], function (api) {
                                 api.get({ folder: id })
                                 .done(function (data) {
+                                    // off
+                                    api.off('change:' + folder);
                                     // remember
                                     folder = String(id);
+                                    // process change
+                                    // look for change folder event
+                                    api.on('change:' + folder, { folder: folder }, hChanged);
                                     // update window title & toolbar?
                                     if (win) {
                                         win.setTitle(data.title);
@@ -271,6 +280,7 @@ define("io.ox/core/desktop",
                                         // update hash
                                         _.url.hash('folder', folder);
                                     }
+                                    self.trigger('change:folder', folder, data);
                                     def.resolve(data);
                                 })
                                 .fail(def.reject);

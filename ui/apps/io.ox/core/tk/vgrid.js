@@ -505,7 +505,13 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                             .done(function () {
                                 // use url?
                                 if (_.url.hash('id') !== undefined) {
-                                    self.selection.set(_.url.hash('id').split(/,/));
+                                    var ids = _.url.hash('id').split(/,/);
+                                    // convert ids to objects first - avoids problems with
+                                    // non-existing items that cannot be resolved in selections
+                                    self.selection.set(_(ids).map(function (cid) {
+                                        var c = cid.split(/\./);
+                                        return { folder_id: c[0], id: c[1] };
+                                    }));
                                 } else {
                                     // select first or previous selection
                                     self.selection.selectSmart();

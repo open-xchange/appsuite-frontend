@@ -13,7 +13,8 @@
 define('io.ox/core/api/folder',
     ['io.ox/core/http',
      'io.ox/core/cache',
-     'io.ox/core/config'], function (http, cache, config) {
+     'io.ox/core/config',
+     'io.ox/core/event'], function (http, cache, config, Events) {
 
     'use strict';
 
@@ -173,7 +174,8 @@ define('io.ox/core/api/folder',
             // get parent folder to inherit permissions
             return api.get({
                 folder: opt.folder
-            }).pipe(function (parent) {
+            })
+            .pipe(function (parent) {
                 // inherit rights only if folder isn't a system folder
                 // (type = 5)
                 if (parent.type === 5) {
@@ -195,12 +197,14 @@ define('io.ox/core/api/folder',
                     },
                     data: opt.data,
                     appendColumns: false
-                }).pipe(function (data) {
+                })
+                .pipe(function (data) {
                     // wait for updating sub folder cache
                     return api.getSubFolders({
                         folder: opt.folder,
                         cache: false
-                    }).pipe(function () {
+                    })
+                    .pipe(function () {
                         // return proper data
                         return data;
                     });
@@ -238,6 +242,8 @@ define('io.ox/core/api/folder',
             return node;
         }
     };
+
+    Events.extend(api);
 
     return api;
 });

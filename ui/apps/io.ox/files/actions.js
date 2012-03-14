@@ -28,8 +28,18 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
                 create.show({
                     uploadedFile: function (data) {
                         app.invalidateFolder(data);
-                    }
+                    },
+                    folder: app.folder.get()
                 });
+            });
+        }
+    });
+
+    ext.point("io.ox/files/actions/share").extend({
+        id: "share",
+        action: function (app) {
+            require(['io.ox/publications/wizard'], function (wizard) {
+                wizard.oneClickAdd(app.folder.get());
             });
         }
     });
@@ -117,6 +127,13 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         ref: "io.ox/files/actions/upload"
     }));
 
+    ext.point("io.ox/files/links/toolbar").extend(new links.Link({
+        index: 200,
+        id: "share",
+        label: "Share",
+        ref: "io.ox/files/actions/share"
+    }));
+
     ext.point("io.ox/files/links/inline").extend(new links.Link({
         id: "open",
         index: 100,
@@ -180,5 +197,34 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         ref: "io.ox/files/versions/actions/delete",
         special: "danger"
     }));
+    
+    // Drag and Drop
+    
+    ext.point("io.ox/files/dnd/actions").extend({
+        id: "create",
+        index: 10,
+        label: "Drop here to upload a new file",
+        action: function (file, app) {
+            app.queues.create.offer(file);
+        }
+    });
+    
+    ext.point("io.ox/files/dnd/actions").extend({
+        id: "newVersion",
+        index: 20,
+        isEnabled: function (app) {
+            return !!app.currentFile;
+        },
+        label: function (app) {
+            if (app.currentFile.title) {
+                return "Drop here to upload a new version of '" + app.currentFile.title + "'";
+            } else {
+                return "Drop here to upload a new version";
+            }
+        },
+        action: function (file, app) {
+            app.queues.update.offer(file);
+        }
+    });
 
 });
