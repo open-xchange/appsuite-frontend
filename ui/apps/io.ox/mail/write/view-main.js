@@ -380,7 +380,10 @@ define("io.ox/mail/write/view-main",
                                     .text(' ' + preview) :
                                     $()
                             )
-                            .on('click', { index: index }, fnSetSignature)
+                            .on('click', { index: index }, function (e) {
+                                e.preventDefault();
+                                app.setSignature(e);
+                            })
                         );
                     }, $())
                 );
@@ -460,9 +463,6 @@ define("io.ox/mail/write/view-main",
     theView.prototype.textarea = null;
     theView.prototype.GRID_WIDTH = 330;
     theView.prototype.signatures = {};
-
-
-
 
 
     var handleFileSelect, addUpload, supportsPreview, createPreview;
@@ -655,11 +655,6 @@ define("io.ox/mail/write/view-main",
         );
     }
     // helper
-
-    function fnSetSignature(e) {
-        e.preventDefault();
-        app.setSignature(e);
-    }
 
     function serialize(obj) {
         return '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + '>';
