@@ -42,7 +42,7 @@ define("plugins/halo/mail/register",
                 ["io.ox/core/tk/dialogs", "io.ox/mail/view-grid-template", "io.ox/mail/api"],
                 function (dialogs, viewGrid, api) {
                     var left = $("<div/>").addClass("io-ox-left-column");
-                    left.append($("<h2/>").text("Messages you received:"));
+                    left.append($("<p/>").text("Received e-mails:").addClass("io-ox-subheader"));
                     if (received.length === 0) {
                         left.append($("<div/>").text("Cannot find any messages this contact sent to you."));
                     } else {
@@ -51,13 +51,14 @@ define("plugins/halo/mail/register",
                     $node.append(left);
                         
                     var right = $("<div/>").addClass("io-ox-right-column");
-                    right.append($("<h2/>").text("Messages you sent:"));
+                    right.append($("<p/>").text("Sent e-mails:").addClass("io-ox-subheader"));
                     if (sent.length === 0) {
                         right.append($("<div/>").text("Cannot find any messages you sent to this contact."));
                     } else {
                         right.append(viewGrid.drawSimpleGrid(sent));
                     }
                     $node.append(right);
+                    $node.append($("<div/>").css("clear", "both"));
                         
                     new dialogs.SidePopup()
                         .delegate($node, ".vgrid-cell", function (popup) {
