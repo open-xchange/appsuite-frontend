@@ -17,7 +17,7 @@ define("io.ox/calendar/util",
     "use strict";
 
     // week day names
-    var n_dayShort = date.locale.daysNarrow,
+    var n_dayShort = "So Mo Di Mi Do Fr Sa".split(' '), // date.locale.daysNarrow,
         n_day = [gettext("Sunday"), gettext("Monday"), gettext("Tuesday"),
                  gettext("Wednesday"), gettext("Thursday"), gettext("Friday"),
                  gettext("Saturday")
@@ -55,7 +55,7 @@ define("io.ox/calendar/util",
         SATURDAY = 64,
         // week starts with (0=Sunday, 1=Monday, ..., 6=Saturday)
         firstWeekDay = date.locale.weekStart;
-    
+
     var that = {
 
         MINUTE: MINUTE,
@@ -105,16 +105,29 @@ define("io.ox/calendar/util",
             }
         },
 
+// OLD STUFF - looks nice
         getTime: function (timestamp) {
-            return (new date.Local(date.Local.utc(timestamp)))
-                .format(date.locale.time);
+            var d = new Date(timestamp);
+            return _.pad(d.getUTCHours(), 2) + ":" + _.pad(d.getUTCMinutes(), 2);
         },
 
         getDate: function (timestamp) {
-            var d = timestamp !== undefined ?
-                new date.Local(date.Local.utc(timestamp)) : new date.Local();
-            return d.format(date.locale.date);
+            var d = timestamp !== undefined ? new Date(timestamp) : new Date();
+            return n_dayShort[d.getUTCDay()] + ", " + _.pad(d.getUTCDate(), 2) + "." + _.pad(d.getUTCMonth() + 1, 2) + "." + d.getUTCFullYear();
         },
+
+// NEW STUFF - not yet done
+//
+//        getTime: function (timestamp) {
+//            return (new date.Local(date.Local.utc(timestamp)))
+//                .format(date.locale.time);
+//        },
+//
+//        getDate: function (timestamp) {
+//            var d = timestamp !== undefined ?
+//                new date.Local(date.Local.utc(timestamp)) : new date.Local();
+//            return d.format(date.locale.date);
+//        },
 
         getSmartDate: function (timestamp) {
 

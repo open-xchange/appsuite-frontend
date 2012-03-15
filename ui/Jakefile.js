@@ -42,6 +42,7 @@ if (debug) console.info("Debug mode: on");
 
 var defineWalker = ast("define").asCall().walker();
 var defineAsyncWalker = ast("define.async").asCall().walker();
+var assertWalker = ast("assert").asCall().walker();
 function jsFilter (data) {
     var self = this;
 
@@ -51,9 +52,10 @@ function jsFilter (data) {
 
     var tree = jsp.parse(data, false, true);
     var defineHooks = this.type.getHooks("define");
-    tree = ast.scanner(defineWalker, defineHandler)
-        .scanner(defineAsyncWalker, defineHandler)
-        .scan(pro.ast_add_scope(tree));
+    var tree2 = ast.scanner(defineWalker, defineHandler)
+                   .scanner(defineAsyncWalker, defineHandler);
+    if (!debug) tree2 = tree2.scanner(assertWalker, assertHandler);
+    tree = tree2.scan(pro.ast_add_scope(tree));
     function defineHandler(scope) {
         if (scope.refs.define !== undefined) return;
         var args = this[2];
@@ -64,6 +66,9 @@ function jsFilter (data) {
         for (var i = 0; i < defineHooks.length; i++) {
             defineHooks[i].call(self, name, deps, f);
         }
+    }
+    function assertHandler(scope) {
+        if (scope.refs.assert === undefined) return ['num', 0];
     }
 
     // UglifyJS
@@ -109,7 +114,7 @@ var jshintOptions = {
     validthis: true,
     white: true, // THIS IS TURNED ON - otherwise we have too many dirty check-ins
     predef: [
-         "$", "_", "Modernizr", "define", "require", "ox"
+         "$", "_", "Modernizr", "define", "require", "ox", "assert"
     ]
 };
 
