@@ -61,11 +61,7 @@ define("io.ox/core/gettext", [], function () {
         lang.resolve(language);
     };
 
-    gt.getModule = function (name) {
-        return lang.pipe(function (lang) {
-            return name + "." + lang;
-        });
-    };
+    gt.language = lang.promise();
 
     return gt;
 });

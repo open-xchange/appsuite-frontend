@@ -72,6 +72,29 @@ define('io.ox/contacts/util',
             require(['io.ox/contacts/edit/main'], function (u) {
                 u.getApp(obj).launch();
             });
+        },
+
+        nameSort: function (a, b) {
+            var nameA, nameB;
+            if (a.display_name === undefined) {
+                nameA = a.mail;
+            } else {
+                nameA = a.display_name.toLowerCase();
+            }
+
+            if (b.display_name === undefined) {
+                nameB = b.mail;
+            } else {
+                nameB = b.display_name.toLowerCase();
+            }
+
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
         }
     };
 });

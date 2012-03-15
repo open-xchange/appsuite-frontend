@@ -12,12 +12,12 @@
  */
 
 define("io.ox/calendar/util",
-    ["gettext!io.ox/calendar/calendar"], function (gettext) {
+    ["io.ox/core/date", "gettext!io.ox/calendar/calendar"], function (date, gettext) {
 
     "use strict";
 
     // week day names
-    var n_dayShort = "So Mo Di Mi Do Fr Sa".split(' '),
+    var n_dayShort = date.locale.daysNarrow,
         n_day = [gettext("Sunday"), gettext("Monday"), gettext("Tuesday"),
                  gettext("Wednesday"), gettext("Thursday"), gettext("Friday"),
                  gettext("Saturday")
@@ -54,8 +54,8 @@ define("io.ox/calendar/util",
         FRIDAY = 32,
         SATURDAY = 64,
         // week starts with (0=Sunday, 1=Monday, ..., 6=Saturday)
-        firstWeekDay = 1;
-
+        firstWeekDay = date.locale.weekStart;
+    
     var that = {
 
         MINUTE: MINUTE,
@@ -80,7 +80,8 @@ define("io.ox/calendar/util",
         },
 
         isToday: function (timestamp) {
-            return new Date(timestamp).toDateString() === new Date().toDateString();
+            return Math.floor(timestamp / DAY) ===
+                Math.floor(date.Local.localTime((new Date()).getTime()) / DAY);
         },
 
         floor: function (timestamp, step) {
@@ -105,13 +106,14 @@ define("io.ox/calendar/util",
         },
 
         getTime: function (timestamp) {
-            var d = new Date(timestamp);
-            return _.pad(d.getUTCHours(), 2) + ":" + _.pad(d.getUTCMinutes(), 2);
+            return (new date.Local(date.Local.utc(timestamp)))
+                .format(date.locale.time);
         },
 
         getDate: function (timestamp) {
-            var d = timestamp !== undefined ? new Date(timestamp) : new Date();
-            return n_dayShort[d.getUTCDay()] + ", " + _.pad(d.getUTCDate(), 2) + "." + _.pad(d.getUTCMonth() + 1, 2) + "." + d.getUTCFullYear();
+            var d = timestamp !== undefined ?
+                new date.Local(date.Local.utc(timestamp)) : new date.Local();
+            return d.format(date.locale.date);
         },
 
         getSmartDate: function (timestamp) {
