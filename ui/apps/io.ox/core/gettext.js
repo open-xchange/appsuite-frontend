@@ -60,10 +60,6 @@ define("io.ox/core/gettext", [], function () {
             return gettext.pgettext("", text);
         }
         
-        gettext.noI18n = function (text) {
-            return text;
-        };
-
         gettext.gettext = gettext;
 
         gettext.ngettext = function (singular, plural, n) {
@@ -71,6 +67,9 @@ define("io.ox/core/gettext", [], function () {
         };
         
         if (_.url.hash('debug-i18n')) {
+            gettext.noI18n = function (text) {
+                return text + '\u200b';
+            };
             gettext.pgettext = function () {
                 return pgettext.apply(this, arguments) + '\u200b';
             };
@@ -78,6 +77,9 @@ define("io.ox/core/gettext", [], function () {
                 return npgettext.apply(this, arguments) + '\u200b';
             };
         } else {
+            gettext.noI18n = function (text) {
+                return text;
+            };
             gettext.pgettext = pgettext;
             gettext.npgettext = npgettext;
         }
