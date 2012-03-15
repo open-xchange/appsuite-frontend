@@ -14,7 +14,7 @@
 define("io.ox/core/gettext", [], function () {
 
     "use strict";
-    
+
     if (_.url.hash('debug-i18n')) {
         try {
             $(document).on('DOMAttrModified', debugAttr)
@@ -24,16 +24,16 @@ define("io.ox/core/gettext", [], function () {
             console.error(e);
         }
     }
-    
+
     function debugAttr(e) {
         if (e.originalEvent.attrName in { title: 1, value: 1 })
             verify(e.originalEvent.newValue, e.target);
     }
-    
+
     function debugData(e) {
         verify(e.originalEvent.newValue, e.target);
     }
-    
+
     function debugNode(e) {
         if (e.target.tagName in { TITLE: 1, SCRIPT: 1, STYLE: 1 }) return;
         debug(e.target);
@@ -45,27 +45,27 @@ define("io.ox/core/gettext", [], function () {
             }
         }
     }
-    
+
     function verify(s, node) {
         if (s.charCodeAt(s.length - 1) !== 0x200b) {
-            console.error("Untranslated string", s, node);
+            console.error("Untranslated string", s, node.parentNode);
         }
     }
-    
+
     function gt(id, po) {
-        
+
         po.plural = new Function("n", "return " + po.plural + ";");
-        
+
         function gettext(text) {
             return gettext.pgettext("", text);
         }
-        
+
         gettext.gettext = gettext;
 
         gettext.ngettext = function (singular, plural, n) {
             return gettext.npgettext("", singular, plural, n);
         };
-        
+
         if (_.url.hash('debug-i18n')) {
             gettext.noI18n = function (text) {
                 return text + '\u200b';
@@ -83,7 +83,7 @@ define("io.ox/core/gettext", [], function () {
             gettext.pgettext = pgettext;
             gettext.npgettext = npgettext;
         }
-        
+
         function pgettext(context, text) {
             var key = context ? context + "\x00" + text : text;
             return po.dictionary[key] || text;
@@ -97,12 +97,12 @@ define("io.ox/core/gettext", [], function () {
                 translation[Number(po.plural(Number(n)))] :
                 Number(n) !== 1 ? plural : singular;
         }
-        
+
         return gettext;
     }
-    
+
     var lang = new $.Deferred();
-    
+
     gt.setLanguage = function (language) {
         gt.setLanguage = function (lang2) {
             if (lang2 !== language) {
