@@ -13,24 +13,24 @@
 
 define("io.ox/preview/util",
     [], function () {
-    
+
     "use strict";
-    
+
     var previewMap = ox.serverConfig.previewMimeTypes || {};
-    
+
     var ContentType = function (contentType) {
-        
+
         var primaryType = null,
             subType = null,
             list = {},
             regexp = new RegExp("([^\\s;]+)(?:\\s*;\\s*charset\\s*=\\s*\"?([^\\s;\"]*)\"?\\s*?)?" +
                     "(?:\\s?;\\s*name\\s*=\\s*\"?([^*;\"]*)\"?\\s*;?)?");
-        
+
         // full content type
         if ($.type(contentType) !== "string") {
             contentType = "";
         }
-        
+
         var result = regexp.exec(contentType);
         if (result.length) {
             if (result[1] !== undefined && result[1].match(/\//)) {
@@ -48,15 +48,15 @@ define("io.ox/preview/util",
                 list.name = $.trim(result[3]);
             }
         }
-        
+
         this.getPrimaryType = function () {
             return primaryType;
         };
-        
+
         this.getSubType = function () {
             return subType;
         };
-        
+
         this.getBaseType = function () {
             // need both
             if (primaryType === null || subType === null) {
@@ -64,15 +64,15 @@ define("io.ox/preview/util",
             }
             return primaryType + "/" + subType;
         };
-        
+
         this.getParameter = function (name) {
             return list[name] || null;
         };
-        
+
         this.getParameterList = function () {
             return list;
         };
-        
+
         this.previewSupported = function (type) {
             if (type === undefined) {
                 // using the base type from the constructor
@@ -87,20 +87,20 @@ define("io.ox/preview/util",
             return false;
         };
     };
-    
+
     var FileTypesMap = {
-        
+
         getFileType : function (filename) {
             if (filename === undefined) {
                 return null;
             }
             var fileEnding = filename.match(/\.([a-z0-9]{2,})$/i);
             if (fileEnding.length >= 2) {
-                return fileEnding[1];
+                return String(fileEnding[1]).toLowerCase();
             }
             return null;
         },
-        
+
         getContentType : function (filename) {
             var fileType = this.getFileType(filename);
             if (filename === undefined || fileType === null) {
@@ -108,7 +108,7 @@ define("io.ox/preview/util",
             }
             return previewMap[fileType];
         },
-        
+
         /**
          * @param type {String} Can be both, either a filename or file type
          */
