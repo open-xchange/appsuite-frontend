@@ -509,10 +509,12 @@ define("io.ox/mail/write/view-main",
     handleFileSelect = function (e, view) {
 
         if (Modernizr.file) {
+
             // look for linked attachments or dropped files
-            var item = $(this).prop('attachment') || $(this).prop('file'),
+            var item = $(e.currentTarget).prop('attachment') || $(e.currentTarget).prop('file'),
                 list = item ? [item] : e.target.files;
             // loop over all attachments
+
             _(list).each(function (file) {
                 view.sections.attachments.append(
                     $('<div>').addClass('section-item file')
