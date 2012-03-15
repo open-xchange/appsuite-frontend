@@ -181,7 +181,7 @@ define.async('io.ox/mail/write/main',
                 )
             );
 
-            var dropZone = upload.dnd.createDropZone({'type': 'multiple'});
+            var dropZone = upload.dnd.createDropZone({'type': 'single'});
             dropZone.on('drop', function (e, file) {
                 app.getView().form.find('input[type=file]').last()
                     .prop('file', file)
