@@ -174,7 +174,7 @@ define("io.ox/files/view-detail",
         layout: "Grid",
         index: 400,
         isEnabled: function (file) {
-            return file.version > 1;
+            return file.current_version && file.version > 1;
         }
     });
 

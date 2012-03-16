@@ -136,12 +136,39 @@ define("io.ox/core/extPatterns/layouts", ["io.ox/core/extensions"], function (ex
         self.trigger = function () {
             var args = $.makeArray(arguments),
                 $node = args.shift(),
-                type = args.shift();
-            _(sublayouts).each(function (layout, sectionId) {
+                type = args.shift(),
+                reflow = false;
+            
+            point.each(function (sectionDef) {
+                if (reflow) {
+                    return;
+                }
+                var layout = sublayouts[sectionDef.id];
+                var $node = nodes[sectionDef.id];
+                var enabled = true;
+                
+                if (sectionDef.isEnabled) {
+                    enabled = sectionDef.isEnabled.apply(sectionDef, args);
+                    if ($node && !enabled) {
+                        $node.empty().remove();
+                        return;
+                    }
+                    if (!$node && enabled) {
+                        // Redraw everything;
+                        reflow = true;
+                        return;
+                    }
+                }
+                
                 if (layout.trigger) {
-                    layout.trigger.apply(layout, _([nodes[sectionId], type, args]).flatten()); // TODO: Rethink _.flatten, destroys regularly passed arrays
+                    layout.trigger.apply(layout, _([$node, type, args]).flatten()); // TODO: Rethink _.flatten, destroys regularly passed arrays
                 }
             });
+            
+            if (reflow) {
+                $node.empty();
+                self.draw.apply($node, args);
+            }
         };
         
         self.destroy = function () {
