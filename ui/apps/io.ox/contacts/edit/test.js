@@ -230,7 +230,7 @@ define("io.ox/contacts/edit/test",
 
                     j.waitsFor(function () {
                         formFrame =  $('.contact-detail.edit[data-property="' + phrase + '"]');
-                        buttonSave = formFrame.find('.default-action.saveButton[data-action="save"]');
+                        buttonSave = formFrame.find('.btn.btn-primary[data-action="save"]');
                         if (buttonSave[0]) {
                             return true;
                         }
@@ -241,7 +241,7 @@ define("io.ox/contacts/edit/test",
 //                        formFrame.find('input[data-property="first_name"]').val('test').trigger('change');
 
                         _.each(testObjectLong, function (val, property) {
-                            console.log(property + ' ' + val);
+//                            console.log(property + ' ' + val);
                             formFrame.find('input[data-property="' + property + '"]').val(val).trigger('change');
                         });
                         buttonSave.triggerHandler('click');
@@ -629,7 +629,7 @@ define("io.ox/contacts/edit/test",
 
                     app.launch();
                     j.runs(function () {
-                        ext.point("io.ox/contacts/edit/form/contact-phone").disable("cellular_telephone1");
+                        ext.point("io.ox/contacts/edit/form/contact_phone").disable("cellular_telephone1");
                     });
 
                     var grid = app.getGrid();
@@ -669,7 +669,6 @@ define("io.ox/contacts/edit/test",
 
                     j.runs(function () {
                         testfield = $('input[data-property="cellular_telephone1"]');
-                        console.log(testfield);
                         j.expect(testfield[0]).toBeFalsy();
                     });
 

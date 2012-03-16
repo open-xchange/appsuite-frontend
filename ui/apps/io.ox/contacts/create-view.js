@@ -27,7 +27,7 @@ define('io.ox/contacts/create-view',
         var button = $('<a>').attr({
             'data-action': 'save',
             'href': '#'
-        }).addClass('button default-action saveButton').text('Save').on('click', function () {
+        }).addClass('btn btn-primary').text(gt('Save')).on('click', function () {
             options.saveForm();
         });
 
@@ -53,7 +53,7 @@ define('io.ox/contacts/create-view',
                 reader = new FileReader();
             reader.onload = (function (theFile) {
                 return function (e) {
-                    $('.picture').css('background-image', 'url(' + e.target.result + ')');
+                    $('.create-contact .picture').css('background-image', 'url(' + e.target.result + ')');
                 };
             }(file[0]));
             reader.readAsDataURL(file[0]);
@@ -86,31 +86,44 @@ define('io.ox/contacts/create-view',
                         'display_name',
                         'email1',
                         'cellular_telephone1'],
-                 header = self.createSection();
+                header = self.createSection(),
+                formtitle = self.createSectionTitle({
+                    'text': gt('Add new contact')
+                });
+
+            var updateDisplayName = function () {
+                console.log('update displayname');
+                self.getModel().set('display_name', util.getFullName(self.getModel().get()));
+            };
+
+            this.getModel().on('change:title change:first_name change:last_name', updateDisplayName);
+
             header.addClass('formheader').append(picDummy(), picform(self));
+            self.node.append(formtitle);
             self.node.append(header);
             _.each(meta, function (field) {
                 var myId = _.uniqueId('c'),
                 sectiongroup = self.createSectionGroup(),
                 model = self.getModel(),
+                label = model.schema.getFieldLabel(field),
                 fieldtype = model.schema.getFieldType(field),
                 createFunction;
 
                 switch (fieldtype) {
                 case "string":
-                    createFunction = self.createTextField({property: field, id: myId, classes: 'nice-input'});
+                    createFunction = self.createTextField({property: field, id: myId, classes: 'form-vertical'});
                     break;
                 case "pastDate":
-                    createFunction = self.createDateField({property: field, id: myId, classes: 'nice-input'});
+                    createFunction = self.createDateField({property: field, id: myId, classes: 'form-vertical'});
                     break;
                 default:
-                    createFunction = self.createTextField({property: field, id: myId, classes: 'nice-input'});
+                    createFunction = self.createTextField({property: field, id: myId, classes: 'form-vertical'});
                     break;
                 }
 
                 sectiongroup.append(self.createLabel({
                     id: myId,
-                    text: gt(field)
+                    text: gt(label)
                 }), createFunction);
 
                 self.node.append(sectiongroup);
@@ -121,7 +134,6 @@ define('io.ox/contacts/create-view',
                 console.log(arguments);
                 $('#myGrowl').jGrowl(err.message, {header: 'Make an educated guess!', sticky: false});
             });
-
             return self;
         },
 

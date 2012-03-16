@@ -113,6 +113,10 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             return this.get(key).format;
         },
 
+        getFieldLabel: function (key) {
+            return this.get(key).label;
+        },
+
         isTrimmed: function (key) {
             return this.get(key).trim !== false;
         },
@@ -266,7 +270,6 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
 //                    console.log(_.difference(value, previous[key]));
 //                    changes[key] = 'dirty';
                 }
-                console.log(changes);
             });
             return changes;
         },

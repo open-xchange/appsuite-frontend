@@ -186,6 +186,33 @@
     background-size: cover;
 }
 
+.create-contact .sectiontitle {
+	margin: 0px 0 15px 0;
+	font-size: 1.25em;
+	color: #888;
+	font-family: OpenSans, Helvetica, Arial, sans-serif;
+	font-weight: 200;
+	line-height: 1.15em;
+}
+
+.create-contact div.io-ox-label {
+	margin-right: 15px;
+	padding-top: 7px;
+	width: 100px;
+	float:left;
+	text-align: right;
+	font-size: 0.9em;
+    line-height: 1em;
+    color: #888;
+    font-weight: normal;
+    vertical-align: top;
+}
+
+.btn.btn-inverse {
+	vertical-align: top;
+}
+
+
 /*update form*/
 
 /*.edit1 {
@@ -330,10 +357,11 @@ input#image1 {
 .contact-detail.edit div.input.inline.nr0 input[type="text"] {
 	width: 75px;
 	margin-right: 10px;
+	float: left;
 }
 
 .contact-detail.edit div.input.inline.nr1 input[type="text"] {
-	width: 109px;
+	width: 106px;
 }
 
 .contact-detail.edit .input > input[type="text"]:focus{
@@ -347,6 +375,10 @@ input#image1 {
 	width: 150px;
 	float:left;
 	text-align: right;
+}
+
+.contact-detail.edit div.io-ox-label label{
+	display: inline;
 }
 
 .contact-detail.edit div.inlinelabel {
@@ -385,7 +417,7 @@ input#image1 {
 	display: block;
 }
 
-.contact-detail.edit .section.formheader .saveButton{
+.contact-detail.edit .section.formheader .btn.btn-primary{
 	float: right;
 }
 

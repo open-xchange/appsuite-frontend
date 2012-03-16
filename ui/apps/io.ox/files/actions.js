@@ -11,9 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/files/actions',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links'], function (ext, links) {
+define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/links", "gettext!io.ox/files/files"], function (ext, links, gt) {
 
     'use strict';
 
@@ -60,6 +58,16 @@ define('io.ox/files/actions',
         }
     });
 
+    new Action('io.ox/files/actions/edit', {
+        id: 'upload',
+        requires: function (e) {
+            return true; //e.collection.has('modify');
+        },
+        action: function (context) {
+            context.detailView.edit();
+        }
+    });
+
     new Action('io.ox/files/actions/open', {
         id: 'open',
         requires: 'some',
@@ -89,9 +97,9 @@ define('io.ox/files/actions',
         multiple: function (list) {
             require(['io.ox/files/api', 'io.ox/core/tk/dialogs'], function (api, dialogs) {
                 new dialogs.ModalDialog()
-                    .text('Are you really sure about your decision? Are you aware of all consequences you have to live with?')
-                    .addButton('cancel', 'No, rather not')
-                    .addButton('delete', 'Shut up and delete it!', undefined, { classes: 'btn-primary' })
+                    .text(gt("Are you really sure about your decision? Are you aware of all consequences you have to live with?"))
+                    .addButton("cancel", gt("No, rather not"))
+                    .addButton("delete", gt("Shut up and delete it!"), undefined, { classes: 'btn-primary' })
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
@@ -101,6 +109,26 @@ define('io.ox/files/actions',
             });
         }
     });
+
+    // edit mode actions
+    ext.point("io.ox/files/actions/edit/save").extend({
+        id: "save",
+        action: function (context) {
+            require(["io.ox/files/api"], function (api) {
+                var updatedFile = context.detailView.getModifiedFile();
+                api.update(updatedFile).done();
+                context.detailView.endEdit();
+            });
+        }
+    });
+
+    ext.point("io.ox/files/actions/edit/cancel").extend({
+        id: "cancel",
+        action: function (context) {
+            context.detailView.endEdit();
+        }
+    });
+
 
     // version specific actions
 
@@ -122,9 +150,9 @@ define('io.ox/files/actions',
         action: function (data) {
             require(['io.ox/files/api', 'io.ox/core/tk/dialogs'], function (api, dialogs) {
                 new dialogs.ModalDialog()
-                    .text('Are you really sure about your decision? Are you aware of all consequences you have to live with?')
-                    .addButton('cancel', 'No, rather not')
-                    .addButton('delete', 'Shut up and delete it!', undefined, { classes: 'btn-primary' })
+                    .text(gt("Are you really sure about your decision? Are you aware of all consequences you have to live with?"))
+                    .addButton("cancel", gt("No, rather not"))
+                    .addButton("delete", gt("Shut up and delete it!"), undefined, { classes: 'btn-primary' })
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
@@ -140,45 +168,69 @@ define('io.ox/files/actions',
 
     ext.point('io.ox/files/links/toolbar').extend(new links.Link({
         index: 100,
-        id: 'upload',
-        label: 'Upload',
-        ref: 'io.ox/files/actions/upload'
+        id: "upload",
+        label: gt("Upload"),
+        ref: "io.ox/files/actions/upload"
     }));
 
     ext.point('io.ox/files/links/toolbar').extend(new links.Link({
         index: 200,
-        id: 'share',
-        label: 'Share',
-        ref: 'io.ox/files/actions/share'
+        id: "share",
+        label: gt("Share"),
+        ref: "io.ox/files/actions/share"
     }));
 
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'open',
+    ext.point("io.ox/files/links/inline").extend(new links.Link({
+        id: "edit",
+        index: 50,
+        label: gt("Edit"),
+        ref: "io.ox/files/actions/edit"
+    }));
+
+    ext.point("io.ox/files/links/inline").extend(new links.Link({
+        id: "open",
         index: 100,
-        label: 'Open',
-        ref: 'io.ox/files/actions/open'
+        label: gt("Open"),
+        ref: "io.ox/files/actions/open"
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'download',
         index: 200,
-        label: 'Download',
-        ref: 'io.ox/files/actions/download'
+        label: gt("Download"),
+        ref: "io.ox/files/actions/download"
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'send',
         index: 300,
-        label: 'Send by E-Mail',
-        ref: 'io.ox/files/actions/send'
+        label: gt("Send by E-Mail"),
+        ref: "io.ox/files/actions/send"
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'delete',
         index: 400,
-        label: 'Delete',
-        ref: 'io.ox/files/actions/delete',
-        special: 'danger'
+        label: gt("Delete"),
+        ref: "io.ox/files/actions/delete"
+    }));
+
+    // edit links
+
+    ext.point("io.ox/files/links/edit/inline").extend(new links.Button({
+        id: "save",
+        index: 100,
+        label: gt("Save"),
+        ref: "io.ox/files/actions/edit/save",
+        cssClasses: "btn btn-primary"
+    }));
+
+    ext.point("io.ox/files/links/edit/inline").extend(new links.Button({
+        id: "cancel",
+        index: 200,
+        label: gt("Cancel"),
+        ref: "io.ox/files/actions/edit/cancel",
+        cssClasses: "btn"
     }));
 
     // version links
@@ -187,22 +239,22 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'open',
         index: 100,
-        label: 'Open',
-        ref: 'io.ox/files/actions/open'
+        label: gt("Open"),
+        ref: "io.ox/files/actions/open"
     }));
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'download',
         index: 200,
-        label: 'Download',
-        ref: 'io.ox/files/actions/download'
+        label: gt("Download"),
+        ref: "io.ox/files/actions/download"
     }));
 
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'makeCurrent',
         index: 250,
-        label: 'Make this the current version',
-        ref: 'io.ox/files/versions/actions/makeCurrent',
+        label: gt("Make this the current version"),
+        ref: "io.ox/files/versions/actions/makeCurrent",
         isEnabled: function (file) {
             return !file.current_version;
         }
@@ -211,9 +263,9 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/versions/links/inline').extend(new links.Link({
         id: 'delete',
         index: 300,
-        label: 'Delete version',
-        ref: 'io.ox/files/versions/actions/delete',
-        special: 'danger'
+        label: gt("Delete version"),
+        ref: "io.ox/files/versions/actions/delete",
+        special: "danger"
     }));
 
     // Drag and Drop
@@ -221,7 +273,7 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/dnd/actions').extend({
         id: 'create',
         index: 10,
-        label: 'Drop here to upload a new file',
+        label: gt("Drop here to upload a new file"),
         action: function (file, app) {
             app.queues.create.offer(file);
         }
@@ -235,9 +287,15 @@ define('io.ox/files/actions',
         },
         label: function (app) {
             if (app.currentFile.title) {
-                return 'Drop here to upload a new version of "' + app.currentFile.title + '"';
+                /**
+                  FIXME: Once gt.format is available
+                return gt.format(
+                    //#. %1$s is the title of the file
+                    gt("Drop here to upload a new version of '%1$s'"), app.currentFile.title);
+                    **/
+                return "Drop here to upload a new version of '" + app.currentFile.title + "'";
             } else {
-                return 'Drop here to upload a new version';
+                return gt("Drop here to upload a new version");
             }
         },
         action: function (file, app) {
