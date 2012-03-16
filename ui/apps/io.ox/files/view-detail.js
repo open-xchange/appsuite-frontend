@@ -84,7 +84,7 @@ define("io.ox/files/view-detail",
                                 hideSection = false;
                                 extension.deactivate.call($node, file, self, extension);
                             } else {
-                                // Dim the extension
+                                // Dim the extension, poor mans 'deactivate'
                                 if ($node) {
                                     $node.css({opacity: "0.5" });
                                 }
@@ -193,7 +193,7 @@ define("io.ox/files/view-detail",
         },
         edit: function (file) {
             var size = this.find(".title").css("font-size") || "";
-            this.find(".title").empty().append($("<label>").text("Title:")).append($("<input type='text' name='title'>").css({fontSize: size, height: size}).val(file.title));
+            this.find(".title").empty().append($("<label>").text("Title:")).append($("<input type='text' name='title'>").css({fontSize: size, height: size, width: "100%"}).val(file.title));
         },
         endEdit: function (file) {
             this.find(".title").empty().text(file.title);
