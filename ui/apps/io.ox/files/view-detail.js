@@ -44,10 +44,6 @@ define("io.ox/files/view-detail",
             });
         }
         
-        $element.on("dblclick", function () {
-            self.edit();
-        });
-        
         var blacklisted = {
             "refresh.list": true
         };
@@ -521,7 +517,7 @@ define("io.ox/files/view-detail",
                 self.empty().append($mainContent);
             }
 
-            // Then let's fetch all versions and update link and table accordingly
+            // Then let's fetch all versions and update the table accordingly
             if (!allVersions) {
                 filesAPI.versions({
                     id: file.id

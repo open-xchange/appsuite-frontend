@@ -70,7 +70,7 @@ define("io.ox/files/main",
             .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main);
 
-
+        
         // Grid
         grid = new VGrid(left);
 
@@ -143,6 +143,16 @@ define("io.ox/files/main",
                 currentDetailView.trigger.apply(currentDetailView, args);
             }
         });
+        
+        // Toggle Edit Mode
+        
+        right.on("dblclick", function () {
+            if (currentDetailView) {
+                currentDetailView.edit();
+            }
+        });
+        
+        
 
         // Uploads
         
