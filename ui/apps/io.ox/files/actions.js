@@ -46,9 +46,9 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
 
     ext.point("io.ox/files/actions/download").extend({
         id: "download",
-        action: function (file) {
-            window.open(file.documentUrl + "&content_type=application/octet-stream" +
-                    "&content_disposition=attachment", file.title);
+        action: function (data) {
+            window.open(data.file.documentUrl + "&content_type=application/octet-stream" +
+                    "&content_disposition=attachment", data.file.title);
         }
     });
     
@@ -64,15 +64,15 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
 
     ext.point("io.ox/files/actions/open").extend({
         id: "open",
-        action: function (file) {
-            window.open(file.documentUrl, file.title);
+        action: function (data) {
+            window.open(data.file.documentUrl, data.file.title);
         }
     });
 
     ext.point("io.ox/files/actions/send").extend({
         id: "send",
-        action: function (file) {
-            alert("Zzzzzush: " + file.title);
+        action: function (data) {
+            alert("Zzzzzush: " + data.file.title);
         }
     });
 
@@ -87,7 +87,7 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
                     .show()
                     .done(function (action) {
                         if (action === "delete") {
-                            api.remove(data);
+                            api.remove(data.file);
                         }
                     });
             });
