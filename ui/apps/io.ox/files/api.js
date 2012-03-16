@@ -17,8 +17,9 @@
 define("io.ox/files/api",
     ["io.ox/core/http",
      "io.ox/core/api/factory",
-     "io.ox/core/config"
-    ], function (http, apiFactory, config) {
+     "io.ox/core/config",
+     "io.ox/core/cache"
+    ], function (http, apiFactory, config, cache) {
 
     "use strict";
 
@@ -51,6 +52,8 @@ define("io.ox/files/api",
             }
         }
     });
+    
+    api.caches.versions = new cache.SimpleCache("infostore-versions", true);
 
     function fallbackForOX6BackendREMOVEME(htmlpage) {
         // Extract the JSON text
@@ -133,6 +136,7 @@ define("io.ox/files/api",
                 // clear folder cache
                 api.caches.all.remove(options.folder);
                 api.caches.get.remove({id: options.id, folder: options.folder});
+                api.caches.versions.remove(options.id);
                 api.trigger("create.version update", {id: options.id, folder: options.folder});
 
                 var tmp = fallbackForOX6BackendREMOVEME(data);
@@ -147,7 +151,8 @@ define("io.ox/files/api",
             data: file
         }).done(function () {
             api.caches.all.remove(file.folder);
-            api.caches.get.remove(file);
+            api.caches.versions.remove(file.id);
+            api.caches.get.remove({id: file.id, folder: file.folder});
             api.trigger("update", {id: file.id, folder: file.folder});
         });
     };
@@ -182,10 +187,18 @@ define("io.ox/files/api",
             throw new Error("Please specify an id for which to fetch versions");
         }
         getOptions.id = options.id;
-        return http.GET({
-            module: "infostore",
-            params: getOptions,
-            appendColumns: true
+        return api.caches.versions.contains(options.id).pipe(function (check) {
+            if (check) {
+                return api.caches.versions.get(options.id);
+            } else {
+                return http.GET({
+                    module: "infostore",
+                    params: getOptions,
+                    appendColumns: true
+                }).pipe(function (data) {
+                    api.caches.versions.add(options.id, data);
+                });
+            }
         });
     };
 
@@ -201,7 +214,8 @@ define("io.ox/files/api",
             data: [version.version]
         }).done(function () {
             api.caches.all.remove(version.folder);
-            api.caches.get.remove(version);
+            api.caches.versions.remove(version.id);
+            api.caches.get.remove({id: version.id, folder: version.folder});
             api.trigger("delete.version update", {id: version.id, folder: version.folder, version: version.version});
         });
     };
