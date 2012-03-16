@@ -45,6 +45,11 @@ define('io.ox/core/tk/forms',
             self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
         },
         selectChangeByModel = function (e, value) {
+            // small fix for headerdisplay in contact edit
+            if ($('span[data-property="display_name"]').text() === '') {
+                var spacer = '&nbsp;';
+                $('span[data-property="display_name"]').html(spacer);
+            }
             $(this).val(value);
         },
 

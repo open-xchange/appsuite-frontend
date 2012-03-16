@@ -101,7 +101,8 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
                 data: { action: action },
                 click: process,
                 dataaction: dataaction,
-                purelink: options.purelink
+                purelink: options.purelink,
+                inverse: options.inverse
             };
 
             if (options.type) {

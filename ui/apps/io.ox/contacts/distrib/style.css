@@ -81,10 +81,12 @@
 	width: 290px;
 	margin-left: 0px;
 	margin-right: 25px;
+	margin-bottom: 200px;
 }
 
 .create-distributionlist .fieldset.mail{
 	margin-left:  20px;
+	margin-bottom: 200px;
 	width: 230px;
 }
 
