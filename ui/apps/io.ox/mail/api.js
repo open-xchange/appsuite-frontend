@@ -219,21 +219,47 @@ define("io.ox/mail/api",
             });
     };
 
-    api.update = function (obj, data) {
-        return http.PUT({
-            module: 'mail',
-            params: {
-                action: 'update',
-                id: obj.id,
-                folder: obj.folder || obj.folder_id
-            },
-            data: data
-        }).pipe(function (data) {
+    api.update = function (list, data) {
+        // allow single object and arrays
+        list = _.isArray(list) ? list : [list];
+        // pause http layer
+        http.pause();
+        // process all updates
+        _(list).map(function (obj) {
+            return http.PUT({
+                module: 'mail',
+                params: {
+                    action: 'update',
+                    id: obj.id,
+                    folder: obj.folder || obj.folder_id
+                },
+                data: data,
+                appendColumns: false
+            })
+            .pipe(function () {
+                // update flags locally?
+                if ('flags' in data && 'value' in data && 'flags' in obj) {
+                    if (data.value) {
+                        obj.flags = obj.flags | data.flags;
+                    } else {
+                        obj.flags = obj.flags & ~data.flags;
+                    }
+                    return $.when(
+                         api.caches.list.merge(obj),
+                         api.caches.get.merge(obj)
+                    );
+                } else {
+                    // remove affected object from caches
+                    return $.when(
+                        api.caches.get.remove(obj),
+                        api.caches.list.remove(obj)
+                    );
+                }
+            });
+        });
+        // resume & trigger refresh
+        return http.resume().done(function () {
             api.trigger('refresh.list');
-            if (ox.online) {
-                ox.trigger("refresh");
-            }
-            return data;
         });
     };
 

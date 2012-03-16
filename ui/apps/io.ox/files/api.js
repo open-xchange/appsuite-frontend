@@ -189,20 +189,28 @@ define("io.ox/files/api",
         });
     };
 
-    api.addDocumentLink = function (file) {
-        file.documentUrl = ox.apiRoot + "/infostore?action=document&id=" + file.id +
+    api.getUrl = function (file, mode) {
+        var url = ox.apiRoot + "/infostore?action=document&id=" + file.id +
             "&folder=" + file.folder_id + "&version=" + file.version + "&session=" + ox.session;
+        switch (mode) {
+        case 'open':
+            return url + '&content_disposition=inline';
+        case 'download':
+            return url + '&content_type=application/octet-stream&content_disposition=attachment';
+        default:
+            return url;
+        }
     };
 
     api.detach = function (version) {
         return http.PUT({
             module: "infostore",
-            params: {action: "detach", id: version.id, folder: version.folder, timestamp: version.last_modified},
+            params: { action: "detach", id: version.id, folder: version.folder, timestamp: version.last_modified },
             data: [version.version]
         }).done(function () {
             api.caches.all.remove(version.folder);
             api.caches.get.remove(version);
-            api.trigger("delete.version update", {id: version.id, folder: version.folder, version: version.version});
+            api.trigger("delete.version update", { id: version.id, folder: version.folder, version: version.version });
         });
     };
 

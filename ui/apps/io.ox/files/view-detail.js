@@ -29,7 +29,7 @@ define("io.ox/files/view-detail",
     var supportsDragOut = Modernizr.draganddrop && _.browser.Chrome;
 
     var draw = function (file) {
-        filesAPI.addDocumentLink(file);
+
         var $element = $("<div>").addClass("file-details view"),
             sections = new layouts.Sections({
                 ref: "io.ox/files/details/sections"
@@ -58,7 +58,6 @@ define("io.ox/files/view-detail",
                 var self = this;
                 if (evt && evt.id && evt.id === file.id && type !== "delete") {
                     filesAPI.get({id: evt.id, folder: evt.folder}).done(function (file) {
-                        filesAPI.addDocumentLink(file);
                         self.file = file;
                         sections.trigger($element, type, file);
                     });
@@ -232,7 +231,7 @@ define("io.ox/files/view-detail",
                 name: file.filename,
                 mimetype: file.file_mimetype,
                 size: file.file_size,
-                dataURL: file.documentUrl
+                dataURL: filesAPI.getUrl(file)
             };
             var prev = new Preview(fileDescription);
             return prev.supportsPreview();
@@ -245,9 +244,9 @@ define("io.ox/files/view-detail",
                     name: file.filename,
                     mimetype: file.file_mimetype,
                     size: file.file_size,
-                    dataURL: file.documentUrl
+                    dataURL: filesAPI.getUrl(file)
                 },
-                link = $('<a>', { href: ox.abs + desc.dataURL, target: '_blank', draggable: true })
+                link = $('<a>', { href: filesAPI.getUrl(file, 'open'), target: '_blank', draggable: true })
                     .addClass('dragout')
                     .attr('data-downloadurl', desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.dataURL),
                 self = this.hide(),
@@ -256,7 +255,7 @@ define("io.ox/files/view-detail",
             if (prev.supportsPreview()) {
                 prev.appendTo(link.appendTo(self));
                 if (supportsDragOut) {
-                    link.attr('title', 'Drag to desktop');
+                    link.attr('title', 'Click to open. Drag on your desktop to download.');
                 }
                 self.show();
             }
@@ -383,7 +382,6 @@ define("io.ox/files/view-detail",
             function drawAllVersions(allVersions) {
                 $mainContent.empty();
                 _.chain(allVersions).sort(versionSorter).each(function (version) {
-                    filesAPI.addDocumentLink(version);
                     var $entryRow = $("<div>")
                             .addClass("row-fluid version " + (version.current_version ? 'current' : ''))
                             .append(

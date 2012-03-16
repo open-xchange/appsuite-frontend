@@ -104,11 +104,10 @@ define("io.ox/core/api/factory",
 
             getList: function (ids, useCache) {
                 // be robust
-                ids = ids || [];
+                ids = ids ? [].concat(ids) : [];
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
-                // cache miss?
-
+                // async getter
                 var getter = function () {
                     return http.fixList(ids, http.PUT({
                         module: o.module,
@@ -122,11 +121,12 @@ define("io.ox/core/api/factory",
                         caches.get.merge(data);
                     });
                 };
-
+                // empty?
                 if (ids.length === 0) {
                     return $.Deferred().resolve([]);
                 } else {
                     if (useCache) {
+                        // cache miss?
                         return caches.list.contains(ids).pipe(function (check) {
                             if (check) {
                                 return caches.list.get(ids);
