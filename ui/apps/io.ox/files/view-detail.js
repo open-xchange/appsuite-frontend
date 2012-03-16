@@ -44,10 +44,6 @@ define("io.ox/files/view-detail",
             });
         }
         
-        $element.on("dblclick", function () {
-            self.edit();
-        });
-        
         var blacklisted = {
             "refresh.list": true
         };
@@ -84,7 +80,7 @@ define("io.ox/files/view-detail",
                                 hideSection = false;
                                 extension.deactivate.call($node, file, self, extension);
                             } else {
-                                // Dim the extension
+                                // Dim the extension, poor mans 'deactivate'
                                 if ($node) {
                                     $node.css({opacity: "0.5" });
                                 }
@@ -174,7 +170,7 @@ define("io.ox/files/view-detail",
         layout: "Grid",
         index: 400,
         isEnabled: function (file) {
-            return file.version > 1;
+            return file.current_version && file.version > 1;
         }
     });
 
@@ -193,7 +189,7 @@ define("io.ox/files/view-detail",
         },
         edit: function (file) {
             var size = this.find(".title").css("font-size") || "";
-            this.find(".title").empty().append($("<label>").text("Title:")).append($("<input type='text' name='title'>").css({fontSize: size, height: size}).val(file.title));
+            this.find(".title").empty().append($("<label>").text("Title:")).append($("<input type='text' name='title'>").css({fontSize: size, height: size, width: "100%"}).val(file.title));
         },
         endEdit: function (file) {
             this.find(".title").empty().text(file.title);
@@ -521,7 +517,7 @@ define("io.ox/files/view-detail",
                 self.empty().append($mainContent);
             }
 
-            // Then let's fetch all versions and update link and table accordingly
+            // Then let's fetch all versions and update the table accordingly
             if (!allVersions) {
                 filesAPI.versions({
                     id: file.id
