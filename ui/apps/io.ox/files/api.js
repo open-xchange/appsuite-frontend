@@ -57,10 +57,8 @@ define("io.ox/files/api",
 
     function fallbackForOX6BackendREMOVEME(htmlpage) {
         // Extract the JSON text
-        console.log("HTMLPAGE", htmlpage);
         if (typeof htmlpage === 'string') {
             var matches = /\((\{.*?\})\)/.exec(htmlpage);
-            console.log(matches);
             return matches && matches[1] ? JSON.parse(matches[1]) : JSON.parse(htmlpage);
         } else {
             return htmlpage;
