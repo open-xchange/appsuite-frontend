@@ -59,9 +59,10 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
     });
 
     new Action('io.ox/files/actions/edit', {
-        id: 'upload',
+        id: 'edit',
         requires: function (e) {
-            return true; //e.collection.has('modify');
+            window.COLL = e.collection;
+            return e.collection.has('modify');
         },
         action: function (context) {
             context.detailView.edit();

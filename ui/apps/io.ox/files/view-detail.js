@@ -304,7 +304,8 @@ define("io.ox/files/view-detail",
             draw: function (file, detailView, extension) {
                 regularLinks.draw.call(this, {
                     file: file,
-                    detailView: detailView
+                    detailView: detailView,
+                    folder_id: file.folder_id // collection needs this to work!
                 });
             },
             edit: function (file, detailView, extension) {
