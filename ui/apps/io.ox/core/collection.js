@@ -90,6 +90,7 @@ define('io.ox/core/collection',
                             // folder unknown
                             props.unknown = true;
                             props.read = props.modify = props['delete'] = props.create = false;
+                            console.error("AHA!", folder);
                             break;
                         }
                     }

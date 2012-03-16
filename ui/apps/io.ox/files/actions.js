@@ -61,7 +61,6 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
     new Action('io.ox/files/actions/edit', {
         id: 'edit',
         requires: function (e) {
-            console.log("has.modify?", e.collection.has('modify'));
             return e.collection.has('modify');
         },
         action: function (context) {
