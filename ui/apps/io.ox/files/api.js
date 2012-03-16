@@ -197,6 +197,7 @@ define("io.ox/files/api",
                     appendColumns: true
                 }).pipe(function (data) {
                     api.caches.versions.add(options.id, data);
+                    return data;
                 });
             }
         });
