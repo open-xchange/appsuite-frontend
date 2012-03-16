@@ -22,7 +22,8 @@ define("io.ox/files/view-detail",
      "io.ox/files/actions",
      "io.ox/files/api",
      "io.ox/preview/main",
-     "io.ox/core/tk/upload"], function (ext, links, layouts, i18n, Event, actions, filesAPI, Preview, upload) {
+     "io.ox/core/tk/upload",
+     "gettext!io.ox/files/files"], function (ext, links, layouts, i18n, Event, actions, filesAPI, Preview, upload, gt) {
 
     "use strict";
 
@@ -30,25 +31,25 @@ define("io.ox/files/view-detail",
 
     var draw = function (file) {
         filesAPI.addDocumentLink(file);
-        var $element = $("<div>").addClass("file-details view"),
+        var self,
+            mode = 'display',
+            $element = $("<div>").addClass("file-details view"),
             sections = new layouts.Sections({
                 ref: "io.ox/files/details/sections"
             });
 
-        // add drog-out delegate
+        // add drag-out delegate
         if (supportsDragOut) {
             $element.on('dragstart', '.dragout', function (e) {
                 e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
             });
         }
-
-        sections.draw.call($element, file);
-
+        
         var blacklisted = {
             "refresh.list": true
         };
 
-        return {
+        self = {
             element: $element,
             file: file,
             trigger: function (type, evt) {
@@ -64,12 +65,84 @@ define("io.ox/files/view-detail",
                     });
                 }
             },
+            edit: function () {
+                if (mode === 'edit') {
+                    return;
+                }
+                mode = 'edit';
+                sections.each(function (sublayout, $sectionNode) {
+                    var hideSection = true;
+                    sublayout.each(function (extension, $node) {
+                        if (extension.edit) {
+                            hideSection = false;
+                            extension.edit.call($node, file, self, extension);
+                        } else {
+                            if (extension.deactivate) {
+                                hideSection = false;
+                                extension.deactivate.call($node, file, self, extension);
+                            } else {
+                                // Dim the extension, poor mans 'deactivate'
+                                if ($node) {
+                                    $node.css({opacity: "0.5" });
+                                }
+                            }
+                        }
+                    });
+                    
+                    if (hideSection) {
+                        $sectionNode.fadeOut();
+                        $sectionNode.data("io-ox-files-hidden", true);
+                    }
+                    
+                });
+            },
+            endEdit: function () {
+                if (mode === 'display') {
+                    return;
+                }
+                mode = 'display';
+                sections.each(function (sublayout, $sectionNode) {
+                    sublayout.each(function (extension, $node) {
+                        if (extension.endEdit) {
+                            extension.endEdit.call($node, file, self, extension);
+                        } else {
+                            if (extension.activate) {
+                                extension.activate.call($node, file, self, extension);
+                            } else {
+                                // Activate the extension
+                                if ($node) {
+                                    $node.css({opacity: "" });
+                                }
+                            }
+                        }
+                    });
+                    
+                    if ($sectionNode.data("io-ox-files-hidden")) {
+                        $sectionNode.fadeIn();
+                        $sectionNode.data("io-ox-files-hidde", false);
+                    }
+                });
+            },
+            getModifiedFile: function () {
+                sections.each(function (sublayout, $sectionNode) {
+                    sublayout.each(function (extension, $node) {
+                        if (extension.process) {
+                            extension.process.call($node, file, self, extension);
+                        }
+                    });
+                });
+                return file;
+            },
             destroy: function () {
                 sections.destroy();
                 $element.empty();
                 $element = null;
             }
         };
+        
+        sections.draw.call($element, file, self);
+
+        return self;
     };
 
     // Let's define the standard sections
@@ -87,18 +160,18 @@ define("io.ox/files/view-detail",
 
     ext.point("io.ox/files/details/sections").extend({
         id: "upload",
-        title: "Upload a new version",
+        title: gt("Upload a new version"),
         layout: "Grid",
         index: 300
     });
 
     ext.point("io.ox/files/details/sections").extend({
         id: "versions",
-        title: "Versions",
+        title: gt("Versions"),
         layout: "Grid",
         index: 400,
         isEnabled: function (file) {
-            return file.version > 1;
+            return file.current_version && file.version > 1;
         }
     });
 
@@ -114,6 +187,16 @@ define("io.ox/files/view-detail",
         index: 10,
         draw: function (file) {
             this.append($("<div>").addClass("title clear-title").text(file.title));
+        },
+        edit: function (file) {
+            var size = this.find(".title").css("font-size") || "";
+            this.find(".title").empty().append($("<label>").text(gt("Title:"))).append($("<input type='text' name='title'>").css({fontSize: size, height: size, width: "100%"}).val(file.title));
+        },
+        endEdit: function (file) {
+            this.find(".title").empty().text(file.title);
+        },
+        process: function (file) {
+            file.title = this.find("input").val();
         },
         on: {
             update: function (file) {
@@ -174,7 +257,7 @@ define("io.ox/files/view-detail",
         index: 10,
         fields: ["file_size"],
         label: function () {
-            return "Size";
+            return gt("Size");
         },
         draw: function (field, file, $element) {
             $element.text(bytesToSize(file.file_size));
@@ -186,7 +269,7 @@ define("io.ox/files/view-detail",
         index: 20,
         fields: ["version"],
         label: function (field) {
-            return "Version";
+            return gt("Version");
         },
         draw: function (field, file, $element) {
             $element.text(file.version);
@@ -198,7 +281,7 @@ define("io.ox/files/view-detail",
         index: 30,
         fields: ["last_modified"],
         label: function () {
-            return "Last Modified";
+            return gt("Last Modified");
         },
         draw: function (field, file, $element) {
             $element.text(i18n.date("fulldatetime", file.last_modified));
@@ -206,14 +289,42 @@ define("io.ox/files/view-detail",
     });
 
     // Basic Actions
+    (function () {
+        var regularLinks = new links.InlineLinks({
+            ref: 'io.ox/files/links/inline'
+        });
+        
+        var editLinks = new links.InlineLinks({
+            ref: 'io.ox/files/links/edit/inline'
+        });
+        
+        ext.point('io.ox/files/details/sections/header').extend({
+            index: 30,
+            id: 'inline-links',
+            orientation: 'right',
+            draw: function (file, detailView, extension) {
+                regularLinks.draw.call(this, {
+                    file: file,
+                    detailView: detailView
+                });
+            },
+            edit: function (file, detailView, extension) {
+                this.empty();
+                editLinks.draw.call(this, {file: file,
+                    detailView: detailView
+                });
+                
+            },
+            endEdit: function (file, detailView, extension) {
+                this.empty();
+                regularLinks.draw.call(this, {file: file,
+                    detailView: detailView
+                });
+            }
+        });
 
-    ext.point('io.ox/files/details/sections/header').extend(new links.InlineLinks({
-        index: 30,
-        id: 'inline-links',
-        ref: 'io.ox/files/links/inline',
-        orientation: 'right'
-    }));
-
+    }());
+    
 
 
     // Content Section
@@ -256,7 +367,7 @@ define("io.ox/files/view-detail",
             if (prev.supportsPreview()) {
                 prev.appendTo(link.appendTo(self));
                 if (supportsDragOut) {
-                    link.attr('title', 'Drag to desktop');
+                    link.attr('title', gt('Drag to desktop'));
                 }
                 self.show();
             }
@@ -278,10 +389,9 @@ define("io.ox/files/view-detail",
             span: 6
         },
         isEnabled: function (file) {
-            return !!file.description;
+            return true;
         },
         draw: function (file) {
-            this.addClass("description");
             this.append(
                 $("<div>")
                 .css({
@@ -289,8 +399,18 @@ define("io.ox/files/view-detail",
                     fontFamily: "monospace, 'Courier new'",
                     whiteSpace: "pre-wrap",
                     paddingRight: "2em"
-                })
-                .text(file.description));
+                }).addClass("description")
+                .text(file.description || '')
+            );
+        },
+        edit: function (file) {
+            this.find(".description").empty().append($("<label>").text(gt("Description:"))).append($("<textarea>").css({resize: 'none', width: "100%", height: "220px"}).val(file.description));
+        },
+        endEdit: function (file) {
+            this.find(".description").empty().text(file.description);
+        },
+        process: function (file) {
+            file.description = this.find("textarea").val();
         },
         on: {
             update: function (file, extension) {
@@ -318,7 +438,7 @@ define("io.ox/files/view-detail",
 
             var $button = $("<button/>").text("Upload").addClass("btn btn-primary pull-right").on("click", function () {
                 _($input[0].files).each(function (fileData) {
-                    $button.addClass("disabled").text("Uploading...");
+                    $button.addClass("disabled").text(gt("Uploading..."));
                     $commentArea.addClass("disabled");
                     $input.addClass("disabled");
                     filesAPI.uploadNewVersion({
@@ -328,7 +448,7 @@ define("io.ox/files/view-detail",
                         timestamp: file.last_modified,
                         json: {version_comment: $commentArea.val()}
                     }).done(function (data) {
-                        $button.removeClass("disabled").text("Upload new version");
+                        $button.removeClass("disabled").text(gt("Upload new version"));
                         $commentArea.removeClass("disabled");
                         $input.removeClass("disabled");
                         $comment.hide();
@@ -342,7 +462,7 @@ define("io.ox/files/view-detail",
             $("<div>").addClass("row-fluid").append($("<div>").addClass("span6").append($input)).append($("<div>").addClass("span6 pull-right").append($button)).appendTo($node);
 
             var $comment = $("<div>").addClass("row-fluid").hide().appendTo($node);
-            $comment.append($("<label>").text("Version Comment:"));
+            $comment.append($("<label>").text(gt("Version Comment:")));
             var $commentArea = $("<textarea rows='5'></textarea>").css({resize: 'none', width: "100%"}).appendTo($comment);
 
             $input.on("change", function () {
@@ -373,7 +493,7 @@ define("io.ox/files/view-detail",
         isEnabled: function (file) {
             return file.current_version && file.version > 1;
         },
-        draw: function (file, allVersions) {
+        draw: function (file, detailView, allVersions) {
             var self = this,
                 $link = $("<a>", {
                     href: '#'
@@ -398,7 +518,7 @@ define("io.ox/files/view-detail",
                 self.empty().append($mainContent);
             }
 
-            // Then let's fetch all versions and update link and table accordingly
+            // Then let's fetch all versions and update the table accordingly
             if (!allVersions) {
                 filesAPI.versions({
                     id: file.id
@@ -415,7 +535,7 @@ define("io.ox/files/view-detail",
                     id: file.id
                 }).done(function (allVersions) {
                     self.empty();
-                    extension.draw.call(self, file, allVersions);
+                    extension.draw.call(self, file, null, allVersions);
                 });
             }
         }

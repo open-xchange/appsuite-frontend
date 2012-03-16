@@ -1,4 +1,4 @@
-define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensions", "io.ox/files/api", "text!io.ox/files/views/snippets.html"], function (dialogs, ext, filesApi, snippetsHTML) {
+define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensions", "io.ox/files/api", "text!io.ox/files/views/snippets.html", "gettext!io.ox/files/files"], function (dialogs, ext, filesApi, snippetsHTML, gt) {
     
     "use strict";
     
@@ -54,6 +54,12 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         
         nodes.moreButton = $content.find(".more");
         
+        nodes.moreButton.text(
+            //#. Show more fields in the file creation dialog
+            gt("Show more..."));
+        
+        $content.find(".form-title").text(gt("Form Upload"));
+        
         // Hide all extendedFormFields
         
         $content.find(".extendedForm").hide();
@@ -107,7 +113,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
                     visibility: "hidden"
                 });
                 
-                uploadIndicator.getContentNode().append($("<div>").text("Uploading...").addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
+                uploadIndicator.getContentNode().append($("<div>").text(gt("Uploading...")).addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
                 
                 uploadIndicator.show();
                 
@@ -134,7 +140,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         id: "title",
         extendedForm: true,
         index: 10,
-        label: "Title",
+        label: gt("Title"),
         draw: function (element, state) {
             state.node = $("<input type='text' name='title'></input>");
             element.append(state.node);
@@ -152,7 +158,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         id: "url",
         extendedForm: true,
         index: 20,
-        label: "Link / URL",
+        label: gt("Link / URL"),
         draw: function (element, state) {
             state.node = $("<input type='text' name='title'></input>");
             element.append(state.node);
@@ -180,7 +186,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         id: "comment",
         extendedForm: true,
         index: 40,
-        label: "Comment",
+        label: gt("Comment"),
         draw: function (element, state) {
             state.node = $("<textarea rows='10'></textarea>").addClass("input-xlarge");
             element.append(state.node);
@@ -196,7 +202,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
     // Save
     buttonsPoint.extend({
         id: "save",
-        label: "Save",
+        label: gt("Save"),
         type: "primary",
         perform: function (fileEntry, states, cb) {
             var savedOnce = false;

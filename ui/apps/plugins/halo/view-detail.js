@@ -45,6 +45,8 @@ define("plugins/halo/view-detail",
                         } else {
                             drawn.resolve();
                         }
+                    }).fail(function (response) {
+                        $node.idle();
                     });
                 });
             }

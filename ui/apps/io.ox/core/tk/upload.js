@@ -14,13 +14,13 @@
 define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
 
     "use strict";
-    
+
     function hasLeftViewport(evt) {
         evt = evt.originalEvent || evt;
-        
+
         return evt.clientX === 0 && evt.clientY === 0;
     }
-    
+
     // We provide a few events:
     // "dragover" if someone threatens to drop a file into the window
     // "dragend" when she released the file
@@ -33,7 +33,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
         require(["less!io.ox/core/tk/upload.less"]);
         var self = this, $overlay, nodes = [], nodeGenerator, currentRow, height, showOverlay, highlightedAction, removeOverlay;
         Events.extend(this);
-        
+
         $overlay = $("<div/>").addClass("abs io-ox-dropzone-multiple-overlay");
 
         showOverlay = function () {
@@ -51,7 +51,7 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
             $overlay.detach();
             return false; // Prevent regular event handling
         };
-        
+
         // If we have more than 4 actions, do this in two columns, else do this in one column
         if (options.actions.length < 4) {
             nodeGenerator = function () {
@@ -67,11 +67,11 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                     currentRow = null;
                 } else {
                     currentRow = $("<div>").addClass("row-fluid").appendTo($overlay);
-                    
+
                     nodes.push(currentRow);
                     currentRow.append($actionTile);
                 }
-                
+
                 return $actionTile;
             };
         }
@@ -120,9 +120,9 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                 }
             });
         });
-        
-        
-        
+
+
+
         var included = false;
         this.remove = function () {
             if (!included) {
@@ -164,9 +164,9 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
                 }
             });
         };
-        
+
     }
-    
+
     // Let's define a DropZone class, where files can be dropped
     // We leave the eyecandy to calling code, but provide a few events
     // "dragover" if someone threatens to drop a file into $node
@@ -371,13 +371,14 @@ define("io.ox/core/tk/upload", ["io.ox/core/event"], function (Events) {
         dnd : {
             enabled: Modernizr.draganddrop,
             createDropZone: function (options) {
+                options = options || {};
                 if (!this.enabled) {
                     return new DisabledDropZone(options.node);
                 }
                 if (options.type === 'multiple') {
-                    return new DropZone(options.node);
-                } else {
                     return new MultiDropZone(options);
+                } else {
+                    return new DropZone(options.node);
                 }
             }
         },

@@ -32,15 +32,12 @@ define("plugins/halo/appointments/register",
                 deferred.resolve();
                 return deferred;
             }
-            $node.append(
-                $("<div/>").addClass("widget-title clear-title").text("Shared Appointments")
-            );
 
             // TODO: unify with portal code (copy/paste right now)
             require(
                 ["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
                 function (dialogs, viewGrid) {
-
+                    $node.append($("<div/>").addClass("widget-title clear-title").text("Shared Appointments"));
                     viewGrid.drawSimpleGrid(appointments).appendTo($node);
 
                     new dialogs.SidePopup()

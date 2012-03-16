@@ -47,7 +47,6 @@ define('io.ox/contacts/actions',
             return e.collection.has('one', 'modify');
         },
         action: function (data) {
-            console.log("DATA", data, 'list?', data.mark_as_distributionlist);
             if (data.mark_as_distributionlist === true) {
                 require(["io.ox/contacts/distrib/main"], function (createDist) {
                     createDist.getApp(data).launch();
@@ -57,7 +56,6 @@ define('io.ox/contacts/actions',
                     util.createEditPage(data);
                 });
             }
-
         }
     });
 
