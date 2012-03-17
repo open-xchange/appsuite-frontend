@@ -319,7 +319,9 @@ define("io.ox/mail/view-detail",
                             // get unmodified mail
                             api.getUnmodified(data)
                                 .done(function (unmodifiedData) {
-                                    self.replaceWith(that.draw(unmodifiedData));
+                                    // keep outer node due to custom CSS classes (e.g. page)
+                                    var content = that.draw(unmodifiedData);
+                                    self.empty().append(content.children());
                                 });
                         });
                     })
