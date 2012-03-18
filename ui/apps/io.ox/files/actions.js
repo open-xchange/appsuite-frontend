@@ -98,8 +98,8 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
             require(['io.ox/files/api', 'io.ox/core/tk/dialogs'], function (api, dialogs) {
                 new dialogs.ModalDialog()
                     .text(gt("Are you really sure about your decision? Are you aware of all consequences you have to live with?"))
+                    .addPrimaryButton("delete", gt("Shut up and delete it!"))
                     .addButton("cancel", gt("No, rather not"))
-                    .addButton("delete", gt("Shut up and delete it!"), undefined, { classes: 'btn-primary' })
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
@@ -151,8 +151,8 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
             require(['io.ox/files/api', 'io.ox/core/tk/dialogs'], function (api, dialogs) {
                 new dialogs.ModalDialog()
                     .text(gt("Are you really sure about your decision? Are you aware of all consequences you have to live with?"))
+                    .addPrimaryButton("delete", gt("Shut up and delete it!"))
                     .addButton("cancel", gt("No, rather not"))
-                    .addButton("delete", gt("Shut up and delete it!"), undefined, { classes: 'btn-primary' })
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {

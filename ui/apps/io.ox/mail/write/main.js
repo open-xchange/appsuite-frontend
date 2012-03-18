@@ -1383,9 +1383,9 @@ define.async('io.ox/mail/write/main',
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt("Do you really want to cancel editing this mail?"))
+                        .addPrimaryButton("delete", gt('Lose changes'))
+                        .addAlternativeButton('savedraft', gt('Save as draft'))
                         .addButton("cancel", gt('Cancel'))
-                        .addButton("delete", gt('Lose changes'))
-                        .addButton('savedraft', gt('Save as draft'))
                         .show()
                         .done(function (action) {
                             console.debug("Action", action);

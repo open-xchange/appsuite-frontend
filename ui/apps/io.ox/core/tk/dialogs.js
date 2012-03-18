@@ -16,20 +16,19 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
     'use strict';
 
     // scaffolds
-    var underlay = $("<div/>").addClass("abs io-ox-dialog-underlay"),
-        popup = $("<div/>").addClass("io-ox-dialog-popup")
+    var underlay = $("<div>").hide().addClass("abs io-ox-dialog-underlay"),
+        popup = $("<div>").hide().addClass("io-ox-dialog-popup")
             .append(
-                $("<div/>").addClass("content")
-            )
-            .append(
-                $("<div/>").addClass("form-actions")
+                $("<div>").addClass("modal-header"),
+                $("<div>").addClass("modal-body"),
+                $("<div>").addClass("modal-footer")
             );
 
     var Dialog = function (options) {
 
         var nodes = {
-                underlay: underlay.clone().hide().appendTo("body"),
-                popup: popup.clone().hide().appendTo("body")
+                underlay: underlay.clone().appendTo('body'),
+                popup: popup.clone().appendTo('body')
             },
 
             deferred = $.Deferred(),
@@ -58,6 +57,7 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
                 for (var prop in self) {
                     delete self[prop];
                 }
+                nodes.header = nodes.body = nodes.footer = null;
                 nodes = deferred = self = data = o = null;
             },
 
@@ -66,33 +66,41 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
                 close();
             };
 
+        _(['header', 'body', 'footer']).each(function (part) {
+            nodes[part] = nodes.popup.find('.modal-' + part);
+        });
+
         this.data = function (d) {
             data = d !== undefined ? d : {};
             return this;
         };
 
+        this.header = function () {
+            nodes.header.append.apply(nodes.header, arguments);
+            return this;
+        };
+
         this.getContentNode = function () {
-            return nodes.popup.find(".content");
+            return nodes.body;
         };
 
         this.getContentControls = function () {
-            return nodes.popup.find(".form-actions");
+            return nodes.footer;
         };
 
         this.text = function (str) {
-            var p = nodes.popup.find(".content");
+            var p = nodes.body;
             p.find(".plain-text").remove();
-            p.append($("<div>").addClass("plain-text").text(str || ""));
+            p.append($("<h4>").addClass("plain-text").text(str || ""));
             return this;
         };
 
         this.append = function (node) {
-            nodes.popup.find(".content").append(node);
+            nodes.body.append(node);
             return this;
         };
 
-
-        this.addButton = function (action, label, dataaction, options) {
+        var addButton = function (action, label, dataaction, options) {
 
             options = options || {};
 
@@ -110,9 +118,26 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
             }
 
             var button = $.button(opt);
-            button.addClass(options.classes);
-            nodes.popup.find(".form-actions").append(button).append("&nbsp;");
+            return button.addClass(options.classes);
+        };
 
+        this.addButton = function (action, label, dataaction, options) {
+            var button = addButton(action, label, dataaction, options);
+            nodes.footer.append(button);
+            return this;
+        };
+
+        this.addPrimaryButton = function (action, label, dataaction, options) {
+            var button = addButton(action, label, dataaction, options);
+            button.addClass('btn-primary');
+            nodes.footer.prepend(button);
+            return this;
+        };
+
+        this.addAlternativeButton = function (action, label, dataaction, options) {
+            var button = addButton(action, label, dataaction, options);
+            button.css({ 'float': 'left', marginLeft: 0 });
+            nodes.footer.prepend(button);
             return this;
         };
 
@@ -128,6 +153,11 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
 
         this.show = function (callback) {
 
+            // empty header?
+            if (nodes.header.children().length === 0) {
+                nodes.header.remove();
+            }
+
             var dim = {
                 width: o.width || nodes.popup.width(),
                 height: o.height || nodes.popup.height()
@@ -152,7 +182,6 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
                 // center vertically
                 nodes.popup.css({
                     width: dim.width + "px",
-                    height: dim.height + "px",
                     top: "50%",
                     marginTop: 0 - ((dim.height + 60) / 2 >> 0) + "px"
                 });
@@ -160,18 +189,12 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
                 // use fixed top position
                 nodes.popup.css({
                     width: dim.width + "px",
-                    height: dim.height + "px",// TODO review the way of sizedetection
                     top: o.top || "0px"
                 });
             }
 
             nodes.underlay.show();
             nodes.popup.show();
-
-            // fix content height in case async requests draw later
-            var h1 = nodes.popup.height(),
-                h2 = nodes.popup.find(".form-actions").outerHeight(true);
-            nodes.popup.find(".content").css("height", (h1 - h2) + "px");
 
             if (o.easyOut) {
                 $(document).on("keydown", closeViaEscapeKey);
@@ -182,59 +205,6 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
             }
 
             return deferred;
-        };
-
-        this.resize = function () {
-            // Reset
-            nodes.popup.css({
-                width: "",
-                height: ""
-            });
-            nodes.popup.find(".content").css({
-                width: "",
-                height: ""
-            });
-            var dim = {
-                width: o.width || nodes.popup.width(),
-                height: o.height || nodes.popup.height()
-            };
-
-            // limit width & height
-            _(["width", "height"]).each(function (d) {
-                // apply explicit limit
-                var id = o[$.camelCase("max-" + d)];
-                if (o[id] && dim[d] > o[id]) {
-                    dim[d] = o[id];
-                }
-                // apply document limits
-                var max = $(document)[d]() - 100;
-                if (dim[d] && dim[d] > max) {
-                    dim[d] = max;
-                }
-            });
-
-            // apply dimensions
-            if (o.center) {
-                // center vertically
-                nodes.popup.css({
-                    width: dim.width + "px",
-                    height: dim.height + "px",
-                    top: "50%",
-                    marginTop: 0 - ((dim.height + 60) / 2 >> 0) + "px"
-                });
-            } else {
-                // use fixed top position
-                nodes.popup.css({
-                    width: dim.width + "px",
-                    top: o.top || "0px"
-                });
-            }
-
-            // fix content height in case async requests draw later
-            var h1 = nodes.popup.height(),
-                h2 = nodes.popup.find(".form-actions").outerHeight(true);
-            nodes.popup.find(".content").css("height", (h1 - h2) + "px");
-
         };
 
         nodes.underlay.click(function () {
@@ -466,11 +436,11 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
     };
 
     //TODO: Less C&P
-    var pane = $('<div/>').addClass('abs io-ox-dialog-pane').append(
-        $("<div/>").addClass("content")
+    var pane = $('<div>').addClass('abs io-ox-dialog-pane').append(
+        $("<div>").addClass("content")
     )
     .append(
-        $("<div/>").addClass("form-actions")
+        $("<div>").addClass("form-actions")
     );
 
 
@@ -610,7 +580,7 @@ require(["io.ox/core/tk/dialogs"], function (dialogs) {
     new dialogs.ModalDialog()
         .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
         .addButton("cancel", "No, rather not")
-        .addButton("delete", "Shut up and delete it!")
+        .addPrimaryButton("delete", "Shut up and delete it!")
         .show()
         .done(function (action) {
             console.debug("Action", action);
