@@ -12,7 +12,6 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-// TODO: Break this up, this is becoming messy
 define("io.ox/files/main",
     ["io.ox/files/view-detail",
      "io.ox/files/api",
@@ -22,10 +21,11 @@ define("io.ox/files/main",
      "io.ox/core/extPatterns/dnd",
      "io.ox/core/tk/dialogs",
      "io.ox/help/hints",
+     "gettext!io.ox/files/files",
      "io.ox/core/bootstrap/basics",
      "io.ox/files/actions",
      "less!io.ox/files/style.css"
-    ], function (viewDetail, api, commons, VGrid, upload, dnd, dialogs, hints) {
+    ], function (viewDetail, api, commons, VGrid, upload, dnd, dialogs, hints, gt) {
 
     "use strict";
 
@@ -46,7 +46,7 @@ define("io.ox/files/main",
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/files',
-            title: "Files",
+            title: gt("Files"),
             titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true,
             search: true
@@ -70,7 +70,7 @@ define("io.ox/files/main",
             .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main);
 
-
+        
         // Grid
         grid = new VGrid(left);
 
@@ -101,6 +101,7 @@ define("io.ox/files/main",
             right.idle().empty().append(currentDetailView.element);
             right.parent().scrollTop(0);
             app.currentFile = data;
+            app.detailView = currentDetailView;
             dropZone.update();
         }
 
@@ -142,6 +143,16 @@ define("io.ox/files/main",
                 currentDetailView.trigger.apply(currentDetailView, args);
             }
         });
+        
+        // Toggle Edit Mode
+        
+        right.on("dblclick", function () {
+            if (currentDetailView) {
+                currentDetailView.edit();
+            }
+        });
+        
+        
 
         // Uploads
         
@@ -151,7 +162,7 @@ define("io.ox/files/main",
         app.queues.create = upload.createQueue({
             processFile: function (file) {
                 var uploadIndicator = new dialogs.ModalDialog();
-                uploadIndicator.getContentNode().append($("<div>").text("Uploading...").addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
+                uploadIndicator.getContentNode().append($("<div>").text(gt("Uploading ...")).addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
                 uploadIndicator.getContentControls().css({
                     visibility: "hidden"
                 });
@@ -170,7 +181,7 @@ define("io.ox/files/main",
         app.queues.update = upload.createQueue({
             processFile: function (fileData) {
                 var uploadIndicator = new dialogs.ModalDialog();
-                uploadIndicator.getContentNode().append($("<div>").text("Uploading...").addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
+                uploadIndicator.getContentNode().append($("<div>").text(gt("Uploading ...")).addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
                 uploadIndicator.getContentControls().css({
                     visibility: "hidden"
                 });
@@ -216,7 +227,7 @@ define("io.ox/files/main",
                 win.nodes.title.prepend(
                     $('<img>', {
                         src: ox.base + '/apps/themes/default/glyphicons_232_cloud.png',
-                        title: 'This folder has publications',
+                        title: gt('This folder has publications'),
                         alt: ''
                     })
                     .addClass('has-publications')

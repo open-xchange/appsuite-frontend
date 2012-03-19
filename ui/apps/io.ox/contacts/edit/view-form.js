@@ -33,11 +33,18 @@ define('io.ox/contacts/edit/view-form',
             return $(this).val() !== "";
         }),
         man = (parent.find('.mandatory')).length,
-        empty = el.length + man;
-//        console.log(empty);
-        return empty;
+        filled = el.length + man;
+        return filled;
     };
 
+    var fieldCount = function (c) {
+        var parent = $(c).parent(),
+        el = parent.find('input').filter(function () {
+            return $(this).val() === "";
+        }),
+        empty = el.length;
+        return empty;
+    };
 
     var lessSwitch = function (evt) {
         var parent = $(evt.currentTarget).parent();
@@ -83,13 +90,17 @@ define('io.ox/contacts/edit/view-form',
         $(evt.currentTarget).text(txt);
     };
 
-
     var toggleFields = function (evt) {
-        var empty = checkEl(evt.currentTarget),
-            parent = $(evt.currentTarget).parent(),
+        var target;
+        target = evt.currentTarget;
+
+        var filled = checkEl(target),
+            empty = fieldCount(target),
+            parent = $(target).parent(),
             status;
 
-        if (empty === 0) {
+
+        if (filled === 0) {
             status = parent.hasClass('expanded') ? '1' :  '2';
         } else {
             status = !parent.hasClass('expanded') ? '3' : '4';
@@ -111,26 +122,35 @@ define('io.ox/contacts/edit/view-form',
         }
     };
 
+    var pointRecalc = function (pointName) {
+        var recalc = (pointName.toLowerCase()).replace(/ /g, "_");
+        return recalc;
+    };
 
     var drawSection = function (pointName) {
         return function (options) {
             var section = options.view.createSection(),
                 sectionTitle = options.view.createSectionTitle({text: gt(pointName)}),
-                sectionContent = options.view.createSectionContent();
+                sectionContent = options.view.createSectionContent(),
+                pointNameRecalc = pointRecalc(pointName);
 
             section.append(sectionTitle);
             section.append(sectionContent);
             this.append(section);
 
-            if (/^(.*-address)$/.test(pointName)) {
-                options.pointName = pointName;
+
+            if (/^(.*_address)$/.test(pointNameRecalc)) {
+                options.pointName = pointNameRecalc;
                 ext.point('io.ox/contacts/edit/form/address').invoke('draw', sectionContent, options);
 
             } else {
-                ext.point('io.ox/contacts/edit/form/' + pointName).invoke('draw', sectionContent, options);
+                ext.point('io.ox/contacts/edit/form/' + pointNameRecalc).invoke('draw', sectionContent, options);
             }
             if (checkEl(sectionContent) !== 0) {
-                section.append($('<a>').addClass('switcher').text('+ more').on('click', {pointName: pointName}, toggleFields));
+                if (fieldCount(sectionContent) !== 0) {
+                    section.append($('<a>').addClass('switcher').text('+ more').on('click', {pointName: pointName}, toggleFields));
+                }
+
             } else {
                 section.append($('<a>').addClass('switcher').text('+ ' + pointName).on('click', {pointName: pointName}, toggleFields));
                 sectionTitle.addClass('hidden');
@@ -148,22 +168,23 @@ define('io.ox/contacts/edit/view-form',
                 model = view.getModel(),
                 sectionGroup = view.createSectionGroup(),
                 fieldtype = model.schema.getFieldType(subPointName),
+                label = model.schema.getFieldLabel(subPointName),
                 createFunction;
 
             switch (fieldtype) {
             case "string":
-                createFunction = view.createTextField({ id: myId, property: subPointName, classes: 'nice-input' });
+                createFunction = view.createTextField({ id: myId, property: subPointName, classes: 'form-vertical' });
                 break;
             case "pastDate":
-                createFunction = view.createDateField({ id: myId, property: subPointName, classes: 'nice-input' });
+                createFunction = view.createDateField({ id: myId, property: subPointName, classes: 'form-vertical' });
                 break;
             default:
-                createFunction = view.createTextField({ id: myId, property: subPointName, classes: 'nice-input' });
+                createFunction = view.createTextField({ id: myId, property: subPointName, classes: 'form-vertical' });
                 break;
             }
 
             sectionGroup.append(
-                 view.createLabel({ id: myId, text: gt(subPointName) }),
+                 view.createLabel({ id: myId, text: gt(label) }),
                  createFunction
             );
 
@@ -186,9 +207,12 @@ define('io.ox/contacts/edit/view-form',
 
     var drawAddress = function (options) {
         var addressFormat = 'street,postal_code/city,country,state'.split(','),
-            addressGroop = '_' + (options.pointName.split('-'))[1],
-            self = this;
-//        console.log(addressGroop);
+            addressGroop = '_' + (options.pointName.split('_'))[1],
+            self = this,
+            view = options.view,
+            model = view.getModel();
+//            label = model.schema.getFieldLabel(subPointName);
+
         _.each(addressFormat, function (line, index) {
             var lineFormat = line.split(/\//);
             if (lineFormat.length === 1) {
@@ -207,10 +231,11 @@ define('io.ox/contacts/edit/view-form',
 
                 _.each(lineFormat, function (multiline, index) {
                     var myId = _.uniqueId('c');
-                    labels.push(options.view.createLabel({ id: myId, text: gt(multiline) }));
-                    fields.push(options.view.createTextField({ id: myId, property: multiline + addressGroop, classes: 'nice-input' }));
+                    labels.push(options.view.createLabel({ id: myId, text: options.view.getModel().schema.getFieldLabel(multiline + addressGroop)}));
+                    fields.push(options.view.createTextField({ id: myId, property: multiline + addressGroop, classes: 'form-vertical' }));
                     hide = (options.view.getModel().get(multiline + addressGroop)) ? false : true;
                 });
+
                 var outterLabel = $('<div>').addClass('inlinelabel');
                 _.each(labels, function (label) {
                     outterLabel.append(label);
@@ -233,7 +258,7 @@ define('io.ox/contacts/edit/view-form',
         window.ursel = saveButton;
         saveButton.attr('data-action', 'save');
         saveButton.attr('id', 'testid');
-        saveButton.addClass('button default-action saveButton').text('Save');
+        saveButton.addClass('btn btn-primary').text('Save');
         saveButton.on('click', function () {
             options.view.saveForm();
 
@@ -333,8 +358,10 @@ define('io.ox/contacts/edit/view-form',
         };
     };
     var handleSection = function (section, pointName) {
-        ext.point('io.ox/contacts/edit/form').extend({id: pointName, draw: drawSection(pointName), index: 120});
-        _.each(section, handleField(pointName));
+        var pointNameRecalc = pointRecalc(pointName);
+
+        ext.point('io.ox/contacts/edit/form').extend({id: pointNameRecalc, draw: drawSection(pointName), index: 120});
+        _.each(section, handleField(pointNameRecalc));
     };
 
     var initExtensionPoints = function (meta) {
@@ -360,15 +387,15 @@ define('io.ox/contacts/edit/view-form',
 //            console.log(this);
             if (this.getModel()) {
                 meta = {
-                    'contact-personal': ['title', 'first_name', 'last_name', 'display_name', 'second_name', 'suffix', 'nickname', 'birthday'],
-                    'contact-email': ['email1', 'email2', 'email3'],
-                    'contact-phone': ['telephone_business1', 'telephone_business2', 'fax_business', 'telephone_car', 'telephone_company', 'telephone_home1', 'telephone_home2', 'fax_home', 'cellular_telephone1', 'cellular_telephone2', 'telephone_other', 'fax_other', 'telephone_isdn', 'telephone_pager', 'telephone_primary', 'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'instant_messenger1', 'instant_messenger2', 'telephone_ip', 'telephone_assistant', 'telephone_callback'],
-                    'contact-home-address': ['street_home', 'postal_code_home', 'city_home', 'state_home', 'country_home'],
-                    'contact-business-address': ['street_business', 'postal_code_business', 'city_business', 'state_business', 'country_business'],
-                    'contact-other-address': ['street_other', 'postal_code_other', 'city_other', 'state_other', 'country_other'],
-                    'contact-job-descriptions': ['room_number', 'profession', 'position', 'company', 'department', 'employee_type', 'number_of_employees', 'sales_volume', 'tax_id', 'commercial_register', 'branches', 'business_category', 'info', 'manager_name', 'assistant_name'],
-                    'special-information': ['marital_status', 'number_of_children', 'spouse_name', 'note', 'url', 'anniversary'],
-                    'userfields': ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05', 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10', 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15', 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20']
+                    'Contact personal': ['title', 'first_name', 'last_name', 'display_name', 'second_name', 'suffix', 'nickname', 'birthday'],
+                    'Contact email': ['email1', 'email2', 'email3'],
+                    'Contact phone': ['telephone_business1', 'telephone_business2', 'fax_business', 'telephone_car', 'telephone_company', 'telephone_home1', 'telephone_home2', 'fax_home', 'cellular_telephone1', 'cellular_telephone2', 'telephone_other', 'fax_other', 'telephone_isdn', 'telephone_pager', 'telephone_primary', 'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'instant_messenger1', 'instant_messenger2', 'telephone_ip', 'telephone_assistant', 'telephone_callback'],
+                    'Contact home address': ['street_home', 'postal_code_home', 'city_home', 'state_home', 'country_home'],
+                    'Contact business address': ['street_business', 'postal_code_business', 'city_business', 'state_business', 'country_business'],
+                    'Contact other address': ['street_other', 'postal_code_other', 'city_other', 'state_other', 'country_other'],
+                    'Contact job descriptions': ['room_number', 'profession', 'position', 'company', 'department', 'employee_type', 'number_of_employees', 'sales_volume', 'tax_id', 'commercial_register', 'branches', 'business_category', 'info', 'manager_name', 'assistant_name'],
+                    'Special information': ['marital_status', 'number_of_children', 'spouse_name', 'note', 'url', 'anniversary'],
+                    'Optional fields': ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05', 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10', 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15', 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20']
                 };
 
                 var updateDisplayName = function () {

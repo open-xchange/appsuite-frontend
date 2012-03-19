@@ -49,6 +49,7 @@ define("io.ox/core/gettext", [], function () {
     function verify(s, node) {
         if (s.charCodeAt(s.length - 1) !== 0x200b) {
             console.error("Untranslated string", s, node.parentNode);
+            $(node.parentNode).css('backgroundColor', 'rgba(255, 192, 0, 0.5)');
         }
     }
 

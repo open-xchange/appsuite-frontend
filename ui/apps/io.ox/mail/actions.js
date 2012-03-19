@@ -12,25 +12,26 @@
  */
 
 define('io.ox/mail/actions',
-        ['io.ox/core/extensions',
-         'io.ox/core/extPatterns/links',
-         'io.ox/mail/api',
-         'io.ox/core/config'], function (ext, links, api, config) {
+    ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
+     'io.ox/mail/api',
+     'io.ox/core/config'], function (ext, links, api, config) {
 
     'use strict';
 
-    var defaultDraftFolder = config.get('modules.mail.defaultFolder.drafts');
+    var defaultDraftFolder = config.get('modules.mail.defaultFolder.drafts'),
+        Action = links.Action;
 
     // actions
 
-    ext.point('io.ox/mail/actions/reader').extend({
+    new Action('io.ox/mail/actions/reader', {
         id: 'reader',
         action: function (app) {
             app.toggleLamp();
         }
     });
 
-    ext.point('io.ox/mail/actions/compose').extend({
+    new Action('io.ox/mail/actions/compose', {
         id: 'compose',
         action: function (app) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -41,17 +42,15 @@ define('io.ox/mail/actions',
         }
     });
 
-    ext.point('io.ox/mail/actions/delete').extend({
+    new Action('io.ox/mail/actions/delete', {
         id: 'delete',
-        requires: function (e) {
-            return e.collection.has('some', 'delete');
-        },
-        action: function (data) {
-            api.remove(data);
+        requires: 'some delete',
+        multiple: function (list) {
+            api.remove(list);
         }
     });
 
-    ext.point('io.ox/mail/actions/reply-all').extend({
+    new Action('io.ox/mail/actions/reply-all', {
         id: 'reply-all',
         requires: function (e) {
             return e.collection.has('one') && e.context.folder_id !== defaultDraftFolder;
@@ -65,7 +64,7 @@ define('io.ox/mail/actions',
         }
     });
 
-    ext.point('io.ox/mail/actions/reply').extend({
+    new Action('io.ox/mail/actions/reply', {
         id: 'reply',
         requires: function (e) {
             return e.collection.has('one') && e.context.folder_id !== defaultDraftFolder;
@@ -79,7 +78,7 @@ define('io.ox/mail/actions',
         }
     });
 
-    ext.point('io.ox/mail/actions/forward').extend({
+    new Action('io.ox/mail/actions/forward', {
         id: 'forward',
         requires: function (e) {
             return e.collection.has('some');
@@ -93,7 +92,7 @@ define('io.ox/mail/actions',
         }
     });
 
-    ext.point('io.ox/mail/actions/edit').extend({
+    new Action('io.ox/mail/actions/edit', {
         id: 'edit',
         requires: function (e) {
             return e.collection.has('one') && e.context.folder_id === defaultDraftFolder;
@@ -111,19 +110,13 @@ define('io.ox/mail/actions',
         }
     });
 
-
-    ext.point('io.ox/mail/actions/source').extend({
+    new Action('io.ox/mail/actions/source', {
         id: 'source',
-        requires: function (e) {
-            return e.collection.has('one') && e.context.folder_id !== defaultDraftFolder;
-        },
         action: function (data) {
             api.getSource(data).done(function (srcData) {
-
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     var dialog = new dialogs.ModalDialog()
                         .addButton("ok", "OK");
-
                     dialog.getContentNode().append($('<pre>').text(srcData));
                     dialog.show();
                 });
@@ -131,26 +124,34 @@ define('io.ox/mail/actions',
         }
     });
 
-    ext.point('io.ox/mail/actions/markunread').extend({
+    new Action('io.ox/mail/actions/markunread', {
         id: 'markunread',
         requires: function (e) {
-            return _.isEqual(e.context.flags & api.FLAGS.SEEN, api.FLAGS.SEEN);
+            return api.getList(e.context).pipe(function (list) {
+                return _(list).reduce(function (memo, data) {
+                    return memo && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN;
+                }, true);
+            });
         },
-        action: function (data) {
-            api.update(data, {flags: api.FLAGS.SEEN, value: false}).done(function (updateData) {
-                api.trigger('refresh.list');
+        multiple: function (list) {
+            api.getList(list).done(function (list) {
+                api.update(list, { flags: api.FLAGS.SEEN, value: false });
             });
         }
     });
 
-    ext.point('io.ox/mail/actions/markread').extend({
+    new Action('io.ox/mail/actions/markread', {
         id: 'markread',
         requires: function (e) {
-            return _.isEqual(e.context.flags & api.FLAGS.SEEN, 0);
+            return api.getList(e.context).pipe(function (list) {
+                return _(list).reduce(function (memo, data) {
+                    return memo || (data.flags & api.FLAGS.SEEN) === 0;
+                }, false);
+            });
         },
-        action: function (data) {
-            api.update(data, {flags: api.FLAGS.SEEN, value: true}).done(function (updateData) {
-                api.trigger('refresh.list');
+        multiple: function (list) {
+            api.getList(list).done(function (list) {
+                api.update(list, { flags: api.FLAGS.SEEN, value: true });
             });
         }
     });
@@ -217,9 +218,7 @@ define('io.ox/mail/actions',
     }));
 
     function changeLabel(options, color) {
-        return api.update(options, {color_label: color, value: true}).done(function (updateData) {
-            api.trigger('refresh.list');
-        });
+        return api.update(options, { color_label: color, value: true });
     }
 
     ext.point('io.ox/mail/links/inline').extend({
@@ -251,7 +250,9 @@ define('io.ox/mail/actions',
                 });
 
             _(api.COLORS).each(function (index, color) {
-                var li = $('<li>').text(color).click(function (e) {changeLabel(options, api.COLORS[color]); });
+                var li = $('<li>').text(color).click(function (e) {
+                        changeLabel(options, api.COLORS[color]);
+                    });
                 if (_.isEqual(options.color_label, api.COLORS[color])) {
                     li.addClass('active');
                 }

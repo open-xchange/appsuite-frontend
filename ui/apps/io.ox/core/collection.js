@@ -40,8 +40,11 @@ define('io.ox/core/collection',
             // is app (pseudo collection used by window toolbar)?
             if (_.isObject(obj.folder) && _.isFunction(obj.folder.get)) {
                 return obj.folder.get();
-            } else {
+            } else if ('folder_id' in obj || 'folder' in obj) {
                 return obj.folder_id || obj.folder;
+            } else {
+                console.error('collection.getFolderId: Object has no folder');
+                return undefined;
             }
         },
 
@@ -87,6 +90,7 @@ define('io.ox/core/collection',
                             // folder unknown
                             props.unknown = true;
                             props.read = props.modify = props['delete'] = props.create = false;
+                            console.error("AHA!", folder);
                             break;
                         }
                     }

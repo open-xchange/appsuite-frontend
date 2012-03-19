@@ -18,14 +18,18 @@ define('io.ox/contacts/edit/main',
      'io.ox/core/cache',
      'io.ox/contacts/edit/view-form',
      'io.ox/contacts/model',
+     'gettext!io.ox/contacts/contacts',
      'less!io.ox/contacts/style.css'
-     ], function (api, cache, ContactEditView, ContactModel) {
+     ], function (api, cache, ContactEditView, ContactModel, gt) {
 
     'use strict';
 
     // multi instance pattern
     function createInstance(data) {
-        var app;
+        var app, getDirtyStatus,
+            dirtyStatus = {
+            byApi: true
+        };
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/edit',
@@ -57,17 +61,35 @@ define('io.ox/contacts/edit/main',
                     var myModel = new ContactModel({ data: data }),
                         myView = new ContactEditView({ model: myModel });
 
+                    getDirtyStatus = function () {
+                        var status;
+                        if (myModel.dirty !== true) {
+                            status =  myModel.isDirty();
+                        } else {
+                            status = true;
+                        }
+                        return status;
+                    };
+
                     myModel.store = function (data, changes) {
                         // TODO: replace image upload with a field in formsjs method
                         var image = $('#contactUploadImage').find("input[type=file]").get(0);
                         if (image.files && image.files[0]) {
-                            return api.editNewImage(data, changes, image.files[0]);
+                            return api.editNewImage(data, changes, image.files[0])
+                            .done(function () {
+                                dirtyStatus.byApi = false;
+                                app.quit();
+                            });
+
                         } else {
                             return api.edit({
                                 id: data.id,
                                 folder: data.folder_id,
                                 timestamp: _.now(),
                                 data: changes
+                            }).done(function () {
+                                dirtyStatus.byApi = false;
+                                app.quit();
                             });
                         }
                     };
@@ -87,6 +109,43 @@ define('io.ox/contacts/edit/main',
                 api.get(app.getState()).done(cont);
             }
         });
+
+        app.setQuit(function () {
+            var def = $.Deferred(),
+                listetItem =  $('.listet-item');
+
+            dirtyStatus.byModel = getDirtyStatus();
+
+            if (dirtyStatus.byModel === true) {
+                if (dirtyStatus.byApi === true) {
+                    require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                        new dialogs.ModalDialog()
+                            .text(gt("Do you really want to lose your changes?"))
+                            .addButton("cancel", gt('Cancel'))
+                            .addButton("delete", gt('Lose changes'))
+                            .show()
+                            .done(function (action) {
+                                console.debug("Action", action);
+                                if (action === 'delete') {
+                                    def.resolve();
+                                    listetItem.remove();
+                                } else {
+                                    def.reject();
+                                }
+                            });
+                    });
+                } else {
+                    def.resolve();
+                    listetItem.remove();
+                }
+            } else {
+                def.resolve();
+                listetItem.remove();
+            }
+            //clean
+            return def;
+        });
+
         return app;
     }
 

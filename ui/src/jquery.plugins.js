@@ -36,7 +36,8 @@
             info: false,
             success: false,
             warning: false,
-            danger: false
+            danger: false,
+            inverse: false
 
             // other options:
             // tabIndex, id, mousedown
@@ -46,7 +47,7 @@
         if (opt.purelink === true) {
             className = "button io-ox-action-link";
         } else {
-            className = "btn" + (!opt.enabled ? " btn-disabled" : "") + (opt.primary ? " btn-primary" : "") + (opt.info ? " btn-info" : "") + (opt.success ? " btn-success" : "") + (opt.warning ? " btn-warning" : "") + (opt.danger ? " btn-danger" : "");
+            className = "btn" + (!opt.enabled ? " btn-disabled" : "") + (opt.primary ? " btn-primary" : "") + (opt.info ? " btn-info" : "") + (opt.success ? " btn-success" : "") + (opt.warning ? " btn-warning" : "") + (opt.danger ? " btn-danger" : "") + (opt.inverse ? " btn-inverse" : "");
 
         }
 

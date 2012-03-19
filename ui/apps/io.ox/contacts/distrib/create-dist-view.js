@@ -48,7 +48,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                     'href': '#',
                     'class': 'close',
                     'data-dismiss': 'alert'
-                }).append($('<div>').addClass('delete-button')), $('<p>').text(gt('This mailadress ' + mail + ' is already in the list'))
+                }).append($('<div>').addClass('delete-button')), $('<p>').text(gt('The email address ' + mail + ' is already in the list'))
             );
         return alert;
     };
