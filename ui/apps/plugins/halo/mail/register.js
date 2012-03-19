@@ -12,7 +12,7 @@
  */
 
 define("plugins/halo/mail/register",
-    ["io.ox/core/extensions"], function (ext) {
+    ["io.ox/core/extensions", "gettext!plugins/halo/mail"], function (ext, gt) {
 
     "use strict";
 
@@ -37,23 +37,23 @@ define("plugins/halo/mail/register",
                     sent.push(elem);
                 }
             });
-            $node.append($("<div/>").addClass("widget-title clear-title").text("Recent conversations"));
+            $node.append($("<div/>").addClass("widget-title clear-title").text(gt("Recent conversations")));
             require(
                 ["io.ox/core/tk/dialogs", "io.ox/mail/view-grid-template", "io.ox/mail/api"],
                 function (dialogs, viewGrid, api) {
                     var left = $("<div/>").addClass("io-ox-left-column");
-                    left.append($("<p/>").text("Received e-mails:").addClass("io-ox-subheader"));
+                    left.append($("<p/>").text(gt("Received e-mails:")).addClass("io-ox-subheader"));
                     if (received.length === 0) {
-                        left.append($("<div/>").text("Cannot find any messages this contact sent to you."));
+                        left.append($("<div/>").text(gt("Cannot find any messages this contact sent to you.")));
                     } else {
                         left.append(viewGrid.drawSimpleGrid(received));
                     }
                     $node.append(left);
                         
                     var right = $("<div/>").addClass("io-ox-right-column");
-                    right.append($("<p/>").text("Sent e-mails:").addClass("io-ox-subheader"));
+                    right.append($("<p/>").text(gt("Sent e-mails:")).addClass("io-ox-subheader"));
                     if (sent.length === 0) {
-                        right.append($("<div/>").text("Cannot find any messages you sent to this contact."));
+                        right.append($("<div/>").text(gt("Cannot find any messages you sent to this contact.")));
                     } else {
                         right.append(viewGrid.drawSimpleGrid(sent));
                     }
