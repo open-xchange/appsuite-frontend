@@ -64,7 +64,7 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
             return e.collection.has('modify');
         },
         action: function (context) {
-            context.detailView.edit();
+            context.view.edit();
         }
     });
 
@@ -87,7 +87,14 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         id: 'send',
         requires: 'some',
         multiple: function (list) {
-            alert('TBD [' + list.length + ']');
+            // get file API to get full objects
+            require(['io.ox/files/api', 'io.ox/mail/write/main'], function (api, m) {
+                api.getList(list).done(function (list) {
+                    m.getApp().launch().done(function () {
+                        this.compose({ infostore_ids: list });
+                    });
+                });
+            });
         }
     });
 
@@ -115,9 +122,9 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         id: "save",
         action: function (context) {
             require(["io.ox/files/api"], function (api) {
-                var updatedFile = context.detailView.getModifiedFile();
+                var updatedFile = context.view.getModifiedFile();
                 api.update(updatedFile).done();
-                context.detailView.endEdit();
+                context.view.endEdit();
             });
         }
     });
@@ -125,7 +132,7 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
     ext.point("io.ox/files/actions/edit/cancel").extend({
         id: "cancel",
         action: function (context) {
-            context.detailView.endEdit();
+            context.view.endEdit();
         }
     });
 
