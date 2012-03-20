@@ -336,20 +336,20 @@ define("io.ox/files/view-detail",
                     folder_id: file.folder_id // collection needs this to work!
                 });
             },
-            edit: function (file, detailView, extension) {
+            edit: function (file, context) {
                 this.empty();
                 editLinks.draw.call(this, {
                     data: file,
-                    view: detailView,
+                    view: context.view,
                     folder_id: file.folder_id // collection needs this to work!
                 });
 
             },
-            endEdit: function (file, detailView, extension) {
+            endEdit: function (file, context) {
                 this.empty();
                 regularLinks.draw.call(this, {
                     data: file,
-                    view: detailView,
+                    view: context.view,
                     folder_id: file.folder_id // collection needs this to work!
                 });
             }

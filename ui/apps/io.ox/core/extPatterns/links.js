@@ -31,7 +31,6 @@ define("io.ox/core/extPatterns/links",
                 var node = $(this),
                     context = node.data("context"),
                     ref = node.data("ref");
-                
                 actions.invoke(ref, self, context);
             };
 
