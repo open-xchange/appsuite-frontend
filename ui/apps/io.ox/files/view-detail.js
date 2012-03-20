@@ -193,18 +193,21 @@ define("io.ox/files/view-detail",
         id: "title",
         index: 10,
         draw: function (file) {
-            this.append($("<div>").addClass("title clear-title").text(file.title));
+            this.append(
+                $("<div>").addClass("title clear-title").text(file.title || file.filename || '\u00A0')
+            );
         },
         edit: function (file) {
-            var size = this.find(".title").height();
-            if (size < 30) {
-                size = 30;
-            }
-            this.find(".title").empty().append($("<input type='text' name='title'>").css({fontSize: size + "px", lineHeight: size + 7 + "px", height: size + 7 + "px", width: "100%", boxSizing: "border-box"}).attr({placeholder: gt("Title"), tabIndex: 10}).val(file.title));
+            this.find(".title").empty().append(
+                $('<input>', { type: 'text', name: 'title' })
+                .addClass('editing')
+                .attr({placeholder: gt("Title"), tabIndex: 10})
+                .val(file.title)
+            );
             this.find("input").focus();
         },
         endEdit: function (file) {
-            this.find(".title").empty().text(file.title);
+            this.find(".title").empty().text(file.title || file.filename || '\u00A0');
         },
         process: function (file) {
             file.title = this.find("input").val();
@@ -212,7 +215,9 @@ define("io.ox/files/view-detail",
         on: {
             update: function (file) {
                 this.empty();
-                this.append($("<div>").addClass("title clear-title").text(file.title));
+                this.append(
+                    $("<div>").addClass("title clear-title").text(file.title || file.filename || '\u00A0')
+                );
             }
         }
     });

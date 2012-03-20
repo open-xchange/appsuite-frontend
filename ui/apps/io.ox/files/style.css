@@ -51,3 +51,16 @@
 .file-details .dragout {
     cursor: pointer;
 }
+
+.file-details .title .editing {
+    font-size: 30px;
+    line-height: 37px;
+    height: 37px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.file-details .title .editing::-webkit-input-placeholder {
+    font-size: 20px;
+    color: #ccc;
+}
