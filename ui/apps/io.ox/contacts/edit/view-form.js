@@ -280,30 +280,24 @@ define('io.ox/contacts/edit/view-form',
           title,
           jobDescription,
           calculatedModel,
-          saveButton;
+          saveButton,
+          displayNameText;
 
         section = options.view.createSection({}).addClass('formheader');
 
-        title = options.view.createText({property: 'display_name', classes: 'name clear-title'});
+        title = $('<span>').addClass('text name clear-title')
+        .attr('data-property', 'display_name');
+        displayNameText = options.view.getModel().get().display_name;
 
+     // fix for empty display_name
+        if (!displayNameText) {
+            $(title).html('&nbsp;');
+        }
+        title.text(displayNameText);
 
-        calculatedModel = new Model({});
-        _.extend(calculatedModel, {
-            get: function () {
-                return util.getJob(options.view.getModel().get());
-            },
-            update: function () {
-                $(this).trigger('change:calculated.jobdescription', util.getJob(options.view.getModel().get()));
-            },
-            set: function () {}
-        });
-
-        // just bridge the event
-        $(options.view.getModel()).on('change:calculated.jobdescription', function () {
-            calculatedModel.update();
-        });
-
-        jobDescription = options.view.createText({property: 'jobdescription.calculated', classes: 'job clear-title', model: calculatedModel});
+        jobDescription = $('<span>').addClass('text job clear-title')
+        .attr('data-property', 'jobdescription_calculated')
+        .text(util.getJob(options.view.getModel().get()));
 
 
         saveButton = createSaveButton(options);
@@ -398,17 +392,34 @@ define('io.ox/contacts/edit/view-form',
                     'Optional fields': ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05', 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10', 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15', 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20']
                 };
 
+
+                var updateDisplayNameByFields = function () {
+                    var text = util.getDisplayName(self.getModel().get());
+                    // fix for empty display_name
+                    if (text === '') {
+                        text = '&nbsp;';
+                    }
+                    $('span[data-property="display_name"]').html(text);
+                    $('input[data-property="display_name"]').val(text).trigger('change');
+                };
+
                 var updateDisplayName = function () {
-                    console.log('update displayname');
-                    self.getModel().set('display_name', util.getFullName(self.getModel().get()));
+                    var text = self.getModel().get().display_name;
+                    // fix for empty display_name
+                    if (text === '') {
+                        text = '&nbsp;';
+                    }
+                    $('span[data-property="display_name"]').html(text);
                 };
 
                 var updateJobDescription = function () {
-                    self.getModel().trigger('change:calculated.jobdescription', util.getJob(self.getModel().get()));
+                    var jobText = util.getJob(self.getModel().get());
+                    $('[data-property="jobdescription_calculated"]').text(jobText);
                 };
 
-                this.getModel().on('change:title change:first_name change:last_name', updateDisplayName);
-                this.getModel().on('change:company change:position change:profession', updateJobDescription);
+                this.getModel().on('change:title change:first_name change:last_name', updateDisplayNameByFields);
+                this.getModel().on('change:display_name', updateDisplayName);
+                this.getModel().on('change:company change:position', updateJobDescription); //change:profession
 
                 initExtensionPoints(meta);
                 this.node.addClass('contact-detail edit').attr('data-property', self.getModel().get('folder_id') + '.' + self.getModel().get('id'));
