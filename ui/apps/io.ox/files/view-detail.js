@@ -64,6 +64,14 @@ define("io.ox/files/view-detail",
                     });
                 }
             },
+            toggleEdit: function () {
+                if (mode === 'edit') {
+                    // Trigger Save
+                    ext.point("io.ox/files/actions/edit/save").invoke("action", self, {view: self, file: self.getModifiedFile()});
+                } else {
+                    self.edit();
+                }
+            },
             edit: function () {
                 if (mode === 'edit') {
                     return;
