@@ -130,7 +130,6 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
     ext.point("io.ox/files/actions/edit/cancel").extend({
         id: "cancel",
         action: function (file, context) {
-            console.log(context);
             context.view.endEdit();
         }
     });
