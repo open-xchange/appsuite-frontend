@@ -50,6 +50,8 @@ define("io.ox/core/extPatterns/links",
                 var node = $(this),
                     context = node.data("context"),
                     p = ext.point(node.data("ref"));
+                // use data?
+                context = context.data || context;
                 // general handler
                 p.invoke('action', self, context);
                 // handler for multi selection - always provides an array
@@ -66,7 +68,7 @@ define("io.ox/core/extPatterns/links",
             );
         };
     };
-    
+
     var Button = function (options) {
 
         _.extend(this, options);
@@ -89,7 +91,7 @@ define("io.ox/core/extPatterns/links",
             ).append("&nbsp;");
         };
     };
-    
+
 
     var applyCollection = function (self, collection, node, context, args, bootstrapMode) {
         // resolve collection's properties

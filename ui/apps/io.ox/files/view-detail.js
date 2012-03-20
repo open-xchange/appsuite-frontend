@@ -303,16 +303,16 @@ define("io.ox/files/view-detail",
             orientation: 'right',
             draw: function (file, detailView, extension) {
                 regularLinks.draw.call(this, {
-                    file: file,
-                    detailView: detailView,
+                    data: file,
+                    view: detailView,
                     folder_id: file.folder_id // collection needs this to work!
                 });
             },
             edit: function (file, detailView, extension) {
                 this.empty();
                 editLinks.draw.call(this, {
-                    file: file,
-                    detailView: detailView,
+                    data: file,
+                    view: detailView,
                     folder_id: file.folder_id // collection needs this to work!
                 });
 
@@ -320,8 +320,8 @@ define("io.ox/files/view-detail",
             endEdit: function (file, detailView, extension) {
                 this.empty();
                 regularLinks.draw.call(this, {
-                    file: file,
-                    detailView: detailView,
+                    data: file,
+                    view: detailView,
                     folder_id: file.folder_id // collection needs this to work!
                 });
             }
