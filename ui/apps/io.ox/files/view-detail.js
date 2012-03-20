@@ -408,7 +408,12 @@ define("io.ox/files/view-detail",
             );
         },
         edit: function (file) {
-            this.empty().append($("<textarea>").css({resize: 'none', width: "100%", height: "220px", boxSizing: "border-box"}).attr({placeholder: gt("Description")}).val(file.description));
+            var height = this.parent().innerHeight();
+            if (height < 220) {
+                height = 220;
+            }
+            console.log(height);
+            this.empty().append($("<textarea>").css({resize: 'none', width: "100%", height: height + "px", boxSizing: "border-box"}).attr({placeholder: gt("Description")}).val(file.description));
         },
         endEdit: function (file) {
             this.empty().append(
