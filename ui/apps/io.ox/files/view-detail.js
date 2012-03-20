@@ -201,6 +201,7 @@ define("io.ox/files/view-detail",
                 size = 30;
             }
             this.find(".title").empty().append($("<input type='text' name='title'>").css({fontSize: size + "px", lineHeight: size + 7 + "px", height: size + 7 + "px", width: "100%", boxSizing: "border-box"}).attr({placeholder: gt("Title"), tabIndex: 10}).val(file.title));
+            this.find("input").focus();
         },
         endEdit: function (file) {
             this.find(".title").empty().text(file.title);
