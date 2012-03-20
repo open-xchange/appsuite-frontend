@@ -143,7 +143,6 @@ define.async('io.ox/mail/write/main',
         };
 
         function showMessage(msg, header, sticky) {
-            console.log(arguments);
             $('#myGrowl').jGrowl(msg, {header: header, sticky: sticky});
         }
 
@@ -753,7 +752,6 @@ define.async('io.ox/mail/write/main',
                                 clean();
                             } else if (action === 'savedraft') {
                                 app.saveDraft().done(function (mail) {
-                                    console.log(mail);
                                     def.resolve();
                                     clean();
                                 }).fail(function (e) {

@@ -263,6 +263,15 @@ define("io.ox/mail/api",
         });
     };
 
+    api.move = function (obj, newFolder) {
+        return api.update(obj, { "folder_id":  newFolder}).done(function () {
+            $.when(api.caches.get.remove(obj), api.caches.list.remove(obj), api.caches.all.remove(obj), api.caches.allThreaded.remove(obj))
+            .done(function () {
+                ox.trigger('refresh');
+            });
+        });
+    };
+
     var react = function (action, obj, view) {
         return http.GET({
                 module: 'mail',

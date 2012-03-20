@@ -124,6 +124,31 @@ define('io.ox/mail/actions',
         }
     });
 
+    new Action('io.ox/mail/actions/move', {
+        id: 'move',
+        action: function (mail) {
+            var self = this;
+            require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, FolderTree) {
+                var dialog = new dialogs.ModalDialog()
+                    .addPrimaryButton("ok", "OK")
+                    .addButton("cancel", "Cancel");
+                var tree = new FolderTree(dialog.getContentNode(), {'type': 'mail'});
+                tree.paint();
+                dialog.show()
+                .done(function (action) {
+                    if (action === 'ok') {
+                        var selectedFolder = tree.selection.get();
+                        if (selectedFolder.length === 1) {
+                            // move action
+                            api.move(mail, selectedFolder[0].id);
+                            api.trigger('refresh.all');
+                        }
+                    }
+                });
+            });
+        }
+    });
+
     new Action('io.ox/mail/actions/markunread', {
         id: 'markunread',
         requires: function (e) {
@@ -193,6 +218,13 @@ define('io.ox/mail/actions',
         id: 'forward',
         label: 'Forward',
         ref: 'io.ox/mail/actions/forward'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: 350,
+        id: 'move',
+        label: 'Move',
+        ref: 'io.ox/mail/actions/move'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
