@@ -155,10 +155,7 @@ define("io.ox/files/main",
             }
         });
         
-        
-
         // Uploads
-        
         
         app.queues = {};
         
