@@ -189,7 +189,7 @@ define("io.ox/files/view-detail",
         },
         edit: function (file) {
             var size = this.find(".title").css("font-size") || "";
-            this.find(".title").empty().append($("<label>").text(gt("Title:"))).append($("<input type='text' name='title'>").css({fontSize: size, height: size, width: "100%"}).val(file.title));
+            this.find(".title").empty().append($("<input type='text' name='title'>").css({fontSize: size, height: size, width: "100%"}).attr({placeholder: gt("Title")}).val(file.title));
         },
         endEdit: function (file) {
             this.find(".title").empty().text(file.title);
@@ -408,7 +408,7 @@ define("io.ox/files/view-detail",
             );
         },
         edit: function (file) {
-            this.find(".description").empty().append($("<label>").text(gt("Description:"))).append($("<textarea>").css({resize: 'none', width: "100%", height: "220px"}).val(file.description));
+            this.find(".description").empty().append($("<textarea>").css({resize: 'none', width: "100%", height: "220px"}).attr({placeholder: gt("Description")}).val(file.description));
         },
         endEdit: function (file) {
             this.find(".description").empty().text(file.description);
