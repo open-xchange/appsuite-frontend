@@ -412,7 +412,6 @@ define("io.ox/files/view-detail",
             if (height < 220) {
                 height = 220;
             }
-            console.log(height);
             this.empty().append($("<textarea>").css({resize: 'none', width: "100%", height: height + "px", boxSizing: "border-box"}).attr({placeholder: gt("Description")}).val(file.description));
         },
         endEdit: function (file) {
