@@ -52,11 +52,13 @@ define("io.ox/core/tk/keys", ["io.ox/core/event"], function (Events) {
         
         this.include = function () {
             $node.on("keydown", handleEvent);
+            return this;
         };
         
         
         this.remove = function () {
             $node.off("keydown", handleEvent);
+            return this;
         };
         
         function normalizeExpression(keyExpr) {
@@ -67,12 +69,13 @@ define("io.ox/core/tk/keys", ["io.ox/core/event"], function (Events) {
             if (!keyExpr) {
                 throw new Error("Please specify a key expression");
             }
-            console.log("ON", keyExpr);
             events.on(normalizeExpression(keyExpr), fn);
+            return this;
         };
         
         this.off = function (keyExpr, fn) {
             events.off(normalizeExpression(keyExpr), fn);
+            return this;
         };
         
         this.destroy = function () {

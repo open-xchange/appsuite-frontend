@@ -30,8 +30,11 @@ define("io.ox/core/extPatterns/shortcuts", ["io.ox/core/tk/keys", "io.ox/core/co
             actions.extPatterns.applyCollection(self, new Collection(context), context, args).done(function (extDeferreds) {
                 _(extDeferreds).each(function (def) {
                     def.done(function (shortcut) {
-                        keyListener.on(shortcut.shortcut, function () {
+                        keyListener.on(shortcut.shortcut, function (evt) {
                             actions.invoke(shortcut.ref, shortcut, context);
+                            if (shortcut.preventDefault) {
+                                evt.preventDefault();
+                            }
                         });
                     });
                 });
