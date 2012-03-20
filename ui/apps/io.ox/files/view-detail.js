@@ -197,7 +197,10 @@ define("io.ox/files/view-detail",
         },
         edit: function (file) {
             var size = this.find(".title").height();
-            this.find(".title").empty().append($("<input type='text' name='title'>").css({fontSize: size + "px", height: size + 7 + "px", width: "100%", boxSizing: "border-box"}).attr({placeholder: gt("Title"), tabIndex: 10}).val(file.title));
+            if (size < 30) {
+                size = 30;
+            }
+            this.find(".title").empty().append($("<input type='text' name='title'>").css({fontSize: size + "px", lineHeight: size + 7 + "px", height: size + 7 + "px", width: "100%", boxSizing: "border-box"}).attr({placeholder: gt("Title"), tabIndex: 10}).val(file.title));
         },
         endEdit: function (file) {
             this.find(".title").empty().text(file.title);
