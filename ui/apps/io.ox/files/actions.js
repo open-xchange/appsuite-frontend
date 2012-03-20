@@ -225,20 +225,21 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
     // edit links
 
     ext.point("io.ox/files/links/edit/inline").extend(new links.Button({
-        id: "save",
+        id: "cancel",
         index: 100,
+        label: gt("Cancel"),
+        ref: "io.ox/files/actions/edit/cancel",
+        cssClasses: "btn"
+    }));
+
+    ext.point("io.ox/files/links/edit/inline").extend(new links.Button({
+        id: "save",
+        index: 100000,
         label: gt("Save"),
         ref: "io.ox/files/actions/edit/save",
         cssClasses: "btn btn-primary"
     }));
 
-    ext.point("io.ox/files/links/edit/inline").extend(new links.Button({
-        id: "cancel",
-        index: 200,
-        label: gt("Cancel"),
-        ref: "io.ox/files/actions/edit/cancel",
-        cssClasses: "btn"
-    }));
 
     // version links
 
