@@ -63,8 +63,7 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         requires: function (e) {
             return e.collection.has('modify');
         },
-        action: function (context) {
-            console.log(arguments);
+        action: function (file, context) {
             context.view.edit();
         }
     });

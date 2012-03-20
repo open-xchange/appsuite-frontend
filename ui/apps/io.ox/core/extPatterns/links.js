@@ -49,13 +49,12 @@ define("io.ox/core/extPatterns/links",
                 e.preventDefault();
                 var node = $(this),
                     context = node.data("context"),
-                    p = ext.point(node.data("ref"));
-                // use data?
-                context = context.data || context;
+                    p = ext.point(node.data("ref")),
+                    data = context.data || context;
                 // general handler
-                p.invoke('action', self, context);
+                p.invoke('action', self, data, context);
                 // handler for multi selection - always provides an array
-                p.invoke('multiple', self, _.isArray(context) ? context : [context]);
+                p.invoke('multiple', self, _.isArray(data) ? data : [data], context);
             };
 
         this.draw = function (context) {
