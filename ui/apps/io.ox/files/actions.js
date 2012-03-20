@@ -60,9 +60,7 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
 
     new Action('io.ox/files/actions/edit', {
         id: 'edit',
-        requires: function (e) {
-            return e.collection.has('modify');
-        },
+        requires: 'one modify',
         action: function (file, context) {
             context.view.edit();
         }
