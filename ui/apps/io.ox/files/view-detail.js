@@ -188,8 +188,8 @@ define("io.ox/files/view-detail",
             this.append($("<div>").addClass("title clear-title").text(file.title));
         },
         edit: function (file) {
-            var size = this.find(".title").css("font-size") || "";
-            this.find(".title").empty().append($("<input type='text' name='title'>").css({fontSize: size, height: size, width: "100%"}).attr({placeholder: gt("Title")}).val(file.title));
+            var size = this.find(".title").height();
+            this.find(".title").empty().append($("<input type='text' name='title'>").css({fontSize: size + "px", height: size + 7 + "px", width: "100%", boxSizing: "border-box"}).attr({placeholder: gt("Title")}).val(file.title));
         },
         endEdit: function (file) {
             this.find(".title").empty().text(file.title);
@@ -408,10 +408,19 @@ define("io.ox/files/view-detail",
             );
         },
         edit: function (file) {
-            this.find(".description").empty().append($("<textarea>").css({resize: 'none', width: "100%", height: "220px"}).attr({placeholder: gt("Description")}).val(file.description));
+            this.empty().append($("<textarea>").css({resize: 'none', width: "100%", height: "220px", boxSizing: "border-box"}).attr({placeholder: gt("Description")}).val(file.description));
         },
         endEdit: function (file) {
-            this.find(".description").empty().text(file.description);
+            this.empty().append(
+                $("<div>")
+                .css({
+                    // makes it readable
+                    fontFamily: "monospace, 'Courier new'",
+                    whiteSpace: "pre-wrap",
+                    paddingRight: "2em"
+                }).addClass("description")
+                .text(file.description || '')
+            );
         },
         process: function (file) {
             file.description = this.find("textarea").val();
