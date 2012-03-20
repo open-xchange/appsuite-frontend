@@ -442,7 +442,7 @@ define("io.ox/files/view-detail",
                 height = 220;
             }
             this.empty().append($("<textarea>").css({resize: 'none', width: "100%", height: height + "px", boxSizing: "border-box"}).attr({placeholder: gt("Description"), tabIndex: 20}).val(file.description));
-            keyListener.on("shift+enter", function () {
+            keyListener.on("shift+enter", function (evt) {
                 context.view.toggleEdit();
             });
             this.data("keyListener", keyListener);
@@ -523,6 +523,12 @@ define("io.ox/files/view-detail",
                 $comment.show();
                 $commentArea.focus();
             });
+            
+            new KeyListener($comment).on("shift+enter", function (evt) {
+                evt.preventDefault();
+                evt.stopImmediatePropagation();
+                $button.click();
+            }).include();
         }
     });
 
