@@ -229,7 +229,8 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         index: 100,
         label: gt("Cancel"),
         ref: "io.ox/files/actions/edit/cancel",
-        cssClasses: "btn"
+        cssClasses: "btn",
+        tabIndex: 40
     }));
 
     ext.point("io.ox/files/links/edit/inline").extend(new links.Button({
@@ -237,7 +238,8 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         index: 100000,
         label: gt("Save"),
         ref: "io.ox/files/actions/edit/save",
-        cssClasses: "btn btn-primary"
+        cssClasses: "btn btn-primary",
+        tabIndex: 30
     }));
 
 

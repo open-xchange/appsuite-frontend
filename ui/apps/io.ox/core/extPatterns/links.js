@@ -82,8 +82,9 @@ define("io.ox/core/extPatterns/links",
             };
 
         this.draw = function (context) {
+            
             this.append(
-                $("<button>", { "data-action": self.id })
+                $("<button>", { "data-action": self.id, tabIndex: self.tabIndex || '' })
                 .addClass(self.cssClasses || 'btn')
                 .data({ ref: self.ref, context: context })
                 .click(click)
