@@ -146,9 +146,12 @@ define("io.ox/files/main",
         
         // Toggle Edit Mode
         
-        right.on("dblclick", function () {
+        right.on("dblclick", function (e) {
+            if (_(["a", "button", "input", "textarea"]).include(e.srcElement.tagName.toLowerCase())) {
+                return;
+            }
             if (currentDetailView) {
-                currentDetailView.edit();
+                currentDetailView.toggleEdit();
             }
         });
         

@@ -64,6 +64,14 @@ define("io.ox/files/view-detail",
                     });
                 }
             },
+            toggleEdit: function () {
+                if (mode === 'edit') {
+                    // Trigger Save
+                    ext.point("io.ox/files/actions/edit/save").invoke("action", self, {view: self, file: self.getModifiedFile()});
+                } else {
+                    self.edit();
+                }
+            },
             edit: function () {
                 if (mode === 'edit') {
                     return;
@@ -188,8 +196,8 @@ define("io.ox/files/view-detail",
             this.append($("<div>").addClass("title clear-title").text(file.title));
         },
         edit: function (file) {
-            var size = this.find(".title").css("font-size") || "";
-            this.find(".title").empty().append($("<label>").text(gt("Title:"))).append($("<input type='text' name='title'>").css({fontSize: size, height: size, width: "100%"}).val(file.title));
+            var size = this.find(".title").height();
+            this.find(".title").empty().append($("<input type='text' name='title'>").css({fontSize: size + "px", height: size + 7 + "px", width: "100%", boxSizing: "border-box"}).attr({placeholder: gt("Title"), tabIndex: 10}).val(file.title));
         },
         endEdit: function (file) {
             this.find(".title").empty().text(file.title);
@@ -408,10 +416,23 @@ define("io.ox/files/view-detail",
             );
         },
         edit: function (file) {
-            this.find(".description").empty().append($("<label>").text(gt("Description:"))).append($("<textarea>").css({resize: 'none', width: "100%", height: "220px"}).val(file.description));
+            var height = this.parent().innerHeight();
+            if (height < 220) {
+                height = 220;
+            }
+            this.empty().append($("<textarea>").css({resize: 'none', width: "100%", height: height + "px", boxSizing: "border-box"}).attr({placeholder: gt("Description"), tabIndex: 20}).val(file.description));
         },
         endEdit: function (file) {
-            this.find(".description").empty().text(file.description);
+            this.empty().append(
+                $("<div>")
+                .css({
+                    // makes it readable
+                    fontFamily: "monospace, 'Courier new'",
+                    whiteSpace: "pre-wrap",
+                    paddingRight: "2em"
+                }).addClass("description")
+                .text(file.description || '')
+            );
         },
         process: function (file) {
             file.description = this.find("textarea").val();
