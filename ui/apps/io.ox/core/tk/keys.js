@@ -19,7 +19,8 @@ define("io.ox/core/tk/keys", ["io.ox/core/event"], function (Events) {
         9: "tab",
         27: "esc",
         13: "enter",
-        32: "space"
+        32: "space",
+        46: "del"
     };
     
     function translate(charCode) {
@@ -30,7 +31,7 @@ define("io.ox/core/tk/keys", ["io.ox/core/event"], function (Events) {
         var events = new Events();
         
         if (!$node) {
-            $node = window;
+            $node = $(window);
         }
         
         function handleEvent(evt) {
@@ -46,7 +47,6 @@ define("io.ox/core/tk/keys", ["io.ox/core/event"], function (Events) {
             keys.push(translate(evt.which));
             
             expr = _.chain(keys).invoke("toLowerCase").sort().join("+").value();
-            
             events.trigger(expr, evt);
         }
         
@@ -64,6 +64,10 @@ define("io.ox/core/tk/keys", ["io.ox/core/event"], function (Events) {
         }
         
         this.on = function (keyExpr, fn) {
+            if (!keyExpr) {
+                throw new Error("Please specify a key expression");
+            }
+            console.log("ON", keyExpr);
             events.on(normalizeExpression(keyExpr), fn);
         };
         

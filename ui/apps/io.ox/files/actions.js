@@ -118,7 +118,7 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
     // edit mode actions
     ext.point("io.ox/files/actions/edit/save").extend({
         id: "save",
-        action: function (context) {
+        action: function (file, context) {
             require(["io.ox/files/api"], function (api) {
                 var updatedFile = context.view.getModifiedFile();
                 api.update(updatedFile).done();
@@ -129,7 +129,7 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
 
     ext.point("io.ox/files/actions/edit/cancel").extend({
         id: "cancel",
-        action: function (context) {
+        action: function (file, context) {
             context.view.endEdit();
         }
     });
@@ -309,6 +309,20 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         action: function (file, app) {
             app.queues.update.offer(file);
         }
+    });
+    
+    // Keyboard Shotcuts
+    
+    ext.point("io.ox/files/shortcuts").extend({
+        id: "cancel",
+        shortcut: "esc",
+        ref: "io.ox/files/actions/edit/cancel"
+    });
+    
+    ext.point("io.ox/files/shortcuts").extend({
+        id: "edit",
+        shortcut: "shift+enter",
+        ref: "io.ox/files/actions/edit"
     });
 
 });
