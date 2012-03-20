@@ -70,7 +70,6 @@ define("io.ox/files/main",
             .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main);
 
-        
         // Grid
         grid = new VGrid(left);
 
@@ -84,7 +83,7 @@ define("io.ox/files/main",
                 return { name: name };
             },
             set: function (data, fields, index) {
-                fields.name.text(data.title);
+                fields.name.text(data.title || data.filename || '\u00A0');
             }
         });
 
@@ -115,8 +114,8 @@ define("io.ox/files/main",
         };
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/files', drawFile, right);
-        
-        
+
+
         grid.selection.on('empty', function () {
             if (currentDetailView) {
                 currentDetailView.destroy();
@@ -125,7 +124,7 @@ define("io.ox/files/main",
             app.currentFile = null;
             dropZone.update();
         });
-        
+
         grid.selection.on("change", function (evt, selected) {
             if (selected.length > 1) {
                 app.currentFile = null;
@@ -143,22 +142,25 @@ define("io.ox/files/main",
                 currentDetailView.trigger.apply(currentDetailView, args);
             }
         });
-        
+
         // Toggle Edit Mode
-        
-        right.on("dblclick", function () {
+
+        right.on("dblclick", function (e) {
+            if (_(["a", "button", "input", "textarea"]).include(e.srcElement.tagName.toLowerCase())) {
+                return;
+            }
             if (currentDetailView) {
-                currentDetailView.edit();
+                currentDetailView.toggleEdit();
             }
         });
-        
-        
+
+
 
         // Uploads
-        
-        
+
+
         app.queues = {};
-        
+
         app.queues.create = upload.createQueue({
             processFile: function (file) {
                 var uploadIndicator = new dialogs.ModalDialog();
@@ -177,7 +179,7 @@ define("io.ox/files/main",
                     });
             }
         });
-        
+
         app.queues.update = upload.createQueue({
             processFile: function (fileData) {
                 var uploadIndicator = new dialogs.ModalDialog();

@@ -49,11 +49,12 @@ define("io.ox/core/extPatterns/links",
                 e.preventDefault();
                 var node = $(this),
                     context = node.data("context"),
-                    p = ext.point(node.data("ref"));
+                    p = ext.point(node.data("ref")),
+                    data = context.data || context;
                 // general handler
-                p.invoke('action', self, context);
+                p.invoke('action', self, data, context);
                 // handler for multi selection - always provides an array
-                p.invoke('multiple', self, _.isArray(context) ? context : [context]);
+                p.invoke('multiple', self, _.isArray(data) ? data : [data], context);
             };
 
         this.draw = function (context) {
@@ -66,7 +67,7 @@ define("io.ox/core/extPatterns/links",
             );
         };
     };
-    
+
     var Button = function (options) {
 
         _.extend(this, options);
@@ -80,8 +81,9 @@ define("io.ox/core/extPatterns/links",
             };
 
         this.draw = function (context) {
+            
             this.append(
-                $("<button>", { "data-action": self.id })
+                $("<button>", { "data-action": self.id, tabIndex: self.tabIndex || '' })
                 .addClass(self.cssClasses || 'btn')
                 .data({ ref: self.ref, context: context })
                 .click(click)
@@ -89,7 +91,7 @@ define("io.ox/core/extPatterns/links",
             ).append("&nbsp;");
         };
     };
-    
+
 
     var applyCollection = function (self, collection, node, context, args, bootstrapMode) {
         // resolve collection's properties

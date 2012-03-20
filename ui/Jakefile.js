@@ -466,36 +466,41 @@ task("deps", [depsPath], function() {
 });
 
 // upload task
-desc("Uploads source package to the build service");
-task("upload", ["clean", "tmp/packaging"], function () {
+
+var distDest = process.env.destDir || "tmp/packaging";
+
+desc("Creates source packages");
+task("dist", ["clean", distDest], function () {
     var toCopy = _.reject(fs.readdirSync("."), function(f) {
         return /^(tmp|ox.pot|build)$/.test(f);
     });
     var name = "open-xchange-gui-" + ver;
     var debName = "open-xchange-gui_" + ver;
-    var dest = "tmp/packaging/" + name;
+    var dest = path.join(distDest, name);
     fs.mkdirSync(dest);
     utils.exec(["cp", "-r"].concat(toCopy, dest), tar);
     function tar(code) {
         if (code) return fail();
         utils.exec(["tar", "cjf", debName + ".orig.tar.bz2", name],
-                   { cwd: "tmp/packaging" }, dpkgSource);
+                   { cwd: distDest }, dpkgSource);
     }
     function dpkgSource(code) {
         if (code) return fail();
         utils.exec(["dpkg-source", "-Zbzip2", "-b", name],
-                   { cwd: "tmp/packaging" }, uploadAll);
+                   { cwd: distDest }, done);
     }
+    function done(code) { if (code) return fail(); else complete(); }
+}, {async: true });
+
+desc("Uploads source package to the build service");
+task("upload", ["dist"], function () {
     var counter;
-    function uploadAll(code) {
-        if (code) return fail();
-        counter = 1;
-        upload("", debName + ".orig.tar.bz2");
-        upload("", "open-xchange-gui_" + rev + ".debian.tar.bz2");
-        upload("", "open-xchange-gui_" + rev + ".dsc");
-        upload(name + "/", "open-xchange-gui.spec");
-        done();
-    }
+    counter = 1;
+    upload("", debName + ".orig.tar.bz2");
+    upload("", "open-xchange-gui_" + rev + ".debian.tar.bz2");
+    upload("", "open-xchange-gui_" + rev + ".dsc");
+    upload(name + "/", "open-xchange-gui.spec");
+    done();
     function upload(dir, name) {
         counter++;
         var req = http.request({
@@ -506,7 +511,7 @@ task("upload", ["clean", "tmp/packaging"], function () {
             path: "/source/" + (process.env.bsProject || "home:gast") +
                   "/open-xchange-gui/" + name
         }, uploaded).on("error", fail);
-        util.pump(fs.createReadStream("tmp/packaging/" + dir + name), req);
+        util.pump(fs.createReadStream(path.join(distDest, dir + name)), req);
     }
     function uploaded(resp) {
         if (resp.statusCode != 200) return fail();
