@@ -60,7 +60,9 @@
     box-sizing: border-box;
 }
 
-.file-details .title .editing::-webkit-input-placeholder {
+.file-details .title .editing::-webkit-input-placeholder,
+.file-details .title .editing::-moz-placeholder,
+.file-details .title .editing::placeholder {
     font-size: 20px;
     color: #ccc;
 }
