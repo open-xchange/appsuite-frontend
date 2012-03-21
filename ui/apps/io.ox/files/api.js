@@ -183,7 +183,8 @@ define("io.ox/files/api",
         return http.PUT({
                 module: "infostore",
                 params: { action: "new" },
-                data: options.json
+                data: options.json,
+                appendColumns: false
             })
             .pipe(function (data) {
                 // clear folder cache
@@ -236,7 +237,8 @@ define("io.ox/files/api",
         return http.PUT({
             module: "infostore",
             params: { action: "detach", id: version.id, folder: version.folder, timestamp: _.now() },
-            data: [version.version]
+            data: [version.version],
+            appendColumns: false
         })
         .pipe(function () {
             return $.when(

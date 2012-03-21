@@ -196,7 +196,6 @@ define("io.ox/core/api/factory",
                     });
                     // loop over each folder and look for items to remove
                     _(folders).each(function (value, folder_id) {
-
                         caches.all.get(folder_id).done(function (items) {
                             if (items) {
                                 caches.all.add(
@@ -214,8 +213,8 @@ define("io.ox/core/api/factory",
                     caches.list.remove(ids);
                     caches.get.remove(ids);
                     // trigger local refresh
-                    api.trigger("afterdelete");
-                    api.trigger("refresh.all");
+                    api.trigger('deleted');
+                    api.trigger('refresh.all');
                 };
                 api.trigger("beforedelete");
                 // delete on server?
