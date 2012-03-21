@@ -219,7 +219,7 @@ define("io.ox/mail/api",
             });
     };
 
-    api.update = function (list, data) {
+    api.change = function (list, data, apiAction) {
         // allow single object and arrays
         list = _.isArray(list) ? list : [list];
         // pause http layer
@@ -229,7 +229,7 @@ define("io.ox/mail/api",
             return http.PUT({
                 module: 'mail',
                 params: {
-                    action: 'update',
+                    action: apiAction,
                     id: obj.id,
                     folder: obj.folder || obj.folder_id
                 },
@@ -263,8 +263,21 @@ define("io.ox/mail/api",
         });
     };
 
+    api.update = function (list, data) {
+        return api.change(list, data, 'update');
+    };
+
     api.move = function (obj, newFolder) {
         return api.update(obj, { "folder_id":  newFolder}).done(function () {
+            $.when(api.caches.get.remove(obj), api.caches.list.remove(obj), api.caches.all.remove(obj), api.caches.allThreaded.remove(obj))
+            .done(function () {
+                ox.trigger('refresh');
+            });
+        });
+    };
+
+    api.copy = function (obj, newFolder) {
+        return api.change(obj, { "folder_id":  newFolder}, 'copy').done(function () {
             $.when(api.caches.get.remove(obj), api.caches.list.remove(obj), api.caches.all.remove(obj), api.caches.allThreaded.remove(obj))
             .done(function () {
                 ox.trigger('refresh');

@@ -21,8 +21,9 @@ define("io.ox/mail/write/view-main",
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/mail/util',
-     'io.ox/core/i18n'
-    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, i18n) {
+     'io.ox/core/i18n',
+     'gettext!io.ox/mail/mail'
+    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, i18n, gt) {
 
     'use strict';
     var app;
@@ -40,7 +41,7 @@ define("io.ox/mail/write/view-main",
                 .prepend(
                     collapsable ?
                         $('<a>', { href: '#', tabindex: '7' })
-                        .addClass('collapse').text('Hide')
+                        .addClass('collapse').text(gt('Hide'))
                         .on('click', $.preventDefault) :
                         $()
                 );
@@ -220,7 +221,7 @@ define("io.ox/mail/write/view-main",
                 $('<div>')
                 .addClass('abs io-ox-mail-write-main')
                 .append(
-                    $('<div>').addClass('io-ox-label').text('Subject')
+                    $('<div>').addClass('io-ox-label').text(gt('Subject'))
                 )
                 .append(
                     $('<div>')
@@ -264,7 +265,7 @@ define("io.ox/mail/write/view-main",
                             $('<a>', { href: '#', tabindex: '8' })
                             .addClass('btn btn-primary')
                             .css('width', '100px')
-                            .text('Send')
+                            .text(gt('Send'))
                             .on('click', function (e) {
                                 e.preventDefault();
                                 ext.point('io.ox/mail/write/actions/send').invoke('action', null, app);
@@ -285,7 +286,7 @@ define("io.ox/mail/write/view-main",
                             .append(
                                 $('<li>').append(
                                     $('<a>', { href: '#' })
-                                    .text('Save as draft')
+                                    .text(gt('Save as draft'))
                                     .on('click', function (e) {
                                         e.preventDefault();
                                         ext.point('io.ox/mail/write/actions/draft').invoke('action', null, app);
@@ -335,30 +336,30 @@ define("io.ox/mail/write/view-main",
             // sections
 
             // TO
-            self.addSection('to', 'To')
+            self.addSection('to', gt('To'))
                 .append(self.createRecipientList('to'))
                 .append(self.createField('to'));
 
             // CC
-            self.addSection('cc', 'Copy to', false, true)
+            self.addSection('cc', gt('Copy to'), false, true)
                 .append(self.createRecipientList('cc'))
                 .append(self.createField('cc'));
-            self.addLink('cc', 'Copy (CC) to ...');
+            self.addLink('cc', gt('Copy (CC) to ...'));
 
             // BCC
-            self.addSection('bcc', 'Blind copy to', false, true)
+            self.addSection('bcc', gt('Blind copy to'), false, true)
                 .append(self.createRecipientList('bcc'))
                 .append(self.createField('bcc'));
-            self.addLink('bcc', 'Blind copy (BCC) to ...');
+            self.addLink('bcc', gt('Blind copy (BCC) to ...'));
 
             // Attachments
-            self.addSection('attachments', 'Attachments', false, true);
+            self.addSection('attachments', gt('Attachments'), false, true);
             self.addUpload();
-            self.addLink('attachments', 'Attachments');
+            self.addLink('attachments', gt('Attachments'));
 
             // Signatures
             if (self.signatures.length) {
-                self.addSection('signatures', 'Signatures', false, true)
+                self.addSection('signatures', gt('Signatures'), false, true)
                 .append(
                     _(self.signatures.concat(dummySignature))
                     .inject(function (memo, o, index) {
@@ -388,21 +389,21 @@ define("io.ox/mail/write/view-main",
                     }, $())
                 );
 
-                self.addLink('signatures', 'Signatures');
+                self.addLink('signatures', gt('Signatures'));
             }
 
             // Options
-            self.addSection('options', 'Options', false, true)
+            self.addSection('options', gt('Options'), false, true)
                 .append(
                     // Priority
                     $('<div>').addClass('section-item')
                     .css({ paddingTop: '0.5em', paddingBottom: '0.5em' })
                     .append(
-                        $('<span>').addClass('group-label').text('Priority')
+                        $('<span>').addClass('group-label').text(gt('Priority'))
                     )
-                    .append(createRadio('priority', '1', 'High'))
-                    .append(createRadio('priority', '3', 'Normal', true))
-                    .append(createRadio('priority', '5', 'Low'))
+                    .append(createRadio('priority', '1', gt('High')))
+                    .append(createRadio('priority', '3', gt('Normal'), true))
+                    .append(createRadio('priority', '5', gt('Low')))
                     .on('change', 'input', function () {
                         var radio = $(this);
                         if (radio.attr('value') === '1' && radio.prop('checked')) {
@@ -416,16 +417,16 @@ define("io.ox/mail/write/view-main",
                     // Delivery Receipt
                     $('<div>').addClass('section-item')
                     .css({ paddingTop: '1em', paddingBottom: '1em' })
-                    .append(createCheckbox('receipt', 'Delivery Receipt'))
+                    .append(createCheckbox('receipt', gt('Delivery Receipt')))
                 )
                 .append(
                     // Attach vCard
                     $('<div>').addClass('section-item')
                     .css({ paddingTop: '1em', paddingBottom: '1em' })
-                    .append(createCheckbox('vcard', 'Attach vCard'))
+                    .append(createCheckbox('vcard', gt('Attach vCard')))
                 );
 
-            self.addLink('options', 'More ...');
+            self.addLink('options', gt('More ...'));
 
             var fnChangeFormat = function (e) {
                 e.preventDefault();
@@ -435,15 +436,15 @@ define("io.ox/mail/write/view-main",
             };
 
             if (!Modernizr.touch) {
-                self.addSection('format', 'Text format', true, false)
+                self.addSection('format', gt('Text format'), true, false)
                     .append(
                         $('<div>').addClass('change-format')
                         .append(
-                            $('<a>', { href: '#' }).text('Text').on('click', { format: 'text' }, fnChangeFormat)
+                            $('<a>', { href: '#' }).text(gt('Text')).on('click', { format: 'text' }, fnChangeFormat)
                         )
                         .append($.txt(' \u00A0\u2013\u00A0 ')) // &ndash;
                         .append(
-                            $('<a>', { href: '#' }).text('HTML').on('click', { format: 'html' }, fnChangeFormat)
+                            $('<a>', { href: '#' }).text(gt('HTML')).on('click', { format: 'html' }, fnChangeFormat)
                         )
                     );
             }
@@ -451,7 +452,7 @@ define("io.ox/mail/write/view-main",
         }
     });
 
-    var dummySignature = { signature_name: 'No signature' };
+    var dummySignature = { signature_name: gt('No signature') };
 
     theView.prototype.sections = {};
     theView.prototype.form = null;
@@ -476,7 +477,7 @@ define("io.ox/mail/write/view-main",
         return $($.txt(' \u2013 ')) // ndash
             .add(
                 $('<a>', { href: '#' })
-                .text('Preview')
+                .text(gt('Preview'))
                 .on('click', { file: file }, function (e) {
                     e.preventDefault();
                     // open side popup
