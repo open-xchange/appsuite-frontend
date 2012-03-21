@@ -181,6 +181,40 @@ define("io.ox/core/api/factory",
                 }
             },
 
+            updateCachesAfterRemove: function (ids) {
+                // be robust
+                ids = ids || [];
+                ids = _.isArray(ids) ? ids : [ids];
+                // find affected mails in simple cache
+                var hash = {}, folders = {}, getKey = cache.defaultKeyGenerator;
+                _(ids).each(function (o) {
+                    hash[getKey(o)] = true;
+                    folders[o.folder_id] = true;
+                });
+                // loop over each folder and look for items to remove
+                var defs = _(folders).map(function (value, folder_id) {
+                    return caches.all.get(folder_id).pipe(function (items) {
+                        if (items) {
+                            return caches.all.add(
+                                folder_id,
+                                _(items).select(function (o) {
+                                    return hash[getKey(o)] !== true;
+                                })
+                            );
+                        } else {
+                            return $.when();
+                        }
+                    });
+                });
+                // remove from object caches
+                defs.push(caches.list.remove(ids));
+                defs.push(caches.get.remove(ids));
+                // clear
+                return $.when.apply($, defs).done(function () {
+                    hash = folders = defs = null;
+                });
+            },
+
             remove: function (ids, local) {
                 // be robust
                 ids = ids || [];
@@ -188,33 +222,11 @@ define("io.ox/core/api/factory",
                 var opt = $.extend({}, o.requests.remove, { timestamp: _.now() });
                 // done
                 var done = function () {
-                    // find affected mails in simple cache
-                    var hash = {}, folders = {}, getKey = cache.defaultKeyGenerator;
-                    _(ids).each(function (o) {
-                        hash[getKey(o)] = true;
-                        folders[o.folder_id] = true;
-                    });
-                    // loop over each folder and look for items to remove
-                    _(folders).each(function (value, folder_id) {
-                        caches.all.get(folder_id).done(function (items) {
-                            if (items) {
-                                caches.all.add(
-                                    folder_id,
-                                    _(items).select(function (o) {
-                                        return hash[getKey(o)] !== true;
-                                    })
-                                );
-                            }
+                    return api.updateCachesAfterRemove(ids)
+                        .done(function () {
+                            api.trigger('deleted');
+                            api.trigger('refresh.all');
                         });
-                    });
-                    // clear
-                    hash = folders = null;
-                    // remove from object caches
-                    caches.list.remove(ids);
-                    caches.get.remove(ids);
-                    // trigger local refresh
-                    api.trigger('deleted');
-                    api.trigger('refresh.all');
                 };
                 api.trigger("beforedelete");
                 // delete on server?
@@ -225,9 +237,9 @@ define("io.ox/core/api/factory",
                         data: http.simplify(ids),
                         appendColumns: false
                     })
-                    .done(done);
+                    .pipe(done);
                 } else {
-                    return $.Deferred().resolve().done(done);
+                    return done();
                 }
             },
 

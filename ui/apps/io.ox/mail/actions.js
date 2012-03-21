@@ -144,7 +144,6 @@ define('io.ox/mail/actions',
                         if (selectedFolder.length === 1) {
                             // move action
                             api.move(mail, selectedFolder[0].id);
-                            api.trigger('refresh.all');
                         }
                     }
                 });

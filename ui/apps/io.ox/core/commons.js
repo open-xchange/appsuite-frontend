@@ -102,6 +102,12 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             win.on('hide', function () {
                 grid.selection.keyboard(false);
             });
+            // publish grid
+            if (win.app) {
+                win.app.getGrid = function () {
+                    return grid;
+                };
+            }
         },
 
         /**

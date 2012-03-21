@@ -168,6 +168,8 @@ define("io.ox/mail/main",
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api);
 
+        window.mailApp = app;
+
         // go!
         commons.addFolderSupport(app, grid, 'mail')
             .pipe(commons.showWindow(win, grid))

@@ -219,7 +219,7 @@ define("io.ox/mail/api",
             });
     };
 
-    api.change = function (list, data, apiAction) {
+    var change = function (list, data, apiAction) {
         // allow single object and arrays
         list = _.isArray(list) ? list : [list];
         // pause http layer
@@ -263,26 +263,36 @@ define("io.ox/mail/api",
         });
     };
 
+    var clearCaches = function (obj, targetFolderId) {
+            return function () {
+                return $.when(
+                    api.caches.get.remove(obj),
+                    api.caches.list.remove(obj),
+                    api.caches.all.remove(obj.folder_id), // clear source folder
+                    api.caches.all.remove(targetFolderId), // clear target folder
+                    api.caches.allThreaded.remove(obj.folderId),
+                    api.caches.allThreaded.remove(targetFolderId)
+                );
+            };
+        },
+        refreshAll = function () {
+            api.trigger('refresh.all');
+        };
+
     api.update = function (list, data) {
-        return api.change(list, data, 'update');
+        return change(list, data, 'update');
     };
 
-    api.move = function (obj, newFolder) {
-        return api.update(obj, { "folder_id":  newFolder}).done(function () {
-            $.when(api.caches.get.remove(obj), api.caches.list.remove(obj), api.caches.all.remove(obj), api.caches.allThreaded.remove(obj))
-            .done(function () {
-                ox.trigger('refresh');
-            });
-        });
+    api.move = function (obj, targetFolderId) {
+        return api.update(obj, { folder_id: targetFolderId })
+            .pipe(clearCaches(obj, targetFolderId))
+            .done(refreshAll);
     };
 
-    api.copy = function (obj, newFolder) {
-        return api.change(obj, { "folder_id":  newFolder}, 'copy').done(function () {
-            $.when(api.caches.get.remove(obj), api.caches.list.remove(obj), api.caches.all.remove(obj), api.caches.allThreaded.remove(obj))
-            .done(function () {
-                ox.trigger('refresh');
-            });
-        });
+    api.copy = function (obj, targetFolderId) {
+        return change(obj, { folder_id: targetFolderId }, 'copy')
+            .pipe(clearCaches(obj, targetFolderId))
+            .done(refreshAll);
     };
 
     var react = function (action, obj, view) {
