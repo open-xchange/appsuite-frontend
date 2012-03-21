@@ -21,7 +21,7 @@ define("io.ox/core/extPatterns/shortcuts", ["io.ox/core/tk/keys", "io.ox/core/co
         
         this.activateForContext = function (context) {
             if (active) {
-                this.remove();
+                this.deactivate();
             }
             var args = $.makeArray(arguments);
             active = true;
