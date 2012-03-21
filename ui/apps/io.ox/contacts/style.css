@@ -322,7 +322,7 @@ input#image1 {
 	
 .contact-detail.edit .sectiontitle {
 	margin: 25px 0 15px 0;
-	padding-left: 165px;
+	padding-left: 137px;
 	font-size: 1.25em;
 	color: #888;
 	font-family: OpenSans, Helvetica, Arial, sans-serif;
@@ -335,6 +335,7 @@ input#image1 {
 .contact-detail.edit .section-group,
 .create-contact .section-group {
 	margin-bottom: 5px;
+	overflow: hidden;
 }
 
 .contact-detail.edit div.input > input[type="text"]{
@@ -370,9 +371,9 @@ input#image1 {
 }
 
 .contact-detail.edit div.io-ox-label {
-	margin-right: 15px;
+	margin-right: 37px;
 	padding-top: 7px;
-	width: 150px;
+	width: 100px;
 	float:left;
 	text-align: right;
 }
@@ -382,9 +383,9 @@ input#image1 {
 }
 
 .contact-detail.edit div.inlinelabel {
-	margin-right: 15px;
+	margin-right: 37px;
 	padding-top: 7px;
-	width: 150px;
+	width: 100px;
 	float:left;
 	text-align: right;
 }
@@ -434,7 +435,7 @@ input#image1 {
 
 /*switches*/
 .contact-detail.edit a.switcher {
-	padding-left: 165px;	
+	padding-left: 137px;	
 }
 
 .io-ox-contact-create-dist .contact-image,  .create-distributionlist .contact-image{

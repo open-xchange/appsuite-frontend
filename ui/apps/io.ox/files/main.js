@@ -19,16 +19,18 @@ define("io.ox/files/main",
      "io.ox/core/tk/vgrid",
      "io.ox/core/tk/upload",
      "io.ox/core/extPatterns/dnd",
+     "io.ox/core/extPatterns/shortcuts",
      "io.ox/core/tk/dialogs",
      "io.ox/help/hints",
      "gettext!io.ox/files/files",
      "io.ox/core/bootstrap/basics",
      "io.ox/files/actions",
      "less!io.ox/files/style.css"
-    ], function (viewDetail, api, commons, VGrid, upload, dnd, dialogs, hints, gt) {
-
+    ], function (viewDetail, api, commons, VGrid, upload, dnd, shortcuts, dialogs, hints, gt) {
+    
     "use strict";
-
+    
+    
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/files' }),
         // app window
@@ -70,7 +72,6 @@ define("io.ox/files/main",
             .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main);
 
-        
         // Grid
         grid = new VGrid(left);
 
@@ -84,7 +85,7 @@ define("io.ox/files/main",
                 return { name: name };
             },
             set: function (data, fields, index) {
-                fields.name.text(data.title);
+                fields.name.text(data.title || data.filename || '\u00A0');
             }
         });
 
@@ -93,7 +94,7 @@ define("io.ox/files/main",
 
         // LFO callback
         var currentDetailView = null;
-        function drawDetail(data) {
+        function selectFile(data) {
             if (currentDetailView) {
                 currentDetailView.destroy();
             }
@@ -103,6 +104,11 @@ define("io.ox/files/main",
             app.currentFile = data;
             app.detailView = currentDetailView;
             dropZone.update();
+            shortcutPoint.activateForContext({
+                data: data,
+                view: app.detailView,
+                folder: data.folder_id
+            });
         }
 
         var drawFile = function (obj) {
@@ -111,12 +117,12 @@ define("io.ox/files/main",
                 return;
             }
             right.busy(true);
-            api.get(obj).done(_.lfo(drawDetail));
+            api.get(obj).done(_.lfo(selectFile));
         };
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/files', drawFile, right);
-        
-        
+
+
         grid.selection.on('empty', function () {
             if (currentDetailView) {
                 currentDetailView.destroy();
@@ -125,7 +131,7 @@ define("io.ox/files/main",
             app.currentFile = null;
             dropZone.update();
         });
-        
+
         grid.selection.on("change", function (evt, selected) {
             if (selected.length > 1) {
                 app.currentFile = null;
@@ -143,22 +149,25 @@ define("io.ox/files/main",
                 currentDetailView.trigger.apply(currentDetailView, args);
             }
         });
-        
+
         // Toggle Edit Mode
-        
-        right.on("dblclick", function () {
+
+        right.on("dblclick", function (e) {
+            if (_(["a", "button", "input", "textarea"]).include(e.srcElement.tagName.toLowerCase())) {
+                return;
+            }
             if (currentDetailView) {
-                currentDetailView.edit();
+                currentDetailView.toggleEdit();
             }
         });
-        
-        
+
+
 
         // Uploads
-        
-        
+
+
         app.queues = {};
-        
+
         app.queues.create = upload.createQueue({
             processFile: function (file) {
                 var uploadIndicator = new dialogs.ModalDialog();
@@ -177,7 +186,7 @@ define("io.ox/files/main",
                     });
             }
         });
-        
+
         app.queues.update = upload.createQueue({
             processFile: function (fileData) {
                 var uploadIndicator = new dialogs.ModalDialog();
@@ -204,6 +213,11 @@ define("io.ox/files/main",
         var dropZone = new dnd.UploadZone({
             ref: "io.ox/files/dnd/actions"
         }, app);
+        
+        
+        var shortcutPoint = new shortcuts.Shortcuts({
+            ref: "io.ox/files/shortcuts"
+        });
 
         win.on("show", function () {
             dropZone.include();
@@ -211,6 +225,7 @@ define("io.ox/files/main",
 
         win.on("hide", function () {
             dropZone.remove();
+            shortcutPoint.deactivate();
         });
 
         // Add status for uploads

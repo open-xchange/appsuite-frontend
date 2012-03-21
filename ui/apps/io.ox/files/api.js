@@ -97,9 +97,11 @@ define("io.ox/files/api",
             .pipe(function (data) {
                 // clear folder cache
                 data = fallbackForOX6BackendREMOVEME(data);
-                api.caches.all.remove(options.folder);
-                api.trigger("create.file");
-                return { folder_id: String(options.folder), id: parseInt(data.data, 10) };
+                return api.caches.all.remove(options.folder)
+                    .pipe(function () {
+                        api.trigger("create.file");
+                        return { folder_id: String(options.folder), id: parseInt(data.data, 10) };
+                    });
             });
     };
 
@@ -129,40 +131,50 @@ define("io.ox/files/api",
 
         return http.UPLOAD({
                 module: "infostore",
-                params: { action: "update", timestamp: options.timestamp, id: options.id },
+                params: { action: "update", timestamp: _.now(), id: options.id },
                 data: formData,
                 dataType: "text"
             })
             .pipe(function (data) {
                 // clear folder cache
-                api.caches.all.remove(options.folder);
-                api.caches.get.remove({id: options.id, folder: options.folder});
-                api.caches.versions.remove(options.id);
-                api.trigger("create.version update", {id: options.id, folder: options.folder});
-
-                var tmp = fallbackForOX6BackendREMOVEME(data);
-                return { folder_id: String(options.folder), id: options.id, timestamp: tmp.timestamp};
+                return $.when(
+                    api.caches.all.remove(options.folder),
+                    api.caches.get.remove({id: options.id, folder: options.folder}),
+                    api.caches.versions.remove(options.id)
+                )
+                .pipe(function () {
+                    api.trigger("create.version update refresh.all", {id: options.id, folder: options.folder});
+                    var tmp = fallbackForOX6BackendREMOVEME(data);
+                    return { folder_id: String(options.folder), id: options.id, timestamp: tmp.timestamp};
+                });
             });
     };
 
     api.update = function (file) {
+        var obj = { id: file.id, folder: file.folder_id };
         return http.PUT({
-            module: "infostore",
-            params: {action: "update", id: file.id, timestamp: file.last_modified},
-            data: file
-        }).done(function () {
-            api.caches.all.remove(file.folder);
-            api.caches.versions.remove(file.id);
-            api.caches.get.remove({id: file.id, folder: file.folder});
-            api.trigger("update", {id: file.id, folder: file.folder});
-        });
+                module: 'infostore',
+                params: { action: 'update', id: file.id, timestamp: _.now() },
+                data: file,
+                appendColumns: false
+            })
+            .pipe(function () {
+                // clear all cache since titles and thus the order might have changed
+                return api.caches.all.remove(file.folder_id);
+            })
+            .pipe(function () {
+                return api.get(obj, false);
+            })
+            .done(function () {
+                api.trigger('update refresh.all', obj);
+            });
     };
 
     api.create = function (options) {
+
         options = $.extend({
             folder: config.get("folder.infostore")
         }, options || {});
-
 
         if (!options.json.folder_id) {
             options.json.folder_id = options.folder;
@@ -175,9 +187,11 @@ define("io.ox/files/api",
             })
             .pipe(function (data) {
                 // clear folder cache
-                api.caches.all.remove(options.folder);
-                api.trigger("create.file", {id: data, folder: options.folder});
-                return { folder_id: String(options.folder), id: String(data ? data : 0) };
+                return api.caches.all.remove(options.folder)
+                    .pipe(function () {
+                        api.trigger("create.file", {id: data, folder: options.folder});
+                        return { folder_id: String(options.folder), id: String(data ? data : 0) };
+                    });
             });
     };
 
@@ -196,7 +210,8 @@ define("io.ox/files/api",
                     module: "infostore",
                     params: getOptions,
                     appendColumns: true
-                }).pipe(function (data) {
+                })
+                .pipe(function (data) {
                     api.caches.versions.add(options.id, data);
                     return data;
                 });
@@ -206,7 +221,7 @@ define("io.ox/files/api",
 
     api.getUrl = function (file, mode) {
         var url = ox.apiRoot + "/infostore?action=document&id=" + file.id +
-            "&folder=" + file.folder_id + "&version=" + file.version + "&session=" + ox.session;
+            "&folder=" + file.folder_id + "&version=" + file.version + "&session=" + ox.session; // TODO: Remove ox.session parameter once current B/E is available everywhere
         switch (mode) {
         case 'open':
             return url + '&content_disposition=inline';
@@ -220,13 +235,19 @@ define("io.ox/files/api",
     api.detach = function (version) {
         return http.PUT({
             module: "infostore",
-            params: { action: "detach", id: version.id, folder: version.folder, timestamp: version.last_modified },
+            params: { action: "detach", id: version.id, folder: version.folder, timestamp: _.now() },
             data: [version.version]
-        }).done(function () {
-            api.caches.all.remove(version.folder);
-            api.caches.versions.remove(version.id);
-            api.caches.get.remove({id: version.id, folder: version.folder});
-            api.trigger("delete.version update", {id: version.id, folder: version.folder, version: version.version});
+        })
+        .pipe(function () {
+            return $.when(
+                api.caches.all.remove(version.folder),
+                api.caches.list.remove({ id: version.id, folder: version.folder }),
+                api.caches.get.remove({ id: version.id, folder: version.folder }),
+                api.caches.versions.remove(version.id)
+            );
+        })
+        .done(function () {
+            api.trigger("delete.version update refresh.all", {id: version.id, folder: version.folder, version: version.version});
         });
     };
 

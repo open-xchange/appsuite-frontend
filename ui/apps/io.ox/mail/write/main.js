@@ -23,12 +23,11 @@ define.async('io.ox/mail/write/main',
      'io.ox/core/i18n',
      'io.ox/core/api/user',
      'io.ox/core/tk/upload',
-     'io.ox/core/tk/autocomplete',
      'io.ox/mail/model',
      'io.ox/mail/write/view-main',
      'gettext!io.ox/mail/mail',
      'less!io.ox/mail/style.css',
-     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload, autocomplete, MailModel, WriteView, gt) {
+     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload, MailModel, WriteView, gt) {
 
     'use strict';
 
@@ -354,6 +353,20 @@ define.async('io.ox/mail/write/main',
             }
         };
 
+        app.addFiles = function (list) {
+            app.markDirty();
+            var found = false;
+            _(list || []).each(function (obj) {
+                found = true;
+                app.getView().form.find('input[type=file]').last()
+                    .prop('file', obj)
+                    .trigger('change');
+            });
+            if (found) {
+                app.getView().showSection('attachments');
+            }
+        };
+
         app.setPriority = function (prio) {
             app.markDirty();
             // be robust
@@ -411,6 +424,8 @@ define.async('io.ox/mail/write/main',
             this.setAttachVCard(data.vcard !== undefined ? data.vcard : config.get('mail.vcard', false));
             this.setDeliveryReceipt(data.disp_notification_to !== undefined ? data.disp_notification_to : false);
             this.setMsgRef(data.msgref);
+            // add files (from file storage)
+            this.addFiles(data.infostore_ids);
             // apply mode
             var title = data.subject ? data.subject : windowTitles[composeMode = mail.mode];
             win.setTitle(title);
@@ -640,9 +655,12 @@ define.async('io.ox/mail/write/main',
                     if (attachment) {
                         // add linked attachment
                         mail.attachments.push(attachment);
-                    } else if (file) {
+                    } else if (file instanceof window.File) {
                         // add dropped file
                         files.push(file);
+                    } else if (file && 'id' in file) {
+                        // infostore id
+                        (mail.infostore_ids = (mail.infostore_ids || [])).push(file);
                     } else if (this.files && this.files.length) {
                         // process normal upload
                         _(this.files).each(function (file) {
@@ -666,8 +684,10 @@ define.async('io.ox/mail/write/main',
         app.send = function () {
             // get mail
             var mail = this.getMail();
-            // hide app
-            //win.hide();
+            // get flat ids for data.infostore_ids
+            if (mail.data.infostore_ids) {
+                mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
+            }
             // send!
             mailAPI.send(mail.data, mail.files)
                 .always(function (result) {

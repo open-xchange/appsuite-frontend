@@ -126,7 +126,7 @@ define('io.ox/core/tk/autocomplete', function () {
                                 .addClass('autocomplete-item')
                                 .data('data', data)
                                 .on('click', { index: index, contact: data.contact, email: data.email }, fnSelectItem);
-                            o.draw.call(node, data);
+                            o.draw.call(node, data, query);
                             node.appendTo(scrollpane);
                         });
                         // leads to results

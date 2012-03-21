@@ -22,10 +22,12 @@ define("io.ox/mail/write/view-main",
      'io.ox/contacts/util',
      'io.ox/mail/util',
      'io.ox/core/i18n',
-     'gettext!io.ox/mail/mail'
+     'gettext!io.ox/mail/mail',
+     'io.ox/core/tk/autocomplete'
     ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, i18n, gt) {
 
     'use strict';
+
     var app;
 
     var theView = View.extend({
@@ -515,7 +517,6 @@ define("io.ox/mail/write/view-main",
             var item = $(e.currentTarget).prop('attachment') || $(e.currentTarget).prop('file'),
                 list = item ? [item] : e.target.files;
             // loop over all attachments
-
             _(list).each(function (file) {
                 view.sections.attachments.append(
                     $('<div>').addClass('section-item file')
@@ -524,7 +525,7 @@ define("io.ox/mail/write/view-main",
                         $('<div>')
                         .append(
                             $('<span>').addClass('filesize')
-                            .text(i18n.filesize(file.size))
+                            .text(i18n.filesize(file.size || file.file_size))
                         )
                         .append(
                             supportsPreview(file) ? createPreview(file) : $()
