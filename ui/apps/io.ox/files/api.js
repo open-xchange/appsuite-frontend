@@ -138,7 +138,7 @@ define("io.ox/files/api",
                 api.caches.all.remove(options.folder);
                 api.caches.get.remove({id: options.id, folder: options.folder});
                 api.caches.versions.remove(options.id);
-                api.trigger("create.version update", {id: options.id, folder: options.folder});
+                api.trigger("create.version update refresh.all refresh.list", {id: options.id, folder: options.folder});
 
                 var tmp = fallbackForOX6BackendREMOVEME(data);
                 return { folder_id: String(options.folder), id: options.id, timestamp: tmp.timestamp};
@@ -146,16 +146,21 @@ define("io.ox/files/api",
     };
 
     api.update = function (file) {
+        var obj = { id: file.id, folder: file.folder_id };
         return http.PUT({
-            module: "infostore",
-            params: {action: "update", id: file.id, timestamp: file.last_modified},
-            data: file
-        }).done(function () {
-            api.caches.all.remove(file.folder);
-            api.caches.versions.remove(file.id);
-            api.caches.get.remove({id: file.id, folder: file.folder});
-            api.trigger("refresh.all update", {id: file.id, folder: file.folder});
-        });
+                module: 'infostore',
+                params: { action: 'update', id: file.id, timestamp: file.last_modified },
+                data: file,
+                appendColumns: false
+            })
+            .pipe(function () {
+                return api.get(obj, false);
+            })
+            .done(function () {
+                // clear all cache since titles and thus the order might change
+                api.caches.all.remove(file.folder_id);
+                api.trigger('update refresh.all', obj);
+            });
     };
 
     api.create = function (options) {
@@ -226,7 +231,7 @@ define("io.ox/files/api",
             api.caches.all.remove(version.folder);
             api.caches.versions.remove(version.id);
             api.caches.get.remove({id: version.id, folder: version.folder});
-            api.trigger("delete.version update", {id: version.id, folder: version.folder, version: version.version});
+            api.trigger("delete.version update refresh.all refresh.list", {id: version.id, folder: version.folder, version: version.version});
         });
     };
 
