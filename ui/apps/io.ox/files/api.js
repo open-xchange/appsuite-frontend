@@ -138,7 +138,7 @@ define("io.ox/files/api",
                 api.caches.all.remove(options.folder);
                 api.caches.get.remove({id: options.id, folder: options.folder});
                 api.caches.versions.remove(options.id);
-                api.trigger("create.version update", {id: options.id, folder: options.folder});
+                api.trigger("create.version update refresh.all refresh.list", {id: options.id, folder: options.folder});
 
                 var tmp = fallbackForOX6BackendREMOVEME(data);
                 return { folder_id: String(options.folder), id: options.id, timestamp: tmp.timestamp};
@@ -154,7 +154,7 @@ define("io.ox/files/api",
             api.caches.all.remove(file.folder);
             api.caches.versions.remove(file.id);
             api.caches.get.remove({id: file.id, folder: file.folder});
-            api.trigger("update", {id: file.id, folder: file.folder});
+            api.trigger("update refresh.all refresh.list", {id: file.id, folder: file.folder});
         });
     };
 
@@ -226,7 +226,7 @@ define("io.ox/files/api",
             api.caches.all.remove(version.folder);
             api.caches.versions.remove(version.id);
             api.caches.get.remove({id: version.id, folder: version.folder});
-            api.trigger("delete.version update", {id: version.id, folder: version.folder, version: version.version});
+            api.trigger("delete.version update refresh.all refresh.list", {id: version.id, folder: version.folder, version: version.version});
         });
     };
 
