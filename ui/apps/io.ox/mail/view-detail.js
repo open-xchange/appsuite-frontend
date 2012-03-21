@@ -16,8 +16,9 @@ define("io.ox/mail/view-detail",
     ["io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
      "io.ox/mail/util",
-     "io.ox/mail/actions"
-    ], function (ext, links, util, actions) {
+     "io.ox/mail/actions",
+     "gettext!io.ox/mail/mail"
+    ], function (ext, links, util, actions, gt) {
 
     'use strict';
 
@@ -86,7 +87,7 @@ define("io.ox/mail/view-detail",
                 return content.append(
                     $("<div>")
                     .addClass("infoblock backstripes")
-                    .text('This email has no content')
+                    .text(gt('This email has no content'))
                 );
             }
 
@@ -239,14 +240,14 @@ define("io.ox/mail/view-detail",
                         .addClass("to-cc list")
                         .append(
                             // TO
-                            $("<span>").addClass("io-ox-label").text("To:\u00A0")
+                            $("<span>").addClass("io-ox-label").text(gt("To") + ":\u00A0")
                         )
                         .append(
                             util.serializeList(data.to, true)
                         )
                         .append(
                             // CC
-                            showCC ? $("<span>").addClass("io-ox-label").text(" Copy:\u00A0") : []
+                            showCC ? $("<span>").addClass("io-ox-label").text(gt("Copy") + ":\u00A0") : []
                         )
                         .append(
                             util.serializeList(data.cc, true)
@@ -279,7 +280,7 @@ define("io.ox/mail/view-detail",
                         .addClass("list")
                         .append(
                              // TO
-                             $("<span>").addClass("io-ox-label").text("Attachments: ")
+                             $("<span>").addClass("io-ox-label").text(gt("Attachments: "))
                          )
                          .append(
                              util.serializeAttachments(data, attachments)
@@ -306,11 +307,10 @@ define("io.ox/mail/view-detail",
                     .addClass("list")
                     .addClass("infoblock backstripes")
                     .append(
-                         $('<a>').text('Bilder anzeigen'),
+                         $('<a>').text(gt('Bilder anzeigen')),
                          $('<i>').text(
                               ' \u2013 ' +
-                              'In dieser E-Mail wurden externe Bilder blockiert, ' +
-                              'um potenziellen Missbrauch durch SPAM zu verhindern.'
+                              gt('In dieser E-Mail wurden externe Bilder blockiert, um potenziellen Missbrauch durch SPAM zu verhindern.')
                          )
                      )
                     .on('click', function (e) {

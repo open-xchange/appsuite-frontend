@@ -20,9 +20,10 @@ define("io.ox/mail/main",
      "io.ox/core/tk/vgrid",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
+     "gettext!io.ox/mail/mail",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl) {
+    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt) {
 
     'use strict';
 
@@ -55,7 +56,7 @@ define("io.ox/mail/main",
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/mail',
-            title: "Inbox",
+            title: gt("Inbox"),
             titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true,
             search: true
@@ -156,7 +157,7 @@ define("io.ox/mail/main",
 
         drawFail = function (obj) {
             right.idle().empty().append(
-                $.fail("Couldn't load that email.", function () {
+                $.fail(gt("Couldn't load that email."), function () {
                     showMail(obj);
                 })
             );
