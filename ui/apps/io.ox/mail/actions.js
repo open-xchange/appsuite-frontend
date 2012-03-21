@@ -116,13 +116,31 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/source', {
         id: 'source',
         action: function (data) {
-            api.getSource(data).done(function (srcData) {
-                require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                    var dialog = new dialogs.ModalDialog()
-                        .addButton("ok", gt("OK"));
-                    dialog.getContentNode().append($('<pre>').text(srcData));
-                    dialog.show();
-                });
+            var getSource = api.getSource(data), textarea;
+            require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                new dialogs.ModalDialog({ easyOut: true, width: 700 })
+                    .addPrimaryButton("close", gt("Close"))
+                    .header(
+                        $('<h4>').text(gt('Mail source') + ': ' + (data.subject || ''))
+                    )
+                    .append(
+                        textarea = $('<textarea>', { rows: 15, readonly: 'readonly' })
+                        .css({ width: '100%', boxSizing: 'border-box', visibility: 'hidden' })
+                        .addClass('input-xlarge')
+                        .on('keydown', function (e) {
+                            if (e.which !== 27) {
+                                e.stopPropagation();
+                            }
+                        })
+                    )
+                    .show(function () {
+                        var self = this.busy();
+                        getSource.done(function (src) {
+                            textarea.val(src || '').css('visibility', '').focus();
+                            textarea = getSource = null;
+                            self.idle();
+                        });
+                    });
             });
         }
     });
