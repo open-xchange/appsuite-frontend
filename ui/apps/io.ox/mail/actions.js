@@ -132,14 +132,14 @@ define('io.ox/mail/actions',
         requires: 'one',
         multiple: function (mail) {
             var self = this;
-            require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, FolderTree) {
+            require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, trees) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
                     .header($('<h4>').text('Move'))
                     .addPrimaryButton("ok", gt("OK"))
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css('maxHeight', '250px');
                 var item = _(mail).first(),
-                    tree = new FolderTree(dialog.getBody(), { type: 'mail' });
+                    tree = new trees.FolderTree(dialog.getBody(), { type: 'mail' });
                 tree.paint();
                 dialog.show(function () {
                     tree.selection.set(item.folder_id || item.folder);
@@ -162,14 +162,14 @@ define('io.ox/mail/actions',
         requires: 'one',
         multiple: function (mail) {
             var self = this;
-            require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, FolderTree) {
+            require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, trees) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
                     .header($('<h4>').text('Copy'))
                     .addPrimaryButton("ok", gt("OK"))
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css('maxHeight', '250px');
                 var item = _(mail).first(),
-                    tree = new FolderTree(dialog.getBody(), { type: 'mail' });
+                    tree = new trees.FolderTree(dialog.getBody(), { type: 'mail' });
                 tree.paint();
                 dialog.show(function () {
                     tree.selection.set(item.folder_id || item.folder);

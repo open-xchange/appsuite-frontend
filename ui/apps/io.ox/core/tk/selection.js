@@ -441,6 +441,14 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             changed();
         };
 
+        this.destroy = function () {
+            this.clear();
+            this.keyboard(false);
+            this.events.destroy();
+            container.off('click contextmenu');
+            selectedItems = observedItems = observedItemsIndex = last = null;
+        };
+
         // bind general click handler
         container.on('click contextmenu', '.selectable', click);
     };
