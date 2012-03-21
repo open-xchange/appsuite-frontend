@@ -84,6 +84,10 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
             return nodes.header;
         };
 
+        this.getPopup = function () {
+            return nodes.popup;
+        };
+
         this.getContentNode = this.getBody = function () {
             return nodes.body;
         };
