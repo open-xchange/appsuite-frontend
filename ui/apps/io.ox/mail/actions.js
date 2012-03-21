@@ -53,7 +53,9 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/reply-all', {
         id: 'reply-all',
         requires: function (e) {
-            return e.collection.has('one') && e.context.folder_id !== defaultDraftFolder;
+            // other recipients that me?
+            var multiple = (e.context.to || []).length && (e.context.cc || []).length;
+            return multiple && e.collection.has('one') && e.context.folder_id !== defaultDraftFolder;
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {

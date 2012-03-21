@@ -154,7 +154,7 @@ define("io.ox/files/api",
             api.caches.all.remove(file.folder);
             api.caches.versions.remove(file.id);
             api.caches.get.remove({id: file.id, folder: file.folder});
-            api.trigger("update", {id: file.id, folder: file.folder});
+            api.trigger("refresh.all update", {id: file.id, folder: file.folder});
         });
     };
 
