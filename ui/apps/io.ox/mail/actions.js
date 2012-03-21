@@ -152,6 +152,8 @@ define('io.ox/mail/actions',
                             api.move(mail, selectedFolder[0].id);
                         }
                     }
+                    tree.destroy();
+                    tree = dialog = null;
                 });
             });
         }
@@ -182,6 +184,8 @@ define('io.ox/mail/actions',
                             api.copy(mail, selectedFolder[0].id);
                         }
                     }
+                    tree.destroy();
+                    tree = dialog = null;
                 });
             });
         }
