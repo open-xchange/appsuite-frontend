@@ -129,15 +129,21 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/move', {
         id: 'move',
-        action: function (mail) {
+        requires: 'one',
+        multiple: function (mail) {
             var self = this;
             require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, FolderTree) {
-                var dialog = new dialogs.ModalDialog()
+                var dialog = new dialogs.ModalDialog({ easyOut: true })
+                    .header($('<h4>').text('Move'))
                     .addPrimaryButton("ok", gt("OK"))
                     .addButton("cancel", gt("Cancel"));
-                var tree = new FolderTree(dialog.getContentNode(), {'type': 'mail'});
+                dialog.getBody().css('maxHeight', '250px');
+                var item = _(mail).first(),
+                    tree = new FolderTree(dialog.getBody(), { type: 'mail' });
                 tree.paint();
-                dialog.show()
+                dialog.show(function () {
+                    tree.selection.set(item.folder_id || item.folder);
+                })
                 .done(function (action) {
                     if (action === 'ok') {
                         var selectedFolder = tree.selection.get();
@@ -152,23 +158,28 @@ define('io.ox/mail/actions',
     });
 
     new Action('io.ox/mail/actions/copy', {
-        id: 'move',
-        action: function (mail) {
+        id: 'copy',
+        requires: 'one',
+        multiple: function (mail) {
             var self = this;
             require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, FolderTree) {
-                var dialog = new dialogs.ModalDialog()
+                var dialog = new dialogs.ModalDialog({ easyOut: true })
+                    .header($('<h4>').text('Copy'))
                     .addPrimaryButton("ok", gt("OK"))
                     .addButton("cancel", gt("Cancel"));
-                var tree = new FolderTree(dialog.getContentNode(), {'type': 'mail'});
+                dialog.getBody().css('maxHeight', '250px');
+                var item = _(mail).first(),
+                    tree = new FolderTree(dialog.getBody(), { type: 'mail' });
                 tree.paint();
-                dialog.show()
+                dialog.show(function () {
+                    tree.selection.set(item.folder_id || item.folder);
+                })
                 .done(function (action) {
                     if (action === 'ok') {
                         var selectedFolder = tree.selection.get();
                         if (selectedFolder.length === 1) {
                             // move action
                             api.copy(mail, selectedFolder[0].id);
-                            api.trigger('refresh.all');
                         }
                     }
                 });
