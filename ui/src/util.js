@@ -349,47 +349,24 @@
         /**
          * format/printf
          */
-        printf: _.url.hash('debug-i18n') ?
-            function (str, params) {
-                if (!_.isArray(params)) params = slice.call(arguments, 1);
-                str = String(str);
-                var translated = str.charCodeAt(str.length - 1) === 0x200b;
-                params = _.map(params, function (param) {
-                    param = String(param);
-                    if (param.charCodeAt(param.length - 1) === 0x200b) {
-                        param = param.slice(-1);
-                    } else {
-                        translated = false;
-                    }
-                    return param;
-                });
-                var index = 0;
-                var retval = str.replace(/%(([0-9]+)\$)?[A-Za-z]/g,
+        printf: function (str, params) {
+            // is array?
+            if (!_.isArray(params)) {
+                params = slice.call(arguments, 1);
+            }
+            var index = 0;
+            return String(str)
+                .replace(
+                    /%(([0-9]+)\$)?[A-Za-z]/g,
                     function (match, pos, n) {
-                        if (pos) index = n - 1;
+                        if (pos) {
+                            index = n - 1;
+                        }
                         return params[index++];
                     }
-                ).replace(/%%/, '%');
-                return translated ? retval : retval.slice(-1);
-            } :
-            function (str, params) {
-                // is array?
-                if (!_.isArray(params)) {
-                    params = slice.call(arguments, 1);
-                }
-                var index = 0;
-                return String(str)
-                    .replace(
-                        /%(([0-9]+)\$)?[A-Za-z]/g,
-                        function (match, pos, n) {
-                            if (pos) {
-                                index = n - 1;
-                            }
-                            return params[index++];
-                        }
-                    )
-                    .replace(/%%/, "%");
-            },
+                )
+                .replace(/%%/, "%");
+        },
 
         /**
          * Format error
