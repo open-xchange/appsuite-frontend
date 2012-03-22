@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/links", "gettext!io.ox/files/files"], function (ext, links, gt) {
+define("io.ox/files/actions",
+    ["io.ox/core/extensions",
+     "io.ox/core/extPatterns/links",
+     "gettext!io.ox/files/files"], function (ext, links, gt) {
 
     'use strict';
 
@@ -295,30 +298,28 @@ define("io.ox/files/actions", ["io.ox/core/extensions", "io.ox/core/extPatterns/
         },
         label: function (app) {
             if (app.currentFile.title) {
-                /**
-                  FIXME: Once gt.format is available
-                return gt.format(
+                return gt(
                     //#. %1$s is the title of the file
-                    gt("Drop here to upload a new version of '%1$s'"), app.currentFile.title);
-                    **/
-                return "Drop here to upload a <b>new version</b> of '" + String(app.currentFile.title).replace(/</g, '&lt;') + "'";
+                    'Drop here to upload a <b>new version</b> of "%1$s"',
+                    String(app.currentFile.title).replace(/</g, '&lt;')
+                );
             } else {
-                return gt("Drop here to upload a <b>new version</b>");
+                return gt('Drop here to upload a <b>new version</b>');
             }
         },
         action: function (file, app) {
             app.queues.update.offer(file);
         }
     });
-    
+
     // Keyboard Shotcuts
-    
+
     ext.point("io.ox/files/shortcuts").extend({
         id: "cancel",
         shortcut: "esc",
         ref: "io.ox/files/actions/edit/cancel"
     });
-    
+
     ext.point("io.ox/files/shortcuts").extend({
         id: "edit",
         shortcut: "ctrl+enter",
