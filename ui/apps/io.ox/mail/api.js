@@ -267,25 +267,36 @@ define("io.ox/mail/api",
             return function () {
                 return $.when(
                     api.caches.get.remove(obj),
+                    api.caches.get.remove(obj.folder_id || obj.folder),
                     api.caches.list.remove(obj),
-                    api.caches.all.remove(obj.folder_id), // clear source folder
+                    api.caches.list.remove(obj.folder_id || obj.folder),
+                    api.caches.all.remove(obj.folder_id || obj.folder), // clear source folder
                     api.caches.all.remove(targetFolderId), // clear target folder
-                    api.caches.allThreaded.remove(obj.folderId),
+                    api.caches.allThreaded.remove(obj.folder_id || obj.folder),
                     api.caches.allThreaded.remove(targetFolderId)
                 );
             };
         },
-        refreshAll = function () {
-            api.trigger('refresh.all');
+        refreshAll = function (obj) {
+            $.when.apply($, obj).done(function () {
+                console.log('refresh all', obj);
+                api.trigger('refresh.list');
+                api.trigger('refresh.all');
+            });
         };
 
     api.update = function (list, data) {
         return change(list, data, 'update');
     };
 
-    api.move = function (obj, targetFolderId) {
-        return api.update(obj, { folder_id: targetFolderId })
-            .pipe(clearCaches(obj, targetFolderId))
+    api.move = function (list, targetFolderId) {
+        return api.update(list, { folder_id: targetFolderId })
+            .pipe(function () {
+                list = _.isArray(list) ? list : [list];
+                return _(list).map(function (obj) {
+                    return (clearCaches(obj, targetFolderId))();
+                });
+            })
             .done(refreshAll);
     };
 

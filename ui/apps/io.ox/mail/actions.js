@@ -147,7 +147,7 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/move', {
         id: 'move',
-        requires: 'one',
+        requires: 'some',
         multiple: function (mail) {
             var self = this;
             require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, trees) {
@@ -179,7 +179,7 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/copy', {
         id: 'copy',
-        requires: 'one',
+        requires: 'some',
         multiple: function (mail) {
             var self = this;
             require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, trees) {
@@ -214,7 +214,7 @@ define('io.ox/mail/actions',
         requires: function (e) {
             return api.getList(e.context).pipe(function (list) {
                 return _(list).reduce(function (memo, data) {
-                    return memo && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN;
+                    return memo && (data && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN);
                 }, true);
             });
         },
@@ -230,7 +230,7 @@ define('io.ox/mail/actions',
         requires: function (e) {
             return api.getList(e.context).pipe(function (list) {
                 return _(list).reduce(function (memo, data) {
-                    return memo || (data.flags & api.FLAGS.SEEN) === 0;
+                    return memo || (data && (data.flags & api.FLAGS.SEEN) === 0);
                 }, false);
             });
         },
