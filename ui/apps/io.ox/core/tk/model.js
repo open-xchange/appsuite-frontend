@@ -344,7 +344,6 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             },
                 success = function () {
                     // trigger store - expects deferred object
-                    console.log('alles richtig');
                     return (this.store(this._data, this.getChanges()) || $.when())
                         .done(_.bind(this.initialize, this, this._data));
                 },
