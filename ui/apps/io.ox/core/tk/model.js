@@ -250,7 +250,8 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             var key, value, previous = this._previous, defaults = this._defaults, changed;
             for (key in this._data) {
                 value = this._data[key];
-                changed = !(isEqual(value, previous[key]) || isEqual(value, defaults[key]));
+                // use 'soft' isEqual for previous, 'hard' isEqual for default values
+                changed = !(isEqual(value, previous[key]) || _.isEqual(value, defaults[key]));
                 if (changed) {
                     return true;
                 }
