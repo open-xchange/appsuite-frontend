@@ -47,11 +47,12 @@ define('io.ox/contacts/edit/view-form',
     };
 
     var lessSwitch = function (evt) {
-        var parent = $(evt.currentTarget).parent();
+        var parent = $(evt.currentTarget).parent(),
+            less = 'less';
         parent.find('.hidden').removeClass('hidden').addClass('visible');
         parent.find('.sectiontitle').removeClass('hidden');
         parent.addClass('expanded');
-        $(evt.currentTarget).text('- less');
+        $(evt.currentTarget).text('- ' + gt(less));
     };
 
     var namedSwitch = function (txt, evt) {
@@ -69,7 +70,7 @@ define('io.ox/contacts/edit/view-form',
             }
         ).parent().parent().parent().removeClass('visible').addClass('hidden');
         parent.find('.visible').removeClass('visible').addClass('hidden');
-        $(evt.currentTarget).text(txt);
+        $(evt.currentTarget).text(gt(txt));
     };
 
 
@@ -87,11 +88,13 @@ define('io.ox/contacts/edit/view-form',
                 return $(this).val() === "";
             }
         ).parent().parent().parent().removeClass('visible').addClass('hidden');
-        $(evt.currentTarget).text(txt);
+        $(evt.currentTarget).text(gt(txt));
     };
 
     var toggleFields = function (evt) {
-        var target;
+        var target,
+            switchName = evt.data.pointName,
+            more = 'more';
         target = evt.currentTarget;
 
         var filled = checkEl(target),
@@ -108,7 +111,7 @@ define('io.ox/contacts/edit/view-form',
 
         switch (status) {
         case "1":
-            namedSwitch('+ ' + evt.data.pointName, evt);
+            namedSwitch('+ ' + gt(switchName), evt);
             break;
         case "2":
             lessSwitch(evt);
@@ -117,7 +120,7 @@ define('io.ox/contacts/edit/view-form',
             lessSwitch(evt);
             break;
         case "4":
-            moreSwitch('+ more', evt);
+            moreSwitch('+ ' + gt(more), evt);
             break;
         }
     };
@@ -132,7 +135,8 @@ define('io.ox/contacts/edit/view-form',
             var section = options.view.createSection(),
                 sectionTitle = options.view.createSectionTitle({text: gt(pointName)}),
                 sectionContent = options.view.createSectionContent(),
-                pointNameRecalc = pointRecalc(pointName);
+                pointNameRecalc = pointRecalc(pointName),
+                more = 'more';
 
             section.append(sectionTitle);
             section.append(sectionContent);
@@ -140,7 +144,7 @@ define('io.ox/contacts/edit/view-form',
 
 
             if (/^(.*_address)$/.test(pointNameRecalc)) {
-                options.pointName = pointNameRecalc;
+                options.pointName = 'contact_' + pointNameRecalc;
                 ext.point('io.ox/contacts/edit/form/address').invoke('draw', sectionContent, options);
 
             } else {
@@ -148,11 +152,11 @@ define('io.ox/contacts/edit/view-form',
             }
             if (checkEl(sectionContent) !== 0) {
                 if (fieldCount(sectionContent) !== 0) {
-                    section.append($('<a>').addClass('switcher').text('+ more').on('click', {pointName: pointName}, toggleFields));
+                    section.append($('<a>').addClass('switcher').text('+ ' + gt(more)).on('click', {pointName: pointName}, toggleFields));
                 }
 
             } else {
-                section.append($('<a>').addClass('switcher').text('+ ' + pointName).on('click', {pointName: pointName}, toggleFields));
+                section.append($('<a>').addClass('switcher').text('+ ' + gt(pointName)).on('click', {pointName: pointName}, toggleFields));
                 sectionTitle.addClass('hidden');
             }
 
@@ -173,13 +177,13 @@ define('io.ox/contacts/edit/view-form',
 
             switch (fieldtype) {
             case "string":
-                createFunction = view.createTextField({ id: myId, property: subPointName, classes: 'form-vertical' });
+                createFunction = view.createTextField({ id: myId, property: subPointName, classes: 'input-large' });
                 break;
             case "pastDate":
-                createFunction = view.createDateField({ id: myId, property: subPointName, classes: 'form-vertical' });
+                createFunction = view.createDateField({ id: myId, property: subPointName, classes: 'input-large' });
                 break;
             default:
-                createFunction = view.createTextField({ id: myId, property: subPointName, classes: 'form-vertical' });
+                createFunction = view.createTextField({ id: myId, property: subPointName, classes: 'input-large' });
                 break;
             }
 
@@ -200,13 +204,14 @@ define('io.ox/contacts/edit/view-form',
     };
 
     var drawFields = function (pointName, subPointName) {
+//        console.log(pointName + ' ' + subPointName);
         return function (options) {
             ext.point('io.ox/contacts/edit/form/' + pointName + '/' + subPointName).invoke('draw', this, options);
         };
     };
 
     var drawAddress = function (options) {
-        var addressFormat = 'street,postal_code/city,country,state'.split(','),
+        var addressFormat = 'street,postal_code/city,state,country'.split(','),
             addressGroop = '_' + (options.pointName.split('_'))[1],
             self = this,
             view = options.view,
@@ -230,9 +235,12 @@ define('io.ox/contacts/edit/view-form',
                 self.append(sectionGroup);
 
                 _.each(lineFormat, function (multiline, index) {
-                    var myId = _.uniqueId('c');
-                    labels.push(options.view.createLabel({ id: myId, text: options.view.getModel().schema.getFieldLabel(multiline + addressGroop)}));
-                    fields.push(options.view.createTextField({ id: myId, property: multiline + addressGroop, classes: 'form-vertical' }));
+//                    console.log(multiline + ' ' + addressGroop);
+                    var myId = _.uniqueId('c'),
+                        labelText = options.view.getModel().schema.getFieldLabel(multiline + addressGroop);
+
+                    labels.push(options.view.createLabel({ id: myId, text: gt(labelText)}));
+                    fields.push(options.view.createTextField({ id: myId, property: multiline + addressGroop, classes: 'input-large' }));
                     hide = (options.view.getModel().get(multiline + addressGroop)) ? false : true;
                 });
 
@@ -253,12 +261,13 @@ define('io.ox/contacts/edit/view-form',
     };
 
     var createSaveButton = function (options) {
-        var saveButton = $('<a>');
+        var saveButton = $('<a>'),
+            buttonText = 'Save';
 
         window.ursel = saveButton;
         saveButton.attr('data-action', 'save');
         saveButton.attr('id', 'testid');
-        saveButton.addClass('btn btn-primary').text('Save');
+        saveButton.addClass('btn btn-primary').text(gt(buttonText));
         saveButton.on('click', function () {
             options.view.saveForm();
 
@@ -281,13 +290,14 @@ define('io.ox/contacts/edit/view-form',
           jobDescription,
           calculatedModel,
           saveButton,
-          displayNameText;
+          displayNameText,
+          jobDescriptionText;
 
         section = options.view.createSection({}).addClass('formheader');
 
         title = $('<span>').addClass('text name clear-title')
         .attr('data-property', 'display_name');
-        displayNameText = options.view.getModel().get().display_name;
+        displayNameText = util.getDisplayName(options.view.getModel().get());
 
      // fix for empty display_name
         if (!displayNameText) {
@@ -295,10 +305,16 @@ define('io.ox/contacts/edit/view-form',
         }
         title.text(displayNameText);
 
+        jobDescriptionText = util.getJob(options.view.getModel().get());
+
         jobDescription = $('<span>').addClass('text job clear-title')
         .attr('data-property', 'jobdescription_calculated')
-        .text(util.getJob(options.view.getModel().get()));
+        .text(jobDescriptionText);
 
+        // fix for empty Job Description
+        if (!jobDescriptionText) {
+            $(jobDescription).html('&nbsp;');
+        }
 
         saveButton = createSaveButton(options);
 
@@ -381,13 +397,13 @@ define('io.ox/contacts/edit/view-form',
 //            console.log(this);
             if (this.getModel()) {
                 meta = {
-                    'Contact personal': ['title', 'first_name', 'last_name', 'display_name', 'second_name', 'suffix', 'nickname', 'birthday'],
-                    'Contact email': ['email1', 'email2', 'email3'],
-                    'Contact phone': ['telephone_business1', 'telephone_business2', 'fax_business', 'telephone_car', 'telephone_company', 'telephone_home1', 'telephone_home2', 'fax_home', 'cellular_telephone1', 'cellular_telephone2', 'telephone_other', 'fax_other', 'telephone_isdn', 'telephone_pager', 'telephone_primary', 'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'instant_messenger1', 'instant_messenger2', 'telephone_ip', 'telephone_assistant', 'telephone_callback'],
-                    'Contact home address': ['street_home', 'postal_code_home', 'city_home', 'state_home', 'country_home'],
-                    'Contact business address': ['street_business', 'postal_code_business', 'city_business', 'state_business', 'country_business'],
-                    'Contact other address': ['street_other', 'postal_code_other', 'city_other', 'state_other', 'country_other'],
-                    'Contact job descriptions': ['room_number', 'profession', 'position', 'company', 'department', 'employee_type', 'number_of_employees', 'sales_volume', 'tax_id', 'commercial_register', 'branches', 'business_category', 'info', 'manager_name', 'assistant_name'],
+                    'Personal information': ['title', 'first_name', 'last_name', 'display_name', 'second_name', 'suffix', 'nickname', 'birthday'],
+                    'Email addresses': ['email1', 'email2', 'email3'],
+                    'Phone numbers': ['telephone_business1', 'telephone_business2', 'fax_business', 'telephone_car', 'telephone_company', 'telephone_home1', 'telephone_home2', 'fax_home', 'cellular_telephone1', 'cellular_telephone2', 'telephone_other', 'fax_other', 'telephone_isdn', 'telephone_pager', 'telephone_primary', 'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'instant_messenger1', 'instant_messenger2', 'telephone_ip', 'telephone_assistant', 'telephone_callback'],
+                    'Home address': ['street_home', 'postal_code_home', 'city_home', 'state_home', 'country_home'],
+                    'Business address': ['street_business', 'postal_code_business', 'city_business', 'state_business', 'country_business'],
+                    'Other address': ['street_other', 'postal_code_other', 'city_other', 'state_other', 'country_other'],
+                    'Job descriptions': ['room_number', 'profession', 'position', 'company', 'department', 'employee_type', 'number_of_employees', 'sales_volume', 'tax_id', 'commercial_register', 'branches', 'business_category', 'info', 'manager_name', 'assistant_name'],
                     'Special information': ['marital_status', 'number_of_children', 'spouse_name', 'note', 'url', 'anniversary'],
                     'Optional fields': ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05', 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10', 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15', 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20']
                 };
@@ -403,22 +419,18 @@ define('io.ox/contacts/edit/view-form',
                     $('input[data-property="display_name"]').val(text).trigger('change');
                 };
 
-                var updateDisplayName = function () {
-                    var text = self.getModel().get().display_name;
-                    // fix for empty display_name
-                    if (text === '') {
-                        text = '&nbsp;';
-                    }
-                    $('span[data-property="display_name"]').html(text);
-                };
 
                 var updateJobDescription = function () {
                     var jobText = util.getJob(self.getModel().get());
-                    $('[data-property="jobdescription_calculated"]').text(jobText);
+                 // fix for empty Job Description
+                    if (jobText === '') {
+                        jobText = '&nbsp;';
+                    }
+                    $('span[data-property="jobdescription_calculated"]').html(jobText);
                 };
 
                 this.getModel().on('change:title change:first_name change:last_name', updateDisplayNameByFields);
-                this.getModel().on('change:display_name', updateDisplayName);
+//                this.getModel().on('change:display_name', updateDisplayName);
                 this.getModel().on('change:company change:position', updateJobDescription); //change:profession
 
                 initExtensionPoints(meta);
@@ -427,7 +439,7 @@ define('io.ox/contacts/edit/view-form',
 
 
                 ext.point('io.ox/contacts/edit/form').invoke('draw', self.node, {view: self});
-                self.node.append($('<div>', {id: 'myGrowl'}).addClass('jGrowl').css({position: 'absolute', right: '0', top: '0'}));
+                self.node.append($('<div>', {id: 'myGrowl'}).addClass('jGrowl').css({position: 'absolute', right: '-275px', top: '-10px'}));
 
                 this.getModel().on('error:invalid', function (evt, err) {
                     console.log('error validation');

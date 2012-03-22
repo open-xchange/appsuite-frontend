@@ -54,12 +54,19 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             return true;
         },
         pastDate: function (prop, val, def) {
-            var now = _.now();
-            if (isNaN(val) && val !== '') {
-                return new Error(prop, _.printf('%s is not a valide date', def.i18n || prop));
+            var now = _.now(),
+                reformatetValue,
+                reg = /((\d{2})|(\d))\.((\d{2})|(\d))\.((\d{4})|(\d{2}))/;
+            if (!_.isString(val)) {
+                reformatetValue = require('io.ox/core/i18n').date('dd.MM.YYYY', val);
             } else {
-                return now > val ||
-                new Error(prop, _.printf('%s must be in the past', def.i18n || prop));
+                return new Error(prop, _.printf('%s is not a valide date', def.i18n || prop));
+            }
+
+            if (!reg.test(reformatetValue) && val !== '') {
+                return new Error(prop, _.printf('%s is not a valide date', def.i18n || prop));
+            } else  {
+                return  now > val || new Error(prop, _.printf('%s must be in the past', def.i18n || prop));
             }
 
         },
@@ -235,7 +242,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             var result = this.schema.validate(key, value);
             if (result !== true) {
                 this.trigger('error:invalid', result);
-                return;
+//               / return;
             }
             // update
             this._data[key] = value;
@@ -250,8 +257,10 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             var key, value, previous = this._previous, defaults = this._defaults, changed;
             for (key in this._data) {
                 value = this._data[key];
-                // use 'soft' isEqual for previous, 'hard' isEqual for default values
+
+             // use 'soft' isEqual for previous, 'hard' isEqual for default values
                 changed = !(isEqual(value, previous[key]) || _.isEqual(value, defaults[key]));
+
                 if (changed) {
                     return true;
                 }
@@ -266,8 +275,6 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
                     changes[key] = value;
                 }
                 if (key === 'distribution_list') {
-                    console.log(value);
-                    console.log(previous[key]);
 //                    console.log(_.difference(value, previous[key]));
 //                    changes[key] = 'dirty';
                 }
@@ -327,14 +334,14 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         save: (function () {
 
             var checkValid = function (valid, value, key) {
-                    var result = this.schema.validate(key, value);
-                    if (result !== true) {
-                        this.trigger('error:invalid', result);
-                        return false;
-                    } else {
-                        return valid;
-                    }
-                },
+                var result = this.schema.validate(key, value);
+                if (result !== true) {
+                    this.trigger('error:invalid', result);
+                    return false;
+                } else {
+                    return valid;
+                }
+            },
                 success = function () {
                     // trigger store - expects deferred object
                     return (this.store(this._data, this.getChanges()) || $.when())
