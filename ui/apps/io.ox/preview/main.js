@@ -12,51 +12,28 @@
  */
 
 define("io.ox/preview/main",
-    ["io.ox/preview/util"], function (util) {
+    ["io.ox/core/extensions"], function (ext) {
 
     "use strict";
 
     var Renderer = {
+        point: ext.point("io.ox/preview/engine")
 
-        // a map file ending <-> renderer id
-        map: {},
-
-        // available render engines
-        engines: [],
-
-        register: function (Engine) {
-            var Self = this;
-            $.each(Engine.endings, function (index, element) {
-                Self.map[element] = Engine.id;
+        getByExtension: function (fileExtension) {
+            this.point.chain().find(function (ext) {
+                var endings = ext.metadata("endings");
+                endings = _.isArray(endings) ? endings : [endings];
+                return _(endings).contains(fileExtension)
             });
-            this.engines.push(Engine);
-            return true;
-        },
-
-        get: function (id) {
-            for (var i = 0; i < this.engines.length; i++) {
-                var Engine = this.engines[i];
-                if (Engine.id === id) {
-                    return Engine;
-                }
-            }
-            return null;
-        },
-
-        getByFileType: function (fileType) {
-            return this.get(this.map[fileType]) || null;
         }
     };
 
     // register image typed renderer
-    Renderer.register({
+    Renderer.point.extend({
         id: "image",
         endings: ["png", "jpg", "jpeg", "gif"],
-        canRender: function (file) {
-            return $.inArray(util.FileTypesMap.getFileType(file.name), this.endings) !== -1;
-        },
-        paint: function (file, node) {
-            node.append(
+        draw: function (file, node) {
+            this.append(
                 $("<img>", { src: file.dataURL + "&width=400&height=300", alt: 'Preview' })
                 .css({
                     width: "400px",
@@ -68,7 +45,7 @@ define("io.ox/preview/main",
 
     // register audio typed renderer
     if (Modernizr.audio) {
-        Renderer.register({
+        Renderer.point.extend({
             id: "audio",
             endings: (function () {
                 var endings = [];
@@ -77,23 +54,19 @@ define("io.ox/preview/main",
                 });
                 return endings;
             }()),
-            canRender: function (file) {
-                return $.inArray(util.FileTypesMap.getFileType(file.name), this.endings) !== -1;
-            },
-            paint: function (file, node) {
-                if (this.canRender(file)) {
-                    $("<audio/>").attr({
-                        controls: "controls",
-                        src: file.dataURL
-                    }).appendTo(node);
-                }
+            draw: function (file) {
+                $("<audio/>").attr({
+                    controls: "controls",
+                    src: file.dataURL
+                }).appendTo(this);
             }
         });
     }
-
+    
+    /*
     // if available register office typed renderer
     if (ox.serverConfig.previewMimeTypes) {
-        Renderer.register({
+        Renderer.point.extend({
             id: "office",
             endings: (function () {
                 var endings = [];
@@ -105,34 +78,31 @@ define("io.ox/preview/main",
             canRender: function (file) {
                 return util.FileTypesMap.previewSupported(file.name);
             },
-            paint: function (file, node) {
+            draw: function (file, node) {
                 $.get(file.dataURL + "&format=preview").done(function (html) {
                     node.css({ border: "1px dotted silver", padding: "10px" }).append(html);
                 });
 //                node.append($("<iframe/>").css({ width: "100%", height: "100%"}).attr({ src: file.dataURL + "&format=preview_filtered" }));
             }
         });
-    }
+    } */
 
-    Renderer.register({
+    Renderer.point.extend({
         id: "text",
         endings: [ "txt", "js" ],
-        canRender: function (file) {
-            return $.inArray(util.FileTypesMap.getFileType(file.name), this.endings) !== -1;
-        },
-        paint: function (file, node) {
+        draw: function (file) {
             if (this.canRender(file)) {
                 $.ajax({ url: file.dataURL, dataType: "html" }).done(function (txt) {
-                    node.css({ border: "1px dotted silver", padding: "10px", whiteSpace: "pre-wrap" }).text(txt);
+                    this.css({ border: "1px dotted silver", padding: "10px", whiteSpace: "pre-wrap" }).text(txt);
                 });
             }
         }
     });
 
     var Preview = function (file) {
-
+        var self = this;
         this.file = file;
-        this.Renderer = null;
+        this.renderer = null;
 
         if (this.file.file_mimetype) {
             this.file.mimetype = this.file.file_mimetype;
@@ -143,13 +113,17 @@ define("io.ox/preview/main",
         if (this.file.filename) {
             this.file.name = this.file.filename;
         }
+        
+        this.extension =  (function () {
+            var extension = self.file.name.match(/\.([a-z0-9]{2,})$/i);
+            
+        }())
+        
 
         if (this.file.name) {
             // get matching renderer
-            this.Renderer = Renderer.getByFileType(util.FileTypesMap.getFileType(this.file.name));
+            this.renderer = Renderer.getByExtension(util.FileTypesMap.getFileType(this.file.name));
         }
-
-        this.ContentType = new util.ContentType(this.file.mimetype);
     };
 
     Preview.prototype = {
@@ -159,12 +133,12 @@ define("io.ox/preview/main",
         },
 
         getRenderer: function () {
-            return this.Renderer;
+            return this.renderer;
         },
 
         supportsPreview: function () {
-            if (this.Renderer !== null) {
-                return this.Renderer.canRender(this.file);
+            if (this.renderer !== null) {
+                return this.renderer.canRender(this.file);
             } else {
                 return false;
             }
@@ -172,16 +146,10 @@ define("io.ox/preview/main",
 
         appendTo: function (node) {
             if (this.supportsPreview()) {
-                this.Renderer.paint(this.file, node);
+                this.renderer.invoke("draw", node, this.file);
             }
         }
     };
-
-//    var ct = new util.ContentType('application/vnd.openxmlformats-officedocument.wordprocessingml.document; charset="UTF-8"; name="My testing document.docx";');
-//    console.debug(ct, ct.getBaseType(), ct.getSubType(), ct.getPrimaryType(), ct.getParameterList(), ct.previewSupported());
-//
-//    var ftm = util.FileTypesMap;
-//    console.debug(ftm, ftm.getContentType('My testing document.docx'), ftm.getFileType('My testing document.docx'), ftm.previewSupported('My testing document.docx'));
 
     return Preview;
 
