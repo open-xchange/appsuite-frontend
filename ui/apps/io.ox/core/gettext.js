@@ -35,11 +35,11 @@ define("io.ox/core/gettext", [], function () {
     }
 
     function debugNode(e) {
-        if (e.target.tagName in { TITLE: 1, SCRIPT: 1, STYLE: 1 }) return;
+        if (e.target.tagName in { SCRIPT: 1, STYLE: 1 }) return;
         debug(e.target);
         function debug(node) {
             if (node.nodeType === 3) {
-                verify(node.data, node);
+                verify(node.data, node.parentNode);
             } else if (node.nodeType === 1) {
                 _.each(node.childNodes, debug);
             }
@@ -48,8 +48,8 @@ define("io.ox/core/gettext", [], function () {
 
     function verify(s, node) {
         if (s.charCodeAt(s.length - 1) !== 0x200b) {
-            console.error("Untranslated string", s, node.parentNode);
-            $(node.parentNode).css('backgroundColor', 'rgba(255, 192, 0, 0.5)');
+            console.error("Untranslated string", s, node);
+            $(node).css('backgroundColor', 'rgba(255, 192, 0, 0.5)');
         }
     }
 
@@ -58,10 +58,13 @@ define("io.ox/core/gettext", [], function () {
         po.plural = new Function("n", "return " + po.plural + ";");
 
         function gettext(text) {
-            return gettext.pgettext("", text);
+            text = gettext.pgettext("", text);
+            return _.printf.apply(this, arguments);
         }
 
-        gettext.gettext = gettext;
+        gettext.gettext = function (text) {
+            return gettext.pgettext("", text);
+        };
 
         gettext.ngettext = function (singular, plural, n) {
             return gettext.npgettext("", singular, plural, n);
