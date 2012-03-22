@@ -276,7 +276,6 @@ define("io.ox/mail/view-detail",
                 );
                 _(attachments).each(function (a, i) {
                     var filename = a.filename || ('Attachment #' + i);
-                    console.log('attachment', a);
                     // use extension pattern
                     new links.DropdownLinks({
                         label: filename,
