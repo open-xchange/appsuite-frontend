@@ -219,7 +219,7 @@ define("io.ox/mail/api",
             });
     };
 
-    api.update = function (list, data) {
+    var change = function (list, data, apiAction) {
         // allow single object and arrays
         list = _.isArray(list) ? list : [list];
         // pause http layer
@@ -229,7 +229,7 @@ define("io.ox/mail/api",
             return http.PUT({
                 module: 'mail',
                 params: {
-                    action: 'update',
+                    action: apiAction,
                     id: obj.id,
                     folder: obj.folder || obj.folder_id
                 },
@@ -261,6 +261,49 @@ define("io.ox/mail/api",
         return http.resume().done(function () {
             api.trigger('refresh.list');
         });
+    };
+
+    var clearCaches = function (obj, targetFolderId) {
+            return function () {
+                return $.when(
+                    api.caches.get.remove(obj),
+                    api.caches.get.remove(obj.folder_id || obj.folder),
+                    api.caches.list.remove(obj),
+                    api.caches.list.remove(obj.folder_id || obj.folder),
+                    api.caches.all.remove(obj.folder_id || obj.folder), // clear source folder
+                    api.caches.all.remove(targetFolderId), // clear target folder
+                    api.caches.allThreaded.remove(obj.folder_id || obj.folder),
+                    api.caches.allThreaded.remove(targetFolderId)
+                );
+            };
+        },
+        refreshAll = function (obj) {
+            $.when.apply($, obj).done(function () {
+                console.log('refresh all', obj);
+                api.trigger('refresh.list');
+                api.trigger('refresh.all');
+            });
+        };
+
+    api.update = function (list, data) {
+        return change(list, data, 'update');
+    };
+
+    api.move = function (list, targetFolderId) {
+        return api.update(list, { folder_id: targetFolderId })
+            .pipe(function () {
+                list = _.isArray(list) ? list : [list];
+                return _(list).map(function (obj) {
+                    return (clearCaches(obj, targetFolderId))();
+                });
+            })
+            .done(refreshAll);
+    };
+
+    api.copy = function (obj, targetFolderId) {
+        return change(obj, { folder_id: targetFolderId }, 'copy')
+            .pipe(clearCaches(obj, targetFolderId))
+            .done(refreshAll);
     };
 
     var react = function (action, obj, view) {

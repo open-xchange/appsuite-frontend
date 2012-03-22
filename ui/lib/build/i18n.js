@@ -108,7 +108,7 @@ function warn(message, src) {
 function addMessage(filename, node, method, getSrc) {
     var src = getSrc(node[0].start.line + 1);
     var args = node[2];
-    if (args.length != method.length) {
+    if (method.length > 1 && args.length != method.length) {
         return warn("Invalid number of arguments to i18n function", src);
     }
     var msg = {

@@ -47,6 +47,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             getNode,
             selectPrevious,
             selectNext,
+            lastIndex = -1, // trick for smooth updates
             fnKey,
             hasMultiple;
 
@@ -98,7 +99,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         selectPrevious = function (e) {
             var index;
             if (bHasIndex) {
-                index = (getIndex(last) || 0) - 1;
+                index = getIndex(last) - 1;
                 if (index >= 0) {
                     clear();
                     apply(observedItems[index], e);
@@ -109,7 +110,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         selectNext = function (e) {
             var index;
             if (bHasIndex) {
-                index = (getIndex(last) || 0) + 1;
+                index = getIndex(last) + 1;
                 if (index < observedItems.length) {
                     clear();
                     apply(observedItems[index], e);
@@ -154,7 +155,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         };
 
         getIndex = function (id) {
-            return bHasIndex ? observedItemsIndex[self.serialize(id)] : 0;
+            return bHasIndex ? observedItemsIndex[self.serialize(id)] : -1;
         };
 
         getNode = function (id) {
@@ -166,15 +167,18 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         };
 
         select = function (id) {
-            var key = self.serialize(id);
-            selectedItems[key] = id;
-            getNode(key)
-                .addClass(self.classSelected)
-                .find('input.reflect-selection').attr('checked', 'checked').end()
-                .intoViewport(container);
-            last = id;
-            if (prev === empty) {
-                prev = id;
+            if (id) {
+                var key = self.serialize(id);
+                selectedItems[key] = id;
+                getNode(key)
+                    .addClass(self.classSelected)
+                    .find('input.reflect-selection').attr('checked', 'checked').end()
+                    .intoViewport(container);
+                last = id;
+                lastIndex = getIndex(id);
+                if (prev === empty) {
+                    prev = id;
+                }
             }
         };
 
@@ -226,7 +230,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             observedItemsIndex = {};
             last = prev = empty;
             // build index
-            var i = 0, $i = all.length, key;
+            var i = 0, $i = all.length, key, reselected = false, index = lastIndex;
             for (; i < $i; i++) {
                 observedItemsIndex[self.serialize(all[i])] = i;
             }
@@ -235,7 +239,17 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                 key = self.serialize(tmp[i]);
                 if (observedItemsIndex[key] !== undefined) {
                     select(tmp[i]);
+                    reselected = true;
                 }
+            }
+            // reset index but ignore 'empty runs'
+            if (all.length > 0) {
+                lastIndex = -1;
+            }
+            // could reselect?
+            if (!reselected && index > 0) {
+                // causes smooth updates in vgrid when, for example, deleting emails
+                select(observedItems[index]);
             }
             // fire event?
             if (!_.isEqual(tmp, self.get())) {
@@ -250,15 +264,19 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         this.update = function () {
             // get nodes
             var nodes = container.find('.selectable'),
-                i = 0, $i = nodes.length, node = null;
+                i = 0, $i = nodes.length, node = null, reselected = false;
             for (; i < $i; i++) {
                 node = $(nodes[i]);
                 // is selected?
                 if (isSelected(node.attr('data-obj-id'))) {
-                    node
-                        .find('input.reflect-selection').attr('checked', 'checked').end()
+                    node.find('input.reflect-selection').attr('checked', 'checked').end()
                         .addClass(self.classSelected);
+                    reselected = true;
                 }
+            }
+            if (!reselected) {
+                // try to set last index
+
             }
             return this;
         };
@@ -297,6 +315,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         this.setEditable = function (flag) {
             editable = !!flag;
             last = prev = empty;
+            lastIndex = -1;
             return this;
         };
 
@@ -420,6 +439,14 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
          */
         this.retrigger = function () {
             changed();
+        };
+
+        this.destroy = function () {
+            this.clear();
+            this.keyboard(false);
+            this.events.destroy();
+            container.off('click contextmenu');
+            selectedItems = observedItems = observedItemsIndex = last = null;
         };
 
         // bind general click handler

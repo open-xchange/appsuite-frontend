@@ -15,7 +15,8 @@ define('io.ox/mail/actions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/mail/api',
-     'io.ox/core/config'], function (ext, links, api, config) {
+     'gettext!io.ox/mail/mail',
+     'io.ox/core/config'], function (ext, links, api, gt, config) {
 
     'use strict';
 
@@ -53,7 +54,9 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/reply-all', {
         id: 'reply-all',
         requires: function (e) {
-            return e.collection.has('one') && e.context.folder_id !== defaultDraftFolder;
+            // other recipients that me?
+            var multiple = (e.context.to || []).length && (e.context.cc || []).length;
+            return multiple && e.collection.has('one') && e.context.folder_id !== defaultDraftFolder;
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -113,12 +116,94 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/source', {
         id: 'source',
         action: function (data) {
-            api.getSource(data).done(function (srcData) {
-                require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                    var dialog = new dialogs.ModalDialog()
-                        .addButton("ok", "OK");
-                    dialog.getContentNode().append($('<pre>').text(srcData));
-                    dialog.show();
+            var getSource = api.getSource(data), textarea;
+            require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                new dialogs.ModalDialog({ easyOut: true, width: 700 })
+                    .addPrimaryButton("close", gt("Close"))
+                    .header(
+                        $('<h4>').text(gt('Mail source') + ': ' + (data.subject || ''))
+                    )
+                    .append(
+                        textarea = $('<textarea>', { rows: 15, readonly: 'readonly' })
+                        .css({ width: '100%', boxSizing: 'border-box', visibility: 'hidden' })
+                        .addClass('input-xlarge')
+                        .on('keydown', function (e) {
+                            if (e.which !== 27) {
+                                e.stopPropagation();
+                            }
+                        })
+                    )
+                    .show(function () {
+                        var self = this.busy();
+                        getSource.done(function (src) {
+                            textarea.val(src || '').css('visibility', '').focus();
+                            textarea = getSource = null;
+                            self.idle();
+                        });
+                    });
+            });
+        }
+    });
+
+    new Action('io.ox/mail/actions/move', {
+        id: 'move',
+        requires: 'some',
+        multiple: function (mail) {
+            var self = this;
+            require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, trees) {
+                var dialog = new dialogs.ModalDialog({ easyOut: true })
+                    .header($('<h4>').text('Move'))
+                    .addPrimaryButton("ok", gt("OK"))
+                    .addButton("cancel", gt("Cancel"));
+                dialog.getBody().css('maxHeight', '250px');
+                var item = _(mail).first(),
+                    tree = new trees.FolderTree(dialog.getBody(), { type: 'mail' });
+                tree.paint();
+                dialog.show(function () {
+                    tree.selection.set(item.folder_id || item.folder);
+                })
+                .done(function (action) {
+                    if (action === 'ok') {
+                        var selectedFolder = tree.selection.get();
+                        if (selectedFolder.length === 1) {
+                            // move action
+                            api.move(mail, selectedFolder[0].id);
+                        }
+                    }
+                    tree.destroy();
+                    tree = dialog = null;
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/mail/actions/copy', {
+        id: 'copy',
+        requires: 'some',
+        multiple: function (mail) {
+            var self = this;
+            require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, trees) {
+                var dialog = new dialogs.ModalDialog({ easyOut: true })
+                    .header($('<h4>').text('Copy'))
+                    .addPrimaryButton("ok", gt("OK"))
+                    .addButton("cancel", gt("Cancel"));
+                dialog.getBody().css('maxHeight', '250px');
+                var item = _(mail).first(),
+                    tree = new trees.FolderTree(dialog.getBody(), { type: 'mail' });
+                tree.paint();
+                dialog.show(function () {
+                    tree.selection.set(item.folder_id || item.folder);
+                })
+                .done(function (action) {
+                    if (action === 'ok') {
+                        var selectedFolder = tree.selection.get();
+                        if (selectedFolder.length === 1) {
+                            // move action
+                            api.copy(mail, selectedFolder[0].id);
+                        }
+                    }
+                    tree.destroy();
+                    tree = dialog = null;
                 });
             });
         }
@@ -129,7 +214,7 @@ define('io.ox/mail/actions',
         requires: function (e) {
             return api.getList(e.context).pipe(function (list) {
                 return _(list).reduce(function (memo, data) {
-                    return memo && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN;
+                    return memo && (data && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN);
                 }, true);
             });
         },
@@ -145,7 +230,7 @@ define('io.ox/mail/actions',
         requires: function (e) {
             return api.getList(e.context).pipe(function (list) {
                 return _(list).reduce(function (memo, data) {
-                    return memo || (data.flags & api.FLAGS.SEEN) === 0;
+                    return memo || (data && (data.flags & api.FLAGS.SEEN) === 0);
                 }, false);
             });
         },
@@ -161,14 +246,14 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/links/toolbar').extend(new links.Link({
         index: 100,
         id: 'compose',
-        label: 'Compose new email',
+        label: gt('Compose new email'),
         ref: 'io.ox/mail/actions/compose'
     }));
 
     ext.point('io.ox/mail/links/toolbar').extend(new links.Link({
         index: 200,
         id: 'reader',
-        label: 'Light!',
+        label: gt('Light!'),
         ref: 'io.ox/mail/actions/reader'
     }));
 
@@ -177,28 +262,42 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 100,
         id: 'reply-all',
-        label: 'Reply All',
+        label: gt('Reply All'),
         ref: 'io.ox/mail/actions/reply-all'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 200,
         id: 'reply',
-        label: 'Reply',
+        label: gt('Reply'),
         ref: 'io.ox/mail/actions/reply'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 300,
         id: 'forward',
-        label: 'Forward',
+        label: gt('Forward'),
         ref: 'io.ox/mail/actions/forward'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: 350,
+        id: 'move',
+        label: gt('Move'),
+        ref: 'io.ox/mail/actions/move'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: 360,
+        id: 'copy',
+        label: gt('Copy'),
+        ref: 'io.ox/mail/actions/copy'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 400,
         id: 'edit',
-        label: 'Edit',
+        label: gt('Edit'),
         ref: 'io.ox/mail/actions/edit'
     }));
 
@@ -206,14 +305,14 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 500,
         id: 'markunread',
-        label: 'Mark Unread',
+        label: gt('Mark Unread'),
         ref: 'io.ox/mail/actions/markunread'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 501,
         id: 'markread',
-        label: 'Mark read',
+        label: gt('Mark read'),
         ref: 'io.ox/mail/actions/markread'
     }));
 
@@ -236,7 +335,7 @@ define('io.ox/mail/actions',
                     //'href': '#',
                     'tabindex': 1,
                     'data-action': 'label'
-                }).text('Label')
+                }).text(gt('Label'))
                 .click(function (e) {
                     var linkWidth = link.outerWidth(),
                         dropDownWidth = dropdown.outerWidth(),
@@ -266,14 +365,14 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 600,
         id: 'source',
-        label: 'View Source',
+        label: gt('View Source'),
         ref: 'io.ox/mail/actions/source'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 700,
         id: 'delete',
-        label: 'Delete',
+        label: gt('Delete'),
         ref: 'io.ox/mail/actions/delete',
         special: "danger"
     }));

@@ -102,6 +102,12 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             win.on('hide', function () {
                 grid.selection.keyboard(false);
             });
+            // publish grid
+            if (win.app) {
+                win.app.getGrid = function () {
+                    return grid;
+                };
+            }
         },
 
         /**
@@ -229,8 +235,8 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                 }
             };
 
-            initTree = function (FolderTree) {
-                var tree = app.folderTree = new FolderTree(container, {
+            initTree = function (trees) {
+                var tree = app.folderTree = new trees.ApplicationFolderTree(container, {
                     type: type,
                     rootFolderId: rootFolderId
                 });

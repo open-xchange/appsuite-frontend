@@ -75,6 +75,10 @@ define('io.ox/core/event', function () {
             hub = context = null;
             this.on = this.off = this.one = this.trigger = null;
         };
+
+        this.list = function () {
+            return hub.data('events');
+        };
     };
 
     /**

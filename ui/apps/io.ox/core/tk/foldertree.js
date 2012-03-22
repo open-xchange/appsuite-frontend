@@ -12,7 +12,10 @@
  */
 
 define('io.ox/core/tk/foldertree',
-    ['io.ox/core/tk/selection', 'io.ox/core/api/folder', 'io.ox/core/extensions'], function (Selection, api, ext) {
+    ['io.ox/core/tk/selection',
+     'io.ox/core/api/folder',
+     'io.ox/core/extensions',
+     'io.ox/core/event'], function (Selection, api, ext, Events) {
 
     'use strict';
 
@@ -208,7 +211,7 @@ define('io.ox/core/tk/foldertree',
             nodes.label.text(data.title + '');
             // set counter (mail only)
             if (tree.options.type === 'mail' && data.total !== undefined) {
-                nodes.counter.text(data.total);
+                nodes.counter.text(data.total || '');
             } else {
                 nodes.counter.hide();
             }
@@ -329,9 +332,7 @@ define('io.ox/core/tk/foldertree',
         $(container)
             .addClass('io-ox-foldertree')
             // add tree container
-            .append(this.container = $('<div>'))
-            // add link container
-            .append(this.links = $('<div>').addClass('foldertree-links'));
+            .append(this.container = $('<div>'));
 
         // root tree node
         this.root = new TreeNode(this, this.options.rootFolderId, this.container, 0);
@@ -343,17 +344,17 @@ define('io.ox/core/tk/foldertree',
                 return String(obj.id);
             });
 
+        // add event hub
+        Events.extend(this);
+
         this.paint = function () {
             if (painting === null) {
+                this.trigger('beforepaint');
                 this.selection.clearIndex();
                 painting = this.root.paint();
                 painting.always(function () {
                     self.selection.update();
-                    // paint links
-                    ext.point("io.ox/foldertree/links").invoke("draw", self.links, {
-                        rootFolderId: self.options.rootFolderId,
-                        tree: self
-                    });
+                    self.trigger('paint');
                     painting = null;
                 });
             }
@@ -362,10 +363,12 @@ define('io.ox/core/tk/foldertree',
 
         this.repaint = function () {
             if (painting === null) {
+                this.trigger('beforerepaint');
                 this.selection.clearIndex();
                 painting = this.root.repaint();
                 painting.always(function () {
                     self.selection.update();
+                    self.trigger('repaint');
                     painting = null;
                 });
             }
@@ -374,12 +377,21 @@ define('io.ox/core/tk/foldertree',
 
         this.busy = function () {
             this.container.parent().busy().children().hide();
+            this.trigger('busy');
             return this;
         };
 
         this.idle = function () {
             this.container.parent().idle().children().show();
+            this.trigger('idle');
             return this;
+        };
+
+        this.destroy = function () {
+            this.events.destroy();
+            this.selection.destroy();
+            container.empty();
+            container = this.container = this.selection = null;
         };
     }
 
@@ -387,17 +399,17 @@ define('io.ox/core/tk/foldertree',
         e.preventDefault();
         require(['io.ox/core/tk/dialogs'], function (dialogs) {
             new dialogs.ModalDialog({
-                width: 600,
+                width: 400,
                 easyOut: true
             })
-            .append(
-                $('<h1>').text('Add new folder').css('marginTop', '0')
+            .header(
+                $('<h4>').text('Add new folder')
             )
             .append(
                 $('<input>', { placeholder: 'Folder name', value: '' }).addClass('nice-input')
             )
-            .addButton("cancel", "Cancel")
-            .addButton("add", "Add folder")
+            .addButton('cancel', 'Cancel')
+            .addPrimaryButton('add', 'Add folder')
             .show(function () {
                 this.find('input').focus();
             })
@@ -425,10 +437,25 @@ define('io.ox/core/tk/foldertree',
         });
     }
 
+    function ApplicationFolderTree(container, opt) {
+        // inherit from folder tree
+        FolderTree.call(this, container, opt);
+        // add link container
+        $(container).append(this.links = $('<div>').addClass('foldertree-links'));
+        // add extension point support
+        this.on('paint', function () {
+            // paint links
+            ext.point('io.ox/application-foldertree/links').invoke('draw', this.links, {
+                rootFolderId: this.options.rootFolderId,
+                tree: this
+            });
+        });
+    }
+
     // default extension point
-    ext.point('io.ox/foldertree/links').extend({
+    ext.point('io.ox/application-foldertree/links').extend({
         index: 100,
-        id: "create-folder",
+        id: 'create-folder',
         draw:  function (data) {
             this.append(
                 $('<div>')
@@ -442,6 +469,9 @@ define('io.ox/core/tk/foldertree',
         }
     });
 
-    return FolderTree;
+    return {
+        FolderTree: FolderTree,
+        ApplicationFolderTree: ApplicationFolderTree
+    };
 
 });

@@ -132,7 +132,8 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         var node = $(target).empty().addClass('vgrid'),
             // reference for private functions
             self = this,
-            // first run
+            // states
+            initialized = false,
             firstRun = true,
             // inner container
             scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node),
@@ -319,6 +320,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
 
         paint = function (offset) {
 
+            if (!initialized) {
+                return;
+            }
+
             // keep positive
             offset = Math.max(0, offset);
 
@@ -407,8 +412,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 bounds.bottom = offset + numRows;
             };
 
-            // get item
-
+            // get all items
             var load = loadData[currentMode] || loadData.all,
                 subset = all.slice(offset, offset + numRows);
 
@@ -535,6 +539,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             labelHeight = label.getHeight();
             // resize
             resize();
+            initialized = true;
             // load all IDs
             return loadAll();
         };

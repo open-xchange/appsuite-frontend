@@ -142,7 +142,6 @@ define.async('io.ox/mail/write/main',
         };
 
         function showMessage(msg, header, sticky) {
-            console.log(arguments);
             $('#myGrowl').jGrowl(msg, {header: header, sticky: sticky});
         }
 
@@ -401,10 +400,10 @@ define.async('io.ox/mail/write/main',
         };
 
         var windowTitles = {
-            compose: 'Compose new email',
-            replyall: 'Reply all',
-            reply: 'Reply',
-            forward: 'Forward'
+            compose: gt('Compose new email'),
+            replyall: gt('Reply all'),
+            reply: gt('Reply'),
+            forward: gt('Forward')
         };
 
         app.setMail = function (mail) {
@@ -475,7 +474,7 @@ define.async('io.ox/mail/write/main',
             if (navigator.registerProtocolHandler) {
                 var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
                 navigator.registerProtocolHandler(
-                    'mailto', url + '#app=io.ox/mail/write:compose&mailto=%s', 'OX7 Mailer'
+                    'mailto', url + '#app=io.ox/mail/write:compose&mailto=%s', gt('OX7 Mailer')
                 );
             }
 
@@ -695,7 +694,7 @@ define.async('io.ox/mail/write/main',
                     if (result.error) {
                         console.error(result);
                         win.show();
-                        alert('Server error - see console :(');
+                        alert(gt('Server error - see console :('));
                     } else {
                         app.markClean();
                         app.quit();
@@ -721,10 +720,10 @@ define.async('io.ox/mail/write/main',
                 .always(function (result) {
                     if (result.error) {
                         console.error(result);
-                        def.reject('Server error - see console :(');
-                        showMessage('Mail is NOT saved', 'Mail Error', true);
+                        def.reject(gt('Server error - see console :('));
+                        showMessage(gt('Mail is NOT saved'), gt('Mail Error'), true);
                     } else {
-                        showMessage('Mail is saved', 'Mail', false);
+                        showMessage(gt('Mail is saved'), gt('Mail'), false);
                         def.resolve(result);
                         app.markClean();
                     }
@@ -773,7 +772,6 @@ define.async('io.ox/mail/write/main',
                                 clean();
                             } else if (action === 'savedraft') {
                                 app.saveDraft().done(function (mail) {
-                                    console.log(mail);
                                     def.resolve();
                                     clean();
                                 }).fail(function (e) {

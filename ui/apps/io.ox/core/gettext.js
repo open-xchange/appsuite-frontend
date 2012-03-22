@@ -35,11 +35,11 @@ define("io.ox/core/gettext", [], function () {
     }
 
     function debugNode(e) {
-        if (e.target.tagName in { TITLE: 1, SCRIPT: 1, STYLE: 1 }) return;
+        if (e.target.tagName in { SCRIPT: 1, STYLE: 1 }) return;
         debug(e.target);
         function debug(node) {
             if (node.nodeType === 3) {
-                verify(node.data, node);
+                verify(node.data, node.parentNode);
             } else if (node.nodeType === 1) {
                 _.each(node.childNodes, debug);
             }
@@ -48,26 +48,32 @@ define("io.ox/core/gettext", [], function () {
 
     function verify(s, node) {
         if (s.charCodeAt(s.length - 1) !== 0x200b) {
-            console.error("Untranslated string", s, node.parentNode);
-            $(node.parentNode).css('backgroundColor', 'rgba(255, 192, 0, 0.5)');
+            console.error("Untranslated string", s, node);
+            $(node).css('backgroundColor', 'rgba(255, 192, 0, 0.5)');
         }
     }
 
     function gt(id, po) {
-
+        var gettext;
+        
         po.plural = new Function("n", "return " + po.plural + ";");
 
-        function gettext(text) {
-            return gettext.pgettext("", text);
-        }
-
-        gettext.gettext = gettext;
-
-        gettext.ngettext = function (singular, plural, n) {
-            return gettext.npgettext("", singular, plural, n);
-        };
-
         if (_.url.hash('debug-i18n')) {
+            gettext = function (text) {
+                var args = new Array(arguments.length);
+                args[0] = pgettext("", text);
+                for (var i = 1; i < arguments.length; i++) {
+                    var arg = String(arguments[i]);
+                    if (arg.charCodeAt(arg.length - 1) === 0x200b) {
+                        arg = arg.slice(-1);
+                    } else {
+                        console.error("Untranslated printf parameter", i, arg);
+                        console.trace();
+                    }
+                    args[i] = arg;
+                }
+                return _.printf.apply(this, args) + '\u200b';
+            };
             gettext.noI18n = function (text) {
                 return text + '\u200b';
             };
@@ -78,12 +84,25 @@ define("io.ox/core/gettext", [], function () {
                 return npgettext.apply(this, arguments) + '\u200b';
             };
         } else {
+            gettext = function (text) {
+                text = pgettext("", text);
+                return arguments.length > 1 ? _.printf.apply(this, arguments)
+                                            : text;
+            };
             gettext.noI18n = function (text) {
                 return text;
             };
             gettext.pgettext = pgettext;
             gettext.npgettext = npgettext;
         }
+
+        gettext.gettext = function (text) {
+            return gettext.pgettext("", text);
+        };
+
+        gettext.ngettext = function (singular, plural, n) {
+            return gettext.npgettext("", singular, plural, n);
+        };
 
         function pgettext(context, text) {
             var key = context ? context + "\x00" + text : text;

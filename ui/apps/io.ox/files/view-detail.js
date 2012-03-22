@@ -17,13 +17,14 @@ define("io.ox/files/view-detail",
     ["io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
      "io.ox/core/extPatterns/layouts",
+     "io.ox/core/tk/keys",
      "io.ox/core/i18n",
      "io.ox/core/event",
      "io.ox/files/actions",
      "io.ox/files/api",
      "io.ox/preview/main",
      "io.ox/core/tk/upload",
-     "gettext!io.ox/files/files"], function (ext, links, layouts, i18n, Event, actions, filesAPI, Preview, upload, gt) {
+     "gettext!io.ox/files/files"], function (ext, links, layouts, KeyListener, i18n, Event, actions, filesAPI, Preview, upload, gt) {
 
     "use strict";
 
@@ -67,7 +68,7 @@ define("io.ox/files/view-detail",
             toggleEdit: function () {
                 if (mode === 'edit') {
                     // Trigger Save
-                    ext.point("io.ox/files/actions/edit/save").invoke("action", self, {view: self, file: self.getModifiedFile()});
+                    ext.point("io.ox/files/actions/edit/save").invoke("action", self, self.getModifiedFile(), {view: self, data: self.getModifiedFile()});
                 } else {
                     self.edit();
                 }
@@ -82,11 +83,11 @@ define("io.ox/files/view-detail",
                     sublayout.each(function (extension, $node) {
                         if (extension.edit) {
                             hideSection = false;
-                            extension.edit.call($node, file, self, extension);
+                            extension.edit.call($node, file, {data: file, view: self});
                         } else {
                             if (extension.deactivate) {
                                 hideSection = false;
-                                extension.deactivate.call($node, file, self, extension);
+                                extension.deactivate.call($node, file, {data: file, view: self});
                             } else {
                                 // Dim the extension, poor mans 'deactivate'
                                 if ($node) {
@@ -111,10 +112,10 @@ define("io.ox/files/view-detail",
                 sections.each(function (sublayout, $sectionNode) {
                     sublayout.each(function (extension, $node) {
                         if (extension.endEdit) {
-                            extension.endEdit.call($node, file, self, extension);
+                            extension.endEdit.call($node, file, {data: file, view: self});
                         } else {
                             if (extension.activate) {
-                                extension.activate.call($node, file, self, extension);
+                                extension.activate.call($node, file, {data: file, view: self});
                             } else {
                                 // Activate the extension
                                 if ($node) {
@@ -134,7 +135,7 @@ define("io.ox/files/view-detail",
                 sections.each(function (sublayout, $sectionNode) {
                     sublayout.each(function (extension, $node) {
                         if (extension.process) {
-                            extension.process.call($node, file, self, extension);
+                            extension.process.call($node, file, {data: file, view: self});
                         }
                     });
                 });
@@ -182,8 +183,6 @@ define("io.ox/files/view-detail",
         }
     });
 
-
-
     // Fill up the sections
 
 
@@ -197,17 +196,29 @@ define("io.ox/files/view-detail",
                 $("<div>").addClass("title clear-title").text(file.title || file.filename || '\u00A0')
             );
         },
-        edit: function (file) {
+        edit: function (file, context) {
+            var size = this.find(".title").height(),
+                keyListener = new KeyListener(this).include();
+            if (size < 30) {
+                size = 30;
+            }
             this.find(".title").empty().append(
                 $('<input>', { type: 'text', name: 'title' })
                 .addClass('editing')
                 .attr({placeholder: gt("Title"), tabIndex: 10})
-                .val(file.title)
-            );
+                .val(file.title));
+                
             this.find("input").focus();
+            
+            keyListener.on("enter", function () {
+                context.view.toggleEdit();
+            });
+            this.data("keyListener", keyListener);
         },
         endEdit: function (file) {
             this.find(".title").empty().text(file.title || file.filename || '\u00A0');
+            this.data("keyListener").remove();
+            this.data("keyListener", null);
         },
         process: function (file) {
             file.title = this.find("input").val();
@@ -325,20 +336,20 @@ define("io.ox/files/view-detail",
                     folder_id: file.folder_id // collection needs this to work!
                 });
             },
-            edit: function (file, detailView, extension) {
+            edit: function (file, context) {
                 this.empty();
                 editLinks.draw.call(this, {
                     data: file,
-                    view: detailView,
+                    view: context.view,
                     folder_id: file.folder_id // collection needs this to work!
                 });
 
             },
-            endEdit: function (file, detailView, extension) {
+            endEdit: function (file, context) {
                 this.empty();
                 regularLinks.draw.call(this, {
                     data: file,
-                    view: detailView,
+                    view: context.view,
                     folder_id: file.folder_id // collection needs this to work!
                 });
             }
@@ -424,12 +435,18 @@ define("io.ox/files/view-detail",
                 .text(file.description || '')
             );
         },
-        edit: function (file) {
-            var height = this.parent().innerHeight();
+        edit: function (file, context) {
+            var height = this.parent().innerHeight(),
+                keyListener = new KeyListener(this).include();
             if (height < 220) {
                 height = 220;
             }
             this.empty().append($("<textarea>").css({resize: 'none', width: "100%", height: height + "px", boxSizing: "border-box"}).attr({placeholder: gt("Description"), tabIndex: 20}).val(file.description));
+            keyListener.on("shift+enter", function (evt) {
+                context.view.toggleEdit();
+            });
+            this.data("keyListener", keyListener);
+            
         },
         endEdit: function (file) {
             this.empty().append(
@@ -442,6 +459,9 @@ define("io.ox/files/view-detail",
                 }).addClass("description")
                 .text(file.description || '')
             );
+            this.data("keyListener").remove();
+            this.data("keyListener", null);
+            
         },
         process: function (file) {
             file.description = this.find("textarea").val();
@@ -503,6 +523,12 @@ define("io.ox/files/view-detail",
                 $comment.show();
                 $commentArea.focus();
             });
+            
+            new KeyListener($comment).on("shift+enter", function (evt) {
+                evt.preventDefault();
+                evt.stopImmediatePropagation();
+                $button.click();
+            }).include();
         }
     });
 
