@@ -17,20 +17,21 @@ define("io.ox/preview/main",
     "use strict";
 
     var Renderer = {
-        point: ext.point("io.ox/preview/engine")
+        point: ext.point("io.ox/preview/engine"),
 
         getByExtension: function (fileExtension) {
-            this.point.chain().find(function (ext) {
+            return this.point.chain().find(function (ext) {
                 var endings = ext.metadata("endings");
                 endings = _.isArray(endings) ? endings : [endings];
-                return _(endings).contains(fileExtension)
-            });
+                return _(endings).contains(fileExtension);
+            }).value();
         }
     };
 
     // register image typed renderer
     Renderer.point.extend({
         id: "image",
+        index: 10,
         endings: ["png", "jpg", "jpeg", "gif"],
         draw: function (file, node) {
             this.append(
@@ -47,6 +48,7 @@ define("io.ox/preview/main",
     if (Modernizr.audio) {
         Renderer.point.extend({
             id: "audio",
+            index: 10,
             endings: (function () {
                 var endings = [];
                 $.each(Modernizr.audio, function (id, elem) {
@@ -63,39 +65,33 @@ define("io.ox/preview/main",
         });
     }
     
-    /*
+    
     // if available register office typed renderer
-    if (ox.serverConfig.previewMimeTypes) {
+    if (ox.serverConfig.previewExtensions) {
         Renderer.point.extend({
             id: "office",
-            endings: (function () {
-                var endings = [];
-                $.each(ox.serverConfig.previewMimeTypes, function (id, ct) {
-                    endings.push(id);
-                });
-                return endings;
-            }()),
-            canRender: function (file) {
-                return util.FileTypesMap.previewSupported(file.name);
-            },
-            draw: function (file, node) {
-                $.get(file.dataURL + "&format=preview").done(function (html) {
-                    node.css({ border: "1px dotted silver", padding: "10px" }).append(html);
-                });
-//                node.append($("<iframe/>").css({ width: "100%", height: "100%"}).attr({ src: file.dataURL + "&format=preview_filtered" }));
+            index: 10,
+            endings: ox.serverConfig.previewExtensions,
+            draw: function (file) {
+                this.append(
+                    $("<img>", { src: file.dataURL + "&format=preview_image&width=400", alt: 'Preview' })
+                        .css({
+                            width: "400px",
+                            maxWidth: "100%"
+                        })
+                );
             }
         });
-    } */
+    }
 
     Renderer.point.extend({
         id: "text",
+        index: 10,
         endings: [ "txt", "js" ],
         draw: function (file) {
-            if (this.canRender(file)) {
-                $.ajax({ url: file.dataURL, dataType: "html" }).done(function (txt) {
-                    this.css({ border: "1px dotted silver", padding: "10px", whiteSpace: "pre-wrap" }).text(txt);
-                });
-            }
+            $.ajax({ url: file.dataURL, dataType: "html" }).done(function (txt) {
+                this.css({ border: "1px dotted silver", padding: "10px", whiteSpace: "pre-wrap" }).text(txt);
+            });
         }
     });
 
@@ -116,13 +112,16 @@ define("io.ox/preview/main",
         
         this.extension =  (function () {
             var extension = self.file.name.match(/\.([a-z0-9]{2,})$/i);
-            
-        }())
+            if (extension.length > 0) {
+                return String(extension[1]).toLowerCase();
+            }
+            return "";
+        }());
         
 
         if (this.file.name) {
             // get matching renderer
-            this.renderer = Renderer.getByExtension(util.FileTypesMap.getFileType(this.file.name));
+            this.renderer = Renderer.getByExtension(this.extension);
         }
     };
 
@@ -137,8 +136,11 @@ define("io.ox/preview/main",
         },
 
         supportsPreview: function () {
-            if (this.renderer !== null) {
-                return this.renderer.canRender(this.file);
+            if (this.renderer) {
+                if (this.renderer.canRender) {
+                    return this.renderer.canRender(this.file);
+                }
+                return true;
             } else {
                 return false;
             }
