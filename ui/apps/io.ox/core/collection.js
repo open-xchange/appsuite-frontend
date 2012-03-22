@@ -43,7 +43,6 @@ define('io.ox/core/collection',
             } else if ('folder_id' in obj || 'folder' in obj) {
                 return obj.folder_id || obj.folder;
             } else {
-                console.error('collection.getFolderId: Object has no folder');
                 return undefined;
             }
         },

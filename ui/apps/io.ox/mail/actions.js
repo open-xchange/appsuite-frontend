@@ -241,6 +241,53 @@ define('io.ox/mail/actions',
         }
     });
 
+    new Action('io.ox/mail/actions/preview-attachment', {
+        id: 'preview',
+        action: function () {
+            alert('TBD.preview');
+        }
+    });
+
+    new Action('io.ox/mail/actions/open-attachment', {
+        id: 'open',
+        action: function (data) {
+            // get url
+            var href = ox.apiRoot + '/mail?' + $.param({
+                action: 'attachment',
+                folder: data.mail.folder_id,
+                id: data.mail.id,
+                attachment: data.id,
+                // TODO: remove session once backend support wurst-sessions
+                session: ox.session
+            });
+            window.open(href);
+        }
+    });
+
+    new Action('io.ox/mail/actions/download-attachment', {
+        id: 'download',
+        action: function (data) {
+            // get url
+            var href = ox.apiRoot + '/mail?' + $.param({
+                action: 'attachment',
+                folder: data.mail.folder_id,
+                id: data.mail.id,
+                attachment: data.id,
+                save: '1',
+                // TODO: remove session once backend support wurst-sessions
+                session: ox.session
+            });
+            window.open(href);
+        }
+    });
+
+    new Action('io.ox/mail/actions/save-attachment', {
+        id: 'save',
+        action: function () {
+            alert('TBD.save');
+        }
+    });
+
     // toolbar
 
     ext.point('io.ox/mail/links/toolbar').extend(new links.Link({
@@ -375,6 +422,36 @@ define('io.ox/mail/actions',
         label: gt('Delete'),
         ref: 'io.ox/mail/actions/delete',
         special: "danger"
+    }));
+
+    // Attachments
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'preview',
+        index: 100,
+        label: gt('Preview'),
+        ref: 'io.ox/mail/actions/preview-attachment'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'open',
+        index: 200,
+        label: gt('Open in new tab'),
+        ref: 'io.ox/mail/actions/open-attachment'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'download',
+        index: 300,
+        label: gt('Download'),
+        ref: 'io.ox/mail/actions/download-attachment'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'save',
+        index: 400,
+        label: gt('Save in file store'),
+        ref: 'io.ox/mail/actions/save-attachment'
     }));
 
 });

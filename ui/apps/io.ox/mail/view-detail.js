@@ -240,16 +240,11 @@ define("io.ox/mail/view-detail",
                         .addClass("to-cc list")
                         .append(
                             // TO
-                            $("<span>").addClass("io-ox-label").text(gt("To") + ":\u00A0")
-                        )
-                        .append(
-                            util.serializeList(data.to, true)
-                        )
-                        .append(
+                            $("<span>").addClass("io-ox-label").text(gt("To") + ":\u00A0"),
+                            util.serializeList(data.to, true),
+                            $.txt(' '),
                             // CC
-                            showCC ? $("<span>").addClass("io-ox-label").text(gt("Copy") + ":\u00A0") : []
-                        )
-                        .append(
+                            showCC ? $("<span>").addClass("io-ox-label").text(gt("Copy") + ":\u00A0") : [],
                             util.serializeList(data.cc, true)
                         )
                     : []
@@ -269,24 +264,28 @@ define("io.ox/mail/view-detail",
             // get non-inline attachments
             for (; i < $i; i++) {
                 if (data.attachments[i].disp === "attachment") {
-                    attachments.push(data.attachments[i]);
+                    attachments.push(
+                        _.extend(data.attachments[i], { mail: { id: data.id, folder_id: data.folder_id }})
+                    );
                     hasAttachments = true;
                 }
             }
-            this.append(
-                // attachments
-                hasAttachments ?
-                    $("<div>")
-                        .addClass("list")
-                        .append(
-                             // TO
-                             $("<span>").addClass("io-ox-label").text(gt("Attachments: "))
-                         )
-                         .append(
-                             util.serializeAttachments(data, attachments)
-                         )
-                    : []
-            );
+            if (hasAttachments) {
+                var outer = $('<div>').append(
+                    $('<span>').addClass('io-ox-label').text(gt('Attachments: '))
+                );
+                _(attachments).each(function (a, i) {
+                    var filename = a.filename || ('Attachment #' + i);
+                    console.log('attachment', a);
+                    // use extension pattern
+                    new links.DropdownLinks({
+                        label: filename,
+                        classes: 'attachment-link',
+                        ref: 'io.ox/mail/attachment/links'
+                    }).draw.call(outer, a);
+                });
+                this.append(outer);
+            }
         }
     });
 

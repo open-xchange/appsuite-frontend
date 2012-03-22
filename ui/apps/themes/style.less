@@ -669,17 +669,19 @@ a.action-link {
 }
 
 .delimiter {
-    color: #888;
+    color: #ccc;
 }
 
 .default-content-padding {
     padding: 30px 40px 30px 40px;
 }
 
-a.attachment-link, a.attachment-link:visited {
-    color: @color;
-    text-decoration: underline;
-    cursor: pointer;
+a.attachment-link {
+    color: @mail-attachment-link-color;
+}
+
+a.attachment-link:hover {
+    color: @mail-attachment-link-color-hover;
 }
 
 a.nolink {
