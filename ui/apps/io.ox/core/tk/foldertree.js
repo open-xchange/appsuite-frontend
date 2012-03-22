@@ -211,7 +211,7 @@ define('io.ox/core/tk/foldertree',
             nodes.label.text(data.title + '');
             // set counter (mail only)
             if (tree.options.type === 'mail' && data.total !== undefined) {
-                nodes.counter.text(data.total);
+                nodes.counter.text(data.total || '');
             } else {
                 nodes.counter.hide();
             }
