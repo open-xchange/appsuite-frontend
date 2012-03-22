@@ -19,7 +19,7 @@ define('io.ox/contacts/edit/main',
      'io.ox/contacts/edit/view-form',
      'io.ox/contacts/model',
      'gettext!io.ox/contacts/contacts',
-     'less!io.ox/contacts/style.css'
+     'less!io.ox/contacts/edit/style.css'
      ], function (api, cache, ContactEditView, ContactModel, gt) {
 
     'use strict';
@@ -121,13 +121,14 @@ define('io.ox/contacts/edit/main',
                     require(["io.ox/core/tk/dialogs"], function (dialogs) {
                         new dialogs.ModalDialog()
                             .text(gt("Do you really want to lose your changes?"))
+                            .addPrimaryButton("delete", gt('Lose changes'))
                             .addButton("cancel", gt('Cancel'))
-                            .addButton("delete", gt('Lose changes'))
                             .show()
                             .done(function (action) {
                                 console.debug("Action", action);
                                 if (action === 'delete') {
                                     def.resolve();
+                                    $('#myGrowl').jGrowl('shutdown');
                                     listetItem.remove();
                                 } else {
                                     def.reject();
@@ -136,10 +137,12 @@ define('io.ox/contacts/edit/main',
                     });
                 } else {
                     def.resolve();
+                    $('#myGrowl').jGrowl('shutdown');
                     listetItem.remove();
                 }
             } else {
                 def.resolve();
+                $('#myGrowl').jGrowl('shutdown');
                 listetItem.remove();
             }
             //clean

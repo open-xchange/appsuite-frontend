@@ -17,13 +17,13 @@ define('io.ox/contacts/model',
 
     var contactSchema = new Model.Schema({
 
-        'display_name': {format: 'string', label: 'Display name'}, //defaultValue: 'Mrs. Bean'
-        'first_name': { format: 'string', label: 'First name', mandatory: true},
+        'display_name': {format: 'string', label: 'Display name', mandatory: true}, //defaultValue: 'Mrs. Bean'  mandatory: true
+        'first_name': { format: 'string', label: 'First name'},
         'last_name': {  format: 'string', label: 'Last name'},
         'second_name': { format: 'string', label: 'Middle name'},
         'suffix': { format: 'string', label: 'Suffix'},
         'title': { format: 'string', label: 'Title'},
-        'street_home': { format: 'string', label: 'Street', mandatory: true},
+        'street_home': { format: 'string', label: 'Street'},
         'postal_code_home': { format: 'string', label: 'Postcode'},
         'city_home': { format: 'string', label: 'Town'},
         'state_home': { format: 'string', label: 'State'},

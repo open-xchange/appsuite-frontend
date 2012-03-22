@@ -267,7 +267,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                 id: id
             })
                 .attr('data-type', id) // not name=id!
-                .addClass('discreet form-vertical')
+                .addClass('discreet input-large')
                 .autocomplete({
                     source: function (query) {
                         return api.autocomplete(query);
@@ -362,7 +362,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             .append(self.createLabel({
                 id: myId,
                 text: gt('List name')
-            }), self.createTextField({property: 'display_name', id: myId, classes: 'form-vertical'})
+            }), self.createTextField({property: 'display_name', id: myId, classes: 'input-large'})
             .find('input').attr('tabindex', '1'), saveButton(self));
             editSection.addClass('editsection').append(
 

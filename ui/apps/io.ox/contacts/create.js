@@ -18,9 +18,9 @@ define("io.ox/contacts/create",
      "io.ox/core/tk/dialogs", "io.ox/core/config",
      "io.ox/core/tk/forms",
      "io.ox/contacts/model",
-     "io.ox/contacts/create-view",
+     "io.ox/contacts/create-view", 'gettext!io.ox/contacts/contacts',
      "less!io.ox/contacts/style.css"
-    ], function (util, api, dialogs, config, forms, ContactModel, ContactCreateView) {
+    ], function (util, api, dialogs, config, forms, ContactModel, ContactCreateView, gt) {
 
     "use strict";
 
@@ -42,19 +42,23 @@ define("io.ox/contacts/create",
             myView = new ContactCreateView({model: myModel});
 
         myModel.store = function (data, changes) {
-
             var fId = config.get("folder.contacts");
             // TODO: replace image upload with a field in formsjs method
             var image = $('#contactUploadImage').find("input[type=file]").get(0);
             if (image.files && image.files[0]) {
                 data.folder_id = fId;
 //                    console.log(data);
-                return api.createNewImage(JSON.stringify(data), image.files[0]);
+                return api.createNewImage(JSON.stringify(data), image.files[0])
+                .done(function () {
+                        controls.find('.btn').trigger('clicksave');
+                    });
             } else {
                 if (!_.isEmpty(data)) {
                     data.folder_id = fId;
                     data.display_name = util.createDisplayName(data);
-                    return api.create(data);
+                    return api.create(data).done(function () {
+                        controls.find('.btn').trigger('clicksave');
+                    });
                 }
             }
         };
@@ -65,14 +69,14 @@ define("io.ox/contacts/create",
             top: '-10px'
         })); // TODO needs a better way for placing the notification
 
-        pane.addButton("cancel", "Cancel", "cancel", {inverse: true});
-        controls.append(myView.drawButtons()).on('click', function () {
+        pane.addButton("cancel", gt('Cancel'), "cancel", {inverse: true});
+        controls.append(myView.drawButtons()).on('clicksave', function () {
             pane.close();
         });
 
         //shutdown Growl
 
-        controls.find('.button').on('click', function () {
+        controls.find('.btn-primary').on('click', function () {
             content.find('#myGrowl').jGrowl('shutdown');
         });
 //        window.model = myModel;
