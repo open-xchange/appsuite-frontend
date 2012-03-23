@@ -63,23 +63,30 @@ define('io.ox/core/tk/view',
                 console.error(error.message);
             }
         });
-
-        window.horst = this.model;
     };
 
     View.prototype = {
+
         setModel: function (model) {
             this.model = model;
         },
+
         getModel: function () {
             return this.model;
         },
+
         append: function (jqWrapped) {
             this.node.append(jqWrapped);
+        },
+
+        destroy: function () {
+            this.model.off('change error:invalid error:inconsistent');
+            this.node.off('update.model');
+            this.node.empty().remove();
+            this.model.destroy();
+            this.node = this.model = null;
         }
     };
-
-
 
     // still ugly
     _.each(forms, function (item, itemname) {
@@ -93,6 +100,7 @@ define('io.ox/core/tk/view',
             };
         }
     });
+
     _.makeExtendable(View);
 
     return View;

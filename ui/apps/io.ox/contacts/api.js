@@ -147,16 +147,12 @@ define('io.ox/contacts/api',
         return http.UPLOAD({
                 module: 'contacts',
                 params: { action: 'update', id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.now() },
-                data: form,
-                dataType: 'text'
+                data: form
             })
             .done(function () {
                 api.caches.get.clear();
                 api.caches.list.clear();
                 api.trigger('refresh.list');
-            })
-            .fail(function () {
-                console.log('connection lost');//what to do if fails?
             });
     };
 

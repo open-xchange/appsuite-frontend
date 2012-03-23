@@ -266,7 +266,7 @@ define('io.ox/contacts/edit/view-form',
             .addClass('btn btn-primary')
             .text(gt('Save'))
             .on('click', { view: options.view }, function (e) {
-                e.data.view.saveForm();
+                e.data.view.getModel().save();
             });
     };
 
@@ -310,17 +310,7 @@ define('io.ox/contacts/edit/view-form',
             // save button
             createSaveButton(options),
             // picture form
-            view.createPicUpload({
-                    wrap: false,
-                    label: false,
-                    charset: 'UTF-8',
-                    enctype: 'multipart/form-data',
-                    id: 'contactUploadImage',
-                    method: 'POST',
-                    formname: 'contactUploadImage',
-                    name: 'file',
-                    target: 'hiddenframePicture'
-                })
+            view.createPicUpload()
                 .find('input').on('change', { view: view }, handleFileSelect).end(),
             // delimiter
             view.createSectionDelimiter({})
@@ -423,11 +413,6 @@ define('io.ox/contacts/edit/view-form',
                 });
             }
             return this;
-        },
-
-        saveForm: function () {
-            console.log('saveForm -> save', this);
-            this.getModel().save();
         }
     });
 

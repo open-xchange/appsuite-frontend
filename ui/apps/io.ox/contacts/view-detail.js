@@ -355,7 +355,6 @@ define("io.ox/contacts/view-detail",
             if (!data) {
                 node = $();
             } else {
-                console.log('contact.detail', data);
                 // TMP backend bug fix
                 if (data.distribution_list && data.distribution_list.length) {
                     data.mark_as_distributionlist = true;

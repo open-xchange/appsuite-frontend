@@ -499,7 +499,12 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                     if (r.o.processData) {
                         processResponse(r.def, data, r.o, r.o.type);
                     } else {
-                        r.def.resolve(data);
+                        // error handling if JSON (e.g. for UPLOAD)
+                        if (r.xhr.dataType === 'json' && data.error !== undefined) {
+                            r.def.reject(data);
+                        } else {
+                            r.def.resolve(data);
+                        }
                     }
                     that.trigger("stop done", r.xhr);
                     r = null;
