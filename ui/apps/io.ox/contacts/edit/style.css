@@ -45,6 +45,17 @@ input#image1 {
 	line-height: 1.15em;
 }
 
+.contact-detail.edit .picture {
+    width: 100px;
+    height: 80px;
+    display: inline-block;
+    float: right;
+    background-position: right top;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
 .contact-detail.edit .sectioncontent,
 .contact-detail.edit .section-group {
 	margin-bottom: 5px;
@@ -138,7 +149,7 @@ input#image1 {
 	float: right;
 }
 
-.contact-detail.edit #contactUploadImage, .contact-detail.edit #contactUploadImage input{
+.contact-detail.edit [name="picture-upload-file"], .contact-detail.edit [name="picture-upload-file"] input{
 	width: 0px;
 	height: 0px;
 }
