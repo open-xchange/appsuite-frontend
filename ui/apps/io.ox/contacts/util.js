@@ -11,9 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/util',
-        ['gettext!io.ox/contacts/contacts', 'io.ox/core/tk/selection'
-         ], function (gt, sel) {
+define('io.ox/contacts/util', [], function () {
 
     'use strict';
 

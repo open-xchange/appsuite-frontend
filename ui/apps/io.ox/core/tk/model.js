@@ -242,7 +242,8 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             var result = this.schema.validate(key, value);
             if (result !== true) {
                 this.trigger('error:invalid', result);
-//               / return;
+                // yep, we continue here to actually get invalid data
+                // we need this for a proper final check during save
             }
             // update
             this._data[key] = value;
@@ -257,10 +258,8 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             var key, value, previous = this._previous, defaults = this._defaults, changed;
             for (key in this._data) {
                 value = this._data[key];
-
-             // use 'soft' isEqual for previous, 'hard' isEqual for default values
+                // use 'soft' isEqual for previous, 'hard' isEqual for default values
                 changed = !(isEqual(value, previous[key]) || _.isEqual(value, defaults[key]));
-
                 if (changed) {
                     return true;
                 }
@@ -273,10 +272,6 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             _(this._data).each(function (value, key) {
                 if (!isEqual(value, previous[key])) {
                     changes[key] = value;
-                }
-                if (key === 'distribution_list') {
-//                    console.log(_.difference(value, previous[key]));
-//                    changes[key] = 'dirty';
                 }
             });
             return changes;
@@ -334,14 +329,14 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         save: (function () {
 
             var checkValid = function (valid, value, key) {
-                var result = this.schema.validate(key, value);
-                if (result !== true) {
-                    this.trigger('error:invalid', result);
-                    return false;
-                } else {
-                    return valid;
-                }
-            },
+                    var result = this.schema.validate(key, value);
+                    if (result !== true) {
+                        this.trigger('error:invalid', result);
+                        return false;
+                    } else {
+                        return valid;
+                    }
+                },
                 success = function () {
                     // trigger store - expects deferred object
                     return (this.store(this._data, this.getChanges()) || $.when())

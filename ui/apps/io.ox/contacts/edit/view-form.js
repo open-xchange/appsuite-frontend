@@ -261,98 +261,71 @@ define('io.ox/contacts/edit/view-form',
     };
 
     var createSaveButton = function (options) {
-        var saveButton = $('<a>'),
-            buttonText = 'Save';
-
-        window.ursel = saveButton;
-        saveButton.attr('data-action', 'save');
-        saveButton.attr('id', 'testid');
-        saveButton.addClass('btn btn-primary').text(gt(buttonText));
-        saveButton.on('click', function () {
-            options.view.saveForm();
-
-        });
-        return saveButton;
+        return $('<a>')
+            .attr('data-action', 'save')
+            .addClass('btn btn-primary')
+            .text(gt('Save'))
+            .on('click', { view: options.view }, function (e) {
+                e.data.view.saveForm();
+            });
     };
 
-
-
-
     var picTrigger = function () {
-        $('input[type="file"]').trigger('click');
+        // relative lookup
+        $(this).closest('.window-body').find('input[type="file"]').trigger('click');
+    };
+
+    var handleFileSelect = function (e) {
+        var file = e.target.files,
+            reader = new FileReader(),
+            view = e.data.view;
+        reader.onload = function (e) {
+            view.node.find('.picture').css('background-image', 'url(' + e.target.result + ')');
+        };
+        reader.readAsDataURL(file[0]);
+        view.getModel().dirty = true;
     };
 
     var drawFormHead = function (options) {
-        var section,
-          picture,
-          picForm,
-          title,
-          jobDescription,
-          calculatedModel,
-          saveButton,
-          displayNameText,
-          jobDescriptionText;
 
-        section = options.view.createSection({}).addClass('formheader');
+        var view = options.view, data = view.getModel().get();
 
-        title = $('<span>').addClass('text name clear-title')
-        .attr('data-property', 'display_name');
-        displayNameText = util.getDisplayName(options.view.getModel().get());
-
-     // fix for empty display_name
-        if (!displayNameText) {
-            $(title).html('&nbsp;');
-        }
-        title.text(displayNameText);
-
-        jobDescriptionText = util.getJob(options.view.getModel().get());
-
-        jobDescription = $('<span>').addClass('text job clear-title')
-        .attr('data-property', 'jobdescription_calculated')
-        .text(jobDescriptionText);
-
-        // fix for empty Job Description
-        if (!jobDescriptionText) {
-            $(jobDescription).html('&nbsp;');
-        }
-
-        saveButton = createSaveButton(options);
-
-        picture = (api.getPicture(options.view.getModel().get())).addClass('picture');
-        picture.on('click', picTrigger);
-        function handleFileSelect(evt) {
-            var file = evt.target.files,
-                reader = new FileReader();
-            console.log(reader);
-            reader.onload = (function (theFile) {
-                return function (e) {
-                    $('.picture').css('background-image', 'url(' + e.target.result + ')');
-                };
-            }(file[0]));
-            reader.readAsDataURL(file[0]);
-            options.view.getModel().dirty = true;
-        }
-        picForm = options.view.createPicUpload({
-            wrap: false,
-            label: false,
-            charset: 'UTF-8',
-            enctype: 'multipart/form-data',
-            id: 'contactUploadImage',
-            method: 'POST',
-            formname: 'contactUploadImage',
-            name: 'file',
-            target: 'hiddenframePicture'
-        });
-        picForm.find('input').on('change', handleFileSelect);
-
-        section.append(picture);
-        section.append(title);
-        section.append(jobDescription);
-        section.append(saveButton);
-        section.append(picForm);
-        section.append(options.view.createSectionDelimiter({}));
-
-        this.append(section);
+        view.createSection({})
+        .addClass('formheader')
+        .append(
+            // picture
+            (api.getPicture(data))
+                .addClass('picture')
+                .on('click', picTrigger),
+            // full name
+            $('<span>')
+                .addClass('text name clear-title')
+                .attr('data-property', 'display_name')
+                .text(util.getDisplayName(data) || '\u00A0'),
+            // job description
+            $('<span>')
+                .addClass('text job clear-title')
+                .attr('data-property', 'jobdescription_calculated')
+                .text(util.getJob(data) || '\u00A0'),
+            // save button
+            createSaveButton(options),
+            // picture form
+            view.createPicUpload({
+                    wrap: false,
+                    label: false,
+                    charset: 'UTF-8',
+                    enctype: 'multipart/form-data',
+                    id: 'contactUploadImage',
+                    method: 'POST',
+                    formname: 'contactUploadImage',
+                    name: 'file',
+                    target: 'hiddenframePicture'
+                })
+                .find('input').on('change', { view: view }, handleFileSelect).end(),
+            // delimiter
+            view.createSectionDelimiter({})
+        )
+        .appendTo(this);
     };
 
     var handleField = function (pointName) {
@@ -367,10 +340,14 @@ define('io.ox/contacts/edit/view-form',
             });
         };
     };
+
     var handleSection = function (section, pointName) {
         var pointNameRecalc = pointRecalc(pointName);
-
-        ext.point('io.ox/contacts/edit/form').extend({id: pointNameRecalc, draw: drawSection(pointName), index: 120});
+        ext.point('io.ox/contacts/edit/form').extend({
+            id: pointNameRecalc,
+            draw: drawSection(pointName),
+            index: 120
+        });
         _.each(section, handleField(pointNameRecalc));
     };
 
@@ -380,7 +357,6 @@ define('io.ox/contacts/edit/view-form',
             id: 'formhead',
             draw: drawFormHead
         });
-
         _.each(meta, handleSection);
         ext.point('io.ox/contacts/edit/form/address').extend({
             id: 'address',
@@ -388,15 +364,39 @@ define('io.ox/contacts/edit/view-form',
         });
     };
 
+    var updateDisplayNameByFields = function (e) {
+        // need to build display name manually. util's getDisplayName will not change the display_name
+        // when first or last name is empty
+        var data = this.get(), displayName = '', node = e.data.node;
+        if (data.first_name && data.last_name) {
+            displayName = data.last_name + ', ' + data.first_name;
+        } else {
+            displayName = data.last_name || data.first_name;
+        }
+        // update field - only if we have at least one char
+        if (displayName) {
+            node.find('input[data-property="display_name"]').val(displayName).trigger('change');
+        }
+        // update header
+        node.find('span[data-property="display_name"]').text(util.getFullName(data) || '\u00A0');
+    };
+
+    var updateJobDescription = function (e) {
+        var job = util.getJob(this.get()), node = e.data.node;
+        node.find('span[data-property="jobdescription_calculated"]').text(job || '\u00A0');
+    };
 
     var ContactEditView = View.extend({
 
         draw: function (app) {
-            var self = this,
-                meta;
-//            console.log(this);
-            if (this.getModel()) {
-                meta = {
+
+            var model = this.getModel();
+            if (model) {
+
+                model.on('change:title change:first_name change:last_name', { node: this.node }, updateDisplayNameByFields)
+                    .on('change:company change:position', { node: this.node }, updateJobDescription);
+
+                initExtensionPoints({
                     'Personal information': ['title', 'first_name', 'last_name', 'display_name', 'second_name', 'suffix', 'nickname', 'birthday'],
                     'Email addresses': ['email1', 'email2', 'email3'],
                     'Phone numbers': ['telephone_business1', 'telephone_business2', 'fax_business', 'telephone_car', 'telephone_company', 'telephone_home1', 'telephone_home2', 'fax_home', 'cellular_telephone1', 'cellular_telephone2', 'telephone_other', 'fax_other', 'telephone_isdn', 'telephone_pager', 'telephone_primary', 'telephone_radio', 'telephone_telex', 'telephone_ttytdd', 'instant_messenger1', 'instant_messenger2', 'telephone_ip', 'telephone_assistant', 'telephone_callback'],
@@ -406,55 +406,29 @@ define('io.ox/contacts/edit/view-form',
                     'Job descriptions': ['room_number', 'profession', 'position', 'company', 'department', 'employee_type', 'number_of_employees', 'sales_volume', 'tax_id', 'commercial_register', 'branches', 'business_category', 'info', 'manager_name', 'assistant_name'],
                     'Special information': ['marital_status', 'number_of_children', 'spouse_name', 'note', 'url', 'anniversary'],
                     'Optional fields': ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05', 'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10', 'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15', 'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20']
-                };
+                });
 
+                this.node.addClass('contact-detail edit')
+                    .attr('data-property', model.get('folder_id') + '.' + model.get('id'));
 
-                var updateDisplayNameByFields = function () {
-                    var text = util.getDisplayName(self.getModel().get());
-                    // fix for empty display_name
-                    if (text === '') {
-                        text = '&nbsp;';
-                    }
-                    $('span[data-property="display_name"]').html(text);
-                    $('input[data-property="display_name"]').val(text).trigger('change');
-                };
+                ext.point('io.ox/contacts/edit/form').invoke('draw', this.node, { view: this });
 
+                this.node.append($('<div>', { id: 'myGrowl' })
+                    .addClass('jGrowl').css({position: 'absolute', right: '-275px', top: '-10px'}));
 
-                var updateJobDescription = function () {
-                    var jobText = util.getJob(self.getModel().get());
-                 // fix for empty Job Description
-                    if (jobText === '') {
-                        jobText = '&nbsp;';
-                    }
-                    $('span[data-property="jobdescription_calculated"]').html(jobText);
-                };
-
-                this.getModel().on('change:title change:first_name change:last_name', updateDisplayNameByFields);
-//                this.getModel().on('change:display_name', updateDisplayName);
-                this.getModel().on('change:company change:position', updateJobDescription); //change:profession
-
-                initExtensionPoints(meta);
-                this.node.addClass('contact-detail edit').attr('data-property', self.getModel().get('folder_id') + '.' + self.getModel().get('id'));
-
-
-
-                ext.point('io.ox/contacts/edit/form').invoke('draw', self.node, {view: self});
-                self.node.append($('<div>', {id: 'myGrowl'}).addClass('jGrowl').css({position: 'absolute', right: '-275px', top: '-10px'}));
-
-                this.getModel().on('error:invalid', function (evt, err) {
+                model.on('error:invalid', function (e, err) {
                     console.log('error validation');
                     console.log(arguments);
-                    $('#myGrowl').jGrowl(err.message, {header: 'Make an educated guess!', sticky: true});
+                    $('#myGrowl').jGrowl(e.message, {header: 'Make an educated guess!', sticky: true});
                 });
             }
-            return self;
+            return this;
         },
+
         saveForm: function () {
             console.log('saveForm -> save', this);
             this.getModel().save();
-            //$(this).trigger('save');
         }
-
     });
 
     // my happy place
