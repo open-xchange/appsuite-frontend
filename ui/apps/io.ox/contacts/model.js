@@ -87,7 +87,6 @@ define('io.ox/contacts/model',
         'telephone_assistant': { format: 'string', label: gt('Phone (assistant)')},
         'company': { format: 'string', label: gt('Company')},
         'image1': { format: 'string', label: gt('Image 1')},
-
         'userfield01': { format: 'string', label: gt('Optional 01')},
         'userfield02': { format: 'string', label: gt('Optional 02')},
         'userfield03': { format: 'string', label: gt('Optional 03')},

@@ -322,8 +322,8 @@ define('io.ox/core/tk/forms',
                         name: o.target,
                         src: 'blank.html'
                     })
-                    .hide()
-                );
+                )
+                .hide();
         },
 
         getLastLabelId: function () {

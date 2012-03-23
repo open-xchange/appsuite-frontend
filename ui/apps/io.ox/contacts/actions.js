@@ -67,7 +67,7 @@ define('io.ox/contacts/actions',
         },
         action: function (app) {
             require(["io.ox/contacts/create"], function (create) {
-                create.show();
+                create.show(app);
             });
         }
     });

@@ -26,7 +26,6 @@ define('io.ox/contacts/edit/view-form',
     * urgh, if you want to improve it, do it without that many dom operations
     */
 
-
     var checkEl = function (c) {
         var parent = $(c).parent(),
         el = parent.find('input').filter(function () {
@@ -73,7 +72,6 @@ define('io.ox/contacts/edit/view-form',
         $(evt.currentTarget).text(txt);
     };
 
-
     var moreSwitch = function (txt, evt) {
         var parent = $(evt.currentTarget).parent();
         parent.removeClass('expanded');
@@ -113,7 +111,6 @@ define('io.ox/contacts/edit/view-form',
             empty = fieldCount(target),
             parent = $(target).parent(),
             status;
-
 
         if (filled === 0) {
             status = parent.hasClass('expanded') ? '1' :  '2';
@@ -155,7 +152,6 @@ define('io.ox/contacts/edit/view-form',
             section.append(sectionContent);
             this.append(section);
 
-
             if (/^(.*_address)$/.test(pointNameRecalc)) {
                 options.pointName = 'contact_' + pointNameRecalc;
                 ext.point('io.ox/contacts/edit/form/address').invoke('draw', sectionContent, options);
@@ -167,12 +163,10 @@ define('io.ox/contacts/edit/view-form',
                 if (fieldCount(sectionContent) !== 0) {
                     section.append($('<a>').addClass('switcher').text('+ ' + more).on('click', {pointName: pointName}, toggleFields));
                 }
-
             } else {
                 section.append($('<a>').addClass('switcher').text('+ ' + translationPoints[pointName]).on('click', {pointName: pointName}, toggleFields));
                 sectionTitle.addClass('hidden');
             }
-
         };
     };
 
@@ -228,7 +222,6 @@ define('io.ox/contacts/edit/view-form',
             self = this,
             view = options.view,
             model = view.getModel();
-//            label = model.schema.getFieldLabel(subPointName);
 
         _.each(addressFormat, function (line, index) {
             var lineFormat = line.split(/\//);
@@ -266,7 +259,6 @@ define('io.ox/contacts/edit/view-form',
                 if (hide) {
                     sectionGroup.addClass('hidden');
                 }
-
             }
         });
     };
