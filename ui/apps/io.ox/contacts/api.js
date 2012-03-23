@@ -18,7 +18,6 @@ define('io.ox/contacts/api',
      'io.ox/core/cache'
      ], function (http, apiFactory, cache) {
 
-
     'use strict';
 
     // generate basic API

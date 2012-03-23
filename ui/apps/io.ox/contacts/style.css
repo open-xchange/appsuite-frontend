@@ -248,10 +248,6 @@ input#image1 {
 .contact-detail input, .create-contact input{
 	width: 270px;
 }
-
-.create-contact .section {
-	margin-bottom: 20px;
-}
 	
 .create-contact .section-group {
 	margin-bottom: 5px;

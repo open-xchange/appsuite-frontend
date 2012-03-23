@@ -91,15 +91,19 @@ define('io.ox/contacts/create-view',
             this.getModel()
                 .on('change:display_name', { view: this }, updateHeader)
                 .on('change:first_name change:last_name', updateDisplayName)
-                .on('error:invalid', function (e, err) {
-                    // sooo, das kommt nicht immer - ist mir aber heute zu blöd, das zu debuggen
-                    $('#myGrowl').jGrowl(err.message, { header: 'Make an educated guess!', sticky: false });
+                .on('error:invalid', { view: this }, function (e, data) {
+                    var view = e.data.view;
+                    $.alert(gt('Could not create contact'), data.message)
+                        .insertAfter(view.node.find('.section.formheader'));
                 })
                 .on('save:progress', { view: this }, function (e) {
                     e.data.view.node.css('visibility', 'hidden').parent().busy();
                 })
-                .on('save:fail', { view: this }, function (e) {
-                    e.data.view.node.css('visibility', '').parent().idle();
+                .on('save:fail', { view: this }, function (e, data) {
+                    var view = e.data.view;
+                    view.node.css('visibility', '').parent().idle();
+                    $.alert(gt('Could not create contact'), data.error)
+                        .insertAfter(view.node.find('.section.formheader'));
                 })
                 .on('save:beforedone', function () {
                     $('#myGrowl').jGrowl('shutdown');
