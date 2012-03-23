@@ -55,6 +55,14 @@ input#image1 {
     background-size: cover;
 }
 
+.contact-detail.edit .name {
+    margin-bottom: 0.25em;
+}
+
+.contact-detail.edit .job {
+    font-size: 1.25em;
+    color: #888;
+}
 
 .contact-detail.edit .sectioncontent,
 .contact-detail.edit .section-group {
@@ -133,7 +141,6 @@ input#image1 {
 
 .contact-detail.edit .section.formheader {
 	height: 100px;
-	border-bottom: 1px solid #eee;
 }
 
 .contact-detail.edit .section.formheader .picture{
