@@ -26,7 +26,6 @@ define('io.ox/contacts/edit/view-form',
     * urgh, if you want to improve it, do it without that many dom operations
     */
 
-
     var checkEl = function (c) {
         var parent = $(c).parent(),
         el = parent.find('input').filter(function () {
@@ -73,7 +72,6 @@ define('io.ox/contacts/edit/view-form',
         $(evt.currentTarget).text(gt(txt));
     };
 
-
     var moreSwitch = function (txt, evt) {
         var parent = $(evt.currentTarget).parent();
         parent.removeClass('expanded');
@@ -101,7 +99,6 @@ define('io.ox/contacts/edit/view-form',
             empty = fieldCount(target),
             parent = $(target).parent(),
             status;
-
 
         if (filled === 0) {
             status = parent.hasClass('expanded') ? '1' :  '2';
@@ -142,7 +139,6 @@ define('io.ox/contacts/edit/view-form',
             section.append(sectionContent);
             this.append(section);
 
-
             if (/^(.*_address)$/.test(pointNameRecalc)) {
                 options.pointName = 'contact_' + pointNameRecalc;
                 ext.point('io.ox/contacts/edit/form/address').invoke('draw', sectionContent, options);
@@ -154,12 +150,10 @@ define('io.ox/contacts/edit/view-form',
                 if (fieldCount(sectionContent) !== 0) {
                     section.append($('<a>').addClass('switcher').text('+ ' + gt(more)).on('click', {pointName: pointName}, toggleFields));
                 }
-
             } else {
                 section.append($('<a>').addClass('switcher').text('+ ' + gt(pointName)).on('click', {pointName: pointName}, toggleFields));
                 sectionTitle.addClass('hidden');
             }
-
         };
     };
 
@@ -204,7 +198,6 @@ define('io.ox/contacts/edit/view-form',
     };
 
     var drawFields = function (pointName, subPointName) {
-//        console.log(pointName + ' ' + subPointName);
         return function (options) {
             ext.point('io.ox/contacts/edit/form/' + pointName + '/' + subPointName).invoke('draw', this, options);
         };
@@ -216,7 +209,6 @@ define('io.ox/contacts/edit/view-form',
             self = this,
             view = options.view,
             model = view.getModel();
-//            label = model.schema.getFieldLabel(subPointName);
 
         _.each(addressFormat, function (line, index) {
             var lineFormat = line.split(/\//);
@@ -235,7 +227,6 @@ define('io.ox/contacts/edit/view-form',
                 self.append(sectionGroup);
 
                 _.each(lineFormat, function (multiline, index) {
-//                    console.log(multiline + ' ' + addressGroop);
                     var myId = _.uniqueId('c'),
                         labelText = options.view.getModel().schema.getFieldLabel(multiline + addressGroop);
 
@@ -255,7 +246,6 @@ define('io.ox/contacts/edit/view-form',
                 if (hide) {
                     sectionGroup.addClass('hidden');
                 }
-
             }
         });
     };

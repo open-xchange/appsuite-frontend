@@ -5,7 +5,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011 Mail: info@open-xchange.com
+ * Copyright (C) Open-Xchange Inc., 2006-2012 Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
@@ -22,131 +22,101 @@ define('io.ox/contacts/create-view',
 
     'use strict';
 
-
-    var saveButton = function (options) {
-        var button = $('<a>').attr({
-            'data-action': 'save',
-            'href': '#'
-        }).addClass('btn btn-primary').text(gt('Save')).on('click', function () {
-            options.saveForm();
-        });
-
-        return button;
+    var handleFileSelect = function (e) {
+        var file = e.target.files,
+            reader = new FileReader(),
+            view = e.data.view;
+        reader.onload = function (e) {
+            view.node.find('.picture').css('background-image', 'url(' + e.target.result + ')');
+        };
+        reader.readAsDataURL(file[0]);
     };
 
-    var picform = function (options) {
-        var pic = options.createPicUpload({
-            wrap: false,
-            label: false,
-            charset: 'UTF-8',
-            enctype: 'multipart/form-data',
-            id: 'contactUploadImage',
-            method: 'POST',
-            formname: 'contactUploadImage',
-            name: 'file',
-            target: 'hiddenframePicture'
-        });
-
-        function handleFileSelect(evt) {
-            console.log('triggered');
-            var file = evt.target.files,
-                reader = new FileReader();
-            reader.onload = (function (theFile) {
-                return function (e) {
-                    $('.create-contact .picture').css('background-image', 'url(' + e.target.result + ')');
-                };
-            }(file[0]));
-            reader.readAsDataURL(file[0]);
-        }
-
-        pic.find('input').on('change', handleFileSelect);
-        return pic;
+    var picTrigger = function () {
+        $(this).closest('.io-ox-dialog-popup').find('input[type="file"]').trigger('click');
     };
 
-    var picDummy = function () {
-        function picTrigger() {
-            $('input[type="file"]').trigger('click');
-        }
-
-        var picture = $('<div>').addClass('picture')
-        .css('background-image', 'url(' + ox.base + '/apps/themes/default/dummypicture.png)');
-        picture.on('click', picTrigger);
-
-        return picture;
+    var updateHeader = function (e) {
+        var view = e.data.view,
+            name = util.getDisplayName(this.get());
+        view.node.find('[data-property="display_name"]').text(name);
     };
 
-    var growl = $('<div>', {id: 'myGrowl'}).addClass('jGrowl').css({position: 'absolute', right: '0', top: '0'});
+    var updateDisplayName = function () {
+        var name = util.getFullName(this.get());
+        this.set('display_name', name);
+    };
+
+    var meta = ['first_name', 'last_name', 'display_name', 'email1', 'cellular_telephone1'];
 
     var ContactCreateView = View.extend({
 
-        draw: function (app) {
-            var self = this,
-                meta = ['first_name',
-                        'last_name',
-                        'display_name',
-                        'email1',
-                        'cellular_telephone1'],
-                header = self.createSection(),
-                formtitle = self.createSectionTitle({
-                    'text': gt('Add new contact')
-                });
+        draw: function () {
 
-            var updateDisplayName = function () {
-                console.log('update displayname');
-                self.getModel().set('display_name', util.getFullName(self.getModel().get()));
-            };
+            this.node.append(
+                this.createSection()
+                .addClass('formheader')
+                .append(
+                    // picture
+                    $('<div>')
+                        .addClass('picture')
+                        .css({
+                            backgroundImage: 'url(' + ox.base + '/apps/themes/default/dummypicture.png)',
+                            marginRight: '15px'
+                        })
+                        .on('click', picTrigger),
+                    // full name
+                    $('<span>')
+                        .addClass('text name clear-title')
+                        .attr('data-property', 'display_name')
+                        .text('\u00A0'),
+                    // hidden form
+                    this.createPicUpload()
+                        .find('input').on('change', { view: this }, handleFileSelect).end()
+                )
+            );
 
-            this.getModel().on('change:title change:first_name change:last_name', updateDisplayName);
-
-            header.addClass('formheader').append(picDummy(), picform(self));
-            self.node.append(formtitle);
-            self.node.append(header);
+            // draw input fields
             _.each(meta, function (field) {
                 var myId = _.uniqueId('c'),
-                sectiongroup = self.createSectionGroup(),
-                model = self.getModel(),
-                label = model.schema.getFieldLabel(field),
-                fieldtype = model.schema.getFieldType(field),
-                createFunction;
+                    label = this.getModel().schema.getFieldLabel(field);
+                this.node.append(
+                    this.createSectionGroup().append(
+                        this.createLabel({ id: myId, text: gt(label) }),
+                        this.createTextField({ property: field, id: myId })
+                    )
+                );
+            }, this);
 
-                switch (fieldtype) {
-                case "string":
-                    createFunction = self.createTextField({property: field, id: myId, classes: 'form-vertical'});
-                    break;
-                case "pastDate":
-                    createFunction = self.createDateField({property: field, id: myId, classes: 'form-vertical'});
-                    break;
-                default:
-                    createFunction = self.createTextField({property: field, id: myId, classes: 'form-vertical'});
-                    break;
-                }
+            this.getModel()
+                .on('change:display_name', { view: this }, updateHeader)
+                .on('change:first_name change:last_name', updateDisplayName)
+                .on('error:invalid', function (e, err) {
+                    // sooo, das kommt nicht immer - ist mir aber heute zu blöd, das zu debuggen
+                    $('#myGrowl').jGrowl(err.message, { header: 'Make an educated guess!', sticky: false });
+                })
+                .on('save:progress', { view: this }, function (e) {
+                    e.data.view.node.css('visibility', 'hidden').parent().busy();
+                })
+                .on('save:fail', { view: this }, function (e) {
+                    e.data.view.node.css('visibility', '').parent().idle();
+                })
+                .on('save:beforedone', function () {
+                    $('#myGrowl').jGrowl('shutdown');
+                });
 
-                sectiongroup.append(self.createLabel({
-                    id: myId,
-                    text: gt(label)
-                }), createFunction);
-
-                self.node.append(sectiongroup);
-            });
-
-            this.getModel().on('error:invalid', function (evt, err) {
-                console.log('error validation');
-                console.log(arguments);
-                $('#myGrowl').jGrowl(err.message, {header: 'Make an educated guess!', sticky: false});
-            });
-            return self;
+            return this;
         },
 
         drawButtons: function () {
-            var self = this,
-                button = saveButton(self);
-            return button;
-        },
-
-        saveForm: function () {
-            console.log('saveForm -> save', this);
-            this.getModel().save();
-            //$(this).trigger('save');
+            // create save button
+            return $('<a>', { href: '#', 'data-action': 'save' })
+                .addClass('btn btn-primary')
+                .text(gt('Save'))
+                .on('click', { view: this }, function (e) {
+                    e.preventDefault();
+                    e.data.view.getModel().save();
+                });
         }
     });
 

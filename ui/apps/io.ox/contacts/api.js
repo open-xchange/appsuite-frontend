@@ -59,39 +59,50 @@ define('io.ox/contacts/api',
         }
     });
 
-    api.create = function (form) {
+    api.create = function (data) {
+        // repair email
+        data.email1 = data.email1 || null;
+        data.email2 = data.email2 || null;
+        data.email3 = data.email3 || null;
+        // go!
         return http.PUT({
                 module: 'contacts',
                 params: { action: 'new' },
-                data: form,
+                data: data,
                 datatype: 'text',
                 appendColumns: false
             })
-            .done(function (data) {
+            .done(function (fresh) {
                 api.caches.all.clear(); //TODO consider proper folder
                 api.trigger('refresh.all');
                 api.trigger('created', { // TODO needs a switch for created by hand or by test
-                    folder: form.folder_id,
-                    id: data.id
+                    folder: data.folder_id,
+                    id: fresh.id
                 });
             })
-            .pipe(function (data) {
-                return api.get({ id: data.id, folder: form.folder_id });
+            .pipe(function (fresh) {
+                return api.get({ id: fresh.id, folder: data.folder_id });
             })
             .fail(function () {
                 console.log('connection lost');//what to do if fails?
             });
     };
 
-    api.createNewImage = function (formdata, file) {
+    api.createNewImage = function (data, file) {
+
+        // repair email
+        data.email1 = data.email1 || null;
+        data.email2 = data.email2 || null;
+        data.email3 = data.email3 || null;
+
         var formData = new FormData();
         formData.append('file', file);
-        formData.append('json', formdata);
+        formData.append('json', data);
 
         return http.UPLOAD({
             module: 'contacts',
-            params: {action: 'new'},
-            data: formData,
+            params: { action: 'new' },
+            data: data,
             dataType: 'text'
         })
         .done(function () {

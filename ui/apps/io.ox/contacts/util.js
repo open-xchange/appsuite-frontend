@@ -31,12 +31,19 @@ define('io.ox/contacts/util', [], function () {
                 return (/^(dr\.|prof\.|prof\. dr\.)$/i).test(field) ? field : '';
             }
             // combine title, last_name, and first_name
-            return obj.last_name && obj.first_name ?
-                $.trim(fix(obj.title) + ' ' + obj.last_name + ', ' + obj.first_name) :
-                (obj.display_name || '').replace(/"|'/g, '');
+            if (obj.last_name && obj.first_name) {
+                return $.trim(fix(obj.title) + ' ' + obj.last_name + ', ' + obj.first_name);
+            }
+            // use existing display name?
+            if (obj.display_name) {
+                return String(obj.display_name).replace(/"|'/g, '');
+            }
+            // fallback
+            return obj.last_name || obj.first_name || '';
         },
 
         createDisplayName: function (obj) {
+            // TODO: Wofür soll das gut sein?
             if (!obj.first_name) {
                 obj.first_name = 'undefined';
             }
@@ -48,10 +55,16 @@ define('io.ox/contacts/util', [], function () {
         },
 
         getDisplayName: function (obj) {
+            // use existing display name?
+            if (obj.display_name) {
+                return String(obj.display_name).replace(/"|'/g, '');
+            }
             // combine last_name, and first_name
-            return obj.last_name && obj.first_name ?
-                obj.last_name + ', ' + obj.first_name :
-                (obj.display_name || '').replace(/"|'/g, '');
+            if (obj.last_name && obj.first_name) {
+                return obj.last_name + ', ' + obj.first_name;
+            }
+            // fallback
+            return obj.last_name || obj.first_name || '';
         },
 
         getMail: function (obj) {

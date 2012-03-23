@@ -17,7 +17,7 @@ define('io.ox/contacts/model',
 
     var contactSchema = new Model.Schema({
 
-        'display_name': {format: 'string', label: 'Display name', mandatory: true}, //defaultValue: 'Mrs. Bean'  mandatory: true
+        'display_name': {format: 'string', label: 'Display name', mandatory: true }, //defaultValue: 'Mrs. Bean'  mandatory: true
         'first_name': { format: 'string', label: 'First name'},
         'last_name': {  format: 'string', label: 'Last name'},
         'second_name': { format: 'string', label: 'Middle name'},
@@ -67,11 +67,11 @@ define('io.ox/contacts/model',
         'telephone_home1': { format: 'string', label: 'Phone'},
         'telephone_home2': { format: 'string', label: 'Phone 2'},
         'fax_home': { format: 'string', label: 'Fax'},
-        'cellular_telephone1': { format: 'string', label: 'Cell phone', mandatory: true},
+        'cellular_telephone1': { format: 'string', label: 'Cell phone'},
         'cellular_telephone2': { format: 'string', label: 'Cell phone'},
         'telephone_other': { format: 'string', label: 'Phone (other)'},
         'fax_other': { format: 'string', label: 'Fax (other)'},
-        'email1': { format: 'email', label: 'Email 1', mandatory: true},
+        'email1': { format: 'email', label: 'Email 1'},
         'email2': { format: 'email', label: 'Email 2'},
         'email3': { format: 'email', label: 'Email 3'},
         'url': { format: 'url', label: 'URL'},

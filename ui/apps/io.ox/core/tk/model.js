@@ -112,6 +112,16 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             return defaults;
         },
 
+        getMandatories: function () {
+            var tmp = [];
+            _(this._definitions).each(function (def, prop) {
+                if (def.mandatory) {
+                    tmp.push(prop);
+                }
+            });
+            return tmp;
+        },
+
         isMandatory: function (key) {
             return !!this.get(key).mandatory;
         },
@@ -176,7 +186,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         this._memoize = {};
         Events.extend(this);
         // TODO: we ALWAYS need data! do we have any options? I always forget to use key/value here
-        this.initialize(options.data || options);
+        this.initialize(options.data || options || {});
     };
 
     Model.addComputed = function (key, /* optional */ deps, callback) {
@@ -271,7 +281,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             var changes = {}, previous = this._previous;
             _(this._data).each(function (value, key) {
                 if (!isEqual(value, previous[key])) {
-                    changes[key] = value;
+                    changes[key] = _.copy(value, true);
                 }
             });
             return changes;
@@ -339,8 +349,23 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
                 },
                 success = function () {
                     // trigger store - expects deferred object
-                    return (this.store(this._data, this.getChanges()) || $.when())
-                        .done(_.bind(this.initialize, this, this._data));
+                    var def = $.Deferred().notify(), self = this;
+                    this.trigger('save:progress');
+                    console.log("THIS", this);
+                    (this.store(this.get(), this.getChanges()) || $.when())
+                        .done(function () {
+                            console.log("VS SELF", self);
+                            self.initialize(self._data);
+                            self.trigger('save:beforedone');
+                            self.trigger('save:done');
+                            def.resolve();
+                        })
+                        .fail(function () {
+                            self.trigger('save:beforefail');
+                            self.trigger('save:fail');
+                            def.reject();
+                        });
+                    return def;
                 },
                 fail = function (error) {
                     // fail
@@ -349,6 +374,13 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
                 };
 
             return function () {
+
+                // add mandatory fields to force validation
+                _(this.schema.getMandatories()).each(function (key) {
+                    if (!(key in this._data)) {
+                        this._data[key] = '';
+                    }
+                }, this);
 
                 // check all properties
                 if (!_(this._data).inject(checkValid, true, this)) {

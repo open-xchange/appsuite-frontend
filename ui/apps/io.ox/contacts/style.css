@@ -246,7 +246,7 @@ input#image1 {
 }
 
 .contact-detail input, .create-contact input{
-	width: 200px;
+	width: 270px;
 }
 
 .create-contact .section {
@@ -260,7 +260,6 @@ input#image1 {
 
 .create-contact .section.formheader {
 	height: 100px;
-	border-bottom: 1px solid #eee;
 }
 
  .create-contact .section.formheader .saveButton {
