@@ -33,7 +33,9 @@ define('io.ox/contacts/create',
             footer = pane.getFooter(),
             // create model & view
             model = new ContactModel(),
-            view = new ContactCreateView({ model: model });
+            view = new ContactCreateView({ model: model }),
+            // return value
+            def = $.Deferred();
 
         pane.header(
             $('<h4>').text(gt('Add new contact'))
@@ -51,7 +53,8 @@ define('io.ox/contacts/create',
             }
         };
 
-        model.on('save:done', function () {
+        model.on('save:done', function (e, data) {
+            def.resolve(data);
             pane.close();
         });
 
@@ -71,6 +74,8 @@ define('io.ox/contacts/create',
         pane.show(function () {
             this.find('input[type=text]').first().focus();
         });
+
+        return def;
     };
 
     return {

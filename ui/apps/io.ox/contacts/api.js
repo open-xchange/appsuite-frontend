@@ -102,12 +102,15 @@ define('io.ox/contacts/api',
         return http.UPLOAD({
             module: 'contacts',
             params: { action: 'new' },
-            data: data,
-            dataType: 'text'
+            data: data
         })
         .done(function () {
             api.caches.all.clear(); //TODO considere proper folder
             api.trigger('refresh.all');
+        })
+        .pipe(function (fresh) {
+            console.log('fresh', fresh);
+            return api.get({ id: fresh.id, folder: data.folder_id });
         })
         .fail(function () {
             console.debug('connection lost');//what to do if fails?

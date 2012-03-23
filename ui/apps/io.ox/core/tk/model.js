@@ -351,19 +351,17 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
                     // trigger store - expects deferred object
                     var def = $.Deferred().notify(), self = this;
                     this.trigger('save:progress');
-                    console.log("THIS", this);
                     (this.store(this.get(), this.getChanges()) || $.when())
                         .done(function () {
-                            console.log("VS SELF", self);
                             self.initialize(self._data);
-                            self.trigger('save:beforedone');
-                            self.trigger('save:done');
-                            def.resolve();
+                            self.trigger.apply(self, ['save:beforedone'].concat($.makeArray(arguments)));
+                            self.trigger.apply(self, ['save:done'].concat($.makeArray(arguments)));
+                            def.resolve.apply(def, arguments);
                         })
                         .fail(function () {
-                            self.trigger('save:beforefail');
-                            self.trigger('save:fail');
-                            def.reject();
+                            self.trigger.apply(self, ['save:beforefail'].concat($.makeArray(arguments)));
+                            self.trigger.apply(self, ['save:fail'].concat($.makeArray(arguments)));
+                            def.reject.apply(def, arguments);
                         });
                     return def;
                 },
