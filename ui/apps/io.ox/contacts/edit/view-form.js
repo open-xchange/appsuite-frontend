@@ -47,11 +47,11 @@ define('io.ox/contacts/edit/view-form',
 
     var lessSwitch = function (evt) {
         var parent = $(evt.currentTarget).parent(),
-            less = 'less';
+            less = gt('less');
         parent.find('.hidden').removeClass('hidden').addClass('visible');
         parent.find('.sectiontitle').removeClass('hidden');
         parent.addClass('expanded');
-        $(evt.currentTarget).text('- ' + gt(less));
+        $(evt.currentTarget).text('- ' + less);
     };
 
     var namedSwitch = function (txt, evt) {
@@ -69,7 +69,7 @@ define('io.ox/contacts/edit/view-form',
             }
         ).parent().parent().parent().removeClass('visible').addClass('hidden');
         parent.find('.visible').removeClass('visible').addClass('hidden');
-        $(evt.currentTarget).text(gt(txt));
+        $(evt.currentTarget).text(txt);
     };
 
     var moreSwitch = function (txt, evt) {
@@ -86,13 +86,25 @@ define('io.ox/contacts/edit/view-form',
                 return $(this).val() === "";
             }
         ).parent().parent().parent().removeClass('visible').addClass('hidden');
-        $(evt.currentTarget).text(gt(txt));
+        $(evt.currentTarget).text(txt);
     };
+
+    var translationPoints = {
+            'Personal information': gt('Personal information'),
+            'Email addresses': gt('Email addresses'),
+            'Phone numbers': gt('Phone numbers'),
+            'Home address': gt('Home address'),
+            'Business address': gt('Business address'),
+            'Other address': gt('Other address'),
+            'Job descriptions': gt('Job descriptions'),
+            'Special information': gt('Special information'),
+            'Optional fields': gt('Optional fields')
+        };
 
     var toggleFields = function (evt) {
         var target,
-            switchName = evt.data.pointName,
-            more = 'more';
+            switchName = translationPoints[evt.data.pointName],
+            more = gt('more');
         target = evt.currentTarget;
 
         var filled = checkEl(target),
@@ -108,7 +120,7 @@ define('io.ox/contacts/edit/view-form',
 
         switch (status) {
         case "1":
-            namedSwitch('+ ' + gt(switchName), evt);
+            namedSwitch('+ ' + switchName, evt);
             break;
         case "2":
             lessSwitch(evt);
@@ -117,7 +129,7 @@ define('io.ox/contacts/edit/view-form',
             lessSwitch(evt);
             break;
         case "4":
-            moreSwitch('+ ' + gt(more), evt);
+            moreSwitch('+ ' + more, evt);
             break;
         }
     };
@@ -127,13 +139,14 @@ define('io.ox/contacts/edit/view-form',
         return recalc;
     };
 
+
     var drawSection = function (pointName) {
         return function (options) {
             var section = options.view.createSection(),
-                sectionTitle = options.view.createSectionTitle({text: gt(pointName)}),
+                sectionTitle = options.view.createSectionTitle({text: translationPoints[pointName]}),
                 sectionContent = options.view.createSectionContent(),
                 pointNameRecalc = pointRecalc(pointName),
-                more = 'more';
+                more = gt('more');
 
             section.append(sectionTitle);
             section.append(sectionContent);
@@ -148,10 +161,10 @@ define('io.ox/contacts/edit/view-form',
             }
             if (checkEl(sectionContent) !== 0) {
                 if (fieldCount(sectionContent) !== 0) {
-                    section.append($('<a>').addClass('switcher').text('+ ' + gt(more)).on('click', {pointName: pointName}, toggleFields));
+                    section.append($('<a>').addClass('switcher').text('+ ' + more).on('click', {pointName: pointName}, toggleFields));
                 }
             } else {
-                section.append($('<a>').addClass('switcher').text('+ ' + gt(pointName)).on('click', {pointName: pointName}, toggleFields));
+                section.append($('<a>').addClass('switcher').text('+ ' + translationPoints[pointName]).on('click', {pointName: pointName}, toggleFields));
                 sectionTitle.addClass('hidden');
             }
         };
@@ -182,7 +195,7 @@ define('io.ox/contacts/edit/view-form',
             }
 
             sectionGroup.append(
-                 view.createLabel({ id: myId, text: gt(label) }),
+                 view.createLabel({ id: myId, text: label}),
                  createFunction
             );
 
@@ -230,7 +243,7 @@ define('io.ox/contacts/edit/view-form',
                     var myId = _.uniqueId('c'),
                         labelText = options.view.getModel().schema.getFieldLabel(multiline + addressGroop);
 
-                    labels.push(options.view.createLabel({ id: myId, text: gt(labelText)}));
+                    labels.push(options.view.createLabel({ id: myId, text: labelText}));
                     fields.push(options.view.createTextField({ id: myId, property: multiline + addressGroop, classes: 'input-large' }));
                     hide = (options.view.getModel().get(multiline + addressGroop)) ? false : true;
                 });
@@ -321,6 +334,7 @@ define('io.ox/contacts/edit/view-form',
         };
     };
 
+
     var handleSection = function (section, pointName) {
         var pointNameRecalc = pointRecalc(pointName);
         ext.point('io.ox/contacts/edit/form').extend({
@@ -371,10 +385,12 @@ define('io.ox/contacts/edit/view-form',
         draw: function (app) {
 
             var model = this.getModel();
+
             if (model) {
 
                 model.on('change:title change:first_name change:last_name', { node: this.node }, updateDisplayNameByFields)
                     .on('change:company change:position', { node: this.node }, updateJobDescription);
+
 
                 initExtensionPoints({
                     'Personal information': ['title', 'first_name', 'last_name', 'display_name', 'second_name', 'suffix', 'nickname', 'birthday'],
