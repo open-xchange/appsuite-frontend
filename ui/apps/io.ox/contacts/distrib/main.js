@@ -13,17 +13,12 @@
  */
 
 define('io.ox/contacts/distrib/main',
-    ['io.ox/contacts/util',
-     'io.ox/contacts/api',
-     'io.ox/core/tk/dialogs',
-     'io.ox/core/config',
-     'io.ox/core/tk/forms',
+    ['io.ox/contacts/api',
      'io.ox/contacts/model',
      'io.ox/contacts/distrib/create-dist-view',
      'gettext!io.ox/contacts/contacts',
-     "io.ox/core/commons",
      'less!io.ox/contacts/distrib/style.css'
-     ], function (util, api, dialogs, config, forms, ContactModel, ContactCreateDistView, gt, commons) {
+     ], function (api, ContactModel, ContactCreateDistView, gt) {
 
     'use strict';
 
