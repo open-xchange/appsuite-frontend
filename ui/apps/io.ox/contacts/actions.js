@@ -66,7 +66,7 @@ define('io.ox/contacts/actions',
             return e.collection.has('create');
         },
         action: function (app) {
-            require(["io.ox/contacts/create"], function (create) {
+            require(["io.ox/contacts/create/main"], function (create) {
                 create.show(app).done(function (data) {
                     app.getGrid().selection.set(data);
                 });
