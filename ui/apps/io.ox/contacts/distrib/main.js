@@ -133,7 +133,7 @@ define('io.ox/contacts/distrib/main',
                         new dialogs.ModalDialog()
                             .text(gt("Do you really want to lose your changes?"))
                             .addButton("cancel", gt('Cancel'))
-                            .addButton("delete", gt('Lose changes'))
+                            .addPrimaryButton("delete", gt('Lose changes'))
                             .show()
                             .done(function (action) {
                                 console.debug("Action", action);

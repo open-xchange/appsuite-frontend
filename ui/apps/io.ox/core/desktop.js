@@ -870,7 +870,8 @@ define("io.ox/core/desktop",
                 // create new window instance
                 win = new Window(opt.id, opt.name),
                 // close window
-                close = function () {
+                close = function (e) {
+                    e.preventDefault();
                     win.close();
                 };
 
