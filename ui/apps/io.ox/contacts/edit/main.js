@@ -38,8 +38,8 @@ define('io.ox/contacts/edit/main',
         });
 
         app.setLauncher(function () {
-            var win,
-                container;
+
+            var win, container;
 
             win = ox.ui.createWindow({
                 title: 'Edit Contact',

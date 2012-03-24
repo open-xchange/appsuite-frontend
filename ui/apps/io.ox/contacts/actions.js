@@ -12,7 +12,9 @@
  */
 
 define('io.ox/contacts/actions',
-    ['io.ox/core/extensions', "io.ox/core/extPatterns/links", 'gettext!io.ox/contacts/contacts'], function (ext, links, gt) {
+    ['io.ox/core/extensions',
+     "io.ox/core/extPatterns/links",
+     'gettext!io.ox/contacts/contacts'], function (ext, links, gt) {
 
     'use strict';
 
@@ -21,9 +23,7 @@ define('io.ox/contacts/actions',
     ext.point("io.ox/contacts/main/delete").extend({
         index: 100,
         id: "delete",
-        requires: function (e) {
-            return e.collection.has('some', 'delete');
-        },
+        requires: 'some delete',
         action:  function (data) {
             require(["io.ox/contacts/api", "io.ox/core/tk/dialogs"], function (api, dialogs) {
                 new dialogs.ModalDialog()
@@ -43,13 +43,13 @@ define('io.ox/contacts/actions',
     ext.point("io.ox/contacts/main/update").extend({
         index: 100,
         id: "edit",
-        requires: function (e) {
-            return e.collection.has('one', 'modify');
-        },
+        requires: 'one modify',
         action: function (data) {
             if (data.mark_as_distributionlist === true) {
-                require(["io.ox/contacts/distrib/main"], function (createDist) {
-                    createDist.getApp(data).launch();
+                require(["io.ox/contacts/distrib/main"], function (m) {
+                    m.getApp(data).launch().done(function () {
+                        this.edit(data);
+                    });
                 });
             } else {
                 require(["io.ox/contacts/util"], function (util) {
@@ -62,9 +62,7 @@ define('io.ox/contacts/actions',
     ext.point("io.ox/contacts/main/create").extend({
         index: 100,
         id: "create",
-        requires: function (e) {
-            return e.collection.has('create');
-        },
+        requires: 'create',
         action: function (app) {
             require(["io.ox/contacts/create/main"], function (create) {
                 create.show(app).done(function (data) {
@@ -74,16 +72,15 @@ define('io.ox/contacts/actions',
         }
     });
 
-
     ext.point("io.ox/contacts/main/distrib").extend({
         index: 100,
         id: "create-dist",
-        requires: function (e) {
-            return e.collection.has('create');
-        },
+        requires: 'create',
         action: function (app) {
-            require(["io.ox/contacts/distrib/main"], function (createDist) {
-                createDist.getApp(null, app).launch();
+            require(["io.ox/contacts/distrib/main"], function (m) {
+                m.getApp().launch().done(function () {
+                    this.create(app.folder.get());
+                });
             });
         }
     });

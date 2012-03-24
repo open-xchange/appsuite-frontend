@@ -42,18 +42,6 @@ define('io.ox/contacts/util', [], function () {
             return obj.last_name || obj.first_name || '';
         },
 
-        createDisplayName: function (obj) {
-            // TODO: Wofür soll das gut sein?
-            if (!obj.first_name) {
-                obj.first_name = 'undefined';
-            }
-            if (!obj.last_name) {
-                obj.last_name = 'undefined';
-            }
-            obj.display_name = obj.first_name + ',' + obj.last_name;
-            return obj.display_name;
-        },
-
         getDisplayName: function (obj) {
             // use existing display name?
             if (obj.display_name) {

@@ -127,7 +127,10 @@ define('io.ox/contacts/distrib/create-dist-view',
             'data-action': 'add',
             'href': '#',
             'tabindex': '4'
-        }).addClass('btn btn-inverse').text(gt('Add')).on('click', function (e) { //TODO some css related issues with color
+        })
+        .addClass('btn btn-inverse')
+        .text('+')
+        .on('click', function (e) { //TODO some css related issues with color
             var data = $('[data-holder="data-holder"]').data(),
                 mailValue = $('input#mail').val(),
                 nameValue = $('input#name').val();
@@ -138,7 +141,6 @@ define('io.ox/contacts/distrib/create-dist-view',
                     insertNewContact(options, nameValue, mailValue);
                 }
             }
-
             // reset the fields
             $('[data-holder="data-holder"]').removeData();
             $('input#mail').val('');
@@ -153,7 +155,8 @@ define('io.ox/contacts/distrib/create-dist-view',
     }
 
     function drawAutoCompleteItem(node, data) {
-        var img = $('<div>').addClass('contact-image'),
+
+        var img = $('<div>').addClass('create-distributionlist-contact-image'),
             url = util.getImage(data.contact);
 
         if (Modernizr.backgroundsize) {
@@ -164,7 +167,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             );
         }
 
-        node.addClass('io-ox-contact-create-dist')
+        node
         .append(img)
         .append(
             $('<div>').addClass('person-link ellipsis')
@@ -280,7 +283,6 @@ define('io.ox/contacts/distrib/create-dist-view',
                         }
 
                     },
-
                     // for a second (related) Field
                     stringifyrelated: function (data) {
                         if (related === 'input#mail') {
@@ -302,7 +304,8 @@ define('io.ox/contacts/distrib/create-dist-view',
                         var holder = $('[data-holder="data-holder"]');
                         return holder;
                     }
-                }).on('keydown', function (e) {
+                })
+                .on('keydown', function (e) {
                     if (e.which === 13) {
                         $('[data-action="add"]').trigger('click');
                     }

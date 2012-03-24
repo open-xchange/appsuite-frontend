@@ -267,13 +267,3 @@ input#image1 {
 	width: 0px;
 	height: 0px;
 }
-
-.io-ox-contact-create-dist .contact-image{
-    height: 3em;
-    width: 3em;
-    margin-right: 1em;
-    display: inline-block;
-    background-size: cover;
-    background-repeat: no-repeat;
-    float: left;
-}
