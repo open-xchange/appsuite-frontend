@@ -239,7 +239,6 @@ define('io.ox/contacts/distrib/create-dist-view',
         if ($('[data-mail="' + selectedMail + '"]')[1]) {
             drawAlert(selectedMail).appendTo($('.editsection'));
         }
-
         options.model._data.distribution_list.push({
             id: contact.id,
             display_name: contact.display_name,

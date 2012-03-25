@@ -218,6 +218,12 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             }, this);
         },
 
+        isEmpty: function (key) {
+            // check if value would appear as empty string in UI
+            var value = this._data[key];
+            return value === '' || value === undefined || value === null;
+        },
+
         get: function (key) {
             if (key === undefined) {
                 // get all values

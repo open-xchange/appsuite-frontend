@@ -31,16 +31,20 @@ input#image1 {
 	width: 300px;
 }
 
+.contact-detail.edit {
+    padding-bottom: 20px; 
+}
+
 .contact-detail.edit .section {
 	margin-bottom: 20px;
+    clear: both;
 }
 
 .contact-detail.edit .sectiontitle {
 	margin: 25px 0 15px 0;
-	padding-left: 137px;
-	font-size: 1.25em;
-	color: #888;
-	font-family: OpenSans, Helvetica, Arial, sans-serif;
+	padding-left: 167px;
+	color: #aaa;
+    font-family: @font-light;
 	font-weight: 200;
 	line-height: 1.15em;
 }
@@ -48,6 +52,7 @@ input#image1 {
 .contact-detail.edit .picture {
     width: 100px;
     height: 80px;
+    margin-left: 30px;
     display: inline-block;
     float: right;
     background-position: right top;
@@ -66,7 +71,6 @@ input#image1 {
 
 .contact-detail.edit .sectioncontent,
 .contact-detail.edit .section-group {
-	margin-bottom: 5px;
 	overflow: hidden;
 }
 
@@ -99,7 +103,7 @@ input#image1 {
 }
 
 .contact-detail.edit div.input.inline.nr1 input[type="text"] {
-	width: 177px;
+	width: 175px;
 }
 
 .contact-detail.edit .input > input[type="text"]:focus{
@@ -110,7 +114,7 @@ input#image1 {
 .contact-detail.edit div.io-ox-label {
 	margin-right: 37px;
 	padding-top: 7px;
-	width: 100px;
+	width: 130px;
 	float:left;
 	text-align: right;
 }
@@ -122,7 +126,7 @@ input#image1 {
 .contact-detail.edit div.inlinelabel {
 	margin-right: 37px;
 	padding-top: 7px;
-	width: 100px;
+	width: 130px;
 	float:left;
 	text-align: right;
 }
@@ -161,6 +165,36 @@ input#image1 {
 	height: 0px;
 }
 
-.contact-detail.edit a.switcher {
-	padding-left: 137px;	
+.contact-detail.edit .toggle.show-more,
+.contact-detail.edit .toggle.show-less {
+    float: right;
+}
+
+.contact-detail.edit .add-section {
+    height: 1em;
+    padding-left: 167px;
+}
+
+/* mode #1: add section */
+.contact-detail.edit .section.show-section .sectiontitle,
+.contact-detail.edit .section.show-section .show-more,
+.contact-detail.edit .section.show-section .show-less {
+    display: none;
+}
+
+/* mode #2: show more */
+.contact-detail.edit .section.show-more .add-section,
+.contact-detail.edit .section.show-more .show-less {
+    display: none;
+}
+
+/* mode #3: show less */
+.contact-detail.edit .section.show-less .add-section,
+.contact-detail.edit .section.show-less .show-more {
+    display: none;
+}
+
+/* rare fields */
+.contact-detail.edit .rare-field {
+    display: none;
 }
