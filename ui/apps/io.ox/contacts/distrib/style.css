@@ -1,6 +1,6 @@
 
 .create-distributionlist .section-group.header {
-	padding-top: 20px;
+	padding-top: 10px;
 	min-height: 60px;
 }
 
@@ -14,12 +14,9 @@
 }
 
 .create-distributionlist .sectiontitle {
-	margin: 25px 0 15px 0;
-	font-size: 1.25em;
+	margin: 20px 0 15px 0;
 	color: #888;
-	font-family: OpenSans, Helvetica, Arial, sans-serif;
 	font-weight: 200;
-	line-height: 1.15em;
 }
 
 .create-distributionlist .item-list-header {
@@ -101,46 +98,23 @@
     margin-left: 0;
 }
 
-.create-distributionlist .item-list .listet-item .delete-button {
-	margin-top: 12px;
+.create-distributionlist .item-list .listet-item a.close {
+	margin-top: 8px;
 	margin-right: 4px;
 	float: right;
 	display: inline-block;
-	-webkit-transition: .15s opacity;
-	background-color: transparent;
-	background-image: url(../images/close_button.png);
-	border: none;
-	display: block;
 	height: 16px;
-	opacity: 1;
 	width: 16px
 }
 
-.create-distributionlist .item-list .listet-item .delete-button:hover {
-	background-image: url(../images/close_button_hover.png);
-}
-
-.create-distributionlist .btn.btn-inverse{
+.create-distributionlist .btn.btn-inverse {
 	float: right;
 	margin-top: 33px;
 	margin-right: 0px;
 }
 
-.create-distributionlist .alert .close {
-	position: relative;
-	top: 1px;
-	right: -20px;
-	line-height: 18px;
-}
-
-a.close .delete-button {
-	float: right;
-	display: inline-block;
-	background-image: url(../images/close_button.png);
-	border: none;
-	display: block;
-	height: 16px;
-	width: 16px
+.create-distributionlist .alert {
+    margin-top: 18px;
 }
 
 .listet-item.backstripes[data-mail="empty"] {

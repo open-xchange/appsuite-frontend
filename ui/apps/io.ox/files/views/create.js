@@ -7,7 +7,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
         buttonsPoint = ext.point("io.ox/files/create/action");
 
     //assemble create form
-    var newCreatePane = function (delegate) {
+    var show = function (app, delegate) {
 
         delegate = delegate || {};
 
@@ -78,13 +78,9 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
 
         // And display it all
         pane.show().done(function (action) {
-            var handler = buttonHandlers[action];
+            var handler = buttonHandlers[action], fileEntry;
             if (handler) {
-                var fileEntry = {
-                    folder: delegate.folder
-                },
-                uploadIndicator = new dialogs.ModalDialog();
-
+                fileEntry = { folder: app.folder.get() };
                 controlsPoint.each(function (controlExtension) {
                     if (controlExtension.process) {
                         controlExtension.process(fileEntry, controlStates[controlExtension.id]);
@@ -93,18 +89,9 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
                 if (delegate.modifyFile) {
                     delegate.modifyFile(fileEntry);
                 }
-
-                uploadIndicator.getContentControls().css({
-                    visibility: "hidden"
-                });
-
-                uploadIndicator.getContentNode().append($("<div>").text(gt("Uploading...")).addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
-
-                uploadIndicator.show();
-
+                app.getWindow().busy();
                 handler.perform(fileEntry, controlStates, function (data) {
-                    uploadIndicator.close();
-
+                    app.getWindow().idle();
                     if (delegate.uploadedFile) {
                         delegate.uploadedFile(data);
                     }
@@ -210,7 +197,7 @@ define("io.ox/files/views/create", ["io.ox/core/tk/dialogs", "io.ox/core/extensi
     });
 
     return {
-        show: newCreatePane
+        show: show
     };
 
 });

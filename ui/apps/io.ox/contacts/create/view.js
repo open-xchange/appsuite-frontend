@@ -127,7 +127,7 @@ define('io.ox/contacts/create/view',
             var pane = new dialogs.CreateDialog({ easyOut: true, async: true, width: 500 });
             // header
             pane.header(
-                $('<h4>').text(gt('Add new contact'))
+                $('<h3>').text(gt('Add new contact'))
             );
             // body
             pane.getBody()

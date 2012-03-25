@@ -222,12 +222,24 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     width: 100% !important;
 }
 
+.window-blocker {
+    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.8);
+    opacity: 0.8;
+    z-index: 30;
+}
+
+.rgba .window-blocker {
+    opacity: 1;
+}
+
 .window-head {
     position: absolute;
     top: 0px;
     right: 0px;
     height: 49px;
     left: 0px;
+    z-index: 10;
 
     color: @head-color;
 
@@ -379,6 +391,7 @@ a.button.default-action {
     bottom: 0px;
     left: 0px;
     white-space: normal;
+    z-index: 20;
 }
 
 .window-body.movedown {

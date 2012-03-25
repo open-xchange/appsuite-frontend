@@ -39,12 +39,13 @@ define('io.ox/contacts/distrib/main',
 
         function show() {
 
-            // what about the hash support?
             win.show(function () {
-                container
-                    .append(view.draw().node)
+                container.append(view.draw().node)
                     .find('input[type=text]:visible').eq(0).focus();
             });
+
+            model.on('save:progress', win.busy)
+                .on('save:done save:fail', win.idle);
         }
 
         app.create = function (folderId) {
@@ -78,6 +79,8 @@ define('io.ox/contacts/distrib/main',
         app.edit = function (obj) {
             // load list first
             return api.get(obj).done(function (data) {
+                // TODO: remove backend fix
+                data.mark_as_distributionlist = !![].concat(data.distribution_list).length;
                 // set state
                 app.setState({ folder: data.folder_id, id: data.id });
                 // set title, init model/view
