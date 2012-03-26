@@ -272,7 +272,7 @@ define("io.ox/contacts/view-detail",
         id: 'contact-mails',
         draw: function (data) {
             if (data.mark_as_distributionlist === true) {
-                var i = 0, list = _.deepClone(data.distribution_list), $i = list.length,
+                var i = 0, list = _.copy(data.distribution_list || [], true), $i = list.length,
                     that = this;
                 list = list.sort(util.nameSort);
 

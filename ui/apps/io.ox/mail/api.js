@@ -333,15 +333,6 @@ define("io.ox/mail/api",
                             });
                         // remove white space
                         text = $.trim(text);
-                        // fix reply/forward quoting
-                        // TODO: remove when backend does this properly
-                        if (action === 'replyall' || action === 'reply') {
-                            // OK: reply is fixed
-                            //text = '> ' + text.replace(/\n/, "\n> ");
-                        } else if (action === 'forward') {
-                            // still waiting for backend
-                            text = '> ' + text.replace(/\n/g, "\n> ");
-                        }
                         // polish for html editing
                         if (view === 'html') {
                             // escape '<'

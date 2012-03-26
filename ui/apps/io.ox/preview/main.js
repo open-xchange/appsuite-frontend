@@ -57,11 +57,7 @@ define("io.ox/preview/main",
         },
         paint: function (file, node) {
             node.append(
-                $("<img>", { src: file.dataURL + "&width=400&height=300", alt: 'Preview' })
-                .css({
-                    width: "400px",
-                    maxWidth: "100%"
-                })
+                $("<img>", { src: file.dataURL + "&width=400&height=400&scaleType=contain&delivery=view", alt: 'Preview' })
             );
         }
     });
