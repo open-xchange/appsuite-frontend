@@ -79,8 +79,13 @@ input#image1 {
 	width: 270px;
 }
 
+.contact-detail.edit textarea {
+    box-sizing: border-box;
+    width: 433px;
+    height: 20em;
+}
 
-.contact-detail.edit div.input > input[type="text"]{
+.contact-detail.edit div.input > input[type="text"] {
 	font-size: 14px;
 	width: 300px;
     color: black;
@@ -93,7 +98,7 @@ input#image1 {
     outline: 0; 	
 }
 
-.contact-detail.edit div.input.inline{
+.contact-detail.edit div.input.inline {
 	display: inline;
 }
 

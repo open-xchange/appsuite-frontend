@@ -47,11 +47,11 @@ define('io.ox/contacts/edit/view-form',
                         'employee_type', 'number_of_employees', 'sales_volume', 'tax_id',
                         'commercial_register', 'branches', 'business_category', 'info',
                         'manager_name', 'assistant_name'],
-                comment: ['note'],
                 userfields: ['userfield01', 'userfield02', 'userfield03', 'userfield04', 'userfield05',
                             'userfield06', 'userfield07', 'userfield08', 'userfield09', 'userfield10',
                             'userfield11', 'userfield12', 'userfield13', 'userfield14', 'userfield15',
-                            'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20']
+                            'userfield16', 'userfield17', 'userfield18', 'userfield19', 'userfield20'],
+                comment: ['note']
             },
 
             rare: ['nickname', 'marital_status', 'number_of_children', 'spouse_name',
@@ -204,22 +204,25 @@ define('io.ox/contacts/edit/view-form',
                 model = view.getModel(),
                 type = model.schema.getFieldType(key),
                 label = model.schema.getFieldLabel(key),
-                field,
+                field, method,
                 isAlwaysVisible = _(meta.alwaysVisible).indexOf(key) > -1,
                 isEmpty = model.isEmpty(key),
                 isRare = _(meta.rare).indexOf(key) > -1;
 
             switch (type) {
-            case "string":
-                field = view.createTextField({ id: id, property: key, classes: 'input-large' });
+            case 'text':
+                method = 'createTextArea';
                 break;
-            case "pastDate":
-                field = view.createDateField({ id: id, property: key, classes: 'input-large' });
+            case 'pastDate':
+                method = 'createDateField';
                 break;
             default:
-                field = view.createTextField({ id: id, property: key, classes: 'input-large' });
+                method = 'createTextField';
                 break;
             }
+
+            // get proper field
+            field = view[method]({ id: id, property: key, classes: 'input-large' });
 
             this.append(
                 view.createSectionGroup()

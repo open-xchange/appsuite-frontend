@@ -38,6 +38,9 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             // always true!
             return true;
         },
+        text: function () {
+            return true;
+        },
         number: function (prop, val, def) {
             return _.isNumber(val) ||
                 new Error(prop, _.printf('%s must be a number', def.i18n || prop));
