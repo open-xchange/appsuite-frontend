@@ -106,9 +106,7 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
                     folder: data.folder_id,
                     id: data.id,
                     attachment: list[i].id,
-                    save: '1',
-                    // TODO: remove session once backend support wurst-sessions
-                    session: ox.session
+                    delivery: 'download'
                 });
                 tmp = tmp.add(
                     $('<a>', { href: href, target: '_blank' })

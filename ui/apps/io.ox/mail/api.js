@@ -519,6 +519,35 @@ define("io.ox/mail/api",
         };
     }
 
+    api.saveAttachments = function (list, target) {
+        // be robust
+        target = target || config.get('folder.infostore');
+        // support for multiple attachments
+        list = _.isArray(list) ? list : [list];
+        http.pause();
+        // loop
+        _(list).each(function (data) {
+            http.PUT({
+                module: 'mail',
+                params: {
+                    action: 'attachment',
+                    id: data.mail.id,
+                    folder: data.mail.folder_id,
+                    dest_folder: target,
+                    attachment: data.id
+                },
+                data: { folder_id: target, description: 'Saved mail attachment' },
+                appendColumns: false
+            });
+        });
+        return http.resume().done(function () {
+            require(['io.ox/files/api'], function (fileAPI) {
+                fileAPI.caches.all.remove(target);
+                fileAPI.trigger('refresh.all');
+            });
+        });
+    };
+
     // refresh
     api.on('refresh!', function (e, folder) {
         if (ox.online) {
