@@ -15,6 +15,8 @@ define("io.ox/preview/main",
     ["io.ox/core/extensions"], function (ext) {
 
     "use strict";
+    
+    var supportsDragOut = Modernizr.draganddrop && _.browser.Chrome;
 
     var Renderer = {
         point: ext.point("io.ox/preview/engine"),
