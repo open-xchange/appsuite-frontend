@@ -259,7 +259,6 @@ define('io.ox/mail/actions',
                 attachment: data.id,
                 delivery: 'view'
             });
-            console.log('href', href);
             window.open(href);
         }
     });

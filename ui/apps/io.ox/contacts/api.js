@@ -345,7 +345,7 @@ define('io.ox/contacts/api',
                 .on('error', { url: ox.base + '/apps/themes/default/dummypicture.png' }, set)
                 .prop('src', url);
         };
-        if (obj && obj.image1_url) {
+        if (obj && _.isString(obj.image1_url)) {
             cont(obj.image1_url.replace(/^\/ajax/, ox.apiRoot));
         } else {
             api.getPictureURL(obj).done(cont).fail(clear);
