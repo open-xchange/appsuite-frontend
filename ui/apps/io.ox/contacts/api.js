@@ -18,7 +18,6 @@ define('io.ox/contacts/api',
      'io.ox/core/cache'
      ], function (http, apiFactory, cache) {
 
-
     'use strict';
 
     // generate basic API
@@ -59,48 +58,44 @@ define('io.ox/contacts/api',
         }
     });
 
-    api.create = function (form) {
-        return http.PUT({
+    api.create = function (data, file) {
+
+        // TODO: Ask backend for a fix, until that:
+        // repair email
+        data.email1 = data.email1 || null;
+        data.email2 = data.email2 || null;
+        data.email3 = data.email3 || null;
+
+        var method, body;
+
+        if (file) {
+            var body = new FormData();
+            body.append('file', file);
+            body.append('json', JSON.stringify(data));
+            method = 'UPLOAD';
+        } else {
+            body = data;
+            method = 'PUT';
+        }
+
+        // go!
+        return http[method]({
                 module: 'contacts',
                 params: { action: 'new' },
-                data: form,
-                datatype: 'text',
+                data: body,
                 appendColumns: false
             })
-            .done(function (data) {
-                api.caches.all.clear(); //TODO consider proper folder
+            .pipe(function (fresh) {
+                // UPLOAD does not process response data, so ...
+                fresh = fresh.data || fresh;
+                // get brand new object
+                return api.get({ id: fresh.id, folder: data.folder_id });
+            })
+            .done(function (d) {
+                api.caches.all.remove(d.folder_id);
                 api.trigger('refresh.all');
-                api.trigger('created', { // TODO needs a switch for created by hand or by test
-                    folder: form.folder_id,
-                    id: data.id
-                });
-            })
-            .pipe(function (data) {
-                return api.get({ id: data.id, folder: form.folder_id });
-            })
-            .fail(function () {
-                console.log('connection lost');//what to do if fails?
+                api.trigger('created', { id: d.id, folder: d.folder_id });
             });
-    };
-
-    api.createNewImage = function (formdata, file) {
-        var formData = new FormData();
-        formData.append('file', file);
-        formData.append('json', formdata);
-
-        return http.UPLOAD({
-            module: 'contacts',
-            params: {action: 'new'},
-            data: formData,
-            dataType: 'text'
-        })
-        .done(function () {
-            api.caches.all.clear(); //TODO considere proper folder
-            api.trigger('refresh.all');
-        })
-        .fail(function () {
-            console.debug('connection lost');//what to do if fails?
-        });
     };
 
     api.edit =  function (o) {
@@ -147,16 +142,12 @@ define('io.ox/contacts/api',
         return http.UPLOAD({
                 module: 'contacts',
                 params: { action: 'update', id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.now() },
-                data: form,
-                dataType: 'text'
+                data: form
             })
             .done(function () {
                 api.caches.get.clear();
                 api.caches.list.clear();
                 api.trigger('refresh.list');
-            })
-            .fail(function () {
-                console.log('connection lost');//what to do if fails?
             });
     };
 

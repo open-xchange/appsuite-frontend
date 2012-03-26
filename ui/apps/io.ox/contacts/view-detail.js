@@ -168,7 +168,7 @@ define("io.ox/contacts/view-detail",
                             gt("Distribution list") :
                             (data.company || data.position || data.profession) ?
                                     join(", ", data.company, data.position, data.profession) + "\u00A0" :
-                                    (data.email1 || data.email2 || data.email3) + "\u00A0"
+                                    (data.email1 || data.email2 || data.email3 || '') + "\u00A0"
                     )
                 )
             );
@@ -278,7 +278,7 @@ define("io.ox/contacts/view-detail",
 
                 _.each(list, function (val, key) {
                     if (key === 0) {
-                        addDistribMail('Members', val.display_name, val.mail, that);
+                        addDistribMail(gt('Members'), val.display_name, val.mail, that);
                     } else {
                         addDistribMail('', val.display_name, val.mail, that);
                     }

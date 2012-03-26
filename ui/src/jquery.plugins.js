@@ -280,6 +280,15 @@
         };
     }());
 
+    $.alert = function (title, text) {
+        return $('<div>').addClass('alert alert-block alert-error fade in')
+            .append(
+                $('<a>', { href: '#' }).addClass('close').attr('data-dismiss', 'alert').html('&times;'),
+                title ? $('<h4>').addClass('alert-heading').text(title) : $(),
+                text ? $('<p>').text(text) : $()
+            );
+    };
+
 
     /** jGrowl Wrapper - Establish a base jGrowl Container for compatibility with older releases. **/
     $.jGrowl = function (m, o) {

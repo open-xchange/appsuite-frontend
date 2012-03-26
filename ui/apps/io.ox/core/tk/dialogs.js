@@ -11,7 +11,8 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
+define("io.ox/core/tk/dialogs",
+    ['io.ox/core/event', "io.ox/core/bootstrap/basics"], function (Events) {
 
     'use strict';
 
@@ -44,6 +45,7 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
                 defaultAction: null,
                 easyOut: false,
                 center: true,
+                async: false,
                 top: "50%"
                 // width (px), height (px),
                 // maxWidth (px), maxHeight (px)
@@ -57,18 +59,41 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
                 for (var prop in self) {
                     delete self[prop];
                 }
+                self.close = self.idle = $.noop;
                 nodes.header = nodes.body = nodes.footer = null;
                 nodes = deferred = self = data = o = null;
             },
 
+            busy = function () {
+                nodes.footer.find('input, button').attr('disabled', 'disabled');
+            },
+
+            idle = function () {
+                nodes.footer.find('input, button').removeAttr('disabled');
+            },
+
             process = function (e) {
-                deferred.resolve(e.data ? e.data.action : e, data);
-                close();
+                var action = e.data ? e.data.action : e,
+                    async = o.async && action !== 'cancel';
+                // be busy?
+                if (async) {
+                    busy();
+                }
+                // trigger action event
+                self.trigger('action ' + action, data);
+                // resolve & close?
+                if (!async) {
+                    deferred.resolve(action, data);
+                    close();
+                }
             };
 
         _(['header', 'body', 'footer']).each(function (part) {
             nodes[part] = nodes.popup.find('.modal-' + part);
         });
+
+        // add event hub
+        Events.extend(this);
 
         this.data = function (d) {
             data = d !== undefined ? d : {};
@@ -156,7 +181,15 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
         };
 
         this.close = function () {
-            process("cancel");
+            if (!o || o.async)  {
+                close();
+            } else {
+                process('cancel');
+            }
+        };
+
+        this.idle = function () {
+            idle();
         };
 
         this.show = function (callback) {
@@ -167,8 +200,8 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
             }
 
             var dim = {
-                width: o.width || nodes.popup.width(),
-                height: o.height || nodes.popup.height()
+                width: parseInt(o.width || nodes.popup.width(), 10),
+                height: parseInt(o.height || nodes.popup.height(), 10)
             };
 
             // limit width & height
@@ -211,6 +244,8 @@ define("io.ox/core/tk/dialogs", ["io.ox/core/bootstrap/basics"], function () {
             if (callback) {
                 callback.call(nodes.popup);
             }
+
+            this.trigger('show');
 
             return deferred;
         };

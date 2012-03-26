@@ -49,8 +49,9 @@ define('io.ox/core/tk/forms',
         },
 
         dateChange = function () {
-            var self = $(this);
-            if (self.val() !== '') {
+            var self = $(this),
+                reg = /((\d{2})|(\d))\.((\d{2})|(\d))\.((\d{4})|(\d{2}))/;
+            if (self.val() !== '' && reg.test(self.val())) {
                 var dateArray = self.val().split('.'),
                 date =  Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
                 self.trigger('update.model', { property: self.attr('data-property'), value: date });
@@ -59,9 +60,11 @@ define('io.ox/core/tk/forms',
             }
         },
         dateChangeByModel = function (e, value) {
-            if (value) {
+            if (_.isNumber(value)) {
                 var formatetValue = require('io.ox/core/i18n').date('dd.MM.YYYY', value);
                 $(this).val(formatetValue);
+            } else {
+                $(this).val(value);
             }
         },
 
@@ -294,30 +297,35 @@ define('io.ox/core/tk/forms',
         },
 
         createPicUpload: function (options) {
-            var o = options,
-                form = $('<form>', {
-                'id': o.id,
-                'name': o.formname,
-                'accept-charset': o.charset,
-                'enctype': o.enctype,
-                'method': o.method,
-                'target': o.target
-            });
-            form.append(utils.createFileField({
-                'wrap': false,
-                id: 'file',
-                'accept': 'image/*',
-                "data-property": o.name,
-                name: o.name
-
-            }));
-            form.append($('<iframe>', {
-                name: 'hiddenframePicture',
-                'src': 'blank.html'
-            }).css('display', 'none'));
-
-            return form;
+            var o = _.extend({
+                target: 'picture-upload',
+                name: 'picture-upload-file'
+            }, options);
+            // make target unique
+            o.target += '-' + _.now();
+            return $('<form>', {
+                    'accept-charset': 'UTF-8',
+                    enctype: 'multipart/form-data',
+                    method: 'POST',
+                    target: o.target
+                })
+                .append(
+                    utils.createFileField({
+                        wrap: false,
+                        accept: 'image/*',
+                        "data-property": o.name,
+                        name: o.name
+                    })
+                )
+                .append(
+                    $('<iframe>', {
+                        name: o.target,
+                        src: 'blank.html'
+                    })
+                )
+                .hide();
         },
+
         getLastLabelId: function () {
             return lastLabelId;
         }

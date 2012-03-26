@@ -121,7 +121,7 @@ define('io.ox/mail/actions',
                 new dialogs.ModalDialog({ easyOut: true, width: 700 })
                     .addPrimaryButton("close", gt("Close"))
                     .header(
-                        $('<h4>').text(gt('Mail source') + ': ' + (data.subject || ''))
+                        $('<h3>').text(gt('Mail source') + ': ' + (data.subject || ''))
                     )
                     .append(
                         textarea = $('<textarea>', { rows: 15, readonly: 'readonly' })
@@ -147,12 +147,12 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/move', {
         id: 'move',
-        requires: 'one',
+        requires: 'some',
         multiple: function (mail) {
             var self = this;
             require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, trees) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h4>').text('Move'))
+                    .header($('<h3>').text('Move'))
                     .addPrimaryButton("ok", gt("OK"))
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css('maxHeight', '250px');
@@ -179,12 +179,12 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/copy', {
         id: 'copy',
-        requires: 'one',
+        requires: 'some',
         multiple: function (mail) {
             var self = this;
             require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, trees) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h4>').text('Copy'))
+                    .header($('<h3>').text('Copy'))
                     .addPrimaryButton("ok", gt("OK"))
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css('maxHeight', '250px');
@@ -214,7 +214,7 @@ define('io.ox/mail/actions',
         requires: function (e) {
             return api.getList(e.context).pipe(function (list) {
                 return _(list).reduce(function (memo, data) {
-                    return memo && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN;
+                    return memo && (data && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN);
                 }, true);
             });
         },
@@ -230,7 +230,7 @@ define('io.ox/mail/actions',
         requires: function (e) {
             return api.getList(e.context).pipe(function (list) {
                 return _(list).reduce(function (memo, data) {
-                    return memo || (data.flags & api.FLAGS.SEEN) === 0;
+                    return memo || (data && (data.flags & api.FLAGS.SEEN) === 0);
                 }, false);
             });
         },
@@ -238,6 +238,53 @@ define('io.ox/mail/actions',
             api.getList(list).done(function (list) {
                 api.update(list, { flags: api.FLAGS.SEEN, value: true });
             });
+        }
+    });
+
+    new Action('io.ox/mail/actions/preview-attachment', {
+        id: 'preview',
+        action: function () {
+            alert('TBD.preview');
+        }
+    });
+
+    new Action('io.ox/mail/actions/open-attachment', {
+        id: 'open',
+        action: function (data) {
+            // get url
+            var href = ox.apiRoot + '/mail?' + $.param({
+                action: 'attachment',
+                folder: data.mail.folder_id,
+                id: data.mail.id,
+                attachment: data.id,
+                // TODO: remove session once backend support wurst-sessions
+                session: ox.session
+            });
+            window.open(href);
+        }
+    });
+
+    new Action('io.ox/mail/actions/download-attachment', {
+        id: 'download',
+        action: function (data) {
+            // get url
+            var href = ox.apiRoot + '/mail?' + $.param({
+                action: 'attachment',
+                folder: data.mail.folder_id,
+                id: data.mail.id,
+                attachment: data.id,
+                save: '1',
+                // TODO: remove session once backend support wurst-sessions
+                session: ox.session
+            });
+            window.open(href);
+        }
+    });
+
+    new Action('io.ox/mail/actions/save-attachment', {
+        id: 'save',
+        action: function () {
+            alert('TBD.save');
         }
     });
 
@@ -375,6 +422,36 @@ define('io.ox/mail/actions',
         label: gt('Delete'),
         ref: 'io.ox/mail/actions/delete',
         special: "danger"
+    }));
+
+    // Attachments
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'preview',
+        index: 100,
+        label: gt('Preview'),
+        ref: 'io.ox/mail/actions/preview-attachment'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'open',
+        index: 200,
+        label: gt('Open in new tab'),
+        ref: 'io.ox/mail/actions/open-attachment'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'download',
+        index: 300,
+        label: gt('Download'),
+        ref: 'io.ox/mail/actions/download-attachment'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'save',
+        index: 400,
+        label: gt('Save in file store'),
+        ref: 'io.ox/mail/actions/save-attachment'
     }));
 
 });

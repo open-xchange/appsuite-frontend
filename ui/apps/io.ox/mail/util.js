@@ -107,6 +107,7 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
                     id: data.id,
                     attachment: list[i].id,
                     save: '1',
+                    // TODO: remove session once backend support wurst-sessions
                     session: ox.session
                 });
                 tmp = tmp.add(

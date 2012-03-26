@@ -11,9 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/contacts/util',
-        ['gettext!io.ox/contacts/contacts', 'io.ox/core/tk/selection'
-         ], function (gt, sel) {
+define('io.ox/contacts/util', [], function () {
 
     'use strict';
 
@@ -33,27 +31,28 @@ define('io.ox/contacts/util',
                 return (/^(dr\.|prof\.|prof\. dr\.)$/i).test(field) ? field : '';
             }
             // combine title, last_name, and first_name
-            return obj.last_name && obj.first_name ?
-                $.trim(fix(obj.title) + ' ' + obj.last_name + ', ' + obj.first_name) :
-                (obj.display_name || '').replace(/"|'/g, '');
-        },
-
-        createDisplayName: function (obj) {
-            if (!obj.first_name) {
-                obj.first_name = 'undefined';
+            if (obj.last_name && obj.first_name) {
+                return $.trim(fix(obj.title) + ' ' + obj.last_name + ', ' + obj.first_name);
             }
-            if (!obj.last_name) {
-                obj.last_name = 'undefined';
+            // use existing display name?
+            if (obj.display_name) {
+                return String(obj.display_name).replace(/"|'/g, '');
             }
-            obj.display_name = obj.first_name + ',' + obj.last_name;
-            return obj.display_name;
+            // fallback
+            return obj.last_name || obj.first_name || '';
         },
 
         getDisplayName: function (obj) {
+            // use existing display name?
+            if (obj.display_name) {
+                return String(obj.display_name).replace(/"|'/g, '');
+            }
             // combine last_name, and first_name
-            return obj.last_name && obj.first_name ?
-                obj.last_name + ', ' + obj.first_name :
-                (obj.display_name || '').replace(/"|'/g, '');
+            if (obj.last_name && obj.first_name) {
+                return obj.last_name + ', ' + obj.first_name;
+            }
+            // fallback
+            return obj.last_name || obj.first_name || '';
         },
 
         getMail: function (obj) {

@@ -5,25 +5,26 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 define('io.ox/contacts/actions',
-    ['io.ox/core/extensions', "io.ox/core/extPatterns/links"], function (ext, links) {
+    ['io.ox/core/extensions',
+     "io.ox/core/extPatterns/links",
+     'gettext!io.ox/contacts/contacts'], function (ext, links, gt) {
 
     'use strict';
 
     //  actions
+    var Action = links.Action;
 
-    ext.point("io.ox/contacts/main/delete").extend({
+    new Action("io.ox/contacts/main/delete", {
         index: 100,
         id: "delete",
-        requires: function (e) {
-            return e.collection.has('some', 'delete');
-        },
+        requires: 'some delete',
         action:  function (data) {
             require(["io.ox/contacts/api", "io.ox/core/tk/dialogs"], function (api, dialogs) {
                 new dialogs.ModalDialog()
@@ -40,16 +41,16 @@ define('io.ox/contacts/actions',
         }
     });
 
-    ext.point("io.ox/contacts/main/update").extend({
+    new Action("io.ox/contacts/main/update", {
         index: 100,
         id: "edit",
-        requires: function (e) {
-            return e.collection.has('one', 'modify');
-        },
+        requires: 'one modify',
         action: function (data) {
             if (data.mark_as_distributionlist === true) {
-                require(["io.ox/contacts/distrib/main"], function (createDist) {
-                    createDist.getApp(data).launch();
+                require(["io.ox/contacts/distrib/main"], function (m) {
+                    m.getApp(data).launch().done(function () {
+                        this.edit(data);
+                    });
                 });
             } else {
                 require(["io.ox/contacts/util"], function (util) {
@@ -59,29 +60,30 @@ define('io.ox/contacts/actions',
         }
     });
 
-    ext.point("io.ox/contacts/main/create").extend({
+    new Action("io.ox/contacts/main/create", {
         index: 100,
         id: "create",
-        requires: function (e) {
-            return e.collection.has('create');
-        },
+		requires: 'create',
         action: function (app) {
-            require(["io.ox/contacts/create"], function (create) {
-                create.show();
+            require(["io.ox/contacts/create/main"], function (create) {
+                create.show(app).done(function (data) {
+                    app.getGrid().selection.set(data);
+                });
             });
         }
     });
 
-
-    ext.point("io.ox/contacts/main/distrib").extend({
+    new Action("io.ox/contacts/main/distrib", {
         index: 100,
         id: "create-dist",
-        requires: function (e) {
+		requires: function (e) {
             return e.collection.has('create');
         },
         action: function (app) {
-            require(["io.ox/contacts/distrib/main"], function (createDist) {
-                createDist.getApp(null, app).launch();
+            require(["io.ox/contacts/distrib/main"], function (m) {
+                m.getApp().launch().done(function () {
+                    this.create(app.folder.get());
+                });
             });
         }
     });
@@ -99,14 +101,14 @@ define('io.ox/contacts/actions',
     ext.point("io.ox/contacts/links/toolbar").extend(new links.Link({
         index: 100,
         id: "create",
-        label: "Add contact",
+        label: gt("Add contact"),
         ref: "io.ox/contacts/main/create"
     }));
 
     ext.point("io.ox/contacts/links/toolbar").extend(new links.Link({
         index: 100,
         id: "create-dist",
-        label: "Add distributionlist",
+        label: gt("Add distribution list"),
         ref: "io.ox/contacts/main/distrib"
     }));
 
@@ -115,14 +117,14 @@ define('io.ox/contacts/actions',
     ext.point("io.ox/contacts/links/inline").extend(new links.Link({
         index: 100,
         id: 'update',
-        label: 'Edit',
+        label: gt('Edit'),
         ref: 'io.ox/contacts/main/update'
     }));
 
     ext.point("io.ox/contacts/links/inline").extend(new links.Link({
         index: 200,
         id: 'delete',
-        label: 'Delete',
+        label: gt('Delete'),
         ref: 'io.ox/contacts/main/delete',
         special: "danger"
     }));

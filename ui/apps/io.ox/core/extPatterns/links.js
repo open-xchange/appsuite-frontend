@@ -20,7 +20,7 @@ define("io.ox/core/extPatterns/links",
     // common extension classes
 
     var Action = actions.Action;
-        
+
     var Link = function (options) {
 
         _.extend(this, options);
@@ -59,7 +59,7 @@ define("io.ox/core/extPatterns/links",
             };
 
         this.draw = function (context) {
-            
+
             this.append(
                 $("<button>", { "data-action": self.id, tabIndex: self.tabIndex || '' })
                 .addClass(self.cssClasses || 'btn')
@@ -118,17 +118,19 @@ define("io.ox/core/extPatterns/links",
         this.draw = function () {
             var args = $.makeArray(arguments),
                 context = args[0],
-                $parent = $("<div>").addClass("dropdown").appendTo(this),
-                $toggle = $("<a>", {href: '#'}).text(options.label + " ").append($("<b>").addClass("caret")).appendTo($parent);
+                $parent = $("<div>").addClass('dropdown').css('display', 'inline-block').appendTo(this),
+                $toggle = $("<a>", { href: '#' })
+                    .attr('data-toggle', 'dropdown')
+                    .text(options.label + " ").append($("<b>").addClass("caret")).appendTo($parent);
+
+            $toggle.addClass(options.classes);
+            $parent.append($.txt('\u00A0\u00A0 ')); // a bit more space
 
             // create & add node first, since the rest is async
             var node = $("<ul>").addClass("dropdown-menu").appendTo($parent);
             applyCollection(self, new Collection(context), node, context, args, true);
 
             $toggle.dropdown();
-            $toggle.on("click", function () {
-                $toggle.dropdown('toggle');
-            });
         };
     };
 

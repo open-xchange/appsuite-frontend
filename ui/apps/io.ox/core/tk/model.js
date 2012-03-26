@@ -38,6 +38,9 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             // always true!
             return true;
         },
+        text: function () {
+            return true;
+        },
         number: function (prop, val, def) {
             return _.isNumber(val) ||
                 new Error(prop, _.printf('%s must be a number', def.i18n || prop));
@@ -54,12 +57,19 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             return true;
         },
         pastDate: function (prop, val, def) {
-            var now = _.now();
-            if (isNaN(val) && val !== '') {
-                return new Error(prop, _.printf('%s is not a valide date', def.i18n || prop));
+            var now = _.now(),
+                reformatetValue,
+                reg = /((\d{2})|(\d))\.((\d{2})|(\d))\.((\d{4})|(\d{2}))/;
+            if (!_.isString(val)) {
+                reformatetValue = require('io.ox/core/i18n').date('dd.MM.YYYY', val);
             } else {
-                return now > val ||
-                new Error(prop, _.printf('%s must be in the past', def.i18n || prop));
+                return new Error(prop, _.printf('%s is not a valide date', def.i18n || prop));
+            }
+
+            if (!reg.test(reformatetValue) && val !== '') {
+                return new Error(prop, _.printf('%s is not a valide date', def.i18n || prop));
+            } else  {
+                return  now > val || new Error(prop, _.printf('%s must be in the past', def.i18n || prop));
             }
 
         },
@@ -103,6 +113,16 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
                 }
             });
             return defaults;
+        },
+
+        getMandatories: function () {
+            var tmp = [];
+            _(this._definitions).each(function (def, prop) {
+                if (def.mandatory) {
+                    tmp.push(prop);
+                }
+            });
+            return tmp;
         },
 
         isMandatory: function (key) {
@@ -169,7 +189,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         this._memoize = {};
         Events.extend(this);
         // TODO: we ALWAYS need data! do we have any options? I always forget to use key/value here
-        this.initialize(options.data || options);
+        this.initialize(options.data || options || {});
     };
 
     Model.addComputed = function (key, /* optional */ deps, callback) {
@@ -199,6 +219,12 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             _(this._computed).each(function (o, key) {
                 this.get(key);
             }, this);
+        },
+
+        isEmpty: function (key) {
+            // check if value would appear as empty string in UI
+            var value = this._data[key];
+            return value === '' || value === undefined || value === null;
         },
 
         get: function (key) {
@@ -235,7 +261,8 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             var result = this.schema.validate(key, value);
             if (result !== true) {
                 this.trigger('error:invalid', result);
-                return;
+                // yep, we continue here to actually get invalid data
+                // we need this for a proper final check during save
             }
             // update
             this._data[key] = value;
@@ -263,13 +290,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             var changes = {}, previous = this._previous;
             _(this._data).each(function (value, key) {
                 if (!isEqual(value, previous[key])) {
-                    changes[key] = value;
-                }
-                if (key === 'distribution_list') {
-                    console.log(value);
-                    console.log(previous[key]);
-//                    console.log(_.difference(value, previous[key]));
-//                    changes[key] = 'dirty';
+                    changes[key] = _.copy(value, true);
                 }
             });
             return changes;
@@ -337,8 +358,21 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
                 },
                 success = function () {
                     // trigger store - expects deferred object
-                    return (this.store(this._data, this.getChanges()) || $.when())
-                        .done(_.bind(this.initialize, this, this._data));
+                    var def = $.Deferred().notify(), self = this;
+                    this.trigger('save:progress');
+                    (this.store(this.get(), this.getChanges()) || $.when())
+                        .done(function () {
+                            self.initialize(self._data);
+                            self.trigger.apply(self, ['save:beforedone'].concat($.makeArray(arguments)));
+                            self.trigger.apply(self, ['save:done'].concat($.makeArray(arguments)));
+                            def.resolve.apply(def, arguments);
+                        })
+                        .fail(function () {
+                            self.trigger.apply(self, ['save:beforefail'].concat($.makeArray(arguments)));
+                            self.trigger.apply(self, ['save:fail'].concat($.makeArray(arguments)));
+                            def.reject.apply(def, arguments);
+                        });
+                    return def;
                 },
                 fail = function (error) {
                     // fail
@@ -347,6 +381,13 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
                 };
 
             return function () {
+
+                // add mandatory fields to force validation
+                _(this.schema.getMandatories()).each(function (key) {
+                    if (!(key in this._data)) {
+                        this._data[key] = '';
+                    }
+                }, this);
 
                 // check all properties
                 if (!_(this._data).inject(checkValid, true, this)) {

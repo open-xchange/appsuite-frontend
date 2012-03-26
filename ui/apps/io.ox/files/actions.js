@@ -27,11 +27,10 @@ define("io.ox/files/actions",
         requires: 'create',
         action: function (app) {
             require(['io.ox/files/views/create'], function (create) {
-                create.show({
+                create.show(app, {
                     uploadedFile: function (data) {
                         app.invalidateFolder(data);
-                    },
-                    folder: app.folder.get()
+                    }
                 });
             });
         }
