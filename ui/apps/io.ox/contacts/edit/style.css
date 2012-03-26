@@ -43,10 +43,11 @@ input#image1 {
 .contact-detail.edit .sectiontitle {
 	margin: 25px 0 15px 0;
 	padding-left: 167px;
-	color: #aaa;
+	color: #888;
     font-family: @font-light;
 	font-weight: 200;
-	line-height: 1.15em;
+    font-size: 1.25em;
+	line-height: 1.25em;
 }
 
 .contact-detail.edit .picture {

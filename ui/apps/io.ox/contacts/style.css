@@ -102,8 +102,6 @@
 .contact-detail td.io-ox-label,
 .contact-detail div.io-ox-label,
 .create-contact div.io-ox-label {
-    font-size: 0.9em;
-    line-height: 1em;
     color: #888;
     font-weight: normal;
     text-align: right;
