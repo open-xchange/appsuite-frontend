@@ -102,8 +102,6 @@
 .contact-detail td.io-ox-label,
 .contact-detail div.io-ox-label,
 .create-contact div.io-ox-label {
-    font-size: 0.9em;
-    line-height: 1em;
     color: #888;
     font-weight: normal;
     text-align: right;
@@ -248,10 +246,6 @@ input#image1 {
 .contact-detail input, .create-contact input{
 	width: 270px;
 }
-
-.create-contact .section {
-	margin-bottom: 20px;
-}
 	
 .create-contact .section-group {
 	margin-bottom: 5px;
@@ -270,14 +264,4 @@ input#image1 {
 .create-contact #contactUploadImage, .create-contact #contactUploadImage input{
 	width: 0px;
 	height: 0px;
-}
-
-.io-ox-contact-create-dist .contact-image{
-    height: 3em;
-    width: 3em;
-    margin-right: 1em;
-    display: inline-block;
-    background-size: cover;
-    background-repeat: no-repeat;
-    float: left;
 }

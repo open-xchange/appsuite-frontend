@@ -121,7 +121,7 @@ define('io.ox/mail/actions',
                 new dialogs.ModalDialog({ easyOut: true, width: 700 })
                     .addPrimaryButton("close", gt("Close"))
                     .header(
-                        $('<h4>').text(gt('Mail source') + ': ' + (data.subject || ''))
+                        $('<h3>').text(gt('Mail source') + ': ' + (data.subject || ''))
                     )
                     .append(
                         textarea = $('<textarea>', { rows: 15, readonly: 'readonly' })
@@ -152,7 +152,7 @@ define('io.ox/mail/actions',
             var self = this;
             require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, trees) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h4>').text('Move'))
+                    .header($('<h3>').text('Move'))
                     .addPrimaryButton("ok", gt("OK"))
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css('maxHeight', '250px');
@@ -184,7 +184,7 @@ define('io.ox/mail/actions',
             var self = this;
             require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, trees) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
-                    .header($('<h4>').text('Copy'))
+                    .header($('<h3>').text('Copy'))
                     .addPrimaryButton("ok", gt("OK"))
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css('maxHeight', '250px');

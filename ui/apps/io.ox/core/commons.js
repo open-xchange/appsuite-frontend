@@ -94,12 +94,12 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
          */
         wireGridAndWindow: function (grid, win) {
             // show
-            win.on('show', function () {
+            win.on('show idle', function () {
                 grid.selection.keyboard(true);
                 grid.selection.retrigger();
             });
             // hide
-            win.on('hide', function () {
+            win.on('hide busy', function () {
                 grid.selection.keyboard(false);
             });
             // publish grid

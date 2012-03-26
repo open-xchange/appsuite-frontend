@@ -21,16 +21,14 @@ define("io.ox/files/main",
      "io.ox/core/extPatterns/dnd",
      "io.ox/core/extPatterns/shortcuts",
      "io.ox/core/tk/dialogs",
-     "io.ox/help/hints",
      "gettext!io.ox/files/files",
      "io.ox/core/bootstrap/basics",
      "io.ox/files/actions",
      "less!io.ox/files/style.css"
-    ], function (viewDetail, api, commons, VGrid, upload, dnd, shortcuts, dialogs, hints, gt) {
-    
+    ], function (viewDetail, api, commons, VGrid, upload, dnd, shortcuts, dialogs, gt) {
+
     "use strict";
-    
-    
+
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/files' }),
         // app window
@@ -170,51 +168,41 @@ define("io.ox/files/main",
 
         app.queues.create = upload.createQueue({
             processFile: function (file) {
-                var uploadIndicator = new dialogs.ModalDialog();
-                uploadIndicator.getContentNode().append($("<div>").text(gt("Uploading ...")).addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
-                uploadIndicator.getContentControls().css({
-                    visibility: "hidden"
-                });
-                uploadIndicator.show();
+                win.busy();
                 return api.uploadFile({file: file, folder: app.folder.get()})
                     .done(function (data) {
-                        uploadIndicator.close();
                         // select new item
                         grid.selection.set([data]);
                         grid.refresh();
                         // TODO: Error Handling
-                    });
+                    })
+                    .always(win.idle);
             }
         });
 
         app.queues.update = upload.createQueue({
             processFile: function (fileData) {
-                var uploadIndicator = new dialogs.ModalDialog();
-                uploadIndicator.getContentNode().append($("<div>").text(gt("Uploading ...")).addClass("alert alert-info").css({textAlign: "center"})).append($("<div>").css({minHeight: "10px"}).busy());
-                uploadIndicator.getContentControls().css({
-                    visibility: "hidden"
-                });
-                uploadIndicator.show();
+                win.busy();
                 return api.uploadNewVersion({
-                    file: fileData,
-                    id: app.currentFile.id,
-                    folder: app.currentFile.folder,
-                    timestamp: app.currentFile.last_modified
-                }).done(function (data) {
-                    // select new item
-                    uploadIndicator.close();
-                    grid.selection.set([data]);
-                    grid.refresh();
-                    // TODO: Error Handling
-                });
+                        file: fileData,
+                        id: app.currentFile.id,
+                        folder: app.currentFile.folder,
+                        timestamp: app.currentFile.last_modified
+                    })
+                    .done(function (data) {
+                        // select new item
+                        grid.selection.set([data]);
+                        grid.refresh();
+                        // TODO: Error Handling
+                    })
+                    .always(win.idle);
             }
         });
 
         var dropZone = new dnd.UploadZone({
             ref: "io.ox/files/dnd/actions"
         }, app);
-        
-        
+
         var shortcutPoint = new shortcuts.Shortcuts({
             ref: "io.ox/files/shortcuts"
         });

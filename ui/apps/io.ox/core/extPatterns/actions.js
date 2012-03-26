@@ -1,7 +1,23 @@
-define("io.ox/core/extPatterns/actions", ["io.ox/core/extensions", "io.ox/core/collection"], function (ext, Collection) {
-    
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ */
+
+define("io.ox/core/extPatterns/actions",
+    ["io.ox/core/extensions",
+     "io.ox/core/collection"], function (ext, Collection) {
+
     "use strict";
-    
+
     var requires = function (str) {
         return function (e) {
             return e.collection.has.apply(e.collection, str.split(/ /));
@@ -22,7 +38,7 @@ define("io.ox/core/extPatterns/actions", ["io.ox/core/extensions", "io.ox/core/c
         // extend point
         ext.point(id).extend(o);
     };
-    
+
     var applyCollection = function (self, collection, context, args) {
         // resolve collection's properties
         var linksResolved = new $.Deferred();
@@ -67,10 +83,10 @@ define("io.ox/core/extPatterns/actions", ["io.ox/core/extensions", "io.ox/core/c
                     linksResolved.resolve(links.value());
                 });
             });
-            
+
         return linksResolved;
     };
-    
+
     var performAction = function (ref, self, context) {
         var p = ext.point(ref),
             data = context.data || context;
@@ -79,7 +95,7 @@ define("io.ox/core/extPatterns/actions", ["io.ox/core/extensions", "io.ox/core/c
         // handler for multi selection - always provides an array
         p.invoke('multiple', self, _.isArray(data) ? data : [data], context);
     };
-   
+
     return {
         Action: Action,
         invoke: performAction,
@@ -87,5 +103,5 @@ define("io.ox/core/extPatterns/actions", ["io.ox/core/extensions", "io.ox/core/c
             applyCollection: applyCollection
         }
     };
-    
+
 });

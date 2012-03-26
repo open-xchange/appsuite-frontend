@@ -168,7 +168,7 @@ define("io.ox/contacts/view-detail",
                             gt("Distribution list") :
                             (data.company || data.position || data.profession) ?
                                     join(", ", data.company, data.position, data.profession) + "\u00A0" :
-                                    (data.email1 || data.email2 || data.email3) + "\u00A0"
+                                    (data.email1 || data.email2 || data.email3 || '') + "\u00A0"
                     )
                 )
             );

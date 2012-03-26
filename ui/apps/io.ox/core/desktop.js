@@ -553,6 +553,10 @@ define("io.ox/core/desktop",
                 }, 0);
             };
 
+        that.getWindows = function () {
+            return windows.slice();
+        };
+
         ox.ui.screens.on('hide-windowmanager', function () {
             if (currentWindow) {
                 currentWindow.hide();
@@ -747,6 +751,8 @@ define("io.ox/core/desktop",
 
                 this.close = function () {
 
+                    // local self
+                    var self = this;
                     $('#myGrowl').jGrowl('shutdown'); // maybe needs a better solution to trigger the jGrowl shutdown
 
                     if (quitOnClose && this.app !== null) {
@@ -755,6 +761,7 @@ define("io.ox/core/desktop",
                             .done(function () {
                                 self.state.open = false;
                                 self.state.running = false;
+                                self = null;
                             });
                     } else {
                         this.hide();
@@ -763,6 +770,23 @@ define("io.ox/core/desktop",
                         ox.ui.windowManager.trigger("window.close", this);
                     }
                     return this;
+                };
+
+                this.busy = function () {
+                    // use self instead of this to make busy/idle robust for callback use
+                    if (self) {
+                        $('body').focus(); // steal focus
+                        self.nodes.blocker.busy().show();
+                        self.trigger('busy');
+                    }
+                };
+
+                this.idle = function () {
+                    // use self instead of this to make busy/idle robust for callback use
+                    if (self) {
+                        self.nodes.blocker.idle().hide();
+                        self.trigger('idle');
+                    }
                 };
 
                 this.destroy = function () {
@@ -777,9 +801,9 @@ define("io.ox/core/desktop",
                     }
                     // destroy everything
                     this.events.destroy();
+                    this.show = this.busy = this.idle = $.noop;
                     this.nodes.outer.remove();
-                    this.nodes = null;
-                    this.show = $.noop;
+                    this.nodes = self = null;
                     return this;
                 };
 
@@ -870,7 +894,8 @@ define("io.ox/core/desktop",
                 // create new window instance
                 win = new Window(opt.id, opt.name),
                 // close window
-                close = function () {
+                close = function (e) {
+                    e.preventDefault();
                     win.close();
                 };
 
@@ -890,8 +915,11 @@ define("io.ox/core/desktop",
                     width: width + unit
                 })
                 .append(
-                // window HEAD
-                win.nodes.head = $("<div>")
+                    win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide()
+                )
+                .append(
+                    // window HEAD
+                    win.nodes.head = $("<div>")
                     .addClass("window-head")
                     .append(
                         // title

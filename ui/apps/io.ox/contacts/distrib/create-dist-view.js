@@ -24,33 +24,33 @@ define('io.ox/contacts/distrib/create-dist-view',
 
     'use strict';
 
-
-    var saveButton = function (options) {
-        var button = $('<a>').attr({
-            'data-action': 'save',
-            'href': '#',
-            'tabindex': '5'
-        }).addClass('btn btn-primary').on('click', function () {
-            options.saveForm();
-        });
-        if (options.model._data.mark_as_distributionlist) {
-            button.text(gt('Save'));
-        } else {
-            button.text(gt('Create list'));
-        }
-        return button;
+    var saveButton = function (model) {
+        return $('<a>', {
+                'data-action': 'save',
+                href: '#',
+                tabindex: '5'
+            })
+            .addClass('btn btn-primary')
+            .on('click', { model: model }, function (e) {
+                e.data.model.save();
+            })
+            .text(
+                model.get('mark_as_distributionlist') ? gt('Save') : gt('Create list')
+            );
     };
 
     var drawAlert = function (mail) {
         $('.alert').remove();
-        var alert = $('<div>').addClass('alert alert-block fade in').append(
-                $('<a>').attr({
-                    'href': '#',
-                    'class': 'close',
-                    'data-dismiss': 'alert'
-                }).append($('<div>').addClass('delete-button')), $('<p>').text(gt('The email address ' + mail + ' is already in the list'))
+        return $('<div>')
+            .addClass('alert alert-block fade in')
+            .append(
+                $('<a>').attr({ href: '#', 'data-dismiss': 'alert' })
+                .addClass('close')
+                .html('&times;'),
+                $('<p>').text(
+                    gt('The email address ' + mail + ' is already in the list')
+                )
             );
-        return alert;
     };
 
     var fnClickPerson = function (e) {
@@ -65,11 +65,8 @@ define('io.ox/contacts/distrib/create-dist-view',
             }),
             img = $('<div>').addClass('contact-image'),
             url = util.getImage({}),
-            button = $('<div>').addClass('delete-button').on('click', {
-                options: options,
-                mail: selectedMail,
-                frame: frame
-            }, removeContact);
+            button = $('<a>', { href: '#' }).addClass('close').html('&times;')
+                .on('click', { options: options, mail: selectedMail, frame: frame }, removeContact);
         if (name === undefined) {
             name = '';
         }
@@ -94,11 +91,11 @@ define('io.ox/contacts/distrib/create-dist-view',
     }
 
     function drawEmptyItem(node) {
-        var frame = $('<div>').addClass('listet-item backstripes').attr({
-            'data-mail': 'empty'
-        });
-        frame.text(gt('This list has no entries'));
-        node.append(frame);
+        node.append(
+            $('<div>').addClass('listet-item backstripes')
+            .attr({ 'data-mail': 'empty' })
+            .text(gt('This list has no members yet'))
+        );
     }
 
     function insertNewContact(options, name, mail) {
@@ -127,7 +124,10 @@ define('io.ox/contacts/distrib/create-dist-view',
             'data-action': 'add',
             'href': '#',
             'tabindex': '4'
-        }).addClass('btn btn-inverse').text(gt('Add')).on('click', function (e) { //TODO some css related issues with color
+        })
+        .addClass('btn btn-inverse')
+        .text('+')
+        .on('click', function (e) { //TODO some css related issues with color
             var data = $('[data-holder="data-holder"]').data(),
                 mailValue = $('input#mail').val(),
                 nameValue = $('input#name').val();
@@ -138,7 +138,6 @@ define('io.ox/contacts/distrib/create-dist-view',
                     insertNewContact(options, nameValue, mailValue);
                 }
             }
-
             // reset the fields
             $('[data-holder="data-holder"]').removeData();
             $('input#mail').val('');
@@ -153,7 +152,8 @@ define('io.ox/contacts/distrib/create-dist-view',
     }
 
     function drawAutoCompleteItem(node, data) {
-        var img = $('<div>').addClass('contact-image'),
+
+        var img = $('<div>').addClass('create-distributionlist-contact-image'),
             url = util.getImage(data.contact);
 
         if (Modernizr.backgroundsize) {
@@ -164,7 +164,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             );
         }
 
-        node.addClass('io-ox-contact-create-dist')
+        node
         .append(img)
         .append(
             $('<div>').addClass('person-link ellipsis')
@@ -174,12 +174,14 @@ define('io.ox/contacts/distrib/create-dist-view',
     }
 
     function removeContact(e) {
-        _.each(e.data.options.model._data.distribution_list, function (val, key) {
+        e.preventDefault();
+        var o = e.data.options, model = o.model;
+        _.each(model._data.distribution_list, function (val, key) {
             if (val.mail === e.data.mail) {
-                e.data.options.model._data.distribution_list.splice(key, 1);
+                model._data.distribution_list.splice(key, 1);
             }
-            if (_.isEmpty(e.data.options.model._data.distribution_list)) {
-                e.data.options.displayBox.append(drawEmptyItem(e.data.options.displayBox));
+            if (_.isEmpty(model._data.distribution_list)) {
+                o.displayBox.append(drawEmptyItem(o.displayBox));
             }
         });
         e.data.frame.remove();
@@ -191,11 +193,8 @@ define('io.ox/contacts/distrib/create-dist-view',
             }),
             img = $('<div>').addClass('contact-image'),
             url = util.getImage(data),
-            button = $('<div>').addClass('delete-button').on('click', {
-                options: options,
-                mail: selectedMail,
-                frame: frame
-            }, removeContact);
+            button = $('<a>', { href: '#' }).addClass('close').html('&times;')
+                .on('click', { options: options, mail: selectedMail, frame: frame }, removeContact);
 
         if (Modernizr.backgroundsize) {
             img.css('backgroundImage', 'url(' + url + ')');
@@ -240,7 +239,6 @@ define('io.ox/contacts/distrib/create-dist-view',
         if ($('[data-mail="' + selectedMail + '"]')[1]) {
             drawAlert(selectedMail).appendTo($('.editsection'));
         }
-
         options.model._data.distribution_list.push({
             id: contact.id,
             display_name: contact.display_name,
@@ -266,47 +264,47 @@ define('io.ox/contacts/distrib/create-dist-view',
                 autocorrect: 'off',
                 id: id
             })
-                .attr('data-type', id) // not name=id!
-                .addClass('discreet input-large')
-                .autocomplete({
-                    source: function (query) {
-                        return api.autocomplete(query);
-                    },
-                    stringify: function (data) {
-                        if (related === 'input#mail') {
-                            return data.display_name;
-                        } else {
-                            return data.email;
-                        }
-
-                    },
-
-                    // for a second (related) Field
-                    stringifyrelated: function (data) {
-                        if (related === 'input#mail') {
-                            return data.email;
-                        } else {
-                            return data.display_name;
-                        }
-
-                    },
-                    draw: function (data) {
-                        drawAutoCompleteItem.call(null, this, data);
-                    },
-                    // to specify the related Field
-                    related: function () {
-                        var field = $(related);
-                        return field;
-                    },
-                    dataHolder: function () {
-                        var holder = $('[data-holder="data-holder"]');
-                        return holder;
+            .attr('data-type', id) // not name=id!
+            .addClass('discreet input-large')
+            .autocomplete({
+                source: function (query) {
+                    return api.autocomplete(query);
+                },
+                stringify: function (data) {
+                    if (related === 'input#mail') {
+                        return data.display_name;
+                    } else {
+                        return data.email;
                     }
-                }).on('keydown', function (e) {
-                    if (e.which === 13) {
-                        $('[data-action="add"]').trigger('click');
+
+                },
+                // for a second (related) Field
+                stringifyrelated: function (data) {
+                    if (related === 'input#mail') {
+                        return data.email;
+                    } else {
+                        return data.display_name;
                     }
-                })
+
+                },
+                draw: function (data) {
+                    drawAutoCompleteItem.call(null, this, data);
+                },
+                // to specify the related Field
+                related: function () {
+                    var field = $(related);
+                    return field;
+                },
+                dataHolder: function () {
+                    var holder = $('[data-holder="data-holder"]');
+                    return holder;
+                }
+            })
+            .on('keydown', function (e) {
+                if (e.which === 13) {
+                    $('[data-action="add"]').trigger('click');
+                }
+            })
         );
     }
 
@@ -357,26 +355,34 @@ define('io.ox/contacts/distrib/create-dist-view',
                 });
             }
 
-            self.node.append(sectiongroup.append());
-            sectiongroup.addClass('header')
-            .append(self.createLabel({
-                id: myId,
-                text: gt('List name')
-            }), self.createTextField({property: 'display_name', id: myId, classes: 'input-large'})
-            .find('input').attr('tabindex', '1'), saveButton(self));
-            editSection.addClass('editsection').append(
+            self.node.append(sectiongroup);
 
+            sectiongroup.addClass('header')
+            .append(
+                self.createLabel({
+                    id: myId,
+                    text: gt('List name')
+                }),
+                self.createTextField({ property: 'display_name', id: myId, classes: 'input-large' })
+                    .find('input').attr('tabindex', '1'),
+                saveButton(self.model)
+            );
+
+            editSection.addClass('editsection').append(
                 self.createSectionTitle({text: gt('Members')}),
                 self.displayBox
-                );
+            );
+
             if (_.isEmpty(self.model._data.distribution_list)) {
                 drawEmptyItem(self.displayBox);
             }
             self.node.append(editSection);
 
             dataHolder = $('<div>').attr('data-holder', 'data-holder')
-            .append(createField(self, 'name', 'input#mail', 'Name', '2'), createField(self, 'mail', 'input#name', 'E-mail address', '3'));
-
+                .append(
+                    createField(self, 'name', 'input#mail', 'Name', '2'),
+                    createField(self, 'mail', 'input#name', 'E-mail address', '3')
+                );
 
             addSection.addClass('last').append(
                 //self.createSectionTitle({text: gt('add new Member')}),
@@ -393,17 +399,6 @@ define('io.ox/contacts/distrib/create-dist-view',
             });
 
             return self;
-        },
-
-        drawButtons: function () {
-            var self = this,
-                button = saveButton(self);
-            return button;
-        },
-
-        saveForm: function () {
-            console.log('saveForm -> save', this);
-            this.getModel().save();
         }
     });
 
