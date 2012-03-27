@@ -549,5 +549,34 @@ define("io.ox/mail/api",
         }
     });
 
+    api.getUrl = function (data, mode) {
+        var url = ox.apiRoot + '/mail?', first;
+        if (mode === 'zip') {
+            first = _(data).first();
+            return url + $.param({
+                action: 'zip_attachments',
+                folder: first.mail.folder_id,
+                id: first.mail.id,
+                attachment: _(data).pluck('id').join(',')
+            });
+        } else {
+            url += $.param({
+                action: 'attachment',
+                folder: data.mail.folder_id,
+                id: data.mail.id,
+                attachment: data.id
+            });
+            switch (mode) {
+            case 'view':
+            case 'open':
+                return url + '&delivery=view';
+            case 'download':
+                return url + '&delivery=download';
+            default:
+                return url;
+            }
+        }
+    };
+
     return api;
 });

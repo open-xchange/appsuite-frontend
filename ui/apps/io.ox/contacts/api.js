@@ -89,7 +89,8 @@ define('io.ox/contacts/api',
                 module: 'contacts',
                 params: { action: 'new' },
                 data: body,
-                appendColumns: false
+                appendColumns: false,
+                fixPost: true
             })
             .pipe(function (fresh) {
                 // UPLOAD does not process response data, so ...
@@ -148,7 +149,8 @@ define('io.ox/contacts/api',
         return http.UPLOAD({
                 module: 'contacts',
                 params: { action: 'update', id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.now() },
-                data: form
+                data: form,
+                fixPost: true
             })
             .done(function () {
                 api.caches.get.clear();

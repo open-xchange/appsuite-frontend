@@ -252,6 +252,15 @@ define("io.ox/mail/view-detail",
         }
     });
 
+    var drawAttachmentDropDown = function (node, label, data) {
+        // use extension pattern
+        new links.DropdownLinks({
+            label: label,
+            classes: 'attachment-link',
+            ref: 'io.ox/mail/attachment/links'
+        }).draw.call(node, data);
+    };
+
     ext.point('io.ox/mail/detail').extend({
         index: 160,
         id: 'attachments',
@@ -275,14 +284,13 @@ define("io.ox/mail/view-detail",
                     $('<span>').addClass('io-ox-label').text(gt('Attachments: '))
                 );
                 _(attachments).each(function (a, i) {
-                    var filename = a.filename || ('Attachment #' + i);
-                    // use extension pattern
-                    new links.DropdownLinks({
-                        label: filename,
-                        classes: 'attachment-link',
-                        ref: 'io.ox/mail/attachment/links'
-                    }).draw.call(outer, a);
+                    var label = a.filename || ('Attachment #' + i);
+                    drawAttachmentDropDown(outer, label, a);
                 });
+                // how 'all' drop down?
+                if (attachments.length > 1) {
+                    drawAttachmentDropDown(outer, gt('All'), attachments);
+                }
                 this.append(outer);
             }
         }

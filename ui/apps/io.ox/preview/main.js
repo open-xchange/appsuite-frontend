@@ -51,13 +51,22 @@ define("io.ox/preview/main",
     // register image typed renderer
     Renderer.register({
         id: "image",
-        endings: ["png", "jpg", "jpeg", "gif"],
+        endings: ["png", "jpg", "jpeg", "gif", "bmp"],
         canRender: function (file) {
             return $.inArray(util.FileTypesMap.getFileType(file.name), this.endings) !== -1;
         },
-        paint: function (file, node) {
+        paint: function (file, node, options) {
+            var param = {
+                width: options.width || 400,
+                height: options.height || 400,
+                scaleType: options.scaleType || 'contain',
+                delivery: 'view'
+            };
+            if (options.height === 'auto') {
+                delete param.height;
+            }
             node.append(
-                $("<img>", { src: file.dataURL + "&width=400&height=400&scaleType=contain&delivery=view", alt: 'Preview' })
+                $("<img>", { src: file.dataURL + "&" + $.param(param), alt: 'Preview' })
             );
         }
     });
@@ -78,7 +87,7 @@ define("io.ox/preview/main",
             },
             paint: function (file, node) {
                 if (this.canRender(file)) {
-                    $("<audio/>").attr({
+                    $("<audio>").attr({
                         controls: "controls",
                         src: file.dataURL
                     }).appendTo(node);
@@ -112,7 +121,7 @@ define("io.ox/preview/main",
 
     Renderer.register({
         id: "text",
-        endings: [ "txt", "js" ],
+        endings: ["txt", "js", "md"],
         canRender: function (file) {
             return $.inArray(util.FileTypesMap.getFileType(file.name), this.endings) !== -1;
         },
@@ -125,9 +134,11 @@ define("io.ox/preview/main",
         }
     });
 
-    var Preview = function (file) {
+    var Preview = function (file, options) {
 
-        this.file = file;
+        this.file = _.copy(file, true); // work with a copy
+        this.options = options || {};
+
         this.Renderer = null;
 
         if (this.file.file_mimetype) {
@@ -168,7 +179,7 @@ define("io.ox/preview/main",
 
         appendTo: function (node) {
             if (this.supportsPreview()) {
-                this.Renderer.paint(this.file, node);
+                this.Renderer.paint(this.file, node, this.options);
             }
         }
     };

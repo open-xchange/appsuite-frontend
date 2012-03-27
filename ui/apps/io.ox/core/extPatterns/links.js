@@ -31,7 +31,7 @@ define("io.ox/core/extPatterns/links",
                 var node = $(this),
                     context = node.data("context"),
                     ref = node.data("ref");
-                actions.invoke(ref, self, context);
+                actions.invoke(ref, this, context, e);
             };
 
         this.draw = function (context) {
@@ -72,20 +72,19 @@ define("io.ox/core/extPatterns/links",
 
 
     var applyCollection = function (self, collection, node, context, args, bootstrapMode) {
-        actions.extPatterns.applyCollection(self, collection, context, args).always(function (links) {
+        actions.extPatterns.applyCollection(self, collection, context, args)
+        .always(function (links) {
             // count resolved links
             var count = 0;
             // draw links
-            _(links).each(function (def) {
-                def.done(function (link) {
-                    if (_.isFunction(link.draw)) {
-                        link.draw.call(bootstrapMode ? $("<li>").appendTo(node) : node, context);
-                        if (_.isFunction(link.customize)) {
-                            link.customize.call(node.find('a'), context);
-                        }
-                        count++;
+            _(links).each(function (link) {
+                if (_.isFunction(link.draw)) {
+                    link.draw.call(bootstrapMode ? $("<li>").appendTo(node) : node, context);
+                    if (_.isFunction(link.customize)) {
+                        link.customize.call(node.find('a'), context);
                     }
-                });
+                    count++;
+                }
             });
             // empty?
             if (count === 0) {

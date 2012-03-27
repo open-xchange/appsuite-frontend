@@ -243,45 +243,74 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/preview-attachment', {
         id: 'preview',
-        action: function () {
-            alert('TBD.preview');
+        requires: function (e) {
+            return require(['io.ox/preview/main'])
+                .pipe(function (Preview) {
+                    var list = _.getArray(e.context);
+                    // is at least one attachment supported?
+                    return e.collection.has('some') && _(list).reduce(function (memo, obj) {
+                        return memo && new Preview({ filename: obj.filename }).supportsPreview();
+                    }, true);
+                });
+        },
+        multiple: function (list) {
+            // open side popup
+            var e = $.Event();
+            e.target = this;
+            require(['io.ox/core/tk/dialogs', 'io.ox/preview/main'], function (dialogs, Preview) {
+                new dialogs.SidePopup().show(e, function (popup) {
+                    _(list).each(function (data, i) {
+                        popup.append(
+                            $('<h4>').css('lineHeight', '3em').text(data.filename)
+                        );
+                        new Preview({
+                            filename: data.filename,
+                            dataURL: api.getUrl(data, 'view')
+                        }, {
+                            width: popup.parent().width(),
+                            height: 'auto'
+                        })
+                        .appendTo(popup);
+                        popup.append($('<div>').text('\u00A0'));
+                    });
+                });
+            });
         }
     });
 
     new Action('io.ox/mail/actions/open-attachment', {
         id: 'open',
-        action: function (data) {
-            // get url
-            var href = ox.apiRoot + '/mail?' + $.param({
-                action: 'attachment',
-                folder: data.mail.folder_id,
-                id: data.mail.id,
-                attachment: data.id,
-                delivery: 'view'
+        requires: 'some',
+        multiple: function (list) {
+            _(list).each(function (data) {
+                var url = api.getUrl(data, 'view');
+                window.open(url);
             });
-            window.open(href);
         }
     });
 
     new Action('io.ox/mail/actions/download-attachment', {
         id: 'download',
-        action: function (data) {
-            // get url
-            var href = ox.apiRoot + '/mail?' + $.param({
-                action: 'attachment',
-                folder: data.mail.folder_id,
-                id: data.mail.id,
-                attachment: data.id,
-                delivery: 'download'
-            });
-            window.open(href);
+        requires: 'some',
+        multiple: function (list) {
+            var url;
+            if (list.length === 1) {
+                // download single attachment
+                url = api.getUrl(_(list).first(), 'download');
+            } else {
+                // download zip file
+                url = api.getUrl(list, 'zip');
+            }
+            window.open(url);
         }
     });
 
     new Action('io.ox/mail/actions/save-attachment', {
         id: 'save',
+        requires: 'some',
         multiple: function (list) {
             api.saveAttachments(list).done(function (data) {
+                // TODO: add confirmation
                 console.log('Yep, saved!', data);
             });
         }

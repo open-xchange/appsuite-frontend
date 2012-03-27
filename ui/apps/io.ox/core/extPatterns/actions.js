@@ -76,11 +76,20 @@ define("io.ox/core/extPatterns/actions",
                             def.reject(link);
                         }
                     });
-                    return def;
+                    return {
+                        deferred: def,
+                        link: link
+                    };
                 });
                 // wait for all links
-                $.when.apply($, links.value()).always(function () {
-                    linksResolved.resolve(links.value());
+                $.when.apply($, links.pluck('deferred').value()).always(function () {
+                    linksResolved.resolve(
+                        links.filter(function (o) {
+                            return o.deferred.state() === 'resolved';
+                        })
+                        .pluck('link').value()
+                    );
+                    links = null;
                 });
             });
 
