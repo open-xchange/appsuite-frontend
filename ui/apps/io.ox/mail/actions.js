@@ -257,8 +257,7 @@ define('io.ox/mail/actions',
                 folder: data.mail.folder_id,
                 id: data.mail.id,
                 attachment: data.id,
-                // TODO: remove session once backend support wurst-sessions
-                session: ox.session
+                delivery: 'view'
             });
             window.open(href);
         }
@@ -273,9 +272,7 @@ define('io.ox/mail/actions',
                 folder: data.mail.folder_id,
                 id: data.mail.id,
                 attachment: data.id,
-                save: '1',
-                // TODO: remove session once backend support wurst-sessions
-                session: ox.session
+                delivery: 'download'
             });
             window.open(href);
         }
@@ -283,8 +280,10 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/save-attachment', {
         id: 'save',
-        action: function () {
-            alert('TBD.save');
+        multiple: function (list) {
+            api.saveAttachments(list).done(function (data) {
+                console.log('Yep, saved!', data);
+            });
         }
     });
 

@@ -58,13 +58,19 @@ define('io.ox/contacts/api',
         }
     });
 
+    // fix backend WAT
+    function wat(data, id) {
+        if (data[id] === '' || data[id] === undefined) {
+            delete data[id];
+        }
+    }
+
     api.create = function (data, file) {
 
         // TODO: Ask backend for a fix, until that:
-        // repair email
-        data.email1 = data.email1 || null;
-        data.email2 = data.email2 || null;
-        data.email3 = data.email3 || null;
+        wat(data, 'email1');
+        wat(data, 'email2');
+        wat(data, 'email3');
 
         var method, body;
 
@@ -339,7 +345,7 @@ define('io.ox/contacts/api',
                 .on('error', { url: ox.base + '/apps/themes/default/dummypicture.png' }, set)
                 .prop('src', url);
         };
-        if (obj && obj.image1_url) {
+        if (obj && _.isString(obj.image1_url)) {
             cont(obj.image1_url.replace(/^\/ajax/, ox.apiRoot));
         } else {
             api.getPictureURL(obj).done(cont).fail(clear);

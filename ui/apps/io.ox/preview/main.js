@@ -44,13 +44,12 @@ define("io.ox/preview/main",
         id: "image",
         index: 10,
         endings: ["png", "jpg", "jpeg", "gif"],
-        draw: function (file, node) {
-            this.append(
-                $("<img>", { src: file.dataURL + "&width=400&height=300", alt: 'Preview' })
-                .css({
-                    width: "400px",
-                    maxWidth: "100%"
-                })
+        canRender: function (file) {
+            return $.inArray(util.FileTypesMap.getFileType(file.name), this.endings) !== -1;
+        },
+        paint: function (file, node) {
+            node.append(
+                $("<img>", { src: file.dataURL + "&width=400&height=400&scaleType=contain&delivery=view", alt: 'Preview' })
             );
         }
     });

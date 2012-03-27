@@ -333,15 +333,6 @@ define("io.ox/mail/api",
                             });
                         // remove white space
                         text = $.trim(text);
-                        // fix reply/forward quoting
-                        // TODO: remove when backend does this properly
-                        if (action === 'replyall' || action === 'reply') {
-                            // OK: reply is fixed
-                            //text = '> ' + text.replace(/\n/, "\n> ");
-                        } else if (action === 'forward') {
-                            // still waiting for backend
-                            text = '> ' + text.replace(/\n/g, "\n> ");
-                        }
                         // polish for html editing
                         if (view === 'html') {
                             // escape '<'
@@ -518,6 +509,35 @@ define("io.ox/mail/api",
             window.callback_new = null;
         };
     }
+
+    api.saveAttachments = function (list, target) {
+        // be robust
+        target = target || config.get('folder.infostore');
+        // support for multiple attachments
+        list = _.isArray(list) ? list : [list];
+        http.pause();
+        // loop
+        _(list).each(function (data) {
+            http.PUT({
+                module: 'mail',
+                params: {
+                    action: 'attachment',
+                    id: data.mail.id,
+                    folder: data.mail.folder_id,
+                    dest_folder: target,
+                    attachment: data.id
+                },
+                data: { folder_id: target, description: 'Saved mail attachment' },
+                appendColumns: false
+            });
+        });
+        return http.resume().done(function () {
+            require(['io.ox/files/api'], function (fileAPI) {
+                fileAPI.caches.all.remove(target);
+                fileAPI.trigger('refresh.all');
+            });
+        });
+    };
 
     // refresh
     api.on('refresh!', function (e, folder) {

@@ -89,7 +89,7 @@ define("io.ox/core/extPatterns/actions",
 
     var performAction = function (ref, self, context) {
         var p = ext.point(ref),
-            data = context.data || context;
+            data = context ? context.data || context : {};
         // general handler
         p.invoke('action', self, data, context);
         // handler for multi selection - always provides an array

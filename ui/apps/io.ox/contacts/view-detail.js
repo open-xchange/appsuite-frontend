@@ -272,7 +272,7 @@ define("io.ox/contacts/view-detail",
         id: 'contact-mails',
         draw: function (data) {
             if (data.mark_as_distributionlist === true) {
-                var i = 0, list = _.deepClone(data.distribution_list), $i = list.length,
+                var i = 0, list = _.copy(data.distribution_list || [], true), $i = list.length,
                     that = this;
                 list = list.sort(util.nameSort);
 
@@ -355,10 +355,6 @@ define("io.ox/contacts/view-detail",
             if (!data) {
                 node = $();
             } else {
-                // TMP backend bug fix
-                if (data.distribution_list && data.distribution_list.length) {
-                    data.mark_as_distributionlist = true;
-                }
                 node = $("<table>", {border: 0, cellpadding: 0, cellspacing: 0})
                     .addClass("contact-detail view")
                     .attr('data-obj-id', data.folder_id + '.' + data.id);
