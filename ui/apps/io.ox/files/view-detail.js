@@ -24,11 +24,9 @@ define("io.ox/files/view-detail",
      "io.ox/files/api",
      "io.ox/preview/main",
      "io.ox/core/tk/upload",
-     "gettext!io.ox/files/files"], function (ext, links, layouts, KeyListener, i18n, Event, actions, filesAPI, Preview, upload, gt) {
+     "gettext!io.ox/files/files"], function (ext, links, layouts, KeyListener, i18n, Event, actions, filesAPI, preview, upload, gt) {
 
     "use strict";
-
-    var supportsDragOut = Modernizr.draganddrop && _.browser.Chrome;
 
     var draw = function (file) {
 
@@ -39,12 +37,6 @@ define("io.ox/files/view-detail",
                 ref: "io.ox/files/details/sections"
             });
 
-        // add drag-out delegate
-        if (supportsDragOut) {
-            $element.on('dragstart', '.dragout', function (e) {
-                e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
-            });
-        }
 
         var blacklisted = {
             "refresh.list": true
@@ -361,48 +353,23 @@ define("io.ox/files/view-detail",
 
     // Content Section
     // Preview
-    ext.point("io.ox/files/details/sections/content").extend({
+    ext.point("io.ox/files/details/sections/content").extend(new preview.Extension({
         id: "preview",
         index: 10,
         dim: {
             span: 6
         },
-        isEnabled: function (file) {
+        parseArguments: function (file) {
             if (!file.filename) {
-                return false;
+                return null;
             }
-            var fileDescription = {
+            
+            return {
                 name: file.filename,
                 mimetype: file.file_mimetype,
                 size: file.file_size,
-                dataURL: filesAPI.getUrl(file)
+                dataURL: filesAPI.getUrl(file, 'bare')
             };
-            var prev = new Preview(fileDescription);
-            return prev.supportsPreview();
-        },
-        draw: function (file) {
-
-            this.addClass("preview");
-
-            var desc = {
-                    name: file.filename,
-                    mimetype: file.file_mimetype,
-                    size: file.file_size,
-                    dataURL: filesAPI.getUrl(file)
-                },
-                link = $('<a>', { href: filesAPI.getUrl(file, 'open'), target: '_blank', draggable: true })
-                    .addClass('dragout')
-                    .attr('data-downloadurl', desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.dataURL),
-                self = this.hide(),
-                prev = new Preview(desc);
-
-            if (prev.supportsPreview()) {
-                prev.appendTo(link.appendTo(self));
-                if (supportsDragOut) {
-                    link.attr('title', gt('Click to open. Drag on your desktop to download.'));
-                }
-                self.show();
-            }
         },
         on: {
             update: function (file, extension) {
@@ -410,7 +377,7 @@ define("io.ox/files/view-detail",
                 extension.draw.call(this, file, extension);
             }
         }
-    });
+    }));
 
     // Description
 
