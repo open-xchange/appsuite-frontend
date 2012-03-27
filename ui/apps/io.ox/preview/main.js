@@ -18,17 +18,26 @@ define("io.ox/preview/main",
     
     var supportsDragOut = Modernizr.draganddrop && _.browser.Chrome;
     var dragOutHandler = $.noop;
+    var clickHandler = $.noop;
+    
     if (supportsDragOut) {
-        dragOutHandler = function ($node, downloadURL) {
+        dragOutHandler = function ($node, desc) {
             $node.on('dragstart', function (e) {
-                e.originalEvent.dataTransfer.setData('DownloadURL', downloadURL);
+                e.originalEvent.dataTransfer.setData('DownloadURL',  ox.abs + desc.dataURL + "&delivery=download");
             });
         };
+        clickHandler = function ($node, desc) {
+            return $('<a>', { href: desc.dataURL + "&delivery=view", target: '_blank', draggable: true })
+            .attr('data-downloadurl', desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.dataURL + "&delivery=download")
+            .append($node);
+        };
+    } else {
+        clickHandler = function ($node, desc) {
+            return $('<a>', { href: desc.dataURL + "&delivery=view", target: '_blank'}).append($node);
+        };
+        
     }
     
-    var clickHandler = function ($node, viewURL) {
-        return $('<a>', { href: viewURL, target: '_blank', draggable: supportsDragOut }).append($node);
-    };
     
     
     var Renderer = {
@@ -49,8 +58,8 @@ define("io.ox/preview/main",
             this.draw = function (file) {
                 var $node = $("<div>");
                 options.draw.apply($node, arguments);
-                $node = clickHandler($node, file.dataURL + "&delivery=view");
-                dragOutHandler($node, file.dataURL + "&delivery=download");
+                $node = clickHandler($node, file);
+                dragOutHandler($node, file);
                 
                 if (supportsDragOut) {
                     $node.attr('title', gt('Click to open. Drag to your desktop to download.'));
