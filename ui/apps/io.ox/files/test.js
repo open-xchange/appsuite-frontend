@@ -16,7 +16,7 @@ define("io.ox/files/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/
         id: 'files-general',
         index: 100,
         test: function (j) {
-            var image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9YGARc5KB0XV+IAAAAddEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIFRoZSBHSU1Q72QlbgAAAF1JREFUGNO9zL0NglAAxPEfdLTs4BZM4DIO4C7OwQg2JoQ9LE1exdlYvBBeZ7jqch9//q1uH4TLzw4d6+ErXMMcXuHWxId3KOETnnXXV6MJpcq2MLaI97CER3N0vr4MkhoXe0rZigAAAABJRU5ErkJggg==";
+
 
             j.describe("Unit test for creating and reading info item via ALL request ", function () {
                 var expected = { title : "expected Title", description : "expected Description"};
@@ -52,6 +52,8 @@ define("io.ox/files/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/
                 });
             });
 
+
+
             j.describe("Unit test for creating and reading info item via LIST request ", function () {
                 var expected = { title : "expected Title", description : "expected Description"};
 
@@ -86,10 +88,12 @@ define("io.ox/files/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/
             });
 
 
+
+
             j.describe("Unit test for creating and reading info item via GET request ", function () {
                 var expected = { title : "expected Title", description : "expected Description"};
 
-                j.it("Verify via LIST method", function () {
+                j.it("Verify via GET method", function () {
                     var ready = new Done();
                     var found = false;
                     var actual;
