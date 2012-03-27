@@ -11,8 +11,6 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-// TODO: Render Versions
-
 define("io.ox/files/view-detail",
     ["io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
