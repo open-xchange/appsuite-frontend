@@ -17,7 +17,16 @@ define("io.ox/preview/main",
     "use strict";
     
     var supportsDragOut = Modernizr.draganddrop && _.browser.Chrome;
-
+    var buildDragOut = $.noop;
+    if (supportsDragOut) {
+        buildDragOut = function ($node, downloadURL) {
+            $node.on('dragstart', function (e) {
+                e.originalEvent.dataTransfer.setData('DownloadURL', downloadURL);
+            });
+        };
+    }
+    
+    
     var Renderer = {
         point: ext.point("io.ox/preview/engine"),
 
