@@ -242,7 +242,7 @@ define("io.ox/contacts/edit/test",
 
                         _.each(testObjectLong, function (val, property) {
 //                            console.log(property + ' ' + val);
-                            formFrame.find('input[data-property="' + property + '"]').val(val).trigger('change');
+                            formFrame.find('[data-property="' + property + '"]').val(val).trigger('change');
                         });
                         buttonSave.triggerHandler('click');
 
@@ -629,7 +629,7 @@ define("io.ox/contacts/edit/test",
 
                     app.launch();
                     j.runs(function () {
-                        ext.point("io.ox/contacts/edit/form/phone_numbers").disable("cellular_telephone1");
+                        ext.point("io.ox/contacts/edit/form/phone").disable("cellular_telephone1");
                     });
 
                     var grid = app.getGrid();
