@@ -110,8 +110,7 @@ define('io.ox/contacts/edit/main',
         });
 
         app.setQuit(function () {
-            var def = $.Deferred(),
-                listetItem =  $('.listet-item');
+            var def = $.Deferred();
 
             dirtyStatus.byModel = getDirtyStatus();
 
@@ -128,7 +127,6 @@ define('io.ox/contacts/edit/main',
                                 if (action === 'delete') {
                                     def.resolve();
                                     $('#myGrowl').jGrowl('shutdown');
-                                    listetItem.remove();
                                 } else {
                                     def.reject();
                                 }
@@ -137,12 +135,10 @@ define('io.ox/contacts/edit/main',
                 } else {
                     def.resolve();
                     $('#myGrowl').jGrowl('shutdown');
-                    listetItem.remove();
                 }
             } else {
                 def.resolve();
                 $('#myGrowl').jGrowl('shutdown');
-                listetItem.remove();
             }
             //clean
             return def;

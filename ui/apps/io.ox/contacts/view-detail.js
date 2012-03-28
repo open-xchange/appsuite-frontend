@@ -274,7 +274,7 @@ define("io.ox/contacts/view-detail",
             if (data.mark_as_distributionlist === true) {
                 var i = 0, list = _.copy(data.distribution_list || [], true), $i = list.length,
                     that = this;
-                list = list.sort(util.nameSort);
+//                list = list.sort(util.nameSort);
 
                 _.each(list, function (val, key) {
                     if (key === 0) {

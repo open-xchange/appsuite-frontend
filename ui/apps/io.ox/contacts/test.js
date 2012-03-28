@@ -97,7 +97,7 @@ define("io.ox/contacts/test",
 
                 j.it('looks for the save button and hits', function () {
                     var formFrame =  $('.io-ox-dialog-popup');
-                    var button = formFrame.find(".btn[data-action='save']");
+                    var button = formFrame.find(".btn.btn-primary");
                     button.trigger('click');
 
                     j.expect(button[0]).toBeTruthy();

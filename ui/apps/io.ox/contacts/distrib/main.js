@@ -17,8 +17,9 @@ define('io.ox/contacts/distrib/main',
      'io.ox/contacts/model',
      'io.ox/contacts/distrib/create-dist-view',
      'gettext!io.ox/contacts/contacts',
+     'io.ox/contacts/util',
      'less!io.ox/contacts/distrib/style.css'
-     ], function (api, ContactModel, ContactCreateDistView, gt) {
+     ], function (api, ContactModel, ContactCreateDistView, gt, util) {
 
     'use strict';
 
@@ -58,6 +59,8 @@ define('io.ox/contacts/distrib/main',
             // define store
             model.store = function (data, changes) {
                 if (!_.isEmpty(data)) {
+                  //sort the array before save
+                    data.distribution_list = data.distribution_list.sort(util.nameSort);
                     data.folder_id = folderId;
                     data.mark_as_distributionlist = true;
                     if (data.display_name === '') {
@@ -87,6 +90,8 @@ define('io.ox/contacts/distrib/main',
                 view = new ContactCreateDistView({ model: model });
                 // define store
                 model.store = function (data, changes) {
+                    //sort the array before save
+                    data.distribution_list = data.distribution_list.sort(util.nameSort);
                     return api.edit({
                             id: data.id,
                             folder: data.folder_id,
