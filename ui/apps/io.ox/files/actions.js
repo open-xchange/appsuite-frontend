@@ -61,8 +61,10 @@ define("io.ox/files/actions",
 
     new Action('io.ox/files/actions/editor-new', {
         id: 'editor-new',
-        action: function (data) {
-            ox.launch('io.ox/editor/main');
+        action: function (app) {
+            ox.launch('io.ox/editor/main').done(function () {
+                this.create({ folder: app.folder.get() });
+            });
         }
     });
 

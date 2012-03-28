@@ -13,9 +13,12 @@
 
 define("io.ox/editor/main",
     ["io.ox/files/api",
+     "io.ox/core/api/folder",
+     "io.ox/core/tk/model",
+     "io.ox/core/tk/view",
      "gettext!io.ox/editor/main",
      "less!io.ox/editor/style.css"
-    ], function (api, gt) {
+    ], function (api, folderAPI, Model, View, gt) {
 
     'use strict';
 
@@ -23,13 +26,14 @@ define("io.ox/editor/main",
     function createInstance() {
 
         var // application object
-            app = ox.ui.createApp({ name: 'io.ox/editor' }),
+            app = ox.ui.createApp({ name: 'io.ox/editor', title: 'SimplePad' }),
             // app window
             win,
             textarea,
-            container,
+            container = $('<div>').addClass('container abs'),
             header,
-            fileObject = {};
+            model = new Model(),
+            view = new View({ model: model, node: container });
 
         function fnSave(e) {
             e.preventDefault();
@@ -47,31 +51,35 @@ define("io.ox/editor/main",
                 search: false
             }));
 
+            model.on('change', function (e) {
+                console.log('model.change', e, this.get());
+            });
+
             win.nodes.main
             .addClass('io-ox-editor')
             .append(
-                container = $('<div>').addClass('container abs')
+                container = container
                 .append(
-                    $('<form>', { name: 'text-editor' }).addClass('form-inline')
+                    $('<form>').addClass('form-inline')
                     .on('submit', false)
                     .append(
                         // header
                         header = $('<div>').addClass('header')
                         .append(
                             // document title
-                            $('<input>', {
-                                type: 'text',
-                                placeholder: gt('Enter document title here'),
-                                autocomplete: 'on',
-                                tabindex: 1
-                            })
-                            .on('keydown', function (e) {
-                                if (e.which === 13) {
-                                    e.preventDefault();
-                                    textarea.focus();
-                                }
-                            })
-                            .addClass('title').val(fileObject.title || ''),
+                            view.createTextField({ property: 'title', wrap: false })
+                                .find('input').attr({
+                                    placeholder: gt('Enter document title here'),
+                                    tabindex: '1'
+                                })
+                                .on('keydown', function (e) {
+                                    if (e.which === 13) {
+                                        e.preventDefault();
+                                        textarea.focus();
+                                    }
+                                })
+                                .addClass('title')
+                                .end(),
                             // save button
                             $('<button>', { tabindex: 3 }).addClass('save btn btn-primary').text(gt('Save'))
                                 .on('click', fnSave)
@@ -80,26 +88,34 @@ define("io.ox/editor/main",
                         $('<div>').addClass('body')
                         .append(
                             // editor
-                            textarea = $('<textarea>', { tabindex: 2 })
+                            (textarea = view.createTextArea({ property: 'content', label: false, wrap: false })
+                                .attr({
+                                    tabindex: '2'
+                                })
                                 .on('keydown', function (e) {
                                     if (e.which === 13 && e.ctrlKey) {
                                         app.save();
                                     }
                                 })
+                            )
                         )
                     )
                 )
             );
-
-            win.show(function () {
-                textarea.focus();
-            });
         });
 
         var showOk = function (str) {
             container.find('.alert').remove();
             var a = $.alert('', str).removeClass('alert-error').addClass('alert-success').insertAfter(header);
-            setTimeout(function () { a.remove(); a = null; }, 2000);
+            // hide via timer or keyboard
+            var timer, hide = function () {
+                clearTimeout(timer);
+                textarea.off('keydown.timer');
+                a.remove();
+                a = timer = hide = null;
+            };
+            timer = setTimeout(hide, 10000);
+            textarea.on('keydown.timer', hide);
         };
 
         var showError = function (data) {
@@ -110,35 +126,51 @@ define("io.ox/editor/main",
         // normalize namespace
         window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder;
 
-        function showSuccess() {
-            showOk(gt('Document saved'));
+        function showSuccess(data) {
+            folderAPI.get({ folder: model.get('folder_id') })
+                .done(function (data) {
+                    showOk(gt('Document saved in folder "%1$s"', data.title));
+                });
         }
+
+        app.create = function (options) {
+
+            var opt = options || {};
+
+            model.initialize({ folder_id: opt.folder || 0, title: '', content: '' });
+
+            win.show(function () {
+                textarea.focus();
+            });
+        };
 
         app.save = function () {
             // be busy
             win.busy();
             // vars
-            var builder, title, file, filename;
+            var builder, content, title, file, filename, folder, json;
             // generate blob
+            content = textarea.val();
             builder = new window.BlobBuilder();
-            builder.append(textarea.val());
+            builder.append(content);
             // get data
             title = $.trim(container.find('.title').val());
             file = builder.getBlob('text/plain');
             filename = String(title || 'text').toLowerCase() + '.txt';
+            json = model.get();
+            delete json.content;
             // create or update?
-            if ('id' in fileObject) {
+            if (model.has('id')) {
                 // update
-                fileObject.title = title;
-                return api.uploadNewVersion({ json: fileObject, file: file, filename: filename })
+                return api.uploadNewVersion({ json: json, file: file, filename: filename })
                     .done(showSuccess)
                     .fail(showError)
                     .always(win.idle);
             } else {
                 // create
-                return api.uploadFile({ json: { title: title }, file: file, filename: filename })
+                return api.uploadFile({ json: json, file: file, filename: filename })
                     .done(function (data) {
-                        fileObject = data;
+                        model.initialize($.extend(data, { content: content }));
                         showSuccess();
                     })
                     .fail(showError)
@@ -147,33 +179,44 @@ define("io.ox/editor/main",
         };
 
         app.load = function (o) {
-            // load file
-            win.busy();
-            return $.when(
+            var def = $.Deferred();
+            win.show(function () {
+                // load file
+                win.busy();
+                $.when(
                     api.get(o).fail(showError),
                     $.ajax({ type: 'GET', url: api.getUrl(o, 'view'), dataType: 'text' })
                 )
                 .done(function (data, text) {
-                    fileObject = data;
+                    model.initialize($.extend(data, { content: text[0] }));
                     container.find('.title').val($.trim(data.title));
                     textarea.val(text[0]);
                     win.idle();
                     textarea.focus();
+                    def.resolve();
                 })
-                .fail(win.idle);
+                .fail(win.idle)
+                .fail(def.reject);
+            });
+            return def;
         };
 
         app.setQuit(function () {
             var def = $.Deferred();
-            require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                new dialogs.ModalDialog()
+            console.log('model', model.isDirty(), model.get());
+            if (model.isDirty()) {
+                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                    new dialogs.ModalDialog()
                     .text(gt("Do you really want to quit?"))
                     .addPrimaryButton("quit", gt('Yes, lose changes'))
                     .addButton("cancel", gt('No'))
                     .on('quit', def.resolve)
                     .on('cancel', def.reject)
                     .show();
-            });
+                });
+            } else {
+                def.resolve();
+            }
             return def;
         });
 
