@@ -51,10 +51,6 @@ define("io.ox/editor/main",
                 search: false
             }));
 
-            model.on('change', function (e) {
-                console.log('model.change', e, this.get());
-            });
-
             win.nodes.main
             .addClass('io-ox-editor')
             .append(
@@ -203,14 +199,17 @@ define("io.ox/editor/main",
 
         app.setQuit(function () {
             var def = $.Deferred();
-            console.log('model', model.isDirty(), model.get());
             if (model.isDirty()) {
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     new dialogs.ModalDialog()
                     .text(gt("Do you really want to quit?"))
                     .addPrimaryButton("quit", gt('Yes, lose changes'))
                     .addButton("cancel", gt('No'))
-                    .on('quit', def.resolve)
+                    .on('quit', function () {
+                        view.destroy();
+                        view = model = app = win = textarea = container = header = null;
+                        def.resolve();
+                    })
                     .on('cancel', def.reject)
                     .show();
                 });
