@@ -114,7 +114,6 @@ define("io.ox/preview/main",
                 $.get(file.dataURL + "&format=preview").done(function (html) {
                     node.css({ border: "1px dotted silver", padding: "10px" }).append(html);
                 });
-//                node.append($("<iframe/>").css({ width: "100%", height: "100%"}).attr({ src: file.dataURL + "&format=preview_filtered" }));
             }
         });
     }
@@ -127,8 +126,17 @@ define("io.ox/preview/main",
         },
         paint: function (file, node) {
             if (this.canRender(file)) {
-                $.ajax({ url: file.dataURL, dataType: "html" }).done(function (txt) {
-                    node.css({ border: "1px dotted silver", padding: "10px", whiteSpace: "pre-wrap" }).text(txt);
+                $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
+                    // plain text preview
+                    node.append(
+                        $("<div>").css({
+                            width: (400 - 13 * 2) + 'px',
+                            padding: '13px',
+                            backgroundColor: '#f5f5f5',
+                            whiteSpace: 'pre-wrap'
+                        })
+                        .text(text)
+                    );
                 });
             }
         }

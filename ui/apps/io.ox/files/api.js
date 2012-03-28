@@ -55,6 +55,7 @@ define("io.ox/files/api",
 
     api.caches.versions = new cache.SimpleCache("infostore-versions", true);
 
+    // TODO: remove
     function fallbackForOX6BackendREMOVEME(htmlpage) {
         // Extract the JSON text
         if (typeof htmlpage === 'string') {
@@ -78,7 +79,11 @@ define("io.ox/files/api",
         }, options || {});
 
         var formData = new FormData();
-        formData.append("file", options.file);
+        if ('filename' in options) {
+            formData.append("file", options.file, options.filename);
+        } else {
+            formData.append("file", options.file);
+        }
 
         if (options.json && ! $.isEmptyObject(options.json)) {
             if (!options.json.folder_id) {
@@ -92,11 +97,10 @@ define("io.ox/files/api",
                 module: "infostore",
                 params: { action: "new" },
                 data: formData,
-                dataType: "text"
+                fixPost: true
             })
             .pipe(function (data) {
                 // clear folder cache
-                data = fallbackForOX6BackendREMOVEME(data);
                 return api.caches.all.remove(options.folder)
                     .pipe(function () {
                         api.trigger("create.file");
@@ -118,7 +122,11 @@ define("io.ox/files/api",
         }, options || {});
 
         var formData = new FormData();
-        formData.append("file", options.file);
+        if ('filename' in options) {
+            formData.append("file", options.file, options.filename);
+        } else {
+            formData.append("file", options.file);
+        }
 
         if (options.json && ! $.isEmptyObject(options.json)) {
             if (!options.json.folder_id) {
@@ -133,7 +141,7 @@ define("io.ox/files/api",
                 module: "infostore",
                 params: { action: "update", timestamp: _.now(), id: options.id },
                 data: formData,
-                dataType: "text"
+                fixPost: true // TODO: temp. backend fix
             })
             .pipe(function (data) {
                 // clear folder cache
@@ -144,8 +152,7 @@ define("io.ox/files/api",
                 )
                 .pipe(function () {
                     api.trigger("create.version update refresh.all", {id: options.id, folder: options.folder});
-                    var tmp = fallbackForOX6BackendREMOVEME(data);
-                    return { folder_id: String(options.folder), id: options.id, timestamp: tmp.timestamp};
+                    return { folder_id: String(options.folder), id: options.id, timestamp: data.timestamp};
                 });
             });
     };

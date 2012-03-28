@@ -221,7 +221,7 @@
          */
         inspect: function (first) {
             var args = slice.call(arguments);
-            args.unshift("Inspect");
+            args.unshift('Inspect');
             console.debug.apply(console, args);
             return first;
         },

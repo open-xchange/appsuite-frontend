@@ -181,6 +181,13 @@
 .calendar-detail .participant .status.declined { color: #913F3F; } /* red */
 .calendar-detail .participant .status.tentative { color: #c80; } /* orange */
 
+.calendar-detail .participant .person.declined { text-decoration: line-through; color: #913F3F; }
+
+.calendar-detail .participant .icon-remove,
+.calendar-detail .participant .icon-question-sign {
+    opacity: 0.50;
+}
+
 .calendar-detail .participant .comment {
     color: #888;
     display: block;

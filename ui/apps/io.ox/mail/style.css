@@ -287,3 +287,11 @@
 
 .spotlight-icon:hover { background-color: rgba(200, 200, 200, 0.5); }
 .spotlight .spotlight-icon { display: block; z-index: 3; }
+
+/* attachment preview */
+
+h4.mail-attachment-preview {
+    height: 3em;
+    font-weight: 200;
+    color: #555;
+}

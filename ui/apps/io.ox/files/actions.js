@@ -12,9 +12,10 @@
  */
 
 define("io.ox/files/actions",
-    ["io.ox/core/extensions",
+    ["io.ox/files/api",
+     "io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
-     "gettext!io.ox/files/files"], function (ext, links, gt) {
+     "gettext!io.ox/files/files"], function (api, ext, links, gt) {
 
     'use strict';
 
@@ -45,16 +46,37 @@ define("io.ox/files/actions",
         }
     });
 
+    // editor
+    new Action('io.ox/files/actions/editor', {
+        id: 'editor',
+        requires: function (e) {
+            return e.collection.has('one') && (/\.(txt|js|md)$/i).test(e.context.data.filename);
+        },
+        action: function (data) {
+            ox.launch('io.ox/editor/main').done(function () {
+                this.load(data);
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/editor-new', {
+        id: 'editor-new',
+        action: function (data) {
+            ox.launch('io.ox/editor/main');
+        }
+    });
+
     new Action('io.ox/files/actions/download', {
         id: 'download',
         requires: 'some',
         action: function (list) {
-            // get file API, loop over list, get full file object and trigger downloads
-            require(['io.ox/files/api'], function (api) {
-                _(list).each(function (o) {
-                    api.get(o).done(function (file) {
-                        window.open(api.getUrl(file, 'download'));
-                    });
+            // loop over list, get full file object and trigger downloads
+            _(list).each(function (o) {
+                api.get(o).done(function (file) {
+                    if (o.version) {
+                        file = _.extend({}, file, { version: o.version });
+                    }
+                    window.open(api.getUrl(file, 'download'));
                 });
             });
         }
@@ -72,12 +94,13 @@ define("io.ox/files/actions",
         id: 'open',
         requires: 'some',
         multiple: function (list) {
-            // get file API, loop over list, get full file object and open new window
-            require(['io.ox/files/api'], function (api) {
-                _(list).each(function (o) {
-                    api.get(o).done(function (file) {
-                        window.open(api.getUrl(file, 'open'), file.title || 'file');
-                    });
+            // loop over list, get full file object and open new window
+            _(list).each(function (o) {
+                api.get(o).done(function (file) {
+                    if (o.version) {
+                        file = _.extend({}, file, { version: o.version });
+                    }
+                    window.open(api.getUrl(file, 'open'), file.title || 'file');
                 });
             });
         }
@@ -87,8 +110,7 @@ define("io.ox/files/actions",
         id: 'send',
         requires: 'some',
         multiple: function (list) {
-            // get file API to get full objects
-            require(['io.ox/files/api', 'io.ox/mail/write/main'], function (api, m) {
+            require(['io.ox/mail/write/main'], function (m) {
                 api.getList(list).done(function (list) {
                     m.getApp().launch().done(function () {
                         this.compose({ infostore_ids: list });
@@ -102,7 +124,7 @@ define("io.ox/files/actions",
         id: 'delete',
         requires: 'some',
         multiple: function (list) {
-            require(['io.ox/files/api', 'io.ox/core/tk/dialogs'], function (api, dialogs) {
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 new dialogs.ModalDialog()
                     .text(gt("Are you really sure about your decision? Are you aware of all consequences you have to live with?"))
                     .addPrimaryButton("delete", gt("Shut up and delete it!"))
@@ -121,11 +143,9 @@ define("io.ox/files/actions",
     ext.point("io.ox/files/actions/edit/save").extend({
         id: "save",
         action: function (file, context) {
-            require(["io.ox/files/api"], function (api) {
-                var updatedFile = context.view.getModifiedFile();
-                api.update(updatedFile).done();
-                context.view.endEdit();
-            });
+            var updatedFile = context.view.getModifiedFile();
+            api.update(updatedFile).done();
+            context.view.endEdit();
         }
     });
 
@@ -142,12 +162,10 @@ define("io.ox/files/actions",
     new Action('io.ox/files/versions/actions/makeCurrent', {
         id: 'makeCurrent',
         action: function (data) {
-            require(['io.ox/files/api'], function (api) {
-                api.update({
-                    id: data.id,
-                    last_modified: data.last_modified,
-                    version: data.version
-                });
+            api.update({
+                id: data.id,
+                last_modified: data.last_modified,
+                version: data.version
             });
         }
     });
@@ -155,7 +173,7 @@ define("io.ox/files/actions",
     new Action('io.ox/files/versions/actions/delete', {
         id: 'delete',
         action: function (data) {
-            require(['io.ox/files/api', 'io.ox/core/tk/dialogs'], function (api, dialogs) {
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 new dialogs.ModalDialog()
                     .text(gt("Are you really sure about your decision? Are you aware of all consequences you have to live with?"))
                     .addPrimaryButton("delete", gt("Shut up and delete it!"))
@@ -185,6 +203,21 @@ define("io.ox/files/actions",
         id: "share",
         label: gt("Share"),
         ref: "io.ox/files/actions/share"
+    }));
+
+    ext.point('io.ox/files/links/toolbar').extend(new links.Link({
+        index: 300,
+        id: "editor-new",
+        label: gt("Pad!"),
+        ref: "io.ox/files/actions/editor-new"
+    }));
+
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: "editor",
+        index: 40,
+        label: gt("Edit document"),
+        ref: "io.ox/files/actions/editor"
     }));
 
     ext.point("io.ox/files/links/inline").extend(new links.Link({

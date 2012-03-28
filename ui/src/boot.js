@@ -381,7 +381,7 @@ $(document).ready(function () {
     require = function (deps, callback) {
         if (_.isArray(deps)) {
             // use deferred object
-            var def = $.Deferred().done(callback);
+            var def = $.Deferred().done(callback || $.noop);
             req(deps, def.resolve);
             return def;
         } else {
