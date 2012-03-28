@@ -32,8 +32,8 @@ define("io.ox/calendar/view-grid-template",
                 return { title: title, location: location, time: time, date: date, shown_as: shown_as };
             },
             set: function (data, fields, index) {
-                fields.title.text(data.title);
-                fields.location.text(data.location);
+                fields.title.text(data.title || '');
+                fields.location.text(data.location || '');
                 fields.time.text(util.getTimeInterval(data));
                 fields.date.text(util.getDateInterval(data));
                 fields.shown_as.get(0).className = "abs shown_as " + util.getShownAsClass(data);

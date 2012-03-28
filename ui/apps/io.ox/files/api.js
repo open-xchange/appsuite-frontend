@@ -222,12 +222,12 @@ define("io.ox/files/api",
 
     api.getUrl = function (file, mode) {
         var url = ox.apiRoot + "/infostore?action=document&id=" + file.id +
-            "&folder=" + file.folder_id + "&version=" + file.version + "&session=" + ox.session; // TODO: Remove ox.session parameter once current B/E is available everywhere
+            "&folder=" + file.folder_id + "&version=" + file.version;
         switch (mode) {
         case 'open':
-            return url + '&content_disposition=inline';
+            return url + '&delivery=view';
         case 'download':
-            return url + '&content_type=application/octet-stream&content_disposition=attachment';
+            return url + '&delivery=download';
         default:
             return url;
         }

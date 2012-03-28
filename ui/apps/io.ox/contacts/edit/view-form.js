@@ -86,6 +86,8 @@ define('io.ox/contacts/edit/view-form',
             }
         },
 
+        SELECTOR = 'input, textarea',
+
         SHOW_MORE = gt('Show more'),
         SHOW_LESS = gt('Show less'),
 
@@ -98,11 +100,11 @@ define('io.ox/contacts/edit/view-form',
         },
 
         hasVisibleFields = function (section) {
-            return section.find('.always-visible').length || section.find('input').filter(isNotEmpty).length;
+            return section.find('.always-visible').length || section.find(SELECTOR).filter(isNotEmpty).length;
         },
 
         hasEmptyFields = function (section) {
-            return section.find('input').filter(isEmpty).length > 0;
+            return section.find(SELECTOR).filter(isEmpty).length > 0;
         };
 
     var toggleFields = function (e) {
@@ -129,13 +131,13 @@ define('io.ox/contacts/edit/view-form',
                 // show less
                 s.addClass('show-more').removeClass('show-less')
                     // hide empty fields
-                    .find('input').filter(isEmpty)
+                    .find(SELECTOR).filter(isEmpty)
                         .parents('.section-group').not('.always-visible').addClass('hidden');
             } else {
                 // show more!
                 s.addClass('show-less').removeClass('show-more')
                     .find('.hidden').removeClass('hidden').end()
-                    .find('input').first().focus();
+                    .find(SELECTOR).first().focus();
             }
         }
     };

@@ -333,15 +333,6 @@ define("io.ox/mail/api",
                             });
                         // remove white space
                         text = $.trim(text);
-                        // fix reply/forward quoting
-                        // TODO: remove when backend does this properly
-                        if (action === 'replyall' || action === 'reply') {
-                            // OK: reply is fixed
-                            //text = '> ' + text.replace(/\n/, "\n> ");
-                        } else if (action === 'forward') {
-                            // still waiting for backend
-                            text = '> ' + text.replace(/\n/g, "\n> ");
-                        }
                         // polish for html editing
                         if (view === 'html') {
                             // escape '<'
@@ -519,6 +510,35 @@ define("io.ox/mail/api",
         };
     }
 
+    api.saveAttachments = function (list, target) {
+        // be robust
+        target = target || config.get('folder.infostore');
+        // support for multiple attachments
+        list = _.isArray(list) ? list : [list];
+        http.pause();
+        // loop
+        _(list).each(function (data) {
+            http.PUT({
+                module: 'mail',
+                params: {
+                    action: 'attachment',
+                    id: data.mail.id,
+                    folder: data.mail.folder_id,
+                    dest_folder: target,
+                    attachment: data.id
+                },
+                data: { folder_id: target, description: 'Saved mail attachment' },
+                appendColumns: false
+            });
+        });
+        return http.resume().done(function () {
+            require(['io.ox/files/api'], function (fileAPI) {
+                fileAPI.caches.all.remove(target);
+                fileAPI.trigger('refresh.all');
+            });
+        });
+    };
+
     // refresh
     api.on('refresh!', function (e, folder) {
         if (ox.online) {
@@ -528,6 +548,35 @@ define("io.ox/mail/api",
                 });
         }
     });
+
+    api.getUrl = function (data, mode) {
+        var url = ox.apiRoot + '/mail?', first;
+        if (mode === 'zip') {
+            first = _(data).first();
+            return url + $.param({
+                action: 'zip_attachments',
+                folder: first.mail.folder_id,
+                id: first.mail.id,
+                attachment: _(data).pluck('id').join(',')
+            });
+        } else {
+            url += $.param({
+                action: 'attachment',
+                folder: data.mail.folder_id,
+                id: data.mail.id,
+                attachment: data.id
+            });
+            switch (mode) {
+            case 'view':
+            case 'open':
+                return url + '&delivery=view';
+            case 'download':
+                return url + '&delivery=download';
+            default:
+                return url;
+            }
+        }
+    };
 
     return api;
 });

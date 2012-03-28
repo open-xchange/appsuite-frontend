@@ -26,7 +26,7 @@ define("io.ox/core/extensions",
 
         // sort by index
         pointSorter = function (a, b) {
-            return (a.index || 1000000000) - (b.index || 1000000000);
+            return a.index - b.index;
         },
 
         // for debugging purposes
@@ -106,6 +106,8 @@ define("io.ox/core/extensions",
                 throw "Extensions must have an id!";
             }
 
+            extension.index = extension.index || 1000000000;
+
             // skip duplicates (= same id)
             if (!has(extension.id)) {
 
@@ -118,7 +120,7 @@ define("io.ox/core/extensions",
 
                 extensions.push(extension);
                 extensions.sort(pointSorter);
-                
+
                 if (!extension.metadata) {
                     extension.metadata = function (name, args) {
                         if (this[name]) {

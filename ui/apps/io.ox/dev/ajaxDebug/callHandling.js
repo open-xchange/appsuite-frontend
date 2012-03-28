@@ -19,11 +19,12 @@ define("io.ox/dev/ajaxDebug/callHandling",
 
     var callHandler = {
         history: [],
-        perform: function (options, cb) {
+        perform: function (options) {
             var entry = {
                 id: this.history.length,
                 query: options,
-                response: null
+                response: null,
+                deferred: null
             };
             this.history.push(entry);
             this.trigger("historychanged", this);
@@ -32,19 +33,12 @@ define("io.ox/dev/ajaxDebug/callHandling",
 
             function process(data) {
                 entry.response = data;
-                if (cb) {
-                    cb(data);
-                }
                 callHandler.trigger("entrychanged", entry);
             }
 
-            if (options.data) {
-                http.PUT(options).done(process);
-                http.PUT(options).fail(process);
-            } else {
-                http.GET(options).done(process);
-                http.GET(options).fail(process);
-            }
+            // GO!
+            entry.deferred = http[options.data ? 'PUT' : 'GET'](options);
+            entry.deferred.done(process).fail(process);
             return entry;
         }
     };

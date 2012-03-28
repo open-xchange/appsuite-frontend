@@ -58,7 +58,7 @@ define('io.ox/contacts/api',
         }
     });
 
- // fix backend WAT
+    // fix backend WAT
     function wat(data, id) {
         if (data[id] === '' || data[id] === undefined) {
             delete data[id];
@@ -89,7 +89,8 @@ define('io.ox/contacts/api',
                 module: 'contacts',
                 params: { action: 'new' },
                 data: body,
-                appendColumns: false
+                appendColumns: false,
+                fixPost: true
             })
             .pipe(function (fresh) {
                 // UPLOAD does not process response data, so ...
@@ -148,7 +149,8 @@ define('io.ox/contacts/api',
         return http.UPLOAD({
                 module: 'contacts',
                 params: { action: 'update', id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.now() },
-                data: form
+                data: form,
+                fixPost: true
             })
             .done(function () {
                 api.caches.get.clear();
@@ -345,7 +347,7 @@ define('io.ox/contacts/api',
                 .on('error', { url: ox.base + '/apps/themes/default/dummypicture.png' }, set)
                 .prop('src', url);
         };
-        if (obj && obj.image1_url) {
+        if (obj && _.isString(obj.image1_url)) {
             cont(obj.image1_url.replace(/^\/ajax/, ox.apiRoot));
         } else {
             api.getPictureURL(obj).done(cont).fail(clear);

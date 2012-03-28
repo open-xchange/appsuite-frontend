@@ -36,7 +36,7 @@ input#image1 {
 }
 
 .contact-detail.edit .section {
-	margin-bottom: 20px;
+	margin-bottom: 40px;
     clear: both;
 }
 
@@ -46,8 +46,7 @@ input#image1 {
 	color: #888;
     font-family: @font-light;
 	font-weight: 200;
-    font-size: 1.25em;
-	line-height: 1.25em;
+    cursor: pointer;
 }
 
 .contact-detail.edit .picture {

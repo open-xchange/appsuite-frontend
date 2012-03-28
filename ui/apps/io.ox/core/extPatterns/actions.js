@@ -50,37 +50,48 @@ define("io.ox/core/extPatterns/actions",
                     var def = $.Deferred();
                     // process actions
                     if (link.isEnabled && !link.isEnabled.apply(link, args)) {
-                        return def.reject();
-                    }
-                    // combine actions
-                    $.when.apply($,
-                        ext.point(link.ref).map(function (action) {
-                            // get return value
-                            var ret = _.isFunction(action.requires) ?
-                                    action.requires({ collection: collection, context: context }) : true;
-                            // is not deferred?
-                            if (!ret.promise) {
-                                ret = $.Deferred().resolve(ret);
+                        def.reject();
+                    } else {
+                        // combine actions
+                        $.when.apply($,
+                            ext.point(link.ref).map(function (action) {
+                                // get return value
+                                var ret = _.isFunction(action.requires) ?
+                                        action.requires({ collection: collection, context: context }) : true;
+                                // is not deferred?
+                                if (!ret.promise) {
+                                    ret = $.Deferred().resolve(ret);
+                                }
+                                return ret;
+                            })
+                            .value()
+                        )
+                        .done(function () {
+                            var reduced = _(arguments).reduce(function (memo, action) {
+                                return memo && action === true;
+                            }, true);
+                            if (reduced) {
+                                def.resolve(link);
+                            } else {
+                                def.reject(link);
                             }
-                            return ret;
-                        })
-                        .value()
-                    )
-                    .done(function () {
-                        var reduced = _(arguments).reduce(function (memo, action) {
-                            return memo && action === true;
-                        }, true);
-                        if (reduced) {
-                            def.resolve(link);
-                        } else {
-                            def.reject(link);
-                        }
-                    });
-                    return def;
+                        });
+                    }
+                    return {
+                        deferred: def,
+                        link: link
+                    };
                 });
                 // wait for all links
-                $.when.apply($, links.value()).always(function () {
-                    linksResolved.resolve(links.value());
+                $.when.apply($, links.pluck('deferred').value())
+                .always(function () {
+                    linksResolved.resolve(
+                        links.filter(function (o) {
+                            return o.deferred.state() === 'resolved';
+                        })
+                        .pluck('link').value()
+                    );
+                    links = null;
                 });
             });
 
@@ -89,7 +100,7 @@ define("io.ox/core/extPatterns/actions",
 
     var performAction = function (ref, self, context) {
         var p = ext.point(ref),
-            data = context.data || context;
+            data = context ? context.data || context : {};
         // general handler
         p.invoke('action', self, data, context);
         // handler for multi selection - always provides an array

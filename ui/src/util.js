@@ -390,6 +390,11 @@
             return (diff > 0 ? new Array(diff + 1).join(fill || "0") : "") + str;
         },
 
+        // makes sure you have an array
+        getArray: function (o) {
+            return _.isArray(o) ? o : [o];
+        },
+
         // call function 'every' 1 hour or 5 seconds
         every: function (num, type, fn) {
             var interval = 1000;

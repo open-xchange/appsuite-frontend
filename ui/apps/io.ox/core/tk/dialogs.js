@@ -448,6 +448,9 @@ define("io.ox/core/tk/dialogs",
                     .addClass(mode)
                     .css({ right: right, left: left, zIndex: zIndex + 1 });
 
+                // add popup to proper element
+                self.nodes.target.append(popup.css('visibility', 'hidden'));
+
                 // call custom handler
                 (handler || $.noop).call(this, pane.empty(), e);
 
@@ -456,8 +459,9 @@ define("io.ox/core/tk/dialogs",
                     top = my.offset().top + halfHeight - self.nodes.target.offset().top;
                 arrow.css("top", top);
 
-                // finally, add popup to proper element
-                self.nodes.target.append(popup).append(arrow);
+                // finally, add arrow
+                popup.css('visibility', '');
+                self.nodes.target.append(arrow);
             }
         };
 
