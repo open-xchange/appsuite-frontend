@@ -469,6 +469,8 @@ task("deps", [depsPath], function() {
 
 var distDest = process.env.destDir || "tmp/packaging";
 
+directory(distDest, ["clean"]);
+
 desc("Creates source packages");
 task("dist", ["clean", distDest], function () {
     var toCopy = _.reject(fs.readdirSync("."), function(f) {
@@ -519,5 +521,3 @@ task("upload", ["dist"], function () {
     }
     function done() { if (!--counter) complete(); }
 }, { async: true });
-
-directory("tmp/packaging", ["clean"]);
