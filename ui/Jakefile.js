@@ -403,7 +403,7 @@ utils.copyFile("lib/jquery.min.js", utils.dest("doc/jquery.min.js"));
 
 //update-i18n task
 
-require("./lib/build/cldr.js");
+//require("./lib/build/cldr.js");
 
 // msgmerge task
 
