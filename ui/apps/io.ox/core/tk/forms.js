@@ -321,9 +321,8 @@ define('io.ox/core/tk/forms',
                     $('<iframe>', {
                         name: o.target,
                         src: 'blank.html'
-                    })
-                )
-                .hide();
+                    }).hide()
+                );
         },
 
         getLastLabelId: function () {

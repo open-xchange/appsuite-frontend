@@ -59,37 +59,6 @@ define('io.ox/contacts/distrib/create-dist-view',
         });
     };
 
-    function drawListetItemClear(node, name, selectedMail, options) {
-        var frame = $('<div>').addClass('listet-item').attr({
-                'data-mail': selectedMail
-            }),
-            img = $('<div>').addClass('contact-image'),
-            url = util.getImage({}),
-            button = $('<a>', { href: '#' }).addClass('close').html('&times;')
-                .on('click', { options: options, mail: selectedMail, frame: frame }, removeContact);
-        if (name === undefined) {
-            name = '';
-        }
-
-        if (Modernizr.backgroundsize) {
-            img.css('backgroundImage', 'url(' + url + ')');
-        } else {
-            img.append(
-                $('<img>', { src: url, alt: '' }).css({ width: '100%', height: '100%' })
-            );
-        }
-        node.append(frame);
-        frame.append(button);
-        frame.append(img)
-        .append(
-            $('<div>').addClass('person-link ellipsis')
-            .append($('<a>', {'href': '#'}).on('click', {display_name: name, email1: selectedMail}, fnClickPerson).text(name + '\u00A0')),
-            //.text(name + '\u00A0').on('click', {display_name: name, email1: selectedMail}, fnClickPerson),
-            $('<div>').addClass('person-selected-mail')
-            .text(selectedMail)
-        );
-    }
-
     function drawEmptyItem(node) {
         node.append(
             $('<div>').addClass('listet-item backstripes')
@@ -99,7 +68,12 @@ define('io.ox/contacts/distrib/create-dist-view',
     }
 
     function insertNewContact(options, name, mail) {
-        drawListetItemClear(options.displayBox, name, mail, options);
+        drawListetItem({
+            node: options.displayBox,
+            name: name,
+            selectedMail: mail,
+            options: options
+        });
 
         if (!options.model._data.distribution_list) {
             options.model._data.distribution_list = [];
@@ -127,7 +101,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         })
         .addClass('btn btn-inverse')
         .text('+')
-        .on('click', function (e) { //TODO some css related issues with color
+        .on('click', function (e) {
             var data = $('[data-holder="data-holder"]').data(),
                 mailValue = $('input#mail').val(),
                 nameValue = $('input#name').val();
@@ -187,33 +161,25 @@ define('io.ox/contacts/distrib/create-dist-view',
         e.data.frame.remove();
     }
 
-    function drawListetItem(node, data, selectedMail, options) {
+    function drawListetItem(o) {
         var frame = $('<div>').addClass('listet-item').attr({
-                'data-mail': selectedMail
-            }),
-            img = $('<div>').addClass('contact-image'),
-            url = util.getImage(data),
-            button = $('<a>', { href: '#' }).addClass('close').html('&times;')
-                .on('click', { options: options, mail: selectedMail, frame: frame }, removeContact);
-
-        if (Modernizr.backgroundsize) {
-            img.css('backgroundImage', 'url(' + url + ')');
-        } else {
-            img.append(
-                $('<img>', { src: url, alt: '' }).css({ width: '100%', height: '100%' })
-            );
-        }
-        node.append(frame);
+            'data-mail': o.selectedMail
+        }),
+        img = api.getPicture(o.selectedMail).addClass('contact-image'),
+        button = $('<a>', { href: '#' }).addClass('close').html('&times;')
+            .on('click', { options: o.options, mail: o.selectedMail, frame: frame }, removeContact);
+        o.node.append(frame);
         frame.append(button);
         frame.append(img)
         .append(
             $('<div>').addClass('person-link ellipsis')
-            .append($('<a>', {'href': '#'}).on('click', {display_name: data.display_name, email1: data.email1, id: data.id}, fnClickPerson).text(data.display_name + '\u00A0')),
-            //.text(data.display_name + '\u00A0').on('click', {display_name: data.display_name, email1: data.email1, id: data.id}, fnClickPerson),
+            .append($('<a>', {'href': '#'})
+            .on('click', {id: o.id, email1: o.selectedMail}, fnClickPerson).text(o.name + '\u00A0')),
             $('<div>').addClass('person-selected-mail')
-            .text((selectedMail))
+            .text((o.selectedMail))
         );
     }
+
 
     function calcMailField(contact, selectedMail) { // TODO: needs ab better concept
         var field;
@@ -231,7 +197,13 @@ define('io.ox/contacts/distrib/create-dist-view',
     }
 
     function copyContact(options, contact, selectedMail) {
-        drawListetItem(options.displayBox, contact, selectedMail, options);
+        drawListetItem({
+            node: options.displayBox,
+            id: contact.id,
+            name: contact.display_name,
+            selectedMail: selectedMail,
+            options: options
+        });
         var mailNr = (calcMailField(contact, selectedMail));
         if (!options.model._data.distribution_list) {
             options.model._data.distribution_list = [];
@@ -321,37 +293,19 @@ define('io.ox/contacts/distrib/create-dist-view',
                 sectiongroup = self.createSectionGroup(),
                 dataHolder,
                 fId = config.get("folder.contacts"),
-                listOfMembers = [];
-
+                listOfMembers;
             self.displayBox = createDisplayBox();
 
             if (_.isArray(self.model._data.distribution_list)) {
-                var count = self.model._data.distribution_list.length;
-                _.each(self.model._data.distribution_list, function (val) {
-                    if (val.id) {
-                        api.get({id: val.id, folder: fId}).done(function (obj) {
-                            listOfMembers.push({
-                                display_name: obj.display_name,
-                                obj: obj,
-                                mail: val.mail
-                            });
-                            if (listOfMembers.length === count) {
-                                listOfMembers.sort(util.nameSort);
-                                _.each(listOfMembers, function (val) {
-                                    if (val.obj) {
-                                        drawListetItem(self.displayBox, val.obj, val.mail, self);
-                                    } else {
-                                        drawListetItemClear(self.displayBox, val.display_name, val.mail, self);
-                                    }
-                                });
-                            }
-                        });
-                    } else {
-                        listOfMembers.push({
-                            display_name: val.display_name,
-                            mail: val.mail
-                        });
-                    }
+                listOfMembers = self.model._data.distribution_list;
+                _.each(listOfMembers, function (val) {
+                    drawListetItem({
+                        node: self.displayBox,
+                        id: val.id,
+                        name: val.display_name,
+                        selectedMail: val.mail,
+                        options: self
+                    });
                 });
             }
 
