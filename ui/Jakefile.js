@@ -519,7 +519,7 @@ task("upload", ["dist"], function () {
 desc("Removes all generated files");
 task("clean", [], function() {
     if (path.existsSync("ox.pot")) fs.unlinkSync("ox.pot");
-    rimraf(destDir, rmTmp);
+    rimraf(distDest, rmTmp);
     function rmTmp() { rimraf("tmp", rmBuild); }
     function rmBuild() { rimraf(utils.builddir, complete); };
 }, { async: true });
