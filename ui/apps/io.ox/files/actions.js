@@ -59,6 +59,13 @@ define("io.ox/files/actions",
         }
     });
 
+    new Action('io.ox/files/actions/editor-new', {
+        id: 'editor-new',
+        action: function (data) {
+            ox.launch('io.ox/editor/main');
+        }
+    });
+
     new Action('io.ox/files/actions/download', {
         id: 'download',
         requires: 'some',
@@ -196,6 +203,13 @@ define("io.ox/files/actions",
         id: "share",
         label: gt("Share"),
         ref: "io.ox/files/actions/share"
+    }));
+
+    ext.point('io.ox/files/links/toolbar').extend(new links.Link({
+        index: 300,
+        id: "editor-new",
+        label: gt("Pad!"),
+        ref: "io.ox/files/actions/editor-new"
     }));
 
 
