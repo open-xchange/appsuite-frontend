@@ -401,14 +401,6 @@ utils.copy(utils.list("doc/lib", ["prettify.*", "default.css"]),
            { to: utils.dest("doc") });
 utils.copyFile("lib/jquery.min.js", utils.dest("doc/jquery.min.js"));
 
-// clean task
-
-desc("Removes all generated files");
-task("clean", [], function() {
-    if (path.existsSync("ox.pot")) fs.unlinkSync("ox.pot");
-    rimraf("tmp", function() { rimraf(utils.builddir, complete); });
-}, { async: true });
-
 //update-i18n task
 
 require("./lib/build/cldr.js");
@@ -472,7 +464,7 @@ var distDest = process.env.destDir || "tmp/packaging";
 directory(distDest, ["clean"]);
 
 desc("Creates source packages");
-task("dist", ["clean", distDest], function () {
+task("dist", [distDest], function () {
     var toCopy = _.reject(fs.readdirSync("."), function(f) {
         return /^(tmp|ox.pot|build)$/.test(f);
     });
@@ -520,4 +512,14 @@ task("upload", ["dist"], function () {
         resp.on("end", done);
     }
     function done() { if (!--counter) complete(); }
+}, { async: true });
+
+//clean task
+
+desc("Removes all generated files");
+task("clean", [], function() {
+    if (path.existsSync("ox.pot")) fs.unlinkSync("ox.pot");
+    rimraf(destDir, rmTmp);
+    function rmTmp() { rimraf("tmp", rmBuild); }
+    function rmBuild() { rimraf(utils.builddir, complete); };
 }, { async: true });
