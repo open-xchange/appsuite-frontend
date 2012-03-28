@@ -261,7 +261,7 @@ input#image1 {
  	float: right;
  }
 	
-.create-contact #contactUploadImage, .create-contact #contactUploadImage input{
+.create-contact #contactUploadImage, .create-contact input[name="picture-upload-file"]{
 	width: 0px;
 	height: 0px;
 }
