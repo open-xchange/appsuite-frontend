@@ -95,7 +95,7 @@ define("io.ox/preview/util",
                 return null;
             }
             var fileEnding = filename.match(/\.([a-z0-9]{2,})$/i);
-            if (fileEnding.length >= 2) {
+            if (fileEnding && fileEnding.length >= 2) {
                 return String(fileEnding[1]).toLowerCase();
             }
             return null;

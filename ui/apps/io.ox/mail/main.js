@@ -20,7 +20,7 @@ define("io.ox/mail/main",
      "io.ox/core/tk/vgrid",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
-     "gettext!io.ox/mail/mail",
+     "gettext!io.ox/mail/main",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
     ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt) {

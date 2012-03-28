@@ -112,12 +112,15 @@ define("io.ox/core/extPatterns/links",
         };
     };
 
+    var z = 0;
     var DropdownLinks = function (options) {
         var self = _.extend(this, options);
         this.draw = function () {
             var args = $.makeArray(arguments),
                 context = args[0],
-                $parent = $("<div>").addClass('dropdown').css('display', 'inline-block').appendTo(this),
+                $parent = $("<div>").addClass('dropdown')
+                    .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 10000) })
+                    .appendTo(this),
                 $toggle = $("<a>", { href: '#' })
                     .attr('data-toggle', 'dropdown')
                     .text(options.label + " ").append($("<b>").addClass("caret")).appendTo($parent);

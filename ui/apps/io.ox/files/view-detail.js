@@ -207,9 +207,9 @@ define("io.ox/files/view-detail",
                 .addClass('editing')
                 .attr({placeholder: gt("Title"), tabIndex: 10})
                 .val(file.title));
-                
+
             this.find("input").focus();
-            
+
             keyListener.on("enter", function () {
                 context.view.toggleEdit();
             });
@@ -446,7 +446,7 @@ define("io.ox/files/view-detail",
                 context.view.toggleEdit();
             });
             this.data("keyListener", keyListener);
-            
+
         },
         endEdit: function (file) {
             this.empty().append(
@@ -461,7 +461,7 @@ define("io.ox/files/view-detail",
             );
             this.data("keyListener").remove();
             this.data("keyListener", null);
-            
+
         },
         process: function (file) {
             file.description = this.find("textarea").val();
@@ -523,7 +523,7 @@ define("io.ox/files/view-detail",
                 $comment.show();
                 $commentArea.focus();
             });
-            
+
             new KeyListener($comment).on("shift+enter", function (evt) {
                 evt.preventDefault();
                 evt.stopImmediatePropagation();

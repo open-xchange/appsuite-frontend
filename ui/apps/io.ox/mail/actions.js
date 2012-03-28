@@ -261,7 +261,7 @@ define('io.ox/mail/actions',
                 new dialogs.SidePopup().show(e, function (popup) {
                     _(list).each(function (data, i) {
                         popup.append(
-                            $('<h4>').css('lineHeight', '3em').text(data.filename)
+                            $('<h4>').addClass('mail-attachment-preview').text(data.filename)
                         );
                         new Preview({
                             filename: data.filename,

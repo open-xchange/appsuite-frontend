@@ -38,7 +38,7 @@ define("io.ox/calendar/util",
                      ],
         shownAsClass = "reserved temporary absent free".split(' '),
         // confirmation status (none, accepted, declined, tentative)
-        n_confirm = ["", "\u2713", "x", "?"],
+        n_confirm = ['', '<i class="icon-ok">', '<i class="icon-remove">', '<i class="icon-question-sign">'],
         confirmClass = ["", "accepted", "declined", "tentative"],
         // constants
         MINUTE = 60000,

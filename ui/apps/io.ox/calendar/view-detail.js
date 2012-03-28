@@ -129,8 +129,8 @@ define("io.ox/calendar/view-detail",
             name = display_name = obj.display_name || String(obj.mail).toLowerCase();
         }
         node = $("<div>").addClass("participant")
-            .append($("<span>").addClass(personClass).text(name))
-            .append($("<span>").addClass("status " + statusClass).text(" " + confirm))
+            .append($("<span>").addClass(personClass + ' ' + statusClass).text(name))
+            .append($("<span>").addClass("status " + statusClass).html(" " + confirm))
             .on("click", {
                 display_name: display_name,
                 email1: mail_lc,
