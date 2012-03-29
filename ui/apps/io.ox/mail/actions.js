@@ -181,7 +181,6 @@ define('io.ox/mail/actions',
         id: 'copy',
         requires: 'some',
         multiple: function (mail) {
-            var self = this;
             require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, trees) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
                     .header($('<h3>').text('Copy'))
@@ -192,7 +191,7 @@ define('io.ox/mail/actions',
                     tree = new trees.FolderTree(dialog.getBody(), { type: 'mail' });
                 tree.paint();
                 dialog.show(function () {
-                    tree.selection.set(item.folder_id || item.folder);
+                    tree.selection.set({ id: item.folder_id || item.folder });
                 })
                 .done(function (action) {
                     if (action === 'ok') {
