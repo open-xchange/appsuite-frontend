@@ -9,7 +9,7 @@
  * Copyright (C) Open-Xchange Inc., 2006-2011
  * Mail: info@open-xchange.com
  *
- * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  *
  */
 
