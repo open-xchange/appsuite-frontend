@@ -59,8 +59,11 @@ define('io.ox/contacts/distrib/main',
             // define store
             model.store = function (data, changes) {
                 if (!_.isEmpty(data)) {
-                  //sort the array before save
-                    data.distribution_list = data.distribution_list.sort(util.nameSort);
+                  //sort the array if not empty before save
+
+                    if (data.distribution_list) {
+                        data.distribution_list = data.distribution_list.sort(util.nameSort);
+                    }
                     data.folder_id = folderId;
                     data.mark_as_distributionlist = true;
                     if (data.display_name === '') {
@@ -90,8 +93,11 @@ define('io.ox/contacts/distrib/main',
                 view = new ContactCreateDistView({ model: model });
                 // define store
                 model.store = function (data, changes) {
-                    //sort the array before save
-                    data.distribution_list = data.distribution_list.sort(util.nameSort);
+                    console.log(data.distribution_list);
+                    //sort the array before save if not empty
+                    if (data.distribution_list) {
+                        data.distribution_list = data.distribution_list.sort(util.nameSort);
+                    }
                     return api.edit({
                             id: data.id,
                             folder: data.folder_id,

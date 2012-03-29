@@ -30,7 +30,17 @@ define("io.ox/contacts/distrib/test",
             user3: {
                 nameValue: 'user3',
                 mailValue: 'user3@user3.test'
+            },
+            user4: {
+                nameValue: 'user4',
+                mailValue: 'user4@user4.test'
             }
+        },
+
+        missingItem = {
+            mail_field : 0,
+            mail : 'user3@user3.test',
+            display_name : 'user3'
         },
 
         fillAndTrigger = function (o) {
@@ -66,7 +76,7 @@ define("io.ox/contacts/distrib/test",
 
             j.describe("Contact distrib", function () {
 
-                var app = null, buttonCreate, createForm, inputName, inputMail, addButton,
+                var app = null, buttonCreate, createForm, inputName, inputMail, addButton, deleteButton,
                 saveButton, displayName, dataId, dataObj, dataFolder;
 
                 j.it('opens contact app ', function () {
@@ -128,7 +138,7 @@ define("io.ox/contacts/distrib/test",
                     });
                 });
 
-                j.it('fills the array with the test data ', function () {
+                j.it('fills the ui with the test data ', function () {
                     j.runs(function () {
                         _.each(testObjects, function (val) {
                             fillAndTrigger({
@@ -140,6 +150,23 @@ define("io.ox/contacts/distrib/test",
                             });
                         });
                     });
+                });
+
+                j.it('checks the remove item functionality ', function () {
+
+                    j.waitsFor(function () {
+                        deleteButton = createForm.find('[data-mail="user3@user3.test"] a.close');
+                        if (deleteButton[0]) {
+                            return true;
+                        }
+                    }, 'looks for the element delete button', TIMEOUT);
+
+                    j.runs(function () {
+                        deleteButton.trigger('click');
+                    });
+
+                    j.expect(deleteButton).toBeFalsy();
+
                 });
 
                 j.it('hits the savebutton', function () {
@@ -187,8 +214,10 @@ define("io.ox/contacts/distrib/test",
                             j.expect((dataObj.distribution_list[0]).mail).toEqual(testObjects.user1.mailValue);
                             j.expect((dataObj.distribution_list[1]).display_name).toEqual(testObjects.user2.nameValue);
                             j.expect((dataObj.distribution_list[1]).mail).toEqual(testObjects.user2.mailValue);
-                            j.expect((dataObj.distribution_list[2]).display_name).toEqual(testObjects.user3.nameValue);
-                            j.expect((dataObj.distribution_list[2]).mail).toEqual(testObjects.user3.mailValue);
+                            j.expect((dataObj.distribution_list[2]).display_name).toEqual(testObjects.user4.nameValue);
+                            j.expect((dataObj.distribution_list[2]).mail).toEqual(testObjects.user4.mailValue);
+
+                            j.expect(dataObj.distribution_list).toNotContain(missingItem);
                         });
 
                     });
