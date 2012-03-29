@@ -279,9 +279,7 @@ define("io.ox/mail/api",
         },
         refreshAll = function (obj) {
             $.when.apply($, obj).done(function () {
-                console.log('refresh all', obj);
-                api.trigger('refresh.list');
-                api.trigger('refresh.all');
+                api.trigger('refresh.all refresh.list');
             });
         };
 

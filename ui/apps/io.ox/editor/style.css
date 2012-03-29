@@ -16,7 +16,7 @@
 }
 
 .io-ox-editor .container {
-    width: 800px;
+    width: 900px;
     margin: 30px auto 30px auto;
 }
 
@@ -44,7 +44,7 @@
 .io-ox-editor .title {
     border: 1px solid #f5f5f5;
     font-weight: bold;
-    width: 600px;
+    width: 700px;
     padding-left: 13px;
     padding-right: 13px;
 }
@@ -54,7 +54,7 @@
 }
 
 .io-ox-editor .save {
-    width: 100px;
+    width: 120px;
     float: right;
 }
 

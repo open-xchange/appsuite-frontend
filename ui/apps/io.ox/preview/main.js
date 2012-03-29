@@ -130,10 +130,11 @@ define("io.ox/preview/main",
                     // plain text preview
                     node.append(
                         $("<div>").css({
-                            width: (400 - 13 * 2) + 'px',
+                            width: '100%',
                             padding: '13px',
                             backgroundColor: '#f5f5f5',
-                            whiteSpace: 'pre-wrap'
+                            whiteSpace: 'pre-wrap',
+                            boxSizing: 'border-box'
                         })
                         .text(text)
                     );

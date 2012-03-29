@@ -83,7 +83,7 @@ define("io.ox/core/api/factory",
                             caches.get.remove(diff);
                         });
                         // clear cache
-                        cache.clear(); //TODO: remove affected folder only
+                        cache.remove(opt.folder);
                         // add to cache
                         cache.add(opt.folder, data, timestamp);
                     });

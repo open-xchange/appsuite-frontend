@@ -355,6 +355,51 @@ define('io.ox/contacts/api',
         return node;
     };
 
+    var copymove = function (list, action, targetFolderId) {
+        // allow single object and arrays
+        list = _.isArray(list) ? list : [list];
+        // pause http layer
+        http.pause();
+        // process all updates
+        _(list).map(function (o) {
+            return http.PUT({
+                module: 'contacts',
+                params: {
+                    action: action || 'update',
+                    id: o.id,
+                    folder: o.folder_id || o.folder,
+                    timestamp: o.timestamp || _.now() // mandatory for 'update'
+                },
+                data: { folder_id: targetFolderId },
+                appendColumns: false
+            });
+        });
+        // resume & trigger refresh
+        return http.resume()
+            .pipe(function () {
+                return $.when.apply($,
+                    _(list).map(function (o) {
+                        return $.when(
+                            api.caches.all.remove(targetFolderId),
+                            api.caches.all.remove(o.folder_id),
+                            api.caches.list.remove({ id: o.id, folder: o.folder_id })
+                        );
+                    })
+                );
+            })
+            .done(function () {
+                api.trigger('refresh.all');
+            });
+    };
+
+    api.move = function (list, targetFolderId) {
+        return copymove(list, 'update', targetFolderId);
+    };
+
+    api.copy = function (list, targetFolderId) {
+        return copymove(list, 'copy', targetFolderId);
+    };
+
     return api;
 
 });

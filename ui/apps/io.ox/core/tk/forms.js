@@ -189,7 +189,7 @@ define('io.ox/core/tk/forms',
         },
         createTextArea: function (options) {
             var f = new Field(options, 'text');
-            f.create('<textarea >', textChange);
+            f.create('<textarea>', textChange);
             f.applyModel(textChangeByModel);
             return f.finish('prepend', 'textarea');
         },

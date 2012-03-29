@@ -439,7 +439,7 @@ define("io.ox/core/desktop",
                     _.url.hash('folder', null);
                     _.url.hash('id', null);
                     // remove from list
-                    ox.ui.running = _(ox.ui.running).without(this);
+                    ox.ui.running = _(ox.ui.running).without(self);
                     // mark as not running
                     running = false;
                     // don't save
