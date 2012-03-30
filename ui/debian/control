@@ -1,4 +1,4 @@
-Source: open-xchange-gui
+Source: open-xchange-ui7
 Section: non-free/web
 Priority: optional
 Maintainer: Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -8,7 +8,7 @@ Homepage: http://open-xchange.com
 Vcs-Git: https://git.open-xchange.com/git/wd/frontend/web
 Vcs-Browser: https://git.open-xchange.com/gitweb/?p=wd/frontend/web;a=summary
 
-Package: open-xchange-gui
+Package: open-xchange-ui7
 Architecture: all
 Depends: ${misc:Depends}, apache2
 Description: Open-Xchange HTML5 client
