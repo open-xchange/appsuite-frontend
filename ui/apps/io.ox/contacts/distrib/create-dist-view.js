@@ -39,8 +39,8 @@ define('io.ox/contacts/distrib/create-dist-view',
             );
     };
 
-    var drawAlert = function (mail) {
-        $('.alert').remove();
+    var drawAlert = function (mail, displayBox) {
+        displayBox.parent().find('.alert').remove();
         return $('<div>')
             .addClass('alert alert-block fade in')
             .append(
@@ -67,31 +67,6 @@ define('io.ox/contacts/distrib/create-dist-view',
         );
     }
 
-    function insertNewContact(options, name, mail) {
-        drawListetItem({
-            node: options.displayBox,
-            name: name,
-            selectedMail: mail,
-            options: options
-        });
-
-        if (!options.model._data.distribution_list) {
-            options.model._data.distribution_list = [];
-        }
-
-        if ($('[data-mail="' + mail + '"]')[1]) {
-            drawAlert(mail).appendTo($('.editsection'));
-        }
-
-        options.model._data.distribution_list.push({
-            display_name: name,
-            mail: mail
-        });
-
-        if (!_.isEmpty(options.model._data.distribution_list)) {
-            options.displayBox.find('[data-mail="empty"]').remove();
-        }
-    }
 
     var addButton = function (options) {
         var button = $('<a>').attr({
@@ -102,20 +77,20 @@ define('io.ox/contacts/distrib/create-dist-view',
         .addClass('btn btn-inverse')
         .text('+')
         .on('click', function (e) {
-            var data = $('[data-holder="data-holder"]').data(),
-                mailValue = $('input#mail').val(),
-                nameValue = $('input#name').val();
+            var data = options.node.find('[data-holder="data-holder"]').data(),
+                mailValue = options.node.find('input#mail').val(),
+                nameValue = options.node.find('input#name').val();
             if (data.contact) {
                 copyContact(options, data.contact, data.email);
             } else {
                 if (mailValue !== '') {
-                    insertNewContact(options, nameValue, mailValue);
+                    copyContact(options, nameValue, mailValue);
                 }
             }
             // reset the fields
-            $('[data-holder="data-holder"]').removeData();
-            $('input#mail').val('');
-            $('input#name').val('');
+            options.node.find('[data-holder="data-holder"]').removeData();
+            options.node.find('input#mail').val('');
+            options.node.find('input#name').val('');
         });
 
         return button;
@@ -148,26 +123,34 @@ define('io.ox/contacts/distrib/create-dist-view',
     }
 
     function removeContact(e) {
+        var selectFrame, items,
+        selectFrame = (e.data.frame).parent();
         e.preventDefault();
         var o = e.data.options, model = o.model;
-        _.each(model._data.distribution_list, function (val, key) {
-            if (val.mail === e.data.mail) {
-                model._data.distribution_list.splice(key, 1);
+
+        for (var i = 0; i < model._data.distribution_list.length;) {
+            if ((model._data.distribution_list[i]).mail === e.data.mail && (model._data.distribution_list[i]).display_name === e.data.name) {
+                model._data.distribution_list.splice(i, 1);
+            } else {
+                i += 1;
             }
-            if (_.isEmpty(model._data.distribution_list)) {
-                o.displayBox.append(drawEmptyItem(o.displayBox));
-            }
-        });
-        e.data.frame.remove();
+        }
+
+        items = selectFrame.find('[data-mail="' + e.data.name + '_' + e.data.mail + '"]');
+        selectFrame.find(items).remove();
+
+        if (!selectFrame.find('.listet-item')[0]) {
+            o.displayBox.append(drawEmptyItem(o.displayBox));
+        }
     }
 
     function drawListetItem(o) {
         var frame = $('<div>').addClass('listet-item').attr({
-            'data-mail': o.selectedMail
+            'data-mail': o.name + '_' + o.selectedMail
         }),
         img = api.getPicture(o.selectedMail).addClass('contact-image'),
         button = $('<a>', { href: '#' }).addClass('close').html('&times;')
-            .on('click', { options: o.options, mail: o.selectedMail, frame: frame }, removeContact);
+            .on('click', { options: o.options, mail: o.selectedMail, name: o.name, frame: frame }, removeContact);
         o.node.append(frame);
         frame.append(button);
         frame.append(img)
@@ -180,8 +163,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         );
     }
 
-
-    function calcMailField(contact, selectedMail) { // TODO: needs ab better concept
+    function calcMailField(contact, selectedMail) { // TODO: needs a better concept
         var field;
 
         if (selectedMail === contact.email1) {
@@ -197,26 +179,48 @@ define('io.ox/contacts/distrib/create-dist-view',
     }
 
     function copyContact(options, contact, selectedMail) {
-        drawListetItem({
-            node: options.displayBox,
-            id: contact.id,
-            name: contact.display_name,
-            selectedMail: selectedMail,
-            options: options
-        });
-        var mailNr = (calcMailField(contact, selectedMail));
+        var dataMailId;
+
         if (!options.model._data.distribution_list) {
             options.model._data.distribution_list = [];
         }
-        if ($('[data-mail="' + selectedMail + '"]')[1]) {
-            drawAlert(selectedMail).appendTo($('.editsection'));
+
+        if (_.isString(contact)) {
+            drawListetItem({
+                node: options.displayBox,
+                name: contact,
+                selectedMail: selectedMail,
+                options: options
+            });
+            dataMailId = '[data-mail="' + contact + '_' + selectedMail + '"]';
+            options.model._data.distribution_list.push({
+                display_name: contact,
+                mail: selectedMail
+            });
+
+        } else {
+            drawListetItem({
+                node: options.displayBox,
+                id: contact.id,
+                name: contact.display_name,
+                selectedMail: selectedMail,
+                options: options
+            });
+            dataMailId = '[data-mail="' + contact.display_name + '_' + selectedMail + '"]';
+            var mailNr = (calcMailField(contact, selectedMail));
+
+            options.model._data.distribution_list.push({
+                id: contact.id,
+                display_name: contact.display_name,
+                mail: selectedMail,
+                mail_field: mailNr
+            });
         }
-        options.model._data.distribution_list.push({
-            id: contact.id,
-            display_name: contact.display_name,
-            mail: selectedMail,
-            mail_field: mailNr
-        });
+
+        if (options.displayBox.find(dataMailId)[1]) {
+            drawAlert(selectedMail, options.displayBox).appendTo(options.displayBox.parent().parent().find('.editsection'));
+        }
+
         if (!_.isEmpty(options.model._data.distribution_list)) {
             options.displayBox.find('[data-mail="empty"]').remove();
         }
@@ -227,7 +231,7 @@ define('io.ox/contacts/distrib/create-dist-view',
         return $('<div>')
         .addClass('fieldset ' + id)
         .append(
-            $('<label>', { 'for' : 'input_field_' + id }).text(gt(label)),
+            $('<label>', { 'for' : 'input_field_' + id }).text(label),
             $('<input>', {
                 type: 'text',
                 tabindex: tab,
@@ -334,8 +338,8 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             dataHolder = $('<div>').attr('data-holder', 'data-holder')
                 .append(
-                    createField(self, 'name', 'input#mail', 'Name', '2'),
-                    createField(self, 'mail', 'input#name', 'E-mail address', '3')
+                    createField(self, 'name', 'input#mail', gt('Name'), '2'),
+                    createField(self, 'mail', 'input#name', gt('E-mail address'), '3')
                 );
 
             addSection.addClass('last').append(

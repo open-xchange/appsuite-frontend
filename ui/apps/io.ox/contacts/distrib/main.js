@@ -93,7 +93,6 @@ define('io.ox/contacts/distrib/main',
                 view = new ContactCreateDistView({ model: model });
                 // define store
                 model.store = function (data, changes) {
-                    console.log(data.distribution_list);
                     //sort the array before save if not empty
                     if (data.distribution_list) {
                         data.distribution_list = data.distribution_list.sort(util.nameSort);
@@ -102,7 +101,11 @@ define('io.ox/contacts/distrib/main',
                             id: data.id,
                             folder: data.folder_id,
                             timestamp: _.now(),
-                            data: data
+                            data: {
+                                // just the potential changes
+                                display_name: data.display_name,
+                                distribution_list: data.distribution_list
+                            }
                         })
                         .done(function () {
                             dirtyStatus.byApi = false;

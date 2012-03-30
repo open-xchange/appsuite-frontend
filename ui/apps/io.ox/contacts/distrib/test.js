@@ -34,6 +34,10 @@ define("io.ox/contacts/distrib/test",
             user4: {
                 nameValue: 'user4',
                 mailValue: 'user4@user4.test'
+            },
+            user5: {
+                nameValue: 'user4',
+                mailValue: 'user4@user4.test'
             }
         },
 
@@ -77,7 +81,7 @@ define("io.ox/contacts/distrib/test",
             j.describe("Contact distrib", function () {
 
                 var app = null, buttonCreate, createForm, inputName, inputMail, addButton, deleteButton,
-                saveButton, displayName, dataId, dataObj, dataFolder;
+                saveButton, displayName, dataId, dataObj, dataFolder, alertBox;
 
                 j.it('opens contact app ', function () {
 
@@ -155,7 +159,7 @@ define("io.ox/contacts/distrib/test",
                 j.it('checks the remove item functionality ', function () {
 
                     j.waitsFor(function () {
-                        deleteButton = createForm.find('[data-mail="user3@user3.test"] a.close');
+                        deleteButton = createForm.find('[data-mail="user3_user3@user3.test"] a.close');
                         if (deleteButton[0]) {
                             return true;
                         }
@@ -166,6 +170,16 @@ define("io.ox/contacts/distrib/test",
                     });
 
                     j.expect(deleteButton).toBeFalsy();
+
+                });
+
+                j.it('checks for the alert box', function () {
+                    j.waitsFor(function () {
+                        alertBox = createForm.find('.alert');
+                        if (alertBox[0]) {
+                            return true;
+                        }
+                    }, 'looks for the alert box', TIMEOUT);
 
                 });
 
@@ -216,6 +230,8 @@ define("io.ox/contacts/distrib/test",
                             j.expect((dataObj.distribution_list[1]).mail).toEqual(testObjects.user2.mailValue);
                             j.expect((dataObj.distribution_list[2]).display_name).toEqual(testObjects.user4.nameValue);
                             j.expect((dataObj.distribution_list[2]).mail).toEqual(testObjects.user4.mailValue);
+                            j.expect((dataObj.distribution_list[3]).display_name).toEqual(testObjects.user5.nameValue);
+                            j.expect((dataObj.distribution_list[3]).mail).toEqual(testObjects.user5.mailValue);
 
                             j.expect(dataObj.distribution_list).toNotContain(missingItem);
                         });
