@@ -53,7 +53,6 @@ define("io.ox/core/gettext", [], function () {
     }
 
     function markTranslated(text) {
-        console.log('translating', text);
         return '\u200b' + text + '\u200c';
     }
     
