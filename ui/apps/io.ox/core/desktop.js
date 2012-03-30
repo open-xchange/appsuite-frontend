@@ -434,10 +434,14 @@ define("io.ox/core/desktop",
                 });
             };
 
-            this.quit = function () {
+            this.quit = function (force) {
                 // call quit function
-                var def = quitFn() || $.Deferred().resolve();
+                var def = force ? $.when() : (quitFn() || $.when());
                 return def.done(function () {
+                    // not destroyed?
+                    if (force && self.destroy) {
+                        self.destroy();
+                    }
                     // update hash
                     _.url.hash('app', null);
                     _.url.hash('folder', null);
@@ -529,7 +533,8 @@ define("io.ox/core/desktop",
 
                 show: function (id) {
                     $('#io-ox-screens').children().each(function (i, node) {
-                        var screenId = $(this).attr('id').substr(6);
+                        var attr = $(this).attr('id'),
+                            screenId = String(attr || '').substr(6);
                         if (screenId !== id) {
                             that.hide(screenId);
                         }
