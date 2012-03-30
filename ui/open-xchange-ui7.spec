@@ -1,4 +1,4 @@
-Name: open-xchange-gui
+Name: open-xchange-ui7
 Version: 7.0.0
 Release: 1
 Group: Applications/Productivity
