@@ -477,7 +477,10 @@ define("io.ox/core/desktop",
         ox.ui.App = App;
 
         App.canRestore = function () {
-            return appCache.contains('savepoints');
+            // use get instead of contains since it might exist as empty list
+            return appCache.get('savepoints').pipe(function (list) {
+                return list && list.length;
+            });
         };
 
         App.getSavePoints = function () {
