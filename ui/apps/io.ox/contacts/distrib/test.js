@@ -47,6 +47,12 @@ define("io.ox/contacts/distrib/test",
             display_name : 'user3'
         },
 
+        missingItem2 = {
+            mail_field : 0,
+            mail : 'user1@user1.test',
+            display_name : 'user1'
+        },
+
         fillAndTrigger = function (o) {
             o.inputName.val(o.nameValue);
             o.inputMail.val(o.mailValue);
@@ -54,6 +60,8 @@ define("io.ox/contacts/distrib/test",
         },
 
         listname = 'testlist',
+
+        newListtitle = 'testlistedit',
 
         TIMEOUT = 5000;
 
@@ -80,8 +88,8 @@ define("io.ox/contacts/distrib/test",
 
             j.describe("Contact distrib", function () {
 
-                var app = null, buttonCreate, createForm, inputName, inputMail, addButton, deleteButton,
-                saveButton, displayName, dataId, dataObj, dataFolder, alertBox;
+                var app = null, buttonCreate, createForm, inputName, inputMail, addButton, deleteButton, updateButton,
+                saveButton, displayName, dataId, dataObj, dataFolder, alertBox, listOfItems;
 
                 j.it('opens contact app ', function () {
 
@@ -239,7 +247,153 @@ define("io.ox/contacts/distrib/test",
                     });
                 });
 
-                j.it('looks for the saved item / selects and deletes', function () {
+                j.it('looks for the saved item and reopens', function () {
+
+                    var item, button, dialog,
+                        cid = dataFolder + '.' + dataId,
+                        grid = app.getGrid();
+
+                    j.waitsFor(function () {
+                        // grid contains item?
+                        if (grid.contains(cid)) {
+                            grid.selection.set({ folder_id: dataFolder, id: dataId });
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }, 'looks for the list', TIMEOUT);
+
+                    j.waitsFor(function () {
+                        updateButton = $('table[data-obj-id="' + cid + '"] .io-ox-inline-links a[data-action="update"]');
+                        if (updateButton[0]) {
+                            return true;
+                        }
+                    }, 'looks for update button', TIMEOUT);
+
+
+                    j.runs(function () {
+                        j.expect(updateButton[0]).toBeTruthy();
+                        updateButton.trigger('click');
+                    });
+
+                });
+
+                j.it('checks if the createform is opend ', function () {
+                    j.waitsFor(function () {
+                        createForm = $('.window-content.create-distributionlist');
+                        if (createForm[0]) {
+                            return true;
+                        }
+                    }, 'looks for the createform', TIMEOUT);
+
+                    j.runs(function () {
+                        j.expect(createForm[0]).toBeTruthy();
+                    });
+
+                });
+
+                j.it('looks for the form components ', function () {
+                    j.waitsFor(function () {
+                        saveButton = createForm.find('a[data-action="save"]');
+                        displayName = createForm.find('input[data-property="display_name"]');
+                        if (saveButton[0] && displayName[0]) {
+                            return true;
+                        }
+                    }, 'looks for the createform components', TIMEOUT);
+                    j.expect(saveButton[0]).toBeTruthy();
+
+                });
+
+
+                j.it('checks for the listed items and compares', function () {
+                    j.waitsFor(function () {
+                        listOfItems = createForm.find('.listet-item');
+                        if (listOfItems[3]) {
+                            return true;
+                        }
+                    }, 'looks for the createform', TIMEOUT);
+
+                    j.runs(function () {
+                        j.expect($(listOfItems[0]).attr('data-mail')).toEqual('user1_user1@user1.test');
+                        j.expect($(listOfItems[1]).attr('data-mail')).toEqual('user2_user2@user2.test');
+                        j.expect($(listOfItems[2]).attr('data-mail')).toEqual('user4_user4@user4.test');
+                        j.expect($(listOfItems[3]).attr('data-mail')).toEqual('user4_user4@user4.test');
+                    });
+
+                });
+
+                j.it('changes some values / removes an item from the list and saves', function () {
+
+                    j.waitsFor(function () {
+                        deleteButton = '';
+                        deleteButton = createForm.find('[data-mail="user1_user1@user1.test"] a.close');
+                        if (deleteButton[0]) {
+                            return true;
+                        }
+                    }, 'looks for the element delete button', TIMEOUT);
+
+                    j.runs(function () {
+                        displayName.val(newListtitle).trigger('change');
+                    });
+
+
+                    j.runs(function () {
+                        j.expect(deleteButton).toBeTruthy();
+                        deleteButton.trigger('click');
+                        saveButton.trigger('click');
+                    });
+
+                });
+
+                j.it('looks for the saved item and compares', function () {
+
+                    j.runs(function () {
+                        var me = this;
+                        me.ready = false;
+                        api.on('edit', function (e, data) {
+                            if (data) {
+                                dataId = data.id;
+                                dataFolder = data.folder;
+                                me.ready = true;
+                            }
+                        });
+
+                        j.waitsFor(function () {
+                            return this.ready;
+                        }, 'catches the id', TIMEOUT);
+
+                    });
+
+                    j.runs(function () {
+                        api.get({
+                            id: dataId,
+                            folder_id: dataFolder
+                        }).done(function (obj) {
+                            dataObj = obj;
+                        });
+
+                        j.waitsFor(function () {
+                            if (dataObj) {
+                                return true;
+                            }
+                        }, 'looks for the object', TIMEOUT);
+
+                        j.runs(function () {
+                            j.expect(dataObj.display_name).toEqual(newListtitle);
+                            j.expect((dataObj.distribution_list[0]).display_name).toEqual(testObjects.user2.nameValue);
+                            j.expect((dataObj.distribution_list[0]).mail).toEqual(testObjects.user2.mailValue);
+                            j.expect((dataObj.distribution_list[1]).display_name).toEqual(testObjects.user4.nameValue);
+                            j.expect((dataObj.distribution_list[1]).mail).toEqual(testObjects.user4.mailValue);
+                            j.expect((dataObj.distribution_list[2]).display_name).toEqual(testObjects.user4.nameValue);
+                            j.expect((dataObj.distribution_list[2]).mail).toEqual(testObjects.user4.mailValue);
+
+                            j.expect(dataObj.distribution_list).toNotContain(missingItem2);
+                        });
+
+                    });
+                });
+
+                j.it('looks for the item / selects and deletes', function () {
 
                     var item, button, dialog,
                         cid = dataFolder + '.' + dataId,
@@ -274,6 +428,7 @@ define("io.ox/contacts/distrib/test",
                     }, 'delete dialog to be there', TIMEOUT);
 
                     j.runs(function () {
+                        j.expect(dialog).toBeTruthy();
                         dialog.trigger('click');
                     });
 
