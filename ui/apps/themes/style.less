@@ -239,7 +239,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     right: 0px;
     height: 49px;
     left: 0px;
-    z-index: 10;
+    z-index: 20;
 
     color: @head-color;
 
@@ -287,7 +287,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 }
 
 .window-title b.caret {
-    vertical-align: baseline;
+    vertical-align: middle;
     margin-left: 0.25em;
 }
 
@@ -298,7 +298,6 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     left: 300px;
     padding: 4px 0 4px 13px;
     height: 30px;
-    overflow: hidden;
     white-space: nowrap;
 }
 
@@ -311,6 +310,10 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     white-space: nowrap;
     text-decoration: none;
     outline: 0;
+}
+
+.window-toolbar .dropdown-menu a {
+    margin-right: 0;
 }
 
 .touch .window-toolbar a {
@@ -391,7 +394,7 @@ a.button.default-action {
     bottom: 0px;
     left: 0px;
     white-space: normal;
-    z-index: 20;
+    z-index: 10;
 }
 
 .window-body.movedown {
@@ -863,7 +866,7 @@ span.hint {
 .io-ox-inline-links a {
     color: @inline-link-color;
     text-decoration: none;
-    padding: 0.5em 0.5em 0.5em 0em;
+    padding: 0.5em 0 0.5em 0.5em;
     outline: 0;
 }
 
@@ -909,11 +912,11 @@ span.hint {
 .io-ox-action-link {
     display: inline-block;
     white-space: nowrap;
-    margin-right: 0.75em;
+    margin-left: 0.75em;
 }
 
-.io-ox-action-link:last-child {
-    margin-right: 0;
+.io-ox-action-link:first-child {
+    margin-left: 0;
 }
 
 .io-ox-multi-selection .summary {

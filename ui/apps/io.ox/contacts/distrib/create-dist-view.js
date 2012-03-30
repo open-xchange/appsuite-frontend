@@ -138,13 +138,11 @@ define('io.ox/contacts/distrib/create-dist-view',
             );
         }
 
-        node
-        .append(img)
-        .append(
-            $('<div>').addClass('person-link ellipsis')
-            .text(data.display_name + '\u00A0')
-        )
-        .append($('<div>').addClass('ellipsis').text(data.email));
+        node.append(
+            img,
+            $('<div>').addClass('person-link ellipsis').text(data.display_name),
+            $('<div>').addClass('ellipsis').text(data.email)
+        );
     }
 
     function removeContact(e) {
@@ -158,25 +156,26 @@ define('io.ox/contacts/distrib/create-dist-view',
                 o.displayBox.append(drawEmptyItem(o.displayBox));
             }
         });
-        e.data.frame.remove();
+        $(this).parent().remove();
     }
 
     function drawListetItem(o) {
-        var frame = $('<div>').addClass('listet-item').attr({
-            'data-mail': o.selectedMail
-        }),
-        img = api.getPicture(o.selectedMail).addClass('contact-image'),
-        button = $('<a>', { href: '#' }).addClass('close').html('&times;')
-            .on('click', { options: o.options, mail: o.selectedMail, frame: frame }, removeContact);
-        o.node.append(frame);
-        frame.append(button);
-        frame.append(img)
-        .append(
-            $('<div>').addClass('person-link ellipsis')
-            .append($('<a>', {'href': '#'})
-            .on('click', {id: o.id, email1: o.selectedMail}, fnClickPerson).text(o.name + '\u00A0')),
-            $('<div>').addClass('person-selected-mail')
-            .text((o.selectedMail))
+        o.node.append(
+            $('<div>').addClass('listet-item').attr({ 'data-mail': o.selectedMail })
+            .append(
+                // button
+                $('<a>', { href: '#' }).addClass('close').html('&times;')
+                    .on('click', { options: o.options, mail: o.selectedMail }, removeContact),
+                // image
+                api.getPicture(o.selectedMail).addClass('contact-image'),
+                // name & email
+                $('<div>').addClass('person-link ellipsis')
+                .append(
+                    $('<a>', {'href': '#'})
+                    .on('click', { id: o.id, email1: o.selectedMail }, fnClickPerson).text(o.name)
+                ),
+                $('<div>').addClass('person-selected-mail').text(o.selectedMail)
+            )
         );
     }
 

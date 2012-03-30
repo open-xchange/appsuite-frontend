@@ -356,6 +356,10 @@ define("io.ox/core/desktop",
             this.setWindow = function (w) {
                 win = w;
                 win.app = this;
+                // add app name
+                if ('name' in opt) {
+                    win.nodes.outer.attr('data-app-name', opt.name);
+                }
                 return this;
             };
 

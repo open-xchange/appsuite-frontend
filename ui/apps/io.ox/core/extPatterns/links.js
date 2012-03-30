@@ -45,6 +45,10 @@ define("io.ox/core/extPatterns/links",
         };
     };
 
+    var XLink = function (id, options) {
+        ext.point(id).extend(new Link(options));
+    };
+
     var Button = function (options) {
 
         _.extend(this, options);
@@ -71,7 +75,7 @@ define("io.ox/core/extPatterns/links",
     };
 
 
-    var applyCollection = function (self, collection, node, context, args, bootstrapMode) {
+    var drawLinks = function (self, collection, node, context, args, bootstrapMode) {
         actions.extPatterns.applyCollection(self, collection, context, args)
         .always(function (links) {
             // count resolved links
@@ -98,7 +102,7 @@ define("io.ox/core/extPatterns/links",
         this.draw = function (context) {
             // paint on current node
             var args = $.makeArray(arguments);
-            applyCollection(self, new Collection(context), this, context, args);
+            drawLinks(self, new Collection(context), this, context, args);
         };
     };
 
@@ -108,40 +112,58 @@ define("io.ox/core/extPatterns/links",
             // create & add node first, since the rest is async
             var args = $.makeArray(arguments),
                 node = $("<div>").addClass("io-ox-inline-links").appendTo(this);
-            applyCollection(self, new Collection(context), node, context, args);
+            drawLinks(self, new Collection(context), node, context, args);
         };
     };
 
     var z = 0;
+    var drawDropDown = function (options, context) {
+        var args = $.makeArray(arguments),
+            $parent = $("<div>").addClass('dropdown')
+                .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 10000) })
+                .appendTo(this),
+            $toggle = $("<a>", { href: '#' })
+                .attr('data-toggle', 'dropdown')
+                .text(options.label + " ").append($("<b>").addClass("caret")).appendTo($parent);
+
+        $toggle.addClass(options.classes);
+        $parent.append($.txt('\u00A0\u00A0 ')); // a bit more space
+
+        // create & add node first, since the rest is async
+        var node = $("<ul>").addClass("dropdown-menu").appendTo($parent);
+        drawLinks(options, new Collection(context), node, context, args, true);
+
+        $toggle.dropdown();
+    };
+
     var DropdownLinks = function (options) {
-        var self = _.extend(this, options);
+        var o = _.extend(this, options);
         this.draw = function () {
-            var args = $.makeArray(arguments),
-                context = args[0],
-                $parent = $("<div>").addClass('dropdown')
-                    .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 10000) })
-                    .appendTo(this),
-                $toggle = $("<a>", { href: '#' })
-                    .attr('data-toggle', 'dropdown')
-                    .text(options.label + " ").append($("<b>").addClass("caret")).appendTo($parent);
-
-            $toggle.addClass(options.classes);
-            $parent.append($.txt('\u00A0\u00A0 ')); // a bit more space
-
-            // create & add node first, since the rest is async
-            var node = $("<ul>").addClass("dropdown-menu").appendTo($parent);
-            applyCollection(self, new Collection(context), node, context, args, true);
-
-            $toggle.dropdown();
+            drawDropDown.apply(this, [o].concat($.makeArray(arguments)));
         };
+    };
+
+    var Dropdown = function (id, options) {
+        var o = options || {};
+        o.ref = id + '/' + o.id;
+        ext.point(id).extend(
+            _.extend({
+                ref: o.ref,
+                draw: function (context) {
+                    drawDropDown.call(this, o, context);
+                }
+            }, o)
+        );
     };
 
     return {
         Action: Action,
         Link: Link,
+        XLink: XLink, // TODO: consolidate Link/XLink
         Button: Button,
         ToolbarLinks: ToolbarLinks,
         InlineLinks: InlineLinks,
-        DropdownLinks: DropdownLinks
+        DropdownLinks: DropdownLinks,
+        Dropdown: Dropdown
     };
 });

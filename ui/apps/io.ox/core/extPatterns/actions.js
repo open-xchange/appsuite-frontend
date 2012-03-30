@@ -31,6 +31,8 @@ define("io.ox/core/extPatterns/actions",
     var Action = function (id, options) {
         // get options - use 'requires one' as default
         var o = _.extend({ requires: requiresOne }, options);
+        // fix missing id
+        o.id = o.id || _(id.split(/\//)).last();
         // string?
         if (_.isString(o.requires)) {
             o.requires = requires(o.requires);

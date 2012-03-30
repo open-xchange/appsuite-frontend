@@ -90,13 +90,17 @@ define('io.ox/contacts/distrib/main',
                 view = new ContactCreateDistView({ model: model });
                 // define store
                 model.store = function (data, changes) {
-                    //sort the array before save
+                    // sort the array before save
                     data.distribution_list = data.distribution_list.sort(util.nameSort);
                     return api.edit({
                             id: data.id,
                             folder: data.folder_id,
                             timestamp: _.now(),
-                            data: data
+                            data: {
+                                // just the potential changes
+                                display_name: data.display_name,
+                                distribution_list: data.distribution_list
+                            }
                         })
                         .done(function () {
                             dirtyStatus.byApi = false;
