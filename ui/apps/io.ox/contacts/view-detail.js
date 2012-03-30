@@ -274,8 +274,10 @@ define("io.ox/contacts/view-detail",
             if (data.mark_as_distributionlist === true) {
                 var i = 0, list = _.copy(data.distribution_list || [], true), $i = list.length,
                     that = this;
-//                list = list.sort(util.nameSort);
-
+                // if there are no members in the list
+                if ($i === 0) {
+                    addDistribMail(gt('Members'), gt('This list has no members yet'), "\u00A0", that);
+                }
                 _.each(list, function (val, key) {
                     if (key === 0) {
                         addDistribMail(gt('Members'), val.display_name, val.mail, that);

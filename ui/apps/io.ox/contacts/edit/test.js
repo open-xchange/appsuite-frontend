@@ -225,7 +225,7 @@ define("io.ox/contacts/edit/test",
                     }, 'looks for update button', TIMEOUT);
 
                     j.runs(function () {
-                        buttonUpdate.triggerHandler('click');
+                        buttonUpdate.trigger('click');
                     });
 
                     j.waitsFor(function () {
@@ -239,14 +239,14 @@ define("io.ox/contacts/edit/test",
                     j.runs(function () {
                         formFrame =  $('.contact-detail.edit[data-property="' + phrase + '"]');
 //                        formFrame.find('input[data-property="first_name"]').val('test').trigger('change');
-
                         _.each(testObjectLong, function (val, property) {
 //                            console.log(property + ' ' + val);
                             formFrame.find('[data-property="' + property + '"]').val(val).trigger('change');
                         });
+                        j.expect(buttonSave).toBeTruthy();
                         buttonSave.triggerHandler('click');
-
                     });
+
                 });
 
                 j.it('loads the saved item and compares', function () {
@@ -423,10 +423,11 @@ define("io.ox/contacts/edit/test",
                     }, 'delete dialog to be there', TIMEOUT);
 
                     j.runs(function () {
+                        j.expect(dialog).toBeTruthy();
                         dialog.trigger('click');
                     });
 
-                    j.waits(500); // need a better solution
+//                    j.waits(500); // need a better solution
 
                 });
             });

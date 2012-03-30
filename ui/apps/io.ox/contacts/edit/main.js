@@ -89,7 +89,7 @@ define('io.ox/contacts/edit/main',
                                 })
                                 .done(function () {
                                     dirtyStatus.byApi = false;
-                                    view.destroy();
+                                    view.destroy(); // TODO: solving trouble with model
                                     app.quit();
                                 });
                         }
