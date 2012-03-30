@@ -401,17 +401,9 @@ utils.copy(utils.list("doc/lib", ["prettify.*", "default.css"]),
            { to: utils.dest("doc") });
 utils.copyFile("lib/jquery.min.js", utils.dest("doc/jquery.min.js"));
 
-// clean task
-
-desc("Removes all generated files");
-task("clean", [], function() {
-    if (path.existsSync("ox.pot")) fs.unlinkSync("ox.pot");
-    rimraf("tmp", function() { rimraf(utils.builddir, complete); });
-}, { async: true });
-
 //update-i18n task
 
-require("./lib/build/cldr.js");
+//require("./lib/build/cldr.js");
 
 // msgmerge task
 
@@ -465,12 +457,14 @@ task("deps", [depsPath], function() {
     }
 });
 
-// upload task
+// Packaging
 
 var distDest = process.env.destDir || "tmp/packaging";
 
+directory(distDest, ["clean"]);
+
 desc("Creates source packages");
-task("dist", ["clean", distDest], function () {
+task("dist", [distDest], function () {
     var toCopy = _.reject(fs.readdirSync("."), function(f) {
         return /^(tmp|ox.pot|build)$/.test(f);
     });
@@ -492,32 +486,12 @@ task("dist", ["clean", distDest], function () {
     function done(code) { if (code) return fail(); else complete(); }
 }, {async: true });
 
-desc("Uploads source package to the build service");
-task("upload", ["dist"], function () {
-    var counter;
-    counter = 1;
-    upload("", debName + ".orig.tar.bz2");
-    upload("", "open-xchange-gui_" + rev + ".debian.tar.bz2");
-    upload("", "open-xchange-gui_" + rev + ".dsc");
-    upload(name + "/", "open-xchange-gui.spec");
-    done();
-    function upload(dir, name) {
-        counter++;
-        var req = http.request({
-            method: "PUT",
-            auth: (process.env.bsUser || "gast") + ":" +
-                  (process.env.bsPassword || "netline"),
-            hostname: (process.env.bsHostname || "buildapi.netline.de"),
-            path: "/source/" + (process.env.bsProject || "home:gast") +
-                  "/open-xchange-gui/" + name
-        }, uploaded).on("error", fail);
-        util.pump(fs.createReadStream(path.join(distDest, dir + name)), req);
-    }
-    function uploaded(resp) {
-        if (resp.statusCode != 200) return fail();
-        resp.on("end", done);
-    }
-    function done() { if (!--counter) complete(); }
-}, { async: true });
+//clean task
 
-directory("tmp/packaging", ["clean"]);
+desc("Removes all generated files");
+task("clean", [], function() {
+    if (path.existsSync("ox.pot")) fs.unlinkSync("ox.pot");
+    rimraf(distDest, rmTmp);
+    function rmTmp() { rimraf("tmp", rmBuild); }
+    function rmBuild() { rimraf(utils.builddir, complete); };
+}, { async: true });
