@@ -97,6 +97,43 @@ define("io.ox/mail/main",
             }, []);
         };
 
+        // add label template
+        var openThreads = {};
+        grid.addLabelTemplate(tmpl.thread);
+        grid.requiresLabel = function (i, data, current) {
+            return openThreads[i] !== undefined;
+        };
+        grid.getContainer().on('click', '.thread-size', { grid: grid }, function (e) {
+            console.log('click', this);
+            var cell = $(this).closest('.vgrid-cell'),
+                index = parseInt(cell.attr('data-index'), 10),
+                id,
+                grid = e.data.grid,
+                cont = function () {
+                    // TODO: less heavy
+                    grid.clear().done(function () {
+                        grid.refresh();
+                        grid = null;
+                    });
+                };
+            // toggle
+            console.log('mmmh', index, openThreads);
+            if (openThreads[index + 1] === undefined) {
+                id = cell.attr('data-obj-id');
+                openThreads[index + 1] = id;
+                console.log('Open', id, api.getThread(id));
+                api.getList(api.getThread(id)).done(cont);
+            } else {
+                delete openThreads[index + 1];
+                cont();
+            }
+        });
+
+        grid.getContainer().on('click', '.thread-summary-item', { grid: grid }, function (e) {
+            var key = $(this).attr('data-obj-id');
+            e.data.grid.selection.set(key);
+        });
+
         commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads');
         commons.wireGridAndSearch(grid, win, api);
 

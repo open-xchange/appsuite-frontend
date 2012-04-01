@@ -173,7 +173,14 @@ define("io.ox/mail/api",
 
     // get mails in thread
     api.getThread = function (obj) {
-        var key = obj.folder_id + "." + obj.id;
+        var key;
+        if (typeof obj === 'string') {
+            key = obj;
+            obj = obj.split(/\./);
+            obj = { folder_id: obj[0], id: obj[1] };
+        } else {
+            key = obj.folder_id + "." + obj.id;
+        }
         return threads[key] || [obj];
     };
 

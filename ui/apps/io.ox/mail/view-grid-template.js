@@ -12,8 +12,10 @@
  */
 
 define('io.ox/mail/view-grid-template',
-    ['io.ox/mail/util', 'io.ox/core/tk/vgrid',
-     'less!io.ox/mail/style.css'], function (util, VGrid) {
+    ['io.ox/mail/util',
+     'io.ox/mail/api',
+     'io.ox/core/tk/vgrid',
+     'less!io.ox/mail/style.css'], function (util, api, VGrid) {
 
     'use strict';
 
@@ -29,7 +31,7 @@ define('io.ox/mail/view-grid-template',
                         from = $('<span>').addClass('from')
                     ),
                     $('<div>').append(
-                        threadSize = $('<div>').addClass('threadSize'),
+                        threadSize = $('<div>').addClass('thread-size'),
                         flag = $('<div>').addClass('flag').text('\u00A0'),
                         attachment = $('<span>').addClass('attachment'),
                         priority = $('<span>').addClass('priority'),
@@ -61,6 +63,30 @@ define('io.ox/mail/view-grid-template',
                 if (util.isDeleted(data)) {
                     this.addClass('deleted');
                 }
+                this.attr('data-index', index);
+            }
+        },
+
+        // use label concept to visualize thread overview
+        thread: {
+            build: function () {
+            },
+            set: function (data, fields, index, prev) {
+                var self = this.removeClass('vgrid-label').addClass('thread-summary').empty();
+                return api.getList(api.getThread(prev)).done(function (list) {
+                    _(list).each(function (mail) {
+                        var key = mail.folder_id + '.' + mail.id;
+                        self.append(
+                            $('<div>')
+                            .addClass('thread-summary-item')
+                            .attr('data-obj-id', key)
+                            .append(
+                                $('<div>').addClass('date').text(util.getTime(data.received_date)),
+                                util.getFrom(mail.from).removeClass('person')
+                            )
+                        );
+                    });
+                });
             }
         },
 

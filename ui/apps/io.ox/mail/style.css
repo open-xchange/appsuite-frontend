@@ -91,7 +91,8 @@
     font-weight: normal;
 }
 
-.vgrid-cell.mail .date {
+.vgrid-cell.mail .date,
+.vgrid-cell.thread-summary .date {
     color: #777;
     font-weight: 200;
     display: inline-block;
@@ -105,7 +106,7 @@
     float: right;
 }
 
-.vgrid-cell.mail .threadSize {
+.vgrid-cell.mail .thread-size {
     color: #999;
     min-width: 1em;
     font-weight: normal;
@@ -113,16 +114,38 @@
     margin-left: 1em;
     display: inline-block;
     float: right;
+    position: relative;
+    z-index: 2;
 }
 
-.borderradius .vgrid-cell.mail .threadSize {
+.borderradius .vgrid-cell.mail .thread-size {
     background-color: #e5e5e5;
     text-align: center;
     border-radius: 5px;
 }
 
-.borderradius .vgrid-cell.mail.selected .threadSize {
+.borderradius .vgrid-cell.mail.selected .thread-size {
     background-color: darken(@selected-background, 10%);
+}
+
+.vgrid-cell.thread-summary {
+    padding: 0;
+}
+
+.vgrid-cell .thread-summary-item {
+    padding: 5px 12px 5px 25px;
+    border: 1px solid #fff;
+    border-bottom-width: 0;
+    background-color: #eee;
+    cursor: pointer;
+}
+
+.vgrid-cell .thread-summary-item:hover {
+    background-color: #ddd;
+}
+
+.vgrid-cell .thread-summary-item:last-child {
+    border-bottom-width: 1px;
 }
 
 /* Detail view */
