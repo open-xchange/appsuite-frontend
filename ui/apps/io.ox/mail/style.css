@@ -134,10 +134,18 @@
 
 .vgrid-cell .thread-summary-item {
     padding: 5px 12px 5px 25px;
-    border: 1px solid #fff;
-    border-bottom-width: 0;
+    border-bottom: 1px solid #fff;
     background-color: #eee;
     cursor: pointer;
+}
+
+.vgrid-cell .thread-summary-item.selected,
+.vgrid-cell .thread-summary-item.selected:hover {
+    background-color: #08c;
+}
+
+.vgrid-cell .thread-summary-item.selected * {
+    color: white !important;
 }
 
 .vgrid-cell .thread-summary-item:hover {
@@ -145,7 +153,7 @@
 }
 
 .vgrid-cell .thread-summary-item:last-child {
-    border-bottom-width: 1px;
+    border-bottom: 0px none;
 }
 
 /* Detail view */

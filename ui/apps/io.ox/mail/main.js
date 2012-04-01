@@ -113,6 +113,7 @@ define("io.ox/mail/main",
                     // TODO: less heavy
                     grid.clear().done(function () {
                         grid.refresh();
+                        grid.selection.update();
                         grid = null;
                     });
                 };
