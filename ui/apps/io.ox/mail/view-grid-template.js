@@ -102,11 +102,12 @@ define('io.ox/mail/view-grid-template',
             tmpl.add(that.main);
 
             _(list).each(function (data, i) {
-                tmpl.getClone()
-                    .update(data, i).appendTo($div).node
-                        .css('position', 'relative')
-                        .data('object-data', data)
-                        .addClass('hover');
+                var clone = tmpl.getClone();
+                clone.update(data, i);
+                clone.appendTo($div).node
+                    .css('position', 'relative')
+                    .data('object-data', data)
+                    .addClass('hover');
             });
 
             return $div;
