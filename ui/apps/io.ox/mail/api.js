@@ -124,7 +124,6 @@ define("io.ox/mail/api",
             options.action = 'all';
             options.columns = '601,600,610,612'; // +level, +received_date
             options.sort = 'thread';
-
             return this.getAll(options, useCache)
                 .pipe(function (data) {
                     // loop over data
@@ -159,8 +158,7 @@ define("io.ox/mail/api",
             // request for brand new thread support
             options.action = 'threadedAll';
             options.columns = '601,600';
-            options.sort = '612';
-
+            options.sort = '610';
             return this.getAll(options, useCache, api.caches.allThreaded)
                 .pipe(function (data) {
                     _(data).each(function (obj) {
@@ -562,7 +560,8 @@ define("io.ox/mail/api",
                 action: 'zip_attachments',
                 folder: first.mail.folder_id,
                 id: first.mail.id,
-                attachment: _(data).pluck('id').join(',')
+                attachment: _(data).pluck('id').join(','),
+                session: ox.session
             });
         } else {
             url += $.param({
