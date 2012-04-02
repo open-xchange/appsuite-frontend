@@ -119,7 +119,7 @@ define("io.ox/mail/api",
 
         options = options || {};
 
-        if (2 > 1) {
+        if (0 > 1) {
             // old manual request - wait for backend update
             options.action = 'all';
             options.columns = '601,600,610,612'; // +level, +received_date
