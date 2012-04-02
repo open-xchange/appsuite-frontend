@@ -104,27 +104,26 @@ define("io.ox/mail/main",
             return openThreads[i] !== undefined;
         };
         grid.getContainer().on('click', '.thread-size', { grid: grid }, function (e) {
-            console.log('click', this);
             var cell = $(this).closest('.vgrid-cell'),
-                index = parseInt(cell.attr('data-index'), 10),
-                id,
-                grid = e.data.grid,
-                cont = function () {
-                    // TODO: less heavy
-                    grid.clear().done(function () {
-                        grid.refresh();
-                        grid.selection.update();
+                index = parseInt(cell.attr('data-index'), 10), id,
+                cont = function (list) {
+                    var grid = e.data.grid;
+                    grid.repaintLabels().done(function () {
+                        grid.repaint();
+                        if (list) {
+                            grid.selection.insertAt(list.slice(1), index + 1);
+                        }
                         grid = null;
                     });
                 };
             // toggle
-            console.log('mmmh', index, openThreads);
             if (openThreads[index + 1] === undefined) {
+                // open
                 id = cell.attr('data-obj-id');
                 openThreads[index + 1] = id;
-                console.log('Open', id, api.getThread(id));
                 api.getList(api.getThread(id)).done(cont);
             } else {
+                // close
                 delete openThreads[index + 1];
                 cont();
             }

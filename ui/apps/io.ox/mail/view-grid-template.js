@@ -74,15 +74,16 @@ define('io.ox/mail/view-grid-template',
             set: function (data, fields, index, prev) {
                 var self = this.removeClass('vgrid-label').addClass('thread-summary').empty();
                 return api.getList(api.getThread(prev)).done(function (list) {
-                    _(list.slice(1)).each(function (mail) {
-                        var key = mail.folder_id + '.' + mail.id;
+                    _(list.slice(1)).each(function (data) {
+                        var key = data.folder_id + '.' + data.id;
                         self.append(
                             $('<div>')
                             .addClass('thread-summary-item selectable')
+                            .addClass(util.isUnread(data) ? 'unread' : undefined)
                             .attr('data-obj-id', key)
                             .append(
                                 $('<div>').addClass('date').text(util.getTime(data.received_date)),
-                                util.getFrom(mail.from).removeClass('person')
+                                util.getFrom(data.from).removeClass('person')
                             )
                         );
                     });

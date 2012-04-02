@@ -136,7 +136,8 @@ define("io.ox/mail/view-detail",
             }
 
             if (text !== null) {
-                return content.addClass('plain-text').html(beautifyText(text));
+                return content.addClass('plain-text').html(beautifyText(text))
+                    .find('blockquote').removeAttr('style type').end();
             }
         },
 

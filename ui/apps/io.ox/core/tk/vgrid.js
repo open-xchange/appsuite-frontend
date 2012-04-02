@@ -464,7 +464,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         function initLabels() {
             // process labels first (determines numLabels), then set height
             processLabels();
-            paintLabels().done(function (cumulatedLabelHeight) {
+            return paintLabels().done(function (cumulatedLabelHeight) {
                 container.css({
                     height: (cumulatedLabelHeight + all.length * itemHeight) + 'px'
                 });
@@ -634,6 +634,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 firstRun = false;
             }
             return init();
+        };
+
+        this.repaintLabels = function () {
+            return initLabels();
         };
 
         this.repaint = function () {
