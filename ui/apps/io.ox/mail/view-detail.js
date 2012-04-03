@@ -129,10 +129,10 @@ define("io.ox/mail/view-detail",
 
             // HTML content?
             if (html !== null) {
-                // no need for iframe with the new API
-                return content.append(
-                    $(html).find('a').attr('target', '_blank').end()
-                );
+
+                return content.append($(html))
+                    .find('meta').remove().end()
+                    .find('a').attr('target', '_blank').end();
             }
 
             if (text !== null) {

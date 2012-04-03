@@ -253,8 +253,8 @@
 }
 
 .mail-detail .content.plain-text {
-    font-family: Monaco, monospace;
-    font-size: 13px;
+    font-family: monospace;
+    font-size: 14px;
     line-height: 18px;
     white-space: pre-wrap;
     max-width: 700px;
@@ -329,4 +329,9 @@ h4.mail-attachment-preview {
     height: 3em;
     font-weight: 200;
     color: #555;
+}
+
+/* label dropdown */
+.mail-detail .active-label {
+    font-weight: bold;
 }
