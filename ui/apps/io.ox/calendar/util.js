@@ -179,14 +179,42 @@ define("io.ox/calendar/util",
             }
         },
 
-        getTimeInterval: function (data) {
-            var length;
-            if (data.full_time) {
+        getTimeInterval: function (data, shift) {
+            shift = shift || 0;
+            var length, start, end;
+            if (data.full_time && shift === 0) {
                 length = (data.end_date - data.start_date) / DAY >> 0;
                 return length <= 1 ? "Whole day" : length + " days";
             } else {
-                return this.getTime(data.start_date) + " \u2013 " + this.getTime(data.end_date);
+                start = data.start_date + shift * HOUR;
+                end = data.end_date + shift * HOUR;
+                return that.getTime(start) + " \u2013 " + that.getTime(end);
             }
+        },
+
+        getTimezoneLabel: function (data) {
+            var zone = 'CEST', gti = that.getTimeInterval;
+            return $('<span>').addClass('label label-info').text(zone)
+                .popover({
+                    title: gti(data) + ' ' + zone,
+                    content: function () {
+                        // hard coded for demo purposes
+                        return '<span class="timezones">' +
+                            'San Francisco <i>' + gti(data, -9) + '</i><br>' +
+                            'New York <i>' + gti(data, -7) + '</i><br>' +
+                            'Moscow <i>' + gti(data, +2) + '</i><br>' +
+                            'Bangalore <i>' + gti(data, +3.5) + '</i><br>' +
+                            'Beijing <i>' + gti(data, +6) + '</i><br>' +
+                            'Sydney <i>' + gti(data, +8) + '</i>' +
+                            '</span>';
+                    },
+                    animation: false,
+                    placement: function (tip, element) {
+                        var off = $(element).offset(),
+                            width = $('body').width() / 2;
+                        return off.left > width ? 'left' : 'right';
+                    }
+                });
         },
 
         getShownAsClass: function (data) {

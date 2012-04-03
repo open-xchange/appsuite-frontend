@@ -48,7 +48,10 @@ define("io.ox/calendar/view-detail",
         id: "time",
         draw: function (data) {
             this.append(
-                $("<div>").addClass("interval").text(util.getTimeInterval(data))
+                $("<div>").addClass("interval").append(
+                    $.txt(util.getTimeInterval(data) + ' '),
+                    util.getTimezoneLabel(data)
+                )
             );
         }
     });
