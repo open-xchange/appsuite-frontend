@@ -43,7 +43,7 @@ define('io.ox/mail/view-grid-template',
                 return { from: from, date: date, priority: priority, subject: subject, attachment: attachment, threadSize: threadSize, flag: flag };
             },
             set: function (data, fields, index) {
-                fields.priority.text(util.getPriority(data));
+                fields.priority.empty().append(util.getPriority(data));
                 fields.subject.text(_.prewrap(data.subject));
                 if (!data.threadSize || data.threadSize === 1) {
                     fields.threadSize.text('').hide();

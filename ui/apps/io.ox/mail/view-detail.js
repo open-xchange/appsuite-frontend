@@ -227,7 +227,7 @@ define("io.ox/mail/view-detail",
                     .addClass("subject clear-title")
                     // inject some zero width spaces for better word-break
                     .text(_.prewrap(data.subject || '\u00A0'))
-                    .append($("<span>").addClass("priority").text(" " + util.getPriority(data)))
+                    .append($("<span>").addClass("priority").append(util.getPriority(data)))
             );
         }
     });
