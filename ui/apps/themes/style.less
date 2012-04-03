@@ -364,27 +364,16 @@ a.button.default-action {
 }
 
 .window-control {
-    color: @window-control-color;
-    font-weight: normal;
-    border: 2px solid @window-control-border-color;
-    background-color: transparent;
-    -moz-border-radius: 20px;
-    -webkit-border-radius: 20px;
-    border-radius: 20px 20px 20px 20px;
-    font-size: 16px;
-    line-height: 26px;
-    height: 26px;
-    width: 26px;
-    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
     margin-left: 5px;
     display: inline-block;
-    cursor: pointer;
+    overflow: hidden;
+    height: 38px;
 }
 
-.window-control:hover {
-    background-color: @window-control-background-hover;
-    border-color: @window-control-border-color-hover;
-    color: @window-control-color-hover;
+.window-control .close {
+    font-size: 40px;
+    line-height: 30px;
 }
 
 .window-body {

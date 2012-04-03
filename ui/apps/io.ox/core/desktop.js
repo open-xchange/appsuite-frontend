@@ -972,7 +972,10 @@ define("io.ox/core/desktop",
                             // close
                             win.nodes.closeButton = $("<div>").hide()
                             .addClass("window-control")
-                            .text("\u2715")
+                            .append(
+                                $('<a class="close">&times;</a>')
+                            )
+                            //.text("\u2715")
                         )
                     )
                 )
