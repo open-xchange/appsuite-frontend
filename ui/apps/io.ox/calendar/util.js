@@ -196,7 +196,10 @@ define("io.ox/calendar/util",
 
             var current = 'CEST',
                 zones = [['San Francisco', -9, 'PDT'],
-                         ['New York', -7, 'EDT'],
+                         ['New York', -6, 'EDT'],
+                         ['Rio de Janeiro', -5, 'BRT'],
+                         ['London', -1, 'BST'],
+                         ['Berlin', 0, 'CEST'],
                          ['Moscow', +2, 'MSK'],
                          ['Bangalore', +3.5, 'IST'],
                          ['Beijing', +6, 'CST'],
@@ -211,7 +214,7 @@ define("io.ox/calendar/util",
                             // hard coded for demo purposes
                             return '<div class="timezones">' +
                                 _(zones).map(function (zone) {
-                                    return _.printf('%s <b> %s</b><i>%s</i>', zone[0], zone[2], that.getTimeInterval(data, zone[1]));
+                                    return _.printf('%s <b><span class="label label-info">%s</span></b><i>%s</i>', zone[0], zone[2], that.getTimeInterval(data, zone[1]));
                                 }).join('<br>') +
                                 '</div>';
                         },

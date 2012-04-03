@@ -210,9 +210,8 @@
 
 .popover-content .timezones b {
     font-weight: normal;
-    color: #aaa;
-    width: 3em;
     padding-left: 1em;
+    width: 3em;
     display: inline-block;
     float: right;
 }
