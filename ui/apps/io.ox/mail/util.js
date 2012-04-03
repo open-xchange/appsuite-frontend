@@ -139,7 +139,6 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
         getPriority: function (data) {
             var i = '<i class="icon-star"></i>';
             return data.priority < 3 ? $('<span>\u00A0' + i + i + i + '</span>') : $();
-            //return data.priority < 3 ? " \u2605\u2605\u2605 " : '';
         },
 
         getTime: function (timestamp) {

@@ -207,3 +207,12 @@
     display: inline-block;
     float: right;
 }
+
+.popover-content .timezones b {
+    font-weight: normal;
+    color: #aaa;
+    width: 3em;
+    padding-left: 1em;
+    display: inline-block;
+    float: right;
+}

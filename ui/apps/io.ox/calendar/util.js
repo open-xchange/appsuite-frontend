@@ -192,30 +192,38 @@ define("io.ox/calendar/util",
             }
         },
 
-        getTimezoneLabel: function (data) {
-            var zone = 'CEST', gti = that.getTimeInterval;
-            return $('<span>').addClass('label label-info').text(zone)
-                .popover({
-                    title: gti(data) + ' ' + zone,
-                    content: function () {
-                        // hard coded for demo purposes
-                        return '<span class="timezones">' +
-                            'San Francisco <i>' + gti(data, -9) + '</i><br>' +
-                            'New York <i>' + gti(data, -7) + '</i><br>' +
-                            'Moscow <i>' + gti(data, +2) + '</i><br>' +
-                            'Bangalore <i>' + gti(data, +3.5) + '</i><br>' +
-                            'Beijing <i>' + gti(data, +6) + '</i><br>' +
-                            'Sydney <i>' + gti(data, +8) + '</i>' +
-                            '</span>';
-                    },
-                    animation: false,
-                    placement: function (tip, element) {
-                        var off = $(element).offset(),
-                            width = $('body').width() / 2;
-                        return off.left > width ? 'left' : 'right';
-                    }
-                });
-        },
+        getTimezoneLabel: (function (data) {
+
+            var current = 'CEST',
+                zones = [['San Francisco', -9, 'PDT'],
+                         ['New York', -7, 'EDT'],
+                         ['Moscow', +2, 'MSK'],
+                         ['Bangalore', +3.5, 'IST'],
+                         ['Beijing', +6, 'CST'],
+                         ['Sydney', +8, 'EST']
+                         ];
+
+            return function (data) {
+                return $('<span>').addClass('label label-info').text(current)
+                    .popover({
+                        title: that.getTimeInterval(data) + ' ' + current,
+                        content: function () {
+                            // hard coded for demo purposes
+                            return '<div class="timezones">' +
+                                _(zones).map(function (zone) {
+                                    return _.printf('%s <b> %s</b><i>%s</i>', zone[0], zone[2], that.getTimeInterval(data, zone[1]));
+                                }).join('<br>') +
+                                '</div>';
+                        },
+                        animation: false,
+                        placement: function (tip, element) {
+                            var off = $(element).offset(),
+                                width = $('body').width() / 2;
+                            return off.left > width ? 'left' : 'right';
+                        }
+                    });
+            };
+        }()),
 
         getShownAsClass: function (data) {
             return shownAsClass[(data.shown_as || 1) - 1];
