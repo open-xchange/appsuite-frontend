@@ -100,8 +100,8 @@
 }
 
 .vgrid-cell.mail .attachment {
-    background: url(images/attachment.png) no-repeat 0px 6px;
-    width: 14px;
+    background: url(images/attachment.png) no-repeat 0px 0px;
+    width: 17px;
     margin-left: 1em;
     float: right;
 }
@@ -321,7 +321,7 @@
 }
 
 .spotlight-icon:hover { background-color: rgba(200, 200, 200, 0.5); }
-.spotlight .spotlight-icon { display: block; z-index: 3; }
+.spotlight .spotlight-icon { display: block; z-index: 30; }
 
 /* attachment preview */
 

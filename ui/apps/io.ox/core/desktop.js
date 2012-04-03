@@ -975,7 +975,6 @@ define("io.ox/core/desktop",
                             .append(
                                 $('<a class="close">&times;</a>')
                             )
-                            //.text("\u2715")
                         )
                     )
                 )
