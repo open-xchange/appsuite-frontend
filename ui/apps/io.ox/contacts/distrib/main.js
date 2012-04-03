@@ -58,6 +58,7 @@ define('io.ox/contacts/distrib/main',
             view = new ContactCreateDistView({ model: model });
             // define store
             model.store = function (data, changes) {
+                view.node.find('#myGrowl').jGrowl('shutdown');
                 if (!_.isEmpty(data)) {
                   //sort the array if not empty before save
 
@@ -93,6 +94,7 @@ define('io.ox/contacts/distrib/main',
                 view = new ContactCreateDistView({ model: model });
                 // define store
                 model.store = function (data, changes) {
+                    view.node.find('#myGrowl').jGrowl('shutdown');
                     //sort the array before save if not empty
                     if (data.distribution_list) {
                         data.distribution_list = data.distribution_list.sort(util.nameSort);
@@ -154,6 +156,7 @@ define('io.ox/contacts/distrib/main',
                                 console.debug("Action", action);
                                 if (action === 'delete') {
                                     def.resolve();
+                                    container.find('#myGrowl').jGrowl('shutdown');
                                     listetItem.remove();
                                 } else {
                                     def.reject();
@@ -161,10 +164,12 @@ define('io.ox/contacts/distrib/main',
                             });
                     });
                 } else {
+                    container.find('#myGrowl').jGrowl('shutdown');
                     def.resolve();
                     listetItem.remove();
                 }
             } else {
+                container.find('#myGrowl').jGrowl('shutdown');
                 def.resolve();
                 listetItem.remove();
             }

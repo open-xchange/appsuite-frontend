@@ -350,6 +350,9 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             self.node.append(addSection);
 
+            self.node.append($('<div>', { id: 'myGrowl' })
+                    .addClass('jGrowl').css({position: 'absolute', right: '-275px', top: '-10px'}));
+
             this.getModel().on('error:invalid', function (evt, err) {
                 console.log('error validation');
                 console.log(arguments);
