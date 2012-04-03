@@ -356,6 +356,10 @@ define("io.ox/core/desktop",
             this.setWindow = function (w) {
                 win = w;
                 win.app = this;
+                // add app name
+                if ('name' in opt) {
+                    win.nodes.outer.attr('data-app-name', opt.name);
+                }
                 return this;
             };
 
@@ -430,10 +434,14 @@ define("io.ox/core/desktop",
                 });
             };
 
-            this.quit = function () {
+            this.quit = function (force) {
                 // call quit function
-                var def = quitFn() || $.Deferred().resolve();
+                var def = force ? $.when() : (quitFn() || $.when());
                 return def.done(function () {
+                    // not destroyed?
+                    if (force && self.destroy) {
+                        self.destroy();
+                    }
                     // update hash
                     _.url.hash('app', null);
                     _.url.hash('folder', null);
@@ -469,7 +477,10 @@ define("io.ox/core/desktop",
         ox.ui.App = App;
 
         App.canRestore = function () {
-            return appCache.contains('savepoints');
+            // use get instead of contains since it might exist as empty list
+            return appCache.get('savepoints').pipe(function (list) {
+                return list && list.length;
+            });
         };
 
         App.getSavePoints = function () {
@@ -525,7 +536,8 @@ define("io.ox/core/desktop",
 
                 show: function (id) {
                     $('#io-ox-screens').children().each(function (i, node) {
-                        var screenId = $(this).attr('id').substr(6);
+                        var attr = $(this).attr('id'),
+                            screenId = String(attr || '').substr(6);
                         if (screenId !== id) {
                             that.hide(screenId);
                         }
@@ -960,7 +972,9 @@ define("io.ox/core/desktop",
                             // close
                             win.nodes.closeButton = $("<div>").hide()
                             .addClass("window-control")
-                            .text("\u2715")
+                            .append(
+                                $('<a class="close">&times;</a>')
+                            )
                         )
                     )
                 )

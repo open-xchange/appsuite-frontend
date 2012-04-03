@@ -100,9 +100,11 @@ define("io.ox/core/extensions",
         this.extend = function (extension) {
 
             if (extension.invoke) {
+                console.error(extension);
                 throw "Extensions must not have their own invoke method";
             }
             if (!extension.id) {
+                console.error(extension);
                 throw "Extensions must have an id!";
             }
 
@@ -222,6 +224,10 @@ define("io.ox/core/extensions",
 
         this.isEnabled = function (id) {
             return !!disabled[id];
+        };
+
+        this.inspect = function () {
+            console.debug('Extension point', this.id, JSON.stringify(this.all()));
         };
     };
 

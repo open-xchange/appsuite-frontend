@@ -201,3 +201,17 @@
     margin: 0.75em 0 0.25em 0;
     color: #333;
 }
+
+.popover-content .timezones i {
+    font-style: normal;
+    display: inline-block;
+    float: right;
+}
+
+.popover-content .timezones b {
+    font-weight: normal;
+    padding-left: 1em;
+    width: 3em;
+    display: inline-block;
+    float: right;
+}

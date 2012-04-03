@@ -316,7 +316,7 @@ define('io.ox/mail/write/test',
                 j.it('closes compose dialog', function () {
                     // mark app as clean so no save as draft question will pop up
                     app.markClean();
-                    app.quit();
+                    app.quit(true);
                     j.expect(app.getEditor).toBeUndefined();
                     app = ed = form = null;
                 });
@@ -515,7 +515,7 @@ define('io.ox/mail/write/test',
                 });
 
                 j.it('closes compose dialog', function () {
-                    app.quit();
+                    app.quit(true);
                     j.expect(app.getEditor).toBeUndefined();
                     app = ed = null;
                 });
@@ -617,7 +617,7 @@ define('io.ox/mail/write/test',
                 });
 
                 j.it('closes compose dialog', function () {
-                    app.quit();
+                    app.quit(true);
                     j.expect(app.getEditor).toBeUndefined();
                     app = ed = null;
                 });

@@ -468,8 +468,8 @@ task("dist", [distDest], function () {
     var toCopy = _.reject(fs.readdirSync("."), function(f) {
         return /^(tmp|ox.pot|build)$/.test(f);
     });
-    var name = "open-xchange-gui-" + ver;
-    var debName = "open-xchange-gui_" + ver;
+    var name = "open-xchange-ui7-" + ver;
+    var debName = "open-xchange-ui7_" + ver;
     var dest = path.join(distDest, name);
     fs.mkdirSync(dest);
     utils.exec(["cp", "-r"].concat(toCopy, dest), tar);

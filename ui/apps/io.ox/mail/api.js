@@ -119,12 +119,11 @@ define("io.ox/mail/api",
 
         options = options || {};
 
-        if (2 > 1) {
+        if (0 > 1) {
             // old manual request - wait for backend update
             options.action = 'all';
             options.columns = '601,600,610,612'; // +level, +received_date
             options.sort = 'thread';
-
             return this.getAll(options, useCache)
                 .pipe(function (data) {
                     // loop over data
@@ -159,8 +158,7 @@ define("io.ox/mail/api",
             // request for brand new thread support
             options.action = 'threadedAll';
             options.columns = '601,600';
-            options.sort = '612';
-
+            options.sort = '610';
             return this.getAll(options, useCache, api.caches.allThreaded)
                 .pipe(function (data) {
                     _(data).each(function (obj) {
@@ -173,7 +171,14 @@ define("io.ox/mail/api",
 
     // get mails in thread
     api.getThread = function (obj) {
-        var key = obj.folder_id + "." + obj.id;
+        var key;
+        if (typeof obj === 'string') {
+            key = obj;
+            obj = obj.split(/\./);
+            obj = { folder_id: obj[0], id: obj[1] };
+        } else {
+            key = obj.folder_id + "." + obj.id;
+        }
         return threads[key] || [obj];
     };
 
@@ -555,7 +560,8 @@ define("io.ox/mail/api",
                 action: 'zip_attachments',
                 folder: first.mail.folder_id,
                 id: first.mail.id,
-                attachment: _(data).pluck('id').join(',')
+                attachment: _(data).pluck('id').join(','),
+                session: ox.session
             });
         } else {
             url += $.param({

@@ -122,8 +122,9 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
         },
 
         getDisplayName: function (pair) {
-            var display_name = (pair[0] || '').replace(rDisplayNameCleanup, '');
-            return display_name || pair[1];
+            var name = pair[0], email = pair[1],
+                display_name = _.isString(name) ? name.replace(rDisplayNameCleanup, '') : '';
+            return display_name || email;
         },
 
         getFrom: function (list, prewrap) {
@@ -136,7 +137,8 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
         },
 
         getPriority: function (data) {
-            return data.priority < 3 ? " \u2605\u2605\u2605 " : '';
+            var i = '<i class="icon-star"></i>';
+            return data.priority < 3 ? $('<span>\u00A0' + i + i + i + '</span>') : $();
         },
 
         getTime: function (timestamp) {

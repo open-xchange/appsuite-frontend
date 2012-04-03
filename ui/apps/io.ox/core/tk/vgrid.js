@@ -15,6 +15,8 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
 
     'use strict';
 
+    var DONE = $.when();
+
     /**
      * Template class
      * @returns {Template}
@@ -69,17 +71,17 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             this.detached = true;
         }
 
-        Row.prototype.update = function (data, index, id) {
+        Row.prototype.update = function (data, index, id, prev) {
             // loop over setters
-            var i = 0, setters = this.set, $i = setters.length;
+            var i = 0, setters = this.set, $i = setters.length, rets = [];
             for (; i < $i; i++) {
-                setters[i].call(this.node, data, this.fields, index);
+                rets.push(setters[i].call(this.node, data, this.fields, index, prev) || DONE);
             }
             // set composite id?
             if (id !== undefined) {
                 this.node.attr('data-obj-id', id);
             }
-            return this;
+            return rets;
         };
 
         Row.prototype.appendTo = function (target) {
@@ -245,30 +247,36 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
 
         paintLabels = function () {
             // loop
-            var i = 0, $i = labels.list.length, clone = null, obj, text = '';
+            var i = 0, $i = labels.list.length, clone = null,
+                obj, cumulatedLabelHeight = 0, text = '', defs = [];
             for (; i < $i; i++) {
                 // get
                 obj = labels.list[i];
                 // draw
                 clone = label.getClone();
-                clone.update(all[obj.pos], obj.pos);
+                clone.node.addClass('vgrid-label').data('label-index', i);
+                defs.concat(clone.update(all[obj.pos], obj.pos, '', all[obj.pos - 1] || {}));
                 text = clone.node.text();
+                // add node
+                labels.nodes = labels.nodes.add(clone.node.appendTo(container));
                 // meta data
-                obj.top = i * labelHeight + obj.pos * itemHeight;
                 obj.text = text;
                 labels.index[obj.pos] = i;
                 labels.textIndex[text] = i;
-                // add node
-                labels.nodes = labels.nodes.add(
-                    clone.node.css({
-                        top: obj.top + 'px'
-                    })
-                    .addClass('vgrid-label')
-                    .data('label-index', i)
-                );
-                clone.node.appendTo(container);
             }
-            clone = null;
+            // reloop to get proper height
+            return $.when.apply($, defs).pipe(function () {
+                var i, obj, node;
+                for (i = 0; i < $i; i++) {
+                    obj = labels.list[i];
+                    node = labels.nodes.eq(i);
+                    obj.top = cumulatedLabelHeight + obj.pos * itemHeight;
+                    node.css({ top: obj.top + 'px' });
+                    cumulatedLabelHeight += (obj.height = node.outerHeight(true) || labelHeight);
+                }
+                node = clone = defs = null;
+                return cumulatedLabelHeight;
+            });
         };
 
         cloneRow = (function () {
@@ -328,7 +336,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             offset = Math.max(0, offset);
 
             if (offset === currentOffset) {
-                return $.when();
+                return DONE;
             } else {
                 currentOffset = offset;
             }
@@ -363,24 +371,26 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 var i, $i, shift = 0, j = '', row,
                     defaultClassName = template.getDefaultClassName(),
                     tmp = new Array(data.length),
-                    node, clone;
+                    node, index;
 
                 // get shift (top down)
                 for (j in labels.index) {
                     if (offset > j) {
-                        shift++;
+                        index = labels.index[j];
+                        shift += labels.list[index];
                     }
                 }
 
                 // loop
                 for (i = 0, $i = data.length; i < $i; i++) {
                     // shift?
-                    if (labels.index[offset + i] !== undefined) {
-                        shift++;
+                    index = labels.index[offset + i];
+                    if (index !== undefined) {
+                        shift += labels.list[index].height;
                     }
                     // no data? (happens if list request fails)
                     if (!data[i]) {
-                        pool[i] = clone = cloneRow(template);
+                        pool[i] = cloneRow(template);
                     }
                     row = pool[i];
                     row.appendTo(container);
@@ -389,9 +399,9 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                     node.className = defaultClassName + ' ' + ((offset + i) % 2 ? 'odd' : 'even');
                     if (data[i]) {
                         // update fields
-                        row.update(data[i], offset + i, self.selection.serialize(data[i]));
+                        row.update(data[i], offset + i, self.selection.serialize(data[i]), data[i - 1] || {});
                     }
-                    node.style.top = shift * labelHeight + (offset + i) * itemHeight + 'px';
+                    node.style.top = shift + (offset + i) * itemHeight + 'px';
                     tmp[i] = row.node;
                 }
 
@@ -451,6 +461,16 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             frag = null;
         };
 
+        function initLabels() {
+            // process labels first (determines numLabels), then set height
+            processLabels();
+            return paintLabels().done(function (cumulatedLabelHeight) {
+                container.css({
+                    height: (cumulatedLabelHeight + all.length * itemHeight) + 'px'
+                });
+            });
+        }
+
         function apply(list, quiet) {
             // changed?
             if (list.length !== all.length || !_.isEqual(all, list)) {
@@ -459,12 +479,8 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 currentOffset = null;
                 // initialize selection
                 self.selection.init(all);
-                // process labels first (determines numLabels), then set height
-                processLabels();
-                container.css({
-                    height: (numLabels * labelHeight + all.length * itemHeight) + 'px'
-                });
-                paintLabels();
+                // labels
+                initLabels();
             }
             // trigger event
             if (!quiet) {
@@ -545,10 +561,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         };
 
         getIndex = function (top) {
-            var i = 0, $i = all.length, y = 0;
+            var i = 0, $i = all.length, j = 0, y = 0;
             for (; i < $i && y < top; i++) {
-                if (labels.index[i] !== undefined) {
-                    y += labelHeight;
+                if (labels.list[j] && labels.list[j].pos >= i) {
+                    y += labels.list[j++].height;
                 }
                 y += itemHeight;
             }
@@ -620,6 +636,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             return init();
         };
 
+        this.repaintLabels = function () {
+            return initLabels();
+        };
+
         this.repaint = function () {
             var offset = getIndex(node.scrollTop()) - (numRows - numVisible);
             currentOffset = null;
@@ -627,12 +647,12 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         };
 
         this.clear = function () {
-            apply([], true);
+            return apply([], true);
         };
 
         this.refresh = function () {
             // load all (if painted before)
-            return firstRun ? $.when : loadAll();
+            return firstRun ? DONE : loadAll();
         };
 
         this.getMode = function () {
@@ -718,6 +738,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             } else {
                 return props[key];
             }
+        };
+
+        this.getContainer = function () {
+            return container;
         };
     };
 

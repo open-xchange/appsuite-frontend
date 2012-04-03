@@ -1,7 +1,5 @@
 <h1>Internationalization</h1>
 
-<h2>Introduction</h2>
-
 <p>Providing software for users in the whole world means providing it in
 multiple languages. This consists of two steps:</p>
 <ul>
@@ -12,8 +10,8 @@ multiple languages. This consists of two steps:</p>
     language and/or location.</li>
 </ul>
 <p>The Open-Xchange platform offers several facilities to simplify both parts.
-The L10n part is mostly a concern for translators. Open-Xchange facilities
-consist mainly of using a well-established format for translations:
+The L10n part is mostly a concern for translators. Open-Xchange facilities for
+that consist mainly of using a well-established format for translations:
 <a href="http://www.gnu.org/s/gettext/">GNU Gettext</a> Portable Object (PO)
 files. This allows translators to use existing dedicated translation tools or
 a simple UTF-8-capable text editor.</p>
@@ -24,9 +22,9 @@ what the rest of this document describes.</p>
 
 <p>The main part of i18n is the translation of various text strings which are
 presented to the user. For this purpose, the Open-Xchange platform provides
-the RequireJS plugin <code>"gettext"</code>. Individual translation files are
+the RequireJS plugin <code>'gettext'</code>. Individual translation files are
 specified as a module dependency of the form
-<code>"gettext!<var>module_name</var>"</code>. The resulting module API is
+<code>'gettext!<var>module_name</var>'</code>. The resulting module API is
 a function which can be called to translate a string using the specified
 translation files:</p>
 <script type="text/example">
@@ -58,14 +56,12 @@ ID, translation files can usually have the same name as the corresponding main
 module. Multiple related modules should use the same translation file to avoid
 the overhead of too many small translation files.</p>
 
-<h2>Advanced <code>gettext</code> Functions</h2>
-
 <p>Most modules will require more complex translations than can be provided by
 a simple string lookup. To handle some of these cases, the <code>gettext</code>
 module provides traditional methods in addition to being a callable function.
 Other cases are handled by the build system.</p>
 
-<h3>Composite Phrases</h3>
+<h2>Composite Phrases</h2>
 
 <p>In most cases, the translated texts will not be static, but contain dynamic
 values as parts of a sentence. The straight-forward approach of translating
@@ -74,14 +70,14 @@ compose the final text is a <em><st>BAD</st></em> idea. Different languages have
 different sentence structures, and if there are multiple dynamic values, their
 order might need to be reversed in some languages, and not reversed in others.
 </p>
-<p>The solution is to translate entire sentences and then to use the function
-<code>gettext.format</code> to insert dynamic values:</p>
+<p>The solution is to translate entire sentences and then to use the
+<code>gettext</code> function to insert dynamic values:</p>
 <script type="text/example">
-alert(gt.format(
+alert(
     //#. %1$s is the given name
     //#. %2$s is the family name
     //#, c-format
-    gt('Welcome, %1$s %2$s!'), firstName, lastName);
+    gt('Welcome, %1$s %2$s!', firstName, lastName));
 </script>
 <p>Results in:</p>
 <pre class="nocode prettyprint">
@@ -92,19 +88,56 @@ alert(gt.format(
 <code class="kwd">msgstr</code> <code class="str">""</code>
 </pre>
 <p>As shown in the example, it is possible to add comments for translators by
-Starting a comment with "<code>#.</code>". Such comments must be placed
+starting a comment with "<code>#.</code>". Such comments must be placed
 immediately before the name of the variable which refers to
 the <code>gettext</code> module (in this case <code>gt</code>). They can be
-separated by arbitrary whitespace and newlines, but not other tokens. All
-<code>format</code> calls should have comments explaining every format
+separated by arbitrary whitespace and newlines, but not other tokens. All such
+<code>gettext</code> calls should have comments explaining every format
 specifier.</p>
 <p>Comments starting with "<code>#,</code>" are meant for Gettext tools, which
 in the case of "<code>#, c-format</code>", can ensure that the translator did
 not leave out or mistype any of the format specifiers.</p>
+<p>For the cases when the format string must be translated by one of
+the functions described below, there is a dedicated format function
+<code>gettext.format</code> which, except for debugging, is an alias for
+<code>_.printf</code>.</p>
+
+<h2>Debugging</h2>
+
+<p>One of the most common i18n errors is forgetting to use
+a <code>gettext</code> function. To catch this kind of error, the UI can be
+started with the hash parameter "<code>#debug-i18n=1</code>". (Reloading of
+the browser tab is usually required for the setting to take effect.)</p>
+<p>In this mode, every translated string is marked with invisible Unicode
+characters, and any DOM text without those characters gets reported on the
+console. The <code>gettext.format</code> function then also checks that every
+parameter is translated. This is the reason why <code>_.printf</code> should not
+be used for user-visible strings directly.</p>
+<p>Unfortunately, this method will also report any string which does not
+actually require translation. Examples of such strings include user data,
+numbers, strings already translated by the server, etc. To avoid filling
+the console with such false positives, every such string must be marked by
+passing it through the function <code>gettext.noI18n</code>:</p>
+<script type="text/example">
+alert(
+    //#. %1$s is the given name
+    //#. %2$s is the family name
+    //#, c-format
+    gt('Welcome, %1$s %2$s!', gt.noI18n(firstName), gt.noI18n(lastName)));
+</script>
+<p>This results in the strings being marked as 'translated' without actually
+changing their visible contents. When not debugging, <code>gettext.noI18n</code>
+simply returns its first parameter.</p>
+
+<h2>Advanced <code>gettext</code> Functions</h2>
+
+<p>Besides <code>gettext.format</code> and <code>gettext.noI18n</code> there
+are several other functions which are required to cover all typical translation
+scenarios.</p>
 
 <h3>Contexts</h3>
 
-<p>Sometimes, the same English phrase has multiple meanings and must be
+<p>Sometimes, the same English word or phrase has multiple meanings and must be
 translated differently depending on context. To be able to tell
 the individual translations apart, the method <code>gettext.pgettext</code>
 ('p' stands for 'particular') should be used instead of calling
@@ -128,24 +161,26 @@ alert(gt.pgettext('salutation', 'Title'));
 <h3>Plural forms</h3>
 
 <p>In the case of numbers, the rules to select the proper plural form can be
-very complex. After not having any plural forms at all, English is the second
-simplest language in this respect, having only two plural forms: singular and
-plural. Other languages can have up to four forms, and theoretically even more.
-The functions <code>gettext.ngettext</code> and <code>gettext.npgettext</code>
-(for a combination of plural forms with contexts) can select the proper plural
-form by using a piece of executable code embedded in the header of a PO file:
-</p>
+very complex. With the exception of languages with no separate plural forms,
+English is the second simplest language in this respect, having only two plural
+forms: singular and plural. Other languages can have up to four forms, and
+theoretically even more. The functions <code>gettext.ngettext</code> and
+<code>gettext.npgettext</code> (for a combination of plural forms with contexts)
+can select the proper plural form by using a piece of executable code embedded
+in the header of a PO file:</p>
 <script type="text/example">
 alert(gt.format(
     //#. %1$d is the number of mails
     //#, c-format
     gt.ngettext('You have %1$d mail', 'You have %1$d mails', n),
-    n));
+    gt.noI18n(n)));
 </script>
-<p>The function <code>ngettext</code> accepts three parameters: the English
-singular and plural forms and the number which determines the chosen plural
-form. The function <code>npgettext</code> adds a context parameter before
-the others, similar to <code>pgettext</code>.</p>
+<p>The function <code>gettext.ngettext</code> accepts three parameters:
+the English singular and plural forms and the number which determines the chosen
+plural form. The function <code>gettext.npgettext</code> adds a context
+parameter before the others, similar to <code>gettext.pgettext</code>. They are
+usually used in combination with <code>gettext.format</code> to insert
+the actual number into the translated string.</p>
 <p>The above example results in the following entry:</p>
 <pre class="nocode prettyprint">
 <code class="com">#. %1$d is the number of mails</code>
@@ -158,4 +193,4 @@ the others, similar to <code>pgettext</code>.</p>
 <p>The number of <code>msgstr[<var>N</var>]</code> lines is determined by
 the number of plural forms in each language. This number is specified in the
 header of each PO file, together with the code to compute the index of
-the correct plural form from the supplied number.</p>
+the correct plural form the supplied number.</p>

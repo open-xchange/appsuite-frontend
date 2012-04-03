@@ -94,8 +94,10 @@ define('io.ox/contacts/distrib/main',
                 view = new ContactCreateDistView({ model: model });
                 // define store
                 model.store = function (data, changes) {
+
                     view.node.find('#myGrowl').jGrowl('shutdown');
                     //sort the array before save if not empty
+
                     if (data.distribution_list) {
                         data.distribution_list = data.distribution_list.sort(util.nameSort);
                     }

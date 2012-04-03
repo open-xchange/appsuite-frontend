@@ -35,6 +35,9 @@ define("io.ox/mail/view-detail",
         }
     };
 
+    /*
+     * Helpers to beautify text mails
+     */
     var markupQuotes = function (text) {
         var lines = String(text || '').split(/<br\s?\/?>/i),
             quoting = false,
@@ -60,6 +63,39 @@ define("io.ox/mail/view-detail",
             }
         }
         return text;
+    };
+
+    var beautifyText = function (text) {
+
+        var content = markupQuotes(
+            $.trim(text)
+            // remove line breaks
+            .replace(/\n|\r/g, '')
+            // replace leading BR
+            .replace(/^\s*(<br\/?>\s*)+/g, '')
+            // reduce long BR sequences
+            .replace(/(<br\/?>\s*){3,}/g, '<br><br>')
+            // remove split block quotes
+            .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, '<br><br>')
+            // add markup for email addresses
+            .replace(/(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/g, '<a href="mailto:$6">$2$3</a>')
+        );
+
+//      // get contents to split long character sequences for better wrapping
+//      content.contents().each(function (i) {
+//          var node = $(this), text = node.text(), length = text.length;
+//          if (length >= 60) {
+//              node.text(text.replace(/(\S{60})/g, "$1\u200B")); // zero width space
+//          }
+//      });
+
+//      // collapse block quotes
+//      content.find("blockquote").each(function () {
+//          var quote = $(this);
+//          quote.text(quote.contents().text().substr(0, 150));
+//      });
+
+        return content;
     };
 
     var that = {
@@ -93,46 +129,17 @@ define("io.ox/mail/view-detail",
 
             // HTML content?
             if (html !== null) {
-                // no need for iframe with the new API
-                return content.append(
-                    $(html).find('a').attr('target', '_blank').end()
-                );
+
+                return content.append($(html))
+                    .find('meta').remove().end()
+                    .find('a').attr('target', '_blank').end();
             }
 
             if (text !== null) {
-
-                content
-                .addClass("plain-text")
-                .html(
-                    markupQuotes(
-                        $.trim(text)
-                        // remove line breaks
-                        .replace(/\n|\r/g, '')
-                        // replace leading BR
-                        .replace(/^\s*(<br\/?>\s*)+/g, '')
-                        // reduce long BR sequences
-                        .replace(/(<br\/?>\s*){3,}/g, '<br><br>')
-                        // remove split block quotes
-                        .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, '<br><br>')
-                    )
-                );
-
-//                // get contents to split long character sequences for better wrapping
-//                content.contents().each(function (i) {
-//                    var node = $(this), text = node.text(), length = text.length;
-//                    if (length >= 60) {
-//                        node.text(text.replace(/(\S{60})/g, "$1\u200B")); // zero width space
-//                    }
-//                });
-
-//                // collapse block quotes
-//                content.find("blockquote").each(function () {
-//                    var quote = $(this);
-//                    quote.text(quote.contents().text().substr(0, 150));
-//                });
+                return content.addClass('plain-text').html(beautifyText(text))
+                    .find('blockquote').removeAttr('style type').end()
+                    .find('a').attr('target', '_blank').end();
             }
-
-            return content;
         },
 
         drawScaffold: function (obj, resolver) {
@@ -221,7 +228,7 @@ define("io.ox/mail/view-detail",
                     .addClass("subject clear-title")
                     // inject some zero width spaces for better word-break
                     .text(_.prewrap(data.subject || '\u00A0'))
-                    .append($("<span>").addClass("priority").text(" " + util.getPriority(data)))
+                    .append($("<span>").addClass("priority").append(util.getPriority(data)))
             );
         }
     });

@@ -19,6 +19,7 @@ define("io.ox/calendar/main",
      "io.ox/core/commons",
      "io.ox/core/tk/vgrid",
      "io.ox/calendar/view-grid-template",
+     "io.ox/calendar/actions",
      "less!io.ox/calendar/style.css"], function (api, util, viewDetail, config, commons, VGrid, tmpl) {
 
     "use strict";
@@ -39,6 +40,9 @@ define("io.ox/calendar/main",
 
         // get window
         app.setWindow(win = ox.ui.createWindow({
+            name: 'io.ox/calendar',
+            titleWidth: (GRID_WIDTH + 27) + "px",
+            toolbar: true,
             search: true
         }));
 

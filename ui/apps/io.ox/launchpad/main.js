@@ -29,7 +29,7 @@ define('io.ox/launchpad/main',
 
         // app template
         appTmpl = _.template(
-            '<a href="#" class="app" tabindex="1">' +
+            '<a href="#" class="app" tabindex="1" data-app-name="<%= id %>">' +
             '  <img src="<%= icon %>" class="icon" alt="">' +
             '  <div class="title ellipsis"><%= title %></div>' +
             '</a>'

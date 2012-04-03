@@ -12,8 +12,10 @@
  */
 
 define('io.ox/mail/view-grid-template',
-    ['io.ox/mail/util', 'io.ox/core/tk/vgrid',
-     'less!io.ox/mail/style.css'], function (util, VGrid) {
+    ['io.ox/mail/util',
+     'io.ox/mail/api',
+     'io.ox/core/tk/vgrid',
+     'less!io.ox/mail/style.css'], function (util, api, VGrid) {
 
     'use strict';
 
@@ -29,7 +31,7 @@ define('io.ox/mail/view-grid-template',
                         from = $('<span>').addClass('from')
                     ),
                     $('<div>').append(
-                        threadSize = $('<div>').addClass('threadSize'),
+                        threadSize = $('<div>').addClass('thread-size'),
                         flag = $('<div>').addClass('flag').text('\u00A0'),
                         attachment = $('<span>').addClass('attachment'),
                         priority = $('<span>').addClass('priority'),
@@ -41,7 +43,7 @@ define('io.ox/mail/view-grid-template',
                 return { from: from, date: date, priority: priority, subject: subject, attachment: attachment, threadSize: threadSize, flag: flag };
             },
             set: function (data, fields, index) {
-                fields.priority.text(util.getPriority(data));
+                fields.priority.empty().append(util.getPriority(data));
                 fields.subject.text(_.prewrap(data.subject));
                 if (!data.threadSize || data.threadSize === 1) {
                     fields.threadSize.text('').hide();
@@ -61,6 +63,31 @@ define('io.ox/mail/view-grid-template',
                 if (util.isDeleted(data)) {
                     this.addClass('deleted');
                 }
+                this.attr('data-index', index);
+            }
+        },
+
+        // use label concept to visualize thread overview
+        thread: {
+            build: function () {
+            },
+            set: function (data, fields, index, prev) {
+                var self = this.removeClass('vgrid-label').addClass('thread-summary').empty();
+                return api.getList(api.getThread(prev)).done(function (list) {
+                    _(list.slice(1)).each(function (data) {
+                        var key = data.folder_id + '.' + data.id;
+                        self.append(
+                            $('<div>')
+                            .addClass('thread-summary-item selectable')
+                            .addClass(util.isUnread(data) ? 'unread' : undefined)
+                            .attr('data-obj-id', key)
+                            .append(
+                                $('<div>').addClass('date').text(util.getTime(data.received_date)),
+                                util.getFrom(data.from).removeClass('person')
+                            )
+                        );
+                    });
+                });
             }
         },
 
@@ -75,11 +102,12 @@ define('io.ox/mail/view-grid-template',
             tmpl.add(that.main);
 
             _(list).each(function (data, i) {
-                tmpl.getClone()
-                    .update(data, i).appendTo($div).node
-                        .css('position', 'relative')
-                        .data('object-data', data)
-                        .addClass('hover');
+                var clone = tmpl.getClone();
+                clone.update(data, i);
+                clone.appendTo($div).node
+                    .css('position', 'relative')
+                    .data('object-data', data)
+                    .addClass('hover');
             });
 
             return $div;

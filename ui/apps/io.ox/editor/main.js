@@ -126,6 +126,9 @@ define("io.ox/editor/main",
             folderAPI.get({ folder: model.get('folder_id') })
                 .done(function (data) {
                     showOk(gt('Document saved in folder "%1$s"', data.title));
+                    setTimeout(function () {
+                        textarea.focus();
+                    });
                 });
         }
 
@@ -159,18 +162,19 @@ define("io.ox/editor/main",
             if (model.has('id')) {
                 // update
                 return api.uploadNewVersion({ json: json, file: file, filename: filename })
+                    .always(win.idle)
                     .done(showSuccess)
-                    .fail(showError)
-                    .always(win.idle);
+                    .fail(showError);
+
             } else {
                 // create
                 return api.uploadFile({ json: json, file: file, filename: filename })
+                    .always(win.idle)
                     .done(function (data) {
                         model.initialize($.extend(data, { content: content }));
                         showSuccess();
                     })
-                    .fail(showError)
-                    .always(win.idle);
+                    .fail(showError);
             }
         };
 
@@ -197,6 +201,11 @@ define("io.ox/editor/main",
             return def;
         };
 
+        app.destroy = function () {
+            view.destroy();
+            view = model = app = win = textarea = container = header = null;
+        };
+
         app.setQuit(function () {
             var def = $.Deferred();
             if (model.isDirty()) {
@@ -206,8 +215,7 @@ define("io.ox/editor/main",
                     .addPrimaryButton("quit", gt('Yes, lose changes'))
                     .addButton("cancel", gt('No'))
                     .on('quit', function () {
-                        view.destroy();
-                        view = model = app = win = textarea = container = header = null;
+                        app.destroy();
                         def.resolve();
                     })
                     .on('cancel', def.reject)

@@ -354,27 +354,13 @@ define('io.ox/mail/actions',
         ref: 'io.ox/mail/actions/forward'
     }));
 
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 350,
-        id: 'move',
-        label: gt('Move'),
-        ref: 'io.ox/mail/actions/move'
-    }));
-
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 360,
-        id: 'copy',
-        label: gt('Copy'),
-        ref: 'io.ox/mail/actions/copy'
-    }));
-
+    // edit draft
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 400,
         id: 'edit',
         label: gt('Edit'),
         ref: 'io.ox/mail/actions/edit'
     }));
-
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 500,
@@ -390,61 +376,75 @@ define('io.ox/mail/actions',
         ref: 'io.ox/mail/actions/markread'
     }));
 
-    function changeLabel(options, color) {
-        return api.update(options, { color_label: color, value: true });
+    // change label
+
+    var colorNames = {
+        'NONE':      gt('None'),
+        'RED':       gt('Red'),
+        'BLUE':      gt('Blue'),
+        'GREEN':     gt('Green'),
+        'GREY':      gt('Grey'),
+        'BROWN':     gt('Brown'),
+        'AQUA':      gt('Aqua'),
+        'ORANGE':    gt('Orange'),
+        'PINK':      gt('Pink'),
+        'LIGHTBLUE': gt('Lightblue'),
+        'YELLOW':    gt('Yellow')
+    };
+
+    function changeLabel(e) {
+        return api.update(e.data.data, { color_label: e.data.color, value: true });
     }
 
     ext.point('io.ox/mail/links/inline').extend({
-        index: 503,
-        id: 'doofesDropDown',
-        draw: function (options) {
-            var labelList = $('<ul>'),
-
-                dropdown = $('<div>', {
-                    'class': 'labeldropdown dropdown'
-                }).append(labelList),
-
-                link = $('<a>', {
-                    'class': 'io-ox-action-link',
-                    //'href': '#',
-                    'tabindex': 1,
-                    'data-action': 'label'
-                }).text(gt('Label'))
-                .click(function (e) {
-                    var linkWidth = link.outerWidth(),
-                        dropDownWidth = dropdown.outerWidth(),
-                        coords = link.position();
-                    dropdown.css('left', coords.left + (linkWidth - dropDownWidth))
-                            .css('top', coords.top + link.outerHeight())
-                            .css('zIndex', 1)
-                            .slideToggle("fast");
-                }).blur(function (e) {
-                    dropdown.delay(100).slideUp('fast');
-                });
-
-            _(api.COLORS).each(function (index, color) {
-                var li = $('<li>').text(color).click(function (e) {
-                        changeLabel(options, api.COLORS[color]);
-                    });
-                if (_.isEqual(options.color_label, api.COLORS[color])) {
-                    li.addClass('active');
-                }
-                labelList.append(li);
-            });
-
-            this.append(link).append(dropdown);
+        index: 600,
+        id: 'label',
+        draw: function (data) {
+            this.append(
+                $('<span class="dropdown" class="io-ox-inline-links">')
+                .append(
+                    // link
+                    $('<a href="#" data-toggle="dropdown" >')
+                    .text(gt('Label')).append($('<b class="caret">')).dropdown(),
+                    // drop down
+                    $('<ul class="dropdown-menu">')
+                    .append(
+                        _(api.COLORS).reduce(function (memo, index, color) {
+                            return memo.add($('<li>').append(
+                                $('<a>').text(colorNames[color])
+                                .on('click', { data: data, color: index }, changeLabel)
+                                .addClass(data.color_label === index ? 'active-label' : undefined)
+                            ));
+                        }, $())
+                    )
+                )
+            );
         }
     });
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 600,
+        index: 700,
+        id: 'move',
+        label: gt('Move'),
+        ref: 'io.ox/mail/actions/move'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: 800,
+        id: 'copy',
+        label: gt('Copy'),
+        ref: 'io.ox/mail/actions/copy'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: 900,
         id: 'source',
         label: gt('View Source'),
         ref: 'io.ox/mail/actions/source'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 700,
+        index: 1000,
         id: 'delete',
         label: gt('Delete'),
         ref: 'io.ox/mail/actions/delete',

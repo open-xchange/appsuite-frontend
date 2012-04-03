@@ -67,7 +67,7 @@ define('io.ox/core/cache/localstorage', function () {
 
                 // if garbage collection does not kill any item, do something else
                 if (delCounter === 0) {
-                    console.log('GC: nothing killed');
+                    //console.log('GC: nothing killed');
                     if (force === true) {
                         console.log('GC: forced -> clear current keyspace');
                         that.clear();
