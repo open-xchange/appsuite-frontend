@@ -24,7 +24,8 @@ define("io.ox/files/view-detail",
      "io.ox/files/api",
      "io.ox/preview/main",
      "io.ox/core/tk/upload",
-     "gettext!io.ox/files/files"], function (ext, links, layouts, KeyListener, i18n, Event, actions, filesAPI, Preview, upload, gt) {
+     "io.ox/core/api/user",
+     "gettext!io.ox/files/files"], function (ext, links, layouts, KeyListener, i18n, Event, actions, filesAPI, Preview, upload, userAPI, gt) {
 
     "use strict";
 
@@ -247,7 +248,11 @@ define("io.ox/files/view-detail",
                 var count = 0;
                 _.each(extension.fields, function (index, field) {
                     var content = null;
-                    $line.append($("<em>").text(extension.label(field) + ":")).append(content = $("<span>"));
+                    $line.append(
+                        $("<em>").text(extension.label(field) + ':'),
+                        content = $('<span>'),
+                        $.txt('\u00A0 ')
+                    );
                     extension.draw(field, file, content);
                     count++;
                     if (count === 5) {
@@ -280,8 +285,20 @@ define("io.ox/files/view-detail",
     };
 
     ext.point("io.ox/files/details/sections/header/basicInfo").extend({
+        id: "filename",
+        index: 100,
+        fields: ["filename"],
+        label: function () {
+            return gt("File name");
+        },
+        draw: function (field, file, $element) {
+            $element.text(file.filename || 'N/A');
+        }
+    });
+
+    ext.point("io.ox/files/details/sections/header/basicInfo").extend({
         id: "size",
-        index: 10,
+        index: 200,
         fields: ["file_size"],
         label: function () {
             return gt("Size");
@@ -291,27 +308,31 @@ define("io.ox/files/view-detail",
         }
     });
 
-    ext.point("io.ox/files/details/sections/header/basicInfo").extend({
-        id: "version",
-        index: 20,
-        fields: ["version"],
-        label: function (field) {
-            return gt("Version");
-        },
-        draw: function (field, file, $element) {
-            $element.text(file.version);
-        }
-    });
+    // version number is boring
+//    ext.point("io.ox/files/details/sections/header/basicInfo").extend({
+//        id: "version",
+//        index: 300,
+//        fields: ["version"],
+//        label: function (field) {
+//            return gt("Version");
+//        },
+//        draw: function (field, file, $element) {
+//            $element.text(file.version);
+//        }
+//    });
 
     ext.point("io.ox/files/details/sections/header/basicInfo").extend({
         id: "last_modified",
-        index: 30,
+        index: 400,
         fields: ["last_modified"],
         label: function () {
             return gt("Last Modified");
         },
         draw: function (field, file, $element) {
-            $element.text(i18n.date("fulldatetime", file.last_modified));
+            $element.append(
+                userAPI.getLink(file.created_by),
+                $.txt(' \u2013 ' + i18n.date("fulldatetime", file.last_modified)) // 2013 = ndash
+            );
         }
     });
 
@@ -635,10 +656,7 @@ define("io.ox/files/view-detail",
             orientation: 'right'
         },
         draw: function (version) {
-            var $node = this;
-            require(["io.ox/core/api/user"], function (userAPI) {
-                $node.append($("<span>").append(userAPI.getLink(version.created_by)).addClass("pull-right"));
-            });
+            this.append($("<span>").append(userAPI.getLink(version.created_by)).addClass("pull-right"));
         }
     });
 

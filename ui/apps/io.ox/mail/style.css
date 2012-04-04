@@ -175,12 +175,18 @@
     -webkit-user-select: text;
     -moz-user-select: text;
     user-select: text;
+    clear: both;
 }
 
 .mail-detail.page {
     border-bottom: 1px solid #eee;
     padding: 30px 40px 30px 40px;
     min-height: 200px;
+}
+
+.mail-detail-clear-both {
+    clear: both;
+    height: 0px;
 }
 
 .mail-detail.page:last-child {
@@ -207,7 +213,7 @@
 
 .mail-detail .subject, .mail-detail .flag {
     font-size: 16pt;
-    margin: 0.2em 0 0.4em 0;
+    margin: 0.4em 0 0.6em 0;
     word-wrap: break-word;
 }
 
@@ -242,6 +248,10 @@
     color: #aaa;
 }
 
+.mail-detail .to-cc .person-link {
+    color: #333;
+}
+
 .mail-detail .spacer {
     background-color: #ccc;
     border: 0px none;
@@ -250,14 +260,25 @@
 }
 
 .mail-detail .content {
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+    max-width: 750px;
+    margin-top: 2em;
 }
 
+/* TODO: remove / temp. fix for bootstrap */
+.mail-detail .content [class*="span"] {
+    float: none;
+    margin-left: 0;
+}
+
+/* TODO: remove / temp. fix for sanitized HTML */
+.mail-detail .content { padding: 0 !important; }
+.mail-detail .content > .content { padding: 0; }
+
 .mail-detail .content.plain-text {
-    font-family: monospace;
-    font-size: 14px;
-    line-height: 18px;
     white-space: pre-wrap;
-    max-width: 700px;
 }
 
 .touch .mail-detail .content.plain-text {

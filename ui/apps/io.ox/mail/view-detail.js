@@ -12,13 +12,14 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com
  */
 
-define("io.ox/mail/view-detail",
-    ["io.ox/core/extensions",
-     "io.ox/core/extPatterns/links",
-     "io.ox/mail/util",
-     "io.ox/mail/actions",
-     "gettext!io.ox/mail/mail"
-    ], function (ext, links, util, actions, gt) {
+define('io.ox/mail/view-detail',
+    ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
+     'io.ox/mail/util',
+     'io.ox/mail/api',
+     'gettext!io.ox/mail/mail',
+     'io.ox/mail/actions'
+    ], function (ext, links, util, api, gt) {
 
     'use strict';
 
@@ -26,10 +27,10 @@ define("io.ox/mail/view-detail",
     window.iframeResize = function (guid, doc) {
         _.defer(function () {
             var height = $(doc.body).outerHeight(true);
-            $("#tmp-iframe-" + guid).css("height", height + 30 + "px");
+            $('#tmp-iframe-' + guid).css('height', height + 30 + 'px');
         });
         if (Modernizr.touch) {
-            $(doc).on("touchmove", function (e) {
+            $(doc).on('touchmove', function (e) {
                 e.preventDefault();
             });
         }
@@ -85,17 +86,42 @@ define("io.ox/mail/view-detail",
 //      content.contents().each(function (i) {
 //          var node = $(this), text = node.text(), length = text.length;
 //          if (length >= 60) {
-//              node.text(text.replace(/(\S{60})/g, "$1\u200B")); // zero width space
+//              node.text(text.replace(/(\S{60})/g, '$1\u200B')); // zero width space
 //          }
 //      });
 
 //      // collapse block quotes
-//      content.find("blockquote").each(function () {
+//      content.find('blockquote').each(function () {
 //          var quote = $(this);
 //          quote.text(quote.contents().text().substr(0, 150));
 //      });
 
         return content;
+    };
+
+    var getContentType = function (type) {
+        // might be: image/jpeg; name=Foto.JPG", so ...
+        var split = (type || 'unknown').split(/;/);
+        return split[0];
+    };
+
+    var regHTML = /^text\/html$/i,
+        regText = /^text\/plain$/i,
+        regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
+        regFolder = /^(\s*)(http[^#]+#m=infostore&f=\d+)(\s*)$/i,
+        regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i;
+
+    var hasMultipleTextParts = function (att) {
+        return _(att).reduce(function (memo, a) {
+            var type = getContentType(a.content_type);
+            return memo + regText.test(type);
+        }, 0) > 1;
+    };
+
+    var drawDocumentLink = function (href, title) {
+        return '<a href="' + $.trim(href) + '" style="text-decoration: none; font-family: Arial;">' +
+            '<span class="label label-info">' + title + '</span>' +
+            '</a>';
     };
 
     var that = {
@@ -107,55 +133,82 @@ define("io.ox/mail/view-detail",
             }
 
             var att = data.attachments, i = 0, $i = att.length,
-                text = null, html = null,
-                content = $("<div>").addClass("content");
+                text = '', html = '', type, src,
+                multipleTextParts = hasMultipleTextParts(att),
+                content = $('<div>').addClass('content');
 
             for (; i < $i; i++) {
-                if (html === null && /^text\/html$/i.test(att[i].content_type)) {
+                type = getContentType(att[i].content_type);
+                if (html === '' && text === '' && regHTML.test(type)) {
+                    // HTML
                     html = att[i].content;
-                } else if (text === null && /^text\/plain$/i.test(att[i].content_type)) {
-                    text = att[i].content;
+                    break;
+                } else if (regText.test(type)) {
+                    // plain TEXT
+                    text += att[i].content;
+                } else if (multipleTextParts && regImage.test(type)) {
+                    // image surrounded by text parts
+                    src = api.getUrl(att[i], 'view') + '&scaleType=contain&width=800&height=600';
+                    text += '\n<br>\n<br>\n<img src="' + src + '" alt="" style="display: block">\n';
                 }
             }
 
             // empty?
             if ($.trim(html || text) === '') {
                 return content.append(
-                    $("<div>")
-                    .addClass("infoblock backstripes")
+                    $('<div>')
+                    .addClass('infoblock backstripes')
                     .text(gt('This email has no content'))
                 );
             }
 
-            // HTML content?
-            if (html !== null) {
-
-                return content.append($(html))
-                    .find('meta').remove().end()
-                    .find('a').attr('target', '_blank').end();
+            if (html !== '') {
+                // HTML
+                content.append($(html))
+                    .find('meta').remove().end();
+            }
+            else if (text !== '') {
+                // plain TEXT
+                content.addClass('plain-text').html(beautifyText(text));
             }
 
-            if (text !== null) {
-                return content.addClass('plain-text').html(beautifyText(text))
-                    .find('blockquote').removeAttr('style type').end()
-                    .find('a').attr('target', '_blank').end();
-            }
+            // further fixes
+            content
+                .find('*')
+                    .filter(function () {
+                        return $(this).children().length === 0;
+                    })
+                    .each(function () {
+                        var text = $(this).text(), m;
+                        if ((m = text.match(regDocument)) && m.length) {
+                            // link to document
+                            $(this).replaceWith(m[1] + drawDocumentLink(m[2], gt('Document')) + m[3]);
+                        } else if ((m = text.match(regFolder)) && m.length) {
+                            // link to folder
+                            $(this).replaceWith(m[1] + drawDocumentLink(m[2], gt('Folder')) + m[3]);
+                        }
+                    })
+                    .end().end()
+                .find('blockquote').removeAttr('style type').end()
+                .find('a').attr('target', '_blank').end();
+
+            return content;
         },
 
         drawScaffold: function (obj, resolver) {
-            return $("<div>")
-                .addClass("mail-detail page")
+            return $('<div>')
+                .addClass('mail-detail page')
                 .busy()
-                .one("resolve", obj, resolver);
+                .one('resolve', obj, resolver);
         },
 
         draw: function (data) {
 
             if (!data) {
-                return $("<div>");
+                return $('<div>');
             }
 
-            var node = $("<div>").addClass("mail-detail");
+            var node = $('<div>').addClass('mail-detail');
             ext.point('io.ox/mail/detail').invoke('draw', node, data);
             return node;
         }
@@ -169,14 +222,14 @@ define("io.ox/mail/view-detail",
         draw: function (data) {
             var picture;
             this.append(
-                picture = $("<div>").addClass("contact-picture").hide()
+                picture = $('<div>').addClass('contact-picture').hide()
             );
-            require(["io.ox/contacts/api"], function (api) {
+            require(['io.ox/contacts/api'], function (api) {
                 // get contact picture
                 api.getPictureURL(data.from[0][1])
                     .done(function (url) {
                         if (url) {
-                            picture.css("background-image", "url(" + url + ")").show();
+                            picture.css('background-image', 'url(' + url + ')').show();
                         }
                         if (/dummypicture\.png$/.test(url)) {
                             picture.addClass('default-picture');
@@ -192,7 +245,7 @@ define("io.ox/mail/view-detail",
         id: 'receiveddate',
         draw: function (data) {
             this.append(
-                $("<div>").addClass("date list").text(util.getSmartTime(data.received_date))
+                $('<div>').addClass('date list').text(util.getSmartTime(data.received_date))
             );
         }
     });
@@ -202,8 +255,8 @@ define("io.ox/mail/view-detail",
         id: 'fromlist',
         draw: function (data) {
             this.append(
-                $("<div>")
-                .addClass("from list")
+                $('<div>')
+                .addClass('from list')
                 .append(util.serializeList(data.from, true))
             );
         }
@@ -214,7 +267,7 @@ define("io.ox/mail/view-detail",
         id: 'flag',
         draw: function (data) {
             this.append(
-                $("<div>").addClass("flag flag_" + util.getFlag(data) + ' clear-title').text('\u00A0')
+                $('<div>').addClass('flag flag_' + util.getFlag(data) + ' clear-title').text('\u00A0')
             );
         }
     });
@@ -224,11 +277,11 @@ define("io.ox/mail/view-detail",
         id: 'subject',
         draw: function (data) {
             this.append(
-                $("<div>")
-                    .addClass("subject clear-title")
+                $('<div>')
+                    .addClass('subject clear-title')
                     // inject some zero width spaces for better word-break
                     .text(_.prewrap(data.subject || '\u00A0'))
-                    .append($("<span>").addClass("priority").append(util.getPriority(data)))
+                    .append($('<span>').addClass('priority').append(util.getPriority(data)))
             );
         }
     });
@@ -243,15 +296,15 @@ define("io.ox/mail/view-detail",
 
             this.append(
                 showTO ?
-                    $("<div>")
-                        .addClass("to-cc list")
+                    $('<div>')
+                        .addClass('to-cc list')
                         .append(
                             // TO
-                            $("<span>").addClass("io-ox-label").text(gt("To") + ":\u00A0"),
+                            $('<span>').addClass('io-ox-label').text(gt('To') + '\u00A0\u00A0'),
                             util.serializeList(data.to, true),
-                            $.txt(' '),
+                            $.txt(' \u00A0 '),
                             // CC
-                            showCC ? $("<span>").addClass("io-ox-label").text(gt("Copy") + ":\u00A0") : [],
+                            showCC ? $('<span>').addClass('io-ox-label').text(gt('Copy') + '\u00A0\u00A0') : [],
                             util.serializeList(data.cc, true)
                         )
                     : []
@@ -279,7 +332,7 @@ define("io.ox/mail/view-detail",
 
             // get non-inline attachments
             for (; i < $i; i++) {
-                if (data.attachments[i].disp === "attachment") {
+                if (data.attachments[i].disp === 'attachment') {
                     attachments.push(
                         _.extend(data.attachments[i], { mail: { id: data.id, folder_id: data.folder_id }})
                     );
@@ -288,7 +341,7 @@ define("io.ox/mail/view-detail",
             }
             if (hasAttachments) {
                 var outer = $('<div>').append(
-                    $('<span>').addClass('io-ox-label').text(gt('Attachments: '))
+                    $('<span>').addClass('io-ox-label').text(gt('Attachments') + '\u00A0\u00A0')
                 );
                 _(attachments).each(function (a, i) {
                     var label = a.filename || ('Attachment #' + i);
@@ -316,9 +369,9 @@ define("io.ox/mail/view-detail",
             var self = this;
             if (data.modified === 1) {
                 this.append(
-                    $("<div>")
-                    .addClass("list")
-                    .addClass("infoblock backstripes")
+                    $('<div>')
+                    .addClass('list')
+                    .addClass('infoblock backstripes')
                     .append(
                          $('<a>').text(gt('Bilder anzeigen')),
                          $('<i>').text(
@@ -328,7 +381,7 @@ define("io.ox/mail/view-detail",
                      )
                     .on('click', function (e) {
                         e.preventDefault();
-                        require(["io.ox/mail/api"], function (api) {
+                        require(['io.ox/mail/api'], function (api) {
                             // get unmodified mail
                             api.getUnmodified(data)
                                 .done(function (unmodifiedData) {
@@ -348,7 +401,8 @@ define("io.ox/mail/view-detail",
         id: 'content',
         draw: function (data) {
             this.addClass('view').append(
-                that.getContent(data)
+                that.getContent(data),
+                $('<div>').addClass('mail-detail-clear-both')
             );
         }
     });

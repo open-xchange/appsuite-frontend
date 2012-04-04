@@ -26,6 +26,7 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
             },
 
         fnClickPerson = function (e) {
+                e.preventDefault();
                 ext.point('io.ox/core/person:action').each(function (ext) {
                     _.call(ext.action, e.data, e);
                 });
@@ -83,7 +84,7 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
             var i = 0, $i = list.length, tmp = $(), node, display_name = '';
             for (; i < $i; i++) {
                 display_name = this.getDisplayName(list[i]);
-                node = $('<span>').addClass(addHandlers ? 'person-link' : 'person')
+                node = $('<a>', { href: '#' }).addClass(addHandlers ? 'person-link' : 'person')
                     .css('whiteSpace', 'nowrap').text(display_name);
                 if (addHandlers) {
                     node.on('click', { display_name: display_name, email1: list[i][1] }, fnClickPerson)
