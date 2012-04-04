@@ -26,9 +26,15 @@ define("io.ox/preview/main",
                 e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
             });
         };
-        clickableLink = function (desc) {
-            return $('<a>', { href: desc.dataURL + "&delivery=view", target: '_blank', draggable: true })
+        clickableLink = function (desc, clickHandler) {
+            var $a = $('<a>', {draggable: true })
             .attr('data-downloadurl', desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.dataURL + "&delivery=download");
+            if (clickHandler) {
+                $a.attr({href: "#"}).on("click", clickHandler);
+            } else {
+                $a.attr({ href: desc.dataURL + "&delivery=view", target: '_blank'});
+            }
+            return $a;
         };
     } else {
         clickableLink = function (desc) {
@@ -111,14 +117,22 @@ define("io.ox/preview/main",
             index: 10,
             endings: ox.serverConfig.previewExtensions,
             draw: function (file) {
-                this.append(
-                    $("<img>", { src: file.dataURL + "&format=preview_image&width=400", alt: 'Preview' })
+                var $a = clickableLink(file, function () {
+                    require(["io.ox/preview/officePreview"], function (officePreview) {
+                        officePreview.draw(file.dataURL);
+                    });
+                });
+                $a.append(
+                    $("<img>", { src: file.dataURL + "&format=preview_image&width=400&delivery=view", alt: 'Preview' })
                         .css({
                             width: "400px",
                             maxWidth: "100%"
-                        })
+                        }).addClass("io-ox-clickable")
                 );
-            }
+                dragOutHandler($a);
+                this.append($a);
+            },
+            omitDragoutAndClick: true
         }));
     }
 
@@ -222,7 +236,11 @@ define("io.ox/preview/main",
     return {
         Preview: Preview,
         Engine: Engine,
-        Extension: Extension
+        Extension: Extension,
+        protectedMethods: {
+            clickableLink: clickableLink,
+            dragOutHandler: dragOutHandler
+        }
     };
 
 });

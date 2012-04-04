@@ -203,7 +203,7 @@ define("io.ox/core/tk/dialogs",
                 width: parseInt(o.width || nodes.popup.width(), 10),
                 height: parseInt(o.height || nodes.popup.height(), 10)
             };
-
+            
             // limit width & height
             _(["width", "height"]).each(function (d) {
                 // apply explicit limit
