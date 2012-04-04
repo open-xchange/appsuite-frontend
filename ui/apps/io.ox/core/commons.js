@@ -117,7 +117,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             // open (first show)
             app.getWindow().on('open', function () {
                 if (api.needsRefresh(app.folder.get())) {
-                    api.trigger('refresh!', app.folder.get());
+                    api.trigger('refresh^', app.folder.get());
                 }
             });
         },

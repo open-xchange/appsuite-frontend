@@ -543,7 +543,7 @@ define("io.ox/mail/api",
     };
 
     // refresh
-    api.on('refresh!', function (e, folder) {
+    ox.on('refresh^', function (e, folder) {
         if (ox.online) {
             api.getAllThreads({ folder: folder }, false)
                 .done(function () {

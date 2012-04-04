@@ -109,7 +109,8 @@ define('io.ox/mail/view-detail',
         regText = /^text\/plain$/i,
         regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=\d+)(\s*)$/i,
-        regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i;
+        regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i,
+        regLink = /^(\s*)(http\S+)(\s*)$/i;
 
     var hasMultipleTextParts = function (att) {
         return _(att).reduce(function (memo, a) {
@@ -119,9 +120,12 @@ define('io.ox/mail/view-detail',
     };
 
     var drawDocumentLink = function (href, title) {
-        return '<a href="' + $.trim(href) + '" style="text-decoration: none; font-family: Arial;">' +
-            '<span class="label label-info">' + title + '</span>' +
-            '</a>';
+        return $('<a>', { href: $.trim(href) }).css({ textDecoration: 'none', fontFamily: 'Arial' })
+            .append($('<span class="label label-info">').text(title));
+    };
+
+    var drawLink = function (href) {
+        return $('<a>', { href: href }).text(href);
     };
 
     var that = {
@@ -179,13 +183,21 @@ define('io.ox/mail/view-detail',
                         return $(this).children().length === 0;
                     })
                     .each(function () {
-                        var text = $(this).text(), m;
+                        var node = $(this), text = node.text(), m;
                         if ((m = text.match(regDocument)) && m.length) {
                             // link to document
-                            $(this).replaceWith(m[1] + drawDocumentLink(m[2], gt('Document')) + m[3]);
+                            node.replaceWith(
+                                 $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Document'))).add($.txt(m[3]))
+                            );
                         } else if ((m = text.match(regFolder)) && m.length) {
                             // link to folder
-                            $(this).replaceWith(m[1] + drawDocumentLink(m[2], gt('Folder')) + m[3]);
+                            node.replaceWith(
+                                $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Folder'))).add($.txt(m[3]))
+                            );
+                        } else if ((m = text.match(regLink)) && m.length && node.closest('a').length === 0) {
+                            node.replaceWith(
+                                $($.txt(m[1])).add(drawLink(m[2])).add($.txt(m[3]))
+                            );
                         }
                     })
                     .end().end()

@@ -66,6 +66,16 @@ define("io.ox/core/main",
         });
     }
 
+    function globalRefresh() {
+        // trigger global event
+        if (ox.online) {
+            console.debug('triggering automatic refresh ...');
+            ox.trigger("refresh^");
+        }
+    }
+
+    setInterval(globalRefresh, 60000 * 2); // 2 minute refresh interval!
+
     function launch() {
 
         // add small logo to top bar
@@ -107,10 +117,7 @@ define("io.ox/core/main",
         desktop.addLauncher("right", gt("Help"));
 
         desktop.addLauncher("right", gt("Refresh"), function () {
-                // trigger global event
-                if (ox.online) {
-                    ox.trigger("refresh");
-                }
+                globalRefresh();
                 return $.Deferred().resolve();
             })
             .attr("id", "io-ox-refresh-icon");
