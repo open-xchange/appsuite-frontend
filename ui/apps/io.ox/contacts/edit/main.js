@@ -27,7 +27,7 @@ define('io.ox/contacts/edit/main',
     // multi instance pattern
     function createInstance(data) {
 
-        var app, getDirtyStatus,
+        var app, getDirtyStatus, container,
             dirtyStatus = {
             byApi: true
         };
@@ -39,7 +39,7 @@ define('io.ox/contacts/edit/main',
 
         app.setLauncher(function () {
 
-            var win, container;
+            var win;
 
             win = ox.ui.createWindow({
                 title: 'Edit Contact',
@@ -69,11 +69,13 @@ define('io.ox/contacts/edit/main',
                     model.store = function (data, changes) {
                         // TODO: replace image upload with a field in formsjs method
                         var image = view.node.find('input[name="picture-upload-file"][type="file"]').get(0);
+                        view.node.find('#myGrowl').jGrowl('shutdown');
                         if (image.files && image.files[0]) {
                             return api.editNewImage(data, changes, image.files[0])
                                 .done(function () {
                                     dirtyStatus.byApi = false;
                                     view.destroy();
+                                    view.node.find('#myGrowl').jGrowl('shutdown');
                                     app.quit();
                                 })
                                 .fail(function (e) {
@@ -111,7 +113,6 @@ define('io.ox/contacts/edit/main',
 
         app.setQuit(function () {
             var def = $.Deferred();
-
             dirtyStatus.byModel = getDirtyStatus();
 
             if (dirtyStatus.byModel === true) {
@@ -126,7 +127,7 @@ define('io.ox/contacts/edit/main',
                                 console.debug("Action", action);
                                 if (action === 'delete') {
                                     def.resolve();
-                                    $('#myGrowl').jGrowl('shutdown');
+                                    container.find('#myGrowl').jGrowl('shutdown');
                                 } else {
                                     def.reject();
                                 }
@@ -134,11 +135,11 @@ define('io.ox/contacts/edit/main',
                     });
                 } else {
                     def.resolve();
-                    $('#myGrowl').jGrowl('shutdown');
+                    container.find('#myGrowl').jGrowl('shutdown');
                 }
             } else {
                 def.resolve();
-                $('#myGrowl').jGrowl('shutdown');
+                container.find('#myGrowl').jGrowl('shutdown');
             }
             //clean
             return def;
