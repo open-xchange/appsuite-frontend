@@ -357,3 +357,8 @@ h4.mail-attachment-preview {
 .mail-detail .active-label {
     font-weight: bold;
 }
+
+/* fix bootstrap */
+.mail-detail .content img {
+    width: auto;
+}

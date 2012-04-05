@@ -271,7 +271,7 @@ define("io.ox/core/api/factory",
         Events.extend(api);
 
         // bind to global refresh
-        ox.on("refresh^", function () {
+        ox.on("refresh^." + o.id, function () {
             if (ox.online) {
                 // clear "all & list" caches
                 api.caches.all.clear();

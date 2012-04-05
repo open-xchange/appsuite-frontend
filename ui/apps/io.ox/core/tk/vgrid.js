@@ -137,6 +137,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             // states
             initialized = false,
             firstRun = true,
+            firstAutoSelect = true,
             // inner container
             scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node),
             container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
@@ -488,7 +489,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 self.trigger('ids-loaded');
             }
             // paint items
-            var offset = getIndex(node.scrollTop()) - (numRows - numVisible);
+            var offset = currentOffset || (getIndex(node.scrollTop()) - (numRows - numVisible));
             return paint(offset);
         }
 
@@ -536,9 +537,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                                     // scroll to first selected item
                                     cid = _(ids).first();
                                     setIndex(self.selection.getIndex(cid) || 0);
-                                } else {
+                                } else if (firstAutoSelect) {
                                     // select first or previous selection
                                     self.selection.selectSmart();
+                                    firstAutoSelect = false;
                                 }
                             })
                             .done(def.resolve)
@@ -685,6 +687,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             // otherwise subsequent search queries are impossible
             // if this function gets called too often, fix it elsewhere
             currentMode = mode;
+            firstAutoSelect = true;
             return this.refresh();
         };
 

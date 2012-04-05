@@ -544,6 +544,9 @@ define("io.ox/mail/api",
         });
     };
 
+    // disable default refresh
+    ox.off('refresh^.mail');
+
     // refresh
     ox.on('refresh^', function (e, folder) {
         if (ox.online) {
