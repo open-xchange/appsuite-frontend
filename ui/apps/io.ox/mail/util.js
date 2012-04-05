@@ -129,6 +129,9 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
         },
 
         getDisplayName: function (pair) {
+            if (!pair) {
+                return '';
+            }
             var name = pair[0], email = pair[1],
                 display_name = _.isString(name) ? name.replace(rDisplayNameCleanup, '') : '';
             return display_name || email;
