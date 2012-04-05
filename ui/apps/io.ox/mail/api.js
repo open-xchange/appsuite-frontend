@@ -49,11 +49,13 @@ define("io.ox/mail/api",
             },
             get: {
                 action: "get",
-                view: "noimg"
+                view: "noimg"/*,
+                format: "preview_filtered"*/
             },
             getUnmodified: {
                 action: "get",
-                view: "html"
+                view: "html"/*,
+                format: "preview_filtered"*/
             },
             search: {
                 action: "search",
