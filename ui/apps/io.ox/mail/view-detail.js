@@ -169,7 +169,12 @@ define('io.ox/mail/view-detail',
             if (html !== '') {
                 // HTML
                 content.append($(html))
-                    .find('meta').remove().end();
+                    .find('meta').remove().end()
+                    // transform outlook's pseudo blockquotes
+                    .find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
+                        $(this).replaceWith($('<blockquote>').append($(this).contents()));
+                    })
+                    .end();
             }
             else if (text !== '') {
                 // plain TEXT
@@ -262,6 +267,16 @@ define('io.ox/mail/view-detail',
         }
     });
 
+    function searchSender(e) {
+        var app = ox.ui.App.get('io.ox/mail')[0],
+            win = app.getWindow(),
+            query = e.data.display_name || e.data.email1;
+        // trigger search
+        win.nodes.search.val(query).focus();
+        win.search.query = query;
+        win.trigger('search');
+    }
+
     ext.point('io.ox/mail/detail').extend({
         index: 120,
         id: 'fromlist',
@@ -269,7 +284,16 @@ define('io.ox/mail/view-detail',
             this.append(
                 $('<div>')
                 .addClass('from list')
-                .append(util.serializeList(data.from, true))
+                .append(
+                    util.serializeList(data.from, true, function (obj) {
+                        if (ox.ui.App.get('io.ox/mail').length) {
+                            this.append(
+                                $('<i class="icon-search">').on('click', obj, searchSender)
+                                    .css({ marginLeft: '0.5em', opacity: 0.3, cursor: 'pointer' })
+                            );
+                        }
+                    })
+                )
             );
         }
     });

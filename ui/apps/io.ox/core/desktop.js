@@ -504,6 +504,12 @@ define("io.ox/core/desktop",
             });
         };
 
+        App.get = function (name) {
+            return _(ox.ui.running).filter(function (app) {
+                return app.getName() === name;
+            });
+        };
+
         return function (options) {
             return new App(options);
         };
@@ -1076,7 +1082,7 @@ define("io.ox/core/desktop",
                 .append(
                     $('<label>', { 'for': searchId })
                     .append(
-                        $("<input>", {
+                        win.nodes.search = $("<input>", {
                             type: "text",
                             placeholder: "Search ...",
                             tabindex: '1',
@@ -1085,14 +1091,18 @@ define("io.ox/core/desktop",
                         })
                         .tooltip({
                             animation: false,
-                            title: 'Press enter to search',
+                            title: 'Press &lt;enter> to search,<br>press &lt;esc> to clear',
                             placement: 'bottom',
                             trigger: 'focus'
                         })
                         .addClass('input-large search-query')
                         .on({
-                            keypress: function (e) {
+                            keydown: function (e) {
                                 e.stopPropagation();
+                                if (e.which === 27) {
+                                    $(this).val('');
+                                    win.trigger("cancel-search", lastQuery = '');
+                                }
                             },
                             search: function (e) {
                                 e.stopPropagation();

@@ -80,22 +80,28 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
             return list;
         },
 
-        serializeList: function (list, addHandlers) {
-            var i = 0, $i = list.length, tmp = $(), node, display_name = '';
+        serializeList: function (list, addHandlers, customize) {
+            var i = 0, $i = list.length, tmp = $('<div>'), node, obj;
             for (; i < $i; i++) {
-                display_name = this.getDisplayName(list[i]);
+                obj = {
+                    display_name: this.getDisplayName(list[i]),
+                    email1: String(list[i][1] || '').toLowerCase()
+                };
                 node = $('<a>', { href: '#' }).addClass(addHandlers ? 'person-link' : 'person')
-                    .css('whiteSpace', 'nowrap').text(display_name);
+                    .css('whiteSpace', 'nowrap')
+                    .text(obj.display_name)
+                    .appendTo(tmp);
                 if (addHandlers) {
-                    node.on('click', { display_name: display_name, email1: list[i][1] }, fnClickPerson)
-                        .css('cursor', 'pointer');
+                    node.on('click', obj, fnClickPerson).css('cursor', 'pointer');
                 }
-                tmp = tmp.add(node);
+                if (customize) {
+                    customize.call(tmp, obj);
+                }
                 if (i < $i - 1) {
-                    tmp = tmp.add($('<span>').addClass('delimiter').html('&nbsp;&bull; '));
+                    tmp.append($('<span>').addClass('delimiter').html('&nbsp;&bull; '));
                 }
             }
-            return tmp;
+            return tmp.children();
         },
 
         serializeAttachments: function (data, list) {
