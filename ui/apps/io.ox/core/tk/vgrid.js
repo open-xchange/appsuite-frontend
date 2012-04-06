@@ -532,11 +532,11 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                                     // non-existing items that cannot be resolved in selections
                                     self.selection.set(_(ids).map(function (cid) {
                                         var c = cid.split(/\./);
-                                        return { folder_id: c[0], id: c[1] };
+                                        return { folder_id: c[0], id: c[1], recurrence_position: c[2] };
                                     }));
                                     // scroll to first selected item
                                     cid = _(ids).first();
-                                    setIndex(self.selection.getIndex(cid) || 0);
+                                    setIndex((self.selection.getIndex(cid) || 0) - 2); // not at the very top
                                 } else if (firstAutoSelect) {
                                     // select first or previous selection
                                     self.selection.selectSmart();
@@ -568,7 +568,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
 
         // set scrollTop via index
         setIndex = function (index) {
-            var i = 0, $i = Math.min(index, all.length), j = 0, y = 0, label;
+            var i = 0, $i = Math.min(Math.max(0, index), all.length), j = 0, y = 0, label;
             for (; i < $i; i++) {
                 label = labels.list[j];
                 if (label && label.pos === i) {

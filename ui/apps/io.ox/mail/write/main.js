@@ -15,7 +15,6 @@
 define.async('io.ox/mail/write/main',
     ['io.ox/mail/api',
      'io.ox/mail/util',
-     'io.ox/mail/write/textile',
      'io.ox/core/extensions',
      'io.ox/core/config',
      'io.ox/contacts/api',
@@ -27,7 +26,7 @@ define.async('io.ox/mail/write/main',
      'io.ox/mail/write/view-main',
      'gettext!io.ox/mail/mail',
      'less!io.ox/mail/style.css',
-     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, textile, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload, MailModel, WriteView, gt) {
+     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload, MailModel, WriteView, gt) {
 
     'use strict';
 
@@ -76,14 +75,15 @@ define.async('io.ox/mail/write/main',
             editor,
             editorHash = {},
             currentSignature = '',
-            editorMode = '',
+            editorMode,
+            defaultEditorMode = 'text', // config.get('gui.mail.formatmessage', 'TEXT/PLAIN') === 'TEXT/PLAIN' ? 'text' : 'html',
             mailState,
             composeMode,
             view,
             model;
 
         model = new MailModel();
-        view = new WriteView({model: model});
+        view = new WriteView({ model: model });
 
         app = ox.ui.createApp({
             name: 'io.ox/mail/write',
@@ -411,7 +411,7 @@ define.async('io.ox/mail/write/main',
             mail = mail || {};
             mail.data = mail.data || {};
             mail.mode = mail.mode || 'compose';
-            mail.format = mail.format || 'text';
+            mail.format = mail.format || defaultEditorMode || 'text';
             mail.initial = mail.initial || false;
             // call setters
             var data = mail.data;

@@ -54,7 +54,7 @@ define("io.ox/calendar/main",
         // DOM scaffold
 
         // left panel
-        left = $("<div/>")
+        left = $("<div>")
             .addClass("leftside border-right")
             .css({
                 width: GRID_WIDTH + "px",
@@ -63,7 +63,7 @@ define("io.ox/calendar/main",
             .appendTo(win.nodes.main);
 
         // right panel
-        right = $("<div/>")
+        right = $("<div>")
             .css({ left: GRID_WIDTH + 1 + "px", overflow: "auto" })
             .addClass("rightside default-content-padding calendar-detail-pane")
             .appendTo(win.nodes.main);
@@ -73,7 +73,7 @@ define("io.ox/calendar/main",
 
         // fix selection's serialize
         grid.selection.serialize = function (obj) {
-            return typeof obj === "object" ? (obj.folder_id || 0) + "." + obj.id + "." + (obj.recurrence_position || 0) : obj;
+            return typeof obj === "object" ? (obj.folder_id || obj.folder || 0) + "." + obj.id + "." + (obj.recurrence_position || 0) : obj;
         };
 
         // add template

@@ -490,6 +490,12 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             changed();
         };
 
+        this.retriggerUnlessEmpty = function () {
+            if (this.get().length) {
+                changed();
+            }
+        };
+
         this.destroy = function () {
             this.clear();
             this.keyboard(false);

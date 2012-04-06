@@ -214,7 +214,7 @@
 
 .mail-detail .subject, .mail-detail .flag {
     font-size: 16pt;
-    margin: 0.4em 0 0.6em 0;
+    margin: 0 0 0.6em 0;
     word-wrap: break-word;
 }
 
@@ -232,7 +232,7 @@
     float: right;
     width: 64px;
     height: 64px;
-    margin: 0 0 10px 20px;
+    margin: 0 0 1em 1.5em;
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
@@ -240,7 +240,7 @@
 
 .mail-detail .list {
     line-height: 1.25em;
-    padding: 0.2em 0 0.2em 0;
+    margin: 0 0 0.6em 0;
     vertical-align: top;
 }
 
@@ -251,6 +251,9 @@
 
 .mail-detail .to-cc .person-link {
     color: #333;
+}
+
+.mail-detail .attachment-list {
 }
 
 .mail-detail .spacer {
@@ -265,7 +268,7 @@
     font-size: 13px;
     line-height: 20px;
     max-width: 750px;
-    margin-top: 2em;
+    margin-top: 1em;
 }
 
 /* TODO: remove / temp. fix for bootstrap */

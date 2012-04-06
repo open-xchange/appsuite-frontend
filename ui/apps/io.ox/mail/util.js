@@ -167,6 +167,22 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
             return isSameDay() ? time() : date();
         },
 
+        getDateTime: function (timestamp) {
+            var now = new Date(),
+                d = new Date(timestamp),
+                time = function () {
+                    return _.pad(d.getUTCHours(), 2) + ':' + _.pad(d.getUTCMinutes(), 2);
+                },
+                date = function () {
+                    return _.pad(d.getUTCDate(), 2) + '.' + _.pad(d.getUTCMonth() + 1, 2) + '.' + d.getUTCFullYear();
+                },
+                isSameDay = function () {
+                    return d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+                };
+             // today?
+            return isSameDay() ? time() : date() + ' ' + time();
+        },
+
         getSmartTime: function (timestamp) {
             var now = new Date(),
                 zone = now.getTimezoneOffset(),

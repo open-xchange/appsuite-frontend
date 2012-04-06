@@ -17,9 +17,10 @@ define('io.ox/mail/view-detail',
      'io.ox/core/extPatterns/links',
      'io.ox/mail/util',
      'io.ox/mail/api',
+     'io.ox/core/config',
      'gettext!io.ox/mail/mail',
      'io.ox/mail/actions'
-    ], function (ext, links, util, api, gt) {
+    ], function (ext, links, util, api, config, gt) {
 
     'use strict';
 
@@ -174,7 +175,9 @@ define('io.ox/mail/view-detail',
                     .find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
                         $(this).replaceWith($('<blockquote>').append($(this).contents()));
                     })
-                    .end();
+                    .end()
+                    // remove color inside blockquotes
+                    .find('blockquote *').css('color', '').end();
             }
             else if (text !== '') {
                 // plain TEXT
@@ -207,7 +210,10 @@ define('io.ox/mail/view-detail',
                     })
                     .end().end()
                 .find('blockquote').removeAttr('style type').end()
-                .find('a').attr('target', '_blank').end();
+                .find('a').attr('target', '_blank').end()
+                .find('img').each(function () {
+                    $(this).attr('src', $(this).attr('src').replace(/^\/ajax/, '/ox7/api'));
+                }).end();
 
             return content;
         },
@@ -262,7 +268,7 @@ define('io.ox/mail/view-detail',
         id: 'receiveddate',
         draw: function (data) {
             this.append(
-                $('<div>').addClass('date list').text(util.getSmartTime(data.received_date))
+                $('<div>').addClass('date list').text(util.getDateTime(data.received_date))
             );
         }
     });
@@ -327,11 +333,16 @@ define('io.ox/mail/view-detail',
         id: 'tocopy',
         draw: function (data) {
 
-            var showCC = data.cc && data.cc.length > 0,
-            showTO = (data.to && data.to.length > 1) || showCC;
+            // figure out if to just contains myself - might be a mailing list, for example
+            var justMe = _(data.to).reduce(function (memo, to) {
+                    return memo && to[1] === config.get('mail.defaultaddress');
+                }, true),
+                showCC = data.cc && data.cc.length > 0,
+                showTO = data.to && (data.to.length > 1 || !justMe),
+                show = showTO || showCC;
 
             this.append(
-                showTO ?
+                show ?
                     $('<div>')
                         .addClass('to-cc list')
                         .append(
@@ -376,7 +387,7 @@ define('io.ox/mail/view-detail',
                 }
             }
             if (hasAttachments) {
-                var outer = $('<div>').append(
+                var outer = $('<div>').addClass('list attachment-list').append(
                     $('<span>').addClass('io-ox-label').text(gt('Attachments') + '\u00A0\u00A0')
                 );
                 _(attachments).each(function (a, i) {

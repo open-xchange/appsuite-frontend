@@ -86,11 +86,11 @@ define("io.ox/core/desktop",
         // top bar
         topBar = $("#io-ox-topbar"),
         // add launcher
-        addLauncher = function (side, label, fn) {
+        addLauncher = function (side, label, fn, tooltip) {
             // construct
             var node = $("<div>")
             .addClass("launcher")
-            .text(label + '')
+            .append(_.isString(label) ? $.txt(label) : label)
             .hover(
                 function () {
                     $(this).addClass("hover");
@@ -100,7 +100,7 @@ define("io.ox/core/desktop",
                 }
             )
             .on("click", function () {
-                var self = $(this), title;
+                var self = $(this), content;
                 if (!_.isFunction(fn)) {
                     // for development only - should never happen
                     self.css("backgroundColor", "#800000");
@@ -109,12 +109,12 @@ define("io.ox/core/desktop",
                     }, 500);
                 } else {
                     // set fixed width, hide label, be busy
-                    title = self.text() || label;
+                    content = self.contents();
                     self.css("width", self.width() + "px").text("\u00A0").busy();
                     // call launcher
                     (fn.call(this) || $.when()).done(function () {
                         // revert visual changes
-                        self.idle().text(title + '').css("width", "");
+                        self.idle().empty().append(content).css("width", "");
                     });
                 }
             });
@@ -127,6 +127,11 @@ define("io.ox/core/desktop",
                 } else {
                     return null;
                 }
+            }
+
+            // tooltip
+            if (tooltip) {
+                node.tooltip({ title: tooltip, placement: 'bottom', animation: false });
             }
 
             // add
