@@ -121,6 +121,19 @@ define('io.ox/mail/view-detail',
         return $('<a>', { href: href }).text(href);
     };
 
+    var blockquoteClickOpen, blockquoteClickClose;
+
+    blockquoteClickOpen = function () {
+        var h = this.scrollHeight + 'px';
+        $(this).off('click.open').on('dblclick.close', blockquoteClickClose)
+            .stop().animate({ maxHeight: h, opacity: 1.0 }, 500);
+    };
+
+    blockquoteClickClose = function () {
+        $(this).off('dblclick.close').on('click.open', blockquoteClickOpen)
+            .stop().animate({ maxHeight: '3em', opacity: 0.5 }, 500);
+    };
+
     var that = {
 
         getContent: function (data) {
@@ -240,10 +253,8 @@ define('io.ox/mail/view-detail',
             // blockquotes (top-level only)
             content.find('blockquote').not(content.find('blockquote blockquote'))
                 .css({ maxHeight: '3em', overflow: 'hidden', opacity: 0.5, cursor: 'pointer' })
-                .on('click.open', function (e) {
-                    var h = this.scrollHeight + 'px';
-                    $(this).off('click.open').animate({ maxHeight: h, opacity: 1.0 }, 500);
-                });
+                .on('click.open', blockquoteClickOpen)
+                .on('dblclick.close', blockquoteClickClose);
 
             return content;
         },
