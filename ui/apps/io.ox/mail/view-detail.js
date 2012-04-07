@@ -83,14 +83,6 @@ define('io.ox/mail/view-detail',
             .replace(/(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/g, '<a href="mailto:$6">$2$3</a>')
         );
 
-//      // get contents to split long character sequences for better wrapping
-//      content.contents().each(function (i) {
-//          var node = $(this), text = node.text(), length = text.length;
-//          if (length >= 60) {
-//              node.text(text.replace(/(\S{60})/g, '$1\u200B')); // zero width space
-//          }
-//      });
-
 //      // collapse block quotes
 //      content.find('blockquote').each(function () {
 //          var quote = $(this);
@@ -176,8 +168,28 @@ define('io.ox/mail/view-detail',
                         $(this).replaceWith($('<blockquote>').append($(this).contents()));
                     })
                     .end()
-                    // remove color inside blockquotes
-                    .find('blockquote *').css('color', '').end();
+                    // blockquote
+                    .find('blockquote')
+                        // remove white-space: pre/nowrap
+                        .find('[style*="white-space: "]').css('whiteSpace', '').end()
+                        // remove color inside blockquotes
+                        .find('*').css('color', '').end()
+                    .end();
+                // nested message?
+                if (!('folder_id' in data) && 'filename' in data) {
+                    // fix inline images in nested message
+                    content.find('img[src^="cid:"]').each(function () {
+                        var node = $(this), cid = '<' + String(node.attr('src') || '').substr(4) + '>', src,
+                            // get proper attachment
+                            attachment = _.chain(data.attachments).filter(function (a) {
+                                return a.cid === cid;
+                            }).first().value();
+                        if  (attachment) {
+                            src = api.getUrl(_.extend(attachment, { mail: data.parent }), 'view');
+                            node.attr('src', src);
+                        }
+                    });
+                }
             }
             else if (text !== '') {
                 // plain TEXT
@@ -214,6 +226,24 @@ define('io.ox/mail/view-detail',
                 .find('img').each(function () {
                     $(this).attr('src', $(this).attr('src').replace(/^\/ajax/, '/ox7/api'));
                 }).end();
+
+            // get contents to split long character sequences for better wrapping
+            content.find('*').contents().each(function () {
+                if (this.nodeType === 3) {
+                    var text = this.nodeValue, length = text.length;
+                    if (length >= 60 && /\S{60}/.test(text)) {
+                        this.nodeValue = text.replace(/(\S{60})/g, '$1\u200B'); // zero width space
+                    }
+                }
+            });
+
+            // blockquotes (top-level only)
+            content.find('blockquote').not(content.find('blockquote blockquote'))
+                .css({ maxHeight: '3em', overflow: 'hidden', opacity: 0.5, cursor: 'pointer' })
+                .on('click.open', function (e) {
+                    var h = this.scrollHeight + 'px';
+                    $(this).off('click.open').animate({ maxHeight: h, opacity: 1.0 }, 500);
+                });
 
             return content;
         },
@@ -267,8 +297,10 @@ define('io.ox/mail/view-detail',
         index: 110,
         id: 'receiveddate',
         draw: function (data) {
+            // some mails just have a sent_date, e.g. nested EMLs
+            var date = util.getDateTime(data.received_date || data.sent_date || 0);
             this.append(
-                $('<div>').addClass('date list').text(util.getDateTime(data.received_date))
+                $('<div>').addClass('date list').text(date)
             );
         }
     });
@@ -333,7 +365,7 @@ define('io.ox/mail/view-detail',
         id: 'tocopy',
         draw: function (data) {
 
-            // figure out if to just contains myself - might be a mailing list, for example
+            // figure out if 'to' just contains myself - might be a mailing list, for example
             var justMe = _(data.to).reduce(function (memo, to) {
                     return memo && to[1] === config.get('mail.defaultaddress');
                 }, true),
@@ -341,8 +373,8 @@ define('io.ox/mail/view-detail',
                 showTO = data.to && (data.to.length > 1 || !justMe),
                 show = showTO || showCC;
 
-            this.append(
-                show ?
+            if (show) {
+                this.append(
                     $('<div>')
                         .addClass('to-cc list')
                         .append(
@@ -354,8 +386,8 @@ define('io.ox/mail/view-detail',
                             showCC ? $('<span>').addClass('io-ox-label').text(gt('Copy') + '\u00A0\u00A0') : [],
                             util.serializeList(data.cc, true)
                         )
-                    : []
-            );
+                );
+            }
         }
     });
 
@@ -372,20 +404,34 @@ define('io.ox/mail/view-detail',
         index: 160,
         id: 'attachments',
         draw: function (data) {
-            var i = 0,
-                $i = (data.attachments || []).length,
-                attachments = [],
-                hasAttachments = false;
+
+            var i, $i, obj, parent, attachments = [], hasAttachments = false;
+
+            // get nested messages
+            for (i = 0, $i = (data.nested_msgs || []).length; i < $i; i++) {
+                obj = data.nested_msgs[i];
+                parent = { id: data.id, folder_id: data.folder_id };
+                attachments.push({
+                    id: obj.id,
+                    content_type: 'message/rfc822',
+                    filename: obj.filename,
+                    mail: parent,
+                    nested_message: _.extend({}, obj, { parent: parent })
+                });
+                hasAttachments = true;
+            }
 
             // get non-inline attachments
-            for (; i < $i; i++) {
-                if (data.attachments[i].disp === 'attachment') {
+            for (i = 0, $i = (data.attachments || []).length; i < $i; i++) {
+                obj = data.attachments[i];
+                if (obj.disp === 'attachment') {
                     attachments.push(
-                        _.extend(data.attachments[i], { mail: { id: data.id, folder_id: data.folder_id }})
+                        _.extend(obj, { mail: { id: data.id, folder_id: data.folder_id }})
                     );
                     hasAttachments = true;
                 }
             }
+
             if (hasAttachments) {
                 var outer = $('<div>').addClass('list attachment-list').append(
                     $('<span>').addClass('io-ox-label').text(gt('Attachments') + '\u00A0\u00A0')

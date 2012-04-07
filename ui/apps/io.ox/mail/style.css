@@ -240,7 +240,7 @@
 
 .mail-detail .list {
     line-height: 1.25em;
-    margin: 0 0 0.6em 0;
+    margin: 0 0 0.8em 0;
     vertical-align: top;
 }
 
@@ -290,9 +290,8 @@
 }
 
 .mail-detail blockquote {
-    color: #aaa;
     font-size: 12px;
-    border-left: 1px solid #ddd;
+    border-left: 1px solid #08c;
     padding: 0.5em 1em 0.5em 39px;
     margin: 1em 0 1em 0;
 }
@@ -352,8 +351,7 @@
 
 h4.mail-attachment-preview {
     height: 3em;
-    font-weight: 200;
-    color: #555;
+    color: #333;
 }
 
 /* label dropdown */

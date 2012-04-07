@@ -119,6 +119,20 @@ define("io.ox/preview/main",
     }
 
     Renderer.register({
+        id: "eml",
+        endings: ["eml"],
+        canRender: function (file) {
+            return (/\.eml$/i).test(file.name);
+        },
+        paint: function (file, node) {
+            require(['io.ox/mail/view-detail'], function (view) {
+                var data = file.data.nested_message;
+                node.append(view.draw(data));
+            });
+        }
+    });
+
+    Renderer.register({
         id: "text",
         endings: ["txt", "js", "md"],
         canRender: function (file) {

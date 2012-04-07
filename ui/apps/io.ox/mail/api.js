@@ -563,16 +563,15 @@ define("io.ox/mail/api",
             first = _(data).first();
             return url + $.param({
                 action: 'zip_attachments',
-                folder: first.mail.folder_id,
-                id: first.mail.id,
-                attachment: _(data).pluck('id').join(','),
-                session: ox.session
+                folder: (first.parent || first.mail).folder_id,
+                id: (first.parent || first.mail).id,
+                attachment: _(data).pluck('id').join(',')
             });
         } else {
             url += $.param({
                 action: 'attachment',
-                folder: data.mail.folder_id,
-                id: data.mail.id,
+                folder: (data.parent || data.mail).folder_id,
+                id: (data.parent || data.mail).id,
                 attachment: data.id
             });
             switch (mode) {

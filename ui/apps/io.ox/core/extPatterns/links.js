@@ -34,7 +34,7 @@ define("io.ox/core/extPatterns/links",
                 actions.invoke(ref, this, context, e);
             };
 
-        this.draw = function (context) {
+        this.draw = this.draw || function (context) {
             this.append(
                 $("<a>", { href: "#", tabindex: "1", "data-action": self.id })
                 .addClass('io-ox-action-link' + (options.attention === true ? ' attention': ''))

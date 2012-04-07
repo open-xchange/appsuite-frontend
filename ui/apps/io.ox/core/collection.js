@@ -74,6 +74,12 @@ define('io.ox/core/collection',
                     })
                     .value();
 
+            // mail specific: toplevel? (in contrast to nested mails)
+            props.toplevel = _(collection).reduce(function (memo, item) {
+                // nested mails don't have a folder_id but a filename
+                return memo && 'folder_id' in item && !('filename' in item);
+            }, true);
+
             return api.get({ folder: folders })
                 .pipe(function (hash) {
                     var i = 0, item = null, folder = null;
