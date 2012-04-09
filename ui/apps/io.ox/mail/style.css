@@ -239,7 +239,7 @@
 }
 
 .mail-detail .list {
-    line-height: 1.25em;
+    line-height: 1.40em;
     margin: 0 0 0.8em 0;
     vertical-align: top;
 }
@@ -254,6 +254,10 @@
 }
 
 .mail-detail .attachment-list {
+}
+
+.mail-detail .instant-preview {
+    max-width: inherit;
 }
 
 .mail-detail .spacer {

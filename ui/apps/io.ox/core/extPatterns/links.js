@@ -144,6 +144,7 @@ define("io.ox/core/extPatterns/links",
                 .appendTo(this),
             $toggle = $("<a>", { href: '#' })
                 .attr('data-toggle', 'dropdown')
+                .data('context', context)
                 .text(options.label + " ").append($("<b>").addClass("caret")).appendTo($parent);
 
         $toggle.addClass(options.classes);
@@ -154,12 +155,14 @@ define("io.ox/core/extPatterns/links",
         drawLinks(options, new Collection(context), node, context, args, true);
 
         $toggle.dropdown();
+
+        return $parent;
     };
 
     var DropdownLinks = function (options) {
         var o = _.extend(this, options);
         this.draw = function () {
-            drawDropDown.apply(this, [o].concat($.makeArray(arguments)));
+            return drawDropDown.apply(this, [o].concat($.makeArray(arguments)));
         };
     };
 

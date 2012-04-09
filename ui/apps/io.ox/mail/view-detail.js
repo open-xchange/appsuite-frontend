@@ -408,11 +408,24 @@ define('io.ox/mail/view-detail',
 
     var drawAttachmentDropDown = function (node, label, data) {
         // use extension pattern
-        new links.DropdownLinks({
+        var dd = new links.DropdownLinks({
             label: label,
             classes: 'attachment-link',
             ref: 'io.ox/mail/attachment/links'
         }).draw.call(node, data);
+        // add instant preview
+        if (regImage.test(getContentType(data.content_type))) {
+            dd.find('a').on('click', data, function (e) {
+                var node = $(this), data = e.data, p = node.parent(), url, src;
+                if (p.hasClass('open') && p.find('.instant-preview').length === 0) {
+                    url = api.getUrl(data, 'view');
+                    src = url + '&scaleType=contain&width=190&height=190'; // 190 + 2 * 15 pad = 220 max-width
+                    p.find('ul').append($('<li>').append($('<a>', { href: url, target: '_blank' }).append(
+                        $('<img>', { src: src, alt: '' }).addClass('instant-preview')
+                    )));
+                }
+            });
+        }
     };
 
     var isWinmailDATPart = function (obj) {
