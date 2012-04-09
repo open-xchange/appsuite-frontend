@@ -251,8 +251,8 @@ define('io.ox/mail/actions',
                     var list = _.getArray(e.context);
                     // is at least one attachment supported?
                     return e.collection.has('some') && _(list).reduce(function (memo, obj) {
-                        return memo && new Preview({ filename: obj.filename }).supportsPreview();
-                    }, true);
+                        return memo || new Preview({ filename: obj.filename }).supportsPreview();
+                    }, false);
                 });
         },
         multiple: function (list) {
@@ -262,19 +262,21 @@ define('io.ox/mail/actions',
             require(['io.ox/core/tk/dialogs', 'io.ox/preview/main'], function (dialogs, Preview) {
                 new dialogs.SidePopup().show(e, function (popup) {
                     _(list).each(function (data, i) {
-                        popup.append(
-                            $('<h4>').addClass('mail-attachment-preview').text(data.filename)
-                        );
-                        new Preview({
+                        var pre = new Preview({
                             data: data,
                             filename: data.filename,
                             dataURL: api.getUrl(data, 'view')
                         }, {
                             width: popup.parent().width(),
                             height: 'auto'
-                        })
-                        .appendTo(popup);
-                        popup.append($('<div>').text('\u00A0'));
+                        });
+                        if (pre.supportsPreview()) {
+                            popup.append(
+                                $('<h4>').addClass('mail-attachment-preview').text(data.filename)
+                            );
+                            pre.appendTo(popup);
+                            popup.append($('<div>').text('\u00A0'));
+                        }
                     });
                 });
             });
