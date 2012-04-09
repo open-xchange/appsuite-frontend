@@ -11,11 +11,6 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-#io-ox-core {
-    z-index: 1;
-    color: @color;
-}
-
 #io-ox-core.wallpaper {
 background: @wallpaper-fallback-color; /* Old browsers */
 background: -moz-radial-gradient(center, circle cover, @wallpaper-color1 0%, @wallpaper-color2 40%, @wallpaper-color3 100%); /* FF3.6+ */
@@ -845,6 +840,7 @@ span.hint {
     text-align: right;
     margin: 0 0 1em 0;
     clear: both;
+    -webkit-user-select: none; -moz-user-select: none; user-select: none;
 }
 
 .io-ox-inline-links.empty {

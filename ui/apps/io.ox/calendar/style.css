@@ -112,9 +112,7 @@
     max-width: 550px;
     white-space: pre-wrap;
     margin: 2em 0 1em 0;
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    user-select: text;
+    -webkit-user-select: text; -moz-user-select: text; user-select: text;
     cursor: text;
 }
 

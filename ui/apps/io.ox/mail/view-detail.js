@@ -83,12 +83,6 @@ define('io.ox/mail/view-detail',
             .replace(/(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/g, '<a href="mailto:$6">$2$3</a>')
         );
 
-//      // collapse block quotes
-//      content.find('blockquote').each(function () {
-//          var quote = $(this);
-//          quote.text(quote.contents().text().substr(0, 150));
-//      });
-
         return content;
     };
 
@@ -105,10 +99,11 @@ define('io.ox/mail/view-detail',
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i,
         regLink = /^(\s*)(http\S+)(\s*)$/i;
 
-    var hasMultipleTextParts = function (att) {
+    var looksLikeMixed = function (att) {
+        var firstType = getContentType(att[0].content_type);
         return _(att).reduce(function (memo, a) {
             var type = getContentType(a.content_type);
-            return memo + regText.test(type);
+            return memo + (type === firstType ? 1 : 0);
         }, 0) > 1;
     };
 
@@ -125,12 +120,16 @@ define('io.ox/mail/view-detail',
 
     blockquoteClickOpen = function () {
         var h = this.scrollHeight + 'px';
-        $(this).off('click.open').on('dblclick.close', blockquoteClickClose)
+        $(this).off('click.open')
+            .css('cursor', '')
+            .on('dblclick.close', blockquoteClickClose)
             .stop().animate({ maxHeight: h, opacity: 1.0 }, 500);
     };
 
     blockquoteClickClose = function () {
-        $(this).off('dblclick.close').on('click.open', blockquoteClickOpen)
+        $(this).off('dblclick.close')
+            .css('cursor', 'pointer')
+            .on('click.open', blockquoteClickOpen)
             .stop().animate({ maxHeight: '3em', opacity: 0.5 }, 500);
     };
 
@@ -143,23 +142,28 @@ define('io.ox/mail/view-detail',
             }
 
             var att = data.attachments, i = 0, $i = att.length,
-                text = '', html = '', type, src,
-                multipleTextParts = hasMultipleTextParts(att),
+                isHTML, isText, isMixed,
+                text = '', html = '', type, src, image,
                 content = $('<div>').addClass('content');
+
+            // html vs text
+            isHTML = regHTML.test(att[0].content_type);
+            isText = regText.test(att[0].content_type);
+            isMixed = data.content_type === 'multipart/mixed' || looksLikeMixed(att);
 
             for (; i < $i; i++) {
                 type = getContentType(att[i].content_type);
-                if (html === '' && text === '' && regHTML.test(type)) {
+                if (regHTML.test(type) && isHTML && (html === '' || isMixed)) {
                     // HTML
-                    html = att[i].content;
-                    break;
-                } else if (regText.test(type)) {
+                    html += att[i].content;
+                } else if (regText.test(type) && isText && (text === '' || isMixed)) {
                     // plain TEXT
                     text += att[i].content;
-                } else if (multipleTextParts && regImage.test(type)) {
+                } else if (isMixed && regImage.test(type)) {
                     // image surrounded by text parts
                     src = api.getUrl(att[i], 'view') + '&scaleType=contain&width=800&height=600';
-                    text += '\n<br>\n<br>\n<img src="' + src + '" alt="" style="display: block">\n';
+                    image = '\n<br>\n<br>\n<img src="' + src + '" alt="" style="display: block">\n';
+                    if (isHTML) { html += image; } else { text += image; }
                 }
             }
 
@@ -411,24 +415,37 @@ define('io.ox/mail/view-detail',
         }).draw.call(node, data);
     };
 
+    var isWinmailDATPart = function (obj) {
+        return !('filename' in obj) && obj.attachments &&
+            obj.attachments.length === 1 && obj.attachments[0].content === null;
+    };
+
     ext.point('io.ox/mail/detail').extend({
         index: 160,
         id: 'attachments',
         draw: function (data) {
 
-            var i, $i, obj, parent, attachments = [], hasAttachments = false;
+            var i, $i, obj, parent, dat, attachments = [], hasAttachments = false,
+                mail = { id: data.id, folder_id: data.folder_id };
 
             // get nested messages
             for (i = 0, $i = (data.nested_msgs || []).length; i < $i; i++) {
                 obj = data.nested_msgs[i];
-                parent = { id: data.id, folder_id: data.folder_id };
-                attachments.push({
-                    id: obj.id,
-                    content_type: 'message/rfc822',
-                    filename: obj.filename,
-                    mail: parent,
-                    nested_message: _.extend({}, obj, { parent: parent })
-                });
+                // is wrapped attachment? (winmail.dat stuff)
+                if (isWinmailDATPart(obj)) {
+                    dat = obj.attachments[0];
+                    attachments.push(
+                        _.extend({}, dat, { mail: mail })
+                    );
+                } else {
+                    attachments.push({
+                        id: obj.id,
+                        content_type: 'message/rfc822',
+                        filename: obj.filename,
+                        mail: mail,
+                        nested_message: _.extend({}, obj, { parent: mail })
+                    });
+                }
                 hasAttachments = true;
             }
 
@@ -437,7 +454,7 @@ define('io.ox/mail/view-detail',
                 obj = data.attachments[i];
                 if (obj.disp === 'attachment') {
                     attachments.push(
-                        _.extend(obj, { mail: { id: data.id, folder_id: data.folder_id }})
+                        _.extend(obj, { mail: mail })
                     );
                     hasAttachments = true;
                 }
@@ -504,7 +521,9 @@ define('io.ox/mail/view-detail',
         index: 200,
         id: 'content',
         draw: function (data) {
-            this.addClass('view').append(
+            this.addClass('view')
+            .attr('data-cid', data.folder_id + '.' + data.id)
+            .append(
                 that.getContent(data),
                 $('<div>').addClass('mail-detail-clear-both')
             );

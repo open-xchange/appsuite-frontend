@@ -121,54 +121,21 @@ define("io.ox/mail/api",
 
         options = options || {};
 
-        if (0 > 1) {
-            // old manual request - wait for backend update
-            options.action = 'all';
-            options.columns = '601,600,610,612'; // +level, +received_date
-            options.sort = 'thread';
-            return this.getAll(options, useCache)
-                .pipe(function (data) {
-                    // loop over data
-                    var i = 0, obj, tmp = null, all = [], first,
-                        // store thread
-                        store = function () {
-                            if (tmp) {
-                                // sort
-                                tmp.sort(dateSort);
-                                // add most recent element to list
-                                all.push(first = tmp[0]);
-                                // add to hash
-                                threads[first.folder_id + "." + first.id] = tmp;
-                            }
-                        };
-                    for (; (obj = data[i]); i++) {
-                        if (obj.level === 0) {
-                            store();
-                            tmp = [obj];
-                        } else if (tmp) {
-                            tmp.push(obj);
-                        }
-                    }
-                    // store last thread
-                    store();
-                    // resort all
-                    all.sort(dateSort);
-                    return all;
+        // request for brand new thread support
+        options.action = 'threadedAll';
+        options.columns = '601,600,611'; // + flags
+        options.sort = '610';
+        return this.getAll(options, useCache, api.caches.allThreaded)
+            .pipe(function (data) {
+                // because we also have brand new flags, we merge with list & get caches
+                api.caches.list.merge(data);
+                api.caches.get.merge(data);
+                // build thread hash
+                _(data).each(function (obj) {
+                    threads[obj.folder_id + "." + obj.id] = obj.thread;
                 });
-
-        } else {
-            // request for brand new thread support
-            options.action = 'threadedAll';
-            options.columns = '601,600';
-            options.sort = '610';
-            return this.getAll(options, useCache, api.caches.allThreaded)
-                .pipe(function (data) {
-                    _(data).each(function (obj) {
-                        threads[obj.folder_id + "." + obj.id] = obj.thread;
-                    });
-                    return data;
-                });
-        }
+                return data;
+            });
     };
 
     // get mails in thread
@@ -544,6 +511,37 @@ define("io.ox/mail/api",
         });
     };
 
+    api.getUrl = function (data, mode) {
+        var url = ox.apiRoot + '/mail', first;
+        if (mode === 'zip') {
+            first = _(data).first();
+            return url + '?' + $.param({
+                action: 'zip_attachments',
+                folder: (first.parent || first.mail).folder_id,
+                id: (first.parent || first.mail).id,
+                attachment: _(data).pluck('id').join(',')
+            });
+        } else {
+            // inject filename for more convenient file downloads
+            url += (data.filename ? '/' + encodeURIComponent(data.filename) : '') + '?' +
+                $.param({
+                    action: 'attachment',
+                    folder: (data.parent || data.mail).folder_id,
+                    id: (data.parent || data.mail).id,
+                    attachment: data.id
+                });
+            switch (mode) {
+            case 'view':
+            case 'open':
+                return url + '&delivery=view';
+            case 'download':
+                return url + '&delivery=download';
+            default:
+                return url;
+            }
+        }
+    };
+
     // disable default refresh
     ox.off('refresh^.mail');
 
@@ -556,35 +554,6 @@ define("io.ox/mail/api",
                 });
         }
     });
-
-    api.getUrl = function (data, mode) {
-        var url = ox.apiRoot + '/mail?', first;
-        if (mode === 'zip') {
-            first = _(data).first();
-            return url + $.param({
-                action: 'zip_attachments',
-                folder: (first.parent || first.mail).folder_id,
-                id: (first.parent || first.mail).id,
-                attachment: _(data).pluck('id').join(',')
-            });
-        } else {
-            url += $.param({
-                action: 'attachment',
-                folder: (data.parent || data.mail).folder_id,
-                id: (data.parent || data.mail).id,
-                attachment: data.id
-            });
-            switch (mode) {
-            case 'view':
-            case 'open':
-                return url + '&delivery=view';
-            case 'download':
-                return url + '&delivery=download';
-            default:
-                return url;
-            }
-        }
-    };
 
     return api;
 });
