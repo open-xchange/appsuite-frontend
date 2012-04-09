@@ -478,7 +478,11 @@ define('io.ox/mail/view-detail',
                     $('<span>').addClass('io-ox-label').text(gt('Attachments') + '\u00A0\u00A0')
                 );
                 _(attachments).each(function (a, i) {
-                    var label = a.filename || ('Attachment #' + i);
+                    var label = (a.filename || ('Attachment #' + i))
+                        // lower case file extensions for better readability
+                        .replace(/\.(\w+)$/, function (match) {
+                            return match.toLowerCase();
+                        });
                     drawAttachmentDropDown(outer, label, a);
                 });
                 // how 'all' drop down?
