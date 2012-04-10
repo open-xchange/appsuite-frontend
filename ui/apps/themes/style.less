@@ -919,6 +919,8 @@ span.hint {
 }
 
 .io-ox-sidepopup.right {
+    left: 50%;
+    right: 0px;
     border-right: 0px none;
     -moz-box-shadow: -10px 0px 30px -10px #aaa;
     -webkit-box-shadow: -10px 0px 30px -10px #aaa;
@@ -926,6 +928,8 @@ span.hint {
 }
 
 .io-ox-sidepopup.left {
+    left: 0px;
+    right: 50%;
     border-left: 0px none;
     -moz-box-shadow: 10px 0px 30px -10px #aaa;
     -webkit-box-shadow: 10px 0px 30px -10px #aaa;
@@ -936,6 +940,9 @@ span.hint {
     position: absolute;
     z-index: 4;
 }
+
+.io-ox-sidepopup-arrow.left { left: 0px; right: 50%; }
+.io-ox-sidepopup-arrow.right { left: 50%; right: 0px; }
 
 .io-ox-sidepopup-arrow .border {
     position: absolute;
