@@ -78,6 +78,18 @@ define("io.ox/mail/api",
                     api.remove([params], true);
                 }
             }
+        },
+        pipe: {
+            all: function (data) {
+                // ignore deleted mails
+                data = _(data).filter(function (obj) {
+                    return (obj.flags & 2) === 0;
+                });
+                // because we also have brand new flags, we merge with list & get caches
+                api.caches.list.merge(data);
+                api.caches.get.merge(data);
+                return data;
+            }
         }
     });
 
@@ -118,23 +130,17 @@ define("io.ox/mail/api",
 
     // ~ all
     api.getAllThreads = function (options, useCache) {
-
-        options = options || {};
-
         // request for brand new thread support
+        options = options || {};
         options.action = 'threadedAll';
         options.columns = '601,600,611'; // + flags
         options.sort = '610';
         return this.getAll(options, useCache, api.caches.allThreaded)
-            .pipe(function (data) {
-                // because we also have brand new flags, we merge with list & get caches
-                api.caches.list.merge(data);
-                api.caches.get.merge(data);
-                // build thread hash
+            .done(function (data) {
                 _(data).each(function (obj) {
+                    // build thread hash
                     threads[obj.folder_id + "." + obj.id] = obj.thread;
                 });
-                return data;
             });
     };
 

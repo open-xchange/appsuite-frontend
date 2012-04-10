@@ -42,7 +42,8 @@ define("io.ox/core/api/factory",
                 search: { action: "search" },
                 remove: { action: "delete" }
             },
-            fail: { }
+            fail: {},
+            pipe: {}
         }, o || {});
 
         // use module as id?
@@ -86,7 +87,8 @@ define("io.ox/core/api/factory",
                         cache.remove(opt.folder);
                         // add to cache
                         cache.add(opt.folder, data, timestamp);
-                    });
+                    })
+                    .pipe(o.pipe.all || _.identity);
                 };
 
                 if (useCache) {
