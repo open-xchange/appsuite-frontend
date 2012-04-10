@@ -134,7 +134,7 @@ define("io.ox/preview/main",
 
     Renderer.register({
         id: "text",
-        endings: ["txt", "js", "md"],
+        endings: ["txt", "asc", "js", "md"],
         canRender: function (file) {
             return $.inArray(util.FileTypesMap.getFileType(file.name), this.endings) !== -1;
         },
