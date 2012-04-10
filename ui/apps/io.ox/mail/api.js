@@ -15,7 +15,8 @@ define("io.ox/mail/api",
     ["io.ox/core/http",
      "io.ox/core/config",
      "io.ox/core/cache",
-     "io.ox/core/api/factory"], function (http, config, cache, apiFactory) {
+     "io.ox/core/api/factory",
+     "io.ox/core/api/folder"], function (http, config, cache, apiFactory, folderAPI) {
 
     "use strict";
 
@@ -88,6 +89,16 @@ define("io.ox/mail/api",
                 // because we also have brand new flags, we merge with list & get caches
                 api.caches.list.merge(data);
                 api.caches.get.merge(data);
+                return data;
+            },
+            get: function (data) {
+                // decrease unread count
+                var folder = data.folder_id;
+                folderAPI.get({ folder: folder }).done(function (data) {
+                    folderAPI.decreaseUnreadCount(folder).done(function () {
+                        folderAPI.trigger('change:' + folder);
+                    });
+                });
                 return data;
             }
         }

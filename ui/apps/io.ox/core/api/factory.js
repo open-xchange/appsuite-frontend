@@ -42,6 +42,7 @@ define("io.ox/core/api/factory",
                 search: { action: "search" },
                 remove: { action: "delete" }
             },
+            done: {},
             fail: {},
             pipe: {}
         }, o || {});
@@ -92,15 +93,18 @@ define("io.ox/core/api/factory",
                 };
 
                 if (useCache) {
-                    return cache.contains(opt.folder).pipe(function (check) {
-                        if (check) {
-                            return cache.get(opt.folder);
-                        } else {
-                            return getter();
-                        }
-                    });
+                    return cache.contains(opt.folder)
+                        .pipe(function (check) {
+                            if (check) {
+                                return cache.get(opt.folder);
+                            } else {
+                                return getter();
+                            }
+                        })
+                        .done(o.done.all || $.noop);
                 } else {
-                    return getter();
+                    return getter()
+                        .done(o.done.all || $.noop);
                 }
             },
 
@@ -121,23 +125,28 @@ define("io.ox/core/api/factory",
                         caches.list.add(data);
                         // merge with "get" cache
                         caches.get.merge(data);
-                    });
+                    })
+                    .pipe(o.pipe.list || _.identity);
                 };
                 // empty?
                 if (ids.length === 0) {
-                    return $.Deferred().resolve([]);
+                    return $.Deferred().resolve([])
+                        .done(o.done.list || $.noop);
                 } else {
                     if (useCache) {
                         // cache miss?
-                        return caches.list.contains(ids).pipe(function (check) {
-                            if (check) {
-                                return caches.list.get(ids);
-                            } else {
-                                return getter();
-                            }
-                        });
+                        return caches.list.contains(ids)
+                            .pipe(function (check) {
+                                if (check) {
+                                    return caches.list.get(ids);
+                                } else {
+                                    return getter();
+                                }
+                            })
+                            .done(o.done.list || $.noop);
                     } else {
-                        return getter();
+                        return getter()
+                            .done(o.done.list || $.noop);
                     }
                 }
             },
@@ -166,20 +175,23 @@ define("io.ox/core/api/factory",
                     })
                     .fail(function (e) {
                         _.call(o.fail.get, e, opt, o);
-                    });
+                    })
+                    .pipe(o.pipe.get || _.identity);
                 };
 
-
                 if (useCache) {
-                    return caches.get.contains(opt).pipe(function (check) {
-                        if (check) {
-                            return caches.get.get(opt);
-                        } else {
-                            return getter();
-                        }
-                    });
+                    return caches.get.contains(opt)
+                        .pipe(function (check) {
+                            if (check) {
+                                return caches.get.get(opt);
+                            } else {
+                                return getter();
+                            }
+                        })
+                        .done(o.done.get || $.noop);
                 } else {
-                    return getter();
+                    return getter()
+                        .done(o.done.get || $.noop);
                 }
             },
 

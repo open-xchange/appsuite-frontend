@@ -242,6 +242,7 @@ define("io.ox/core/desktop",
 
                 hChanged = function (e) {
                     that.set(e.data.folder);
+                    self.trigger('folder:refresh', e.data.folder);
                 };
 
                 that = {
@@ -285,7 +286,7 @@ define("io.ox/core/desktop",
                                         // update hash
                                         _.url.hash('folder', folder);
                                     }
-                                    self.trigger('change:folder', folder, data);
+                                    self.trigger('folder:change', folder, data);
                                     def.resolve(data);
                                 })
                                 .fail(def.reject);
@@ -320,6 +321,12 @@ define("io.ox/core/desktop",
 
                     get: function () {
                         return folder;
+                    },
+
+                    getData: function () {
+                        return require(['io.ox/core/api/folder']).pipe(function (api) {
+                            return api.get({ folder: folder });
+                        });
                     },
 
                     updateTitle: function (w) {

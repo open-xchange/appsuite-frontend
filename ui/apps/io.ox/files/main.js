@@ -222,7 +222,7 @@ define("io.ox/files/main",
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api);
 
-        app.on('change:folder', function (e, id, folder) {
+        app.on('folder:change', function (e, id, folder) {
             // reset first
             win.nodes.title.find('.has-publications').remove();
             // published?

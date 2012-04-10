@@ -221,11 +221,19 @@ define('io.ox/core/api/folder',
         },
 
         folderCache: folderCache,
-
         subFolderCache: subFolderCache,
 
         needsRefresh: function (folder) {
             return subFolderCache.contains(folder);
+        },
+
+        decreaseUnreadCount: function (folder) {
+            return folderCache.get(folder).pipe(function (data) {
+                if (data.unread > 0) {
+                    data.unread--;
+                }
+                return folderCache.add(folder, data);
+            });
         },
 
         getTextNode: function (id) {
