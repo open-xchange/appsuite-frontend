@@ -279,7 +279,7 @@ define("io.ox/core/desktop",
                                         win.updateToolbar();
                                     }
                                     // update grid?
-                                    if (grid) {
+                                    if (grid && grid.prop('folder') !== folder) {
                                         grid.clear();
                                         grid.prop('folder', folder);
                                         grid.refresh();

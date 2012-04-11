@@ -220,9 +220,7 @@ define('io.ox/mail/actions',
                 });
         },
         multiple: function (list) {
-            api.getList(list).done(function (list) {
-                api.update(list, { flags: api.FLAGS.SEEN, value: false });
-            });
+            api.markUnread(list);
         }
     });
 
@@ -237,9 +235,7 @@ define('io.ox/mail/actions',
                 });
         },
         multiple: function (list) {
-            api.getList(list).done(function (list) {
-                api.update(list, { flags: api.FLAGS.SEEN, value: true });
-            });
+            api.markRead(list);
         }
     });
 

@@ -50,11 +50,13 @@ define("io.ox/mail/api",
             },
             get: {
                 action: "get",
+                unseen: "true",
                 view: "noimg"/*,
                 format: "preview_filtered"*/
             },
             getUnmodified: {
                 action: "get",
+                unseen: "true",
                 view: "html"/*,
                 format: "preview_filtered"*/
             },
@@ -91,14 +93,13 @@ define("io.ox/mail/api",
                 api.caches.get.merge(data);
                 return data;
             },
+
             get: function (data) {
-                // decrease unread count
-                var folder = data.folder_id;
-                folderAPI.get({ folder: folder }).done(function (data) {
-                    folderAPI.decreaseUnreadCount(folder).done(function () {
-                        folderAPI.trigger('change:' + folder);
-                    });
-                });
+                // is unread?
+                if ((data.flags & 32) !== 32) {
+                    // TODO: change this once backend tells us more about 'GET vs seen/unseen'
+                    api.markRead(data);
+                }
                 return data;
             }
         }
@@ -276,6 +277,32 @@ define("io.ox/mail/api",
 
     api.update = function (list, data) {
         return change(list, data, 'update');
+    };
+
+    api.markUnread = function (list) {
+        // get list first in order to have flags
+        return api.getList(list).pipe(function (list) {
+            // remove unseen mails
+            list = _(list).filter(function (o) {
+                return (o.flags & 32) === 32; // seen? = read?
+            });
+            return api.update(list, { flags: api.FLAGS.SEEN, value: false }).pipe(function () {
+                folderAPI.incUnread(list);
+            });
+        });
+    };
+
+    api.markRead = function (list) {
+        // get list first in order to have flags
+        return api.getList(list).pipe(function (list) {
+            // remove seen mails
+            list = _(list).filter(function (o) {
+                return (o.flags & 32) !== 32; // not seen? = unread?
+            });
+            return api.update(list, { flags: api.FLAGS.SEEN, value: true }).pipe(function () {
+                folderAPI.decUnread(list);
+            });
+        });
     };
 
     api.move = function (list, targetFolderId) {
