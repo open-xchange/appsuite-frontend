@@ -15,19 +15,16 @@ define("io.ox/preview/officePreview/main", ["io.ox/core/tk/keys", "gettext!io.ox
         });
     }
     
-    
+    // Refactor: Look at mail
     function createInstance(file) {
         if (!file) {
-            //TODO: Store and load app state instead of this hack
-            return {
-                launch: function () {
-                    return {
-                        done: function (cb) {
-                            cb();
-                        }
-                    };
-                }
+            file = {
+                name: _.url.hash('name'),
+                dataURL: _.url.hash('dataURL')
             };
+        } else {
+            _.url.hash('name', file.name);
+            _.url.hash("dataURL", file.dataURL);
         }
         var app, win, container;
         
@@ -41,13 +38,13 @@ define("io.ox/preview/officePreview/main", ["io.ox/core/tk/keys", "gettext!io.ox
         app.maxPages = -1; // Unknown
         
         var $pageIndicator = $("<span>").addClass("io-ox-office-preview-page-indicator").text("1");
-        var $nextButton = $("<button>").addClass("btn disabled").text(gt("Next")).on("click", function (e) {
+        var $nextButton = $("<button>").addClass("btn btn-primary disabled").append("<i class='icon-white icon-chevron-right'>").on("click", function (e) {
             e.preventDefault();
             app.nextPage();
         });
         
         
-        var $previousButton = $("<button>").addClass("btn disabled").text(gt("Previous")).on("click", function (e) {
+        var $previousButton = $("<button>").addClass("btn btn-primary disabled").append("<i class='icon-white icon-chevron-left'>").on("click", function (e) {
             e.preventDefault();
             app.previousPage();
         });
@@ -140,7 +137,7 @@ define("io.ox/preview/officePreview/main", ["io.ox/core/tk/keys", "gettext!io.ox
             win = ox.ui.createWindow({
                 name: 'io.ox/mail/write',
                 title: file.name,
-                titleWidth: "90%",
+                titleWidth: "40%",
                 toolbar: true,
                 close: true
             });
@@ -149,14 +146,12 @@ define("io.ox/preview/officePreview/main", ["io.ox/core/tk/keys", "gettext!io.ox
             
             container = win.nodes.main;
             
+            win.nodes.head.append($("<div>").append($previousButton, $.txt(' '), $nextButton).center());
+            
             container.css({overflow: "auto"});
             
             win.show(function () {
-                container.append($("<div>").addClass("row-fluid")
-                    .append($("<div>").addClass("span4").html("&nbsp;"))
-                    .append($("<div>").addClass("span4 io-ox-office-preview-controls").append($previousButton).append($pageIndicator).append($nextButton).append($loadingIndicator))
-                    .append($("<div>").addClass("span4").html("&nbsp;"))
-                ).append($("<div>").addClass("row-fluid").append($contentBlock));
+                container.append($contentBlock);
                 
                 app.showPage(0);
             });
