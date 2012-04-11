@@ -22,12 +22,12 @@ define(function () {
         buildDate: "2010-10-21",
 
         plugins: {
- signin: [],
- core: ["halo"],
- halo: ["halo/contacts", "halo/appointments", "halo/linkedIn", "halo/mail"],
- portal: ["appointments", "linkedIn", "mail", "rss"],
- tests: ["io.ox/mail/write", "plugins/halo", "io.ox/contacts", "io.ox/contacts/edit",
-         "io.ox/core"]
+            signin: [],
+            core: ["halo"],
+            halo: ["halo/contacts", "halo/appointments", "halo/linkedIn", "halo/mail"],
+            portal: ["appointments", "linkedIn", "mail", "rss"],
+            tests: ["io.ox/mail/write", "plugins/halo", "io.ox/contacts", "io.ox/contacts/edit", "io.ox/contacts/distrib",
+                    "io.ox/core", "io.ox/files"]
         },
 
         previewExtensions : ["doc", "dot", "docx", "dotx", "docm", "dotm", "xls", "xlt", "xla", "xlsx", "xltx", "xlsm", "xltm", "xlam", "xlsb", "ppt", "pot", "pps", "ppa", "pptx", "potx", "ppsx", "ppam", "pptm", "potm", "ppsm"]

@@ -80,12 +80,20 @@ define("io.ox/preview/main",
     Renderer.point.extend(new Engine({
         id: "image",
         index: 10,
-        endings: ["png", "jpg", "jpeg", "gif"],
-        draw: function (file) {
-            this.append(
-                $("<img>", { src: file.dataURL + "&width=400&height=400&scaleType=contain&delivery=view", alt: 'Preview' })
-            );
-        }
+        endings: ["png", "jpg", "jpeg", "gif", "bmp"],
+        draw: function (file, node, options) {
+            var param = {
+                width: options.width || 400,
+                height: options.height || 400,
+                scaleType: options.scaleType || 'contain',
+                delivery: 'view'
+            };
+            if (options.height === 'auto') {
+                delete param.height;
+            }
+            node.append(
+                $("<img>", { src: file.dataURL + "&" + $.param(param), alt: 'Preview' });
+        },
     }));
 
     // register audio typed renderer
@@ -144,12 +152,48 @@ define("io.ox/preview/main",
             $.ajax({ url: file.dataURL, dataType: "html" }).done(function (txt) {
                 this.css({ border: "1px dotted silver", padding: "10px", whiteSpace: "pre-wrap" }).text(txt);
             });
+            }
+        });
+    }
+
+    Renderer.register({
+        id: "eml",
+        endings: ["eml"],
+        draw: function (file) {
+            require(['io.ox/mail/view-detail'], function (view) {
+                var data = file.data.nested_message;
+                this.append(view.draw(data));
+            });
+        }
+    });
+
+    Renderer.register({
+        id: "text",
+        endings: ["txt", "asc", "js", "md"],
+        draw: function (file) {
+            if (this.canRender(file)) {
+                $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
+                    // plain text preview
+                    this.append(
+                        $("<div>").css({
+                            width: '100%',
+                            padding: '13px',
+                            backgroundColor: '#f5f5f5',
+                            whiteSpace: 'pre-wrap',
+                            boxSizing: 'border-box'
+                        })
+                        .text(text)
+                    );
+                });
+            }
         }
     }));
 
-    var Preview = function (file) {
-        var self = this;
-        this.file = file;
+    var Preview = function (file, options) {
+
+        this.file = _.copy(file, true); // work with a copy
+        this.options = options || {};
+
         this.renderer = null;
 
         if (this.file.file_mimetype) {
@@ -196,7 +240,7 @@ define("io.ox/preview/main",
 
         appendTo: function (node) {
             if (this.supportsPreview()) {
-                this.renderer.invoke("draw", node, this.file);
+                this.renderer.invoke("draw", node, this.file, this.options);
             }
         }
     };

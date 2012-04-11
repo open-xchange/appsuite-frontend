@@ -286,9 +286,6 @@ define("io.ox/core/tk/dialogs",
 
     var SidePopup = function (width) {
 
-        // default minimum width
-        width = width || 400;
-
         var processEvent,
             isProcessed,
             open,
@@ -360,7 +357,7 @@ define("io.ox/core/tk/dialogs",
 
         open = function (e, handler) {
             // get proper elements
-            var my = $(this), current, zIndex, sidepopup;
+            var my = $(this), zIndex, sidepopup;
             self.nodes = {
                 closest: my.parents(".io-ox-sidepopup-pane, .window-content"),
                 click: my.parents(".io-ox-sidepopup-pane, .window-body"),
@@ -396,57 +393,19 @@ define("io.ox/core/tk/dialogs",
                 $(document).on("keydown", closeByEscapeKey);
 
                 // decide for proper side
-                var docWidth = $(document).width(),
-                    max = (docWidth * 0.50 >> 0) + 1,
-                    w, distance, mode, right, left, pos,
+                var docWidth = $(document).width(), mode,
                     parentPopup = my.parents(".io-ox-sidepopup").first(),
                     firstPopup = parentPopup.length === 0;
 
-                if (firstPopup) {
-                    // get initial side
-                    distance = my.offset().left + my.outerWidth() - (docWidth / 2 >> 0);
-                    mode = distance < 0 ? "right" : "left";
-                } else {
-                    // toggle side for next popup
-                    mode = parentPopup.hasClass("right") ? "left" : "right";
-                }
+                // get side
+                mode = (firstPopup && my.offset().left > docWidth / 2) ||
+                    parentPopup.hasClass("right")  ? 'left' : 'right';
 
-                // min-width greater than max-width?
-                if (width > max) {
-                    max = width;
-                }
+                popup.add(arrow).removeClass("left right").addClass(mode).css('zIndex', zIndex);
+                arrow.css('zIndex', zIndex + 1);
 
-                if (mode === "left") {
-                    // pops up on the left side
-                    w = my.offset().left - 25;
-                    w = Math.max(width, w);
-                    w = Math.min(max, w);
-                    pos = Math.max(50, docWidth - w); // hard limit
-                    right = pos;
-                    left = 0;
-                } else {
-                    // pops up on the right side
-                    w = docWidth - (my.offset().left + my.outerWidth() + 25);
-                    w = Math.max(width, w);
-                    w = Math.min(max, w);
-                    pos = Math.max(50, docWidth - w); // hard limit
-                    right = 0;
-                    left = pos;
-                }
-
-                // convert to percent (nice for dynamic resizing)
-                left = !left ? "0" : (left / docWidth * 100 >> 0) + "%";
-                right = !right ? "0" : (right / docWidth * 100 >> 0) + "%";
-
-                //pane.css("maxWidth", max + "px");
-
-                popup.removeClass("left right")
-                    .addClass(mode)
-                    .css({ right: right, left: left, zIndex: zIndex });
-
-                arrow.removeClass("left right")
-                    .addClass(mode)
-                    .css({ right: right, left: left, zIndex: zIndex + 1 });
+                // add popup to proper element
+                self.nodes.target.append(popup.css('visibility', 'hidden'));
 
                 // call custom handler
                 (handler || $.noop).call(this, pane.empty(), e);
@@ -456,8 +415,9 @@ define("io.ox/core/tk/dialogs",
                     top = my.offset().top + halfHeight - self.nodes.target.offset().top;
                 arrow.css("top", top);
 
-                // finally, add popup to proper element
-                self.nodes.target.append(popup).append(arrow);
+                // finally, add arrow
+                popup.css('visibility', '');
+                self.nodes.target.append(arrow);
             }
         };
 

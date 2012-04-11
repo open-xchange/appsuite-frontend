@@ -201,7 +201,7 @@
                     return pair.substr(0, key.length) === key;
                 })
                 .map(function (pair) {
-                    return pair.substr(key.length + 1);
+                    return decodeURIComponent(pair.substr(key.length + 1));
                 })
                 .first()
                 .value();
@@ -209,7 +209,7 @@
 
         setCookie: function (key, value) {
             // yep, works this way:
-            document.cookie = key + "=" + value;
+            document.cookie = key + "=" + encodeURIComponent(value);
         },
 
         /**
@@ -221,7 +221,7 @@
          */
         inspect: function (first) {
             var args = slice.call(arguments);
-            args.unshift("Inspect");
+            args.unshift('Inspect');
             console.debug.apply(console, args);
             return first;
         },
@@ -388,6 +388,11 @@
         pad: function (val, length, fill) {
             var str = String(val), n = length || 1, diff = n - str.length;
             return (diff > 0 ? new Array(diff + 1).join(fill || "0") : "") + str;
+        },
+
+        // makes sure you have an array
+        getArray: function (o) {
+            return _.isArray(o) ? o : [o];
         },
 
         // call function 'every' 1 hour or 5 seconds

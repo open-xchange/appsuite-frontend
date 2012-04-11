@@ -114,6 +114,7 @@ define('io.ox/dev/testing/main',
                             .attr('data-suite-id', suite.id)
                             .append(
                                 $('<h1>')
+                                .css('margin', '1em 0 0.5em 0')
                                 .addClass('clear-title')
                                 .text(String(suite.description))
                             )

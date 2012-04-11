@@ -42,15 +42,13 @@ define('io.ox/core/cache', function () {
                 fluentCache = require('io.ox/core/cache/' + opt.fluent),
                 id,
                 // use persistent storage?
-                persist = (persitentCache.isUsable() && _.url.param('persistence') !== 'false' && persistent === true ?
+                persist = (persitentCache.isUsable() && _.url.hash('persistence') !== 'false' && persistent === true ?
                         function () {
                             if (ox.user !== '') {
                                 id = 'cache.' + (ox.user || '_') + '.' + (name || '');
-
                                 persist = function () {
                                     return true;
                                 };
-
                                 return true;
                             } else {
                                 return false;

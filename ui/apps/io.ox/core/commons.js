@@ -63,14 +63,24 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
         }()),
 
         wireGridAndSelectionChange: function (grid, id, draw, node) {
+            var last = [''];
             grid.selection.on('change', function (e, selection) {
-                var len = selection.length;
-                if (len === 1) {
-                    draw(selection[0]);
-                } else if (len > 1) {
-                    commons.multiSelection(id, node, this.unfold());
-                } else {
-                    node.empty();
+                var len = selection.length,
+                    // work with reduced string-based set
+                    flat = _(selection).map(function (obj) {
+                        return grid.selection.serialize(obj);
+                    });
+                // has anything changed?
+                if (len !== last.length || !_.isEqual(flat, last)) {
+                    if (len === 1) {
+                        draw(selection[0]);
+                    } else if (len > 1) {
+                        commons.multiSelection(id, node, this.unfold());
+                    } else {
+                        node.empty();
+                    }
+                    // remember current selection
+                    last = flat;
                 }
             });
         },
@@ -96,7 +106,11 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             // show
             win.on('show idle', function () {
                 grid.selection.keyboard(true);
-                grid.selection.retrigger();
+                if (grid.selection.get().length) {
+                    // only retrigger if selection is not empty; hash gets broken if caches are empty
+                    // TODO: figure out why this was important
+                    grid.selection.retriggerUnlessEmpty();
+                }
             });
             // hide
             win.on('hide busy', function () {
@@ -117,7 +131,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             // open (first show)
             app.getWindow().on('open', function () {
                 if (api.needsRefresh(app.folder.get())) {
-                    api.trigger('refresh!', app.folder.get());
+                    api.trigger('refresh^', app.folder.get());
                 }
             });
         },
@@ -172,7 +186,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             app.getWindow().nodes.title.append($('<b>').addClass('caret'));
             // hash support
             app.getWindow().on('show', function () {
-                grid.selection.retrigger();
+                grid.selection.retriggerUnlessEmpty();
                 _.url.hash('folder', app.folder.get());
             });
             defaultFolderId = _.url.hash('folder') || defaultFolderId;

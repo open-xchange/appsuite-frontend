@@ -17,8 +17,9 @@ define('io.ox/contacts/distrib/main',
      'io.ox/contacts/model',
      'io.ox/contacts/distrib/create-dist-view',
      'gettext!io.ox/contacts/contacts',
+     'io.ox/contacts/util',
      'less!io.ox/contacts/distrib/style.css'
-     ], function (api, ContactModel, ContactCreateDistView, gt) {
+     ], function (api, ContactModel, ContactCreateDistView, gt, util) {
 
     'use strict';
 
@@ -57,7 +58,13 @@ define('io.ox/contacts/distrib/main',
             view = new ContactCreateDistView({ model: model });
             // define store
             model.store = function (data, changes) {
+                view.node.find('#myGrowl').jGrowl('shutdown');
                 if (!_.isEmpty(data)) {
+                  //sort the array if not empty before save
+
+                    if (data.distribution_list) {
+                        data.distribution_list = data.distribution_list.sort(util.nameSort);
+                    }
                     data.folder_id = folderId;
                     data.mark_as_distributionlist = true;
                     if (data.display_name === '') {
@@ -87,11 +94,22 @@ define('io.ox/contacts/distrib/main',
                 view = new ContactCreateDistView({ model: model });
                 // define store
                 model.store = function (data, changes) {
+
+                    view.node.find('#myGrowl').jGrowl('shutdown');
+                    //sort the array before save if not empty
+
+                    if (data.distribution_list) {
+                        data.distribution_list = data.distribution_list.sort(util.nameSort);
+                    }
                     return api.edit({
                             id: data.id,
                             folder: data.folder_id,
                             timestamp: _.now(),
-                            data: data
+                            data: {
+                                // just the potential changes
+                                display_name: data.display_name,
+                                distribution_list: data.distribution_list
+                            }
                         })
                         .done(function () {
                             dirtyStatus.byApi = false;
@@ -140,6 +158,7 @@ define('io.ox/contacts/distrib/main',
                                 console.debug("Action", action);
                                 if (action === 'delete') {
                                     def.resolve();
+                                    container.find('#myGrowl').jGrowl('shutdown');
                                     listetItem.remove();
                                 } else {
                                     def.reject();
@@ -147,10 +166,12 @@ define('io.ox/contacts/distrib/main',
                             });
                     });
                 } else {
+                    container.find('#myGrowl').jGrowl('shutdown');
                     def.resolve();
                     listetItem.remove();
                 }
             } else {
+                container.find('#myGrowl').jGrowl('shutdown');
                 def.resolve();
                 listetItem.remove();
             }

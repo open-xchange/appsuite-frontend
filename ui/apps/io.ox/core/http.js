@@ -494,7 +494,20 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         var requests = {};
 
         function lowLevelSend(r) {
-            $.ajax(r.xhr)
+            // TODO: remove backend fix
+            var fixPost = r.o.fixPost && r.xhr.type === 'POST',
+                xhr = _.extend({}, r.xhr, { dataType: fixPost ? 'text' : r.xhr.dataType });
+            $.ajax(xhr)
+                // TODO: remove backend fix
+                .pipe(function (response) {
+                    if (fixPost) {
+                        // Extract the JSON text
+                        var matches = /\((\{.*?\})\)/.exec(response);
+                        return matches && matches[1] ? JSON.parse(matches[1]) : JSON.parse(response);
+                    } else {
+                        return response;
+                    }
+                })
                 .done(function (data) {
                     if (r.o.processData) {
                         processResponse(r.def, data, r.o, r.o.type);

@@ -72,8 +72,10 @@ $(document).ready(function () {
                     location = "#?" + enc(
                         _.rot("session=" + ox.session + "&user=" + ox.user + (ref ? "&ref=" + enc(ref) : ''), 1)
                     );
-                // auto-login?
-                if (viaAutoLogin) {
+                // use redirect servlet for real login request
+                // this even makes chrome and safari asking for storing credentials
+                // skip this for auto-login or during offline mode
+                if (viaAutoLogin || !ox.online) {
                     _.url.redirect(location);
                 } else {
                     // use redirect servlet
@@ -381,7 +383,7 @@ $(document).ready(function () {
     require = function (deps, callback) {
         if (_.isArray(deps)) {
             // use deferred object
-            var def = $.Deferred().done(callback);
+            var def = $.Deferred().done(callback || $.noop);
             req(deps, def.resolve);
             return def;
         } else {

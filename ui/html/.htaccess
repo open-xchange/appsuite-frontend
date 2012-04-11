@@ -1,7 +1,9 @@
 # Compress static data
 AddOutputFilterByType DEFLATE text/html text/plain text/javascript application/javascript text/css text/xml application/xml text/x-js application/x-javascript
 
+# be sure to have those
 AddType text/cache-manifest .appcache
+AddType application/x-font-ttf .ttf
 
 # Define pre-compressed files
 AddType text/javascript .jsz

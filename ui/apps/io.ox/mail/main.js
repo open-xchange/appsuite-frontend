@@ -20,7 +20,7 @@ define("io.ox/mail/main",
      "io.ox/core/tk/vgrid",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
-     "gettext!io.ox/mail/mail",
+     "gettext!io.ox/mail/main",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
     ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt) {
@@ -97,6 +97,90 @@ define("io.ox/mail/main",
             }, []);
         };
 
+        /*
+         * Thread summary
+         */
+        (function () {
+
+            var openThreads = {};
+
+            // add label template
+            grid.addLabelTemplate(tmpl.thread);
+            grid.requiresLabel = function (i, data, current) {
+                return openThreads[i] !== undefined;
+            };
+
+            function refresh(list, index) {
+                grid.repaintLabels().done(function () {
+                    grid.repaint();
+                    if (list) {
+                        grid.selection.insertAt(list.slice(1), index + 1);
+                    }
+                });
+            }
+
+            function open(index, cid) {
+                if (openThreads[index + 1] === undefined) {
+                    var thread = api.getThread(cid);
+                    if (thread.length > 1) {
+                        openThreads[index + 1] = cid;
+                        api.getList(thread).done(function (list) {
+                            refresh(list, index);
+                        });
+                    }
+                }
+            }
+
+            function close(index, cid) {
+                if (openThreads[index + 1] !== undefined) {
+                    var thread = api.getThread(cid);
+                    delete openThreads[index + 1];
+                    api.getList(thread).done(function (list) {
+                        grid.selection.remove(list.slice(1));
+                        refresh();
+                    });
+                }
+            }
+
+            function toggle(index, cid) {
+                if (openThreads[index + 1] === undefined) {
+                    open(index, cid);
+                } else {
+                    close(index, cid);
+                }
+            }
+
+            grid.getContainer().on('click', '.thread-size', function () {
+                var cell = $(this).closest('.vgrid-cell'),
+                    index = parseInt(cell.attr('data-index'), 10),
+                    cid = cell.attr('data-obj-id');
+                toggle(index, cid);
+            });
+
+            grid.getContainer().on('click', '.thread-summary-item', function () {
+                var cid = $(this).attr('data-obj-id');
+                grid.selection.set(cid);
+            });
+
+            grid.selection.on('keyboard', function (evt, e) {
+                var sel = grid.selection.get(), cid, index, key;
+                if (sel.length === 1) {
+                    cid = grid.selection.serialize(sel[0]);
+                    index = grid.selection.getIndex(cid);
+                    key = e.which;
+                    // cursor right? (open)
+                    if (key === 39) {
+                        open(index, cid);
+                    } else if (key === 37) {
+                        close(index, cid);
+                    } else if (key === 13) {
+                        toggle(index, cid);
+                    }
+                }
+            });
+
+        }());
+
         commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads');
         commons.wireGridAndSearch(grid, win, api);
 
@@ -168,7 +252,19 @@ define("io.ox/mail/main",
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api);
 
-        window.mailApp = app;
+        app.on('folder:change folder:refresh', function (e) {
+            app.folder.getData().done(function (data) {
+                var unread = data.unread, badge;
+                if ((badge = win.nodes.title.find('.badge')).length === 0) {
+                    badge = $('<span class="badge badge-error">').appendTo(win.nodes.title);
+                }
+                if (unread > 0) {
+                    badge.text(unread).show();
+                } else {
+                    badge.hide();
+                }
+            });
+        });
 
         // go!
         commons.addFolderSupport(app, grid, 'mail')

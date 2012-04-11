@@ -14,12 +14,13 @@
 /* VGrid elements */
 
 .vgrid-cell.mail * {
-    height: 1.5em;
+    height: 1.5em; /* good for what? */
 }
 
 .vgrid-cell.mail {
     padding: 6px 13px 6px 13px;
     line-height: 1.5em;
+    height: 3em;
 }
 
 .io-ox-portal-widget .vgrid-cell.mail { /* portal */
@@ -91,7 +92,8 @@
     font-weight: normal;
 }
 
-.vgrid-cell.mail .date {
+.vgrid-cell.mail .date,
+.vgrid-cell.thread-summary .date {
     color: #777;
     font-weight: 200;
     display: inline-block;
@@ -99,13 +101,13 @@
 }
 
 .vgrid-cell.mail .attachment {
-    background: url(images/attachment.png) no-repeat 0px 6px;
-    width: 14px;
+    background: url(images/attachment.png) no-repeat 0px 0px;
+    width: 17px;
     margin-left: 1em;
     float: right;
 }
 
-.vgrid-cell.mail .threadSize {
+.vgrid-cell.mail .thread-size {
     color: #999;
     min-width: 1em;
     font-weight: normal;
@@ -113,16 +115,52 @@
     margin-left: 1em;
     display: inline-block;
     float: right;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
 }
 
-.borderradius .vgrid-cell.mail .threadSize {
+.borderradius .vgrid-cell.mail .thread-size {
     background-color: #e5e5e5;
     text-align: center;
     border-radius: 5px;
 }
 
-.borderradius .vgrid-cell.mail.selected .threadSize {
+.borderradius .vgrid-cell.mail.selected .thread-size {
     background-color: darken(@selected-background, 10%);
+}
+
+.vgrid-cell.thread-summary {
+    padding: 0;
+}
+
+.vgrid-cell .thread-summary-item {
+    padding: 5px 12px 5px 25px;
+    border-bottom: 1px solid #fff;
+    background-color: #eee;
+    cursor: pointer;
+}
+
+.vgrid-cell .thread-summary-item.unread,
+.vgrid-cell .thread-summary-item.unread .date {
+    font-weight: bold;
+}
+
+.vgrid-cell .thread-summary-item.selected,
+.vgrid-cell .thread-summary-item.selected:hover {
+    background-color: #08c;
+}
+
+.vgrid-cell .thread-summary-item.selected * {
+    color: white !important;
+}
+
+.vgrid-cell .thread-summary-item:hover {
+    background-color: #ddd;
+}
+
+.vgrid-cell .thread-summary-item:last-child {
+    border-bottom: 0px none;
 }
 
 /* Detail view */
@@ -138,12 +176,18 @@
     -webkit-user-select: text;
     -moz-user-select: text;
     user-select: text;
+    clear: both;
 }
 
 .mail-detail.page {
     border-bottom: 1px solid #eee;
     padding: 30px 40px 30px 40px;
     min-height: 200px;
+}
+
+.mail-detail-clear-both {
+    clear: both;
+    height: 0px;
 }
 
 .mail-detail.page:last-child {
@@ -170,7 +214,7 @@
 
 .mail-detail .subject, .mail-detail .flag {
     font-size: 16pt;
-    margin: 0.2em 0 0.4em 0;
+    margin: 0 0 0.6em 0;
     word-wrap: break-word;
 }
 
@@ -188,21 +232,32 @@
     float: right;
     width: 64px;
     height: 64px;
-    margin: 0 0 10px 20px;
+    margin: 0 0 1em 1.5em;
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
 }
 
 .mail-detail .list {
-    line-height: 1.25em;
-    padding: 0.2em 0 0.2em 0;
+    line-height: 1.40em;
+    margin: 0 0 0.8em 0;
     vertical-align: top;
 }
 
 .mail-detail .io-ox-label {
     font-family: OpenSans, Arial, Helvetica, sans-serif;
     color: #aaa;
+}
+
+.mail-detail .to-cc .person-link {
+    color: #333;
+}
+
+.mail-detail .attachment-list {
+}
+
+.mail-detail .instant-preview {
+    max-width: inherit;
 }
 
 .mail-detail .spacer {
@@ -213,14 +268,26 @@
 }
 
 .mail-detail .content {
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+    max-width: 750px;
+    margin-top: 1em;
+    cursor: auto;
 }
 
+/* TODO: remove / temp. fix for bootstrap */
+.mail-detail .content [class*="span"] {
+    float: none;
+    margin-left: 0;
+}
+
+/* TODO: remove / temp. fix for sanitized HTML */
+.mail-detail .content { padding: 0 !important; }
+.mail-detail .content > .content { padding: 0; }
+
 .mail-detail .content.plain-text {
-    font-family: Monaco, monospace;
-    font-size: @font-size;
-    line-height: 18px;
     white-space: pre-wrap;
-    max-width: 700px;
 }
 
 .touch .mail-detail .content.plain-text {
@@ -228,13 +295,10 @@
 }
 
 .mail-detail blockquote {
-    color: #888 !important;
-    border-color: #888 !important;
-    margin: 1em 0 1em 0;
+    font-size: 12px;
+    border-left: 1px solid #08c;
     padding: 0.5em 1em 0.5em 39px;
-    border-left: 1px solid #00a0cd;
-    background-color: #f5f5f5;
-    color: #555;
+    margin: 1em 0 1em 0;
 }
 
 .mail-detail blockquote p {
@@ -261,7 +325,7 @@
 .spotlight .scrollable-pane { max-width: 900px; min-height: 100%; background-color: white; }
 
 .spotlight .mail-detail.page { border-color: #444; border-width: 5px; background-color: #eee; min-height: 400px; }
-.spotlight .content { background-color: white; padding: 30px 40px 30px 40px; margin: 0 -40px -30px -40px; min-height: 300px; }
+.spotlight .content { background-color: white; max-width: 100%; padding: 30px 110px 30px 40px !important; margin: 0 -40px -30px -40px; min-height: 300px; }
 .spotlight .mail-detail .content.plain-text { max-width: 100%; }
 .spotlight .subject { color: #555; }
 .spotlight .person-link { color: #bbb; font-weight: 200; }
@@ -286,4 +350,21 @@
 }
 
 .spotlight-icon:hover { background-color: rgba(200, 200, 200, 0.5); }
-.spotlight .spotlight-icon { display: block; z-index: 3; }
+.spotlight .spotlight-icon { display: block; z-index: 30; }
+
+/* attachment preview */
+
+h4.mail-attachment-preview {
+    height: 3em;
+    color: #333;
+}
+
+/* label dropdown */
+.mail-detail .active-label {
+    font-weight: bold;
+}
+
+/* fix bootstrap */
+.mail-detail .content img {
+    width: auto;
+}

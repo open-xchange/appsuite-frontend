@@ -34,7 +34,10 @@ define("io.ox/calendar/view-grid-template",
             set: function (data, fields, index) {
                 fields.title.text(data.title || '');
                 fields.location.text(data.location || '');
-                fields.time.text(util.getTimeInterval(data));
+                fields.time.empty().append(
+                    $.txt(util.getTimeInterval(data) + ' '),
+                    util.getTimezoneLabel(data)
+                );
                 fields.date.text(util.getDateInterval(data));
                 fields.shown_as.get(0).className = "abs shown_as " + util.getShownAsClass(data);
             }
@@ -68,11 +71,12 @@ define("io.ox/calendar/view-grid-template",
             tmpl.add(that.main);
 
             _(list).each(function (data, i) {
-                tmpl.getClone()
-                    .update(data, i).appendTo($div).node
-                        .css("position", "relative")
-                        .data("appointment", data)
-                        .addClass("hover");
+                var clone = tmpl.getClone();
+                clone.update(data, i);
+                clone.appendTo($div).node
+                    .css("position", "relative")
+                    .data("appointment", data)
+                    .addClass("hover");
             });
 
             return $div;

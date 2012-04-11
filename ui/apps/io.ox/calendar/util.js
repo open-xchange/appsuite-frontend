@@ -38,7 +38,7 @@ define("io.ox/calendar/util",
                      ],
         shownAsClass = "reserved temporary absent free".split(' '),
         // confirmation status (none, accepted, declined, tentative)
-        n_confirm = ["", "\u2713", "x", "?"],
+        n_confirm = ['', '<i class="icon-ok">', '<i class="icon-remove">', '<i class="icon-question-sign">'],
         confirmClass = ["", "accepted", "declined", "tentative"],
         // constants
         MINUTE = 60000,
@@ -179,15 +179,54 @@ define("io.ox/calendar/util",
             }
         },
 
-        getTimeInterval: function (data) {
-            var length;
-            if (data.full_time) {
+        getTimeInterval: function (data, shift) {
+            shift = shift || 0;
+            var length, start, end;
+            if (data.full_time && shift === 0) {
                 length = (data.end_date - data.start_date) / DAY >> 0;
                 return length <= 1 ? "Whole day" : length + " days";
             } else {
-                return this.getTime(data.start_date) + " \u2013 " + this.getTime(data.end_date);
+                start = data.start_date + shift * HOUR;
+                end = data.end_date + shift * HOUR;
+                return that.getTime(start) + " \u2013 " + that.getTime(end);
             }
         },
+
+        getTimezoneLabel: (function (data) {
+
+            var current = 'CEST',
+                zones = [['San Francisco', -9, 'PDT'],
+                         ['New York', -6, 'EDT'],
+                         ['Rio de Janeiro', -5, 'BRT'],
+                         ['London', -1, 'BST'],
+                         ['Berlin', 0, 'CEST'],
+                         ['Moscow', +2, 'MSK'],
+                         ['Bangalore', +3.5, 'IST'],
+                         ['Beijing', +6, 'CST'],
+                         ['Sydney', +8, 'EST']
+                         ];
+
+            return function (data) {
+                return $('<span>').addClass('label').text(current)
+                    .popover({
+                        title: that.getTimeInterval(data) + ' ' + current,
+                        content: function () {
+                            // hard coded for demo purposes
+                            return '<div class="timezones">' +
+                                _(zones).map(function (zone) {
+                                    return _.printf('%s <b><span class="label label-info">%s</span></b><i>%s</i>', zone[0], zone[2], that.getTimeInterval(data, zone[1]));
+                                }).join('<br>') +
+                                '</div>';
+                        },
+                        animation: false,
+                        placement: function (tip, element) {
+                            var off = $(element).offset(),
+                                width = $('body').width() / 2;
+                            return off.left > width ? 'left' : 'right';
+                        }
+                    });
+            };
+        }()),
 
         getShownAsClass: function (data) {
             return shownAsClass[(data.shown_as || 1) - 1];

@@ -31,10 +31,10 @@ define("io.ox/core/extPatterns/links",
                 var node = $(this),
                     context = node.data("context"),
                     ref = node.data("ref");
-                actions.invoke(ref, self, context);
+                actions.invoke(ref, this, context, e);
             };
 
-        this.draw = function (context) {
+        this.draw = this.draw || function (context) {
             this.append(
                 $("<a>", { href: "#", tabindex: "1", "data-action": self.id })
                 .addClass('io-ox-action-link' + (options.attention === true ? ' attention': ''))
@@ -43,6 +43,10 @@ define("io.ox/core/extPatterns/links",
                 .text(String(self.label))
             );
         };
+    };
+
+    var XLink = function (id, options) {
+        ext.point(id).extend(new Link(options));
     };
 
     var Button = function (options) {
@@ -71,21 +75,20 @@ define("io.ox/core/extPatterns/links",
     };
 
 
-    var applyCollection = function (self, collection, node, context, args, bootstrapMode) {
-        actions.extPatterns.applyCollection(self, collection, context, args).always(function (links) {
+    var drawLinks = function (self, collection, node, context, args, bootstrapMode) {
+        actions.extPatterns.applyCollection(self, collection, context, args)
+        .always(function (links) {
             // count resolved links
             var count = 0;
             // draw links
-            _(links).each(function (def) {
-                def.done(function (link) {
-                    if (_.isFunction(link.draw)) {
-                        link.draw.call(bootstrapMode ? $("<li>").appendTo(node) : node, context);
-                        if (_.isFunction(link.customize)) {
-                            link.customize.call(node.find('a'), context);
-                        }
-                        count++;
+            _(links).each(function (link) {
+                if (_.isFunction(link.draw)) {
+                    link.draw.call(bootstrapMode ? $("<li>").appendTo(node) : node, context);
+                    if (_.isFunction(link.customize)) {
+                        link.customize.call(node.find('a'), context);
                     }
-                });
+                    count++;
+                }
             });
             // empty?
             if (count === 0) {
@@ -99,8 +102,17 @@ define("io.ox/core/extPatterns/links",
         this.draw = function (context) {
             // paint on current node
             var args = $.makeArray(arguments);
-            applyCollection(self, new Collection(context), this, context, args);
+            drawLinks(self, new Collection(context), this, context, args);
         };
+    };
+
+    var inlineToggle = function (e) {
+        var node = $(this), A = 'data-toggle',
+            list = node.parent().children().slice(2, -2),
+            expand = node.attr(A) === 'more';
+        list[expand ? 'show' : 'hide']();
+        node.text(expand ? 'Less' : 'More')
+            .attr(A, expand ? 'less' : 'more');
     };
 
     var InlineLinks = function (options) {
@@ -109,37 +121,72 @@ define("io.ox/core/extPatterns/links",
             // create & add node first, since the rest is async
             var args = $.makeArray(arguments),
                 node = $("<div>").addClass("io-ox-inline-links").appendTo(this);
-            applyCollection(self, new Collection(context), node, context, args);
+            drawLinks(self, new Collection(context), node, context, args);
+            // add toggle
+            if (node.children().length > 4) {
+                node.append(
+                    $('<span>', { 'data-toggle': 'more' })
+                    .addClass('label io-ox-action-link')
+                    .css({ cursor: 'pointer', marginLeft: '1.5em' })
+                    .click(inlineToggle)
+                    .text('More')
+                );
+                node.children().slice(2, -2).hide();
+            }
         };
     };
 
+    var z = 0;
+    var drawDropDown = function (options, context) {
+        var args = $.makeArray(arguments),
+            $parent = $("<div>").addClass('dropdown')
+                .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 10000) })
+                .appendTo(this),
+            $toggle = $("<a>", { href: '#' })
+                .attr('data-toggle', 'dropdown')
+                .data('context', context)
+                .text(options.label + " ").append($("<b>").addClass("caret")).appendTo($parent);
+
+        $toggle.addClass(options.classes);
+        $parent.append($.txt('\u00A0\u00A0 ')); // a bit more space
+
+        // create & add node first, since the rest is async
+        var node = $("<ul>").addClass("dropdown-menu").appendTo($parent);
+        drawLinks(options, new Collection(context), node, context, args, true);
+
+        $toggle.dropdown();
+
+        return $parent;
+    };
+
     var DropdownLinks = function (options) {
-        var self = _.extend(this, options);
+        var o = _.extend(this, options);
         this.draw = function () {
-            var args = $.makeArray(arguments),
-                context = args[0],
-                $parent = $("<div>").addClass('dropdown').css('display', 'inline-block').appendTo(this),
-                $toggle = $("<a>", { href: '#' })
-                    .attr('data-toggle', 'dropdown')
-                    .text(options.label + " ").append($("<b>").addClass("caret")).appendTo($parent);
-
-            $toggle.addClass(options.classes);
-            $parent.append($.txt('\u00A0\u00A0 ')); // a bit more space
-
-            // create & add node first, since the rest is async
-            var node = $("<ul>").addClass("dropdown-menu").appendTo($parent);
-            applyCollection(self, new Collection(context), node, context, args, true);
-
-            $toggle.dropdown();
+            return drawDropDown.apply(this, [o].concat($.makeArray(arguments)));
         };
+    };
+
+    var Dropdown = function (id, options) {
+        var o = options || {};
+        o.ref = id + '/' + o.id;
+        ext.point(id).extend(
+            _.extend({
+                ref: o.ref,
+                draw: function (context) {
+                    drawDropDown.call(this, o, context);
+                }
+            }, o)
+        );
     };
 
     return {
         Action: Action,
         Link: Link,
+        XLink: XLink, // TODO: consolidate Link/XLink
         Button: Button,
         ToolbarLinks: ToolbarLinks,
         InlineLinks: InlineLinks,
-        DropdownLinks: DropdownLinks
+        DropdownLinks: DropdownLinks,
+        Dropdown: Dropdown
     };
 });

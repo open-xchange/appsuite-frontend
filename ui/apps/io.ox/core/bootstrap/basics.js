@@ -11,6 +11,7 @@
          js + '-dropdown.js',
          js + '-button.js',
          js + '-alert.js',
+         js + '-popover.js',
          'less!' + p + 'less/bootstrap.less'], $.noop);
 
 }());

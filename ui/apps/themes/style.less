@@ -11,11 +11,6 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-#io-ox-core {
-    z-index: 1;
-    color: @color;
-}
-
 #io-ox-core.wallpaper {
 background: @wallpaper-fallback-color; /* Old browsers */
 background: -moz-radial-gradient(center, circle cover, @wallpaper-color1 0%, @wallpaper-color2 40%, @wallpaper-color3 100%); /* FF3.6+ */
@@ -239,7 +234,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     right: 0px;
     height: 49px;
     left: 0px;
-    z-index: 10;
+    z-index: 20;
 
     color: @head-color;
 
@@ -287,8 +282,16 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 }
 
 .window-title b.caret {
-    vertical-align: baseline;
+    vertical-align: middle;
     margin-left: 0.25em;
+}
+
+.window-title .badge {
+    position: relative;
+    display: inline-block;
+    line-height: 1.4em;
+    top: -3px;
+    left: 10px;
 }
 
 .window-toolbar {
@@ -298,7 +301,6 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     left: 300px;
     padding: 4px 0 4px 13px;
     height: 30px;
-    overflow: hidden;
     white-space: nowrap;
 }
 
@@ -311,6 +313,10 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     white-space: nowrap;
     text-decoration: none;
     outline: 0;
+}
+
+.window-toolbar .dropdown-menu a {
+    margin-right: 0;
 }
 
 .touch .window-toolbar a {
@@ -361,27 +367,16 @@ a.button.default-action {
 }
 
 .window-control {
-    color: @window-control-color;
-    font-weight: normal;
-    border: 2px solid @window-control-border-color;
-    background-color: transparent;
-    -moz-border-radius: 20px;
-    -webkit-border-radius: 20px;
-    border-radius: 20px 20px 20px 20px;
-    font-size: 16px;
-    line-height: 26px;
-    height: 26px;
-    width: 26px;
-    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
     margin-left: 5px;
     display: inline-block;
-    cursor: pointer;
+    overflow: hidden;
+    height: 38px;
 }
 
-.window-control:hover {
-    background-color: @window-control-background-hover;
-    border-color: @window-control-border-color-hover;
-    color: @window-control-color-hover;
+.window-control .close {
+    font-size: 40px;
+    line-height: 30px;
 }
 
 .window-body {
@@ -391,7 +386,7 @@ a.button.default-action {
     bottom: 0px;
     left: 0px;
     white-space: normal;
-    z-index: 20;
+    z-index: 10;
 }
 
 .window-body.movedown {
@@ -788,6 +783,10 @@ input[type=search] {
     padding: 10px;
 }
 
+.io-ox-dialog-popup .modal-footer .btn {
+    min-width: 5em;
+}
+
 .io-ox-dialog-pane {
     width: 500px;  /* Shrink to fit would be nicer */
     overflow: visible;
@@ -847,20 +846,30 @@ span.hint {
 /* inline links */
 .io-ox-inline-links {
     text-align: right;
-    margin: 0.5em 0 1em 0;
-    height: 2.2em;
+    margin: 0 0 1em 0;
     clear: both;
+    -webkit-user-select: none; -moz-user-select: none; user-select: none;
 }
 
 .io-ox-inline-links.empty {
     padding: 0px;
+    height: 0.5em; /* some min height */
 }
 
-.io-ox-inline-links a {
+.io-ox-inline-links a,
+.io-ox-inline-links span.dropdown {
     color: @inline-link-color;
     text-decoration: none;
-    padding: 0.5em 0.5em 0.5em 0em;
+    padding: 0 0 0 0.5em;
     outline: 0;
+}
+
+.io-ox-inline-links span.dropdown ul {
+    text-align: left;
+}
+
+.io-ox-inline-links span.dropdown .caret {
+    margin-right: 5px;
 }
 
 .io-ox-inline-links a:hover {
@@ -873,43 +882,14 @@ span.hint {
     border-color: #FFD7CF;
 }
 
-.io-ox-inline-links .dropdown {
-	display: none;
-	position: absolute;
-    color: @inline-link-color;
-    text-decoration: none;
-    background-color: #EAF4FB;
-    padding: 0.5em 1em 0.5em 1em;
-    border: 1px solid #D4E3FA;
-}
-
-.io-ox-inline-links .dropdown ul {
-	list-style-type: none;
-	padding:0px;
-	margin:0px;
-}
-
-.io-ox-inline-links .dropdown ul li {
-	padding: 1px;
-}
-
-.io-ox-inline-links .dropdown ul li.active {
-	border-left: 5px solid #D4E3FA;
-}
-
-.io-ox-inline-links .dropdown ul li:hover {
-	background-color: #D4E3FA;
-}
-
-
 .io-ox-action-link {
     display: inline-block;
     white-space: nowrap;
-    margin-right: 0.75em;
+    margin-left: 0.75em;
 }
 
-.io-ox-action-link:last-child {
-    margin-right: 0;
+.io-ox-action-link:first-child {
+    margin-left: 0;
 }
 
 .io-ox-multi-selection .summary {
@@ -947,6 +927,8 @@ span.hint {
 }
 
 .io-ox-sidepopup.right {
+    left: 50%;
+    right: 0px;
     border-right: 0px none;
     -moz-box-shadow: -10px 0px 30px -10px #aaa;
     -webkit-box-shadow: -10px 0px 30px -10px #aaa;
@@ -954,6 +936,8 @@ span.hint {
 }
 
 .io-ox-sidepopup.left {
+    left: 0px;
+    right: 50%;
     border-left: 0px none;
     -moz-box-shadow: 10px 0px 30px -10px #aaa;
     -webkit-box-shadow: 10px 0px 30px -10px #aaa;
@@ -964,6 +948,9 @@ span.hint {
     position: absolute;
     z-index: 4;
 }
+
+.io-ox-sidepopup-arrow.left { left: 0px; right: 50%; }
+.io-ox-sidepopup-arrow.right { left: 50%; right: 0px; }
 
 .io-ox-sidepopup-arrow .border {
     position: absolute;
@@ -1061,8 +1048,8 @@ input.nice-input {
 }
 
 .io-ox-foldertree .folder .folder-label {
-    font-family: OpenSans, Helvetica, Arial, sans-serif;
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 200;
 }
 
 .io-ox-foldertree .folder.selected {

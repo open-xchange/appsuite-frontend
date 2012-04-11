@@ -120,6 +120,9 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
 
         // key handler
         fnKey = function (e) {
+            // also trigger keyboard event to internal hub
+            self.trigger('keyboard', e, e.which);
+            // process event
             switch (e.which) {
             case 38:
                 // cursor up
@@ -226,7 +229,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             var tmp = this.get();
             // clear list
             clear();
-            observedItems = all;
+            observedItems = all.slice(); // shallow copy! otherwise conflict with insertAt
             observedItemsIndex = {};
             last = prev = empty;
             // build index
@@ -256,6 +259,48 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                 changed();
             }
             return this;
+        };
+
+        this.insertAt = function (list, pos) {
+            // vars
+            var $l = list.length,
+                // check for conflict, i.e. at least one item is already on the list
+                conflict = _(list).reduce(function (memo, obj) {
+                    return memo || (self.serialize(obj) in observedItemsIndex);
+                }, false);
+            // no conflict?
+            if (!conflict) {
+                // insert into list
+                observedItems.splice.apply(observedItems, [pos, 0].concat(list));
+                // shift upper index
+                _(observedItemsIndex).each(function (value, key) {
+                    if (value >= pos) {
+                        observedItemsIndex[key] += $l;
+                    }
+                });
+                // add to index
+                _(list).each(function (obj, i) {
+                    observedItemsIndex[self.serialize(obj)] = pos + i;
+                });
+            }
+        };
+
+        this.remove = function (list) {
+            // loop over index and mark items to remove with null
+            _(list).each(function (obj) {
+                var cid = self.serialize(obj),
+                    index = observedItemsIndex[cid];
+                if (index !== undefined) {
+                    observedItems.splice(index, 1, null);
+                }
+            });
+            // compact; remove nulled items now
+            observedItems = _(observedItems).compact();
+            // reset index
+            observedItemsIndex = {};
+            _(observedItems).each(function (obj, i) {
+                observedItemsIndex[self.serialize(obj)] = i;
+            });
         };
 
         /**
@@ -425,6 +470,10 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             return isSelected(id);
         };
 
+        this.getIndex = function (obj) {
+            return getIndex(obj);
+        };
+
         /**
          * Keyboard support
          */
@@ -439,6 +488,12 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
          */
         this.retrigger = function () {
             changed();
+        };
+
+        this.retriggerUnlessEmpty = function () {
+            if (this.get().length) {
+                changed();
+            }
         };
 
         this.destroy = function () {

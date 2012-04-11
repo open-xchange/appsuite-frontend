@@ -26,6 +26,7 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
             },
 
         fnClickPerson = function (e) {
+                e.preventDefault();
                 ext.point('io.ox/core/person:action').each(function (ext) {
                     _.call(ext.action, e.data, e);
                 });
@@ -79,22 +80,28 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
             return list;
         },
 
-        serializeList: function (list, addHandlers) {
-            var i = 0, $i = list.length, tmp = $(), node, display_name = '';
+        serializeList: function (list, addHandlers, customize) {
+            var i = 0, $i = list.length, tmp = $('<div>'), node, obj;
             for (; i < $i; i++) {
-                display_name = this.getDisplayName(list[i]);
-                node = $('<span>').addClass(addHandlers ? 'person-link' : 'person')
-                    .css('whiteSpace', 'nowrap').text(display_name);
+                obj = {
+                    display_name: this.getDisplayName(list[i]),
+                    email1: String(list[i][1] || '').toLowerCase()
+                };
+                node = $('<a>', { href: '#' }).addClass(addHandlers ? 'person-link' : 'person')
+                    .css('whiteSpace', 'nowrap')
+                    .text(obj.display_name)
+                    .appendTo(tmp);
                 if (addHandlers) {
-                    node.on('click', { display_name: display_name, email1: list[i][1] }, fnClickPerson)
-                        .css('cursor', 'pointer');
+                    node.on('click', obj, fnClickPerson).css('cursor', 'pointer');
                 }
-                tmp = tmp.add(node);
+                if (customize) {
+                    customize.call(tmp, obj);
+                }
                 if (i < $i - 1) {
-                    tmp = tmp.add($('<span>').addClass('delimiter').html('&nbsp;&bull; '));
+                    tmp.append($('<span>').addClass('delimiter').html('&nbsp;&bull; '));
                 }
             }
-            return tmp;
+            return tmp.children();
         },
 
         serializeAttachments: function (data, list) {
@@ -122,8 +129,12 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
         },
 
         getDisplayName: function (pair) {
-            var display_name = (pair[0] || '').replace(rDisplayNameCleanup, '');
-            return display_name || pair[1];
+            if (!pair) {
+                return '';
+            }
+            var name = pair[0], email = pair[1],
+                display_name = _.isString(name) ? name.replace(rDisplayNameCleanup, '') : '';
+            return display_name || email;
         },
 
         getFrom: function (list, prewrap) {
@@ -136,7 +147,8 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
         },
 
         getPriority: function (data) {
-            return data.priority < 3 ? " \u2605\u2605\u2605 " : '';
+            var i = '<i class="icon-star"></i>';
+            return data.priority < 3 ? $('<span>\u00A0' + i + i + i + '</span>') : $();
         },
 
         getTime: function (timestamp) {
@@ -147,9 +159,28 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
                 },
                 date = function () {
                     return _.pad(d.getUTCDate(), 2) + '.' + _.pad(d.getUTCMonth() + 1, 2) + '.' + d.getUTCFullYear();
+                },
+                isSameDay = function () {
+                    return d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
                 };
             // today?
-            return d.toString() === now.toString() ? time() : date();
+            return isSameDay() ? time() : date();
+        },
+
+        getDateTime: function (timestamp) {
+            var now = new Date(),
+                d = new Date(timestamp),
+                time = function () {
+                    return _.pad(d.getUTCHours(), 2) + ':' + _.pad(d.getUTCMinutes(), 2);
+                },
+                date = function () {
+                    return _.pad(d.getUTCDate(), 2) + '.' + _.pad(d.getUTCMonth() + 1, 2) + '.' + d.getUTCFullYear();
+                },
+                isSameDay = function () {
+                    return d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+                };
+             // today?
+            return isSameDay() ? time() : date() + ' ' + time();
         },
 
         getSmartTime: function (timestamp) {

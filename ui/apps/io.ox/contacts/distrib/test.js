@@ -8,22 +8,38 @@
  * Copyright (C) Open-Xchange Inc., 2006-2011 Mail: info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define("io.ox/contacts/test",
+define("io.ox/contacts/distrib/test",
     ["io.ox/core/extensions", "io.ox/contacts/main",
      "io.ox/contacts/api"], function (ext, contacts, api) {
 
     "use strict";
 
-
     // test objects
-    var testObject = {
-            first_name: 'Georg',
-            last_name: 'Tester',
-            email1: 'tester@test.de',
-            cellular_telephone1: '0815123456789'
+    var testObjects = {
+            user1: {
+                nameValue: 'user1',
+                mailValue: 'user1@user1.test'
+            },
+            user2: {
+                nameValue: 'user2',
+                mailValue: 'user2@user2.test'
+            },
+            user3: {
+                nameValue: 'user3',
+                mailValue: 'user3@user3.test'
+            }
         },
+
+        fillAndTrigger = function (o) {
+            o.inputName.val(o.nameValue);
+            o.inputMail.val(o.mailValue);
+            o.addButton.trigger('click');
+        },
+
+        listname = 'testlist',
 
         TIMEOUT = 5000;
 
@@ -39,17 +55,19 @@ define("io.ox/contacts/test",
         return f;
     }
 
+
     /*
      * Suite: Contacts Test
      */
     ext.point('test/suite').extend({
-        id: 'contacts-create',
+        id: 'contacts-distrib',
         index: 100,
         test: function (j) {
-            j.describe("Contact create", function () {
 
-                var app = null,
-                    id, dataId, dataFolder, dataObj, createButton, saveButton, formFrame, testfield, alert, closeButton;
+            j.describe("Contact distrib", function () {
+
+                var app = null, buttonCreate, createForm, inputName, inputMail, addButton,
+                saveButton, displayName, dataId, dataObj, dataFolder;
 
                 j.it('opens contact app ', function () {
 
@@ -66,80 +84,71 @@ define("io.ox/contacts/test",
                     });
                 });
 
-                j.waitsFor(function () {
-                    createButton = $(".window-toolbar a[data-action='create']");
-                    if (createButton[0]) {
-                        return true;
-                    }
-                }, 'waits', TIMEOUT);
-
-                j.it('looks for create button and hits ', function () {
-                    j.expect(createButton[0]).toBeTruthy();
-                    createButton.trigger('click');
-
-                });
-
-                j.waitsFor(function () {
-                    formFrame = $('.io-ox-dialog-popup');
-                    if (formFrame[0]) {
-                        return true;
-                    }
-                }, 'no form there', TIMEOUT);
-
-                j.it('looks for the form and autofills ', function () {
-                    for (var i in testObject) {
-                        formFrame.find(".input input[data-property='" + i + "']").val(testObject[i]).trigger('change');
-                    }
-                    j.expect(formFrame[0]).toBeTruthy();
-                });
-
-                j.it('checks for alert div ', function () {
-                    testfield = $('[data-property="email1"]');
-
+                j.it('looks for the create distlist button and hits ', function () {
                     j.waitsFor(function () {
-                        if (testfield[0]) {
+                        buttonCreate = $('[data-action="create-dist"]');
+                        if (buttonCreate[0]) {
                             return true;
                         }
-                    });
+                    }, 'looks for the create distlist button', TIMEOUT);
 
                     j.runs(function () {
-                        testfield.val('wrong_mail').trigger('change');
+                        buttonCreate.trigger('click');
                     });
 
+                });
+
+                j.it('checks if the createform is opend ', function () {
                     j.waitsFor(function () {
-                        alert = formFrame.find('.alert');
-                        if (alert[0]) {
+                        createForm = $('.window-content.create-distributionlist');
+                        if (createForm[0]) {
                             return true;
                         }
-                    });
-
-                    j.runs(function () {
-                        j.expect(alert).toBeTruthy();
-                    });
+                    }, 'looks for the createform', TIMEOUT);
 
                 });
 
-                j.it('corrects the value and skips the alert', function () {
-
-                    j.runs(function () {
-                        testfield.val('tester@test.de').trigger('change');
-                    });
-
-                    j.runs(function () {
-                        closeButton = alert.find('a.close');
-                        j.expect(closeButton).toBeTruthy();
-                        closeButton.trigger('click');
-                    });
+                j.it('looks for the form components ', function () {
+                    j.waitsFor(function () {
+                        inputName = createForm.find('input[data-type="name"]');
+                        inputMail = createForm.find('input[data-type="mail"]');
+                        saveButton = createForm.find('a[data-action="save"]');
+                        addButton = createForm.find('a[data-action="add"]');
+                        displayName = createForm.find('input[data-property="display_name"]');
+                        if (inputName[0] && inputMail[0] && addButton[0] && saveButton[0] && displayName[0]) {
+                            return true;
+                        }
+                    }, 'looks for the createform components', TIMEOUT);
 
                 });
 
-                j.it('looks for the save button and hits', function () {
-                    saveButton = formFrame.find(".btn.btn-primary");
-                    saveButton.trigger('click');
-                    j.expect(saveButton[0]).toBeTruthy();
+                j.it('fills the namefield ', function () {
+                    j.runs(function () {
+                        displayName.val(listname).trigger('change');
+                    });
                 });
 
-                j.it('looks for the saved item and compares incl. autogenerated displayname', function () {
+                j.it('fills the array with the test data ', function () {
+                    j.runs(function () {
+                        _.each(testObjects, function (val) {
+                            fillAndTrigger({
+                                inputName: inputName,
+                                inputMail: inputMail,
+                                addButton: addButton,
+                                nameValue: val.nameValue,
+                                mailValue: val.mailValue
+                            });
+                        });
+                    });
+                });
+
+                j.it('hits the savebutton', function () {
+                    j.runs(function () {
+                        saveButton.trigger('click');
+                    });
+                });
+
+                j.it('looks for the saved item and compares', function () {
 
                     j.runs(function () {
                         var me = this;
@@ -173,19 +182,21 @@ define("io.ox/contacts/test",
                         }, 'looks for the object', TIMEOUT);
 
                         j.runs(function () {
-                            j.expect(dataObj.first_name).toEqual(testObject.first_name);
-                            j.expect(dataObj.last_name).toEqual(testObject.last_name);
-                            j.expect(dataObj.display_name).toEqual('Tester, Georg');
-                            j.expect(dataObj.email1).toEqual(testObject.email1);
-                            j.expect(dataObj.cellular_telephone1).toEqual(testObject.cellular_telephone1);
+                            j.expect(dataObj.display_name).toEqual(listname);
+                            j.expect((dataObj.distribution_list[0]).display_name).toEqual(testObjects.user1.nameValue);
+                            j.expect((dataObj.distribution_list[0]).mail).toEqual(testObjects.user1.mailValue);
+                            j.expect((dataObj.distribution_list[1]).display_name).toEqual(testObjects.user2.nameValue);
+                            j.expect((dataObj.distribution_list[1]).mail).toEqual(testObjects.user2.mailValue);
+                            j.expect((dataObj.distribution_list[2]).display_name).toEqual(testObjects.user3.nameValue);
+                            j.expect((dataObj.distribution_list[2]).mail).toEqual(testObjects.user3.mailValue);
                         });
 
                     });
                 });
 
-                j.it('looks for the created item / selects and deletes', function () {
+                j.it('looks for the saved item / selects and deletes', function () {
 
-                    var button, dialog,
+                    var item, button, dialog,
                         cid = dataFolder + '.' + dataId,
                         grid = app.getGrid();
 
@@ -218,17 +229,13 @@ define("io.ox/contacts/test",
                     }, 'delete dialog to be there', TIMEOUT);
 
                     j.runs(function () {
-                        j.expect(dialog).toBeTruthy();
-                    });
-
-                    j.runs(function () {
                         dialog.trigger('click');
-
-                        app = id = dataId = dataFolder = dataObj = createButton = saveButton = formFrame = testfield = alert = closeButton = null;
                     });
 
                 });
+
             });
         }
     });
+
 });

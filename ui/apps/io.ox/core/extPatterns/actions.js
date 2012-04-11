@@ -31,6 +31,8 @@ define("io.ox/core/extPatterns/actions",
     var Action = function (id, options) {
         // get options - use 'requires one' as default
         var o = _.extend({ requires: requiresOne }, options);
+        // fix missing id
+        o.id = o.id || _(id.split(/\//)).last();
         // string?
         if (_.isString(o.requires)) {
             o.requires = requires(o.requires);
@@ -50,37 +52,48 @@ define("io.ox/core/extPatterns/actions",
                     var def = $.Deferred();
                     // process actions
                     if (link.isEnabled && !link.isEnabled.apply(link, args)) {
-                        return def.reject();
-                    }
-                    // combine actions
-                    $.when.apply($,
-                        ext.point(link.ref).map(function (action) {
-                            // get return value
-                            var ret = _.isFunction(action.requires) ?
-                                    action.requires({ collection: collection, context: context }) : true;
-                            // is not deferred?
-                            if (!ret.promise) {
-                                ret = $.Deferred().resolve(ret);
+                        def.reject();
+                    } else {
+                        // combine actions
+                        $.when.apply($,
+                            ext.point(link.ref).map(function (action) {
+                                // get return value
+                                var ret = _.isFunction(action.requires) ?
+                                        action.requires({ collection: collection, context: context }) : true;
+                                // is not deferred?
+                                if (!ret.promise) {
+                                    ret = $.Deferred().resolve(ret);
+                                }
+                                return ret;
+                            })
+                            .value()
+                        )
+                        .done(function () {
+                            var reduced = _(arguments).reduce(function (memo, action) {
+                                return memo && action === true;
+                            }, true);
+                            if (reduced) {
+                                def.resolve(link);
+                            } else {
+                                def.reject(link);
                             }
-                            return ret;
-                        })
-                        .value()
-                    )
-                    .done(function () {
-                        var reduced = _(arguments).reduce(function (memo, action) {
-                            return memo && action === true;
-                        }, true);
-                        if (reduced) {
-                            def.resolve(link);
-                        } else {
-                            def.reject(link);
-                        }
-                    });
-                    return def;
+                        });
+                    }
+                    return {
+                        deferred: def,
+                        link: link
+                    };
                 });
                 // wait for all links
-                $.when.apply($, links.value()).always(function () {
-                    linksResolved.resolve(links.value());
+                $.when.apply($, links.pluck('deferred').value())
+                .always(function () {
+                    linksResolved.resolve(
+                        links.filter(function (o) {
+                            return o.deferred.state() === 'resolved';
+                        })
+                        .pluck('link').value()
+                    );
+                    links = null;
                 });
             });
 

@@ -54,7 +54,11 @@ define('io.ox/core/tk/foldertree',
 
             isOpen = function () {
                 if (open === undefined) {
-                    open = (data.module === 'system' || data.module === tree.options.type);
+                    // TODO: save/restore tree state
+                    open = data.id === 'default0/INBOX' ||
+                        (tree.options.type === 'infostore' && (data.id === '9' || data.id === '10')) ||
+                        (tree.options.type === 'contacts' && (data.id === '2'));
+                    //open = (data.module === 'system' || data.module === tree.options.type);
                 }
                 return hasChildren() && (skip() || open);
             },
@@ -210,9 +214,11 @@ define('io.ox/core/tk/foldertree',
             // set title
             nodes.label.text(data.title + '');
             // set counter (mail only)
-            if (tree.options.type === 'mail' && data.total !== undefined) {
-                nodes.counter.text(data.total || '');
+            if (tree.options.type === 'mail' && data.unread) {
+                nodes.label.css('fontWeight', 'bold');
+                nodes.counter.text(data.unread || '').show();
             } else {
+                nodes.label.css('fontWeight', '');
                 nodes.counter.hide();
             }
         };

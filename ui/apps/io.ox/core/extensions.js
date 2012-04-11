@@ -26,7 +26,7 @@ define("io.ox/core/extensions",
 
         // sort by index
         pointSorter = function (a, b) {
-            return (a.index || 1000000000) - (b.index || 1000000000);
+            return a.index - b.index;
         },
 
         // for debugging purposes
@@ -100,11 +100,15 @@ define("io.ox/core/extensions",
         this.extend = function (extension) {
 
             if (extension.invoke) {
+                console.error(extension);
                 throw "Extensions must not have their own invoke method";
             }
             if (!extension.id) {
+                console.error(extension);
                 throw "Extensions must have an id!";
             }
+
+            extension.index = extension.index || 1000000000;
 
             // skip duplicates (= same id)
             if (!has(extension.id)) {
@@ -118,7 +122,7 @@ define("io.ox/core/extensions",
 
                 extensions.push(extension);
                 extensions.sort(pointSorter);
-                
+
                 if (!extension.metadata) {
                     extension.metadata = function (name, args) {
                         if (this[name]) {
@@ -220,6 +224,10 @@ define("io.ox/core/extensions",
 
         this.isEnabled = function (id) {
             return !!disabled[id];
+        };
+
+        this.inspect = function () {
+            console.debug('Extension point', this.id, JSON.stringify(this.all()));
         };
     };
 

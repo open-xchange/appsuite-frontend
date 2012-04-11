@@ -37,7 +37,7 @@ define('io.ox/core/cache/localstorage', function () {
 
             if (timeStamp > (lastGCrun + gcTimeout) || force === true) {
                 lastGCrun = timeStamp;
-                // TODO: make an awsome garbage collection
+                // TODO: make an awesome garbage collection
                 var i, $i, key, tmp = [], delCounter = 0;
 
                 // loop over all keys
@@ -67,7 +67,7 @@ define('io.ox/core/cache/localstorage', function () {
 
                 // if garbage collection does not kill any item, do something else
                 if (delCounter === 0) {
-                    console.log('GC: nothing killed');
+                    //console.log('GC: nothing killed');
                     if (force === true) {
                         console.log('GC: forced -> clear current keyspace');
                         that.clear();
@@ -119,10 +119,9 @@ define('io.ox/core/cache/localstorage', function () {
             localStorage.removeItem(id + '.' + key);
             try {
                 var saveData = {
-                        accesstime: _.now(),
-                        data : data
-                    };
-
+                    accesstime: _.now(),
+                    data: data
+                };
                 localStorage.setItem(id + '.' + key, JSON.stringify(saveData));
                 def.resolve(key);
             } catch (e) {

@@ -129,7 +129,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
     Events.extend(api);
 
     // bind to global refresh
-    ox.on("refresh", function () {
+    ox.on("refresh^", function () {
         // clear caches
         all_cache = {};
         // trigger local refresh

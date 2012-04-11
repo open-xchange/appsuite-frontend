@@ -86,11 +86,11 @@ define("io.ox/core/desktop",
         // top bar
         topBar = $("#io-ox-topbar"),
         // add launcher
-        addLauncher = function (side, label, fn) {
+        addLauncher = function (side, label, fn, tooltip) {
             // construct
             var node = $("<div>")
             .addClass("launcher")
-            .text(label + '')
+            .append(_.isString(label) ? $.txt(label) : label)
             .hover(
                 function () {
                     $(this).addClass("hover");
@@ -100,7 +100,7 @@ define("io.ox/core/desktop",
                 }
             )
             .on("click", function () {
-                var self = $(this), title;
+                var self = $(this), content;
                 if (!_.isFunction(fn)) {
                     // for development only - should never happen
                     self.css("backgroundColor", "#800000");
@@ -109,12 +109,12 @@ define("io.ox/core/desktop",
                     }, 500);
                 } else {
                     // set fixed width, hide label, be busy
-                    title = self.text() || label;
+                    content = self.contents();
                     self.css("width", self.width() + "px").text("\u00A0").busy();
                     // call launcher
                     (fn.call(this) || $.when()).done(function () {
                         // revert visual changes
-                        self.idle().text(title + '').css("width", "");
+                        self.idle().empty().append(content).css("width", "");
                     });
                 }
             });
@@ -127,6 +127,11 @@ define("io.ox/core/desktop",
                 } else {
                     return null;
                 }
+            }
+
+            // tooltip
+            if (tooltip) {
+                node.tooltip({ title: tooltip, placement: 'bottom', animation: false });
             }
 
             // add
@@ -237,6 +242,7 @@ define("io.ox/core/desktop",
 
                 hChanged = function (e) {
                     that.set(e.data.folder);
+                    self.trigger('folder:refresh', e.data.folder);
                 };
 
                 that = {
@@ -273,14 +279,14 @@ define("io.ox/core/desktop",
                                         win.updateToolbar();
                                     }
                                     // update grid?
-                                    if (grid) {
+                                    if (grid && grid.prop('folder') !== folder) {
                                         grid.clear();
                                         grid.prop('folder', folder);
                                         grid.refresh();
                                         // update hash
                                         _.url.hash('folder', folder);
                                     }
-                                    self.trigger('change:folder', folder, data);
+                                    self.trigger('folder:change', folder, data);
                                     def.resolve(data);
                                 })
                                 .fail(def.reject);
@@ -315,6 +321,12 @@ define("io.ox/core/desktop",
 
                     get: function () {
                         return folder;
+                    },
+
+                    getData: function () {
+                        return require(['io.ox/core/api/folder']).pipe(function (api) {
+                            return api.get({ folder: folder });
+                        });
                     },
 
                     updateTitle: function (w) {
@@ -356,6 +368,10 @@ define("io.ox/core/desktop",
             this.setWindow = function (w) {
                 win = w;
                 win.app = this;
+                // add app name
+                if ('name' in opt) {
+                    win.nodes.outer.attr('data-app-name', opt.name);
+                }
                 return this;
             };
 
@@ -430,16 +446,20 @@ define("io.ox/core/desktop",
                 });
             };
 
-            this.quit = function () {
-                // update hash
-                _.url.hash('app', null);
-                _.url.hash('folder', null);
-                _.url.hash('id', null);
-                // remove from list
-                ox.ui.running = _(ox.ui.running).without(this);
+            this.quit = function (force) {
                 // call quit function
-                var def = quitFn() || $.Deferred().resolve();
+                var def = force ? $.when() : (quitFn() || $.when());
                 return def.done(function () {
+                    // not destroyed?
+                    if (force && self.destroy) {
+                        self.destroy();
+                    }
+                    // update hash
+                    _.url.hash('app', null);
+                    _.url.hash('folder', null);
+                    _.url.hash('id', null);
+                    // remove from list
+                    ox.ui.running = _(ox.ui.running).without(self);
                     // mark as not running
                     running = false;
                     // don't save
@@ -452,6 +472,7 @@ define("io.ox/core/desktop",
                     self.events.destroy();
                     self.folder.destroy();
                     if (win) {
+                        win.trigger("quit");
                         ox.ui.windowManager.trigger("window.quit", win);
                         win.destroy();
                     }
@@ -468,7 +489,10 @@ define("io.ox/core/desktop",
         ox.ui.App = App;
 
         App.canRestore = function () {
-            return appCache.contains('savepoints');
+            // use get instead of contains since it might exist as empty list
+            return appCache.get('savepoints').pipe(function (list) {
+                return list && list.length;
+            });
         };
 
         App.getSavePoints = function () {
@@ -489,6 +513,12 @@ define("io.ox/core/desktop",
                     });
                 });
                 appCache.remove('savepoints');
+            });
+        };
+
+        App.get = function (name) {
+            return _(ox.ui.running).filter(function (app) {
+                return app.getName() === name;
             });
         };
 
@@ -524,7 +554,8 @@ define("io.ox/core/desktop",
 
                 show: function (id) {
                     $('#io-ox-screens').children().each(function (i, node) {
-                        var screenId = $(this).attr('id').substr(6);
+                        var attr = $(this).attr('id'),
+                            screenId = String(attr || '').substr(6);
                         if (screenId !== id) {
                             that.hide(screenId);
                         }
@@ -710,6 +741,7 @@ define("io.ox/core/desktop",
                             self.state.visible = true;
                             self.state.open = true;
                             self.trigger("show");
+                            document.title = 'OX7. ' + self.getTitle();
                             if (firstShow) {
                                 self.trigger("open");
                                 self.state.running = true;
@@ -736,6 +768,7 @@ define("io.ox/core/desktop",
                     ox.ui.windowManager.trigger("window.hide", this);
                     if (currentWindow === this) {
                         currentWindow = null;
+                        document.title = 'OX7';
                     }
                     return this;
                 };
@@ -756,7 +789,7 @@ define("io.ox/core/desktop",
                     $('#myGrowl').jGrowl('shutdown'); // maybe needs a better solution to trigger the jGrowl shutdown
 
                     if (quitOnClose && this.app !== null) {
-                        this.trigger("quit");
+                        this.trigger("beforequit");
                         this.app.quit()
                             .done(function () {
                                 self.state.open = false;
@@ -772,19 +805,26 @@ define("io.ox/core/desktop",
                     return this;
                 };
 
+                var BUSY_SELECTOR = 'input, select, textarea, button',
+                    TOGGLE_CLASS = 'toggle-disabled';
+
                 this.busy = function () {
                     // use self instead of this to make busy/idle robust for callback use
                     if (self) {
                         $('body').focus(); // steal focus
+                        self.nodes.main.find(BUSY_SELECTOR)
+                            .not(':disabled').attr('disabled', 'disabled').addClass(TOGGLE_CLASS);
                         self.nodes.blocker.busy().show();
                         self.trigger('busy');
                     }
                 };
 
-                this.idle = function () {
+                this.idle = function (enable) {
                     // use self instead of this to make busy/idle robust for callback use
                     if (self) {
                         self.nodes.blocker.idle().hide();
+                        self.nodes.main.find(BUSY_SELECTOR).filter('.' + TOGGLE_CLASS)
+                            .removeAttr('disabled').removeClass(TOGGLE_CLASS);
                         self.trigger('idle');
                     }
                 };
@@ -829,6 +869,9 @@ define("io.ox/core/desktop",
                 this.setTitle = function (t) {
                     title = t;
                     applyTitle();
+                    if (this === currentWindow) {
+                        document.title = 'OX7. ' + t;
+                    }
                     this.trigger('change:title');
                     return this;
                 };
@@ -894,8 +937,7 @@ define("io.ox/core/desktop",
                 // create new window instance
                 win = new Window(opt.id, opt.name),
                 // close window
-                close = function (e) {
-                    e.preventDefault();
+                close = function () {
                     win.close();
                 };
 
@@ -948,7 +990,9 @@ define("io.ox/core/desktop",
                             // close
                             win.nodes.closeButton = $("<div>").hide()
                             .addClass("window-control")
-                            .text("\u2715")
+                            .append(
+                                $('<a class="close">&times;</a>')
+                            )
                         )
                     )
                 )
@@ -1050,7 +1094,7 @@ define("io.ox/core/desktop",
                 .append(
                     $('<label>', { 'for': searchId })
                     .append(
-                        $("<input>", {
+                        win.nodes.search = $("<input>", {
                             type: "text",
                             placeholder: "Search ...",
                             tabindex: '1',
@@ -1059,14 +1103,18 @@ define("io.ox/core/desktop",
                         })
                         .tooltip({
                             animation: false,
-                            title: 'Press enter to search',
+                            title: 'Press &lt;enter> to search,<br>press &lt;esc> to clear',
                             placement: 'bottom',
                             trigger: 'focus'
                         })
                         .addClass('input-large search-query')
                         .on({
-                            keypress: function (e) {
+                            keydown: function (e) {
                                 e.stopPropagation();
+                                if (e.which === 27) {
+                                    $(this).val('');
+                                    win.trigger("cancel-search", lastQuery = '');
+                                }
                             },
                             search: function (e) {
                                 e.stopPropagation();
@@ -1134,6 +1182,22 @@ define("io.ox/core/desktop",
         };
 
     }());
+
+    // simple launch
+    ox.launch = function (id, data) {
+        var def = $.Deferred();
+        if (_.isString(id)) {
+            require([id], function (m) {
+                m.getApp(data).launch().done(function () {
+                    def.resolveWith(this, arguments);
+                });
+            });
+        } else {
+            def.resolve({});
+        }
+        return def;
+    };
+
 
     return {
         addLauncher: addLauncher

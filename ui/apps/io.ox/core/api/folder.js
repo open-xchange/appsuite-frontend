@@ -221,7 +221,6 @@ define('io.ox/core/api/folder',
         },
 
         folderCache: folderCache,
-
         subFolderCache: subFolderCache,
 
         needsRefresh: function (folder) {
@@ -241,6 +240,34 @@ define('io.ox/core/api/folder',
                 });
             return node;
         }
+    };
+
+    var changeUnread = function (list, delta) {
+        // array?
+        list = _.isArray(list) ? list : [list];
+        // wait for all cache ops
+        var def = $.when.apply($,
+            _(list).map(function (o) {
+                var folder = _.isString(o) ? o : o.folder_id;
+                return folderCache.get(folder).pipe(function (data) {
+                    data.unread = Math.max(0, data.unread + delta);
+                    return folderCache.add(folder, data);
+                });
+            })
+        );
+        // trigger change event for each affected folder
+        _.chain(list).pluck('folder_id').uniq().each(function (id) {
+            api.trigger('change:' + id);
+        });
+        return def;
+    };
+
+    api.decUnread = function (folder) {
+        return changeUnread(folder, -1);
+    };
+
+    api.incUnread = function (folder) {
+        return changeUnread(folder, +1);
     };
 
     Events.extend(api);

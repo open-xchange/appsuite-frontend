@@ -40,7 +40,6 @@
 
 .file-details .version {
     padding: 5px 5px 10px 5px;
-    margin-bottom: 10px;
 }
 
 .file-details .version-comment {
@@ -49,7 +48,13 @@
 }
 
 .file-details .dragout {
+    color: @color;
     cursor: pointer;
+}
+
+.file-details .dragout:focus,
+.file-details .dragout:hover {
+    text-decoration: none;
 }
 
 .file-details .title .editing {
@@ -65,4 +70,8 @@
 .file-details .title .editing::placeholder {
     font-size: 20px;
     color: #ccc;
+}
+
+.file-details .io-ox-inline-links {
+    margin-top: 1em;
 }

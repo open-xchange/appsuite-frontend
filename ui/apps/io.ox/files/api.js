@@ -55,16 +55,6 @@ define("io.ox/files/api",
 
     api.caches.versions = new cache.SimpleCache("infostore-versions", true);
 
-    function fallbackForOX6BackendREMOVEME(htmlpage) {
-        // Extract the JSON text
-        if (typeof htmlpage === 'string') {
-            var matches = /\((\{.*?\})\)/.exec(htmlpage);
-            return matches && matches[1] ? JSON.parse(matches[1]) : JSON.parse(htmlpage);
-        } else {
-            return htmlpage;
-        }
-    }
-
     // Upload a file and store it
     // As options, we expect:
     // "folder" - The folder ID to upload the file to. This is optional and defaults to the standard files folder
@@ -78,29 +68,33 @@ define("io.ox/files/api",
         }, options || {});
 
         var formData = new FormData();
-        formData.append("file", options.file);
+        if ('filename' in options) {
+            formData.append("file", options.file, options.filename);
+        } else {
+            formData.append("file", options.file);
+        }
 
-        if (options.json && ! $.isEmptyObject(options.json)) {
+        if (options.json && !$.isEmptyObject(options.json)) {
             if (!options.json.folder_id) {
                 options.json.folder_id = options.folder;
             }
-            formData.append("json", JSON.stringify(options.json));
         } else {
-            formData.append("json", JSON.stringify({folder_id: options.folder}));
+            options.json = { folder_id: options.folder };
         }
+        formData.append("json", JSON.stringify(options.json));
+
         return http.UPLOAD({
                 module: "infostore",
                 params: { action: "new" },
                 data: formData,
-                dataType: "text"
+                fixPost: true
             })
             .pipe(function (data) {
                 // clear folder cache
-                data = fallbackForOX6BackendREMOVEME(data);
-                return api.caches.all.remove(options.folder)
+                return api.caches.all.remove(options.json.folder_id)
                     .pipe(function () {
-                        api.trigger("create.file");
-                        return { folder_id: String(options.folder), id: parseInt(data.data, 10) };
+                        api.trigger("create.file refresh.all");
+                        return { folder_id: String(options.json.folder_id), id: parseInt(data.data, 10) };
                     });
             });
     };
@@ -118,34 +112,37 @@ define("io.ox/files/api",
         }, options || {});
 
         var formData = new FormData();
-        formData.append("file", options.file);
+        if ('filename' in options) {
+            formData.append("file", options.file, options.filename);
+        } else {
+            formData.append("file", options.file);
+        }
 
-        if (options.json && ! $.isEmptyObject(options.json)) {
+        if (options.json && !$.isEmptyObject(options.json)) {
             if (!options.json.folder_id) {
                 options.json.folder_id = options.folder;
             }
-            formData.append("json", JSON.stringify(options.json));
         } else {
-            formData.append("json", JSON.stringify({folder_id: options.folder}));
+            options.json = { folder_id: options.folder };
         }
+        formData.append("json", JSON.stringify(options.json));
 
         return http.UPLOAD({
                 module: "infostore",
                 params: { action: "update", timestamp: _.now(), id: options.id },
                 data: formData,
-                dataType: "text"
+                fixPost: true // TODO: temp. backend fix
             })
             .pipe(function (data) {
                 // clear folder cache
                 return $.when(
-                    api.caches.all.remove(options.folder),
-                    api.caches.get.remove({id: options.id, folder: options.folder}),
-                    api.caches.versions.remove(options.id)
+                    api.caches.all.remove(options.json.folder_id),
+                    api.caches.get.remove(options.json),
+                    api.caches.versions.remove(options.json.id)
                 )
                 .pipe(function () {
-                    api.trigger("create.version update refresh.all", {id: options.id, folder: options.folder});
-                    var tmp = fallbackForOX6BackendREMOVEME(data);
-                    return { folder_id: String(options.folder), id: options.id, timestamp: tmp.timestamp};
+                    api.trigger("create.version update refresh.all", { id: options.json.id, folder: options.json.folder_id });
+                    return { folder_id: String(options.json.folder_id), id: options.json.id, timestamp: data.timestamp};
                 });
             });
     };

@@ -83,6 +83,15 @@ define(function () {
                 category: "Productivity",
                 settings: false
             },
+
+            "io.ox/editor": {
+                title: "SimplePad",
+                company: "Open-Xchange",
+                icon: "default.png",
+                category: "Productivity",
+                settings: false
+            },
+
             "io.ox/settings": {
                 title: "Settings",
                 company: "Open-Xchange",
@@ -90,6 +99,7 @@ define(function () {
                 category: "Basic",
                 settings: false
             },
+
             "io.ox/dev/ajaxDebug": {
                 title: "Ajax Debugger",
                 company: "CompuGlobalHyperMegaNet",

@@ -47,51 +47,49 @@ define("io.ox/core/gettext", [], function () {
     }
 
     function verify(s, node) {
-        if (s.charCodeAt(s.length - 1) !== 0x200b) {
-            console.error("Untranslated string", s, node);
-            $(node).css('backgroundColor', 'rgba(255, 192, 0, 0.5)');
-        }
+        if (isTranslated(s)) return;
+        console.error("Untranslated string", s, node);
+        $(node).css('backgroundColor', 'rgba(255, 192, 0, 0.5)');
     }
 
+    function markTranslated(text) {
+        return '\u200b' + text + '\u200c';
+    }
+    
+    function isTranslated(text) {
+        return (/^\u200b[^\u200b\u200c]*\u200c$/).test(text);
+    }
+    
     function gt(id, po) {
-        var gettext;
-        
         po.plural = new Function("n", "return " + po.plural + ";");
 
+        function gettext(text) {
+            text = gettext.pgettext("", text);
+            return arguments.length < 2 ? text :
+                gettext.format.apply(gettext, arguments);
+        }
+        
         if (_.url.hash('debug-i18n')) {
-            gettext = function (text) {
+            gettext.format = function (text) {
                 var args = new Array(arguments.length);
-                args[0] = pgettext("", text);
-                for (var i = 1; i < arguments.length; i++) {
+                for (var i = 0; i < arguments.length; i++) {
                     var arg = String(arguments[i]);
-                    if (arg.charCodeAt(arg.length - 1) === 0x200b) {
-                        arg = arg.slice(-1);
+                    if (isTranslated(arg)) {
+                        arg = arg.slice(1, -1);
                     } else {
                         console.error("Untranslated printf parameter", i, arg);
                         console.trace();
                     }
                     args[i] = arg;
                 }
-                return _.printf.apply(this, args) + '\u200b';
+                return markTranslated(_.printf.apply(this, args));
             };
-            gettext.noI18n = function (text) {
-                return text + '\u200b';
-            };
-            gettext.pgettext = function () {
-                return pgettext.apply(this, arguments) + '\u200b';
-            };
-            gettext.npgettext = function () {
-                return npgettext.apply(this, arguments) + '\u200b';
-            };
+            gettext.noI18n = markTranslated;
+            gettext.pgettext = _.compose(markTranslated, pgettext);
+            gettext.npgettext = _.compose(markTranslated, npgettext);
         } else {
-            gettext = function (text) {
-                text = pgettext("", text);
-                return arguments.length > 1 ? _.printf.apply(this, arguments)
-                                            : text;
-            };
-            gettext.noI18n = function (text) {
-                return text;
-            };
+            gettext.format = _.printf;
+            gettext.noI18n = _.identity;
             gettext.pgettext = pgettext;
             gettext.npgettext = npgettext;
         }

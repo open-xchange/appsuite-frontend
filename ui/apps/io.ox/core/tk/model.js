@@ -227,6 +227,10 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             return value === '' || value === undefined || value === null;
         },
 
+        has: function (key) {
+            return key in this._data;
+        },
+
         get: function (key) {
             if (key === undefined) {
                 // get all values
@@ -362,14 +366,19 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
                     this.trigger('save:progress');
                     (this.store(this.get(), this.getChanges()) || $.when())
                         .done(function () {
-                            self.initialize(self._data);
-                            self.trigger.apply(self, ['save:beforedone'].concat($.makeArray(arguments)));
-                            self.trigger.apply(self, ['save:done'].concat($.makeArray(arguments)));
+                            // not yet destroyed?
+                            if (self.triggger) {
+                                self.initialize(self._data);
+                                self.trigger.apply(self, ['save:beforedone'].concat($.makeArray(arguments)));
+                                self.trigger.apply(self, ['save:done'].concat($.makeArray(arguments)));
+                            }
                             def.resolve.apply(def, arguments);
                         })
                         .fail(function () {
-                            self.trigger.apply(self, ['save:beforefail'].concat($.makeArray(arguments)));
-                            self.trigger.apply(self, ['save:fail'].concat($.makeArray(arguments)));
+                            if (self.triggger) {
+                                self.trigger.apply(self, ['save:beforefail'].concat($.makeArray(arguments)));
+                                self.trigger.apply(self, ['save:fail'].concat($.makeArray(arguments)));
+                            }
                             def.reject.apply(def, arguments);
                         });
                     return def;
