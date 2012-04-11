@@ -528,13 +528,18 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                                     var ids = _.url.hash('id').split(/,/), cid;
                                     // convert ids to objects first - avoids problems with
                                     // non-existing items that cannot be resolved in selections
-                                    self.selection.set(_(ids).map(function (cid) {
+                                    ids = _(ids).map(function (cid) {
                                         var c = cid.split(/\./);
                                         return { folder_id: c[0], id: c[1], recurrence_position: c[2] };
-                                    }));
-                                    // scroll to first selected item
-                                    cid = _(ids).first();
-                                    setIndex((self.selection.getIndex(cid) || 0) - 2); // not at the very top
+                                    });
+                                    // new?
+                                    if (!self.selection.equals(ids)) {
+                                        // set
+                                        self.selection.set(ids);
+                                        // scroll to first selected item
+                                        cid = _(ids).first();
+                                        setIndex((self.selection.getIndex(cid) || 0) - 2); // not at the very top
+                                    }
                                 } else if (firstAutoSelect) {
                                     // select first or previous selection
                                     self.selection.selectSmart();

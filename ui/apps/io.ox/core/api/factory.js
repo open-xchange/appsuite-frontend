@@ -242,25 +242,26 @@ define("io.ox/core/api/factory",
                 var opt = $.extend({}, o.requests.remove, { timestamp: _.now() });
                 // done
                 var done = function () {
-                    return api.updateCachesAfterRemove(ids)
-                        .done(function () {
-                            api.trigger('deleted');
-                            api.trigger('refresh.all');
-                        });
+                    api.trigger('deleted');
                 };
                 api.trigger("beforedelete");
-                // delete on server?
-                if (local !== true) {
-                    return http.PUT({
-                        module: o.module,
-                        params: opt,
-                        data: http.simplify(ids),
-                        appendColumns: false
-                    })
-                    .pipe(done);
-                } else {
-                    return done();
-                }
+                // remove from caches first
+                api.updateCachesAfterRemove(ids).done(function () {
+                    // trigger refresh now
+                    api.trigger('refresh.all');
+                    // delete on server?
+                    if (local !== true) {
+                        return http.PUT({
+                            module: o.module,
+                            params: opt,
+                            data: http.simplify(ids),
+                            appendColumns: false
+                        })
+                        .pipe(done);
+                    } else {
+                        return done();
+                    }
+                });
             },
 
             needsRefresh: function (folder) {

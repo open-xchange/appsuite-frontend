@@ -424,6 +424,10 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             return this;
         };
 
+        this.equals = function (list) {
+            return _.isEqual(list, this.get());
+        };
+
         this.selectRange = function (a, b) {
             if (bHasIndex) {
                 // get indexes
