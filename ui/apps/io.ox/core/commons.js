@@ -43,7 +43,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             return function (id, node, selection) {
                 if (selection.length > 1) {
                     // clear
-                    node.empty();
+                    node.idle().empty();
                     // inline links
                     var links = $('<div>');
                     (points[id] || (points[id] = new extLinks.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
@@ -75,7 +75,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                     } else if (len > 1) {
                         commons.multiSelection(id, node, this.unfold());
                     } else {
-                        node.empty();
+                        node.idle().empty();
                     }
                     // remember current selection
                     last = flat;
