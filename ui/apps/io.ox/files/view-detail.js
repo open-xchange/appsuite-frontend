@@ -23,7 +23,7 @@ define("io.ox/files/view-detail",
      "io.ox/preview/main",
      "io.ox/core/tk/upload",
      "io.ox/core/api/user",
-     "gettext!io.ox/files/files"], function (ext, links, layouts, KeyListener, i18n, Event, actions, filesAPI, Preview, upload, userAPI, gt) {
+     "gettext!io.ox/files/files"], function (ext, links, layouts, KeyListener, i18n, Event, actions, filesAPI, preview, upload, userAPI, gt) {
 
     "use strict";
 

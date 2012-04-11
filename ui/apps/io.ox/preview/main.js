@@ -92,8 +92,8 @@ define("io.ox/preview/main",
                 delete param.height;
             }
             node.append(
-                $("<img>", { src: file.dataURL + "&" + $.param(param), alt: 'Preview' });
-        },
+                $("<img>", { src: file.dataURL + "&" + $.param(param), alt: 'Preview' }));
+        }
     }));
 
     // register audio typed renderer
@@ -127,7 +127,7 @@ define("io.ox/preview/main",
             draw: function (file) {
                 var $a = clickableLink(file, function () {
                     require(["io.ox/preview/officePreview"], function (officePreview) {
-                        officePreview.draw(file.dataURL);
+                        officePreview.draw(file);
                     });
                 });
                 $a.append(
@@ -152,11 +152,11 @@ define("io.ox/preview/main",
             $.ajax({ url: file.dataURL, dataType: "html" }).done(function (txt) {
                 this.css({ border: "1px dotted silver", padding: "10px", whiteSpace: "pre-wrap" }).text(txt);
             });
-            }
-        });
-    }
+        }
+    }));
+    
 
-    Renderer.register({
+    Renderer.point.extend(new Engine({
         id: "eml",
         endings: ["eml"],
         draw: function (file) {
@@ -165,9 +165,9 @@ define("io.ox/preview/main",
                 this.append(view.draw(data));
             });
         }
-    });
+    }));
 
-    Renderer.register({
+    Renderer.point.extend(new Engine({
         id: "text",
         endings: ["txt", "asc", "js", "md"],
         draw: function (file) {
@@ -190,7 +190,7 @@ define("io.ox/preview/main",
     }));
 
     var Preview = function (file, options) {
-
+        var self = this;
         this.file = _.copy(file, true); // work with a copy
         this.options = options || {};
 
