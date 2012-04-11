@@ -63,15 +63,13 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
         }()),
 
         wireGridAndSelectionChange: function (grid, id, draw, node) {
-            var last = [''];
+            var last = '';
             grid.selection.on('change', function (e, selection) {
                 var len = selection.length,
                     // work with reduced string-based set
-                    flat = _(selection).map(function (obj) {
-                        return grid.selection.serialize(obj);
-                    });
+                    flat = JSON.stringify(selection);
                 // has anything changed?
-                if (len !== last.length || !_.isEqual(flat, last)) {
+                if (flat !== last) {
                     if (len === 1) {
                         draw(selection[0]);
                     } else if (len > 1) {

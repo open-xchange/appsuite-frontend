@@ -193,8 +193,6 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             props = {},
             // shortcut
             isArray = _.isArray,
-            // pending fetch
-            pending = false,
             // edit mode
             editable = false,
             // private methods

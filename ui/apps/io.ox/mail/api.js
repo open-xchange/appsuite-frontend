@@ -93,7 +93,6 @@ define("io.ox/mail/api",
                 api.caches.get.merge(data);
                 return data;
             },
-
             get: function (data) {
                 // is unread?
                 if ((data.flags & 32) !== 32) {
@@ -139,6 +138,7 @@ define("io.ox/mail/api",
 
     // add all thread cache
     api.caches.allThreaded = new cache.SimpleCache('mail-all-threaded', true);
+    api.cacheRegistry.all.push('allThreaded');
 
     // ~ all
     api.getAllThreads = function (options, useCache) {
@@ -212,11 +212,39 @@ define("io.ox/mail/api",
     };
 
     var change = function (list, data, apiAction) {
+
         // allow single object and arrays
         list = _.isArray(list) ? list : [list];
+
         // pause http layer
         http.pause();
-        // process all updates
+
+        var flagUpdate = 'flags' in data && 'value' in data,
+
+            localUpdate = function (obj) {
+                if ('flags' in obj) {
+                    if (data.value) {
+                        obj.flags = obj.flags | data.flags;
+                    } else {
+                        obj.flags = obj.flags & ~data.flags;
+                    }
+                    return $.when(
+                         api.caches.list.merge(obj),
+                         api.caches.get.merge(obj)
+                    );
+                } else {
+                    return $.when();
+                }
+            };
+
+        // process local update first
+        if (flagUpdate) {
+            $.when.apply($, _(list).map(localUpdate)).done(function () {
+                api.trigger('refresh.list');
+            });
+        }
+
+        // now talk to server
         _(list).map(function (obj) {
             return http.PUT({
                 module: 'mail',
@@ -229,18 +257,8 @@ define("io.ox/mail/api",
                 appendColumns: false
             })
             .pipe(function () {
-                // update flags locally?
-                if ('flags' in data && 'value' in data && 'flags' in obj) {
-                    if (data.value) {
-                        obj.flags = obj.flags | data.flags;
-                    } else {
-                        obj.flags = obj.flags & ~data.flags;
-                    }
-                    return $.when(
-                         api.caches.list.merge(obj),
-                         api.caches.get.merge(obj)
-                    );
-                } else {
+                // not just a flag update?
+                if (!flagUpdate) {
                     // remove affected object from caches
                     return $.when(
                         api.caches.get.remove(obj),
@@ -251,7 +269,9 @@ define("io.ox/mail/api",
         });
         // resume & trigger refresh
         return http.resume().done(function () {
-            api.trigger('refresh.list');
+            if (!flagUpdate) {
+                api.trigger('refresh.list');
+            }
         });
     };
 

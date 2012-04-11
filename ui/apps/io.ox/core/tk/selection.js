@@ -486,8 +486,14 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         /**
          * Retrigger current selection
          */
-        this.retrigger = function () {
-            changed();
+        this.retrigger = function (force) {
+            if (force) {
+                var tmp = this.get();
+                this.clear();
+                this.set(tmp);
+            } else {
+                changed();
+            }
         };
 
         this.retriggerUnlessEmpty = function () {

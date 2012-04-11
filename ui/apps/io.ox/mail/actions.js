@@ -221,6 +221,9 @@ define('io.ox/mail/actions',
         },
         multiple: function (list) {
             api.markUnread(list);
+            // TODO: change once full context is available
+            var app = ox.ui.App.get('io.ox/mail')[0];
+            if (app) { app.getGrid().selection.retrigger(true); }
         }
     });
 
@@ -236,6 +239,9 @@ define('io.ox/mail/actions',
         },
         multiple: function (list) {
             api.markRead(list);
+            // TODO: change once full context is available
+            var app = ox.ui.App.get('io.ox/mail')[0];
+            if (app) { app.getGrid().selection.retrigger(true); }
         }
     });
 

@@ -59,6 +59,8 @@ define("io.ox/core/api/factory",
 
         var api = {
 
+            cacheRegistry: { all: ['all'], list: ['list'], get: ['get'] },
+
             getAll: function (options, useCache, cache) {
                 // merge defaults for "all"
                 var opt = $.extend({}, o.requests.all, options || {});
@@ -71,6 +73,7 @@ define("io.ox/core/api/factory",
                         module: o.module,
                         params: opt
                     })
+                    .pipe(o.pipe.all || _.identity)
                     .done(function (data, timestamp) {
                         // remove deprecated entries
                         // TODO: consider folder_id
@@ -88,8 +91,7 @@ define("io.ox/core/api/factory",
                         cache.remove(opt.folder);
                         // add to cache
                         cache.add(opt.folder, data, timestamp);
-                    })
-                    .pipe(o.pipe.all || _.identity);
+                    });
                 };
 
                 if (useCache) {
@@ -120,13 +122,13 @@ define("io.ox/core/api/factory",
                         params: o.requests.list,
                         data: http.simplify(ids)
                     }))
+                    .pipe(o.pipe.list || _.identity)
                     .done(function (data) {
                         // add to cache
                         caches.list.add(data);
                         // merge with "get" cache
                         caches.get.merge(data);
-                    })
-                    .pipe(o.pipe.list || _.identity);
+                    });
                 };
                 // empty?
                 if (ids.length === 0) {
@@ -163,6 +165,7 @@ define("io.ox/core/api/factory",
                         module: o.module,
                         params: fix(opt)
                     })
+                    .pipe(o.pipe.get || _.identity)
                     .done(function (data, timestamp) {
                         // add to cache
                         caches.get.add(data, timestamp);
@@ -175,8 +178,7 @@ define("io.ox/core/api/factory",
                     })
                     .fail(function (e) {
                         _.call(o.fail.get, e, opt, o);
-                    })
-                    .pipe(o.pipe.get || _.identity);
+                    });
                 };
 
                 if (useCache) {
@@ -206,19 +208,23 @@ define("io.ox/core/api/factory",
                     folders[o.folder_id] = true;
                 });
                 // loop over each folder and look for items to remove
-                var defs = _(folders).map(function (value, folder_id) {
-                    return caches.all.get(folder_id).pipe(function (items) {
-                        if (items) {
-                            return caches.all.add(
-                                folder_id,
-                                _(items).select(function (o) {
-                                    return hash[getKey(o)] !== true;
-                                })
-                            );
-                        } else {
-                            return $.when();
-                        }
-                    });
+                var defs = [];
+                _(api.cacheRegistry.all).each(function (cacheName) {
+                    var cache = caches[cacheName];
+                    defs.concat(_(folders).map(function (value, folder_id) {
+                        return cache.get(folder_id).pipe(function (items) {
+                            if (items) {
+                                return cache.add(
+                                    folder_id,
+                                    _(items).select(function (o) {
+                                        return hash[getKey(o)] !== true;
+                                    })
+                                );
+                            } else {
+                                return $.when();
+                            }
+                        });
+                    }));
                 });
                 // remove from object caches
                 defs.push(caches.list.remove(ids));
