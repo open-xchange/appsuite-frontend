@@ -251,11 +251,11 @@ define('io.ox/mail/actions',
         id: 'preview',
         requires: function (e) {
             return require(['io.ox/preview/main'])
-                .pipe(function (Preview) {
+                .pipe(function (p) {
                     var list = _.getArray(e.context);
                     // is at least one attachment supported?
                     return e.collection.has('some') && _(list).reduce(function (memo, obj) {
-                        return memo || new Preview({ filename: obj.filename }).supportsPreview();
+                        return memo || new p.Preview({ filename: obj.filename }).supportsPreview();
                     }, false);
                 });
         },
@@ -263,10 +263,10 @@ define('io.ox/mail/actions',
             // open side popup
             var e = $.Event();
             e.target = this;
-            require(['io.ox/core/tk/dialogs', 'io.ox/preview/main'], function (dialogs, Preview) {
+            require(['io.ox/core/tk/dialogs', 'io.ox/preview/main'], function (dialogs, p) {
                 new dialogs.SidePopup().show(e, function (popup) {
                     _(list).each(function (data, i) {
-                        var pre = new Preview({
+                        var pre = new p.Preview({
                             data: data,
                             filename: data.filename,
                             dataURL: api.getUrl(data, 'view')

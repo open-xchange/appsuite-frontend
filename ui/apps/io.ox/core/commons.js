@@ -101,19 +101,26 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
          * Wire grid & window
          */
         wireGridAndWindow: function (grid, win) {
+            var top = 0;
             // show
             win.on('show idle', function () {
-                grid.selection.keyboard(true);
-                if (grid.selection.get().length) {
-                    // only retrigger if selection is not empty; hash gets broken if caches are empty
-                    // TODO: figure out why this was important
-                    grid.selection.retriggerUnlessEmpty();
-                }
-            });
-            // hide
-            win.on('hide busy', function () {
-                grid.selection.keyboard(false);
-            });
+                    grid.selection.keyboard(true);
+                    if (grid.selection.get().length) {
+                        // only retrigger if selection is not empty; hash gets broken if caches are empty
+                        // TODO: figure out why this was important
+                        grid.selection.retriggerUnlessEmpty();
+                    }
+                })
+                // hide
+                .on('hide busy', function () {
+                    grid.selection.keyboard(false);
+                })
+                .on('beforeshow', function () {
+                    if (top !== null) { grid.scrollTop(top); }
+                })
+                .on('beforehide', function () {
+                    top = grid.scrollTop();
+                });
             // publish grid
             if (win.app) {
                 win.app.getGrid = function () {

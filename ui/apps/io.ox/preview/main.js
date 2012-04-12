@@ -15,11 +15,11 @@ define("io.ox/preview/main",
     ["io.ox/core/extensions", "gettext!io.ox/preview/preview"], function (ext, gt) {
 
     "use strict";
-    
+
     var supportsDragOut = Modernizr.draganddrop && _.browser.Chrome;
     var dragOutHandler = $.noop;
     var clickableLink = $.noop;
-    
+
     if (supportsDragOut) {
         dragOutHandler = function ($node, desc) {
             $node.on('dragstart', function (e) {
@@ -40,9 +40,9 @@ define("io.ox/preview/main",
         clickableLink = function (desc) {
             return $('<a>', { href: desc.dataURL + "&delivery=view", target: '_blank'});
         };
-        
+
     }
-    
+
     var Renderer = {
         point: ext.point("io.ox/preview/engine"),
 
@@ -54,7 +54,7 @@ define("io.ox/preview/main",
             }).value();
         }
     };
-    
+
     var Engine = function (options) {
         _.extend(this, options);
         if (!options.omitDragoutAndClick) {
@@ -65,16 +65,16 @@ define("io.ox/preview/main",
                 } else {
                     $node = $("<div>");
                 }
-                
+
                 options.draw.apply($node, arguments);
                 dragOutHandler($node, file);
-                
+
                 if (supportsDragOut) {
                     $node.attr('title', gt('Click to open. Drag to your desktop to download.'));
                 } else {
                     $node.attr("title", gt("Click to open."));
                 }
-                
+
                 this.append($node);
             };
         }
@@ -120,8 +120,8 @@ define("io.ox/preview/main",
             }
         }));
     }
-    
-    
+
+
     // if available register office typed renderer
     if (ox.serverConfig.previewExtensions) {
         Renderer.point.extend(new Engine({
@@ -160,7 +160,7 @@ define("io.ox/preview/main",
         },
         omitClick: true
     }));
-    
+
 
     Renderer.point.extend(new Engine({
         id: "eml",
@@ -211,7 +211,7 @@ define("io.ox/preview/main",
         if (this.file.filename) {
             this.file.name = this.file.filename;
         }
-        
+
         this.extension =  (function () {
             var extension = self.file.name.match(/\.([a-z0-9]{2,})$/i);
             if (extension.length > 0) {
@@ -219,7 +219,7 @@ define("io.ox/preview/main",
             }
             return "";
         }());
-        
+
 
         if (this.file.name) {
             // get matching renderer
@@ -250,12 +250,12 @@ define("io.ox/preview/main",
             }
         }
     };
-    
+
     function Extension(options) {
         _.extend(this, options);
-        
+
         var self = this;
-        
+
         if (!this.isEnabled) {
             this.isEnabled = function (fileDescription) {
                 if (options.parseArguments) {
@@ -268,7 +268,7 @@ define("io.ox/preview/main",
                 return prev.supportsPreview();
             };
         }
-        
+
         if (!this.draw) {
             this.draw = function (fileDescription) {
                 if (options.parseArguments) {
@@ -292,5 +292,4 @@ define("io.ox/preview/main",
             dragOutHandler: dragOutHandler
         }
     };
-
 });

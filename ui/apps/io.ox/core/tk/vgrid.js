@@ -775,6 +775,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             }
         };
 
+        this.scrollTop = function (t) {
+            return t !== undefined ? scrollpane.scrollTop(t) : scrollpane.scrollTop();
+        };
+
         this.getContainer = function () {
             return container;
         };

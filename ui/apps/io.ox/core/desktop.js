@@ -728,6 +728,7 @@ define("io.ox/core/desktop",
                         }
                         if (node.parent().length === 0) {
                             node.appendTo(pane);
+                            this.trigger("beforeshow");
                         }
                         this.updateToolbar();
                         ox.ui.windowManager.trigger("window.beforeshow", self);
@@ -758,6 +759,7 @@ define("io.ox/core/desktop",
 
                 this.hide = function () {
                     // detach if there are no iframes
+                    this.trigger("beforehide");
                     if (this.nodes.outer.find("iframe").length === 0) {
                         this.nodes.outer.detach();
                     } else {
