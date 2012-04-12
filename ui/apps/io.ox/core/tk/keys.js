@@ -17,9 +17,13 @@ define("io.ox/core/tk/keys", ["io.ox/core/event"], function (Events) {
     var KEY_MAP = {
         8: "backspace",
         9: "tab",
-        27: "esc",
         13: "enter",
+        27: "esc",
         32: "space",
+        37: "leftarrow",
+        38: "uparrow",
+        39: "rightarrow",
+        40: "downarrow",
         46: "del"
     };
     
@@ -28,7 +32,7 @@ define("io.ox/core/tk/keys", ["io.ox/core/event"], function (Events) {
     }
     
     function KeyListener($node) {
-        var events = new Events();
+        var events = new Events(), included = false;
         
         if (!$node) {
             $node = $(window);
@@ -51,12 +55,20 @@ define("io.ox/core/tk/keys", ["io.ox/core/event"], function (Events) {
         }
         
         this.include = function () {
+            if (included) {
+                return;
+            }
+            included = true;
             $node.on("keydown", handleEvent);
             return this;
         };
         
         
         this.remove = function () {
+            if (!included) {
+                return;
+            }
+            included = false;
             $node.off("keydown", handleEvent);
             return this;
         };
