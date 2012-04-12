@@ -119,7 +119,7 @@ define("io.ox/calendar/main",
         commons.wireGridAndSelectionChange(grid, 'io.ox/calendar', showAppointment, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
-        commons.wireGridAndRefresh(grid, api);
+        commons.wireGridAndRefresh(grid, api, win);
 
         // go!
         commons.addFolderSupport(app, grid, 'calendar')

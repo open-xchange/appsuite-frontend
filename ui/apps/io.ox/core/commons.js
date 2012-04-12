@@ -144,17 +144,21 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
         /**
          * Wire grid and API refresh
          */
-        wireGridAndRefresh: function (grid, api) {
-            // bind all refresh
-            api.on('refresh.all', function () {
-                grid.refresh();
-            });
-            // bind list refresh
-            api.on('refresh.list', function () {
-                grid.repaint().done(function () {
-                    grid.selection.retrigger();
+        wireGridAndRefresh: function (grid, api, win) {
+            var refreshAll = function () {
+                    grid.refresh();
+                },
+                refreshList = function () {
+                    grid.repaint().done(function () {
+                        grid.selection.retrigger();
+                    });
+                };
+            win.on('show', function () {
+                    api.on('refresh.all', refreshAll).on('refresh.list', refreshList);
+                })
+                .on('hide', function () {
+                    api.off('refresh.all', refreshAll).off('refresh.list', refreshList);
                 });
-            });
         },
 
         /**

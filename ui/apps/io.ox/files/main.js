@@ -220,7 +220,7 @@ define("io.ox/files/main",
 
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
-        commons.wireGridAndRefresh(grid, api);
+        commons.wireGridAndRefresh(grid, api, win);
 
         app.on('folder:change', function (e, id, folder) {
             // reset first

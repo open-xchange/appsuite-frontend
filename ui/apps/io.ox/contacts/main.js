@@ -183,7 +183,7 @@ define("io.ox/contacts/main",
         commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
-        commons.wireGridAndRefresh(grid, api);
+        commons.wireGridAndRefresh(grid, api, win);
 
         app.getGrid = function () {
             return grid;

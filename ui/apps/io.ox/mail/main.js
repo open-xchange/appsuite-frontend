@@ -250,7 +250,7 @@ define("io.ox/mail/main",
         commons.wireGridAndSelectionChange(grid, 'io.ox/mail', showMail, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
-        commons.wireGridAndRefresh(grid, api);
+        commons.wireGridAndRefresh(grid, api, win);
 
         app.on('folder:change folder:refresh', function (e) {
             app.folder.getData().done(function (data) {

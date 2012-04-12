@@ -728,10 +728,10 @@ define("io.ox/core/desktop",
                         }
                         if (node.parent().length === 0) {
                             node.appendTo(pane);
-                            this.trigger("beforeshow");
                         }
-                        this.updateToolbar();
                         ox.ui.windowManager.trigger("window.beforeshow", self);
+                        this.trigger("beforeshow");
+                        this.updateToolbar();
                         node.show();
                         scrollTo(node, function () {
                             if (currentWindow && currentWindow !== self) {
