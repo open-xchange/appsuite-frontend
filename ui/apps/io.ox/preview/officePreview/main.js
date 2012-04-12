@@ -49,7 +49,7 @@ define("io.ox/preview/officePreview/main", ["io.ox/core/tk/keys", "gettext!io.ox
             app.previousPage();
         });
 
-        var $contentBlock = $("<div>").addClass("span12");
+        var $contentBlock = $("<div>");
         
         var $loadingIndicator = $("<span>").addClass("io-ox-office-preview-loading").text(gt("Loading...")).hide();
         
@@ -110,7 +110,7 @@ define("io.ox/preview/officePreview/main", ["io.ox/core/tk/keys", "gettext!io.ox
                 $contentBlock.empty();
                 $contentBlock.append($shownContent);
                 
-                $shownContent.css({position: "relative"});
+                $shownContent.addClass("io-ox-office-preview-content").css({position: "relative", left: ($(window).width() / 2) - ($shownContent.width() / 2)});
                 app.index = pageNumber;
                 
                 $pageIndicator.text(pageNumber + 1);
@@ -144,13 +144,17 @@ define("io.ox/preview/officePreview/main", ["io.ox/core/tk/keys", "gettext!io.ox
             
             app.setWindow(win);
             
-            container = win.nodes.main;
+            container = $("<div>").css({
+                position: "absolute"
+            }).appendTo(win.nodes.main);
             
-            win.nodes.head.append($("<div>").append($previousButton, $.txt(' '), $nextButton).center());
             
-            container.css({overflow: "auto"});
+            
+            win.nodes.main.css({overflow: "auto"});
             
             win.show(function () {
+                win.nodes.main.addClass("io-ox-office-preview-background");
+                win.nodes.toolbar.append($("<div>").append($previousButton, $.txt(' '), $nextButton)).css({left: "50%"});
                 container.append($contentBlock);
                 
                 app.showPage(0);
