@@ -83,11 +83,16 @@ define("io.ox/mail/api",
             }
         },
         pipe: {
-            all: function (data) {
+            all: function (data, opt) {
+                // unread count
+                var unread = 0;
                 // ignore deleted mails
                 data = _(data).filter(function (obj) {
+                    unread += (obj.flags & 32) === 0 ? 1 : 0;
                     return (obj.flags & 2) === 0;
                 });
+                // update folder
+                folderAPI.setUnread(opt.folder, unread);
                 // because we also have brand new flags, we merge with list & get caches
                 api.caches.list.merge(data);
                 api.caches.get.merge(data);

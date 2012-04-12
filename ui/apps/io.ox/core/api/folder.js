@@ -402,6 +402,16 @@ define('io.ox/core/api/folder',
         return def;
     };
 
+    api.setUnread = function (folder, unread) {
+        return folderCache.get(folder).pipe(function (data) {
+                data.unread = Math.max(0, unread);
+                return folderCache.add(folder, data);
+            })
+            .done(function () {
+                api.trigger('change:' + folder);
+            });
+    };
+
     api.decUnread = function (folder) {
         return changeUnread(folder, -1);
     };

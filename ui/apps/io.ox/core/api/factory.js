@@ -73,8 +73,10 @@ define("io.ox/core/api/factory",
                         module: o.module,
                         params: opt
                     })
-                    .pipe(o.pipe.all || _.identity)
-                    .done(function (data, timestamp) {
+                    .pipe(function (data) {
+                        return (o.pipe.all || _.identity)(data, opt);
+                    })
+                    .done(function (data) {
                         // remove deprecated entries
                         // TODO: consider folder_id
                         caches.get.keys().done(function (keys) {
@@ -90,7 +92,7 @@ define("io.ox/core/api/factory",
                         // clear cache
                         cache.remove(opt.folder);
                         // add to cache
-                        cache.add(opt.folder, data, timestamp);
+                        cache.add(opt.folder, data);
                     });
                 };
 
@@ -122,7 +124,9 @@ define("io.ox/core/api/factory",
                         params: o.requests.list,
                         data: http.simplify(ids)
                     }))
-                    .pipe(o.pipe.list || _.identity)
+                    .pipe(function (data) {
+                        return (o.pipe.list || _.identity)(data);
+                    })
                     .done(function (data) {
                         // add to cache
                         caches.list.add(data);
@@ -165,10 +169,12 @@ define("io.ox/core/api/factory",
                         module: o.module,
                         params: fix(opt)
                     })
-                    .pipe(o.pipe.get || _.identity)
-                    .done(function (data, timestamp) {
+                    .pipe(function (data) {
+                        return (o.pipe.get || _.identity)(data, opt);
+                    })
+                    .done(function (data) {
                         // add to cache
-                        caches.get.add(data, timestamp);
+                        caches.get.add(data);
                         // update list cache
                         caches.list.merge(data).done(function (ok) {
                             if (ok) {
