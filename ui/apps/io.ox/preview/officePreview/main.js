@@ -110,7 +110,10 @@ define("io.ox/preview/officePreview/main", ["io.ox/core/tk/keys", "gettext!io.ox
                 $contentBlock.empty();
                 $contentBlock.append($shownContent);
                 
-                $shownContent.addClass("io-ox-office-preview-content").css({position: "relative", left: ($(window).width() / 2) - ($shownContent.width() / 2)});
+                var centerOffset = ($(window).width() / 2) - ($shownContent.width() / 2);
+                
+                $shownContent.addClass("io-ox-office-preview-content").css({position: "relative", left: centerOffset, right: centerOffset});
+                                
                 app.index = pageNumber;
                 
                 $pageIndicator.text(pageNumber + 1);
@@ -156,7 +159,7 @@ define("io.ox/preview/officePreview/main", ["io.ox/core/tk/keys", "gettext!io.ox
                 win.nodes.main.addClass("io-ox-office-preview-background");
                 win.nodes.toolbar.append($("<div>").append($previousButton, $.txt(' '), $nextButton)).css({left: "50%"});
                 container.append($contentBlock);
-                
+                win.nodes.main.append($pageIndicator);
                 app.showPage(0);
             });
             

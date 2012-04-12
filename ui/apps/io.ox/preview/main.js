@@ -30,7 +30,7 @@ define("io.ox/preview/main",
             var $a = $('<a>', {draggable: true })
             .attr('data-downloadurl', desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.dataURL + "&delivery=download");
             if (clickHandler) {
-                $a.attr({href: "#"}).on("click", clickHandler);
+                $a.attr({}).on("click", clickHandler);
             } else {
                 $a.attr({ href: desc.dataURL + "&delivery=view", target: '_blank'});
             }
@@ -42,8 +42,6 @@ define("io.ox/preview/main",
         };
         
     }
-    
-    
     
     var Renderer = {
         point: ext.point("io.ox/preview/engine"),
@@ -61,7 +59,13 @@ define("io.ox/preview/main",
         _.extend(this, options);
         if (!options.omitDragoutAndClick) {
             this.draw = function (file) {
-                var $node = clickableLink(file);
+                var $node;
+                if (!options.omitClick) {
+                    $node = clickableLink(file);
+                } else {
+                    $node = $("<div>");
+                }
+                
                 options.draw.apply($node, arguments);
                 dragOutHandler($node, file);
                 
@@ -81,7 +85,7 @@ define("io.ox/preview/main",
         id: "image",
         index: 10,
         endings: ["png", "jpg", "jpeg", "gif", "bmp"],
-        draw: function (file, node, options) {
+        draw: function (file, options) {
             var param = {
                 width: options.width || 400,
                 height: options.height || 400,
@@ -91,7 +95,7 @@ define("io.ox/preview/main",
             if (options.height === 'auto') {
                 delete param.height;
             }
-            node.append(
+            this.append(
                 $("<img>", { src: file.dataURL + "&" + $.param(param), alt: 'Preview' }));
         }
     }));
@@ -149,10 +153,12 @@ define("io.ox/preview/main",
         index: 10,
         endings: [ "txt", "js" ],
         draw: function (file) {
+            var $node = this;
             $.ajax({ url: file.dataURL, dataType: "html" }).done(function (txt) {
-                this.css({ border: "1px dotted silver", padding: "10px", whiteSpace: "pre-wrap" }).text(txt);
+                $node.css({ border: "1px dotted silver", padding: "10px", whiteSpace: "pre-wrap" }).text(txt);
             });
-        }
+        },
+        omitClick: true
     }));
     
 
@@ -258,7 +264,7 @@ define("io.ox/preview/main",
                 if (!fileDescription) {
                     return false;
                 }
-                var prev = new Preview(fileDescription);
+                var prev = new Preview(fileDescription, options);
                 return prev.supportsPreview();
             };
         }
@@ -271,7 +277,7 @@ define("io.ox/preview/main",
                 if (!fileDescription) {
                     return false;
                 }
-                var prev = new Preview(fileDescription);
+                var prev = new Preview(fileDescription, options);
                 prev.appendTo(this);
             };
         }
