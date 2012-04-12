@@ -21,6 +21,7 @@ define('io.ox/core/api/folder',
     var // folder object cache
         folderCache = new cache.SimpleCache('folder', true),
         subFolderCache = new cache.SimpleCache('subfolder', true),
+        visibleCache = new cache.SimpleCache('visible-folder', true),
 
         // magic permission check
         perm = function (bits, offset) {
@@ -155,6 +156,70 @@ define('io.ox/core/api/folder',
             }
         },
 
+        getVisible: function (options) {
+
+            // options
+            var opt = _.extend({
+                    type: 'mail',
+                    cache: true
+                }, options || {}),
+
+                getter = function () {
+                    return http.GET({
+                            module: 'folders',
+                            appendColumns: true,
+                            params: {
+                                tree: '1',
+                                action: 'allVisible',
+                                content_type: opt.type
+                            }
+                        })
+                        .pipe(function (data, timestamp) {
+                            // make objects
+                            var id, i, $i, folders,
+                                defaultFolder = String(config.get('folder.' + opt.type, 0)),
+                                sorter = function (a, b) {
+                                    return a.id === defaultFolder ? -1 :
+                                        (a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1);
+                                };
+                            for (id in data) {
+                                for (i = 0, folders = data[id], $i = folders.length; i < $i; i++) {
+                                    // replace by object
+                                    folders[i] = http.makeObject(folders[i], 'folders');
+                                    // add to folder cache
+                                    folderCache.add(folders[i], timestamp);
+                                }
+                                if ($i === 0) {
+                                    delete data[id];
+                                } else {
+                                    // sort by title, default folder always first
+                                    // (skip shared folder due to special order)
+                                    if (id !== 'shared') {
+                                        folders.sort(sorter);
+                                    }
+                                }
+                            }
+                            return data;
+                        })
+                        .done(function (data) {
+                            // add to simple cache
+                            visibleCache.add(opt.type, data);
+                        });
+                };
+
+            if (opt.cache === false) {
+                return getter();
+            } else {
+                return visibleCache.contains(opt.type).pipe(function (check) {
+                    if (check) {
+                        return visibleCache.get(opt.type);
+                    } else {
+                        return getter();
+                    }
+                });
+            }
+        },
+
         create: function (options) {
 
             // options
@@ -217,6 +282,81 @@ define('io.ox/core/api/folder',
             bits: function (data, offset) {
                 return perm(_.firstOf(data.own_rights, data, 0),
                         offset || 0);
+            }
+        },
+
+        is: function (type, data) {
+            var result, i = 0, $i, id;
+            // check multiple folder?
+            if (_.isArray(data)) {
+                // for multiple folders, all folders must satisfy the condition
+                return _(data).reduce(function (memo, o) {
+                    return memo && api.is(type, o);
+                }, true);
+            } else {
+                // split? (OR)
+                if (type.search(/\|/) > -1) {
+                    var types = type.split(/\|/);
+                    for ($i = types.length, result = false; i < $i; i++) {
+                        if (this.is(types[i], data)) {
+                            result = true;
+                            break;
+                        }
+                    }
+                    return result;
+                } else {
+                    // is?
+                    switch (type) {
+                    case 'private':
+                        return data.type === 1;
+                    case 'public':
+                        return data.type === 2;
+                    case 'shared':
+                        return data.type === 3;
+                    case 'system':
+                        return data.type === 5;
+                    case 'mail':
+                        return data.module === 'mail';
+                    case 'messaging':
+                        return data.module === 'messaging';
+                    case 'calendar':
+                        return data.module === 'calendar';
+                    case 'contacts':
+                        return data.module === 'contacts';
+                    case 'tasks':
+                        return data.module === 'tasks';
+                    case 'infostore':
+                        return data.module === 'infostore';
+                    case 'account':
+                        return data.module === 'system' && /^default(\d+)?/.test(String(data.id));
+//                    case 'unifiedmail':
+//                        id = data ? (data.id !== undefined ? data.id : data) : '';
+//                        var match = String(id).match(/^default(\d+)/);
+//                        // is account? (unified inbox is not a usual account)
+//                        return match ? !ox.api.cache.account.contains(match[1]) : false;
+//                    case 'external':
+//                        return /^default[1-9]/.test(String(data.id)) && !this.is('unifiedmail', data);
+                    case 'defaultfolder':
+                        // get default folder
+                        var folders = config.get('mail.folder');
+                        for (id in folders) {
+                            if (folders[id] === data.id) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    case 'published':
+                        if (data['com.openexchange.publish.publicationFlag']) {
+                            return true; // published
+                        }
+                        if (data.permissions.length <= 1) {
+                            return false; // not shared
+                        }
+                        // only shared BY me, not TO me
+                        return data.type === 1 || data.type === 7 ||
+                            (data.module === 'infostore' && data.created_by === config.get('identifier'));
+                    }
+                }
             }
         },
 

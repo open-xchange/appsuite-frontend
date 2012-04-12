@@ -67,7 +67,7 @@ define("io.ox/contacts/main",
             .appendTo(win.nodes.main);
 
         // folder tree
-        commons.addFolderTree(app, GRID_WIDTH, 'contacts');
+        commons.addFolderView(app, { width: GRID_WIDTH, type: 'contacts', view: 'FolderList' });
 
         // thumb index
         thumbs = $("<div>")

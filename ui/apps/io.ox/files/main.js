@@ -55,7 +55,7 @@ define("io.ox/files/main",
         app.setWindow(win);
 
         // folder tree
-        commons.addFolderTree(app, GRID_WIDTH, 'infostore', 9);
+        commons.addFolderView(app, { width: GRID_WIDTH, type: 'infostore', rootFolderId: 9 });
 
         // left side
         left = $("<div>").addClass("leftside border-right")

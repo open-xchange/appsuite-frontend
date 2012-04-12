@@ -66,7 +66,7 @@ define("io.ox/mail/main",
         app.setWindow(win);
 
         // folder tree
-        commons.addFolderTree(app, GRID_WIDTH, 'mail');
+        commons.addFolderView(app, { width: GRID_WIDTH, type: 'mail' });
 
         // left panel
         left = $("<div>")

@@ -90,14 +90,14 @@ define('io.ox/contacts/actions',
 
     var copyMove = function (type, apiAction, title) {
         return function (list) {
-            require(['io.ox/contacts/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/foldertree'], function (api, dialogs, trees) {
+            require(['io.ox/contacts/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (api, dialogs, views) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
                     .header($('<h3>').text(title))
                     .addPrimaryButton('ok', gt('OK'))
                     .addButton('cancel', gt('Cancel'));
                 dialog.getBody().css('maxHeight', '250px');
                 var item = _(list).first(),
-                    tree = new trees.FolderTree(dialog.getBody(), { type: type });
+                    tree = new views.FolderTree(dialog.getBody(), { type: type });
                 tree.paint();
                 dialog.show(function () {
                     tree.selection.set({ id: item.folder_id || item.folder });

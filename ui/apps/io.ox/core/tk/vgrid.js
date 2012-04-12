@@ -612,13 +612,21 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             }
         }, 100);
 
-        // routing
-        this.selection.on('change', function (e, list) {
-            var id = _(list).map(function (obj) {
-                    return self.selection.serialize(obj);
-                }).join(',');
-            _.url.hash('id', id !== '' ? id : null);
-        });
+        // selection events
+        this.selection
+            .on('change', function (e, list) {
+                var id = _(list).map(function (obj) {
+                        return self.selection.serialize(obj);
+                    }).join(',');
+                _.url.hash('id', id !== '' ? id : null);
+            })
+            .on('select:first', function () {
+                setIndex(0);
+            })
+            .on('select:last', function () {
+                setIndex(all.length - 1);
+            });
+
 
         // public methods
 

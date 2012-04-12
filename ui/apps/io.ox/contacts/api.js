@@ -222,14 +222,14 @@ define('io.ox/contacts/api',
                 return api.search(query, true)
                     .pipe(function (data) {
                         var tmp = [], hash = {};
-                        // resolve email addresses
+                        // improve response
+                        // 1/4: resolve email addresses
                         _(data).each(function (obj) {
                             process(tmp, obj, 'email1');
                             process(tmp, obj, 'email2');
                             process(tmp, obj, 'email3');
                         });
-                        // remove duplicates
-                        // 1/3: sort by email address/has image
+                        // 2/4: sort by email address/has image
                         tmp.sort(function (a, b) {
                             if (a.email < b.email) {
                                 return -1;
@@ -243,12 +243,12 @@ define('io.ox/contacts/api',
                                 return 0;
                             }
                         });
-                        // 2/3: remove duplicates
+                        // 3/4: remove duplicates
                         tmp = _(tmp).filter(function (obj) {
                             return obj.email in hash ? false : (hash[obj.email] = true);
                         });
                         hash = null;
-                        // 3/3: sort by display_name
+                        // 4/4: sort by display_name
                         tmp.sort(function (a, b) {
                             if (a.display_name < b.display_name) {
                                 return -1;

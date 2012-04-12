@@ -197,9 +197,16 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
         },
 
         /**
-         * Add visual folder tree
+         * Add folder view
          */
-        addFolderTree: function (app, width, type, rootFolderId) {
+        addFolderView: function (app, options) {
+
+            options = $.extend({
+                width: 330,
+                rootFolderId: '1',
+                type: undefined,
+                view: 'ApplicationFolderTree'
+            }, options);
 
             var container,
                 visible = false,
@@ -211,7 +218,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                 .css({
                     backgroundColor: 'white',
                     right: 'auto',
-                    width: width + 'px',
+                    width: options.width + 'px',
                     zIndex: 3
                 })
                 .hide()
@@ -219,7 +226,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
 
             fnChangeFolder = function (e, selection) {
                 var folder = selection[0];
-                if (folder.module === type) {
+                if (folder.module === options.type) {
                     app.folder.unset();
                     top = container.scrollTop();
                     container.fadeOut('fast', function () {
@@ -247,11 +254,11 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                 }
             };
 
-            initTree = function (trees) {
-                var tree = app.folderTree = new trees.ApplicationFolderTree(container, {
-                    type: type,
-                    rootFolderId: rootFolderId
-                });
+            initTree = function (views) {
+                var tree = app.folderView = new views[options.view](container, {
+                        type: options.type,
+                        rootFolderId: options.rootFolderId
+                    });
                 tree.selection.on('change', fnChangeFolder);
                 return tree.paint()
                     .done(function () {
@@ -265,13 +272,13 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             loadTree = function () {
                 container.busy();
                 fnToggle();
-                app.showFolderTree = fnShow;
+                app.showFolderView = fnShow;
                 app.getWindow().nodes.title.off('click', loadTree);
-                return require(['io.ox/core/tk/foldertree']).pipe(initTree);
+                return require(['io.ox/core/tk/folderviews']).pipe(initTree);
             };
 
-            app.showFolderTree = loadTree;
-            app.folderTree = null;
+            app.showFolderView = loadTree;
+            app.folderView = null;
 
             app.getWindow().nodes.title
                 .css('cursor', 'pointer')

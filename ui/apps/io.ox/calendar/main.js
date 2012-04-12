@@ -49,7 +49,7 @@ define("io.ox/calendar/main",
         win.addClass("io-ox-calendar-main");
 
         // folder tree
-        commons.addFolderTree(app, GRID_WIDTH, 'calendar');
+        commons.addFolderView(app, { width: GRID_WIDTH, type: 'calendar', view: 'FolderList' });
 
         // DOM scaffold
 

@@ -332,8 +332,9 @@ define("io.ox/contacts/view-detail",
                 }
                 addField("\u00A0", true, this, function (td) {
                     td.append(
-                        $("<a>").addClass("action-link")
-                        .text("Show QR-code")
+                        $('<i class="icon-qrcode">'), $.txt(' '),
+                        $("<a>", { href: '#' })
+                        .text("Show QR code")
                         .on("click", function (e) {
                             e.preventDefault();
                             td.empty().busy();

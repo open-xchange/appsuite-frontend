@@ -1038,14 +1038,14 @@ input.nice-input {
 
 .io-ox-foldertree .folder {
     line-height: 18px;
-    padding: 2px 13px 2px 13px;
+    padding: 3px 13px 3px 13px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
 .io-ox-foldertree .folder .folder-label {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 200;
 }
 
@@ -1067,8 +1067,8 @@ input.nice-input {
     filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@selected-background, 20%)", endColorstr="darken(@selected-background, 5%)~")";
 }
 
-.io-ox-foldertree .folder.selected .folder-label {
-    color: white;
+.io-ox-foldertree .folder.selected * {
+    color: white !important;
 }
 
 .io-ox-foldertree .folder.greyed-out {
@@ -1121,6 +1121,22 @@ input.nice-input {
 
 .io-ox-foldertree .foldertree-links {
     padding: 1em 13px 1em 29px;
+}
+
+.io-ox-foldertree .section {
+    margin-bottom: 21px;
+}
+
+.io-ox-foldertree .section .section-title {
+    font-size: 21px;
+    line-height: 1em;
+    font-weight: 200;
+    color: #ccc;
+    padding: 0 13px 0.5em 13px;
+}
+
+.io-ox-foldertree .folder .shared-by {
+    padding-left: 22px;
 }
 
 .io-ox-sectionTitle {

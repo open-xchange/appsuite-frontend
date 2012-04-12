@@ -45,7 +45,9 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             isRange,
             getIndex,
             getNode,
+            selectFirst,
             selectPrevious,
+            selectLast,
             selectNext,
             lastIndex = -1, // trick for smooth updates
             fnKey,
@@ -96,24 +98,45 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             changed();
         };
 
+        selectFirst = function (e) {
+            if (bHasIndex && observedItems.length) {
+                var obj = observedItems[0];
+                clear();
+                apply(obj, e);
+                self.trigger('select:first', obj);
+            }
+        };
+
         selectPrevious = function (e) {
-            var index;
             if (bHasIndex) {
-                index = getIndex(last) - 1;
+                var index = getIndex(last) - 1, obj;
                 if (index >= 0) {
+                    obj = observedItems[index];
                     clear();
-                    apply(observedItems[index], e);
+                    apply(obj, e);
+                    self.trigger('select:previous', obj);
                 }
             }
         };
 
+        selectLast = function (e) {
+            if (bHasIndex && observedItems.length) {
+                var index = observedItems.length - 1,
+                    obj = observedItems[index];
+                clear();
+                apply(obj, e);
+                self.trigger('select:last', obj);
+            }
+        };
+
         selectNext = function (e) {
-            var index;
             if (bHasIndex) {
-                index = getIndex(last) + 1;
+                var index = getIndex(last) + 1, obj;
                 if (index < observedItems.length) {
+                    obj = observedItems[index];
                     clear();
-                    apply(observedItems[index], e);
+                    apply(obj, e);
+                    self.trigger('select:next', obj);
                 }
             }
         };
@@ -126,11 +149,19 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             switch (e.which) {
             case 38:
                 // cursor up
-                selectPrevious(e);
+                if (e.metaKey) {
+                    selectFirst(e);
+                } else {
+                    selectPrevious(e);
+                }
                 return false;
             case 40:
                 // cursor down
-                selectNext(e);
+                if (e.metaKey) {
+                    selectLast(e);
+                } else {
+                    selectNext(e);
+                }
                 return false;
             }
         };
@@ -182,6 +213,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                 if (prev === empty) {
                     prev = id;
                 }
+                self.trigger('select', key);
             }
         };
 
@@ -191,6 +223,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             getNode(key)
                 .find('input.reflect-selection').removeAttr('checked').end()
                 .removeClass(self.classSelected);
+            self.trigger('deselect', key);
         };
 
         toggle = function (id) {
@@ -388,6 +421,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             clear();
             // trigger event
             if (quiet !== true) {
+                self.trigger('clear');
                 changed();
             }
             return this;
@@ -450,11 +484,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         };
 
         this.selectFirst = function () {
-            if (bHasIndex && observedItems.length) {
-                clear();
-                select(observedItems[0]);
-                changed();
-            }
+            selectFirst();
             return this;
         };
 

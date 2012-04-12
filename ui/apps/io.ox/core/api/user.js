@@ -61,9 +61,11 @@ define("io.ox/core/api/user",
         return node;
     };
 
-    api.getLink = function (id, options) {
+    api.getLink = function (id, text) {
+        var textNode = text ? $.txt(text) : api.getTextNode(id);
         return $("<a>", { href: '#' })
-            .append(api.getTextNode(id)).on("click", function (e) {
+            .append(textNode)
+            .on("click", function (e) {
                 e.preventDefault();
                 require(["io.ox/core/extensions"], function (ext) {
                     ext.point("io.ox/core/person:action").each(function (ext) {
