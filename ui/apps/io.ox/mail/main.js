@@ -118,6 +118,8 @@ define("io.ox/mail/main",
                     '[data-option="' + (props.unread ? 'unread' : '~unread') + '"]'
                 )
                 .find('i').attr('class', 'icon-ok');
+            // unread
+            dropdown.find('.icon-envelope')[props.unread ? 'show' : 'hide']();
             // order
             var opacity = [1, 0.4][props.order === 'desc' ? 'slice' : 'reverse']();
             dropdown.find('.icon-arrow-down').css('opacity', opacity[0]).end()
@@ -132,16 +134,17 @@ define("io.ox/mail/main",
                 $('<a>', { href: '#' })
                 .attr('data-toggle', 'dropdown')
                 .append(
+                    $('<i class="icon-envelope">').css('marginRight', '0.5em').hide(),
                     $('<i class="icon-arrow-down">'), $('<i class="icon-arrow-up">')
                 )
                 .dropdown(),
                 $('<ul>').addClass("dropdown-menu")
                 .css({ top: 'auto', bottom: '110%', right: 0, left: 'auto' })
                 .append(
+                    $(_.printf(option, 610, gt('Date'))),
                     $(_.printf(option, 603, gt('From'))),
+                    $(_.printf(option, 102, gt('Mark'))),
                     $(_.printf(option, 607, gt('Subject'))),
-                    $(_.printf(option, 610, gt('Received'))),
-                    $(_.printf(option, 102, gt('Flag'))),
                     $('<li class="divider">'),
                     $(_.printf(option, 'asc', gt('Ascending'))),
                     $(_.printf(option, 'desc', gt('Descending'))),

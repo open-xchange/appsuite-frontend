@@ -368,3 +368,9 @@ h4.mail-attachment-preview {
 .mail-detail .content img {
     width: auto;
 }
+
+.mail-detail pre {
+    background-color: initial;
+    border: 0px none;
+    -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0;
+}
