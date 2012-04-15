@@ -315,7 +315,7 @@ define("io.ox/contacts/view-detail",
         draw: function (data) {
             var r = 0,
                 date = new Date(data.birthday);
-            if (!isNaN(date.getDate())) {
+            if (data.birthday !== null && !isNaN(date.getDate())) {
                 r += addField(gt("Birthday"), date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear(), this);
             }
         }
