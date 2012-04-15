@@ -97,13 +97,13 @@ define("io.ox/mail/main",
             }, []);
         };
 
-        commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads');
-        commons.wireGridAndSearch(grid, win, api);
-
         // add grid options
         grid.prop('sort', '610')
             .prop('order', 'desc')
             .prop('unread', false);
+
+        commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads');
+        commons.wireGridAndSearch(grid, win, api);
 
         function updateGridOptions() {
             var dropdown = grid.getToolbar().find('.grid-options'),

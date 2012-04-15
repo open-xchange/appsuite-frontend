@@ -72,7 +72,7 @@ define("io.ox/core/api/factory",
                 var getter = function () {
                     return http.GET({
                         module: o.module,
-                        params: $.extend({}, opt, { order: 'desc' })
+                        params: $.extend({}, opt, { order: 'asc' })
                     })
                     .pipe(function (data) {
                         return (o.pipe.all || _.identity)(data, opt);
@@ -112,7 +112,7 @@ define("io.ox/core/api/factory",
                     }
                 }())
                 .pipe(function (data) {
-                    return opt.order === 'asc' ? data.slice().reverse() : data;
+                    return opt.order === 'asc' ? data : data.slice().reverse();
                 })
                 .done(o.done.all || $.noop);
 
