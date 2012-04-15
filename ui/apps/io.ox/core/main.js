@@ -69,8 +69,12 @@ define("io.ox/core/main",
     function globalRefresh() {
         // trigger global event
         if (ox.online) {
-            console.debug('triggering automatic refresh ...');
-            ox.trigger("refresh^");
+            try {
+                console.debug('triggering automatic refresh ...');
+                ox.trigger("refresh^");
+            } catch (e) {
+                console.error('globalRefresh()', e);
+            }
         }
     }
 

@@ -40,7 +40,7 @@ define("io.ox/mail/api",
         requests: {
             all: {
                 folder: "default0/INBOX",
-                columns: "601,600",
+                columns: "601,600,611", // + flags
                 sort: "610", // received_date
                 order: "desc"
             },
@@ -149,9 +149,12 @@ define("io.ox/mail/api",
     api.getAllThreads = function (options, useCache) {
         // request for brand new thread support
         options = options || {};
-        options.action = 'threadedAll';
-        options.columns = '601,600,611'; // + flags
-        options.sort = '610';
+        options = $.extend(options, {
+            action: 'threadedAll',
+            columns: '601,600,611', // + flags
+            sort: options.sort || '610',
+            order: options.order || 'desc'
+        });
         return this.getAll(options, useCache, api.caches.allThreaded)
             .done(function (data) {
                 _(data).each(function (obj) {
@@ -282,15 +285,16 @@ define("io.ox/mail/api",
 
     var clearCaches = function (obj, targetFolderId) {
             return function () {
+                var id = obj.folder_id || obj.folder;
                 return $.when(
                     api.caches.get.remove(obj),
-                    api.caches.get.remove(obj.folder_id || obj.folder),
+                    api.caches.get.remove(id),
                     api.caches.list.remove(obj),
-                    api.caches.list.remove(obj.folder_id || obj.folder),
-                    api.caches.all.remove(obj.folder_id || obj.folder), // clear source folder
-                    api.caches.all.remove(targetFolderId), // clear target folder
-                    api.caches.allThreaded.remove(obj.folder_id || obj.folder),
-                    api.caches.allThreaded.remove(targetFolderId)
+                    api.caches.list.remove(id),
+                    api.caches.all.grepRemove(id + '\t'), // clear source folder
+                    api.caches.all.grepRemove(targetFolderId + '\t'), // clear target folder
+                    api.caches.allThreaded.grepRemove(id + '\t'),
+                    api.caches.allThreaded.grepRemove(targetFolderId + '\t')
                 );
             };
         },
@@ -304,30 +308,70 @@ define("io.ox/mail/api",
         return change(list, data, 'update');
     };
 
-    api.markUnread = function (list) {
+    /*
+     * Mark unread/read (not trivial)
+     */
+    function updateFlags(cache, folder, hash, bitmask) {
+        // get proper keys (differ due to sort/order suffix)
+        return cache.grepKeys(folder).pipe(function (keys) {
+            return $.when.apply($,
+                _(keys).each(function (folder) {
+                    return cache.get(folder).pipe(function (data) {
+                        if (data) {
+                            // update affected items
+                            _(data).each(function (obj) {
+                                var cid = obj.folder_id + '.' + obj.id;
+                                if (cid in hash) {
+                                    obj.flags = obj.flags & bitmask;
+                                }
+                            });
+                            return cache.add(folder, data);
+                        } else {
+                            return $.when();
+                        }
+                    });
+                })
+            );
+        });
+    }
+
+    function mark(list, value, bitmask, bool, call) {
         // get list first in order to have flags
         return api.getList(list).pipe(function (list) {
             // remove unseen mails
+            var folders = {}, items = {};
             list = _(list).filter(function (o) {
-                return (o.flags & 32) === 32; // seen? = read?
+                if ((o.flags & 32) === value) { // seen? = read?
+                    return (folders[o.folder_id] = items[o.folder_id + '.' + o.id] = true);
+                } else {
+                    return false;
+                }
             });
-            return api.update(list, { flags: api.FLAGS.SEEN, value: false }).pipe(function () {
-                folderAPI.incUnread(list);
+            // loop over affected 'all' index
+            $.when.apply($,
+                _(folders).map(function (value, folder) {
+                    return $.when(
+                        updateFlags(api.caches.all, folder, items, bitmask),
+                        updateFlags(api.caches.allThreaded, folder, items, bitmask)
+                    );
+                })
+            )
+            .pipe(function () {
+                return api.update(list, { flags: api.FLAGS.SEEN, value: bool })
+                    .pipe(function () {
+                        folderAPI[call](list);
+                        folders = items = list = null;
+                    });
             });
         });
+    }
+
+    api.markUnread = function (list) {
+        return mark(list, 32, ~32, false, 'incUnread');
     };
 
     api.markRead = function (list) {
-        // get list first in order to have flags
-        return api.getList(list).pipe(function (list) {
-            // remove seen mails
-            list = _(list).filter(function (o) {
-                return (o.flags & 32) !== 32; // not seen? = unread?
-            });
-            return api.update(list, { flags: api.FLAGS.SEEN, value: true }).pipe(function () {
-                folderAPI.decUnread(list);
-            });
-        });
+        return mark(list, 0, 32, true, 'decUnread');
     };
 
     api.move = function (list, targetFolderId) {
@@ -574,7 +618,7 @@ define("io.ox/mail/api",
         });
         return http.resume().done(function () {
             require(['io.ox/files/api'], function (fileAPI) {
-                fileAPI.caches.all.remove(target);
+                fileAPI.caches.all.grepRemove(target + '\t');
                 fileAPI.trigger('refresh.all');
             });
         });

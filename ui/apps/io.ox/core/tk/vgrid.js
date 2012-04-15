@@ -149,7 +149,9 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 },
             toolbar = $('<div>').addClass('vgrid-toolbar')
                 .append(
-                    $('<a>', { href: '#' }).addClass('action-link').text('Edit')
+                    $('<a>', { href: '#' })
+                    .addClass('action-link')
+                    .append($('<i class="icon-th-list">'))
                     .on('click', { grid: this }, fnToggleEditable)
                 )
                 .appendTo(node),
@@ -512,11 +514,13 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
 
             // get all IDs
             var load = loadIds[currentMode] || loadIds.all,
-                def = $.Deferred();
+                def = $.Deferred(),
+                changed;
 
             load.call(self)
                 .done(function (list) {
                     if (isArray(list)) {
+                        changed = list.length !== all.length || !_.isEqual(all, list);
                         apply(list)
                             .always(function () {
                                 // stop being busy
@@ -525,17 +529,19 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                             .done(function () {
                                 // use url?
                                 if (_.url.hash('id') !== undefined) {
-                                    var ids = _.url.hash('id').split(/,/), cid;
+                                    var ids = _.url.hash('id').split(/,/), cid, selectionChanged;
                                     // convert ids to objects first - avoids problems with
                                     // non-existing items that cannot be resolved in selections
                                     ids = _(ids).map(function (cid) {
                                         var c = cid.split(/\./);
                                         return { folder_id: c[0], id: c[1], recurrence_position: c[2] };
                                     });
-                                    // new?
-                                    if (!self.selection.equals(ids)) {
+                                    selectionChanged = !self.selection.equals(ids);
+                                    if (selectionChanged) {
                                         // set
                                         self.selection.set(ids);
+                                    }
+                                    if (selectionChanged || changed) {
                                         // scroll to first selected item
                                         cid = _(ids).first();
                                         setIndex((self.selection.getIndex(cid) || 0) - 2); // not at the very top
@@ -768,10 +774,17 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         };
 
         this.prop = function (key, value) {
-            if (value !== undefined) {
-                props[key] = value;
+            if (key !== undefined) {
+                if (value !== undefined) {
+                    props[key] = value;
+                    this.trigger('change:prop', key, value);
+                    this.trigger('change:prop:' + key, value);
+                    return this;
+                } else {
+                    return props[key];
+                }
             } else {
-                return props[key];
+                return props;
             }
         };
 

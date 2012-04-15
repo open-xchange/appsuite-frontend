@@ -63,7 +63,8 @@ define("io.ox/core/api/factory",
 
             getAll: function (options, useCache, cache) {
                 // merge defaults for "all"
-                var opt = $.extend({}, o.requests.all, options || {});
+                var opt = $.extend({}, o.requests.all, options || {}),
+                    cid = opt.folder + '\t' + opt.sort;
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 cache = cache || caches.all;
@@ -71,7 +72,7 @@ define("io.ox/core/api/factory",
                 var getter = function () {
                     return http.GET({
                         module: o.module,
-                        params: opt
+                        params: $.extend({}, opt, { order: 'desc' })
                     })
                     .pipe(function (data) {
                         return (o.pipe.all || _.identity)(data, opt);
@@ -90,26 +91,31 @@ define("io.ox/core/api/factory",
                             caches.get.remove(diff);
                         });
                         // clear cache
-                        cache.remove(opt.folder);
+                        cache.remove(cid);
                         // add to cache
-                        cache.add(opt.folder, data);
+                        cache.add(cid, data);
                     });
                 };
 
-                if (useCache) {
-                    return cache.contains(opt.folder)
-                        .pipe(function (check) {
-                            if (check) {
-                                return cache.get(opt.folder);
-                            } else {
-                                return getter();
-                            }
-                        })
-                        .done(o.done.all || $.noop);
-                } else {
-                    return getter()
-                        .done(o.done.all || $.noop);
-                }
+                return (function () {
+                    if (useCache) {
+                        return cache.contains(cid)
+                            .pipe(function (check) {
+                                if (check) {
+                                    return cache.get(cid);
+                                } else {
+                                    return getter();
+                                }
+                            });
+                    } else {
+                        return getter();
+                    }
+                }())
+                .pipe(function (data) {
+                    return opt.order === 'asc' ? data.slice().reverse() : data;
+                })
+                .done(o.done.all || $.noop);
+
             },
 
             getList: function (ids, useCache) {

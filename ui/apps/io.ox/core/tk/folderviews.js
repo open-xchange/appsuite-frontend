@@ -28,7 +28,9 @@ define('io.ox/core/tk/folderviews',
         tmplFolder = $('<div>').addClass('folder selectable').css('paddingLeft', '13px'),
         tmplSub = $('<div>').addClass('subfolders').hide(),
 
-        refreshHash = {};
+        refreshHash = {},
+
+        TRUE = function () { return true; };
 
     /**
      * Tree node class
@@ -43,6 +45,9 @@ define('io.ox/core/tk/folderviews',
             open,
             self = this,
             data = {},
+
+            // custom filter
+            filter = _.isFunction(tree.options.filter) ? tree.options.filter : TRUE,
 
             // internal functions
             skip = function () {
@@ -155,9 +160,9 @@ define('io.ox/core/tk/folderviews',
                     .pipe(function (data) {
                         // create new children array
                         children = _.chain(data)
-                            .select(function (folder) {
+                            .filter(function (folder) {
                                 // ignore system folders without sub folders, e.g. 'Shared folders'
-                                return folder.module !== 'system' || folder.subfolders;
+                                return (folder.module !== 'system' || folder.subfolders) && filter(folder);
                             })
                             .map(function (folder) {
                                 if (reload && hash[folder.id] !== undefined) {
@@ -372,6 +377,14 @@ define('io.ox/core/tk/folderviews',
      * Folder tree class
      */
     function FolderTree(container, opt) {
+
+        // add hard filter for trees (e.g. just show mail folders)
+        opt = $.extend({
+            filter: function (obj) {
+                return obj.module === opt.type || (opt.type === 'mail' && (/^default\d+(\W|$)/i).test(obj.id));
+                    // module == type? plus: special handling for external mail accounts
+            }
+        }, opt);
 
         FolderStructure.call(this, container, opt);
 

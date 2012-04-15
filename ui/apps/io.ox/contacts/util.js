@@ -57,7 +57,7 @@ define('io.ox/contacts/util', [], function () {
 
         getMail: function (obj) {
             // get the first mail address
-            return obj.email1 || obj.email2 || obj.email3 || '';
+            return (obj.email1 || obj.email2 || obj.email3 || '').toLowerCase();
         },
 
         getJob: function (obj) {
