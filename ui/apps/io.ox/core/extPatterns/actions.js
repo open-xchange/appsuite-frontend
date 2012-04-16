@@ -52,7 +52,7 @@ define("io.ox/core/extPatterns/actions",
                     var def = $.Deferred();
                     // process actions
                     if (link.isEnabled && !link.isEnabled.apply(link, args)) {
-                        def.reject();
+                        def.resolve({ link: link, state: false });
                     } else {
                         // combine actions
                         $.when.apply($,
@@ -69,29 +69,19 @@ define("io.ox/core/extPatterns/actions",
                             .value()
                         )
                         .done(function () {
-                            var reduced = _(arguments).reduce(function (memo, action) {
+                            var state = _(arguments).reduce(function (memo, action) {
                                 return memo && action === true;
                             }, true);
-                            if (reduced) {
-                                def.resolve(link);
-                            } else {
-                                def.reject(link);
-                            }
+                            def.resolve({ link: link, state: state });
                         });
                     }
-                    return {
-                        deferred: def,
-                        link: link
-                    };
+                    return def;
                 });
                 // wait for all links
-                $.when.apply($, links.pluck('deferred').value())
-                .always(function () {
+                $.when.apply($, links.value())
+                .done(function () {
                     linksResolved.resolve(
-                        links.filter(function (o) {
-                            return o.deferred.state() === 'resolved';
-                        })
-                        .pluck('link').value()
+                        _.chain(arguments).filter(function (o) { return o.state; }).pluck('link').value()
                     );
                     links = null;
                 });

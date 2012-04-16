@@ -14,6 +14,8 @@ CACHE:
 @base@/apps/io.ox/core/bootstrap/js/bootstrap-tooltip.js
 @base@/apps/io.ox/core/bootstrap/js/bootstrap-dropdown.js
 @base@/apps/io.ox/core/bootstrap/js/bootstrap-button.js
+@base@/apps/io.ox/core/bootstrap/js/bootstrap-alert.js
+@base@/apps/io.ox/core/bootstrap/js/bootstrap-popover.js
 @base@/apps/io.ox/core/bootstrap/less/bootstrap.less
 # theme
 @base@/apps/themes/login/login.css

@@ -67,7 +67,7 @@ define("io.ox/contacts/main",
             .appendTo(win.nodes.main);
 
         // folder tree
-        commons.addFolderTree(app, GRID_WIDTH, 'contacts');
+        commons.addFolderView(app, { width: GRID_WIDTH, type: 'contacts', view: 'FolderList' });
 
         // thumb index
         thumbs = $("<div>")
@@ -183,7 +183,7 @@ define("io.ox/contacts/main",
         commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
-        commons.wireGridAndRefresh(grid, api);
+        commons.wireGridAndRefresh(grid, api, win);
 
         app.getGrid = function () {
             return grid;

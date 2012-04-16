@@ -11,11 +11,12 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/foldertree',
+define('io.ox/core/tk/folderviews',
     ['io.ox/core/tk/selection',
      'io.ox/core/api/folder',
+     'io.ox/core/api/user',
      'io.ox/core/extensions',
-     'io.ox/core/event'], function (Selection, api, ext, Events) {
+     'io.ox/core/event'], function (Selection, api, userAPI, ext, Events) {
 
     'use strict';
 
@@ -27,7 +28,9 @@ define('io.ox/core/tk/foldertree',
         tmplFolder = $('<div>').addClass('folder selectable').css('paddingLeft', '13px'),
         tmplSub = $('<div>').addClass('subfolders').hide(),
 
-        refreshHash = {};
+        refreshHash = {},
+
+        TRUE = function () { return true; };
 
     /**
      * Tree node class
@@ -42,6 +45,9 @@ define('io.ox/core/tk/foldertree',
             open,
             self = this,
             data = {},
+
+            // custom filter
+            filter = _.isFunction(tree.options.filter) ? tree.options.filter : TRUE,
 
             // internal functions
             skip = function () {
@@ -154,9 +160,9 @@ define('io.ox/core/tk/foldertree',
                     .pipe(function (data) {
                         // create new children array
                         children = _.chain(data)
-                            .select(function (folder) {
+                            .filter(function (folder) {
                                 // ignore system folders without sub folders, e.g. 'Shared folders'
-                                return folder.module !== 'system' || folder.subfolders;
+                                return (folder.module !== 'system' || folder.subfolders) && filter(folder);
                             })
                             .map(function (folder) {
                                 if (reload && hash[folder.id] !== undefined) {
@@ -179,45 +185,6 @@ define('io.ox/core/tk/foldertree',
                     });
             } else {
                 return $.Deferred().resolve(children);
-            }
-        };
-
-        this.customize = function (nodes, data) {
-
-            var src;
-
-            switch (data.id) {
-            case 'default0/INBOX':
-                src = PATH + 'inbox.png';
-                break;
-            case 'default0/INBOX/Trash':
-                src = PATH + 'trash.png';
-                break;
-            case 'default0/INBOX/Sent Items':
-                src = PATH + 'outbox.png';
-                break;
-            case '6':
-                src = PATH + 'user.png';
-                break;
-            default:
-                src = DEFAULT;
-                break;
-            }
-
-            // fade out?
-            if (tree.options.type && tree.options.type !== data.module) {
-                nodes.folder.addClass('greyed-out');
-            }
-
-            // set icon
-            nodes.icon.attr('src', src);
-            // set title
-            nodes.label.text(data.title + '');
-            // set counter (mail only)
-            if (tree.options.type === 'mail' && data.total !== undefined) {
-                nodes.counter.text(data.total || '');
-            } else {
-                nodes.counter.hide();
             }
         };
 
@@ -251,7 +218,7 @@ define('io.ox/core/tk/foldertree',
                         data = promise;
                         // re-add to index, customize, update arrow
                         tree.selection.addToIndex(data);
-                        self.customize(nodes, data);
+                        self.customize();
                         updateArrow();
                         // draw children
                         if (isOpen()) {
@@ -299,13 +266,13 @@ define('io.ox/core/tk/foldertree',
                     // work with selection
                     nodes.folder.attr('data-obj-id', data.id);
                     tree.selection.addToIndex(data);
-                    // customize
-                    self.customize(nodes, data);
                     // draw children
                     var def = isOpen() ? paintChildren() : $.when();
                     updateArrow();
                     // add to DOM
                     nodes.folder.append(nodes.arrow, nodes.icon, nodes.counter, nodes.label);
+                    // customize
+                    self.customize();
                     // Done
                     return def;
                 })
@@ -314,32 +281,34 @@ define('io.ox/core/tk/foldertree',
                     painted = true;
                 });
         };
+
+        this.customize = function () {
+            // invoke extension points
+            ext.point('io.ox/foldertree/folder').invoke('customize', nodes.folder, data, tree.options);
+        };
     }
 
     /**
-     * Folder tree class
+     * Abstract folder structure class
      */
-    function FolderTree(container, opt) {
+    function FolderStructure(container, opt) {
 
         this.options = _.extend({
-                id: 'default',
-                rootFolderId: '1',
-                skipRoot: true,
-                type: null
-            }, opt);
+            id: 'default',
+            rootFolderId: '1',
+            skipRoot: true,
+            type: null
+        }, opt);
 
-        // painting
-        var painting = null,
-            // ref
-            self = this;
+        this.internal = { destroy: $.noop };
+
+        // ref
+        var self = this;
 
         $(container)
             .addClass('io-ox-foldertree')
             // add tree container
             .append(this.container = $('<div>'));
-
-        // root tree node
-        this.root = new TreeNode(this, this.options.rootFolderId, this.container, 0);
 
         // selection
         Selection.extend(this, container) // not this.container!
@@ -352,31 +321,35 @@ define('io.ox/core/tk/foldertree',
         Events.extend(this);
 
         this.paint = function () {
-            if (painting === null) {
+            var p = this.paint;
+            if (p.running === null) {
                 this.trigger('beforepaint');
                 this.selection.clearIndex();
-                painting = this.root.paint();
-                painting.always(function () {
+                p.running = this.internal.paint.call(this) || $.when();
+                p.running.always(function () {
                     self.selection.update();
                     self.trigger('paint');
-                    painting = null;
+                    p.running = null;
                 });
             }
-            return painting || $.when();
+            return p.running || $.when();
         };
 
+        this.paint.running = null;
+
         this.repaint = function () {
-            if (painting === null) {
+            var p = this.paint;
+            if (p.running === null) {
                 this.trigger('beforerepaint');
                 this.selection.clearIndex();
-                painting = this.root.repaint();
-                painting.always(function () {
+                p.running = (this.internal.repaint || this.internal.paint).call(this) || $.when();
+                p.running.always(function () {
                     self.selection.update();
                     self.trigger('repaint');
-                    painting = null;
+                    p.running = null;
                 });
             }
-            return painting || $.when();
+            return p || $.when();
         };
 
         this.busy = function () {
@@ -394,8 +367,36 @@ define('io.ox/core/tk/foldertree',
         this.destroy = function () {
             this.events.destroy();
             this.selection.destroy();
+            this.internal.destroy();
             container.empty();
-            container = this.container = this.selection = null;
+            container = this.container = this.selection = this.internal = null;
+        };
+    }
+
+    /**
+     * Folder tree class
+     */
+    function FolderTree(container, opt) {
+
+        // add hard filter for trees (e.g. just show mail folders)
+        opt = $.extend({
+            filter: function (obj) {
+                return obj.module === opt.type || (opt.type === 'mail' && (/^default\d+(\W|$)/i).test(obj.id));
+                    // module == type? plus: special handling for external mail accounts
+            }
+        }, opt);
+
+        FolderStructure.call(this, container, opt);
+
+        // root tree node
+        this.root = new TreeNode(this, this.options.rootFolderId, this.container, 0);
+
+        this.internal.paint = function () {
+            return this.root.paint();
+        };
+
+        this.internal.repaint = function () {
+            return this.root.repaint();
         };
     }
 
@@ -456,6 +457,55 @@ define('io.ox/core/tk/foldertree',
         });
     }
 
+    // customization extension point
+    ext.point('io.ox/foldertree/folder').extend({
+        index: 100,
+        id: 'default',
+        customize: function (data, options) {
+
+            var src,
+                icon = this.find('.folder-icon'),
+                label = this.find('.folder-label'),
+                counter = this.find('.folder-counter');
+
+            switch (data.id) {
+            case 'default0/INBOX':
+                src = PATH + 'inbox.png';
+                break;
+            case 'default0/INBOX/Trash':
+                src = PATH + 'trash.png';
+                break;
+            case 'default0/INBOX/Sent Items':
+                src = PATH + 'outbox.png';
+                break;
+            case '6':
+                src = PATH + 'user.png';
+                break;
+            default:
+                src = DEFAULT;
+                break;
+            }
+
+            // fade out?
+            if (options.type && options.type !== data.module) {
+                this.addClass('greyed-out');
+            }
+
+            // set icon
+            icon.attr('src', src);
+            // set title
+            label.text(data.title + '');
+            // set counter (mail only)
+            if (options.type === 'mail' && data.unread) {
+                label.css('fontWeight', 'bold');
+                counter.text(data.unread || '').show();
+            } else {
+                label.css('fontWeight', '');
+                counter.hide();
+            }
+        }
+    });
+
     // default extension point
     ext.point('io.ox/application-foldertree/links').extend({
         index: 100,
@@ -473,7 +523,78 @@ define('io.ox/core/tk/foldertree',
         }
     });
 
+    var sections = { 'private': 'Private', 'public': 'Public ', 'shared': 'Shared' };
+
+    function FolderList(container, opt) {
+
+        FolderStructure.call(this, container, opt);
+
+        var self = this;
+
+        function drawFolder(data) {
+
+            var folder = tmplFolder.clone()
+                .append(
+                    $('<img>', { src: '', alt: '' }).addClass('folder-icon'),
+                    $('<span>').addClass('folder-label')
+                )
+                .attr('data-obj-id', data.id);
+
+            // add owner for shared folders
+            if (api.is('shared', data)) {
+                folder.append(
+                    $('<div>').addClass('shared-by').append(
+                        userAPI.getLink(data.created_by, data['com.openexchange.folderstorage.displayName'])
+                    )
+                );
+            }
+
+            // update selection
+            self.selection.addToIndex(data);
+
+            // invoke extension points
+            ext.point('io.ox/foldertree/folder').invoke('customize', folder, data, opt);
+
+            return folder;
+        }
+
+        function paint() {
+
+            api.getVisible({ type: opt.type }).done(function (data) {
+                var id, section,
+                    drawSection = function (node, list) {
+                        // loop over folders
+                        _(list).each(function (data) {
+                            node.append(drawFolder(data));
+                        });
+                    };
+                // loop over sections
+                for (id in sections) {
+                    if (data[id]) {
+                        self.container.append(
+                            section = $('<div>').addClass('section')
+                            .append(
+                                $("<div>").addClass('section-title').text(sections[id])
+                            )
+                        );
+                        drawSection(section, data[id]);
+                    }
+                }
+            });
+        }
+
+        this.internal.paint = function () {
+            paint();
+        };
+
+        this.internal.repaint = function () {
+            this.container.empty();
+            paint();
+        };
+    }
+
     return {
+        FolderList: FolderList,
         FolderTree: FolderTree,
         ApplicationFolderTree: ApplicationFolderTree
     };

@@ -11,8 +11,6 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-// TODO: Render Versions
-
 define("io.ox/files/view-detail",
     ["io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
@@ -24,11 +22,10 @@ define("io.ox/files/view-detail",
      "io.ox/files/api",
      "io.ox/preview/main",
      "io.ox/core/tk/upload",
-     "gettext!io.ox/files/files"], function (ext, links, layouts, KeyListener, i18n, Event, actions, filesAPI, Preview, upload, gt) {
+     "io.ox/core/api/user",
+     "gettext!io.ox/files/files"], function (ext, links, layouts, KeyListener, i18n, Event, actions, filesAPI, preview, upload, userAPI, gt) {
 
     "use strict";
-
-    var supportsDragOut = Modernizr.draganddrop && _.browser.Chrome;
 
     var draw = function (file) {
 
@@ -39,12 +36,6 @@ define("io.ox/files/view-detail",
                 ref: "io.ox/files/details/sections"
             });
 
-        // add drag-out delegate
-        if (supportsDragOut) {
-            $element.on('dragstart', '.dragout', function (e) {
-                e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
-            });
-        }
 
         var blacklisted = {
             "refresh.list": true
@@ -247,7 +238,11 @@ define("io.ox/files/view-detail",
                 var count = 0;
                 _.each(extension.fields, function (index, field) {
                     var content = null;
-                    $line.append($("<em>").text(extension.label(field) + ":")).append(content = $("<span>"));
+                    $line.append(
+                        $("<em>").text(extension.label(field) + ':'),
+                        content = $('<span>'),
+                        $.txt('\u00A0 ')
+                    );
                     extension.draw(field, file, content);
                     count++;
                     if (count === 5) {
@@ -280,8 +275,20 @@ define("io.ox/files/view-detail",
     };
 
     ext.point("io.ox/files/details/sections/header/basicInfo").extend({
+        id: "filename",
+        index: 100,
+        fields: ["filename"],
+        label: function () {
+            return gt("File name");
+        },
+        draw: function (field, file, $element) {
+            $element.text(file.filename || 'N/A');
+        }
+    });
+
+    ext.point("io.ox/files/details/sections/header/basicInfo").extend({
         id: "size",
-        index: 10,
+        index: 200,
         fields: ["file_size"],
         label: function () {
             return gt("Size");
@@ -291,27 +298,31 @@ define("io.ox/files/view-detail",
         }
     });
 
-    ext.point("io.ox/files/details/sections/header/basicInfo").extend({
-        id: "version",
-        index: 20,
-        fields: ["version"],
-        label: function (field) {
-            return gt("Version");
-        },
-        draw: function (field, file, $element) {
-            $element.text(file.version);
-        }
-    });
+    // version number is boring
+//    ext.point("io.ox/files/details/sections/header/basicInfo").extend({
+//        id: "version",
+//        index: 300,
+//        fields: ["version"],
+//        label: function (field) {
+//            return gt("Version");
+//        },
+//        draw: function (field, file, $element) {
+//            $element.text(file.version);
+//        }
+//    });
 
     ext.point("io.ox/files/details/sections/header/basicInfo").extend({
         id: "last_modified",
-        index: 30,
+        index: 400,
         fields: ["last_modified"],
         label: function () {
             return gt("Last Modified");
         },
         draw: function (field, file, $element) {
-            $element.text(i18n.date("fulldatetime", file.last_modified));
+            $element.append(
+                userAPI.getLink(file.created_by),
+                $.txt(' \u2013 ' + i18n.date("fulldatetime", file.last_modified)) // 2013 = ndash
+            );
         }
     });
 
@@ -361,48 +372,23 @@ define("io.ox/files/view-detail",
 
     // Content Section
     // Preview
-    ext.point("io.ox/files/details/sections/content").extend({
+    ext.point("io.ox/files/details/sections/content").extend(new preview.Extension({
         id: "preview",
         index: 10,
         dim: {
             span: 6
         },
-        isEnabled: function (file) {
+        parseArguments: function (file) {
             if (!file.filename) {
-                return false;
+                return null;
             }
-            var fileDescription = {
+            
+            return {
                 name: file.filename,
                 mimetype: file.file_mimetype,
                 size: file.file_size,
-                dataURL: filesAPI.getUrl(file)
+                dataURL: filesAPI.getUrl(file, 'bare')
             };
-            var prev = new Preview(fileDescription);
-            return prev.supportsPreview();
-        },
-        draw: function (file) {
-
-            this.addClass("preview");
-
-            var desc = {
-                    name: file.filename,
-                    mimetype: file.file_mimetype,
-                    size: file.file_size,
-                    dataURL: filesAPI.getUrl(file)
-                },
-                link = $('<a>', { href: filesAPI.getUrl(file, 'open'), target: '_blank', draggable: true })
-                    .addClass('dragout')
-                    .attr('data-downloadurl', desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.dataURL),
-                self = this.hide(),
-                prev = new Preview(desc);
-
-            if (prev.supportsPreview()) {
-                prev.appendTo(link.appendTo(self));
-                if (supportsDragOut) {
-                    link.attr('title', gt('Click to open. Drag on your desktop to download.'));
-                }
-                self.show();
-            }
         },
         on: {
             update: function (file, extension) {
@@ -410,7 +396,7 @@ define("io.ox/files/view-detail",
                 extension.draw.call(this, file, extension);
             }
         }
-    });
+    }));
 
     // Description
 
@@ -635,10 +621,7 @@ define("io.ox/files/view-detail",
             orientation: 'right'
         },
         draw: function (version) {
-            var $node = this;
-            require(["io.ox/core/api/user"], function (userAPI) {
-                $node.append($("<span>").append(userAPI.getLink(version.created_by)).addClass("pull-right"));
-            });
+            this.append($("<span>").append(userAPI.getLink(version.created_by)).addClass("pull-right"));
         }
     });
 

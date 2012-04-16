@@ -201,7 +201,7 @@
                     return pair.substr(0, key.length) === key;
                 })
                 .map(function (pair) {
-                    return pair.substr(key.length + 1);
+                    return decodeURIComponent(pair.substr(key.length + 1));
                 })
                 .first()
                 .value();
@@ -209,7 +209,7 @@
 
         setCookie: function (key, value) {
             // yep, works this way:
-            document.cookie = key + "=" + value;
+            document.cookie = key + "=" + encodeURIComponent(value);
         },
 
         /**

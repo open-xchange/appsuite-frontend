@@ -42,7 +42,9 @@ define("io.ox/core/api/factory",
                 search: { action: "search" },
                 remove: { action: "delete" }
             },
-            fail: { }
+            done: {},
+            fail: {},
+            pipe: {}
         }, o || {});
 
         // use module as id?
@@ -57,9 +59,12 @@ define("io.ox/core/api/factory",
 
         var api = {
 
+            cacheRegistry: { all: ['all'], list: ['list'], get: ['get'] },
+
             getAll: function (options, useCache, cache) {
                 // merge defaults for "all"
-                var opt = $.extend({}, o.requests.all, options || {});
+                var opt = $.extend({}, o.requests.all, options || {}),
+                    cid = opt.folder + '\t' + opt.sort;
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 cache = cache || caches.all;
@@ -67,9 +72,12 @@ define("io.ox/core/api/factory",
                 var getter = function () {
                     return http.GET({
                         module: o.module,
-                        params: opt
+                        params: $.extend({}, opt, { order: 'asc' })
                     })
-                    .done(function (data, timestamp) {
+                    .pipe(function (data) {
+                        return (o.pipe.all || _.identity)(data, opt);
+                    })
+                    .done(function (data) {
                         // remove deprecated entries
                         // TODO: consider folder_id
                         caches.get.keys().done(function (keys) {
@@ -83,23 +91,31 @@ define("io.ox/core/api/factory",
                             caches.get.remove(diff);
                         });
                         // clear cache
-                        cache.remove(opt.folder);
+                        cache.remove(cid);
                         // add to cache
-                        cache.add(opt.folder, data, timestamp);
+                        cache.add(cid, data);
                     });
                 };
 
-                if (useCache) {
-                    return cache.contains(opt.folder).pipe(function (check) {
-                        if (check) {
-                            return cache.get(opt.folder);
-                        } else {
-                            return getter();
-                        }
-                    });
-                } else {
-                    return getter();
-                }
+                return (function () {
+                    if (useCache) {
+                        return cache.contains(cid)
+                            .pipe(function (check) {
+                                if (check) {
+                                    return cache.get(cid);
+                                } else {
+                                    return getter();
+                                }
+                            });
+                    } else {
+                        return getter();
+                    }
+                }())
+                .pipe(function (data) {
+                    return opt.order === 'asc' ? data : data.slice().reverse();
+                })
+                .done(o.done.all || $.noop);
+
             },
 
             getList: function (ids, useCache) {
@@ -114,6 +130,9 @@ define("io.ox/core/api/factory",
                         params: o.requests.list,
                         data: http.simplify(ids)
                     }))
+                    .pipe(function (data) {
+                        return (o.pipe.list || _.identity)(data);
+                    })
                     .done(function (data) {
                         // add to cache
                         caches.list.add(data);
@@ -123,19 +142,23 @@ define("io.ox/core/api/factory",
                 };
                 // empty?
                 if (ids.length === 0) {
-                    return $.Deferred().resolve([]);
+                    return $.Deferred().resolve([])
+                        .done(o.done.list || $.noop);
                 } else {
                     if (useCache) {
                         // cache miss?
-                        return caches.list.contains(ids).pipe(function (check) {
-                            if (check) {
-                                return caches.list.get(ids);
-                            } else {
-                                return getter();
-                            }
-                        });
+                        return caches.list.contains(ids)
+                            .pipe(function (check) {
+                                if (check) {
+                                    return caches.list.get(ids);
+                                } else {
+                                    return getter();
+                                }
+                            })
+                            .done(o.done.list || $.noop);
                     } else {
-                        return getter();
+                        return getter()
+                            .done(o.done.list || $.noop);
                     }
                 }
             },
@@ -152,9 +175,12 @@ define("io.ox/core/api/factory",
                         module: o.module,
                         params: fix(opt)
                     })
-                    .done(function (data, timestamp) {
+                    .pipe(function (data) {
+                        return (o.pipe.get || _.identity)(data, opt);
+                    })
+                    .done(function (data) {
                         // add to cache
-                        caches.get.add(data, timestamp);
+                        caches.get.add(data);
                         // update list cache
                         caches.list.merge(data).done(function (ok) {
                             if (ok) {
@@ -167,17 +193,19 @@ define("io.ox/core/api/factory",
                     });
                 };
 
-
                 if (useCache) {
-                    return caches.get.contains(opt).pipe(function (check) {
-                        if (check) {
-                            return caches.get.get(opt);
-                        } else {
-                            return getter();
-                        }
-                    });
+                    return caches.get.contains(opt)
+                        .pipe(function (check) {
+                            if (check) {
+                                return caches.get.get(opt);
+                            } else {
+                                return getter();
+                            }
+                        })
+                        .done(o.done.get || $.noop);
                 } else {
-                    return getter();
+                    return getter()
+                        .done(o.done.get || $.noop);
                 }
             },
 
@@ -188,23 +216,30 @@ define("io.ox/core/api/factory",
                 // find affected mails in simple cache
                 var hash = {}, folders = {}, getKey = cache.defaultKeyGenerator;
                 _(ids).each(function (o) {
-                    hash[getKey(o)] = true;
-                    folders[o.folder_id] = true;
+                    hash[getKey(o)] = folders[o.folder_id] = true;
                 });
                 // loop over each folder and look for items to remove
-                var defs = _(folders).map(function (value, folder_id) {
-                    return caches.all.get(folder_id).pipe(function (items) {
-                        if (items) {
-                            return caches.all.add(
-                                folder_id,
-                                _(items).select(function (o) {
-                                    return hash[getKey(o)] !== true;
-                                })
-                            );
-                        } else {
-                            return $.when();
-                        }
-                    });
+                var defs = [];
+                _(api.cacheRegistry.all).each(function (cacheName) {
+                    var cache = caches[cacheName];
+                    defs.concat(_(folders).map(function (value, folder_id) {
+                        // grep keys
+                        return cache.grepKeys(folder_id + '\t').pipe(function (key) {
+                            // now get cache entry
+                            return cache.get(key).pipe(function (items) {
+                                if (items) {
+                                    return cache.add(
+                                        key,
+                                        _(items).filter(function (o) {
+                                            return hash[getKey(o)] !== true;
+                                        })
+                                    );
+                                } else {
+                                    return $.when();
+                                }
+                            });
+                        });
+                    }));
                 });
                 // remove from object caches
                 defs.push(caches.list.remove(ids));
@@ -222,25 +257,26 @@ define("io.ox/core/api/factory",
                 var opt = $.extend({}, o.requests.remove, { timestamp: _.now() });
                 // done
                 var done = function () {
-                    return api.updateCachesAfterRemove(ids)
-                        .done(function () {
-                            api.trigger('deleted');
-                            api.trigger('refresh.all');
-                        });
+                    api.trigger('deleted');
                 };
                 api.trigger("beforedelete");
-                // delete on server?
-                if (local !== true) {
-                    return http.PUT({
-                        module: o.module,
-                        params: opt,
-                        data: http.simplify(ids),
-                        appendColumns: false
-                    })
-                    .pipe(done);
-                } else {
-                    return done();
-                }
+                // remove from caches first
+                api.updateCachesAfterRemove(ids).done(function () {
+                    // trigger refresh now
+                    api.trigger('refresh.all');
+                    // delete on server?
+                    if (local !== true) {
+                        return http.PUT({
+                            module: o.module,
+                            params: opt,
+                            data: http.simplify(ids),
+                            appendColumns: false
+                        })
+                        .pipe(done);
+                    } else {
+                        return done();
+                    }
+                });
             },
 
             needsRefresh: function (folder) {
@@ -271,7 +307,7 @@ define("io.ox/core/api/factory",
         Events.extend(api);
 
         // bind to global refresh
-        ox.on("refresh", function () {
+        ox.on("refresh^." + o.id, function () {
             if (ox.online) {
                 // clear "all & list" caches
                 api.caches.all.clear();

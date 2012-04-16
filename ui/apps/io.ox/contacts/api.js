@@ -28,12 +28,13 @@ define('io.ox/contacts/api',
                 action: 'all',
                 folder: '6',
                 columns: '20,1,500,502',
-                sort: '607', // magic field
+                sort: '607', // 607 = magic field
                 order: 'asc'
             },
             list: {
                 action: 'list',
                 columns: '20,1,500,501,502,505,520,555,556,557,569,602,606'
+                    // 602 = mark_as_distributionlist, 606 = image1_url
             },
             get: {
                 action: 'get'
@@ -45,6 +46,7 @@ define('io.ox/contacts/api',
                 order: 'asc',
                 getData: function (query, autoComplete) {
                     return {
+                        display_name: query,
                         first_name: query,
                         last_name: query,
                         email1: query,
@@ -192,25 +194,24 @@ define('io.ox/contacts/api',
     api.autocomplete = function (query) {
 
         function process(list, obj, field) {
-            var name;
             if (obj[field]) {
-                if (obj.display_name) {
+                var name, a = obj.last_name, b = obj.first_name, c = obj.display_name;
+                if (a && b) {
+                    // use last_name & first_name
+                    name = a + ', ' + b;
+                } else if (c) {
                     // use display name
-                    name = obj.display_name + '';
+                    name = c + '';
                 } else {
                     // use last_name & first_name
                     name = [];
-                    if (obj.last_name) {
-                        name.push(obj.last_name);
-                    }
-                    if (obj.first_name) {
-                        name.push(obj.first_name);
-                    }
+                    if (a) { name.push(a); }
+                    if (b) { name.push(b); }
                     name = name.join(', ');
                 }
                 list.push({
                     display_name: name,
-                    email: obj[field],
+                    email: obj[field].toLowerCase(),
                     contact: obj
                 });
             }
@@ -220,11 +221,46 @@ define('io.ox/contacts/api',
             if (!check) {
                 return api.search(query, true)
                     .pipe(function (data) {
-                        var tmp = [];
+                        var tmp = [], hash = {};
+                        // improve response
+                        // 1/4: resolve email addresses
                         _(data).each(function (obj) {
                             process(tmp, obj, 'email1');
                             process(tmp, obj, 'email2');
                             process(tmp, obj, 'email3');
+                        });
+                        // 2/4: sort by email address/has image
+                        tmp.sort(function (a, b) {
+                            if (a.email < b.email) {
+                                return -1;
+                            } else if (a.email > b.email) {
+                                return +1;
+                            } else if (a.contact.image1_url && !b.contact.image1_url) {
+                                return -1;
+                            } else if (!a.contact.image1_url && b.contact.image1_url) {
+                                return +1;
+                            } else {
+                                return 0;
+                            }
+                        });
+                        // 3/4: remove duplicates
+                        tmp = _(tmp).filter(function (obj) {
+                            return obj.email in hash ? false : (hash[obj.email] = true);
+                        });
+                        hash = null;
+                        // 4/4: sort by display_name
+                        tmp.sort(function (a, b) {
+                            if (a.display_name < b.display_name) {
+                                return -1;
+                            } else if (a.display_name > b.display_name) {
+                                return +1;
+                            } else if (a.email < b.email) {
+                                return -1;
+                            } else if (a.email > b.email) {
+                                return +1;
+                            } else {
+                                return 0;
+                            }
                         });
                         return tmp;
                     })

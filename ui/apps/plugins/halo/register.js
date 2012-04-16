@@ -22,7 +22,8 @@ define("plugins/halo/register", ["io.ox/core/extensions"], function (ext) {
         action: function (data, e) {
             // require detail view, dialogs & all halo extensions
             require(
-                ["plugins/halo/view-detail", "io.ox/core/tk/dialogs",
+                ["plugins/halo/view-detail",
+                 "io.ox/core/tk/dialogs",
                  "io.ox/core/api/user"
                 ].concat(ext.getPlugins({ name: 'halo' })), function (view, dialogs) {
                     new dialogs.SidePopup()

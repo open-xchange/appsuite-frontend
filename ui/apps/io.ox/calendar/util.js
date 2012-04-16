@@ -207,7 +207,7 @@ define("io.ox/calendar/util",
                          ];
 
             return function (data) {
-                return $('<span>').addClass('label label-info').text(current)
+                return $('<span>').addClass('label').text(current)
                     .popover({
                         title: that.getTimeInterval(data) + ' ' + current,
                         content: function () {

@@ -43,7 +43,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             return function (id, node, selection) {
                 if (selection.length > 1) {
                     // clear
-                    node.empty();
+                    node.idle().empty();
                     // inline links
                     var links = $('<div>');
                     (points[id] || (points[id] = new extLinks.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
@@ -63,14 +63,22 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
         }()),
 
         wireGridAndSelectionChange: function (grid, id, draw, node) {
+            var last = '';
             grid.selection.on('change', function (e, selection) {
-                var len = selection.length;
-                if (len === 1) {
-                    draw(selection[0]);
-                } else if (len > 1) {
-                    commons.multiSelection(id, node, this.unfold());
-                } else {
-                    node.empty();
+                var len = selection.length,
+                    // work with reduced string-based set
+                    flat = JSON.stringify(selection);
+                // has anything changed?
+                if (flat !== last) {
+                    if (len === 1) {
+                        draw(selection[0]);
+                    } else if (len > 1) {
+                        commons.multiSelection(id, node, this.unfold());
+                    } else {
+                        node.idle().empty();
+                    }
+                    // remember current selection
+                    last = flat;
                 }
             });
         },
@@ -93,15 +101,26 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
          * Wire grid & window
          */
         wireGridAndWindow: function (grid, win) {
+            var top = 0;
             // show
             win.on('show idle', function () {
-                grid.selection.keyboard(true);
-                grid.selection.retrigger();
-            });
-            // hide
-            win.on('hide busy', function () {
-                grid.selection.keyboard(false);
-            });
+                    grid.selection.keyboard(true);
+                    if (grid.selection.get().length) {
+                        // only retrigger if selection is not empty; hash gets broken if caches are empty
+                        // TODO: figure out why this was important
+                        grid.selection.retriggerUnlessEmpty();
+                    }
+                })
+                // hide
+                .on('hide busy', function () {
+                    grid.selection.keyboard(false);
+                })
+                .on('beforeshow', function () {
+                    if (top !== null) { grid.scrollTop(top); }
+                })
+                .on('beforehide', function () {
+                    top = grid.scrollTop();
+                });
             // publish grid
             if (win.app) {
                 win.app.getGrid = function () {
@@ -117,7 +136,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             // open (first show)
             app.getWindow().on('open', function () {
                 if (api.needsRefresh(app.folder.get())) {
-                    api.trigger('refresh!', app.folder.get());
+                    api.trigger('refresh^', app.folder.get());
                 }
             });
         },
@@ -125,17 +144,21 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
         /**
          * Wire grid and API refresh
          */
-        wireGridAndRefresh: function (grid, api) {
-            // bind all refresh
-            api.on('refresh.all', function () {
-                grid.refresh();
-            });
-            // bind list refresh
-            api.on('refresh.list', function () {
-                grid.repaint().done(function () {
-                    grid.selection.retrigger();
+        wireGridAndRefresh: function (grid, api, win) {
+            var refreshAll = function () {
+                    grid.refresh();
+                },
+                refreshList = function () {
+                    grid.repaint().done(function () {
+                        grid.selection.retrigger();
+                    });
+                };
+            win.on('show', function () {
+                    api.on('refresh.all', refreshAll).on('refresh.list', refreshList);
+                })
+                .on('hide', function () {
+                    api.off('refresh.all', refreshAll).off('refresh.list', refreshList);
                 });
-            });
         },
 
         /**
@@ -172,7 +195,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             app.getWindow().nodes.title.append($('<b>').addClass('caret'));
             // hash support
             app.getWindow().on('show', function () {
-                grid.selection.retrigger();
+                grid.selection.retriggerUnlessEmpty();
                 _.url.hash('folder', app.folder.get());
             });
             defaultFolderId = _.url.hash('folder') || defaultFolderId;
@@ -185,9 +208,16 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
         },
 
         /**
-         * Add visual folder tree
+         * Add folder view
          */
-        addFolderTree: function (app, width, type, rootFolderId) {
+        addFolderView: function (app, options) {
+
+            options = $.extend({
+                width: 330,
+                rootFolderId: '1',
+                type: undefined,
+                view: 'ApplicationFolderTree'
+            }, options);
 
             var container,
                 visible = false,
@@ -199,7 +229,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                 .css({
                     backgroundColor: 'white',
                     right: 'auto',
-                    width: width + 'px',
+                    width: options.width + 'px',
                     zIndex: 3
                 })
                 .hide()
@@ -207,7 +237,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
 
             fnChangeFolder = function (e, selection) {
                 var folder = selection[0];
-                if (folder.module === type) {
+                if (folder.module === options.type) {
                     app.folder.unset();
                     top = container.scrollTop();
                     container.fadeOut('fast', function () {
@@ -235,11 +265,11 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                 }
             };
 
-            initTree = function (trees) {
-                var tree = app.folderTree = new trees.ApplicationFolderTree(container, {
-                    type: type,
-                    rootFolderId: rootFolderId
-                });
+            initTree = function (views) {
+                var tree = app.folderView = new views[options.view](container, {
+                        type: options.type,
+                        rootFolderId: options.rootFolderId
+                    });
                 tree.selection.on('change', fnChangeFolder);
                 return tree.paint()
                     .done(function () {
@@ -253,13 +283,13 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             loadTree = function () {
                 container.busy();
                 fnToggle();
-                app.showFolderTree = fnShow;
+                app.showFolderView = fnShow;
                 app.getWindow().nodes.title.off('click', loadTree);
-                return require(['io.ox/core/tk/foldertree']).pipe(initTree);
+                return require(['io.ox/core/tk/folderviews']).pipe(initTree);
             };
 
-            app.showFolderTree = loadTree;
-            app.folderTree = null;
+            app.showFolderView = loadTree;
+            app.folderView = null;
 
             app.getWindow().nodes.title
                 .css('cursor', 'pointer')

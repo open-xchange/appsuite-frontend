@@ -66,6 +66,20 @@ define("io.ox/core/main",
         });
     }
 
+    function globalRefresh() {
+        // trigger global event
+        if (ox.online) {
+            try {
+                console.debug('triggering automatic refresh ...');
+                ox.trigger("refresh^");
+            } catch (e) {
+                console.error('globalRefresh()', e);
+            }
+        }
+    }
+
+    setInterval(globalRefresh, 60000 * 2); // 2 minute refresh interval!
+
     function launch() {
 
         // add small logo to top bar
@@ -100,38 +114,40 @@ define("io.ox/core/main",
             $("#io-ox-topbar").find('.launcher[data-app-id=' + $.escape(id) + ']').text(title);
         });
 
-        desktop.addLauncher("right", gt("Sign out"), function (e) {
+        // sign out
+        desktop.addLauncher("right", $('<i class="icon-off icon-white">'), function (e) {
             return logout();
-        });
+        }, gt('Sign out'));
 
-        desktop.addLauncher("right", gt("Help"));
+        // help
+        desktop.addLauncher("right", $('<i class="icon-question-sign icon-white">'), void(0), gt('Help'));
 
-        desktop.addLauncher("right", gt("Refresh"), function () {
-                // trigger global event
-                if (ox.online) {
-                    ox.trigger("refresh");
-                }
+        // refresh
+        desktop.addLauncher("right", $('<i class="icon-refresh icon-white">'), function () {
+                globalRefresh();
                 return $.Deferred().resolve();
-            })
+            }, gt('Refresh'))
             .attr("id", "io-ox-refresh-icon");
 
         // refresh animation
         initRefreshAnimation();
 
-        var addLauncher = function (app) {
+        var addLauncher = function (app, tooltip) {
             var launcher = desktop.addLauncher(app.side || 'left', app.title, function () {
                 return require([app.id + '/main'], function (m) {
                     var app = m.getApp();
                     launcher.attr('data-app-id', app.getId());
                     app.launch();
                 });
-            })
+            }, _.isString(tooltip) ? tooltip : void(0))
             .attr('data-app-name', app.id);
         };
 
-        addLauncher({ id: 'io.ox/settings', title: gt('Settings'), side: 'right' });
+        // settings
+        addLauncher({ id: 'io.ox/settings', title: $('<i class="icon-cog icon-white">'), side: 'right' }, gt('Settings'));
 
-        desktop.addLauncher("left", gt("Apps"), function () {
+        // apps
+        desktop.addLauncher("left", $('<i class="icon-th icon-white">'), function () {
             return require(["io.ox/launchpad/main"], function (m) {
                 m.show();
             });

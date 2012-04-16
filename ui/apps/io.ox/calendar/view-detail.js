@@ -25,6 +25,7 @@ define("io.ox/calendar/view-detail",
     "use strict";
 
     var fnClickPerson = function (e) {
+        e.preventDefault();
         ext.point("io.ox/core/person:action").each(function (ext) {
             _.call(ext.action, e.data, e);
         });
@@ -132,7 +133,7 @@ define("io.ox/calendar/view-detail",
             name = display_name = obj.display_name || String(obj.mail).toLowerCase();
         }
         node = $("<div>").addClass("participant")
-            .append($("<span>").addClass(personClass + ' ' + statusClass).text(name))
+            .append($('<a href="#">').addClass(personClass + ' ' + statusClass).text(name))
             .append($("<span>").addClass("status " + statusClass).html(" " + confirm))
             .on("click", {
                 display_name: display_name,

@@ -168,7 +168,7 @@ define("io.ox/contacts/view-detail",
                             gt("Distribution list") :
                             (data.company || data.position || data.profession) ?
                                     join(", ", data.company, data.position, data.profession) + "\u00A0" :
-                                    (data.email1 || data.email2 || data.email3 || '') + "\u00A0"
+                                    util.getMail(data) + "\u00A0"
                     )
                 )
             );
@@ -315,7 +315,7 @@ define("io.ox/contacts/view-detail",
         draw: function (data) {
             var r = 0,
                 date = new Date(data.birthday);
-            if (!isNaN(date.getDate())) {
+            if (data.birthday !== null && !isNaN(date.getDate())) {
                 r += addField(gt("Birthday"), date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear(), this);
             }
         }
@@ -332,8 +332,9 @@ define("io.ox/contacts/view-detail",
                 }
                 addField("\u00A0", true, this, function (td) {
                     td.append(
-                        $("<a>").addClass("action-link")
-                        .text("Show QR-code")
+                        $('<i class="icon-qrcode">'), $.txt(' '),
+                        $("<a>", { href: '#' })
+                        .text("Show QR code")
                         .on("click", function (e) {
                             e.preventDefault();
                             td.empty().busy();

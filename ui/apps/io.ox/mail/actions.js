@@ -45,7 +45,7 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/delete', {
         id: 'delete',
-        requires: 'some delete',
+        requires: 'toplevel some delete',
         multiple: function (list) {
             api.remove(list);
         }
@@ -56,7 +56,7 @@ define('io.ox/mail/actions',
         requires: function (e) {
             // other recipients that me?
             var multiple = (e.context.to || []).length && (e.context.cc || []).length;
-            return multiple && e.collection.has('one') && e.context.folder_id !== defaultDraftFolder;
+            return multiple && e.collection.has('toplevel', 'one') && e.context.folder_id !== defaultDraftFolder;
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -70,7 +70,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/reply', {
         id: 'reply',
         requires: function (e) {
-            return e.collection.has('one') && e.context.folder_id !== defaultDraftFolder;
+            return e.collection.has('toplevel', 'one') && e.context.folder_id !== defaultDraftFolder;
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -84,7 +84,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/forward', {
         id: 'forward',
         requires: function (e) {
-            return e.collection.has('some');
+            return e.collection.has('toplevel', 'some');
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -98,7 +98,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/edit', {
         id: 'edit',
         requires: function (e) {
-            return e.collection.has('one') && e.context.folder_id === defaultDraftFolder;
+            return e.collection.has('toplevel', 'one') && e.context.folder_id === defaultDraftFolder;
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -115,6 +115,7 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/source', {
         id: 'source',
+        requires: 'toplevel one',
         action: function (data) {
             var getSource = api.getSource(data), textarea;
             require(["io.ox/core/tk/dialogs"], function (dialogs) {
@@ -147,17 +148,17 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/move', {
         id: 'move',
-        requires: 'some',
+        requires: 'toplevel some',
         multiple: function (mail) {
             var self = this;
-            require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, trees) {
+            require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
                     .header($('<h3>').text('Move'))
                     .addPrimaryButton("ok", gt("OK"))
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css('maxHeight', '250px');
                 var item = _(mail).first(),
-                    tree = new trees.FolderTree(dialog.getBody(), { type: 'mail' });
+                    tree = new views.FolderTree(dialog.getBody(), { type: 'mail' });
                 tree.paint();
                 dialog.show(function () {
                     tree.selection.set(item.folder_id || item.folder);
@@ -179,16 +180,16 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/copy', {
         id: 'copy',
-        requires: 'some',
+        requires: 'toplevel some',
         multiple: function (mail) {
-            require(["io.ox/core/tk/dialogs", "io.ox/core/tk/foldertree"], function (dialogs, trees) {
+            require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
                     .header($('<h3>').text('Copy'))
                     .addPrimaryButton("ok", gt("OK"))
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css('maxHeight', '250px');
                 var item = _(mail).first(),
-                    tree = new trees.FolderTree(dialog.getBody(), { type: 'mail' });
+                    tree = new views.FolderTree(dialog.getBody(), { type: 'mail' });
                 tree.paint();
                 dialog.show(function () {
                     tree.selection.set({ id: item.folder_id || item.folder });
@@ -212,15 +213,18 @@ define('io.ox/mail/actions',
         id: 'markunread',
         requires: function (e) {
             return api.getList(e.context).pipe(function (list) {
-                return _(list).reduce(function (memo, data) {
-                    return memo && (data && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN);
-                }, true);
+                var bool = e.collection.has('toplevel') &&
+                    _(list).reduce(function (memo, data) {
+                        return memo && (data && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN);
+                    }, true);
+                return bool;
             });
         },
         multiple: function (list) {
-            api.getList(list).done(function (list) {
-                api.update(list, { flags: api.FLAGS.SEEN, value: false });
-            });
+            api.markUnread(list);
+            // TODO: change once full context is available
+            var app = ox.ui.App.get('io.ox/mail')[0];
+            if (app) { app.getGrid().selection.retrigger(true); }
         }
     });
 
@@ -228,15 +232,18 @@ define('io.ox/mail/actions',
         id: 'markread',
         requires: function (e) {
             return api.getList(e.context).pipe(function (list) {
-                return _(list).reduce(function (memo, data) {
-                    return memo || (data && (data.flags & api.FLAGS.SEEN) === 0);
-                }, false);
+                var bool = e.collection.has('toplevel') &&
+                    _(list).reduce(function (memo, data) {
+                        return memo || (data && (data.flags & api.FLAGS.SEEN) === 0);
+                    }, false);
+                return bool;
             });
         },
         multiple: function (list) {
-            api.getList(list).done(function (list) {
-                api.update(list, { flags: api.FLAGS.SEEN, value: true });
-            });
+            api.markRead(list);
+            // TODO: change once full context is available
+            var app = ox.ui.App.get('io.ox/mail')[0];
+            if (app) { app.getGrid().selection.retrigger(true); }
         }
     });
 
@@ -244,33 +251,36 @@ define('io.ox/mail/actions',
         id: 'preview',
         requires: function (e) {
             return require(['io.ox/preview/main'])
-                .pipe(function (Preview) {
+                .pipe(function (p) {
                     var list = _.getArray(e.context);
                     // is at least one attachment supported?
                     return e.collection.has('some') && _(list).reduce(function (memo, obj) {
-                        return memo && new Preview({ filename: obj.filename }).supportsPreview();
-                    }, true);
+                        return memo || new p.Preview({ filename: obj.filename }).supportsPreview();
+                    }, false);
                 });
         },
         multiple: function (list) {
             // open side popup
             var e = $.Event();
             e.target = this;
-            require(['io.ox/core/tk/dialogs', 'io.ox/preview/main'], function (dialogs, Preview) {
+            require(['io.ox/core/tk/dialogs', 'io.ox/preview/main'], function (dialogs, p) {
                 new dialogs.SidePopup().show(e, function (popup) {
                     _(list).each(function (data, i) {
-                        popup.append(
-                            $('<h4>').addClass('mail-attachment-preview').text(data.filename)
-                        );
-                        new Preview({
+                        var pre = new p.Preview({
+                            data: data,
                             filename: data.filename,
                             dataURL: api.getUrl(data, 'view')
                         }, {
                             width: popup.parent().width(),
                             height: 'auto'
-                        })
-                        .appendTo(popup);
-                        popup.append($('<div>').text('\u00A0'));
+                        });
+                        if (pre.supportsPreview()) {
+                            popup.append(
+                                $('<h4>').addClass('mail-attachment-preview').text(data.filename)
+                            );
+                            pre.appendTo(popup);
+                            popup.append($('<div>').text('\u00A0'));
+                        }
                     });
                 });
             });
@@ -396,9 +406,16 @@ define('io.ox/mail/actions',
         return api.update(e.data.data, { color_label: e.data.color, value: true });
     }
 
-    ext.point('io.ox/mail/links/inline').extend({
+    new Action('io.ox/mail/actions/label', {
+        id: 'label',
+        requires: 'toplevel some',
+        multiple: $.noop
+    });
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 600,
         id: 'label',
+        ref: 'io.ox/mail/actions/label',
         draw: function (data) {
             this.append(
                 $('<span class="dropdown" class="io-ox-inline-links">')
@@ -420,7 +437,7 @@ define('io.ox/mail/actions',
                 )
             );
         }
-    });
+    }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 700,

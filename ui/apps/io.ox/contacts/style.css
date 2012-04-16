@@ -129,7 +129,7 @@
 
 .contact-detail .picture {
     width: 100px;
-    height: 80px;
+    height: 100px;
     display: inline-block;
     float: right;
     background-position: right top;
@@ -180,7 +180,7 @@
 
 .create-contact .picture {
     width: 100px;
-    height: 80px;
+    height: 100px;
     display: inline-block;
     float: left;
     background-position: right top;
@@ -257,7 +257,7 @@ input#image1 {
 }
 
 .create-contact .section.formheader {
-	height: 100px;
+	height: 120px;
 }
 
  .create-contact .section.formheader .saveButton {

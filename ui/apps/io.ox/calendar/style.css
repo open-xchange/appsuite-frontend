@@ -14,7 +14,7 @@
 /* Grid */
 
 .vgrid-cell.calendar {
-    height: 3.5em;
+    height: 4em;
     padding: 0.75em 13px 0.75em 13px;
 }
 
@@ -54,7 +54,7 @@
 .borderradius .vgrid-cell.calendar .shown_as {
     top: 5px;
     bottom: 5px;
-    left: 3px;
+    left: 4px;
     border-right: 0px none;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
@@ -112,9 +112,7 @@
     max-width: 550px;
     white-space: pre-wrap;
     margin: 2em 0 1em 0;
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    user-select: text;
+    -webkit-user-select: text; -moz-user-select: text; user-select: text;
     cursor: text;
 }
 
@@ -177,10 +175,12 @@
 }
 
 .calendar-detail .participant .status { }
+.calendar-detail .participant .status.accepted i { opacity: 0.25; }
 .calendar-detail .participant .status.accepted { color: #8EB360; } /* green */
 .calendar-detail .participant .status.declined { color: #913F3F; } /* red */
 .calendar-detail .participant .status.tentative { color: #c80; } /* orange */
 
+.calendar-detail .participant .person.accepted { color: #799952; } /* green */
 .calendar-detail .participant .person.declined { text-decoration: line-through; color: #913F3F; }
 
 .calendar-detail .participant .icon-remove,

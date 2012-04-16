@@ -34,7 +34,7 @@ define("io.ox/core/extPatterns/links",
                 actions.invoke(ref, this, context, e);
             };
 
-        this.draw = function (context) {
+        this.draw = this.draw || function (context) {
             this.append(
                 $("<a>", { href: "#", tabindex: "1", "data-action": self.id })
                 .addClass('io-ox-action-link' + (options.attention === true ? ' attention': ''))
@@ -106,6 +106,15 @@ define("io.ox/core/extPatterns/links",
         };
     };
 
+    var inlineToggle = function (e) {
+        var node = $(this), A = 'data-toggle',
+            list = node.parent().children().slice(2, -2),
+            expand = node.attr(A) === 'more';
+        list[expand ? 'show' : 'hide']();
+        node.text(expand ? 'Less' : 'More')
+            .attr(A, expand ? 'less' : 'more');
+    };
+
     var InlineLinks = function (options) {
         var self = _.extend(this, options);
         this.draw = function (context) {
@@ -113,6 +122,17 @@ define("io.ox/core/extPatterns/links",
             var args = $.makeArray(arguments),
                 node = $("<div>").addClass("io-ox-inline-links").appendTo(this);
             drawLinks(self, new Collection(context), node, context, args);
+            // add toggle
+            if (node.children().length > 4) {
+                node.append(
+                    $('<span>', { 'data-toggle': 'more' })
+                    .addClass('label io-ox-action-link')
+                    .css({ cursor: 'pointer', marginLeft: '1.5em' })
+                    .click(inlineToggle)
+                    .text('More')
+                );
+                node.children().slice(2, -2).hide();
+            }
         };
     };
 
@@ -124,6 +144,7 @@ define("io.ox/core/extPatterns/links",
                 .appendTo(this),
             $toggle = $("<a>", { href: '#' })
                 .attr('data-toggle', 'dropdown')
+                .data('context', context)
                 .text(options.label + " ").append($("<b>").addClass("caret")).appendTo($parent);
 
         $toggle.addClass(options.classes);
@@ -134,12 +155,14 @@ define("io.ox/core/extPatterns/links",
         drawLinks(options, new Collection(context), node, context, args, true);
 
         $toggle.dropdown();
+
+        return $parent;
     };
 
     var DropdownLinks = function (options) {
         var o = _.extend(this, options);
         this.draw = function () {
-            drawDropDown.apply(this, [o].concat($.makeArray(arguments)));
+            return drawDropDown.apply(this, [o].concat($.makeArray(arguments)));
         };
     };
 
