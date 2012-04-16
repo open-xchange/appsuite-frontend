@@ -124,14 +124,12 @@ define.async('plugins/halo/api',
                 action: 'services'
             }
         })
-        .pipe(function (response) {
-            // TODO: activeMap is just local - remove?
-            var activeMap = {};
-            _(response).each(function (provider) {
-                activeMap[provider] = true;
-            });
+        .pipe(function (list) {
+            // TODO: remove; temp.fix for sequence
+            list = _(list).without('com.openexchange.halo.contacts');
+            list.unshift('com.openexchange.halo.contacts');
             var providerConfig = config.get('ui.halo.providers');
-            activeProviders = haloConfigUtil.interpret(providerConfig, response);
+            activeProviders = haloConfigUtil.interpret(providerConfig, list);
             // publish api!
             return api;
         });

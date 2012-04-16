@@ -22,36 +22,27 @@ define("plugins/halo/view-detail",
 
         draw: function (data) {
 
-            var $container = $("<div>").addClass("io-ox-halo");
+            var container = $("<div>").addClass("io-ox-halo");
 
             if (api) {
-                var investigations = api.halo.investigate(data),
-                    drawingFinished = [];
-                _(investigations).each(function (promise, providerName) {
 
-                    var $node = $("<div/>")
-                            .css({"min-width": "100px"})
-                            .addClass("ray")
-                            .busy()
-                            .appendTo($container),
-                        drawn = new $.Deferred();
+                _(api.halo.investigate(data)).each(function (promise, providerName) {
 
-                    drawingFinished.push(drawn);
+                    var node = $("<div>")
+                        .css('minHeight', '100px')
+                        .addClass("ray").busy().appendTo(container);
+
                     promise.done(function (response) {
-                        $node.idle();
-                        var deferred = api.viewer.draw($node, providerName, response);
-                        if (deferred) {
-                            deferred.done(drawn.resolve);
-                        } else {
-                            drawn.resolve();
-                        }
-                    }).fail(function (response) {
-                        $node.idle();
+                        api.viewer.draw(node, providerName, response);
+                    })
+                    .always(function () {
+                        node.idle().css('minHeight', '');
+                        node = null;
                     });
                 });
             }
 
-            return $container;
+            return container;
         }
     };
 });
