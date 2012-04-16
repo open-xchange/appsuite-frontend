@@ -161,18 +161,14 @@ define('io.ox/contacts/distrib/create-dist-view',
         o.node.append(frame);
     }
 
-    function calcMailField(contact, selectedMail) { // TODO: needs a better concept
-        var field;
-
-        if (selectedMail === contact.email1) {
-            field = 1;
-        }
-        if (selectedMail === contact.email2) {
-            field = 2;
-        }
-        if (selectedMail === contact.email3) {
-            field = 3;
-        }
+    function calcMailField(contact, selectedMail) {
+        var field, mail;
+        mail = [contact.email1, contact.email2, contact.email3];
+        _.each(mail, function (val, key) {
+            if (selectedMail === val) {
+                field = key + 1;
+            }
+        });
         return field;
     }
 
