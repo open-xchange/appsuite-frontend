@@ -149,25 +149,6 @@ define("io.ox/preview/main",
         }));
     }
 
-    // TODO: remove? duplicate during merge? (see below)
-//    Renderer.point.extend(new Engine({
-//        id: "text",
-//        index: 10,
-//        endings: [ "txt", "js" ],
-//        draw: function (file) {
-//            var $node = this;
-//            $.ajax({ url: file.dataURL, dataType: "html" }).done(function (txt) {
-//                $node.css({
-//                    border: "1px dotted silver",
-//                    padding: "10px",
-//                    whiteSpace: "pre-wrap"
-//                }).text(txt);
-//            });
-//        },
-//        omitClick: true
-//    }));
-
-
     Renderer.point.extend(new Engine({
         id: "eml",
         endings: ["eml"],
