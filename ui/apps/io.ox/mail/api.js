@@ -51,14 +51,14 @@ define("io.ox/mail/api",
             get: {
                 action: "get",
                 unseen: "true",
-                view: "noimg"/*,
-                format: "preview_filtered"*/
+                view: "noimg",
+                embedded: "true"
             },
             getUnmodified: {
                 action: "get",
                 unseen: "true",
-                view: "html"/*,
-                format: "preview_filtered"*/
+                view: "html",
+                embedded: "true"
             },
             search: {
                 action: "search",
