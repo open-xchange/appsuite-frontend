@@ -175,31 +175,43 @@ define('io.ox/core/api/folder',
                             }
                         })
                         .pipe(function (data, timestamp) {
-                            // make objects
-                            var id, i, $i, folders,
+                            // clean up
+                            var id, folders, tmp = {},
                                 defaultFolder = String(config.get('folder.' + opt.type, 0)),
+
+                                makeObject = function (raw) {
+                                    return http.makeObject(raw, 'folders');
+                                },
+                                canRead = function (obj) {
+                                    // read permission?
+                                    return api.can('read', obj);
+                                },
+                                addToCache = function (obj) {
+                                    // add to folder cache
+                                    folderCache.add(obj, timestamp);
+                                    return obj;
+                                },
                                 sorter = function (a, b) {
                                     return a.id === defaultFolder ? -1 :
                                         (a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1);
                                 };
                             for (id in data) {
-                                for (i = 0, folders = data[id], $i = folders.length; i < $i; i++) {
-                                    // replace by object
-                                    folders[i] = http.makeObject(folders[i], 'folders');
-                                    // add to folder cache
-                                    folderCache.add(folders[i], timestamp);
-                                }
-                                if ($i === 0) {
-                                    delete data[id];
-                                } else {
+                                folders = _.chain(data[id])
+                                    .map(makeObject)
+                                    .filter(canRead)
+                                    .map(addToCache) // since each doesn't chain
+                                    .value();
+                                // empty?
+                                if (folders.length > 0) {
                                     // sort by title, default folder always first
                                     // (skip shared folder due to special order)
                                     if (id !== 'shared') {
                                         folders.sort(sorter);
                                     }
+                                    tmp[id] = folders;
                                 }
                             }
-                            return data;
+                            return tmp;
                         })
                         .done(function (data) {
                             // add to simple cache
@@ -357,6 +369,77 @@ define('io.ox/core/api/folder',
                             (data.module === 'infostore' && data.created_by === config.get('identifier'));
                     }
                 }
+            }
+        },
+
+        /**
+         * Can?
+         */
+        can: function (action, data) {
+            // check multiple folder?
+            if (_.isArray(data)) {
+                // for multiple folders, all folders must satisfy the condition
+                return _(data).reduce(function (memo, folder) {
+                    return memo && api.can(action, folder);
+                }, true);
+            }
+            // vars
+            var result = true,
+                rights = data.own_rights,
+                isSystem = data.standard_folder || this.is('system', data),
+                isAdmin = perm(rights, 28) === 1,
+                isMail = data.module === 'mail';
+            // switch
+            switch (action) {
+            case 'read':
+                // can read?
+                // 256 = read own, 512 = read all, 8192 = admin
+                //return (rights & 256 || rights & 512 || rights & 8192) > 0;
+                return perm(rights, 7) > 0;
+            case 'write':
+                // can write?
+                return perm(rights, 0) >= 2;
+            case 'rename':
+                // can rename?
+                if (!isAdmin || isSystem) {
+                    // missing admin privileges or system folder
+                    result = false;
+                } else if (perm(rights, 30) === 1) {
+                    // special new rename bit
+                    result = true;
+                } else {
+                    if (!isMail) {
+                        result = true;
+                    } else {
+                        // default folder cannot be renamed
+                        result = !this.is('defaultfolder', data);
+                    }
+                }
+                return result;
+            case 'create':
+                return (isAdmin || this.derive('permissions', data).bit >= 4);
+            case 'delete':
+                // must be admin; system and default folder cannot be deleted
+                return isAdmin && !isSystem && !this.is('defaultfolder', data);
+            case 'import':
+                // import data
+                return (rights & 127) >= 2 && this.is('calendar|contacts|tasks', data);
+            case 'export':
+                // export data (not allowed for shared folders)
+                return !this.is('shared', data) && this.is('contacts|calendar', data);
+            case 'empty':
+                // empty folder
+                return (rights >> 21 & 127) && this.is('mail', data);
+            case 'changepermissions':
+                return isAdmin;
+            case 'viewproperties':
+                // view properties
+                return !isMail && !this.is('account', data) && (data.capabilities & 1);
+            case 'subscribe':
+                // can subscribe
+                return isMail && Boolean(data.capabilities & Math.pow(2, 4));
+            default:
+                return false;
             }
         },
 
