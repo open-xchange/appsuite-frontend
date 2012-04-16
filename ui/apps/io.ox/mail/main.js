@@ -37,6 +37,20 @@ define("io.ox/mail/main",
             });
         },
 
+        hToolbarOptions = function (e) {
+            e.preventDefault();
+            var option = $(this).attr('data-option'),
+                grid = e.data.grid;
+            if (/^(603|607|610|102)$/.test(option)) {
+                grid.prop('sort', option);
+            } else if (/^(asc|desc)$/.test(option)) {
+                grid.prop('order', option);
+            } else if (option === 'unread') {
+                grid.prop('unread', !grid.prop('unread'));
+            }
+            grid.refresh();
+        },
+
         // application object
         app = ox.ui.createApp({ name: 'io.ox/mail' }),
 
@@ -143,7 +157,7 @@ define("io.ox/mail/main",
                 .append(
                     $(_.printf(option, 610, gt('Date'))),
                     $(_.printf(option, 603, gt('From'))),
-                    $(_.printf(option, 102, gt('Mark'))),
+                    $(_.printf(option, 102, gt('Label'))),
                     $(_.printf(option, 607, gt('Subject'))),
                     $('<li class="divider">'),
                     $(_.printf(option, 'asc', gt('Ascending'))),
@@ -151,18 +165,7 @@ define("io.ox/mail/main",
                     $('<li class="divider">'),
                     $(_.printf(option, 'unread', gt('Unread only')))
                 )
-                .on('click', 'a', function (e) {
-                    e.preventDefault();
-                    var option = $(this).attr('data-option');
-                    if (/^(603|607|610|102)$/.test(option)) {
-                        grid.prop('sort', option);
-                    } else if (/^(asc|desc)$/.test(option)) {
-                        grid.prop('order', option);
-                    } else if (option === 'unread') {
-                        grid.prop('unread', !grid.prop('unread'));
-                    }
-                    grid.refresh();
-                })
+                .on('click', 'a', { grid: grid }, hToolbarOptions)
             )
         );
 

@@ -216,25 +216,28 @@ define("io.ox/core/api/factory",
                 // find affected mails in simple cache
                 var hash = {}, folders = {}, getKey = cache.defaultKeyGenerator;
                 _(ids).each(function (o) {
-                    hash[getKey(o)] = true;
-                    folders[o.folder_id] = true;
+                    hash[getKey(o)] = folders[o.folder_id] = true;
                 });
                 // loop over each folder and look for items to remove
                 var defs = [];
                 _(api.cacheRegistry.all).each(function (cacheName) {
                     var cache = caches[cacheName];
                     defs.concat(_(folders).map(function (value, folder_id) {
-                        return cache.get(folder_id).pipe(function (items) {
-                            if (items) {
-                                return cache.add(
-                                    folder_id,
-                                    _(items).select(function (o) {
-                                        return hash[getKey(o)] !== true;
-                                    })
-                                );
-                            } else {
-                                return $.when();
-                            }
+                        // grep keys
+                        return cache.grepKeys(folder_id + '\t').pipe(function (key) {
+                            // now get cache entry
+                            return cache.get(key).pipe(function (items) {
+                                if (items) {
+                                    return cache.add(
+                                        key,
+                                        _(items).filter(function (o) {
+                                            return hash[getKey(o)] !== true;
+                                        })
+                                    );
+                                } else {
+                                    return $.when();
+                                }
+                            });
                         });
                     }));
                 });
