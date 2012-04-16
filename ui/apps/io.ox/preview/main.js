@@ -59,21 +59,22 @@ define("io.ox/preview/main",
         _.extend(this, options);
         if (!options.omitDragoutAndClick) {
             this.draw = function (file) {
+
                 var $node;
+
                 if (!options.omitClick) {
                     $node = clickableLink(file);
+                    if (supportsDragOut) {
+                        $node.attr('title', gt('Click to open. Drag to your desktop to download.'));
+                    } else {
+                        $node.attr("title", gt("Click to open."));
+                    }
                 } else {
                     $node = $("<div>");
                 }
 
                 options.draw.apply($node, arguments);
                 dragOutHandler($node, file);
-
-                if (supportsDragOut) {
-                    $node.attr('title', gt('Click to open. Drag to your desktop to download.'));
-                } else {
-                    $node.attr("title", gt("Click to open."));
-                }
 
                 this.append($node);
             };
@@ -148,18 +149,23 @@ define("io.ox/preview/main",
         }));
     }
 
-    Renderer.point.extend(new Engine({
-        id: "text",
-        index: 10,
-        endings: [ "txt", "js" ],
-        draw: function (file) {
-            var $node = this;
-            $.ajax({ url: file.dataURL, dataType: "html" }).done(function (txt) {
-                $node.css({ border: "1px dotted silver", padding: "10px", whiteSpace: "pre-wrap" }).text(txt);
-            });
-        },
-        omitClick: true
-    }));
+    // TODO: remove? duplicate during merge? (see below)
+//    Renderer.point.extend(new Engine({
+//        id: "text",
+//        index: 10,
+//        endings: [ "txt", "js" ],
+//        draw: function (file) {
+//            var $node = this;
+//            $.ajax({ url: file.dataURL, dataType: "html" }).done(function (txt) {
+//                $node.css({
+//                    border: "1px dotted silver",
+//                    padding: "10px",
+//                    whiteSpace: "pre-wrap"
+//                }).text(txt);
+//            });
+//        },
+//        omitClick: true
+//    }));
 
 
     Renderer.point.extend(new Engine({
@@ -177,22 +183,26 @@ define("io.ox/preview/main",
         id: "text",
         endings: ["txt", "asc", "js", "md"],
         draw: function (file) {
-            if (this.canRender(file)) {
-                $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
-                    // plain text preview
-                    this.append(
-                        $("<div>").css({
-                            width: '100%',
-                            padding: '13px',
-                            backgroundColor: '#f5f5f5',
-                            whiteSpace: 'pre-wrap',
-                            boxSizing: 'border-box'
-                        })
-                        .text(text)
-                    );
-                });
-            }
-        }
+            var node = this;
+            $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
+                // plain text preview
+                node.css({
+                    fontFamily: 'monospace',
+                    fontSize: '13px',
+                    width: '100%',
+                    padding: '13px',
+                    border: "1px dotted silver",
+                    boxSizing: 'border-box',
+                    whiteSpace: 'pre-wrap',
+                    MozUserSelect: 'text',
+                    webkitUserSelect: 'text',
+                    userSelect: 'text',
+                    cursor: 'auto'
+                })
+                .text(text);
+            });
+        },
+        omitClick: true
     }));
 
     var Preview = function (file, options) {
