@@ -150,13 +150,11 @@ define.async('io.ox/core/api/apps',
             });
     }
 
-    return appCache.contains('default').pipe(function (check) {
-        if (check) {
-            return appCache.get('default').pipe(function (data) {
-                appData = data;
-                fetch();
-                return api;
-            });
+    return appCache.get('default').pipe(function (data) {
+        if (data !== null) {
+            appData = data;
+            fetch();
+            return api;
         } else {
             return fetch().pipe(function () {
                 return api;

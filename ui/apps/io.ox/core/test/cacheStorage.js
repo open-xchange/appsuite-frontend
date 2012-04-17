@@ -48,11 +48,9 @@ define("io.ox/core/test/cacheStorage",
 
                     testStorage.setId('TEST');
 
-
                     j.it('check storagelayer', function () {
                         j.expect(testStorage.isUsable()).toBeTruthy();
                     });
-
 
                     j.it('clear the cache', function () {
                         var loaded = new Done();
@@ -88,7 +86,7 @@ define("io.ox/core/test/cacheStorage",
 
                         testStorage.get('notexistingkey').done(function (data) {
                             loaded.yep();
-                            j.expect(data).not.toBeDefined();
+                            j.expect(data).toBeNull();
                         }).fail(function (e) {
                             loaded.yep();
                             j.expect(e).not.toBeDefined();
@@ -142,9 +140,9 @@ define("io.ox/core/test/cacheStorage",
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not check key', TIMEOUT);
 
-                        testStorage.contains(testKey).done(function (check) {
+                        testStorage.get(testKey).done(function (check) {
                             loaded.yep();
-                            j.expect(check).toBeTruthy();
+                            j.expect(check).not.toBeNull();
                         }).fail(function (e) {
                             loaded.yep();
                             j.expect(e).not.toBeDefined();
@@ -170,9 +168,9 @@ define("io.ox/core/test/cacheStorage",
                         var loaded = new Done();
                         j.waitsFor(loaded, 'Could not check key', TIMEOUT);
 
-                        testStorage.contains(testKey).done(function (check) {
+                        testStorage.get(testKey).done(function (check) {
                             loaded.yep();
-                            j.expect(check).toBeFalsy();
+                            j.expect(check).toBeNull();
                         }).fail(function (e) {
                             loaded.yep();
                             j.expect(e).not.toBeDefined();
@@ -223,8 +221,6 @@ define("io.ox/core/test/cacheStorage",
 
                     for (var i = 0 ; i <= max ; i++) {
                         localstorage.set('testkey' + i, testData);
-
-                        console.log('add ', i);
 
                         if (i === max) {
                             loaded.yep();

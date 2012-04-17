@@ -72,7 +72,7 @@ define("io.ox/core/api/factory",
                 var getter = function () {
                     return http.GET({
                         module: o.module,
-                        params: $.extend({}, opt, { order: 'desc' })
+                        params: $.extend({}, opt, { order: 'asc' }) // asc is default due to address book, calendar etc.
                     })
                     .pipe(function (data) {
                         // tmp. fix until backend delivers reduced data
@@ -95,25 +95,11 @@ define("io.ox/core/api/factory",
                     });
                 };
 
-                return (function () {
-                    if (useCache) {
-                        return cache.contains(cid)
-                            .pipe(function (check) {
-                                if (check) {
-                                    return cache.get(cid);
-                                } else {
-                                    return getter();
-                                }
-                            });
-                    } else {
-                        return getter();
-                    }
-                }())
-                .pipe(function (data) {
-                    return opt.order === 'desc' ? data : data.reverse();
-                })
-                .done(o.done.all || $.noop);
-
+                return (useCache ? cache.get(cid, getter) : getter())
+                    .pipe(function (data) {
+                        return opt.order === 'asc' ? data : data.reverse();
+                    })
+                    .done(o.done.all || $.noop);
             },
 
             getList: function (ids, useCache) {
@@ -143,21 +129,9 @@ define("io.ox/core/api/factory",
                     return $.Deferred().resolve([])
                         .done(o.done.list || $.noop);
                 } else {
-                    if (useCache) {
-                        // cache miss?
-                        return caches.list.contains(ids)
-                            .pipe(function (check) {
-                                if (check) {
-                                    return caches.list.get(ids);
-                                } else {
-                                    return getter();
-                                }
-                            })
-                            .done(o.done.list || $.noop);
-                    } else {
-                        return getter()
-                            .done(o.done.list || $.noop);
-                    }
+                    // cache miss?
+                    return (useCache ? caches.list.get(ids, getter) : getter())
+                        .done(o.done.list || $.noop);
                 }
             },
 
@@ -191,20 +165,8 @@ define("io.ox/core/api/factory",
                     });
                 };
 
-                if (useCache) {
-                    return caches.get.contains(opt)
-                        .pipe(function (check) {
-                            if (check) {
-                                return caches.get.get(opt);
-                            } else {
-                                return getter();
-                            }
-                        })
-                        .done(o.done.get || $.noop);
-                } else {
-                    return getter()
-                        .done(o.done.get || $.noop);
-                }
+                return (useCache ? caches.get.get(opt, getter) : getter())
+                    .done(o.done.get || $.noop);
             },
 
             updateCachesAfterRemove: function (ids) {
@@ -279,7 +241,9 @@ define("io.ox/core/api/factory",
 
             needsRefresh: function (folder) {
                 // has entries in 'all' cache for specific folder
-                return caches.all.contains(folder);
+                return caches.all.get(folder).pipe(function (data) {
+                    return data !== null;
+                });
             },
 
             caches: caches

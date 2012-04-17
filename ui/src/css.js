@@ -386,20 +386,17 @@ define("settings",['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model']
                 if (!settingsCache) {
                     settingsCache = new cache.SimpleCache('settings', true);
                 }
-                if (settingsCache.contains('settingsDefault')) {
-                    return settingsCache.get('settingsDefault').pipe(function (mycached) {
-                        if (mycached !== undefined) {
-                            settings = mycached;
+
+                return settingsCache.get('settingsDefault')
+                    .pipe(function (data) {
+                        if (data !== null) {
+                            settings = data;
                             load();
                             return settings;
                         } else {
                             return load();
                         }
                     });
-                } else {
-                    // load configuration
-                    return load();
-                }
             },
             save: function () {
                 settingsCache.add('settingsDefault', settings);

@@ -52,17 +52,8 @@ define('io.ox/core/api/folder',
                     console.error('folder.get', id, error);
                 });
             };
-            if (opt.cache === false) {
-                return getter();
-            } else {
-                return cache.contains(id).pipe(function (check) {
-                    if (check) {
-                        return cache.get(id);
-                    } else {
-                        return getter();
-                    }
-                });
-            }
+
+            return opt.cache === false ? getter() : cache.get(id, getter);
         };
 
     var api = {
@@ -143,18 +134,7 @@ define('io.ox/core/api/folder',
                 });
             };
 
-            if (opt.cache === false) {
-                return getter();
-            } else {
-                return cache.contains(opt.folder)
-                .pipe(function (check) {
-                    if (check) {
-                        return cache.get(opt.folder);
-                    } else {
-                        return getter();
-                    }
-                });
-            }
+            return opt.cache === false ? getter() : cache.get(opt.folder, getter);
         },
 
         getVisible: function (options) {
@@ -220,17 +200,7 @@ define('io.ox/core/api/folder',
                         });
                 };
 
-            if (opt.cache === false) {
-                return getter();
-            } else {
-                return visibleCache.contains(opt.type).pipe(function (check) {
-                    if (check) {
-                        return visibleCache.get(opt.type);
-                    } else {
-                        return getter();
-                    }
-                });
-            }
+            return opt.cache === false ? getter() : visibleCache.get(opt.type, getter);
         },
 
         create: function (options) {
@@ -446,7 +416,9 @@ define('io.ox/core/api/folder',
         subFolderCache: subFolderCache,
 
         needsRefresh: function (folder) {
-            return subFolderCache.contains(folder);
+            return subFolderCache.get(folder).pipe(function (data) {
+                return data !== null;
+            });
         },
 
         getTextNode: function (id) {

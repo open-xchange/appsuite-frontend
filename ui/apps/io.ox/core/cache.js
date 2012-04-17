@@ -82,10 +82,6 @@ define('io.ox/core/cache', function () {
                 return getStorageLayer().set(key, data);
             };
 
-            this.contains = function (key) {
-                return getStorageLayer().contains(key);
-            };
-
             this.remove = function (key) {
                 return getStorageLayer().remove(key);
             };
@@ -122,9 +118,8 @@ define('io.ox/core/cache', function () {
             timestamp = timestamp !== undefined ? timestamp : _.now();
             // add/update?
             return index.get(key).pipe(function (getdata) {
-                var type = (_(getdata).isUndefined()) ? 'add modify *' : 'update modify *';
-
-                if (!_(getdata).isUndefined()) {
+                var type = getdata === null ? 'add modify *' : 'update modify *';
+                if (getdata !== null) {
                     if (timestamp >= getdata.timestamp) {
                         return index.set(key, {
                             data: data,
@@ -147,20 +142,16 @@ define('io.ox/core/cache', function () {
         };
 
         // get from cache
-        this.get = function (key) {
-            return index.get(key).pipe(function (data) {
-                return data !== undefined ? data.data : undefined;
+        this.get = function (key, getter) {
+            return index.get(key).pipe(function (o) {
+                return o !== null ? o.data : (getter ? getter() : null);
             });
         };
 
         // get timestamp of cached element
         this.time = function (key) {
-            return index.get(key).pipe(function (data) {
-                if (!_(data).isUndefined()) {
-                    return data.timestamp;
-                } else {
-                    return 0;
-                }
+            return index.get(key).pipe(function (o) {
+                return o !== null ? o.timestamp : 0;
             });
         };
 
@@ -223,29 +214,6 @@ define('io.ox/core/cache', function () {
             });
         };
 
-        // grep contained keys
-        this.grepContains = function (list) {
-            var i = 0, $i = list.length, c = [];
-
-            var checker = function (num) {
-                return index.contains(list[num]).pipe(function (check) {
-                    if (check) {
-                        return list[num];
-                    } else {
-                        return;
-                    }
-                });
-            };
-
-            for (; i < $i; i++) {
-                c.push(checker(i));
-            }
-
-            return $.when.apply(null, c).pipe(function () {
-                return _(arguments).without(undefined);
-            });
-        };
-
         // list values
         this.values = function () {
 
@@ -263,7 +231,7 @@ define('io.ox/core/cache', function () {
                 }
 
                 return $.when.apply(null, c).pipe(function () {
-                    return _(arguments).without(undefined);
+                    return _(arguments).without(null);
                 });
             });
         };
@@ -273,11 +241,6 @@ define('io.ox/core/cache', function () {
             return index.keys().pipe(function (keys) {
                 return keys.length;
             });
-        };
-
-        // contains
-        this.contains = function (key) {
-            return index.contains(key);
         };
     };
 
@@ -294,27 +257,31 @@ define('io.ox/core/cache', function () {
 
         // get from cache
         var get = this.get;
-        this.get = function (key) {
+        this.get = function (key, getter) {
             // array?
             if (_.isArray(key)) {
-                var i = 0, obj, tmp = new Array(key.length),
-                    c = [], self = this, def = new $.Deferred();
 
-                var getter = function (obj, i) {
-                    return self.get(obj).done(function (data) {
-                        tmp[i] = data;
-                    });
-                };
+                var self = this, def = new $.Deferred();
 
-                for (; (obj = key[i]); i++) {
-                    c.push(getter(obj, i));
-                }
-
-
-                $.when.apply(null, c).done(function () {
-                    def.resolve(tmp);
-                }).fail(function (e) {
-                    def.reject(e);
+                $.when.apply($,
+                    _(key).map(function (o) {
+                        return self.get(o);
+                    })
+                )
+                .done(function () {
+                    // contains null?
+                    var containsNull = _(arguments).reduce(function (memo, o) {
+                            return memo || o === null;
+                        }, false);
+                    if (containsNull) {
+                        if (getter) {
+                            getter().done(def.resolve);
+                        } else {
+                            def.resolve(null);
+                        }
+                    } else {
+                        def.resolve($.makeArray(arguments));
+                    }
                 });
 
                 return def;
@@ -326,7 +293,7 @@ define('io.ox/core/cache', function () {
                 } else {
                     tmpKey = this.keyGenerator(key);
                 }
-                return get(tmpKey);
+                return get(tmpKey, getter);
             }
         };
 
@@ -350,7 +317,7 @@ define('io.ox/core/cache', function () {
                 }
 
                 return $.when.apply(null, c).pipe(function () {
-                    return _(arguments).without(undefined);
+                    return _(arguments).without(null);
                 });
             } else {
                 // get key
@@ -359,48 +326,6 @@ define('io.ox/core/cache', function () {
                 return add(key, data, timestamp).pipe(function (result) {
                     return key;
                 });
-            }
-        };
-
-        // contains
-        var contains = this.contains;
-        this.contains = function (key) {
-            var self = this;
-
-            var getKey = function (key) {
-                var tmpKey = null;
-                if (typeof key === 'string' || typeof key === 'number') {
-                    tmpKey = key;
-                } else {
-                    // object, so get key
-                    tmpKey = String(self.keyGenerator(key));
-                }
-                return tmpKey;
-            };
-
-            // array?
-            if (_.isArray(key)) {
-                var i = 0, $i = key.length, found = true;
-
-                var checker = function (key) {
-                    var tmpKey = getKey(key);
-                    return self.contains(tmpKey).pipe(function (result) {
-                        found = found && result;
-                        return;
-                    });
-                };
-
-                var c = [];
-                for (; i < $i; i++) {
-                    c.push(checker(key[i]));
-                }
-
-                return $.when.apply(null, c).pipe(function () {
-                    return found;
-                });
-            } else {
-                // simple value
-                return contains(getKey(key));
             }
         };
 
@@ -426,26 +351,22 @@ define('io.ox/core/cache', function () {
                 });
             } else {
                 key = String(this.keyGenerator(data));
-
-                return contains(key).pipe(function (check) {
-                    if (check) {
-                        return get(key).pipe(function (target) {
-                            var id;
-                            for (id in target) {
-                                if (data[id] !== undefined) {
-                                    changed = changed || !_.isEqual(target[id], data[id]);
-                                    target[id] = data[id];
-                                }
+                return get(key).pipe(function (target) {
+                    if (target !== null) {
+                        var id;
+                        for (id in target) {
+                            if (data[id] !== undefined) {
+                                changed = changed || !_.isEqual(target[id], data[id]);
+                                target[id] = data[id];
                             }
-
-                            if (changed) {
-                                return self.add(target, timestamp).pipe(function (addReturn) {
-                                    return changed;
-                                });
-                            } else {
+                        }
+                        if (changed) {
+                            return self.add(target, timestamp).pipe(function (addReturn) {
                                 return changed;
-                            }
-                        });
+                            });
+                        } else {
+                            return changed;
+                        }
                     } else {
                         return false;
                     }

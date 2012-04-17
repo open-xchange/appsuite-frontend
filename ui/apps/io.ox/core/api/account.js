@@ -143,13 +143,7 @@ define('io.ox/core/api/account',
             });
         };
 
-        return cache.contains(id).pipe(function (yep) {
-            if (yep) {
-                return cache.get(id);
-            } else {
-                return getter();
-            }
-        });
+        return cache.get(id, getter);
     };
 
     /**

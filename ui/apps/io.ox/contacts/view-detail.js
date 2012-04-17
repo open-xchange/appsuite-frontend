@@ -24,10 +24,10 @@ define("io.ox/contacts/view-detail",
     // smart join
     var join = function () {
         return _(arguments)
-        .select(function (obj, i) {
-            return i > 0 && !!obj;
-        })
-        .join(arguments[0] || "");
+            .select(function (obj, i) {
+                return i > 0 && !!obj;
+            })
+            .join(arguments[0] || "");
     };
 
     function addField(label, value, node, fn) {
