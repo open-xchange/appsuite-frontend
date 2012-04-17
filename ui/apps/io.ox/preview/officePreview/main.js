@@ -19,6 +19,13 @@ define("io.ox/preview/officePreview/main",
     "use strict";
 
     var BATCH_SIZE = 5;
+    
+    function documentTypeClasses(file) {
+        if (/\.pptx?$/.test(file.name)) {
+            return "io-ox-office-preview-presentation ";
+        }
+        return "io-ox-office-preview-page";
+    }
 
     function turnFixedPositioningIntoAbsolutePositioning($node) {
         $node.find("*").each(function (index, $childNode) {
@@ -32,7 +39,7 @@ define("io.ox/preview/officePreview/main",
         });
     }
 
-    // Refactor: Look at mail
+    // TODO: Refactor: Look at mail
     function createInstance(file) {
 
         if (!file) {
@@ -114,13 +121,11 @@ define("io.ox/preview/officePreview/main",
         };
 
         app.showPage = function (pageNumber) {
-
             pageNumber = Math.max(0, pageNumber);
 
             if (app.maxPages !== -1 && pageNumber > app.maxPages) {
                 pageNumber = app.maxPages;
             }
-
             var num = pageNumber + BATCH_SIZE - (pageNumber % BATCH_SIZE);
             fetchPages(num).done(function (doc) {
 
@@ -136,9 +141,13 @@ define("io.ox/preview/officePreview/main",
                 container.empty().append($shownContent);
 
                 var centerOffset = ($(window).width() / 2) - ($shownContent.width() / 2);
+                
+                $shownContent.addClass(documentTypeClasses(file));
+                
 
                 $shownContent.addClass("io-ox-office-preview-content").css({position: "relative", left: centerOffset, right: centerOffset});
-
+                
+                
                 app.index = pageNumber;
 
                 $pageIndicator.text(pageNumber + 1);
