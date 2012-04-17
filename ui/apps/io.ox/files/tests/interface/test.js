@@ -16,7 +16,7 @@
 define("io.ox/files/interface/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/files/api"], function (ext, files, api) {
     "use strict";
 
-    var TIMEOUT = 5000;
+    var TIMEOUT = 2500;
     
     function Done() {
         var f = function () {
@@ -33,6 +33,8 @@ define("io.ox/files/interface/test", ["io.ox/core/extensions", "io.ox/files/main
         id: 'files-integration-tests',
         index: 100,
         test: function (j) {
+            var timestamp = new Date().getTime();
+            var testtitle = "Check it out (" + timestamp + ")";
 
             j.describe("Info item creation", function () {
 
@@ -66,13 +68,39 @@ define("io.ox/files/interface/test", ["io.ox/core/extensions", "io.ox/files/main
                     }, 'waits', TIMEOUT);
                 });
 
-                j.it('looks for "show more" button and hits ', function () {
+                j.it('fill out form an save ', function () {
                     j.waitsFor(function () {
-                        var formFrame = $('.create-file label[class="control-label"][for="title"]');
-                        if (formFrame[0]) {
-//                            formFrame.
+                        var titleField = $('.create-file input[name="title"]'), commentField = $('.create-file textarea.input-xlarge'), saveButton = $('button[data-action="save"]');
+                        if (titleField[0] && titleField[1]) {
+                            titleField.first().val(testtitle);
+                            titleField.eq(1).val("http://www.somethingawful.com"); //yes, the link field is also titled "title"
+                            commentField.val('This is something totally awesome!');
+                            saveButton.triggerHandler('click');
                             return true;
                         }
+                    }, 'waits', TIMEOUT);
+                });
+                
+                j.it('check out the stored data ', function () {
+                    var rightBox;
+                    j.waitsFor(function () {
+                        var boxes = $('.vgrid-cell.file div.name');
+                        boxes.each(function (index, box) {
+                            if ($(this).html() === testtitle) {
+                                rightBox = box;
+                                return true;
+                            }
+                        });
+                    }, 'waited for the right div to appear in the left navbar', TIMEOUT);
+                    
+                    j.waitsFor(function () {
+                        rightBox.trigger('click');
+                        return true;
+                    }, 'waits', TIMEOUT);
+                    
+                    j.waitsFor(function () {
+                        var page = $('.file-details .view');
+                        console.log(page);
                     }, 'waits', TIMEOUT);
                 });
 
