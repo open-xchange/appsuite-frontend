@@ -72,26 +72,22 @@ define("io.ox/core/api/factory",
                 var getter = function () {
                     return http.GET({
                         module: o.module,
-                        params: $.extend({}, opt, { order: 'asc' })
+                        params: $.extend({}, opt, { order: 'desc' })
                     })
                     .pipe(function (data) {
+                        // tmp. fix until backend delivers reduced data
+                        // TODO: remove then
+                        _(data).each(function (obj) {
+                            var len = obj.thread.length;
+                            if (len === 1) {
+                                obj.thread = [];
+                            } else if (len > 1) {
+                                obj.thread = _(obj.thread).pluck('id');
+                            }
+                        });
                         return (o.pipe.all || _.identity)(data, opt);
                     })
                     .done(function (data) {
-                        // remove deprecated entries
-                        // TODO: consider folder_id
-                        caches.get.keys().done(function (keys) {
-                            var diff = _(keys)
-                            .difference(
-                                _(data).map(function (obj) {
-                                    return caches.get.keyGenerator(obj);
-                                })
-                            );
-                            caches.list.remove(diff);
-                            caches.get.remove(diff);
-                        });
-                        // clear cache
-                        cache.remove(cid);
                         // add to cache
                         cache.add(cid, data);
                     });
@@ -112,7 +108,7 @@ define("io.ox/core/api/factory",
                     }
                 }())
                 .pipe(function (data) {
-                    return opt.order === 'asc' ? data : data.slice().reverse();
+                    return opt.order === 'desc' ? data : data.reverse();
                 })
                 .done(o.done.all || $.noop);
 

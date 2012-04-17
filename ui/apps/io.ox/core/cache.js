@@ -35,7 +35,7 @@ define('io.ox/core/cache', function () {
 
             var opt = _.extend({
                     fluent: 'simple',
-                    persistent: 'localstorage'
+                    persistent: false && Modernizr.indexeddb ? 'indexeddb' : 'localstorage'
                 }, options || {}),
 
                 persitentCache = require('io.ox/core/cache/' + opt.persistent),

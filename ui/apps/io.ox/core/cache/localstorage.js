@@ -112,20 +112,21 @@ define('io.ox/core/cache/localstorage', function () {
         },
 
         set: function (key, data) {
-            var def = new $.Deferred();
 
             that.gc();
-
             localStorage.removeItem(id + '.' + key);
-            try {
-                var saveData = {
+
+            var def = new $.Deferred(),
+                saveData = {
                     accesstime: _.now(),
                     data: data
                 };
+            try {
                 localStorage.setItem(id + '.' + key, JSON.stringify(saveData));
                 def.resolve(key);
             } catch (e) {
                 if (e.name && e.name === 'QUOTA_EXCEEDED_ERR') {
+                    console.warn('localStorage: Exceeded quota!', e, 'Object size', Math.round(JSON.stringify(saveData).length / 1024) + 'Kb');
                     that.gc(true);
                 }
                 def.reject(e);

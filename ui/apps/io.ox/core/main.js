@@ -250,6 +250,9 @@ define("io.ox/core/main",
         $.when(
                 ext.loadPlugins(),
                 require(autoLaunchModules),
+                require(['io.ox/core/api/account']).pipe(function (api) {
+                    return api.all();
+                }),
                 def
             )
             .done(function () {

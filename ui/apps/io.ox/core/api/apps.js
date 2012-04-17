@@ -20,8 +20,6 @@ define.async('io.ox/core/api/apps',
     // simple plain cache
     var appCache = null,
         appData = {},
-        // wait for init
-        wait = $.Deferred(),
         api;
 
     var bless = function (obj, id) {
