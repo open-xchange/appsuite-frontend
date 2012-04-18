@@ -51,9 +51,9 @@ define('io.ox/portal/mail/register',
         load: function () {
             var loading = new $.Deferred();
             require(['io.ox/mail/api'], function (api) {
-                api.getAll()
+                api.getAllThreads()
                     .done(function (ids) {
-                        api.getList(ids.slice(0, 5))
+                        api.getThreads(ids.slice(0, 5))
                             .done(loading.resolve)
                             .fail(loading.reject);
                     })
@@ -80,20 +80,21 @@ define('io.ox/portal/mail/register',
 
             } else {
 
-                return require(
-                    ['io.ox/core/tk/dialogs', 'io.ox/mail/view-grid-template'],
-                    function (dialogs, viewGrid) {
+                return require(['io.ox/core/tk/dialogs',
+                                'io.ox/mail/view-grid-template'], function (dialogs, viewGrid) {
 
                         viewGrid.drawSimpleGrid(list).appendTo(node);
 
                         new dialogs.SidePopup(600)
-                        .delegate(node, '.vgrid-cell', function (popup) {
+                        .delegate(node, '.vgrid-cell', function (pane) {
                             var data = $(this).data('object-data');
+                            pane.parent().removeClass('default-content-padding');
                             require(['io.ox/mail/view-detail', 'io.ox/mail/api'], function (view, api) {
-                                api.get(data).done(function (data) {
-                                    popup.append(
-                                        view.draw(data).removeClass('page')
-                                    );
+                                // get thread
+                                var thread = api.getThread(data);
+                                // get first mail first
+                                api.get(thread[0]).done(function (data) {
+                                    view.drawThread(pane, thread, data);
                                 });
                             });
                         });

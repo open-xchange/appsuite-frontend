@@ -77,7 +77,7 @@ define("io.ox/core/api/factory",
                     .pipe(function (data) {
                         // tmp. fix until backend delivers reduced data
                         // TODO: remove then
-                        if (o.module === 'mail') {
+                        if (o.module === 'mail' && opt.action === 'threadedAll') {
                             _(data).each(function (obj) {
                                 var len = obj.thread.length;
                                 if (len === 1) {
