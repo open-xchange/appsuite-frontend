@@ -95,7 +95,7 @@ define('io.ox/settings/utils',
             item.attr('data-item-id', options.dataid);
 
             item.append(
-                    $('<a>').addClass('close-button')
+                    $('<a>').html('&times;').addClass('close')
                   );
 
             item.append($('<div>').html(options.html));

@@ -92,11 +92,23 @@
   z-index: 2;
 }
 .settings-detail-pane .listbox > [selected] {
-	border-color: hsl(0, 0%, 85%);
-	background-color: hsl(0,0%,90%);
-	z-index: 2;
-	background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0.8),
-                                            rgba(255, 255, 255, 0));
+	background-color: @selected-background !important;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, lighten(@selected-background, 20%)),
+        color-stop(1, darken(@selected-background, 5%))
+    ) !important;
+    background-image: -o-linear-gradient(top, lighten(@selected-background, 20%) 0%, darken(@selected-background, 5%) 100%) !important;
+    background-image: -moz-linear-gradient(
+        center top,
+        lighten(@selected-background, 20%) 0%,
+        darken(@selected-background, 5%) 100%
+    ) !important;
+    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@selected-background, 20%)", endColorstr="darken(@selected-background, 5%)~")";
+    border-bottom-color: black;
+    color: #fff;
 }
 .settings-detail-pane .listbox:not([disabled]) > :hover {
 	border-color: hsl(214, 91%, 85%);
@@ -124,21 +136,3 @@
 .settings-detail-pane .listbox .deletable-item div{
 	width: auto;
 }
-
-.settings-detail-pane .listbox .close-button {
-	height: 16px;
-	width: 16px;
-	float: right;
- 	background-color: transparent;
-  	background-image: url(images/close_button.png);
-	border: none;
-}
-
-.settings-detail-pane .listbox .close-button:hover {
-  	background-image: url(images/close_button_hover.png);
-}
-
-.settings-detail-pane .listbox .close-button:active {
-  	background-image: url(images/close_button_active.png);
-}
-
