@@ -34,6 +34,30 @@ define("io.ox/mail/api",
         return b.received_date - a.received_date;
     };
 
+    // lookup hash for flags & color_label (since mail has no "updates")
+    var latest = {};
+
+    // remember latest state
+    var updateLatest = function (data) {
+        var cid = data.folder_id + '.' + data.id;
+        if (cid in latest) {
+            if ('flags' in data) { latest[cid].flags = data.flags; }
+            if ('color_label' in data) { latest[cid].color_label = data.color_label; }
+        }
+        return data;
+    };
+
+    // apply latest state of flag & color_label on mail
+    var applyLatest = function (data) {
+        var cid = data.folder_id + '.' + data.id, obj;
+        if (cid in latest) {
+            obj = latest[cid];
+            data.flags = obj.flags;
+            data.color_label = obj.color_label;
+        }
+        return data;
+    };
+
     // generate basic API
     var api = apiFactory({
         module: "mail",
@@ -87,18 +111,26 @@ define("io.ox/mail/api",
                 // unread count
                 var unread = 0;
                 // ignore deleted mails
+                // TODO: remove once backend supports "deleted=false"
                 data = _(data).filter(function (obj) {
+                    // inc unread counter
                     unread += (obj.flags & 32) === 0 ? 1 : 0;
+                    // skip deleted mails
                     return (obj.flags & 2) === 0;
                 });
                 // update folder
                 folderAPI.setUnread(opt.folder, unread);
-                // because we also have brand new flags, we merge with list & get caches
-                // however, this gets super slow for folders with lots of mails (>= 10.0000)
-                // so we just update recent mails and ignore "the past"
-                var subset = data.slice(0, 500);
-                api.caches.list.merge(subset);
-                api.caches.get.merge(subset);
+                return data;
+            },
+            allPost: function (data) {
+                _(data).each(function (obj) {
+                    // update hash
+                    latest[obj.folder_id + '.' + obj.id] = { flags: obj.flags, color_label: obj.color_label };
+                });
+                return data;
+            },
+            listPost: function (data) {
+                _(data).each(applyLatest);
                 return data;
             },
             get: function (data) {
@@ -108,6 +140,9 @@ define("io.ox/mail/api",
                     api.markRead(data);
                 }
                 return data;
+            },
+            getPost: function (data) {
+                return applyLatest(data);
             }
         }
     });
@@ -154,7 +189,7 @@ define("io.ox/mail/api",
         options = options || {};
         options = $.extend(options, {
             action: 'threadedAll',
-            columns: '601,600,611', // + flags
+            columns: '601,600,611,102', // +flags +color_label
             sort: options.sort || '610',
             order: options.order || 'desc'
         });
@@ -227,6 +262,7 @@ define("io.ox/mail/api",
                     } else {
                         obj.flags = obj.flags & ~data.flags;
                     }
+                    updateLatest(obj);
                     return $.when(
                          api.caches.list.merge(obj),
                          api.caches.get.merge(obj)
@@ -258,6 +294,11 @@ define("io.ox/mail/api",
             .pipe(function () {
                 // not just a flag update?
                 if (!flagUpdate) {
+                    // color_label?
+                    if ('color_label' in data) {
+                        obj.color_label = data.color_label;
+                        updateLatest(obj);
+                    }
                     // remove affected object from caches
                     return $.when(
                         api.caches.get.remove(obj),

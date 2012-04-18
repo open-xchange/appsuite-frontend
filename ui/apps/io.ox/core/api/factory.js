@@ -99,6 +99,7 @@ define("io.ox/core/api/factory",
                     .pipe(function (data) {
                         return opt.order === 'asc' ? data : data.reverse();
                     })
+                    .pipe(o.pipe.allPost)
                     .done(o.done.all || $.noop);
             },
 
@@ -131,6 +132,7 @@ define("io.ox/core/api/factory",
                 } else {
                     // cache miss?
                     return (useCache ? caches.list.get(ids, getter) : getter())
+                        .pipe(o.pipe.listPost)
                         .done(o.done.list || $.noop);
                 }
             },
@@ -166,6 +168,7 @@ define("io.ox/core/api/factory",
                 };
 
                 return (useCache ? caches.get.get(opt, getter) : getter())
+                    .pipe(o.pipe.getPost)
                     .done(o.done.get || $.noop);
             },
 
