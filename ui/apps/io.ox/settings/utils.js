@@ -68,8 +68,13 @@ define('io.ox/settings/utils',
             return $('<div>').addClass('sectioncontent');
         },
 
-        createSectionGroup: function () {
-            return $('<div>').addClass('section-group');
+        createSectionGroup: function (options) {
+            if (options) {
+                return $('<div>').addClass('section-group' + ' ' + options.styleclass);
+            } else {
+                return $('<div>').addClass('section-group');
+            }
+
         },
 
         createListBox: function (options) {
@@ -89,12 +94,12 @@ define('io.ox/settings/utils',
             item.addClass(options.classStr);
             item.attr('data-item-id', options.dataid);
 
+            item.append(
+                    $('<a>').addClass('close-button')
+                  );
+
             item.append($('<div>').html(options.html));
 
-            item.append(
-              $('<button>')
-                .addClass('close-button')
-            );
 
             item.on('click', function () {
                 console.log('click');
@@ -109,7 +114,7 @@ define('io.ox/settings/utils',
         },
 
         createButton: function (options) {
-            return $('<button>').text(options.label);
+            return $('<button>').addClass(options.btnclass).text(options.label);
         }
     };
 

@@ -40,12 +40,12 @@ function (ext, View, Model, util, gt, settings) {
                         util.createSectionTitle({ text: gt('Common')}),
                         util.createSectionContent()
                           .append(
-                              this.createCheckbox({property: 'selectFirstMessage', label: gt('Automatically select first E-Mail?')}).addClass('expertmode'),
-                              this.createCheckbox({property: 'removeDeletedPermanently', label: gt('Permanently remove deleted E-Mails?')}),
-                              this.createCheckbox({property: 'notifyAcknoledge', label: gt('Notify on delivery receipt?')}).addClass('expertmode'),
-                              this.createCheckbox({property: 'showContactImage', label: gt('Show sender image?')}),
-                              this.createCheckbox({property: 'contactCollectOnMailTransport', label: gt('Automatically collect contacts in the folder "Collected addresses" while sending?')}).addClass('expertmode'),
-                              this.createCheckbox({property: 'contactCollectOnMailAccess', label: gt('Automatically collect contacts in the folder "Collected addresses" while reading?')}).addClass('expertmode')
+                              this.createCheckbox({property: 'selectFirstMessage', label: gt('Automatically select first E-Mail?'), labelclass: 'checkbox'}).addClass('expertmode'),
+                              this.createCheckbox({property: 'removeDeletedPermanently', label: gt('Permanently remove deleted E-Mails?'), labelclass: 'checkbox'}),
+                              this.createCheckbox({property: 'notifyAcknoledge', label: gt('Notify on delivery receipt?'), labelclass: 'checkbox'}).addClass('expertmode'),
+                              this.createCheckbox({property: 'showContactImage', label: gt('Show sender image?'), labelclass: 'checkbox'}),
+                              this.createCheckbox({property: 'contactCollectOnMailTransport', label: gt('Automatically collect contacts in the folder "Collected addresses" while sending?'), labelclass: 'checkbox'}).addClass('expertmode'),
+                              this.createCheckbox({property: 'contactCollectOnMailAccess', label: gt('Automatically collect contacts in the folder "Collected addresses" while reading?'), labelclass: 'checkbox'}).addClass('expertmode')
                           ),
                       util.createSectionDelimiter()
                     )
@@ -64,53 +64,53 @@ function (ext, View, Model, util, gt, settings) {
                         util.createSectionTitle({ text: gt('Compose')}),
                         util.createSectionContent()
                             .append(
-                                this.createCheckbox({property: 'appendMailTextOnReply', label: gt('Insert the original E-Mail text to a reply')}).addClass('expertmode'),
-                                this.createCheckbox({property: 'appendVcard', label: gt('Append vcard')}),
-                                this.createCheckbox({property: 'autocompleteEmailAddresses', label: gt('Enable auto completion of E-Mail addresses')}),
+                                this.createCheckbox({property: 'appendMailTextOnReply', label: gt('Insert the original E-Mail text to a reply'), labelclass: 'checkbox'}).addClass('expertmode'),
+                                this.createCheckbox({property: 'appendVcard', label: gt('Append vcard'), labelclass: 'checkbox'}),
+                                this.createCheckbox({property: 'autocompleteEmailAddresses', label: gt('Enable auto completion of E-Mail addresses'), labelclass: 'checkbox'}),
                                 util.createSectionDelimiter(),
                                 util.createSectionGroup()
                                     .append(
                                         util.createInfoText({text: gt('Forward E-Mails as:')}),
-                                        this.createRadioButton({property: 'forwardMessageAs', label: gt('Inline'), name: 'forwardMessageAs', value: 'Inline' }),
-                                        this.createRadioButton({property: 'forwardMessageAs', label: gt('Attachment'), name: 'forwardMessageAs', value: 'Attachment'})
+                                        this.createRadioButton({property: 'forwardMessageAs', label: gt('Inline'), labelclass: 'radio', name: 'forwardMessageAs', value: 'Inline' }),
+                                        this.createRadioButton({property: 'forwardMessageAs', label: gt('Attachment'), labelclass: 'radio', name: 'forwardMessageAs', value: 'Attachment'})
                                     ),
                                 util.createSectionDelimiter(),
                                 util.createSectionGroup()
                                     .append(
                                         util.createInfoText({text: gt('When "Reply all":')}),
-                                        this.createRadioButton({property: 'replyAllCc', label: gt('Add sender and recipients to "To", Cc to "Cc"'), name: 'replyAllCc', value: false}),
-                                        this.createRadioButton({property: 'replyAllCc', label: gt('Add sender to "To", recipients to "Cc"'), name: 'replyAllCc', value: true})
+                                        this.createRadioButton({property: 'replyAllCc', label: gt('Add sender and recipients to "To", Cc to "Cc"'), labelclass: 'radio', name: 'replyAllCc', value: false}),
+                                        this.createRadioButton({property: 'replyAllCc', label: gt('Add sender to "To", recipients to "Cc"'), labelclass: 'radio', name: 'replyAllCc', value: true})
                                     ),
                                 util.createSectionDelimiter(),
                                 util.createSectionGroup()
                                     .append(
                                         util.createInfoText({text: gt('Format E-Mails as:')}),
-                                        this.createRadioButton({property: 'messageFormat', label: gt('HTML'), name: 'messageFormat', value: 'html'}),
-                                        this.createRadioButton({property: 'messageFormat', label: gt('Plain text'), name: 'messageFormat', value: 'plain'}),
-                                        this.createRadioButton({property: 'messageFormat', label: gt('HTML and Plain text'), name: 'messageFormat', value: 'both'})
+                                        this.createRadioButton({property: 'messageFormat', label: gt('HTML'), labelclass: 'radio', name: 'messageFormat', value: 'html'}),
+                                        this.createRadioButton({property: 'messageFormat', label: gt('Plain text'), labelclass: 'radio', name: 'messageFormat', value: 'plain'}),
+                                        this.createRadioButton({property: 'messageFormat', label: gt('HTML and Plain text'), labelclass: 'radio', name: 'messageFormat', value: 'both'})
                                     ),
                                 util.createSectionDelimiter(),
                                 util.createSectionGroup()
                                     .append(
-                                        this.createSelectbox({property: 'defaultMailFont', label: gt('Default E-Mail font:'), items: {'Default': 'default', 'Andale Mono': 'andale_mono', 'Arial': 'arial', 'Arial Black': 'arial_black', 'Book Antiqua': 'book_antiqua'}})
+                                        this.createSelectbox({property: 'defaultMailFont', label: gt('Default E-Mail font:'), span: 'span3', items: {'Default': 'default', 'Andale Mono': 'andale_mono', 'Arial': 'arial', 'Arial Black': 'arial_black', 'Book Antiqua': 'book_antiqua'}})
                                     ).addClass('expertmode'),
                                 util.createSectionGroup()
                                     .append(
-                                        this.createSelectbox({property: 'defaultMailFontSize', label: gt('Default E-Mail font size:'), items: {'Default': 'default', '1 (8pt)': '8_pt', '2 (10pt)': '10_pt'}})
+                                        this.createSelectbox({property: 'defaultMailFontSize', label: gt('Default E-Mail font size:'), span: 'span3', items: {'Default': 'default', '1 (8pt)': '8_pt', '2 (10pt)': '10_pt'}})
                                     ).addClass('expertmode'),
-                                util.createSectionGroup()
+                                util.createSectionGroup({styleclass: 'form-inline'})
                                     .append(
                                         this.createText({ text: gt('Line wrap when sending text mails after: ') }),
-                                        this.createTextField({ property: 'lineWrapAfter'}).css({ width: '30px', display: 'inline-block'}),
+                                        this.createTextField({ property: 'lineWrapAfter', span: 'span1'}).css({ display: 'inline-block'}),
                                         this.createText({ text: ' characters' })
                                     ),
                                 util.createSectionGroup()
                                     .append(
-                                        this.createSelectbox({property: 'defaultSendAddress', label: gt('Default sender address:'), items: { 'mario@sourcegarden.de': 'mario@sourcegarden.de', 'mario@sourcegarden.com': 'mario@sourcegarden.com', 'mario.scheliga@open-xchange.com': 'mario.scheliga@open-xchange.com' }})
+                                        this.createSelectbox({property: 'defaultSendAddress', label: gt('Default sender address:'), span: 'input-xlarge', items: { 'mario@sourcegarden.de': 'mario@sourcegarden.de', 'mario@sourcegarden.com': 'mario@sourcegarden.com', 'mario.scheliga@open-xchange.com': 'mario.scheliga@open-xchange.com' }})
                                     ),
                                 util.createSectionGroup()
                                     .append(
-                                        this.createSelectbox({property: 'autoSafeDraftsAfter', label: gt('Auto-save Email drafts?'), items: {'Disabled': 'disabled', '1 Minute': '1_minute', '3 Minutes': '3_minutes', '5 Minutes': '5_minutes', '10 Minutes': '10_minutes' }})
+                                        this.createSelectbox({property: 'autoSafeDraftsAfter', label: gt('Auto-save Email drafts?'), span: 'span3', items: {'Disabled': 'disabled', '1 Minute': '1_minute', '3 Minutes': '3_minutes', '5 Minutes': '5_minutes', '10 Minutes': '10_minutes' }})
                                     )
                             ),
                         util.createSectionDelimiter()
@@ -129,11 +129,11 @@ function (ext, View, Model, util, gt, settings) {
                         util.createSectionTitle({ text: gt('Display')}),
                         util.createSectionContent()
                             .append(
-                                this.createCheckbox({property: 'allowHtmlMessages', label: gt('Allow html formatted E-Mails')}),
-                                this.createCheckbox({property: 'allowHtmlImages', label: gt('Block pre-loading of externally linked images')}),
-                                this.createCheckbox({property: 'displayEmomticons', label: gt('Display emoticons as graphics in text E-Mails')}),
-                                this.createCheckbox({property: 'isColorQuoted', label: gt('Color quoted lines')}),
-                                this.createCheckbox({property: 'showName', label: gt('Show name instead of E-Mail address in To and Cc fields')})
+                                this.createCheckbox({property: 'allowHtmlMessages', label: gt('Allow html formatted E-Mails'), labelclass: 'checkbox'}),
+                                this.createCheckbox({property: 'allowHtmlImages', label: gt('Block pre-loading of externally linked images'), labelclass: 'checkbox'}),
+                                this.createCheckbox({property: 'displayEmomticons', label: gt('Display emoticons as graphics in text E-Mails'), labelclass: 'checkbox'}),
+                                this.createCheckbox({property: 'isColorQuoted', label: gt('Color quoted lines'), labelclass: 'checkbox'}),
+                                this.createCheckbox({property: 'showName', label: gt('Show name instead of E-Mail address in To and Cc fields'), labelclass: 'checkbox'})
                             ),
                         util.createSectionDelimiter()
                     )
@@ -180,9 +180,9 @@ function (ext, View, Model, util, gt, settings) {
                                         }
                                     }
                                 }),
-                                util.createButton({label: gt('Add ...')}).css({'margin-right': '15px'}).on('click', addSignatureButton),
-                                util.createButton({label: gt('Edit ...')}).css({'margin-right': '15px'}).on('click', editSignatureButton),
-                                util.createButton({label: gt('Delete ...')}).css({'margin-right': '15px'}).on('click', deleteSignatureButton)
+                                util.createButton({label: gt('Add ...'), btnclass: 'btn'}).on('click', addSignatureButton),
+                                util.createButton({label: gt('Edit ...'), btnclass: 'btn'}).on('click', editSignatureButton),
+                                util.createButton({label: gt('Delete ...'), btnclass: 'btn'}).on('click', deleteSignatureButton)
                             ),
                         util.createSectionDelimiter()
                     )
@@ -234,9 +234,9 @@ function (ext, View, Model, util, gt, settings) {
                                         }
                                     }
                                 }),
-                                util.createButton({label: 'Add ...'}).css({'margin-right': '15px'}).on('click', addFilterButton),
-                                util.createButton({label: 'Edit ...'}).css({'margin-right': '15px'}).on('click', editFilterButton),
-                                util.createButton({label: 'Delete ...'}).css({'margin-right': '15px'}).on('click', deleteFilterButton)
+                                util.createButton({label: 'Add ...', btnclass: 'btn'}).on('click', addFilterButton),
+                                util.createButton({label: 'Edit ...', btnclass: 'btn'}).on('click', editFilterButton),
+                                util.createButton({label: 'Delete ...', btnclass: 'btn'}).on('click', deleteFilterButton)
                             ),
                         util.createSectionDelimiter()
                     )
@@ -254,13 +254,13 @@ function (ext, View, Model, util, gt, settings) {
                         util.createSectionTitle({ text: gt('Vacation Notice')}),
                         util.createSectionContent()
                             .append(
-                                this.createCheckbox({property: 'activateMailFilter', label: 'activate vacation notification'}),
-                                this.createLabeledTextField({ label: gt('Subject'), property: 'mailFilterSubject'}),
-                                this.createLabeledTextArea({ label: gt('Message'), property: 'mailFilterBody'}),
-                                this.createLabeledTextField({ label: gt('Days'), property: 'mailFilterResendDays'}),
+                                this.createCheckbox({property: 'activateMailFilter', label: gt('activate vacation notification'), labelclass: 'checkbox'}),
+                                this.createTextField({ label: gt('Subject'), property: 'mailFilterSubject', span: 'input-xxlarge'}),
+                                this.createTextArea({ label: gt('Message'), property: 'mailFilterBody',  span: 'input-xxlarge'}),
+                                this.createTextField({ label: gt('Days'), property: 'mailFilterResendDays',  span: 'input-xxlarge'}),
                                 util.createSectionDelimiter(),
                                 this.createText({text: gt('E-Mail Adressen')}),
-                                this.createCheckbox({property: 'emailAddress', label: 'bill.gates@microsoft.com'})
+                                this.createCheckbox({property: 'emailAddress', label: 'bill.gates@microsoft.com', labelclass: 'checkbox'})
 
                             ),
                         util.createSectionDelimiter()
