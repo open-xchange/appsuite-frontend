@@ -115,7 +115,8 @@ define('io.ox/core/tk/forms',
                 'data-property': o.property,
                 name: o.name,
                 id: o.id,
-                value: o.value
+                value: o.value,
+                'class': o.span
             })
             .on('change', onChange)
             .addClass(o.classes);
@@ -140,6 +141,9 @@ define('io.ox/core/tk/forms',
             var label = $('<label>', { 'for': o.id }),
                 space = $.txt(' '),
                 text = $.txt(o.label || '');
+            if (o.labelclass !== false) {
+                label.addClass(o.labelclass);
+            }
             node = label.append.apply(label, order === 'append' ? [node, space, text] : [text, space, node]);
         }
         // wrap DIV around field & label
@@ -165,7 +169,8 @@ define('io.ox/core/tk/forms',
 
         createSelectbox: function (options) {
             var f = new Field(options, 'select');
-            f.create('<select size="1">', selectChange);
+            f.create('<select>', selectChange);
+            console.log(options);
             // add options
             f.node.append(_(options.items).inject(function (memo, text, value) {
                 return memo.add($('<option>').attr('value', value).text(text));
@@ -220,7 +225,7 @@ define('io.ox/core/tk/forms',
             return utils.createLabel(options)
                 .css({ width: '100%', display: 'inline-block' })
                 .append(utils.createText({ text: options.label }))
-                .append(utils.createTextField({ property: options.property, value: options.value, model: options.model})
+                .append(utils.createTextField({ property: options.property, value: options.value, model: options.model, span: options.span})
                         .css({ width: options.width + 'px', display: 'inline-block' })
                 );
         },

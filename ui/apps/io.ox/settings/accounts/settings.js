@@ -55,9 +55,9 @@ define('io.ox/settings/accounts/settings',
                             }
                         })
                     )
-                    .append(utils.createButton({label: 'Add ...'}).css({'margin-right': '15px'}))
+                    .append(utils.createButton({label: 'Add ...', btnclass: 'btn'}).css({'margin-right': '15px'}))
                     .append(
-                      utils.createButton({label: 'Edit ...'})
+                      utils.createButton({label: 'Edit ...', btnclass: 'btn'})
                         .css({'margin-right': '15px'})
                         .on('click', function (args) {
                             var selectedItemID = listbox.find('div[selected="selected"]').attr('data-item-id');
@@ -72,7 +72,7 @@ define('io.ox/settings/accounts/settings',
                             }
                         })
                     )
-                    .append(utils.createButton({label: 'Delete ...'}))
+                    .append(utils.createButton({label: 'Delete ...', btnclass: 'btn'}))
                 )
                 .append(utils.createSectionDelimiter())
             );
