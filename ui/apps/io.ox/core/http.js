@@ -466,7 +466,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                         }
                         deferred.resolve(data);
                     } else {
-                        data = sanitize(response.data, o.columnModule, o.params.columns);
+                        var columns = o.params.columns || (o.processResponse === true ? getAllColumns(o.columnModule, true) : '');
+                        data = sanitize(response.data, o.columnModule, columns);
                         timestamp = response.timestamp !== undefined ? response.timestamp : _.now();
                         deferred.resolve(data, timestamp);
                     }

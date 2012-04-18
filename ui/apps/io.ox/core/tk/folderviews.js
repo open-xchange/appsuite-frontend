@@ -14,9 +14,12 @@
 define('io.ox/core/tk/folderviews',
     ['io.ox/core/tk/selection',
      'io.ox/core/api/folder',
+     'io.ox/core/api/account',
      'io.ox/core/api/user',
      'io.ox/core/extensions',
-     'io.ox/core/event'], function (Selection, api, userAPI, ext, Events) {
+     'io.ox/core/event',
+     'io.ox/core/config'
+    ], function (Selection, api, account, userAPI, ext, Events, config) {
 
     'use strict';
 
@@ -216,9 +219,11 @@ define('io.ox/core/tk/folderviews',
                     .pipe(function (promise) {
                         // get data
                         data = promise;
-                        // re-add to index, customize, update arrow
-                        tree.selection.addToIndex(data);
+                        // customize, re-add to index, update arrow
                         self.customize();
+                        if (nodes.folder.hasClass('selectable')) {
+                            tree.selection.addToIndex(data);
+                        }
                         updateArrow();
                         // draw children
                         if (isOpen()) {
@@ -263,9 +268,6 @@ define('io.ox/core/tk/folderviews',
                     nodes.icon = $('<img>', { src: '', alt: '' }).addClass('folder-icon');
                     nodes.label = $('<span>').addClass('folder-label');
                     nodes.counter = $('<span>').addClass('folder-counter');
-                    // work with selection
-                    nodes.folder.attr('data-obj-id', data.id);
-                    tree.selection.addToIndex(data);
                     // draw children
                     var def = isOpen() ? paintChildren() : $.when();
                     updateArrow();
@@ -273,6 +275,11 @@ define('io.ox/core/tk/folderviews',
                     nodes.folder.append(nodes.arrow, nodes.icon, nodes.counter, nodes.label);
                     // customize
                     self.customize();
+                    // work with selection
+                    nodes.folder.attr('data-obj-id', data.id);
+                    if (nodes.folder.hasClass('selectable')) {
+                        tree.selection.addToIndex(data);
+                    }
                     // Done
                     return def;
                 })
@@ -468,27 +475,96 @@ define('io.ox/core/tk/folderviews',
                 label = this.find('.folder-label'),
                 counter = this.find('.folder-counter');
 
-            switch (data.id) {
-            case 'default0/INBOX':
-                src = PATH + 'inbox.png';
-                break;
-            case 'default0/INBOX/Trash':
-                src = PATH + 'trash.png';
-                break;
-            case 'default0/INBOX/Sent Items':
-                src = PATH + 'outbox.png';
-                break;
-            case '6':
-                src = PATH + 'user.png';
-                break;
-            default:
-                src = DEFAULT;
-                break;
-            }
+            (function () {
 
-            // fade out?
+                var accountId, a = {}, cont, id;
+
+                if (data.module === 'mail') {
+
+                    cont = function () {
+                        switch (data.id) {
+                        case a.inbox_fullname:
+                            src = PATH + 'inbox.png';
+                            break;
+                        case a.trash_fullname:
+                            src = PATH + 'trash.png';
+                            break;
+                        case a.sent_fullname:
+                            src = PATH + 'outbox.png';
+                            break;
+                        case a.drafts_fullname:
+                            src = PATH + 'draft.png';
+                            break;
+                        case a.spam_fullname:
+                            src = PATH + 'spam.png';
+                            break;
+                        case a.confirmed_ham_fullname:
+                            src = PATH + 'ham.png';
+                            break;
+                        case a.confirmed_spam_fullname:
+                            src = PATH + 'spam.png';
+                            break;
+                        default:
+                            src = DEFAULT;
+                            break;
+                        }
+                        // update src
+                        icon.attr('src', src);
+                    };
+
+                    // get account id
+                    accountId = /^default(\d*)\b/.exec(data.id);
+                    if ($.isArray(accountId)) {
+                        accountId = accountId[1];
+                        // default0?
+                        if (accountId === '0') {
+                            // use config from api!
+                            var f = config.get('mail.folder');
+                            if (f) { // might be undefined when mail module is down
+                                a.inbox_fullname = f.inbox;
+                                a.trash_fullname = f.trash;
+                                a.sent_fullname = f.sent;
+                                a.drafts_fullname = f.drafts;
+                                a.spam_fullname = f.spam;
+                                cont();
+                            }
+                        } else {
+                            // get account data from cache
+                            id = 'default' + accountId;
+                            account.get(accountId).done(function (data) {
+                                // unified inbox, e.g. behaves like an account but is not
+                                if (!data) {
+                                    a = {
+                                        inbox_fullname: id + '/INBOX',
+                                        trash_fullname: id + '/Trash',
+                                        sent_fullname: id + '/Sent',
+                                        drafts_fullname: id + '/Drafts',
+                                        spam_fullname: id + '/Spam'
+                                    };
+                                } else {
+                                    a = data;
+                                }
+                                // inbox still not set?
+                                if (a.inbox_fullname === undefined) {
+                                    a.inbox_fullname = id + '/INBOX';
+                                }
+                                cont();
+                            });
+                        }
+                    }
+                } else {
+                    // id specific
+                    if (data.id === '6') {
+                        src = 'user.png';
+                    } else {
+                        src = DEFAULT;
+                    }
+                }
+            }());
+
+            // not selectable?
             if (options.type && options.type !== data.module) {
-                this.addClass('greyed-out');
+                this.removeClass('selectable');
             }
 
             // set icon
@@ -574,7 +650,7 @@ define('io.ox/core/tk/folderviews',
                         self.container.append(
                             section = $('<div>').addClass('section')
                             .append(
-                                $("<div>").addClass('section-title').text(sections[id])
+                                $('<div>').addClass('section-title').text(sections[id])
                             )
                         );
                         drawSection(section, data[id]);

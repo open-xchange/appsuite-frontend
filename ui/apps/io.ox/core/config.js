@@ -138,21 +138,15 @@ define('io.ox/core/config',
                 configCache = new cache.SimpleCache('config', true);
             }
 
-            configCache.contains('default')
-                .done(function (check) {
-                    if (check) {
-                        configCache.get('default')
-                        .done(function (data) {
-                            config = data;
-                            load();
-                            def.resolve(data);
-                        })
-                        .fail(def.reject);
-                    } else {
-                        load().done(def.resolve);
-                    }
-                })
-                .fail(def.reject);
+            configCache.get('default').done(function (data) {
+                if (data !== null) {
+                    config = data;
+                    load();
+                    def.resolve(data);
+                } else {
+                    load().done(def.resolve);
+                }
+            });
 
             return def;
         }

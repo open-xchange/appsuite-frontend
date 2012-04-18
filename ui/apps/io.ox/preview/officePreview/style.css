@@ -1,8 +1,24 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
 .io-ox-office-preview-page-indicator {
     position: absolute;
-    font-size: 40px;
-    bottom: 40px;
-    right: 40px;
+    font-size: 30pt;
+    bottom: 26px;
+    right: 13px;
+    color: #aaa;
+    z-index: 1;
 }
 
 .io-ox-office-preview-controls {
@@ -15,15 +31,26 @@
     text-align: center;
 }
 
+.io-ox-office-preview-page {
+    width: 21cm;
+    box-sizing: border-box;
+    padding: 2cm;
+    margin: 1cm auto 1cm auto;
+}
+
+.io-ox-office-preview-presentation {
+    width: 720pt;
+    box-sizing: border-box;
+    margin: 1cm auto 1cm auto;
+}
+
 .io-ox-office-preview-content {
-    margin: 20px;
-    padding: 10px;
-    -webkit-box-shadow: 0px 0px 10px 0px #000;
-       -moz-box-shadow: 0px 0px 10px 0px #000;
-            box-shadow: 0px 0px 10px 0px #000;
+    -webkit-box-shadow: 0px 0px 40px -5px #000;
+       -moz-box-shadow: 0px 0px 40px -5px #000;
+            box-shadow: 0px 0px 40px -5px #000;
     background-color: white;
 }
 
 .io-ox-office-preview-background {
-    background-color: #777;
+    background-color: #ddd;
 }

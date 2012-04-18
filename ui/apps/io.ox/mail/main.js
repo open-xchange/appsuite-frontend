@@ -186,6 +186,11 @@ define("io.ox/mail/main",
                 });
         });
 
+        win.nodes.title.on('click', '.badge', function (e) {
+            e.preventDefault();
+            grid.prop('unread', !grid.prop('unread')).refresh();
+        });
+
 
         // custom all request
 

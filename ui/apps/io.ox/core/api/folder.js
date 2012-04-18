@@ -14,7 +14,8 @@ define('io.ox/core/api/folder',
     ['io.ox/core/http',
      'io.ox/core/cache',
      'io.ox/core/config',
-     'io.ox/core/event'], function (http, cache, config, Events) {
+     'io.ox/core/api/account',
+     'io.ox/core/event'], function (http, cache, config, account, Events) {
 
     'use strict';
 
@@ -51,17 +52,8 @@ define('io.ox/core/api/folder',
                     console.error('folder.get', id, error);
                 });
             };
-            if (opt.cache === false) {
-                return getter();
-            } else {
-                return cache.contains(id).pipe(function (check) {
-                    if (check) {
-                        return cache.get(id);
-                    } else {
-                        return getter();
-                    }
-                });
-            }
+
+            return opt.cache === false ? getter() : cache.get(id, getter);
         };
 
     var api = {
@@ -142,18 +134,7 @@ define('io.ox/core/api/folder',
                 });
             };
 
-            if (opt.cache === false) {
-                return getter();
-            } else {
-                return cache.contains(opt.folder)
-                .pipe(function (check) {
-                    if (check) {
-                        return cache.get(opt.folder);
-                    } else {
-                        return getter();
-                    }
-                });
-            }
+            return opt.cache === false ? getter() : cache.get(opt.folder, getter);
         },
 
         getVisible: function (options) {
@@ -219,17 +200,7 @@ define('io.ox/core/api/folder',
                         });
                 };
 
-            if (opt.cache === false) {
-                return getter();
-            } else {
-                return visibleCache.contains(opt.type).pipe(function (check) {
-                    if (check) {
-                        return visibleCache.get(opt.type);
-                    } else {
-                        return getter();
-                    }
-                });
-            }
+            return opt.cache === false ? getter() : visibleCache.get(opt.type, getter);
         },
 
         create: function (options) {
@@ -341,13 +312,11 @@ define('io.ox/core/api/folder',
                         return data.module === 'infostore';
                     case 'account':
                         return data.module === 'system' && /^default(\d+)?/.test(String(data.id));
-//                    case 'unifiedmail':
-//                        id = data ? (data.id !== undefined ? data.id : data) : '';
-//                        var match = String(id).match(/^default(\d+)/);
-//                        // is account? (unified inbox is not a usual account)
-//                        return match ? !ox.api.cache.account.contains(match[1]) : false;
-//                    case 'external':
-//                        return /^default[1-9]/.test(String(data.id)) && !this.is('unifiedmail', data);
+                    case 'unifiedmail':
+                        id = data ? (data.id !== undefined ? data.id : data) : '';
+                        return account.isUnified(id);
+                    case 'external':
+                        return (/^default[1-9]/).test(String(data.id)) && !this.is('unifiedmail', data);
                     case 'defaultfolder':
                         // get default folder
                         var folders = config.get('mail.folder');
@@ -447,7 +416,9 @@ define('io.ox/core/api/folder',
         subFolderCache: subFolderCache,
 
         needsRefresh: function (folder) {
-            return subFolderCache.contains(folder);
+            return subFolderCache.get(folder).pipe(function (data) {
+                return data !== null;
+            });
         },
 
         getTextNode: function (id) {

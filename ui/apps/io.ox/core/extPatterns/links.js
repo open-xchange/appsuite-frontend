@@ -76,7 +76,7 @@ define("io.ox/core/extPatterns/links",
 
 
     var drawLinks = function (self, collection, node, context, args, bootstrapMode) {
-        actions.extPatterns.applyCollection(self, collection, context, args)
+        return actions.extPatterns.applyCollection(self, collection, context, args)
         .always(function (links) {
             // count resolved links
             var count = 0;
@@ -121,18 +121,20 @@ define("io.ox/core/extPatterns/links",
             // create & add node first, since the rest is async
             var args = $.makeArray(arguments),
                 node = $("<div>").addClass("io-ox-inline-links").appendTo(this);
-            drawLinks(self, new Collection(context), node, context, args);
-            // add toggle
-            if (node.children().length > 4) {
-                node.append(
-                    $('<span>', { 'data-toggle': 'more' })
-                    .addClass('label io-ox-action-link')
-                    .css({ cursor: 'pointer', marginLeft: '1.5em' })
-                    .click(inlineToggle)
-                    .text('More')
-                );
-                node.children().slice(2, -2).hide();
-            }
+            drawLinks(self, new Collection(context), node, context, args)
+            .done(function () {
+                // add toggle
+                if (node.children().length > 4) {
+                    node.append(
+                        $('<span>', { 'data-toggle': 'more' })
+                        .addClass('label io-ox-action-link')
+                        .css({ cursor: 'pointer', marginLeft: '1.5em' })
+                        .click(inlineToggle)
+                        .text('More')
+                    );
+                    node.children().slice(2, -2).hide();
+                }
+            });
         };
     };
 

@@ -15,6 +15,7 @@ define('io.ox/core/cache/localstorage', function () {
     'use strict';
 
     var id = null,
+        reg = null,
         lastGCrun = 0,
         gcTimeout = 1000 * 60 * 5, // 5 minutes
         ts_cachetimeout = (new Date()).getTime() - (2 * 24 * 60 * 60 * 1000); // 2 days
@@ -22,6 +23,7 @@ define('io.ox/core/cache/localstorage', function () {
     var that = {
         setId: function (theId) {
             id = theId;
+            reg = new RegExp('^' + id.replace(/\./g, '\\.') + '\\.');
         },
 
         getStorageLayerName: function () {
@@ -80,62 +82,58 @@ define('io.ox/core/cache/localstorage', function () {
         },
 
         clear: function () {
-            // loop over all keys
-            var i = 0, key;
-            while (i < localStorage.length) {
-                // get key by index
-                key = localStorage.key(i);
-                // match?
-                var reg = new RegExp('^' + id.replace(/\./g, '\\.') + '\\.');
-                if (reg.test(key)) {
-                    localStorage.removeItem(key);
-                } else {
-                    i++;
+            // loop over all keys (do this in two loops due to very strange async-ish behaviour in some browsers)
+            var i = 0, $i = localStorage.length, key, tmp = [];
+            for (; i < $i; i++) {
+                // copy?
+                if (reg.test(key = localStorage.key(i))) {
+                    tmp.push(key);
                 }
             }
-            return $.Deferred().resolve();
+            // loop over tmp and remove items
+            _(tmp).each(function (key) {
+                localStorage.removeItem(key);
+            });
+            return $.when();
         },
 
         get: function (key) {
-            that.gc();
 
+            // fetch first, then GC
             var item = localStorage.getItem(id + '.' + key);
+            that.gc();
 
             if (item !== null) {
                 item = JSON.parse(item);
                 that.set(key, item.data);
             } else {
-                item = { data: undefined };
+                item = { data: null };
             }
 
             return $.Deferred().resolve(item.data);
         },
 
         set: function (key, data) {
-            var def = new $.Deferred();
 
             that.gc();
-
             localStorage.removeItem(id + '.' + key);
-            try {
-                var saveData = {
+
+            var def = new $.Deferred(),
+                saveData = {
                     accesstime: _.now(),
                     data: data
                 };
+            try {
                 localStorage.setItem(id + '.' + key, JSON.stringify(saveData));
                 def.resolve(key);
             } catch (e) {
                 if (e.name && e.name === 'QUOTA_EXCEEDED_ERR') {
+                    console.warn('localStorage: Exceeded quota!', e, 'Object size', Math.round(JSON.stringify(saveData).length / 1024) + 'Kb');
                     that.gc(true);
                 }
                 def.reject(e);
             }
             return def;
-        },
-
-        contains: function (key) {
-            return $.Deferred().resolve(
-                    localStorage.getItem(id + '.' + key) !== null);
         },
 
         remove: function (key) {
@@ -145,18 +143,15 @@ define('io.ox/core/cache/localstorage', function () {
 
         keys: function () {
             var i, $i, key, tmp = [];
-
             // loop over all keys
             for (i = 0, $i = localStorage.length; i < $i; i++) {
                 // get key by index
                 key = localStorage.key(i);
                 // match?
-                var reg = new RegExp('^' + id.replace(/\./g, '\\.') + '\\.');
                 if (reg.test(key)) {
                     tmp.push(key.substr(id.length + 1));
                 }
             }
-
             return $.Deferred().resolve(tmp);
         }
     };

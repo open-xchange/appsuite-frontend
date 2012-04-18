@@ -284,7 +284,7 @@
 
 /* TODO: remove / temp. fix for sanitized HTML */
 .mail-detail .content { padding: 0 !important; }
-.mail-detail .content > .content { padding: 0; }
+.mail-detail .content > div > [class$="-content"] { padding: 0; }
 
 .mail-detail .content.plain-text {
     white-space: pre-wrap;
@@ -373,4 +373,8 @@ h4.mail-attachment-preview {
     background-color: initial;
     border: 0px none;
     -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0;
+}
+
+.io-ox-mail-main .window-title .badge {
+    cursor: pointer;
 }

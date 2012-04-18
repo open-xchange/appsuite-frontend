@@ -5,10 +5,12 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
  * @author Stefan Preuss <stefan.preuss@open-xchange.com>
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 define("io.ox/preview/main",
@@ -148,25 +150,6 @@ define("io.ox/preview/main",
             omitDragoutAndClick: true
         }));
     }
-
-    // TODO: remove? duplicate during merge? (see below)
-//    Renderer.point.extend(new Engine({
-//        id: "text",
-//        index: 10,
-//        endings: [ "txt", "js" ],
-//        draw: function (file) {
-//            var $node = this;
-//            $.ajax({ url: file.dataURL, dataType: "html" }).done(function (txt) {
-//                $node.css({
-//                    border: "1px dotted silver",
-//                    padding: "10px",
-//                    whiteSpace: "pre-wrap"
-//                }).text(txt);
-//            });
-//        },
-//        omitClick: true
-//    }));
-
 
     Renderer.point.extend(new Engine({
         id: "eml",

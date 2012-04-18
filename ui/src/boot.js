@@ -82,8 +82,7 @@ $(document).ready(function () {
                     $("#io-ox-login-form")
                         .off('submit')
                         .attr('action', ox.apiRoot + '/redirect')
-                        .find('input[type=hidden][name=location]').val('/ox7/' + location)
-                        .end()
+                        .find('input[type=hidden][name=location]').val('/ox7/' + location).end()
                         .submit();
                 }
             });

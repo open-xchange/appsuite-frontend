@@ -51,14 +51,14 @@ define("io.ox/mail/api",
             get: {
                 action: "get",
                 unseen: "true",
-                view: "noimg"/*,
-                format: "preview_filtered"*/
+                view: "noimg",
+                embedded: "true"
             },
             getUnmodified: {
                 action: "get",
                 unseen: "true",
-                view: "html"/*,
-                format: "preview_filtered"*/
+                view: "html",
+                embedded: "true"
             },
             search: {
                 action: "search",
@@ -94,8 +94,11 @@ define("io.ox/mail/api",
                 // update folder
                 folderAPI.setUnread(opt.folder, unread);
                 // because we also have brand new flags, we merge with list & get caches
-                api.caches.list.merge(data);
-                api.caches.get.merge(data);
+                // however, this gets super slow for folders with lots of mails (>= 10.0000)
+                // so we just update recent mails and ignore "the past"
+                var subset = data.slice(0, 500);
+                api.caches.list.merge(subset);
+                api.caches.get.merge(subset);
                 return data;
             },
             get: function (data) {
@@ -155,52 +158,40 @@ define("io.ox/mail/api",
             sort: options.sort || '610',
             order: options.order || 'desc'
         });
+        console.log('time.pre', _.now() - ox.t0);
         return this.getAll(options, useCache, api.caches.allThreaded)
             .done(function (data) {
                 _(data).each(function (obj) {
                     // build thread hash
-                    threads[obj.folder_id + "." + obj.id] = obj.thread;
+                    threads[obj.folder_id + '.' + obj.id] = obj.thread;
                 });
+                console.log('time.post', data.length, _.now() - ox.t0);
             });
     };
 
     // get mails in thread
     api.getThread = function (obj) {
-        var key;
+        var key, folder, thread;
         if (typeof obj === 'string') {
             key = obj;
             obj = obj.split(/\./);
-            obj = { folder_id: obj[0], id: obj[1] };
+            obj = { folder_id: (folder = obj[0]), id: obj[1] };
         } else {
-            key = obj.folder_id + "." + obj.id;
+            key = (folder = obj.folder_id) + "." + obj.id;
+            obj = { folder_id: folder, id: obj.id };
         }
-        return threads[key] || [obj];
-    };
-
-    // ~ get
-    api.getFullThread = function (obj) {
-        // get list of IDs
-        var key = obj.folder_id + "." + obj.id,
-            thread = threads[key] || [obj],
-            defs = [],
-            self = this;
-        // get each mail
-        _.each(thread, function (t) {
-            defs.push(self.get(t));
-        });
-        // join all deferred objects
-        var result = $.Deferred();
-        $.when.apply($, defs).done(function () {
-            var args = $.makeArray(arguments), tmp = [];
-            args = defs.length > 1 ? args : [args];
-            // loop over results
-            _.each(args, function (obj) {
-                tmp.push(obj[0] || obj);
-            });
-            // resolve
-            result.resolve(tmp);
-        });
-        return result;
+        if (key in threads) {
+            thread = threads[key];
+            if (thread.length === 0) {
+                return [obj];
+            } else if (thread.length > 1) {
+                return _(thread).map(function (id) {
+                    return { folder_id: folder, id: id };
+                });
+            }
+        } else {
+            return [obj];
+        }
     };
 
     // ~ list
@@ -661,10 +652,16 @@ define("io.ox/mail/api",
     // refresh
     ox.on('refresh^', function (e, folder) {
         if (ox.online) {
-            api.getAllThreads({ folder: folder }, false)
-                .done(function () {
-                    api.trigger('refresh.all');
-                });
+            if (folder) {
+                api.getAllThreads({ folder: folder }, false)
+                    .done(function () {
+                        api.trigger('refresh.all');
+                    });
+            } else {
+                api.caches.all.clear();
+                api.caches.allThreaded.clear();
+                api.trigger('refresh.all');
+            }
         }
     });
 

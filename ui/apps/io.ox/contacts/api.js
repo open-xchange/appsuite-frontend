@@ -217,8 +217,10 @@ define('io.ox/contacts/api',
             }
         }
 
-        return autocompleteCache.contains(query).pipe(function (check) {
-            if (!check) {
+        return autocompleteCache.get(query).pipe(function (data) {
+            if (data !== null) {
+                return data;
+            } else {
                 return api.search(query, true)
                     .pipe(function (data) {
                         var tmp = [], hash = {};
@@ -267,8 +269,6 @@ define('io.ox/contacts/api',
                     .done(function (data) {
                         autocompleteCache.add(query, data);
                     });
-            } else {
-                return autocompleteCache.get(query);
             }
         });
     };
@@ -282,8 +282,10 @@ define('io.ox/contacts/api',
         // lower case!
         address = String(address).toLowerCase();
 
-        return contactPictures.contains(address).pipe(function (check) {
-            if (!check) {
+        return contactPictures.get(address).pipe(function (data) {
+            if (data !== null) {
+                return data;
+            } else {
                 return http.PUT({
                     module: 'contacts',
                     params: {
@@ -318,8 +320,6 @@ define('io.ox/contacts/api',
                         return contactPictures.add(address, '');
                     }
                 });
-            } else {
-                return contactPictures.get(address);
             }
         });
     };

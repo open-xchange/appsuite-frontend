@@ -222,7 +222,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             var container,
                 visible = false,
                 top = 0,
-                fnChangeFolder, fnShow, fnToggle, loadTree, initTree;
+                fnChangeFolder, fnShow, fnToggle, toggle, loadTree, initTree;
 
             container = $('<div>')
                 .addClass('abs border-right')
@@ -255,7 +255,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                 return $.when();
             };
 
-            fnToggle = function () {
+            toggle = function () {
                 if (visible) {
                     top = container.scrollTop();
                     container.hide();
@@ -264,6 +264,13 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                     fnShow();
                 }
             };
+
+            fnToggle = function (e) {
+                if (!e.isDefaultPrevented()) {
+                    toggle();
+                }
+            };
+
 
             initTree = function (views) {
                 var tree = app.folderView = new views[options.view](container, {
@@ -280,12 +287,14 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                     });
             };
 
-            loadTree = function () {
-                container.busy();
-                fnToggle();
-                app.showFolderView = fnShow;
-                app.getWindow().nodes.title.off('click', loadTree);
-                return require(['io.ox/core/tk/folderviews']).pipe(initTree);
+            loadTree = function (e) {
+                if (!e.isDefaultPrevented()) {
+                    container.busy();
+                    toggle();
+                    app.showFolderView = fnShow;
+                    app.getWindow().nodes.title.off('click', loadTree);
+                    return require(['io.ox/core/tk/folderviews']).pipe(initTree);
+                }
             };
 
             app.showFolderView = loadTree;

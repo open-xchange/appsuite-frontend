@@ -200,9 +200,9 @@ define("io.ox/files/api",
             throw new Error("Please specify an id for which to fetch versions");
         }
         getOptions.id = options.id;
-        return api.caches.versions.contains(options.id).pipe(function (check) {
-            if (check) {
-                return api.caches.versions.get(options.id);
+        return api.caches.versions.get(options.id).pipe(function (data) {
+            if (data !== null) {
+                return data;
             } else {
                 return http.GET({
                     module: "infostore",
