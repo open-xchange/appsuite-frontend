@@ -193,14 +193,16 @@ define("io.ox/mail/api",
             sort: options.sort || '610',
             order: options.order || 'desc'
         });
-        console.log('time.pre', _.now() - ox.t0);
+        var t1, t2;
+        console.log('time.pre', 't1', (t1 = _.now()) - ox.t0);
         return this.getAll(options, useCache, api.caches.allThreaded)
             .done(function (data) {
                 _(data).each(function (obj) {
                     // build thread hash
                     threads[obj.folder_id + '.' + obj.id] = obj.thread;
                 });
-                console.log('time.post', data.length, _.now() - ox.t0);
+                t2 =
+                console.log('time.post', '#', data.length, 't2', (t2 = _.now()) - ox.t0, 'took', t2 - t1);
             });
     };
 

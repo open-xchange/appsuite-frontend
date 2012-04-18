@@ -105,7 +105,7 @@ define('io.ox/core/tk/text-editor', [], function () {
                 var w = Math.max(10, textarea.outerWidth() - 12 - 750);
                 textarea.css('paddingRight', w + 'px');
                 textarea.parents('.window-content').find('.editor-print-margin')
-                    .css('right', Math.max(0, w - 10) + 'px');
+                    .css('right', Math.max(0, w - 10) + 'px').show();
                 // force reflow
                 textarea.css('display', (alt = !alt) ? 'block' : '');
             }, 100);
