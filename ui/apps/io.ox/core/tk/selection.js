@@ -283,7 +283,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                 lastIndex = -1;
             }
             // could reselect?
-            if (!reselected && index > 0) {
+            if (!reselected && index >= 0) {
                 // causes smooth updates in vgrid when, for example, deleting emails
                 select(observedItems[index]);
             }
