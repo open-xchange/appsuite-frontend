@@ -52,6 +52,7 @@ define("io.ox/mail/main",
         grid,
         GRID_WIDTH = 330,
         // nodes
+        audio,
         left,
         right,
         scrollpane;
@@ -73,6 +74,13 @@ define("io.ox/mail/main",
 
         // folder tree
         commons.addFolderView(app, { width: GRID_WIDTH, type: 'mail' });
+
+        // sound
+        audio = $('<audio>', { src: ox.base + '/apps/io.ox/mail/images/ping.mp3' })
+            .hide().prop('volume', 0.5).appendTo(win.nodes.main);
+        api.on('new-mail', function () {
+            audio.get(0).play();
+        });
 
         // left panel
         left = $("<div>")

@@ -120,6 +120,10 @@ define("io.ox/mail/api",
                 });
                 // update folder
                 folderAPI.setUnread(opt.folder, unread);
+                // event
+                if (unread > 0) {
+                    api.trigger('new-mail');
+                }
                 return data;
             },
             allPost: function (data) {
