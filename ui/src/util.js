@@ -108,7 +108,9 @@
         /** is Firefox? */
         Firefox:  ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1,
         /** MacOS **/
-        MacOS: ua.indexOf('Macintosh') > -1
+        MacOS: ua.indexOf('Macintosh') > -1,
+        /** iOS **/
+        iOS: /iPhone|iPad|iPod/.test(navigator.platform) && webkit
     };
 
     _.url = {
