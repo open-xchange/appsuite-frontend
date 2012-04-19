@@ -97,7 +97,8 @@ define('io.ox/mail/view-detail',
         regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=\d+)(\s*)$/i,
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i,
-        regLink = /^(\s*)(http\S+)(\s*)$/i;
+        regLink = /^(\s*)(http\S+)(\s*)$/i,
+        regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
     var looksLikeMixed = function (att) {
         var firstType = getContentType(att[0].content_type);
@@ -182,6 +183,9 @@ define('io.ox/mail/view-detail',
 
             if (html !== '') {
                 // HTML
+                // replace images on source level
+                html = html.replace(regImageSrc, '$1' + ox.apiRoot);
+                // start constructing
                 content.append($(html))
                     .find('meta').remove().end()
                     // transform outlook's pseudo blockquotes
@@ -243,10 +247,10 @@ define('io.ox/mail/view-detail',
                     })
                     .end().end()
                 .find('blockquote').removeAttr('style type').end()
-                .find('a').attr('target', '_blank').end()
-                .find('img').each(function () {
-                    $(this).attr('src', $(this).attr('src').replace(/^\/ajax/, ox.apiRoot));
-                }).end();
+                .find('a').attr('target', '_blank').end();
+//                .find('img').each(function () {
+//                    $(this).attr('src', $(this).attr('src').replace(/^\/ajax/, ox.apiRoot));
+//                }).end();
 
             // get contents to split long character sequences for better wrapping
             content.find('*').contents().each(function () {
