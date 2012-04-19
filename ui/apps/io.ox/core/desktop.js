@@ -742,7 +742,7 @@ define("io.ox/core/desktop",
                             self.state.visible = true;
                             self.state.open = true;
                             self.trigger("show");
-                            document.title = 'OX7. ' + self.getTitle();
+                            document.title = ox.serverConfig.pageTitle + self.getTitle();
                             if (firstShow) {
                                 self.trigger("open");
                                 self.state.running = true;
@@ -770,7 +770,7 @@ define("io.ox/core/desktop",
                     ox.ui.windowManager.trigger("window.hide", this);
                     if (currentWindow === this) {
                         currentWindow = null;
-                        document.title = 'OX7';
+                        document.title = ox.serverConfig.pageTitle;
                     }
                     return this;
                 };
@@ -872,7 +872,7 @@ define("io.ox/core/desktop",
                     title = t;
                     applyTitle();
                     if (this === currentWindow) {
-                        document.title = 'OX7. ' + t;
+                        document.title = ox.serverConfig.pageTitle + t;
                     }
                     this.trigger('change:title');
                     return this;

@@ -16,18 +16,20 @@ html, body { background-color: #fff; margin: 0; padding: 0; border: 0; overflow:
 </style>
 
 <script>
+var root = location.pathname.replace(/\/[^\/]*$/, '');
 window.ox = {
     abs: location.protocol + '//' + location.host,
-    apiRoot: "/ox7/api",
-    base: "v=@ version @",
+    apiRoot: root + '/api',
+    base: 'v=@ version @',
     online: navigator.onLine !== undefined ? navigator.onLine : true,
+    root: root,
     serverConfig: {},
     session: "",
     signin: false,
     t0: new Date().getTime(), // for profiling
     ui: { session: {} },
-    user: "",
-    windowState: "foreground"
+    user: '',
+    windowState: 'foreground'
 };
 </script>
 

@@ -94,7 +94,7 @@ define('io.ox/game/main', [], function () {
                     '-webkit-transition-timing-function': 'linear',
                     '-webkit-transform': 'translate3d(-' + WIDTH / 2 + 'px, 0, 0)'
                 });
-                showText('OX7 - The Game', 5, 3);
+                showText('OX.7 - The Game', 5, 3);
                 showText('You start as a little\nunexperienced email user ...', 10, 3);
                 showText('... fighting all the way up\nto become ...', 15, 3);
                 showText('A master of groupware', 20, 5);

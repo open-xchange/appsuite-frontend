@@ -476,7 +476,7 @@ define.async('io.ox/mail/write/main',
             if (navigator.registerProtocolHandler) {
                 var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
                 navigator.registerProtocolHandler(
-                    'mailto', url + '#app=io.ox/mail/write:compose&mailto=%s', gt('OX7 Mailer')
+                    'mailto', url + '#app=io.ox/mail/write:compose&mailto=%s', ox.serverConfig.productNameMail
                 );
             }
 

@@ -245,7 +245,7 @@ define('io.ox/mail/view-detail',
                 .find('blockquote').removeAttr('style type').end()
                 .find('a').attr('target', '_blank').end()
                 .find('img').each(function () {
-                    $(this).attr('src', $(this).attr('src').replace(/^\/ajax/, '/ox7/api'));
+                    $(this).attr('src', $(this).attr('src').replace(/^\/ajax/, ox.apiRoot));
                 }).end();
 
             // get contents to split long character sequences for better wrapping

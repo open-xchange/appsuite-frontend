@@ -615,9 +615,9 @@ define("io.ox/mail/api",
         $('.io-ox-mail-write').append(frame);
 
         $(form).attr({
-            'method': 'post',
-            'action': '/ox7/api/mail?action=new&session=' + ox.session,
-            'target': tmpName
+            method: 'post',
+            action: ox.apiRoot + '/mail?action=new&session=' + ox.session,
+            target: tmpName
         });
 
         $(form).submit();

@@ -82,7 +82,7 @@ $(document).ready(function () {
                     $("#io-ox-login-form")
                         .off('submit')
                         .attr('action', ox.apiRoot + '/redirect')
-                        .find('input[type=hidden][name=location]').val('/ox7/' + location).end()
+                        .find('input[type=hidden][name=location]').val(ox.root + '/' + location).end()
                         .submit();
                 }
             });
@@ -446,7 +446,7 @@ $(document).ready(function () {
                 // store server config
                 ox.serverConfig = data;
                 // set page title now
-                document.title = ox.serverConfig.pageTitle || "ox7";
+                document.title = ox.serverConfig.pageTitle || '';
                 // continue
                 autoLogin();
             });
