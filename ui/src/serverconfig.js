@@ -28,8 +28,8 @@ define(function () {
             core: ['halo'],
             halo: ['halo/contacts', 'halo/appointments', 'halo/linkedIn', 'halo/mail'],
             portal: ['appointments', 'linkedIn', 'mail', 'rss'],
-            tests: ['io.ox/mail/write', 'plugins/halo', 'io.ox/contacts', 'io.ox/contacts/edit', 'io.ox/contacts/distrib',
-                    'io.ox/core', 'io.ox/files']
+            tests: ["io.ox/mail/write", "plugins/halo", "io.ox/contacts", "io.ox/contacts/edit", "io.ox/contacts/distrib",
+                    "io.ox/core", "io.ox/files/tests/interface", "io.ox/files/tests/unit"]
         },
 
         previewExtensions : ['doc', 'dot', 'docx', 'dotx', 'docm', 'dotm', 'xls', 'xlt', 'xla', 'xlsx', 'xltx', 'xlsm',

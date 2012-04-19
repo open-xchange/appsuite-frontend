@@ -1,4 +1,18 @@
-define("io.ox/files/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/files/api"], function (ext, files, api) {
+/**
+ *
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Tobias Prinz <tobias.prinz@open-xchange.com>
+ *
+ */
+define("io.ox/files/unit/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/files/api"], function (ext, files, api) {
     "use strict";
 
     function Done() {
@@ -13,7 +27,7 @@ define("io.ox/files/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/
     }
 
     ext.point('test/suite').extend({
-        id: 'files-general',
+        id: 'files-unit-test',
         index: 100,
         test: function (j) {
 
