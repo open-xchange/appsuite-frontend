@@ -84,18 +84,22 @@ define("io.ox/files/interface/test", ["io.ox/core/extensions", "io.ox/files/main
                 j.it('check out the stored data ', function () {
                     var rightBox;
                     j.waitsFor(function () {
-                        var boxes = $('.vgrid-cell.file div.name');
+                        var boxes = $('.vgrid-cell div.name');
                         boxes.each(function (index, box) {
+                            console.log("[" + index + "] '" + $(this).html() + "' vs '" + testtitle + "'");
                             if ($(this).html() === testtitle) {
                                 rightBox = box;
+                                console.log("I knew it!");
                                 return true;
                             }
                         });
                     }, 'waited for the right div to appear in the left navbar', TIMEOUT);
                     
                     j.waitsFor(function () {
-                        rightBox.trigger('click');
-                        return true;
+                        if (rightBox !== null) {
+                            rightBox.trigger('click');
+                            return true;
+                        }
                     }, 'waits', TIMEOUT);
                     
                     j.waitsFor(function () {
