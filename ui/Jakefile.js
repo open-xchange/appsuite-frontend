@@ -235,6 +235,16 @@ utils.concat("pre-core.js",
     ]), { type: "source" }
 );
 
+utils.concat("apps/io.ox/core/bootstrap.js",
+    utils.list("apps/io.ox/core/bootstrap/js", [
+        'bootstrap-transition.js',
+        'bootstrap-tooltip.js',
+        'bootstrap-dropdown.js',
+        'bootstrap-alert.js',
+        'bootstrap-popover.js'
+    ]), { type: "source" }
+);
+
 // module dependencies
 
 var moduleDeps = {};
