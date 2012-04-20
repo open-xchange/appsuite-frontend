@@ -17,7 +17,7 @@ define("io.ox/files/interface/test", ["io.ox/core/extensions", "io.ox/files/main
     "use strict";
 
     var TIMEOUT = 2500;
-    
+
     function Done() {
         var f = function () {
             return f.value;
@@ -48,7 +48,7 @@ define("io.ox/files/interface/test", ["io.ox/core/extensions", "io.ox/files/main
                         app = this;
                         loaded.yep();
                     });
-                    
+
                     j.waitsFor(function () {
                         var button = $("[data-action='upload']");
                         if (button[0]) {
@@ -80,32 +80,32 @@ define("io.ox/files/interface/test", ["io.ox/core/extensions", "io.ox/files/main
                         }
                     }, 'waits', TIMEOUT);
                 });
-                
+
                 j.it('check out the stored data ', function () {
                     var rightBox;
                     j.waitsFor(function () {
-                        var boxes = $('.vgrid-cell div.name');
+                        var boxes = $('.vgrid-cell div.name'), found = false;
                         boxes.each(function (index, box) {
-                            console.log("[" + index + "] '" + $(this).html() + "' vs '" + testtitle + "'");
-                            if ($(this).html() === testtitle) {
-                                rightBox = box;
-                                console.log("I knew it!");
-                                return true;
+                            //console.debug("[" + index + "] '" + $(this).html() + "' vs '" + testtitle + "'");
+                            if ($(this).text() === testtitle) {
+                                rightBox = $(this);
+                                found = true;
                             }
                         });
+                        return found;
                     }, 'waited for the right div to appear in the left navbar', TIMEOUT);
-                    
+
                     j.waitsFor(function () {
                         if (rightBox !== null) {
                             rightBox.trigger('click');
                             return true;
                         }
                     }, 'waits', TIMEOUT);
-                    
-                    j.waitsFor(function () {
-                        var page = $('.file-details .view');
-                        console.log(page);
-                    }, 'waits', TIMEOUT);
+
+                    j.runs(function () {
+                        var page = $('.file-details.view');
+                        j.expect(page.find('.title').text()).toEqual(testtitle);
+                    });
                 });
 
             });//END: j.describe

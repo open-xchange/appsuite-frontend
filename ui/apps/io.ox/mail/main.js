@@ -77,7 +77,7 @@ define("io.ox/mail/main",
 
         // sound
         audio = $('<audio>', { src: ox.base + '/apps/io.ox/mail/images/ping.mp3' })
-            .hide().prop('volume', 0.90).appendTo(win.nodes.main);
+            .hide().prop('volume', 0.50).appendTo(win.nodes.main);
         api.on('new-mail', function () {
             audio.get(0).play();
         });

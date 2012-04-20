@@ -66,7 +66,9 @@ define("io.ox/mail/api",
                 folder: "default0/INBOX",
                 columns: "601,600,611", // + flags
                 sort: "610", // received_date
-                order: "desc"
+                order: "desc",
+                deleted: 'false',
+                limit: '5000' // temp: hard limit for speed
             },
             list: {
                 action: "list",
@@ -110,13 +112,9 @@ define("io.ox/mail/api",
             all: function (data, opt) {
                 // unread count
                 var unread = 0;
-                // ignore deleted mails
-                // TODO: remove once backend supports "deleted=false"
-                data = _(data).filter(function (obj) {
+                _(data).each(function (obj) {
                     // inc unread counter
                     unread += (obj.flags & 32) === 0 ? 1 : 0;
-                    // skip deleted mails
-                    return (obj.flags & 2) === 0;
                 });
                 // update folder
                 folderAPI.setUnread(opt.folder, unread);
@@ -225,7 +223,7 @@ define("io.ox/mail/api",
             thread = threads[key];
             if (thread.length === 0) {
                 return [obj];
-            } else if (thread.length > 1) {
+            } else {
                 return _(thread).map(function (id) {
                     return { folder_id: folder, id: id };
                 });

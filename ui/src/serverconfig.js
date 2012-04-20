@@ -17,11 +17,11 @@ define(function () {
             fr_FR: 'Français'
         },
 
-        defaultContext: '1337',
+        defaultContext: 'open-xchange.com',
 
-        copyright: '&copy; 2011 open xchange.',
+        copyright: '&copy; 2012 open xchange.',
         version: '7.0.0 dev',
-        buildDate: '2010-10-21',
+        buildDate: '2012-04-20',
 
         plugins: {
             signin: [],

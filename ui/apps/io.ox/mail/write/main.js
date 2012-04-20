@@ -280,6 +280,7 @@ define.async('io.ox/mail/write/main',
 
         app.setRawBody = function (str) {
             app.markDirty();
+            console.log('setRaw', str);
             app.getEditor().setContent(str);
         };
 
@@ -293,6 +294,11 @@ define.async('io.ox/mail/write/main',
                 signature = ds ? $.trim(ds.signature_text) : '',
                 pos = ds ? ds.position : 'below',
                 content = $.trim(str);
+            // image URL fix
+            if (editorMode === 'html') {
+                console.log('content', content);
+                content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
+            }
             // set signature?
             if (ds) {
                 // remember as current signature

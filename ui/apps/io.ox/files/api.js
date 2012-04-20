@@ -185,7 +185,7 @@ define("io.ox/files/api",
             })
             .pipe(function (data) {
                 // clear folder cache
-                return api.caches.all.remove(options.folder)
+                return api.caches.all.grepRemove(options.folder)
                     .pipe(function () {
                         api.trigger("create.file", {id: data, folder: options.folder});
                         return { folder_id: String(options.folder), id: String(data ? data : 0) };
