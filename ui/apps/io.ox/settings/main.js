@@ -128,6 +128,11 @@ define('io.ox/settings/main',
 
         grid = new VGrid(left);
 
+        // disable the Deserializer
+        grid.setDeserialize(function (cid) {
+            return cid;
+        });
+
         grid.addTemplate(tmpl.main);
         grid.addLabelTemplate(tmpl.label);
 
@@ -155,12 +160,7 @@ define('io.ox/settings/main',
 
         var showSettings = function (obj) {
             var settingsID;
-            if (obj.folder_id) {
-                settingsID = obj.folder_id + '.' + obj.id + '/settings';
-            } else {
-                settingsID = obj.id + '/settings';
-            }
-
+            settingsID = obj.id + '/settings';
             console.log('load:' + settingsID);
             right.empty().busy();
             require([ settingsID ], function (m) {

@@ -45,7 +45,7 @@ define('io.ox/core/tk/forms',
             self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
         },
         selectChangeByModel = function (e, value) {
-            $(this).val(value);
+            $(this).find('input').val(value);
         },
 
         dateChange = function () {
@@ -106,20 +106,37 @@ define('io.ox/core/tk/forms',
         this.options.id = this.options.id || _.uniqueId(type);
         // node
         this.node = null;
+        this.options.fieldtype = type;
     };
 
     Field.prototype.create = function (tag, onChange) {
-        var o = this.options;
-        this.node = $(tag)
-            .attr({
-                'data-property': o.property,
-                name: o.name,
-                id: o.id,
-                value: o.value,
-                'class': o.span
-            })
-            .on('change', onChange)
-            .addClass(o.classes);
+        var o = this.options,
+            text = $.txt(o.label || ''),
+        mainlabel = $('<label>').addClass(o.fieldtype),
+        element = $(tag)
+        .attr({
+            'data-property': o.property,
+            name: o.name,
+            id: o.id,
+            value: o.value,
+            'class': o.span
+        })
+        .on('change', onChange)
+        .addClass(o.classes);
+
+        if (o.fieldtype === 'text' || o.fieldtype === 'textarea') {
+            mainlabel.append(element);
+        } else {
+            mainlabel.append(element, text);
+        }
+        if (o.fieldtype === 'select') {
+            this.node = $('<div>').addClass('controls').append(element);
+        } else {
+            this.node = o.gabinput ? $('<div>').append(mainlabel) : $('<div>').addClass('controls').append(mainlabel);
+        }
+
+
+
     };
 
 
@@ -135,20 +152,49 @@ define('io.ox/core/tk/forms',
 
     Field.prototype.finish = function (order, classes) {
         // local reference
-        var o = this.options, node = this.node;
-        // wrap label tag around field
+        var o = this.options, node = this.node,
+            label, space, text;
+        // label tag
         if (o.label !== false) {
-            var label = $('<label>', { 'for': o.id }),
-                space = $.txt(' '),
+            if (order === 'before') {
+                // before node
+                if (o.fieldtype === 'checkbox' || o.fieldtype === 'select') {
+                    label = $('<label>', {
+                        'for': o.id
+                    });
+                } else {
+                    label = $('<label>');
+                }
+
+                label.addClass('control-label');
+
+                if (o.fieldtype === 'select' || o.fieldtype === 'text' || o.fieldtype === 'textarea') {
+                    text = $.txt(o.label || '');
+                    label.append(text);
+                } else if (o.fieldtype === 'radio') {
+                    text = $.txt(o.mainlabel || '');
+                    label.append(text);
+                }
+
+            } else {
+                // around field
+                label = $('<label>', { 'for': o.id });
+                space = $.txt(' ');
                 text = $.txt(o.label || '');
-            if (o.labelclass !== false) {
-                label.addClass(o.labelclass);
+                node = label.append.apply(label, order === 'append' ? [node, space, text] : [text, space, node]);
             }
-            node = label.append.apply(label, order === 'append' ? [node, space, text] : [text, space, node]);
+
         }
+
+
         // wrap DIV around field & label
         if (this.options.wrap !== false) {
-            node = $('<div>').addClass(classes).append(node);
+
+            if (classes !== undefined) {
+                node = $('<div>').addClass('control-group' + ' ' + classes).append(label, node);
+            } else {
+                node = $('<div>').addClass('control-group').append(label, node);
+            }
         }
         // clean up
         this.node = this.options = o = null;
@@ -161,42 +207,41 @@ define('io.ox/core/tk/forms',
     var utils = {
 
         createCheckbox: function (options) {
-            var f = new Field(options, 'box');
+            var f = new Field(options, 'checkbox');
             f.create('<input type="checkbox">', boxChange);
             f.applyModel(boxChangeByModel);
-            return f.finish('append', 'checkbox');
+            return f.finish('before');
         },
 
         createSelectbox: function (options) {
             var f = new Field(options, 'select');
             f.create('<select>', selectChange);
-            console.log(options);
             // add options
-            f.node.append(_(options.items).inject(function (memo, text, value) {
+            f.node.find('select').append(_(options.items).inject(function (memo, text, value) {
                 return memo.add($('<option>').attr('value', value).text(text));
             }, $()));
             f.applyModel(selectChangeByModel);
-            return f.finish('prepend');
+            return f.finish('before', options.wraperclass);
         },
 
         createRadioButton: function (options) {
             var f = new Field(options, 'radio');
             f.create('<input type="radio">', radioChange);
             f.applyModel(radioChangeByModel);
-            return f.finish('append', 'radio');
+            return f.finish('before');
         },
 
         createTextField: function (options) {
             var f = new Field(options, 'text');
             f.create('<input type="text">', textChange);
             f.applyModel(textChangeByModel);
-            return f.finish('prepend', 'input');
+            return f.finish('before', 'input');
         },
         createTextArea: function (options) {
             var f = new Field(options, 'text');
             f.create('<textarea>', textChange);
             f.applyModel(textChangeByModel);
-            return f.finish('prepend', 'textarea');
+            return f.finish('before', 'textarea');
         },
         createDateField: function (options) {
             var f = new Field(options, 'date');
@@ -281,12 +326,41 @@ define('io.ox/core/tk/forms',
             return node;
         },
 
+        createInfoText: function (options) {
+            var d = $('<div>').addClass('informational-text');
+            if (options.html) {
+                d.html(options.html);
+            } else {
+                d.text(options.text);
+            }
+            return d;
+        },
+
+        // settings
+
+        createSectionDelimiter: function () {
+            return $('<div>')
+                .addClass('settings sectiondelimiter');
+        },
+
+        createApplicationTitle: function (options) {
+            return $('<div>')
+                .addClass('clear-title')
+                .text(options.text);
+        },
+
+        createSettingsHead: function (app) {
+            return $('<div>')
+                .append(utils.createApplicationTitle({ text: app.title }))
+                .append(utils.createSectionDelimiter());
+        },
+
         createSection: function (options) {
             return $('<div>').addClass('section');
         },
 
         createSectionTitle: function (options) {
-            return $('<div>').addClass('sectiontitle').text(options.text);
+            return $('<legend>').addClass('sectiontitle').text(options.text);
         },
 
         createSectionContent: function (options) {
@@ -297,8 +371,12 @@ define('io.ox/core/tk/forms',
             return $('<div>').addClass('section-group');
         },
 
-        createSectionDelimiter: function () {
-            return $('<div>').addClass('settings sectiondelimiter');
+        createSectionHorizontalWrapper: function () {
+            return $('<div>').addClass('form-horizontal');
+        },
+
+        createInlineWrapper: function () {
+            return $('<div>').addClass('control-group form-inline');
         },
 
         createPicUpload: function (options) {
@@ -332,7 +410,49 @@ define('io.ox/core/tk/forms',
 
         getLastLabelId: function () {
             return lastLabelId;
+        },
+
+        createListBox: function (options) {
+            var ldiv = $('<div>').addClass('listbox');
+            ldiv.append(utils.createListSpacer());
+            _.each(options.model.get(options.dataid), function (item, k) {
+                console.log(k + ':' + item.dataid);
+                ldiv.append(utils.createListItem({ dataid: item.dataid, html: item.html }));
+            });
+            ldiv.append(utils.createListSpacer());
+            return ldiv;
+        },
+
+        createListItem: function (options) {
+            options.classStr = options.classStr || 'deletable-item';
+            var item = $('<div>');
+            item.addClass(options.classStr);
+            item.attr('data-item-id', options.dataid);
+
+            item.append(
+                    $('<a>').html('&times;').addClass('close')
+                  );
+
+            item.append($('<div>').html(options.html));
+
+
+            item.on('click', function () {
+                console.log('click');
+                item.parent().find('div[selected="selected"]').attr('selected', null);
+                item.attr('selected', 'selected');
+            });
+            return item;
+        },
+
+        createListSpacer: function () {
+            return $('<div>').addClass('spacer').css({height: '0px'});
+        },
+
+        createButton: function (options) {
+            return $('<button>').addClass(options.btnclass).text(options.label);
         }
+
+
     };
 
     return utils;

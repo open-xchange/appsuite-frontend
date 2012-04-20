@@ -210,7 +210,8 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             init,
             setIndex,
             getIndex,
-            fnScroll;
+            fnScroll,
+            desirealize;
 
         // add label class
         template.node.addClass('selectable');
@@ -493,6 +494,12 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             return paint(offset);
         }
 
+
+        desirealize = function (cid) {
+            var c = cid.split(/\./);
+            return { folder_id: c[0], id: c[1], recurrence_position: c[2] };
+        };
+
         loadAll = function () {
 
             if (all.length === 0) {
@@ -532,10 +539,8 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                                     var ids = _.url.hash('id').split(/,/), cid, selectionChanged;
                                     // convert ids to objects first - avoids problems with
                                     // non-existing items that cannot be resolved in selections
-                                    ids = _(ids).map(function (cid) {
-                                        var c = cid.split(/\./);
-                                        return { folder_id: c[0], id: c[1], recurrence_position: c[2] };
-                                    });
+
+                                    ids = _(ids).map(desirealize);
                                     selectionChanged = !self.selection.equals(ids);
                                     if (selectionChanged) {
                                         // set
@@ -794,6 +799,12 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
 
         this.getContainer = function () {
             return container;
+        };
+
+        this.setDeserialize = function (fn) {
+            if (_.isFunction(fn)) {
+                desirealize = fn;
+            }
         };
     };
 
