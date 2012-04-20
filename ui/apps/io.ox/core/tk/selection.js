@@ -283,7 +283,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                 lastIndex = -1;
             }
             // could reselect?
-            if (!reselected && index > 0) {
+            if (!reselected && index >= 0) {
                 // causes smooth updates in vgrid when, for example, deleting emails
                 select(observedItems[index]);
             }
@@ -342,19 +342,16 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         this.update = function () {
             // get nodes
             var nodes = container.find('.selectable'),
-                i = 0, $i = nodes.length, node = null, reselected = false;
+                i = 0, $i = nodes.length, node = null;
             for (; i < $i; i++) {
                 node = $(nodes[i]);
                 // is selected?
                 if (isSelected(node.attr('data-obj-id'))) {
                     node.find('input.reflect-selection').attr('checked', 'checked').end()
                         .addClass(self.classSelected);
-                    reselected = true;
+                } else {
+                    node.find('input.reflect-selection').removeAttr('checked');
                 }
-            }
-            if (!reselected) {
-                // try to set last index
-
             }
             return this;
         };

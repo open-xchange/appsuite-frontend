@@ -458,11 +458,14 @@ define('io.ox/core/api/folder',
 
     api.setUnread = function (folder, unread) {
         return folderCache.get(folder).pipe(function (data) {
-                data.unread = Math.max(0, unread);
-                return folderCache.add(folder, data);
-            })
-            .done(function () {
-                api.trigger('change:' + folder);
+                if (data) {
+                    data.unread = Math.max(0, unread);
+                    return folderCache.add(folder, data).done(function () {
+                        api.trigger('change:' + folder);
+                    });
+                } else {
+                    return $.when();
+                }
             });
     };
 

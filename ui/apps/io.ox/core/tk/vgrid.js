@@ -545,6 +545,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                                     if (selectionChanged) {
                                         // set
                                         self.selection.set(ids);
+                                        firstAutoSelect = false;
                                     }
                                     if (selectionChanged || changed) {
                                         // scroll to first selected item

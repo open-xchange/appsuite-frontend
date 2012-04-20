@@ -29,14 +29,6 @@ define("io.ox/mail/main",
 
     var draftFolderId = config.get('modules.mail.defaultFolder.drafts'),
 
-        autoResolveThreads = function (e) {
-            var self = $(this), parents = self.parents();
-            api.get(e.data).done(function (data) {
-                // replace placeholder with mail content
-                self.replaceWith(viewDetail.draw(data).addClass('page'));
-            });
-        },
-
         hToolbarOptions = function (e) {
             e.preventDefault();
             var option = $(this).attr('data-option'),
@@ -60,6 +52,7 @@ define("io.ox/mail/main",
         grid,
         GRID_WIDTH = 330,
         // nodes
+        audio,
         left,
         right,
         scrollpane;
@@ -81,6 +74,13 @@ define("io.ox/mail/main",
 
         // folder tree
         commons.addFolderView(app, { width: GRID_WIDTH, type: 'mail' });
+
+        // sound
+        audio = $('<audio>', { src: ox.base + '/apps/io.ox/mail/images/ping.mp3' })
+            .hide().prop('volume', 0.50).appendTo(win.nodes.main);
+        api.on('new-mail', function () {
+            audio.get(0).play();
+        });
 
         // left panel
         left = $("<div>")
@@ -289,44 +289,13 @@ define("io.ox/mail/main",
                 var thread = api.getThread(obj);
                 // get first mail first
                 api.get(thread[0])
-                    .done(_.lfo(drawThread, thread))
+                    .done(_.lfo(viewDetail.drawThread, right, thread))
                     .fail(_.lfo(drawFail, obj));
             } else {
                 api.get(obj)
                     .done(_.lfo(drawMail))
                     .fail(_.lfo(drawFail, obj));
             }
-        };
-
-        drawThread = function (list, mail) {
-            // loop over thread - use fragment to be fast for tons of mails
-            var i = 0, obj, frag = document.createDocumentFragment();
-            for (; (obj = list[i]); i++) {
-                if (i === 0) {
-                    frag.appendChild(viewDetail.draw(mail).addClass('page').get(0));
-                } else {
-                    frag.appendChild(viewDetail.drawScaffold(obj, autoResolveThreads).get(0));
-                }
-            }
-            scrollpane.scrollTop(0);
-            right.idle().empty().get(0).appendChild(frag);
-            // show many to resolve?
-            var nodes = right.find(".mail-detail"),
-                numVisible = (right.parent().height() / nodes.eq(0).outerHeight(true) >> 0) + 1;
-            // resolve visible
-            nodes.slice(0, numVisible).trigger("resolve");
-            // look for scroll
-            var autoResolve = function (e) {
-                // determine visible nodes
-                e.data.nodes.each(function () {
-                    var self = $(this), bottom = scrollpane.scrollTop() + (2 * right.parent().height());
-                    if (bottom > self.position().top) {
-                        self.trigger('resolve');
-                    }
-                });
-            };
-            scrollpane.off("scroll").on("scroll", { nodes: nodes }, _.debounce(autoResolve, 250));
-            nodes = frag = null;
         };
 
         drawMail = function (data) {

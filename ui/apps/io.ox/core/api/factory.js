@@ -75,18 +75,6 @@ define("io.ox/core/api/factory",
                         params: $.extend({}, opt, { order: 'asc' }) // asc is default due to address book, calendar etc.
                     })
                     .pipe(function (data) {
-                        // tmp. fix until backend delivers reduced data
-                        // TODO: remove then
-                        if (o.module === 'mail') {
-                            _(data).each(function (obj) {
-                                var len = obj.thread.length;
-                                if (len === 1) {
-                                    obj.thread = [];
-                                } else if (len > 1) {
-                                    obj.thread = _(obj.thread).pluck('id');
-                                }
-                            });
-                        }
                         return (o.pipe.all || _.identity)(data, opt);
                     })
                     .done(function (data) {

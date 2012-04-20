@@ -97,7 +97,8 @@ define('io.ox/mail/view-detail',
         regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=\d+)(\s*)$/i,
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i,
-        regLink = /^(\s*)(http\S+)(\s*)$/i;
+        regLink = /^(\s*)(http\S+)(\s*)$/i,
+        regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
     var looksLikeMixed = function (att) {
         var firstType = getContentType(att[0].content_type);
@@ -182,6 +183,9 @@ define('io.ox/mail/view-detail',
 
             if (html !== '') {
                 // HTML
+                // replace images on source level
+                html = html.replace(regImageSrc, '$1' + ox.apiRoot);
+                // start constructing
                 content.append($(html))
                     .find('meta').remove().end()
                     // transform outlook's pseudo blockquotes
@@ -243,10 +247,10 @@ define('io.ox/mail/view-detail',
                     })
                     .end().end()
                 .find('blockquote').removeAttr('style type').end()
-                .find('a').attr('target', '_blank').end()
-                .find('img').each(function () {
-                    $(this).attr('src', $(this).attr('src').replace(/^\/ajax/, '/ox7/api'));
-                }).end();
+                .find('a').attr('target', '_blank').end();
+//                .find('img').each(function () {
+//                    $(this).attr('src', $(this).attr('src').replace(/^\/ajax/, ox.apiRoot));
+//                }).end();
 
             // get contents to split long character sequences for better wrapping
             content.find('*').contents().each(function () {
@@ -269,7 +273,7 @@ define('io.ox/mail/view-detail',
 
         drawScaffold: function (obj, resolver) {
             return $('<div>')
-                .addClass('mail-detail page')
+                .addClass('mail-detail')
                 .busy()
                 .one('resolve', obj, resolver);
         },
@@ -283,6 +287,48 @@ define('io.ox/mail/view-detail',
             var node = $('<div>').addClass('mail-detail');
             ext.point('io.ox/mail/detail').invoke('draw', node, data);
             return node;
+        },
+
+        autoResolveThreads: function (e) {
+            var self = $(this), parents = self.parents();
+            api.get(e.data).done(function (data) {
+                // replace placeholder with mail content
+                self.replaceWith(that.draw(data));
+            });
+        },
+
+        drawThread: function (node, list, mail) {
+            var i = 0, obj, frag = document.createDocumentFragment(),
+                scrollpane = node.closest('.scrollable'),
+                nodes, numVisible;
+            // loop over thread - use fragment to be fast for tons of mails
+            for (; (obj = list[i]); i++) {
+                if (i === 0) {
+                    frag.appendChild(that.draw(mail).get(0));
+                } else {
+                    frag.appendChild(that.drawScaffold(obj, that.autoResolveThreads).get(0));
+                }
+            }
+            scrollpane.scrollTop(0);
+            node.idle().empty().get(0).appendChild(frag);
+            // show many to resolve?
+            nodes = node.find('.mail-detail');
+            numVisible = (node.parent().height() / nodes.eq(0).outerHeight(true) >> 0) + 1;
+            // resolve visible
+            nodes.slice(0, numVisible).trigger('resolve');
+            // look for scroll
+            var autoResolve = function (e) {
+                // determine visible nodes
+                var pane = $(this), node = e.data.node;
+                e.data.nodes.each(function () {
+                    var self = $(this), bottom = pane.scrollTop() + (2 * node.parent().height());
+                    if (bottom > self.position().top) {
+                        self.trigger('resolve');
+                    }
+                });
+            };
+            scrollpane.off('scroll').on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 250));
+            nodes = frag = node = scrollpane = list = mail = null;
         }
     };
 

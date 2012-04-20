@@ -1,5 +1,5 @@
 // NOJSHINT
-// Adapted Jasmine Testing Framework for OX7 Environment
+// Adapted Jasmine Testing Framework for OX UI Environment
 
 define("io.ox/dev/testing/jasmine", function () {
 

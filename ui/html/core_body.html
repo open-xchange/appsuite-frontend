@@ -19,7 +19,7 @@
 
 <!-- Login screen -->
 <div id="io-ox-login-screen-decorator" style="display: none"></div>
-<div id="io-ox-login-screen" class="unselectable" style="display: none">
+<div id="io-ox-login-screen" class="unselectable" style="display: block">
 
     <!-- Background decoration -->
     <div id="io-ox-login-background" class="wallpaper"></div>
@@ -34,22 +34,20 @@
 
         <!-- login dialog; must be hard-coded this way, otherwise browsers won't inject credentials -->
         <div id="login-box-content">
-            <form action="/ox7/api/redirect" method="post" id="io-ox-login-form">
+            <form action="v=@ version @/blank.html" method="post" id="io-ox-login-form">
                 <input type="hidden" name="location" value=""><!-- used by redirect servlet -->
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr>
                             <td>
                                 <label for="io-ox-login-username" class="login-label" data-i18n="User name" >User name</label><br>
-                                <input type="text" tabindex="1" id="io-ox-login-username"
-                                    class="login-credential" name="username" maxlength="1000"
-                                    autocorrect="off" autocapitalize="off" spellcheck="false">
+                                <input type="text" id="io-ox-login-username" name="username" tabindex="1"
+                                    class="login-credential" maxlength="1000" autocorrect="off" autocapitalize="off" spellcheck="false">
                             </td>
                             <td>
                                 <label for="io-ox-login-password" class="login-label" data-i18n="Password">Password</label><br>
-                                <input type="password" tabindex="2" id="io-ox-login-password"
-                                    class="login-credential" name="password" maxlength="100"
-                                    autocorrect="off" autocapitalize="off">
+                                <input type="password" id="io-ox-login-password" name="password" tabindex="2"
+                                    class="login-credential" maxlength="100" autocorrect="off" autocapitalize="off">
                             </td>
                             <td>
                                 <label for="login-button" class="login-label">&nbsp;</label><br>

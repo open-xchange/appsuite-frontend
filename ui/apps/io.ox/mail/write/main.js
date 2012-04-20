@@ -76,11 +76,13 @@ define.async('io.ox/mail/write/main',
             editorHash = {},
             currentSignature = '',
             editorMode,
-            defaultEditorMode = 'text', // config.get('gui.mail.formatmessage', 'TEXT/PLAIN') === 'TEXT/PLAIN' ? 'text' : 'html',
+            defaultEditorMode = config.get('gui.mail.formatmessage', 'TEXT/PLAIN') === 'TEXT/PLAIN' ? 'text' : 'html',
             mailState,
             composeMode,
             view,
             model;
+
+        console.log('defaultEditorMode is', defaultEditorMode);
 
         model = new MailModel();
         view = new WriteView({ model: model });
@@ -278,6 +280,7 @@ define.async('io.ox/mail/write/main',
 
         app.setRawBody = function (str) {
             app.markDirty();
+            console.log('setRaw', str);
             app.getEditor().setContent(str);
         };
 
@@ -291,6 +294,11 @@ define.async('io.ox/mail/write/main',
                 signature = ds ? $.trim(ds.signature_text) : '',
                 pos = ds ? ds.position : 'below',
                 content = $.trim(str);
+            // image URL fix
+            if (editorMode === 'html') {
+                console.log('content', content);
+                content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
+            }
             // set signature?
             if (ds) {
                 // remember as current signature
@@ -474,7 +482,7 @@ define.async('io.ox/mail/write/main',
             if (navigator.registerProtocolHandler) {
                 var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
                 navigator.registerProtocolHandler(
-                    'mailto', url + '#app=io.ox/mail/write:compose&mailto=%s', gt('OX7 Mailer')
+                    'mailto', url + '#app=io.ox/mail/write:compose&mailto=%s', ox.serverConfig.productNameMail
                 );
             }
 
@@ -518,7 +526,7 @@ define.async('io.ox/mail/write/main',
         app.replyall = function (obj) {
             var def = $.Deferred();
             win.show(function () {
-                mailAPI.replyall(obj, editorMode || 'text')
+                mailAPI.replyall(obj, defaultEditorMode || 'text')
                 .done(function (data) {
                     app.setMail({ data: data, mode: 'replyall', initial: true })
                     .done(function () {
@@ -536,7 +544,7 @@ define.async('io.ox/mail/write/main',
         app.reply = function (obj) {
             var def = $.Deferred();
             win.show(function () {
-                mailAPI.reply(obj, editorMode || 'text')
+                mailAPI.reply(obj, defaultEditorMode || 'text')
                 .done(function (data) {
                     app.setMail({ data: data, mode: 'reply', initial: true })
                     .done(function () {
@@ -554,7 +562,7 @@ define.async('io.ox/mail/write/main',
         app.forward = function (obj) {
             var def = $.Deferred();
             win.show(function () {
-                mailAPI.forward(obj, editorMode || 'text')
+                mailAPI.forward(obj, defaultEditorMode || 'text')
                 .done(function (data) {
                     app.setMail({ data: data, mode: 'forward', initial: true })
                     .done(function () {
@@ -751,10 +759,11 @@ define.async('io.ox/mail/write/main',
             var clean = function () {
                 // clean up editors
                 for (var id in editorHash) {
+                    console.log('yeppa', id, editorHash[id]);
                     editorHash[id].destroy();
                 }
                 // clear all private vars
-                app = win = editor = currentSignature = null;
+                app = win = editor = currentSignature = editorHash = null;
             };
 
             if (app.getState() === app.STATES.DIRTY) {
@@ -766,14 +775,13 @@ define.async('io.ox/mail/write/main',
                         .addButton("cancel", gt('Cancel'))
                         .show()
                         .done(function (action) {
-                            console.debug("Action", action);
                             if (action === 'delete') {
+                                clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
                                 def.resolve();
-                                clean();
                             } else if (action === 'savedraft') {
                                 app.saveDraft().done(function (mail) {
-                                    def.resolve();
                                     clean();
+                                    def.resolve();
                                 }).fail(function (e) {
                                     def.reject(e);
                                 });

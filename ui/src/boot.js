@@ -27,6 +27,14 @@ $(document).ready(function () {
 
     "use strict";
 
+    if (1 > 2) {
+        $('#io-ox-login-header').text('Yalla ' + _.now());
+        $('#background_loader').hide();
+        $('#io-ox-login-screen').show();
+
+        return;
+    }
+
     // animations
     var DURATION = 250,
         // flags
@@ -82,7 +90,8 @@ $(document).ready(function () {
                     $("#io-ox-login-form")
                         .off('submit')
                         .attr('action', ox.apiRoot + '/redirect')
-                        .find('input[type=hidden][name=location]').val('/ox7/' + location).end()
+                        .removeAttr('target')
+                        .find('input[type=hidden][name=location]').val(ox.root + '/' + location).end()
                         .submit();
                 }
             });
@@ -123,8 +132,9 @@ $(document).ready(function () {
      * Handler for form submit
      */
     fnSubmit = function (e) {
-        // stop
+        // stop unless iOS
         e.preventDefault();
+        //if (!_.browser.iOS) {  }
         // restore form
         var restore = function () {
                 // stop being busy
@@ -293,8 +303,7 @@ $(document).ready(function () {
             loadCore();
         } else if (ox.serverConfig.autoLogin === true && ox.online) {
             // try auto login
-            var session = require("io.ox/core/session");
-            session.autoLogin()
+            require("io.ox/core/session").autoLogin()
                 .done(function () {
                     gotoCore(true);
                 })
@@ -363,7 +372,7 @@ $(document).ready(function () {
 
         return $.when(
                 // load extensions
-                require("io.ox/core/extensions").loadPlugins(),
+                require(["io.ox/core/extensions"]).pipe(function (ext) { return ext.loadPlugins(); }),
                 // use browser language
                 setDefaultLanguage()
             )
@@ -371,7 +380,6 @@ $(document).ready(function () {
                 // show login dialog
                 $("#io-ox-login-blocker").on("mousedown", false);
                 $("#io-ox-login-form").on("submit", fnSubmit);
-                $("#io-ox-login-screen").show();
                 $("#io-ox-login-username").removeAttr("disabled").focus().select();
                 $("#background_loader").idle().fadeOut(DURATION, cont);
             });
@@ -446,7 +454,7 @@ $(document).ready(function () {
                 // store server config
                 ox.serverConfig = data;
                 // set page title now
-                document.title = ox.serverConfig.pageTitle || "ox7";
+                document.title = ox.serverConfig.pageTitle || '';
                 // continue
                 autoLogin();
             });

@@ -177,11 +177,8 @@
     -moz-user-select: text;
     user-select: text;
     clear: both;
-}
-
-.mail-detail.page {
-    border-bottom: 1px solid #eee;
     padding: 30px 40px 30px 40px;
+    border-bottom: 1px solid #eee;
     min-height: 200px;
 }
 
@@ -190,11 +187,11 @@
     height: 0px;
 }
 
-.mail-detail.page:last-child {
+.mail-detail:last-child {
     border-bottom: 0px none;
 }
 
-.mail-detail.page .infoblock {
+.mail-detail .infoblock {
 	padding: 13px;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
@@ -202,7 +199,7 @@
     cursor: pointer;
 }
 
-.mail-detail.page .infoblock a {
+.mail-detail .infoblock a {
     text-decoration: underline;
 }
 
@@ -324,7 +321,7 @@
 .spotlight .mail-detail-pane { background-color: #444; }
 .spotlight .scrollable-pane { max-width: 900px; min-height: 100%; background-color: white; }
 
-.spotlight .mail-detail.page { border-color: #444; border-width: 5px; background-color: #eee; min-height: 400px; }
+.spotlight .mail-detail { border-color: #444; border-width: 5px; background-color: #eee; min-height: 400px; }
 .spotlight .content { background-color: white; max-width: 100%; padding: 30px 110px 30px 40px !important; margin: 0 -40px -30px -40px; min-height: 300px; }
 .spotlight .mail-detail .content.plain-text { max-width: 100%; }
 .spotlight .subject { color: #555; }

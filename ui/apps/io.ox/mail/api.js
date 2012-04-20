@@ -66,7 +66,9 @@ define("io.ox/mail/api",
                 folder: "default0/INBOX",
                 columns: "601,600,611", // + flags
                 sort: "610", // received_date
-                order: "desc"
+                order: "desc",
+                deleted: 'false',
+                limit: '5000' // temp: hard limit for speed
             },
             list: {
                 action: "list",
@@ -110,16 +112,16 @@ define("io.ox/mail/api",
             all: function (data, opt) {
                 // unread count
                 var unread = 0;
-                // ignore deleted mails
-                // TODO: remove once backend supports "deleted=false"
-                data = _(data).filter(function (obj) {
+                _(data).each(function (obj) {
                     // inc unread counter
                     unread += (obj.flags & 32) === 0 ? 1 : 0;
-                    // skip deleted mails
-                    return (obj.flags & 2) === 0;
                 });
                 // update folder
                 folderAPI.setUnread(opt.folder, unread);
+                // event
+                if (unread > 0) {
+                    api.trigger('new-mail');
+                }
                 return data;
             },
             allPost: function (data) {
@@ -193,14 +195,16 @@ define("io.ox/mail/api",
             sort: options.sort || '610',
             order: options.order || 'desc'
         });
-        console.log('time.pre', _.now() - ox.t0);
+        var t1, t2;
+        console.log('time.pre', 't1', (t1 = _.now()) - ox.t0);
         return this.getAll(options, useCache, api.caches.allThreaded)
             .done(function (data) {
                 _(data).each(function (obj) {
                     // build thread hash
                     threads[obj.folder_id + '.' + obj.id] = obj.thread;
                 });
-                console.log('time.post', data.length, _.now() - ox.t0);
+                t2 =
+                console.log('time.post', '#', data.length, 't2', (t2 = _.now()) - ox.t0, 'took', t2 - t1);
             });
     };
 
@@ -219,7 +223,7 @@ define("io.ox/mail/api",
             thread = threads[key];
             if (thread.length === 0) {
                 return [obj];
-            } else if (thread.length > 1) {
+            } else {
                 return _(thread).map(function (id) {
                     return { folder_id: folder, id: id };
                 });
@@ -613,9 +617,9 @@ define("io.ox/mail/api",
         $('.io-ox-mail-write').append(frame);
 
         $(form).attr({
-            'method': 'post',
-            'action': '/ox7/api/mail?action=new&session=' + ox.session,
-            'target': tmpName
+            method: 'post',
+            action: ox.apiRoot + '/mail?action=new&session=' + ox.session,
+            target: tmpName
         });
 
         $(form).submit();
