@@ -21,6 +21,7 @@ define('io.ox/core/api/account',
 
     // quick hash for sync checks
     var idHash = {},
+        typeHash = {},
         // chache
         cache = new cache.ObjectCache('account', true, function (o) { return String(o.id); }),
         // default separator
@@ -54,7 +55,6 @@ define('io.ox/core/api/account',
             };
 
         _(data).each(function (account) {
-            idHash[account.id] = true;
             fix(account, 'trash', 'Trash');
             fix(account, 'sent', 'Sent');
             fix(account, 'drafts', 'Drafts');
@@ -102,6 +102,11 @@ define('io.ox/core/api/account',
 
     api.isAccount = function (id) {
         return id in idHash;
+    };
+
+    // is drafts, trash, spam etc.
+    api.is = function (id, type) {
+        return typeHash[id] === type;
     };
 
     api.parseAccountId = function (str, strict) {
@@ -160,16 +165,26 @@ define('io.ox/core/api/account',
         };
 
         return cache.keys().pipe(function (keys) {
-            if (keys.length > 0) {
-                return cache.values();
-            } else {
-                return getter().pipe(function (data) {
-                    data = process(data);
-                    cache.add(data);
-                    return data;
+                if (keys.length > 0) {
+                    return cache.values();
+                } else {
+                    return getter().pipe(function (data) {
+                        data = process(data);
+                        cache.add(data);
+                        return data;
+                    });
+                }
+            })
+            .pipe(function (list) {
+                _(list).each(function (account) {
+                    // remember account id
+                    idHash[account.id] = true;
+                    // remember types
+                    _('sent drafts'.split(' ')).each(function (type) {
+                        typeHash[account[type + '_fullname']] = type;
+                    });
                 });
-            }
-        });
+            });
     };
 
     /**

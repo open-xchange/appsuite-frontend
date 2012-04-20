@@ -138,6 +138,7 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
         },
 
         getFrom: function (list, prewrap) {
+            list = list || [['', '']];
             var dn = that.getDisplayName(list[0]);
             return $('<span>').addClass('person').text(prewrap ? _.prewrap(dn) : dn);
         },

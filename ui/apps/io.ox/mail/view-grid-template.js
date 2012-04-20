@@ -15,7 +15,8 @@ define('io.ox/mail/view-grid-template',
     ['io.ox/mail/util',
      'io.ox/mail/api',
      'io.ox/core/tk/vgrid',
-     'less!io.ox/mail/style.css'], function (util, api, VGrid) {
+     'io.ox/core/api/account',
+     'less!io.ox/mail/style.css'], function (util, api, VGrid, account) {
 
     'use strict';
 
@@ -50,7 +51,9 @@ define('io.ox/mail/view-grid-template',
                 } else {
                     fields.threadSize.text(data.threadSize).css('display', '');
                 }
-                fields.from.empty().append(util.getFrom(data.from), true);
+                fields.from.empty().append(
+                    util.getFrom(account.is(data.folder_id, 'sent') ? data.to : data.from, true)
+                );
                 fields.date.text(util.getTime(data.received_date));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
                 fields.flag.get(0).className = 'flag flag_' + (data.color_label || 0);
