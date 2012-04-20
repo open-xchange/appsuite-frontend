@@ -442,5 +442,14 @@
             };
         }())
     });
+    
+    /**
+     * Available only in debug builds;
+     */
+    assert(window.assert = function (value, message) {
+        if (value) return;
+        console.error(message);
+        if (console.trace) console.trace();
+    });
 
 }());

@@ -448,3 +448,20 @@ exports.includes = {
     }
     
 };
+
+/**
+ * A filter which processes //@include directives and takes care of dependencies
+ */
+exports.includeFilter = function (data) {
+    var dest = this.task.name;
+    exports.includes.set(dest, []);
+    var dir = path.dirname(this.getSrc(1).name);
+    return data.replace(/\/\/@include\s+(.*?)(\S*)$/gm,
+        function(m, prefix, name) {
+            return (prefix || "") + exports.list(dir, name).map(function(file) {
+                var include = path.join(dir, file);
+                exports.includes.add(dest, include);
+                return fs.readFileSync(include, "utf8");
+            }).join("\n");
+        });
+};

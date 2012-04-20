@@ -57,12 +57,12 @@
         }
         (function () {
             var window; // pretend we're not in a browser
-            //@include parser.js
+            //@include ../lib/less.js/lib/less/parser.js
         }());
-        //@include tree.js
-        //@include colors.js
-        //@include functions.js
-        //@include tree/*.js
+        //@include ../lib/less.js/lib/less/tree.js
+        //@include ../lib/less.js/lib/less/colors.js
+        //@include ../lib/less.js/lib/less/functions.js
+        //@include ../lib/less.js/lib/less/tree/*.js
         less.Parser.importer = function (file, paths, callback) {
             var filename = paths[0] ? paths[0] + "/" + file : file;
             window.require(["text!" + filename], function (data) {

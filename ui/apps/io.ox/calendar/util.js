@@ -17,7 +17,7 @@ define("io.ox/calendar/util",
     "use strict";
 
     // week day names
-    var n_dayShort = "So Mo Di Mi Do Fr Sa".split(' '), // date.locale.daysNarrow,
+    var n_dayShort = date.locale.daysNarrow,
         n_day = [gettext("Sunday"), gettext("Monday"), gettext("Tuesday"),
                  gettext("Wednesday"), gettext("Thursday"), gettext("Friday"),
                  gettext("Saturday")

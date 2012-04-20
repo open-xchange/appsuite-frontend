@@ -10,7 +10,7 @@
         "Freitag",
         "Samstag"
     ],
-    "shortDays": [
+    "daysShort": [
         "So.",
         "Mo.",
         "Di.",
@@ -19,7 +19,7 @@
         "Fr.",
         "Sa."
     ],
-    "narrowDays": [
+    "daysNarrow": [
         "S",
         "M",
         "D",
@@ -42,7 +42,7 @@
         "November",
         "Dezember"
     ],
-    "shortMonths": [
+    "monthsShort": [
         "Jan",
         "Feb",
         "Mär",
@@ -58,5 +58,19 @@
     ],
     "date": "dd.MM.yyyy",
     "time": "HH:mm:ss",
-    "dateTime": "dd.MM.yyyy HH:mm:ss"
+    "dateTime": "dd.MM.yyyy HH:mm:ss",
+    "dayPeriods": {
+        "afternoon": "nachmittags",
+        "am": "vorm.",
+        "earlyMorning": "morgens",
+        "evening": "abends",
+        "morning": "vormittags",
+        "night": "nachts",
+        "noon": "Mittag",
+        "pm": "nachm."
+    },
+    "eras": [
+        "v. Chr.",
+        "n. Chr."
+    ]
 }

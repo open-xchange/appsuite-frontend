@@ -10,7 +10,7 @@
         "vendredi",
         "samedi"
     ],
-    "shortDays": [
+    "daysShort": [
         "dim.",
         "lun.",
         "mar.",
@@ -19,7 +19,7 @@
         "ven.",
         "sam."
     ],
-    "narrowDays": [
+    "daysNarrow": [
         "D",
         "L",
         "M",
@@ -42,7 +42,7 @@
         "novembre",
         "décembre"
     ],
-    "shortMonths": [
+    "monthsShort": [
         "janv.",
         "févr.",
         "mars",
@@ -58,5 +58,14 @@
     ],
     "date": "d MMM y",
     "time": "HH:mm:ss",
-    "dateTime": "d MMM y HH:mm:ss"
+    "dateTime": "d MMM y HH:mm:ss",
+    "dayPeriods": {
+        "afternoon": "ap.m.",
+        "am": "av.m.",
+        "pm": "p"
+    },
+    "eras": [
+        "av. J.-C.",
+        "ap. J.-C."
+    ]
 }
