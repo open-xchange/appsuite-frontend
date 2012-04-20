@@ -48,28 +48,21 @@
 .settings-detail-pane .section {
     max-width: 800px;
 }
-.settings-detail-pane .section-group {
-    margin: 10px 0;
-}
-.settings-detail-pane  .sectiontitle {
-    float: left;
-    width: 100px;
-    font-size: 1.2em;
-    font-weight: bold;
-}
-.settings-detail-pane .sectioncontent {
-    margin-top: 0px;
-    padding-top: 0px;
-    float: left;
-    width: 600px;
+
+.settings-detail-pane .form-horizontal .control-group > label {
+	float: left;
+	width: 180px;
+	padding-top: 5px;
+	text-align: right;
 }
 
-.settings-detail-pane .informational-text {
-    margin: 0px 0px 10px 0px;
+.settings-detail-pane  .form-horizontal .controls {
+	margin-left: 200px;
 }
 
-.settings-detail-pane .button-leftspacing {
-    margin-left: 10px;
+.settings-detail-pane .form-inline {
+	text-align: right;
+	width: 470px;
 }
 
 .settings-detail-pane button{
@@ -91,6 +84,7 @@
   border-color: hsl(214, 91%, 65%);
   z-index: 2;
 }
+
 .settings-detail-pane .listbox > [selected] {
 	background-color: @selected-background !important;
     background-image: -webkit-gradient(
@@ -110,15 +104,18 @@
     border-bottom-color: black;
     color: #fff;
 }
+
 .settings-detail-pane .listbox:not([disabled]) > :hover {
 	border-color: hsl(214, 91%, 85%);
 	z-index: 1;
 	background-color: hsl(214, 91%, 97%);
 }
+
 .settings-detail-pane .listbox:focus > [selected] {
 	background-color: hsl(214,91%,89%);
 	border-color: hsl(214, 91%, 65%);
 }
+
 .settings-detail-pane .listbox > .spacer {
 	border: 0;
  	box-sizing: border-box;

@@ -41,12 +41,14 @@ input#image1 {
 }
 
 .contact-detail.edit .sectiontitle {
+	font-size: 13px;
 	margin: 25px 0 15px 0;
 	padding-left: 167px;
 	color: #888;
     font-family: @font-light;
 	font-weight: 200;
     cursor: pointer;
+    border: none;
 }
 
 .contact-detail.edit .picture {
@@ -71,7 +73,7 @@ input#image1 {
 
 .contact-detail.edit .sectioncontent,
 .contact-detail.edit .section-group {
-	overflow: hidden;
+	/*overflow: hidden;*/
 }
 
 .contact-detail.edit input.input-large {
