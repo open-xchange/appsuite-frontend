@@ -349,7 +349,7 @@ define("io.ox/mail/api",
      */
     function updateFlags(cache, folder, hash, bitmask) {
         // get proper keys (differ due to sort/order suffix)
-        return cache.grepKeys(folder).pipe(function (keys) {
+        return cache.grepKeys(folder + '\t').pipe(function (keys) {
             return $.when.apply($,
                 _(keys).each(function (folder) {
                     return cache.get(folder).pipe(function (data) {

@@ -64,7 +64,7 @@ define("io.ox/core/api/factory",
             getAll: function (options, useCache, cache) {
                 // merge defaults for "all"
                 var opt = $.extend({}, o.requests.all, options || {}),
-                    cid = opt.folder + '\t' + opt.sort;
+                    cid = opt.folder + '\t' + opt.sort + '.' + opt.order + '.' + opt.limit;
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 cache = cache || caches.all;
@@ -72,7 +72,7 @@ define("io.ox/core/api/factory",
                 var getter = function () {
                     return http.GET({
                         module: o.module,
-                        params: $.extend({}, opt, { order: 'asc' }) // asc is default due to address book, calendar etc.
+                        params: opt
                     })
                     .pipe(function (data) {
                         return (o.pipe.all || _.identity)(data, opt);
@@ -84,9 +84,6 @@ define("io.ox/core/api/factory",
                 };
 
                 return (useCache ? cache.get(cid, getter) : getter())
-                    .pipe(function (data) {
-                        return opt.order === 'asc' ? data : data.reverse();
-                    })
                     .pipe(o.pipe.allPost)
                     .done(o.done.all || $.noop);
             },
