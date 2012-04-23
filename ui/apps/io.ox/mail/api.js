@@ -118,10 +118,6 @@ define("io.ox/mail/api",
                 });
                 // update folder
                 folderAPI.setUnread(opt.folder, unread);
-                // event
-                if (unread > 0) {
-                    api.trigger('new-mail');
-                }
                 return data;
             },
             allPost: function (data) {
@@ -721,10 +717,13 @@ define("io.ox/mail/api",
     // disable default refresh
     ox.off('refresh^.mail');
 
+    var lastUnseenMail = 0;
+
     // refresh
     ox.on('refresh^', function (e, folder) {
         if (ox.online) {
             if (folder) {
+                // refresh current view
                 api.getAllThreads({ folder: folder }, false)
                     .done(function () {
                         api.trigger('refresh.all');
@@ -734,6 +733,34 @@ define("io.ox/mail/api",
                 api.caches.allThreaded.clear();
                 api.trigger('refresh.all');
             }
+            // look for new unseen mails in INBOX
+            http.GET({
+                module: 'mail',
+                params: {
+                    action: 'all',
+                    folder: 'default0/INBOX',
+                    columns: '610',
+                    unseen: 'true',
+                    deleted: 'false',
+                    sort: '610',
+                    order: 'desc'
+                }
+            })
+            .done(function (unseen) {
+                var recent;
+                // found unseen mails?
+                if (unseen.length) {
+                    // check most recent mail
+                    recent = _(unseen).filter(function (obj) {
+                        return obj.received_date > lastUnseenMail;
+                    });
+                    if (recent.length) {
+                        api.trigger('new-mail', recent);
+                        lastUnseenMail = recent[0].received_date;
+                    }
+                    api.trigger('unseen-mail', unseen);
+                }
+            });
         }
     });
 
