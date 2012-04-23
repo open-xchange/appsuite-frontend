@@ -550,6 +550,8 @@ define('io.ox/mail/view-detail',
         ref: 'io.ox/mail/links/inline'
     }));
 
+    // TODO: remove click handler out of inner closure
+
     ext.point('io.ox/mail/detail').extend({
         index: 195,
         id: 'externalresources-warning',

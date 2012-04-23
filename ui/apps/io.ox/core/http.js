@@ -704,12 +704,14 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             var i = 0, item = null, tmp = new Array(list.length);
             for (; (item = list[i]); i++) {
                 if (typeof item === "object") {
-                    tmp[i] = { id: item.id };
-                    if (item.folder || item.folder_id) {
-                        tmp[i].folder = item.folder || item.folder_id;
-                    }
-                    if (item.recurrence_position) {
-                        tmp[i].recurrence_position = item.recurrence_position;
+                    if ('folder_id' in item || 'folder' in item) {
+                        tmp[i] = {
+                            id: item.id,
+                            folder: item.folder_id || item.folder
+                        };
+                        if (item.recurrence_position) {
+                            tmp[i].recurrence_position = item.recurrence_position;
+                        }
                     }
                 } else {
                     // just integers for example

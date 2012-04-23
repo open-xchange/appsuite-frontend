@@ -490,12 +490,39 @@ define("io.ox/mail/api",
     };
 
     api.getUnmodified = function (obj) {
-        return this.get({
-            action: 'get',
-            id: obj.id,
-            folder: obj.folder || obj.folder_id,
-            view: 'html'
-        }, false);
+        // has folder?
+        if ('folder_id' in obj || 'folder' in obj) {
+            return this.get({
+                action: 'get',
+                id: obj.id,
+                folder: obj.folder || obj.folder_id,
+                view: 'html'
+            }, false);
+        } else if ('parent' in obj) {
+            // nested message!?
+            var id = obj.id, parent = obj.parent;
+            return this.get({
+                    action: 'get',
+                    id: obj.parent.id,
+                    folder: obj.parent.folder || obj.parent.folder_id,
+                    view: 'html'
+                }, false)
+                .pipe(function (data) {
+                    return _.chain(data.nested_msgs)
+                        .filter(function (obj) {
+                            if (obj.id === id) {
+                                obj.parent = parent;
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        })
+                        .first().value();
+                });
+        } else {
+            console.error('api.getUnmodified', obj);
+            return $.Deferred().resolve(obj);
+        }
     };
 
     api.getSource = function (obj) {
