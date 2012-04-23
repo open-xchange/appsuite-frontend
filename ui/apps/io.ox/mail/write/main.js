@@ -694,15 +694,17 @@ define.async('io.ox/mail/write/main',
             if (mail.data.infostore_ids) {
                 mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
             }
+            // close window now (!= quit / might be reopened)
+            app.markClean();
+            win.busy().preQuit();
             // send!
             mailAPI.send(mail.data, mail.files)
                 .always(function (result) {
                     if (result.error) {
                         console.error(result);
-                        win.show();
+                        win.idle().show();
                         alert(gt('Server error - see console :('));
                     } else {
-                        app.markClean();
                         app.quit();
                     }
                 });

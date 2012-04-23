@@ -46,13 +46,14 @@ define("io.ox/preview/main",
     }
 
     var Renderer = {
+
         point: ext.point("io.ox/preview/engine"),
 
         getByExtension: function (fileExtension) {
             return this.point.chain().find(function (ext) {
-                var endings = ext.metadata("endings");
-                endings = _.isArray(endings) ? endings : [endings];
-                return _(endings).contains(fileExtension);
+                var tmp = ext.metadata("supports");
+                tmp = _.isArray(tmp) ? tmp : [tmp];
+                return _(tmp).contains(fileExtension);
             }).value();
         }
     };
@@ -87,7 +88,7 @@ define("io.ox/preview/main",
     Renderer.point.extend(new Engine({
         id: "image",
         index: 10,
-        endings: ["png", "jpg", "jpeg", "gif", "bmp"],
+        supports: ["png", "jpg", "jpeg", "gif", "bmp"],
         draw: function (file, options) {
             var param = {
                 width: options.width || 400,
@@ -108,15 +109,15 @@ define("io.ox/preview/main",
         Renderer.point.extend(new Engine({
             id: "audio",
             index: 10,
-            endings: (function () {
-                var endings = [];
+            supports: (function () {
+                var tmp = [];
                 $.each(Modernizr.audio, function (id, elem) {
-                    endings.push(id);
+                    tmp.push(id);
                 });
-                return endings;
+                return tmp;
             }()),
             draw: function (file) {
-                $("<audio/>").attr({
+                $("<audio>").attr({
                     controls: "controls",
                     src: file.dataURL
                 }).appendTo(this);
@@ -130,7 +131,7 @@ define("io.ox/preview/main",
         Renderer.point.extend(new Engine({
             id: "office",
             index: 10,
-            endings: ox.serverConfig.previewExtensions,
+            supports: ox.serverConfig.previewExtensions,
             draw: function (file) {
                 var $a = clickableLink(file, function () {
                     require(["io.ox/preview/officePreview"], function (officePreview) {
@@ -152,19 +153,21 @@ define("io.ox/preview/main",
     }
 
     Renderer.point.extend(new Engine({
-        id: "eml",
-        endings: ["eml"],
+        id: 'eml',
+        supports: ['eml', 'message/rfc822'],
         draw: function (file) {
+            var self = this;
             require(['io.ox/mail/view-detail'], function (view) {
                 var data = file.data.nested_message;
-                this.append(view.draw(data));
+                self.append(view.draw(data).css('padding', 0));
             });
-        }
+        },
+        omitClick: true
     }));
 
     Renderer.point.extend(new Engine({
-        id: "text",
-        endings: ["txt", "asc", "js", "md"],
+        id: 'text',
+        supports: ['txt', 'plain/text', 'asc', 'js', 'md'],
         draw: function (file) {
             var node = this;
             $.ajax({ url: file.dataURL, dataType: 'text' }).done(function (text) {
@@ -189,7 +192,9 @@ define("io.ox/preview/main",
     }));
 
     var Preview = function (file, options) {
+
         var self = this;
+
         this.file = _.copy(file, true); // work with a copy
         this.options = options || {};
 
@@ -205,18 +210,17 @@ define("io.ox/preview/main",
             this.file.name = this.file.filename;
         }
 
-        this.extension =  (function () {
+        this.extension = (function () {
             var extension = self.file.name.match(/\.([a-z0-9]{2,})$/i);
-            if (extension.length > 0) {
+            if (extension && extension.length > 0) {
                 return String(extension[1]).toLowerCase();
             }
-            return "";
+            return '';
         }());
-
 
         if (this.file.name) {
             // get matching renderer
-            this.renderer = Renderer.getByExtension(this.extension);
+            this.renderer = Renderer.getByExtension(this.extension || this.file.mimetype);
         }
     };
 
@@ -227,14 +231,7 @@ define("io.ox/preview/main",
         },
 
         supportsPreview: function () {
-            if (this.renderer) {
-                if (this.renderer.canRender) {
-                    return this.renderer.canRender(this.file);
-                }
-                return true;
-            } else {
-                return false;
-            }
+            return !!this.renderer;
         },
 
         appendTo: function (node) {

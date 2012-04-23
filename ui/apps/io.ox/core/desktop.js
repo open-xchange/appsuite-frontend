@@ -614,7 +614,7 @@ define("io.ox/core/desktop",
             that.trigger("empty", false);
         });
 
-        that.on("window.close window.quit", function (e, win, type) {
+        that.on("window.close window.quit window.pre-quit", function (e, win, type) {
 
             var pos = _(windows).indexOf(win), i, $i, w;
             if (pos !== -1) {
@@ -623,7 +623,7 @@ define("io.ox/core/desktop",
                     windows.splice(pos, 1);
                 }
                 // close?
-                else if (type === "window.close") {
+                else if (type === "window.close" || type === 'window.pre-quit') {
                     windows = _(windows).without(win);
                     windows.push(win);
                 }
@@ -784,13 +784,21 @@ define("io.ox/core/desktop",
                     return this;
                 };
 
+                this.preQuit = function () {
+                    this.hide();
+                    this.state.open = false;
+                    this.trigger("pre-quit");
+                    ox.ui.windowManager.trigger("window.pre-quit", this);
+                    return this;
+                };
+
                 this.close = function () {
 
                     // local self
                     var self = this;
-                    $('#myGrowl').jGrowl('shutdown'); // maybe needs a better solution to trigger the jGrowl shutdown
 
                     if (quitOnClose && this.app !== null) {
+                        $('#myGrowl').jGrowl('shutdown'); // maybe needs a better solution to trigger the jGrowl shutdown
                         this.trigger("beforequit");
                         this.app.quit()
                             .done(function () {
@@ -819,6 +827,7 @@ define("io.ox/core/desktop",
                         self.nodes.blocker.busy().show();
                         self.trigger('busy');
                     }
+                    return this;
                 };
 
                 this.idle = function (enable) {
@@ -829,6 +838,7 @@ define("io.ox/core/desktop",
                             .removeAttr('disabled').removeClass(TOGGLE_CLASS);
                         self.trigger('idle');
                     }
+                    return this;
                 };
 
                 this.destroy = function () {
@@ -851,6 +861,7 @@ define("io.ox/core/desktop",
 
                 this.setQuitOnClose = function (flag) {
                     quitOnClose = !!flag;
+                    return this;
                 };
 
                 var title = "";

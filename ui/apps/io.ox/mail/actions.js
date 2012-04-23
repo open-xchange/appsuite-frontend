@@ -255,7 +255,11 @@ define('io.ox/mail/actions',
                     var list = _.getArray(e.context);
                     // is at least one attachment supported?
                     return e.collection.has('some') && _(list).reduce(function (memo, obj) {
-                        return memo || new p.Preview({ filename: obj.filename }).supportsPreview();
+                        return memo || new p.Preview({
+                            filename: obj.filename,
+                            mimetype: obj.content_type
+                        })
+                        .supportsPreview();
                     }, false);
                 });
         },
@@ -269,6 +273,7 @@ define('io.ox/mail/actions',
                         var pre = new p.Preview({
                             data: data,
                             filename: data.filename,
+                            mimetype: data.content_type,
                             dataURL: api.getUrl(data, 'view')
                         }, {
                             width: popup.parent().width(),

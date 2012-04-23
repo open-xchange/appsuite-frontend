@@ -488,7 +488,7 @@ define('io.ox/mail/view-detail',
         id: 'attachments',
         draw: function (data) {
 
-            var i, $i, obj, parent, dat, attachments = [], hasAttachments = false,
+            var i, $i, obj, dat, attachments = [], hasAttachments = false,
                 mail = { id: data.id, folder_id: data.folder_id };
 
             // get nested messages
