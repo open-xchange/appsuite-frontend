@@ -161,8 +161,10 @@
     };
 
     $.fail = function (msg, retry) {
-        var tmp = $("<div>").append(
-                $('<span>').addClass("io-ox-fail").text(msg)
+        var tmp = $("<div>")
+            .addClass('io-ox-fail')
+            .append(
+                $('<span>').text(msg)
             );
         if (retry) {
             tmp.append(
@@ -172,7 +174,7 @@
                 $('<a>', { href: '#' }).text('Retry')
                 .on('click', function (e) {
                     e.preventDefault();
-                    $(this).parents('.io-ox-center').remove();
+                    $(this).closest('.io-ox-center').remove();
                     retry.apply(this, arguments);
                 })
             );

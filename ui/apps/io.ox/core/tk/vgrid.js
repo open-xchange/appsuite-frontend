@@ -138,6 +138,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             initialized = false,
             firstRun = true,
             firstAutoSelect = true,
+            paused = false,
             // inner container
             scrollpane = $('<div>').addClass('abs vgrid-scrollpane').appendTo(node),
             container = $('<div>').css({ position: 'relative', top: '0px' }).appendTo(scrollpane),
@@ -502,6 +503,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
 
         loadAll = function () {
 
+            if (paused) {
+                return $.when();
+            }
+
             if (all.length === 0) {
                 // be busy
                 container.css({ visibility: 'hidden' }).parent().busy();
@@ -511,12 +516,14 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 // clear grid
                 apply([]);
                 // inform user
-                container.hide().parent().idle().append(
-                    $.fail('Could not load content.', function () {
-                        container.show();
-                        loadAll();
-                    })
-                );
+                container.hide().parent().idle()
+                    .find('.io-ox-fail').parent().remove().end().end()
+                    .append(
+                        $.fail('Could not load content.', function () {
+                            container.show();
+                            loadAll();
+                        })
+                    );
             }
 
             // get all IDs
@@ -693,7 +700,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         };
 
         this.clear = function () {
-            return apply([], true);
+            return paused ? $.when() : apply([], true);
         };
 
         this.refresh = function () {
@@ -806,6 +813,16 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             if (_.isFunction(fn)) {
                 desirealize = fn;
             }
+        };
+
+        this.pause = function () {
+            paused = true;
+            return self;
+        };
+
+        this.resume = function () {
+            paused = false;
+            return self;
         };
     };
 

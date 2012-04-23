@@ -34,13 +34,16 @@ define("io.ox/mail/main",
             var option = $(this).attr('data-option'),
                 grid = e.data.grid;
             if (/^(603|607|610|102)$/.test(option)) {
-                grid.prop('sort', option);
+                grid.prop('sort', option).refresh();
             } else if (/^(asc|desc)$/.test(option)) {
-                grid.prop('order', option);
+                grid.prop('order', option).refresh();
             } else if (option === 'unread') {
-                grid.prop('unread', !grid.prop('unread'));
+                if (grid.prop('unread')) {
+                    grid.prop('unread', false).resume().refresh();
+                } else {
+                    grid.prop('unread', true).refresh().done(grid.pause);
+                }
             }
-            grid.refresh();
         },
 
         // application object
