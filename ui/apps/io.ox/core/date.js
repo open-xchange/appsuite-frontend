@@ -585,13 +585,28 @@ function (gettext, config) {
         // time zone specific Date class
         
         function D(y, m, d, h, min, s, ms) {
-            this.d = new Date(
-                arguments.length === 0 ? new Date().getTime() + offset :
-                arguments.length === 1 ? y :
-                D.utc(Date.UTC(y, m, d, h, min, s, ms)));
+            switch (arguments.length) {
+                case 0:
+                    this.t = new Date().getTime() + offset;
+                    this.local = D.localTime(this.t);
+                    break;
+                case 1:
+                    this.t = new Date(y).getTime();
+                    this.local = D.localTime(this.t);
+                    break;
+                default:
+                    arguments[1]--;
+                    this.local = Date.UTC.apply(Date, arguments);
+                    this.t = D.utc(this.local);
+            }
         }
         
         $.extend(D.prototype, DatePrototype);
+        if (Object.defineProperty) {
+            for (var i in DatePrototype) {
+                Object.defineProperty(D.prototype, i, { enumerable: false });
+            }
+        }
         
         D.getTTInfo = makeGetTTInfo(transitions);
         
@@ -611,7 +626,7 @@ function (gettext, config) {
         D.utc = function (t) { return t - D.getTTInfoLocal(t).gmtoff; };
         
         D.parse = function (string, format) {
-            return parseDateTime(format || api.locale.dateTime, string);
+            return new D(parseDateTime(format || api.locale.dateTime, string));
         };
         
         assert(D.transitions = transitions);
@@ -621,34 +636,73 @@ function (gettext, config) {
     
     var DatePrototype = {
         getDays: function () {
-            var t = this.constructor.localTime(this.d.getTime());
-            return Math.floor(t / api.DAY);
+            return Math.floor(this.local / api.DAY);
         },
         format: function (format) {
-            var d = new Date(this.constructor.localTime(this.d.getTime()));
+            var d = new Date(this.local);
             return formatDateTime(format || api.locale.dateTime, d);
         },
-        add: function (time) {
-            this.d.setTime(this.d.getTime() + time);
+        toString: function () {
+            return this.format();
+        },
+        add: function(time) {
+            this.t = this.constructor.utc(this.local += time);
+            return this;
+        },
+        addUTC: function (time) {
+            this.local = this.constructor.localTime(this.t += time);
+            return this;
         },
         addMonths: function (months) {
-            this.d.setUTCMonth(this.d.getUTCMonth() + months);
+            var d = new Date(this.local);
+            d.setUTCMonth(d.getUTCMonth() + months);
+            this.t = this.constructor.utc(this.local = d.getTime());
+            return this;
         },
         addYears: function (years) {
-            this.d.setUTCFullYear(this.d.getUTCFullYear() + years);
+            var d = new Date(this.local);
+            d.setUTCFullYear(d.getUTCFullYear() + years);
+            this.t = this.constructor.utc(this.local = d.getTime());
+            return this;
         },
-        getTime: function () { return this.d.getTime(); },
-        setTime: function (t) { this.d.setTime(t); },
-        getYear: function () { return this.d.getUTCFullYear(); },
-        setYear: function (y) { this.d.setUTCFullYear(y); },
-        getDay: function () { return this.d.getUTCDay(); }
+        getTime: function () {
+            return this.t;
+        },
+        setTime: function (t) {
+            this.local = this.constructor.localTime(this.t = t);
+            return this;
+        },
+        getYear: function () {
+            return new Date(this.local).getUTCFullYear();
+        },
+        setYear: function (y) {
+            var d = new Date(this.local);
+            d.setUTCFullYear(y);
+            this.t = this.constructor.utc(this.local = d.getTime());
+            return this;
+        },
+        getMonth: function () {
+            return new Date(this.local).getUTCMonth() + 1;
+        },
+        setMonth: function (m) {
+            var d = new Date(this.local);
+            d.setUTCMonth(m - 1);
+            this.t = this.constructor.utc(this.local = d.getTime());
+            return this;
+        },
+        getDay: function () {
+            return new Date(this.local).getUTCDay();
+        }
     };
-    _.each(['Month', 'Date', 'Hours', 'Minutes', 'Seconds', 'Milliseconds'],
+    _.each(['Date', 'Hours', 'Minutes', 'Seconds', 'Milliseconds'],
         function(name) {
             DatePrototype['get' + name] = new Function(
-                'return this.d.getUTC' + name + '();');
+                'return new Date(this.local).getUTC' + name + '();');
             DatePrototype['set' + name] = new Function('x',
-                'this.d.setUTC' + name + '(x);');
+                'var d = new Date(this.local);' +
+                'd.setUTC' + name + '(x);' +
+                'this.t = this.constructor.utc(this.local = d.getTime());' +
+                'return this;');
         });
     
     api.getTimeZone = _.memoize(function (name) {

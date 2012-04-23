@@ -77,6 +77,11 @@ function (date, ext) {
                     change(false, 2100, 10, 31, 3);
                 });
             });
+            describe('Constructor', function () {
+                it('uses proper month numbers', function () {
+                    expect(new D(1970, 1, 1).getTime()).toEqual(-date.HOUR);
+                });
+            });
             describe('Parsing', function () {
                 _.each({
                     '2012-01-01 as yyyy-MM-dd': [2012, 1, 1],
@@ -92,6 +97,24 @@ function (date, ext) {
                         expect(D.parse(m[1], m[2]).getTime())
                             .toEqual(Date.UTC.apply(Date, time));
                     });
+                });
+            });
+            describe('Date arithmetic', function () {
+                it('adds UTC time', function () {
+                    expect(new D(2012, 3, 25).addUTC(date.DAY))
+                        .toEqual(new D(2012, 3, 26, 1));
+                });
+                it('adds local time', function () {
+                    expect(new D(2012, 3, 25).add(date.DAY))
+                        .toEqual(new D(2012, 3, 26));
+                });
+                it('adds months', function () {
+                    expect(new D(2012, 3, 1).addMonths(1))
+                        .toEqual(new D(2012, 4, 1));
+                });
+                it('adds years', function () {
+                    expect(new D(2012, 3, 1).addYears(1))
+                        .toEqual(new D(2013, 3, 1));
                 });
             });
         });
