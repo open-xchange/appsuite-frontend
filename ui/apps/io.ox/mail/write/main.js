@@ -644,9 +644,12 @@ define.async('io.ox/mail/write/main',
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,
                 vcard: parseInt(data.vcard, 10) || 0,
-                disp_notification_to: parseInt(data.receipt, 10) || 0,
                 attachments: [content]
             };
+            // delivery receipt (add only if true)
+            if (parseInt(data.receipt, 10)) {
+                mail.disp_notification_to = true;
+            }
             // add msgref?
             if (data.msgref) {
                 mail.msgref = data.msgref;
