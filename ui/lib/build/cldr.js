@@ -21,10 +21,10 @@ function getParent(name) {
     return i >= 0 ? name.slice(0, i) : name !== "root" ? "root" : null;
 }
 
-_.each(i18n.languages(), function (lang) {
+_.each(i18n.languages().concat('root'), function (lang) {
     var dest = processLanguage(lang);
     for (var name = lang; name; name = getParent(name)) {
-        file(dest, ["tmp/cldr/main/" + name + ".json"]);
+        task(dest, ["tmp/cldr/main/" + name + ".json"]);
         downloadFile("main/" + name);
     }
 });
@@ -109,8 +109,9 @@ function downloadFile(name, filter) {
 }
 
 function processLanguage(lang) {
-    var dest = "apps/io.ox/core/date." + lang + ".json";
-    utils.file(dest,
+    var dest = "update-i18n-" + lang;
+    task("update-i18n", [dest]);
+    task(dest,
         ["lib/build/cldr.js", "tmp/cldr/supplemental/supplementalData.json"],
         function () {
             var ldml = loadLanguage(lang), supp = supplementalData();
@@ -151,21 +152,43 @@ function processLanguage(lang) {
                     "{0}Formats/{0}FormatLength[@type='{1}']/{0}Format/pattern",
                     [type, choice]));
             }
-                    
+            
+            function getDayPeriods(type) {
+                var retval = {};
+                _.each(ldml.get(gregorian +
+                    "dayPeriods/dayPeriodContext[@type='format']/" +
+                    "dayPeriodWidth[@type='narrow']/dayPeriod"),
+                    function(period) {
+                        retval[period['@'].type] = period['#'];
+                    });
+                return retval;
+            }
+            
+            function getEras() {
+                var array = [];
+                _.each(ldml.get(gregorian + "eras/eraAbbr/era"), function(era) {
+                    array[era['@'].type] = era['#'];
+                });
+                return array;
+            }
+            
             var data = {
                 daysInFirstWeek: Number(supp.minDays[territory]),
                 weekStart: weekDays[supp.firstDay[territory]],
-                days: mapDays("format", "wide"),
-                shortDays: mapDays("format", "abbreviated"),
-                narrowDays: mapDays("stand-alone", "narrow"),
-                months: mapMonths("format", "wide"),
-                shortMonths: mapMonths("format", "abbreviated"),
-                date: getFormat("date"),
-                time: getFormat("time"),
-                dateTime: getFormat("dateTime")
+                days: mapDays('format', 'wide'),
+                daysShort: mapDays('format', 'abbreviated'),
+                daysNarrow: mapDays('stand-alone', 'narrow'),
+                months: mapMonths('format', 'wide'),
+                monthsShort: mapMonths('format', 'abbreviated'),
+                date: getFormat('date'),
+                time: getFormat('time'),
+                dateTime: getFormat('dateTime'),
+                dayPeriods: getDayPeriods(),
+                eras: getEras()
             };
             data.dateTime = format(data.dateTime, [data.time, data.date]);
-            fs.writeFileSync(this.name, JSON.stringify(data, null, 4));
+            fs.writeFileSync('apps/io.ox/core/date.' + lang + '.json',
+                JSON.stringify(data, null, 4));
         });
     return dest;
 }

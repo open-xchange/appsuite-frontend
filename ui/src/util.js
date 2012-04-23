@@ -442,5 +442,12 @@
             };
         }())
     });
+    
+    window.assert = function (value, message) {
+        if (value) return;
+        console.error(message);
+        if (console.trace) console.trace();
+    };
+    if (assert(true) === 0) delete window.assert; // Available only in debug builds
 
 }());

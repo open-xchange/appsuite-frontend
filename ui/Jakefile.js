@@ -40,6 +40,9 @@ console.info("Build version: " + version);
 var debug = Boolean(process.env.debug);
 if (debug) console.info("Debug mode: on");
 
+utils.fileType("source").addHook("filter", utils.includeFilter);
+utils.fileType("module").addHook("filter", utils.includeFilter);
+
 var defineWalker = ast("define").asCall().walker();
 var defineAsyncWalker = ast("define.async").asCall().walker();
 var assertWalker = ast("assert").asCall().walker();
@@ -113,9 +116,8 @@ var jshintOptions = {
     undef: true,
     validthis: true,
     white: true, // THIS IS TURNED ON - otherwise we have too many dirty check-ins
-    predef: [
-         "$", "_", "Modernizr", "define", "require", "ox", "assert"
-    ]
+    predef: ['$', '_', 'Modernizr', 'define', 'require', 'ox', 'assert',
+             'include']
 };
 
 function hint (data, getSrc) {
@@ -198,30 +200,16 @@ file(utils.dest("signin.appcache"), ["force"]);
 
 // js
 
-utils.concat("boot.js", ["src/jquery.plugins.js", "src/util.js", "src/boot.js"],
+utils.concat("boot.js",
+    ["src/css.js", "src/jquery.plugins.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
-
-utils.copy(utils.list("src", "css.js"), {
-    to: "tmp", type: "source", filter: function(data) {
-        var dest = this.task.name;
-        utils.includes.set(dest, []);
-        var dir = "lib/less.js/lib/less";
-        return data.replace(/\/\/@include\s+(.*)$/gm, function(m, name) {
-            return utils.list(dir, name).map(function(file) {
-                var include = path.join(dir, file);
-                utils.includes.add(dest, include);
-                return fs.readFileSync(include, "utf8");
-            }).join("\n");
-        });
-    }
-});
 
 utils.concat("boot.js", [
         "lib/jquery.min.js",
         "lib/underscore.js", // load this before require.js to keep global object
         "lib/require.js",
         "lib/modernizr.js",
-        "tmp/css.js", utils.string(";"), "tmp/boot.js"]);
+        "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
@@ -412,9 +400,9 @@ utils.copy(utils.list("doc/lib", ["prettify.*", "default.css"]),
            { to: utils.dest("doc") });
 utils.copyFile("lib/jquery.min.js", utils.dest("doc/jquery.min.js"));
 
-//update-i18n task
+// update-i18n task
 
-//require("./lib/build/cldr.js");
+require("./lib/build/cldr.js");
 
 // msgmerge task
 
@@ -429,6 +417,23 @@ task("merge", ["ox.pot"], function() {
 }, { async: true });
 
 // module dependency visualization
+
+function printTree(root, name, children) {
+    var getName = typeof name != "string" ? name :
+            function (node) { return node[name]; };
+    var getChildren = typeof children != "string" ? children :
+            function (node) { return node[children]; };
+    print(root, "", "");
+    function print(node, indent1, indent2) {
+        console.log(indent1 + getName(node));
+        var children = getChildren(node);
+        var last = children.length - 1;
+        for (var i = 0; i < last; i++) {
+            print(children[i], indent2 + "├─", indent2 + "│ ");
+        }
+        if (last >= 0) print(children[last], indent2 + "└─", indent2 + "  ");
+    }
+}
 
 desc("Prints module dependencies");
 task("deps", [depsPath], function() {
@@ -449,26 +454,18 @@ task("deps", [depsPath], function() {
     var root = process.env.root;
     if (root) {
         console.log("");
-        if (root in deps) print(deps[process.env.root], "", "");
+        if (root in deps) printTree(deps[process.env.root], "name", down);
     } else {
         _.each(deps, function(root) {
             if (!root[up].length) {
                 console.log("");
-                print(root, "", "");
+                printTree(root, "name", down);
             }
         });
     }
-    function print(node, indent1, indent2) {
-        console.log(indent1 + node.name);
-        var last = node[down].length - 1;
-        for (var i = 0; i < last; i++) {
-            print(node[down][i], indent2 + "├─", indent2 + "│ ");
-        }
-        if (last >= 0) print(node[down][last], indent2 + "└─", indent2 + "  ");
-    }
 });
 
-// Packaging
+// packaging
 
 var distDest = process.env.destDir || "tmp/packaging";
 
@@ -497,7 +494,7 @@ task("dist", [distDest], function () {
     function done(code) { if (code) return fail(); else complete(); }
 }, {async: true });
 
-//clean task
+// clean task
 
 desc("Removes all generated files");
 task("clean", [], function() {
@@ -506,3 +503,32 @@ task("clean", [], function() {
     function rmTmp() { rimraf("tmp", rmBuild); }
     function rmBuild() { rimraf(utils.builddir, complete); };
 }, { async: true });
+
+// task dependencies
+
+desc("Shows the dependency chain between two Jake tasks");
+task("jakedeps", [], function() {
+    if (process.env.to) {
+        if (!show(process.env.from, process.env.to)) console.log("Not found");
+    } else {
+        printTree(process.env.from, _.identity, function (name) {
+            var task = jake.Task[name];
+            return task ? task.prereqs : [];
+        });
+    }
+    function show(from, to) {
+        if (from == to) {
+            console.log(from);
+            return true;
+        }
+        if (!(from in jake.Task)) return false;
+        var prereqs = jake.Task[from].prereqs;
+        for (var i = 0; i < prereqs.length; i++) {
+            if (show(prereqs[i], to)) {
+                console.log(from);
+                return true;
+            }
+        };
+        return false;
+    }
+});

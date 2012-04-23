@@ -11,9 +11,8 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-define.async('io.ox/core/date',
-['io.ox/core/gettext', 'gettext!io.ox/core/date', 'io.ox/core/config'],
-function (gettext, gt, config) {
+define.async('io.ox/core/date', ['io.ox/core/gettext', 'io.ox/core/config'],
+function (gettext, config) {
     /*jshint white:false */
     
     'use strict';
@@ -25,36 +24,12 @@ function (gettext, gt, config) {
         MINUTE:   60000, // ms / min
         HOUR:   3600000, // ms / h
         DAY:   86400000, // ms / day
-        WEEK: 604800000, // ms / week
-
-        locale: {
-            /**
-             * The first week with at least daysInFirstWeek days in a given year
-             * is defined as the first week of that year.
-             * @ignore
-             */
-            daysInFirstWeek: 1,
-            
-            /**
-             * First day of the week.
-             * 0 = Sunday, 1 = Monday and so on.
-             * @ignore
-             */
-            weekStart: 0,
-            
-            /**
-             * A list of days in a week; narrow; stand-alone.
-             * @ignore
-             */
-            daysNarrow: ['1', '2', '3', '4', '5', '6', '7'],
-            
-            /**
-             * A list of days in a week; abbreviated; format.
-             */
-            daysShort: ['1', '2', '3', '4', '5', '6', '7']
-        }
+        WEEK: 604800000  // ms / week
     };
     
+    //@include api.locale = date.root.json
+    ;
+        
     // TODO: Difference between server and client clocks.
     var offset = 0;
     
@@ -130,7 +105,7 @@ function (gettext, gt, config) {
     
     var funs = {
         a: function (n, d) {
-            return d.getUTCHours() < 12 ? _("AM") : _("PM");
+            return api.locale.dayPeriods[d.getUTCHours() < 12 ? 'am' : 'pm'];
         },
         D: function (n, d) {
             return num(n,
@@ -145,7 +120,7 @@ function (gettext, gt, config) {
             return num(n, Math.floor(d.getUTCDate() / 7) + 1);
         },
         G: function (n, d) {
-            return d.getTime() < -621355968e5 ? gt("BC") : gt("AD");
+            return api.locale.eras[d.getTime() < -621355968e5 ? 0 : 1];
         },
         H: function (n, d) { return num(n, d.getUTCHours()); },
         h: function (n, d) { return num(n, d.getUTCHours() % 12 || 12); },
@@ -154,7 +129,7 @@ function (gettext, gt, config) {
         M: function (n, d) {
             var m = d.getUTCMonth();
             if (n >= 3) {
-                return text(n, api.locale.months[m], api.locale.shortMonths[m]);
+                return text(n, api.locale.months[m], api.locale.monthsShort[m]);
             } else {
                 return num(n, m + 1);
             }
@@ -206,7 +181,7 @@ function (gettext, gt, config) {
     var pregex = new RegExp(pregexStr, "g");
     
     function escape(rex) {
-        return String(rex).replace(/[$\^\\.*+?()\[\]{}|]/g, "\\$");
+        return String(rex).replace(/[$\^\\.*+?()\[\]{}|]/g, "\\$&");
     }
     function makeRegex(names, shortNames) {
         return "(" + _.map(names.concat(shortNames), escape).join("|") + ")";
@@ -225,11 +200,13 @@ function (gettext, gt, config) {
     
     var prexs = {
         a: function (n) {
-            return "(" + escape(_("AM")) + "|" + escape(_("PM")) + ")";
+            return "(" + escape(api.locale.dayPeriods.am) + "|" +
+                         escape(api.locale.dayPeriods.pm) + ")";
         },
         E: function (n) { return dayRegex; },
         G: function (n) {
-            return "(" + escape(_("BC")) + "|" + escape(_("AD")) + ")";
+            return "(" + escape(api.locale.eras[0]) + "|" +
+                         escape(api.locale.eras[1]) + ")";
         },
         M: function (n) { return n >= 3 ? monthRegex : numRex; },
         D: number, d: number, F: number, H: number, h: number, K: number,
@@ -257,9 +234,13 @@ function (gettext, gt, config) {
     }
     
     var pfuns = {
-        a: function (n) { return function (s, d) { d.pm = s === gt("PM"); }; },
+        a: function (n) {
+            return function (s, d) { d.pm = s === api.locale.dayPeriods.pm; };
+        },
         E: function (n) { return function (s, d) {  }; },
-        G: function (n) { return function (s, d) { d.bc = s === gt("BC"); }; },
+        G: function (n) {
+            return function (s, d) { d.bc = s === api.locale.eras[0]; };
+        },
         h: function (n) {
             return function (s, d) { d.h2 = s === "12" ? 0 : Number(s); };
         },
@@ -334,9 +315,9 @@ function (gettext, gt, config) {
             return year;
         }
         d.y = adjustYear(d.y);
-        d.wy = adjustYear(d.wy);
         var date = new Date(0);
         if ("wy" in d) {
+            d.wy = adjustYear(d.wy);
             date.setUTCFullYear(d.wy);
             var jan1st = getDays(date.getTime()), start = getWeekStart(date);
             if (7 - (jan1st - start) < api.daysInFirstWeek) start += 7;
@@ -604,13 +585,28 @@ function (gettext, gt, config) {
         // time zone specific Date class
         
         function D(y, m, d, h, min, s, ms) {
-            this.d = new Date(
-                arguments.length === 0 ? new Date().getTime() + offset :
-                arguments.length === 1 ? y :
-                D.utc(Date.UTC(y, m, d, h, min, s, ms)));
+            switch (arguments.length) {
+                case 0:
+                    this.t = new Date().getTime() + offset;
+                    this.local = D.localTime(this.t);
+                    break;
+                case 1:
+                    this.t = new Date(y).getTime();
+                    this.local = D.localTime(this.t);
+                    break;
+                default:
+                    arguments[1]--;
+                    this.local = Date.UTC.apply(Date, arguments);
+                    this.t = D.utc(this.local);
+            }
         }
         
         $.extend(D.prototype, DatePrototype);
+        if (Object.defineProperty) {
+            for (var i in DatePrototype) {
+                Object.defineProperty(D.prototype, i, { enumerable: false });
+            }
+        }
         
         D.getTTInfo = makeGetTTInfo(transitions);
         
@@ -630,24 +626,84 @@ function (gettext, gt, config) {
         D.utc = function (t) { return t - D.getTTInfoLocal(t).gmtoff; };
         
         D.parse = function (string, format) {
-            return parseDateTime(format || api.locale.format, string);
+            return new D(parseDateTime(format || api.locale.dateTime, string));
         };
         
-        D.transitions = transitions;
+        assert(D.transitions = transitions);
         
         return D;
     }
     
     var DatePrototype = {
-        getDay: function () {
-            var t = this.constructor.localTime(this.d.getTime());
-            return Math.floor(t / api.DAY);
+        getDays: function () {
+            return Math.floor(this.local / api.DAY);
         },
         format: function (format) {
-            var d = new Date(this.constructor.localTime(this.d.getTime()));
+            var d = new Date(this.local);
             return formatDateTime(format || api.locale.dateTime, d);
+        },
+        toString: function () {
+            return this.format();
+        },
+        add: function(time) {
+            this.t = this.constructor.utc(this.local += time);
+            return this;
+        },
+        addUTC: function (time) {
+            this.local = this.constructor.localTime(this.t += time);
+            return this;
+        },
+        addMonths: function (months) {
+            var d = new Date(this.local);
+            d.setUTCMonth(d.getUTCMonth() + months);
+            this.t = this.constructor.utc(this.local = d.getTime());
+            return this;
+        },
+        addYears: function (years) {
+            var d = new Date(this.local);
+            d.setUTCFullYear(d.getUTCFullYear() + years);
+            this.t = this.constructor.utc(this.local = d.getTime());
+            return this;
+        },
+        getTime: function () {
+            return this.t;
+        },
+        setTime: function (t) {
+            this.local = this.constructor.localTime(this.t = t);
+            return this;
+        },
+        getYear: function () {
+            return new Date(this.local).getUTCFullYear();
+        },
+        setYear: function (y) {
+            var d = new Date(this.local);
+            d.setUTCFullYear(y);
+            this.t = this.constructor.utc(this.local = d.getTime());
+            return this;
+        },
+        getMonth: function () {
+            return new Date(this.local).getUTCMonth() + 1;
+        },
+        setMonth: function (m) {
+            var d = new Date(this.local);
+            d.setUTCMonth(m - 1);
+            this.t = this.constructor.utc(this.local = d.getTime());
+            return this;
+        },
+        getDay: function () {
+            return new Date(this.local).getUTCDay();
         }
     };
+    _.each(['Date', 'Hours', 'Minutes', 'Seconds', 'Milliseconds'],
+        function(name) {
+            DatePrototype['get' + name] = new Function(
+                'return new Date(this.local).getUTC' + name + '();');
+            DatePrototype['set' + name] = new Function('x',
+                'var d = new Date(this.local);' +
+                'd.setUTC' + name + '(x);' +
+                'this.t = this.constructor.utc(this.local = d.getTime());' +
+                'return this;');
+        });
     
     api.getTimeZone = _.memoize(function (name) {
         return require(["text!io.ox/core/tz/zoneinfo/" + name])
@@ -658,10 +714,10 @@ function (gettext, gt, config) {
         return require(["text!io.ox/core/date." + lang + ".json"]);
     }).done(function (locale) {
         api.locale = JSON.parse(locale);
-        monthRegex = makeRegex(api.locale.months, api.locale.shortMonths);
-        dayRegex = makeRegex(api.locale.days, api.locale.shortDays);
-        monthMap = makeMap(api.locale.months, api.locale.shortMonths);
-        dayMap = makeMap(api.locale.days, api.locale.shortDays);
+        monthRegex = makeRegex(api.locale.months, api.locale.monthsShort);
+        dayRegex = makeRegex(api.locale.days, api.locale.daysShort);
+        monthMap = makeMap(api.locale.months, api.locale.monthsShort);
+        dayMap = makeMap(api.locale.days, api.locale.daysShort);
     });
     
     // TODO: load the entire locale config

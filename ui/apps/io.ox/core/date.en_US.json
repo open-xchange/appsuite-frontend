@@ -10,7 +10,7 @@
         "Friday",
         "Saturday"
     ],
-    "shortDays": [
+    "daysShort": [
         "Sun",
         "Mon",
         "Tue",
@@ -19,7 +19,7 @@
         "Fri",
         "Sat"
     ],
-    "narrowDays": [
+    "daysNarrow": [
         "S",
         "M",
         "T",
@@ -42,7 +42,7 @@
         "November",
         "December"
     ],
-    "shortMonths": [
+    "monthsShort": [
         "Jan",
         "Feb",
         "Mar",
@@ -58,5 +58,14 @@
     ],
     "date": "MMM d, y",
     "time": "h:mm:ss a",
-    "dateTime": "MMM d, y h:mm:ss a"
+    "dateTime": "MMM d, y h:mm:ss a",
+    "dayPeriods": {
+        "am": "a",
+        "noon": "n",
+        "pm": "p"
+    },
+    "eras": [
+        "BC",
+        "AD"
+    ]
 }
