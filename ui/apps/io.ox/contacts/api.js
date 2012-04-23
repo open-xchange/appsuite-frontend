@@ -221,49 +221,38 @@ define('io.ox/contacts/api',
             if (data !== null) {
                 return data;
             } else {
+                query = String(query || '').toLowerCase();
                 return api.search(query, true)
                     .pipe(function (data) {
                         var tmp = [], hash = {};
                         // improve response
-                        // 1/4: resolve email addresses
+                        // 1/2: resolve email addresses
                         _(data).each(function (obj) {
-                            process(tmp, obj, 'email1');
-                            process(tmp, obj, 'email2');
-                            process(tmp, obj, 'email3');
-                        });
-                        // 2/4: sort by email address/has image
-                        tmp.sort(function (a, b) {
-                            if (a.email < b.email) {
-                                return -1;
-                            } else if (a.email > b.email) {
-                                return +1;
-                            } else if (a.contact.image1_url && !b.contact.image1_url) {
-                                return -1;
-                            } else if (!a.contact.image1_url && b.contact.image1_url) {
-                                return +1;
+                            if (obj.mark_as_distributionlist) {
+                                // distribution list
+                                tmp.push({
+                                    display_name: obj.display_name || '',
+                                    email: 'will not be resolved',
+                                    contact: obj
+                                });
                             } else {
-                                return 0;
+                                // email
+                                process(tmp, obj, 'email1');
+                                process(tmp, obj, 'email2');
+                                process(tmp, obj, 'email3');
                             }
                         });
-                        // 3/4: remove duplicates
+                        // 2/2: filter distribution lists & remove email duplicates
                         tmp = _(tmp).filter(function (obj) {
-                            return obj.email in hash ? false : (hash[obj.email] = true);
+                            var isDistributionList = obj.contact.mark_as_distributionlist === true,
+                                isDuplicate = obj.email in hash;
+                            if (isDistributionList) {
+                                return String(obj.display_name || '').toLowerCase().indexOf(query) > -1;
+                            } else {
+                                return isDuplicate ? false : (hash[obj.email] = true);
+                            }
                         });
                         hash = null;
-                        // 4/4: sort by display_name
-                        tmp.sort(function (a, b) {
-                            if (a.display_name < b.display_name) {
-                                return -1;
-                            } else if (a.display_name > b.display_name) {
-                                return +1;
-                            } else if (a.email < b.email) {
-                                return -1;
-                            } else if (a.email > b.email) {
-                                return +1;
-                            } else {
-                                return 0;
-                            }
-                        });
                         return tmp;
                     })
                     .done(function (data) {

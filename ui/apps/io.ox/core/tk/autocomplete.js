@@ -22,8 +22,8 @@ define('io.ox/core/tk/autocomplete', function () {
 
         o = $.extend({
             minLength: 1,
-            maxResults: 100,
-            delay: 200,
+            maxResults: 25,
+            delay: 100,
             source: null,
             draw: null,
             blur: $.noop,

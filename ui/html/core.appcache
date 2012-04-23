@@ -10,17 +10,15 @@ CACHE:
 @base@/src/serverconfig.js
 @base@/src/offline.js
 # core - bootstrap
-@base@/apps/io.ox/core/bootstrap/js/bootstrap-transition.js
-@base@/apps/io.ox/core/bootstrap/js/bootstrap-tooltip.js
-@base@/apps/io.ox/core/bootstrap/js/bootstrap-dropdown.js
-@base@/apps/io.ox/core/bootstrap/js/bootstrap-button.js
-@base@/apps/io.ox/core/bootstrap/js/bootstrap-alert.js
-@base@/apps/io.ox/core/bootstrap/js/bootstrap-popover.js
+@base@/bootstrap.js
+@base@/apps/io.ox/core/bootstrap/basics.js
 @base@/apps/io.ox/core/bootstrap/less/bootstrap.less
+@base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings.png
+@base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings-white.png
 # theme
 @base@/apps/themes/login/login.css
 @base@/apps/themes/login/busy.gif
-@base@/apps/themes/login/fonts/OpenSans-Light.ttf
+@base@/apps/themes/login/fonts/opensans-300.woff
 @base@/apps/themes/default/style.css
 @base@/apps/themes/default/style.less
 @base@/apps/themes/default/definitions.less
@@ -34,6 +32,8 @@ CACHE:
 @base@/apps/io.ox/mail/util.js
 @base@/apps/io.ox/mail/view-detail.js
 @base@/apps/io.ox/mail/view-grid-template.js
+@base@/apps/io.ox/mail/images/attachment.png
+@base@/apps/io.ox/mail/images/ping.mp3
 # plugins
 @base@/apps/plugins/halo/register.js
 

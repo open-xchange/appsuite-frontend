@@ -228,18 +228,19 @@ utils.concat("pre-core.js",
         "event.js", "extensions.js", "http.js",
         "cache.js", "cache/*.js", // cache + cache storage layers
         "config.js", "session.js", "gettext.js",
-        "tk/selection.js", "tk/vgrid.js",
+        "tk/selection.js", "tk/vgrid.js", "tk/model.js", "tk/view.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js",
         "api/folder.js", "desktop.js", "commons.js",
         "collection.js", "extPatterns/links.js"
     ]), { type: "source" }
 );
 
-utils.concat("apps/io.ox/core/bootstrap.js",
+utils.concat("bootstrap.js",
     utils.list("apps/io.ox/core/bootstrap/js", [
         'bootstrap-transition.js',
         'bootstrap-tooltip.js',
         'bootstrap-dropdown.js',
+        'bootstrap-button.js',
         'bootstrap-alert.js',
         'bootstrap-popover.js'
     ]), { type: "source" }

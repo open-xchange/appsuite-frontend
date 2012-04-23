@@ -172,6 +172,14 @@ define("io.ox/mail/main",
         grid.on('change:prop', updateGridOptions);
         updateGridOptions();
 
+        grid.getToolbar().append(
+            $('<div>').addClass('grid-count').css({ textAlign: 'center', color: '#888' })
+        );
+
+        grid.on('change:ids', function (e, all) {
+            grid.getToolbar().find('.grid-count').text(all.length + ' mails');
+        });
+
         grid.setAllRequest(function () {
             var sort = this.prop('sort'), unread = this.prop('unread');
             return api[sort === '610' ? 'getAllThreads' : 'getAll']({

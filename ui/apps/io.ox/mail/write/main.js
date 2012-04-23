@@ -82,8 +82,6 @@ define.async('io.ox/mail/write/main',
             view,
             model;
 
-        console.log('defaultEditorMode is', defaultEditorMode);
-
         model = new MailModel();
         view = new WriteView({ model: model });
 
@@ -280,7 +278,6 @@ define.async('io.ox/mail/write/main',
 
         app.setRawBody = function (str) {
             app.markDirty();
-            console.log('setRaw', str);
             app.getEditor().setContent(str);
         };
 
@@ -294,11 +291,6 @@ define.async('io.ox/mail/write/main',
                 signature = ds ? $.trim(ds.signature_text) : '',
                 pos = ds ? ds.position : 'below',
                 content = $.trim(str);
-            // image URL fix
-            if (editorMode === 'html') {
-                console.log('content', content);
-                content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
-            }
             // set signature?
             if (ds) {
                 // remember as current signature
@@ -447,6 +439,10 @@ define.async('io.ox/mail/write/main',
                     var content = data.attachments && data.attachments.length ? data.attachments[0].content : '';
                     if (mail.format === 'text') {
                         content = content.replace(/<br>\n?/g, '\n');
+                    }
+                    // image URL fix
+                    if (editorMode === 'html') {
+                        content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
                     }
                     app[mail.initial ? 'setBody' : 'setRawBody'](content);
                 });
@@ -627,7 +623,9 @@ define.async('io.ox/mail/write/main',
             if (editorMode === 'html') {
                 content = {
                     content_type: 'text/html',
-                    content: app.getEditor() ? app.getEditor().getContent() : ''
+                    content: (app.getEditor() ? app.getEditor().getContent() : '')
+                        // reverse img fix
+                        .replace(/(<img[^>]+src=")(\/ox7\/)?api\//g, '$1/ajax/')
                 };
             } else {
                 content = {
@@ -759,7 +757,6 @@ define.async('io.ox/mail/write/main',
             var clean = function () {
                 // clean up editors
                 for (var id in editorHash) {
-                    console.log('yeppa', id, editorHash[id]);
                     editorHash[id].destroy();
                 }
                 // clear all private vars

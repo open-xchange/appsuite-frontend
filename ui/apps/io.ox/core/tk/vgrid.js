@@ -150,7 +150,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             toolbar = $('<div>').addClass('vgrid-toolbar')
                 .append(
                     $('<a>', { href: '#' })
-                    .addClass('action-link')
+                    .css('float', 'left')
                     .append($('<i class="icon-th-list">'))
                     .on('click', { grid: this }, fnToggleEditable)
                 )
@@ -487,7 +487,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             }
             // trigger event
             if (!quiet) {
-                self.trigger('ids-loaded');
+                self.trigger('ids-loaded change:ids', all);
             }
             // paint items
             var offset = currentOffset || (getIndex(node.scrollTop()) - (numRows - numVisible));
