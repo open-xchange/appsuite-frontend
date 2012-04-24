@@ -919,8 +919,7 @@ span.hint {
     z-index: 3; /* above .window-content */
 }
 
-.io-ox-sidepopup-pane {
-}
+.io-ox-sidepopup-pane { z-index: 1; }
 
 .io-ox-sidepopup.right {
     left: 49.5%;
@@ -939,6 +938,10 @@ span.hint {
     -webkit-box-shadow: 10px 0px 30px -10px #aaa;
     box-shadow: 10px 0px 30px -10px #aaa;
 }
+
+.io-ox-sidepopup-close { position: absolute; top: 8px; z-index: 2; }
+.io-ox-sidepopup.left .io-ox-sidepopup-close { right: 15px; }
+.io-ox-sidepopup.right .io-ox-sidepopup-close { right: 15px; }
 
 .io-ox-sidepopup-arrow {
     position: absolute;

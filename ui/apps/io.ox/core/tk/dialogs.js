@@ -203,7 +203,7 @@ define("io.ox/core/tk/dialogs",
                 width: parseInt(o.width || nodes.popup.width(), 10),
                 height: parseInt(o.height || nodes.popup.height(), 10)
             };
-            
+
             // limit width & height
             _(["width", "height"]).each(function (d) {
                 // apply explicit limit
@@ -297,12 +297,13 @@ define("io.ox/core/tk/dialogs",
 
             pane = $("<div>")
                 .addClass("io-ox-sidepopup-pane default-content-padding abs"),
+
+            closeIcon = $('<span>').addClass('io-ox-sidepopup-close close').html('&times'),
+
             popup = $("<div>")
                 .addClass("io-ox-sidepopup abs")
-                .append(pane)
-                .on("click", function (e) {
-                    processEvent(e);
-                }),
+                .append(closeIcon, pane),
+
             arrow = $("<div>")
                 .addClass("io-ox-sidepopup-arrow")
                 .append($("<div>").addClass("border"))
@@ -354,6 +355,14 @@ define("io.ox/core/tk/dialogs",
                 popup.detach();
             }, 100);
         };
+
+        closeIcon.on('click', function (e) {
+            pane.trigger('click'); // route click to 'pane' since closeIcon is above pane
+            close(e); // close side popup
+            return false;
+        });
+
+        popup.on("click", processEvent);
 
         open = function (e, handler) {
             // get proper elements

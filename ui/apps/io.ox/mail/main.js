@@ -180,7 +180,9 @@ define("io.ox/mail/main",
         );
 
         grid.on('change:ids', function (e, all) {
-            grid.getToolbar().find('.grid-count').text(all.length + ' mails');
+            grid.getToolbar().find('.grid-count').text(
+                all.length + ' ' + gt.ngettext('mail', 'mails', all.length)
+            );
         });
 
         grid.setAllRequest(function () {
