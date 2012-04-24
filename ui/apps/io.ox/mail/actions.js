@@ -55,7 +55,7 @@ define('io.ox/mail/actions',
         id: 'reply-all',
         requires: function (e) {
             // other recipients that me?
-            var multiple = (e.context.to || []).length && (e.context.cc || []).length;
+            var multiple = ((e.context.to || []).length + (e.context.cc || []).length) > 1;
             return multiple && e.collection.has('toplevel', 'one') && e.context.folder_id !== defaultDraftFolder;
         },
         action: function (data) {

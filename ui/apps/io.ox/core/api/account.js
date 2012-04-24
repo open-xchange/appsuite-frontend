@@ -184,6 +184,7 @@ define('io.ox/core/api/account',
                         typeHash[account[type + '_fullname']] = type;
                     });
                 });
+                return list;
             });
     };
 

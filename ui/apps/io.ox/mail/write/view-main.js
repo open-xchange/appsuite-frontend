@@ -65,10 +65,12 @@ define("io.ox/mail/write/view-main",
             }
             return this.sections[id];
         },
-        showSection: function (id, self) {
+        showSection: function (id, focus) {
             this.sections[id + 'Label'].show();
             this.sections[id].show().trigger('show');
-            this.focusSection(id);
+            if (focus !== false) {
+                this.focusSection(id);
+            }
             this.sections[id + 'Link'].hide();
         },
         hideSection: function (id, self) {
@@ -196,7 +198,7 @@ define("io.ox/mail/write/view-main",
             _(list).each(function (recipient) {
                 var node = $('<div>');
                 drawContact(id, node, {
-                    display_name: recipient[0] ? recipient[0].replace(/^('|")|('|")$/g, '') : recipient[0],
+                    display_name: recipient[0] ? recipient[0].replace(/^('|")|('|")$/g, '') : recipient[1],
                     email: recipient[1],
                     contact: {}
                 });
@@ -623,45 +625,46 @@ define("io.ox/mail/write/view-main",
 
     function drawContact(id, node, data) {
 
-        node.addClass('io-ox-mail-write-contact section-item')
-        .append(
-            contactsAPI.getPicture(data.email + '')
-            .addClass('contact-image')
-        )
-        .append(
-            $('<input>', { type: 'hidden', name: id, value: serialize(data) })
-        )
-        .append(
-            $('<a>', { href: '#' }).addClass('person-link')
-            .text(data.display_name + '\u00A0')
-            .on('click', {
-                display_name: data.display_name,
-                email1: data.email
-            }, fnClickPerson)
-        )
-        .append($('<div>').text(data.email))
-        .append(
+        node.addClass('io-ox-mail-write-contact section-item').append(
+            // picture
+            contactsAPI.getPicture(data.email + '').addClass('contact-image'),
+            // hidden field
+            $('<input>', { type: 'hidden', name: id, value: serialize(data) }),
+            // display name
+            $('<div>').append(
+                $('<a>', { href: '#' }).addClass('person-link')
+                .text(data.display_name + '\u00A0')
+                .on('click', {
+                    display_name: data.display_name,
+                    email1: data.email
+                }, fnClickPerson)
+            ),
+            // email address
+            $('<div>').text(String(data.email || '').toLowerCase()),
             // remove
             $('<a>', { href: '#', tabindex: '6' })
-            .addClass('remove')
-            .append(
-                $('<div>').addClass('icon').text('x')
-            )
-            .on('click', { id: id }, function (e) {
-                e.preventDefault();
-                var list = $(this).parents().find('.recipient-list');
-                $(this).parent().remove();
-                // hide section if empty
-                if (list.children().length === 0) {
-                    list.hide();
-                }
-            })
+                .addClass('remove')
+                .append(
+                    $('<div>').addClass('icon').text('x')
+                )
+                .on('click', { id: id }, function (e) {
+                    e.preventDefault();
+                    var list = $(this).parents().find('.recipient-list');
+                    $(this).parent().remove();
+                    // hide section if empty
+                    if (list.children().length === 0) {
+                        list.hide();
+                    }
+                })
         );
     }
+
     // helper
 
     function serialize(obj) {
-        return '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + '>';
+        // display_name might be null!
+        return obj.display_name ?
+             '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + '>' : '<' + obj.email + '>';
     }
 
     var fnClickPerson = function (e) {

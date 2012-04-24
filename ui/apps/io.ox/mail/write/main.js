@@ -115,7 +115,6 @@ define.async('io.ox/mail/write/main',
             mailState = app.STATES.CLEAN;
         };
 
-
         app.getView().signatures = config.get('gui.mail.signatures', []);
 
         app.setSignature = function (e) {
@@ -323,14 +322,14 @@ define.async('io.ox/mail/write/main',
         app.setCC = function (list) {
             app.getView().addRecipients('cc', list || []);
             if (list && list.length) {
-                app.getView().showSection('cc');
+                app.getView().showSection('cc', false);
             }
         };
 
         app.setBCC = function (list) {
             app.getView().addRecipients('bcc', list || []);
             if (list && list.length) {
-                app.getView().showSection('bcc');
+                app.getView().showSection('bcc', false);
             }
         };
 
@@ -527,6 +526,7 @@ define.async('io.ox/mail/write/main',
                     app.setMail({ data: data, mode: 'replyall', initial: true })
                     .done(function () {
                         app.getEditor().focus();
+                        app.getView().scrollpane.scrollTop(0);
                         def.resolve();
                     });
                 });
@@ -545,6 +545,7 @@ define.async('io.ox/mail/write/main',
                     app.setMail({ data: data, mode: 'reply', initial: true })
                     .done(function () {
                         app.getEditor().focus();
+                        app.getView().scrollpane.scrollTop(0);
                         def.resolve();
                     });
                 });
