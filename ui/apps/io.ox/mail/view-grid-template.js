@@ -75,9 +75,12 @@ define('io.ox/mail/view-grid-template',
             build: function () {
             },
             set: function (data, fields, index, prev) {
-                var self = this.removeClass('vgrid-label').addClass('thread-summary').empty();
-                return api.getList(api.getThread(prev)).done(function (list) {
-                    _(list.slice(1)).each(function (data) {
+                var self = this.removeClass('vgrid-label').addClass('thread-summary').empty(),
+                    thread = api.getThread(prev),
+                    order = api.getThreadOrder(prev);
+                return api.getList(thread).done(function (list) {
+                    list = order === 'desc' ? list.slice(1) : list.slice(0, -1);
+                    _(list).each(function (data) {
                         var key = data.folder_id + '.' + data.id;
                         self.append(
                             $('<div>')

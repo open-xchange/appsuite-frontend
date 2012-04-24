@@ -13,7 +13,7 @@
  */
 
 define("io.ox/core/extensions",
-    ["io.ox/core/event", "io.ox/core/collection"], function (Events, Collection) {
+    ["io.ox/core/event"], function (Events) {
 
     // A naive extension registry.
     "use strict";

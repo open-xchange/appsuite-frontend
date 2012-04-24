@@ -26,12 +26,7 @@ define("io.ox/mail/api",
     // helper: get number of mails in thread
     var threadSize = function (obj) {
         var key = obj.folder_id + "." + obj.id;
-        return (threads[key] || []).length;
-    };
-
-    // helper: sort by received date
-    var dateSort = function (a, b) {
-        return b.received_date - a.received_date;
+        return key in threads ? threads[key].length - 1 : 0;
     };
 
     // lookup hash for flags & color_label (since mail has no "updates")
@@ -197,8 +192,8 @@ define("io.ox/mail/api",
             .done(function (data) {
                 _(data).each(function (obj) {
                     // build thread hash
-                    threads[obj.folder_id + '.' + obj.id] = options.order === 'desc' ?
-                            obj.thread : obj.thread.slice().reverse();
+                    threads[obj.folder_id + '.' + obj.id] = [options.order]
+                        .concat(options.order === 'desc' ? obj.thread : obj.thread.slice().reverse());
                 });
                 console.log('time.post', '#', data.length, 't2', (t2 = _.now()) - ox.t0, 'took', t2 - t1);
             });
@@ -206,7 +201,7 @@ define("io.ox/mail/api",
 
     // get mails in thread
     api.getThread = function (obj) {
-        var key, folder, thread;
+        var key, folder, thread, order, len;
         if (typeof obj === 'string') {
             key = obj;
             obj = obj.split(/\./);
@@ -215,15 +210,23 @@ define("io.ox/mail/api",
             key = (folder = obj.folder_id) + "." + obj.id;
             obj = { folder_id: folder, id: obj.id };
         }
-        if (key in threads && (thread = threads[key]).length) {
+        if (key in threads && (thread = threads[key].slice()).length) {
+            order = thread.shift();
+            len = thread.length;
             return _(thread).map(function (id, i) {
-                return { folder_id: folder, id: id, threadPosition: i, threadSize: thread.length };
+                var pos = order === 'desc' ? len - i : i + 1;
+                return { folder_id: folder, id: id, threadPosition: pos, threadSize: len };
             });
         } else {
-            obj.threadPosition = 0;
+            obj.threadPosition = 1;
             obj.threadSize = 1;
             return [obj];
         }
+    };
+
+    api.getThreadOrder = function (obj) {
+        var key = typeof obj === 'string' ? obj : obj.folder_id + "." + obj.id;
+        return key in threads ? threads[key][0] : 'desc';
     };
 
     // ~ list

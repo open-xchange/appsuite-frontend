@@ -209,10 +209,19 @@
     float: right;
 }
 
-.mail-detail .subject, .mail-detail .flag {
+.mail-detail .subject,
+.mail-detail .thread-size,
+.mail-detail .flag {
     font-size: 16pt;
     margin: 0 0 0.6em 0;
     word-wrap: break-word;
+}
+
+.mail-detail .thread-size {
+    color: #aaa;
+    float: right;
+    display: inline-block;
+    margin-left: 0.5em;
 }
 
 .mail-detail .flag { min-width: 1.5em; }

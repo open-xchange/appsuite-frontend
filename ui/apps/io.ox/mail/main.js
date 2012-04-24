@@ -220,22 +220,23 @@ define("io.ox/mail/main",
                 return openThreads[i] !== undefined;
             };
 
-            function refresh(list, index) {
+            function refresh(list, index, order) {
                 grid.repaintLabels().done(function () {
                     grid.repaint();
                     if (list) {
-                        grid.selection.insertAt(list.slice(1), index + 1);
+                        grid.selection.insertAt(order === 'desc' ? list.slice(1) : list.slice(0, -1), index + 1);
                     }
                 });
             }
 
             function open(index, cid) {
                 if (openThreads[index + 1] === undefined) {
-                    var thread = api.getThread(cid);
+                    var thread = api.getThread(cid),
+                        order = api.getThreadOrder(cid);
                     if (thread.length > 1) {
                         openThreads[index + 1] = cid;
                         api.getList(thread).done(function (list) {
-                            refresh(list, index);
+                            refresh(list, index, order);
                         });
                     }
                 }
@@ -243,10 +244,11 @@ define("io.ox/mail/main",
 
             function close(index, cid) {
                 if (openThreads[index + 1] !== undefined) {
-                    var thread = api.getThread(cid);
+                    var thread = api.getThread(cid),
+                        order = api.getThreadOrder(cid);
                     delete openThreads[index + 1];
                     api.getList(thread).done(function (list) {
-                        grid.selection.remove(list.slice(1));
+                        grid.selection.remove(order === 'desc' ? list.slice(1) : list.slice(0, -1));
                         refresh();
                     });
                 }
@@ -291,7 +293,7 @@ define("io.ox/mail/main",
 
         }());
 
-        var showMail, drawThread, drawMail, drawFail;
+        var showMail, drawMail, drawFail;
 
         showMail = function (obj) {
             // be busy

@@ -293,6 +293,8 @@ define('io.ox/mail/view-detail',
             var self = $(this), parents = self.parents();
             api.get(e.data).done(function (data) {
                 // replace placeholder with mail content
+                data.threadPosition = e.data.threadPosition;
+                data.threadSize = e.data.threadSize;
                 self.replaceWith(that.draw(data));
             });
         },
@@ -304,6 +306,8 @@ define('io.ox/mail/view-detail',
             // loop over thread - use fragment to be fast for tons of mails
             for (; (obj = list[i]); i++) {
                 if (i === 0) {
+                    mail.threadPosition = obj.threadPosition;
+                    mail.threadSize = obj.threadSize;
                     frag.appendChild(that.draw(mail).get(0));
                 } else {
                     frag.appendChild(that.drawScaffold(obj, that.autoResolveThreads).get(0));
@@ -398,6 +402,20 @@ define('io.ox/mail/view-detail',
                     })
                 )
             );
+        }
+    });
+
+    ext.point('io.ox/mail/detail').extend({
+        index: 124,
+        id: 'thread-position',
+        draw: function (data) {
+            if (data.threadSize > 1) {
+                this.append(
+                    $('<div>')
+                    .addClass('thread-size clear-title')
+                    .text(data.threadPosition + ' / ' + data.threadSize)
+                );
+            }
         }
     });
 

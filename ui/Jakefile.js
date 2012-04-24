@@ -216,10 +216,11 @@ utils.concat("pre-core.js",
         "event.js", "extensions.js", "http.js",
         "cache.js", "cache/*.js", // cache + cache storage layers
         "config.js", "session.js", "gettext.js",
-        "tk/selection.js", "tk/vgrid.js", "tk/model.js", "tk/view.js",
-        "api/factory.js", "api/user.js", "api/resource.js", "api/group.js",
-        "api/folder.js", "desktop.js", "commons.js",
-        "collection.js", "extPatterns/links.js"
+        "tk/selection.js", "tk/vgrid.js", "tk/model.js", "tk/upload.js",
+        "api/factory.js", "api/user.js", "api/resource.js", "api/group.js", "api/account.js",
+        "api/folder.js", "desktop.js", "commons.js", "collection.js",
+        "extPatterns/actions.js", "extPatterns/links.js",
+        "settings.js" // settings plugin
     ]), { type: "source" }
 );
 
