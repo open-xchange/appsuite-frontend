@@ -213,13 +213,13 @@ define('io.ox/contacts/edit/view-form',
 
             switch (type) {
             case 'text':
-                method = 'createTextArea';
+                method = 'createTextAreaClean';
                 break;
             case 'pastDate':
-                method = 'createDateField';
+                method = 'createDateFieldClean';
                 break;
             default:
-                method = 'createTextField';
+                method = 'createTextFieldClean';
                 break;
             }
 
@@ -270,7 +270,7 @@ define('io.ox/contacts/edit/view-form',
                         labelText = options.view.getModel().schema.getFieldLabel(multiline + addressGroop);
 
                     labels.push(options.view.createLabel({ id: myId, text: labelText}));
-                    fields.push(options.view.createTextField({ id: myId, property: multiline + addressGroop, classes: 'input-large' }));
+                    fields.push(options.view.createTextFieldClean({ id: myId, property: multiline + addressGroop, classes: 'input-large' }));
                     hide = (options.view.getModel().get(multiline + addressGroop)) ? false : true;
                 });
 

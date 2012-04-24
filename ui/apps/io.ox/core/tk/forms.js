@@ -45,7 +45,7 @@ define('io.ox/core/tk/forms',
             self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
         },
         selectChangeByModel = function (e, value) {
-            $(this).find('input').val(value);
+            $(this).val(value);
         },
 
         dateChange = function () {
@@ -111,39 +111,50 @@ define('io.ox/core/tk/forms',
 
     Field.prototype.create = function (tag, onChange) {
         var o = this.options,
-            text = $.txt(o.label || ''),
-        mainlabel = $('<label>').addClass(o.fieldtype),
-        element = $(tag)
-        .attr({
-            'data-property': o.property,
-            name: o.name,
-            id: o.id,
-            value: o.value,
-            'class': o.span
-        })
-        .on('change', onChange)
-        .addClass(o.classes);
-
-        if (o.fieldtype === 'text' || o.fieldtype === 'textarea') {
-            mainlabel.append(element);
+            node = $('<div>').addClass('controls');
+        this.node = node;
+        if (o.unique) {
+            _.each(o.unique, function (val) {
+                var property = o.property ? o.property : val.property,
+                    label = $('<label>').addClass(o.fieldtype),
+                    text = $.txt(val.label || ''),
+                    element = $(tag)
+                    .attr({
+                        'data-property': property,
+                        name: o.name,
+                        value: val.value
+                    })
+                    .on('change', onChange)
+                    .addClass(o.classes);
+                node.append(label.append(element, text));
+            });
         } else {
-            mainlabel.append(element, text);
+            var label = $('<label>').addClass(o.fieldtype),
+                text = $.txt(o.label || ''),
+                element = $(tag)
+                .attr({
+                    'data-property': o.property,
+                    name: o.name,
+                    id: o.id,
+                    value: o.value
+                })
+                .on('change', onChange)
+                .addClass(o.classes);
+
+            label.append.apply(label, o.fieldtype === 'text' || o.fieldtype === 'textarea' ? [element] : [element, text]);
+
+            if (o.fieldtype === 'select') {
+                this.node.append(element);
+            } else {
+                this.node = o.gabinput ? $('<div>').append(label) : $('<div>').addClass('controls').append(label);
+            }
         }
-        if (o.fieldtype === 'select') {
-            this.node = $('<div>').addClass('controls').append(element);
-        } else {
-            this.node = o.gabinput ? $('<div>').append(mainlabel) : $('<div>').addClass('controls').append(mainlabel);
-        }
-
-
-
     };
-
 
     Field.prototype.applyModel = function (handler) {
         var o = this.options, model = o.model, val = o.initialValue;
         if ((model || val) !== undefined) {
-            this.node
+            this.node.find('[data-property="' + o.property + '"]')
                 .on('invalid', invalid)
                 .on('update.view', handler)
                 .triggerHandler('update.view', model !== undefined ? model.get(o.property) : val);
@@ -158,23 +169,19 @@ define('io.ox/core/tk/forms',
         if (o.label !== false) {
             if (order === 'before') {
                 // before node
-                if (o.fieldtype === 'checkbox' || o.fieldtype === 'select') {
+                if (o.fieldtype === 'textarea' || o.fieldtype === 'text' || o.fieldtype === 'select') {
                     label = $('<label>', {
                         'for': o.id
                     });
+                    text = $.txt(o.label || '');
+                    label.append(text);
                 } else {
                     label = $('<label>');
+                    text = $.txt(o.grouplabel || '');
+                    label.append(text);
                 }
 
                 label.addClass('control-label');
-
-                if (o.fieldtype === 'select' || o.fieldtype === 'text' || o.fieldtype === 'textarea') {
-                    text = $.txt(o.label || '');
-                    label.append(text);
-                } else if (o.fieldtype === 'radio') {
-                    text = $.txt(o.mainlabel || '');
-                    label.append(text);
-                }
 
             } else {
                 // around field
@@ -183,18 +190,11 @@ define('io.ox/core/tk/forms',
                 text = $.txt(o.label || '');
                 node = label.append.apply(label, order === 'append' ? [node, space, text] : [text, space, node]);
             }
-
         }
-
 
         // wrap DIV around field & label
         if (this.options.wrap !== false) {
-
-            if (classes !== undefined) {
-                node = $('<div>').addClass('control-group' + ' ' + classes).append(label, node);
-            } else {
-                node = $('<div>').addClass('control-group').append(label, node);
-            }
+            node = $('<div>').addClass('control-group').append(label, node);
         }
         // clean up
         this.node = this.options = o = null;
@@ -221,7 +221,7 @@ define('io.ox/core/tk/forms',
                 return memo.add($('<option>').attr('value', value).text(text));
             }, $()));
             f.applyModel(selectChangeByModel);
-            return f.finish('before', options.wraperclass);
+            return f.finish('before');
         },
 
         createRadioButton: function (options) {
@@ -235,20 +235,45 @@ define('io.ox/core/tk/forms',
             var f = new Field(options, 'text');
             f.create('<input type="text">', textChange);
             f.applyModel(textChangeByModel);
-            return f.finish('before', 'input');
+            return f.finish('before');
         },
+
+        createTextFieldClean: function (options) {
+            var f = new Field(options, 'text');
+            f.create('<input type="text">', textChange);
+            f.applyModel(textChangeByModel);
+            return f.node;
+        },
+
         createTextArea: function (options) {
             var f = new Field(options, 'text');
             f.create('<textarea>', textChange);
             f.applyModel(textChangeByModel);
-            return f.finish('before', 'textarea');
+            return f.finish('before');
         },
+
+        createTextAreaClean: function (options) {
+            var f = new Field(options, 'text');
+            f.create('<textarea>', textChange);
+            f.applyModel(textChangeByModel);
+            return f.node;
+        },
+
+
         createDateField: function (options) {
             var f = new Field(options, 'date');
             f.create('<input type="date">', dateChange);
             f.applyModel(dateChangeByModel);
-            return f.finish('prepend', 'input');
+            return f.finish('prepend');
         },
+
+        createDateFieldClean: function (options) {
+            var f = new Field(options, 'date');
+            f.create('<input type="date">', dateChange);
+            f.applyModel(dateChangeByModel);
+            return f.node;
+        },
+
         createPasswordField: function (options) {
             var f = new Field(options, 'text');
             f.create('<input type="password">', textChange);

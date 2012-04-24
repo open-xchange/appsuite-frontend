@@ -56,39 +56,67 @@ function (ext, View, Model, gt, settings) {
         draw: function (options) {
             this.append(
                 this.createSection()
-                    .append(
-                        this.createSectionTitle({ text: gt('Compose')}),
-                        this.createCheckbox({property: 'appendMailTextOnReply', label: gt('Insert the original E-Mail text to a reply')}).addClass('expertmode'),
-                        this.createCheckbox({property: 'appendVcard', label: gt('Append vcard')}),
-                        this.createCheckbox({property: 'autocompleteEmailAddresses', label: gt('Enable auto completion of E-Mail addresses')}),
-                        this.createSectionDelimiter(),
-                        this.createSectionHorizontalWrapper().append(
-                                this.createRadioButton({property: 'forwardMessageAs', mainlabel: gt('Forward E-Mails as:'), label: gt('Inline'), name: 'forwardMessageAs', value: 'Inline' }),
-                                this.createRadioButton({property: 'forwardMessageAs', label: gt('Attachment'), name: 'forwardMessageAs', value: 'Attachment'})
-                        ),
+                    .append(this.createSectionHorizontalWrapper().append(
+                            this.createCheckbox({
+                                grouplabel: gt('Compose'),
+                                unique: {
+                                    1: { property: 'appendMailTextOnReply', label: gt('Insert the original E-Mail text to a reply')},
+                                    2: { property: 'appendVcard', label: gt('Append vcard')},
+                                    3: { property: 'autocompleteEmailAddresses', label: gt('Enable auto completion of E-Mail addresses')}
+                                }
+                            }),
 
-                        this.createSectionDelimiter(),
-                        this.createInfoText({text: gt('When "Reply all":')}),
-                        this.createRadioButton({property: 'replyAllCc', label: gt('Add sender and recipients to "To", Cc to "Cc"'), name: 'replyAllCc', value: false}),
-                        this.createRadioButton({property: 'replyAllCc', label: gt('Add sender to "To", recipients to "Cc"'), name: 'replyAllCc', value: true}),
-                        this.createSectionDelimiter(),
-                        this.createInfoText({text: gt('Format E-Mails as:')}),
-                        this.createRadioButton({property: 'messageFormat', label: gt('HTML'), name: 'messageFormat', value: 'html'}),
-                        this.createRadioButton({property: 'messageFormat', label: gt('Plain text'), name: 'messageFormat', value: 'plain'}),
-                        this.createRadioButton({property: 'messageFormat', label: gt('HTML and Plain text'), name: 'messageFormat', value: 'both'}),
-                        this.createSectionDelimiter(),
-                        this.createSectionHorizontalWrapper().append(
-                            this.createSelectbox({property: 'defaultMailFont', label: gt('Default E-Mail font:'), span: 'input-xlarge', items: {'Default': 'default', 'Andale Mono': 'andale_mono', 'Arial': 'arial', 'Arial Black': 'arial_black', 'Book Antiqua': 'book_antiqua'}}).addClass('expertmode'),
-                            this.createSelectbox({property: 'defaultMailFontSize', label: gt('Default E-Mail font size:'),  span: 'input-xlarge', items: {'Default': 'default', '1 (8pt)': '8_pt', '2 (10pt)': '10_pt'}}).addClass('expertmode'),
+                            this.createSectionDelimiter(),
+
+                            this.createRadioButton({
+                                grouplabel: gt('Forward E-Mails as:'),
+                                property: 'forwardMessageAs',
+                                unique: {
+                                    1: { label: gt('Inline'), value: 'Inline'},
+                                    2: { label: gt('Attachment'), value: 'Attachment'}
+                                }
+                            }),
+
+                            this.createSectionDelimiter(),
+
+                            this.createRadioButton({
+                                property: 'replyAllCc',
+                                grouplabel: gt('When "reply all":'),
+                                name: 'replyAllCc',
+                                unique: {
+                                    1: { label: gt('Add sender and recipients to "To", Cc to "Cc"'), value: false },
+                                    2: { label: gt('Add sender to "To", recipients to "Cc"'), value: true }
+                                }
+                            }),
+
+                            this.createSectionDelimiter(),
+
+                            this.createRadioButton({
+                                property: 'messageFormat',
+                                grouplabel: gt('Format E-Mails as:'),
+                                name: 'messageFormat',
+                                unique: {
+                                    1: { label: gt('HTML'), value: 'html' },
+                                    2: { label: gt('Plain text'), value: 'plain' },
+                                    3: { label: gt('HTML and Plain text'), value: 'both'}
+                                }
+                            }),
+
+                            this.createSectionDelimiter(),
+
+                            this.createSelectbox({property: 'defaultMailFont', label: gt('Default E-Mail font:'), classes: 'input-xlarge', items: {'Default': 'default', 'Andale Mono': 'andale_mono', 'Arial': 'arial', 'Arial Black': 'arial_black', 'Book Antiqua': 'book_antiqua'}}).addClass('expertmode'),
+                            this.createSelectbox({property: 'defaultMailFontSize', label: gt('Default E-Mail font size:'),  classes: 'input-xlarge', items: {'Default': 'default', '1 (8pt)': '8_pt', '2 (10pt)': '10_pt'}}).addClass('expertmode'),
                             this.createInlineWrapper().append(
                                 this.createText({ text: gt('Line wrap when sending text mails after: ') }),
-                                this.createTextField({ property: 'lineWrapAfter', span: 'span1', gabinput: true, wrap: false}).css({ display: 'inline-block'}),
+                                this.createTextField({ property: 'lineWrapAfter', classes: 'span1', gabinput: true, wrap: false}).css({ display: 'inline-block'}),
                                 this.createText({ text: ' characters' })
                             ),
-                            this.createSelectbox({property: 'defaultSendAddress', label: gt('Default sender address:'), span: 'input-xlarge', items: { 'mario@sourcegarden.de': 'mario@sourcegarden.de', 'mario@sourcegarden.com': 'mario@sourcegarden.com', 'mario.scheliga@open-xchange.com': 'mario.scheliga@open-xchange.com' }}),
-                            this.createSelectbox({property: 'autoSafeDraftsAfter', label: gt('Auto-save Email drafts?'), span: 'input-xlarge', items: {'Disabled': 'disabled', '1 Minute': '1_minute', '3 Minutes': '3_minutes', '5 Minutes': '5_minutes', '10 Minutes': '10_minutes' }})
-                            ),
-                        this.createSectionDelimiter()
+                            this.createSelectbox({property: 'defaultSendAddress', label: gt('Default sender address:'), classes: 'input-xlarge', items: { 'mario@sourcegarden.de': 'mario@sourcegarden.de', 'mario@sourcegarden.com': 'mario@sourcegarden.com', 'mario.scheliga@open-xchange.com': 'mario.scheliga@open-xchange.com' }}),
+                            this.createSelectbox({property: 'autoSafeDraftsAfter', label: gt('Auto-save Email drafts?'), classes: 'input-xlarge', items: {'Disabled': 'disabled', '1 Minute': '1_minute', '3 Minutes': '3_minutes', '5 Minutes': '5_minutes', '10 Minutes': '10_minutes' }}),
+
+                            this.createSectionDelimiter()
+                        )
+
                     )
             );
         }
@@ -227,9 +255,9 @@ function (ext, View, Model, gt, settings) {
                         this.createSectionContent()
                             .append(
                                 this.createCheckbox({property: 'activateMailFilter', label: gt('activate vacation notification')}),
-                                this.createTextField({ label: gt('Subject'), property: 'mailFilterSubject', span: 'input-xxlarge'}),
-                                this.createTextArea({ label: gt('Message'), property: 'mailFilterBody',  span: 'input-xxlarge'}),
-                                this.createTextField({ label: gt('Days'), property: 'mailFilterResendDays',  span: 'input-xxlarge'}),
+                                this.createTextField({ label: gt('Subject'), property: 'mailFilterSubject', classes: 'input-xxlarge'}),
+                                this.createTextArea({ label: gt('Message'), property: 'mailFilterBody',  classes: 'input-xxlarge'}),
+                                this.createTextField({ label: gt('Days'), property: 'mailFilterResendDays',  classes: 'input-xxlarge'}),
                                 this.createSectionDelimiter(),
                                 this.createText({text: gt('E-Mail Adressen')}),
                                 this.createCheckbox({property: 'emailAddress', label: 'bill.gates@microsoft.com'})

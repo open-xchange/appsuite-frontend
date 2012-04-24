@@ -51,18 +51,18 @@
 
 .settings-detail-pane .form-horizontal .control-group > label {
 	float: left;
-	width: 180px;
+	width: 150px;
 	padding-top: 5px;
 	text-align: right;
 }
 
 .settings-detail-pane  .form-horizontal .controls {
-	margin-left: 200px;
+	margin-left: 170px;
 }
 
 .settings-detail-pane .form-inline {
 	text-align: right;
-	width: 470px;
+	width: 440px;
 }
 
 .settings-detail-pane button{
