@@ -12,7 +12,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
+define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], function (ext, config) {
 
     'use strict';
 
@@ -41,7 +41,14 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
         // regex: remove < > from mail address
         rMailCleanup = /(^<|>$)/g,
         // regex: clean up display name
-        rDisplayNameCleanup = /(^["'\\\s]+|["'\\\s]+$)/g;
+        rDisplayNameCleanup = /(^["'\\\s]+|["'\\\s]+$)/g,
+
+        // mail addresses hash
+        addresses = {};
+
+    _(config.get('mail.addresses', [])).each(function (address) {
+        addresses[address.toLowerCase()] = true;
+    });
 
     that = {
 
@@ -217,8 +224,14 @@ define('io.ox/mail/util', ['io.ox/core/extensions'], function (ext) {
         },
 
         isMe: function (data) {
-            // hard wired
-            return data.from && data.from.length && data.from[0][1] === ox.user;
+            return data.from && data.from.length && String(data.from[0][1] || '').toLowerCase() in addresses;
+        },
+
+        multipleReply: function (data) {
+            return 0 < _([].concat(data.to, data.cc, data.bcc)).reduce(function (memo, arr) {
+                var email = String(arr[1] || '').toLowerCase();
+                return memo + (email && !(email in addresses) ? 1 : 0);
+            }, 0);
         }
     };
     return that;

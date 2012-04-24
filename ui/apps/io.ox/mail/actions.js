@@ -15,8 +15,9 @@ define('io.ox/mail/actions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/mail/api',
+     'io.ox/mail/util',
      'gettext!io.ox/mail/mail',
-     'io.ox/core/config'], function (ext, links, api, gt, config) {
+     'io.ox/core/config'], function (ext, links, api, util, gt, config) {
 
     'use strict';
 
@@ -55,7 +56,7 @@ define('io.ox/mail/actions',
         id: 'reply-all',
         requires: function (e) {
             // other recipients that me?
-            var multiple = ((e.context.to || []).length + (e.context.cc || []).length) > 1;
+            var multiple = util.multipleReply(e.context); //((e.context.to || []).length + (e.context.cc || []).length) > 1;
             return multiple && e.collection.has('toplevel', 'one') && e.context.folder_id !== defaultDraftFolder;
         },
         action: function (data) {
