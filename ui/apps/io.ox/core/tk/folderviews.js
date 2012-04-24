@@ -555,7 +555,7 @@ define('io.ox/core/tk/folderviews',
                 } else {
                     // id specific
                     if (data.id === '6') {
-                        src = 'user.png';
+                        src = PATH + 'user.png';
                     } else {
                         src = DEFAULT;
                     }

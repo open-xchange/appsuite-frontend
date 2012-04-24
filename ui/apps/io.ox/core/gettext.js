@@ -55,11 +55,11 @@ define("io.ox/core/gettext", [], function () {
     function markTranslated(text) {
         return '\u200b' + text + '\u200c';
     }
-    
+
     function isTranslated(text) {
         return (/^\u200b[^\u200b\u200c]*\u200c$/).test(text);
     }
-    
+
     function gt(id, po) {
         po.plural = new Function("n", "return " + po.plural + ";");
 
@@ -68,7 +68,7 @@ define("io.ox/core/gettext", [], function () {
             return arguments.length < 2 ? text :
                 gettext.format.apply(gettext, arguments);
         }
-        
+
         if (_.url.hash('debug-i18n')) {
             gettext.format = function (text) {
                 var args = new Array(arguments.length);
@@ -122,6 +122,10 @@ define("io.ox/core/gettext", [], function () {
     var lang = new $.Deferred();
 
     gt.setLanguage = function (language) {
+        // is supported?
+        if (!(language in ox.serverConfig.languages)) {
+            language = 'en_US';
+        }
         gt.setLanguage = function (lang2) {
             if (lang2 !== language) {
                 throw new Error("Multiple setLanguage calls");

@@ -440,6 +440,7 @@ $(document).ready(function () {
     }
 
     // no ellipsis? (firefox)
+    // TODO: fix this; v11 support text-overflow
     if (_.browser.Firefox) {
         $("html").addClass("no-ellipsis");
     }

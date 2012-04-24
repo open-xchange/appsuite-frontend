@@ -197,9 +197,9 @@ define("io.ox/mail/api",
             .done(function (data) {
                 _(data).each(function (obj) {
                     // build thread hash
-                    threads[obj.folder_id + '.' + obj.id] = obj.thread;
+                    threads[obj.folder_id + '.' + obj.id] = options.order === 'desc' ?
+                            obj.thread : obj.thread.slice().reverse();
                 });
-                t2 =
                 console.log('time.post', '#', data.length, 't2', (t2 = _.now()) - ox.t0, 'took', t2 - t1);
             });
     };
