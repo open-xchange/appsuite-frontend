@@ -98,6 +98,10 @@ define('io.ox/core/tk/folderviews',
 
             // open/close tree node
             toggleState = function (e) {
+                // not valid click?
+                if (e.type !== 'dblclick' && $(this).hasClass('selectable')) {
+                    return;
+                }
                 e.preventDefault();
                 if (hasChildren()) {
                     if (open) {
@@ -244,7 +248,7 @@ define('io.ox/core/tk/folderviews',
         // paint tree node - loads and paints sub folder if open
         this.paint = function () {
 
-            nodes.folder = tmplFolder.clone().on('dblclick', toggleState);
+            nodes.folder = tmplFolder.clone().on('dblclick click', toggleState);
 
             if (level > 0) {
                 nodes.folder.css('paddingLeft', (13 + level * 22) + 'px');
@@ -562,9 +566,17 @@ define('io.ox/core/tk/folderviews',
                 }
             }());
 
-            // not selectable?
-            if (options.type && options.type !== data.module) {
+            // selectable?
+            var hasProperType = !options.type || options.type === data.module,
+                isReadable = api.can('read', data),
+                isSelectable = hasProperType && isReadable;
+
+            if (!isSelectable) {
                 this.removeClass('selectable');
+                // userstore?
+                if (data.folder_id === '10') {
+                    this.css('opacity', 0.60);
+                }
             }
 
             // set icon

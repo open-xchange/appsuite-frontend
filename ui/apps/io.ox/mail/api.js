@@ -215,16 +215,13 @@ define("io.ox/mail/api",
             key = (folder = obj.folder_id) + "." + obj.id;
             obj = { folder_id: folder, id: obj.id };
         }
-        if (key in threads) {
-            thread = threads[key];
-            if (thread.length === 0) {
-                return [obj];
-            } else {
-                return _(thread).map(function (id) {
-                    return { folder_id: folder, id: id };
-                });
-            }
+        if (key in threads && (thread = threads[key]).length) {
+            return _(thread).map(function (id, i) {
+                return { folder_id: folder, id: id, threadPosition: i, threadSize: thread.length };
+            });
         } else {
+            obj.threadPosition = 0;
+            obj.threadSize = 1;
             return [obj];
         }
     };
