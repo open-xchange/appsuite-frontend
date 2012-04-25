@@ -37,6 +37,7 @@
     padding-top: 50px;
     height: 100%;
     width: 100%;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     z-index: 1;
 }
@@ -64,7 +65,8 @@
     font-size: 16px;
     line-height: 1.5em;
     color: #333;
-
+    
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     padding: 13px;
     width: 100%;

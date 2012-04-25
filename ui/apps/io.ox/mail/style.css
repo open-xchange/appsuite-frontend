@@ -34,6 +34,7 @@
     margin-left: 1em;
     border-radius: 5px;
     display: inline-block;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     float: right;
 }
@@ -224,7 +225,7 @@
     margin-left: 0.5em;
 }
 
-.mail-detail .flag { min-width: 1.5em; }
+.mail-detail .flag { min-width: 1.5em; width: 1.5em; }
 .mail-detail .flag_0 { display: none; }
 
 .mail-detail .priority {

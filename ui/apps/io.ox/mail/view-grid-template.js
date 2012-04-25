@@ -29,14 +29,14 @@ define('io.ox/mail/view-grid-template',
                 this.addClass('mail').append(
                     $('<div>').append(
                         date = $('<span>').addClass('date'),
-                        from = $('<span>').addClass('from')
+                        from = $('<div>').addClass('from')
                     ),
                     $('<div>').append(
                         threadSize = $('<div>').addClass('thread-size'),
                         flag = $('<div>').addClass('flag').text('\u00A0'),
                         attachment = $('<span>').addClass('attachment'),
                         priority = $('<span>').addClass('priority'),
-                        $('<span>').addClass('subject')
+                        $('<div>').addClass('subject')
                             .append($('<i>').addClass('icon-envelope'))
                             .append(subject = $('<span>'))
                     )
@@ -89,7 +89,7 @@ define('io.ox/mail/view-grid-template',
                             .attr('data-obj-id', key)
                             .append(
                                 $('<div>').addClass('date').text(util.getTime(data.received_date)),
-                                util.getFrom(data.from).removeClass('person')
+                                $('<div>').append(util.getFrom(data.from).removeClass('person'))
                             )
                         );
                     });

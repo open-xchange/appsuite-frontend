@@ -81,6 +81,7 @@ input#image1 {
 }
 
 .contact-detail.edit textarea {
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 433px;
     height: 20em;

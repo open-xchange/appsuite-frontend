@@ -33,14 +33,14 @@
 
 .io-ox-office-preview-page {
     width: 21cm;
-    box-sizing: border-box;
+    box-sizing: border-box; -moz-box-sizing: border-box;
     padding: 2cm;
     margin: 1cm auto 1cm auto;
 }
 
 .io-ox-office-preview-presentation {
     width: 720pt;
-    box-sizing: border-box;
+    box-sizing: border-box; -moz-box-sizing: border-box;
     margin: 1cm auto 1cm auto;
 }
 
