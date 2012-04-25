@@ -691,7 +691,8 @@ define("io.ox/mail/api",
                 action: 'zip_attachments',
                 folder: (first.parent || first.mail).folder_id,
                 id: (first.parent || first.mail).id,
-                attachment: _(data).pluck('id').join(',')
+                attachment: _(data).pluck('id').join(','),
+                session: ox.session // required here!
             });
         } else {
             // inject filename for more convenient file downloads

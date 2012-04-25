@@ -481,7 +481,9 @@ define('io.ox/mail/view-detail',
                 classes: 'attachment-link',
                 ref: 'io.ox/mail/attachment/links'
             }).draw.call(node, data),
-            contentType = getContentType(data.content_type);
+            contentType = getContentType(data.content_type),
+            url,
+            filename;
         // add instant preview
         if (regImage.test(contentType)) {
             dd.find('a').on('click', data, function (e) {
@@ -496,10 +498,17 @@ define('io.ox/mail/view-detail',
             });
         }
         // make draggable (drag-out)
+        if (_.isArray(data)) {
+            url = api.getUrl(data, 'zip');
+            filename = (data.subject || 'mail') + '.zip'; // yep, array prop
+        } else {
+            url = api.getUrl(data, 'download');
+            filename = data.filename;
+        }
         dd.find('a')
             .attr({
                 draggable: true,
-                'data-downloadurl': contentType + ':' + data.filename + ':' + ox.abs + api.getUrl(data, 'download')
+                'data-downloadurl': contentType + ':' + filename.replace(/:/g, '') + ':' + ox.abs + url
             })
             .on('dragstart', function (e) {
                 $(this).css({ display: 'inline-block', backgroundColor: 'white' });
@@ -566,6 +575,7 @@ define('io.ox/mail/view-detail',
                 });
                 // how 'all' drop down?
                 if (attachments.length > 1) {
+                    attachments.subject = data.subject;
                     drawAttachmentDropDown(outer, gt('All'), attachments);
                 }
                 this.append(outer);
