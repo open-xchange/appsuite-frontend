@@ -91,7 +91,7 @@ define("io.ox/files/api",
             })
             .pipe(function (data) {
                 // clear folder cache
-                return api.caches.all.remove(options.json.folder_id)
+                return api.caches.all.grepRemove(options.json.folder_id + '\t')
                     .pipe(function () {
                         api.trigger("create.file refresh.all");
                         return { folder_id: String(options.json.folder_id), id: parseInt(data.data, 10) };
@@ -136,7 +136,7 @@ define("io.ox/files/api",
             .pipe(function (data) {
                 // clear folder cache
                 return $.when(
-                    api.caches.all.remove(options.json.folder_id),
+                    api.caches.all.grepRemove(options.json.folder_id + '\t'),
                     api.caches.get.remove(options.json),
                     api.caches.versions.remove(options.json.id)
                 )
@@ -157,7 +157,7 @@ define("io.ox/files/api",
             })
             .pipe(function () {
                 // clear all cache since titles and thus the order might have changed
-                return api.caches.all.remove(file.folder_id);
+                return api.caches.all.grepRemove(file.folder_id + '\t');
             })
             .pipe(function () {
                 return api.get(obj, false);
@@ -239,7 +239,7 @@ define("io.ox/files/api",
         })
         .pipe(function () {
             return $.when(
-                api.caches.all.remove(version.folder),
+                api.caches.all.grepRemove(version.folder + '\t'),
                 api.caches.list.remove({ id: version.id, folder: version.folder }),
                 api.caches.get.remove({ id: version.id, folder: version.folder }),
                 api.caches.versions.remove(version.id)
