@@ -157,6 +157,7 @@ define('io.ox/contacts/actions',
 
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         index: 100,
+        prio: 'hi',
         id: 'update',
         label: gt('Edit'),
         ref: 'io.ox/contacts/main/update'
@@ -178,6 +179,7 @@ define('io.ox/contacts/actions',
 
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         index: 400,
+        prio: 'hi',
         id: 'delete',
         label: gt('Delete'),
         ref: 'io.ox/contacts/main/delete',

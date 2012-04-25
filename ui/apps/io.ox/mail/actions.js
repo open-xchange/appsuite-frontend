@@ -56,8 +56,8 @@ define('io.ox/mail/actions',
         id: 'reply-all',
         requires: function (e) {
             // other recipients that me?
-            var multiple = util.multipleReply(e.context); //((e.context.to || []).length + (e.context.cc || []).length) > 1;
-            return multiple && e.collection.has('toplevel', 'one') && e.context.folder_id !== defaultDraftFolder;
+            return e.collection.has('toplevel', 'one') &&
+                util.hasOtherRecipients(e.context) && e.context.folder_id !== defaultDraftFolder;
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -351,6 +351,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 100,
+        prio: 'hi',
         id: 'reply-all',
         label: gt('Reply All'),
         ref: 'io.ox/mail/actions/reply-all'
@@ -358,6 +359,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 200,
+        prio: 'hi',
         id: 'reply',
         label: gt('Reply'),
         ref: 'io.ox/mail/actions/reply'
@@ -365,6 +367,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 300,
+        prio: 'lo',
         id: 'forward',
         label: gt('Forward'),
         ref: 'io.ox/mail/actions/forward'
@@ -373,6 +376,7 @@ define('io.ox/mail/actions',
     // edit draft
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 400,
+        prio: 'hi',
         id: 'edit',
         label: gt('Edit'),
         ref: 'io.ox/mail/actions/edit'
@@ -380,6 +384,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 500,
+        prio: 'lo',
         id: 'markunread',
         label: gt('Mark Unread'),
         ref: 'io.ox/mail/actions/markunread'
@@ -387,6 +392,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 501,
+        prio: 'hi',
         id: 'markread',
         label: gt('Mark read'),
         ref: 'io.ox/mail/actions/markread'
@@ -424,14 +430,15 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 600,
+        prio: 'lo',
         id: 'label',
         ref: 'io.ox/mail/actions/label',
         draw: function (data) {
             this.append(
-                $('<span class="dropdown" class="io-ox-inline-links">')
+                $('<span class="dropdown" class="io-ox-inline-links" data-prio="lo">')
                 .append(
                     // link
-                    $('<a href="#" data-toggle="dropdown" >')
+                    $('<a href="#" data-toggle="dropdown">')
                     .text(gt('Label')).append($('<b class="caret">')).dropdown(),
                     // drop down
                     $('<ul class="dropdown-menu">')
@@ -451,6 +458,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 700,
+        prio: 'lo',
         id: 'move',
         label: gt('Move'),
         ref: 'io.ox/mail/actions/move'
@@ -458,6 +466,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 800,
+        prio: 'lo',
         id: 'copy',
         label: gt('Copy'),
         ref: 'io.ox/mail/actions/copy'
@@ -465,6 +474,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 900,
+        prio: 'lo',
         id: 'source',
         label: gt('View Source'),
         ref: 'io.ox/mail/actions/source'
@@ -472,6 +482,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 1000,
+        prio: 'hi',
         id: 'delete',
         label: gt('Delete'),
         ref: 'io.ox/mail/actions/delete',

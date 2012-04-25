@@ -75,7 +75,7 @@ define("io.ox/editor/main",
                                     }
                                 })
                                 .addClass('title')
-                                .end(),
+                                .parent(),
                             // save button
                             $('<button>', { tabindex: 3 }).addClass('save btn btn-primary').text(gt('Save'))
                                 .on('click', fnSave)
@@ -93,6 +93,7 @@ define("io.ox/editor/main",
                                         app.save();
                                     }
                                 })
+                                .find('textarea')
                             )
                         )
                     )

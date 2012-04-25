@@ -227,8 +227,9 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
             return data.from && data.from.length && String(data.from[0][1] || '').toLowerCase() in addresses;
         },
 
-        multipleReply: function (data) {
-            return 0 < _([].concat(data.to, data.cc, data.bcc)).reduce(function (memo, arr) {
+        hasOtherRecipients: function (data) {
+            var list = [].concat(data.to, data.cc, data.bcc);
+            return 0 < _(list).reduce(function (memo, arr) {
                 var email = String(arr[1] || '').toLowerCase();
                 return memo + (email && !(email in addresses) ? 1 : 0);
             }, 0);

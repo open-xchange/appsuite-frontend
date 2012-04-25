@@ -218,6 +218,7 @@ define("io.ox/files/actions",
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: "editor",
         index: 40,
+        prio: 'hi',
         label: gt("Edit document"),
         ref: "io.ox/files/actions/editor"
     }));
@@ -232,6 +233,7 @@ define("io.ox/files/actions",
     ext.point("io.ox/files/links/inline").extend(new links.Link({
         id: "open",
         index: 100,
+        prio: 'hi',
         label: gt("Open"),
         ref: "io.ox/files/actions/open"
     }));
@@ -239,6 +241,7 @@ define("io.ox/files/actions",
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'download',
         index: 200,
+        prio: 'hi',
         label: gt("Download"),
         ref: "io.ox/files/actions/download"
     }));
@@ -253,6 +256,7 @@ define("io.ox/files/actions",
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'delete',
         index: 400,
+        prio: 'hi',
         label: gt("Delete"),
         ref: "io.ox/files/actions/delete"
     }));

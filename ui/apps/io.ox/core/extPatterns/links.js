@@ -37,7 +37,8 @@ define("io.ox/core/extPatterns/links",
         this.draw = this.draw || function (context) {
             this.append(
                 $("<a>", { href: "#", tabindex: "1", "data-action": self.id })
-                .addClass('io-ox-action-link' + (options.attention === true ? ' attention': ''))
+                .addClass('io-ox-action-link')
+                .attr('data-prio', options.prio || 'lo')
                 .data({ ref: self.ref, context: context })
                 .click(click)
                 .text(String(self.label))
@@ -108,11 +109,10 @@ define("io.ox/core/extPatterns/links",
 
     var inlineToggle = function (e) {
         var node = $(this), A = 'data-toggle',
-            list = node.parent().children().slice(2, -2),
+            list = node.parent().children('[data-prio="lo"]'),
             expand = node.attr(A) === 'more';
         list[expand ? 'show' : 'hide']();
-        node.text(expand ? 'Less' : 'More')
-            .attr(A, expand ? 'less' : 'more');
+        node.text(expand ? 'Less' : 'More').attr(A, expand ? 'less' : 'more');
     };
 
     var InlineLinks = function (options) {
@@ -120,11 +120,12 @@ define("io.ox/core/extPatterns/links",
         this.draw = function (context) {
             // create & add node first, since the rest is async
             var args = $.makeArray(arguments),
-                node = $("<div>").addClass("io-ox-inline-links").appendTo(this);
+                node = $("<div>").addClass("io-ox-inline-links").appendTo(this),
+                multiple = _.isArray(context) && context.length > 1;
             drawLinks(self, new Collection(context), node, context, args)
             .done(function () {
-                // add toggle
-                if (node.children().length > 4) {
+                // add toggle unless multi-selection
+                if (!multiple && node.children().length > 3) {
                     node.append(
                         $('<span>', { 'data-toggle': 'more' })
                         .addClass('label io-ox-action-link')
@@ -132,7 +133,7 @@ define("io.ox/core/extPatterns/links",
                         .click(inlineToggle)
                         .text('More')
                     );
-                    node.children().slice(2, -2).hide();
+                    node.children('[data-prio="lo"]').hide();
                 }
             });
         };
@@ -153,7 +154,7 @@ define("io.ox/core/extPatterns/links",
         $parent.append($.txt('\u00A0\u00A0 ')); // a bit more space
 
         // create & add node first, since the rest is async
-        var node = $("<ul>").addClass("dropdown-menu").appendTo($parent);
+        var node = $('<ul>').addClass('dropdown-menu').appendTo($parent);
         drawLinks(options, new Collection(context), node, context, args, true);
 
         $toggle.dropdown();
