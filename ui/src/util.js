@@ -127,7 +127,8 @@
          */
         hash: function (name, value) {
             // since the hash might change we decode it for every request
-            var hashData = document.location.hash.substr(1);
+            // firefox has a bug and decodes the hash, so we use href
+            var hashData = location.href.split(/#/)[1] || '';
             hashData = deserialize(
                  hashData.substr(0, 1) === "?" ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData
             );
@@ -442,7 +443,7 @@
             };
         }())
     });
-    
+
     window.assert = function (value, message) {
         if (value) return;
         console.error(message);
