@@ -477,12 +477,13 @@ define('io.ox/mail/view-detail',
     var drawAttachmentDropDown = function (node, label, data) {
         // use extension pattern
         var dd = new links.DropdownLinks({
-            label: label,
-            classes: 'attachment-link',
-            ref: 'io.ox/mail/attachment/links'
-        }).draw.call(node, data);
+                label: label,
+                classes: 'attachment-link',
+                ref: 'io.ox/mail/attachment/links'
+            }).draw.call(node, data),
+            contentType = getContentType(data.content_type);
         // add instant preview
-        if (regImage.test(getContentType(data.content_type))) {
+        if (regImage.test(contentType)) {
             dd.find('a').on('click', data, function (e) {
                 var node = $(this), data = e.data, p = node.parent(), url, src;
                 if (p.hasClass('open') && p.find('.instant-preview').length === 0) {
@@ -494,6 +495,16 @@ define('io.ox/mail/view-detail',
                 }
             });
         }
+        // make draggable (drag-out)
+        dd.find('a')
+            .attr({
+                draggable: true,
+                'data-downloadurl': contentType + ':' + data.filename + ':' + ox.abs + api.getUrl(data, 'download')
+            })
+            .on('dragstart', function (e) {
+                $(this).css({ display: 'inline-block', backgroundColor: 'white' });
+                e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
+            });
     };
 
     var isWinmailDATPart = function (obj) {
