@@ -214,8 +214,12 @@ define("io.ox/calendar/util",
                             // hard coded for demo purposes
                             return '<div class="timezones">' +
                                 _(zones).map(function (zone) {
-                                    return _.printf('%s <b><span class="label label-info">%s</span></b><i>%s</i>', zone[0], zone[2], that.getTimeInterval(data, zone[1]));
-                                }).join('<br>') +
+                                    return _.printf(
+                                        // must use outer DIV with "clear: both" here for proper layout in firefox
+                                        '<div class="clear">%s <b><span class="label label-info">%s</span></b><i>%s</i></div>',
+                                        zone[0], zone[2], that.getTimeInterval(data, zone[1])
+                                    );
+                                }).join('') +
                                 '</div>';
                         },
                         animation: false,

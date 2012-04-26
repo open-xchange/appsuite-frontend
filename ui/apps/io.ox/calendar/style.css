@@ -202,6 +202,10 @@
     color: #333;
 }
 
+.popover-content .timezones .clear {
+    clear: both;
+}
+
 .popover-content .timezones i {
     font-style: normal;
     display: inline-block;
