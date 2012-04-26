@@ -333,7 +333,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             dataHolder = $('<div>').attr('data-holder', 'data-holder')
                 .append(
                     createField(self, 'name', 'input#mail', gt('Name'), '2'),
-                    createField(self, 'mail', 'input#name', gt('E-mail address'), '3')
+                    createField(self, 'mail', 'input#name', gt('Email address'), '3')
                 );
 
             addSection.addClass('last').append(

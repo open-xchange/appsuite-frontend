@@ -45,7 +45,7 @@ define('io.ox/settings/accounts/email/settings',
                   .append(
                       utils.createSectionContent()
                         .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(forms.createLabeledTextField({label: 'E-Mail Address:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(forms.createLabeledTextField({label: 'Email Address:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
                         .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
                         .append(forms.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', model: settings, validator: myValidator}))
                   )
@@ -85,7 +85,7 @@ define('io.ox/settings/accounts/email/settings',
                   .append(
                       utils.createSectionContent()
                         .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(forms.createLabeledTextField({label: 'E-Mail Address:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
+                        .append(forms.createLabeledTextField({label: 'Email Address:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
                         .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
                         .append(forms.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', model: settings, validator: myValidator}))
                   )

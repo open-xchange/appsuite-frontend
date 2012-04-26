@@ -605,7 +605,7 @@ define('io.ox/mail/view-detail',
                          $('<a>').text(gt('Bilder anzeigen')),
                          $('<i>').text(
                               ' \u2013 ' +
-                              gt('In dieser E-Mail wurden externe Bilder blockiert, um potenziellen Missbrauch durch SPAM zu verhindern.')
+                              gt('In dieser email wurden externe Bilder blockiert, um potenziellen Missbrauch durch SPAM zu verhindern.')
                          )
                      )
                     .on('click', function (e) {

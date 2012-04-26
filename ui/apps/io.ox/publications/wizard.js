@@ -58,7 +58,7 @@ define('io.ox/publications/wizard', ['io.ox/publications/api'], function (api) {
                         .append(
                             $('<a>', { href: '#' }).addClass('btn btn-primary').text('Close')
                             .on('click', { dialog: dialog }, hCloseDialog),
-                            $('<a>', { href: '#' }).addClass('btn').text('Send E-Mail')
+                            $('<a>', { href: '#' }).addClass('btn').text('Send email')
                             .on('click', { publication: pub, dialog: dialog }, hSendPublicationByMail)
                         )
                     )

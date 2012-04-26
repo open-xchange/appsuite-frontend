@@ -68,7 +68,7 @@ define('io.ox/portal/mail/register',
             node.addClass('io-ox-portal-mail')
                 .append(
                     $('<div>').addClass('clear-title')
-                        .text('New E-Mails')
+                        .text('New emails')
                 );
 
             ext.point('io.ox/portal/widget/mail').invoke('draw', node);

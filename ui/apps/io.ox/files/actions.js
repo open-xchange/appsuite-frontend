@@ -249,7 +249,7 @@ define("io.ox/files/actions",
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'send',
         index: 300,
-        label: gt("Send by E-Mail"),
+        label: gt("Send by email"),
         ref: "io.ox/files/actions/send"
     }));
 

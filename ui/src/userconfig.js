@@ -27,7 +27,7 @@ define(function () {
             },
 
             "io.ox/mail": {
-                title: "E-Mail",
+                title: "Mail",
                 company: "Open-Xchange",
                 icon: "mail.png",
                 category: "Basic",
@@ -35,7 +35,7 @@ define(function () {
             },
 
             "io.ox/mail/write": {
-                title: "Compose E-Mail",
+                title: "Compose email",
                 company: "Open-Xchange",
                 icon: "mail-write.png",
                 category: "Basic",

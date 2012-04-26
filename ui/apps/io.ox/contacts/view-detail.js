@@ -289,14 +289,14 @@ define("io.ox/contacts/view-detail",
             } else {
                 var dupl = {},
                 r = 0;
-                r += addMail.call(this, gt("E-Mail"), data.email1, data);
+                r += addMail.call(this, gt("Email"), data.email1, data);
                 dupl[data.email1] = true;
                 if (dupl[data.email2] !== true) {
-                    r += addMail.call(this, gt("E-Mail"), data.email2, data);
+                    r += addMail.call(this, gt("Email"), data.email2, data);
                     dupl[data.email2] = true;
                 }
                 if (dupl[data.email3] !== true) {
-                    r += addMail.call(this, gt("E-Mail"), data.email3, data);
+                    r += addMail.call(this, gt("Email"), data.email3, data);
                 }
                 if (r > 0) {
                     addField("", "\u00A0", this);

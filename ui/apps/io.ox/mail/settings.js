@@ -37,8 +37,8 @@ function (ext, View, Model, gt, settings) {
                 this.createSection({})
                     .append(
                         this.createSectionTitle({ text: gt('Common')}),
-                        this.createCheckbox({property: 'selectFirstMessage', label: gt('Automatically select first E-Mail?')}).addClass('expertmode'),
-                        this.createCheckbox({property: 'removeDeletedPermanently', label: gt('Permanently remove deleted E-Mails?') }),
+                        this.createCheckbox({property: 'selectFirstMessage', label: gt('Automatically select first email?')}).addClass('expertmode'),
+                        this.createCheckbox({property: 'removeDeletedPermanently', label: gt('Permanently remove deleted emails?') }),
                         this.createCheckbox({property: 'notifyAcknoledge', label: gt('Notify on delivery receipt?')}).addClass('expertmode'),
                         this.createCheckbox({property: 'showContactImage', label: gt('Show sender image?')}),
                         this.createCheckbox({property: 'contactCollectOnMailTransport', label: gt('Automatically collect contacts in the folder "Collected addresses" while sending?')}).addClass('expertmode'),
@@ -58,12 +58,12 @@ function (ext, View, Model, gt, settings) {
                 this.createSection()
                     .append(
                         this.createSectionTitle({ text: gt('Compose')}),
-                        this.createCheckbox({property: 'appendMailTextOnReply', label: gt('Insert the original E-Mail text to a reply')}).addClass('expertmode'),
+                        this.createCheckbox({property: 'appendMailTextOnReply', label: gt('Insert the original email text to a reply')}).addClass('expertmode'),
                         this.createCheckbox({property: 'appendVcard', label: gt('Append vcard')}),
-                        this.createCheckbox({property: 'autocompleteEmailAddresses', label: gt('Enable auto completion of E-Mail addresses')}),
+                        this.createCheckbox({property: 'autocompleteEmailAddresses', label: gt('Enable auto completion of email addresses')}),
                         this.createSectionDelimiter(),
                         this.createSectionHorizontalWrapper().append(
-                                this.createRadioButton({property: 'forwardMessageAs', mainlabel: gt('Forward E-Mails as:'), label: gt('Inline'), name: 'forwardMessageAs', value: 'Inline' }),
+                                this.createRadioButton({property: 'forwardMessageAs', mainlabel: gt('Forward emails as:'), label: gt('Inline'), name: 'forwardMessageAs', value: 'Inline' }),
                                 this.createRadioButton({property: 'forwardMessageAs', label: gt('Attachment'), name: 'forwardMessageAs', value: 'Attachment'})
                         ),
 
@@ -72,14 +72,14 @@ function (ext, View, Model, gt, settings) {
                         this.createRadioButton({property: 'replyAllCc', label: gt('Add sender and recipients to "To", Cc to "Cc"'), name: 'replyAllCc', value: false}),
                         this.createRadioButton({property: 'replyAllCc', label: gt('Add sender to "To", recipients to "Cc"'), name: 'replyAllCc', value: true}),
                         this.createSectionDelimiter(),
-                        this.createInfoText({text: gt('Format E-Mails as:')}),
+                        this.createInfoText({text: gt('Format emails as:')}),
                         this.createRadioButton({property: 'messageFormat', label: gt('HTML'), name: 'messageFormat', value: 'html'}),
                         this.createRadioButton({property: 'messageFormat', label: gt('Plain text'), name: 'messageFormat', value: 'plain'}),
                         this.createRadioButton({property: 'messageFormat', label: gt('HTML and Plain text'), name: 'messageFormat', value: 'both'}),
                         this.createSectionDelimiter(),
                         this.createSectionHorizontalWrapper().append(
-                            this.createSelectbox({property: 'defaultMailFont', label: gt('Default E-Mail font:'), span: 'input-xlarge', items: {'Default': 'default', 'Andale Mono': 'andale_mono', 'Arial': 'arial', 'Arial Black': 'arial_black', 'Book Antiqua': 'book_antiqua'}}).addClass('expertmode'),
-                            this.createSelectbox({property: 'defaultMailFontSize', label: gt('Default E-Mail font size:'),  span: 'input-xlarge', items: {'Default': 'default', '1 (8pt)': '8_pt', '2 (10pt)': '10_pt'}}).addClass('expertmode'),
+                            this.createSelectbox({property: 'defaultMailFont', label: gt('Default email font:'), span: 'input-xlarge', items: {'Default': 'default', 'Andale Mono': 'andale_mono', 'Arial': 'arial', 'Arial Black': 'arial_black', 'Book Antiqua': 'book_antiqua'}}).addClass('expertmode'),
+                            this.createSelectbox({property: 'defaultMailFontSize', label: gt('Default email font size:'),  span: 'input-xlarge', items: {'Default': 'default', '1 (8pt)': '8_pt', '2 (10pt)': '10_pt'}}).addClass('expertmode'),
                             this.createInlineWrapper().append(
                                 this.createText({ text: gt('Line wrap when sending text mails after: ') }),
                                 this.createTextField({ property: 'lineWrapAfter', span: 'span1', gabinput: true, wrap: false}).css({ display: 'inline-block'}),
@@ -102,11 +102,11 @@ function (ext, View, Model, gt, settings) {
                 this.createSection({})
                     .append(
                         this.createSectionTitle({ text: gt('Display')}),
-                        this.createCheckbox({property: 'allowHtmlMessages', label: gt('Allow html formatted E-Mails')}),
+                        this.createCheckbox({property: 'allowHtmlMessages', label: gt('Allow html formatted emails')}),
                         this.createCheckbox({property: 'allowHtmlImages', label: gt('Block pre-loading of externally linked images')}),
-                        this.createCheckbox({property: 'displayEmomticons', label: gt('Display emoticons as graphics in text E-Mails')}),
+                        this.createCheckbox({property: 'displayEmomticons', label: gt('Display emoticons as graphics in text emails')}),
                         this.createCheckbox({property: 'isColorQuoted', label: gt('Color quoted lines')}),
-                        this.createCheckbox({property: 'showName', label: gt('Show name instead of E-Mail address in To and Cc fields')}),
+                        this.createCheckbox({property: 'showName', label: gt('Show name instead of email address in To and Cc fields')}),
                         this.createSectionDelimiter()
                     )
             );
@@ -231,7 +231,7 @@ function (ext, View, Model, gt, settings) {
                                 this.createTextArea({ label: gt('Message'), property: 'mailFilterBody',  span: 'input-xxlarge'}),
                                 this.createTextField({ label: gt('Days'), property: 'mailFilterResendDays',  span: 'input-xxlarge'}),
                                 this.createSectionDelimiter(),
-                                this.createText({text: gt('E-Mail Adressen')}),
+                                this.createText({text: gt('email Adressen')}),
                                 this.createCheckbox({property: 'emailAddress', label: 'bill.gates@microsoft.com'})
 
                             ),
