@@ -57,17 +57,23 @@ define("io.ox/core/api/factory",
             get: new cache.ObjectCache(o.id + "-get", true, o.keyGenerator)
         };
 
+        // hash to track very first cache hit
+        var readThrough = {};
+
         var api = {
 
             cacheRegistry: { all: ['all'], list: ['list'], get: ['get'] },
 
             getAll: function (options, useCache, cache) {
+
                 // merge defaults for "all"
                 var opt = $.extend({}, o.requests.all, options || {}),
                     cid = opt.folder + '\t' + opt.sort + '.' + opt.order + '.' + opt.limit;
+
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 cache = cache || caches.all;
+
                 // cache miss?
                 var getter = function () {
                     return http.GET({
@@ -83,7 +89,16 @@ define("io.ox/core/api/factory",
                     });
                 };
 
-                return (useCache ? cache.get(cid, getter) : getter())
+                var hit = function (data) {
+                    if (!(cid in readThrough)) {
+                        readThrough[cid] = true;
+                        setTimeout(function () {
+                            api.refresh();
+                        }, 3000); // wait some secs
+                    }
+                };
+
+                return (useCache ? cache.get(cid, getter, hit) : getter())
                     .pipe(o.pipe.allPost)
                     .done(o.done.all || $.noop);
             },
@@ -227,9 +242,9 @@ define("io.ox/core/api/factory",
                 });
             },
 
-            needsRefresh: function (folder) {
+            needsRefresh: function (folder, sort, desc) {
                 // has entries in 'all' cache for specific folder
-                return caches.all.get(folder).pipe(function (data) {
+                return caches.all.keys(folder + '\t' + sort + '.' + desc).pipe(function (data) {
                     return data !== null;
                 });
             },
@@ -257,7 +272,7 @@ define("io.ox/core/api/factory",
         Events.extend(api);
 
         // bind to global refresh
-        ox.on("refresh^." + o.id, function () {
+        api.refresh = function () {
             if (ox.online) {
                 // clear "all & list" caches
                 api.caches.all.clear();
@@ -265,6 +280,10 @@ define("io.ox/core/api/factory",
                 // trigger local refresh
                 api.trigger("refresh.all");
             }
+        };
+
+        ox.on('refresh^', function () {
+            api.refresh(); // write it this way so that API's can overwrite refresh
         });
 
         return api;

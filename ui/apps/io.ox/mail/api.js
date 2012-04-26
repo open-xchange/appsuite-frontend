@@ -516,7 +516,7 @@ define("io.ox/mail/api",
                         .first().value();
                 });
         } else {
-            console.error('api.getUnmodified', obj);
+            console.error('api.getUnmodified(). Invalid case.', obj);
             return $.Deferred().resolve(obj);
         }
     };
@@ -715,13 +715,10 @@ define("io.ox/mail/api",
         }
     };
 
-    // disable default refresh
-    ox.off('refresh^.mail');
-
     var lastUnseenMail = 0;
 
     // refresh
-    ox.on('refresh^', function (e, folder) {
+    api.refresh = function (e, folder) {
         if (ox.online) {
             if (folder) {
                 // refresh current view
@@ -730,9 +727,13 @@ define("io.ox/mail/api",
                         api.trigger('refresh.all');
                     });
             } else {
-                api.caches.all.clear();
-                api.caches.allThreaded.clear();
-                api.trigger('refresh.all');
+                $.when(
+                    api.caches.all.clear(),
+                    api.caches.allThreaded.clear()
+                )
+                .done(function () {
+                    api.trigger('refresh.all');
+                });
             }
             // look for new unseen mails in INBOX
             http.GET({
@@ -763,7 +764,7 @@ define("io.ox/mail/api",
                 }
             });
         }
-    });
+    };
 
     return api;
 });

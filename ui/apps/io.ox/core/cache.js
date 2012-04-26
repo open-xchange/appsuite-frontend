@@ -142,9 +142,14 @@ define('io.ox/core/cache', function () {
         };
 
         // get from cache
-        this.get = function (key, getter) {
+        this.get = function (key, getter, readThroughHandler) {
             return index.get(key).pipe(function (o) {
-                return o !== null ? o.data : (getter ? getter() : null);
+                if (o !== null) {
+                    if (readThroughHandler) { readThroughHandler(o.data); }
+                    return o.data;
+                } else {
+                    return getter ? getter() : null;
+                }
             });
         };
 

@@ -127,7 +127,7 @@
          */
         hash: function (name, value) {
             // since the hash might change we decode it for every request
-            // firefox has a bug and decodes the hash, so we use href
+            // firefox has a bug and already decodes the hash string, so we use href
             var hashData = location.href.split(/#/)[1] || '';
             hashData = deserialize(
                  hashData.substr(0, 1) === "?" ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData
