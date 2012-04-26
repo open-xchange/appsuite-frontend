@@ -432,16 +432,9 @@ a.button.default-action {
     resize: none;
 }
 
-@media screen and (min-height: 800px) {
-    .window-head { height: 68px; }
-    .window-title, .window-toolbar, .window-controls { top: 20px; }
-    .window-body { top: 70px; }
-}
-
 /* vGrid */
 
-.vgrid {
-}
+.vgrid {}
 
 .vgrid .vgrid-scrollpane {
     overflow-x: hidden;
@@ -1250,3 +1243,12 @@ div.jGrowl div.jGrowl-closer {
 	}
 }
 /** OMG END **/
+
+
+/** MEDIA QUERIES AT THE VERY BOTTOM -- EITHER MISTRANSFORMED OR EATEN BY LESS.JS **/
+
+@media screen and (min-height: 800px) {
+    .window-head { height: 68px; border: 5px solid red; }
+    .window-title, .window-toolbar, .window-controls { top: 20px; }
+    .window-body { top: 70px; }
+}
