@@ -44,7 +44,8 @@ define("io.ox/core/api/factory",
             },
             done: {},
             fail: {},
-            pipe: {}
+            pipe: {},
+            filter: null
         }, o || {});
 
         // use module as id?
@@ -106,6 +107,8 @@ define("io.ox/core/api/factory",
             getList: function (ids, useCache) {
                 // be robust
                 ids = ids ? [].concat(ids) : [];
+                // filter
+                if (o.filter) { ids = _(ids).filter(o.filter); }
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 // async getter
@@ -143,7 +146,6 @@ define("io.ox/core/api/factory",
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 // cache miss?
-
                 var getter = function () {
                     return http.GET({
                         module: o.module,

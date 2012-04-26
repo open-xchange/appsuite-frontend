@@ -103,6 +103,10 @@ define("io.ox/mail/api",
                 }
             }
         },
+        // filter list request (special fix for nested messages; don't have folder; inline action checks fail)
+        filter: function (obj) {
+            return 'folder_id' in obj;
+        },
         pipe: {
             all: function (data, opt) {
                 // unread count
