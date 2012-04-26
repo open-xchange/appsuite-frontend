@@ -17,7 +17,7 @@ define('io.ox/contacts/model',
 
     var contactSchema = new Model.Schema({
 
-        'display_name': {format: 'string', label: gt('Display name'), mandatory: true}, //defaultValue: 'Mrs. Bean'  mandatory: true
+        'display_name': {format: 'string', label: gt('Display name'), mandatory: true }, //defaultValue: 'Mrs. Bean'  mandatory: true
         'first_name': { format: 'string', label: gt('First name')},
         'last_name': {  format: 'string', label: gt('Last name')},
         'second_name': { format: 'string', label: gt('Middle name')},
@@ -117,7 +117,7 @@ define('io.ox/contacts/model',
         'number_of_links': { format: 'number', label: gt('Number of links')},
 
         'number_of_images': { format: 'number', label: gt('Number of images')},
-        'image_last_modified': {format: 'timestamp', label: gt('Image last modified')},
+        'image_last_modified': {format: 'number', label: gt('Image last modified')},
 
         'state_other': { format: 'string', label: gt('State')},
         'file_as': { format: 'string', label: gt('File as')},

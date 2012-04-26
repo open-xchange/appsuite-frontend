@@ -285,13 +285,13 @@
                         var tmp = isArray(elem) ? new Array(elem.length) : {}, prop, i;
                         for (i in elem) {
                             prop = elem[i];
-                            tmp[i] = deep && typeof prop === 'object' ? copy(prop, deep) : prop;
+                            tmp[i] = deep && typeof prop === 'object' && prop !== null ? copy(prop, deep) : prop;
                         }
                         return tmp;
                     };
 
             return function (elem, deep) {
-                return typeof elem !== 'object' ? elem : copy(elem, !!deep);
+                return typeof elem !== 'object' || elem === null ? elem : copy(elem, !!deep);
             };
         }()),
 

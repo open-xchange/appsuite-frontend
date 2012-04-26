@@ -318,12 +318,12 @@ define('io.ox/contacts/edit/view-form',
                 .on('click', picTrigger),
             // full name
             $('<span>')
-                .addClass('text name clear-title')
+                .addClass('text name clear-title user-select-text')
                 .attr('data-property', 'display_name')
                 .text(util.getDisplayName(data) || '\u00A0'),
             // job description
             $('<span>')
-                .addClass('text job clear-title')
+                .addClass('text job clear-title user-select-text')
                 .attr('data-property', 'jobdescription_calculated')
                 .text(util.getJob(data) || '\u00A0'),
             // save button

@@ -157,12 +157,12 @@ define("io.ox/contacts/view-detail",
                 .css({ verticalAlign: "top" })
                 .append(
                     $("<div>")
-                    .addClass("name clear-title")
+                    .addClass("name clear-title user-select-text")
                     .text(util.getFullName(data))
                 )
                 .append(
                     $("<div>")
-                    .addClass("job clear-title")
+                    .addClass("job clear-title user-select-text")
                     .text(
                         data.mark_as_distributionlist ?
                             gt("Distribution list") :
@@ -359,7 +359,7 @@ define("io.ox/contacts/view-detail",
                 node = $();
             } else {
                 node = $("<table>", {border: 0, cellpadding: 0, cellspacing: 0})
-                    .addClass("contact-detail view")
+                    .addClass("contact-detail view user-select-text")
                     .attr('data-obj-id', data.folder_id + '.' + data.id);
                 ext.point("io.ox/contacts/detail").invoke("draw", node, data);
             }

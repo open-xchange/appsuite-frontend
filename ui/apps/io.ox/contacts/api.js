@@ -164,24 +164,19 @@ define('io.ox/contacts/api',
     api.remove =  function (list) {
         // get array
         list = _.isArray(list) ? list : [list];
-        // one request per object
-        var defs = [];
-        _(list).each(function (data) {
-            defs.push(http.PUT({
+        // remove
+        return http.PUT({
                 module: 'contacts',
-                params: { action: 'delete', timestamp: data.last_modified || _.now() },
-                data: { folder: data.folder_id, id: data.id }
-            }));
-        });
-        // resume HTTP layer
-        $.when.apply($, defs)
+                params: { action: 'delete', timestamp: _.now() },
+                appendColumns: false,
+                data: _(list).map(function (data) {
+                    return { folder: data.folder_id, id: data.id };
+                })
+            })
             .done(function () {
                 api.caches.all.clear();
-                api.caches.list.clear();
+                api.caches.list.remove(list);
                 api.trigger('refresh.all');
-            })
-           .fail(function () {
-                console.log('connection lost'); //what to do if fails?
             });
     };
 

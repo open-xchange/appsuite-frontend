@@ -144,7 +144,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         validate: function (prop, value) {
             var def = this.get(prop),
                 format = def.format || 'string',
-                isEmpty = value === '',
+                isEmpty = value === '' || value === null,
                 isNotMandatory = def.mandatory !== true;
             if (isEmpty) {
                 return isNotMandatory ||

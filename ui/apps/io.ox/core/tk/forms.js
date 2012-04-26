@@ -112,17 +112,17 @@ define('io.ox/core/tk/forms',
     Field.prototype.create = function (tag, onChange) {
         var o = this.options,
             text = $.txt(o.label || ''),
-        mainlabel = $('<label>').addClass(o.fieldtype),
-        element = $(tag)
-        .attr({
-            'data-property': o.property,
-            name: o.name,
-            id: o.id,
-            value: o.value,
-            'class': o.span
-        })
-        .on('change', onChange)
-        .addClass(o.classes);
+            mainlabel = $('<label>').addClass(o.fieldtype),
+            element = $(tag)
+            .attr({
+                'data-property': o.property,
+                name: o.name,
+                id: o.id,
+                value: o.value,
+                'class': o.span
+            })
+            .on('change', onChange)
+            .addClass(o.classes);
 
         if (o.fieldtype === 'text' || o.fieldtype === 'textarea') {
             mainlabel.append(element);
