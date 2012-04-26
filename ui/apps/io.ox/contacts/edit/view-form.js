@@ -213,13 +213,13 @@ define('io.ox/contacts/edit/view-form',
 
             switch (type) {
             case 'text':
-                method = 'createTextAreaClean';
+                method = 'createTextArea';
                 break;
             case 'pastDate':
-                method = 'createDateFieldClean';
+                method = 'createDateField';
                 break;
             default:
-                method = 'createTextFieldClean';
+                method = 'createTextField';
                 break;
             }
 
@@ -229,7 +229,7 @@ define('io.ox/contacts/edit/view-form',
             this.append(
                 view.createSectionGroup()
                 .append(
-                    view.createLabel({ id: id, text: label }),
+                    view.createLabel({ 'for': id, text: label }),
                     field
                 )
                 // is always visible?
@@ -269,8 +269,8 @@ define('io.ox/contacts/edit/view-form',
                     var myId = _.uniqueId('c'),
                         labelText = options.view.getModel().schema.getFieldLabel(multiline + addressGroop);
 
-                    labels.push(options.view.createLabel({ id: myId, text: labelText}));
-                    fields.push(options.view.createTextFieldClean({ id: myId, property: multiline + addressGroop, classes: 'input-large' }));
+                    labels.push(options.view.createLabel({ 'for': myId, text: labelText}));
+                    fields.push(options.view.createTextField({ id: myId, property: multiline + addressGroop, classes: 'input-large' }));
                     hide = (options.view.getModel().get(multiline + addressGroop)) ? false : true;
                 });
 

@@ -103,7 +103,7 @@ define('io.ox/core/tk/forms',
     var Field = function (options, type) {
         // store options
         this.options = options || {};
-        this.options.id = this.options.id || _.uniqueId(type);
+        this.options.id = this.options.id;
         // node
         this.node = null;
         this.options.fieldtype = type;
@@ -111,95 +111,36 @@ define('io.ox/core/tk/forms',
 
     Field.prototype.create = function (tag, onChange) {
         var o = this.options,
-            node = $('<div>').addClass('controls');
-        this.node = node;
-        if (o.unique) {
-            _.each(o.unique, function (val) {
-                var property = o.property ? o.property : val.property,
-                    label = $('<label>').addClass(o.fieldtype),
-                    text = $.txt(val.label || ''),
-                    element = $(tag)
-                    .attr({
-                        'data-property': property,
-                        name: o.name,
-                        value: val.value
-                    })
-                    .on('change', onChange)
-                    .addClass(o.classes);
-                node.append(label.append(element, text));
-            });
-        } else {
-            var label = $('<label>').addClass(o.fieldtype),
-                text = $.txt(o.label || ''),
-                element = $(tag)
-                .attr({
-                    'data-property': o.property,
-                    name: o.name,
-                    id: o.id,
-                    value: o.value
-                })
-                .on('change', onChange)
-                .addClass(o.classes);
-
-            label.append.apply(label, o.fieldtype === 'text' || o.fieldtype === 'textarea' ? [element] : [element, text]);
-
-            if (o.fieldtype === 'select') {
-                this.node.append(element);
-            } else {
-                this.node = o.gabinput ? $('<div>').append(label) : $('<div>').addClass('controls').append(label);
-            }
-        }
+            id = o.id === 'last' ? utils.getLastLabelId() : o.id,
+            element = $(tag)
+            .attr({
+                'data-property': o.property,
+                name: o.name,
+                id: id,
+                value: o.value
+            })
+            .on('change', onChange)
+            .addClass(o.classes);
+        this.node = element;
     };
 
     Field.prototype.applyModel = function (handler) {
         var o = this.options, model = o.model, val = o.initialValue;
         if ((model || val) !== undefined) {
-            this.node.find('[data-property="' + o.property + '"]')
+            this.node
                 .on('invalid', invalid)
                 .on('update.view', handler)
                 .triggerHandler('update.view', model !== undefined ? model.get(o.property) : val);
         }
     };
 
-    Field.prototype.finish = function (order, classes) {
-        // local reference
-        var o = this.options, node = this.node,
-            label, space, text;
-        // label tag
-        if (o.label !== false) {
-            if (order === 'before') {
-                // before node
-                if (o.fieldtype === 'textarea' || o.fieldtype === 'text' || o.fieldtype === 'select') {
-                    label = $('<label>', {
-                        'for': o.id
-                    });
-                    text = $.txt(o.label || '');
-                    label.append(text);
-                } else {
-                    label = $('<label>');
-                    text = $.txt(o.grouplabel || '');
-                    label.append(text);
-                }
-
-                label.addClass('control-label');
-
-            } else {
-                // around field
-                label = $('<label>', { 'for': o.id });
-                space = $.txt(' ');
-                text = $.txt(o.label || '');
-                node = label.append.apply(label, order === 'append' ? [node, space, text] : [text, space, node]);
-            }
-        }
-
-        // wrap DIV around field & label
-        if (this.options.wrap !== false) {
-            node = $('<div>').addClass('control-group').append(label, node);
-        }
-        // clean up
-        this.node = this.options = o = null;
-        return node;
+    Field.prototype.wrapLabel = function () {
+        var o = this.options,
+            label = $('<label>').addClass(o.fieldtype),
+            text = $.txt(o.label || '');
+        this.node = label.append(text, this.node);
     };
+
 
     // allows global lookup
     var lastLabelId = '';
@@ -210,67 +151,52 @@ define('io.ox/core/tk/forms',
             var f = new Field(options, 'checkbox');
             f.create('<input type="checkbox">', boxChange);
             f.applyModel(boxChangeByModel);
-            return f.finish('before');
+            f.wrapLabel();
+            return f.node;
         },
 
         createSelectbox: function (options) {
             var f = new Field(options, 'select');
             f.create('<select>', selectChange);
             // add options
-            f.node.find('select').append(_(options.items).inject(function (memo, text, value) {
+            f.node.append(_(options.items).inject(function (memo, text, value) {
                 return memo.add($('<option>').attr('value', value).text(text));
             }, $()));
             f.applyModel(selectChangeByModel);
-            return f.finish('before');
+            f.wrapLabel();
+            return f.node;
         },
 
         createRadioButton: function (options) {
             var f = new Field(options, 'radio');
             f.create('<input type="radio">', radioChange);
             f.applyModel(radioChangeByModel);
-            return f.finish('before');
+            f.wrapLabel();
+            return f.node;
         },
 
         createTextField: function (options) {
             var f = new Field(options, 'text');
             f.create('<input type="text">', textChange);
             f.applyModel(textChangeByModel);
-            return f.finish('before');
-        },
-
-        createTextFieldClean: function (options) {
-            var f = new Field(options, 'text');
-            f.create('<input type="text">', textChange);
-            f.applyModel(textChangeByModel);
+            f.wrapLabel();
             return f.node;
         },
+
 
         createTextArea: function (options) {
             var f = new Field(options, 'text');
             f.create('<textarea>', textChange);
             f.applyModel(textChangeByModel);
-            return f.finish('before');
-        },
-
-        createTextAreaClean: function (options) {
-            var f = new Field(options, 'text');
-            f.create('<textarea>', textChange);
-            f.applyModel(textChangeByModel);
+            f.wrapLabel();
             return f.node;
         },
-
 
         createDateField: function (options) {
             var f = new Field(options, 'date');
             f.create('<input type="date">', dateChange);
             f.applyModel(dateChangeByModel);
-            return f.finish('prepend');
-        },
-
-        createDateFieldClean: function (options) {
-            var f = new Field(options, 'date');
-            f.create('<input type="date">', dateChange);
-            f.applyModel(dateChangeByModel);
+            f.wrapLabel();
             return f.node;
         },
 
@@ -278,7 +204,8 @@ define('io.ox/core/tk/forms',
             var f = new Field(options, 'text');
             f.create('<input type="password">', textChange);
             f.applyModel(textChangeByModel);
-            return f.finish('prepend');
+            f.wrapLabel();
+            return f.node;
         },
 
         createFileField: function (options) {
@@ -288,7 +215,8 @@ define('io.ox/core/tk/forms',
                 'accept': options.accept
             });
             f.applyModel(textChangeByModel);
-            return f.finish('prepend');
+            f.wrapLabel();
+            return f.node;
         },
 
         createLabeledTextField: function (options) {
@@ -318,8 +246,11 @@ define('io.ox/core/tk/forms',
 
         createLabel: function (options) {
             var labelDiv,
-                label;
-            options.id = lastLabelId = options.id || _.uniqueId('label');
+                label,
+                forID = 'for';
+            if (options[forID] === 'auto') {
+                options[forID] = lastLabelId = _.uniqueId('label_');
+            }
             options.text = options.text || "";
 
             labelDiv = $('<div>');
@@ -329,7 +260,7 @@ define('io.ox/core/tk/forms',
             }
 
             label = $('<label>');
-            label.attr('for', options.id);
+            label.attr('for', options[forID]);
             label.text(options.text);
 
             labelDiv.append(label);
@@ -400,9 +331,27 @@ define('io.ox/core/tk/forms',
             return $('<div>').addClass('form-horizontal');
         },
 
-        createInlineWrapper: function () {
+        createControlGroup: function () {
+            return $('<div>').addClass('control-group');
+        },
+
+        createInlineControlGroup: function () {
             return $('<div>').addClass('control-group form-inline');
         },
+
+        createControlGroupLabel: function (options) {
+            var forID = 'for';
+            if (options[forID] === 'auto') {
+                options[forID] = lastLabelId = _.uniqueId('label_');
+            }
+            return $('<label>', {'for': options[forID]})
+            .text(options.text).addClass('control-label');
+        },
+
+        createControlsWrapper: function () {
+            return $('<div>').addClass('controls');
+        },
+
 
         createPicUpload: function (options) {
             var o = _.extend({

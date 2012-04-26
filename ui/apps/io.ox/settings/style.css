@@ -60,7 +60,8 @@
 	margin-left: 170px;
 }
 
-.settings-detail-pane .form-inline {
+.settings-detail-pane .form-inline  .controls{
+	margin-left: 0px;
 	text-align: right;
 	width: 440px;
 }

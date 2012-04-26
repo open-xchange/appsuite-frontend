@@ -103,13 +103,13 @@ input#image1 {
 	display: inline;
 }
 
-.contact-detail.edit div.input.inline.nr0 input[type="text"] {
+.contact-detail.edit label.inline.nr0 input[type="text"] {
 	width: 75px;
 	margin-right: 10px;
 	float: left;
 }
 
-.contact-detail.edit div.input.inline.nr1 input[type="text"] {
+.contact-detail.edit label.inline.nr1 input[type="text"] {
 	width: 175px;
 }
 
