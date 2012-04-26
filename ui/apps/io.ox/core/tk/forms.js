@@ -111,7 +111,7 @@ define('io.ox/core/tk/forms',
 
     Field.prototype.create = function (tag, onChange) {
         var o = this.options,
-            id = o.id === 'last' ? utils.getLastLabelId() : o.id,
+            id = utils.connectLabelToField(o.id),
             element = $(tag)
             .attr({
                 'data-property': o.property,
@@ -135,10 +135,12 @@ define('io.ox/core/tk/forms',
     };
 
     Field.prototype.wrapLabel = function () {
-        var o = this.options,
-            label = $('<label>').addClass(o.fieldtype),
-            text = $.txt(o.label || '');
-        this.node = label.append(text, this.node);
+        var o = this.options;
+        if (o.label !== false) {
+            var label = $('<label>').addClass(o.fieldtype),
+                text = $.txt(o.label || '');
+            this.node = label.append(text, this.node);
+        }
     };
 
 
@@ -245,27 +247,15 @@ define('io.ox/core/tk/forms',
         },
 
         createLabel: function (options) {
-            var labelDiv,
-                label,
-                forID = 'for';
-            if (options[forID] === 'auto') {
-                options[forID] = lastLabelId = _.uniqueId('label_');
-            }
+            var label,
+                forTag = utils.connectLabelToField(options['for']);
             options.text = options.text || "";
 
-            labelDiv = $('<div>');
-            labelDiv.addClass('io-ox-label');
-            if (options.classes) {
-                labelDiv.addClass(options.classes);
-            }
-
             label = $('<label>');
-            label.attr('for', options[forID]);
+            label.attr('for', forTag);
             label.text(options.text);
 
-            labelDiv.append(label);
-
-            return labelDiv;
+            return label;
         },
 
         createText: function (options) {
@@ -340,11 +330,9 @@ define('io.ox/core/tk/forms',
         },
 
         createControlGroupLabel: function (options) {
-            var forID = 'for';
-            if (options[forID] === 'auto') {
-                options[forID] = lastLabelId = _.uniqueId('label_');
-            }
-            return $('<label>', {'for': options[forID]})
+            var forTag = utils.connectLabelToField(options['for']);
+
+            return $('<label>', {'for': forTag})
             .text(options.text).addClass('control-label');
         },
 
@@ -384,6 +372,18 @@ define('io.ox/core/tk/forms',
 
         getLastLabelId: function () {
             return lastLabelId;
+        },
+
+        connectLabelToField: function (from) {
+            var CreatedId;
+            if (from === 'auto') {
+                CreatedId = lastLabelId = _.uniqueId('label_');
+                return CreatedId;
+            } else if (from === 'last') {
+                return utils.getLastLabelId();
+            } else {
+                return from;
+            }
         },
 
         createListBox: function (options) {

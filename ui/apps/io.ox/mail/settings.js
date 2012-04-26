@@ -127,7 +127,7 @@ function (ext, View, Model, gt, settings) {
                             this.createInlineControlGroup().append(
                                 this.createControlsWrapper().append(
                                     this.createText({ text: gt('Line wrap when sending text mails after: ') }),
-                                    this.createTextField({ property: 'lineWrapAfter', classes: 'span1'}),
+                                    this.createTextField({ property: 'lineWrapAfter', classes: 'span1', label: false}),
                                     this.createText({ text: ' characters' })
                                 )
 
