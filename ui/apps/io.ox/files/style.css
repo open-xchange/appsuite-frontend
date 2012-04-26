@@ -19,6 +19,7 @@
     font-family: OpenSans, Arial, Helvetica, sans-serif;
     color: #aaa;
     font-style: normal;
+    white-space: nowrap;
 }
 
 .file-details .basicInfo span {
