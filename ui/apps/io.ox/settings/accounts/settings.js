@@ -34,7 +34,9 @@ define('io.ox/settings/accounts/settings',
             self.node.append(this.createSettingsHead(data))
             .append(
                     this.createSection()
-                    .append(this.createSectionTitle({text: 'Accounts'}))
+                    .append(
+                        this.createSectionTitle({text: 'Accounts'})
+                        )
                     .append(
                         this.createSectionContent()
                         .append(

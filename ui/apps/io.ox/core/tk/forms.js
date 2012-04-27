@@ -229,15 +229,15 @@ define('io.ox/core/tk/forms',
                         .css({ width: options.width + 'px', display: 'inline-block' })
                 );
         },
-        createLabeledTextArea: function (options) {
-            return utils.createLabel(options)
-                .css({ width: '100%', display: 'inline-block' })
-                .append(utils.createText({ text: options.label }))
-                .append(utils.createTextArea({ property: options.property, value: options.value, model: options.model})
-                        .css({ width: options.width + 'px', display: 'inline-block' })
-                );
-
-        },
+//        createLabeledTextArea: function (options) {
+//            return utils.createLabel(options)
+//                .css({ width: '100%', display: 'inline-block' })
+//                .append(utils.createText({ text: options.label }))
+//                .append(utils.createTextArea({ property: options.property, value: options.value, model: options.model})
+//                        .css({ width: options.width + 'px', display: 'inline-block' })
+//                );
+//
+//        },
 
         createLabeledPasswordField: function (options) {
             var l = utils.createLabel(options).css({width: '100%', display: 'inline-block'});
@@ -374,15 +374,15 @@ define('io.ox/core/tk/forms',
             return lastLabelId;
         },
 
-        connectLabelToField: function (from) {
+        connectLabelToField: function (tagValue) {
             var CreatedId;
-            if (from === 'auto') {
+            if (tagValue === 'auto') {
                 CreatedId = lastLabelId = _.uniqueId('label_');
                 return CreatedId;
-            } else if (from === 'last') {
+            } else if (tagValue === 'last') {
                 return utils.getLastLabelId();
             } else {
-                return from;
+                return tagValue;
             }
         },
 

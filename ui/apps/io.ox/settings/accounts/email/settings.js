@@ -40,26 +40,26 @@ define('io.ox/settings/accounts/email/settings',
                   .append(utils.createSectionDelimiter())
             )
             .append(
-                utils.createSection()
-                  .append(utils.createSectionTitle({text: 'Account Settings'}))
+                forms.createSection()
+                  .append(forms.createSectionTitle({text: 'Account Settings'}))
                   .append(
-                      utils.createSectionContent()
+                      forms.createSectionContent()
                         .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
                         .append(forms.createLabeledTextField({label: 'E-Mail Address:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
                         .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
                         .append(forms.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', model: settings, validator: myValidator}))
                   )
-                  .append(utils.createSectionDelimiter())
+                  .append(forms.createSectionDelimiter())
             )
             .append(
-                utils.createSection()
-                .append(utils.createSectionTitle({text: 'Server Settings'}))
+                forms.createSection()
+                .append(forms.createSectionTitle({text: 'Server Settings'}))
                 .append(
-                    utils.createSectionContent()
+                    forms.createSectionContent()
                     .append(
-                        utils.createSectionGroup()
+                        forms.createSectionGroup()
                         .append(
-                          utils.createSectionGroup()
+                            forms.createSectionGroup()
                             .append(
                               forms.createSelectbox({dataid: 'mail-testselect', label: 'Server Type:', items: {
                 'IMAP mail server': 'option1',
@@ -77,19 +77,19 @@ define('io.ox/settings/accounts/email/settings',
                         .append(forms.createLabeledTextField({label: 'Login', dataid: 'mail-account-name', model: settings, validator: myValidator}))
                         .append(forms.createLabeledPasswordField({label: 'Password', dataid: 'mail-account-name', model: settings, validator: myValidator}))
                   )
-                  .append(utils.createSectionDelimiter())
+                  .append(forms.createSectionDelimiter())
             )))
             .append(
-                utils.createSection()
-                  .append(utils.createSectionTitle({text: 'Outgoing Server Settings (SMTP)'}))
+                forms.createSection()
+                  .append(forms.createSectionTitle({text: 'Outgoing Server Settings (SMTP)'}))
                   .append(
-                      utils.createSectionContent()
+                      forms.createSectionContent()
                         .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
                         .append(forms.createLabeledTextField({label: 'E-Mail Address:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
                         .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
                         .append(forms.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', model: settings, validator: myValidator}))
                   )
-                  .append(utils.createSectionDelimiter())
+                  .append(forms.createSectionDelimiter())
             );
 
         },
@@ -97,7 +97,6 @@ define('io.ox/settings/accounts/email/settings',
             accountDetailView.node = options.topnode.append($("<div>").addClass("accountDetail"));
             accountDetailView.dialog = new dialogs.SidePopup('800')
                 .delegate(accountDetailView.node, '', accountDetailView.draw);
-
             return accountDetailView.node;
         }
     };
