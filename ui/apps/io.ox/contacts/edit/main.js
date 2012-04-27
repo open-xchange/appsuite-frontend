@@ -73,7 +73,6 @@ define('io.ox/contacts/edit/main',
                                 .done(function () {
                                     dirtyStatus.byApi = false;
                                     view.destroy();
-                                    view.node.find('#myGrowl').jGrowl('shutdown');
                                     app.quit();
                                 })
                                 .fail(function (e) {

@@ -100,10 +100,16 @@ define('io.ox/contacts/api',
                 // get brand new object
                 return api.get({ id: fresh.id, folder: data.folder_id });
             })
-            .done(function (d) {
-                api.caches.all.remove(d.folder_id);
-                api.trigger('refresh.all');
-                api.trigger('created', { id: d.id, folder: d.folder_id });
+            .pipe(function (d) {
+                return $.when(
+                    api.caches.all.grepRemove(d.folder_id + '\t'),
+                    contactPictures.clear()
+                )
+                .pipe(function () {
+                    api.trigger('refresh.all');
+                    api.trigger('created', { id: d.id, folder: d.folder_id });
+                    return d;
+                });
             });
     };
 
@@ -126,13 +132,19 @@ define('io.ox/contacts/api',
                 .pipe(function () {
                     // get updated contact
                     return api.get({ id: o.id, folder: o.folder }, false)
-                        .done(function () {
-                            api.caches.all.remove(o.folder);
-                            api.caches.list.remove({ id: o.id, folder: o.folder });
-                            api.trigger('refresh.list');
-                            api.trigger('edit', { // TODO needs a switch for created by hand or by test
-                                id: o.id,
-                                folder: o.folder
+                        .pipe(function (data) {
+                            $.when(
+                                api.caches.all.grepRemove(o.folder + '\t'),
+                                api.caches.list.remove({ id: o.id, folder: o.folder }),
+                                contactPictures.clear()
+                            )
+                            .pipe(function () {
+                                api.trigger('refresh.list');
+                                api.trigger('edit', { // TODO needs a switch for created by hand or by test
+                                    id: o.id,
+                                    folder: o.folder
+                                });
+                                return data;
                             });
                         });
                 })
@@ -154,9 +166,14 @@ define('io.ox/contacts/api',
                 data: form,
                 fixPost: true
             })
+            .pipe(function () {
+                return $.when(
+                    api.caches.get.clear(),
+                    api.caches.list.clear(),
+                    contactPictures.clear()
+                );
+            })
             .done(function () {
-                api.caches.get.clear();
-                api.caches.list.clear();
                 api.trigger('refresh.list');
             });
     };
@@ -173,9 +190,14 @@ define('io.ox/contacts/api',
                     return { folder: data.folder_id, id: data.id };
                 })
             })
+            .pipe(function () {
+                return $.when(
+                    api.caches.all.clear(),
+                    api.caches.list.remove(list),
+                    contactPictures.clear()
+                );
+            })
             .done(function () {
-                api.caches.all.clear();
-                api.caches.list.remove(list);
                 api.trigger('refresh.all');
             });
     };
@@ -400,8 +422,8 @@ define('io.ox/contacts/api',
                 return $.when.apply($,
                     _(list).map(function (o) {
                         return $.when(
-                            api.caches.all.remove(targetFolderId),
-                            api.caches.all.remove(o.folder_id),
+                            api.caches.all.grepRemove(targetFolderId + '\t'),
+                            api.caches.all.grepRemove(o.folder_id + '\t'),
                             api.caches.list.remove({ id: o.id, folder: o.folder_id })
                         );
                     })
