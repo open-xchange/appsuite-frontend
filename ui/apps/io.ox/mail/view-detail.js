@@ -602,10 +602,10 @@ define('io.ox/mail/view-detail',
                     .addClass('list')
                     .addClass('infoblock backstripes')
                     .append(
-                         $('<a>').text(gt('Bilder anzeigen')),
+                         $('<a>').text(gt('Show images')),
                          $('<i>').text(
                               ' \u2013 ' +
-                              gt('In dieser email wurden externe Bilder blockiert, um potenziellen Missbrauch durch SPAM zu verhindern.')
+                              gt('External images have been blocked to protect you against potential spam!')
                          )
                      )
                     .on('click', function (e) {
