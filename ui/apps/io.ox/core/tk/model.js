@@ -367,7 +367,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
                     (this.store(this.get(), this.getChanges()) || $.when())
                         .done(function () {
                             // not yet destroyed?
-                            if (self.triggger) {
+                            if ('trigger' in self) {
                                 self.initialize(self._data);
                                 self.trigger.apply(self, ['save:beforedone'].concat($.makeArray(arguments)));
                                 self.trigger.apply(self, ['save:done'].concat($.makeArray(arguments)));
@@ -375,7 +375,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
                             def.resolve.apply(def, arguments);
                         })
                         .fail(function () {
-                            if (self.triggger) {
+                            if ('trigger' in self) {
                                 self.trigger.apply(self, ['save:beforefail'].concat($.makeArray(arguments)));
                                 self.trigger.apply(self, ['save:fail'].concat($.makeArray(arguments)));
                             }

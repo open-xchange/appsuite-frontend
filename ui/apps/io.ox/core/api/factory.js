@@ -19,7 +19,7 @@ define("io.ox/core/api/factory",
     "use strict";
 
     var fix = function (obj) {
-        var clone = _.deepClone(obj);
+        var clone = _.copy(obj, true);
         clone.folder = clone.folder || clone.folder_id;
         return clone;
     };
