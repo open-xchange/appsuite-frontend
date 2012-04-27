@@ -297,11 +297,13 @@ if (!path.existsSync("apps/io.ox/core/tz/zoneinfo")) {
                 } else {
                     eachClause(rule.root, f);
                 }
+            } else if (rule instanceof less.tree.Media) {
+                f(less.print(rule.features), rule);
             } else if (rule.name) {
                 f(rule.name, rule);
             } else if (rule.selectors) {
                 _.each(rule.selectors, function(selector) {
-                    f(selector.toCSS(), rule);
+                    f(less.print(selector), rule);
                 });
             }
         });
