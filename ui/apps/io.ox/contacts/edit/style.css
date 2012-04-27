@@ -59,7 +59,7 @@ input#image1 {
     float: right;
     background-position: right top;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
 }
 
 .contact-detail.edit .name {

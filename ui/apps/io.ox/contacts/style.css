@@ -134,7 +134,7 @@
     float: right;
     background-position: right top;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
 }
 
 /*new contact form*/
@@ -185,7 +185,7 @@
     float: left;
     background-position: right top;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
 }
 
 .create-contact .sectiontitle {

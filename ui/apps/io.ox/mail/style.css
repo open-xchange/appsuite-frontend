@@ -242,7 +242,7 @@
     margin: 0 0 1em 1.5em;
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: cover;
+    background-size: contain;
 }
 
 .mail-detail .list {
