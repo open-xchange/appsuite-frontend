@@ -16,12 +16,16 @@ define("io.ox/mail/api",
      "io.ox/core/config",
      "io.ox/core/cache",
      "io.ox/core/api/factory",
-     "io.ox/core/api/folder"], function (http, config, cache, apiFactory, folderAPI) {
+     "io.ox/core/api/folder",
+     "io.ox/core/api/account"], function (http, config, cache, apiFactory, folderAPI, accountAPI) {
 
     "use strict";
 
     // simple temporary thread cache
     var threads = {};
+
+    // default separator
+    var separator = config.get('modules.mail.defaultseparator', '/');
 
     // helper: get number of mails in thread
     var threadSize = function (obj) {
@@ -188,10 +192,11 @@ define("io.ox/mail/api",
             action: 'threadedAll',
             columns: '601,600,611,102', // +flags +color_label
             sort: options.sort || '610',
-            order: options.order || 'desc'
+            order: options.order || 'desc',
+            includeSent: !accountAPI.is(options.folder, 'sent')
         });
         var t1, t2;
-        console.log('time.pre', 't1', (t1 = _.now()) - ox.t0);
+        console.log('time.pre', 't1', (t1 = _.now()) - ox.t0, new Date(_.now()));
         return this.getAll(options, useCache, api.caches.allThreaded)
             .done(function (data) {
                 _(data).each(function (obj) {
@@ -205,7 +210,7 @@ define("io.ox/mail/api",
 
     // get mails in thread
     api.getThread = function (obj) {
-        var key, folder, thread, order, len;
+        var key, folder, account, thread, order, len;
         if (typeof obj === 'string') {
             key = obj;
             obj = obj.split(/\./);
@@ -217,8 +222,13 @@ define("io.ox/mail/api",
         if (key in threads && (thread = threads[key].slice()).length) {
             order = thread.shift();
             len = thread.length;
+            account = folder.split(separator, 2)[0];
             return _(thread).map(function (id, i) {
-                var pos = order === 'desc' ? len - i : i + 1;
+                var pos = order === 'desc' ? len - i : i + 1,
+                    split = id.split(separator);
+                // get proper folder & id
+                folder = split.length > 1 ? account + separator + split.slice(0, -1).join(separator) : folder;
+                id = split.slice(-1).join('');
                 return { folder_id: folder, id: id, threadPosition: pos, threadSize: len };
             });
         } else {
