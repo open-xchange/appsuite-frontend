@@ -809,7 +809,7 @@ define.async('io.ox/mail/write/main',
     };
 
     // load user
-    return userAPI.get(config.get('identifier'))
+    return userAPI.get({ id: config.get('identifier') })
         .done(function (sender) {
             // inject 'from'
             defaultSender = ['"' + sender.display_name + '"', sender.email1];
