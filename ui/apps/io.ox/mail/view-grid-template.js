@@ -60,7 +60,7 @@ define('io.ox/mail/view-grid-template',
                 if (util.isUnread(data)) {
                     this.addClass('unread');
                 }
-                if (util.isMe(data)) {
+                if (util.byMyself(data)) {
                     this.addClass('me');
                 }
                 if (util.isDeleted(data)) {

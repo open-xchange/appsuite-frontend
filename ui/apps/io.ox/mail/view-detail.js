@@ -18,9 +18,10 @@ define('io.ox/mail/view-detail',
      'io.ox/mail/util',
      'io.ox/mail/api',
      'io.ox/core/config',
+     'io.ox/core/api/account',
      'gettext!io.ox/mail/mail',
      'io.ox/mail/actions'
-    ], function (ext, links, util, api, config, gt) {
+    ], function (ext, links, util, api, config, account, gt) {
 
     'use strict';
 
@@ -258,9 +259,6 @@ define('io.ox/mail/view-detail',
                     .end().end()
                 .find('blockquote').removeAttr('style type').end()
                 .find('a').attr('target', '_blank').end();
-//                .find('img').each(function () {
-//                    $(this).attr('src', $(this).attr('src').replace(/^\/ajax/, ox.apiRoot));
-//                }).end();
 
             // get contents to split long character sequences for better wrapping
             content.find('*').contents().each(function () {
@@ -297,8 +295,17 @@ define('io.ox/mail/view-detail',
                 return $('<div>');
             }
 
+            // outer node
             var node = $('<div>').addClass('mail-detail');
+
+            // send by myself (and not in sent folder)
+            if (util.byMyself(data) && !account.is('sent', data.folder_id)) {
+                node.addClass('by-myself');
+            }
+
+            // invoke extensions
             ext.point('io.ox/mail/detail').invoke('draw', node, data);
+
             return node;
         },
 
@@ -638,16 +645,30 @@ define('io.ox/mail/view-detail',
         }
     });
 
+    function replaceContent(e) {
+        e.preventDefault();
+        $(this).parent().replaceWith(that.getContent(e.data));
+    }
+
     ext.point('io.ox/mail/detail').extend({
         index: 200,
         id: 'content',
         draw: function (data) {
+
+            var content;
+
+            // sent by myself and not in sent folder!?
+            if (util.byMyself(data) && !account.is('sent', data.folder_id)) {
+                content = $('<div>').append(
+                    $('<a>', { href: '#' }).text(gt('Show content')).on('click', data, replaceContent)
+                );
+            } else {
+                content = that.getContent(data);
+            }
+
             this.addClass('view')
             .attr('data-cid', data.folder_id + '.' + data.id)
-            .append(
-                that.getContent(data),
-                $('<div>').addClass('mail-detail-clear-both')
-            );
+            .append(content, $('<div>').addClass('mail-detail-clear-both'));
         }
     });
 

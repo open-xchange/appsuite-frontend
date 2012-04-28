@@ -223,7 +223,7 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
             return (data.flags & 2) === 2;
         },
 
-        isMe: function (data) {
+        byMyself: function (data) {
             return data.from && data.from.length && String(data.from[0][1] || '').toLowerCase() in addresses;
         },
 

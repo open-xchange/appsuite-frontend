@@ -183,6 +183,14 @@
     min-height: 200px;
 }
 
+.mail-detail.by-myself {
+    background-color: #f5f5f5;
+}
+
+.mail-detail.by-myself a {
+    color: #888 !important;
+}
+
 .mail-detail-clear-both {
     clear: both;
     height: 0px;
