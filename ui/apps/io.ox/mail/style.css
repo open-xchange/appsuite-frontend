@@ -376,6 +376,21 @@ h4.mail-attachment-preview {
     width: auto;
 }
 
+.mail-detail .content table {
+    border: 0px none;
+}
+
+.mail-detail .content th,
+.mail-detail .content td {
+    text-align: left;
+    border: 0px none;
+    border-top: 1px solid #aaa;
+    padding: 8px;
+}
+
+.mail-detail .content tr:first-child th { border-top: 0; }
+.mail-detail .content tr:last-child td { border-bottom: 1px solid #aaa; }
+
 .mail-detail pre {
     background-color: initial;
     border: 0px none;

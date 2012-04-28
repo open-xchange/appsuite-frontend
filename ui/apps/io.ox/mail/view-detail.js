@@ -117,7 +117,7 @@ define('io.ox/mail/view-detail',
         return $('<a>', { href: href }).text(href);
     };
 
-    var blockquoteClickOpen, blockquoteClickClose;
+    var blockquoteClickOpen, blockquoteClickClose, mailTo;
 
     blockquoteClickOpen = function () {
         var h = this.scrollHeight + 'px';
@@ -136,6 +136,16 @@ define('io.ox/mail/view-detail',
             .css('cursor', 'pointer')
             .on('click.open', blockquoteClickOpen)
             .stop().animate({ maxHeight: '3em', opacity: 0.5 }, 500);
+    };
+
+    mailTo = function (e) {
+        e.preventDefault();
+        var node = $(this),
+            email = node.attr('href').substr(7), // cut off leading "mailto:"
+            text = node.text();
+        ox.launch('io.ox/mail/write/main').done(function () {
+            this.compose({ to: [[text, email]] });
+        });
     };
 
     var that = {
@@ -267,6 +277,9 @@ define('io.ox/mail/view-detail',
                 .css({ maxHeight: '3em', overflow: 'hidden', opacity: 0.5, cursor: 'pointer' })
                 .on('click.open', blockquoteClickOpen)
                 .on('dblclick.close', blockquoteClickClose);
+
+            // follow mailto: links
+            content.find('a[href^="mailto:"]').on('click', mailTo);
 
             return content;
         },
