@@ -410,7 +410,7 @@ define("io.ox/mail/write/view-main",
                     .append(createRadio('priority', '5', gt('Low')))
                     .on('change', 'input', function () {
                         var radio = $(this);
-                        if (radio.attr('value') === '1' && radio.prop('checked')) {
+                        if (radio.val() === '1' && radio.prop('checked')) {
                             self.applyHighPriority(true);
                         } else {
                             self.applyHighPriority(false);
