@@ -101,40 +101,65 @@ define('io.ox/core/api/folder',
         getSubFolders: function (options) {
             // options
             var opt = _.extend({
-                folder: '1',
-                all: false,
-                event: false,
-                cache: true,
-                storage: null
-            }, options || {}),
-            // get cache
-            cache = opt.storage || subFolderCache;
-            // cache miss?
-            var getter = function () {
-                return http.GET({
-                    module: 'folders',
-                    params: {
-                        action: 'list',
-                        parent: opt.folder,
-                        tree: '1',
-                        all: opt.all ? '1' : '0'
-                    },
-                    appendColumns: true
-                })
-                .done(function (data, timestamp) {
-                    // add to cache
-                    cache.add(opt.folder, data);
-                    // also add to folder cache
-                    _(data).each(function (folder) {
-                        folderCache.add(folder.id, folder);
+                    folder: '1',
+                    all: false,
+                    event: false,
+                    cache: true,
+                    storage: null
+                }, options || {}),
+                // get cache
+                cache = opt.storage || subFolderCache,
+                // cache miss?
+                getter = function () {
+                    return http.GET({
+                        module: 'folders',
+                        params: {
+                            action: 'list',
+                            parent: opt.folder,
+                            tree: '1',
+                            all: opt.all ? '1' : '0'
+                        },
+                        appendColumns: true
+                    })
+                    .done(function (data, timestamp) {
+                        // add to cache
+                        cache.add(opt.folder, data);
+                        // also add to folder cache
+                        _(data).each(function (folder) {
+                            folderCache.add(folder.id, folder);
+                        });
+                    })
+                    .fail(function (error) {
+                        console.error('folder.getSubFolders', opt.folder, error);
                     });
-                })
-                .fail(function (error) {
-                    console.error('folder.getSubFolders', opt.folder, error);
-                });
-            };
+                };
 
             return opt.cache === false ? getter() : cache.get(opt.folder, getter);
+        },
+
+        getPath: function (options) {
+            // options
+            var opt = _.extend({
+                    folder: '1',
+                    event: false,
+                    cache: true,
+                    storage: null
+                }, options || {}),
+                // get cache
+                cache = opt.storage || folderCache,
+                // result
+                def = $.Deferred(),
+                result = [],
+                // get via cache?
+                useCache = function (id) {
+                    cache.get(id).done(function (data) {
+                        if (data === null) {
+
+                        }
+                    });
+                };
+
+            return useCache(opt.folder);
         },
 
         getVisible: function (options) {
