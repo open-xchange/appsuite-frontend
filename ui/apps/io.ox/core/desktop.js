@@ -282,7 +282,12 @@ define("io.ox/core/desktop",
                                     if (grid && grid.prop('folder') !== folder) {
                                         grid.clear();
                                         grid.prop('folder', folder);
-                                        grid.refresh();
+                                        if (win && win.getSearchQuery() !== '') {
+                                            win.setSearchQuery('');
+                                            grid.setMode('all');
+                                        } else {
+                                            grid.refresh();
+                                        }
                                         // update hash
                                         _.url.hash('folder', folder);
                                     }
@@ -886,6 +891,15 @@ define("io.ox/core/desktop",
                         document.title = ox.serverConfig.pageTitle + t;
                     }
                     this.trigger('change:title');
+                    return this;
+                };
+
+                this.getSearchQuery = function () {
+                    return $.trim(this.nodes.search.val());
+                };
+
+                this.setSearchQuery = function (q) {
+                    this.nodes.search.val(q);
                     return this;
                 };
 
