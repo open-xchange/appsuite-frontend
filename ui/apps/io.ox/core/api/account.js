@@ -14,8 +14,9 @@
 define('io.ox/core/api/account',
     ['io.ox/core/config',
      'io.ox/core/http',
-     'io.ox/core/cache'
-    ], function (config, http, cache) {
+     'io.ox/core/cache',
+     'io.ox/core/event'
+    ], function (config, http, cache, Events) {
 
     'use strict';
 
@@ -93,6 +94,8 @@ define('io.ox/core/api/account',
     var regParseAccountId = new RegExp('^default\\d+' + separator + '[^' + separator + ']+' + separator);
 
     var api = {};
+
+    Events.extend(api);
 
     api.isUnified = function (id) {
         var match = String(id).match(/^default(\d+)/);
@@ -175,67 +178,86 @@ define('io.ox/core/api/account',
     /**
      * Create mail account
      */
-    api.create = function (options) {
-        // options
-        var opt = $.extend({
-            data: {},
-            success: $.noop
-        }, options || {});
-        // go!
-        ox.api.http.PUT({
+//    api.create = function (options) {
+//        // options
+//        var opt = $.extend({
+//            data: {},
+//            success: $.noop
+//        }, options || {});
+//        // go!
+//        ox.api.http.PUT({
+//            module: 'account',
+//            appendColumns: false,
+//            params: {
+//                action: 'new'
+//            },
+//            data: opt.data,
+//            success: function (data, timestamp) {
+//                // process data
+//                data = process(data.data);
+//                // add to cache
+//                ox.api.cache.account.add(data, timestamp);
+//                // additionally, folder '1' has a new child
+//                invalidateRoot();
+//                // trigger folder event
+//                ox.api.folder.dispatcher.trigger('modify');
+//                // cont
+//                ox.util.call(opt.success, data);
+//            },
+//            error: opt.error
+//        });
+//    };
+
+    api.create = function (data) {
+        return http.PUT({
             module: 'account',
-            appendColumns: false,
-            params: {
-                action: 'new'
-            },
-            data: opt.data,
-            success: function (data, timestamp) {
-                // process data
-                data = process(data.data);
-                // add to cache
-                ox.api.cache.account.add(data, timestamp);
-                // additionally, folder '1' has a new child
-                invalidateRoot();
-                // trigger folder event
-                ox.api.folder.dispatcher.trigger('modify');
-                // cont
-                ox.util.call(opt.success, data);
-            },
-            error: opt.error
+            params: {action: 'new'},
+            data: data
+        })
+        .done(function (d) {
+            api.trigger('account_created', {id: d.id});
         });
     };
 
     /**
      * Remove mail account
      */
-    api.remove = function (options) {
-        // options
-        var opt = $.extend({
-            id: undefined,
-            success: $.noop
-        }, options || {});
-        // go!
-        ox.api.http.PUT({
+//    api.remove = function (options) {
+//        // options
+//        var opt = $.extend({
+//            id: undefined,
+//            success: $.noop
+//        }, options || {});
+//        // go!
+//        ox.api.http.PUT({
+//            module: 'account',
+//            appendColumns: false,
+//            params: {
+//                action: 'delete'
+//            },
+//            data: [parseInt(opt.id, 10)], // must be an array containing a number (not a string)
+//            success: function (data, timestamp) {
+//                // remove from cache
+//                ox.api.cache.account.remove(opt.id);
+//                // invalidate root
+//                invalidateRoot();
+//                // invalidate folders
+//                invalidateFolder('default' + opt.id);
+//                // invalidate unified mail
+//                invalidateUnifiedMail();
+//                // trigger folder event
+//                ox.api.folder.dispatcher.trigger('modify remove');
+//                // cont
+//                ox.util.call(opt.success, data);
+//            }
+//        });
+//    };
+
+    api.remove = function (data) {
+        return http.PUT({
             module: 'account',
-            appendColumns: false,
-            params: {
-                action: 'delete'
-            },
-            data: [parseInt(opt.id, 10)], // must be an array containing a number (not a string)
-            success: function (data, timestamp) {
-                // remove from cache
-                ox.api.cache.account.remove(opt.id);
-                // invalidate root
-                invalidateRoot();
-                // invalidate folders
-                invalidateFolder('default' + opt.id);
-                // invalidate unified mail
-                invalidateUnifiedMail();
-                // trigger folder event
-                ox.api.folder.dispatcher.trigger('modify remove');
-                // cont
-                ox.util.call(opt.success, data);
-            }
+            params: {action: 'delete'},
+            data: data
         });
     };
 

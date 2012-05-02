@@ -88,7 +88,7 @@ define("io.ox/contacts/test",
 
                 j.it('looks for the form and autofills ', function () {
                     for (var i in testObject) {
-                        formFrame.find(".input input[data-property='" + i + "']").val(testObject[i]).trigger('change');
+                        formFrame.find("input[data-property='" + i + "']").val(testObject[i]).trigger('change');
                     }
                     j.expect(formFrame[0]).toBeTruthy();
                 });

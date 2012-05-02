@@ -82,11 +82,6 @@ define('io.ox/settings/accounts/settings',
         }
     });
 
-
-
-
-
-
     ext.point("io.ox/settings/accounts/settings/detail").extend({
         index: 200,
         id: "accountssettings",

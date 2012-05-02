@@ -19,7 +19,31 @@ define("io.ox/settings/accounts/email/test",
     // test objects
 
 
-    var TIMEOUT = 5000;
+    var TIMEOUT = 5000,
+
+        TESTACCOUNT = {
+            "name": "Neuer Account",
+            "primary_address": "christoph-kopp@gmx.net",
+            "personal": "Christoph Kopp",
+            "unified_inbox_enabled": false,
+            "mail_protocol": "pop3",
+            "mail_secure": true,
+            "mail_server": "pop.gmx.net",
+            "mail_port": 995,
+            "login": "christoph-kopp@gmx.net",
+            "password": " ",
+            "pop3_refresh_rate": "3",
+            "pop3_expunge_on_quit": true,
+            "transport_secure": true,
+            "transport_server": "mail.gmx.net",
+            "transport_port": 465,
+            "transport_login": "christoph-kopp@gmx.net",
+            "transport_password": " ",
+            "transport_protocol": "smtp",
+            "pop3_storage": "mailaccount",
+            "spam_handler": "NoSpamHandler"
+        };
+
 
 
     /*
@@ -31,8 +55,36 @@ define("io.ox/settings/accounts/email/test",
         test: function (j) {
             j.describe("Creates a new Emailaccount", function () {
 
-                j.it('sends a GET request', function () {
+                var dataId;
 
+                j.it('sends a GET request and creates a account', function () {
+                    api.create(TESTACCOUNT);
+//                    api.all();
+                });
+
+                j.it('gets the id of the created account', function () {
+
+                    j.runs(function () {
+                        var me = this;
+                        me.ready = false;
+                        api.on('account_created', function (e, data) {
+                            if (data) {
+                                dataId = data.id;
+                                me.ready = true;
+                            }
+                        });
+
+                        j.waitsFor(function () {
+                            return this.ready;
+                        }, 'catches the id', TIMEOUT);
+
+                    });
+
+
+                });
+
+                j.it('deletes the created account', function () {
+                    api.remove([dataId]);
                 });
 
             });
