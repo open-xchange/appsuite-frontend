@@ -210,6 +210,14 @@ define('io.ox/mail/view-detail',
                         .find('[style*="white-space: "]').css('whiteSpace', '').end()
                         // remove color inside blockquotes
                         .find('*').css('color', '').end()
+                    .end()
+                    // images with attribute width/height
+                    .find('img[width], img[height]').each(function () {
+                        var node = $(this), w = node.attr('width'), h = node.attr('height');
+                        node.removeAttr('width height');
+                        if (w) { node.css({ width: w + 'px', maxWidth: w + 'px' }); }
+                        if (h) { node.css('height', h + 'px'); }
+                    })
                     .end();
                 // nested message?
                 if (!('folder_id' in data) && 'filename' in data) {
