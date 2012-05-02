@@ -183,7 +183,8 @@ define("io.ox/mail/api",
     // ~ all
     api.getAllThreads = function (options, useCache) {
         // request for brand new thread support
-        options = $.extend(options || {}, {
+        options = options || {};
+        options = $.extend(options, {
             action: 'threadedAll',
             columns: '601,600,611,102', // +flags +color_label
             sort: options.sort || '610',
