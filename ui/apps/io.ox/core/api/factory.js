@@ -63,13 +63,11 @@ define("io.ox/core/api/factory",
 
         var api = {
 
-            cacheRegistry: { all: ['all'], list: ['list'], get: ['get'] },
-
             getAll: function (options, useCache, cache) {
 
                 // merge defaults for "all"
                 var opt = $.extend({}, o.requests.all, options || {}),
-                    cid = opt.folder + '\t' + opt.sort + '.' + opt.order + '.' + opt.limit;
+                    cid = opt.folder + '\t' + (opt.sortKey || opt.sort) + '.' + opt.order + '.' + opt.limit;
 
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
@@ -184,27 +182,23 @@ define("io.ox/core/api/factory",
                     hash[getKey(o)] = folders[o.folder_id] = true;
                 });
                 // loop over each folder and look for items to remove
-                var defs = [];
-                _(api.cacheRegistry.all).each(function (cacheName) {
-                    var cache = caches[cacheName];
-                    defs.concat(_(folders).map(function (value, folder_id) {
-                        // grep keys
-                        return cache.grepKeys(folder_id + '\t').pipe(function (key) {
-                            // now get cache entry
-                            return cache.get(key).pipe(function (items) {
-                                if (items) {
-                                    return cache.add(
-                                        key,
-                                        _(items).filter(function (o) {
-                                            return hash[getKey(o)] !== true;
-                                        })
-                                    );
-                                } else {
-                                    return $.when();
-                                }
-                            });
+                var defs = _(folders).map(function (value, folder_id) {
+                    // grep keys
+                    return caches.all.grepKeys(folder_id + '\t').pipe(function (key) {
+                        // now get cache entry
+                        return cache.get(key).pipe(function (items) {
+                            if (items) {
+                                return cache.add(
+                                    key,
+                                    _(items).filter(function (o) {
+                                        return hash[getKey(o)] !== true;
+                                    })
+                                );
+                            } else {
+                                return $.when();
+                            }
                         });
-                    }));
+                    });
                 });
                 // remove from object caches
                 defs.push(caches.list.remove(ids));
