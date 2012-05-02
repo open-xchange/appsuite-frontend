@@ -535,6 +535,7 @@ define('io.ox/mail/view-detail',
         }
         dd.find('a')
             .attr({
+                title: data.title,
                 draggable: true,
                 'data-downloadurl': contentType + ':' + filename.replace(/:/g, '') + ':' + ox.abs + url
             })
@@ -564,7 +565,7 @@ define('io.ox/mail/view-detail',
                 if (isWinmailDATPart(obj)) {
                     dat = obj.attachments[0];
                     attachments.push(
-                        _.extend({}, dat, { mail: mail })
+                        _.extend({}, dat, { mail: mail, title: obj.filename || '' })
                     );
                 } else {
                     attachments.push({
@@ -572,6 +573,7 @@ define('io.ox/mail/view-detail',
                         content_type: 'message/rfc822',
                         filename: obj.filename ||
                             _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), 50), // remove consecutive white-space
+                        title: obj.filename || obj.subject || '',
                         mail: mail,
                         nested_message: _.extend({}, obj, { parent: mail })
                     });
@@ -584,7 +586,7 @@ define('io.ox/mail/view-detail',
                 obj = data.attachments[i];
                 if (obj.disp === 'attachment') {
                     attachments.push(
-                        _.extend(obj, { mail: mail })
+                        _.extend(obj, { mail: mail, title: obj.filename || '' })
                     );
                     hasAttachments = true;
                 }
