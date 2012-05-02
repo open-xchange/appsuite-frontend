@@ -523,7 +523,7 @@ define('io.ox/mail/view-detail',
             filename = (data.subject || 'mail') + '.zip'; // yep, array prop
         } else {
             url = api.getUrl(data, 'download');
-            filename = data.filename;
+            filename = String(data.filename || '');
         }
         dd.find('a')
             .attr({
@@ -562,7 +562,8 @@ define('io.ox/mail/view-detail',
                     attachments.push({
                         id: obj.id,
                         content_type: 'message/rfc822',
-                        filename: obj.filename,
+                        filename: obj.filename ||
+                            _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), 50), // remove consecutive white-space
                         mail: mail,
                         nested_message: _.extend({}, obj, { parent: mail })
                     });
@@ -591,6 +592,7 @@ define('io.ox/mail/view-detail',
                         .replace(/\.(\w+)$/, function (match) {
                             return match.toLowerCase();
                         });
+                    // draw
                     drawAttachmentDropDown(outer, label, a);
                 });
                 // how 'all' drop down?

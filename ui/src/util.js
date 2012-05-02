@@ -393,6 +393,11 @@
             return (diff > 0 ? new Array(diff + 1).join(fill || "0") : "") + str;
         },
 
+        ellipsis: function (str, length) {
+            str = String(str || '');
+            return str.length > length ? str.substr(0, length - 4) + ' ...' : str;
+        },
+
         // makes sure you have an array
         getArray: function (o) {
             return _.isArray(o) ? o : [o];

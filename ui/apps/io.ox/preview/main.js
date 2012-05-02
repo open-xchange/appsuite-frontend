@@ -212,7 +212,7 @@ define("io.ox/preview/main",
         }
 
         this.extension = (function () {
-            var extension = self.file.name.match(/\.([a-z0-9]{2,})$/i);
+            var extension = String(self.file.name || '').match(/\.([a-z0-9]{2,})$/i);
             if (extension && extension.length > 0) {
                 return String(extension[1]).toLowerCase();
             }
