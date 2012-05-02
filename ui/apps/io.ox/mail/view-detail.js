@@ -101,14 +101,6 @@ define('io.ox/mail/view-detail',
         regLink = /^(\s*)(http\S+)(\s*)$/i,
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
-    var looksLikeMixed = function (att) {
-        var firstType = getContentType(att[0].content_type);
-        return _(att).reduce(function (memo, a) {
-            var type = getContentType(a.content_type);
-            return memo + (type === firstType ? 1 : 0);
-        }, 0) > 1;
-    };
-
     var drawDocumentLink = function (href, title) {
         return $('<a>', { href: $.trim(href) }).css({ textDecoration: 'none', fontFamily: 'Arial' })
             .append($('<span class="label label-info">').text(title));
@@ -157,34 +149,16 @@ define('io.ox/mail/view-detail',
                 return $();
             }
 
-            var att = data.attachments, i = 0, $i = att.length,
-                isHTML, isText, isMixed,
-                text = '', html = '', type, src, image,
+            var att = data.attachments, source = '', type, isHTML,
                 content = $('<div>').addClass('content');
 
-            // html vs text
-            isHTML = regHTML.test(att[0].content_type);
-            isText = regText.test(att[0].content_type);
-            isMixed = data.content_type === 'multipart/mixed' || looksLikeMixed(att);
-
-            for (; i < $i; i++) {
-                type = getContentType(att[i].content_type);
-                if (regHTML.test(type) && isHTML && (html === '' || isMixed)) {
-                    // HTML
-                    html += att[i].content;
-                } else if (regText.test(type) && isText && (text === '' || isMixed)) {
-                    // plain TEXT
-                    text += att[i].content;
-                } else if (isMixed && regImage.test(type)) {
-                    // image surrounded by text parts
-                    src = api.getUrl(att[i], 'view') + '&scaleType=contain&width=800&height=600';
-                    image = '\n<br>\n<br>\n<img src="' + src + '" alt="" style="display: block">\n';
-                    if (isHTML) { html += image; } else { text += image; }
-                }
-            }
+            // use first attachment to determine content type
+            type = getContentType(att[0].content_type);
+            isHTML = regHTML.test(type);
+            source = $.trim(att[0].content);
 
             // empty?
-            if ($.trim(html || text) === '') {
+            if (source === '') {
                 return content.append(
                     $('<div>')
                     .addClass('infoblock backstripes')
@@ -192,12 +166,13 @@ define('io.ox/mail/view-detail',
                 );
             }
 
-            if (html !== '') {
+            // replace images on source level
+            source = source.replace(regImageSrc, '$1' + ox.apiRoot);
+
+            if (isHTML) {
                 // HTML
-                // replace images on source level
-                html = html.replace(regImageSrc, '$1' + ox.apiRoot);
                 // start constructing
-                content.append($(html))
+                content.append($(source))
                     .find('meta').remove().end()
                     // transform outlook's pseudo blockquotes
                     .find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
@@ -234,10 +209,9 @@ define('io.ox/mail/view-detail',
                         }
                     });
                 }
-            }
-            else if (text !== '') {
+            } else {
                 // plain TEXT
-                content.addClass('plain-text').html(beautifyText(text));
+                content.addClass('plain-text').html(beautifyText(source));
             }
 
             // further fixes
