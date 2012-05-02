@@ -138,7 +138,7 @@ define('io.ox/mail/actions',
                     .show(function () {
                         var self = this.busy();
                         getSource.done(function (src) {
-                            textarea.val(src || '').css('visibility', '').focus();
+                            textarea.val(src || '').css({ visibility: '',  cursor: 'default' });
                             textarea = getSource = null;
                             self.idle();
                         });
