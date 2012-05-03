@@ -71,7 +71,6 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             } else  {
                 return  now > val || new Error(prop, _.printf('%s must be in the past', def.i18n || prop));
             }
-
         },
         email: function (prop, val, def) {
             return regEmail.test(val) ||
@@ -263,13 +262,14 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             // validate only if really changed - yes, initial value might conflict with schema
             // but we validate each field again during final consistency checks
             var result = this.schema.validate(key, value);
+            // update value first
+            this._data[key] = value;
+            // trigger now
             if (result !== true) {
                 this.trigger('error:invalid', result);
                 // yep, we continue here to actually get invalid data
                 // we need this for a proper final check during save
             }
-            // update
-            this._data[key] = value;
             // trigger change event for property and global change
             this.trigger('change:' + key + ' change', key, value);
             // trigger change event for computed properties
