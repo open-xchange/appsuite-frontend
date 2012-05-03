@@ -40,7 +40,9 @@ input#image1 {
     clear: both;
 }
 
+
 .contact-detail.edit .sectiontitle {
+	width: 280px;
 	font-size: 13px;
 	margin: 25px 0 15px 0;
 	padding-left: 167px;
@@ -175,6 +177,7 @@ input#image1 {
 
 .contact-detail.edit .toggle.show-more,
 .contact-detail.edit .toggle.show-less {
+	margin-top: 10px;
     float: right;
 }
 
