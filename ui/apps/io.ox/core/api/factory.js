@@ -24,6 +24,16 @@ define("io.ox/core/api/factory",
         return clone;
     };
 
+    var GET_IDS = 'id: folder_id:folder folder: recurrence_position:'.split(' ');
+
+    var reduce = function (obj) {
+        return _(GET_IDS).reduce(function (memo, prop) {
+            var p = prop.split(':'), source = p[0], target = p[1] || p[0];
+            if (source in obj) { memo[target] = obj[source]; }
+            return memo;
+        }, {});
+    };
+
     return function (o) {
 
         // extend default options (deep)
@@ -140,7 +150,7 @@ define("io.ox/core/api/factory",
 
             get: function (options, useCache) {
                 // merge defaults for get
-                var opt = $.extend({}, o.requests.get, options || {});
+                var opt = $.extend({}, o.requests.get, reduce(options));
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 // cache miss?
