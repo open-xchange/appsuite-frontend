@@ -205,6 +205,11 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             } else {
                 return app.folder.setDefault();
             }
+            // reset mode on folder change
+            app.on('folder:change', function () {
+                console.log('mmmh');
+                //grid.setMode('all');
+            });
         },
 
         /**

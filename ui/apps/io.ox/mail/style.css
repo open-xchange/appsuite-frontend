@@ -283,12 +283,13 @@
 }
 
 .mail-detail .content {
-    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 13px;
     line-height: 20px;
     max-width: 750px;
     margin-top: 1em;
     cursor: auto;
+    position: relative;
 }
 
 /* TODO: remove / temp. fix for bootstrap */
@@ -382,22 +383,25 @@ h4.mail-attachment-preview {
 /* fix bootstrap */
 .mail-detail .content img {
     width: auto;
+    vertical-align: middle;
+}
+
+.mail-detail .content p {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.mail-detail .content small {
+    color: inherit;
+    font-size: initial;
+}
+
+.mail-detail .content code {
+    font-family: inherit;
 }
 
 .mail-detail .content table {
-    border: 0px none;
+    border: 0px none; line-height: normal;
 }
-
-.mail-detail .content th,
-.mail-detail .content td {
-    text-align: left;
-    border: 0px none;
-    border-top: 1px solid #aaa;
-    padding: 8px;
-}
-
-.mail-detail .content tr:first-child th { border-top: 0; }
-.mail-detail .content tr:last-child td { border-bottom: 1px solid #aaa; }
 
 .mail-detail pre {
     background-color: initial;

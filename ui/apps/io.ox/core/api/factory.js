@@ -24,6 +24,8 @@ define("io.ox/core/api/factory",
         return clone;
     };
 
+    var GET_IDS = 'id: folder_id:folder folder: recurrence_position:'.split(' ');
+
     return function (o) {
 
         // extend default options (deep)
@@ -63,13 +65,11 @@ define("io.ox/core/api/factory",
 
         var api = {
 
-            cacheRegistry: { all: ['all'], list: ['list'], get: ['get'] },
-
             getAll: function (options, useCache, cache) {
 
                 // merge defaults for "all"
                 var opt = $.extend({}, o.requests.all, options || {}),
-                    cid = opt.folder + '\t' + opt.sort + '.' + opt.order + '.' + opt.limit;
+                    cid = opt.folder + '\t' + (opt.sortKey || opt.sort) + '.' + opt.order + '.' + opt.limit;
 
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
@@ -142,7 +142,7 @@ define("io.ox/core/api/factory",
 
             get: function (options, useCache) {
                 // merge defaults for get
-                var opt = $.extend({}, o.requests.get, options || {});
+                var opt = $.extend({}, o.requests.get, options);
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 // cache miss?
@@ -184,27 +184,24 @@ define("io.ox/core/api/factory",
                     hash[getKey(o)] = folders[o.folder_id] = true;
                 });
                 // loop over each folder and look for items to remove
-                var defs = [];
-                _(api.cacheRegistry.all).each(function (cacheName) {
-                    var cache = caches[cacheName];
-                    defs.concat(_(folders).map(function (value, folder_id) {
-                        // grep keys
-                        return cache.grepKeys(folder_id + '\t').pipe(function (key) {
-                            // now get cache entry
-                            return cache.get(key).pipe(function (items) {
-                                if (items) {
-                                    return cache.add(
-                                        key,
-                                        _(items).filter(function (o) {
-                                            return hash[getKey(o)] !== true;
-                                        })
-                                    );
-                                } else {
-                                    return $.when();
-                                }
-                            });
+                var defs = _(folders).map(function (value, folder_id) {
+                    // grep keys
+                    var cache = caches.all;
+                    return cache.grepKeys(folder_id + '\t').pipe(function (key) {
+                        // now get cache entry
+                        return cache.get(key).pipe(function (items) {
+                            if (items) {
+                                return cache.add(
+                                    key,
+                                    _(items).filter(function (o) {
+                                        return hash[getKey(o)] !== true;
+                                    })
+                                );
+                            } else {
+                                return $.when();
+                            }
                         });
-                    }));
+                    });
                 });
                 // remove from object caches
                 defs.push(caches.list.remove(ids));
@@ -249,6 +246,15 @@ define("io.ox/core/api/factory",
                 return caches.all.keys(folder + '\t' + sort + '.' + desc).pipe(function (data) {
                     return data !== null;
                 });
+            },
+
+            // reduce object to id, folder, recurrence_position
+            reduce: function (obj) {
+                return _(GET_IDS).reduce(function (memo, prop) {
+                    var p = prop.split(':'), source = p[0], target = p[1] || p[0];
+                    if (source in obj) { memo[target] = obj[source]; }
+                    return memo;
+                }, {});
             },
 
             caches: caches

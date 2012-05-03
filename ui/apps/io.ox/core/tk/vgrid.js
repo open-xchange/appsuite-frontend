@@ -209,6 +209,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             resize,
             loadAll,
             init,
+            isVisible,
             setIndex,
             getIndex,
             fnScroll,
@@ -543,7 +544,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                             .done(function () {
                                 // use url?
                                 if (_.url.hash('id') !== undefined) {
-                                    var ids = _.url.hash('id').split(/,/), cid, selectionChanged;
+                                    var ids = _.url.hash('id').split(/,/), cid, index, selectionChanged;
                                     // convert ids to objects first - avoids problems with
                                     // non-existing items that cannot be resolved in selections
 
@@ -557,7 +558,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                                     if (selectionChanged || changed) {
                                         // scroll to first selected item
                                         cid = _(ids).first();
-                                        setIndex((self.selection.getIndex(cid) || 0) - 2); // not at the very top
+                                        index = self.selection.getIndex(cid) || 0;
+                                        if (!isVisible(index)) {
+                                            setIndex(index - 2); // not at the very top
+                                        }
                                     }
                                 } else if (firstAutoSelect) {
                                     // select first or previous selection
@@ -586,6 +590,13 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             initialized = true;
             // load all IDs
             return loadAll();
+        };
+
+        // is index visible?
+        isVisible = function (index) {
+            var top = scrollpane.scrollTop(),
+                height = scrollpane.height();
+            return index >= getIndex(top) && index < (getIndex(top + height) - 1);
         };
 
         // set scrollTop via index
@@ -717,6 +728,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             // otherwise subsequent search queries are impossible
             // if this function gets called too often, fix it elsewhere
             currentMode = mode;
+            _.url.hash('id', null);
             firstAutoSelect = true;
             return this.refresh();
         };
@@ -824,6 +836,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             paused = false;
             return self;
         };
+
+        this.isVisible = isVisible;
+        this.setIndex = setIndex;
+        this.getIndex = getIndex;
     };
 
     // make Template accessible

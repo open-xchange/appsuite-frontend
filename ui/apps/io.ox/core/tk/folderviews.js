@@ -360,7 +360,7 @@ define('io.ox/core/tk/folderviews',
                     p.running = null;
                 });
             }
-            return p || $.when();
+            return p.running || $.when();
         };
 
         this.busy = function () {

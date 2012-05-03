@@ -45,7 +45,7 @@ define('io.ox/mail/view-grid-template',
             },
             set: function (data, fields, index) {
                 fields.priority.empty().append(util.getPriority(data));
-                fields.subject.text(_.prewrap(data.subject));
+                fields.subject.text(_.prewrap($.trim(data.subject)));
                 if (!data.threadSize || data.threadSize <= 1) {
                     fields.threadSize.text('').css('display', 'none');
                 } else {

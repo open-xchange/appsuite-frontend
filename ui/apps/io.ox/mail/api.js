@@ -109,7 +109,7 @@ define("io.ox/mail/api",
         },
         // filter list request (special fix for nested messages; don't have folder; inline action checks fail)
         filter: function (obj) {
-            return 'folder_id' in obj;
+            return obj.folder_id !== undefined;
         },
         pipe: {
             all: function (data, opt) {
@@ -180,10 +180,6 @@ define("io.ox/mail/api",
         'YELLOW':   10
     };
 
-    // add all thread cache
-    api.caches.allThreaded = new cache.SimpleCache('mail-all-threaded', true);
-    api.cacheRegistry.all.push('allThreaded');
-
     // ~ all
     api.getAllThreads = function (options, useCache) {
         // request for brand new thread support
@@ -192,12 +188,13 @@ define("io.ox/mail/api",
             action: 'threadedAll',
             columns: '601,600,611,102', // +flags +color_label
             sort: options.sort || '610',
+            sortKey: 'threaded-' + (options.sort || '610'),
             order: options.order || 'desc',
-            includeSent: !accountAPI.is(options.folder, 'sent')
+            includeSent: false // !accountAPI.is(options.folder, 'sent')
         });
         var t1, t2;
         console.log('time.pre', 't1', (t1 = _.now()) - ox.t0, new Date(_.now()));
-        return this.getAll(options, useCache, api.caches.allThreaded)
+        return this.getAll(options, useCache)
             .done(function (data) {
                 _(data).each(function (obj) {
                     // build thread hash
@@ -338,9 +335,7 @@ define("io.ox/mail/api",
                     api.caches.list.remove(obj),
                     api.caches.list.remove(id),
                     api.caches.all.grepRemove(id + '\t'), // clear source folder
-                    api.caches.all.grepRemove(targetFolderId + '\t'), // clear target folder
-                    api.caches.allThreaded.grepRemove(id + '\t'),
-                    api.caches.allThreaded.grepRemove(targetFolderId + '\t')
+                    api.caches.all.grepRemove(targetFolderId + '\t') // clear target folder
                 );
             };
         },
@@ -396,10 +391,7 @@ define("io.ox/mail/api",
             // loop over affected 'all' index
             $.when.apply($,
                 _(folders).map(function (value, folder) {
-                    return $.when(
-                        updateFlags(api.caches.all, folder, items, bitmask),
-                        updateFlags(api.caches.allThreaded, folder, items, bitmask)
-                    );
+                    return updateFlags(api.caches.all, folder, items, bitmask);
                 })
             )
             .pipe(function () {
@@ -741,11 +733,7 @@ define("io.ox/mail/api",
                         api.trigger('refresh.all');
                     });
             } else {
-                $.when(
-                    api.caches.all.clear(),
-                    api.caches.allThreaded.clear()
-                )
-                .done(function () {
+                api.caches.all.clear().done(function () {
                     api.trigger('refresh.all');
                 });
             }

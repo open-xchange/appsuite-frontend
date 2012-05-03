@@ -94,20 +94,11 @@ define('io.ox/mail/view-detail',
     };
 
     var regHTML = /^text\/html$/i,
-        regText = /^text\/plain$/i,
         regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=\d+)(\s*)$/i,
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i,
-        regLink = /^(\s*)(http\S+)(\s*)$/i,
+        regLink = /^(.*)(http\S+)(\s.*)$/i,
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
-
-    var looksLikeMixed = function (att) {
-        var firstType = getContentType(att[0].content_type);
-        return _(att).reduce(function (memo, a) {
-            var type = getContentType(a.content_type);
-            return memo + (type === firstType ? 1 : 0);
-        }, 0) > 1;
-    };
 
     var drawDocumentLink = function (href, title) {
         return $('<a>', { href: $.trim(href) }).css({ textDecoration: 'none', fontFamily: 'Arial' })
@@ -157,34 +148,17 @@ define('io.ox/mail/view-detail',
                 return $();
             }
 
-            var att = data.attachments, i = 0, $i = att.length,
-                isHTML, isText, isMixed,
-                text = '', html = '', type, src, image,
+            var att = data.attachments, source = '', type, isHTML, isLarge,
                 content = $('<div>').addClass('content');
 
-            // html vs text
-            isHTML = regHTML.test(att[0].content_type);
-            isText = regText.test(att[0].content_type);
-            isMixed = data.content_type === 'multipart/mixed' || looksLikeMixed(att);
-
-            for (; i < $i; i++) {
-                type = getContentType(att[i].content_type);
-                if (regHTML.test(type) && isHTML && (html === '' || isMixed)) {
-                    // HTML
-                    html += att[i].content;
-                } else if (regText.test(type) && isText && (text === '' || isMixed)) {
-                    // plain TEXT
-                    text += att[i].content;
-                } else if (isMixed && regImage.test(type)) {
-                    // image surrounded by text parts
-                    src = api.getUrl(att[i], 'view') + '&scaleType=contain&width=800&height=600';
-                    image = '\n<br>\n<br>\n<img src="' + src + '" alt="" style="display: block">\n';
-                    if (isHTML) { html += image; } else { text += image; }
-                }
-            }
+            // use first attachment to determine content type
+            type = getContentType(att[0].content_type);
+            isHTML = regHTML.test(type);
+            source = $.trim(att[0].content);
+            isLarge = source.length > 1024 * 512; // > 512 KB
 
             // empty?
-            if ($.trim(html || text) === '') {
+            if (source === '') {
                 return content.append(
                     $('<div>')
                     .addClass('infoblock backstripes')
@@ -192,15 +166,17 @@ define('io.ox/mail/view-detail',
                 );
             }
 
-            if (html !== '') {
+            // replace images on source level
+            source = source.replace(regImageSrc, '$1' + ox.apiRoot);
+
+            if (isHTML) {
                 // HTML
-                // replace images on source level
-                html = html.replace(regImageSrc, '$1' + ox.apiRoot);
                 // start constructing
-                content.append($(html))
-                    .find('meta').remove().end()
+                content.append($(source));
+                content.find('meta').remove();
+                if (!isLarge) {
                     // transform outlook's pseudo blockquotes
-                    .find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
+                    content.find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
                         $(this).replaceWith($('<blockquote>').append($(this).contents()));
                     })
                     .end()
@@ -210,7 +186,16 @@ define('io.ox/mail/view-detail',
                         .find('[style*="white-space: "]').css('whiteSpace', '').end()
                         // remove color inside blockquotes
                         .find('*').css('color', '').end()
+                    .end()
+                    // images with attribute width/height
+                    .find('img[width], img[height]').each(function () {
+                        var node = $(this), w = node.attr('width'), h = node.attr('height');
+                        node.removeAttr('width height');
+                        if (w) { node.css({ width: w + 'px', maxWidth: w + 'px' }); }
+                        if (h) { node.css('height', h + 'px'); }
+                    })
                     .end();
+                }
                 // nested message?
                 if (!('folder_id' in data) && 'filename' in data) {
                     // fix inline images in nested message
@@ -226,20 +211,21 @@ define('io.ox/mail/view-detail',
                         }
                     });
                 }
-            }
-            else if (text !== '') {
+            } else {
                 // plain TEXT
-                content.addClass('plain-text').html(beautifyText(text));
+                content.addClass('plain-text').html(beautifyText(source));
             }
 
-            // further fixes
-            content
-                .find('*')
-                    .filter(function () {
-                        return $(this).children().length === 0;
-                    })
-                    .each(function () {
-                        var node = $(this), text = node.text(), m;
+            // process all text nodes unless mail is too large (> 512 KB)
+            if (!isLarge) {
+                content.find('*').contents().each(function () {
+                    if (this.nodeType === 3) {
+                        var node = $(this), text = this.nodeValue, length = text.length, m;
+                        // split long character sequences for better wrapping
+                        if (length >= 60 && /\S{60}/.test(text)) {
+                            this.nodeValue = text.replace(/(\S{60})/g, '$1\u200B'); // zero width space
+                        }
+                        // some replacements
                         if ((m = text.match(regDocument)) && m.length) {
                             // link to document
                             node.replaceWith(
@@ -255,20 +241,14 @@ define('io.ox/mail/view-detail',
                                 $($.txt(m[1])).add(drawLink(m[2])).add($.txt(m[3]))
                             );
                         }
-                    })
-                    .end().end()
+                    }
+                });
+            }
+
+            // further fixes
+            content
                 .find('blockquote').removeAttr('style type').end()
                 .find('a').attr('target', '_blank').end();
-
-            // get contents to split long character sequences for better wrapping
-            content.find('*').contents().each(function () {
-                if (this.nodeType === 3) {
-                    var text = this.nodeValue, length = text.length;
-                    if (length >= 60 && /\S{60}/.test(text)) {
-                        this.nodeValue = text.replace(/(\S{60})/g, '$1\u200B'); // zero width space
-                    }
-                }
-            });
 
             // blockquotes (top-level only)
             content.find('blockquote').not(content.find('blockquote blockquote'))
@@ -457,7 +437,7 @@ define('io.ox/mail/view-detail',
                 $('<div>')
                     .addClass('subject clear-title')
                     // inject some zero width spaces for better word-break
-                    .text(_.prewrap(data.subject || '\u00A0'))
+                    .text(_.prewrap(data.subject ? $.trim(data.subject) : '\u00A0'))
                     .append($('<span>').addClass('priority').append(util.getPriority(data)))
             );
         }
@@ -523,10 +503,11 @@ define('io.ox/mail/view-detail',
             filename = (data.subject || 'mail') + '.zip'; // yep, array prop
         } else {
             url = api.getUrl(data, 'download');
-            filename = data.filename;
+            filename = String(data.filename || '');
         }
         dd.find('a')
             .attr({
+                title: data.title,
                 draggable: true,
                 'data-downloadurl': contentType + ':' + filename.replace(/:/g, '') + ':' + ox.abs + url
             })
@@ -556,13 +537,15 @@ define('io.ox/mail/view-detail',
                 if (isWinmailDATPart(obj)) {
                     dat = obj.attachments[0];
                     attachments.push(
-                        _.extend({}, dat, { mail: mail })
+                        _.extend({}, dat, { mail: mail, title: obj.filename || '' })
                     );
                 } else {
                     attachments.push({
                         id: obj.id,
                         content_type: 'message/rfc822',
-                        filename: obj.filename,
+                        filename: obj.filename ||
+                            _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), 50), // remove consecutive white-space
+                        title: obj.filename || obj.subject || '',
                         mail: mail,
                         nested_message: _.extend({}, obj, { parent: mail })
                     });
@@ -575,7 +558,7 @@ define('io.ox/mail/view-detail',
                 obj = data.attachments[i];
                 if (obj.disp === 'attachment') {
                     attachments.push(
-                        _.extend(obj, { mail: mail })
+                        _.extend(obj, { mail: mail, title: obj.filename || '' })
                     );
                     hasAttachments = true;
                 }
@@ -591,6 +574,7 @@ define('io.ox/mail/view-detail',
                         .replace(/\.(\w+)$/, function (match) {
                             return match.toLowerCase();
                         });
+                    // draw
                     drawAttachmentDropDown(outer, label, a);
                 });
                 // how 'all' drop down?
