@@ -148,13 +148,14 @@ define('io.ox/mail/view-detail',
                 return $();
             }
 
-            var att = data.attachments, source = '', type, isHTML,
+            var att = data.attachments, source = '', type, isHTML, isLarge,
                 content = $('<div>').addClass('content');
 
             // use first attachment to determine content type
             type = getContentType(att[0].content_type);
             isHTML = regHTML.test(type);
             source = $.trim(att[0].content);
+            isLarge = source.length > 1024 * 512; // > 512 KB
 
             // empty?
             if (source === '') {
@@ -171,10 +172,11 @@ define('io.ox/mail/view-detail',
             if (isHTML) {
                 // HTML
                 // start constructing
-                content.append($(source))
-                    .find('meta').remove().end()
+                content.append($(source));
+                content.find('meta').remove();
+                if (!isLarge) {
                     // transform outlook's pseudo blockquotes
-                    .find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
+                    content.find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
                         $(this).replaceWith($('<blockquote>').append($(this).contents()));
                     })
                     .end()
@@ -193,6 +195,7 @@ define('io.ox/mail/view-detail',
                         if (h) { node.css('height', h + 'px'); }
                     })
                     .end();
+                }
                 // nested message?
                 if (!('folder_id' in data) && 'filename' in data) {
                     // fix inline images in nested message
@@ -213,32 +216,34 @@ define('io.ox/mail/view-detail',
                 content.addClass('plain-text').html(beautifyText(source));
             }
 
-            // process all text nodes
-            content.find('*').contents().each(function () {
-                if (this.nodeType === 3) {
-                    var node = $(this), text = this.nodeValue, length = text.length, m;
-                    // split long character sequences for better wrapping
-                    if (length >= 60 && /\S{60}/.test(text)) {
-                        this.nodeValue = text.replace(/(\S{60})/g, '$1\u200B'); // zero width space
+            // process all text nodes unless mail is too large (> 512 KB)
+            if (!isLarge) {
+                content.find('*').contents().each(function () {
+                    if (this.nodeType === 3) {
+                        var node = $(this), text = this.nodeValue, length = text.length, m;
+                        // split long character sequences for better wrapping
+                        if (length >= 60 && /\S{60}/.test(text)) {
+                            this.nodeValue = text.replace(/(\S{60})/g, '$1\u200B'); // zero width space
+                        }
+                        // some replacements
+                        if ((m = text.match(regDocument)) && m.length) {
+                            // link to document
+                            node.replaceWith(
+                                 $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Document'))).add($.txt(m[3]))
+                            );
+                        } else if ((m = text.match(regFolder)) && m.length) {
+                            // link to folder
+                            node.replaceWith(
+                                $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Folder'))).add($.txt(m[3]))
+                            );
+                        } else if ((m = text.match(regLink)) && m.length && node.closest('a').length === 0) {
+                            node.replaceWith(
+                                $($.txt(m[1])).add(drawLink(m[2])).add($.txt(m[3]))
+                            );
+                        }
                     }
-                    // some replacements
-                    if ((m = text.match(regDocument)) && m.length) {
-                        // link to document
-                        node.replaceWith(
-                             $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Document'))).add($.txt(m[3]))
-                        );
-                    } else if ((m = text.match(regFolder)) && m.length) {
-                        // link to folder
-                        node.replaceWith(
-                            $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Folder'))).add($.txt(m[3]))
-                        );
-                    } else if ((m = text.match(regLink)) && m.length && node.closest('a').length === 0) {
-                        node.replaceWith(
-                            $($.txt(m[1])).add(drawLink(m[2])).add($.txt(m[3]))
-                        );
-                    }
-                }
-            });
+                });
+            }
 
             // further fixes
             content
