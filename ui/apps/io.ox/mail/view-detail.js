@@ -94,11 +94,10 @@ define('io.ox/mail/view-detail',
     };
 
     var regHTML = /^text\/html$/i,
-        regText = /^text\/plain$/i,
         regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=\d+)(\s*)$/i,
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i,
-        regLink = /^(\s*)(http\S+)(\s*)$/i,
+        regLink = /^(.*)(http\S+)(\s.*)$/i,
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
     var drawDocumentLink = function (href, title) {
@@ -214,43 +213,37 @@ define('io.ox/mail/view-detail',
                 content.addClass('plain-text').html(beautifyText(source));
             }
 
-            // further fixes
-            content
-                .find('*')
-                    .filter(function () {
-                        return $(this).children().length === 0;
-                    })
-                    .each(function () {
-                        var node = $(this), text = node.text(), m;
-                        if ((m = text.match(regDocument)) && m.length) {
-                            // link to document
-                            node.replaceWith(
-                                 $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Document'))).add($.txt(m[3]))
-                            );
-                        } else if ((m = text.match(regFolder)) && m.length) {
-                            // link to folder
-                            node.replaceWith(
-                                $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Folder'))).add($.txt(m[3]))
-                            );
-                        } else if ((m = text.match(regLink)) && m.length && node.closest('a').length === 0) {
-                            node.replaceWith(
-                                $($.txt(m[1])).add(drawLink(m[2])).add($.txt(m[3]))
-                            );
-                        }
-                    })
-                    .end().end()
-                .find('blockquote').removeAttr('style type').end()
-                .find('a').attr('target', '_blank').end();
-
-            // get contents to split long character sequences for better wrapping
+            // process all text nodes
             content.find('*').contents().each(function () {
                 if (this.nodeType === 3) {
-                    var text = this.nodeValue, length = text.length;
+                    var node = $(this), text = this.nodeValue, length = text.length, m;
+                    // split long character sequences for better wrapping
                     if (length >= 60 && /\S{60}/.test(text)) {
                         this.nodeValue = text.replace(/(\S{60})/g, '$1\u200B'); // zero width space
                     }
+                    // some replacements
+                    if ((m = text.match(regDocument)) && m.length) {
+                        // link to document
+                        node.replaceWith(
+                             $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Document'))).add($.txt(m[3]))
+                        );
+                    } else if ((m = text.match(regFolder)) && m.length) {
+                        // link to folder
+                        node.replaceWith(
+                            $($.txt(m[1])).add(drawDocumentLink(m[2], gt('Folder'))).add($.txt(m[3]))
+                        );
+                    } else if ((m = text.match(regLink)) && m.length && node.closest('a').length === 0) {
+                        node.replaceWith(
+                            $($.txt(m[1])).add(drawLink(m[2])).add($.txt(m[3]))
+                        );
+                    }
                 }
             });
+
+            // further fixes
+            content
+                .find('blockquote').removeAttr('style type').end()
+                .find('a').attr('target', '_blank').end();
 
             // blockquotes (top-level only)
             content.find('blockquote').not(content.find('blockquote blockquote'))

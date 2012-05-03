@@ -386,9 +386,17 @@ h4.mail-attachment-preview {
     vertical-align: middle;
 }
 
+.mail-detail .content small {
+    color: inherit;
+    font-size: initial;
+}
+
+.mail-detail .content code {
+    font-family: inherit;
+}
+
 .mail-detail .content table {
-    border: 0px none;
-    line-height: normal;
+    border: 0px none; line-height: normal;
 }
 
 .mail-detail pre {
