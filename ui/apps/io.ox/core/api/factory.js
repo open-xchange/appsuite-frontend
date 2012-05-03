@@ -26,14 +26,6 @@ define("io.ox/core/api/factory",
 
     var GET_IDS = 'id: folder_id:folder folder: recurrence_position:'.split(' ');
 
-    var reduce = function (obj) {
-        return _(GET_IDS).reduce(function (memo, prop) {
-            var p = prop.split(':'), source = p[0], target = p[1] || p[0];
-            if (source in obj) { memo[target] = obj[source]; }
-            return memo;
-        }, {});
-    };
-
     return function (o) {
 
         // extend default options (deep)
@@ -150,7 +142,7 @@ define("io.ox/core/api/factory",
 
             get: function (options, useCache) {
                 // merge defaults for get
-                var opt = $.extend({}, o.requests.get, reduce(options));
+                var opt = $.extend({}, o.requests.get, options);
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
                 // cache miss?
@@ -194,7 +186,8 @@ define("io.ox/core/api/factory",
                 // loop over each folder and look for items to remove
                 var defs = _(folders).map(function (value, folder_id) {
                     // grep keys
-                    return caches.all.grepKeys(folder_id + '\t').pipe(function (key) {
+                    var cache = caches.all;
+                    return cache.grepKeys(folder_id + '\t').pipe(function (key) {
                         // now get cache entry
                         return cache.get(key).pipe(function (items) {
                             if (items) {
@@ -253,6 +246,15 @@ define("io.ox/core/api/factory",
                 return caches.all.keys(folder + '\t' + sort + '.' + desc).pipe(function (data) {
                     return data !== null;
                 });
+            },
+
+            // reduce object to id, folder, recurrence_position
+            reduce: function (obj) {
+                return _(GET_IDS).reduce(function (memo, prop) {
+                    var p = prop.split(':'), source = p[0], target = p[1] || p[0];
+                    if (source in obj) { memo[target] = obj[source]; }
+                    return memo;
+                }, {});
             },
 
             caches: caches
