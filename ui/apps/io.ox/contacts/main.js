@@ -138,7 +138,7 @@ define("io.ox/contacts/main",
         showContact = function (obj) {
             // get contact
             right.busy(true);
-            api.get(obj)
+            api.get(api.reduce(obj))
                 .done(_.lfo(drawContact))
                 .fail(_.lfo(drawFail, obj));
         };
