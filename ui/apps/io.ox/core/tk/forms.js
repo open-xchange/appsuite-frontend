@@ -45,7 +45,7 @@ define('io.ox/core/tk/forms',
             self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
         },
         selectChangeByModel = function (e, value) {
-            $(this).find('input').val(value);
+            $(this).find('input, textarea, select').val(value);
         },
 
         dateChange = function () {

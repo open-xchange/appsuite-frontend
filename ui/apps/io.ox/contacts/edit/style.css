@@ -1,29 +1,43 @@
-.hidden{
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Christoph Kopp <christoph.kopp@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.hidden {
 	display: none;
 }
 
-.mandatory.hidden{
+.mandatory.hidden {
 	display: block;
 }
 
-.hidden.filled{
+.hidden.filled {
 	display: table-row;
 }
 
-.savebutton{
+.savebutton {
 	float: right;
 }
 
-.contact-edit{
+.contact-edit {
 	overflow: auto;
 }
 
- .change-pic-link {
+.change-pic-link {
 	width: auto;
 	float: right;
 }
 
-.picture{
+.picture {
 	cursor: pointer;
 }
 
@@ -36,10 +50,9 @@ input#image1 {
 }
 
 .contact-detail.edit .section {
-	margin-bottom: 40px;
+	margin-bottom: 30px;
     clear: both;
 }
-
 
 .contact-detail.edit .sectiontitle {
 	width: 280px;
