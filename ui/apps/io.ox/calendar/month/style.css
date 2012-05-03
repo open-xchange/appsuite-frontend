@@ -1,0 +1,33 @@
+
+/*
+ * CSS Calendar
+ * Tim Wright
+ * Chris Coyier
+ -----------------------------*/
+ol.calendar         			{width:60em;margin:0 auto;display:block;}
+ol.calendar li                  {list-style:none;}
+ol.calendar p.link              {text-align:center;display:block;}
+
+/*
+ * Day styles
+ -------------------------*/
+ol.calendar li li               {width:7em;height:7em;float:left;margin:.1em;border:1px solid #444;padding:.2em;overflow:auto;}
+
+/*
+ * Day content (UL/OL & P)
+ -------------------------*/
+ol.calendar li li p             {font-size:.7em;display:block;border-bottom:1px solid #ddd;}
+ol.calendar li li ol            {width:auto;}
+ol.calendar li li ul li,
+ol.calendar li li ol li         {font-size:.7em;display:block;height:auto;width:auto;margin:0;padding:.2em 0;float:none;border:0;border-bottom:1px solid #ddd;}
+
+/*
+ * Holiday class
+ -------------------------*/
+ol.calendar li li.holiday       {border-color:#f00;}
+
+/*
+ * Inactive months
+ -------------------------*/
+ol.calendar li.lastmonth li,
+ol.calendar li.nextmonth li     {background:#f5f5f5;border:1px solid #999;}

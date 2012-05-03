@@ -12,7 +12,9 @@
 
 define('io.ox/calendar/month/view',
     ['io.ox/calendar/util',
-     'gettext!io.ox/calendar/month/view'], function (util, gt) {
+     'io.ox/calendar/api',
+     'gettext!io.ox/calendar/month/view',
+     'less!io.ox/calendar/month/style.css'], function (util, api, gt) {
 
     'use strict';
 
@@ -25,9 +27,6 @@ define('io.ox/calendar/month/view',
                 app = a;
                 win = app.getWindow();
                 main = win.addView('month-view');
-                main.append(
-                    $('<h3>').text('Hallo Welt!')
-                );
                 initialized = true;
             }
         };
@@ -42,28 +41,69 @@ define('io.ox/calendar/month/view',
             // set view
             win.setView('month-view');
 
-            // draw scaffold
-            main.empty().css({
-                    color: '#eb7d1e',
-                    backgroundColor: '#333',
-                    padding: '30px',
-                    textAlign: 'right',
-                    fontFamily: 'Monaco, monospace',
-                    fontSize: '32pt',
-                    lineHeight: '1.25em',
-                    whiteSpace: 'pre'
+            var drawTs = _.now(),
+                drawDate = new Date(drawTs),
+                list = util.getMonthScaffold(drawTs),
+                appointmentFilter = {},
+                drawMonth = drawDate.getUTCMonth();
+
+            var monthView = $('<ol>', {"class": "calendar", "start": drawMonth}),
+                prevMonth = $('<ol>', {"class": "lastmonth"}),
+                thisMonth = $('<ol>', {"class": "thismonth"}),
+                nextMonth = $('<ol>', {"class": "nextmonth"});
+
+            monthView.append($('<li>').append(prevMonth))
+                .append($('<li>').append(thisMonth))
+                .append($('<li>').append(nextMonth));
+
+            _(list).each(function (weeks) {
+                _(weeks).each(function (day) {
+                    var actualList;
+
+                    if (!appointmentFilter.start) {
+                        appointmentFilter.start = day.timestamp;
+                    }
+                    appointmentFilter.end = day.timestamp;
+
+                    if (day.month < drawDate.getUTCMonth()) {
+                        actualList = prevMonth;
+                        console.log(prevMonth.attr('start'));
+                        if (!prevMonth.attr('start')) {
+                            prevMonth.attr('start', day.date);
+                        }
+                    } else if (day.month > drawDate.getUTCMonth()) {
+                        actualList = nextMonth;
+                    } else {
+                        actualList = thisMonth;
+                    }
+
+                    var actualDay = $("<li>", {"class": "calendarday day" + day.year + '-' + day.month + '-' + day.date});
+                    actualDay.data('date', day);
+                    actualDay.text(day.date + '.' + (day.month + 1));
+
+
+                    actualList.append(actualDay);
+                });
+            });
+
+
+            // add the data to the calendar
+            api.getAll(appointmentFilter).done(function (appointments) {
+                _(appointments).each(function (appointment) {
+                    var appointmentDate = new Date(appointment.start_date);
+                    var dateStr = appointmentDate.getUTCFullYear() + '-' + appointmentDate.getUTCMonth() + '-' + appointmentDate.getUTCDate();
+
+                    var liItem = $('.calendarday.day' + dateStr);
+                    console.log('.calendarday.day' + dateStr, liItem);
+
+                    liItem.append($('<p>').text(appointment.title));
                 });
 
-            main.append($('<span>').css('color', '#555').append($.txt(util.getDayNames().join(" ") + '\n')));
-            var list = util.getMonthScaffold(_.now());
-            _(list).each(function (days) {
-                main.append($.txt(
-                    _(days).map(function (day) {
-                            return _.pad(day.date, 2, " ");
-                        })
-                        .join(" ") + '\n'
-                ));
             });
+
+
+            main.append(monthView);
+            main.scrollable();
         }
     };
 });

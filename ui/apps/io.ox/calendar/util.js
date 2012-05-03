@@ -373,14 +373,15 @@ define("io.ox/calendar/util",
                 year = d.getUTCFullYear(),
                 month = d.getUTCMonth(),
                 weekday = d.getUTCDay(),
+                firstDayOfMonth = Date.UTC(year, month, 1),
                 // apply week day shift
-                shift = (7 + weekday - that.getFirstWeekDay()) % 7,
+                shift = (7 + (new Date(firstDayOfMonth)).getDay() - that.getFirstWeekDay()) % 7,
                 // get number of days in month
                 max = that.getDaysInMonth(year, month) + shift,
                 // loop
                 i = 0,
                 rows = [],
-                day = Date.UTC(year, month, 1) - DAY * shift,
+                day = firstDayOfMonth - DAY * shift,
                 row,
                 obj;
 
