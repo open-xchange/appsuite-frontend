@@ -19,14 +19,14 @@
         "Fri",
         "Sat"
     ],
-    "daysNarrow": [
-        "S",
-        "M",
-        "T",
-        "W",
-        "T",
-        "F",
-        "S"
+    "daysStandalone": [
+        "Sun",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat"
     ],
     "months": [
         "January",

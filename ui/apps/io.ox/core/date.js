@@ -707,7 +707,12 @@ function (gettext, config) {
     
     api.getTimeZone = _.memoize(function (name) {
         return require(["text!io.ox/core/tz/zoneinfo/" + name])
-            .pipe(parseTZInfo);
+            .pipe(parseTZInfo)
+            .pipe(function (D) {
+                D.id = name;
+                D.displayName = config.get(['availableTimeZones', name], name);
+                return D;
+            });
     });
     
     var locale = gettext.language.pipe(function (lang) {

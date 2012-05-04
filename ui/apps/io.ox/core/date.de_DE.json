@@ -19,14 +19,14 @@
         "Fr.",
         "Sa."
     ],
-    "daysNarrow": [
-        "S",
-        "M",
-        "D",
-        "M",
-        "D",
-        "F",
-        "S"
+    "daysStandalone": [
+        "So",
+        "Mo",
+        "Di",
+        "Mi",
+        "Do",
+        "Fr",
+        "Sa"
     ],
     "months": [
         "Januar",
