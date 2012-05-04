@@ -17,17 +17,10 @@ define("io.ox/calendar/util",
     "use strict";
 
     // week day names
-    var n_dayShort = date.locale.daysShort,
-        n_day = [gettext("Sunday"), gettext("Monday"), gettext("Tuesday"),
-                 gettext("Wednesday"), gettext("Thursday"), gettext("Friday"),
-                 gettext("Saturday")
-                 ],
+    var n_dayShort = date.locale.daysStandalone,
+        n_day = date.locale.days,
         // month names
-        n_month = [gettext("January"), gettext("February"), gettext("March"),
-                   gettext("April"), gettext("May"), gettext("June"),
-                   gettext("July"), gettext("August"), gettext("September"),
-                   gettext("October"), gettext("November"), gettext("December")
-                  ],
+        n_month = date.locale.months,
         // day names
         n_count = [gettext("last"), "", gettext("first"), gettext("second"),
                    gettext("third"), gettext("fourth"), gettext("last")
@@ -55,6 +48,16 @@ define("io.ox/calendar/util",
         SATURDAY = 64,
         // week starts with (0=Sunday, 1=Monday, ..., 6=Saturday)
         firstWeekDay = date.locale.weekStart;
+
+    var zones;
+    $.when.apply($, _.map(
+        ['America/Los_Angeles', 'America/New_York', 'America/Sao_Paulo',
+         'Europe/London', 'Europe/Berlin', 'Europe/Moscow', 'Asia/Kolkata',
+         'Asia/Shanghai', 'Australia/Sydney'], date.getTimeZone))
+        .done(function () {
+            zones = Array.prototype.slice.call(arguments);
+        });
+        
 
     var that = {
 
@@ -179,58 +182,57 @@ define("io.ox/calendar/util",
             }
         },
 
-        getTimeInterval: function (data, shift) {
-            shift = shift || 0;
+        getTimeInterval: function (data, D) {
             var length, start, end;
-            if (data.full_time && shift === 0) {
+            D = D || date.Local;
+            if (data.full_time) {
                 length = (data.end_date - data.start_date) / DAY >> 0;
-                return length <= 1 ? "Whole day" : length + " days";
+                return length <= 1 ? gettext('Whole day') : gettext.format(
+                    //#. %d is the number of days
+                    gettext.ngettext('%d day', '%d days', length), length);
             } else {
-                start = data.start_date + shift * HOUR;
-                end = data.end_date + shift * HOUR;
+                start = D.localTime(date.Local.utc(data.start_date));
+                end = D.localTime(date.Local.utc(data.end_date));
                 return that.getTime(start) + " \u2013 " + that.getTime(end);
             }
         },
 
-        getTimezoneLabel: (function (data) {
+        addTimezoneLabel: function (parent, data) {
 
-            var current = 'CEST',
-                zones = [['San Francisco', -9, 'PDT'],
-                         ['New York', -6, 'EDT'],
-                         ['Rio de Janeiro', -5, 'BRT'],
-                         ['London', -1, 'BST'],
-                         ['Berlin', 0, 'CEST'],
-                         ['Moscow', +2, 'MSK'],
-                         ['Bangalore', +3.5, 'IST'],
-                         ['Beijing', +6, 'CST'],
-                         ['Sydney', +8, 'EST']
-                         ];
+            var current = date.Local.getTTInfoLocal(data.start_date);
+            
+            parent.append(
+                $.txt(that.getTimeInterval(data) + ' '),
+                $('<span>').addClass('label').text(current.abbr).popover({
+                    title: that.getTimeInterval(data) + ' ' + current.abbr,
+                    content: getContent,
+                    animation: false,
+                    placement: function (tip, element) {
+                        var off = $(element).offset(),
+                            width = $('body').width() / 2;
+                        return off.left > width ? 'left' : 'right';
+                    }
+                })
+            );
+            
+            function getContent() {
+                // hard coded for demo purposes
+                var div = $('<div>');
+                _(zones).each(function (zone) {
+                    // must use outer DIV with "clear: both" here for proper layout in firefox
+                    div.append($('<div>').addClass('clear').append(
+                        $('<span>').text(zone.displayName.replace(/^.*?\//, '')),
+                        $('<b>').append($('<span>')
+                            .addClass('label label-info')
+                            .text(zone.getTTInfoLocal(data.start_date).abbr)),
+                        $('<i>').text(that.getTimeInterval(data, zone))
+                    ));
+                });
+                return '<div class="timezones">' + div.html() + '</div>';
+            }
 
-            return function (data) {
-                return $('<span>').addClass('label').text(current)
-                    .popover({
-                        title: that.getTimeInterval(data) + ' ' + current,
-                        content: function () {
-                            // hard coded for demo purposes
-                            return '<div class="timezones">' +
-                                _(zones).map(function (zone) {
-                                    return _.printf(
-                                        // must use outer DIV with "clear: both" here for proper layout in firefox
-                                        '<div class="clear">%s <b><span class="label label-info">%s</span></b><i>%s</i></div>',
-                                        zone[0], zone[2], that.getTimeInterval(data, zone[1])
-                                    );
-                                }).join('') +
-                                '</div>';
-                        },
-                        animation: false,
-                        placement: function (tip, element) {
-                            var off = $(element).offset(),
-                                width = $('body').width() / 2;
-                            return off.left > width ? 'left' : 'right';
-                        }
-                    });
-            };
-        }()),
+            return parent;
+        },
 
         getShownAsClass: function (data) {
             return shownAsClass[(data.shown_as || 1) - 1];

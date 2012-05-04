@@ -177,7 +177,7 @@ function processLanguage(lang) {
                 weekStart: weekDays[supp.firstDay[territory]],
                 days: mapDays('format', 'wide'),
                 daysShort: mapDays('format', 'abbreviated'),
-                daysNarrow: mapDays('stand-alone', 'narrow'),
+                daysStandalone: mapDays('stand-alone', 'abbreviated'),
                 months: mapMonths('format', 'wide'),
                 monthsShort: mapMonths('format', 'abbreviated'),
                 date: getFormat('date'),

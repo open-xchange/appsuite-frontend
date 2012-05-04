@@ -19,14 +19,14 @@
         "ven.",
         "sam."
     ],
-    "daysNarrow": [
-        "D",
-        "L",
-        "M",
-        "M",
-        "J",
-        "V",
-        "S"
+    "daysStandalone": [
+        "dim.",
+        "lun.",
+        "mar.",
+        "mer.",
+        "jeu.",
+        "ven.",
+        "sam."
     ],
     "months": [
         "janvier",

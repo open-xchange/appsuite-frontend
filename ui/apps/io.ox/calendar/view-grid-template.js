@@ -34,10 +34,7 @@ define("io.ox/calendar/view-grid-template",
             set: function (data, fields, index) {
                 fields.title.text(data.title || '');
                 fields.location.text(data.location || '');
-                fields.time.empty().append(
-                    $.txt(util.getTimeInterval(data) + ' '),
-                    util.getTimezoneLabel(data)
-                );
+                util.addTimezoneLabel(fields.time.empty(), data);
                 fields.date.text(util.getDateInterval(data));
                 fields.shown_as.get(0).className = "abs shown_as " + util.getShownAsClass(data);
             }
