@@ -330,10 +330,15 @@ define('io.ox/core/tk/forms',
         },
 
         createControlGroupLabel: function (options) {
-            var forTag = utils.connectLabelToField(options['for']);
+            if (options) {
+                var forTag = utils.connectLabelToField(options['for']);
 
-            return $('<label>', {'for': forTag})
-            .text(options.text).addClass('control-label');
+                return $('<label>', {'for': forTag})
+                .text(options.text).addClass('control-label');
+            } else {
+                return $('<label>');
+            }
+
         },
 
         createControlsWrapper: function () {

@@ -140,13 +140,23 @@ define('io.ox/core/api/account',
      */
     api.get = function (id) {
 
-        var getter = function () {
-            return api.all().pipe(function () {
-                return cache.get(id);
-            });
-        };
+//        var getter = function () {
+//            return api.all().pipe(function () {
+//                return cache.get(id);
+//            });
+//        };
 
-        return cache.get(id, getter);
+//        return cache.get(id, getter);
+
+        return http.GET({
+            module: 'account',
+            params: {
+                action: 'get',
+                id: id,
+                columns: '1001,1004'
+            },
+            processResponse: true
+        });
     };
 
     /**
@@ -154,25 +164,25 @@ define('io.ox/core/api/account',
      */
     api.all = function () {
 
-        var getter = function () {
-            return http.GET({
-                module: 'account',
-                params: { action: 'all' },
-                processResponse: true
-            });
-        };
-
-        return cache.keys().pipe(function (keys) {
-            if (keys.length > 0) {
-                return cache.values();
-            } else {
-                return getter().pipe(function (data) {
-                    data = process(data);
-                    cache.add(data);
-                    return data;
-                });
-            }
+//        var getter = function () {
+        return http.GET({
+            module: 'account',
+            params: { action: 'all', columns: '1001,1004,1007'},
+            processResponse: true
         });
+//        };
+
+//        return cache.keys().pipe(function (keys) {
+//            if (keys.length > 0) {
+//                return cache.values();
+//            } else {
+//                return getter().pipe(function (data) {
+//                    data = process(data);
+//                    cache.add(data);
+//                    return data;
+//                });
+//            }
+//        });
     };
 
     /**

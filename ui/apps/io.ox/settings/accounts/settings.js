@@ -19,18 +19,36 @@ define('io.ox/settings/accounts/settings',
        'io.ox/core/tk/model',
        'io.ox/settings/utils',
        'io.ox/core/tk/dialogs',
-       'settings!io.ox/settings/accounts'], function (ext, View, Model, utils, dialogs, settings) {
+       'io.ox/core/api/account',
+       'settings!io.ox/settings/accounts'], function (ext, View, Model, utils, dialogs, api, settings) {
 
 
     'use strict';
 
     var AccountsSettingsModel = Model.extend({
-    });
+    }),
+
+        listOfAccounts = [],
+
+        createAccountItem = function (val) {
+            listOfAccounts.push({
+                dataid: 'email/' + val.id,
+                html: val.primary_address
+            });
+            console.log(listOfAccounts);
+        },
+
+        seperateEachAccount = function (data) {
+            _.each(data, function (val) {
+                createAccountItem(val);
+            });
+        };
 
     var AccountsSettingsModelView = View.extend({
         draw: function (data) {
             var self = this,
                 listbox = null;
+
             self.node.append(this.createSettingsHead(data))
             .append(
                     this.createSection()
@@ -44,14 +62,16 @@ define('io.ox/settings/accounts/settings',
                                 dataid: 'accounts-list',
                                 model: {
                                     get: function () {
-                                        var list = [
-                                            {dataid: 'email/2281', html: 'mario@sourcegarden.com (imap)'},
-                                            {dataid: 'facebook/2823', html: 'mario.scheliga (facebook)'},
-                                            {dataid: 'twitter/28311', html: 'marioscheliga (twitter)'},
-                                            {dataid: 'xing/288128', html: 'mario.scheliga (xing)'},
-                                            {dataid: 'linkedin/288111', html: 'mario.scheliga (linkedIn)'}
-                                        ];
-                                        return list;
+//                                        var list = [
+//                                            {dataid: 'email/2281', html: 'mario@sourcegarden.com (imap)'},
+//                                            {dataid: 'facebook/2823', html: 'mario.scheliga (facebook)'},
+//                                            {dataid: 'twitter/28311', html: 'marioscheliga (twitter)'},
+//                                            {dataid: 'xing/288128', html: 'mario.scheliga (xing)'},
+//                                            {dataid: 'linkedin/288111', html: 'mario.scheliga (linkedIn)'}
+//                                        ];
+//                                        console.log(listOfAccounts);
+                                        return listOfAccounts;
+//                                        return list;
                                     }
                                 }
                             })
@@ -87,8 +107,14 @@ define('io.ox/settings/accounts/settings',
         id: "accountssettings",
         draw: function (data) {
             var myModel = settings.createModel(AccountsSettingsModel),
-                myView = new AccountsSettingsModelView({model: myModel});
-            this.append(myView.draw(data).node);
+                myView = new AccountsSettingsModelView({model: myModel}),
+                that = this;
+            console.log(myModel);
+            api.all().done(function (data) {
+                seperateEachAccount(data);
+                that.append(myView.draw(data).node);
+            });
+
             return myView.node;
         },
         save: function () {

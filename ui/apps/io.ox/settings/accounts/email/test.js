@@ -22,7 +22,7 @@ define("io.ox/settings/accounts/email/test",
     var TIMEOUT = 5000,
 
         TESTACCOUNT = {
-            "name": "Neuer Account",
+            "name": "Ein Account",
             "primary_address": "christoph-kopp@gmx.net",
             "personal": "Christoph Kopp",
             "unified_inbox_enabled": false,
@@ -84,7 +84,7 @@ define("io.ox/settings/accounts/email/test",
                 });
 
                 j.it('deletes the created account', function () {
-                    api.remove([dataId]);
+//                    api.remove([dataId]);
                 });
 
             });
