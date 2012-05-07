@@ -148,7 +148,7 @@ define('io.ox/mail/view-detail',
                 return $();
             }
 
-            var att = data.attachments, source = '', type, isHTML, isLarge,
+            var att = data.attachments, source = '', type, isHTML, isLarge, frag, tmp,
                 content = $('<div>').addClass('content');
 
             // use first attachment to determine content type
@@ -169,12 +169,18 @@ define('io.ox/mail/view-detail',
             // replace images on source level
             source = source.replace(regImageSrc, '$1' + ox.apiRoot);
 
+            // robust constructor for large HTML
+            frag = document.createDocumentFragment();
+            frag.appendChild(tmp = document.createElement('DIV'));
+            tmp.innerHTML = source;
+            content.get(0).appendChild(frag);
+            frag = tmp = null;
+
             if (isHTML) {
                 // HTML
-                // start constructing
-                content.append($(source));
-                content.find('meta').remove();
                 if (!isLarge) {
+                    // remove stupid tags
+                    content.find('meta').remove();
                     // transform outlook's pseudo blockquotes
                     content.find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
                         $(this).replaceWith($('<blockquote>').append($(this).contents()));
