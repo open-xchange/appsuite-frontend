@@ -54,3 +54,5 @@ blockquote {
     margin: 1em 0 1em 0;
     opacity: 0.5;
 }
+
+blockquote blockquote { opacity: 1.0; }

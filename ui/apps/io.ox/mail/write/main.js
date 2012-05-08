@@ -498,7 +498,7 @@ define.async('io.ox/mail/write/main',
                 _.url.hash('mailto', null);
             }
 
-            win.show(function () {
+            win.busy().show(function () {
                 app.setMail({ data: data, mode: 'compose', initial: true })
                 .done(function () {
                     if (mailto) {
@@ -508,6 +508,7 @@ define.async('io.ox/mail/write/main',
                     } else {
                         $('input[data-type=to]').focus().select();
                     }
+                    win.idle();
                     def.resolve();
                 });
             });
@@ -520,13 +521,14 @@ define.async('io.ox/mail/write/main',
          */
         app.replyall = function (obj) {
             var def = $.Deferred();
-            win.show(function () {
+            win.busy().show(function () {
                 mailAPI.replyall(obj, defaultEditorMode || 'text')
                 .done(function (data) {
                     app.setMail({ data: data, mode: 'replyall', initial: true })
                     .done(function () {
                         app.getEditor().focus();
                         app.getView().scrollpane.scrollTop(0);
+                        win.idle();
                         def.resolve();
                     });
                 });
@@ -539,13 +541,14 @@ define.async('io.ox/mail/write/main',
          */
         app.reply = function (obj) {
             var def = $.Deferred();
-            win.show(function () {
+            win.busy().show(function () {
                 mailAPI.reply(obj, defaultEditorMode || 'text')
                 .done(function (data) {
                     app.setMail({ data: data, mode: 'reply', initial: true })
                     .done(function () {
                         app.getEditor().focus();
                         app.getView().scrollpane.scrollTop(0);
+                        win.idle();
                         def.resolve();
                     });
                 });
@@ -558,12 +561,13 @@ define.async('io.ox/mail/write/main',
          */
         app.forward = function (obj) {
             var def = $.Deferred();
-            win.show(function () {
+            win.busy().show(function () {
                 mailAPI.forward(obj, defaultEditorMode || 'text')
                 .done(function (data) {
                     app.setMail({ data: data, mode: 'forward', initial: true })
                     .done(function () {
                         $('input[data-type=to]').focus().select();
+                        win.idle();
                         def.resolve();
                     });
                 });

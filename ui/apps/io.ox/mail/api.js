@@ -440,9 +440,9 @@ define("io.ox/mail/api",
                 }
             })
             .pipe(function (data) {
+                var text = '', tmp = '', quote = '', tmp;
                 // transform pseudo-plain text to real text
                 if (data.attachments && data.attachments.length) {
-                    var text = '', tmp = '', quote = '';
                     if (data.attachments[0].content_type === 'text/plain') {
                         $('<div>')
                             // escape everything but BR tags
@@ -476,12 +476,14 @@ define("io.ox/mail/api",
                             data.attachments[0].content = $.trim(text);
                         }
                     } else if (data.attachments[0].content_type === 'text/html') {
-
-                        data.attachments[0].content = $('<div>')
-                            .html(data.attachments[0].content)
-                            .find('blockquote').removeAttr('style')
-                            .end()
-                            .html();
+                        // robust approach for large mails
+                        tmp = document.createElement('DIV');
+                        tmp.innerHTML = data.attachments[0].content;
+                        _(tmp.getElementsByTagName('BLOCKQUOTE')).each(function (node) {
+                            node.removeAttribute('style');
+                        });
+                        data.attachments[0].content = tmp.innerHTML;
+                        tmp = null;
                     }
                 } else {
                     data.attachments = data.attachments || [{}];
