@@ -19,7 +19,7 @@ define("io.ox/preview/officePreview/main",
     "use strict";
 
     var BATCH_SIZE = 5;
-    
+
     function documentTypeClasses(file) {
         if (/\.pptx?$/.test(file.name)) {
             return "io-ox-office-preview-presentation ";
@@ -141,13 +141,13 @@ define("io.ox/preview/officePreview/main",
                 container.empty().append($shownContent);
 
                 var centerOffset = ($(window).width() / 2) - ($shownContent.width() / 2);
-                
+
                 $shownContent.addClass(documentTypeClasses(file));
-                
+
 
                 $shownContent.addClass("io-ox-office-preview-content").css({position: "relative", left: centerOffset, right: centerOffset});
-                
-                
+
+
                 app.index = pageNumber;
 
                 $pageIndicator.text(pageNumber + 1);

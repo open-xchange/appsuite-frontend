@@ -29,18 +29,22 @@ define("io.ox/preview/main",
             });
         };
         clickableLink = function (desc, clickHandler) {
-            var $a = $('<a>', {draggable: true })
-            .attr('data-downloadurl', desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.dataURL + "&delivery=download");
+            var $a = $('<a>', { draggable: true })
+                .attr('data-downloadurl', desc.mimetype + ':' + desc.name + ':' + ox.abs + desc.dataURL + "&delivery=download");
             if (clickHandler) {
-                $a.attr({}).on("click", clickHandler);
+                $a.on("click", clickHandler);
             } else {
                 $a.attr({ href: desc.dataURL + "&delivery=view", target: '_blank'});
             }
             return $a;
         };
     } else {
-        clickableLink = function (desc) {
-            return $('<a>', { href: desc.dataURL + "&delivery=view", target: '_blank'});
+        clickableLink = function (desc, clickHandler) {
+            var link = $('<a>', { href: desc.dataURL + "&delivery=view", target: '_blank'});
+            if (clickHandler) {
+                link.on("click", clickHandler);
+            }
+            return link;
         };
 
     }
@@ -133,7 +137,8 @@ define("io.ox/preview/main",
             index: 10,
             supports: ox.serverConfig.previewExtensions,
             draw: function (file) {
-                var $a = clickableLink(file, function () {
+                var $a = clickableLink(file, function (e) {
+                    e.preventDefault();
                     require(["io.ox/preview/officePreview"], function (officePreview) {
                         officePreview.draw(file);
                     });
