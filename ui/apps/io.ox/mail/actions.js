@@ -384,7 +384,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 500,
-        prio: 'lo',
+        prio: 'hi',
         id: 'markunread',
         label: gt('Mark Unread'),
         ref: 'io.ox/mail/actions/markunread'
