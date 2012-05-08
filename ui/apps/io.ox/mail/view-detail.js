@@ -549,7 +549,7 @@ define('io.ox/mail/view-detail',
                 if (isWinmailDATPart(obj)) {
                     dat = obj.attachments[0];
                     attachments.push(
-                        _.extend({}, dat, { mail: mail, title: obj.filename || '' })
+                        _.extend({}, dat, { mail: mail, title: obj.filename || '' })
                     );
                 } else {
                     attachments.push({
@@ -570,7 +570,7 @@ define('io.ox/mail/view-detail',
                 obj = data.attachments[i];
                 if (obj.disp === 'attachment') {
                     attachments.push(
-                        _.extend(obj, { mail: mail, title: obj.filename || '' })
+                        _.extend(obj, { mail: mail, title: obj.filename || '' })
                     );
                     hasAttachments = true;
                 }
