@@ -67,15 +67,19 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             grid.selection.on('change', function (e, selection) {
                 var len = selection.length,
                     // work with reduced string-based set
-                    flat = JSON.stringify(selection);
+                    flat = JSON.stringify(_([].concat(selection)).map(function (o) {
+                        return { folder_id: o.folder_id || o.folder, id: o.id, recurrence_position: o.recurrence_position };
+                    }));
                 // has anything changed?
                 if (flat !== last) {
                     if (len === 1) {
+                        node.css('height', '');
                         draw(selection[0]);
                     } else if (len > 1) {
+                        node.css('height', '100%');
                         commons.multiSelection(id, node, this.unfold());
                     } else {
-                        node.idle().empty();
+                        node.css('height', '').idle().empty();
                     }
                     // remember current selection
                     last = flat;

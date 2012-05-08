@@ -38,11 +38,7 @@ define("io.ox/mail/main",
             } else if (/^(asc|desc)$/.test(option)) {
                 grid.prop('order', option).refresh();
             } else if (option === 'unread') {
-                if (grid.prop('unread')) {
-                    grid.prop('unread', false).resume().refresh();
-                } else {
-                    grid.prop('unread', true).refresh().done(grid.pause);
-                }
+                grid.prop('unread', !grid.prop('unread'));
             }
         },
 
@@ -80,7 +76,7 @@ define("io.ox/mail/main",
 
         // sound
         audio = $('<audio>', { src: ox.base + '/apps/io.ox/mail/images/ping.mp3' })
-            .hide().prop('volume', 0.50).appendTo(win.nodes.main);
+            .hide().prop('volume', 0.40).appendTo(win.nodes.main);
         api.on('new-mail', function () {
             audio.get(0).play();
         });
@@ -171,6 +167,14 @@ define("io.ox/mail/main",
                 .on('click', 'a', { grid: grid }, hToolbarOptions)
             )
         );
+
+        grid.on('change:prop:unread', function (e, value) {
+            if (value === true) {
+                grid.refresh().done(grid.pause);
+            } else {
+                grid.resume().refresh();
+            }
+        });
 
         grid.on('change:prop', updateGridOptions);
         updateGridOptions();

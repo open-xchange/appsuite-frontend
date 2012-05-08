@@ -78,7 +78,7 @@ define("io.ox/core/main",
         }
     }
 
-    setInterval(globalRefresh, 60000 * 2); // 2 minute refresh interval!
+    setInterval(globalRefresh, 60000 * 5); // 5 minute refresh interval!
 
     function launch() {
 

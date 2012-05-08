@@ -828,11 +828,13 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         };
 
         this.pause = function () {
+            console.log('pause!');
             paused = true;
             return self;
         };
 
         this.resume = function () {
+            console.log('resume!');
             paused = false;
             return self;
         };
