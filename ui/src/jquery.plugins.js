@@ -15,6 +15,9 @@
 
     "use strict";
 
+    // save some original jQuery methods
+    $.original = { val: $.fn.val };
+
     $.preventDefault = function (e) {
         e.preventDefault();
     };
@@ -211,7 +214,7 @@
     };
 
     $.txt = function (str) {
-        return document.createTextNode(str);
+        return document.createTextNode(str !== undefined ? str : '');
     };
 
     $.inlineEdit = function () {

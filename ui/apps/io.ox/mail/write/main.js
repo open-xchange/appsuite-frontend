@@ -122,22 +122,34 @@ define.async('io.ox/mail/write/main',
             var self = this;
 
             var index = e.data.index,
-                signature, text;
+                signature, text,
+                ed = self.getEditor(),
+                isHTML = !!ed.removeBySelector;
 
-            if (currentSignature) {
-                // remove current signature from editor
-                self.getEditor().replaceParagraph(currentSignature, '');
-                currentSignature = '';
+            // remove current signature from editor
+            if (isHTML) {
+                ed.removeBySelector('.io-ox-signature');
+            } else {
+                if (currentSignature) {
+                    ed.replaceParagraph(currentSignature, '');
+                    currentSignature = '';
+                }
             }
 
             // add signature?
             if (index < app.getView().signatures.length) {
                 signature = app.getView().signatures[index];
                 text = $.trim(signature.signature_text);
-                self.getEditor().appendContent(text);
-                self.getEditor().scrollTop('bottom');
+                if (isHTML) {
+                    ed.appendContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
+                } else {
+                    ed.appendContent(text);
+                }
                 currentSignature = text;
+                ed.scrollTop('bottom');
             }
+
+            ed.focus();
         };
 
         function showMessage(msg, header, sticky) {

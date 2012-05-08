@@ -448,7 +448,7 @@ define.async('io.ox/core/tk/html-editor', [], function () {
 
             ln2br = function (str) {
                 return String(str || '').replace(/\r/g, '')
-                    .replace('\n', '<br>'); // '\n' is for IE
+                    .replace(new RegExp('\\n', 'g'), '<br>'); // '\n' is for IE
             },
 
             // get editor content
@@ -469,6 +469,8 @@ define.async('io.ox/core/tk/html-editor', [], function () {
         this.focus = function () {
             ed.focus();
         };
+
+        this.ln2br = ln2br;
 
         this.clear = clear;
 
@@ -578,6 +580,10 @@ define.async('io.ox/core/tk/html-editor', [], function () {
             this.replaceContent(str, '');
         };
 
+        this.removeBySelector = function (selector) {
+            $(selector, ed.getDoc()).remove();
+        };
+
         this.replaceContent = function (str, rep) {
 
             // adopted from tinyMCE's searchreplace plugin
@@ -606,6 +612,8 @@ define.async('io.ox/core/tk/html-editor', [], function () {
                     found = true;
                 }
             }
+
+            window.lala = win;
 
             return found;
         };

@@ -16,7 +16,7 @@ define('io.ox/core/tk/text-editor', [], function () {
     'use strict';
 
     // save jQuery val() - since tinyMCE is a bit too aggressive
-    var val = $.fn.val;
+    var val = $.original.val;
 
     function Editor(textarea) {
 
