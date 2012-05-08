@@ -13,15 +13,16 @@
 
 define("io.ox/portal/appointments/register",
     ["io.ox/core/extensions"], function (ext) {
-    
+
     "use strict";
-    
+
     var appointmentPortal = {
         id: "appointments",
         index: 100,
         load: function () {
             var loading = new $.Deferred();
             require(["io.ox/calendar/api"], function (api) {
+                console.log('get all appointments');
                 api.getAll()
                     .done(function (ids) {
                         api.getList(ids.slice(0, 10))
@@ -33,28 +34,28 @@ define("io.ox/portal/appointments/register",
             return loading;
         },
         draw: function (appointments) {
-            
+
             var deferred = new $.Deferred(),
                 $node = this;
-            
+
             $node.addClass("io-ox-portal-appointments")
                 .append(
                     $("<div/>").addClass("clear-title").text("Appointments")
                 );
-            
+
             if (appointments.length === 0) {
-                
+
                 $node.append("<div><b>You don't have any appointments in the near future. Go take a walk!</b></div>");
                 deferred.resolve();
-                
+
             } else {
-                
+
                 require(
                     ["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
                     function (dialogs, viewGrid) {
-                        
+
                         viewGrid.drawSimpleGrid(appointments).appendTo($node);
-                        
+
                         new dialogs.SidePopup()
                             .delegate($node, ".vgrid-cell", function (popup) {
                                 var data = $(this).data("appointment");
@@ -63,14 +64,22 @@ define("io.ox/portal/appointments/register",
                                     data = null;
                                 });
                             });
-                        
+
                         deferred.resolve();
                     }
                 );
             }
             return deferred;
+        },
+        post: function (ext) {
+            var self = this;
+            require(["io.ox/calendar/api"], function (api) {
+                api.on('refresh.all', function () {
+                    ext.load().done(_.bind(ext.draw, self));
+                });
+            });
         }
     };
-    
+
     ext.point("io.ox/portal/widget").extend(appointmentPortal);
 });

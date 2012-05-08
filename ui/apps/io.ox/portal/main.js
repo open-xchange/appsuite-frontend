@@ -117,6 +117,7 @@
 
                     var $node = $('<div>')
                         .addClass('io-ox-portal-widget')
+                        .attr('widget-id', extension.id)
                         .busy();
 
                     widgets = widgets.add($node);
@@ -126,6 +127,7 @@
                             return (extension.invoke('draw', $node, data) || $.Deferred())
                                 .done(function () {
                                     $node.idle();
+                                    extension.invoke('post', $node, extension);
                                 });
                         })
                         .fail(function (e) {

@@ -65,7 +65,8 @@ define('io.ox/portal/mail/register',
 
             var node = this;
 
-            node.addClass('io-ox-portal-mail')
+            node.empty()
+                .addClass('io-ox-portal-mail')
                 .append(
                     $('<div>').addClass('clear-title')
                         .text('New emails')
@@ -101,6 +102,14 @@ define('io.ox/portal/mail/register',
                     }
                 );
             }
+        },
+        post: function (ext) {
+            var self = this;
+            require(['io.ox/mail/api'], function (api) {
+                api.on('refresh.all', function () {
+                    ext.load().done(_.bind(ext.draw, self));
+                });
+            });
         }
     });
 });
