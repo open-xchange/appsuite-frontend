@@ -97,7 +97,7 @@ define('io.ox/mail/view-detail',
         regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=\d+)(\s*)$/i,
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i,
-        regLink = /^(.*)(http\S+)(\s.*)$/i,
+        regLink = /^(.*)(http\S+)(\s.*)?$/i,
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
     var drawDocumentLink = function (href, title) {
@@ -242,7 +242,7 @@ define('io.ox/mail/view-detail',
                             );
                         } else if ((m = text.match(regLink)) && m.length && node.closest('a').length === 0) {
                             node.replaceWith(
-                                $($.txt(m[1])).add(drawLink(m[2])).add($.txt(m[3]))
+                                $($.txt(m[1] || '')).add(drawLink(m[2])).add($.txt(m[3]))
                             );
                         }
                     }
