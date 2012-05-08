@@ -148,8 +148,7 @@ define('io.ox/mail/view-detail',
                 return $();
             }
 
-            var att = data.attachments, source = '', type, isHTML, isLarge,
-                content = $('<div>').addClass('content');
+            var att = data.attachments, source = '', type, isHTML, isLarge, content;
 
             // use first attachment to determine content type
             type = getContentType(att[0].content_type);
@@ -169,12 +168,17 @@ define('io.ox/mail/view-detail',
             // replace images on source level
             source = source.replace(regImageSrc, '$1' + ox.apiRoot);
 
+            // robust constructor for large HTML
+            content = document.createElement('DIV');
+            content.className = 'content';
+            content.innerHTML = source;
+            content = $(content);
+
             if (isHTML) {
                 // HTML
-                // start constructing
-                content.append($(source));
-                content.find('meta').remove();
                 if (!isLarge) {
+                    // remove stupid tags
+                    content.find('meta').remove();
                     // transform outlook's pseudo blockquotes
                     content.find('div[style*="none none none solid"][style*="1.5pt"]').each(function () {
                         $(this).replaceWith($('<blockquote>').append($(this).contents()));
@@ -195,21 +199,21 @@ define('io.ox/mail/view-detail',
                         if (h) { node.css('height', h + 'px'); }
                     })
                     .end();
-                }
-                // nested message?
-                if (!('folder_id' in data) && 'filename' in data) {
-                    // fix inline images in nested message
-                    content.find('img[src^="cid:"]').each(function () {
-                        var node = $(this), cid = '<' + String(node.attr('src') || '').substr(4) + '>', src,
-                            // get proper attachment
-                            attachment = _.chain(data.attachments).filter(function (a) {
-                                return a.cid === cid;
-                            }).first().value();
-                        if  (attachment) {
-                            src = api.getUrl(_.extend(attachment, { mail: data.parent }), 'view');
-                            node.attr('src', src);
-                        }
-                    });
+                    // nested message?
+                    if (!('folder_id' in data) && 'filename' in data) {
+                        // fix inline images in nested message
+                        content.find('img[src^="cid:"]').each(function () {
+                            var node = $(this), cid = '<' + String(node.attr('src') || '').substr(4) + '>', src,
+                                // get proper attachment
+                                attachment = _.chain(data.attachments).filter(function (a) {
+                                    return a.cid === cid;
+                                }).first().value();
+                            if  (attachment) {
+                                src = api.getUrl(_.extend(attachment, { mail: data.parent }), 'view');
+                                node.attr('src', src);
+                            }
+                        });
+                    }
                 }
             } else {
                 // plain TEXT
@@ -246,18 +250,26 @@ define('io.ox/mail/view-detail',
             }
 
             // further fixes
-            content
-                .find('blockquote').removeAttr('style type').end()
-                .find('a').attr('target', '_blank').end();
+            // for support for very large mails we do the following stuff manually,
+            // otherwise jQuery explodes with "Maximum call stack size exceeded"
 
-            // blockquotes (top-level only)
-            content.find('blockquote').not(content.find('blockquote blockquote'))
-                .css({ maxHeight: '3em', overflow: 'hidden', opacity: 0.5, cursor: 'pointer' })
-                .on('click.open', blockquoteClickOpen)
-                .on('dblclick.close', blockquoteClickClose);
+            _(content.get(0).getElementsByTagName('BLOCKQUOTE')).each(function (node) {
+                node.removeAttribute('style');
+                node.removeAttribute('type');
+            });
 
-            // follow mailto: links
-            content.find('a[href^="mailto:"]').on('click', mailTo);
+            _(content.get(0).getElementsByTagName('A')).each(function (node) {
+                $(node).attr('target', '_blank')
+                    .filter('[href^="mailto:"]').on('click', mailTo);
+            });
+
+            if (!isLarge) {
+                // blockquotes (top-level only)
+                content.find('blockquote').not(content.find('blockquote blockquote'))
+                    .css({ maxHeight: '3em', overflow: 'hidden', opacity: 0.5, cursor: 'pointer' })
+                    .on('click.open', blockquoteClickOpen)
+                    .on('dblclick.close', blockquoteClickClose);
+            }
 
             return content;
         },
