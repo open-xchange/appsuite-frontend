@@ -42,16 +42,15 @@ define('io.ox/contacts/api',
             search: {
                 action: 'search',
                 columns: '20,1,500,501,502,505,520,555,556,557,569,602,606',
-                sort: '607',
-                order: 'asc',
+                sort: '609', // magic sort field - ignores asc/desc
                 getData: function (query, autoComplete) {
                     return {
-                        display_name: query,
-                        first_name: query,
-                        last_name: query,
-                        email1: query,
-                        email2: query,
-                        email3: query,
+                        display_name: query + '*',
+                        first_name: query + '*',
+                        last_name: query + '*',
+                        email1: query + '*',
+                        email2: query + '*',
+                        email3: query + '*',
                         orSearch: true,
                         emailAutoComplete: !!autoComplete
                     };
