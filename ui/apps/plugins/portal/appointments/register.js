@@ -22,7 +22,6 @@ define("io.ox/portal/appointments/register",
         load: function () {
             var loading = new $.Deferred();
             require(["io.ox/calendar/api"], function (api) {
-                console.log('get all appointments');
                 api.getAll()
                     .done(function (ids) {
                         api.getList(ids.slice(0, 10))
