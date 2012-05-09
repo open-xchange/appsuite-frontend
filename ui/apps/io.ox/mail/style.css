@@ -403,6 +403,8 @@ h4.mail-attachment-preview {
     border: 0px none; line-height: normal; border-collapse: initial;
 }
 
+.mail-detail .content li { line-height: 16px; margin-bottom: 0.7em; }
+
 .mail-detail pre {
     background-color: initial;
     border: 0px none;
