@@ -37,6 +37,20 @@ define('io.ox/calendar/actions',
         }
     });
 
+    new Action('io.ox/calendar/actions/edit', {
+        id: 'edit',
+        requires: function (e) {
+            return e.collection.has('toplevel', 'one');
+        },
+        action: function (data) {
+            require(['io.ox/calendar/edit/main'], function (editmain) {
+                editmain.getApp().launch().done(function () {
+                    this.edit(data);
+                });
+            });
+        }
+    });
+
     // Links - toolbar
 
     new Dropdown('io.ox/calendar/links/toolbar', {
@@ -57,6 +71,14 @@ define('io.ox/calendar/actions',
         index: 200,
         label: gt('Month'),
         ref: 'io.ox/calendar/actions/switch-to-month-view'
+    });
+
+    new Link('io.ox/calendar/links/inline', {
+        id: 'edit',
+        index: 100,
+        prio: 'hi',
+        label: gt('Edit'),
+        ref: 'io.ox/calendar/actions/edit'
     });
 
     window.ext = ext;

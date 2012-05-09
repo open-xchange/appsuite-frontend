@@ -18,9 +18,10 @@ define("io.ox/calendar/view-detail",
      "io.ox/core/api/group",
      "io.ox/core/api/resource",
      "io.ox/core/api/folder",
+     "io.ox/core/extPatterns/links",
      "gettext!io.ox/calendar/calendar",
      "less!io.ox/calendar/style.css"
-    ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI) {
+    ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI, links) {
 
     "use strict";
 
@@ -68,6 +69,13 @@ define("io.ox/calendar/view-detail",
             );
         }
     });
+
+    // inline actions
+    ext.point('io.ox/calendar/detail').extend(new links.InlineLinks({
+        index: 170,
+        id: 'inline-links',
+        ref: 'io.ox/calendar/links/inline'
+    }));
 
     // draw title
     ext.point("io.ox/calendar/detail").extend({
@@ -143,6 +151,8 @@ define("io.ox/calendar/view-detail",
         }
         return node;
     }
+
+
 
     ext.point("io.ox/calendar/detail").extend({
         index: 500,
