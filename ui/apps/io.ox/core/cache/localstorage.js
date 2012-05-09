@@ -18,9 +18,16 @@ define('io.ox/core/cache/localstorage', function () {
         reg = null,
         lastGCrun = 0,
         gcTimeout = 1000 * 60 * 5, // 5 minutes
-        ts_cachetimeout = (new Date()).getTime() - (2 * 24 * 60 * 60 * 1000); // 2 days
+        ts_cachetimeout = (new Date()).getTime() - (2 * 24 * 60 * 60 * 1000), // 2 days
+
+        // max size for persistent objects
+        MAX_LENGTH = 1024 * 512, // 1/2 MB
+
+        // fluent backup cache
+        large = {};
 
     var that = {
+
         setId: function (theId) {
             id = theId;
             reg = new RegExp('^' + id.replace(/\./g, '\\.') + '\\.');
@@ -94,18 +101,26 @@ define('io.ox/core/cache/localstorage', function () {
             _(tmp).each(function (key) {
                 localStorage.removeItem(key);
             });
+            // clear backup cache
+            for (key in large) {
+                if (reg.test(id + '.' + key)) {
+                    delete large[id + '.' + key];
+                }
+            }
             return $.when();
         },
 
         get: function (key) {
 
             // fetch first, then GC
-            var item = localStorage.getItem(id + '.' + key);
-            that.gc();
+            var cid = id + '.' + key,
+                item = localStorage.getItem(cid);
 
             if (item !== null) {
                 item = JSON.parse(item);
                 that.set(key, item.data);
+            } else if (cid in large) {
+                item = large[cid];
             } else {
                 item = { data: null };
             }
@@ -115,20 +130,28 @@ define('io.ox/core/cache/localstorage', function () {
 
         set: function (key, data) {
 
-            that.gc();
-            localStorage.removeItem(id + '.' + key);
-
             var def = new $.Deferred(),
                 saveData = {
                     accesstime: _.now(),
                     data: data
-                };
+                },
+                json,
+                cid = id + '.' + key;
+
+            localStorage.removeItem(cid);
+            that.gc();
+
             try {
-                localStorage.setItem(id + '.' + key, JSON.stringify(saveData));
+                json = JSON.stringify(saveData);
+                if (json.length <= MAX_LENGTH) {
+                    localStorage.setItem(cid, json);
+                } else {
+                    large[cid] = saveData;
+                }
                 def.resolve(key);
             } catch (e) {
                 if (e.name && e.name === 'QUOTA_EXCEEDED_ERR') {
-                    console.warn('localStorage: Exceeded quota!', e, 'Object size', Math.round(JSON.stringify(saveData).length / 1024) + 'Kb');
+                    console.warn('localStorage: Exceeded quota!', e, 'Object size', Math.round(json.length / 1024) + 'Kb');
                     that.gc(true);
                 }
                 def.reject(e);
@@ -137,7 +160,9 @@ define('io.ox/core/cache/localstorage', function () {
         },
 
         remove: function (key) {
-            localStorage.removeItem(id + '.' + key);
+            var cid = id + '.' + key;
+            localStorage.removeItem(cid);
+            delete large[cid];
             return $.Deferred().resolve();
         },
 
@@ -150,6 +175,12 @@ define('io.ox/core/cache/localstorage', function () {
                 // match?
                 if (reg.test(key)) {
                     tmp.push(key.substr(id.length + 1));
+                }
+            }
+            // loop over backup cache
+            for (key in large) {
+                if (reg.test(id + '.' + key)) {
+                    tmp.push(key);
                 }
             }
             return $.Deferred().resolve(tmp);

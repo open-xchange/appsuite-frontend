@@ -400,7 +400,7 @@ h4.mail-attachment-preview {
 }
 
 .mail-detail .content table {
-    border: 0px none; line-height: normal;
+    border: 0px none; line-height: normal; border-collapse: initial;
 }
 
 .mail-detail pre {
