@@ -168,6 +168,9 @@ define.async('io.ox/mail/write/main',
                 close: true
             });
 
+            // due to tinyMCE's iframe
+            win.detachable = false;
+
             app.setWindow(win);
             view.render();
 

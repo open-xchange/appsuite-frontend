@@ -729,6 +729,7 @@ define("io.ox/core/desktop",
                 this.search = { query: "" };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
+                this.detachable = true;
 
                 var quitOnClose = false,
                     // views
@@ -785,7 +786,7 @@ define("io.ox/core/desktop",
                 this.hide = function () {
                     // detach if there are no iframes
                     this.trigger("beforehide");
-                    if (this.nodes.outer.find("iframe").length === 0) {
+                    if (this.detachable && this.nodes.outer.find("iframe").length === 0) {
                         this.nodes.outer.detach();
                     } else {
                         this.nodes.outer.hide();
