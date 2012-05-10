@@ -565,17 +565,17 @@ define("io.ox/mail/write/view-main",
         this.showSection(id, e.target);
     }
 
-    function togglePriority(e, view) {
-        var high = view.form.find('input[name=priority][value=1]'),
-            normal = view.form.find('input[name=priority][value=3]');
+    function togglePriority() {
+        var high = this.form.find('input[name=priority][value=1]'),
+            normal = this.form.find('input[name=priority][value=3]');
         if (high.prop('checked')) {
             high.prop('checked', false);
             normal.prop('checked', true);
-            view.applyHighPriority(false);
+            this.applyHighPriority(false);
         } else {
             high.prop('checked', true);
             normal.prop('checked', false);
-            view.applyHighPriority(true);
+            this.applyHighPriority(true);
         }
     }
 
