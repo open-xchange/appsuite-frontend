@@ -44,8 +44,10 @@ define('io.ox/calendar/actions',
         },
         action: function (data) {
             require(['io.ox/calendar/edit/main'], function (editmain) {
-                editmain.getApp().launch().done(function () {
-                    this.edit(data);
+                console.log('got data?');
+                console.log(data);
+                editmain.getApp(data).launch().done(function () {
+                   // this.edit(data);
                 });
             });
         }
@@ -73,6 +75,7 @@ define('io.ox/calendar/actions',
         ref: 'io.ox/calendar/actions/switch-to-month-view'
     });
 
+    // FIXME: should only be visible if rights are ok
     new Link('io.ox/calendar/links/inline', {
         id: 'edit',
         index: 100,

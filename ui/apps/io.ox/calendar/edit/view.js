@@ -18,6 +18,25 @@ define('io.ox/calendar/edit/view',
 
     var app;
 
+
+    var EditCommonView = View.extend({
+        render: function (app) {
+
+        }
+    });
+
+    var EditParticipantsViewItem = View.extend({
+        render: function () {
+
+        }
+    });
+
+    var EditParticipants = View.extend({
+        render: function () {
+
+        }
+    });
+
     var EditView = View.extend({
         GRID_WIDTH: 330,
         render: function (app) {
@@ -48,17 +67,40 @@ define('io.ox/calendar/edit/view',
 
                 self.createLabel({id: 'edit_note', text: gt('Note')}),
                 self.createTextArea({id: 'edit_note', property: 'note'})
-
-
             );
 
             self.scrollpane = $('<div>').css({ width: (self.GRID_WIDTH - 26) + 'px'}).addClass('leftside io-ox-calendar-edit-sidepanel');
             self.sidepanel = self.scrollpane.scrollable();
 
+            self.sidepanel.append(
+                self.createParticipantList()
+            );
 
+            self.growl = $('<div>', {id: 'myGrowl'})
+                .addClass('jGrowl').css({position: 'absolute', right: '-275px', top: '-10px'});
 
-            self.el.append(self.main, self.scrollpane);
+            self.el.append(self.main, self.scrollpane, self.growl);
             return self;
+        },
+
+        createParticipantList: function () {
+            var self = this,
+                participants = self.model.get('participants'),
+                el = $('<div>').addClass('edit-appointment-participantlist');
+
+            _.each(participants, function (participant) {
+            });
+            console.log(participants);
+            return el;
+        },
+        drawContact: function (id, node, data) {
+
+        },
+        drawAutoCompleteItem: function (node, data, query) {
+
+        },
+        addParticipant: function (participant) {
+
         }
     });
 
