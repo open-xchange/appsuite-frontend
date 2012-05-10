@@ -237,6 +237,12 @@ define("io.ox/core/tk/dialogs",
             nodes.underlay.show();
             nodes.popup.show();
 
+            // focus button (if available)
+            var button = nodes.popup.find('.btn-primary').first().focus();
+            if (!button.length) {
+                nodes.popup.find('.btn').first().focus();
+            }
+
             if (o.easyOut) {
                 $(document).on("keydown", closeViaEscapeKey);
             }
