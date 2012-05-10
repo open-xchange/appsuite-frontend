@@ -187,22 +187,29 @@ define("io.ox/core/desktop",
                 running = false,
                 runningId = null,
                 // save/restore
-                savePointUniqueID = _.now(),
+                uniqueID = _.now() + '.' + String(Math.random()).substr(3, 4),
                 savePoint = '',
                 saveRestorePointTimer = null,
                 // self
                 self = this;
 
+            /* save point handling */
+
+            this.getUniqueId = function () {
+                return uniqueID;
+            };
+
             function saveRestorePoint() {
                 if (self.failSave) {
                     appCache.get('savepoints').done(function (list) {
+                        // might be null, so:
                         list = list || [];
 
                         var data = self.failSave(),
                             ids = _(list).pluck('id'),
-                            pos = _(ids).indexOf(savePointUniqueID);
+                            pos = _(ids).indexOf(uniqueID);
 
-                        data.id = savePointUniqueID;
+                        data.id = uniqueID;
 
                         if (pos > -1) {
                             // replace
@@ -220,7 +227,7 @@ define("io.ox/core/desktop",
                 appCache.get('savepoints').done(function (list) {
                     list = list || [];
                     var ids = _(list).pluck('id'),
-                        pos = _(ids).indexOf(savePointUniqueID);
+                        pos = _(ids).indexOf(uniqueID);
 
                     if (pos > -1) {
                         list.splice(pos, 1);
@@ -230,7 +237,7 @@ define("io.ox/core/desktop",
             }
 
             $(window).on('unload', saveRestorePoint);
-            saveRestorePointTimer = setInterval(saveRestorePoint, 10000);
+            saveRestorePointTimer = setInterval(saveRestorePoint, 10 * 1000); // 10 secs
 
             // add event hub
             Events.extend(this);
@@ -398,6 +405,10 @@ define("io.ox/core/desktop",
                 return win;
             };
 
+            this.getWindowNode = function () {
+                return $(win.nodes.main);
+            };
+
             this.getWindowTitle = function () {
                 return win ? win.getTitle() : '';
             };
@@ -508,16 +519,25 @@ define("io.ox/core/desktop",
 
         App.restore = function () {
             App.getSavePoints().done(function (data) {
-                _(data).each(function (obj) {
-                    require([obj.module + '/main'], function (m) {
-                        m.getApp().launch().done(function () {
-                            if (this.failRestore) {
-                                this.failRestore(obj.point);
-                            }
+                $.when.apply($,
+                    _(data).map(function (obj) {
+                        return require([obj.module + '/main']).pipe(function (m) {
+                            return m.getApp().launch().done(function () {
+                                // update unique id
+                                obj.id = this.getUniqueId();
+                                if (this.failRestore) {
+                                    // restore
+                                    this.failRestore(obj.point);
+                                }
+                            });
                         });
-                    });
+                    })
+                )
+                .done(function () {
+                    // we don't remove that savepoint now because the app might crash during restore!
+                    // in this case, data would be lost
+                    appCache.add('savepoints', data || []);
                 });
-                appCache.remove('savepoints');
             });
         };
 

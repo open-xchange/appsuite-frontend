@@ -641,9 +641,12 @@ define.async('io.ox/core/tk/html-editor', [], function () {
 
         this.destroy = function () {
             this.handleHide();
-            //this.setContent('');
-            $(ed.getWin()).off('focus blur');
-            textarea.tinymce().remove();
+            if (ed) {
+                $(ed.getWin()).off('focus blur');
+            }
+            if (textarea.tinymce()) {
+                textarea.tinymce().remove();
+            }
             textarea = textarea.tinymce = def = ed = null;
         };
     }

@@ -290,8 +290,8 @@ define('io.ox/mail/view-detail',
             // outer node
             var node = $('<div>').addClass('mail-detail');
 
-            // send by myself (and not in sent folder)
-            if (util.byMyself(data) && !account.is('sent', data.folder_id)) {
+            // threaded & send by myself (and not in sent folder)?
+            if (data.threadSize > 1 && util.byMyself(data) && !account.is('sent', data.folder_id)) {
                 node.addClass('by-myself');
             }
 
@@ -654,7 +654,7 @@ define('io.ox/mail/view-detail',
             var content;
 
             // sent by myself and not in sent folder!?
-            if (util.byMyself(data) && !account.is('sent', data.folder_id)) {
+            if (data.threadSize > 1 && util.byMyself(data) && !account.is('sent', data.folder_id)) {
                 content = $('<div>').append(
                     $('<a>', { href: '#' }).text(gt('Show content')).on('click', data, replaceContent)
                 );

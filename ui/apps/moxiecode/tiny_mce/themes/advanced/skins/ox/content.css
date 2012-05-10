@@ -19,7 +19,7 @@ body {
 }
 
 body > *:first-child {
-    margin-top: 0.5em !important;
+    margin-top: 0 !important;
 }
 
 a {

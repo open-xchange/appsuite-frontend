@@ -22,14 +22,15 @@ define('io.ox/core/tk/view',
 
     var View = function (options) {
 
-        options = options || {};
-        options.node = options.node || $('<div>');
+        // options become properties
+        _(options || {}).each(function (value, key) {
+            this[key] = value;
+        }, this);
 
-        if (options.model) {
-            this.model = options.model || new Model();
-        }
+        this.model = this.model || new Model();
+        this.node = this.node ? $(this.node) : $('<div>');
 
-        this.node = $(options.node);
+        this.initialize(options);
 
         var self = this,
             getPropertyNodes = function (names) {
@@ -66,6 +67,8 @@ define('io.ox/core/tk/view',
     };
 
     View.prototype = {
+
+        initialize: $.noop,
 
         setModel: function (model) {
             this.model = model;

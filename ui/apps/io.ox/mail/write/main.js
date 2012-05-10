@@ -67,6 +67,7 @@ define.async('io.ox/mail/write/main',
 
     // default sender (used to set from address)
     var defaultSender = [];
+    var UUID = 1;
 
     // multi instance pattern
     function createInstance() {
@@ -82,13 +83,15 @@ define.async('io.ox/mail/write/main',
             view,
             model;
 
-        model = new MailModel();
-        view = new WriteView({ model: model });
-
         app = ox.ui.createApp({
             name: 'io.ox/mail/write',
             title: 'Compose'
         });
+
+        model = new MailModel();
+        view = new WriteView({ model: model, app: app });
+
+        view.ID = 'YEAH #' + (UUID++);
 
         app.getView = function () {
             return view;
@@ -115,15 +118,13 @@ define.async('io.ox/mail/write/main',
             mailState = app.STATES.CLEAN;
         };
 
-        app.getView().signatures = config.get('gui.mail.signatures', []);
+        view.signatures = config.get('gui.mail.signatures', []);
 
         app.setSignature = function (e) {
 
-            var self = this;
-
             var index = e.data.index,
                 signature, text,
-                ed = self.getEditor(),
+                ed = this.getEditor(),
                 isHTML = !!ed.removeBySelector;
 
             // remove current signature from editor
@@ -137,8 +138,8 @@ define.async('io.ox/mail/write/main',
             }
 
             // add signature?
-            if (index < app.getView().signatures.length) {
-                signature = app.getView().signatures[index];
+            if (index < view.signatures.length) {
+                signature = view.signatures[index];
                 text = $.trim(signature.signature_text);
                 if (isHTML) {
                     ed.appendContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
@@ -162,22 +163,19 @@ define.async('io.ox/mail/write/main',
             win = ox.ui.createWindow({
                 name: 'io.ox/mail/write',
                 title: '',
-                titleWidth: (app.getView().GRID_WIDTH + 10) + 'px',
+                titleWidth: (view.GRID_WIDTH + 10) + 'px',
                 toolbar: true,
                 close: true
             });
 
             app.setWindow(win);
-
-            app.getView().render(app);
-
-
+            view.render();
 
             // add panels to windows
             win.nodes.main
             .addClass('io-ox-mail-write')
             .append(
-                app.getView().form = $('<form>', {
+                view.form = $('<form>', {
                     name: 'compose',
                     method: 'post',
                     enctype: 'multipart/form-data'
@@ -185,17 +183,17 @@ define.async('io.ox/mail/write/main',
                 .addClass('form-inline')
                 .append(
                     $('<input>', { type: 'hidden', name: 'msgref', value: '' }),
-                    app.getView().main,
-                    app.getView().scrollpane
+                    view.main,
+                    view.scrollpane
                 )
             );
 
             var dropZone = upload.dnd.createDropZone({'type': 'single'});
             dropZone.on('drop', function (e, file) {
-                app.getView().form.find('input[type=file]').last()
+                view.form.find('input[type=file]').last()
                     .prop('file', file)
                     .trigger('change');
-                app.getView().showSection('attachments');
+                view.showSection('attachments');
             });
 
             win.on('show', function () {
@@ -223,7 +221,7 @@ define.async('io.ox/mail/write/main',
             function load(mode, content) {
                 var editorSrc = 'io.ox/core/tk/' + (mode === 'html' ? 'html-editor' : 'text-editor');
                 return require([editorSrc]).pipe(function (Editor) {
-                    return (editorHash[mode] = new Editor(app.getView().textarea))
+                    return (editorHash[mode] = new Editor(view.textarea))
                         .done(function () {
                             app.setEditor(editorHash[mode]);
                             app.getEditor().setPlainText(content);
@@ -241,7 +239,7 @@ define.async('io.ox/mail/write/main',
 
             function changeMode(mode) {
                 // be busy
-                app.getView().textarea.attr('disabled', 'disabled').busy();
+                view.textarea.attr('disabled', 'disabled').busy();
                 if (app.getEditor()) {
                     var content = app.getEditor().getPlainText();
                     app.getEditor().clear();
@@ -284,7 +282,7 @@ define.async('io.ox/mail/write/main',
 
         app.setSubject = function (str) {
             app.markDirty();
-            app.getView().subject.val(str || '');
+            view.subject.val(str || '');
         };
 
         app.setRawBody = function (str) {
@@ -295,7 +293,7 @@ define.async('io.ox/mail/write/main',
         app.setBody = function (str) {
             app.markDirty();
             // get default signature
-            var ds = _(app.getView().signatures)
+            var ds = _(view.signatures)
                     .find(function (o) {
                         return o.signature_default === true;
                     }),
@@ -328,20 +326,20 @@ define.async('io.ox/mail/write/main',
         };
 
         app.setTo = function (list) {
-            app.getView().addRecipients('to', list || []);
+            view.addRecipients('to', list || []);
         };
 
         app.setCC = function (list) {
-            app.getView().addRecipients('cc', list || []);
+            view.addRecipients('cc', list || []);
             if (list && list.length) {
-                app.getView().showSection('cc', false);
+                view.showSection('cc', false);
             }
         };
 
         app.setBCC = function (list) {
-            app.getView().addRecipients('bcc', list || []);
+            view.addRecipients('bcc', list || []);
             if (list && list.length) {
-                app.getView().showSection('bcc', false);
+                view.showSection('bcc', false);
             }
         };
 
@@ -354,13 +352,13 @@ define.async('io.ox/mail/write/main',
                     // add as linked attachment
                     attachment.type = 'file';
                     found = true;
-                    app.getView().form.find('input[type=file]').last()
+                    view.form.find('input[type=file]').last()
                         .prop('attachment', attachment)
                         .trigger('change');
                 }
             });
             if (found) {
-                app.getView().showSection('attachments');
+                view.showSection('attachments');
             }
         };
 
@@ -369,12 +367,12 @@ define.async('io.ox/mail/write/main',
             var found = false;
             _(list || []).each(function (obj) {
                 found = true;
-                app.getView().form.find('input[type=file]').last()
+                view.form.find('input[type=file]').last()
                     .prop('file', obj)
                     .trigger('change');
             });
             if (found) {
-                app.getView().showSection('attachments');
+                view.showSection('attachments');
             }
         };
 
@@ -385,29 +383,29 @@ define.async('io.ox/mail/write/main',
             prio = prio < 3 ? 1 : prio;
             prio = prio > 3 ? 5 : prio;
             // set
-            app.getView().form.find('input[name=priority][value=' + prio + ']')
+            view.form.find('input[name=priority][value=' + prio + ']')
                 .prop('checked', true);
             // high priority?
             if (prio === 1) {
-                app.getView().priorityOverlay.addClass('high');
+                view.priorityOverlay.addClass('high');
             }
         };
 
         app.setAttachVCard = function (bool) {
             app.markDirty();
             // set
-            app.getView().form.find('input[name=vcard]').prop('checked', !!bool);
+            view.form.find('input[name=vcard]').prop('checked', !!bool);
         };
 
         app.setDeliveryReceipt = function (bool) {
             app.markDirty();
             // set
-            app.getView().form.find('input[name=receipt]').prop('checked', !!bool);
+            view.form.find('input[name=receipt]').prop('checked', !!bool);
         };
 
         app.setMsgRef = function (ref) {
             app.markDirty();
-            app.getView().form.find('input[name=msgref]').val(ref || '');
+            view.form.find('input[name=msgref]').val(ref || '');
         };
 
         var windowTitles = {
@@ -516,9 +514,9 @@ define.async('io.ox/mail/write/main',
                     if (mailto) {
                         app.getEditor().focus();
                     } else if (data && data.to) {
-                        $('input[name=subject]').focus().select();
+                        app.getWindowNode().find('input[name=subject]').focus().select();
                     } else {
-                        $('input[data-type=to]').focus().select();
+                        app.getWindowNode().find('input[data-type=to]').focus().select();
                     }
                     win.idle();
                     def.resolve();
@@ -539,7 +537,7 @@ define.async('io.ox/mail/write/main',
                     app.setMail({ data: data, mode: 'replyall', initial: true })
                     .done(function () {
                         app.getEditor().focus();
-                        app.getView().scrollpane.scrollTop(0);
+                        view.scrollpane.scrollTop(0);
                         win.idle();
                         def.resolve();
                     });
@@ -559,7 +557,7 @@ define.async('io.ox/mail/write/main',
                     app.setMail({ data: data, mode: 'reply', initial: true })
                     .done(function () {
                         app.getEditor().focus();
-                        app.getView().scrollpane.scrollTop(0);
+                        view.scrollpane.scrollTop(0);
                         win.idle();
                         def.resolve();
                     });
@@ -578,7 +576,7 @@ define.async('io.ox/mail/write/main',
                 .done(function (data) {
                     app.setMail({ data: data, mode: 'forward', initial: true })
                     .done(function () {
-                        $('input[data-type=to]').focus().select();
+                        app.getWindowNode().find('input[data-type=to]').focus().select();
                         win.idle();
                         def.resolve();
                     });
@@ -613,7 +611,7 @@ define.async('io.ox/mail/write/main',
          */
         app.getMail = function () {
             var // get relevant fields
-                fields = app.getView().form
+                fields = view.form
                     .find(':input[name]')
                     .filter('textarea, [type=text], [type=hidden], [type=radio]:checked, [type=checkbox]:checked'),
                 // get raw data
@@ -672,7 +670,7 @@ define.async('io.ox/mail/write/main',
                 mail.msgref = data.msgref;
             }
             // get files
-            app.getView().form.find(':input[name][type=file]')
+            view.form.find(':input[name][type=file]')
                 .each(function () {
                     // link to existing attachments (e.g. in forwards)
                     var attachment = $(this).prop('attachment'),
