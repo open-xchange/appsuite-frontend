@@ -3,14 +3,21 @@
   background-color: whiteSmoke;
 }
 
-
+div.edit-appointment-participants {
+    margin-bottom: 5px;
+}
 
 li.edit-appointment-participant {
-    clear: both;
+/*    clear: both;*/
+    position: relative;
+    line-height: 1.5em;
+    background-color: white;
+    margin-bottom: 2px;
+    padding: 4px 2.5em 4px 5px;
 
 }
 
-.contact-image {
+li.edit-appointment-participant .contact-image {
     height: 3em;
     width: 3em;
     margin-right: 1em;
@@ -19,3 +26,57 @@ li.edit-appointment-participant {
     background-repeat: no-repeat;
     float: left;
 }
+
+li.edit-appointment-participant .remove {
+    display: inline-block;
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    bottom: 1px;
+    width: 2em;
+    line-height: 1em;
+    background-color: white;
+    color: #CCC;
+    cursor: pointer;
+}
+li.edit-appointment-participant .remove:hover {
+    background-color: #a00;
+    color: #fff;
+    text-decoration: none;
+}
+li.edit-appointment-participant .icon {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin-top: -0.5em;
+    text-align: center;
+}
+
+li.edit-appointment-participant div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.edit-appointment input[type="text"].discreet:focus {
+    font-size: 12px;
+    line-height: 18px;
+    height: 29px;
+    border: 1px solid #CCC;
+    background-color: white;
+    color: black;
+    outline: 0;
+    margin: 0;
+    padding: 5px 5px 4px 5px;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-border-radius: 0;
+    -webkit-appearance: none;
+}
+
+
+

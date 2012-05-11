@@ -18,14 +18,23 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
         'io.ox/calendar/api',
         'io.ox/core/tk/view',
         'io.ox/core/tk/model',
+        'io.ox/core/tk/collection',
         'io.ox/core/api/user',
         'io.ox/contacts/api',
+        'io.ox/core/tk/autocomplete',
+        'io.ox/core/extensions',
+        'text!io.ox/calendar/edit/participant.tpl',
         'gettext!io.ox/calendar/edit/main',
-        'less!io.ox/calendar/edit/style.css'], function (calAPI, config, CalendarModel, CalendarEditView, api, View, Model, userAPI, contactAPI, gt) {
+        'less!io.ox/calendar/edit/style.css'], function (calAPI, config, CalendarModel, CalendarEditView, api, View, Model, Collection, userAPI, contactAPI, autocomplete, ext, participantTemplate, gt) {
 
     'use strict';
 
     var GRID_WIDTH = 330;
+    var fnClickPerson = function (e) {
+        ext.point('io.ox/core/person:action').each(function (ext) {
+            _.call(ext.action, e.data, e);
+        });
+    };
 
     var CommonView = View.extend({
         tagName: 'div',
@@ -78,6 +87,7 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
             var self = this,
                 df = new $.Deferred();
 
+
             switch (obj.type) {
             case self.TYPE_USER:
                 //fetch user contact
@@ -113,77 +123,229 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
         }
     });
 
+    var ParticipantsCollection = Collection.extend({
+        model: ParticipantModel
+    });
+
+
+    var EnterParticipantView = View.extend({
+        initialize: function () {
+            var self = this;
+            self.el = $('<div>').attr('data-holder', 'data-holder');
+        },
+        render: function () {
+            var self = this,
+                renderedContent;
+
+            renderedContent = self.template({});
+            self.el.empty().append(renderedContent);
+
+            self.el.find('#enter_name')
+                .attr('autocapitalize', 'off')
+                .attr('autocorrect', 'off')
+                .attr('autocomplete', 'off')
+                .autocomplete({
+                    source: function (query) {
+                        var df = new $.Deferred();
+                        console.log('query:' + query);
+                        //return contactAPI.autocomplete(query);
+                        console.log(userAPI.search);
+                        return userAPI.search(query, {columns: '20,1,500,501,502,505,520,555,556,557,569,602,606'});
+                    },
+                    stringify: function (data) {
+                        return data.display_name;
+                    },
+                    draw: function (data) {
+                        console.log('drawwww');
+                        this.append(
+                            $('<div>').addClass('person-link ellipsis').text(data.display_name),
+                            $('<div>').addClass('ellipsis').text(data.email1)
+                        );
+                    },
+                    related: function () {
+                        var field = self.el.find('#enter_email');
+                        return field;
+                    },
+                    stringifyrelated: function (data) {
+                        return data.email;
+                    },
+                    dataHolder: function () {
+                        var holder = self.el;
+                        return holder;
+                    }
+                })
+                .on('keydown', function (e) {
+                    // on return key
+                    if (e.which === 13) {
+                        console.log('add participant');
+                        console.log(self.el.data());
+                        self.trigger('select', self.el.data());
+                        self.el.find('#enter_name').val('');
+                        self.el.find('#enter_email').val(''); //just empty
+                    }
+                });
+
+            self.el.find('#enter_email')
+                .attr('autocapitalize', 'off')
+                .attr('autocorrect', 'off')
+                .attr('autocomplete', 'off')
+                .autocomplete({
+                    source: function (query) {
+                        console.log('query:' + query);
+                        return contactAPI.autocomplete(query);
+                    },
+                    stringify: function (data) {
+                        return data.email1;
+                    },
+                    draw: function (data) {
+                        console.log('drawwww');
+                        this.append(
+                            $('<div>').addClass('person-link ellipsis').text(data.display_name),
+                            $('<div>').addClass('ellipsis').text(data.email1)
+                        );
+                    },
+                    related: function () {
+                        var field = self.el.find('#enter_name');
+                        return field;
+                    },
+                    stringifyrelated: function (data) {
+                        return data.display_name;
+                    },
+                    dataHolder: function () {
+                        var holder = self.el;
+                        return holder;
+                    }
+                })
+                .on('keydown', function (e) {
+                    // on return key
+                    if (e.which === 13) {
+                        console.log('add participant:::::');
+                        self.trigger('select', self.el.data());
+                        self.el.find('#enter_email').val(''); //just empty
+                    }
+                });
+
+
+
+            return self;
+        },
+        template: function (data) {
+            var self = this,
+                c = $('<div>');
+            c.append(
+                self.createLabel({id: 'enter_name', text: gt('Name')}),
+                self.createTextField({id: 'enter_name', property: 'display_name', classes: 'discreet'}),
+
+                self.createLabel({id: 'enter_email', text: gt('Email')}),
+                self.createTextField({id: 'enter_email', property: 'email', classes: 'discreet'})
+
+
+            );
+            return c.html();
+        }
+
+    });
+
     //just a single participant
     var ParticipantView = View.extend({
-        templatefile: 'text!io.ox/calendar/edit/participant.tpl',
+        initialize: function () {
+            var self = this;
+            self.template = _.template(participantTemplate);
+            self.el = $('<li>')
+                .addClass('edit-appointment-participant')
+                .attr('data-cid', self.model.cid);
+
+            // rerender on model change
+            self.model.on('change', _.bind(self.render, self));
+        },
         render: function () {
             var self = this;
-            self.el = $('<li>').addClass('edit-appointment-participant');
+
+            var mydata = _.clone(self.model.get());
             console.log('render participant');
+            console.log(self.model.collection);
 
-            require([self.templatefile], function (tpl) {
-                self.template = _.template(tpl);
-                console.log('search picture for:');
+            if (mydata.image1_url) {
+                mydata.image1_url = mydata.image1_url.replace(/^\/ajax/, ox.apiRoot);
+            } else {
+                mydata.image1_url = '';
+            }
 
-                var serialized = self.model.toString();
-                console.log('serialized');
-                console.log(serialized);
-
-                var mydata = _.clone(self.model.get());
-
-                if (mydata.image1_url) {
-                    mydata.image1_url = mydata.image1_url.replace(/^\/ajax/, ox.apiRoot);
-                } else {
-                    mydata.image1_url = '';
-                }
-
-                var renderedContent = self.template(mydata);
-                self.el.empty().append(renderedContent);
-            });
-
+            var renderedContent = self.template(mydata);
+            self.el.empty().append(renderedContent);
             return self;
         }
     });
 
     // just a collection of a participant view
     var ParticipantsView = View.extend({
-        render: function () {
+        initialize: function () {
             var self = this;
             self.el = $('<div>').addClass('edit-appointment-participants');
+            self.model.on('change', _.bind(self.render, self));
+            self.model.on('add', _.bind(self.onAdd, self));
+            self.model.on('remove', _.bind(self.onRemove, self));
 
+            $(self.el).on('click', _.bind(self.click, self));
+        },
+        render: function () {
+            var self = this;
             self.list = $('<ul>'); //.addClass('edit-appointment-participantslist');
 
-            var participants = self.model.get('participants');
-
-            _.each(participants, function (participant) {
+            self.model.each(function (participant) {
                 self.add(participant);
             });
 
-            self.el.append(self.list);
+            self.el.empty().append(self.list);
 
             return self;
         },
-        add: function (obj) {
+        add: function (participantModel) {
             var self = this;
-            var mymodel = window.testmodel = new ParticipantModel();
-            var myview = new ParticipantView({model: mymodel});
-
-
-            mymodel.on('change', _.bind(myview.render, myview));
-
-            mymodel.fetch(obj)
+            var myview = new ParticipantView({model: participantModel});
+            participantModel.fetch(participantModel.get())
                 .done(function () {
                     self.list.append(
                         myview.render().el
                     );
                 });
 
+        },
+        onAdd: function (evt, model) {
+            var self = this;
+            self.add(model);
+        },
+        onRemove: function (evt, model, collection, options) {
+            var self = this;
+            $(self.el).find('[data-cid=' + model.cid + ']').remove();
+        },
+        click: function (evt) {
+            var self = this,
+                item = $(evt.target).parents('.edit-appointment-participant').get(0),
+                itemid = $(item).attr('data-cid');
+
+            if ($(evt.target).parent().hasClass('remove')) {
+                console.log('click:' + itemid);
+                console.log(item);
+                self.model.remove(self.model.getByCid(itemid));
+                console.log('click');
+                console.log(arguments);
+            }
+
+            if ($(evt.target).hasClass('person-link')) {
+                var obj = self.model.getByCid(itemid).get();
+                console.log(obj);
+                evt.data = {id: obj.id, email1: obj.email1};
+                fnClickPerson(evt);
+
+                console.log('hit halo now');
+            }
         }
     });
 
 
     var AppView = View.extend({
-        render: function () {
+        initialize: function () {
             var self = this;
 
             self.el = ox.ui.createWindow({
@@ -194,6 +356,9 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
                 close: true
             });
             self.el.addClass('io-ox-calendar-edit');
+        },
+        render: function () {
+            var self = this;
 
             var container = self.el.nodes.main;
 
@@ -207,11 +372,25 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
             self.scrollpane = $('<div>').css({ width: (GRID_WIDTH - 26) + 'px'}).addClass('leftside io-ox-calendar-edit-sidepanel');
             self.sidepanel = self.scrollpane.scrollable();
 
-            var participantsView = new ParticipantsView({model: self.model});
-            self.sidepanel.empty().append(participantsView.render().el);
+            var participantsCollection = new ParticipantsCollection(self.model.get('participants'));
 
-            container.append(self.scrollpane, self.main);
+            window.coll = participantsCollection;
 
+            var enterParticipantView = new EnterParticipantView({model: new Model()});
+            var participantsView = new ParticipantsView({model: participantsCollection });
+
+            enterParticipantView.on('select', function (evt, data) {
+                //just a test
+                console.log('data');
+                console.log(data);
+                participantsCollection.add([{type: 1, id: data.id }]);
+            });
+
+            self.sidepanel.empty()
+                .append(enterParticipantView.render().el)
+                .append(participantsView.render().el);
+
+            container.empty().append(self.scrollpane, self.main);
             return self;
         }
     });
@@ -223,8 +402,6 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
 
         self.data = data;
         self.app.setLauncher(function () {
-            console.log('set launcher');
-            console.log(arguments);
             return self.launch();
         });
         self.app.setQuit(function () {
@@ -248,7 +425,6 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
                 console.log(arguments);
 
                 console.log('launching app');
-                console.log(self.data);
 
                 self.win = self.view.render().el;
                 self.app.setWindow(self.win);
@@ -260,11 +436,9 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
                 self.app.setState({ folder: self.data.folder_id, id: self.data.id});
                 cont(self.data);
             } else {
-                console.log('no data');
                 api.get(self.app.getState())
                     .done(cont)
                     .fail(function (err) {
-                        console.log(err);
                         // FIXME: use general error class, teardown gently for the user
                         throw new Error(err.error);
                     });
@@ -309,7 +483,6 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
 
 
     function createInstance(data) {
-        console.log('create Instance');
         console.log(arguments);
         var controller = new AppController(data);
 
