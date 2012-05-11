@@ -286,35 +286,44 @@ define('io.ox/core/api/account',
     /**
      * Update account
      */
-    api.update = function (options) {
-        // options
-        var opt = $.extend({
-            data: {},
-            success: $.noop
-        }, options || {});
-        // update
-        ox.api.http.PUT({
+//    api.update = function (options) {
+//        // options
+//        var opt = $.extend({
+//            data: {},
+//            success: $.noop
+//        }, options || {});
+//        // update
+//        ox.api.http.PUT({
+//            module: 'account',
+//            appendColumns: false,
+//            params: {
+//                action: 'update'
+//            },
+//            data: opt.data,
+//            success: function (response) {
+//                // invalidate unified mail folders
+//                invalidateUnifiedMail();
+//                invalidateRoot();
+//                // process response
+//                var data = process(response.data);
+//                ox.api.cache.account.add(data);
+//                // trigger folder event
+//                ox.api.folder.dispatcher.trigger('modify');
+//                // continue
+//                ox.util.call(opt.success, data);
+//            },
+//            error: opt.error
+//        });
+//    };
+    api.update = function (data) {
+        return http.PUT({
             module: 'account',
-            appendColumns: false,
-            params: {
-                action: 'update'
-            },
-            data: opt.data,
-            success: function (response) {
-                // invalidate unified mail folders
-                invalidateUnifiedMail();
-                invalidateRoot();
-                // process response
-                var data = process(response.data);
-                ox.api.cache.account.add(data);
-                // trigger folder event
-                ox.api.folder.dispatcher.trigger('modify');
-                // continue
-                ox.util.call(opt.success, data);
-            },
-            error: opt.error
+            params: {action: 'update'},
+            data: data
         });
     };
+
+
 
     return api;
 });

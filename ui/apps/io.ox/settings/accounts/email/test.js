@@ -55,11 +55,10 @@ define("io.ox/settings/accounts/email/test",
         test: function (j) {
             j.describe("Creates a new Emailaccount", function () {
 
-                var dataId;
+                var dataId, obj;
 
-                j.it('sends a GET request and creates a account', function () {
+                j.it('creates a new account', function () {
                     api.create(TESTACCOUNT);
-//                    api.all();
                 });
 
                 j.it('gets the id of the created account', function () {
@@ -80,11 +79,50 @@ define("io.ox/settings/accounts/email/test",
 
                     });
 
+                });
+
+                j.it('modifies the account name', function () {
+
+                    j.runs(function () {
+                        var me = this;
+                        me.ready = false;
+                        api.get(dataId).done(function (data) {
+                            obj = data;
+                            obj.name = 'Ein Account changed';
+//                            console.log('get');
+                            me.ready = true;
+                        });
+
+                        j.waitsFor(function () {
+                            return this.ready;
+                        }, 'update', TIMEOUT);
+
+
+                    });
 
                 });
 
+//                j.it('updates the account', function () {
+//                    var me = this;
+//                    me.ready = false;
+//                    api.update(obj).done(function (data) {
+//                        me.ready = true;
+//                        console.log('update');
+//                        dataId = data.id;
+//                        me.ready = true;
+//                    });
+//
+//
+//                    j.waitsFor(function () {
+//                        return this.ready;
+//                    }, 'update', TIMEOUT);
+//
+//                });
+
+
                 j.it('deletes the created account', function () {
-//                    api.remove([dataId]);
+//                    console.log('delete');
+                    api.remove([dataId]);
                 });
 
             });
