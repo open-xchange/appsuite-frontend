@@ -2,3 +2,20 @@
   padding: 13px;
   background-color: whiteSmoke;
 }
+
+
+
+li.edit-appointment-participant {
+    clear: both;
+
+}
+
+.contact-image {
+    height: 3em;
+    width: 3em;
+    margin-right: 1em;
+    display: inline-block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    float: left;
+}

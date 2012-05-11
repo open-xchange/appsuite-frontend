@@ -28,10 +28,19 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
     var GRID_WIDTH = 330;
 
     var CommonView = View.extend({
-        render: function () {
-            var self = this;
-            self.el = $('<div>').addClass('rightside').css({left: GRID_WIDTH + 'px'});
-            self.el.append(
+        tagName: 'div',
+        className: 'myclass',
+        events: {
+            '#button click': 'click'
+        },
+        initialize: function () {
+
+        },
+        template: function (data) {
+            var self = this,
+                c = $('<div>');
+
+            c.append(
                 self.createLabel({id: 'edit_title', text: gt('Title')}),
                 self.createTextField({id: 'edit_title', property: 'title', classes: 'input-large'}),
 
@@ -47,6 +56,13 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
                 self.createLabel({id: 'edit_note', text: gt('Note')}),
                 self.createTextArea({id: 'edit_note', property: 'note'})
             );
+            return c;
+        },
+        render: function () {
+            var self = this;
+            self.el = $('<div>').addClass('rightside').css({left: GRID_WIDTH + 'px'});
+            var renderedContent = self.template(self.model.get());
+            self.el.empty().append(renderedContent);
             return this;
         }
     });
@@ -65,12 +81,8 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
             switch (obj.type) {
             case self.TYPE_USER:
                 //fetch user contact
-                console.log('fetch user: ' + obj.id);
-                console.log(userAPI);
-                userAPI.getList([obj.id]).done(function (users) {
-                    console.log('got user');
-                    console.log(users);
-                    self._data = users[0];
+                userAPI.get({id: obj.id}).done(function (user) {
+                    self._data = user;
                     df.resolve();
                 });
                 break;
@@ -103,42 +115,31 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
 
     //just a single participant
     var ParticipantView = View.extend({
+        templatefile: 'text!io.ox/calendar/edit/participant.tpl',
         render: function () {
             var self = this;
             self.el = $('<li>').addClass('edit-appointment-participant');
+            console.log('render participant');
 
-            self.el.append(
-                contactAPI.getPicture(self.model.get('email1') + '').addClass('contact-image'),
-                $('<div>').append(
-                    $('<a>', {href: '#'}).addClass('person-link')
-                    .text(self.model.get('display_name') + '\u00A0')
-                    .on('click', {
-                        display_name: self.model.get('display_name'),
-                        email1: self.model.get('email1')
-                    }, function () {
-                        console.log('click me');
-                    })
-                ),
+            require([self.templatefile], function (tpl) {
+                self.template = _.template(tpl);
+                console.log('search picture for:');
 
-                $('<div>').text(String(self.model.get('email') || '').toLowerCase()),
-                $('<a>', {href: '#', tabindex: '6'})
-                    .addClass('remove')
-                    .append(
-                        $('<div>').addClass('icon').text('x')
-                    )
-                    .on('click', {id: self.model.get('id')}, function (e) {
-                        e.preventDefault();
-                        var list = $(this).parents().find('.edit-appointment-participants');
-                        $(this).parent().remove();
-                        if (list.children().length === 0) {
-                            list.hide();
-                        }
-                    })
+                var serialized = self.model.toString();
+                console.log('serialized');
+                console.log(serialized);
 
+                var mydata = _.clone(self.model.get());
 
+                if (mydata.image1_url) {
+                    mydata.image1_url = mydata.image1_url.replace(/^\/ajax/, ox.apiRoot);
+                } else {
+                    mydata.image1_url = '';
+                }
 
-
-            );
+                var renderedContent = self.template(mydata);
+                self.el.empty().append(renderedContent);
+            });
 
             return self;
         }
@@ -150,7 +151,7 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
             var self = this;
             self.el = $('<div>').addClass('edit-appointment-participants');
 
-            self.list = $('<ul>');
+            self.list = $('<ul>'); //.addClass('edit-appointment-participantslist');
 
             var participants = self.model.get('participants');
 
@@ -164,8 +165,12 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
         },
         add: function (obj) {
             var self = this;
-            var mymodel = new ParticipantModel();
+            var mymodel = window.testmodel = new ParticipantModel();
             var myview = new ParticipantView({model: mymodel});
+
+
+            mymodel.on('change', _.bind(myview.render, myview));
+
             mymodel.fetch(obj)
                 .done(function () {
                     self.list.append(
@@ -220,12 +225,16 @@ define('io.ox/calendar/edit/main', ['io.ox/calendar/api',
         self.app.setLauncher(function () {
             console.log('set launcher');
             console.log(arguments);
-            self.launch();
+            return self.launch();
         });
         self.app.setQuit(function () {
             return self.dispose();
         });
     };
+
+
+
+
 
     AppController.prototype = {
         launch: function () {
