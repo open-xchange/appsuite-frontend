@@ -70,12 +70,13 @@ define("io.ox/calendar/view-detail",
         }
     });
 
-    // inline actions
-    ext.point('io.ox/calendar/detail').extend(new links.InlineLinks({
-        index: 170,
-        id: 'inline-links',
-        ref: 'io.ox/calendar/links/inline'
-    }));
+    ext.point('io.ox/calendar/detail').extend({
+        index: 350,
+        id: 'inline-actions',
+        draw: function (data) {
+            ext.point('io.ox/calendar/detail/actions').invoke('draw', this, data);
+        }
+    });
 
     // draw title
     ext.point("io.ox/calendar/detail").extend({

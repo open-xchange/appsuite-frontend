@@ -37,11 +37,9 @@ define('io.ox/calendar/actions',
         }
     });
 
-    new Action('io.ox/calendar/actions/edit', {
+    new Action('io.ox/calendar/detail/actions/edit', {
         id: 'edit',
-        requires: function (e) {
-            return e.collection.has('toplevel', 'one');
-        },
+        requires: 'one modify',
         action: function (data) {
             require(['io.ox/calendar/edit/main'], function (editmain) {
                 console.log('got data?');
@@ -76,12 +74,34 @@ define('io.ox/calendar/actions',
     });
 
     // FIXME: should only be visible if rights are ok
-    new Link('io.ox/calendar/links/inline', {
-        id: 'edit',
+    ext.point('io.ox/calendar/detail/actions').extend(new links.InlineLinks({
+        index: 100,
+        id: 'inline-links',
+        ref: 'io.ox/calendar/links/inline'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 100,
         prio: 'hi',
+        id: 'edit',
         label: gt('Edit'),
-        ref: 'io.ox/calendar/actions/edit'
+        ref: 'io.ox/calendar/detail/actions/edit'
+    }));
+
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.DropdownLinks({
+        index: 200,
+        prio: 'lo',
+        id: 'changestatus',
+        label: gt('Change Status'),
+        ref: 'io.ox/calendar/actions/changestatus'
+    }));
+
+    new Link('io.ox/calendar/actions/changestatus', {
+        id: 'list',
+        index: 100,
+        label: gt('List'),
+        ref: 'io.ox/calendar/actions/switch-to-list-view'
     });
 
     window.ext = ext;

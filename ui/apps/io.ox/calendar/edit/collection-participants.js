@@ -11,20 +11,15 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 
-define('io.ox/calendar/edit/main',
-      ['io.ox/calendar/edit/controller-main'], function (EditController) {
-
-
+define('io.ox/calendar/edit/collection-participants',
+      ['io.ox/core/tk/collection',
+       'io.ox/calendar/edit/model-participant'], function (Collection, ParticipantModel) {
     'use strict';
 
+    var ParticipantsCollection = Collection.extend({
+        model: ParticipantModel
+    });
 
-    function createInstance(data) {
-        console.log(arguments);
-        var controller = new EditController(data);
-        return controller.app;
-    }
+    return ParticipantsCollection;
 
-    return {
-        getApp: createInstance
-    };
 });
