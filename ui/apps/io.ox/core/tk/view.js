@@ -87,8 +87,8 @@ define('io.ox/core/tk/view',
             return this.model;
         },
 
-        append: function (jqWrapped) {
-            this.node.append(jqWrapped);
+        append: function () {
+            this.node.append.apply(this.node, arguments);
         },
 
         destroy: function () {
