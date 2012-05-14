@@ -57,8 +57,8 @@
         "Dec"
     ],
     "date": "MMM d, y",
-    "time": "h:mm:ss a",
-    "dateTime": "MMM d, y h:mm:ss a",
+    "time": "h:mm a",
+    "dateTime": "MMM d, y h:mm a",
     "dayPeriods": {
         "am": "a",
         "noon": "n",

@@ -56,8 +56,8 @@
         "12"
     ],
     "date": "y MMM d",
-    "time": "HH:mm:ss",
-    "dateTime": "y MMM d HH:mm:ss",
+    "time": "HH:mm",
+    "dateTime": "y MMM d HH:mm",
     "dayPeriods": {
         "am": "AM",
         "pm": "PM"

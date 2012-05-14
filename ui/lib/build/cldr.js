@@ -16,7 +16,25 @@ var svnPath = "/repos/cldr/" + (
         "trunk"
     ) + "/common/";
 
+var parentLocales = (function () {
+    var reverse = {
+        "root": "az_Cyrl ha_Arab ku_Latn mn_Mong pa_Arab shi_Tfng sr_Latn " +
+                "uz_Arab uz_Latn vai_Latn zh_Hant",
+        "en_GB": "en_AU en_BE en_HK en_IE en_IN en_MT en_NZ en_PK en_SG",
+        "es_419": "es_AR es_BO es_CL es_CO es_CR es_DO es_EC es_GT es_HN " +
+                  "es_MX es_NI es_PA es_PE es_PR es_PY es_SV es_US es_UY es_VE",
+        "pt_PT": "pt_AO pt_GW pt_MZ pt_ST"
+    };
+    var map = {};
+    for (var parent in reverse) {
+        children = reverse[parent].split(' ');
+        for (var i in children) map[children[i]] = parent;
+    }
+    return map;
+}());
+
 function getParent(name) {
+    if (name in parentLocales) return parentLocales[name];
     var i = name.lastIndexOf("_");
     return i >= 0 ? name.slice(0, i) : name !== "root" ? "root" : null;
 }
@@ -145,8 +163,8 @@ function processLanguage(lang) {
                 return array;
             }
             
-            function getFormat(type) {
-                var choice = ldml.get(gregorian + format(
+            function getFormat(type, choice) {
+                choice = choice || ldml.get(gregorian + format(
                     "{0}Formats/default", [type]))["@"].choice;
                 return ldml.get(gregorian + format(
                     "{0}Formats/{0}FormatLength[@type='{1}']/{0}Format/pattern",
@@ -181,7 +199,7 @@ function processLanguage(lang) {
                 months: mapMonths('format', 'wide'),
                 monthsShort: mapMonths('format', 'abbreviated'),
                 date: getFormat('date'),
-                time: getFormat('time'),
+                time: getFormat('time', 'short'),
                 dateTime: getFormat('dateTime'),
                 dayPeriods: getDayPeriods(),
                 eras: getEras()
