@@ -408,7 +408,7 @@ define("io.ox/contacts/view-qrcode", [], function () {
         }
 
         return QRCode.createBytes(buffer, rsBlocks);
-    }
+    };
 
     QRCode.createBytes = function(buffer, rsBlocks) {
 
@@ -473,7 +473,7 @@ define("io.ox/contacts/view-qrcode", [], function () {
 
         return data;
 
-    }
+    };
 
     //---------------------------------------------------------------------
     // QRMode
@@ -1177,7 +1177,7 @@ define("io.ox/contacts/view-qrcode", [], function () {
         }
 
         return list;
-    }
+    };
 
     QRRSBlock.getRsBlockTable = function(typeNumber, errorCorrectLevel) {
 
@@ -1193,7 +1193,7 @@ define("io.ox/contacts/view-qrcode", [], function () {
         default :
             return undefined;
         }
-    }
+    };
 
     //---------------------------------------------------------------------
     // QRBitBuffer
@@ -1278,7 +1278,7 @@ define("io.ox/contacts/view-qrcode", [], function () {
                 }
                 // return just built canvas
                 return canvas;
-            }
+            };
 
             // from Jon-Carlos Rivera (https://github.com/imbcmdth)
             var createTable = function(){
@@ -1316,7 +1316,7 @@ define("io.ox/contacts/view-qrcode", [], function () {
                 }
                 // return just built canvas
                 return $table;
-            }
+            };
 
 
             return this.each(function(){

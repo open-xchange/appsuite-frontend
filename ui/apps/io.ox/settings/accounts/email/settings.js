@@ -16,107 +16,75 @@ define: true, _: true
 define('io.ox/settings/accounts/email/settings',
       ['io.ox/core/extensions',
        'io.ox/settings/utils',
-       'io.ox/core/tk/forms',
-       'io.ox/core/tk/dialogs'], function (ext, utils, forms, dialogs) {
+       'io.ox/core/api/account',
+       'io.ox/settings/accounts/email/model',
+       'io.ox/settings/accounts/email/view-form',
+       'io.ox/core/tk/dialogs'
+       ], function (ext, utils, api, AccountModel, AccountDetailView, dialogs) {
     'use strict';
-
-    var settings = null; //should be initialized by the ext.point
-    var myValidator = {
-
-    };
-
-    var accountDetailView = {
-        dialog: null,
-        node: null,
-        itemid: null,
-        save: function () {
-
-        },
-        draw: function (popup) {
-            popup.empty()
-            .addClass('settings-detail-pane')
-            .append(
-                $('<div>').addClass('clear-title').text('Marios Account')
-                  .append(utils.createSectionDelimiter())
-            )
-            .append(
-                utils.createSection()
-                  .append(utils.createSectionTitle({text: 'Account Settings'}))
-                  .append(
-                      utils.createSectionContent()
-                        .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(forms.createLabeledTextField({label: 'Email Address:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(forms.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', model: settings, validator: myValidator}))
-                  )
-                  .append(utils.createSectionDelimiter())
-            )
-            .append(
-                utils.createSection()
-                .append(utils.createSectionTitle({text: 'Server Settings'}))
-                .append(
-                    utils.createSectionContent()
-                    .append(
-                        utils.createSectionGroup()
-                        .append(
-                          utils.createSectionGroup()
-                            .append(
-                              forms.createSelectbox({dataid: 'mail-testselect', label: 'Server Type:', items: {
-                'IMAP mail server': 'option1',
-                'POP3 mail server': 'option2',
-                'V-split view 3': 'option3'
-            },
-                                currentValue: 'option1',
-                                model: settings,
-                                validator: myValidator
-                            })
-                        )
-                        .append(forms.createCheckbox({ dataid: 'mail-common-selectfirst', label: 'Use SSL connection', model: settings, validator: myValidator}))
-                        .append(forms.createLabeledTextField({label: 'Server Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(forms.createLabeledTextField({label: 'Server Port:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(forms.createLabeledTextField({label: 'Login', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(forms.createLabeledPasswordField({label: 'Password', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                  )
-                  .append(utils.createSectionDelimiter())
-            )))
-            .append(
-                utils.createSection()
-                  .append(utils.createSectionTitle({text: 'Outgoing Server Settings (SMTP)'}))
-                  .append(
-                      utils.createSectionContent()
-                        .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(forms.createLabeledTextField({label: 'Email Address:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(forms.createLabeledTextField({label: 'Account Name:', dataid: 'mail-account-name', model: settings, validator: myValidator}))
-                        .append(forms.createCheckbox({dataid: 'mail-common-selectfirst', label: 'Use Unified Mail for this account', model: settings, validator: myValidator}))
-                  )
-                  .append(utils.createSectionDelimiter())
-            );
-
-        },
-        open: function (options) {
-            accountDetailView.node = options.topnode.append($("<div>").addClass("accountDetail"));
-            accountDetailView.dialog = new dialogs.SidePopup('800')
-                .delegate(accountDetailView.node, '', accountDetailView.draw);
-
-            return accountDetailView.node;
-        }
-    };
 
 
 
     ext.point("io.ox/settings/accounts/email/settings/detail").extend({
         index: 200,
         id: "emailaccountssettings",
-        draw: function (dataid) {
-            var mynode = this;
-            require(['settings!io.ox/settings/accounts/email/' + dataid], function (settingsWrapper) {
-                settings = settingsWrapper;
-                console.log('open tha detail page');
-                accountDetailView.open({topnode: mynode});
-            });
+        draw: function (evt) {
+            var data,
+                myModel,
+                myView;
+            if (evt.data.id) {
+                api.get(evt.data.id).done(function (obj) {
+                    data = obj;
+                    myModel = new AccountModel({data: data});
+                    myView = new AccountDetailView({model: myModel});
+                    myView.node = $("<div>").addClass("accountDetail");
+                    myView.dialog = new dialogs.SidePopup('800').show(evt, function (pane) {
+                        var myout = myView.draw();
+                        pane.append(myout);
+
+
+                    });
+
+                    myModel.store = function (data) {
+                        console.log('store update');
+                        // add folder id
+//                        data.folder_id = app.folder.get();
+                        // has file?
+//                        var image = view.node.find('input[name="picture-upload-file"][type="file"]').get(0);
+                        return api.create(data);
+                    };
+                    return myView.node;
+                });
+            } else {
+                myModel = new AccountModel();
+                myView = new AccountDetailView({model: myModel});
+                myView.node = $("<div>").addClass("accountDetail");
+                myView.dialog = new dialogs.SidePopup('800').show(evt, function (pane) {
+                    var myout = myView.draw();
+                    pane.append(myout);
+
+                });
+                myView.dialog.nodes.click.on('close', function () {
+                    console.log('geht');
+                    myModel.save();
+                });
+                myModel.store = function (data) {
+                    console.log('store new');
+                    // add folder id
+//                    data.folder_id = app.folder.get();
+                    // has file?
+//                    var image = view.node.find('input[name="picture-upload-file"][type="file"]').get(0);
+                    return api.create(data);
+                };
+                return myView.node;
+            }
+
+
+
+
         },
         save: function () {
-            console.log('now accounts get saved?');
+            console.log('now accountsdetail get saved?');
         }
     });
 

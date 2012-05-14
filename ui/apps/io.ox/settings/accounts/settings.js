@@ -16,83 +16,112 @@ define: true, _: true
 define('io.ox/settings/accounts/settings',
       ['io.ox/core/extensions',
        'io.ox/core/tk/view',
-       'io.ox/core/tk/model',
        'io.ox/settings/utils',
        'io.ox/core/tk/dialogs',
-       'settings!io.ox/settings/accounts'], function (ext, View, Model, utils, dialogs, settings) {
+       'io.ox/core/api/account',
+       'io.ox/core/tk/forms'
+       ], function (ext, View, utils, dialogs, api, forms) {
 
 
     'use strict';
 
-    var AccountsSettingsModel = Model.extend({
-    });
 
-    var AccountsSettingsModelView = View.extend({
+
+
+    var listOfAccounts,
+
+        createAccountItem = function (val) {
+            listOfAccounts.push({
+                dataid: 'email/' + val.id,
+                html: val.primary_address
+            });
+            console.log(listOfAccounts);
+
+        },
+
+        seperateEachAccount = function (data) {
+            listOfAccounts = [];
+            _.each(data, function (val) {
+                createAccountItem(val);
+            });
+        },
+
+
+        createExtpointForSelectedAccount = function (args) {
+            var selectedItemID = args.data.listbox.find('div[selected="selected"]').attr('data-item-id');
+            if (selectedItemID !== undefined) {
+                var type = selectedItemID.split(/\//)[0],
+                    dataid = selectedItemID.split(/\//)[1];
+                args.data.id = dataid;
+                require(['io.ox/settings/accounts/' + type + '/settings'], function (m) {
+                    console.log('ext: ' + 'io.ox/settings/accounts/' + type + '/settings/detail');
+                    ext.point('io.ox/settings/accounts/' + type + '/settings/detail').invoke('draw', args.data.self.node, args);
+
+                });
+            }
+        },
+
+        createExtpointForNewAccount = function (args) {
+            var type = 'email'; // TODO add more options
+            console.log('create a new account');
+            require(['io.ox/settings/accounts/' + type + '/settings'], function (m) {
+                console.log('ext: ' + 'io.ox/settings/accounts/' + type + '/settings/detail');
+                ext.point('io.ox/settings/accounts/' + type + '/settings/detail').invoke('draw', args.data.self.node, args);
+
+            });
+        },
+
+        AccountsSettingsModelView = {
         draw: function (data) {
             var self = this,
                 listbox = null;
-            self.node.append(this.createSettingsHead(data))
+
+            self.node = $('<div>');
+
+            self.node.append(forms.createSettingsHead(data))
             .append(
-                    this.createSection()
-                    .append(this.createSectionTitle({text: 'Accounts'}))
+                    forms.createSection()
                     .append(
-                        this.createSectionContent()
+                        forms.createSectionTitle({text: 'Accounts'})
+                        )
+                    .append(
+                        forms.createSectionContent()
                         .append(
-                            listbox = this.createListBox({
+                            listbox = forms.createListBox({
                                 dataid: 'accounts-list',
                                 model: {
                                     get: function () {
-                                        var list = [
-                                            {dataid: 'email/2281', html: 'mario@sourcegarden.com (imap)'},
-                                            {dataid: 'facebook/2823', html: 'mario.scheliga (facebook)'},
-                                            {dataid: 'twitter/28311', html: 'marioscheliga (twitter)'},
-                                            {dataid: 'xing/288128', html: 'mario.scheliga (xing)'},
-                                            {dataid: 'linkedin/288111', html: 'mario.scheliga (linkedIn)'}
-                                        ];
-                                        return list;
+                                        return listOfAccounts;
                                     }
                                 }
                             })
                         )
-                        .append(this.createButton({label: 'Add ...', btnclass: 'btn'}).css({'margin-right': '15px'}))
                         .append(
-                          this.createButton({label: 'Edit ...', btnclass: 'btn'})
-                            .css({'margin-right': '15px'})
-                            .on('click', function (args) {
-                                var selectedItemID = listbox.find('div[selected="selected"]').attr('data-item-id');
-                                if (selectedItemID !== undefined) {
-                                    var type = selectedItemID.split(/\//)[0]; // first is the type (subpath)
-                                    var dataid = selectedItemID.split(/\//)[1];
-                                    require(['io.ox/settings/accounts/' + type + '/settings'], function (m) {
-                                        console.log('ext: ' + 'io.ox/settings/accounts/' + type + '/settings/detail');
-                                        ext.point('io.ox/settings/accounts/' + type + '/settings/detail').invoke('draw', self.node, dataid);
-
-                                    });
-                                }
-                            })
+                            forms.createButton({label: 'Add ...', btnclass: 'btn'}).css({'margin-right': '15px'})
+                                 .on('click', {self: self}, createExtpointForNewAccount),
+                            forms.createButton({label: 'Edit ...', btnclass: 'btn'}).css({'margin-right': '15px'})
+                                .on('click', {listbox: listbox, self: self}, createExtpointForSelectedAccount),
+                            forms.createButton({label: 'Delete ...', btnclass: 'btn'})
                         )
-                        .append(this.createButton({label: 'Delete ...', btnclass: 'btn'}))
                     )
-                    .append(this.createSectionDelimiter())
+                    .append(forms.createSectionDelimiter())
                 );
             return self;
 
         }
-    });
-
-
-
-
-
+    };
 
     ext.point("io.ox/settings/accounts/settings/detail").extend({
         index: 200,
         id: "accountssettings",
         draw: function (data) {
-            var myModel = settings.createModel(AccountsSettingsModel),
-                myView = new AccountsSettingsModelView({model: myModel});
-            this.append(myView.draw(data).node);
-            return myView.node;
+            var  that = this;
+            api.all().done(function (allAccounts) {
+                seperateEachAccount(allAccounts);
+                that.append(AccountsSettingsModelView.draw(data).node);
+            });
+
+            return AccountsSettingsModelView.node;
         },
         save: function () {
             console.log('now accounts get saved?');

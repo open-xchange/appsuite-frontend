@@ -33,12 +33,6 @@ define('io.ox/core/tk/view',
 
         Event.extend(this);
 
-        if (options.model) {
-            this.model = options.model || new Model();
-        }
-
-        //this.initialize(options);
-
         var self = this,
             getPropertyNodes = function (names) {
                 return _([].concat(names)).inject(function (memo, name) {
@@ -87,8 +81,8 @@ define('io.ox/core/tk/view',
             return this.model;
         },
 
-        append: function (jqWrapped) {
-            this.node.append(jqWrapped);
+        append: function () {
+            this.node.append.apply(this.node, arguments);
         },
 
         destroy: function () {

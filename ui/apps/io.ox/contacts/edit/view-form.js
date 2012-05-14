@@ -209,7 +209,8 @@ define('io.ox/contacts/edit/view-form',
                 field, method,
                 isAlwaysVisible = _(meta.alwaysVisible).indexOf(key) > -1,
                 isEmpty = model.isEmpty(key),
-                isRare = _(meta.rare).indexOf(key) > -1;
+                isRare = _(meta.rare).indexOf(key) > -1,
+                wrapperDiv = $('<div>').addClass('io-ox-label');
 
             switch (type) {
             case 'text':
@@ -224,12 +225,12 @@ define('io.ox/contacts/edit/view-form',
             }
 
             // get proper field
-            field = view[method]({ id: id, property: key, classes: 'input-large' });
+            field = view[method]({ id: 'auto', property: key, classes: 'input-large' });
 
             this.append(
                 view.createSectionGroup()
                 .append(
-                    view.createLabel({ id: id, text: label }),
+                    wrapperDiv.append(view.createLabel({ 'for': 'last', text: label })),
                     field
                 )
                 // is always visible?
@@ -269,7 +270,7 @@ define('io.ox/contacts/edit/view-form',
                     var myId = _.uniqueId('c'),
                         labelText = options.view.getModel().schema.getFieldLabel(multiline + addressGroop);
 
-                    labels.push(options.view.createLabel({ id: myId, text: labelText}));
+                    labels.push(options.view.createLabel({ 'for': myId, text: labelText}));
                     fields.push(options.view.createTextField({ id: myId, property: multiline + addressGroop, classes: 'input-large' }));
                     hide = (options.view.getModel().get(multiline + addressGroop)) ? false : true;
                 });

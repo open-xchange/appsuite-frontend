@@ -14,8 +14,9 @@
 define('io.ox/core/api/account',
     ['io.ox/core/config',
      'io.ox/core/http',
-     'io.ox/core/cache'
-    ], function (config, http, cache) {
+     'io.ox/core/cache',
+     'io.ox/core/event'
+    ], function (config, http, cache, Events) {
 
     'use strict';
 
@@ -94,6 +95,8 @@ define('io.ox/core/api/account',
 
     var api = {};
 
+    Events.extend(api);
+
     api.isUnified = function (id) {
         var match = String(id).match(/^default(\d+)/);
         // is account? (unified inbox is not a usual account)
@@ -142,13 +145,23 @@ define('io.ox/core/api/account',
      */
     api.get = function (id) {
 
-        var getter = function () {
-            return api.all().pipe(function () {
-                return cache.get(id);
-            });
-        };
+//        var getter = function () {
+//            return api.all().pipe(function () {
+//                return cache.get(id);
+//            });
+//        };
 
-        return cache.get(id, getter);
+//        return cache.get(id, getter);
+
+        return http.GET({
+            module: 'account',
+            params: {
+                action: 'get',
+                id: id,
+                columns: '1001,1004'
+            },
+            processResponse: true
+        });
     };
 
     /**
@@ -156,102 +169,112 @@ define('io.ox/core/api/account',
      */
     api.all = function () {
 
-        var getter = function () {
-            return http.GET({
-                module: 'account',
-                params: { action: 'all' },
-                processResponse: true
-            });
-        };
 
-        return cache.keys().pipe(function (keys) {
-                if (keys.length > 0) {
-                    return cache.values();
-                } else {
-                    return getter().pipe(function (data) {
-                        data = process(data);
-                        cache.add(data);
-                        return data;
-                    });
-                }
-            })
-            .pipe(function (list) {
-                _(list).each(function (account) {
-                    // remember account id
-                    idHash[account.id] = true;
-                    // remember types
-                    _('sent drafts'.split(' ')).each(function (type) {
-                        typeHash[account[type + '_fullname']] = type;
-                    });
-                });
-                return list;
-            });
+//        var getter = function () {
+        return http.GET({
+            module: 'account',
+            params: { action: 'all', columns: '1001,1004,1007'},
+            processResponse: true
+        });
+//        };
+
+//        return cache.keys().pipe(function (keys) {
+//            if (keys.length > 0) {
+//                return cache.values();
+//            } else {
+//                return getter().pipe(function (data) {
+//                    data = process(data);
+//                    cache.add(data);
+//                    return data;
+//                });
+//            }
+//        });
+
     };
 
     /**
      * Create mail account
      */
-    api.create = function (options) {
-        // options
-        var opt = $.extend({
-            data: {},
-            success: $.noop
-        }, options || {});
-        // go!
-        ox.api.http.PUT({
+//    api.create = function (options) {
+//        // options
+//        var opt = $.extend({
+//            data: {},
+//            success: $.noop
+//        }, options || {});
+//        // go!
+//        ox.api.http.PUT({
+//            module: 'account',
+//            appendColumns: false,
+//            params: {
+//                action: 'new'
+//            },
+//            data: opt.data,
+//            success: function (data, timestamp) {
+//                // process data
+//                data = process(data.data);
+//                // add to cache
+//                ox.api.cache.account.add(data, timestamp);
+//                // additionally, folder '1' has a new child
+//                invalidateRoot();
+//                // trigger folder event
+//                ox.api.folder.dispatcher.trigger('modify');
+//                // cont
+//                ox.util.call(opt.success, data);
+//            },
+//            error: opt.error
+//        });
+//    };
+
+    api.create = function (data) {
+        return http.PUT({
             module: 'account',
-            appendColumns: false,
-            params: {
-                action: 'new'
-            },
-            data: opt.data,
-            success: function (data, timestamp) {
-                // process data
-                data = process(data.data);
-                // add to cache
-                ox.api.cache.account.add(data, timestamp);
-                // additionally, folder '1' has a new child
-                invalidateRoot();
-                // trigger folder event
-                ox.api.folder.dispatcher.trigger('modify');
-                // cont
-                ox.util.call(opt.success, data);
-            },
-            error: opt.error
+            params: {action: 'new'},
+            data: data
+        })
+        .done(function (d) {
+            api.trigger('account_created', {id: d.id});
         });
     };
 
     /**
      * Remove mail account
      */
-    api.remove = function (options) {
-        // options
-        var opt = $.extend({
-            id: undefined,
-            success: $.noop
-        }, options || {});
-        // go!
-        ox.api.http.PUT({
+//    api.remove = function (options) {
+//        // options
+//        var opt = $.extend({
+//            id: undefined,
+//            success: $.noop
+//        }, options || {});
+//        // go!
+//        ox.api.http.PUT({
+//            module: 'account',
+//            appendColumns: false,
+//            params: {
+//                action: 'delete'
+//            },
+//            data: [parseInt(opt.id, 10)], // must be an array containing a number (not a string)
+//            success: function (data, timestamp) {
+//                // remove from cache
+//                ox.api.cache.account.remove(opt.id);
+//                // invalidate root
+//                invalidateRoot();
+//                // invalidate folders
+//                invalidateFolder('default' + opt.id);
+//                // invalidate unified mail
+//                invalidateUnifiedMail();
+//                // trigger folder event
+//                ox.api.folder.dispatcher.trigger('modify remove');
+//                // cont
+//                ox.util.call(opt.success, data);
+//            }
+//        });
+//    };
+
+    api.remove = function (data) {
+        return http.PUT({
             module: 'account',
-            appendColumns: false,
-            params: {
-                action: 'delete'
-            },
-            data: [parseInt(opt.id, 10)], // must be an array containing a number (not a string)
-            success: function (data, timestamp) {
-                // remove from cache
-                ox.api.cache.account.remove(opt.id);
-                // invalidate root
-                invalidateRoot();
-                // invalidate folders
-                invalidateFolder('default' + opt.id);
-                // invalidate unified mail
-                invalidateUnifiedMail();
-                // trigger folder event
-                ox.api.folder.dispatcher.trigger('modify remove');
-                // cont
-                ox.util.call(opt.success, data);
-            }
+            params: {action: 'delete'},
+            data: data
         });
     };
 
@@ -270,35 +293,44 @@ define('io.ox/core/api/account',
     /**
      * Update account
      */
-    api.update = function (options) {
-        // options
-        var opt = $.extend({
-            data: {},
-            success: $.noop
-        }, options || {});
-        // update
-        ox.api.http.PUT({
+//    api.update = function (options) {
+//        // options
+//        var opt = $.extend({
+//            data: {},
+//            success: $.noop
+//        }, options || {});
+//        // update
+//        ox.api.http.PUT({
+//            module: 'account',
+//            appendColumns: false,
+//            params: {
+//                action: 'update'
+//            },
+//            data: opt.data,
+//            success: function (response) {
+//                // invalidate unified mail folders
+//                invalidateUnifiedMail();
+//                invalidateRoot();
+//                // process response
+//                var data = process(response.data);
+//                ox.api.cache.account.add(data);
+//                // trigger folder event
+//                ox.api.folder.dispatcher.trigger('modify');
+//                // continue
+//                ox.util.call(opt.success, data);
+//            },
+//            error: opt.error
+//        });
+//    };
+    api.update = function (data) {
+        return http.PUT({
             module: 'account',
-            appendColumns: false,
-            params: {
-                action: 'update'
-            },
-            data: opt.data,
-            success: function (response) {
-                // invalidate unified mail folders
-                invalidateUnifiedMail();
-                invalidateRoot();
-                // process response
-                var data = process(response.data);
-                ox.api.cache.account.add(data);
-                // trigger folder event
-                ox.api.folder.dispatcher.trigger('modify');
-                // continue
-                ox.util.call(opt.success, data);
-            },
-            error: opt.error
+            params: {action: 'update'},
+            data: data
         });
     };
+
+
 
     return api;
 });
