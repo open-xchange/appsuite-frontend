@@ -54,6 +54,7 @@ define('io.ox/core/event', function () {
 
         // trigger event
         this.trigger = function () {
+
             var args = $.makeArray(arguments), types = args.shift();
             var myHub = hub; // Keep reference in case a handler cleans up the event dispatcher
             _(types.split(/\s+/)).each(function (type) {
