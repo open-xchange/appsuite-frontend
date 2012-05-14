@@ -25,6 +25,7 @@ define('io.ox/calendar/edit/view-addparticipants',
             var self = this;
             self.el = $('<div>').attr('data-holder', 'data-holder');
         },
+        // TODO: should refactored to a controller
         render: function () {
             var self = this,
                 renderedContent;

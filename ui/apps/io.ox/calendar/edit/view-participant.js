@@ -33,6 +33,9 @@ define('io.ox/calendar/edit/view-participant',
             var self = this;
 
             var mydata = _.clone(self.model.get());
+
+            _.defaults(mydata, {email1: ''});
+
             console.log('render participant');
             console.log(self.model.collection);
 

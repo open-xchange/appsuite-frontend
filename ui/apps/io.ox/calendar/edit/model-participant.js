@@ -12,7 +12,10 @@
  */
 
 define('io.ox/calendar/edit/model-participant',
-      ['io.ox/core/tk/model', 'io.ox/core/api/user'], function (Model, userAPI) {
+      ['io.ox/core/tk/model',
+       'io.ox/core/api/user',
+       'io.ox/core/api/group',
+       'io.ox/core/api/resource'], function (Model, userAPI, groupAPI, resourceAPI) {
     'use strict';
 
 
@@ -36,20 +39,27 @@ define('io.ox/calendar/edit/model-participant',
                 });
                 break;
             case self.TYPE_USER_GROUP:
-                //fetch user group contact
-                self._data = {display_name: 'usergroup'};
-                df.resolve();
+                //fetch user group
+                groupAPI.get({id: obj.id}).done(function (group) {
+                    console.log(group);
+                    self._data = group;
+                    df.resolve();
+                });
                 break;
             case self.TYPE_RESOURCE:
-                self._data = {display_name: 'resource'};
-                df.resolve();
+                resourceAPI.get({id: obj.id}).done(function (resource) {
+                    console.log(resource);
+                    self._data = resource;
+                    df.resolve();
+                });
                 break;
             case self.TYPE_RESOURCE_GROUP:
                 self._data = {display_name: 'resource group'};
                 df.resolve();
                 break;
             case self.TYPE_EXTERNAL_USER:
-                self._data = {display_name: 'external user'};
+                console.log(obj);
+                self._data = {display_name: obj.display_name, email1: obj.mail};
                 df.resolve();
                 break;
             default:
