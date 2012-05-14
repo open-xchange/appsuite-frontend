@@ -25,10 +25,6 @@ define('io.ox/settings/accounts/email/view-form',
 
             var mynode = $('<div>');
 
-            var model = this.getModel();
-
-            console.log(model);
-
             mynode.addClass('settings-detail-pane')
             .append(
                 $('<div>').addClass('clear-title').text(' ')

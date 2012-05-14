@@ -29,14 +29,33 @@ define('io.ox/settings/accounts/email/settings',
         index: 200,
         id: "emailaccountssettings",
         draw: function (evt) {
-            console.log(arguments);
             var data,
                 myModel,
                 myView;
-            console.log(evt.data);
-            api.get(evt.data.id).done(function (obj) {
-                data = obj;
-                myModel = new AccountModel({data: data});
+            if (evt.data.id) {
+                api.get(evt.data.id).done(function (obj) {
+                    data = obj;
+                    myModel = new AccountModel({data: data});
+                    myView = new AccountDetailView({model: myModel});
+                    myView.node = $("<div>").addClass("accountDetail");
+                    myView.dialog = new dialogs.SidePopup('800').show(evt, function (pane) {
+                        var myout = myView.draw();
+                        pane.append(myout);
+
+                    });
+
+                    myModel.store = function (data) {
+                        console.log('store update');
+                        // add folder id
+//                        data.folder_id = app.folder.get();
+                        // has file?
+//                        var image = view.node.find('input[name="picture-upload-file"][type="file"]').get(0);
+                        return api.create(data);
+                    };
+                    return myView.node;
+                });
+            } else {
+                myModel = new AccountModel();
                 myView = new AccountDetailView({model: myModel});
                 myView.node = $("<div>").addClass("accountDetail");
                 myView.dialog = new dialogs.SidePopup('800').show(evt, function (pane) {
@@ -44,8 +63,21 @@ define('io.ox/settings/accounts/email/settings',
                     pane.append(myout);
 
                 });
+                myView.dialog.nodes.click.on('close', function () {
+                    console.log('geht');
+                    myModel.save();
+                });
+                myModel.store = function (data) {
+                    console.log('store new');
+                    // add folder id
+//                    data.folder_id = app.folder.get();
+                    // has file?
+//                    var image = view.node.find('input[name="picture-upload-file"][type="file"]').get(0);
+                    return api.create(data);
+                };
                 return myView.node;
-            });
+            }
+
 
 
 

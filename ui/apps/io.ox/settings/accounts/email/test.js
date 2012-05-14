@@ -122,7 +122,7 @@ define("io.ox/settings/accounts/email/test",
 
                 j.it('deletes the created account', function () {
 //                    console.log('delete');
-                    api.remove([dataId]);
+//                    api.remove([dataId]);
                 });
 
             });
