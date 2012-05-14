@@ -18,9 +18,10 @@ define("io.ox/calendar/view-detail",
      "io.ox/core/api/group",
      "io.ox/core/api/resource",
      "io.ox/core/api/folder",
+     "io.ox/core/extPatterns/links",
      "gettext!io.ox/calendar/calendar",
      "less!io.ox/calendar/style.css"
-    ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI) {
+    ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI, links) {
 
     "use strict";
 
@@ -66,6 +67,14 @@ define("io.ox/calendar/view-detail",
                     (recurrenceString !== "" ? " \u2013 " + recurrenceString : "")
                 )
             );
+        }
+    });
+
+    ext.point('io.ox/calendar/detail').extend({
+        index: 350,
+        id: 'inline-actions',
+        draw: function (data) {
+            ext.point('io.ox/calendar/detail/actions').invoke('draw', this, data);
         }
     });
 
@@ -143,6 +152,8 @@ define("io.ox/calendar/view-detail",
         }
         return node;
     }
+
+
 
     ext.point("io.ox/calendar/detail").extend({
         index: 500,

@@ -186,6 +186,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         this._previous = {};
         this._defaults = this.schema.getDefaults();
         this._memoize = {};
+        this.cid = _.uniqueId('c');  // automatically clientid
         Events.extend(this);
         // TODO: we ALWAYS need data! do we have any options? I always forget to use key/value here
         this.initialize(options.data || options || {});
@@ -205,6 +206,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
     Model.prototype = {
 
         _computed: {},
+        idAttribute: 'id',
 
         schema: new Schema(),
 
@@ -214,6 +216,11 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             // due to defaultValues, data and previous might differ.
             // however, the model is not dirty
             this._data = _.extend({}, this._defaults, _.copy(data || {}, true));
+
+            // set the id addionally if possible (useful for identifying duplicates and the likes
+            if (this.idAttribute in this._data) {
+                this.id = this._data[this.idAttribute];
+            }
             // memoize computed properties
             _(this._computed).each(function (o, key) {
                 this.get(key);
@@ -264,6 +271,8 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             var result = this.schema.validate(key, value);
             // update value first
             this._data[key] = value;
+
+
             // trigger now
             if (result !== true) {
                 this.trigger('error:invalid', result);
@@ -303,6 +312,9 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         toString: function () {
             return JSON.stringify(this._data);
         },
+        toJSON: function () {
+            return this.toString(); //just for compability with collection (backbone)
+        },
 
         // DEPRECATED
         setData: function (data) {
@@ -317,6 +329,11 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             return _.copy(this._data, true);
         },
 
+        //just for compability with collection
+        _validate: function () {
+            return true;
+        },
+
 
         // DEPRECATED
         getDefinition: function (prop) {
@@ -329,6 +346,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             console.warn('DEPRECATED: validate -> schema.validate()');
             return this.schema.validate(prop, value);
         },
+
 
         // DEPRECATED
         // can return deferred object / otherwise just instance of Error or nothing

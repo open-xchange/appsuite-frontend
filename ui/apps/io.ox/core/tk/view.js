@@ -16,7 +16,8 @@ define: true
 
 define('io.ox/core/tk/view',
       ['io.ox/core/tk/forms',
-       'io.ox/core/tk/model'], function (forms, Model) {
+       'io.ox/core/tk/model',
+       'io.ox/core/event'], function (forms, Model, Event) {
 
     'use strict';
 
@@ -30,7 +31,13 @@ define('io.ox/core/tk/view',
         this.model = this.model || new Model();
         this.node = this.node ? $(this.node) : $('<div>');
 
-        this.initialize(options);
+        Event.extend(this);
+
+        if (options.model) {
+            this.model = options.model || new Model();
+        }
+
+        //this.initialize(options);
 
         var self = this,
             getPropertyNodes = function (names) {
@@ -64,6 +71,8 @@ define('io.ox/core/tk/view',
                 console.error(error.message);
             }
         });
+
+        this.initialize.apply(this, arguments);
     };
 
     View.prototype = {

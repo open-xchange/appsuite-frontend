@@ -37,6 +37,20 @@ define('io.ox/calendar/actions',
         }
     });
 
+    new Action('io.ox/calendar/detail/actions/edit', {
+        id: 'edit',
+        requires: 'one modify',
+        action: function (data) {
+            require(['io.ox/calendar/edit/main'], function (editmain) {
+                console.log('got data?');
+                console.log(data);
+                editmain.getApp(data).launch().done(function () {
+                   // this.edit(data);
+                });
+            });
+        }
+    });
+
     // Links - toolbar
 
     new Dropdown('io.ox/calendar/links/toolbar', {
@@ -57,6 +71,37 @@ define('io.ox/calendar/actions',
         index: 200,
         label: gt('Month'),
         ref: 'io.ox/calendar/actions/switch-to-month-view'
+    });
+
+    // FIXME: should only be visible if rights are ok
+    ext.point('io.ox/calendar/detail/actions').extend(new links.InlineLinks({
+        index: 100,
+        id: 'inline-links',
+        ref: 'io.ox/calendar/links/inline'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'edit',
+        label: gt('Edit'),
+        ref: 'io.ox/calendar/detail/actions/edit'
+    }));
+
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.DropdownLinks({
+        index: 200,
+        prio: 'lo',
+        id: 'changestatus',
+        label: gt('Change Status'),
+        ref: 'io.ox/calendar/actions/changestatus'
+    }));
+
+    new Link('io.ox/calendar/actions/changestatus', {
+        id: 'list',
+        index: 100,
+        label: gt('List'),
+        ref: 'io.ox/calendar/actions/switch-to-list-view'
     });
 
     window.ext = ext;
