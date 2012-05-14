@@ -37,7 +37,7 @@ define('io.ox/core/tk/view',
             this.model = options.model || new Model();
         }
 
-        this.initialize(options);
+        //this.initialize(options);
 
         var self = this,
             getPropertyNodes = function (names) {
@@ -85,9 +85,6 @@ define('io.ox/core/tk/view',
 
         getModel: function () {
             return this.model;
-        },
-        initialize: function () {
-
         },
 
         append: function (jqWrapped) {
