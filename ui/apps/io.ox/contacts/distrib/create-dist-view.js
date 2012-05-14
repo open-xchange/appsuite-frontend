@@ -189,7 +189,8 @@ define('io.ox/contacts/distrib/create-dist-view',
             dataMailId = '[data-mail="' + contact + '_' + selectedMail + '"]';
             options.model._data.distribution_list.push({
                 display_name: contact,
-                mail: selectedMail
+                mail: selectedMail,
+                mail_field: 0
             });
 
         } else {
