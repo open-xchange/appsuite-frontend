@@ -100,9 +100,36 @@ define('io.ox/mail/view-detail',
         regLink = /^(.*)(http\S+)(\s.*)?$/i,
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
+    var openDocumentLink = function (e) {
+        e.preventDefault();
+        location.hash = e.data.hash;
+        ox.launch('io.ox/files/main');
+    };
+
+    var isValidHost = function (url) {
+        var match;
+        return (match = url.match(/^https?:\/\/([^\/]+)/i)) && match.length &&
+                _(ox.serverConfig.hosts).indexOf(match[1]);
+    };
+
     var drawDocumentLink = function (href, title) {
-        return $('<a>', { href: $.trim(href) }).css({ textDecoration: 'none', fontFamily: 'Arial' })
+        var link, match, folder, id;
+        // create link
+        link = $('<a>', { href: '#' })
+            .css({ textDecoration: 'none', fontFamily: 'Arial' })
             .append($('<span class="label label-info">').text(title));
+        // internal document?
+        if (isValidHost(href) && (match = href.match(/#m=infostore&f=(\d+)&i=(\d+)/i)) && match.length) {
+            // yep, internal
+            folder = match[1];
+            id = match[2];
+            href = '#app=io.ox/files&folder=' + folder + '&id=' + folder + '.' + id;
+            link.on('click', { hash: href }, openDocumentLink);
+        } else {
+            // nope, external
+            link.attr('href', $.trim(href));
+        }
+        return link;
     };
 
     var drawLink = function (href) {
