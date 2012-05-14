@@ -27,7 +27,7 @@ function (gettext, config) {
         WEEK: 604800000  // ms / week
     };
     
-    //@include api.locale = date.root.json
+    //@include api.locale = date/date.root.json
     ;
         
     // TODO: Difference between server and client clocks.
@@ -706,7 +706,7 @@ function (gettext, config) {
         });
     
     api.getTimeZone = _.memoize(function (name) {
-        return require(["text!io.ox/core/tz/zoneinfo/" + name])
+        return require(["text!io.ox/core/date/tz/zoneinfo/" + name])
             .pipe(parseTZInfo)
             .pipe(function (D) {
                 D.id = name;
@@ -716,7 +716,7 @@ function (gettext, config) {
     });
     
     var locale = gettext.language.pipe(function (lang) {
-        return require(["text!io.ox/core/date." + lang + ".json"]);
+        return require(["text!io.ox/core/date/date." + lang + ".json"]);
     }).done(function (locale) {
         api.locale = JSON.parse(locale);
         monthRegex = makeRegex(api.locale.months, api.locale.monthsShort);

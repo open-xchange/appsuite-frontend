@@ -277,8 +277,8 @@ if (apps.rest) utils.copy(apps.rest);
 
 // time zone database
 
-if (!path.existsSync("apps/io.ox/core/tz/zoneinfo")) {
-    var zoneinfo = utils.dest("apps/io.ox/core/tz/zoneinfo");
+if (!path.existsSync("apps/io.ox/core/date/tz/zoneinfo")) {
+    var zoneinfo = utils.dest("apps/io.ox/core/date/tz/zoneinfo");
     utils.file(zoneinfo, [], function() {
         if (!path.existsSync(zoneinfo)) {
             fs.symlinkSync("/usr/share/zoneinfo", zoneinfo);

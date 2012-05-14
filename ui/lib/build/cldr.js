@@ -187,7 +187,7 @@ function processLanguage(lang) {
                 eras: getEras()
             };
             data.dateTime = format(data.dateTime, [data.time, data.date]);
-            fs.writeFileSync('apps/io.ox/core/date.' + lang + '.json',
+            fs.writeFileSync('apps/io.ox/core/date/date.' + lang + '.json',
                 JSON.stringify(data, null, 4));
         });
     return dest;
