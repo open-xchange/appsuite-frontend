@@ -185,7 +185,7 @@ define('io.ox/mail/view-detail',
 
             // empty?
             if (source === '') {
-                return content.append(
+                return $('<div>').addClass('content').append(
                     $('<div>')
                     .addClass('infoblock backstripes')
                     .text(gt('This email has no content'))
