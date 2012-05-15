@@ -344,7 +344,7 @@ define('io.ox/contacts/api',
                     deferred.resolve(url || defaultUrl);
                 })
                 .fail(fail);
-        } else {
+        } else if (typeof obj === 'object' && obj !== null) {
             // also look for contact_id to support user objects directly
             api.get({ id: obj.contact_id || obj.id, folder: obj.folder_id || obj.folder })
                 .done(function (data) {
@@ -355,6 +355,8 @@ define('io.ox/contacts/api',
                     }
                 })
                 .fail(fail);
+        } else {
+            fail();
         }
 
         return deferred;
