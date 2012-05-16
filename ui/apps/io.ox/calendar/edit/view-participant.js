@@ -12,41 +12,55 @@
  */
 
 define('io.ox/calendar/edit/view-participant',
-      ['io.ox/core/tk/view',
-       'text!io.ox/calendar/edit/tpl/participant.tpl'], function (View, participantTemplate) {
+      ['io.ox/calendar/edit/deps/Backbone',
+       'text!io.ox/calendar/edit/tpl/participant.tpl'], function (Backbone, participantTemplate) {
 
     'use strict';
 
     //just a single participant
-    var ParticipantView = View.extend({
+    var ParticipantView = Backbone.View.extend({
+        tagName: 'li',
+        className: 'edit-appointment-participant',
+        _modelBinder: undefined,
         initialize: function () {
             var self = this;
             self.template = _.template(participantTemplate);
-            self.el = $('<li>')
-                .addClass('edit-appointment-participant')
-                .attr('data-cid', self.model.cid);
+            self.$el.attr('data-cid', self.model.cid);
 
             // rerender on model change
-            self.model.on('change', _.bind(self.render, self));
+            //self.model.on('change', _.bind(self.render, self));
+            this._modelBinder = new Backbone.ModelBinder();
+
+            // FIXME: polymorph model so fetch on initialize, may be it's not a good idea
+            self.model.fetch();
         },
         render: function () {
             var self = this;
 
-            var mydata = _.clone(self.model.get());
+            this.$el.empty().append(participantTemplate);
 
-            _.defaults(mydata, {email1: ''});
+            // take util function
+            var convertImage = function (dir, value) {
+                console.log('convert');
+                console.log(arguments);
 
-            console.log('render participant');
-            console.log(self.model.collection);
+                var url = '';
+                if (value) {
+                    url = value.replace(/^\/ajax/, ox.apiRoot);
+                } else {
+                    url = '';
+                }
 
-            if (mydata.image1_url) {
-                mydata.image1_url = mydata.image1_url.replace(/^\/ajax/, ox.apiRoot);
-            } else {
-                mydata.image1_url = '';
-            }
+                return 'background: url("' + url + '");';
+            };
 
-            var renderedContent = self.template(mydata);
-            self.el.empty().append(renderedContent);
+            var bindings = {
+                display_name: '.person-link',
+                image1_url: [{selector: '.contact-image', elAttribute: 'style', converter: convertImage}],
+                email1: '.email'
+            };
+
+            this._modelBinder.bind(self.model, this.el, bindings);
             return self;
         }
     });

@@ -10,19 +10,14 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
-
-define('io.ox/calendar/edit/main',
-      ['io.ox/calendar/edit/controller-main'], function (EditController) {
+define('io.ox/calendar/edit/model-calendar',
+      ['io.ox/calendar/edit/deps/Backbone'], function (Backbone) {
 
     'use strict';
 
-    function createInstance(data) {
-        console.log(arguments);
-        var controller = new EditController(data);
-        return controller.app;
-    }
+    var CalendarModel = Backbone.Model.extend({
 
-    return {
-        getApp: createInstance
-    };
+    });
+
+    return CalendarModel;
 });

@@ -12,15 +12,16 @@
  */
 
 define('io.ox/calendar/edit/view-addparticipants',
-      ['io.ox/core/tk/view',
+      ['io.ox/calendar/edit/deps/Backbone',
        'io.ox/core/api/user',
        'io.ox/contacts/api',
        'io.ox/core/tk/autocomplete',
-       'gettext!io.ox/calendar/edit/main'], function (View, userAPI, contactAPI, autocomplete, gt) {
+       'text!io.ox/calendar/edit/tpl/addparticipant.tpl',
+       'gettext!io.ox/calendar/edit/main'], function (Backbone, userAPI, contactAPI, autocomplete, tpl, gt) {
 
     'use strict';
 
-    var AddParticipantView = View.extend({
+    var AddParticipantView = Backbone.View.extend({
         initialize: function () {
             var self = this;
             self.el = $('<div>').attr('data-holder', 'data-holder');
@@ -30,6 +31,7 @@ define('io.ox/calendar/edit/view-addparticipants',
             var self = this,
                 renderedContent;
 
+            self.template = _.template(tpl);
             renderedContent = self.template({});
             self.el.empty().append(renderedContent);
 
@@ -121,18 +123,6 @@ define('io.ox/calendar/edit/view-addparticipants',
 
 
             return self;
-        },
-        template: function (data) {
-            var self = this,
-                c = $('<div>');
-            c.append(
-                self.createLabel({id: 'enter_name', text: gt('Name')}),
-                self.createTextField({id: 'enter_name', property: 'display_name', classes: 'discreet'}),
-
-                self.createLabel({id: 'enter_email', text: gt('Email')}),
-                self.createTextField({id: 'enter_email', property: 'email', classes: 'discreet'})
-            );
-            return c.html();
         }
 
     });

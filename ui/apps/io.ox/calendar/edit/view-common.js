@@ -11,44 +11,113 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 define('io.ox/calendar/edit/view-common',
-      ['io.ox/core/tk/view', 'gettext!io.ox/calendar/edit/main'], function (View, gt) {
+      ['io.ox/calendar/edit/deps/Backbone',
+       'io.ox/core/date',
+       'text!io.ox/calendar/edit/tpl/common.tpl',
+       'gettext!io.ox/calendar/edit/main'], function (Backbone, dateAPI, commontpl, gt) {
 
     'use strict';
 
     var GRID_WIDTH = 330;
 
-    var CommonView = View.extend({
-        initialize: function () {
 
+    var BinderUtils = {
+        convertDate: function (direction, value, attribute, model) {
+            if (direction === 'ModelToView') {
+                var formated = new dateAPI.Local(value).format(dateAPI.locale.date);
+                return formated;
+            } else {
+                var mydate = new dateAPI.Local(model.get(attribute));
+                var parsedDate = dateAPI.Local.parse(value, dateAPI.locale.date);
+
+                // just reject the change, if it's not parsable
+                if (parsedDate.getTime() === 0) {
+                    return model.get(attribute);
+                }
+
+                mydate.setDate(parsedDate.getDate());
+                mydate.setMonth(parsedDate.getMonth());
+                mydate.setYear(parsedDate.getYear());
+
+                return mydate.getTime();
+            }
         },
-        template: function (data) {
-            var self = this,
-                c = $('<div>');
+        convertTime: function (direction, value, attribute, model) {
+            if (direction === 'ModelToView') {
+                return new dateAPI.Local(value).format(dateAPI.locale.time);
+            } else {
+                var mydate = new dateAPI.Local(model.get(attribute));
+                var parsedDate = dateAPI.Local.parse(value, dateAPI.locale.time);
 
-            c.append(
-                self.createLabel({id: 'edit_title', text: gt('Title')}),
-                self.createTextField({id: 'edit_title', property: 'title', classes: 'input-large'}),
+                if (parsedDate.getTime() === 0) {
+                    return model.get(attribute);
+                }
 
-                self.createLabel({id: 'edit_location', text: gt('Location')}),
-                self.createTextField({id: 'edit_location', property: 'location', classes: 'input-large'}),
+                mydate.setHours(parsedDate.getHours());
+                mydate.setMinutes(parsedDate.getMinutes());
+                mydate.setSeconds(parsedDate.getSeconds());
 
-                self.createLabel({id: 'edit_startdate', text: gt('Start at')}),
-                self.createDateField({id: 'edit_startdate', property: 'start_date', classes: 'input-large'}),
+                return mydate.getTime();
+            }
+        }
 
-                self.createLabel({id: 'edit_enddate', text: gt('Ends at')}),
-                self.createDateField({id: 'edit_enddate', property: 'end_date', classes: 'input-large'}),
+    };
 
-                self.createLabel({id: 'edit_note', text: gt('Note')}),
-                self.createTextArea({id: 'edit_note', property: 'note'})
-            );
-            return c;
+    var CommonView = Backbone.View.extend({
+        tagName: 'div',
+        className: 'rightside',
+        _modelBinder: undefined,
+        initialize: function () {
+            var self = this;
+            self.template = _.template(commontpl);
+            self._modelBinder = new Backbone.ModelBinder();
         },
         render: function () {
             var self = this;
-            self.el = $('<div>').addClass('rightside').css({left: GRID_WIDTH + 'px'});
-            var renderedContent = self.template(self.model.get());
-            self.el.empty().append(renderedContent);
-            return this;
+            var css_prefix = 'io-ox-calendar-edit-';
+            self.$el.css({left: GRID_WIDTH + 'px'});
+
+            var labels = {
+                LABEL_SUBJECT: gt('Subject'),
+                LABEL_LOCATION: gt('Location'),
+                LABEL_STARTS_AT: gt('Starts at'),
+                LABEL_ENDS_AT: gt('Ends at'),
+                LABEL_REMINDER: gt('Reminder'),
+                LABEL_NOTE: gt('Note')
+            };
+
+
+            // first render the labels and append before bind
+            self.$el.empty().append(self.template(labels));
+
+            var bindings = {
+                title: '.' + css_prefix + 'title',
+                location: '.' + css_prefix + 'location',
+                start_date: [
+                    {
+                        selector: '.' + css_prefix + 'startsat-date',
+                        converter: BinderUtils.convertDate
+                    },
+                    {
+                        selector: '.' + css_prefix + 'startsat-time',
+                        converter: BinderUtils.convertTime
+                    }
+                ],
+                end_date: [
+                    {
+                        selector: '.' + css_prefix + 'endsat-date',
+                        converter: BinderUtils.convertDate
+                    },
+                    {
+                        selector: '.' + css_prefix + 'endsat-time',
+                        converter: BinderUtils.convertTime
+                    }
+                ],
+                note: '.' + css_prefix + 'note'
+            };
+
+            self._modelBinder.bind(self.model, self.el, bindings);
+            return self;
         }
     });
 

@@ -11,7 +11,7 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 define('io.ox/calendar/edit/controller-main',
-      ['io.ox/calendar/model',
+      ['io.ox/calendar/edit/model-calendar',
        'io.ox/calendar/api',
        'io.ox/calendar/edit/view-main',
         'gettext!io.ox/calendar/edit/main'], function (CalendarModel, api, EditMainView, gt) {
@@ -39,7 +39,7 @@ define('io.ox/calendar/edit/controller-main',
             var cont = function (data) {
                 self.data = data;
 
-                self.model = new CalendarModel({data: self.data});
+                self.model = new CalendarModel(self.data);
                 self.view = new EditMainView({model: self.model});
 
                 console.log(arguments);
@@ -48,14 +48,19 @@ define('io.ox/calendar/edit/controller-main',
 
                 self.win = self.view.render().el;
                 self.app.setWindow(self.win);
-                self.win.show();
+                self.win.show(function () {
+                    // what a h4ck
+                    self.view.aftershow();
+                });
             };
 
             if (self.data) {
                 //hash support
+                console.log('got data');
                 self.app.setState({ folder: self.data.folder_id, id: self.data.id});
                 cont(self.data);
             } else {
+                console.log('need to fetch app state');
                 api.get(self.app.getState())
                     .done(cont)
                     .fail(function (err) {
@@ -75,7 +80,7 @@ define('io.ox/calendar/edit/controller-main',
                 df = new $.Deferred();
 
             //be gently
-            if (self.model.isDirty() || true) {
+            if (self.model.hasChanged()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to lose your changes?'))

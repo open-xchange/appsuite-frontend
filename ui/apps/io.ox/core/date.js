@@ -14,11 +14,11 @@
 define.async('io.ox/core/date', ['io.ox/core/gettext', 'io.ox/core/config'],
 function (gettext, config) {
     /*jshint white:false */
-    
+
     'use strict';
-    
+
     var AVG_YEAR = 31556952000; // average ms / year
-    
+
     var api = {
         SECOND:    1000, // ms / s
         MINUTE:   60000, // ms / min
@@ -26,17 +26,17 @@ function (gettext, config) {
         DAY:   86400000, // ms / day
         WEEK: 604800000  // ms / week
     };
-    
+
     //@include api.locale = date.root.json
     ;
-        
+
     // TODO: Difference between server and client clocks.
     var offset = 0;
-    
+
     function getDays(d) {
         return Math.floor(d / api.DAY);
     }
-    
+
     /**
      * Computes the number of the first day of the specified week, taking into
      * account weekStart.
@@ -57,7 +57,7 @@ function (gettext, config) {
     function getKeyDayOfWeek(d) {
         return (getWeekStart(d) + 7 - api.daysInFirstWeek);
     }
-    
+
     /**
      * Computes the week number of the specified Date object, taking into
      * account daysInFirstWeek and weekStart.
@@ -75,7 +75,7 @@ function (gettext, config) {
                               inMonth ? keyDate.getUTCMonth() : 0);
         return Math.floor((keyDay - getDays(jan1st)) / 7) + 1;
     }
-    
+
     function getWeekYear(d) {
         var year = d.getUTCFullYear(),
             month = d.getUTCMonth(),
@@ -84,14 +84,14 @@ function (gettext, config) {
         if (month === 11 && week < 26) year++;
         return year;
     }
-    
+
     function isLeapYear(year) {
         return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
     }
-    
+
     var reLetters = "GyYMwWDdFEuaHkKhmsSzZX".split("").join("+|") + "+";
     var regex = new RegExp("(" + reLetters + ")|'((?:[^']|'')+)'|('')", "g");
-    
+
     function num(n, x) {
         var s = x.toString();
         n -= s.length;
@@ -102,7 +102,7 @@ function (gettext, config) {
         return a.join("");
     }
     function text(n, full, short) { return n >= 4 ? full : short; }
-    
+
     var funs = {
         a: function (n, d) {
             return api.locale.dayPeriods[d.getUTCHours() < 12 ? 'am' : 'pm'];
@@ -141,7 +141,7 @@ function (gettext, config) {
         W: function (n, d) { return num(n, getWeek(d, true)); },
         w: function (n, d) { return num(n, getWeek(d)); },
         X: function (n, d) {
-            
+
         },
         Y: function (n, d) {
             var y = d.getUTCFullYear(), m = d.getUTCMonth(), w = getWeek(d);
@@ -156,10 +156,10 @@ function (gettext, config) {
             return num(n, n === 2 ? y % 100 : y);
         },
         Z: function (n, d) {
-            
+
         },
         z: function (n, d) {
-            
+
         }
         // TODO: z, Z and X
     };
@@ -175,11 +175,11 @@ function (gettext, config) {
                 }
             });
     }
-    
+
     var pregexStr = "(" + reLetters + ")(?!" + reLetters + ")|(" + reLetters +
         ")(?=" + reLetters + ")|'((?:[^']|'')+)'|('')|([$^\\\\.*+?()[\\]{}|])";
     var pregex = new RegExp(pregexStr, "g");
-    
+
     function escape(rex) {
         return String(rex).replace(/[$\^\\.*+?()\[\]{}|]/g, "\\$&");
     }
@@ -197,7 +197,7 @@ function (gettext, config) {
     var monthRegex, dayRegex, monthMap, dayMap;
     var numRex = "([+-]?\\d+)";
     function number(n) { return numRex; }
-    
+
     var prexs = {
         a: function (n) {
             return "(" + escape(api.locale.dayPeriods.am) + "|" +
@@ -214,11 +214,11 @@ function (gettext, config) {
         w: number, Y: number, y: number
         // TODO: z, Z and X
     };
-    
+
     function mnum(n) {
         return n > 1 ? "([-+\\d]\\d{1," + (n - 1) + "})" : "(\\d{1," + n + "})";
     }
-    
+
     var mrexs = {
         M: function (n) { return n >= 3 ? monthRegex : mnum(n); },
         a: prexs.a, D: mnum, d: mnum, E: prexs.E, F: mnum, G: prexs.G, H: mnum,
@@ -232,7 +232,7 @@ function (gettext, config) {
             return function (s, d) { d[field] = Number(s); };
         };
     }
-    
+
     var pfuns = {
         a: function (n) {
             return function (s, d) { d.pm = s === api.locale.dayPeriods.pm; };
@@ -268,10 +268,10 @@ function (gettext, config) {
         w: nfun("w")
         // TODO: z, Z and X
     };
-    
+
     var threshold = new Date();
     var century = Math.floor((threshold.getUTCFullYear() + 20) / 100) * 100;
-    
+
     function parseDateTime(formatMatch, string) {
         var handlers = [];
         var rex = formatMatch.replace(pregex,
@@ -344,9 +344,9 @@ function (gettext, config) {
         date.setUTCHours(d.h, d.min, d.s, d.ms);
         return date;
     }
-    
+
     // Time zone support
-    
+
     var tzRegExp = (function () {
         function opt(s) {
             return "(?:" + s + ")?";
@@ -359,7 +359,7 @@ function (gettext, config) {
         return new RegExp("^" + abbr + offset +
                           opt(abbr + opt(offset) + when + when) + "$");
     }());
-    
+
     function julian(day, time) {
         var delta = (day - 1) * api.DAY + time,
             leap = day > 31 + 28 ? api.DAY : 0;
@@ -390,7 +390,7 @@ function (gettext, config) {
             };
         }
     }
-    
+
     function parseTZ(tz) {
         var m = tzRegExp.exec(tz);
         function time(i) {
@@ -431,7 +431,7 @@ function (gettext, config) {
             }
         }
     }
-    
+
     function parseTZInfo(tzinfo) {
         if (tzinfo.slice(0, 4) !== "TZif") {
             throw new Error("Not a zoneinfo file.");
@@ -445,28 +445,28 @@ function (gettext, config) {
                     732: 152, 8482: 153, 353: 154, 8250: 155, 339: 156,
                     382: 158, 376: 159 },
             pos = 0, i;
-        
+
         function byte() {
             var b = tzinfo.charCodeAt(pos++);
             return b < 0x100 ? b : map[b];
         }
-        
+
         function uint32() {
             return byte() * 0x1000000 + byte() * 0x10000 +
                    byte() * 0x100 + byte();
         }
-        
+
         function int32() {
             var n = uint32();
             return n < 0x80000000 ? n : n - 0x100000000;
         }
-        
+
         function int64() {
             return int32() * 0x100000000 + uint32();
         }
-        
+
         // header
-        
+
         function header() {
             if (tzinfo.slice(pos, pos + 4) !== "TZif") {
                 throw new Error("Invalid zoneinfo header.");
@@ -481,13 +481,13 @@ function (gettext, config) {
                 charcnt: int32()
             };
         }
-        
+
         var tzh = header(), time;
-        
+
         // use 64 bit variant if available
-        
+
         var version2 = tzinfo.charAt(4) >= "2";
-        
+
         if (version2) {
             time = int64;
             pos += tzh.timecnt * 5 + tzh.typecnt * 6 + tzh.charcnt +
@@ -496,9 +496,9 @@ function (gettext, config) {
         } else {
             time = int32;
         }
-        
+
         // transition times
-        
+
         var transitions = [];
         for (i = 0; i < tzh.timecnt; i++) {
             transitions.push({ start: time() * 1000 });
@@ -506,9 +506,9 @@ function (gettext, config) {
         for (i = 0; i < tzh.timecnt; i++) {
             transitions[i].index = byte();
         }
-        
+
         // types of local time
-        
+
         var ttinfos = [];
         for (i = 0; i < tzh.typecnt; i++) {
             ttinfos.push({
@@ -520,43 +520,43 @@ function (gettext, config) {
         transitions = _.map(transitions, function (t) {
             return { start: t.start, ttinfo: ttinfos[t.index] };
         });
-        
+
         // abbreviations
-        
+
         for (i = 0; i < tzh.typecnt; i++) {
             var start = pos + ttinfos[i].abbr;
             ttinfos[i].abbr =
                 tzinfo.slice(start, tzinfo.indexOf("\x00", start));
         }
         pos += tzh.charcnt;
-        
+
         // ignore leap seconds, isstd flags and isgmt flags
-        
+
         pos += tzh.leapcnt * (version2 ? 12 : 8) +
                tzh.ttisstdcnt + tzh.ttisgmtcnt;
-        
+
         // precomputed stuff
-        
+
         var initialTTInfo = _.find(ttinfos, function (ttinfo) {
             return !ttinfo.isdst;
         }) || _.first(ttinfos);
-        
+
         var finalTTInfo = version2 && byte() === 10 ?
                 parseTZ(tzinfo.slice(pos, tzinfo.indexOf("\n", pos))) :
                 function () {
                     return _.last(transitions).ttinfo;
                 };
-        
+
         var BIN_SIZE = AVG_YEAR / 2;
-        
+
         function makeGetTTInfo(transitions, local) {
             var firstTransition = Infinity, lastTransition = -Infinity,
                 offset;
-            
+
             function getBin(t) {
                 return Math.floor((t - offset) / BIN_SIZE);
             }
-            
+
             var hash = [];
             if (transitions.length) {
                 firstTransition = _.first(transitions).start;
@@ -569,7 +569,7 @@ function (gettext, config) {
                     hash[bin] = i;
                 }
             }
-            
+
             return function (t) {
                 if (t < firstTransition) {
                     return initialTTInfo;
@@ -581,9 +581,9 @@ function (gettext, config) {
                 }
             };
         }
-        
+
         // time zone specific Date class
-        
+
         function D(y, m, d, h, min, s, ms) {
             switch (arguments.length) {
                 case 0:
@@ -600,40 +600,43 @@ function (gettext, config) {
                     this.t = D.utc(this.local);
             }
         }
-        
+
         $.extend(D.prototype, DatePrototype);
         if (Object.defineProperty) {
             for (var i in DatePrototype) {
                 Object.defineProperty(D.prototype, i, { enumerable: false });
             }
         }
-        
+
         D.getTTInfo = makeGetTTInfo(transitions);
-        
+
         /**
          * Returns the local timestamp for a UTC timestamp
          */
         D.localTime = function (t) { return t + D.getTTInfo(t).gmtoff; };
-        
+
         var prev = initialTTInfo;
         D.getTTInfoLocal = makeGetTTInfo(_.map(transitions, function (tr) {
             return { start: tr.start + prev.gmtoff, ttinfo: prev = tr.ttinfo };
         }), true);
-        
+
         /**
          * Returns the UTC timestamp for a local timestamp
          */
         D.utc = function (t) { return t - D.getTTInfoLocal(t).gmtoff; };
-        
+
         D.parse = function (string, format) {
-            return new D(parseDateTime(format || api.locale.dateTime, string));
+            return new D(D.utc(parseDateTime(format || api.locale.dateTime, string)));
+
+            //before monkey-patch
+            //return new D(parseDateTime(format || api.locale.dateTime, string));
         };
-        
+
         assert(D.transitions = transitions);
-        
+
         return D;
     }
-    
+
     var DatePrototype = {
         getDays: function () {
             return Math.floor(this.local / api.DAY);
@@ -704,7 +707,7 @@ function (gettext, config) {
                 'this.t = this.constructor.utc(this.local = d.getTime());' +
                 'return this;');
         });
-    
+
     api.getTimeZone = _.memoize(function (name) {
         return require(["text!io.ox/core/tz/zoneinfo/" + name])
             .pipe(parseTZInfo)
@@ -714,7 +717,7 @@ function (gettext, config) {
                 return D;
             });
     });
-    
+
     var locale = gettext.language.pipe(function (lang) {
         return require(["text!io.ox/core/date." + lang + ".json"]);
     }).done(function (locale) {
@@ -724,7 +727,7 @@ function (gettext, config) {
         monthMap = makeMap(api.locale.months, api.locale.monthsShort);
         dayMap = makeMap(api.locale.days, api.locale.daysShort);
     });
-    
+
     // TODO: load the entire locale config
     return $.when(api.getTimeZone('Europe/Berlin'), locale/*, config */)
         .pipe(function (tz) {

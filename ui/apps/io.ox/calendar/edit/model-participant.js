@@ -12,58 +12,69 @@
  */
 
 define('io.ox/calendar/edit/model-participant',
-      ['io.ox/core/tk/model',
+      ['io.ox/calendar/edit/deps/Backbone',
        'io.ox/core/api/user',
        'io.ox/core/api/group',
-       'io.ox/core/api/resource'], function (Model, userAPI, groupAPI, resourceAPI) {
+       'io.ox/core/api/resource'], function (Backbone, userAPI, groupAPI, resourceAPI) {
     'use strict';
 
 
-    var ParticipantModel = Model.extend({
+    var ParticipantModel = Backbone.Model.extend({
         TYPE_USER: 1,
         TYPE_USER_GROUP: 2,
         TYPE_RESOURCE: 3,
         TYPE_RESOURCE_GROUP: 4,
         TYPE_EXTERNAL_USER: 5,
-        fetch: function (obj) {
+
+        defaults: {
+            display_name: 'unknwon',
+            email1: ''
+        },
+        fetch: function (options) {
             var self = this,
                 df = new $.Deferred();
 
+            console.log('fetching');
+            console.log(this);
 
-            switch (obj.type) {
+            switch (self.get('type')) {
             case self.TYPE_USER:
                 //fetch user contact
-                userAPI.get({id: obj.id}).done(function (user) {
-                    self._data = user;
+                userAPI.get({id: self.get('id')}).done(function (user) {
+                    self.set(user);
+                    self.trigger('change', self);
                     df.resolve();
                 });
                 break;
             case self.TYPE_USER_GROUP:
                 //fetch user group
-                groupAPI.get({id: obj.id}).done(function (group) {
-                    console.log(group);
-                    self._data = group;
+                groupAPI.get({id: self.get('id')}).done(function (group) {
+                    self.set(group);
+                    self.trigger('change', self);
                     df.resolve();
                 });
                 break;
             case self.TYPE_RESOURCE:
-                resourceAPI.get({id: obj.id}).done(function (resource) {
+                resourceAPI.get({id: self.get('id')}).done(function (resource) {
                     console.log(resource);
-                    self._data = resource;
+                    self.set(resource);
+                    self.trigger('change', self);
                     df.resolve();
                 });
                 break;
             case self.TYPE_RESOURCE_GROUP:
                 self._data = {display_name: 'resource group'};
+                self.trigger('change', self);
                 df.resolve();
                 break;
             case self.TYPE_EXTERNAL_USER:
-                console.log(obj);
-                self._data = {display_name: obj.display_name, email1: obj.mail};
+                self.set({display_name: self.get('display_name'), email1: self.get('mail')});
+                self.trigger('change', self);
                 df.resolve();
                 break;
             default:
-                self._data = {display_name: 'unknown'};
+                self.set({display_name: 'unknown'});
+                self.trigger('change', self);
                 df.resolve();
                 break;
             }
