@@ -1,29 +1,166 @@
-<label for='io-ox-calendar-edit-title'><%= LABEL_SUBJECT %>
-    <input type='text' class='discreet input-large io-ox-calendar-edit-title abs' />
-</label>
 
-<label for='io-ox-calendar-edit-location'><%= LABEL_LOCATION %>
-    <input type='text' class='discreet input-large io-ox-calendar-edit-location' />
-</label>
+<div class='section'>
+    <label for='title'>{{= it.gt('Subject') }}</label>
+    <input type='text' class='discreet title' name='title' />
 
-<label><%= LABEL_STARTS_AT %>
-    <input type='text' class='discreet io-ox-calendar-edit-startsat-date' />
-    <input type='text' class='discreet io-ox-calendar-edit-startsat-time' />
-    <input type='checkbox' class='io-ox-calendar-edit-fulltime' />
-</label>
+    <label for='location'>{{= it.gt('Location') }}</label>
+    <input type='text' class='discreet location' name='location' />
 
-<label><%= LABEL_ENDS_AT %>
-    <input type='text' class='discreet io-ox-calendar-edit-endsat-date' />
-    <input type='text' class='discreet io-ox-calendar-edit-endsat-time' disabled='true'/>
-</label>
+    <a class="btn btn-primary save">Save</a>
+</div>
 
-<label><%= LABEL_REMINDER %>
-    <select class='io-ox-calendar-edit-notification'>
-    </select>
-    <input type='checkbox' class='io-ox-calendar-edit-notifyall' />
-</label>
+<div class="section">
+    <div class="left">
+        <label>{{= it.gt('Start on') }}</label>
+        <input type='text' class='discreet startsat-date' />
+        <input type='text' class='discreet startsat-time' />
+        <span class="label" data-original-title="">CEST</span>
+    </div>
+    <div class="right">
+        <label>{{= it.gt('Ends on') }}</label>
+        <input type='text' class='discreet endsat-date' />
+        <input type='text' class='discreet endsat-time' />
+        <span class="label" data-original-title="">CEST</span>
+    </div>
+</div>
 
-<label><%= LABEL_NOTE %>
-    <textarea class='io-ox-calendar-edit-note'>
-    </textarea>
-</label>
+<div class="section">
+    <div class="left">
+        <input type='checkbox' class='full_time' name='full_time'/>
+        <label style='display: inline;'>{{= it.gt('All day') }}</label>
+        <div />
+        <input type='checkbox' class='repeat' />
+        <label style='display: inline;'>{{= it.gt('Repeat') }}</label>
+        </div>
+    <div class="right">
+        <div style='text-align: right;'>
+          <a class="inline edittimezone">{{= it.gt('Change Timezone') }}</a>
+          <a class="inline editrecurrence">{{= it.gt('edit') }}</a>
+        </div>
+    </div>
+</div>
+
+<div class="section recurrence">
+    <div>
+        <div class="left">
+            <div class="left">
+                <input type="radio" name="recurrence_type" value="1"/>
+                <label style="display: inline;">{{= it.gt('Daily') }}</label>
+
+            </div>
+            <div class="right">
+                <input type="radio" name="recurrence_type" value="2"/>
+                <label style="display: inline;">{{= it.gt('Weekly') }}</label>
+            </div>
+        </div>
+        <div class="right">
+            <div class="left">
+                <input type="radio" name="recurrence_type" value="3"/>
+                <label style="display: inline;">{{= it.gt('Monthly') }}</label>
+            </div>
+            <div class="right">
+                <input type="radio" name="recurrence_type" value="4"/>
+                <label style="display: inline;">{{= it.gt('Yearly') }}</label>
+            </div>
+        </div>
+    </div>
+    <div style='clear: both;'>
+        <div class='recurrence_details daily'>{{= it.gt('Every') }}
+            <input type="text" class="discreet days"/>
+            {{= it.gt('day') }}
+        </div>
+
+        <div class='recurrence_details weekly'>
+            weeksdetails
+        </div>
+
+        <div class='recurrence_details monthly'>
+            monthly options
+        </div>
+
+        <div class='recurrence_details yearly'>
+            yearly options
+        </div>
+    </div>
+    <div style='clear: both;'>
+        <div class="left">
+            <label>{{= it.gt('Starts on')}}</label>
+            <input type="text" class="discreet startsat-date" name='recurrence_start'/>
+        </div>
+        <div class="right">
+            <label>{{= it.gt('Ends')}}</label>
+            <input type="checkbox" /><span style='margin-left: 4px;'>{{= it.gt('on') }}</span>
+            <input type="text" class="discreet until" name='until'/>
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="section">
+    <label>{{= it.gt('Description') }}</label>
+    <textarea class='note' name='note'></textarea>
+</div>
+
+<div class="section">
+    <div style='width: 33%; float: left;'>
+        <label>{{= it.gt('Reminder')}}</label>
+        <select name='alarm'>
+            <option value='-1'>{{= it.gt('no reminder') }}</option>
+
+            <option value='0'>{{= it.gt('0 minutes') }}</option>
+            <option value='15'>{{= it.gt('15 minutes') }}</option>
+            <option value='30'>{{= it.gt('30 minutes') }}</option>
+            <option value='45'>{{= it.gt('45 minutes') }}</option>
+            <option value='60'>{{= it.gt('1 hour') }}</option>
+            <option value='120'>{{= it.gt('2 hours') }}</option>
+            <option value='240'>{{= it.gt('4 hours') }}</option>
+            <option value='360'>{{= it.gt('6 hours') }}</option>
+            <option value='420'>{{= it.gt('8 hours') }}</option>
+            <option value='720'>{{= it.gt('12 hours') }}</option>
+            <option value='1440'>{{= it.gt('1 day') }}</option>
+            <option value='2880'>{{= it.gt('2 days') }}</option>
+            <option value='4320'>{{= it.gt('3 days') }}</option>
+            <option value='5760'>{{= it.gt('4 days') }}</option>
+            <option value='7200'>{{= it.gt('5 days') }}</option>
+            <option value='8640'>{{= it.gt('6 days') }}</option>
+            <option value='10080'>{{= it.gt('1 week') }}</option>
+            <option value='20160'>{{= it.gt('2 weeks') }}</option>
+            <option value='30240'>{{= it.gt('3 weeks') }}</option>
+            <option value='40320'>{{= it.gt('4 weeks') }}</option>
+        </select>
+    </div>
+    <div style='width: 33%; float: left;'>
+        <label>{{= it.gt('Display as')}}</label>
+        <select name='shown_as'>
+            <option value='1'>{{= it.gt('reserved') }}</option>
+            <option value='2'>{{= it.gt('temporary') }}</option>
+            <option value='3'>{{= it.gt('absent') }}</option>
+            <option value='4'>{{= it.gt('free') }}</option>
+        </select>
+    </div>
+    <div style='width: 33%; float: left;'>
+        <label>{{= it.gt('Type')}}</label>
+        <input type='checkbox' name='private_flag'><span style='margin-left:4px;'>Private</span>
+    </div>
+</div>
+
+<div class="section">
+    <div class="sectionhead">
+        <div class="left">
+            {{= it.gt('Participants')}}
+        </div>
+        <div class="right">
+            <div style='text-align: right;'>
+                <input type='checkbox' name='notification'/>
+                <label style='display:inline;'>{{= it.gt('Notify all')}}</label>
+            </div>
+        </div>
+    </div>
+    <div style='clear:both;' id='participantsView'/>
+
+    <div>
+
+    </div>
+</div>

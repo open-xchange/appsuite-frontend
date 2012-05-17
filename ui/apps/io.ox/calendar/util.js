@@ -57,7 +57,7 @@ define("io.ox/calendar/util",
         .done(function () {
             zones = Array.prototype.slice.call(arguments);
         });
-        
+
 
     var that = {
 
@@ -200,7 +200,7 @@ define("io.ox/calendar/util",
         addTimezoneLabel: function (parent, data) {
 
             var current = date.Local.getTTInfoLocal(data.start_date);
-            
+
             parent.append(
                 $.txt(that.getTimeInterval(data) + ' '),
                 $('<span>').addClass('label').text(current.abbr).popover({
@@ -214,7 +214,7 @@ define("io.ox/calendar/util",
                     }
                 })
             );
-            
+
             function getContent() {
                 // hard coded for demo purposes
                 var div = $('<div>');

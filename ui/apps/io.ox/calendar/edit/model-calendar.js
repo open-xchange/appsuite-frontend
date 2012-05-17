@@ -16,7 +16,11 @@ define('io.ox/calendar/edit/model-calendar',
     'use strict';
 
     var CalendarModel = Backbone.Model.extend({
-
+        save: function (attributes, options) {
+            console.log('model save');
+            console.log(arguments);
+            console.log(this.changedAttributes());
+        }
     });
 
     return CalendarModel;

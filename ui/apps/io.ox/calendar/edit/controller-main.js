@@ -13,8 +13,8 @@
 define('io.ox/calendar/edit/controller-main',
       ['io.ox/calendar/edit/model-calendar',
        'io.ox/calendar/api',
-       'io.ox/calendar/edit/view-main',
-        'gettext!io.ox/calendar/edit/main'], function (CalendarModel, api, EditMainView, gt) {
+       'io.ox/calendar/edit/view-app',
+        'gettext!io.ox/calendar/edit/main'], function (CalendarModel, api, AppView, gt) {
 
     'use strict';
 
@@ -40,7 +40,7 @@ define('io.ox/calendar/edit/controller-main',
                 self.data = data;
 
                 self.model = new CalendarModel(self.data);
-                self.view = new EditMainView({model: self.model});
+                self.view = new AppView({model: self.model});
 
                 console.log(arguments);
 
@@ -51,6 +51,7 @@ define('io.ox/calendar/edit/controller-main',
                 self.win.show(function () {
                     // what a h4ck
                     self.view.aftershow();
+                    $('.window-content').scrollable();
                 });
             };
 
