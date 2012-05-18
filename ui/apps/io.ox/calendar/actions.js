@@ -45,10 +45,26 @@ define('io.ox/calendar/actions',
                 console.log('got data?');
                 console.log(data);
                 editmain.getApp(data).launch().done(function () {
-                   // this.edit(data);
+                    this.controller.edit();
                 });
             });
         }
+    });
+
+    new Action('io.ox/calendar/detail/actions/create', {
+        id: 'create',
+        requires: 'one create',
+        action: function (data) {
+            require(['io.ox/calendar/edit/main'], function (editmain) {
+                console.log('create');
+                // FIXME: what a hack > folder_id
+                editmain.getApp({folder_id: data.folder.get()}).launch().done(function () {
+                    this.controller.create();
+                });
+            });
+
+        }
+
     });
 
     // Links - toolbar
@@ -64,6 +80,13 @@ define('io.ox/calendar/actions',
         index: 100,
         label: gt('List'),
         ref: 'io.ox/calendar/actions/switch-to-list-view'
+    });
+
+    new Link('io.ox/calendar/links/toolbar', {
+        index: 100,
+        id: 'create',
+        label: gt('Create'),
+        ref: 'io.ox/calendar/detail/actions/create'
     });
 
     new Link('io.ox/calendar/links/toolbar/view', {
@@ -87,7 +110,6 @@ define('io.ox/calendar/actions',
         label: gt('Edit'),
         ref: 'io.ox/calendar/detail/actions/edit'
     }));
-
 
     ext.point('io.ox/calendar/links/inline').extend(new links.DropdownLinks({
         index: 200,

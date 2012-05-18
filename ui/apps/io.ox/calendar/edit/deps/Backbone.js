@@ -1719,7 +1719,7 @@ define('io.ox/calendar/edit/deps/Backbone', [], function () {
                 if(el.attr('type')){
                     switch (el.attr('type')) {
                         case 'radio':
-                            if (el.attr('value') === convertedValue) {
+                            if (el.val() === convertedValue) {
                                 el.attr('checked', 'checked');
                             }
                             break;
@@ -1732,7 +1732,7 @@ define('io.ox/calendar/edit/deps/Backbone', [], function () {
                             }
                             break;
                         default:
-                            $(el).val(convertedValue);
+                            el.val(convertedValue);
                     }
                 }
                 else if(el.is('input') || el.is('select') || el.is('textarea')){

@@ -41,10 +41,6 @@ div.io-ox-calendar-edit {
         width: 35px;
     }
 
-    input.days {
-        width: 20px;
-    }
-
     div.left {
         width: 50%;
         float: left;
@@ -55,14 +51,8 @@ div.io-ox-calendar-edit {
         float: right;
     }
 
-    div.recurrence {
-        background: whitesmoke;
-        display: none;
-    }
 
-    div.recurrence_details {
-        display: none;
-    }
+
 
     .label {
         padding: 1px 3px 2px;
@@ -108,15 +98,14 @@ div.io-ox-calendar-edit {
         border-bottom: 1px solid grey;
     }
 
-
-
-
     ul {
         list-style: none;
     }
     ul, ol {
         margin: 0 0 9px 0px
     }
+
+
     li.edit-appointment-participant {
         /*    clear: both;*/
         position: relative;
@@ -127,8 +116,35 @@ div.io-ox-calendar-edit {
         float: left;
         width: 216px;
     }
-}
 
+    div.recurrence {
+        display: none;
+    }
+
+    div.io-ox-calendar-edit-recurrence {
+        background: whitesmoke;
+
+        div.recurrence_details {
+            display: none;
+        }
+        input[type=text].short {
+            width: 20px;
+        }
+        select {
+
+        }
+        select.months {
+            width: 100px;
+        }
+        select.days {
+            width: 100px;
+        }
+        select.sequence {
+            width: 80px;
+        }
+    }
+
+}
 
 
 

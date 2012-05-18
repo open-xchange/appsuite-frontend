@@ -29,8 +29,8 @@
         <input type='checkbox' class='full_time' name='full_time'/>
         <label style='display: inline;'>{{= it.gt('All day') }}</label>
         <div />
-        <input type='checkbox' class='repeat' />
-        <label style='display: inline;'>{{= it.gt('Repeat') }}</label>
+        <input type='checkbox' class='repeat' name='repeat'/>
+        <label style='display: inline;'>{{= it.gt('Repeat') }}:<span name='recurrenceText'></span></label>
         </div>
     <div class="right">
         <div style='text-align: right;'>
@@ -41,59 +41,7 @@
 </div>
 
 <div class="section recurrence">
-    <div>
-        <div class="left">
-            <div class="left">
-                <input type="radio" name="recurrence_type" value="1"/>
-                <label style="display: inline;">{{= it.gt('Daily') }}</label>
 
-            </div>
-            <div class="right">
-                <input type="radio" name="recurrence_type" value="2"/>
-                <label style="display: inline;">{{= it.gt('Weekly') }}</label>
-            </div>
-        </div>
-        <div class="right">
-            <div class="left">
-                <input type="radio" name="recurrence_type" value="3"/>
-                <label style="display: inline;">{{= it.gt('Monthly') }}</label>
-            </div>
-            <div class="right">
-                <input type="radio" name="recurrence_type" value="4"/>
-                <label style="display: inline;">{{= it.gt('Yearly') }}</label>
-            </div>
-        </div>
-    </div>
-    <div style='clear: both;'>
-        <div class='recurrence_details daily'>{{= it.gt('Every') }}
-            <input type="text" class="discreet days"/>
-            {{= it.gt('day') }}
-        </div>
-
-        <div class='recurrence_details weekly'>
-            weeksdetails
-        </div>
-
-        <div class='recurrence_details monthly'>
-            monthly options
-        </div>
-
-        <div class='recurrence_details yearly'>
-            yearly options
-        </div>
-    </div>
-    <div style='clear: both;'>
-        <div class="left">
-            <label>{{= it.gt('Starts on')}}</label>
-            <input type="text" class="discreet startsat-date" name='recurrence_start'/>
-        </div>
-        <div class="right">
-            <label>{{= it.gt('Ends')}}</label>
-            <input type="checkbox" /><span style='margin-left: 4px;'>{{= it.gt('on') }}</span>
-            <input type="text" class="discreet until" name='until'/>
-        </div>
-
-    </div>
 </div>
 
 
