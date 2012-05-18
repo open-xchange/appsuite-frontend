@@ -150,7 +150,7 @@ define("io.ox/contacts/main",
 
         drawFail = function (obj) {
             right.idle().empty().append(
-                $.fail("Couldn't load contact data.", function () {
+                $.fail("Oops, couldn't load contact data.", function () {
                     showContact(obj);
                 })
             );

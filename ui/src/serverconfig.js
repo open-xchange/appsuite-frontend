@@ -19,6 +19,8 @@ define(function () {
 
         defaultContext: 'open-xchange.com',
 
+        hosts: ['ox7-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com'],
+
         copyright: '&copy; 2012 open xchange.',
         version: '7.0.0 dev',
         buildDate: '2012-04-26',

@@ -31,7 +31,9 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 
 .scrollable-pane {
     position: relative;
-    min-height: 100%;
+    width: 100%;
+    height: 100%;
+    display: table;
 }
 
 /* top bar */
@@ -818,8 +820,8 @@ span.hint {
 
 /* fail handling */
 .io-ox-fail {
-    font-weight: bold;
-    color: #aaa;
+    font-weight: normal;
+    color: #888;
 }
 
 .io-ox-center {

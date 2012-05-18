@@ -110,7 +110,7 @@ define("io.ox/calendar/main",
 
         drawFail = function (obj) {
             right.idle().empty().append(
-                $.fail("Couldn't load appointment data.", function () {
+                $.fail("Oops, couldn't load appointment data.", function () {
                     showAppointment(obj);
                 })
             );
