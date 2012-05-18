@@ -128,7 +128,7 @@ define('io.ox/contacts/distrib/main',
             container = win.nodes.main
                 .addClass('create-distributionlist')
                 .scrollable()
-                .css({ maxWidth: '700px', margin: '20px auto 20px auto' });
+                .css({ width: '700px', margin: '20px auto 20px auto' });
 
             // hash state support
             var state = app.getState();
