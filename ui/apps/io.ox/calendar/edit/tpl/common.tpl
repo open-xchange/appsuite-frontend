@@ -12,14 +12,14 @@
 <div class="section">
     <div class="left">
         <label>{{= it.gt('Start on') }}</label>
-        <input type='text' class='discreet startsat-date' />
-        <input type='text' class='discreet startsat-time' />
+        <input type='date' class='discreet startsat-date' />
+        <input type='time' class='discreet startsat-time' />
         <span class="label" data-original-title="">CEST</span>
     </div>
     <div class="right">
         <label>{{= it.gt('Ends on') }}</label>
-        <input type='text' class='discreet endsat-date' />
-        <input type='text' class='discreet endsat-time' />
+        <input type='date' class='discreet endsat-date' />
+        <input type='time' class='discreet endsat-time' />
         <span class="label" data-original-title="">CEST</span>
     </div>
 </div>

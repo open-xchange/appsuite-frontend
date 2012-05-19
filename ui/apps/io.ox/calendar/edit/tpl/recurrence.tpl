@@ -32,25 +32,25 @@
         <input type="text" class="discreet weeks short"/>
         {{= it.gt('weeks') }}
         <div>
-            <input type='checkbox' name='day1'/>
+            <input type='checkbox' name='day{{= it.daybits.DAYS_MONDAY }}'/>
             <label style="display: inline;">{{= it.gt('Monday') }}</label>
 
-            <input type='checkbox' name='day2'/>
+            <input type='checkbox' name='day{{= it.daybits.DAYS_TUESDAY }}'/>
             <label style="display: inline;">{{= it.gt('Tuesday') }}</label>
 
-            <input type='checkbox' name='day3'/>
+            <input type='checkbox' name='day{{= it.daybits.DAYS_WEDNESDAY }}'/>
             <label style="display: inline;">{{= it.gt('Wednesday') }}</label>
 
-            <input type='checkbox' name='day4'/>
+            <input type='checkbox' name='day{{= it.daybits.DAYS_THURSDAY }}'/>
             <label style="display: inline;">{{= it.gt('Thursday') }}</label>
 
-            <input type='checkbox' name='day5'/>
+            <input type='checkbox' name='day{{= it.daybits.DAYS_FRIDAY }}'/>
             <label style="display: inline;">{{= it.gt('Friday') }}</label>
 
-            <input type='checkbox' name='day6'/>
+            <input type='checkbox' name='day{{= it.daybits.DAYS_SATURDAY }}'/>
             <label style="display: inline;">{{= it.gt('Saturday') }}</label>
 
-            <input type='checkbox' name='day0'/>
+            <input type='checkbox' name='day{{= it.daybits.DAYS_SUNDAY }}'/>
             <label style="display: inline;">{{= it.gt('Sunday') }}</label>
         </div>
     </div>
@@ -67,21 +67,21 @@
         <div>
             <input type='radio' name='monthlyoption'>
             {{= it.gt('at')}}
-            <select class='sequence'>
-                <option>{{= it.gt('First')}}</option>
-                <option>{{= it.gt('Second')}}</option>
-                <option>{{= it.gt('Third')}}</option>
-                <option>{{= it.gt('Fourth')}}</option>
-                <option>{{= it.gt('Last')}}</option>
+            <select name='day_in_month'>
+                <option value='1'>{{= it.gt('First')}}</option>
+                <option value='2'>{{= it.gt('Second')}}</option>
+                <option value='3'>{{= it.gt('Third')}}</option>
+                <option value='4'>{{= it.gt('Fourth')}}</option>
+                <option value='5'>{{= it.gt('Last')}}</option>
             </select>
             <select name='days' class='days'>
-                <option>{{= it.gt('Monday')}}</option>
-                <option>{{= it.gt('Tuessday')}}</option>
-                <option>{{= it.gt('Wednesday')}}</option>
-                <option>{{= it.gt('Thursday')}}</option>
-                <option>{{= it.gt('Friday')}}</option>
-                <option>{{= it.gt('Saturday')}}</option>
-                <option>{{= it.gt('Sunday')}}</option>
+                <option value='{{= it.daybits.DAYS_MONDAY }}'>{{= it.gt('Monday')}}</option>
+                <option value='{{= it.daybits.DAYS_TUESDAY }}'>{{= it.gt('Tuesday')}}</option>
+                <option value='{{= it.daybits.DAYS_WEDNESDAY }}'>{{= it.gt('Wednesday')}}</option>
+                <option value='{{= it.daybits.DAYS_THURSDAY }}'>{{= it.gt('Thursday')}}</option>
+                <option value='{{= it.daybits.DAYS_FRIDAY }}'>{{= it.gt('Friday')}}</option>
+                <option value='{{= it.daybits.DAYS_SATURDAY }}'>{{= it.gt('Saturday')}}</option>
+                <option value='{{= it.daybits.DAYS_SUNDAY }}'>{{= it.gt('Sunday')}}</option>
             </select>
             {{= it.gt('every')}}
             <input type='text' name='interval' class='discreet short'/> {{= it.gt('th month')}}
@@ -112,21 +112,21 @@
         <div>
             <input type='radio' name='yearlyoption'>
             {{= it.gt('at')}}
-            <select class='sequence'>
-                <option>{{= it.gt('First')}}</option>
-                <option>{{= it.gt('Second')}}</option>
-                <option>{{= it.gt('Third')}}</option>
-                <option>{{= it.gt('Fourth')}}</option>
-                <option>{{= it.gt('Last')}}</option>
+            <select name='day_in_month'>
+                <option value='1'>{{= it.gt('First')}}</option>
+                <option value='2'>{{= it.gt('Second')}}</option>
+                <option value='3'>{{= it.gt('Third')}}</option>
+                <option value='4'>{{= it.gt('Fourth')}}</option>
+                <option value='5'>{{= it.gt('Last')}}</option>
             </select>
             <select name='days' class='days'>
-                <option>{{= it.gt('Monday')}}</option>
-                <option>{{= it.gt('Tuessday')}}</option>
-                <option>{{= it.gt('Wednesday')}}</option>
-                <option>{{= it.gt('Thursday')}}</option>
-                <option>{{= it.gt('Friday')}}</option>
-                <option>{{= it.gt('Saturday')}}</option>
-                <option>{{= it.gt('Sunday')}}</option>
+                <option value='{{= it.daybits.DAYS_MONDAY }}'>{{= it.gt('Monday')}}</option>
+                <option value='{{= it.daybits.DAYS_TUESDAY }}'>{{= it.gt('Tuesday')}}</option>
+                <option value='{{= it.daybits.DAYS_WEDNESDAY }}'>{{= it.gt('Wednesday')}}</option>
+                <option value='{{= it.daybits.DAYS_THURSDAY }}'>{{= it.gt('Thursday')}}</option>
+                <option value='{{= it.daybits.DAYS_FRIDAY }}'>{{= it.gt('Friday')}}</option>
+                <option value='{{= it.daybits.DAYS_SATURDAY }}'>{{= it.gt('Saturday')}}</option>
+                <option value='{{= it.daybits.DAYS_SUNDAY }}'>{{= it.gt('Sunday')}}</option>
             </select>
             {{= it.gt('in')}}
             <select name='month' class='months'>

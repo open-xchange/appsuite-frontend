@@ -20,8 +20,35 @@ define('io.ox/calendar/edit/view-recurrence',
 
     'use strict';
 
+    function createDaysBitConverter(day) {
+        return {
+            selector: '[name=day' + day + ']',
+            converter: function (dir, val, attr, model) {
+                console.log('change days bit: ' + dir);
+                if (dir === 'ModelToView') {
+                    return val & day;
+                } else {
+                    return (val) ? (model.get(attr) | day) : (model.get(attr) - day);
+                }
+            }
+        };
+    }
 
     var RecurrenceView = Backbone.View.extend({
+        RECURRENCE_NONE: 0,
+        RECURRENCE_DAILY: 1,
+        RECURRENCE_WEEKLY: 2,
+        RECURRENCE_MONTHLY: 3,
+        RECURRENCE_YEARLY: 4,
+        daybits: {
+            DAYS_SUNDAY: 1 << 0,
+            DAYS_MONDAY: 1 << 1,
+            DAYS_TUESDAY: 1 << 2,
+            DAYS_WEDNESDAY: 1 << 3,
+            DAYS_THURSDAY: 1 << 4,
+            DAYS_FRIDAY: 1 << 5,
+            DAYS_SATURDAY: 1 << 6
+        },
         tagName: 'div',
         _modelBinder: undefined,
         className: 'io-ox-calendar-edit-recurrence',
@@ -33,22 +60,35 @@ define('io.ox/calendar/edit/view-recurrence',
         },
         render: function () {
             var self = this;
-            self.$el.empty().append(self.template({gt: gt}));
+            self.$el.empty().append(self.template({gt: gt, daybits: self.daybits}));
 
-            console.log('view recurrence rendered');
+            window.recur = self.model;
+            window.view = self;
 
-            var bindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'name');
-
-            bindings.recurrence_type = [{
-                selector: '[name=recurrence_type]',
-                converter: BinderUtils.numToString
-            }];
-
-            bindings.until = {
-                selector: '[name=until]',
-                converter: BinderUtils.convertDate
+            var bindings = {
+                day_in_month: '[name=day_in_month]',
+                interval: '[name=interval]',
+                month: '[name=month]',
+                recurrence_start: '[name=recurrence_start]',
+                until: {
+                    selector: '[name=until]',
+                    converter: BinderUtils.convertDate
+                },
+                recurrence_type: [{
+                    selector: '[name=recurrence_type]',
+                    converter: BinderUtils.numToString //shitty aspect in ModelBinder
+                }],
+                days: [
+                    createDaysBitConverter(self.daybits.DAYS_SUNDAY),
+                    createDaysBitConverter(self.daybits.DAYS_MONDAY),
+                    createDaysBitConverter(self.daybits.DAYS_TUESDAY),
+                    createDaysBitConverter(self.daybits.DAYS_WEDNESDAY),
+                    createDaysBitConverter(self.daybits.DAYS_THURSDAY),
+                    createDaysBitConverter(self.daybits.DAYS_FRIDAY),
+                    createDaysBitConverter(self.daybits.DAYS_SATURDAY),
+                    { selector: '[name=days]'}
+                ]
             };
-
 
             self._modelBinder.bind(self.model, self.el, bindings);
             self.updateRecurrenceDetail();
@@ -65,24 +105,24 @@ define('io.ox/calendar/edit/view-recurrence',
             self.$('.recurrence_details').hide();
 
             switch (parseInt(self.model.get('recurrence_type'), 10)) {
-            case 0:
-                break;
-            case 1:
+            case self.RECURRENCE_DAILY:
                 self.$('.recurrence_details.daily').show();
-                console.log('show daily');
                 break;
-            case 2:
+            case self.RECURRENCE_WEEKLY:
                 self.$('.recurrence_details.weekly').show();
                 break;
-            case 3:
+            case self.RECURRENCE_MONTHLY:
                 self.$('.recurrence_details.monthly').show();
                 break;
-            case 4:
+            case self.RECURRENCE_YEARLY:
                 self.$('.recurrence_details.yearly').show();
+                break;
+            case self.RECURRENCE_NONE:
+                break;
+            default:
                 break;
             }
         }
-
     });
 
     return RecurrenceView;

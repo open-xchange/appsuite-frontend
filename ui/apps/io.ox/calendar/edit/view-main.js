@@ -25,15 +25,12 @@ define('io.ox/calendar/edit/view-main',
 
 
     var CommonView = Backbone.View.extend({
-        RECURRENCE_NONE: 0,
-        RECURRENCE_DAILY: 1,
-        RECURRENCE_WEEKLY: 2,
-        RECURRENCE_MONTHLY: 3,
-        RECURRENCE_YEARLY: 4,
+
 
         tagName: 'div',
         className: 'io-ox-calendar-edit',
         _modelBinder: undefined,
+        bindings: undefined,
         events: {
             'click .editrecurrence': 'toggleRecurrence',
             'click .save': 'onSave'
@@ -47,14 +44,8 @@ define('io.ox/calendar/edit/view-main',
             self.recurrenceView = new RecurrenceView({model: self.model});
 
 
-        },
-        render: function () {
-            var self = this;
-
-            self.$el.empty().append(self.template({gt: gt}));
-            self.$('#participantsView').empty().append(self.participantsView.render().el);
-            var bindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'name');
-            bindings.start_date = [
+            self.bindings = {
+                start_date: [
                     {
                         selector: '.startsat-date',
                         converter: BinderUtils.convertDate
@@ -63,8 +54,8 @@ define('io.ox/calendar/edit/view-main',
                         selector: '.startsat-time',
                         converter: BinderUtils.convertTime
                     }
-                ];
-            bindings.end_date = [
+                ],
+                end_date: [
                     {
                         selector: '.endsat-date',
                         converter: BinderUtils.convertDate
@@ -73,39 +64,49 @@ define('io.ox/calendar/edit/view-main',
                         selector: '.endsat-time',
                         converter: BinderUtils.convertTime
                     }
-                ];
-
-            bindings.recurrence_type = [{
-                selector: '[name=repeat]',
-                converter: function (direction, value, attribute, model) {
-                    if (direction === 'ModelToView') {
-                        console.log('repeat=' + value + '(' + (typeof value) + ')');
-                        if (value === self.RECURRENCE_NONE) {
-                            return false;
+                ],
+                recurrence_type: [
+                    {
+                        selector: '[name=repeat]',
+                        converter: function (direction, value, attribute, model) {
+                            if (direction === 'ModelToView') {
+                                console.log('repeat=' + value + '(' + (typeof value) + ')');
+                                if (value === self.RECURRENCE_NONE) {
+                                    return false;
+                                }
+                                console.log('-> do repeat');
+                                return true;
+                            } else {
+                                console.log('update recurrence repeat flag');
+                                if (value === false) {
+                                    console.log('no repeat');
+                                    return self.RECURRENCE_NONE;
+                                }
+                                return model.get(attribute);
+                            }
                         }
-                        console.log('-> do repeat');
-                        return true;
-                    } else {
-                        console.log('update recurrence repeat flag');
-                        if (value === false) {
-                            console.log('no repeat');
-                            return self.RECURRENCE_NONE;
+                    }, {
+                        selector: '[name=recurrenceText]',
+                        converter: function (direction, value, attribute, model) {
+                            if (direction === 'ModelToView') {
+                                return util.getRecurrenceString(model.attributes);
+                            } else {
+                                return model.get(attribute);
+                            }
                         }
-                        return model.get(attribute);
-                    }
-                }
-            }, {
-                selector: '[name=recurrenceText]',
-                converter: function (direction, value, attribute, model) {
-                    if (direction === 'ModelToView') {
-                        return util.getRecurrenceString(model.attributes);
-                    } else {
-                        return model.get(attribute);
-                    }
-                }
 
-            }
-            ];
+                    }
+                ]
+            };
+
+        },
+        render: function () {
+            var self = this;
+
+            self.$el.empty().append(self.template({gt: gt}));
+            self.$('#participantsView').empty().append(self.participantsView.render().el);
+            var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'name');
+            var bindings = _.extend(defaultBindings, self.bindings);
 
             self._modelBinder.bind(self.model, self.el, bindings);
             return self;

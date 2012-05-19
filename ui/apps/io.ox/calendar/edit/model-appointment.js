@@ -95,9 +95,18 @@ define('io.ox/calendar/edit/model-appointment',
         onChange: function (model, source) {
             var self = this;
             console.log('model changed');
+
+            // silent business logic, modifing attributes and source
+            // especially for recurrency
+
+
             _.each(source.changes, function (change, key) {
                 self.toSync[key] = self.get(key);
             });
+
+
+
+
             console.log(arguments);
         },
         isDirty: function () {
