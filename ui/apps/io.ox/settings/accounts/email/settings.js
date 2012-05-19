@@ -51,7 +51,7 @@ define('io.ox/settings/accounts/email/settings',
 //                        data.folder_id = app.folder.get();
                         // has file?
 //                        var image = view.node.find('input[name="picture-upload-file"][type="file"]').get(0);
-                        return api.create(data);
+                        return api.update(data);
                     };
                     return myView.node;
                 });
@@ -65,7 +65,6 @@ define('io.ox/settings/accounts/email/settings',
 
                 });
                 myView.dialog.nodes.click.on('close', function () {
-                    console.log('geht');
                     myModel.save();
                 });
                 myModel.store = function (data) {

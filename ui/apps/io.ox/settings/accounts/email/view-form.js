@@ -21,8 +21,7 @@ define('io.ox/settings/accounts/email/view-form',
 
 
     var AccountDetailView = View.extend({
-        draw: function (mynode) {
-
+        draw: function () {
             var mynode = $('<div>');
 
             mynode.addClass('settings-detail-pane')
