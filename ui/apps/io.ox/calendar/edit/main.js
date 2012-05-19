@@ -45,10 +45,6 @@ define('io.ox/calendar/edit/main',
                 self.model = new AppointmentModel(self.data);
                 self.view = new AppView({model: self.model});
 
-                console.log(arguments);
-
-                console.log('launching app');
-
                 self.win = self.view.render().el;
                 self.app.setWindow(self.win);
                 self.win.show(function () {
@@ -60,11 +56,9 @@ define('io.ox/calendar/edit/main',
 
             if (self.data) {
                 //hash support
-                console.log('got data');
                 self.app.setState({ folder: self.data.folder_id, id: self.data.id});
                 cont(self.data);
             } else {
-                console.log('need to fetch app state');
                 api.get(self.app.getState())
                     .done(cont)
                     .fail(function (err) {
@@ -78,10 +72,6 @@ define('io.ox/calendar/edit/main',
 
             self.model = new AppointmentModel(self.data);
             self.view = new AppView({model: self.model});
-
-            console.log(arguments);
-
-            console.log('launching app');
 
             self.win = self.view.render().el;
             self.app.setWindow(self.win);
@@ -102,7 +92,7 @@ define('io.ox/calendar/edit/main',
                 df = new $.Deferred();
 
             //be gently
-            if (self.model.hasChanged()) {
+            if (self.model.isDirty()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to lose your changes?'))
@@ -129,7 +119,6 @@ define('io.ox/calendar/edit/main',
 
 
     function createInstance(data) {
-        console.log(arguments);
         var controller = new EditAppointmentController(data);
         return controller.app;
     }

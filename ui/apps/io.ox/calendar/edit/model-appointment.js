@@ -10,6 +10,7 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
+
 define('io.ox/calendar/edit/model-appointment',
       ['io.ox/calendar/edit/deps/Backbone',
        'io.ox/calendar/api'], function (Backbone, CalendarAPI) {
@@ -98,15 +99,21 @@ define('io.ox/calendar/edit/model-appointment',
 
             // silent business logic, modifing attributes and source
             // especially for recurrency
+            if (self.get('recurrence_type') > 0) {
+                source.changes.interval = true; //just to send this over the air everytime
+            }
 
+            if (self.get('recurrence_type') > 1) {
+                source.changes.days = true; //pff
+            }
+
+            if (self.get('recurrence_type') >= 3) {
+                source.changes.day_in_month = true;
+            }
 
             _.each(source.changes, function (change, key) {
                 self.toSync[key] = self.get(key);
             });
-
-
-
-
             console.log(arguments);
         },
         isDirty: function () {

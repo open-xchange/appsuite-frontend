@@ -18,11 +18,10 @@ define('io.ox/calendar/edit/binding-util',
     var BinderUtils = {
         convertDate: function (direction, value, attribute, model) {
             if (direction === 'ModelToView') {
-                console.log(arguments);
-                var formated = new dateAPI.Local(value).format(dateAPI.locale.date);
+                var formated = new dateAPI.Local(parseInt(value, 10)).format(dateAPI.locale.date);
                 return formated;
             } else {
-                var mydate = new dateAPI.Local(model.get(attribute));
+                var mydate = new dateAPI.Local(parseInt(model.get(attribute), 10));
                 var parsedDate = dateAPI.Local.parse(value, dateAPI.locale.date);
 
                 // just reject the change, if it's not parsable
@@ -39,9 +38,9 @@ define('io.ox/calendar/edit/binding-util',
         },
         convertTime: function (direction, value, attribute, model) {
             if (direction === 'ModelToView') {
-                return new dateAPI.Local(value).format(dateAPI.locale.time);
+                return new dateAPI.Local(parseInt(value, 10)).format(dateAPI.locale.time);
             } else {
-                var mydate = new dateAPI.Local(model.get(attribute));
+                var mydate = new dateAPI.Local(parseInt(model.get(attribute), 10));
                 var parsedDate = dateAPI.Local.parse(value, dateAPI.locale.time);
 
                 if (parsedDate.getTime() === 0) {

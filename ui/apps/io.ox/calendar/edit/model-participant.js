@@ -27,15 +27,12 @@ define('io.ox/calendar/edit/model-participant',
         TYPE_EXTERNAL_USER: 5,
 
         defaults: {
-            display_name: 'unknwon',
+            display_name: '...',
             email1: ''
         },
         fetch: function (options) {
             var self = this,
                 df = new $.Deferred();
-
-            console.log('fetching');
-            console.log(this);
 
             switch (self.get('type')) {
             case self.TYPE_USER:
@@ -56,7 +53,6 @@ define('io.ox/calendar/edit/model-participant',
                 break;
             case self.TYPE_RESOURCE:
                 resourceAPI.get({id: self.get('id')}).done(function (resource) {
-                    console.log(resource);
                     self.set(resource);
                     self.trigger('change', self);
                     df.resolve();

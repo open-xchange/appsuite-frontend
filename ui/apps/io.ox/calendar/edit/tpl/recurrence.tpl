@@ -29,7 +29,7 @@
 
     <div class='recurrence_details weekly'>
         {{= it.gt('Every') }}
-        <input type="text" class="discreet weeks short"/>
+        <input type="text" name='interval' class="discreet weeks short"/>
         {{= it.gt('weeks') }}
         <div>
             <input type='checkbox' name='day{{= it.daybits.DAYS_MONDAY }}'/>
@@ -57,7 +57,7 @@
 
     <div class='recurrence_details monthly'>
         <div>
-            <input type='radio' name='monthlyoption'>
+            <input type='radio' name='monthly_option' value='one'>
             {{= it.gt('at')}}
             <input type='text' name='day_in_month' class='discreet short'/>
             {{= it.gt('th day every')}}
@@ -65,7 +65,7 @@
             {{= it.gt('th month')}}
         </div>
         <div>
-            <input type='radio' name='monthlyoption'>
+            <input type='radio' name='monthly_option' value='two'>
             {{= it.gt('at')}}
             <select name='day_in_month'>
                 <option value='1'>{{= it.gt('First')}}</option>
@@ -90,11 +90,11 @@
 
     <div class='recurrence_details yearly'>
         <div>
-            <input type='radio' name='yearlyoption'>
+            <input type='radio' name='yearly_option' value='one'>
             {{= it.gt('Every')}}
             <input type='text' name='day_in_month' class='short'/>
             {{= it.gt('th')}}
-            <select name='month' class='months'>
+            <select name='month' class='month'>
                 <option value='0'>{{= it.gt('January')}}</option>
                 <option value='1'>{{= it.gt('February')}}</option>
                 <option value='2'>{{= it.gt('March')}}</option>
@@ -110,7 +110,7 @@
             </select>
         </div>
         <div>
-            <input type='radio' name='yearlyoption'>
+            <input type='radio' name='yearly_option' value='two'>
             {{= it.gt('at')}}
             <select name='day_in_month'>
                 <option value='1'>{{= it.gt('First')}}</option>
@@ -129,7 +129,7 @@
                 <option value='{{= it.daybits.DAYS_SUNDAY }}'>{{= it.gt('Sunday')}}</option>
             </select>
             {{= it.gt('in')}}
-            <select name='month' class='months'>
+            <select name='month' class='month'>
                 <option value='0'>{{= it.gt('January')}}</option>
                 <option value='1'>{{= it.gt('February')}}</option>
                 <option value='2'>{{= it.gt('March')}}</option>
@@ -153,7 +153,14 @@
     </div>
     <div class="right">
         <label>{{= it.gt('Ends')}}</label>
-        <input type="checkbox" /><span style='margin-left: 4px;'>{{= it.gt('on') }}</span>
+        <input type="radio" name='endingoption'/><span style='margin-left: 4px;'>{{= it.gt('on') }}</span>
         <input type="text" class="discreet until" name='until'/>
+        <br />
+        <input type="radio" name='endingoption'/><span style='margin-left: 4px;'>{{= it.gt('after') }}</span>
+        <input type="text" class="discreet until short" name='occurrences'/>
+        {{= it.gt('times')}}
+        <br />
+        <input type="radio" name='endingoption'/><span style='margin-left: 4px;'>
+        {{= it.gt('Never') }}</span>
     </div>
 </div>

@@ -13,7 +13,8 @@
 
 define('io.ox/calendar/edit/view-participant',
       ['io.ox/calendar/edit/deps/Backbone',
-       'text!io.ox/calendar/edit/tpl/participant.tpl'], function (Backbone, participantTemplate) {
+       'io.ox/calendar/edit/deps/doT',
+       'text!io.ox/calendar/edit/tpl/participant.tpl'], function (Backbone, doT, participantTemplate) {
 
     'use strict';
 
@@ -24,7 +25,7 @@ define('io.ox/calendar/edit/view-participant',
         _modelBinder: undefined,
         initialize: function () {
             var self = this;
-            self.template = _.template(participantTemplate);
+            self.template = doT.template(participantTemplate);
             self.$el.attr('data-cid', self.model.cid);
 
             // rerender on model change
@@ -41,9 +42,6 @@ define('io.ox/calendar/edit/view-participant',
 
             // take util function
             var convertImage = function (dir, value) {
-                console.log('convert');
-                console.log(arguments);
-
                 var url = '';
                 if (value) {
                     url = value.replace(/^\/ajax/, ox.apiRoot);

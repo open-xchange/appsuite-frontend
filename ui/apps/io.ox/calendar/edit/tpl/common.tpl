@@ -56,7 +56,6 @@
         <label>{{= it.gt('Reminder')}}</label>
         <select name='alarm'>
             <option value='-1'>{{= it.gt('no reminder') }}</option>
-
             <option value='0'>{{= it.gt('0 minutes') }}</option>
             <option value='15'>{{= it.gt('15 minutes') }}</option>
             <option value='30'>{{= it.gt('30 minutes') }}</option>
@@ -107,8 +106,6 @@
         </div>
     </div>
     <div style='clear:both;' id='participantsView'/>
-
-    <div>
 
     </div>
 </div>

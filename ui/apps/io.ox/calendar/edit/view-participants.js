@@ -55,8 +55,6 @@ define('io.ox/calendar/edit/view-participants',
         },
         onRemove: function (model, collection, options) {
             var self = this;
-            console.log('remove');
-            console.log(arguments);
             // find view
             // tear down model of view
             // tear down view
@@ -83,8 +81,6 @@ define('io.ox/calendar/edit/view-participants',
             ext.point('io.ox/core/person:action').each(function (ext) {
                 _.call(ext.action, evt.data, evt);
             });
-
-            console.log('hit halo now');
         }
     });
 

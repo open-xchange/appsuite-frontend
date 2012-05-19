@@ -26,7 +26,7 @@ define('io.ox/calendar/edit/view-main',
 
     var CommonView = Backbone.View.extend({
 
-
+        RECURRENCE_NONE: 0,
         tagName: 'div',
         className: 'io-ox-calendar-edit',
         _modelBinder: undefined,
@@ -43,6 +43,14 @@ define('io.ox/calendar/edit/view-main',
             self.participantsView = new ParticipantsView({collection: self.participantsCollection});
             self.recurrenceView = new RecurrenceView({model: self.model});
 
+
+            var recurTextConverter = function (direction, value, attribute, model) {
+                if (direction === 'ModelToView') {
+                    return util.getRecurrenceString(model.attributes);
+                } else {
+                    return model.get(attribute);
+                }
+            };
 
             self.bindings = {
                 start_date: [
@@ -70,16 +78,12 @@ define('io.ox/calendar/edit/view-main',
                         selector: '[name=repeat]',
                         converter: function (direction, value, attribute, model) {
                             if (direction === 'ModelToView') {
-                                console.log('repeat=' + value + '(' + (typeof value) + ')');
                                 if (value === self.RECURRENCE_NONE) {
                                     return false;
                                 }
-                                console.log('-> do repeat');
                                 return true;
                             } else {
-                                console.log('update recurrence repeat flag');
                                 if (value === false) {
-                                    console.log('no repeat');
                                     return self.RECURRENCE_NONE;
                                 }
                                 return model.get(attribute);
@@ -87,16 +91,13 @@ define('io.ox/calendar/edit/view-main',
                         }
                     }, {
                         selector: '[name=recurrenceText]',
-                        converter: function (direction, value, attribute, model) {
-                            if (direction === 'ModelToView') {
-                                return util.getRecurrenceString(model.attributes);
-                            } else {
-                                return model.get(attribute);
-                            }
-                        }
-
+                        converter: recurTextConverter
                     }
-                ]
+                ],
+                day_in_month: {selector: '[name=recurrenceText]', converter: recurTextConverter},
+                interval: {selector: '[name=recurrenceText]', converter: recurTextConverter},
+                days: {selector: '[name=recurrenceText]', converter: recurTextConverter},
+                month: {selector: '[name=recurrenceText]', converter: recurTextConverter}
             };
 
         },
@@ -120,13 +121,11 @@ define('io.ox/calendar/edit/view-main',
             } else {
                 this.$('.editrecurrence').text(gt('hide'));
                 var rendered = self.recurrenceView.render().el;
-                console.log('rendered: ' + rendered);
                 $rep.empty().append(rendered);
             }
             this.$('.recurrence').toggle();
         },
         onSave: function () {
-            console.log('on save');
             var self = this;
             self.model.save();
         }
