@@ -97,11 +97,11 @@ define('io.ox/settings/accounts/settings',
                             })
                         )
                         .append(
-                            forms.createButton({label: 'Add ...', btnclass: 'btn'}).css({'margin-right': '15px'})
+                            forms.createButton({label: 'Add ...', btnclass: 'btn'}).attr('data-action', 'add').css({'margin-right': '15px'})
                                  .on('click', {self: self}, createExtpointForNewAccount),
-                            forms.createButton({label: 'Edit ...', btnclass: 'btn'}).css({'margin-right': '15px'})
+                            forms.createButton({label: 'Edit ...', btnclass: 'btn'}).attr('data-action', 'edit').css({'margin-right': '15px'})
                                 .on('click', {listbox: listbox, self: self}, createExtpointForSelectedAccount),
-                            forms.createButton({label: 'Delete ...', btnclass: 'btn'})
+                            forms.createButton({label: 'Delete ...', btnclass: 'btn'}).attr('data-action', 'delete')
                         )
                     )
                     .append(forms.createSectionDelimiter())
