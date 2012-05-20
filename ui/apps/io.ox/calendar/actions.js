@@ -44,11 +44,49 @@ define('io.ox/calendar/actions',
             require(['io.ox/calendar/edit/main'], function (editmain) {
                 console.log('got data?');
                 console.log(data);
-                editmain.getApp(data).launch().done(function () {
-                   // this.edit(data);
-                });
+                if (data.recurrence_type > 0) {
+                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        new dialogs.ModalDialog()
+                            .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
+                            .addPrimaryButton('series', gt('Series'))
+                            .addButton('appointment', gt('Appointment'))
+                            .addButton('cancel', gt('Cancel'))
+                            .show()
+                            .done(function (action) {
+                                if (action === 'cancel') {
+                                    return;
+                                }
+                                if (action === 'series') {
+                                    delete data.recurrence_position;
+                                }
+                                editmain.getApp(data).launch().done(function () {
+                                    this.controller.edit();
+                                });
+                            });
+                    });
+                } else {
+                    editmain.getApp(data).launch().done(function () {
+                        this.controller.edit();
+                    });
+                }
             });
         }
+    });
+
+    new Action('io.ox/calendar/detail/actions/create', {
+        id: 'create',
+        requires: 'one create',
+        action: function (data) {
+            require(['io.ox/calendar/edit/main'], function (editmain) {
+                console.log('create');
+                // FIXME: what a hack > folder_id
+                editmain.getApp({folder_id: data.folder.get()}).launch().done(function () {
+                    this.controller.create();
+                });
+            });
+
+        }
+
     });
 
     // Links - toolbar
@@ -64,6 +102,13 @@ define('io.ox/calendar/actions',
         index: 100,
         label: gt('List'),
         ref: 'io.ox/calendar/actions/switch-to-list-view'
+    });
+
+    new Link('io.ox/calendar/links/toolbar', {
+        index: 100,
+        id: 'create',
+        label: gt('Create'),
+        ref: 'io.ox/calendar/detail/actions/create'
     });
 
     new Link('io.ox/calendar/links/toolbar/view', {
@@ -87,7 +132,6 @@ define('io.ox/calendar/actions',
         label: gt('Edit'),
         ref: 'io.ox/calendar/detail/actions/edit'
     }));
-
 
     ext.point('io.ox/calendar/links/inline').extend(new links.DropdownLinks({
         index: 200,
