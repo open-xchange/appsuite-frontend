@@ -13,80 +13,74 @@
 
 define('io.ox/calendar/edit/view-participants',
       ['io.ox/core/extensions',
-       'io.ox/core/tk/view',
-       'io.ox/calendar/edit/view-participant'], function (ext, View, ParticipantView) {
+       'io.ox/calendar/edit/deps/Backbone',
+       'io.ox/calendar/edit/view-participant'], function (ext, Backbone, ParticipantView) {
 
     'use strict';
-    var fnClickPerson = function (e) {
-        ext.point('io.ox/core/person:action').each(function (ext) {
-            _.call(ext.action, e.data, e);
-        });
-    };
-
 
     // just a collection of a participant view
-    var ParticipantsView = View.extend({
-        initialize: function () {
+    var ParticipantsView = Backbone.View.extend({
+        tagName: 'div',
+        className: 'edit-appointment-participants',
+        events: {
+            'click .person-link': 'onClickPersonLink',
+            'click .remove': 'onClickRemove'
+        },
+        initialize: function (options) {
             var self = this;
-            self.el = $('<div>').addClass('edit-appointment-participants');
-            self.model.on('change', _.bind(self.render, self));
-            self.model.on('add', _.bind(self.onAdd, self));
-            self.model.on('remove', _.bind(self.onRemove, self));
+            self._participantViews = [];
 
-            $(self.el).on('click', _.bind(self.click, self));
+            self.collection.on('reset', _.bind(self.render, self));
+            self.collection.on('add', _.bind(self.onAdd, self));
+            self.collection.on('remove', _.bind(self.onRemove, self));
+
+            self.collection.each(function (participant) {
+                self._participantViews.push(new ParticipantView({model: participant}));
+            });
         },
         render: function () {
             var self = this;
             self.list = $('<ul>'); //.addClass('edit-appointment-participantslist');
-
-            self.model.each(function (participant) {
-                self.add(participant);
+            self.$el.empty().append(self.list);
+            _(self._participantViews).each(function (participantView) {
+                self.list.append(participantView.render().el);
             });
-
-            self.el.empty().append(self.list);
-
             return self;
         },
-        add: function (participantModel) {
+        onAdd: function (model) {
             var self = this;
-            var myview = new ParticipantView({model: participantModel});
-            participantModel.fetch(participantModel.get())
-                .done(function () {
-                    self.list.append(
-                        myview.render().el
-                    );
-                });
+            var myview = new ParticipantView({model: model});
+            self._participantViews.push(myview);
+            self.list.append(myview.render().el);
+        },
+        onRemove: function (model, collection, options) {
+            var self = this;
+            // find view
+            // tear down model of view
+            // tear down view
+            // remove artifacts
+            self.$el.find('[data-cid=' + model.cid + ']').remove();
+        },
 
-        },
-        onAdd: function (evt, model) {
-            var self = this;
-            self.add(model);
-        },
-        onRemove: function (evt, model, collection, options) {
-            var self = this;
-            $(self.el).find('[data-cid=' + model.cid + ']').remove();
-        },
-        click: function (evt) {
+        onClickRemove: function (evt) {
             var self = this,
                 item = $(evt.target).parents('.edit-appointment-participant').get(0),
                 itemid = $(item).attr('data-cid');
 
-            if ($(evt.target).parent().hasClass('remove')) {
-                console.log('click:' + itemid);
-                console.log(item);
-                self.model.remove(self.model.getByCid(itemid));
-                console.log('click');
-                console.log(arguments);
-            }
+            self.collection.remove(self.collection.getByCid(itemid));
+        },
 
-            if ($(evt.target).hasClass('person-link')) {
-                var obj = self.model.getByCid(itemid).get();
-                console.log(obj);
-                evt.data = {id: obj.id, email1: obj.email1};
-                fnClickPerson(evt);
+        onClickPersonLink: function (evt) {
+            var self = this,
+                item = $(evt.target).parents('.edit-appointment-participant').get(0),
+                itemid = $(item).attr('data-cid');
 
-                console.log('hit halo now');
-            }
+            var obj = self.collection.getByCid(itemid);
+
+            evt.data = {id: obj.get('id'), email1: obj.get('email1')};
+            ext.point('io.ox/core/person:action').each(function (ext) {
+                _.call(ext.action, evt.data, evt);
+            });
         }
     });
 
