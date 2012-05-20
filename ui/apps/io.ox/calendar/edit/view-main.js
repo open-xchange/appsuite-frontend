@@ -124,6 +124,7 @@ define('io.ox/calendar/edit/view-main',
             this.$('.recurrence').toggle();
         },
         onSave: function () {
+            console.log('trigger save');
             var self = this;
             self.trigger('save');
         }

@@ -177,10 +177,24 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 },
                 data: o.data
             })
-            .pipe(function () {
-                console.log('ok piping');
-                console.log(arguments);
-
+            .pipe(function (obj, timestamp) {
+                return api.get({ id: obj.id, folder: o.folder}, false)
+                    .pipe(function (data) {
+                        $.when(
+                        )
+                        .pipe(function () {
+                            all_cache = {};
+                            get_cache = {};
+                            console.log('cache resetted');
+                            api.trigger('refresh.all');
+                            api.trigger('refresh.list');
+                            api.trigger('edit', {
+                                id: o.id,
+                                folder: o.folder
+                            });
+                            return data;
+                        });
+                    });
             })
             .fail(function (err) {
                 console.log('error on creating appointment');

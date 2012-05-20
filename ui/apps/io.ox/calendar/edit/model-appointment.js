@@ -101,8 +101,7 @@ define('io.ox/calendar/edit/model-appointment',
                     df.reject('error on creating model');
                 });
 
-            console.log('create appointment');
-            console.log(o);
+            return df;
         },
         onChange: function (model, source) {
             var self = this;

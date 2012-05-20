@@ -73,6 +73,7 @@ define('io.ox/calendar/edit/main',
 
             self.model = new AppointmentModel(self.data);
             self.view = new AppView({model: self.model});
+            self.view.on('save', _.bind(self.onSave, self));
 
             self.win = self.view.render().el;
             self.app.setWindow(self.win);
@@ -84,6 +85,7 @@ define('io.ox/calendar/edit/main',
         },
         onSave: function () {
             var self = this;
+            console.log('save model');
             self.model.save()
                 .done(
                     function () {
