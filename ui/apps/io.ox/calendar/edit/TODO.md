@@ -1,7 +1,7 @@
 
 # Refinement
 - refine layout
-- change all templates to doT
+OK change all templates to doT
 - refactor participant model handling and rendering
 - Tidy up template code
 - correct time entered, seems to be wrong timezone or something
@@ -10,6 +10,7 @@
 
 
 # Feature
+OK implement dialog for edit serie or just the one event
 - add add participants
 - define default values for recurrence handling
 - implement cleanup on recurrencetype change

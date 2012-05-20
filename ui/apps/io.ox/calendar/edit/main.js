@@ -35,15 +35,16 @@ define('io.ox/calendar/edit/main',
 
     EditAppointmentController.prototype = {
         launch: function () {
-
+            console.log('LAUNCH? ONLY!');
         },
         edit: function (data) {
             var self = this;
             var cont = function (data) {
                 self.data = data;
-
                 self.model = new AppointmentModel(self.data);
                 self.view = new AppView({model: self.model});
+
+                self.view.on('save', _.bind(self.onSave, self));
 
                 self.win = self.view.render().el;
                 self.app.setWindow(self.win);
@@ -80,6 +81,22 @@ define('io.ox/calendar/edit/main',
                 self.view.aftershow();
                 $('.window-content').scrollable();
             });
+        },
+        onSave: function () {
+            var self = this;
+            self.model.save()
+                .done(
+                    function () {
+                        console.log('successful saved');
+                        self.app.quit();
+                    }
+                )
+                .fail(
+                    function (err) {
+                        console.log('failed to save');
+                        console.log(err);
+                    }
+                );
         },
         /*
         * should cleanly remove every outbounding reference

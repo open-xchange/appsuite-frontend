@@ -44,9 +44,31 @@ define('io.ox/calendar/actions',
             require(['io.ox/calendar/edit/main'], function (editmain) {
                 console.log('got data?');
                 console.log(data);
-                editmain.getApp(data).launch().done(function () {
-                    this.controller.edit();
-                });
+                if (data.recurrence_type > 0) {
+                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        new dialogs.ModalDialog()
+                            .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
+                            .addPrimaryButton('series', gt('Series'))
+                            .addButton('appointment', gt('Appointment'))
+                            .addButton('cancel', gt('Cancel'))
+                            .show()
+                            .done(function (action) {
+                                if (action === 'cancel') {
+                                    return;
+                                }
+                                if (action === 'series') {
+                                    delete data.recurrence_position;
+                                }
+                                editmain.getApp(data).launch().done(function () {
+                                    this.controller.edit();
+                                });
+                            });
+                    });
+                } else {
+                    editmain.getApp(data).launch().done(function () {
+                        this.controller.edit();
+                    });
+                }
             });
         }
     });

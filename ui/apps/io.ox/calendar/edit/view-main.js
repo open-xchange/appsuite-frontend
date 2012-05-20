@@ -103,12 +103,10 @@ define('io.ox/calendar/edit/view-main',
         },
         render: function () {
             var self = this;
-
             self.$el.empty().append(self.template({gt: gt}));
             self.$('#participantsView').empty().append(self.participantsView.render().el);
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'name');
             var bindings = _.extend(defaultBindings, self.bindings);
-
             self._modelBinder.bind(self.model, self.el, bindings);
             return self;
         },
@@ -127,7 +125,7 @@ define('io.ox/calendar/edit/view-main',
         },
         onSave: function () {
             var self = this;
-            self.model.save();
+            self.trigger('save');
         }
     });
 

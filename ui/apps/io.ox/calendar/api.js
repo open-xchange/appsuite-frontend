@@ -126,6 +126,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
         },
 
         update: function (o) {
+            var key = o.folder + "." + o.id + "." + (o.recurrence_position || 0);
             if (_.isEmpty(o.data)) {
                 return $.when();
             } else {
@@ -148,7 +149,10 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                             )
                             .pipe(function () {
                                 all_cache = {};
+                                get_cache = {};
+                                console.log('cache resetted');
                                 api.trigger('refresh.all');
+                                api.trigger('refresh.list');
                                 api.trigger('edit', {
                                     id: o.id,
                                     folder: o.folder

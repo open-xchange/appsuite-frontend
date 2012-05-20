@@ -57,8 +57,6 @@ define('io.ox/calendar/edit/view-recurrence',
         className: 'io-ox-calendar-edit-recurrence',
         initialize: function () {
             var self = this;
-            //debug
-            window.model = self.model;
 
             self.template = doT.template(template);
             self._modelBinder = new Backbone.ModelBinder();
@@ -67,9 +65,6 @@ define('io.ox/calendar/edit/view-recurrence',
         render: function () {
             var self = this;
             self.$el.empty().append(self.template({gt: gt, daybits: self.daybits}));
-
-            window.recur = self.model;
-            window.view = self;
 
             var bindings = {
                 day_in_month: '[name=day_in_month]',
@@ -98,7 +93,6 @@ define('io.ox/calendar/edit/view-recurrence',
 
             self._modelBinder.bind(self.model, self.el, bindings);
             self.updateRecurrenceDetail();
-
             return self;
         },
         updateRecurrenceDetail: function () {
@@ -107,6 +101,7 @@ define('io.ox/calendar/edit/view-recurrence',
 
             switch (parseInt(self.model.get('recurrence_type'), 10)) {
             case self.RECURRENCE_DAILY:
+                self.model.unset('day_in_month');
                 if (!self.model.has('interval')) {
                     self.model.set('interval', 1);
                 }
@@ -125,7 +120,15 @@ define('io.ox/calendar/edit/view-recurrence',
                 console.log('ok monthly');
                 self.model.unset('month');
                 self.$('.recurrence_details.monthly').show();
+
+                if (!self.model.has('day_in_month')) {
+                    self.model.set('day_in_month', 1);
+                }
+                if (!self.model.has('interval')) {
+                    self.model.set('interval', 1);
+                }
                 // yeah ducktype is awesome :x
+
                 if (self.model.has('day_in_month') &&
                     self.model.has('days') &&
                     self.model.has('interval')) {
@@ -159,11 +162,13 @@ define('io.ox/calendar/edit/view-recurrence',
 
                 break;
             case self.RECURRENCE_NONE:
+                // TODO: should this handled in model?
                 self.model.unset('interval');
                 self.model.unset('days');
                 self.model.unset('day_in_month');
                 self.model.unset('until');
                 self.model.unset('recurrence_start');
+                self.model.unset('month');
                 break;
             default:
                 break;
@@ -172,14 +177,6 @@ define('io.ox/calendar/edit/view-recurrence',
         changeMonthlyOption: function (evt) {
             var self = this,
                 option = evt.target.value;
-
-            if (!self.model.has('day_in_month')) {
-                self.model.set('day_in_month', 1);
-            }
-            if (!self.model.has('interval')) {
-                self.model.set('interval', 1);
-            }
-
             if (option === 'one') {
                 self.model.unset('days');
 

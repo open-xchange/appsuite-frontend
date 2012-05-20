@@ -19,16 +19,15 @@ define('io.ox/calendar/edit/view-app',
 
     'use strict';
 
-    var GRID_WIDTH = 330;
     var AppView = Backbone.View.extend({
         _modelBinder: undefined,
         className: 'io-ox-calendar-edit',
+        subviews: {},
         initialize: function () {
             this._modelBinder = new Backbone.ModelBinder();
         },
         render: function () {
             var self = this;
-
             self.el = ox.ui.createWindow({
                 name: 'io.ox/calendar/edit',
                 title: gt('Edit Appointment'),
@@ -36,13 +35,11 @@ define('io.ox/calendar/edit/view-app',
                 search: false,
                 close: true
             });
-
-            var container = self.el.nodes.main;
-
-
-            self.view = new MainView({model: self.model});
-
-            container.empty().append(self.view.render().el);
+            self.subviews.common = new MainView({model: self.model});
+            self.subviews.common.on('save', function () {
+                self.trigger('save'); //just bubble manually
+            });
+            self.el.nodes.main.empty().append(self.subviews.common.render().el);
             return self;
         },
 
@@ -52,10 +49,9 @@ define('io.ox/calendar/edit/view-app',
             var bindings = {
                 title: '.window-title'
             };
+            // updates the title on change
             self._modelBinder.bind(self.model, $('.window-title').parent().get(), bindings);
         }
     });
-
     return AppView;
-
 });
