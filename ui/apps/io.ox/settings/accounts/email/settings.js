@@ -41,8 +41,8 @@ define('io.ox/settings/accounts/email/settings',
                     myView = new AccountDetailView({model: myModel, node: myViewNode});
                     myView.dialog = new dialogs.SidePopup('800').show(evt, function (pane) {
                         var myout = myView.draw();
-//                        pane.append(myView.node.append(myout));
-                        $('.rightside').append(myView.node.append(myout));
+                        pane.append(myView.node.append(myout));
+//                        $('.rightside').append(myView.node.append(myout));
                     });
 
                     myModel.store = function (data) {
@@ -57,8 +57,8 @@ define('io.ox/settings/accounts/email/settings',
                 myView = new AccountDetailView({model: myModel, node: myViewNode});
                 myView.dialog = new dialogs.SidePopup('800').show(evt, function (pane) {
                     var myout = myView.draw();
-//                    pane.append(myout);
-                    $('.rightside').append(myView.node.append(myout));
+                    pane.append(myout);
+//                    $('.rightside').append(myView.node.append(myout));
 
                 });
                 myModel.store = function (data) {
