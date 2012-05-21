@@ -152,7 +152,7 @@ define('io.ox/settings/accounts/email/view-form',
                         )
                     ),
                     // just to have a save option for now
-                    $('<button>').text('save').on('click', { model: this.getModel() }, function (e) {
+                    $('<button>').attr('data-action', 'save').text('save').on('click', { model: this.getModel() }, function (e) {
                         console.log(e.data.model);
                         e.data.model.save();
                     })
