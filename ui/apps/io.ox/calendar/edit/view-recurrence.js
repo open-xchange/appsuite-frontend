@@ -64,7 +64,7 @@ define('io.ox/calendar/edit/view-recurrence',
         },
         render: function () {
             var self = this;
-            self.$el.empty().append(self.template({gt: gt, daybits: self.daybits}));
+            self.$el.empty().append(self.template({gt: gt, daybits: self.daybits, uid: _.uniqueId('io_ox_calendar_edit_recurrence')}));
 
             var bindings = {
                 day_in_month: '[name=day_in_month]',
