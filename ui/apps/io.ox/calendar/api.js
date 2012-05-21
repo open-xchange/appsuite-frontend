@@ -123,6 +123,83 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
         needsRefresh: function (folder) {
             // has entries in 'all' cache for specific folder
             return all_cache[folder] !== undefined;
+        },
+
+        update: function (o) {
+            var key = o.folder + "." + o.id + "." + (o.recurrence_position || 0);
+            if (_.isEmpty(o.data)) {
+                return $.when();
+            } else {
+                return http.PUT({
+                    module: 'calendar',
+                    params: {
+                        action: 'update',
+                        id: o.id,
+                        folder: o.folder,
+                        timestamp: o.timestamp
+                    },
+                    data: o.data
+                })
+                .pipe(function () {
+                    return api.get({ id: o.id, folder: o.folder}, false)
+                        .pipe(function (data) {
+                            $.when(
+                                /*api.caches.all.grepRemove(o.folder + '\t'),
+                                api.caches.list.remove({id: o.id, folder: o.folder })*/
+                            )
+                            .pipe(function () {
+                                all_cache = {};
+                                get_cache = {};
+                                console.log('cache resetted');
+                                api.trigger('refresh.all');
+                                api.trigger('refresh.list');
+                                api.trigger('edit', {
+                                    id: o.id,
+                                    folder: o.folder
+                                });
+                                return data;
+
+                            });
+                        });
+                })
+                .fail(function (err) {
+                    console.log('error on updating appointment');
+                    console.log(err);
+                });
+            }
+
+        },
+        create: function (o) {
+            return http.PUT({
+                module: 'calendar',
+                params: {
+                    action: 'new'
+                },
+                data: o.data
+            })
+            .pipe(function (obj, timestamp) {
+                return api.get({ id: obj.id, folder: o.folder}, false)
+                    .pipe(function (data) {
+                        $.when(
+                        )
+                        .pipe(function () {
+                            all_cache = {};
+                            get_cache = {};
+                            console.log('cache resetted');
+                            api.trigger('refresh.all');
+                            api.trigger('refresh.list');
+                            api.trigger('edit', {
+                                id: o.id,
+                                folder: o.folder
+                            });
+                            return data;
+                        });
+                    });
+            })
+            .fail(function (err) {
+                console.log('error on creating appointment');
+                console.log(err);
+            });
         }
     };
 

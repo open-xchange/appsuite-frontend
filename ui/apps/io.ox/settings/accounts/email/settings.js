@@ -31,60 +31,43 @@ define('io.ox/settings/accounts/email/settings',
         draw: function (evt) {
             var data,
                 myModel,
-                myView;
+                myView,
+                myViewNode;
             if (evt.data.id) {
                 api.get(evt.data.id).done(function (obj) {
                     data = obj;
+                    myViewNode = $("<div>").addClass("accountDetail");
                     myModel = new AccountModel({data: data});
-                    myView = new AccountDetailView({model: myModel});
-                    myView.node = $("<div>").addClass("accountDetail");
+                    myView = new AccountDetailView({model: myModel, node: myViewNode});
                     myView.dialog = new dialogs.SidePopup('800').show(evt, function (pane) {
                         var myout = myView.draw();
-                        pane.append(myout);
-
-
+                        pane.append(myView.node.append(myout));
+//                        $('.rightside').append(myView.node.append(myout));
                     });
 
                     myModel.store = function (data) {
                         console.log('store update');
-                        // add folder id
-//                        data.folder_id = app.folder.get();
-                        // has file?
-//                        var image = view.node.find('input[name="picture-upload-file"][type="file"]').get(0);
-                        return api.create(data);
+                        return api.update(data);
                     };
                     return myView.node;
                 });
             } else {
+                myViewNode = $("<div>").addClass("accountDetail");
                 myModel = new AccountModel();
-                myView = new AccountDetailView({model: myModel});
-                myView.node = $("<div>").addClass("accountDetail");
+                myView = new AccountDetailView({model: myModel, node: myViewNode});
                 myView.dialog = new dialogs.SidePopup('800').show(evt, function (pane) {
                     var myout = myView.draw();
                     pane.append(myout);
+//                    $('.rightside').append(myView.node.append(myout));
 
-                });
-                myView.dialog.nodes.click.on('close', function () {
-                    console.log('geht');
-                    myModel.save();
                 });
                 myModel.store = function (data) {
                     console.log('store new');
-                    // add folder id
-//                    data.folder_id = app.folder.get();
-                    // has file?
-//                    var image = view.node.find('input[name="picture-upload-file"][type="file"]').get(0);
+                    data.spam_handler = "NoSpamHandler"; // just to fix it now
                     return api.create(data);
                 };
                 return myView.node;
             }
-
-
-
-
-        },
-        save: function () {
-            console.log('now accountsdetail get saved?');
         }
     });
 

@@ -1,10 +1,9 @@
 <div>
-  <div class='contact-image' style='background: url("<%= image1_url %>");'></div>
+  <div class='contact-image'></div>
   <div>
-      <a href='#' class='person-link'><%= display_name %></a>
+      <a href='#' class='person-link'></a>
   </div>
-  <div>
-      <%= email1 %>
+  <div class='email'>
   </div>
   <a href='#' class='remove'>
       <div class='icon'>x</div>

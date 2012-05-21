@@ -10,71 +10,125 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
-
 define('io.ox/calendar/edit/view-main',
-      ['io.ox/core/tk/view',
-       'io.ox/core/tk/model',
-       'io.ox/calendar/edit/view-common',
-       'io.ox/calendar/edit/view-addparticipants',
-       'io.ox/calendar/edit/view-participants',
+      ['io.ox/calendar/edit/deps/Backbone',
+       'io.ox/calendar/edit/deps/doT',
        'io.ox/calendar/edit/collection-participants',
-       'gettext!io.ox/calendar/edit/main',
-       'less!io.ox/calendar/edit/style.css'], function (View, Model, CommonView, AddParticipantView, ParticipantsView, ParticipantsCollection, gt) {
+       'io.ox/calendar/edit/view-participants',
+       'io.ox/calendar/edit/view-recurrence',
+       'io.ox/calendar/edit/binding-util',
+       'io.ox/calendar/util',
+       'text!io.ox/calendar/edit/tpl/common.tpl',
+       'gettext!io.ox/calendar/edit/main'], function (Backbone, doT, ParticipantsCollection, ParticipantsView, RecurrenceView, BinderUtils, util, commontpl, gt) {
 
     'use strict';
 
-    var GRID_WIDTH = 330;
-    var AppView = View.extend({
+
+    var CommonView = Backbone.View.extend({
+
+        RECURRENCE_NONE: 0,
+        tagName: 'div',
+        className: 'io-ox-calendar-edit',
+        _modelBinder: undefined,
+        bindings: undefined,
+        events: {
+            'click .editrecurrence': 'toggleRecurrence',
+            'click .save': 'onSave'
+        },
         initialize: function () {
             var self = this;
+            self.template = doT.template(commontpl);
+            self._modelBinder = new Backbone.ModelBinder();
+            self.participantsCollection = new ParticipantsCollection(self.model.get('participants'));
+            self.participantsView = new ParticipantsView({collection: self.participantsCollection});
+            self.recurrenceView = new RecurrenceView({model: self.model});
 
-            self.el = ox.ui.createWindow({
-                name: 'io.ox/calendar/edit',
-                title: gt('Edit Appointment'),
-                toolbar: true,
-                search: false,
-                close: true
-            });
-            self.el.addClass('io-ox-calendar-edit');
+
+            var recurTextConverter = function (direction, value, attribute, model) {
+                if (direction === 'ModelToView') {
+                    return util.getRecurrenceString(model.attributes);
+                } else {
+                    return model.get(attribute);
+                }
+            };
+
+            self.bindings = {
+                start_date: [
+                    {
+                        selector: '.startsat-date',
+                        converter: BinderUtils.convertDate
+                    },
+                    {
+                        selector: '.startsat-time',
+                        converter: BinderUtils.convertTime
+                    }
+                ],
+                end_date: [
+                    {
+                        selector: '.endsat-date',
+                        converter: BinderUtils.convertDate
+                    },
+                    {
+                        selector: '.endsat-time',
+                        converter: BinderUtils.convertTime
+                    }
+                ],
+                recurrence_type: [
+                    {
+                        selector: '[name=repeat]',
+                        converter: function (direction, value, attribute, model) {
+                            if (direction === 'ModelToView') {
+                                if (value === self.RECURRENCE_NONE) {
+                                    return false;
+                                }
+                                return true;
+                            } else {
+                                if (value === false) {
+                                    return self.RECURRENCE_NONE;
+                                }
+                                return model.get(attribute);
+                            }
+                        }
+                    }, {
+                        selector: '[name=recurrenceText]',
+                        converter: recurTextConverter
+                    }
+                ],
+                day_in_month: {selector: '[name=recurrenceText]', converter: recurTextConverter},
+                interval: {selector: '[name=recurrenceText]', converter: recurTextConverter},
+                days: {selector: '[name=recurrenceText]', converter: recurTextConverter},
+                month: {selector: '[name=recurrenceText]', converter: recurTextConverter}
+            };
+
         },
         render: function () {
             var self = this;
-
-            var container = self.el.nodes.main;
-
-            var commonsModel = self.model; //just for easyness in the moment
-            var commonsView = new CommonView({model: commonsModel});
-
-            // should go into common view
-            self.main = commonsView.render().el;
-
-            //FIXME: quick hack
-            self.scrollpane = $('<div>').css({ width: (GRID_WIDTH - 26) + 'px'}).addClass('leftside io-ox-calendar-edit-sidepanel');
-            self.sidepanel = self.scrollpane.scrollable();
-
-            var participantsCollection = new ParticipantsCollection(self.model.get('participants'));
-
-            window.coll = participantsCollection;
-
-            var enterParticipantView = new AddParticipantView({model: new Model()});
-            var participantsView = new ParticipantsView({model: participantsCollection });
-
-            enterParticipantView.on('select', function (evt, data) {
-                //just a test
-                console.log('data');
-                console.log(data);
-                participantsCollection.add([{type: 1, id: data.id }]);
-            });
-
-            self.sidepanel.empty()
-                .append(enterParticipantView.render().el)
-                .append(participantsView.render().el);
-
-            container.empty().append(self.scrollpane, self.main);
+            self.$el.empty().append(self.template({gt: gt}));
+            self.$('#participantsView').empty().append(self.participantsView.render().el);
+            var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'name');
+            var bindings = _.extend(defaultBindings, self.bindings);
+            self._modelBinder.bind(self.model, self.el, bindings);
             return self;
+        },
+        toggleRecurrence: function () {
+            var self = this,
+                $rep = self.$('.recurrence');
+            if ($rep.is(':visible')) {
+                this.$('.editrecurrence').text(gt('edit'));
+                $rep.empty();
+            } else {
+                this.$('.editrecurrence').text(gt('hide'));
+                var rendered = self.recurrenceView.render().el;
+                $rep.empty().append(rendered);
+            }
+            this.$('.recurrence').toggle();
+        },
+        onSave: function () {
+            console.log('trigger save');
+            var self = this;
+            self.trigger('save');
         }
     });
 
-    return AppView;
-
+    return CommonView;
 });
