@@ -11,10 +11,12 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/portal/appointments/register",
+define("plugins/portal/appointments/register",
     ["io.ox/core/extensions"], function (ext) {
 
     "use strict";
+    
+    console.log("LOADED appt module");
 
     var appointmentPortal = {
         id: "appointments",
