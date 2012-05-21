@@ -164,11 +164,55 @@ function processLanguage(lang) {
             }
             
             function getFormat(type, choice) {
-                choice = choice || ldml.get(gregorian + format(
-                    "{0}Formats/default", [type]))["@"].choice;
+                choice = choice ||
+                    ldml.get(gregorian + type + "Formats/default")["@"].choice;
                 return ldml.get(gregorian + format(
                     "{0}Formats/{0}FormatLength[@type='{1}']/{0}Format/pattern",
                     [type, choice]));
+            }
+
+            var vFormat = ldml.get(gregorian + "dateTimeFormats/appendItems/" +
+                "appendItem[@request='Timezone']")['#'];
+            var vName = ldml.get(gregorian +
+                "fields/field[@type='zone']/displayName");
+            
+            function getFormats() {
+                var formats = {};
+                _.each(['E', 'yMd', 'yMEd', 'yMMMd', 'yMMMEd', 'hm', 'Hm', 'v'],
+                    function (fmt) {
+                        var f = ldml.get(gregorian + "dateTimeFormats/" +
+                            "availableFormats/dateFormatItem[@id='" + fmt +
+                            "']");
+                        formats[fmt] = f ? f['#'] : fmt;
+                    });
+                formats.Hmv = format(vFormat, [formats.Hm, formats.v, vName]);
+                formats.hmv = format(vFormat, [formats.hm, formats.v, vName]);
+                var fmt = getFormat('dateTime');
+                for (var i = 0; i < 8; i++) {
+                    var d = i & 4 ? 'yMEd' : 'yMd';
+                    var t = (i & 2 ? 'hm' : 'Hm') + (i & 1 ? 'v' : '');
+                    formats[d + t] = format(fmt, [formats[t], formats[d]]);
+                }
+                return formats;
+            }
+            
+            function getIntervals() {
+                var intervals = {
+                    fallback: reformat(ldml.get(gregorian + "dateTimeFormats/" +
+                        "intervalFormats/intervalFormatFallback"))
+                };
+                _.each(['hm', 'Hm', 'hmv', 'Hmv', 'yMMMd', 'yMMMEd'],
+                    function (fmt) {
+                        var diffs = ldml.get(gregorian + "dateTimeFormats/" +
+                            "intervalFormats/intervalFormatItem[@id='" + fmt +
+                            "']/greatestDifference");
+                        if (!diffs.length) diffs = [diffs];
+                        var interval = intervals[fmt] = {};
+                        _.each(diffs, function (diff) {
+                            interval[diff['@'].id.toLowerCase()] = diff['#'];
+                        });
+                    });
+                return intervals;
             }
             
             function getDayPeriods(type) {
@@ -190,6 +234,13 @@ function processLanguage(lang) {
                 return array;
             }
             
+            function reformat(s) {
+                return s.replace(/\{(\d)\}/g, function(_, d) {
+                    return '%' + (Number(d) + 1) + '$s';
+                });
+            }
+            
+            var dtFormat = getFormat('dateTime');
             var data = {
                 daysInFirstWeek: Number(supp.minDays[territory]),
                 weekStart: weekDays[supp.firstDay[territory]],
@@ -198,13 +249,19 @@ function processLanguage(lang) {
                 daysStandalone: mapDays('stand-alone', 'abbreviated'),
                 months: mapMonths('format', 'wide'),
                 monthsShort: mapMonths('format', 'abbreviated'),
+                formats: getFormats(),
+
                 date: getFormat('date'),
                 time: getFormat('time', 'short'),
-                dateTime: getFormat('dateTime'),
+                
+                dateTimeFormat: reformat(dtFormat),
+
+                intervals: getIntervals(),
                 dayPeriods: getDayPeriods(),
                 eras: getEras()
             };
-            data.dateTime = format(data.dateTime, [data.time, data.date]);
+            data.dateTime = format(dtFormat, [data.time, data.date]),
+            data.h12 = data.time.indexOf('h') >= 0;
             fs.writeFileSync('apps/io.ox/core/date/date.' + lang + '.json',
                 JSON.stringify(data, null, 4));
         });
