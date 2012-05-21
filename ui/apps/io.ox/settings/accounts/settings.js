@@ -71,6 +71,16 @@ define('io.ox/settings/accounts/settings',
             });
         },
 
+        deleteSelectedItem = function (args) {
+            var selectedItemID = args.data.listbox.find('div[selected="selected"]').attr('data-item-id');
+            if (selectedItemID !== undefined) {
+                var type = selectedItemID.split(/\//)[0],
+                    dataid = selectedItemID.split(/\//)[1];
+//                console.log(type + ' ' + dataid);
+                api.remove([dataid]);
+            }
+        },
+
         AccountsSettingsModelView = {
         draw: function (data) {
             var self = this,
@@ -102,6 +112,7 @@ define('io.ox/settings/accounts/settings',
                             forms.createButton({label: 'Edit ...', btnclass: 'btn'}).attr('data-action', 'edit').css({'margin-right': '15px'})
                                 .on('click', {listbox: listbox, self: self}, createExtpointForSelectedAccount),
                             forms.createButton({label: 'Delete ...', btnclass: 'btn'}).attr('data-action', 'delete')
+                                .on('click', {listbox: listbox, self: self}, deleteSelectedItem)
                         )
                     )
                     .append(forms.createSectionDelimiter())

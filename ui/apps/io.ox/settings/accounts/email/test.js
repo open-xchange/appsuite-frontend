@@ -43,11 +43,8 @@ define("io.ox/settings/accounts/email/test",
             "transport_protocol": "smtp",
             "pop3_storage": "mailaccount",
             "spam_handler": "NoSpamHandler"
-        },
-
-        fillAndTrigger = function (o) {
-
         };
+
 
      // helpers
     function Done() {
@@ -60,7 +57,6 @@ define("io.ox/settings/accounts/email/test",
         };
         return f;
     }
-
 
 
     /*

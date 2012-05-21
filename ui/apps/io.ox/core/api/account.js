@@ -275,7 +275,16 @@ define('io.ox/core/api/account',
             module: 'account',
             params: {action: 'delete'},
             data: data
-        });
+        }).pipe(function () {
+                return $.when(
+//                    api.caches.all.clear()
+//                    api.caches.list.remove(list),
+//                    contactPictures.clear()
+                );
+            })
+            .done(function () {
+                api.trigger('refresh.all');
+            });
     };
 
     /**
@@ -329,7 +338,6 @@ define('io.ox/core/api/account',
             data: data
         });
     };
-
 
 
     return api;
