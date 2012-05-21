@@ -15,7 +15,7 @@ define('io.ox/settings/accounts/email/view-form',
     ['io.ox/core/tk/view',
      'io.ox/core/tk/model'
 
-    ], function (View, Model) {
+    ], function (View) {
 
     'use strict';
 
@@ -150,9 +150,21 @@ define('io.ox/settings/accounts/email/view-form',
                         this.createControlsWrapper().append(
                             this.createPasswordField({property: 'transport_password', id: 'last'})
                         )
-                    )
+                    ),
+                    // just to have a save option for now
+                    $('<button>').attr('data-action', 'save').text('save').on('click', { model: this.getModel() }, function (e) {
+                        console.log(e.data.model);
+                        e.data.model.save();
+                    })
+
+
+
+
+
+
                 )
             );
+            console.log(this.getModel());
             return mynode;
         }
     });
