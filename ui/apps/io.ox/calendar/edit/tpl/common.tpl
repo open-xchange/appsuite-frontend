@@ -36,12 +36,18 @@
             <label style="display: inline;" for="{{=it.uid}}_full_time">{{= it.gt("All day") }}</label>
             <div />
             <input type="checkbox" class="repeat" name="repeat" id="{{=it.uid}}_repeat"/>
-            <label style="display: inline;" for="{{=it.uid}}_repeat">{{= it.gt("Repeat") }}:<span name="recurrenceText"></span></label>
+            <label style="display: inline;" for="{{=it.uid}}_repeat">{{= it.gt("Repeat") }}:
+
+            </label>
+                            <span name="recurrenceText"></span>
+                <span class='editrecurrence_wrapper' style="display:none;">
+                  (<a class="editrecurrence">{{= it.gt("edit") }}</a>)
+                </span>
         </div>
         <div class="right">
             <div style="text-align: right;">
               <a class="edittimezone">{{= it.gt("Change Timezone") }}</a>
-              <a class="editrecurrence">{{= it.gt("edit") }}</a>
+
             </div>
         </div>
     </div>
@@ -88,7 +94,7 @@
         </select>
     </div>
     <div class="tablecell" style="width: 266px;">
-        <label for="^shown_as">{{= it.gt("Display as")}}</label>
+        <label for="shown_as">{{= it.gt("Display as")}}</label>
         <select name="shown_as" id="{{=it.uid}}_shown_as">
             <option value="1">{{= it.gt("reserved") }}</option>
             <option value="2">{{= it.gt("temporary") }}</option>
