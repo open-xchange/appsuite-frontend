@@ -153,7 +153,7 @@
         </div>
     </div>
 </div>
-<div class='control-group'>
+<div class='control-group' style='margin-top: 20px;'>
     <div class='controls tablerow'>
         <div class="left">
             <label for="{{=it.uid}}_recurrence_start">{{= it.gt('Starts on')}}</label>

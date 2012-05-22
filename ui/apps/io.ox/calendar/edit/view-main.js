@@ -31,7 +31,8 @@ define('io.ox/calendar/edit/view-main',
         bindings: undefined,
         events: {
             'click .editrecurrence': 'toggleRecurrence',
-            'click .save': 'onSave'
+            'click .save': 'onSave',
+            'click input.repeat': 'onToggleRepeat'
         },
         initialize: function () {
             var self = this;
@@ -41,7 +42,6 @@ define('io.ox/calendar/edit/view-main',
             self.participantsCollection = new ParticipantsCollection(self.model.get('participants'));
             self.participantsView = new ParticipantsView({collection: self.participantsCollection});
             self.recurrenceView = new RecurrenceView({model: self.model});
-
 
             var recurTextConverter = function (direction, value, attribute, model) {
                 if (direction === 'ModelToView') {
@@ -126,6 +126,27 @@ define('io.ox/calendar/edit/view-main',
             console.log('trigger save');
             var self = this;
             self.trigger('save');
+        },
+        onToggleRepeat: function (evt) {
+            console.log('trigger repeat');
+            var self = this;
+            var isRecurrence = ($(evt.target).attr('checked') === 'checked');
+
+            if (isRecurrence) {
+                self.$('.editrecurrence_wrapper').show();
+                if (self.model.get('recurrence_type') === 0) {
+                    self.model.set('recurrence_type', 1);
+                }
+            } else {
+                self.$('.editrecurrence_wrapper').hide();
+                self.model.set('recurrence_type', 0);
+                self.$('.recurrence').empty();
+                self.$('.editrecurrence').text(gt('edit'));
+                self.$('.recurrence').hide();
+            }
+            // set default recurrence settings and not
+            // if not delete all recurrence settings, save them in temporary variable
+            // so it can restored
         }
     });
 
