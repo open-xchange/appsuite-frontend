@@ -140,29 +140,7 @@ define('io.ox/core/api/account',
         }
     };
 
-    /**
-     * Get mail account
-     */
-    api.get = function (id) {
 
-//        var getter = function () {
-//            return api.all().pipe(function () {
-//                return cache.get(id);
-//            });
-//        };
-
-//        return cache.get(id, getter);
-
-        return http.GET({
-            module: 'account',
-            params: {
-                action: 'get',
-                id: id,
-                columns: '1001,1004'
-            },
-            processResponse: true
-        });
-    };
 
     /**
      * Get all mail accounts
@@ -192,6 +170,32 @@ define('io.ox/core/api/account',
         });
 
 
+    };
+
+
+
+    /**
+     * Get mail account
+     */
+    api.get = function (id) {
+
+//        var getter = function () {
+//            return api.all().pipe(function () {
+//                return accountsAllCache.get(id);
+//            });
+//        };
+//
+//        return accountsAllCache.get(id, getter);
+
+        return http.GET({
+            module: 'account',
+            params: {
+                action: 'get',
+                id: id,
+                columns: '1001,1004'
+            },
+            processResponse: true
+        });
     };
 
     /**
