@@ -35,7 +35,7 @@ define('io.ox/settings/accounts/settings',
                 dataid: 'email/' + val.id,
                 html: val.primary_address
             });
-            console.log(listOfAccounts);
+//            console.log(listOfAccounts);
 
         },
 

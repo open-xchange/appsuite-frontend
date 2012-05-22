@@ -164,7 +164,6 @@ define('io.ox/settings/accounts/email/view-form',
 
                 )
             );
-            console.log(this.getModel());
             return mynode;
         }
     });
