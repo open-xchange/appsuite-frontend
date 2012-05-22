@@ -23,9 +23,7 @@ define('io.ox/calendar/edit/view-main',
 
     'use strict';
 
-
     var CommonView = Backbone.View.extend({
-
         RECURRENCE_NONE: 0,
         tagName: 'div',
         className: 'io-ox-calendar-edit',
@@ -39,6 +37,7 @@ define('io.ox/calendar/edit/view-main',
             var self = this;
             self.template = doT.template(commontpl);
             self._modelBinder = new Backbone.ModelBinder();
+
             self.participantsCollection = new ParticipantsCollection(self.model.get('participants'));
             self.participantsView = new ParticipantsView({collection: self.participantsCollection});
             self.recurrenceView = new RecurrenceView({model: self.model});
@@ -103,7 +102,7 @@ define('io.ox/calendar/edit/view-main',
         },
         render: function () {
             var self = this;
-            self.$el.empty().append(self.template({gt: gt}));
+            self.$el.empty().append(self.template({gt: gt, uid: _.uniqueId('io_ox_calendar_edit_')}));
             self.$('#participantsView').empty().append(self.participantsView.render().el);
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'name');
             var bindings = _.extend(defaultBindings, self.bindings);

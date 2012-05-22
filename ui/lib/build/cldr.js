@@ -16,7 +16,25 @@ var svnPath = "/repos/cldr/" + (
         "trunk"
     ) + "/common/";
 
+var parentLocales = (function () {
+    var reverse = {
+        "root": "az_Cyrl ha_Arab ku_Latn mn_Mong pa_Arab shi_Tfng sr_Latn " +
+                "uz_Arab uz_Latn vai_Latn zh_Hant",
+        "en_GB": "en_AU en_BE en_HK en_IE en_IN en_MT en_NZ en_PK en_SG",
+        "es_419": "es_AR es_BO es_CL es_CO es_CR es_DO es_EC es_GT es_HN " +
+                  "es_MX es_NI es_PA es_PE es_PR es_PY es_SV es_US es_UY es_VE",
+        "pt_PT": "pt_AO pt_GW pt_MZ pt_ST"
+    };
+    var map = {};
+    for (var parent in reverse) {
+        children = reverse[parent].split(' ');
+        for (var i in children) map[children[i]] = parent;
+    }
+    return map;
+}());
+
 function getParent(name) {
+    if (name in parentLocales) return parentLocales[name];
     var i = name.lastIndexOf("_");
     return i >= 0 ? name.slice(0, i) : name !== "root" ? "root" : null;
 }
@@ -145,12 +163,56 @@ function processLanguage(lang) {
                 return array;
             }
             
-            function getFormat(type) {
-                var choice = ldml.get(gregorian + format(
-                    "{0}Formats/default", [type]))["@"].choice;
+            function getFormat(type, choice) {
+                choice = choice ||
+                    ldml.get(gregorian + type + "Formats/default")["@"].choice;
                 return ldml.get(gregorian + format(
                     "{0}Formats/{0}FormatLength[@type='{1}']/{0}Format/pattern",
                     [type, choice]));
+            }
+
+            var vFormat = ldml.get(gregorian + "dateTimeFormats/appendItems/" +
+                "appendItem[@request='Timezone']")['#'];
+            var vName = ldml.get(gregorian +
+                "fields/field[@type='zone']/displayName");
+            
+            function getFormats() {
+                var formats = {};
+                _.each(['E', 'yMd', 'yMEd', 'yMMMd', 'yMMMEd', 'hm', 'Hm', 'v'],
+                    function (fmt) {
+                        var f = ldml.get(gregorian + "dateTimeFormats/" +
+                            "availableFormats/dateFormatItem[@id='" + fmt +
+                            "']");
+                        formats[fmt] = f ? f['#'] : fmt;
+                    });
+                formats.Hmv = format(vFormat, [formats.Hm, formats.v, vName]);
+                formats.hmv = format(vFormat, [formats.hm, formats.v, vName]);
+                var fmt = getFormat('dateTime');
+                for (var i = 0; i < 8; i++) {
+                    var d = i & 4 ? 'yMEd' : 'yMd';
+                    var t = (i & 2 ? 'hm' : 'Hm') + (i & 1 ? 'v' : '');
+                    formats[d + t] = format(fmt, [formats[t], formats[d]]);
+                }
+                return formats;
+            }
+            
+            function getIntervals() {
+                var intervals = {
+                    fallback: reformat(ldml.get(gregorian + "dateTimeFormats/" +
+                        "intervalFormats/intervalFormatFallback"))
+                };
+                _.each(['hm', 'Hm', 'hmv', 'Hmv', 'yMMMd', 'yMMMEd'],
+                    function (fmt) {
+                        var diffs = ldml.get(gregorian + "dateTimeFormats/" +
+                            "intervalFormats/intervalFormatItem[@id='" + fmt +
+                            "']/greatestDifference");
+                        if (!diffs.length) diffs = [diffs];
+                        var interval = intervals[fmt] = {};
+                        _.each(diffs, function (diff) {
+                            interval[diff['@'].id.toLowerCase()] = diff['#'];
+                        });
+                    });
+                return intervals;
             }
             
             function getDayPeriods(type) {
@@ -172,6 +234,13 @@ function processLanguage(lang) {
                 return array;
             }
             
+            function reformat(s) {
+                return s.replace(/\{(\d)\}/g, function(_, d) {
+                    return '%' + (Number(d) + 1) + '$s';
+                });
+            }
+            
+            var dtFormat = getFormat('dateTime');
             var data = {
                 daysInFirstWeek: Number(supp.minDays[territory]),
                 weekStart: weekDays[supp.firstDay[territory]],
@@ -180,14 +249,20 @@ function processLanguage(lang) {
                 daysStandalone: mapDays('stand-alone', 'abbreviated'),
                 months: mapMonths('format', 'wide'),
                 monthsShort: mapMonths('format', 'abbreviated'),
+                formats: getFormats(),
+
                 date: getFormat('date'),
-                time: getFormat('time'),
-                dateTime: getFormat('dateTime'),
+                time: getFormat('time', 'short'),
+                
+                dateTimeFormat: reformat(dtFormat),
+
+                intervals: getIntervals(),
                 dayPeriods: getDayPeriods(),
                 eras: getEras()
             };
-            data.dateTime = format(data.dateTime, [data.time, data.date]);
-            fs.writeFileSync('apps/io.ox/core/date.' + lang + '.json',
+            data.dateTime = format(dtFormat, [data.time, data.date]),
+            data.h12 = data.time.indexOf('h') >= 0;
+            fs.writeFileSync('apps/io.ox/core/date/date.' + lang + '.json',
                 JSON.stringify(data, null, 4));
         });
     return dest;
