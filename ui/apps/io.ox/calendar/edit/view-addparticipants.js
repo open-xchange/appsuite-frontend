@@ -12,13 +12,11 @@
  */
 
 define('io.ox/calendar/edit/view-addparticipants',
-      ['io.ox/calendar/edit/deps/Backbone',
-       'io.ox/calendar/edit/deps/doT',
-       'io.ox/core/api/user',
+      ['io.ox/core/api/user',
        'io.ox/contacts/api',
        'io.ox/core/tk/autocomplete',
        'text!io.ox/calendar/edit/tpl/addparticipant.tpl',
-       'gettext!io.ox/calendar/edit/main'], function (Backbone, doT, userAPI, contactAPI, autocomplete, tpl, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (userAPI, contactAPI, autocomplete, tpl, gt) {
 
     'use strict';
 

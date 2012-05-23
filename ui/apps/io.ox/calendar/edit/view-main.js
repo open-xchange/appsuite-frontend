@@ -11,15 +11,13 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 define('io.ox/calendar/edit/view-main',
-      ['io.ox/calendar/edit/deps/Backbone',
-       'io.ox/calendar/edit/deps/doT',
-       'io.ox/calendar/edit/collection-participants',
+      ['io.ox/calendar/edit/collection-participants',
        'io.ox/calendar/edit/view-participants',
        'io.ox/calendar/edit/view-recurrence',
        'io.ox/calendar/edit/binding-util',
        'io.ox/calendar/util',
        'text!io.ox/calendar/edit/tpl/common.tpl',
-       'gettext!io.ox/calendar/edit/main'], function (Backbone, doT, ParticipantsCollection, ParticipantsView, RecurrenceView, BinderUtils, util, commontpl, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (ParticipantsCollection, ParticipantsView, RecurrenceView, BinderUtils, util, commontpl, gt) {
 
     'use strict';
 

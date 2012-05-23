@@ -12,11 +12,9 @@
  */
 
 define('io.ox/calendar/edit/view-recurrence',
-      ['io.ox/calendar/edit/deps/Backbone',
-       'io.ox/calendar/edit/deps/doT',
-       'io.ox/calendar/edit/binding-util',
+      ['io.ox/calendar/edit/binding-util',
        'text!io.ox/calendar/edit/tpl/recurrence.tpl',
-       'gettext!io.ox/calendar/edit/main'], function (Backbone, doT, BinderUtils, template, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, template, gt) {
 
     'use strict';
 

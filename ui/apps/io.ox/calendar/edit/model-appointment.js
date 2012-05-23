@@ -12,8 +12,7 @@
  */
 
 define('io.ox/calendar/edit/model-appointment',
-      ['io.ox/calendar/edit/deps/Backbone',
-       'io.ox/calendar/api'], function (Backbone, CalendarAPI) {
+      ['io.ox/calendar/api'], function (CalendarAPI) {
 
     'use strict';
 

@@ -12,10 +12,9 @@
  */
 
 define('io.ox/calendar/edit/view-app',
-      ['io.ox/calendar/edit/deps/Backbone',
-       'io.ox/calendar/edit/view-main',
+      ['io.ox/calendar/edit/view-main',
        'gettext!io.ox/calendar/edit/main',
-       'less!io.ox/calendar/edit/style.less'], function (Backbone, MainView, gt) {
+       'less!io.ox/calendar/edit/style.less'], function (MainView, gt) {
 
     'use strict';
 

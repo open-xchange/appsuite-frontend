@@ -1,11 +1,10 @@
-// NOJSHINT
 // doT.js
 // 2011, Laura Doktorova, https://github.com/olado/doT
 //
 // doT.js is an open source component of http://bebedo.com
 // Licensed under the MIT license.
 //
-define('io.ox/calendar/edit/deps/doT', [], function () {
+(function() {
 	"use strict";
 
 	var doT = {
@@ -31,9 +30,8 @@ define('io.ox/calendar/edit/deps/doT', [], function () {
 
 	if (typeof module !== 'undefined' && module.exports) {
 		module.exports = doT;
-	} else if (typeof define === 'function' && define.amd) {
-        // EDIT (mario scheliga): THATS BULLSHIT
-		//define(function(){return doT;});
+	} else if (typeof define === 'function' && define.amd  && false /*just disable it*/) {
+		define(function(){return doT;});
 	} else {
 		global.doT = doT;
 	}
@@ -130,7 +128,4 @@ define('io.ox/calendar/edit/deps/doT', [], function () {
 	doT.compile = function(tmpl, def) {
 		return doT.template(tmpl, null, def);
 	};
-
-
-    return doT;
-});
+}());
