@@ -16,7 +16,7 @@ define('io.ox/core/api/account',
      'io.ox/core/http',
      'io.ox/core/cache',
      'io.ox/core/event'
-    ], function (config, http, cache, Events) {
+    ], function (config, http, Cache, Events) {
 
     'use strict';
 
@@ -24,7 +24,7 @@ define('io.ox/core/api/account',
     var idHash = {},
         typeHash = {},
         // chache
-        cache = new cache.ObjectCache('account', true, function (o) { return String(o.id); }),
+        cache = new Cache.ObjectCache('account', true, function (o) { return String(o.id); }),
         // default separator
         separator = config.get('modules.mail.defaultseparator', '/');
 
@@ -140,6 +140,40 @@ define('io.ox/core/api/account',
         }
     };
 
+
+
+    /**
+     * Get all mail accounts
+     */
+
+    var accountsAllCache = new Cache.SimpleCache('accounts-all', true);
+
+    api.all = function () {
+
+        var all = 'actual-user';
+
+        return accountsAllCache.get(all).pipe(function (data) {
+            if (data !== null) {
+                return data;
+            } else {
+                return http.GET({
+                    module: 'account',
+                    params: { action: 'all', columns: '1001,1004,1007'},
+                    processResponse: true
+                })
+                .pipe(function (data) {
+                    if (data) {
+                        return accountsAllCache.add(all, data);
+                    }
+                });
+            }
+        });
+
+
+    };
+
+
+
     /**
      * Get mail account
      */
@@ -147,11 +181,11 @@ define('io.ox/core/api/account',
 
 //        var getter = function () {
 //            return api.all().pipe(function () {
-//                return cache.get(id);
+//                return accountsAllCache.get(id);
 //            });
 //        };
-
-//        return cache.get(id, getter);
+//
+//        return accountsAllCache.get(id, getter);
 
         return http.GET({
             module: 'account',
@@ -162,34 +196,6 @@ define('io.ox/core/api/account',
             },
             processResponse: true
         });
-    };
-
-    /**
-     * Get all mail accounts
-     */
-    api.all = function () {
-
-
-//        var getter = function () {
-        return http.GET({
-            module: 'account',
-            params: { action: 'all', columns: '1001,1004,1007'},
-            processResponse: true
-        });
-//        };
-
-//        return cache.keys().pipe(function (keys) {
-//            if (keys.length > 0) {
-//                return cache.values();
-//            } else {
-//                return getter().pipe(function (data) {
-//                    data = process(data);
-//                    cache.add(data);
-//                    return data;
-//                });
-//            }
-//        });
-
     };
 
     /**
@@ -233,6 +239,7 @@ define('io.ox/core/api/account',
         })
         .done(function (d) {
             api.trigger('account_created', {id: d.id});
+            accountsAllCache.clear();
         });
     };
 
@@ -283,6 +290,7 @@ define('io.ox/core/api/account',
                 );
             })
             .done(function () {
+                accountsAllCache.clear();
                 api.trigger('refresh.all');
             });
     };

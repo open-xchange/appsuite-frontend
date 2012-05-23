@@ -1,166 +1,157 @@
-<div>
-    <div style='width: 20%; float: left; display: inline;'>
-        <input type="radio" name="recurrence_type" value="0"/>
-        <label style="display: inline;">{{= it.gt('Once') }}</label>
-    </div>
-    <div style='width: 20%; float: left; display: inline;'>
-        <input type="radio" name="recurrence_type" value="1"/>
-        <label style="display: inline;">{{= it.gt('Daily') }}</label>
-    </div>
-    <div style='width: 20%; float: left; display: inline;'>
-        <input type="radio" name="recurrence_type" value="2"/>
-        <label style="display: inline;">{{= it.gt('Weekly') }}</label>
-    </div>
-    <div style='width: 20%; float: left; display: inline;'>
-        <input type="radio" name="recurrence_type" value="3"/>
-        <label style="display: inline;">{{= it.gt('Monthly') }}</label>
-    </div>
-    <div style='width: 20%; float: left; display: inline;'>
-        <input type="radio" name="recurrence_type" value="4"/>
-        <label style="display: inline;">{{= it.gt('Yearly') }}</label>
-    </div>
-</div>
-<div style='clear: both; margin: 20px; background-color: grey;'>
-    <div class='recurrence_details daily'>
-        {{= it.gt('Every') }}
-        <input type="text" class="discreet short" name='interval'/>
-        {{= it.gt('day') }}
-    </div>
-
-    <div class='recurrence_details weekly'>
-        {{= it.gt('Every') }}
-        <input type="text" name='interval' class="discreet weeks short"/>
-        {{= it.gt('weeks') }}
-        <div>
-            <input type='checkbox' name='day{{= it.daybits.DAYS_MONDAY }}'/>
-            <label style="display: inline;">{{= it.gt('Monday') }}</label>
-
-            <input type='checkbox' name='day{{= it.daybits.DAYS_TUESDAY }}'/>
-            <label style="display: inline;">{{= it.gt('Tuesday') }}</label>
-
-            <input type='checkbox' name='day{{= it.daybits.DAYS_WEDNESDAY }}'/>
-            <label style="display: inline;">{{= it.gt('Wednesday') }}</label>
-
-            <input type='checkbox' name='day{{= it.daybits.DAYS_THURSDAY }}'/>
-            <label style="display: inline;">{{= it.gt('Thursday') }}</label>
-
-            <input type='checkbox' name='day{{= it.daybits.DAYS_FRIDAY }}'/>
-            <label style="display: inline;">{{= it.gt('Friday') }}</label>
-
-            <input type='checkbox' name='day{{= it.daybits.DAYS_SATURDAY }}'/>
-            <label style="display: inline;">{{= it.gt('Saturday') }}</label>
-
-            <input type='checkbox' name='day{{= it.daybits.DAYS_SUNDAY }}'/>
-            <label style="display: inline;">{{= it.gt('Sunday') }}</label>
-        </div>
-    </div>
-
-    <div class='recurrence_details monthly'>
-        <div>
-            <input type='radio' name='monthly_option' value='one'>
-            {{= it.gt('at')}}
-            <input type='text' name='day_in_month' class='discreet short'/>
-            {{= it.gt('th day every')}}
-            <input type='text' name='interval' class='discreet short'/>
-            {{= it.gt('th month')}}
-        </div>
-        <div>
-            <input type='radio' name='monthly_option' value='two'>
-            {{= it.gt('at')}}
-            <select name='day_in_month'>
-                <option value='1'>{{= it.gt('First')}}</option>
-                <option value='2'>{{= it.gt('Second')}}</option>
-                <option value='3'>{{= it.gt('Third')}}</option>
-                <option value='4'>{{= it.gt('Fourth')}}</option>
-                <option value='5'>{{= it.gt('Last')}}</option>
-            </select>
-            <select name='days' class='days'>
-                <option value='{{= it.daybits.DAYS_MONDAY }}'>{{= it.gt('Monday')}}</option>
-                <option value='{{= it.daybits.DAYS_TUESDAY }}'>{{= it.gt('Tuesday')}}</option>
-                <option value='{{= it.daybits.DAYS_WEDNESDAY }}'>{{= it.gt('Wednesday')}}</option>
-                <option value='{{= it.daybits.DAYS_THURSDAY }}'>{{= it.gt('Thursday')}}</option>
-                <option value='{{= it.daybits.DAYS_FRIDAY }}'>{{= it.gt('Friday')}}</option>
-                <option value='{{= it.daybits.DAYS_SATURDAY }}'>{{= it.gt('Saturday')}}</option>
-                <option value='{{= it.daybits.DAYS_SUNDAY }}'>{{= it.gt('Sunday')}}</option>
-            </select>
-            {{= it.gt('every')}}
-            <input type='text' name='interval' class='discreet short'/> {{= it.gt('th month')}}
-        </div>
-    </div>
-
-    <div class='recurrence_details yearly'>
-        <div>
-            <input type='radio' name='yearly_option' value='one'>
-            {{= it.gt('Every')}}
-            <input type='text' name='day_in_month' class='short'/>
-            {{= it.gt('th')}}
-            <select name='month' class='month'>
-                <option value='0'>{{= it.gt('January')}}</option>
-                <option value='1'>{{= it.gt('February')}}</option>
-                <option value='2'>{{= it.gt('March')}}</option>
-                <option value='3'>{{= it.gt('April')}}</option>
-                <option value='4'>{{= it.gt('Mai')}}</option>
-                <option value='5'>{{= it.gt('June')}}</option>
-                <option value='6'>{{= it.gt('July')}}</option>
-                <option value='7'>{{= it.gt('August')}}</option>
-                <option value='8'>{{= it.gt('September')}}</option>
-                <option value='9'>{{= it.gt('October')}}</option>
-                <option value='10'>{{= it.gt('November')}}</option>
-                <option value='11'>{{= it.gt('December')}}</option>
-            </select>
-        </div>
-        <div>
-            <input type='radio' name='yearly_option' value='two'>
-            {{= it.gt('at')}}
-            <select name='day_in_month'>
-                <option value='1'>{{= it.gt('First')}}</option>
-                <option value='2'>{{= it.gt('Second')}}</option>
-                <option value='3'>{{= it.gt('Third')}}</option>
-                <option value='4'>{{= it.gt('Fourth')}}</option>
-                <option value='5'>{{= it.gt('Last')}}</option>
-            </select>
-            <select name='days' class='days'>
-                <option value='{{= it.daybits.DAYS_MONDAY }}'>{{= it.gt('Monday')}}</option>
-                <option value='{{= it.daybits.DAYS_TUESDAY }}'>{{= it.gt('Tuesday')}}</option>
-                <option value='{{= it.daybits.DAYS_WEDNESDAY }}'>{{= it.gt('Wednesday')}}</option>
-                <option value='{{= it.daybits.DAYS_THURSDAY }}'>{{= it.gt('Thursday')}}</option>
-                <option value='{{= it.daybits.DAYS_FRIDAY }}'>{{= it.gt('Friday')}}</option>
-                <option value='{{= it.daybits.DAYS_SATURDAY }}'>{{= it.gt('Saturday')}}</option>
-                <option value='{{= it.daybits.DAYS_SUNDAY }}'>{{= it.gt('Sunday')}}</option>
-            </select>
-            {{= it.gt('in')}}
-            <select name='month' class='month'>
-                <option value='0'>{{= it.gt('January')}}</option>
-                <option value='1'>{{= it.gt('February')}}</option>
-                <option value='2'>{{= it.gt('March')}}</option>
-                <option value='3'>{{= it.gt('April')}}</option>
-                <option value='4'>{{= it.gt('Mai')}}</option>
-                <option value='5'>{{= it.gt('June')}}</option>
-                <option value='6'>{{= it.gt('July')}}</option>
-                <option value='7'>{{= it.gt('August')}}</option>
-                <option value='8'>{{= it.gt('September')}}</option>
-                <option value='9'>{{= it.gt('October')}}</option>
-                <option value='10'>{{= it.gt('November')}}</option>
-                <option value='11'>{{= it.gt('December')}}</option>
-            </select>
-        </div>
-    </div>
-</div>
-<div style='clear: both;'>
+<fieldset class="tablerow">
+    <legend class="sectiontitle">Legend text</legend>
     <div class="left">
-        <label>{{= it.gt('Starts on')}}</label>
-        <input type="text" class="discreet startsat-date" name='recurrence_start'/>
+        <div class="control-group">
+            <label for="{{=it.uid}}_recurrence_start" class="control-label">{{= it.strings.STARTS_ON }}</label>
+            <div class="controls">
+                <input id="{{=it.uid}}_recurrence_start" type="text" class="discreet startsat-date" name='recurrence_start'/>
+            </div>
+        </div>
     </div>
     <div class="right">
-        <label>{{= it.gt('Ends')}}</label>
-        <input type="radio" name='endingoption'/><span style='margin-left: 4px;'>{{= it.gt('on') }}</span>
-        <input type="text" class="discreet until" name='until'/>
-        <br />
-        <input type="radio" name='endingoption'/><span style='margin-left: 4px;'>{{= it.gt('after') }}</span>
-        <input type="text" class="discreet until short" name='occurrences'/>
-        {{= it.gt('times')}}
-        <br />
-        <input type="radio" name='endingoption'/><span style='margin-left: 4px;'>
-        {{= it.gt('Never') }}</span>
+        <div class="control-group">
+            <label for="{{=it.uid}}_recurrence_endings" class="control-label">{{= it.strings.ENDS }}</label>
+            <div class="controls">
+                <div>
+                    <input type="radio" name='endingoption'/>
+                    <label class="radio inline">{{= it.strings.NEVER }}</label>
+                </div>
+                <div>
+                    <input id="{{=it.uid}}_recurrence_endings" type="radio" name='endingoption'/>
+                    <label class="radio inline">
+                       {{= it.strings.ON }}
+                       <input type="text" class="discreet until" name='until'/>
+                    </label>
+                </div>
+                <div>
+                    <input type="radio" name='endingoption'/>
+                    <label class="radio inline">
+                        {{= it.strings.AFTER }}
+                        <input type="text" class="discreet until short" name='occurrences'/>
+                        <span class="help-inline">{{= it.strings.TIMES }}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+
+<div class='control-group'>
+    <legend class="sectiontitle">Legend text</legend>
+    <div class='controls tablerow'>
+        <div style='width: 200px;' class="tablecell">
+            <input type="radio" name="recurrence_type" value="1" id="{{=it.uid}}_daily"/>
+            <label style="display: inline;" for="{{=it.uid}}_daily">{{= it.strings.DAILY }}</label>
+        </div>
+        <div style='width: 200px;' class="tablecell">
+            <input type="radio" name="recurrence_type" value="2" id="{{=it.uid}}_weekly"/>
+            <label style="display: inline;" for="{{=it.uid}}_weekly">{{= it.strings.WEEKLY }}</label>
+        </div>
+        <div style='width: 200px;' class="tablecell">
+            <input type="radio" name="recurrence_type" value="3" id="{{=it.uid}}_monthly"/>
+            <label style="display: inline;" for="{{=it.uid}}_monthly">{{= it.strings.MONTHLY }}</label>
+        </div>
+        <div style='width: 200px;' class="tablecell">
+            <input type="radio" name="recurrence_type" value="4" id="{{=it.uid}}_yearly"/>
+            <label style="display: inline;" for="{{=it.uid}}_yearly">{{= it.strings.YEARLY }}</label>
+        </div>
     </div>
 </div>
+
+<div>
+    <div class='recurrence_details daily control-group'>
+        <legend class="sectiontitle">Legend text</legend>
+        <div class="controls">
+            <label for="{{=it.uid}}_daily_interval">{{= it.strings.EVERY }}</label>
+            <input type="text" class="discreet short" name='interval' id="{{=it.uid}}_daily_interval"/>
+            <span class="help-inline">{{= it.strings.DAY }}</span>
+        </div>
+    </div>
+
+    <div class='recurrence_details weekly control-group'>
+        <legend class="sectiontitle">Legend text</legend>
+        <div class="controls">
+            <label for="{{=it.uid}}_weekly_interval">{{= it.strings.EVERY }}</label>
+            <input type="text" name='interval' class="discreet weeks short" id="{{=it.uid}}_weekly_interval"/>
+            <span class="help-inline">{{= it.strings.WEEKS }}</span>
+            <div>
+                {{~ it.weekDayList :item:index }}
+                <input type='checkbox' name='day{{= item.value }}' id="{{=it.uid}}_weekly_days_monday"/>
+                <label style="display: inline;" for="{{=it.uid}}_weekly_days_monday">{{= item.label }}</label>
+                {{~}}
+            </div>
+        </div>
+    </div>
+
+    <div class='recurrence_details monthly control-group'>
+            <legend class="sectiontitle">Legend text</legend>
+            <div class="controls">
+                <div>
+                    <input type='radio' name='monthly_option' value='one'>
+                    <span class='help-inline'>{{= it.strings.AT }}</span>
+                    <input type='text' name='day_in_month' class='discreet short'/>
+                    <span class='help-inline'>{{= it.strings.TH_DAY_EVERY }}</span>
+                    <input type='text' name='interval' class='discreet short'/>
+                    <span class='help-inline'>{{= it.strings.TH_MONTH }}</div>
+                </div>
+                <div>
+                    <input type='radio' name='monthly_option' value='two'>
+                    <span class='help-inline'>{{= it.strings.AT }}</span>
+                    <select name='day_in_month'>
+                        <option value='1'>{{= it.strings.FIRST }}</option>
+                        <option value='2'>{{= it.strings.SECOND }}</option>
+                        <option value='3'>{{= it.strings.THIRD }}</option>
+                        <option value='4'>{{= it.strings.FOURTH }}</option>
+                        <option value='5'>{{= it.strings.LAST }}</option>
+                    </select>
+                    <select name='days' class='days'>
+                        {{~it.weekDayList :item:index }}
+                        <option value='{{= item.value }}'>{{= item.label }}</option>
+                        {{~}}
+                    </select>
+                    <span class='help-inline'>{{= it.strings.EVERY }}</span>
+                    <input type='text' name='interval' class='discreet short'/><span class='help-inline'>{{= it.strings.TH_MONTH }}</span>
+                </div>
+            </div>
+    </div>
+
+    <div class='recurrence_details yearly control-group'>
+        <legend class="sectiontitle">Legend text</legend>
+        <div class='controls'>
+            <div>
+                <input type='radio' name='yearly_option' value='one'>
+                <span class='help-inline'>{{= it.strings.EVERY }}</span>
+                <input type='text' name='day_in_month' class='short'/>
+                <span class='help-inline'>{{= it.strings.TH }}</span>
+                <select name='month' class='month'>
+                    {{~ it.monthList :item:index }}
+                    <option value='{{= item.value }}'>{{= item.label }}</option>
+                    {{~}}
+                </select>
+            </div>
+            <div>
+                <input type='radio' name='yearly_option' value='two'>
+                <span class='help-inline'>{{= it.strings.AT }}</span>
+                <select name='day_in_month'>
+                    <option value='1'>{{= it.strings.FIRST }}</option>
+                    <option value='2'>{{= it.strings.SECOND }}</option>
+                    <option value='3'>{{= it.strings.THIRD }}</option>
+                    <option value='4'>{{= it.strings.FOURTH }}</option>
+                    <option value='5'>{{= it.strings.LAST }}</option>
+                </select>
+                <select name='days' class='days'>
+                    {{~ it.weekDayList :item:index }}
+                    <option value='{{= item.value }}'>{{= item.label }}</option>
+                    {{~}}
+                </select>
+                <span class='help-inline'>{{= it.strings.IN }}</span>
+                <select name='month' class='month'>
+                    {{~ it.monthList :item:index }}
+                    <option value='{{= item.value }}'>{{= item.label }}</option>
+                    {{~}}
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+

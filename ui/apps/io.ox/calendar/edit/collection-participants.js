@@ -12,8 +12,7 @@
  */
 
 define('io.ox/calendar/edit/collection-participants',
-      ['io.ox/calendar/edit/deps/Backbone',
-       'io.ox/calendar/edit/model-participant'], function (Backbone, ParticipantModel) {
+      ['io.ox/calendar/edit/model-participant'], function (ParticipantModel) {
     'use strict';
 
     var ParticipantsCollection = Backbone.Collection.extend({

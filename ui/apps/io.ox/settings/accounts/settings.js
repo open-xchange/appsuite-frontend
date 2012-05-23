@@ -29,13 +29,14 @@ define('io.ox/settings/accounts/settings',
 
 
     var listOfAccounts,
+        listbox = null,
 
         createAccountItem = function (val) {
             listOfAccounts.push({
                 dataid: 'email/' + val.id,
                 html: val.primary_address
             });
-            console.log(listOfAccounts);
+//            console.log(listOfAccounts);
 
         },
 
@@ -71,20 +72,38 @@ define('io.ox/settings/accounts/settings',
             });
         },
 
-        deleteSelectedItem = function (args) {
-            var selectedItemID = args.data.listbox.find('div[selected="selected"]').attr('data-item-id');
+        splitDataItemId = function (selectedItemID) {
             if (selectedItemID !== undefined) {
                 var type = selectedItemID.split(/\//)[0],
                     dataid = selectedItemID.split(/\//)[1];
-//                console.log(type + ' ' + dataid);
-                api.remove([dataid]);
+                return dataid;
             }
+        },
+
+        removeSelectedItem = function (dataid, selectedItemID) {
+            api.remove([dataid]).done(
+                function () {
+                    listbox.find('[data-item-id="' + selectedItemID + '"]').remove();
+                }
+            );
+        },
+
+        getSelectedItem = function (args) {
+            var dataid,
+                selectedItemID;
+            if (args.data !== undefined) {
+                selectedItemID = listbox.find('div[selected="selected"]').attr('data-item-id');
+            } else {
+                selectedItemID = $(args.srcElement.parentNode).attr('data-item-id');
+            }
+            dataid = splitDataItemId(selectedItemID);
+            removeSelectedItem(dataid, selectedItemID);
         },
 
         AccountsSettingsModelView = {
         draw: function (data) {
-            var self = this,
-                listbox = null;
+            var self = this;
+
 
             self.node = $('<div>');
 
@@ -104,7 +123,7 @@ define('io.ox/settings/accounts/settings',
                                         return listOfAccounts;
                                     }
                                 }
-                            })
+                            }).delegate('.close', 'click', getSelectedItem)
                         )
                         .append(
                             forms.createButton({label: 'Add ...', btnclass: 'btn'}).attr('data-action', 'add').css({'margin-right': '15px'})
@@ -112,7 +131,7 @@ define('io.ox/settings/accounts/settings',
                             forms.createButton({label: 'Edit ...', btnclass: 'btn'}).attr('data-action', 'edit').css({'margin-right': '15px'})
                                 .on('click', {listbox: listbox, self: self}, createExtpointForSelectedAccount),
                             forms.createButton({label: 'Delete ...', btnclass: 'btn'}).attr('data-action', 'delete')
-                                .on('click', {listbox: listbox, self: self}, deleteSelectedItem)
+                                .on('click', {self: self}, getSelectedItem)
                         )
                     )
                     .append(forms.createSectionDelimiter())

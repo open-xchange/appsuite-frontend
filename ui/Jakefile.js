@@ -117,7 +117,7 @@ var jshintOptions = {
     validthis: true,
     white: true, // THIS IS TURNED ON - otherwise we have too many dirty check-ins
     predef: ['$', '_', 'Modernizr', 'define', 'require', 'ox', 'assert',
-             'include']
+             'include', 'doT', 'Backbone']
 };
 
 function hint (data, getSrc) {
@@ -209,6 +209,12 @@ utils.concat("boot.js", [
         "lib/underscore.js", // load this before require.js to keep global object
         "lib/require.js",
         "lib/modernizr.js",
+
+        //add backbone and dot.js may be a AMD-variant would be better
+        "lib/backbone.js",
+        "lib/backbone.modelbinder.js",
+        "lib/doT.js",
+
         "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
@@ -277,8 +283,8 @@ if (apps.rest) utils.copy(apps.rest);
 
 // time zone database
 
-if (!path.existsSync("apps/io.ox/core/tz/zoneinfo")) {
-    var zoneinfo = utils.dest("apps/io.ox/core/tz/zoneinfo");
+if (!path.existsSync("apps/io.ox/core/date/tz/zoneinfo")) {
+    var zoneinfo = utils.dest("apps/io.ox/core/date/tz/zoneinfo");
     utils.file(zoneinfo, [], function() {
         if (!path.existsSync(zoneinfo)) {
             fs.symlinkSync("/usr/share/zoneinfo", zoneinfo);
