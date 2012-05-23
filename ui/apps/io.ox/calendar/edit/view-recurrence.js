@@ -47,17 +47,17 @@ define('io.ox/calendar/edit/view-recurrence',
     };
 
     var weekDayList = [
-        { value: 1 << 0, label: gt('Sunday')},
-        { value: 1 << 1, label: gt('Monday')},
-        { value: 1 << 2, label: gt('Tuesday')},
-        { value: 1 << 3, label: gt('Wednesday')},
-        { value: 1 << 4, label: gt('Thursday')},
-        { value: 1 << 5, label: gt('Friday')},
-        { value: 1 << 6, label: gt('Saturday')}
+        { value: (1 << 0), label: gt('Sunday')},
+        { value: (1 << 1), label: gt('Monday')},
+        { value: (1 << 2), label: gt('Tuesday')},
+        { value: (1 << 3), label: gt('Wednesday')},
+        { value: (1 << 4), label: gt('Thursday')},
+        { value: (1 << 5), label: gt('Friday')},
+        { value: (1 << 6), label: gt('Saturday')}
     ];
 
     var monthList = [
-        { value: 0, label: gt('January') }
+        { value: 0, label: gt('January') },
         { value: 1, label: gt('February') },
         { value: 2, label: gt('March') },
         { value: 3, label: gt('April') },
@@ -95,15 +95,6 @@ define('io.ox/calendar/edit/view-recurrence',
         RECURRENCE_WEEKLY: 2,
         RECURRENCE_MONTHLY: 3,
         RECURRENCE_YEARLY: 4,
-        daybits: {
-            DAYS_SUNDAY: 1 << 0,
-            DAYS_MONDAY: 1 << 1,
-            DAYS_TUESDAY: 1 << 2,
-            DAYS_WEDNESDAY: 1 << 3,
-            DAYS_THURSDAY: 1 << 4,
-            DAYS_FRIDAY: 1 << 5,
-            DAYS_SATURDAY: 1 << 6
-        },
         events: {
             'change [name=monthly_option]': 'changeMonthlyOption',
             'change [name=yearly_option]': 'changeYearlyOption'
@@ -121,8 +112,6 @@ define('io.ox/calendar/edit/view-recurrence',
         render: function () {
             var self = this;
             self.$el.empty().append(self.template({
-                gt: gt,
-                daybits: self.daybits,
                 uid: _.uniqueId('io_ox_calendar_edit_recurrence'),
                 strings: staticStrings,
                 weekDayList: weekDayList,
@@ -141,17 +130,7 @@ define('io.ox/calendar/edit/view-recurrence',
                 recurrence_type: [{
                     selector: '[name=recurrence_type]',
                     converter: BinderUtils.numToString //shitty aspect in ModelBinder
-                }],
-                days: [
-                    createDaysBitConverter(self.daybits.DAYS_SUNDAY),
-                    createDaysBitConverter(self.daybits.DAYS_MONDAY),
-                    createDaysBitConverter(self.daybits.DAYS_TUESDAY),
-                    createDaysBitConverter(self.daybits.DAYS_WEDNESDAY),
-                    createDaysBitConverter(self.daybits.DAYS_THURSDAY),
-                    createDaysBitConverter(self.daybits.DAYS_FRIDAY),
-                    createDaysBitConverter(self.daybits.DAYS_SATURDAY),
-                    { selector: '[name=days]'}
-                ]
+                }]
             };
 
             // days of the week - bindings
@@ -159,7 +138,7 @@ define('io.ox/calendar/edit/view-recurrence',
             _.each(weekDayList, function (item) {
                 bindings.days.push(createDaysBitConverter(item.value));
             });
-            bindgins.days.push({ selector: '[name=days]'});
+            bindings.days.push({ selector: '[name=days]'});
 
             self._modelBinder.bind(self.model, self.el, bindings);
             self.updateRecurrenceDetail();
