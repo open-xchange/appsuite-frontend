@@ -188,11 +188,13 @@ define("io.ox/settings/accounts/email/test",
                     });
                 });
 
-                j.it('looks for the add form', function () {
+                j.it('looks for the add form and save button', function () {
 
                     j.waitsFor(function () {
-                        detailPane = $('.accountDetail');
-                        if (detailPane[0]) {
+                        detailPane = $('.settings-detail-pane');
+                        buttonSave = $('[data-action="save"]');
+                        if (detailPane[0] && buttonSave[0]) {
+                            console.log(detailPane);
                             return true;
                         }
                     }, 'looks for detailPane', TIMEOUT);
@@ -202,18 +204,12 @@ define("io.ox/settings/accounts/email/test",
                 j.it('fills the form', function () {
                     _.each(TESTACCOUNT, function (value, key) {
                         console.log(key + ' ' + value);
+                        console.log(detailPane.find('[data-property="' + key + '"]'));
                         detailPane.find('[data-property="' + key + '"]').val(value).trigger('change');
                     });
                 });
 
                 j.it('hits the save button', function () {
-
-                    j.waitsFor(function () {
-                        buttonSave = $('[data-action="save"]');
-                        if (buttonSave[0]) {
-                            return true;
-                        }
-                    }, 'looks for save button', TIMEOUT);
 
                     j.runs(function () {
                         console.log(buttonSave + ' gedrueckt');
@@ -242,7 +238,6 @@ define("io.ox/settings/accounts/email/test",
                 });
 
                 j.it('deletes the created account', function () {
-//                    console.log(dataId);
                     api.remove([dataId]);
                 });
 
