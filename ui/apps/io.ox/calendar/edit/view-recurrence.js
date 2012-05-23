@@ -70,8 +70,6 @@ define('io.ox/calendar/edit/view-recurrence',
         { value: 10, label: gt('November') },
         { value: 11, label: gt('Dezember') }
     ];
-
-
     //strings end
 
 
@@ -258,7 +256,6 @@ define('io.ox/calendar/edit/view-recurrence',
             if (option === 'one') {
                 self.model.unset('days');
             }
-            console.log();
         }
     });
 

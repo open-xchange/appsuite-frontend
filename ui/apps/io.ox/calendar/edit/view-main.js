@@ -1,3 +1,4 @@
+// NOJSHINT
 /**
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
@@ -16,8 +17,9 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/calendar/edit/view-recurrence',
        'io.ox/calendar/edit/binding-util',
        'io.ox/calendar/util',
+       'io.ox/core/extensions',
        'text!io.ox/calendar/edit/tpl/common.tpl',
-       'gettext!io.ox/calendar/edit/main'], function (ParticipantsCollection, ParticipantsView, RecurrenceView, BinderUtils, util, commontpl, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (ParticipantsCollection, ParticipantsView, RecurrenceView, BinderUtils, util, ext, commontpl, gt) {
 
     'use strict';
 
@@ -176,17 +178,113 @@ define('io.ox/calendar/edit/view-main',
         },
         render: function () {
             var self = this;
+
+            //debug
+            window.ext = ext;
+
+            // pre render it
             self.$el.empty().append(self.template({
                 strings: staticStrings,
                 reminderList: reminderListValues,
                 uid: _.uniqueId('io_ox_calendar_edit_')
             }));
+
+
+            // HANDLE DYNAMIC EXTENSION POINTS
+            // DO NOT TOUCH
+            var deepests = self.deepest('*[data-extgroup]', self.el);
+            while (deepests.length > 0) {
+                //work with deepests
+                var extpoints = {};
+                _(deepests).each(function ($item, index) {
+                    var $parent = $item.parent();
+                    var extgroup = $item.attr('data-extgroup');
+                    var pointname = 'io.ox/calendar/edit/' + extgroup;
+
+                    // just tidy up to prevent endless loop by accident
+                    $item.removeAttr('data-extgroup');
+                    self.extendPoint(index, $item, pointname, $parent);
+                    extpoints[pointname] = $parent;
+                });
+
+                //apply them to their parent with in el
+                _(extpoints).each(function ($parent, pointname) {
+                    // points are keeping a reference to their original occurence-parent
+                    // so we just need to call the draw function
+                    // but we leave the this assignment to global space
+                    // so if there is any
+                    ext.point(pointname).invoke('draw', $parent);
+                });
+
+                // redefine deepests after first run, so now every deepest element should be rendered in the el-Node
+                deepests = self.deepest('*[data-extgroup]', self.el);
+            }
+            // DYNAMIC EXTENSION POINTS END
+
+            // should be an ext point tooo
             self.$('#participantsView').empty().append(self.participantsView.render().el);
+
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'name');
             var bindings = _.extend(defaultBindings, self.bindings);
             self._modelBinder.bind(self.model, self.el, bindings);
             return self;
         },
+
+
+        extendPoint: function (index, $ext_item, pointName, $fragment) {
+            var self = this;
+            var id = $ext_item.attr('data-extid');
+            var myindex = (index + 1) * 100;
+            var point = ext.point(pointName);
+            var myfrag = $ext_item.detach(); //keep everything else but remove it from fragment
+
+            // nasty unneeded hack :(
+            // second time we need to replace it because we keep a reference to $fragment
+            var operation = 'extend';
+            if (_(point.keys()).indexOf(id) !== -1) {
+                console.log('replace it');
+                operation = 'replace';
+            }
+
+            // first extend
+            point[operation]({
+                id: id,
+                index: myindex,
+                draw: function (options) {
+                    console.log('draw extpoint:' + pointName + '   id: ' + id);
+                    console.log(this);
+                    // just use fragment here - cause its the original parent of the group
+                    // so we draw what we already have
+                    this.append(myfrag);
+                }
+            });
+        },
+
+        // should be an jquery function :)
+        deepest: function (sel, el) {
+            var sel = '*[data-extgroup]';
+            var levels = 0;
+            var deepests = [];
+
+            $(el).find('*[data-extgroup]').each(function (index, item) {
+                console.log('deep....');
+                if(!this.firstChild || this.firstChild.nodeType !== 1) {
+                    var levelsFromHere = $(this).parentsUntil('body').length;
+                    if(levelsFromHere > levels) {
+                        deepests = [];
+                        levels = levelsFromHere;
+                        deepests.push($(item));
+                    } else if (levelsFromHere === levels) {
+                        deepests.push($(item));
+                    }
+                }
+            });
+            return deepests;
+        },
+
+
+
+
 
         onSave: function () {
             console.log('trigger save');
