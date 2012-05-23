@@ -250,7 +250,7 @@ input#image1 {
 .contact-detail input, .create-contact input{
 	width: 270px;
 }
-	
+
 .create-contact .section-group {
 	margin-bottom: 5px;
 	overflow: hidden;
@@ -264,7 +264,7 @@ input#image1 {
  	margin-top: 50px;
  	float: right;
  }
-	
+
 .create-contact #contactUploadImage, .create-contact input[name="picture-upload-file"]{
 	width: 0px;
 	height: 0px;

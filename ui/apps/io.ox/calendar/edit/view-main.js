@@ -45,7 +45,8 @@ define('io.ox/calendar/edit/view-main',
 
             var recurTextConverter = function (direction, value, attribute, model) {
                 if (direction === 'ModelToView') {
-                    return util.getRecurrenceString(model.attributes);
+                    var txt = util.getRecurrenceString(model.attributes);
+                    return (txt) ? ': ' + txt : '';
                 } else {
                     return model.get(attribute);
                 }

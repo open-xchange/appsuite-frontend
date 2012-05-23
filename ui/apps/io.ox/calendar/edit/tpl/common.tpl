@@ -36,13 +36,11 @@
             <label style="display: inline;" for="{{=it.uid}}_full_time">{{= it.gt("All day") }}</label>
             <div />
             <input type="checkbox" class="repeat" name="repeat" id="{{=it.uid}}_repeat"/>
-            <label style="display: inline;" for="{{=it.uid}}_repeat">{{= it.gt("Repeat") }}:
-
-            </label>
-                            <span name="recurrenceText"></span>
-                <span class='editrecurrence_wrapper' style="display:none;">
-                  (<a class="editrecurrence">{{= it.gt("edit") }}</a>)
-                </span>
+            <label style="display: inline; margin-right: -4px;" for="{{=it.uid}}_repeat">{{= it.gt("Repeat") }}</label>
+            <span name="recurrenceText"></span>
+            <span class='editrecurrence_wrapper' style="display:none;">
+            (<a class="editrecurrence">{{= it.gt("edit") }}</a>)
+            </span>
         </div>
         <div class="right">
             <div style="text-align: right;">
@@ -56,8 +54,6 @@
 <div class="control-group recurrence">
 
 </div>
-
-
 
 <div class="control-group">
     <label class="control-label" for="{{=it.uid}}_note">{{= it.gt("Description") }}</label>
@@ -122,6 +118,5 @@
         </div>
     </div>
     <div style="clear:both;" id="participantsView"/>
-
     </div>
 </div>
