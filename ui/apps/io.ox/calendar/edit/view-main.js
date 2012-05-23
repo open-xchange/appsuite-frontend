@@ -67,7 +67,7 @@ define('io.ox/calendar/edit/view-main',
         }
     });
 
-    var usedStrings = {
+    var staticStrings = {
         SUBJECT:            gt('Subject'),
         LOCATION:           gt('Location'),
         STARTS_ON:          gt('Starts on'),
@@ -90,6 +90,8 @@ define('io.ox/calendar/edit/view-main',
         PRIVATE:            gt('Private'),
         NOTIFY_ALL:         gt('Notify all')
     };
+
+    /// strings end
 
 
 
@@ -175,7 +177,7 @@ define('io.ox/calendar/edit/view-main',
         render: function () {
             var self = this;
             self.$el.empty().append(self.template({
-                STRINGS: usedStrings,
+                strings: staticStrings,
                 reminderList: reminderListValues,
                 uid: _.uniqueId('io_ox_calendar_edit_')
             }));

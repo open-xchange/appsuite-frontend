@@ -18,6 +18,64 @@ define('io.ox/calendar/edit/view-recurrence',
 
     'use strict';
 
+
+    //Strings
+    var staticStrings = {
+        STARTS_ON: gt('Starts on'),
+        ENDS: gt('Ends'),
+        NEVER: gt('Never'),
+        ON: gt('on'),
+        AFTER: gt('after'),
+        TIMES: gt('times'),
+        DAILY: gt('Daily'),
+        WEEKLY: gt('Weekly'),
+        MONTHLY: gt('Monthly'),
+        YEARLY: gt('Yearly'),
+        EVERY: gt('Every'),
+        DAY: gt('day'),
+        WEEKS: gt('weeks'),
+        AT: gt('at'),
+        TH_DAY_EVERY: gt('th day every'),
+        TH_MONTH: gt('th month'),
+        FIRST: gt('First'),
+        SECOND: gt('Second'),
+        THIRD: gt('Third'),
+        FOURTH: gt('Fourth'),
+        LAST: gt('Last'),
+        TH: gt('th'),
+        IN: gt('in')
+    };
+
+    var weekDayList = [
+        { value: 1 << 0, label: gt('Sunday')},
+        { value: 1 << 1, label: gt('Monday')},
+        { value: 1 << 2, label: gt('Tuesday')},
+        { value: 1 << 3, label: gt('Wednesday')},
+        { value: 1 << 4, label: gt('Thursday')},
+        { value: 1 << 5, label: gt('Friday')},
+        { value: 1 << 6, label: gt('Saturday')}
+    ];
+
+    var monthList = [
+        { value: 0, label: gt('January') }
+        { value: 1, label: gt('February') },
+        { value: 2, label: gt('March') },
+        { value: 3, label: gt('April') },
+        { value: 4, label: gt('Mai') },
+        { value: 5, label: gt('June') },
+        { value: 6, label: gt('July') },
+        { value: 7, label: gt('August') },
+        { value: 8, label: gt('September') },
+        { value: 9, label: gt('Oktober') },
+        { value: 10, label: gt('November') },
+        { value: 11, label: gt('Dezember') }
+    ];
+
+
+    //strings end
+
+
+
     function createDaysBitConverter(day) {
         return {
             selector: '[name=day' + day + ']',
@@ -62,7 +120,14 @@ define('io.ox/calendar/edit/view-recurrence',
         },
         render: function () {
             var self = this;
-            self.$el.empty().append(self.template({gt: gt, daybits: self.daybits, uid: _.uniqueId('io_ox_calendar_edit_recurrence')}));
+            self.$el.empty().append(self.template({
+                gt: gt,
+                daybits: self.daybits,
+                uid: _.uniqueId('io_ox_calendar_edit_recurrence'),
+                strings: staticStrings,
+                weekDayList: weekDayList,
+                monthList: monthList
+            }));
 
             var bindings = {
                 day_in_month: '[name=day_in_month]',
@@ -88,6 +153,13 @@ define('io.ox/calendar/edit/view-recurrence',
                     { selector: '[name=days]'}
                 ]
             };
+
+            // days of the week - bindings
+            bindings.days = [];
+            _.each(weekDayList, function (item) {
+                bindings.days.push(createDaysBitConverter(item.value));
+            });
+            bindgins.days.push({ selector: '[name=days]'});
 
             self._modelBinder.bind(self.model, self.el, bindings);
             self.updateRecurrenceDetail();
