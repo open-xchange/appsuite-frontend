@@ -242,7 +242,6 @@ define('io.ox/calendar/edit/view-main',
             // second time we need to replace it because we keep a reference to $fragment
             var operation = 'extend';
             if (_(point.keys()).indexOf(id) !== -1) {
-                console.log('replace it');
                 operation = 'replace';
             }
 
@@ -251,8 +250,6 @@ define('io.ox/calendar/edit/view-main',
                 id: id,
                 index: myindex,
                 draw: function (options) {
-                    console.log('draw extpoint:' + pointName + '   id: ' + id);
-                    console.log(this);
                     // just use fragment here - cause its the original parent of the group
                     // so we draw what we already have
                     this.append(myfrag);
@@ -267,7 +264,6 @@ define('io.ox/calendar/edit/view-main',
             var deepests = [];
 
             $(el).find('*[data-extgroup]').each(function (index, item) {
-                console.log('deep....');
                 if(!this.firstChild || this.firstChild.nodeType !== 1) {
                     var levelsFromHere = $(this).parentsUntil('body').length;
                     if(levelsFromHere > levels) {
@@ -287,7 +283,6 @@ define('io.ox/calendar/edit/view-main',
 
 
         onSave: function () {
-            console.log('trigger save');
             var self = this;
             self.trigger('save');
         },
@@ -306,7 +301,6 @@ define('io.ox/calendar/edit/view-main',
             this.$('.recurrence').toggle();
         },
         onToggleRepeat: function (evt) {
-            console.log('trigger repeat');
             var self = this;
             var isRecurrence = ($(evt.target).attr('checked') === 'checked');
 
