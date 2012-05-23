@@ -149,7 +149,7 @@ define('io.ox/mail/view-detail',
     blockquoteClickClose = function () {
         // collapse selection created by double click
         if (document.getSelection) {
-            document.getSelection().collapse();
+            document.getSelection().collapse(this, 0);
         }
         $(this).off('dblclick.close')
             .css('cursor', 'pointer')

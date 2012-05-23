@@ -48,11 +48,13 @@ define("io.ox/mail/api",
 
     // apply latest state of flag & color_label on mail
     var applyLatest = function (data) {
-        var cid = data.folder_id + '.' + data.id, obj;
-        if (cid in latest) {
-            obj = latest[cid];
-            data.flags = obj.flags;
-            data.color_label = obj.color_label;
+        if (data) {
+            var cid = data.folder_id + '.' + data.id, obj;
+            if (cid in latest) {
+                obj = latest[cid];
+                data.flags = obj.flags;
+                data.color_label = obj.color_label;
+            }
         }
         return data;
     };

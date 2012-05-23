@@ -547,7 +547,6 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                                     var ids = _.url.hash('id').split(/,/), cid, index, selectionChanged;
                                     // convert ids to objects first - avoids problems with
                                     // non-existing items that cannot be resolved in selections
-
                                     ids = _(ids).map(desirealize);
                                     selectionChanged = !self.selection.equals(ids);
                                     if (selectionChanged) {
@@ -555,6 +554,8 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                                         self.selection.set(ids);
                                         firstAutoSelect = false;
                                     }
+                                    //changed = true;
+                                    //console.log('selectionChanged', selectionChanged, 'changed', changed);
                                     if (selectionChanged || changed) {
                                         // scroll to first selected item
                                         cid = _(ids).first();
@@ -828,13 +829,11 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         };
 
         this.pause = function () {
-            console.log('pause!');
             paused = true;
             return self;
         };
 
         this.resume = function () {
-            console.log('resume!');
             paused = false;
             return self;
         };
