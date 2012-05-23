@@ -71,3 +71,18 @@
     border: 0px none;
     max-width: 250px;
 }
+
+
+.facebook.wall-entry {
+    margin: 1em 0;
+}
+.facebook .from {
+    display: inline;
+}
+.facebook .wall-comment {
+    margin: 1em 0 0 1em;
+}
+.facebook a.action {
+    margin: 0 1em 0 0;
+    font-size: 80%;
+}
