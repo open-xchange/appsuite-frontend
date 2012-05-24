@@ -8,7 +8,7 @@
         <label for="{{=it.uid}}_location">{{= it.strings.LOCATION }}</label>
         <input type="text" class="discreet location" name="location" id="{{=it.uid}}_location" data-extgroup="head" data-extid="location" />
 
-        <a class="btn btn-primary save" data-extgroup="head" data-extid="save">Save</a>
+        <a class="btn btn-primary save" data-extgroup="head" data-extid="save">{{= it.strings.SAVE_BUTTON_LABEL }}</a>
     </div>
 </div>
 

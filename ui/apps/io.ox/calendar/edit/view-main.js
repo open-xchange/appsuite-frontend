@@ -102,6 +102,7 @@ define('io.ox/calendar/edit/view-main',
         className: 'io-ox-calendar-edit',
         subviews: {},
         _modelBinder: undefined,
+        guid: undefined,
         bindings: undefined,
         events: {
  //           'click .editrecurrence': 'toggleRecurrence',
@@ -112,6 +113,7 @@ define('io.ox/calendar/edit/view-main',
             var self = this;
             self.template = doT.template(commontpl);
             self._modelBinder = new Backbone.ModelBinder();
+            self.guid = _.uniqueId('io_ox_calendar_edit_');
 
             //self.participantsCollection = new ParticipantsCollection(self.model.get('participants'));
             //self.participantsView = new ParticipantsView({collection: self.participantsCollection});
@@ -178,11 +180,14 @@ define('io.ox/calendar/edit/view-main',
         render: function () {
             var self = this;
 
+
             // pre render it
+            staticStrings.SAVE_BUTTON_LABEL = (self.model.has('id') ? gt('Save') : gt('Create'));
+
             self.$el.empty().append(self.template({
                 strings: staticStrings,
                 reminderList: reminderListValues,
-                uid: _.uniqueId('io_ox_calendar_edit_')
+                uid: self.guid
             }));
 
             // define and invoke extension points
@@ -204,6 +209,8 @@ define('io.ox/calendar/edit/view-main',
 
             // finally bind the model to the dom using the defined bindings
             self._modelBinder.bind(self.model, self.el, bindings);
+
+
             return self;
         },
 

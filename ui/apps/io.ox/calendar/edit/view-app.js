@@ -40,6 +40,8 @@ define('io.ox/calendar/edit/view-app',
                 self.trigger('save'); //just bubble manually
             });
             self.el.nodes.main.empty().append(self.subviews.common.render().el);
+
+
             return self;
         },
 
@@ -51,6 +53,9 @@ define('io.ox/calendar/edit/view-app',
             };
             // updates the title on change
             self._modelBinder.bind(self.model, $('.window-title').parent().get(), bindings);
+            // now focus on title
+            console.log('focus:' + '#' + self.subviews.common.guid + '_title');
+            $('#' + self.subviews.common.guid + '_title').get(0).focus();
         }
     });
     return AppView;
