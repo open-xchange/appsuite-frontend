@@ -11,15 +11,12 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 define('io.ox/calendar/edit/view-main',
-      ['io.ox/calendar/edit/collection-participants',
-       'io.ox/calendar/edit/view-participants',
-       'io.ox/calendar/edit/view-recurrence',
-       'io.ox/calendar/edit/binding-util',
+       ['io.ox/calendar/edit/binding-util',
        'io.ox/calendar/util',
        'io.ox/core/extensions',
        'io.ox/calendar/edit/ext-helper',
        'text!io.ox/calendar/edit/tpl/common.tpl',
-       'gettext!io.ox/calendar/edit/main'], function (ParticipantsCollection, ParticipantsView, RecurrenceView, BinderUtils, util, ext, ext_helper, commontpl, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, ext_helper, commontpl, gt) {
 
     'use strict';
 
@@ -106,18 +103,18 @@ define('io.ox/calendar/edit/view-main',
         _modelBinder: undefined,
         bindings: undefined,
         events: {
-            'click .editrecurrence': 'toggleRecurrence',
-            'click .save': 'onSave',
-            'click input.repeat': 'onToggleRepeat'
+ //           'click .editrecurrence': 'toggleRecurrence',
+            'click .save': 'onSave'
+ //           'click input.repeat': 'onToggleRepeat'
         },
         initialize: function () {
             var self = this;
             self.template = doT.template(commontpl);
             self._modelBinder = new Backbone.ModelBinder();
 
-            self.participantsCollection = new ParticipantsCollection(self.model.get('participants'));
-            self.participantsView = new ParticipantsView({collection: self.participantsCollection});
-            self.recurrenceView = new RecurrenceView({model: self.model});
+            //self.participantsCollection = new ParticipantsCollection(self.model.get('participants'));
+            //self.participantsView = new ParticipantsView({collection: self.participantsCollection});
+            //self.recurrenceView = new RecurrenceView({model: self.model});
 
             var recurTextConverter = function (direction, value, attribute, model) {
                 if (direction === 'ModelToView') {
@@ -148,8 +145,8 @@ define('io.ox/calendar/edit/view-main',
                         selector: '.endsat-time',
                         converter: BinderUtils.convertTime
                     }
-                ],
-                recurrence_type: [
+                ]
+               /* recurrence_type: [
                     {
                         selector: '[name=repeat]',
                         converter: function (direction, value, attribute, model) {
@@ -173,7 +170,7 @@ define('io.ox/calendar/edit/view-main',
                 day_in_month: {selector: '[name=recurrenceText]', converter: recurTextConverter},
                 interval: {selector: '[name=recurrenceText]', converter: recurTextConverter},
                 days: {selector: '[name=recurrenceText]', converter: recurTextConverter},
-                month: {selector: '[name=recurrenceText]', converter: recurTextConverter}
+                month: {selector: '[name=recurrenceText]', converter: recurTextConverter}*/
             };
 
         },
@@ -193,7 +190,7 @@ define('io.ox/calendar/edit/view-main',
             ext_helper.processDomFragment(self.el, 'io.ox/calendar/edit');
 
             // should be an ext point tooo
-            self.$('#participantsView').empty().append(self.participantsView.render().el);
+            //self.$('#participantsView').empty().append(self.participantsView.render().el);
 
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'name');
             var bindings = _.extend(defaultBindings, self.bindings);
@@ -215,9 +212,9 @@ define('io.ox/calendar/edit/view-main',
         onSave: function () {
             var self = this;
             self.trigger('save');
-        },
+        }
 
-        toggleRecurrence: function () {
+        /*toggleRecurrence: function () {
             var self = this,
                 $rep = self.$('.recurrence');
             if ($rep.is(':visible')) {
@@ -249,7 +246,7 @@ define('io.ox/calendar/edit/view-main',
             // set default recurrence settings and not
             // if not delete all recurrence settings, save them in temporary variable
             // so it can restored
-        }
+        }*/
     });
 
     return CommonView;

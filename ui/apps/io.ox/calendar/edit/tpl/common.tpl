@@ -32,20 +32,15 @@
 <div class="control-group" data-extgroup="section" data-extid="extras">
     <div class="controls tablerow">
         <div class="left">
-            <input type="checkbox" class="full_time" name="full_time" id="{{=it.uid}}_full_time"/>
-            <label style="display: inline;" for="{{=it.uid}}_full_time">{{= it.strings.ALL_DAY }}</label>
-            <div />
-            <input type="checkbox" class="repeat" name="repeat" id="{{=it.uid}}_repeat"/>
-            <label style="display: inline; margin-right: -4px;" for="{{=it.uid}}_repeat">{{= it.strings.REPEAT }}</label>
-            <span name="recurrenceText"></span>
-            <span class='editrecurrence_wrapper' style="display:none;">
-            (<a class="editrecurrence">{{= it.strings.EDIT }}</a>)
-            </span>
+            <div data-extgroup="extrasleft" data-extid="fulltime">
+                <input type="checkbox" class="full_time" name="full_time" id="{{=it.uid}}_full_time"/>
+                <label style="display: inline;" for="{{=it.uid}}_full_time">{{= it.strings.ALL_DAY }}</label>
+            </div>
+
         </div>
         <div class="right">
             <div style="text-align: right;">
               <a class="edittimezone">{{= it.strings.CHANGE_TIMEZONE }}</a>
-
             </div>
         </div>
     </div>
@@ -88,18 +83,4 @@
     </div>
 </div>
 
-<div class="control-group" data-extgroup="section" data-extid="participants">
-    <div class="control-grouphead tablerow">
-        <div class="left">
-            {{= it.strings.PARTICIPANTS}}
-        </div>
-        <div class="right">
-            <div style="text-align: right;">
-                <input type="checkbox" name="notification" id="{{=it.uid}}_notification"/>
-                <label style="display:inline;" for="{{=it.uid}}_notification">{{= it.strings.NOTIFY_ALL}}</label>
-            </div>
-        </div>
-    </div>
-    <div style="clear:both;" id="participantsView"/>
-    </div>
-</div>
+

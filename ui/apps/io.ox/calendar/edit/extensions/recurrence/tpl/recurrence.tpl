@@ -1,3 +1,10 @@
+<!--
+<div class="control-group recurrence" data-extgroup="section" data-extid="recurrence">
+
+</div>
+-->
+
+
 <fieldset class="tablerow">
     <legend class="sectiontitle">Legend text</legend>
     <div class="left">
