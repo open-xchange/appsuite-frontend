@@ -8,7 +8,7 @@
         <label for="{{=it.uid}}_location">{{= it.strings.LOCATION }}</label>
         <input type="text" class="discreet location" name="location" id="{{=it.uid}}_location" data-extgroup="head" data-extid="location" />
 
-        <a class="btn btn-primary save">Save</a>
+        <a class="btn btn-primary save" data-extgroup="head" data-extid="save">Save</a>
     </div>
 </div>
 
@@ -16,15 +16,15 @@
     <div class="controls tablerow">
         <div class="left">
             <label for="{{=it.uid}}_start_date">{{= it.strings.STARTS_ON }}</label>
-            <input type="date" class="discreet startsat-date" id="{{=it.uid}}_start_date"/>
-            <input type="time" class="discreet startsat-time" />
-            <span class="label" data-original-title="">CEST</span>
+            <input type="date" class="discreet startsat-date" id="{{=it.uid}}_start_date" data-extgroup="startdates" data-extid="date"/>
+            <input type="time" class="discreet startsat-time" data-extgroup="startdates" data-extid="time"/>
+            <span class="label" data-original-title="" data-extgroup="startdates" data-extid="timezone">CEST</span>
         </div>
         <div class="right">
-            <label for="{{=it.uid}}_end_date">{{= it.STRINGS_ENDS_ON }}</label>
-            <input type="date" class="discreet endsat-date" id="{{=it.uid}}_end_date"/>
-            <input type="time" class="discreet endsat-time" />
-            <span class="label" data-original-title="">CEST</span>
+            <label for="{{=it.uid}}_end_date">{{= it.strings.ENDS_ON }}</label>
+            <input type="date" class="discreet endsat-date" id="{{=it.uid}}_end_date" data-extgroup="enddates" data-extid="date"/>
+            <input type="time" class="discreet endsat-time" data-extgroup="enddates" data-extid="time"/>
+            <span class="label" data-original-title="" data-extgroup="enddates" data-extid="timezone">CEST</span>
         </div>
     </div>
 </div>

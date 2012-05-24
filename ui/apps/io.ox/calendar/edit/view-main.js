@@ -1,4 +1,3 @@
-// NOJSHINT
 /**
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
@@ -18,8 +17,9 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/calendar/edit/binding-util',
        'io.ox/calendar/util',
        'io.ox/core/extensions',
+       'io.ox/calendar/edit/ext-helper',
        'text!io.ox/calendar/edit/tpl/common.tpl',
-       'gettext!io.ox/calendar/edit/main'], function (ParticipantsCollection, ParticipantsView, RecurrenceView, BinderUtils, util, ext, commontpl, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (ParticipantsCollection, ParticipantsView, RecurrenceView, BinderUtils, util, ext, ext_helper, commontpl, gt) {
 
     'use strict';
 
@@ -50,20 +50,21 @@ define('io.ox/calendar/edit/view-main',
     ];
 
     _.each(reminderListValues, function (item, index) {
+        var i;
         switch (item.format) {
         case 'minutes':
             item.label = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), gt.noI18n(item.value));
             break;
         case 'hours':
-            var i = Math.floor(item.value / 60);
+            i = Math.floor(item.value / 60);
             item.label = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), gt.noI18n(i));
             break;
         case 'days':
-            var i  = Math.floor(item.value / 60 / 24);
+            i  = Math.floor(item.value / 60 / 24);
             item.label = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), gt.noI18n(i));
             break;
         case 'weeks':
-            var i = Math.floor(item.value / 60 / 24 / 7);
+            i = Math.floor(item.value / 60 / 24 / 7);
             item.label = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), gt.noI18n(i));
             break;
         }
@@ -179,9 +180,6 @@ define('io.ox/calendar/edit/view-main',
         render: function () {
             var self = this;
 
-            //debug
-            window.ext = ext;
-
             // pre render it
             self.$el.empty().append(self.template({
                 strings: staticStrings,
@@ -189,95 +187,27 @@ define('io.ox/calendar/edit/view-main',
                 uid: _.uniqueId('io_ox_calendar_edit_')
             }));
 
-
-            // HANDLE DYNAMIC EXTENSION POINTS
-            // DO NOT TOUCH
-            var deepests = self.deepest('*[data-extgroup]', self.el);
-            while (deepests.length > 0) {
-                //work with deepests
-                var extpoints = {};
-                _(deepests).each(function ($item, index) {
-                    var $parent = $item.parent();
-                    var extgroup = $item.attr('data-extgroup');
-                    var pointname = 'io.ox/calendar/edit/' + extgroup;
-
-                    // just tidy up to prevent endless loop by accident
-                    $item.removeAttr('data-extgroup');
-                    self.extendPoint(index, $item, pointname, $parent);
-                    extpoints[pointname] = $parent;
-                });
-
-                //apply them to their parent with in el
-                _(extpoints).each(function ($parent, pointname) {
-                    // points are keeping a reference to their original occurence-parent
-                    // so we just need to call the draw function
-                    // but we leave the this assignment to global space
-                    // so if there is any
-                    ext.point(pointname).invoke('draw', $parent);
-                });
-
-                // redefine deepests after first run, so now every deepest element should be rendered in the el-Node
-                deepests = self.deepest('*[data-extgroup]', self.el);
-            }
-            // DYNAMIC EXTENSION POINTS END
+            // define and invoke extension points
+            console.log('invoking everything');
+            console.log(self.el);
+            ext_helper.processDomFragment(self.el, 'io.ox/calendar/edit');
 
             // should be an ext point tooo
             self.$('#participantsView').empty().append(self.participantsView.render().el);
 
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'name');
             var bindings = _.extend(defaultBindings, self.bindings);
+
+
+            // let others modify the bindings - if something is disabled,
+            // that has explicit bindings like start_date in this case
+            ext.point('io.ox/calendar/edit/bindings/common').invoke('modify', self, {bindings: bindings});
+
+
+            // finally bind the model to the dom using the defined bindings
             self._modelBinder.bind(self.model, self.el, bindings);
             return self;
         },
-
-
-        extendPoint: function (index, $ext_item, pointName, $fragment) {
-            var self = this;
-            var id = $ext_item.attr('data-extid');
-            var myindex = (index + 1) * 100;
-            var point = ext.point(pointName);
-            var myfrag = $ext_item.detach(); //keep everything else but remove it from fragment
-
-            // nasty unneeded hack :(
-            // second time we need to replace it because we keep a reference to $fragment
-            var operation = 'extend';
-            if (_(point.keys()).indexOf(id) !== -1) {
-                operation = 'replace';
-            }
-
-            // first extend
-            point[operation]({
-                id: id,
-                index: myindex,
-                draw: function (options) {
-                    // just use fragment here - cause its the original parent of the group
-                    // so we draw what we already have
-                    this.append(myfrag);
-                }
-            });
-        },
-
-        // should be an jquery function :)
-        deepest: function (sel, el) {
-            var sel = '*[data-extgroup]';
-            var levels = 0;
-            var deepests = [];
-
-            $(el).find('*[data-extgroup]').each(function (index, item) {
-                if(!this.firstChild || this.firstChild.nodeType !== 1) {
-                    var levelsFromHere = $(this).parentsUntil('body').length;
-                    if(levelsFromHere > levels) {
-                        deepests = [];
-                        levels = levelsFromHere;
-                        deepests.push($(item));
-                    } else if (levelsFromHere === levels) {
-                        deepests.push($(item));
-                    }
-                }
-            });
-            return deepests;
-        },
-
 
 
 

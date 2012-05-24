@@ -14,8 +14,9 @@
 define('io.ox/calendar/edit/main',
       ['io.ox/calendar/edit/model-appointment',
        'io.ox/calendar/api',
+       'io.ox/calendar/edit/extensions',
        'io.ox/calendar/edit/view-app',
-        'gettext!io.ox/calendar/edit/main'], function (AppointmentModel, api, AppView, gt) {
+        'gettext!io.ox/calendar/edit/main'], function (AppointmentModel, api, editExtensions, AppView, gt) {
 
     'use strict';
     var EditAppointmentController = function (data) {
@@ -32,6 +33,9 @@ define('io.ox/calendar/edit/main',
             return self.dispose();
         });
     };
+
+    // register to "compile"-time think is a good idea
+    editExtensions.init();
 
     EditAppointmentController.prototype = {
         launch: function () {
