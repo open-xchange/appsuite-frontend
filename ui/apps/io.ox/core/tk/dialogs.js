@@ -160,6 +160,13 @@ define("io.ox/core/tk/dialogs",
             return this;
         };
 
+        this.addDangerButton = function (action, label, dataaction, options) {
+            var button = addButton(action, label, dataaction, options);
+            nodes.footer.append(button);
+            button.addClass('btn-danger');
+            return this;
+        };
+
         this.addPrimaryButton = function (action, label, dataaction, options) {
             var button = addButton(action, label, dataaction, options);
             button.addClass('btn-primary');

@@ -255,8 +255,6 @@ define("io.ox/calendar/util",
         },
 
         getRecurrenceString: function (data) {
-            console.log('getRecurrenceString');
-            console.log(data);
             function getCountString(i) {
                 return n_count[i + 1];
             }
@@ -311,11 +309,9 @@ define("io.ox/calendar/util",
 
             switch (data.recurrence_type) {
             case 1:
-                console.log('string for daily');
                 str = f(gettext("Each %s Day"), interval);
                 break;
             case 2:
-                console.log('string for weekly');
                 str = interval === 1 ?
                     f(gettext("Weekly on %s"), getDayString(days)) :
                     f(gettext("Each %s weeks on %s"), interval, getDayString(days));

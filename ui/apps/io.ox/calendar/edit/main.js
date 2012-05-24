@@ -87,6 +87,11 @@ define('io.ox/calendar/edit/main',
                 $('.window-content').scrollable();
             });
         },
+        remove: function () {
+            var self = this;
+            self.model = new AppointmentModel(self.data);
+            self.model.destroy();
+        },
         onSave: function () {
             var self = this;
             console.log('save model');
