@@ -105,6 +105,7 @@ define('io.ox/calendar/edit/model-appointment',
         onChange: function (model, source) {
             var self = this;
             console.log('model changed');
+            console.log(source.changes);
 
             // silent business logic, modifing attributes and source
             // especially for recurrency

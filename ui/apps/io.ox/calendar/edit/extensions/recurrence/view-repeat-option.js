@@ -44,10 +44,12 @@ define('io.ox/calendar/edit/extensions/recurrence/view-repeat-option',
             self.template = doT.template(template);
             self._modelBinder = new Backbone.ModelBinder();
             var recurTextConverter = function (direction, value, attribute, model) {
-                console.log('update text:');
-                console.log(model.attributes);
+                console.log('update text:' + direction);
+
                 if (direction === 'ModelToView') {
                     var txt = util.getRecurrenceString(model.attributes);
+                    console.log('text' + txt);
+                    console.log(model.attributes);
                     return (txt) ? ': ' + txt : '';
                 } else {
                     return model.get(attribute);

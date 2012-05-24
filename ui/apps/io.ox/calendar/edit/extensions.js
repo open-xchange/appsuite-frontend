@@ -20,7 +20,9 @@ define('io.ox/calendar/edit/extensions',
     // just init the default extensions
     return {
         init: function () {
-            ext.point('io.ox/calendar/edit/extrasleft').extend({
+
+            // RECURRENCE
+            /*ext.point('io.ox/calendar/edit/extrasleft').extend({
                 id: 'recurrence_checkbox',
                 description: 'adds the repeat-checkbox',
                 index: 200,
@@ -38,7 +40,9 @@ define('io.ox/calendar/edit/extensions',
                     this.append(options.view.subviews.recurrenceoptions.render().el);
                     return this;
                 }
-            });
+            });*/
+
+
             /*ext.point('io.ox/calendar/edit/section').extend({
                 id: 'newawesomesection',
                 index: 104, // after header

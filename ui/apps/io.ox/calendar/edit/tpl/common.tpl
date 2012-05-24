@@ -39,9 +39,9 @@
 
         </div>
         <div class="right">
-            <div style="text-align: right;">
+          <!--  <div style="text-align: right;">
               <a class="edittimezone">{{= it.strings.CHANGE_TIMEZONE }}</a>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
@@ -75,8 +75,5 @@
     <div class="tablecell" style="width: 266px;">
         <label for="{{=it.uid}}_private_flag">{{= it.strings.TYPE }}</label>
         <input type="checkbox" name="private_flag" id="{{=it.uid}}_private_flag"><span style="margin-left:4px;">{{= it.strings.PRIVATE}}</span>
-
     </div>
 </div>
-
-
