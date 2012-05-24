@@ -77,7 +77,7 @@ define('io.ox/calendar/edit/ext-helper',
     };
 
     return {
-        processDomFragment: function (el, namespace) {
+        processDomFragment: function (el, namespace, options) {
             // HANDLE DYNAMIC EXTENSION POINTS
             // DO NOT TOUCH, EXCEPT YOU KNOW WHAT YOU DO :)
             namespace = namespace || 'undefined_namespace';
@@ -100,7 +100,7 @@ define('io.ox/calendar/edit/ext-helper',
                 // but we leave the this assignment to global space
                 // so if there is any
                 console.log('invoking: ' + pointname);
-                ext.point(pointname).invoke('draw', $parent);
+                ext.point(pointname).invoke('draw', $parent, options);
             };
 
 

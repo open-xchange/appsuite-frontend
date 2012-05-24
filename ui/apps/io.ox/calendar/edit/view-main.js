@@ -73,8 +73,8 @@ define('io.ox/calendar/edit/view-main',
         STARTS_ON:          gt('Starts on'),
         ENDS_ON:            gt('Ends on'),
         ALL_DAY:            gt('All day'),
-        REPEAT:             gt('Repeat'),
-        EDIT:               gt('edit'),
+
+
         CHANGE_TIMEZONE:    gt('Change timezone'),
         DESCRIPTION:        gt('Description'),
         REMINDER:           gt('Reminder'),
@@ -100,6 +100,7 @@ define('io.ox/calendar/edit/view-main',
         RECURRENCE_NONE: 0,
         tagName: 'div',
         className: 'io-ox-calendar-edit',
+        subviews: {},
         _modelBinder: undefined,
         bindings: undefined,
         events: {
@@ -187,7 +188,7 @@ define('io.ox/calendar/edit/view-main',
             // define and invoke extension points
             console.log('invoking everything');
             console.log(self.el);
-            ext_helper.processDomFragment(self.el, 'io.ox/calendar/edit');
+            ext_helper.processDomFragment(self.el, 'io.ox/calendar/edit', {view: self});
 
             // should be an ext point tooo
             //self.$('#participantsView').empty().append(self.participantsView.render().el);

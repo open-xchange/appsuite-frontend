@@ -11,9 +11,9 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 
-define('io.ox/calendar/edit/view-recurrence',
+define('io.ox/calendar/edit/extensions/recurrence/view-recurrence',
       ['io.ox/calendar/edit/binding-util',
-       'text!io.ox/calendar/edit/tpl/recurrence.tpl',
+       'text!io.ox/calendar/edit/extensions/recurrence/tpl/recurrence.tpl',
        'gettext!io.ox/calendar/edit/main'], function (BinderUtils, template, gt) {
 
     'use strict';
@@ -99,7 +99,7 @@ define('io.ox/calendar/edit/view-recurrence',
         },
         tagName: 'div',
         _modelBinder: undefined,
-        className: 'io-ox-calendar-edit-recurrence',
+        className: 'control-group recurrence',
         initialize: function () {
             var self = this;
 

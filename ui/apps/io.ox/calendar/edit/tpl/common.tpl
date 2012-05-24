@@ -46,10 +46,6 @@
     </div>
 </div>
 
-<div class="control-group recurrence" data-extgroup="section" data-extid="recurrence">
-
-</div>
-
 <div class="control-group" data-extgroup="section" data-extid="description">
     <label class="control-label" for="{{=it.uid}}_note">{{= it.strings.DESCRIPTION }}</label>
     <div class="controls">

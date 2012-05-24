@@ -1,5 +1,5 @@
 <!--
-<div class="control-group recurrence" data-extgroup="section" data-extid="recurrence">
+<div class="control-group recurrence">
 
 </div>
 -->
