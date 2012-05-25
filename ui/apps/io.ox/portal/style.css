@@ -73,9 +73,11 @@
 }
 
 
+
 .facebook.wall-entry {
-    margin: 1em 0;
     border-bottom: 1px solid #eee;
+    clear: both;
+    position: relative;
 }
 .facebook .from {
     display: inline;
@@ -83,10 +85,10 @@
 .facebook .wall-comment {
     margin: 1em 0 0 3em;
 }
-.facebook .wall-post {
-    position: static;
-    padding-left: 50px;
-    clear: both;
+.facebook .wall-post, .facebook .wall-comment-content {
+    position: relative;
+    top: -50px;
+    left: 55px;
 }
 .facebook a.action {
     margin: 0 1em 0 0;
@@ -96,14 +98,26 @@
     display: block;
 }
 .facebook a.picture img.picture{
-    border: 1px solid #eee;
-    margin: 4px;
+    border: 1px solid #ccc;
+    padding: 4px;
 }
 .facebook .from .picture {
     display: block;
-    float: left;
-    margin: 2px;
+    position: relative;
+    top: 5px;
+    left: 0;
+    width: 50px;
 }
-.facebook .wall-comment .hidden {
-    display: none;
+.facebook .datetime  {
+    display: block;
+    font-size: 80%;
+}
+.facebook img.video-preview {
+    display: block;
+    padding-right: 1em;
+}
+.facebook .caption {
+    font-size: 80%;
+    line-height: 80%;
+    text-decoration: none;
 }

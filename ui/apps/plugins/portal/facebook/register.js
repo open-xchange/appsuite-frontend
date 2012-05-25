@@ -1,6 +1,39 @@
 /* EXAMPLE:
 {
     "data": [{
+        "id": "100000510769600_397839420255304",
+        "from": {
+            "name": "Ewald Bartkowiak",
+            "id": "100000510769600"
+        },
+        "message": "A message from Burt Gummer: http:\/\/www.youtube.com\/watch?v=rDQ8J_HJ7iw",
+        "picture": "http:\/\/external.ak.fbcdn.net\/safe_image.php?d=AQCmH9VAOrHny4KP&w=130&h=130&url=http\u00253A\u00252F\u00252Fi3.ytimg.com\u00252Fvi\u00252FrDQ8J_HJ7iw\u00252Fhqdefault.jpg",
+        "link": "http:\/\/www.youtube.com\/watch?v=rDQ8J_HJ7iw",
+        "source": "http:\/\/www.youtube.com\/v\/rDQ8J_HJ7iw?version=3&autohide=1&autoplay=1",
+        "name": "A Message From Burt Gummer",
+        "caption": "www.youtube.com",
+        "description": "A Promo for the show Tremors: The Series. This played before different episodes during a Tremors the series Marathon back when the show aired on Scifi (SyFy).",
+        "icon": "http:\/\/static.ak.fbcdn.net\/rsrc.php\/v2\/yj\/r\/v2OnaTyTQZE.gif",
+        "actions": [{
+            "name": "Comment",
+            "link": "http:\/\/www.facebook.com\/100000510769600\/posts\/397839420255304"
+        },
+        {
+            "name": "Like",
+            "link": "http:\/\/www.facebook.com\/100000510769600\/posts\/397839420255304"
+        }],
+        "privacy": {
+            "description": "Public",
+            "value": "EVERYONE"
+        },
+        "type": "video",
+        "created_time": "2012-05-25T14:14:05+0000",
+        "updated_time": "2012-05-25T14:14:05+0000",
+        "comments": {
+            "count": 0
+        }
+    },
+    {
         "id": "100000510769600_466646893362332",
         "from": {
             "name": "Ewald Bartkowiak",
@@ -109,33 +142,54 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
 
         draw: function (wall) {
             var self = this;
-            console.log(wall);
             self.append($("<div>").addClass("clear-title").text("Facebook"));
+
+            var count = 0;
             _(wall).each(function (post) {
                 var entry_id = "facebook-" + post.id;
-                var elem = $("<div>").addClass("facebook wall-entry").attr("id", entry_id);
-                //user pic and name
-                elem.append(
-                    $("<a>").addClass("from").text(post.from.name).attr("href", "https://graph.facebook.com/" + post.from.id)
-                    .append($("<img>").addClass("picture").attr("src", "https://graph.facebook.com/" + post.from.id + "/picture"))
-                    );
-                    
-                //message
-                elem.append($("<div>").addClass("wall-post").text(post.message || post.story));
+                var wall_content = $("<div>").addClass("facebook wall-entry").attr("id", entry_id);
+                //user pic
+                wall_content.append($("<img>").addClass("picture").attr("src", "https://graph.facebook.com/" + post.from.id + "/picture"));
+                                    
+                var wall_post = $("<div>").addClass("wall-post");
+                
+                //user name
+                wall_post.append($("<a>").addClass("from").text(post.from.name).attr("href", "https://graph.facebook.com/" + post.from.id));
+                
+                //status message
+                if (post.type === "status" || (post.type === "video" && post.caption !== "www.youtube.com")) {
+                    wall_post.append($("<div>").addClass("wall-post-text").text(post.message));
+                }
                 
                 //image post
-                if (post.picture) {
-                    elem.append(
+                if (post.type === "photo") {
+                    wall_post.append($("<div>").addClass("wall-post-text").text(post.story));
+                    wall_post.append(
                         $("<a>").attr("href", post.link).addClass("picture").append($("<img>").addClass("picture").attr("src", post.picture)));
                 }
                 
+                //youtube video post
+                if (post.type === "video" && post.caption === "www.youtube.com") {
+                    wall_post.append($("<div>").addClass("wall-post-text").text(post.name));
+                    /watch\?v=(.+)/.exec(post.link);
+                    var vid_id = RegExp.$1;
+                    wall_post.append(
+                        $("<a>").attr("href", post.link).addClass("video")
+                            .append($("<img>").addClass("video-preview").attr("src", "http://img.youtube.com/vi/" + vid_id + "/2.jpg"))
+                            .append($("<span>").addClass("caption").text(post.description)));
+                }
+                
+                wall_content.append(wall_post);
+                
                 //actions like "like"
 /*                _(post.actions).each(function (action) {
-                    elem.append($("<a>").addClass("action").text(action.name).attr("href", action.link));
+                    wall_post.append($("<a>").addClass("action").text(action.name).attr("href", action.link));
                 });*/
                 
                 //post date
-                elem.append($("<span>").addClass("datetime").text(post.created_time));
+                wall_post.append($("<span>").addClass("datetime").text(post.created_time));
+                
+                wall_content.append(wall_post);
                 
                 //comments
                 if (post.comments && post.comments.data) {
@@ -147,22 +201,20 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
                         if (comment_toggler.text() === "Show comments") { comment_toggler.text("Hide comments"); } else { comment_toggler.text("Show comments"); }
 
                     });
-                    elem.append(comment_toggler);
+                    wall_content.append(comment_toggler);
                     
                     _(post.comments.data).each(function (comment) {
                         var comm = $("<div>").addClass("wall-comment");
+                        var name = $("<a>").addClass("from").text(post.from.name).attr("href", "https://graph.facebook.com/" + post.from.id);
+                        var msg = $("<div>").addClass("wall-comment-text").text(comment.message);
 
-                        comm.append(
-                            $("<a>").addClass("from").text(post.from.name).attr("href", "https://graph.facebook.com/" + post.from.id)
-                            .append($("<img>").addClass("picture").attr("src", "https://graph.facebook.com/" + post.from.id + "/picture"))
-                            );
-
-                        comm.append($("<div>").addClass("wall-post").text(comment.message));
-                        elem.append(comm);
+                        comm.append($("<img>").addClass("picture").attr("src", "https://graph.facebook.com/" + post.from.id + "/picture"));
+                        comm.append($("<div>").addClass("wall-comment-content").append(name).append(msg));
+                        wall_content.append(comm);
                     });
                 }
                 
-                self.append(elem);
+                self.append(wall_content);
             });
 /*            if (wall.paging.previous) {
                 self.append($("<a>").addClass("paging previous").text("Previous").attr("href", wall.paging.previous));
