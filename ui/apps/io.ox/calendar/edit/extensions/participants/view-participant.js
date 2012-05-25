@@ -12,9 +12,7 @@
  */
 
 define('io.ox/calendar/edit/view-participant',
-      ['io.ox/calendar/edit/deps/Backbone',
-       'io.ox/calendar/edit/deps/doT',
-       'text!io.ox/calendar/edit/tpl/participant.tpl'], function (Backbone, doT, participantTemplate) {
+      ['text!io.ox/calendar/edit/tpl/participant.tpl'], function (participantTemplate) {
 
     'use strict';
 

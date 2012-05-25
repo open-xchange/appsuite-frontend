@@ -12,10 +12,9 @@
  */
 
 define('io.ox/calendar/edit/model-participant',
-      ['io.ox/calendar/edit/deps/Backbone',
-       'io.ox/core/api/user',
+      ['io.ox/core/api/user',
        'io.ox/core/api/group',
-       'io.ox/core/api/resource'], function (Backbone, userAPI, groupAPI, resourceAPI) {
+       'io.ox/core/api/resource'], function (userAPI, groupAPI, resourceAPI) {
     'use strict';
 
 

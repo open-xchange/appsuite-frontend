@@ -214,6 +214,7 @@ define("io.ox/core/extensions",
 
         this.disable = function (id) {
             disabled[id] = true;
+            console.log(disabled);
             return this;
         };
 
@@ -223,7 +224,7 @@ define("io.ox/core/extensions",
         };
 
         this.isEnabled = function (id) {
-            return !!disabled[id];
+            return !!disabled[id];  //FIXME: something may be wrong here after disable an id it returns true for the same id
         };
 
         this.inspect = function () {

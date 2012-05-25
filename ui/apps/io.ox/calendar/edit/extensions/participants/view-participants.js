@@ -13,8 +13,7 @@
 
 define('io.ox/calendar/edit/view-participants',
       ['io.ox/core/extensions',
-       'io.ox/calendar/edit/deps/Backbone',
-       'io.ox/calendar/edit/view-participant'], function (ext, Backbone, ParticipantView) {
+       'io.ox/calendar/edit/view-participant'], function (ext, ParticipantView) {
 
     'use strict';
 

@@ -200,6 +200,32 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 console.log('error on creating appointment');
                 console.log(err);
             });
+        },
+
+        // delete is a reserved word :( - but this will delete the
+        // appointment on the server
+        remove: function (o) {
+            return http.PUT({
+                module: 'calendar',
+                params: {
+                    action: 'delete',
+                    id: o.id,
+                    folder: o.folder,
+                    timestamp: o.timestamp
+                },
+                data: o.data
+            })
+            .done(function (resp) {
+                all_cache = {};
+                get_cache = {};
+                console.log('cache resetted');
+                api.trigger('refresh.all');
+                api.trigger('refresh.list');
+            })
+            .fail(function (err) {
+                console.log('error on creating appointment');
+                console.log(err);
+            });
         }
     };
 

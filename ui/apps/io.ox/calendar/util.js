@@ -255,7 +255,6 @@ define("io.ox/calendar/util",
         },
 
         getRecurrenceString: function (data) {
-
             function getCountString(i) {
                 return n_count[i + 1];
             }
