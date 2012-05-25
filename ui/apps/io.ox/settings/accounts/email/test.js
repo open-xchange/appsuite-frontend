@@ -102,7 +102,6 @@ define("io.ox/settings/accounts/email/test",
                         api.get(dataId).done(function (data) {
                             obj = data;
                             obj.name = 'Ein Account changed';
-//                            console.log('get');
                             me.ready = true;
                         });
 

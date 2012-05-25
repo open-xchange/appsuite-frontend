@@ -146,32 +146,30 @@ define('io.ox/core/api/account',
      * Get all mail accounts
      */
 
-    var accountsAllCache = new Cache.SimpleCache('accounts-all', true);
+    var accountsAllCache = new Cache.ObjectCache('account', true, function (o) { return String(o.id); });
 
     api.all = function () {
 
-        var all = 'actual-user';
+        var getter = function () {
+            return http.GET({
+                module: 'account',
+                params: { action: 'all' },
+                processResponse: true
+            });
+        };
 
-        return accountsAllCache.get(all).pipe(function (data) {
-            if (data !== null) {
-                return data;
+        return accountsAllCache.keys().pipe(function (keys) {
+            if (keys.length > 0) {
+                return accountsAllCache.values();
             } else {
-                return http.GET({
-                    module: 'account',
-                    params: { action: 'all', columns: '1001,1004,1007'},
-                    processResponse: true
-                })
-                .pipe(function (data) {
-                    if (data) {
-                        return accountsAllCache.add(all, data);
-                    }
+                return getter().pipe(function (data) {
+                    data = process(data);
+                    accountsAllCache.add(data);
+                    return data;
                 });
             }
         });
-
-
     };
-
 
 
     /**
@@ -179,23 +177,14 @@ define('io.ox/core/api/account',
      */
     api.get = function (id) {
 
-//        var getter = function () {
-//            return api.all().pipe(function () {
-//                return accountsAllCache.get(id);
-//            });
-//        };
-//
-//        return accountsAllCache.get(id, getter);
+        var getter = function () {
+            return api.all().pipe(function () {
+                return accountsAllCache.get(id);
+            });
+        };
 
-        return http.GET({
-            module: 'account',
-            params: {
-                action: 'get',
-                id: id,
-                columns: '1001,1004'
-            },
-            processResponse: true
-        });
+        return accountsAllCache.get(id, getter);
+
     };
 
     /**
@@ -239,7 +228,7 @@ define('io.ox/core/api/account',
         })
         .done(function (d) {
             api.trigger('account_created', {id: d.id});
-            accountsAllCache.clear();
+            accountsAllCache.add(d, _.now());
         });
     };
 
@@ -282,17 +271,10 @@ define('io.ox/core/api/account',
             module: 'account',
             params: {action: 'delete'},
             data: data
-        }).pipe(function () {
-                return $.when(
-//                    api.caches.all.clear()
-//                    api.caches.list.remove(list),
-//                    contactPictures.clear()
-                );
-            })
-            .done(function () {
-                accountsAllCache.clear();
-                api.trigger('refresh.all');
-            });
+        }).done(function () {
+            accountsAllCache.remove(data);
+            api.trigger('refresh.all');
+        });
     };
 
     /**
@@ -344,6 +326,9 @@ define('io.ox/core/api/account',
             module: 'account',
             params: {action: 'update'},
             data: data
+        }).done(function () {
+            accountsAllCache.merge(data, _.now());
+            api.trigger('refresh.all');
         });
     };
 
