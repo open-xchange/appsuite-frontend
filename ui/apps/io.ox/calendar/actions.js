@@ -73,6 +73,56 @@ define('io.ox/calendar/actions',
         }
     });
 
+
+    new Action('io.ox/calendar/detail/actions/delete', {
+        id: 'edit',
+        requires: 'one modify',
+        action: function (data) {
+            require(['io.ox/calendar/edit/main'], function (editmain) {
+                // different warnings especially for events with
+                // external users should handled here
+                if (data.recurrence_type > 0) {
+                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        new dialogs.ModalDialog()
+                            .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
+                            .addPrimaryButton('cancel', gt('Cancel'))
+                            .addDangerButton('appointment', gt('Appointment'))
+                            .addDangerButton('series', gt('Series'))
+                            .show()
+                            .done(function (action) {
+                                if (action === 'cancel') {
+                                    return;
+                                }
+                                if (action === 'series') {
+                                    delete data.recurrence_position;
+                                }
+                                editmain.getApp(data).launch().done(function () {
+                                    this.controller.remove();
+                                });
+                            });
+                    });
+                } else {
+                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        new dialogs.ModalDialog()
+                            .text(gt('Do you want to delete this appointment?'))
+                            .addPrimaryButton('cancel', gt('Cancel'))
+                            .addDangerButton('ok', gt('Delete'))
+                            .show()
+                            .done(function (action) {
+                                if (action === 'cancel') {
+                                    return;
+                                }
+                                editmain.getApp(data).launch().done(function () {
+                                    this.controller.remove();
+                                });
+                            });
+                    });
+                }
+            });
+        }
+    });
+
+
     new Action('io.ox/calendar/detail/actions/create', {
         id: 'create',
         requires: 'one create',
@@ -133,7 +183,15 @@ define('io.ox/calendar/actions',
         ref: 'io.ox/calendar/detail/actions/edit'
     }));
 
-    ext.point('io.ox/calendar/links/inline').extend(new links.DropdownLinks({
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'delete',
+        label: gt('Delete'),
+        ref: 'io.ox/calendar/detail/actions/delete'
+    }));
+
+    /*ext.point('io.ox/calendar/links/inline').extend(new links.DropdownLinks({
         index: 200,
         prio: 'lo',
         id: 'changestatus',
@@ -146,7 +204,7 @@ define('io.ox/calendar/actions',
         index: 100,
         label: gt('List'),
         ref: 'io.ox/calendar/actions/switch-to-list-view'
-    });
+    });*/
 
     window.ext = ext;
 });

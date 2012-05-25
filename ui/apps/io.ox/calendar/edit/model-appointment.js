@@ -102,9 +102,48 @@ define('io.ox/calendar/edit/model-appointment',
 
             return df;
         },
+        destroy: function () {
+            console.log('now destroy it on server?');
+            var self = this,
+                o = {},
+                df = new $.Deferred();
+
+            o.data = self.attributes;
+            // set recurrence_type if it was set
+            if (self.get('recurrence_type')) {
+                o.data.recurrence_type = self.get('recurrence_type');
+
+                // none recurrenc
+                if (o.data.recurrence_type === 0) {
+                    delete o.data.recurrence_id;
+                    self.unset('recurrence_id');
+                }
+            }
+
+            // TODO: recurrence position should be handled
+            o.id = self.get('id');
+            o.folder = self.get('folder_id');
+            o.data.folder = o.folder;
+            o.timestamp = _.now();
+
+            CalendarAPI.remove(o)
+                .done(function () {
+                    self._resetDirty();
+                    console.log('ok');
+                    df.resolve(true);
+                })
+                .fail(function (err) {
+                    console.log('not ok');
+                    console.log(err);
+                    df.reject('error on creating model');
+                });
+
+            return df;
+        },
         onChange: function (model, source) {
             var self = this;
             console.log('model changed');
+            console.log(source.changes);
 
             // silent business logic, modifing attributes and source
             // especially for recurrency

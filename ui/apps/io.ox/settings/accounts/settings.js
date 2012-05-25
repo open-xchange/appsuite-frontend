@@ -49,14 +49,15 @@ define('io.ox/settings/accounts/settings',
 
 
         createExtpointForSelectedAccount = function (args) {
-            var selectedItemID = args.data.listbox.find('div[selected="selected"]').attr('data-item-id');
+            var selectedItemID = args.data.listbox.find('div[selected="selected"]').attr('data-item-id'),
+                splitedObj;
             if (selectedItemID !== undefined) {
-                var type = selectedItemID.split(/\//)[0],
-                    dataid = selectedItemID.split(/\//)[1];
-                args.data.id = dataid;
-                require(['io.ox/settings/accounts/' + type + '/settings'], function (m) {
-                    console.log('ext: ' + 'io.ox/settings/accounts/' + type + '/settings/detail');
-                    ext.point('io.ox/settings/accounts/' + type + '/settings/detail').invoke('draw', args.data.self.node, args);
+//                console.log(selectedItemID);
+                splitedObj = splitDataItemId(selectedItemID);
+                args.data.id = splitedObj.dataid;
+                require(['io.ox/settings/accounts/' + splitedObj.type + '/settings'], function (m) {
+                    console.log('ext: ' + 'io.ox/settings/accounts/' + splitedObj.type + '/settings/detail');
+                    ext.point('io.ox/settings/accounts/' + splitedObj.type + '/settings/detail').invoke('draw', args.data.self.node, args);
 
                 });
             }
@@ -76,7 +77,10 @@ define('io.ox/settings/accounts/settings',
             if (selectedItemID !== undefined) {
                 var type = selectedItemID.split(/\//)[0],
                     dataid = selectedItemID.split(/\//)[1];
-                return dataid;
+                return {
+                    dataid: dataid,
+                    type: type
+                };
             }
         },
 
@@ -90,20 +94,20 @@ define('io.ox/settings/accounts/settings',
 
         getSelectedItem = function (args) {
             var dataid,
-                selectedItemID;
+                selectedItemID,
+                splitedObj;
             if (args.data !== undefined) {
                 selectedItemID = listbox.find('div[selected="selected"]').attr('data-item-id');
             } else {
                 selectedItemID = $(args.srcElement.parentNode).attr('data-item-id');
             }
-            dataid = splitDataItemId(selectedItemID);
-            removeSelectedItem(dataid, selectedItemID);
+            splitedObj = splitDataItemId(selectedItemID);
+            removeSelectedItem(splitedObj.dataid, selectedItemID);
         },
 
         AccountsSettingsModelView = {
         draw: function (data) {
             var self = this;
-
 
             self.node = $('<div>');
 

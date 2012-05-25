@@ -45,6 +45,7 @@
         },
 
         unbind:function () {
+            console.log('UNDBIND');
             this._unbindModelToView();
             this._unbindViewToModel();
 
@@ -160,7 +161,11 @@
             }
         },
 
+        // THINK HERE IS AN ISSUE
+
         _bindViewToModel:function () {
+            console.log('binding:');
+            console.log(this._rootEl);
             $(this._rootEl).delegate('', 'change', this._onElChanged);
             // The change event doesn't work properly for contenteditable elements - but blur does
             $(this._rootEl).delegate('[contenteditable]', 'blur', this._onElChanged);
@@ -168,6 +173,8 @@
 
         _unbindViewToModel: function(){
             if(this._rootEl){
+                console.log('unbind');
+                console.log(this._rootEl);
                 $(this._rootEl).undelegate('', 'change', this._onElChanged);
                 $(this._rootEl).undelegate('[contenteditable]', 'blur', this._onElChanged);
             }
