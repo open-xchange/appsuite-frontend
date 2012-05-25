@@ -338,7 +338,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             }
 
             // keep positive
-            offset = Math.max(0, offset);
+            offset = Math.max(offset, 0);
 
             if (offset === currentOffset) {
                 return DONE;
@@ -634,10 +634,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                     index = getIndex(top);
                 // checks bounds
                 if (index >= bounds.bottom - numVisible - 2) {
-                    // below bottom
+                    // below bottom (scroll down)
                     paint(index - (numVisible >> 1));
                 } else if (index < bounds.top + 2 && bounds.top !== 0) {
-                    // above top
+                    // above top (scroll up)
                     paint(index - numVisible * 1.5, 'above');
                 }
             }
