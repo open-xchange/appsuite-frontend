@@ -27,11 +27,8 @@
             'less!io.ox/portal/style.css'
         ].concat(ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' }));
         
-    console.error("DEPS", deps);
-
     define('io.ox/portal/main', deps, function (ext, config, userAPI, i18n) {
 
-        console.error("DEPS LOADED", deps);
         // application object
         var app = ox.ui.createApp({ name: 'io.ox/portal' }),
             // app window
@@ -117,7 +114,6 @@
             //TODO: Add Configurability
             ext.point('io.ox/portal/widget')
                 .each(function (extension) {
-                    console.log("CHECKING EXTENSIONS", extension.id);
                     var $node = $('<div>')
                         .addClass('io-ox-portal-widget')
                         .attr('widget-id', extension.id)

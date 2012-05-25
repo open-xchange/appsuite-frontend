@@ -74,62 +74,6 @@
             }],
             "count": 2
         }
-    },
-    {
-        "id": "100000510769600_364431180250571",
-        "from": {
-            "name": "Ewald Bartkowiak",
-            "id": "100000510769600"
-        },
-        "message": "Endlich Feierabend!",
-        "actions": [{
-            "name": "Comment",
-            "link": "http:\/\/www.facebook.com\/100000510769600\/posts\/364431180250571"
-        },
-        {
-            "name": "Like",
-            "link": "http:\/\/www.facebook.com\/100000510769600\/posts\/364431180250571"
-        }],
-        "privacy": {
-            "description": "Public",
-            "value": "EVERYONE"
-        },
-        "type": "status",
-        "application": {
-            "name": "Open-Xchange (Testapp for netline.de)",
-            "id": "198479450171436"
-        },
-        "created_time": "2012-01-16T17:05:56+0000",
-        "updated_time": "2012-01-16T17:05:56+0000",
-        "comments": {
-            "count": 0
-        }
-    },
-    {
-        "id": "100000510769600_183787108301350",
-        "from": {
-            "name": "Ewald Bartkowiak",
-            "id": "100000510769600"
-        },
-        "message": "bla",
-        "actions": [{
-            "name": "Comment",
-            "link": "http:\/\/www.facebook.com\/100000510769600\/posts\/183787108301350"
-        },
-        {
-            "name": "Like",
-            "link": "http:\/\/www.facebook.com\/100000510769600\/posts\/183787108301350"
-        }],
-        "privacy": {
-            "description": "Friends",
-            "value": "ALL_FRIENDS"
-        },
-        "type": "status",
-        "created_time": "2010-12-10T15:30:40+0000",
-        "updated_time": "2010-12-10T15:30:40+0000",
-        "comments": {
-            "count": 0
-        }
     }],
     "paging": {
         "previous": "https:\/\/graph.facebook.com\/me\/feed?access_token=AAAAADOoW7OkBAKIwvixUNrIfPhGZAlitW5I3uwCKsbbDMODUsJARfOb3e63yISxnC57tNG68H2moGXMpp66gLEVpHZAxS1sVtlpLGMwQZDZD&limit=25&since=1337610149&__previous=1",
@@ -156,7 +100,7 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
     "use strict";
     ext.point("io.ox/portal/widget").extend({
         id: "facebook",
-        index: 50,
+        index: 150,
 
         load: function () {
             var def = proxy.request({api: "facebook", url: "https://graph.facebook.com/me/feed"});
@@ -165,22 +109,54 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
 
         draw: function (wall) {
             var self = this;
+            console.log(wall);
             self.append($("<div>").addClass("clear-title").text("Facebook"));
             _(wall).each(function (post) {
-                var elem = $("<div>").addClass("facebook wall-entry");
-                elem.append($("<a>").addClass("from").text(post.from.name).attr("href", "https://graph.facebook.com/" + post.from.id));
+                var entry_id = "facebook-" + post.id;
+                var elem = $("<div>").addClass("facebook wall-entry").attr("id", entry_id);
+                //user pic and name
+                elem.append(
+                    $("<a>").addClass("from").text(post.from.name).attr("href", "https://graph.facebook.com/" + post.from.id)
+                    .append($("<img>").addClass("picture").attr("src", "https://graph.facebook.com/" + post.from.id + "/picture"))
+                    );
+                    
+                //message
                 elem.append($("<div>").addClass("wall-post").text(post.message || post.story));
+                
+                //image post
                 if (post.picture) {
                     elem.append(
-                        $("<a>").attr("href", post.link).append($("<img>").addClass("picture").attr("src", post.picture)));
+                        $("<a>").attr("href", post.link).addClass("picture").append($("<img>").addClass("picture").attr("src", post.picture)));
                 }
-                _(post.actions).each(function (action) {
+                
+                //actions like "like"
+/*                _(post.actions).each(function (action) {
                     elem.append($("<a>").addClass("action").text(action.name).attr("href", action.link));
-                });
+                });*/
+                
+                //post date
+                elem.append($("<span>").addClass("datetime").text(post.created_time));
+                
+                //comments
                 if (post.comments && post.comments.data) {
+                    //display comments on/off
+                    var comment_toggler = $("<a>").addClass("comment-toggle").text("Hide comments");
+                    comment_toggler.click(function () {
+                        var comment_id = "#" + entry_id + " .wall-comment";
+                        $(comment_id).toggle('fast', function () {});
+                        if (comment_toggler.text() === "Show comments") { comment_toggler.text("Hide comments"); } else { comment_toggler.text("Show comments"); }
+
+                    });
+                    elem.append(comment_toggler);
+                    
                     _(post.comments.data).each(function (comment) {
                         var comm = $("<div>").addClass("wall-comment");
-                        comm.append($("<a>").addClass("from").text(post.from.name).attr("href", "https://graph.facebook.com/" + post.from.id));
+
+                        comm.append(
+                            $("<a>").addClass("from").text(post.from.name).attr("href", "https://graph.facebook.com/" + post.from.id)
+                            .append($("<img>").addClass("picture").attr("src", "https://graph.facebook.com/" + post.from.id + "/picture"))
+                            );
+
                         comm.append($("<div>").addClass("wall-post").text(comment.message));
                         elem.append(comm);
                     });

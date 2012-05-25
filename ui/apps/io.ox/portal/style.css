@@ -75,14 +75,35 @@
 
 .facebook.wall-entry {
     margin: 1em 0;
+    border-bottom: 1px solid #eee;
 }
 .facebook .from {
     display: inline;
 }
 .facebook .wall-comment {
-    margin: 1em 0 0 1em;
+    margin: 1em 0 0 3em;
+}
+.facebook .wall-post {
+    position: static;
+    padding-left: 50px;
+    clear: both;
 }
 .facebook a.action {
     margin: 0 1em 0 0;
     font-size: 80%;
+}
+.facebook a.picture {
+    display: block;
+}
+.facebook a.picture img.picture{
+    border: 1px solid #eee;
+    margin: 4px;
+}
+.facebook .from .picture {
+    display: block;
+    float: left;
+    margin: 2px;
+}
+.facebook .wall-comment .hidden {
+    display: none;
 }

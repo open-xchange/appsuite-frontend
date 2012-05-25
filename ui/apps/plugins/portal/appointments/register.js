@@ -16,8 +16,6 @@ define("plugins/portal/appointments/register",
 
     "use strict";
     
-    console.log("LOADED appt module");
-
     var appointmentPortal = {
         id: "appointments",
         index: 100,
