@@ -102,6 +102,7 @@ define('io.ox/calendar/edit/model-appointment',
 
             return df;
         },
+        // Backbone API for deleting objects on server
         destroy: function () {
             console.log('now destroy it on server?');
             var self = this,
