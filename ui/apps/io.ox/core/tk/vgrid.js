@@ -11,7 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], function (Selection, Events) {
+define('io.ox/core/tk/vgrid',
+    ['io.ox/core/tk/selection',
+     'io.ox/core/event',
+     'gettext!core'
+    ], function (Selection, Events, gt) {
 
     'use strict';
 
@@ -213,7 +217,8 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             setIndex,
             getIndex,
             fnScroll,
-            desirealize;
+            deserialize,
+            emptyMessage;
 
         // add label class
         template.node.addClass('selectable');
@@ -487,6 +492,11 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 // labels
                 initLabels();
             }
+            // empty?
+            scrollpane.find('.io-ox-center').remove().end();
+            if (list.length === 0) {
+                scrollpane.append($.fail(emptyMessage ? emptyMessage(self.getMode()) : gt('Empty')));
+            }
             // trigger event
             if (!quiet) {
                 self.trigger('ids-loaded change:ids', all);
@@ -496,8 +506,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
             return paint(offset);
         }
 
-
-        desirealize = function (cid) {
+        deserialize = function (cid) {
             var c = cid.split(/\./);
             return { folder_id: c[0], id: c[1], recurrence_position: c[2] };
         };
@@ -520,7 +529,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                 container.hide().parent().idle()
                     .find('.io-ox-fail').parent().remove().end().end()
                     .append(
-                        $.fail('Could not load content.', function () {
+                        $.fail(gt('Could not load this list'), function () {
                             container.show();
                             loadAll();
                         })
@@ -547,7 +556,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
                                     var ids = _.url.hash('id').split(/,/), cid, index, selectionChanged;
                                     // convert ids to objects first - avoids problems with
                                     // non-existing items that cannot be resolved in selections
-                                    ids = _(ids).map(desirealize);
+                                    ids = _(ids).map(deserialize);
                                     selectionChanged = !self.selection.equals(ids);
                                     if (selectionChanged) {
                                         // set
@@ -824,7 +833,7 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
 
         this.setDeserialize = function (fn) {
             if (_.isFunction(fn)) {
-                desirealize = fn;
+                deserialize = fn;
             }
         };
 
@@ -841,6 +850,10 @@ define('io.ox/core/tk/vgrid', ['io.ox/core/tk/selection', 'io.ox/core/event'], f
         this.isVisible = isVisible;
         this.setIndex = setIndex;
         this.getIndex = getIndex;
+
+        this.setEmptyMessage = function (fn) {
+            emptyMessage = fn;
+        };
     };
 
     // make Template accessible

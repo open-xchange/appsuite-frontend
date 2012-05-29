@@ -348,6 +348,12 @@ define("io.ox/mail/main",
             });
         });
 
+        grid.setEmptyMessage(function (mode) {
+            return mode === 'search' ?
+                gt('No emails found for "%s"', win.search.query) :
+                gt('No emails in this folder');
+        });
+
         // go!
         commons.addFolderSupport(app, grid, 'mail')
             .pipe(commons.showWindow(win, grid))
