@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/portal/rss/register",
+define("plugins/portal/rss/register",
     ["io.ox/core/extensions"], function (ext, api) {
 
     "use strict";
