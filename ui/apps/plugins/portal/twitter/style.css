@@ -18,8 +18,8 @@
 
 .twitter .tweet {
     position: relative;
-    margin-left: 65px;
-    margin-bottom: 20px;
+    min-height: 50px;
+    margin: 0 0 20px 65px;
 }
 
 .twitter .profilePicture {

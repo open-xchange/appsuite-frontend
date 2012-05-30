@@ -11,7 +11,11 @@
  * @author  Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define("plugins/portal/twitter/register", ["io.ox/core/extensions", "io.ox/oauth/proxy", "less!plugins/portal/twitter/style.css"], function (ext, proxy) {
+define("plugins/portal/twitter/register",
+    ["io.ox/core/extensions",
+     "io.ox/oauth/proxy",
+     "less!plugins/portal/twitter/style.css"], function (ext, proxy) {
+
     "use strict";
 
     var parseTweet = function (text, entities) {

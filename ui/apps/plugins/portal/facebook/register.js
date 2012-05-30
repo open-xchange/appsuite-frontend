@@ -11,7 +11,6 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author  Tobias Prinz <tobias.prinz@open-xchange.com>
  */
-
 /* EXAMPLE:
 {
     "data": [{
@@ -129,10 +128,15 @@
 }
 */
 
-define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oauth/proxy"], function (ext, proxy) {
+define("plugins/portal/facebook/register",
+    ["io.ox/core/extensions",
+     "io.ox/oauth/proxy",
+     "less!plugins/portal/facebook/style.css"], function (ext, proxy) {
 
     "use strict";
+
     ext.point("io.ox/portal/widget").extend({
+
         id: "facebook",
         index: 150,
 
@@ -146,6 +150,10 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
             self.append($("<div>").addClass("clear-title").text("Facebook"));
 
             var count = 0;
+
+            // TODO: remove debugging helper
+            console.debug('wall', wall);
+
             _(wall.data).each(function (post) {
                 var entry_id = "facebook-" + post.id;
                 var wall_content = $("<div>").addClass("facebook wall-entry").attr("id", entry_id);
@@ -234,6 +242,4 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
             return $.Deferred().resolve();
         }
     });
-
-
 });
