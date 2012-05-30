@@ -19,14 +19,13 @@ define.async('io.ox/mail/write/main',
      'io.ox/core/config',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
-     'io.ox/core/i18n',
      'io.ox/core/api/user',
      'io.ox/core/tk/upload',
      'io.ox/mail/model',
      'io.ox/mail/write/view-main',
      'gettext!io.ox/mail/mail',
      'less!io.ox/mail/style.css',
-     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload, MailModel, WriteView, gt) {
+     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, upload, MailModel, WriteView, gt) {
 
     'use strict';
 

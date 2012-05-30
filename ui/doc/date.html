@@ -410,11 +410,12 @@ time zones.</p>
 
 <h3>LocalDate</h3>
 
-<p>The core of the <code>date</code> API is the class <code>LocalDate</code>
-which is the superclass of time zone specific classes. The class itself is not
-publically available, only its subclasses can be created by calling
-<code>getTimeZone()</code>. The subclasses and their instances are referred to
-as <code>LocalDate</code> classes and <code>LocalDate</code> objects.</p>
+<p>The core of the <code>date</code> API is the abstract class
+<code>LocalDate</code> which is the superclass of time zone specific classes.
+The class itself is not publically available, only its subclasses can be created
+by calling <code>getTimeZone()</code>. The subclasses and their instances are
+referred to as <code>LocalDate</code> classes and <code>LocalDate</code>
+objects.</p>
 
 <p>The constructor mimics the behavior of the <code>Date</code> class, but it
 can't be called as a function.</p>
@@ -511,8 +512,9 @@ heuristics.</span></p>
             localized for the current user's locale according to
             <code>locale.formats</code>.</li>
             
-            <li><b>Returns</b> <i>LocalDate</i> - A new <code>LocalDate</code>
-            object which represents the parsed date and time.</li>
+            <li><b>Returns</b> <i>LocalDate or null</i> - A new
+            <code>LocalDate</code> object which represents the parsed date and
+            time or null if the string could not be parsed.</li>
         </ul>
     </dd>
 </dl>

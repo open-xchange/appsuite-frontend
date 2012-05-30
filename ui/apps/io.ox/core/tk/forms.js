@@ -15,7 +15,7 @@
 define: true
 */
 define('io.ox/core/tk/forms',
-      ['io.ox/core/i18n'], function (i18n) {
+      ['io.ox/core/date'], function (date) {
 
     'use strict';
 
@@ -63,11 +63,9 @@ define('io.ox/core/tk/forms',
         },
         dateChangeByModel = function (e, value) {
             if (_.isNumber(value)) {
-                var formatetValue = require('io.ox/core/i18n').date('dd.MM.YYYY', value);
-                $(this).val(formatetValue);
-            } else {
-                $(this).val(value);
+                value = new date.Local(date.Local.utc(value)).format(date.DATE);
             }
+            $(this).val(value);
         },
 
         radioChange = selectChange,
