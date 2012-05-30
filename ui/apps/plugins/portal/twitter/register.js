@@ -21,7 +21,7 @@ define("plugins/portal/twitter/register", ["io.ox/core/extensions", "io.ox/oauth
         var offsets = {};
         
         _(entities.hashtags).each(function (hashtag) {
-            var elem = $("<a>", {href: "https://twitter.com/#!/search/%23" + hashtag.text, target: "_blank"}).text(hashtag.text);
+            var elem = $("<a>", {href: "https://twitter.com/#!/search/%23" + hashtag.text, target: "_blank"}).text("#" + hashtag.text);
             offsets[hashtag.indices[0]] = {
                 elem: elem,
                 indices: hashtag.indices
@@ -75,7 +75,6 @@ define("plugins/portal/twitter/register", ["io.ox/core/extensions", "io.ox/oauth
             var count = 0;
             var tweets = $("<div></div>").addClass("twitter");
             _(timeline).each(function (tweet) {
-                console.log(tweet);
                 var tweetNode = $("<div>").addClass("tweet").appendTo(tweets);
                 // Image
                 $("<img>", {src: tweet.user.profile_image_url, "class": 'profilePicture', alt: tweet.user.description}).appendTo(tweetNode);
