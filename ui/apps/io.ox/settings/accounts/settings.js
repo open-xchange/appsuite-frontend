@@ -85,11 +85,27 @@ define('io.ox/settings/accounts/settings',
         },
 
         removeSelectedItem = function (dataid, selectedItemID) {
-            api.remove([dataid]).done(
-                function () {
-                    listbox.find('[data-item-id="' + selectedItemID + '"]').remove();
-                }
-            );
+            var def = $.Deferred();
+
+            require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                new dialogs.ModalDialog()
+                    .text("Do you really want to delete this account?")
+                    .addPrimaryButton("delete", 'delete account')
+                    .addButton("cancel", 'Cancel')
+                    .show()
+                    .done(function (action) {
+                        if (action === 'delete') {
+                            def.resolve();
+                            api.remove([dataid]).done(
+                                function () {
+                                    listbox.find('[data-item-id="' + selectedItemID + '"]').remove();
+                                }
+                            );
+                        } else {
+                            def.reject();
+                        }
+                    });
+            });
         },
 
         getSelectedItem = function (args) {
