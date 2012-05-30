@@ -48,7 +48,7 @@ define("plugins/portal/twitter/register", ["io.ox/core/extensions", "io.ox/oauth
         var cursor = 0;
         _(keySet).each(function (key) {
             var element = offsets[key];
-            bob.append(text.substr(cursor, element.indices[0])).append(element.elem);
+            bob.append(text.substring(cursor, element.indices[0])).append(element.elem);
             cursor = element.indices[1];
         });
         

@@ -122,7 +122,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
+ * Copyright (C) Open-Xchange Inc., 2006-2011
  * Mail: info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
@@ -136,8 +136,8 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
         index: 150,
 
         load: function () {
-            var def = proxy.request({api: "facebook", url: "https://graph.facebook.com/me/feed"});
-            return def.pipe(function (response) { return JSON.parse(response); });
+            var def = proxy.request({api: "facebook", url: "https://graph.facebook.com/me/feed?limit=10"});
+            return def.pipe(function (response) { return JSON.parse(response);  });
         },
 
         draw: function (wall) {
@@ -154,7 +154,7 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
                 var wall_post = $("<div>").addClass("wall-post");
                 
                 //user name
-                wall_post.append($("<a>").addClass("from").text(post.from.name).attr("href", "https://graph.facebook.com/" + post.from.id));
+                wall_post.append($("<a>").addClass("from").text(post.from.name).attr("href", "http://www.facebook.com/profile.php?id=" + post.from.id));
                 
                 //status message
                 if (post.type === "status" || (post.type === "video" && post.caption !== "www.youtube.com")) {
@@ -194,26 +194,33 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
                 //comments
                 if (post.comments && post.comments.data) {
                     //display comments on/off
-                    var comment_toggler = $("<a>").addClass("comment-toggle").text("Hide comments");
+                    var comment_id = "#" + entry_id + " .wall-comment";
+                    var comment_toggler = $("<a>").addClass("comment-toggle").text("Show comments");
+                    
                     comment_toggler.click(function () {
-                        var comment_id = "#" + entry_id + " .wall-comment";
-                        $(comment_id).toggle('fast', function () {});
-                        if (comment_toggler.text() === "Show comments") { comment_toggler.text("Hide comments"); } else { comment_toggler.text("Show comments"); }
+                        comment_toggler.data("unfolded", !comment_toggler.data("unfolded"));
+                        $(comment_id).toggle('fast');
+                        if (comment_toggler.data("unfolded")) { comment_toggler.text("Hide comments"); } else { comment_toggler.text("Show comments"); }
 
                     });
                     wall_content.append(comment_toggler);
                     
                     _(post.comments.data).each(function (comment) {
                         var comm = $("<div>").addClass("wall-comment");
-                        var name = $("<a>").addClass("from").text(post.from.name).attr("href", "https://graph.facebook.com/" + post.from.id);
+                        var name = $("<a>").addClass("from").text(post.from.name).attr("href", "http://www.facebook.com/profile.php?id=" + post.from.id);
                         var msg = $("<div>").addClass("wall-comment-text").text(comment.message);
 
                         comm.append($("<img>").addClass("picture").attr("src", "https://graph.facebook.com/" + post.from.id + "/picture"));
                         comm.append($("<div>").addClass("wall-comment-content").append(name).append(msg));
                         wall_content.append(comm);
+                        comm.hide();
                     });
+                    
+                    comment_toggler.data("unfolded", false);
                 }
-                
+                wall_content.find("a").each(function (index, elem) {
+                    $(elem).attr("target", "_blank");
+                });
                 self.append(wall_content);
             });
 /*            if (wall.paging.previous) {
