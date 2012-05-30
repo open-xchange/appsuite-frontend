@@ -145,7 +145,7 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
             self.append($("<div>").addClass("clear-title").text("Facebook"));
 
             var count = 0;
-            _(wall).each(function (post) {
+            _(wall.data).each(function (post) {
                 var entry_id = "facebook-" + post.id;
                 var wall_content = $("<div>").addClass("facebook wall-entry").attr("id", entry_id);
                 //user pic
