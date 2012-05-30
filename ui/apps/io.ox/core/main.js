@@ -17,9 +17,9 @@ define("io.ox/core/main",
      "io.ox/core/http",
      "io.ox/core/api/apps",
      "io.ox/core/extensions",
-     "io.ox/core/i18n",
+     "io.ox/core/date",
      "gettext!io.ox/core/main",
-     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, i18n, gt) {
+     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, date, gt) {
 
     "use strict";
 
@@ -191,7 +191,7 @@ define("io.ox/core/main",
             id: "welcome",
             draw: function () {
 
-                var date, update;
+                var d, update;
 
                 this.append(
                     $("<div>", { id: "io-ox-welcome" })
@@ -206,12 +206,12 @@ define("io.ox/core/main",
                         )
                     )
                     .append(
-                        date = $("<div>").addClass("clock clear-title").text("")
+                        d = $("<div>").addClass("clock clear-title").text("")
                     )
                 );
 
                 update = function () {
-                    date.text(i18n.date("EEE dd. MMM YYYY HH:mm:ss"));
+                    d.text(new date.Local().format(date.FULL_DATE));
                 };
 
                 update();

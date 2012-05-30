@@ -10,9 +10,10 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define("io.ox/contacts/edit/test",
-    ["io.ox/core/extensions", "io.ox/contacts/main",
-     "io.ox/contacts/api", "io.ox/core/config"], function (ext, contacts, api, config) {
+define('io.ox/contacts/edit/test',
+    ['io.ox/core/extensions', 'io.ox/contacts/main',
+     'io.ox/contacts/api', 'io.ox/core/config', 'io.ox/core/date'],
+function (ext, contacts, api, config, date) {
 
     "use strict";
 
@@ -323,12 +324,12 @@ define("io.ox/contacts/edit/test",
                             j.expect(dataObj.city_home).toEqual(testObjectLong.city_home);
                             j.expect(dataObj.state_home).toEqual(testObjectLong.state_home);
                             j.expect(dataObj.country_home).toEqual(testObjectLong.country_home);
-                            j.expect(require('io.ox/core/i18n').date('dd.MM.YYYY', dataObj.birthday)).toEqual(testObjectLong.birthday);
+                            j.expect(date.Local(date.Local.utc(dataObj.birthday)).format('dd.MM.YYYY')).toEqual(testObjectLong.birthday);
                             j.expect(dataObj.marital_status).toEqual(testObjectLong.marital_status);
                             j.expect(dataObj.number_of_children).toEqual(testObjectLong.number_of_children);
                             j.expect(dataObj.nickname).toEqual(testObjectLong.nickname);
                             j.expect(dataObj.spouse_name).toEqual(testObjectLong.spouse_name);
-                            j.expect(require('io.ox/core/i18n').date('dd.MM.YYYY', dataObj.anniversary)).toEqual(testObjectLong.anniversary);
+                            j.expect(date.Local(date.Local.utc(dataObj.anniversary)).format('dd.MM.YYYY')).toEqual(testObjectLong.anniversary);
                             j.expect(dataObj.note).toEqual(testObjectLong.note);
                             j.expect(dataObj.employee_type).toEqual(testObjectLong.employee_type);
                             j.expect(dataObj.room_number).toEqual(testObjectLong.room_number);
