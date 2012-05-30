@@ -122,7 +122,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
