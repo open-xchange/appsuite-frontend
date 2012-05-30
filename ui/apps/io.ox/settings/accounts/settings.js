@@ -48,6 +48,30 @@ define('io.ox/settings/accounts/settings',
         },
 
 
+        mailAutoconfigDialog = function (e) {
+            e.preventDefault();
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                new dialogs.ModalDialog({
+                    width: 400,
+                    easyOut: true
+                })
+                .header(
+                    $('<h4>').text('Create a new mailaccount')
+                )
+                .append(
+                    $('<input>', { placeholder: 'Mailaddress', value: '' }).addClass('nice-input')
+                )
+                .addButton('cancel', 'Cancel')
+                .addPrimaryButton('add', 'Add folder')
+                .show(function () {
+                    this.find('input').focus();
+                })
+                .done(function (action) {
+
+                });
+            });
+        },
+
         createExtpointForSelectedAccount = function (args) {
             var selectedItemID = args.data.listbox.find('div[selected="selected"]').attr('data-item-id'),
                 splitedObj;
@@ -147,7 +171,7 @@ define('io.ox/settings/accounts/settings',
                         )
                         .append(
                             forms.createButton({label: 'Add ...', btnclass: 'btn'}).attr('data-action', 'add').css({'margin-right': '15px'})
-                                 .on('click', {self: self}, createExtpointForNewAccount),
+                                 .on('click', {self: self}, mailAutoconfigDialog),
                             forms.createButton({label: 'Edit ...', btnclass: 'btn'}).attr('data-action', 'edit').css({'margin-right': '15px'})
                                 .on('click', {listbox: listbox, self: self}, createExtpointForSelectedAccount),
                             forms.createButton({label: 'Delete ...', btnclass: 'btn'}).attr('data-action', 'delete')

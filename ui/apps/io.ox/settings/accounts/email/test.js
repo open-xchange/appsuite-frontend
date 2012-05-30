@@ -43,7 +43,14 @@ define("io.ox/settings/accounts/email/test",
             "transport_protocol": "smtp",
             "pop3_storage": "mailaccount",
             "spam_handler": "NoSpamHandler"
+        },
+
+        TESTMAILAUTOCONFIG = {
+            'email': 'christoph-kopp@gmx.net',
+            'password': 'test'
         };
+
+
 
 
      // helpers
@@ -244,4 +251,38 @@ define("io.ox/settings/accounts/email/test",
 
         }
     });
+
+
+    ext.point('test/suite').extend({
+        id: 'email-autoconfig',
+        index: 100,
+        test: function (j) {
+            j.describe("Tests the mail-autoconfig api", function () {
+
+                var emailConfigData;
+
+                j.it('tests the autoconfig api', function () {
+
+                    j.runs(function () {
+                        var me = this;
+                        me.ready = false;
+                        api.autoconfig(TESTMAILAUTOCONFIG)
+                        .done(function (data) {
+//                            console.log(data);
+                            me.ready = true;
+                        });
+
+                        j.waitsFor(function () {
+                            return this.ready;
+                        }, 'response from autoconfig arrived', TIMEOUT);
+
+                    });
+
+                });
+
+            });
+        }
+    });
+
+
 });
