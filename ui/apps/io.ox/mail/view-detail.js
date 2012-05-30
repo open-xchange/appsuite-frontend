@@ -97,7 +97,7 @@ define('io.ox/mail/view-detail',
         regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=\d+)(\s*)$/i,
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i,
-        regLink = /^(.*)(http\S+)(\s.*)?$/i,
+        regLink = /^(.*)(http:\/\/\S+)(\s.*)?$/i,
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
     var openDocumentLink = function (e) {
@@ -149,7 +149,7 @@ define('io.ox/mail/view-detail',
     blockquoteClickClose = function () {
         // collapse selection created by double click
         if (document.getSelection) {
-            document.getSelection().collapse();
+            document.getSelection().collapse(this, 0);
         }
         $(this).off('dblclick.close')
             .css('cursor', 'pointer')
