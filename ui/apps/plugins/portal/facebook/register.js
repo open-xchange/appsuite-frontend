@@ -137,7 +137,7 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
 
         load: function () {
             var def = proxy.request({api: "facebook", url: "https://graph.facebook.com/me/feed?limit=10"});
-            return def;
+            return def.pipe(function (response) { return JSON.parse(response); });
         },
 
         draw: function (wall) {
