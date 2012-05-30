@@ -1,19 +1,35 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Tobias Prinz <tobias.prinz@open-xchange.com>
+ */
+
 .twitter .name {
     font-weight: bold;
 }
+
 .twitter .tweet {
     position: relative;
+    margin-left: 65px;
+    margin-bottom: 20px;
 }
+
 .twitter .profilePicture {
-    display: block;
-    position: relative;
-    top: 0;
-    left: 0;
+    position: absolute;
+    top: 4px;
+    left: -65px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
 }
+
 .twitter .text {
-    display: block;
-    position: relative;
-    top: -48px;
-    left: 48px;
-    padding-left: 1em;
 }

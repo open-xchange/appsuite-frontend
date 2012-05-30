@@ -1,3 +1,17 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author  Tobias Prinz <tobias.prinz@open-xchange.com>
+ */
+
 /* EXAMPLE:
 {
     "data": [{
@@ -115,19 +129,6 @@
 }
 */
 
-/**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
- *
- * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
- *
- * @author Francisco Laguna <francisco.laguna@open-xchange.com>
- * @author  Tobias Prinz <tobias.prinz@open-xchange.com>
- */
 define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oauth/proxy"], function (ext, proxy) {
 
     "use strict";
@@ -150,24 +151,24 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
                 var wall_content = $("<div>").addClass("facebook wall-entry").attr("id", entry_id);
                 //user pic
                 wall_content.append($("<img>").addClass("picture").attr("src", "https://graph.facebook.com/" + post.from.id + "/picture"));
-                                    
+
                 var wall_post = $("<div>").addClass("wall-post");
-                
+
                 //user name
                 wall_post.append($("<a>").addClass("from").text(post.from.name).attr("href", "http://www.facebook.com/profile.php?id=" + post.from.id));
-                
+
                 //status message
                 if (post.type === "status" || (post.type === "video" && post.caption !== "www.youtube.com")) {
                     wall_post.append($("<div>").addClass("wall-post-text").text(post.message));
                 }
-                
+
                 //image post
                 if (post.type === "photo") {
                     wall_post.append($("<div>").addClass("wall-post-text").text(post.story));
                     wall_post.append(
                         $("<a>").attr("href", post.link).addClass("picture").append($("<img>").addClass("picture").attr("src", post.picture)));
                 }
-                
+
                 //youtube video post
                 if (post.type === "video" && post.caption === "www.youtube.com") {
                     wall_post.append($("<div>").addClass("wall-post-text").text(post.name));
@@ -178,25 +179,25 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
                             .append($("<img>").addClass("video-preview").attr("src", "http://img.youtube.com/vi/" + vid_id + "/2.jpg"))
                             .append($("<span>").addClass("caption").text(post.description)));
                 }
-                
+
                 wall_content.append(wall_post);
-                
+
                 //actions like "like"
 /*                _(post.actions).each(function (action) {
                     wall_post.append($("<a>").addClass("action").text(action.name).attr("href", action.link));
                 });*/
-                
+
                 //post date
                 wall_post.append($("<span>").addClass("datetime").text(post.created_time));
-                
+
                 wall_content.append(wall_post);
-                
+
                 //comments
                 if (post.comments && post.comments.data) {
                     //display comments on/off
                     var comment_id = "#" + entry_id + " .wall-comment";
                     var comment_toggler = $("<a>").addClass("comment-toggle").text("Show comments");
-                    
+
                     comment_toggler.click(function () {
                         comment_toggler.data("unfolded", !comment_toggler.data("unfolded"));
                         $(comment_id).toggle('fast');
@@ -204,7 +205,7 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
 
                     });
                     wall_content.append(comment_toggler);
-                    
+
                     _(post.comments.data).each(function (comment) {
                         var comm = $("<div>").addClass("wall-comment");
                         var name = $("<a>").addClass("from").text(post.from.name).attr("href", "http://www.facebook.com/profile.php?id=" + post.from.id);
@@ -215,7 +216,7 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
                         wall_content.append(comm);
                         comm.hide();
                     });
-                    
+
                     comment_toggler.data("unfolded", false);
                 }
                 wall_content.find("a").each(function (index, elem) {
@@ -233,6 +234,6 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
             return $.Deferred().resolve();
         }
     });
-    
-    
+
+
 });
