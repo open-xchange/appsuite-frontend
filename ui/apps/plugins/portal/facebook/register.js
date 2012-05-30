@@ -137,7 +137,7 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
 
         load: function () {
             var def = proxy.request({api: "facebook", url: "https://graph.facebook.com/me/feed"});
-            return def;
+            return def.pipe(function (response) { return JSON.parse(response); });
         },
 
         draw: function (wall) {
@@ -145,7 +145,7 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
             self.append($("<div>").addClass("clear-title").text("Facebook"));
 
             var count = 0;
-            _(wall).each(function (post) {
+            _(wall.data).each(function (post) {
                 var entry_id = "facebook-" + post.id;
                 var wall_content = $("<div>").addClass("facebook wall-entry").attr("id", entry_id);
                 //user pic

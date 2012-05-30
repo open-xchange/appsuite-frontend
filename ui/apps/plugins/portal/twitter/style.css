@@ -1,0 +1,19 @@
+.twitter .name {
+    font-weight: bold;
+}
+.twitter .tweet {
+    position: relative;
+}
+.twitter .profilePicture {
+    display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+.twitter .text {
+    display: block;
+    position: relative;
+    top: -48px;
+    left: 48px;
+    padding-left: 1em;
+}
