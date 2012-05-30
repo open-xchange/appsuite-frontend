@@ -12,14 +12,11 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-.twitter .name {
-    font-weight: bold;
-}
-
 .twitter .tweet {
     position: relative;
-    min-height: 50px;
+    min-height: 55px;
     margin: 0 0 20px 65px;
+    -webkit-user-select: text; -moz-user-select: text; user-select: text;
 }
 
 .twitter .profilePicture {
@@ -31,5 +28,6 @@
     border-radius: 5px;
 }
 
-.twitter .text {
+.twitter .name {
+    font-weight: bold;
 }
