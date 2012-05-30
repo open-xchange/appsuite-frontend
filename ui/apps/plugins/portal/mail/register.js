@@ -12,7 +12,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/portal/mail/register',
+define('plugins/portal/mail/register',
     ['io.ox/core/extensions', "io.ox/core/extPatterns/links"], function (ext, links, api) {
 
     'use strict';
