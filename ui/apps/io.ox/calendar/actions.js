@@ -85,9 +85,9 @@ define('io.ox/calendar/actions',
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         new dialogs.ModalDialog()
                             .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
-                            .addPrimaryButton('cancel', gt('Cancel'))
-                            .addDangerButton('appointment', gt('Appointment'))
-                            .addDangerButton('series', gt('Series'))
+                            .addButton('cancel', gt('Cancel'))
+                            .addDangerButton('appointment', gt('Delete appointment'))
+                            .addDangerButton('series', gt('Delete whole series'))
                             .show()
                             .done(function (action) {
                                 if (action === 'cancel') {
@@ -105,7 +105,7 @@ define('io.ox/calendar/actions',
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         new dialogs.ModalDialog()
                             .text(gt('Do you want to delete this appointment?'))
-                            .addPrimaryButton('cancel', gt('Cancel'))
+                            .addButton('cancel', gt('Cancel'))
                             .addDangerButton('ok', gt('Delete'))
                             .show()
                             .done(function (action) {
