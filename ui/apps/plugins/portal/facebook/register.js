@@ -136,7 +136,7 @@ define("plugins/portal/facebook/register", ["io.ox/core/extensions", "io.ox/oaut
         index: 150,
 
         load: function () {
-            var def = proxy.request({api: "facebook", url: "https://graph.facebook.com/me/feed"});
+            var def = proxy.request({api: "facebook", url: "https://graph.facebook.com/me/feed?limit=10"});
             return def;
         },
 
