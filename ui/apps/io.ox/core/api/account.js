@@ -333,5 +333,17 @@ define('io.ox/core/api/account',
     };
 
 
+    api.autoconfig = function (data) {
+        return http.GET({
+            module: 'autoconfig',
+            params: {
+                action: 'get',
+                email: data.email,
+                password: data.password
+            }
+        });
+    };
+
+
     return api;
 });
