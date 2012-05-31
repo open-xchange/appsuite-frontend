@@ -46,7 +46,7 @@ define("io.ox/settings/accounts/email/test",
         },
 
         TESTMAILAUTOCONFIG = {
-            'email': 'christoph-kopp@gmx.net',
+            'email': 'christoph.kopp@web.de',
             'password': 'test'
         };
 
@@ -152,7 +152,8 @@ define("io.ox/settings/accounts/email/test",
         test: function (j) {
             j.describe("Creates a new Emailaccount via ui", function () {
 
-                var app = null, accountPane, buttonAdd, buttonSave, detailPane, dataId;
+                var app = null, accountPane, buttonAdd, buttonAddAutoconf, dialog,
+                    buttonSave, detailPane, dataId;
 
                 j.it('opens settings app ', function () {
 
@@ -189,9 +190,33 @@ define("io.ox/settings/accounts/email/test",
                     }, 'looks for add button', TIMEOUT);
 
                     j.runs(function () {
-                        console.log(buttonAdd + ' gedrueckt');
                         buttonAdd.triggerHandler('click');
                     });
+                });
+
+
+                j.it('looks for the autoconf form and the add button', function () {
+
+                    j.waitsFor(function () {
+                        dialog = $('.io-ox-dialog-popup');
+                        buttonAddAutoconf = $('button.btn-primary');
+                        if (dialog[0] && buttonAddAutoconf[0]) {
+                            return true;
+                        }
+                    }, 'looks for dialog', TIMEOUT);
+
+                });
+
+                j.it('fills the form', function () {
+                    dialog.find('input').val(TESTMAILAUTOCONFIG.email);
+                });
+
+                j.it('hits the add button', function () {
+
+                    j.runs(function () {
+                        buttonAddAutoconf.trigger('click');
+                    });
+
                 });
 
                 j.it('looks for the add form and save button', function () {
@@ -200,17 +225,20 @@ define("io.ox/settings/accounts/email/test",
                         detailPane = $('.settings-detail-pane');
                         buttonSave = $('[data-action="save"]');
                         if (detailPane[0] && buttonSave[0]) {
-                            console.log(detailPane);
                             return true;
                         }
                     }, 'looks for detailPane', TIMEOUT);
 
                 });
 
+                j.it('compares the autofilled primary address with the testobject', function () {
+
+                    j.expect(detailPane.find('[data-property="primary_address"]').val()).toEqual(TESTMAILAUTOCONFIG.email);
+
+                });
+
                 j.it('fills the form', function () {
                     _.each(TESTACCOUNT, function (value, key) {
-                        console.log(key + ' ' + value);
-                        console.log(detailPane.find('[data-property="' + key + '"]'));
                         detailPane.find('[data-property="' + key + '"]').val(value).trigger('change');
                     });
                 });
@@ -268,8 +296,10 @@ define("io.ox/settings/accounts/email/test",
                         me.ready = false;
                         api.autoconfig(TESTMAILAUTOCONFIG)
                         .done(function (data) {
-//                            console.log(data);
                             me.ready = true;
+                        })
+                        .fail(function () {
+                            console.log('no configdata recived');
                         });
 
                         j.waitsFor(function () {
@@ -283,6 +313,9 @@ define("io.ox/settings/accounts/email/test",
             });
         }
     });
+
+
+
 
 
 });
