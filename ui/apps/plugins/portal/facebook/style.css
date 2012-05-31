@@ -31,14 +31,23 @@
 }
 
 .facebook .wall-comment {
-    margin: 1em 0 0 3em;
+    position: relative;
+    padding: 1em;
 }
 
 .facebook .wall-comment-content {
     position: relative;
-    top: -50px;
-    left: 55px;
+    margin-left: 55px;
 }
+
+.facebook .wall-comment .picture {
+    display: block;
+    position: absolute;
+    left: 0px;
+    top: 1em;
+    width: 50px;
+}
+
 
 .facebook a.action {
     margin: 0 1em 0 0;
@@ -54,12 +63,10 @@
     padding: 4px;
 }
 
-.facebook .from .picture {
+.facebook img.posted-image {
     display: block;
-    position: relative;
-    top: 5px;
-    left: 0;
-    width: 50px;
+    border: 1px solid #ccc;
+    padding: 4px;
 }
 
 .facebook .datetime  {
