@@ -151,10 +151,10 @@ define("io.ox/mail/api",
     });
 
     api.SENDTYPE = {
-        'NORMAL':  1,
-        'REPLY':   2,
-        'FORWARD': 3,
-        'DRAFT':   4
+        NORMAL:  1,
+        REPLY:   2,
+        FORWARD: 3,
+        DRAFT:   4
     };
 
     api.FLAGS = {
