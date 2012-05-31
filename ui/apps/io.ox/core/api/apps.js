@@ -13,7 +13,8 @@
 
 define.async('io.ox/core/api/apps',
     ['io.ox/core/cache',
-     'io.ox/core/event'], function (cache, Events) {
+     'io.ox/core/event',
+     'io.ox/core/extensions'], function (cache, Events, ext) {
 
     'use strict';
 
@@ -77,6 +78,14 @@ define.async('io.ox/core/api/apps',
                             group: 'Categories'
                         };
                     })
+                ).concat(
+                    // Add extension point categories
+                    ext.point("io.ox/core/apps/category").map(function (ext) {
+                        if (ext.category) {
+                            return ext.metadata("category");
+                        }
+                        return ext;
+                    }).value()
                 );
         },
 
@@ -95,7 +104,15 @@ define.async('io.ox/core/api/apps',
         getSpecial = function (prop) {
             return _(appData[prop]).map(function (id) {
                 return bless(appData.apps[id], id);
-            });
+            }).concat(
+                // Add extension point categories
+                ext.point("io.ox/core/apps/" + prop).map(function (ext) {
+                    if (ext.app) {
+                        return ext.metadata("app");
+                    }
+                    return ext;
+                }).value()
+            );
         };
 
     // public module interface

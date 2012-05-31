@@ -111,8 +111,7 @@ define('io.ox/applications/main',
             if (id !== 'installed' && id !== 'favorites' && id !== 'upgrades' && id !== 'mockIntegration') {
                 id = 'category';
             }
-            console.log('io.ox/applications/view-' + id);
-            require(['io.ox/applications/view-' + id])
+            require([obj.viewModule || 'io.ox/applications/view-' + id])
                 .done(_.lfo(showView, obj));
         };
 
