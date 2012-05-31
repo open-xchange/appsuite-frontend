@@ -36,8 +36,6 @@ define('io.ox/settings/accounts/settings',
                 dataid: 'email/' + val.id,
                 html: val.primary_address
             });
-//            console.log(listOfAccounts);
-
         },
 
         seperateEachAccount = function (data) {
@@ -47,10 +45,60 @@ define('io.ox/settings/accounts/settings',
             });
         },
 
+        drawAlert = function (alertPlaceholder) {
+            alertPlaceholder.find('.alert').remove();
+            alertPlaceholder.append(
+                $('<div>')
+                .addClass('alert alert-block fade in')
+                .append(
+                    $('<a>').attr({ href: '#', 'data-dismiss': 'alert' })
+                    .addClass('close')
+                    .html('&times;'),
+                    $('<p>').text('This is not an valide emailaddress')
+                )
+            );
+        },
+
+        autoconfigApiCall = function (e, mailaddress) {
+
+            api.autoconfig({
+                'email': mailaddress,
+                'password': 'test'
+            }).done(
+                function (data) {
+                    e.data.autoconfig = data;
+                    e.data.autoconfig.primary_address = mailaddress;
+                    createExtpointForNewAccount(e);
+                }
+            )
+            .fail(
+                function () {
+                    console.log('no configdata recived');
+                    e.data.autoconfig = {
+                        'primary_address': mailaddress
+                    };
+                    createExtpointForNewAccount(e);
+                }
+            );
+        },
+
+        validateEmail = function (e, mailaddress, alertPlaceholder) {
+            var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+            if (regEmail.test(mailaddress)) {
+                autoconfigApiCall(e, mailaddress);
+            } else {
+                drawAlert(alertPlaceholder);
+            }
+        },
 
         mailAutoconfigDialog = function (e) {
+            var inputField =  $('<input>', { placeholder: 'Mailaddress', value: '' }).addClass('nice-input'),
+                alertPlaceholder = $('<div>');
+
             e.preventDefault();
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                var self = this;
                 new dialogs.ModalDialog({
                     width: 400,
                     easyOut: true
@@ -59,15 +107,19 @@ define('io.ox/settings/accounts/settings',
                     $('<h4>').text('Create a new mailaccount')
                 )
                 .append(
-                    $('<input>', { placeholder: 'Mailaddress', value: '' }).addClass('nice-input')
+                    inputField
+                )
+                .append(
+                    alertPlaceholder
                 )
                 .addButton('cancel', 'Cancel')
-                .addPrimaryButton('add', 'Add folder')
+                .addPrimaryButton('add', 'Add')
                 .show(function () {
                     this.find('input').focus();
                 })
-                .done(function (action) {
-
+                .done(function () {
+                    var mailaddress = inputField.val();
+                    validateEmail(e, mailaddress, alertPlaceholder);
                 });
             });
         },
@@ -80,9 +132,7 @@ define('io.ox/settings/accounts/settings',
                 splitedObj = splitDataItemId(selectedItemID);
                 args.data.id = splitedObj.dataid;
                 require(['io.ox/settings/accounts/' + splitedObj.type + '/settings'], function (m) {
-                    console.log('ext: ' + 'io.ox/settings/accounts/' + splitedObj.type + '/settings/detail');
                     ext.point('io.ox/settings/accounts/' + splitedObj.type + '/settings/detail').invoke('draw', args.data.self.node, args);
-
                 });
             }
         },
@@ -91,9 +141,7 @@ define('io.ox/settings/accounts/settings',
             var type = 'email'; // TODO add more options
             console.log('create a new account');
             require(['io.ox/settings/accounts/' + type + '/settings'], function (m) {
-                console.log('ext: ' + 'io.ox/settings/accounts/' + type + '/settings/detail');
                 ext.point('io.ox/settings/accounts/' + type + '/settings/detail').invoke('draw', args.data.self.node, args);
-
             });
         },
 

@@ -281,7 +281,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
     var growl = $('<div>', {id: 'myGrowl'}).addClass('jGrowl').css({position: 'absolute', right: '0', top: '0'});
 
-    var ContactCreateView = View.extend({
+    var ContactCreateDistView = View.extend({
 
         draw: function (app) {
             var self = this,
@@ -358,5 +358,5 @@ define('io.ox/contacts/distrib/create-dist-view',
         }
     });
 
-    return ContactCreateView;
+    return ContactCreateDistView;
 });

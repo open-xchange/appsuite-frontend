@@ -668,30 +668,14 @@ define('io.ox/mail/view-detail',
         }
     });
 
-    function replaceContent(e) {
-        e.preventDefault();
-        $(this).parent().replaceWith(that.getContent(e.data));
-    }
-
     ext.point('io.ox/mail/detail').extend({
         index: 200,
         id: 'content',
         draw: function (data) {
 
-            var content;
-
-            // sent by myself and not in sent folder!?
-            if (data.threadSize > 1 && util.byMyself(data) && !account.is('sent', data.folder_id)) {
-                content = $('<div>').append(
-                    $('<a>', { href: '#' }).text(gt('Show content')).on('click', data, replaceContent)
-                );
-            } else {
-                content = that.getContent(data);
-            }
-
             this.addClass('view')
             .attr('data-cid', data.folder_id + '.' + data.id)
-            .append(content, $('<div>').addClass('mail-detail-clear-both'));
+            .append(that.getContent(data), $('<div>').addClass('mail-detail-clear-both'));
         }
     });
 
