@@ -1,7 +1,3 @@
-/* EXAMPLE:
-
-*/
-
 /**
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
@@ -14,12 +10,17 @@
  *
  * @author  Tobias Prinz <tobias.prinz@open-xchange.com>
  */
-define("plugins/portal/twitter/register", ["io.ox/core/extensions", "io.ox/oauth/proxy", "less!plugins/portal/twitter/style.css"], function (ext, proxy) {
+
+define("plugins/portal/twitter/register",
+    ["io.ox/core/extensions",
+     "io.ox/oauth/proxy",
+     "less!plugins/portal/twitter/style.css"], function (ext, proxy) {
+
     "use strict";
 
     var parseTweet = function (text, entities) {
         var offsets = {};
-        
+
         _(entities.hashtags).each(function (hashtag) {
             var elem = $("<a>", {href: "https://twitter.com/#!/search/%23" + hashtag.text, target: "_blank"}).text("#" + hashtag.text);
             offsets[hashtag.indices[0]] = {
@@ -41,9 +42,9 @@ define("plugins/portal/twitter/register", ["io.ox/core/extensions", "io.ox/oauth
                 indices: user_mention.indices
             };
         });
-        
+
         var keySet = _(offsets).keys().sort(function (a, b) {return a - b; });
-        
+
         var bob = $("<div>");
         var cursor = 0;
         _(keySet).each(function (key) {
@@ -51,11 +52,11 @@ define("plugins/portal/twitter/register", ["io.ox/core/extensions", "io.ox/oauth
             bob.append(text.substring(cursor, element.indices[0])).append(element.elem);
             cursor = element.indices[1];
         });
-        
+
         if (cursor < text.length) {
             bob.append(text.substr(cursor, text.length));
         }
-        
+
         return bob;
     };
 
@@ -71,7 +72,7 @@ define("plugins/portal/twitter/register", ["io.ox/core/extensions", "io.ox/oauth
         draw: function (timeline) {
             var self = this;
             self.append($("<div>").addClass("clear-title").text("Twitter"));
-            
+
             var count = 0;
             var tweets = $("<div></div>").addClass("twitter");
             _(timeline).each(function (tweet) {
@@ -85,12 +86,12 @@ define("plugins/portal/twitter/register", ["io.ox/core/extensions", "io.ox/oauth
                     .append("<br />")
                     .append(parseTweet(tweet.text, tweet.entities));
             });
-            
+
             self.append(tweets);
 
             return $.Deferred().resolve();
         }
     });
-    
-    
+
+
 });

@@ -59,20 +59,11 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             return true;
         },
         pastDate: function (prop, val, def) {
-            var now = _.now(),
-                reformatetValue,
-                reg = /((\d{2})|(\d))\.((\d{2})|(\d))\.((\d{4})|(\d{2}))/;
-            if (!_.isString(val)) {
-                reformatetValue = require('io.ox/core/i18n').date('dd.MM.YYYY', val);
-            } else {
+            if (_.isString(val)) {
                 return new Error(prop, _.printf('%s is not a valide date', def.i18n || prop));
             }
-
-            if (!reg.test(reformatetValue) && val !== '') {
-                return new Error(prop, _.printf('%s is not a valide date', def.i18n || prop));
-            } else  {
-                return  now > val || new Error(prop, _.printf('%s must be in the past', def.i18n || prop));
-            }
+            
+            return _.now() > val || new Error(prop, _.printf('%s must be in the past', def.i18n || prop));
         },
         email: function (prop, val, def) {
             return regEmail.test(val) ||

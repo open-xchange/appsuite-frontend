@@ -12,23 +12,21 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-(function () {
+define.async('io.ox/portal/main',
+    ['io.ox/core/extensions',
+     'io.ox/core/config',
+     'io.ox/core/api/user',
+     'io.ox/core/date',
+     'gettext!io.ox/portal/portal',
+     'less!io.ox/portal/style.css'],
+function (ext, config, userAPI, date, gt) {
 
     'use strict';
 
-    // is defined!
-    var ext = require('io.ox/core/extensions'),
-        // dependencies
-        deps = [
-            'io.ox/core/extensions',
-            'io.ox/core/config',
-            'io.ox/core/api/user',
-            'io.ox/core/i18n',
-            'less!io.ox/portal/style.css'
-        ].concat(ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' }));
+    // wait for plugin dependencies
+    var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' });
+    return require(plugins).pipe(function () {
         
-    define('io.ox/portal/main', deps, function (ext, config, userAPI, i18n) {
-
         // application object
         var app = ox.ui.createApp({ name: 'io.ox/portal' }),
             // app window
@@ -36,7 +34,7 @@
             // update window title
             updateTitle = function () {
                 win.setTitle(
-                    $($.txt(i18n.getGreetingPhrase()))
+                    $($.txt(getGreetingPhrase()))
                     .add($.txt(', '))
                     .add(userAPI.getTextNode(config.get('identifier')))
                     .add($.txt(' '))
@@ -44,6 +42,20 @@
                 );
             };
 
+        // time-based greeting phrase
+        function getGreetingPhrase() {
+            var hour = new date.Local().getHours();
+
+            // find proper phrase
+            if (hour >= 4 && hour <= 11) {
+                return gt('Good morning');
+            } else if (hour >= 18 && hour <= 23) {
+                return gt('Good evening');
+            } else {
+                return gt('Hello');
+            }
+        }
+        
         // launcher
         app.setLauncher(function () {
 
@@ -151,4 +163,4 @@
             getApp: app.getInstance
         };
     });
-}());
+});
