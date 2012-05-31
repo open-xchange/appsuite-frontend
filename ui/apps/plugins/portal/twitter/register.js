@@ -78,11 +78,13 @@ define("plugins/portal/twitter/register",
             _(timeline).each(function (tweet) {
                 var tweetNode = $("<div>").addClass("tweet").appendTo(tweets);
                 // Image
-                $("<img>", {src: tweet.user.profile_image_url, "class": 'profilePicture', alt: tweet.user.description}).appendTo(tweetNode);
+                $("<a>", {href: "https://twitter.com/#!/" + tweet.user.screen_name}).append(
+                    $("<img>", {src: tweet.user.profile_image_url, "class": 'profilePicture', alt: tweet.user.description}))
+                .appendTo(tweetNode);
 
                 // Text
                 $("<div>").appendTo(tweetNode).addClass("text")
-                    .append($("<span>").text(tweet.user.name).addClass("name"))
+                    .append($("<a>", {"class": "name", "href": "https://twitter.com/#!/" + tweet.user.screen_name}).text(tweet.user.name))
                     .append("<br />")
                     .append(parseTweet(tweet.text, tweet.entities));
             });
