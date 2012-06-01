@@ -158,28 +158,28 @@ define("io.ox/mail/api",
     };
 
     api.FLAGS = {
-        'ANSWERD':     1,
-        'DELETED':     2,
-        'DRAFT':       4,
-        'FLAGGED':     8,
-        'RECENT':     16,
-        'SEEN':       32,
-        'USER':       64,
-        'FORWARDED': 128
+        ANSWERD:     1,
+        DELETED:     2,
+        DRAFT:       4,
+        FLAGGED:     8,
+        RECENT:     16,
+        SEEN:       32,
+        USER:       64,
+        FORWARDED: 128
     };
 
     api.COLORS = {
-        'NONE':      0,
-        'RED':       1,
-        'BLUE':      2,
-        'GREEN':     3,
-        'GREY':      4,
-        'BROWN':     5,
-        'AQUA':      6,
-        'ORANGE':    7,
-        'PINK':      8,
-        'LIGHTBLUE': 9,
-        'YELLOW':   10
+        NONE:      0,
+        RED:       1,
+        BLUE:      2,
+        GREEN:     3,
+        GREY:      4,
+        BROWN:     5,
+        AQUA:      6,
+        ORANGE:    7,
+        PINK:      8,
+        LIGHTBLUE: 9,
+        YELLOW:   10
     };
 
     // ~ all

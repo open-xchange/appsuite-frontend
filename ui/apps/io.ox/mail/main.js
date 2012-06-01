@@ -184,9 +184,16 @@ define("io.ox/mail/main",
         );
 
         grid.on('change:ids', function (e, all) {
-            grid.getToolbar().find('.grid-count').text(
-                all.length + ' ' + gt.ngettext('mail', 'mails', all.length)
-            );
+            // get node & clear now
+            var node = grid.getToolbar().find('.grid-count').text('');
+            // be lazy
+            setTimeout(function () {
+                // loop over all top-level items (=threads) to get total number of mails
+                var count = _(all).reduce(function (memo, obj) {
+                    return memo + (obj.thread ? obj.thread.length : 1);
+                }, 0);
+                node.text(count + ' ' + gt.ngettext('mail', 'mails', count));
+            }, 10);
         });
 
         grid.setAllRequest(function () {

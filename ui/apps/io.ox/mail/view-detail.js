@@ -322,6 +322,11 @@ define('io.ox/mail/view-detail',
                 node.addClass('by-myself');
             }
 
+            // unread?
+            if (util.isUnread(data)) {
+                node.addClass('unread');
+            }
+
             // invoke extensions
             ext.point('io.ox/mail/detail').invoke('draw', node, data);
 
@@ -341,7 +346,16 @@ define('io.ox/mail/view-detail',
         drawThread: function (node, list, mail) {
             var i = 0, obj, frag = document.createDocumentFragment(),
                 scrollpane = node.closest('.scrollable'),
-                nodes, numVisible;
+                nodes, numVisible, inline;
+            // draw inline links for whole thread
+            if (list.length > 1) {
+                inline = $('<div class="mail-detail thread-inline-actions">');
+                ext.point('io.ox/mail/thread').invoke('draw', inline, list);
+                inline.children().first().prepend(
+                    $('<span class="io-ox-label">').text('Entire thread')
+                );
+                frag.appendChild(inline.get(0));
+            }
             // loop over thread - use fragment to be fast for tons of mails
             for (; (obj = list[i]); i++) {
                 if (i === 0) {
@@ -626,8 +640,16 @@ define('io.ox/mail/view-detail',
         }
     });
 
+    // inline links for each mail
     ext.point('io.ox/mail/detail').extend(new links.InlineLinks({
         index: 170,
+        id: 'inline-links',
+        ref: 'io.ox/mail/links/inline'
+    }));
+
+    // inline links for while thread
+    ext.point('io.ox/mail/thread').extend(new links.InlineLinks({
+        index: 100,
         id: 'inline-links',
         ref: 'io.ox/mail/links/inline'
     }));
