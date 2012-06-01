@@ -169,51 +169,29 @@ define('plugins/portal/facebook/register',
 
             this.append($('<div>').addClass('clear-title').text('Facebook'));
 
-            // TODO: remove debugging helper
-            console.debug('wall', wall);
-
             _(wall.data).each(function (post) {
                 var entry_id = 'facebook-' + post.id;
                 var wall_content = $('<div class="facebook wall-entry">').attr('id', entry_id);
                 var profile_link = 'http://www.facebook.com/profile.php?id=' + post.from.id;
                 
-                //user pic
+                //use extension mechanism to enable rendering of different types of wall posts
+                ext.point('plugins/portal/facebook/renderer').each(function (renderer) {
+                    if (renderer.accepts(post)) {
+                        renderer.draw.apply(wall_content, [post]);
+                    }
+                });
+                
+                //add user pic
                 $('<a class="profile-picture">').attr('href', profile_link)
                     .append($('<img class="picture">').attr('src', 'https://graph.facebook.com/' + post.from.id + '/picture'))
                     .appendTo(wall_content);
 
                 var wall_post = $('<div class="wall-post">').appendTo(wall_content);
 
-                //user name
+                //add user name
                 wall_post.append($('<a class="from">').text(post.from.name).attr('href', profile_link));
 
-                //status message
-                if (post.type === 'status' || (post.type === 'video' && post.caption !== 'www.youtube.com')) {
-                    wall_post.append($('<div class="wall-post-text">').text(post.message));
-                }
 
-                //image post
-                if (post.type === 'photo') {
-                    $('<div class="wall-post-text">').text(post.story || post.message).appendTo(wall_post);
-                    $('<a class="posted-image">').attr('href', post.link)
-                        .append($('<img class="posted-image">').attr('src', post.picture))
-                        .appendTo(wall_post);
-                }
-
-                //youtube video post
-                if (post.type === 'video' && post.caption === 'www.youtube.com') {
-                    /watch\?v=(.+)/.exec(post.link);
-                    var vid_id = RegExp.$1;
-                    
-                    $('<div class="wall-post-text">').text(post.name).appendTo(wall_post);
-                    $('<a class="video">').attr('href', post.link)
-                        .append(
-                            $('<img class="video-preview">').attr('src', 'http://img.youtube.com/vi/' + vid_id + '/2.jpg'),
-                            $('<span class="caption">').text(post.description))
-                        .appendTo(wall_post);
-                }
-
-                wall_content.append(wall_post);
 
                 //actions like 'like'
                 /* ... */
@@ -221,7 +199,7 @@ define('plugins/portal/facebook/register',
                 //post date
                 wall_post.append($('<span class="datetime">').text(post.created_time));
 
-//                wall_content.append(wall_post);
+                wall_content.append(wall_post);
 
                 //comments
                 if (post.comments && post.comments.data) {
@@ -240,6 +218,70 @@ define('plugins/portal/facebook/register',
             }, this);
 
             return $.when();
+        }
+    });
+    
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'photo',
+        accepts: function (post) {
+            return (post.type === 'photo');
+        },
+        draw: function (post) {
+            $('<div class="wall-post-text">').text(post.story || post.message).appendTo(this);
+            $('<a class="posted-image">').attr('href', post.link)
+                .append($('<img class="posted-image">').attr('src', post.picture))
+                .appendTo(this);
+        }
+    });
+    
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'youtube',
+        accepts: function (post) {
+            return (post.type === 'video' && post.caption === 'www.youtube.com');
+        },
+        draw: function (post) {
+            /watch\?v=(.+)/.exec(post.link);
+            var vid_id = RegExp.$1;
+             
+            $('<div class="wall-post-text">').text(post.name).appendTo(this);
+            $('<a class="video">').attr('href', post.link)
+                .append(
+                    $('<img class="video-preview">').attr('src', 'http://img.youtube.com/vi/' + vid_id + '/2.jpg'),
+                    $('<span class="caption">').text(post.description))
+                .appendTo(this);
+        }
+    });
+    
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'status',
+        accepts: function (post) {
+            return (post.type === 'status');
+        },
+        draw: function (post) {
+            $('<div class="wall-post-text">').text(post.message).appendTo(this);
+        }
+    });
+    
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'other_video',
+        accepts: function (post) {
+            return (post.type === 'video' && post.caption !== 'www.youtube.com');
+        },
+        draw: function (post) {
+            $('<div class="wall-post-text">').text(post.message).appendTo(this);
+        }
+    });
+    
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'photo',
+        accepts: function (post) {
+            return (post.type === 'photo');
+        },
+        draw: function (post) {
+            $('<div class="wall-post-text">').text(post.story || post.message).appendTo(this);
+            $('<a class="posted-image">').attr('href', post.link)
+                .append($('<img class="posted-image">').attr('src', post.picture))
+                .appendTo(this);
         }
     });
 });
