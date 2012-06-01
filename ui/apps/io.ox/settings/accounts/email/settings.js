@@ -32,10 +32,7 @@ define('io.ox/settings/accounts/email/settings',
             var data,
                 myModel,
                 myView,
-                myViewNode,
-                obj,
-                auto;
-
+                myViewNode;
             if (evt.data.id) {
                 api.get(evt.data.id).done(function (obj) {
                     data = obj;
@@ -55,18 +52,7 @@ define('io.ox/settings/accounts/email/settings',
                 });
             } else {
                 myViewNode = $("<div>").addClass("accountDetail");
-                auto = evt.data.autoconfig;
-                obj = {
-                    'primary_address': auto.primary_address,
-                    'mail_protocol': auto.mailProtocol,
-                    'mail_port': auto.mailport,
-                    'mail_server': auto.mailserver,
-                    'transport_protocol': auto.transportProtocol,
-                    'transport_port': auto.transportport,
-                    'transport_server': auto.transportserver,
-                    'login': auto.username
-                };
-                myModel = new AccountModel({data: obj});
+                myModel = new AccountModel();
                 myView = new AccountDetailView({model: myModel, node: myViewNode});
                 myView.dialog = new dialogs.SidePopup('800').show(evt, function (pane) {
                     var myout = myView.draw();
