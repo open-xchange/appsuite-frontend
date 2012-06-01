@@ -175,14 +175,17 @@ define('plugins/portal/facebook/register',
             _(wall.data).each(function (post) {
                 var entry_id = 'facebook-' + post.id;
                 var wall_content = $('<div class="facebook wall-entry">').attr('id', entry_id);
+                var profile_link = 'http://www.facebook.com/profile.php?id=' + post.from.id;
                 
                 //user pic
-                wall_content.append($('<img>').addClass('picture').attr('src', 'https://graph.facebook.com/' + post.from.id + '/picture'));
+                $('<a class="profile-picture">').attr('href', profile_link)
+                    .append($('<img class="picture">').attr('src', 'https://graph.facebook.com/' + post.from.id + '/picture'))
+                    .appendTo(wall_content);
 
-                var wall_post = $('<div>').addClass('wall-post');
+                var wall_post = $('<div class="wall-post">').appendTo(wall_content);
 
                 //user name
-                wall_post.append($('<a class="from">').text(post.from.name).attr('href', 'http://www.facebook.com/profile.php?id=' + post.from.id));
+                wall_post.append($('<a class="from">').text(post.from.name).attr('href', profile_link));
 
                 //status message
                 if (post.type === 'status' || (post.type === 'video' && post.caption !== 'www.youtube.com')) {
@@ -213,14 +216,12 @@ define('plugins/portal/facebook/register',
                 wall_content.append(wall_post);
 
                 //actions like 'like'
-/*                _(post.actions).each(function (action) {
-                    wall_post.append($('<a>').addClass('action').text(action.name).attr('href', action.link));
-                });*/
-
+                /* ... */
+                
                 //post date
                 wall_post.append($('<span class="datetime">').text(post.created_time));
 
-                wall_content.append(wall_post);
+//                wall_content.append(wall_post);
 
                 //comments
                 if (post.comments && post.comments.data) {

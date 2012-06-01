@@ -17,10 +17,13 @@
     -webkit-user-select: text; -moz-user-select: text; user-select: text;
 }
 
-.facebook.wall-entry .picture {
+.facebook.wall-entry a.profile-picture {
     position: absolute;
     top: 2px;
     left: -65px;
+}
+
+.facebook.wall-entry a.profile-picture img.picture{
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
