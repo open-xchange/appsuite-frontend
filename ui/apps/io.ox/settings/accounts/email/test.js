@@ -23,33 +23,34 @@ define("io.ox/settings/accounts/email/test",
     var TIMEOUT = 5000,
 
         TESTACCOUNT = {
-            "name": "Ein Account",
-            "primary_address": "christoph-kopp@gmx.net",
-            "personal": "Christoph Kopp",
-            "unified_inbox_enabled": false,
+//          "primary_address": "tester@gmx.net",
+//          "mail_protocol": "pop3",
+//          "mail_port": 995,
+//          "mail_server": "pop.gmx.net",
+//          "transport_protocol": "smtp",
+//          "transport_port": 465,
+//          "transport_server": "mail.gmx.net",
+//          "login": "tester@gmx.net",
             "mail_protocol": "pop3",
+            "name": "Ein Account",
+            "personal": "Tester",
+            "unified_inbox_enabled": false,
             "mail_secure": true,
-            "mail_server": "pop.gmx.net",
-            "mail_port": 995,
-            "login": "christoph-kopp@gmx.net",
             "password": "test",
             "pop3_refresh_rate": "3",
             "pop3_expunge_on_quit": true,
             "transport_secure": true,
-            "transport_server": "mail.gmx.net",
-            "transport_port": 465,
-            "transport_login": "christoph-kopp@gmx.net",
+            "transport_login": "tester@gmx.net",
             "transport_password": "test",
-            "transport_protocol": "smtp",
             "pop3_storage": "mailaccount",
             "spam_handler": "NoSpamHandler"
         },
 
         TESTMAILAUTOCONFIG = {
-            'email': 'christoph.kopp@web.de',
+            'email': 'tester@gmx.net',
             'password': 'test'
         };
-
+    //christoph-kopp@gmx.net
 
 
 
