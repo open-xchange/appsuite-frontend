@@ -444,7 +444,7 @@ define("io.ox/core/desktop",
                     // mark as running
                     running = true;
                     // go!
-                    (deferred = launchFn() || $.when())
+                    (deferred = launchFn.apply(this, arguments) || $.when())
                     .done(function () {
                         ox.ui.running.push(self);
                         ox.trigger('application:launch', self);
