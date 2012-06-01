@@ -141,16 +141,15 @@ define('plugins/portal/facebook/register',
             .text(self.data('unfolded') ? 'Hide comments' : 'Show comments')
             .parent().find('.wall-comment').toggle('fast');
     };
+
     var createCommentIterator = function (id, node) {
         return function (comment) {
             console.log(this);
-            $('<div class="wall-comment">')
-                .append(
-                    $('<img class="picture">').attr('src', 'https://graph.facebook.com/' + comment.from.id + '/picture'),
-                    $('<div class="wall-comment-content">')
-                        .append(
-                            $('<a class="from">').text(comment.from.name).attr('href', 'http://www.facebook.com/profile.php?id=' + comment.from.id))
-                            .append($('<div class="wall-comment-text">').text(comment.message)))
+            $('<div class="wall-comment">').append(
+                $('<img class="picture">').attr('src', 'https://graph.facebook.com/' + comment.from.id + '/picture'),
+                $('<div class="wall-comment-content">').append(
+                    $('<a class="from">').text(comment.from.name).attr('href', 'http://www.facebook.com/profile.php?id=' + comment.from.id)).append(
+                        $('<div class="wall-comment-text">').text(comment.message)))
                 .hide()
                 .appendTo($(node));
         };
