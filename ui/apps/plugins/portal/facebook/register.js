@@ -179,13 +179,13 @@ define('plugins/portal/facebook/register',
                         $('<img class="picture">').attr('src', 'https://graph.facebook.com/' + post.from.id + '/picture')),
                     $('<div class="wall-post">').append(
                         $('<a class="from">').text(post.from.name).attr('href', profile_link),
-                        $('<div class="wall-post-text">'),
+                        $('<div class="wall-post-content">'),
                         $('<span class="datetime">').text(post.created_time)
                     )).appendTo(this);
                 
                 //use extension mechanism to enable rendering of different contents
                 ext.point('plugins/portal/facebook/renderer').each(function (renderer) {
-                    var content_container = wall_content.find('div.wall-post-text');
+                    var content_container = wall_content.find('div.wall-post-content');
                     if (renderer.accepts(post)) {
                         renderer.draw.apply(content_container, [post]);
                     }
