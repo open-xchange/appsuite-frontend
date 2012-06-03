@@ -80,12 +80,18 @@ define('io.ox/launchpad/main',
             if ((running = getRunningApps(e.data.id)).length) {
                 running[0].app.launch();
             } else {
+                console.log("APP DATA: ", e, this);
                 $.when(
-                    require([e.data.id + "/main"]),
+                    require([e.data.entryModule || e.data.id + "/main"]),
                     pad.fadeOut(FADE_DURATION >> 1)
                 )
                 .done(function (m) {
-                    m.getApp().launch();
+                    if (e.data.launchArguments) {
+                        var app = m.getApp();
+                        app.launch.apply(app, e.data.launchArguments);
+                    } else {
+                        m.getApp().launch();
+                    }
                 });
             }
         },
@@ -121,7 +127,7 @@ define('io.ox/launchpad/main',
             _(running).each(function (o) {
                 // draw running app
                 secRunning.append(
-                    drawApp(o.data).on('click', { id: o.data.id }, launchApp)
+                    drawApp(o.data).on('click', o.data, launchApp)
                 );
             });
 
@@ -139,7 +145,7 @@ define('io.ox/launchpad/main',
             _(api.getInstalled()).each(function (data) {
                 // draw installed app
                 secInstalled.append(
-                    drawApp(data).on('click', { id: data.id }, launchApp)
+                    drawApp(data).on('click', data, launchApp)
                 );
             });
 
