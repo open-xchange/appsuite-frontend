@@ -18,10 +18,11 @@ define('io.ox/mail/view-detail',
      'io.ox/mail/util',
      'io.ox/mail/api',
      'io.ox/core/config',
+     'io.ox/core/http',
      'io.ox/core/api/account',
      'gettext!io.ox/mail/mail',
      'io.ox/mail/actions'
-    ], function (ext, links, util, api, config, account, gt) {
+    ], function (ext, links, util, api, config, http, account, gt) {
 
     'use strict';
 
@@ -335,58 +336,89 @@ define('io.ox/mail/view-detail',
 
         autoResolveThreads: function (e) {
             var self = $(this), parents = self.parents();
-            api.get(e.data).done(function (data) {
+            api.get(api.reduce(e.data)).done(function (data) {
                 // replace placeholder with mail content
+                data.threadKey = e.data.threadKey;
                 data.threadPosition = e.data.threadPosition;
                 data.threadSize = e.data.threadSize;
                 self.replaceWith(that.draw(data));
             });
         },
 
-        drawThread: function (node, list, mail) {
-            var i = 0, obj, frag = document.createDocumentFragment(),
-                scrollpane = node.closest('.scrollable'),
-                nodes, numVisible, inline;
-            // draw inline links for whole thread
-            if (list.length > 1) {
-                inline = $('<div class="mail-detail thread-inline-actions">');
-                ext.point('io.ox/mail/thread').invoke('draw', inline, list);
-                inline.children().first().prepend(
-                    $('<span class="io-ox-label">').text('Entire thread')
-                );
-                frag.appendChild(inline.get(0));
-            }
-            // loop over thread - use fragment to be fast for tons of mails
-            for (; (obj = list[i]); i++) {
-                if (i === 0) {
-                    mail.threadPosition = obj.threadPosition;
-                    mail.threadSize = obj.threadSize;
-                    frag.appendChild(that.draw(mail).get(0));
-                } else {
-                    frag.appendChild(that.drawScaffold(obj, that.autoResolveThreads).get(0));
-                }
-            }
-            scrollpane.scrollTop(0);
-            node.idle().empty().get(0).appendChild(frag);
-            // show many to resolve?
-            nodes = node.find('.mail-detail');
-            numVisible = (node.parent().height() / nodes.eq(0).outerHeight(true) >> 0) + 1;
-            // resolve visible
-            nodes.slice(0, numVisible).trigger('resolve');
-            // look for scroll
-            var autoResolve = function (e) {
+        drawThread: (function () {
+
+            function autoResolve(e) {
                 // determine visible nodes
-                var pane = $(this), node = e.data.node;
+                var pane = $(this), node = e.data.node,
+                    top = pane.scrollTop(), bottom = top + node.parent().height();
                 e.data.nodes.each(function () {
-                    var self = $(this), bottom = pane.scrollTop() + (2 * node.parent().height());
-                    if (bottom > self.position().top) {
+                    var self = $(this), pos = self.position();
+                    if (pos.top > top && pos.top < bottom) {
                         self.trigger('resolve');
                     }
                 });
+            }
+
+            function drawThread(node, list, pos, top, bottom, mails) {
+                var i, obj, frag = document.createDocumentFragment(),
+                    scrollpane = node.closest('.scrollable').off('scroll'),
+                    nodes, inline, top, height, mail;
+                // draw inline links for whole thread
+                if (list.length > 1) {
+                    inline = $('<div class="mail-detail thread-inline-actions">');
+                    ext.point('io.ox/mail/thread').invoke('draw', inline, list);
+                    inline.children().first().prepend(
+                        $('<span class="io-ox-label">').text('Entire thread')
+                    );
+                    frag.appendChild(inline.get(0));
+                }
+                // loop over thread - use fragment to be fast for tons of mails
+                for (i = 0; (obj = list[i]); i++) {
+                    if (i >= top && i <= bottom) {
+                        mail = mails.shift();
+                        mail.threadKey = obj.threadKey;
+                        mail.threadPosition = obj.threadPosition;
+                        mail.threadSize = obj.threadSize;
+                        frag.appendChild(that.draw(mail).get(0));
+                    } else {
+                        frag.appendChild(that.drawScaffold(obj, that.autoResolveThreads).get(0));
+                    }
+                }
+                node.idle().empty().get(0).appendChild(frag);
+                // get nodes
+                nodes = node.find('.mail-detail').not('.thread-inline-actions');
+                // set initial scroll position (37px not to see thread's inline links)
+                top = nodes.eq(pos).position().top;
+                scrollpane.scrollTop(list.length === 1 ? 0 : top);
+                scrollpane.on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 250));
+                nodes = frag = node = scrollpane = list = mail = mails = null;
+            }
+
+            return function (node, list, mail) {
+                // define next step now
+                var next = _.lfo(drawThread);
+                // get list data, esp. to know unseen flag - we need this list for inline link checks anyway
+                api.getList(list).done(function (data) {
+                    var i, $i = data.length - 1, pos, numVisible, top, bottom, defs = [];
+                    // which mail to focus?
+                    for (i = pos = $i; i >= 0; i--) {
+                        pos = i;
+                        if (util.isUnread(data[i])) { break; }
+                    }
+                    // how many visible?
+                    numVisible = Math.ceil(node.parent().height() / 300);
+                    bottom = Math.min(pos + numVisible, $i);
+                    top = Math.max(0, pos - (pos + numVisible - bottom));
+                    // fetch mails we will display
+                    for (i = top; i <= bottom; i++) {
+                        defs.push(api.get(api.reduce(list[i])));
+                    }
+                    $.when.apply($, defs).done(function () {
+                        next(node, list, pos, top, bottom, $.makeArray(arguments));
+                    });
+                });
             };
-            scrollpane.off('scroll').on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 250));
-            nodes = frag = node = scrollpane = list = mail = null;
-        }
+        }())
     };
 
     //extensions

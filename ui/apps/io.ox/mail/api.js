@@ -77,7 +77,6 @@ define("io.ox/mail/api",
             },
             get: {
                 action: "get",
-                unseen: "true",
                 view: "noimg",
                 embedded: "true"
             },
@@ -137,10 +136,9 @@ define("io.ox/mail/api",
                 return data;
             },
             get: function (data) {
-                // is unread?
-                if ((data.flags & 32) !== 32) {
-                    // TODO: change this once backend tells us more about 'GET vs seen/unseen'
-                    api.markRead(data);
+                // was unseen?
+                if (data.unseen) {
+                    folderAPI.decUnread(data);
                 }
                 return data;
             },
@@ -209,7 +207,7 @@ define("io.ox/mail/api",
 
     // get mails in thread
     api.getThread = function (obj) {
-        var key, folder, account, thread, order, len;
+        var key, folder, account, thread, order, len, retVal;
         if (typeof obj === 'string') {
             key = obj;
             obj = obj.split(/\./);
@@ -222,19 +220,28 @@ define("io.ox/mail/api",
             order = thread.shift();
             len = thread.length;
             account = folder.split(separator, 2)[0];
-            return _(thread).map(function (id, i) {
+            retVal = _(thread).map(function (id, i) {
                 var pos = order === 'desc' ? len - i : i + 1,
                     split = id.split(separator);
                 // get proper folder & id
                 folder = split.length > 1 ? account + separator + split.slice(0, -1).join(separator) : folder;
                 id = split.slice(-1).join('');
-                return { folder_id: folder, id: id, threadPosition: pos, threadSize: len };
+                return {
+                    folder_id: folder,
+                    id: id,
+                    threadKey: key,
+                    threadPosition: pos,
+                    threadSize: len
+                };
             });
         } else {
+            obj.threadKey = key;
             obj.threadPosition = 1;
             obj.threadSize = 1;
-            return [obj];
+            retVal = [obj];
         }
+        //console.debug('getThread', retVal);
+        return retVal;
     };
 
     api.getThreadOrder = function (obj) {
@@ -442,7 +449,7 @@ define("io.ox/mail/api",
                 }
             })
             .pipe(function (data) {
-                var text = '', tmp = '', quote = '', tmp;
+                var text = '', quote = '', tmp;
                 // transform pseudo-plain text to real text
                 if (data.attachments && data.attachments.length) {
                     if (data.attachments[0].content_type === 'text/plain') {
@@ -770,6 +777,58 @@ define("io.ox/mail/api",
                 }
             });
         }
+    };
+
+    function updateTopLevel(folder_id, mapper) {
+        // grep keys
+        var cache = api.caches.all;
+        return cache.grepKeys(folder_id + '\t').pipe(function (key) {
+            // now get cache entry
+            return cache.get(key).pipe(function (items) {
+                if (items) {
+                    return cache.add(key, _(items).map(mapper));
+                } else {
+                    return $.when();
+                }
+            });
+        });
+    }
+
+    api.prepareRemove = function (ids) {
+        return $.when.apply($,
+            _(ids).map(function (obj, index) {
+                // find thread
+                var key = obj.threadKey, top, list, pos;
+                if (key in threads) {
+                    // is not top element?
+                    top = _.cid(key);
+                    list = threads[key];
+                    pos = _(list).indexOf(obj.id);
+                    // trick: remove from array to avoid further processing
+                    ids.splice(index, 1);
+                    if (pos === 1) {
+                        // proper replace
+                        return updateTopLevel(top.folder_id, function (o) {
+                            if (o.id === top.id) {
+                                o.thread = _(o.thread).without(obj.id);
+                                o.id = _(o.thread).first();
+                            }
+                            return o;
+                        });
+                    } else {
+                        // just remove from thread list
+                        return updateTopLevel(top.folder_id, function (o) {
+                            if (o.id === top.id) {
+                                o.thread = _(o.thread).without(obj.id);
+                            }
+                            return o;
+                        });
+                    }
+                } else {
+                    return $.when();
+                }
+            })
+        );
     };
 
     return api;

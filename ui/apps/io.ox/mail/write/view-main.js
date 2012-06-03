@@ -536,10 +536,9 @@ define("io.ox/mail/write/view-main",
             //#. File size
             //#. %1$d is the number
             //#. %2$s is the unit (B, KB, MB etc.)
-            gt('%1$d %2$s', this.round(size, 1), n_size[i]));
+            gt('%1$d %2$s', Math.round(size, 1), n_size[i]));
     }
 
-    
     handleFileSelect = function (e, view) {
 
         if (Modernizr.file) {
