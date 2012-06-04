@@ -165,7 +165,6 @@ define('plugins/portal/facebook/register',
         },
 
         draw: function (wall) {
-            console.log(wall, wall.length);
             this.append($('<div>').addClass('clear-title').text('Facebook'));
 
             _(wall.data).each(function (post) {
@@ -239,13 +238,18 @@ define('plugins/portal/facebook/register',
             return (post.type === 'video' && post.caption === 'www.youtube.com');
         },
         draw: function (post) {
-            /watch\?v=(.+)/.exec(post.link);
-            var vid_id = RegExp.$1;
-            
-            this.text(post.message).append(
-                $('<a class="video">').attr('href', post.link).append(
-                    $('<img class="video-preview">').attr('src', 'http://img.youtube.com/vi/' + vid_id + '/2.jpg'),
-                    $('<span class="caption">').text(post.description)));
+            var vid_id = /[?&]v=(.+)/.exec(post.link);
+            if (!vid_id) {
+                this.text(post.message).append(
+                    $('<br>'),
+                    $('<a class="video">').attr('href', post.link).append(
+                        $('<span class="caption">').text(post.description)));
+            } else {
+                this.text(post.message).append(
+                    $('<a class="video">').attr('href', post.link).append(
+                        $('<img class="video-preview">').attr('src', 'http://img.youtube.com/vi/' + vid_id[1] + '/2.jpg'),
+                        $('<span class="caption">').text(post.description)));
+            }
         }
     });
     
