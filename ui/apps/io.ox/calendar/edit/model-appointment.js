@@ -12,11 +12,19 @@
  */
 
 define('io.ox/calendar/edit/model-appointment',
-      ['io.ox/calendar/api'], function (CalendarAPI) {
+      ['io.ox/calendar/api',
+       'gettext!io.ox/calendar/edit/main'], function (CalendarAPI, gt) {
 
     'use strict';
 
     var AppointmentModel = Backbone.Model.extend({
+        validation: {
+            title: {
+                required: true,
+                minLength: 8,
+                msg: gt('The title have to have minmum 8 characters')
+            }
+        },
         toSync: {},
         defaults: {
             start_date: new Date().getTime(),
@@ -102,6 +110,7 @@ define('io.ox/calendar/edit/model-appointment',
 
             return df;
         },
+        // Backbone API for deleting objects on server
         destroy: function () {
             console.log('now destroy it on server?');
             var self = this,
