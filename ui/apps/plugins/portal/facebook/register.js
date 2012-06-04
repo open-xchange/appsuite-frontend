@@ -172,6 +172,7 @@ define('plugins/portal/facebook/register',
                 var entry_id = 'facebook-' + post.id;
                 var wall_content = $('<div class="facebook wall-entry">').attr('id', entry_id);
                 var profile_link = 'http://www.facebook.com/profile.php?id=' + post.from.id;
+                var foundHandler = false;
                 
                 // basic wall post skeleton
                 wall_content.append(
@@ -181,15 +182,20 @@ define('plugins/portal/facebook/register',
                         $('<a class="from">').text(post.from.name).attr('href', profile_link),
                         $('<div class="wall-post-content">'),
                         $('<span class="datetime">').text(post.created_time)
-                    )).appendTo(this);
+                    ));
                 
                 //use extension mechanism to enable rendering of different contents
                 ext.point('plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
                     if (renderer.accepts(post)) {
                         renderer.draw.apply(content_container, [post]);
+                        foundHandler = true;
                     }
                 });
+                //not used as long as there is a catch-all handler! TODO: Should work in production code.
+                if (!foundHandler) {
+                    return;
+                }
 
                 //comments
                 if (post.comments && post.comments.data) {
@@ -206,6 +212,7 @@ define('plugins/portal/facebook/register',
                 //make all outgoing links open new tabs/windows
                 wall_content.find('a').attr('target', '_blank');
                 
+                wall_content.appendTo(this);
             }, this);
 
             return $.when();
@@ -214,6 +221,7 @@ define('plugins/portal/facebook/register',
     
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'photo',
+        index: 128,
         accepts: function (post) {
             return (post.type === 'photo');
         },
@@ -226,6 +234,7 @@ define('plugins/portal/facebook/register',
     
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'youtube',
+        index: 128,
         accepts: function (post) {
             return (post.type === 'video' && post.caption === 'www.youtube.com');
         },
@@ -242,6 +251,7 @@ define('plugins/portal/facebook/register',
     
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'status',
+        index: 128,
         accepts: function (post) {
             return (post.type === 'status');
         },
@@ -252,11 +262,25 @@ define('plugins/portal/facebook/register',
     
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'other_video',
+        index: 128,
         accepts: function (post) {
-            return (post.type === 'video' && post.caption !== 'www.youtube.com');
+            return (post.type === 'video' && post.caption !== 'www.youtube.com') && false;
         },
         draw: function (post) {
             this.text(post.message);
+        }
+    });
+    
+    
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'fallback',
+        index: 64,
+        accepts: function (post) {
+            return true;
+        },
+        draw: function (post) {
+            console.log("Please attach when reporting missing type", post);
+            this.html('<em style="color: red;">This message is of the type <b>' + post.type + '</b>. We do not know how to render this yet. Please write a e-mail to <a href="mailto:tobias.prinz@open-xchange.com?subject=Unkown Facebook type: ' + post.type + '">tobias.prinz@open-xchange.com</a></em>');
         }
     });
 });
