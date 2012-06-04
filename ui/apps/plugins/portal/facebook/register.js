@@ -161,10 +161,15 @@ define('plugins/portal/facebook/register',
         index: 150,
 
         load: function () {
-            return proxy.request({ api: 'facebook', url: 'https://graph.facebook.com/me/feed?limit=5'}).pipe(JSON.parse);
+            return proxy.request({ api: 'facebook', url: 'https://graph.facebook.com/me/feed?limit=5'})
+                .pipe(function (response) { return (response) ? JSON.parse(response) : null; });
         },
 
         draw: function (wall) {
+            if (!wall) {
+                this.remove();
+                return $.Deferred().resolve();
+            }
 
             this.append($('<div>').addClass('clear-title').text('Facebook'));
 
@@ -172,6 +177,7 @@ define('plugins/portal/facebook/register',
                 var entry_id = 'facebook-' + post.id;
                 var wall_content = $('<div class="facebook wall-entry">').attr('id', entry_id);
                 var profile_link = 'http://www.facebook.com/profile.php?id=' + post.from.id;
+                var foundHandler = false;
                 
                 // basic wall post skeleton
                 wall_content.append(
@@ -181,15 +187,20 @@ define('plugins/portal/facebook/register',
                         $('<a class="from">').text(post.from.name).attr('href', profile_link),
                         $('<div class="wall-post-content">'),
                         $('<span class="datetime">').text(post.created_time)
-                    )).appendTo(this);
+                    ));
                 
                 //use extension mechanism to enable rendering of different contents
                 ext.point('plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
-                    if (renderer.accepts(post)) {
+                    if (renderer.accepts(post) && ! foundHandler) {
                         renderer.draw.apply(content_container, [post]);
+                        foundHandler = true;
                     }
                 });
+                //not used as long as there is a catch-all handler! TODO: Should work in production code.
+                if (!foundHandler) {
+                    return;
+                }
 
                 //comments
                 if (post.comments && post.comments.data) {
@@ -206,6 +217,7 @@ define('plugins/portal/facebook/register',
                 //make all outgoing links open new tabs/windows
                 wall_content.find('a').attr('target', '_blank');
                 
+                wall_content.appendTo(this);
             }, this);
 
             return $.when();
@@ -214,6 +226,7 @@ define('plugins/portal/facebook/register',
     
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'photo',
+        index: 128,
         accepts: function (post) {
             return (post.type === 'photo');
         },
@@ -226,22 +239,29 @@ define('plugins/portal/facebook/register',
     
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'youtube',
+        index: 128,
         accepts: function (post) {
             return (post.type === 'video' && post.caption === 'www.youtube.com');
         },
         draw: function (post) {
-            /watch\?v=(.+)/.exec(post.link);
-            var vid_id = RegExp.$1;
-            
-            this.text(post.name).append(
-                $('<a class="video">').attr('href', post.link).append(
-                    $('<img class="video-preview">').attr('src', 'http://img.youtube.com/vi/' + vid_id + '/2.jpg'),
-                    $('<span class="caption">').text(post.description)));
+            var vid_id = /[?&]v=(.+)/.exec(post.link);
+            if (!vid_id) {
+                this.text(post.message).append(
+                    $('<br>'),
+                    $('<a class="video">').attr('href', post.link).append(
+                        $('<span class="caption">').text(post.description)));
+            } else {
+                this.text(post.message).append(
+                    $('<a class="video">').attr('href', post.link).append(
+                        $('<img class="video-preview">').attr('src', 'http://img.youtube.com/vi/' + vid_id[1] + '/2.jpg'),
+                        $('<span class="caption">').text(post.description)));
+            }
         }
     });
     
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'status',
+        index: 128,
         accepts: function (post) {
             return (post.type === 'status');
         },
@@ -251,12 +271,40 @@ define('plugins/portal/facebook/register',
     });
     
     ext.point('plugins/portal/facebook/renderer').extend({
-        id: 'other_video',
+        id: 'link',
+        index: 128,
         accepts: function (post) {
-            return (post.type === 'video' && post.caption !== 'www.youtube.com');
+            return (post.type === 'link');
+        },
+        draw: function (post) {
+//            this.text(post.message);
+            var result = $.linkSplit(post.message);
+            this.append.apply(this, result);
+            console.log("Finding links", result);
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'other_video',
+        index: 196,
+        accepts: function (post) {
+            return (post.type === 'video');
         },
         draw: function (post) {
             this.text(post.message);
+        }
+    });
+    
+    
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'fallback',
+        index: 256,
+        accepts: function (post) {
+            return true;
+        },
+        draw: function (post) {
+            console.log("Please attach when reporting missing type " + post.type, post);
+            this.html('<em style="color: red;">This message is of the type <b>' + post.type + '</b>. We do not know how to render this yet. Please write a e-mail to <a href="mailto:tobias.prinz@open-xchange.com?subject=Unkown Facebook type: ' + post.type + '">tobias.prinz@open-xchange.com</a></em>');
         }
     });
 });
