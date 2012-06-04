@@ -115,7 +115,6 @@ define("io.ox/files/main",
                 return;
             }
             right.busy(true);
-            console.log("drawfile", obj);
             api.get(obj).done(_.lfo(selectFile));
         };
 

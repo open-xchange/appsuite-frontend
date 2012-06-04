@@ -142,7 +142,6 @@ define("io.ox/files/api",
                     api.caches.versions.remove(id)
                 )
                 .pipe(function () {
-                    console.log("Triggering Event: ", { id: id, folder: options.json.folder_id });
                     api.trigger("create.version update refresh.all", { id: id, folder: options.json.folder_id });
                     return { folder_id: String(options.json.folder_id), id: id, timestamp: data.timestamp};
                 });
