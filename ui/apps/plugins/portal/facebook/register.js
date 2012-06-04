@@ -161,10 +161,16 @@ define('plugins/portal/facebook/register',
         index: 150,
 
         load: function () {
-            return proxy.request({ api: 'facebook', url: 'https://graph.facebook.com/me/feed?limit=5'}).pipe(JSON.parse);
+            return proxy.request({ api: 'facebook', url: 'https://graph.facebook.com/me/feed?limit=5'})
+                .pipe(function (response) { return (response) ? JSON.parse(response) : null; });
         },
 
         draw: function (wall) {
+            if (!wall) {
+                this.remove();
+                return $.Deferred().resolve();
+            }
+
             this.append($('<div>').addClass('clear-title').text('Facebook'));
 
             _(wall.data).each(function (post) {
