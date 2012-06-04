@@ -136,6 +136,8 @@ define("io.ox/mail/api",
                 return data;
             },
             get: function (data) {
+                // local update
+                latest[data.folder_id + '.' + data.id] = { flags: data.flags, color_label: data.color_label };
                 // was unseen?
                 if (data.unseen) {
                     folderAPI.decUnread(data);
