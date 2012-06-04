@@ -12,7 +12,7 @@
  */
 define('io.ox/calendar/edit/extensions/recurrence/view-repeat-option',
       ['io.ox/calendar/util',
-       'text!io.ox/calendar/edit/extensions/recurrence/tpl/repeat-option.tpl',
+       'text!io.ox/calendar/edit/extensions/recurrence/tpl/repeat-option.html',
        'gettext!io.ox/calendar/edit/main'], function (util, template, gt) {
 
     'use strict';
