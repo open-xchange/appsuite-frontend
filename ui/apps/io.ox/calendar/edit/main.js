@@ -19,6 +19,7 @@ define('io.ox/calendar/edit/main',
         'gettext!io.ox/calendar/edit/main'], function (AppointmentModel, api, editExtensions, AppView, gt) {
 
     'use strict';
+
     var EditAppointmentController = function (data) {
         var self = this;
         self.app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: gt('Edit Appointment')});

@@ -25,6 +25,7 @@ define('io.ox/calendar/edit/extensions/recurrence/view-repeat-option',
 
 
     var RepeatOptionView = Backbone.View.extend({
+
         RECURRENCE_NONE: 0,
         tagName: 'div',
         _modelBinder: undefined,
