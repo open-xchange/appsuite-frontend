@@ -181,10 +181,10 @@
     padding: 30px 40px 30px 40px;
     border-bottom: 1px solid #eee;
     min-height: 200px;
+    z-index: 0;
 }
 
 .mail-detail.by-myself {
-    background-color: #f5f5f5;
 }
 
 .mail-detail.by-myself a {
@@ -198,6 +198,18 @@
 
 .mail-detail:last-child {
     border-bottom: 0px none;
+}
+
+.mail-detail.thread-inline-actions {
+    border: 0px none;
+    padding: 18px 40px 0 40px;
+    min-height: initial;
+    text-align: right;
+    z-index: 1;
+}
+
+.mail-detail.thread-inline-actions .io-ox-inline-links {
+    margin-bottom: 0;
 }
 
 .mail-detail .infoblock {
@@ -224,6 +236,15 @@
     font-size: 16pt;
     margin: 0 0 0.6em 0;
     word-wrap: break-word;
+}
+
+.mail-detail.unread .from .person-link {
+    font-weight: bold;
+}
+
+.mail-detail.unread .subject {
+    font-family: @font-normal;
+    font-weight: bold;
 }
 
 .mail-detail .thread-size {

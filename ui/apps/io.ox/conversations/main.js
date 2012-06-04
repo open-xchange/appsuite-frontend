@@ -18,10 +18,10 @@ define("io.ox/conversations/main",
      "io.ox/core/api/user",
      "io.ox/core/config",
      "io.ox/core/extensions",
-     "io.ox/core/i18n",
+     "io.ox/core/date",
      "less!io.ox/conversations/style.css",
      "io.ox/conversations/actions"
-    ], function (util, api, VGrid, userAPI, config, ext, i18n) {
+    ], function (util, api, VGrid, userAPI, config, ext, date) {
 
     "use strict";
 
@@ -239,12 +239,10 @@ define("io.ox/conversations/main",
                 emoticons[str] + '.gif" class="emoticon">';
         };
 
-        var getTime = function (t) {
-            // copied from calendar/util -- should be all part of date.js soon
-            function isToday(timestamp) {
-                return new Date(timestamp).toDateString() === new Date().toDateString();
-            }
-            return isToday(t) ? i18n.date('HH:mm', t) : i18n.date('dd.MM.YY HH:mm', t);
+        var getTime = function (lt) {
+            var fmt = date.TIME, d = new date.Local(date.Local.utc(lt));
+            if (d.getDays() === new date.Local().getDays()) fmt += date.DATE;
+            return d.format(fmt);
         };
 
         drawMessages = function (list) {

@@ -134,3 +134,15 @@
 .settings-detail-pane .listbox .deletable-item div{
 	width: auto;
 }
+
+.io-ox-dialog-popup input.input-large {
+	width: 360px;	
+}
+
+.io-ox-dialog-popup .busy_pic {
+	margin: 10px auto 10px auto;
+	background-image: url(v=7.0.0-1.20120601.132924/apps/io.ox/settings/busy.gif);
+	width: 45px;
+	height: 11px;
+	background-repeat: no-repeat;
+}

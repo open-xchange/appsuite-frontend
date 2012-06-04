@@ -251,8 +251,8 @@ exports.potHandler = function(filename) {
 
 function escapePO(s) {
     return s.replace(/[\x00-\x1f\\"]/g, function(c) {
-        var n = Number(c.charCodeAt(0)).toString(16);
-        return "\\u00" + (n.length < 2 ? "0" + n : n);
+        var n = Number(c.charCodeAt(0)).toString(8);
+        return "\\000".slice(0, -n.length) + n;
     });
 }
 

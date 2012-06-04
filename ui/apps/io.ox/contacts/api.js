@@ -29,7 +29,8 @@ define('io.ox/contacts/api',
                 folder: '6',
                 columns: '20,1,500,502',
                 sort: '607', // 607 = magic field
-                order: 'asc'
+                order: 'asc',
+                admin: 'false'
             },
             list: {
                 action: 'list',

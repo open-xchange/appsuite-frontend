@@ -162,8 +162,8 @@ define("io.ox/core/tk/dialogs",
 
         this.addDangerButton = function (action, label, dataaction, options) {
             var button = addButton(action, label, dataaction, options);
-            nodes.footer.append(button);
             button.addClass('btn-danger');
+            nodes.footer.prepend(button);
             return this;
         };
 
@@ -247,7 +247,7 @@ define("io.ox/core/tk/dialogs",
             // focus button (if available)
             var button = nodes.popup.find('.btn-primary').first().focus();
             if (!button.length) {
-                nodes.popup.find('.btn').first().focus();
+                nodes.popup.find('.btn').not('.btn-danger').first().focus();
             }
 
             if (o.easyOut) {

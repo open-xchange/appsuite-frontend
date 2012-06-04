@@ -23,27 +23,35 @@ define("io.ox/settings/accounts/email/test",
     var TIMEOUT = 5000,
 
         TESTACCOUNT = {
-            "name": "Ein Account",
-            "primary_address": "christoph-kopp@gmx.net",
-            "personal": "Christoph Kopp",
-            "unified_inbox_enabled": false,
+//          "primary_address": "tester@gmx.net",
+//          "mail_protocol": "pop3",
+//          "mail_port": 995,
+//          "mail_server": "pop.gmx.net",
+//          "transport_protocol": "smtp",
+//          "transport_port": 465,
+//          "transport_server": "mail.gmx.net",
+//          "login": "tester@gmx.net",
             "mail_protocol": "pop3",
+            "name": "Ein Account",
+            "personal": "Tester",
+            "unified_inbox_enabled": false,
             "mail_secure": true,
-            "mail_server": "pop.gmx.net",
-            "mail_port": 995,
-            "login": "christoph-kopp@gmx.net",
             "password": "test",
             "pop3_refresh_rate": "3",
             "pop3_expunge_on_quit": true,
             "transport_secure": true,
-            "transport_server": "mail.gmx.net",
-            "transport_port": 465,
-            "transport_login": "christoph-kopp@gmx.net",
+            "transport_login": "tester@gmx.net",
             "transport_password": "test",
-            "transport_protocol": "smtp",
             "pop3_storage": "mailaccount",
             "spam_handler": "NoSpamHandler"
+        },
+
+        TESTMAILAUTOCONFIG = {
+            'email': 'tester@gmx.net',
+            'password': 'test'
         };
+    //christoph-kopp@gmx.net
+
 
 
      // helpers
@@ -145,7 +153,8 @@ define("io.ox/settings/accounts/email/test",
         test: function (j) {
             j.describe("Creates a new Emailaccount via ui", function () {
 
-                var app = null, accountPane, buttonAdd, buttonSave, detailPane, dataId;
+                var app = null, accountPane, buttonAdd, buttonAddAutoconf, dialog,
+                    buttonSave, detailPane, dataId;
 
                 j.it('opens settings app ', function () {
 
@@ -182,9 +191,33 @@ define("io.ox/settings/accounts/email/test",
                     }, 'looks for add button', TIMEOUT);
 
                     j.runs(function () {
-                        console.log(buttonAdd + ' gedrueckt');
                         buttonAdd.triggerHandler('click');
                     });
+                });
+
+
+                j.it('looks for the autoconf form and the add button', function () {
+
+                    j.waitsFor(function () {
+                        dialog = $('.io-ox-dialog-popup');
+                        buttonAddAutoconf = $('button.btn-primary');
+                        if (dialog[0] && buttonAddAutoconf[0]) {
+                            return true;
+                        }
+                    }, 'looks for dialog', TIMEOUT);
+
+                });
+
+                j.it('fills the form', function () {
+                    dialog.find('input').val(TESTMAILAUTOCONFIG.email);
+                });
+
+                j.it('hits the add button', function () {
+
+                    j.runs(function () {
+                        buttonAddAutoconf.trigger('click');
+                    });
+
                 });
 
                 j.it('looks for the add form and save button', function () {
@@ -193,17 +226,20 @@ define("io.ox/settings/accounts/email/test",
                         detailPane = $('.settings-detail-pane');
                         buttonSave = $('[data-action="save"]');
                         if (detailPane[0] && buttonSave[0]) {
-                            console.log(detailPane);
                             return true;
                         }
                     }, 'looks for detailPane', TIMEOUT);
 
                 });
 
+                j.it('compares the autofilled primary address with the testobject', function () {
+
+                    j.expect(detailPane.find('[data-property="primary_address"]').val()).toEqual(TESTMAILAUTOCONFIG.email);
+
+                });
+
                 j.it('fills the form', function () {
                     _.each(TESTACCOUNT, function (value, key) {
-                        console.log(key + ' ' + value);
-                        console.log(detailPane.find('[data-property="' + key + '"]'));
                         detailPane.find('[data-property="' + key + '"]').val(value).trigger('change');
                     });
                 });
@@ -244,4 +280,43 @@ define("io.ox/settings/accounts/email/test",
 
         }
     });
+
+
+    ext.point('test/suite').extend({
+        id: 'email-autoconfig',
+        index: 100,
+        test: function (j) {
+            j.describe("Tests the mail-autoconfig api", function () {
+
+                var emailConfigData;
+
+                j.it('tests the autoconfig api', function () {
+
+                    j.runs(function () {
+                        var me = this;
+                        me.ready = false;
+                        api.autoconfig(TESTMAILAUTOCONFIG)
+                        .done(function (data) {
+                            me.ready = true;
+                        })
+                        .fail(function () {
+                            console.log('no configdata recived');
+                        });
+
+                        j.waitsFor(function () {
+                            return this.ready;
+                        }, 'response from autoconfig arrived', TIMEOUT);
+
+                    });
+
+                });
+
+            });
+        }
+    });
+
+
+
+
+
 });

@@ -184,6 +184,7 @@ define("io.ox/core/api/factory",
                     hash[getKey(o)] = folders[o.folder_id] = true;
                 });
                 // loop over each folder and look for items to remove
+                console.log('updateCachesAfterRemove', ids, hash);
                 var defs = _(folders).map(function (value, folder_id) {
                     // grep keys
                     var cache = caches.all;
@@ -204,40 +205,50 @@ define("io.ox/core/api/factory",
                     });
                 });
                 // remove from object caches
-                defs.push(caches.list.remove(ids));
-                defs.push(caches.get.remove(ids));
+                if (ids.length) {
+                    defs.push(caches.list.remove(ids));
+                    defs.push(caches.get.remove(ids));
+                }
                 // clear
                 return $.when.apply($, defs).done(function () {
                     hash = folders = defs = null;
                 });
             },
 
+            prepareRemove: function (ids) {
+                return $.when();
+            },
+
             remove: function (ids, local) {
                 // be robust
                 ids = ids || [];
                 ids = _.isArray(ids) ? ids : [ids];
-                var opt = $.extend({}, o.requests.remove, { timestamp: _.now() });
+                var opt = $.extend({}, o.requests.remove, { timestamp: _.now() }),
+                    data = http.simplify(ids);
                 // done
                 var done = function () {
-                    api.trigger('deleted');
+                    api.trigger('delete', ids);
                 };
-                api.trigger("beforedelete");
-                // remove from caches first
-                api.updateCachesAfterRemove(ids).done(function () {
-                    // trigger refresh now
-                    api.trigger('refresh.all');
-                    // delete on server?
-                    if (local !== true) {
-                        return http.PUT({
-                            module: o.module,
-                            params: opt,
-                            data: http.simplify(ids),
-                            appendColumns: false
-                        })
-                        .pipe(done);
-                    } else {
-                        return done();
-                    }
+                api.trigger('beforedelete', ids);
+                return api.prepareRemove(ids).pipe(function () {
+                    // remove from caches first
+                    console.log('remove -> updateCachesAfterRemove', ids);
+                    return api.updateCachesAfterRemove(ids).pipe(function () {
+                        // trigger refresh now
+                        api.trigger('refresh.all');
+                        // delete on server?
+                        if (local !== true) {
+                            return http.PUT({
+                                module: o.module,
+                                params: opt,
+                                data: data,
+                                appendColumns: false
+                            })
+                            .done(done);
+                        } else {
+                            return done();
+                        }
+                    });
                 });
             },
 
@@ -250,7 +261,7 @@ define("io.ox/core/api/factory",
 
             // reduce object to id, folder, recurrence_position
             reduce: function (obj) {
-                return _(GET_IDS).reduce(function (memo, prop) {
+                return !obj ? obj : _(GET_IDS).reduce(function (memo, prop) {
                     var p = prop.split(':'), source = p[0], target = p[1] || p[0];
                     if (source in obj) { memo[target] = obj[source]; }
                     return memo;

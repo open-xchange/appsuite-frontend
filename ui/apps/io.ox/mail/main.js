@@ -184,9 +184,16 @@ define("io.ox/mail/main",
         );
 
         grid.on('change:ids', function (e, all) {
-            grid.getToolbar().find('.grid-count').text(
-                all.length + ' ' + gt.ngettext('mail', 'mails', all.length)
-            );
+            // get node & clear now
+            var node = grid.getToolbar().find('.grid-count').text('');
+            // be lazy
+            setTimeout(function () {
+                // loop over all top-level items (=threads) to get total number of mails
+                var count = _(all).reduce(function (memo, obj) {
+                    return memo + (obj.thread ? obj.thread.length : 1);
+                }, 0);
+                node.text(count + ' ' + gt.ngettext('mail', 'mails', count));
+            }, 10);
         });
 
         grid.setAllRequest(function () {
@@ -329,6 +336,16 @@ define("io.ox/mail/main",
             );
         };
 
+        var repaint = function () {
+            var sel = grid.selection.get();
+            if (sel.length === 1) {
+                right.css('height', '');
+                showMail(sel[0]);
+            }
+        };
+
+        api.on('delete', repaint);
+
         commons.wireGridAndSelectionChange(grid, 'io.ox/mail', showMail, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
@@ -346,6 +363,12 @@ define("io.ox/mail/main",
                     badge.hide();
                 }
             });
+        });
+
+        grid.setEmptyMessage(function (mode) {
+            return mode === 'search' ?
+                gt('No emails found for "%s"', win.search.query) :
+                gt('No emails in this folder');
         });
 
         // go!

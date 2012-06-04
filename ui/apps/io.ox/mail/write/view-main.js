@@ -21,10 +21,9 @@ define("io.ox/mail/write/view-main",
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/mail/util',
-     'io.ox/core/i18n',
      'gettext!io.ox/mail/mail',
      'io.ox/core/tk/autocomplete'
-    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, i18n, gt) {
+    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, gt) {
 
     'use strict';
 
@@ -510,6 +509,36 @@ define("io.ox/mail/write/view-main",
             );
     };
 
+    function round(num, digits) {
+        // TODO: add localization (. vs ,)
+        digits = digits || 0;
+        var pow = Math.pow(10, digits);
+        return Math.round(num * pow) / pow;
+    }
+
+    var n_size = [/*#. Bytes*/      gt('B'),
+                  /*#. Kilobytes*/  gt('KB'),
+                  /*#. Megabytes*/  gt('MB'),
+                  /*#. Gigabytes*/  gt('GB'),
+                  /*#. Terabytes*/  gt('TB'),
+                  /*#. Petabytes*/  gt('PB'),
+                  /*#. Exabytes*/   gt('EB'),
+                  /*#. Zettabytes*/ gt('ZB'),
+                  /*#. Yottabytes*/ gt('YB')];
+
+    function filesize(size) {
+        var i = 0, $i = n_size.length;
+        while (size > 1024 && i < $i) {
+            size = size / 1024;
+            i++;
+        }
+        return (
+            //#. File size
+            //#. %1$d is the number
+            //#. %2$s is the unit (B, KB, MB etc.)
+            gt('%1$d %2$s', Math.round(size, 1), n_size[i]));
+    }
+
     handleFileSelect = function (e, view) {
 
         if (Modernizr.file) {
@@ -526,7 +555,7 @@ define("io.ox/mail/write/view-main",
                         $('<div>')
                         .append(
                             $('<span>').addClass('filesize')
-                            .text(i18n.filesize(file.size || file.file_size))
+                            .text(filesize(file.size || file.file_size))
                         )
                         .append(
                             supportsPreview(file) ? createPreview(file) : $()

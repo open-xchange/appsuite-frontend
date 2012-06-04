@@ -16,14 +16,14 @@ define("io.ox/files/view-detail",
      "io.ox/core/extPatterns/links",
      "io.ox/core/extPatterns/layouts",
      "io.ox/core/tk/keys",
-     "io.ox/core/i18n",
+     "io.ox/core/date",
      "io.ox/core/event",
      "io.ox/files/actions",
      "io.ox/files/api",
      "io.ox/preview/main",
      "io.ox/core/tk/upload",
      "io.ox/core/api/user",
-     "gettext!io.ox/files/files"], function (ext, links, layouts, KeyListener, i18n, Event, actions, filesAPI, preview, upload, userAPI, gt) {
+     "gettext!io.ox/files/files"], function (ext, links, layouts, KeyListener, date, Event, actions, filesAPI, preview, upload, userAPI, gt) {
 
     "use strict";
 
@@ -319,9 +319,10 @@ define("io.ox/files/view-detail",
             return gt("Last Modified");
         },
         draw: function (field, file, $element) {
+            var d = new date.Local(date.Local.utc(file.last_modified));
             $element.append(
                 userAPI.getLink(file.created_by),
-                $.txt(' \u2013 ' + i18n.date("fulldatetime", file.last_modified)) // 2013 = ndash
+                $.txt(' \u2013 ' + d.format(date.FULL_DATE)) // 2013 = ndash
             );
         }
     });
@@ -644,7 +645,9 @@ define("io.ox/files/view-detail",
             orientation: 'right'
         },
         draw: function (version) {
-            this.append($("<span>").text(i18n.date("datetime", version.creation_date)).addClass("pull-right"));
+            var d = new date.Local(date.Loacl.utc(version.creation_date));
+            this.append($("<span>").text(d.format(date.DATE_TIME))
+                                   .addClass("pull-right"));
         }
     });
 

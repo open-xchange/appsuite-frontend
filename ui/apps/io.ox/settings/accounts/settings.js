@@ -36,8 +36,6 @@ define('io.ox/settings/accounts/settings',
                 dataid: 'email/' + val.id,
                 html: val.primary_address
             });
-//            console.log(listOfAccounts);
-
         },
 
         seperateEachAccount = function (data) {
@@ -47,6 +45,100 @@ define('io.ox/settings/accounts/settings',
             });
         },
 
+        dialogbox,
+
+        drawAlert = function (alertPlaceholder) {
+            alertPlaceholder.find('.alert').remove();
+            alertPlaceholder.append(
+                $('<div>')
+                .addClass('alert alert-block fade in')
+                .append(
+                    $('<a>').attr({ href: '#', 'data-dismiss': 'alert' })
+                    .addClass('close')
+                    .html('&times;'),
+                    $('<p>').text('This is not an valide email address')
+                )
+            );
+        },
+
+        drawBusy = function (alertPlaceholder) {
+            alertPlaceholder.find('.alert').remove();
+            alertPlaceholder.append(
+                $('<div>')
+                .addClass('alert alert-info fade in')
+                .append($('<div>').addClass('busy_pic')
+                )
+            );
+        },
+
+        autoconfigApiCall = function (e, newMailaddress) {
+            api.autoconfig({
+                'email': newMailaddress,
+                'password': 'test'
+            }).done(function (data) {
+                e.data.autoconfig = data;
+                e.data.autoconfig.primary_address = newMailaddress;
+                createExtpointForNewAccount(e);
+                dialogbox.close();
+            })
+            .fail(function () {
+                console.log('no configdata recived');
+                e.data.autoconfig = {
+                    'primary_address': newMailaddress
+                };
+                createExtpointForNewAccount(e);
+            });
+        },
+
+        validateEmail = function (newMailaddress) {
+            var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (regEmail.test(newMailaddress)) {
+                return true;
+            }
+        },
+
+        mailAutoconfigDialog = function (e) {
+            var inputField =  $('<input>', { placeholder: 'Your email address', value: '' }).addClass('input-large'),
+                alertPlaceholder = $('<div>');
+
+            e.preventDefault();
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                var self = this;
+                dialogbox = new dialogs.ModalDialog({
+                    width: 400,
+                    easyOut: true,
+                    async: true
+                });
+
+                dialogbox.header(
+                    $('<h4>').text('Add email account')
+                )
+                .append(
+                    inputField
+                )
+                .append(
+                    alertPlaceholder
+                )
+                .addButton('cancel', 'Cancel')
+                .addPrimaryButton('add', 'Add')
+                .show(function () {
+                    inputField.focus();
+                });
+
+                dialogbox.on('action add', function () {
+                    var newMailaddress = inputField.val();
+                    if (validateEmail(newMailaddress)) {
+                        drawBusy(alertPlaceholder);
+                        autoconfigApiCall(e, newMailaddress);
+                    } else {
+                        drawAlert(alertPlaceholder);
+                        inputField.focus();
+                        dialogbox.idle();
+                    }
+                });
+
+            });
+        },
 
         createExtpointForSelectedAccount = function (args) {
             var selectedItemID = args.data.listbox.find('div[selected="selected"]').attr('data-item-id'),
@@ -56,9 +148,7 @@ define('io.ox/settings/accounts/settings',
                 splitedObj = splitDataItemId(selectedItemID);
                 args.data.id = splitedObj.dataid;
                 require(['io.ox/settings/accounts/' + splitedObj.type + '/settings'], function (m) {
-                    console.log('ext: ' + 'io.ox/settings/accounts/' + splitedObj.type + '/settings/detail');
                     ext.point('io.ox/settings/accounts/' + splitedObj.type + '/settings/detail').invoke('draw', args.data.self.node, args);
-
                 });
             }
         },
@@ -67,9 +157,7 @@ define('io.ox/settings/accounts/settings',
             var type = 'email'; // TODO add more options
             console.log('create a new account');
             require(['io.ox/settings/accounts/' + type + '/settings'], function (m) {
-                console.log('ext: ' + 'io.ox/settings/accounts/' + type + '/settings/detail');
                 ext.point('io.ox/settings/accounts/' + type + '/settings/detail').invoke('draw', args.data.self.node, args);
-
             });
         },
 
@@ -85,11 +173,27 @@ define('io.ox/settings/accounts/settings',
         },
 
         removeSelectedItem = function (dataid, selectedItemID) {
-            api.remove([dataid]).done(
-                function () {
-                    listbox.find('[data-item-id="' + selectedItemID + '"]').remove();
-                }
-            );
+            var def = $.Deferred();
+
+            require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                new dialogs.ModalDialog()
+                    .text("Do you really want to delete this account?")
+                    .addPrimaryButton("delete", 'delete account')
+                    .addButton("cancel", 'Cancel')
+                    .show()
+                    .done(function (action) {
+                        if (action === 'delete') {
+                            def.resolve();
+                            api.remove([dataid]).done(
+                                function () {
+                                    listbox.find('[data-item-id="' + selectedItemID + '"]').remove();
+                                }
+                            );
+                        } else {
+                            def.reject();
+                        }
+                    });
+            });
         },
 
         getSelectedItem = function (args) {
@@ -131,7 +235,7 @@ define('io.ox/settings/accounts/settings',
                         )
                         .append(
                             forms.createButton({label: 'Add ...', btnclass: 'btn'}).attr('data-action', 'add').css({'margin-right': '15px'})
-                                 .on('click', {self: self}, createExtpointForNewAccount),
+                                 .on('click', {self: self}, mailAutoconfigDialog),
                             forms.createButton({label: 'Edit ...', btnclass: 'btn'}).attr('data-action', 'edit').css({'margin-right': '15px'})
                                 .on('click', {listbox: listbox, self: self}, createExtpointForSelectedAccount),
                             forms.createButton({label: 'Delete ...', btnclass: 'btn'}).attr('data-action', 'delete')

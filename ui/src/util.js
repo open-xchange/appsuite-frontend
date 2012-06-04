@@ -446,12 +446,35 @@
                 console.debug('clock.t' + (i++), t - (last || ox.t0), label || '');
                 last = t;
             };
-        }())
+        }()),
+
+        // simple composite-key constructor/parser
+        cid: function (o) {
+            var tmp, r = 'recurrence_position', split, m, f;
+            if (typeof o === 'string') {
+                // mail folder?
+                if (/^default/.test(o)) {
+                    split = o.split('.');
+                    tmp = { folder_id: split.slice(0, -1).join('.'), id: split.slice(-1) + '' };
+                } else if ((m = o.match(/^(\d*?)\.(\d+)(\.(\d+))?$/)) && m.length) {
+                    // integer based ids
+                    tmp = { folder_id: String(m[1]), id: m[2] + '' };
+                    if (m[4] !== undefined) { tmp[r] = m[4] + ''; }
+                }
+            } else if (typeof o === 'object' && o !== null) {
+                // join
+                tmp = o.id;
+                f = o.folder_id !== undefined ? o.folder_id : o.folder;
+                if (f !== undefined) { tmp = f + '.' + tmp; }
+                if (o[r] !== undefined) { tmp += '.' + o[r]; }
+            }
+            return tmp;
+        }
     });
 
     window.assert = function (value, message) {
         if (value) return;
-        console.error(message);
+        console.error(message || 'Assertion failed!');
         if (console.trace) console.trace();
     };
     if (assert(true) === 0) delete window.assert; // Available only in debug builds

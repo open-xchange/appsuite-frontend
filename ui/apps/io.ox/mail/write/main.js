@@ -19,14 +19,13 @@ define.async('io.ox/mail/write/main',
      'io.ox/core/config',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
-     'io.ox/core/i18n',
      'io.ox/core/api/user',
      'io.ox/core/tk/upload',
      'io.ox/mail/model',
      'io.ox/mail/write/view-main',
      'gettext!io.ox/mail/mail',
      'less!io.ox/mail/style.css',
-     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, i18n, userAPI, upload, MailModel, WriteView, gt) {
+     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, upload, MailModel, WriteView, gt) {
 
     'use strict';
 
@@ -186,6 +185,7 @@ define.async('io.ox/mail/write/main',
                 .addClass('form-inline')
                 .append(
                     $('<input>', { type: 'hidden', name: 'msgref', value: '' }),
+                    $('<input>', { type: 'hidden', name: 'sendtype', value: mailAPI.SENDTYPE.NORMAL }),
                     view.main,
                     view.scrollpane
                 )
@@ -411,6 +411,11 @@ define.async('io.ox/mail/write/main',
             view.form.find('input[name=msgref]').val(ref || '');
         };
 
+        app.setSendType = function (type) {
+            app.markDirty();
+            view.form.find('input[name=sendtype]').val(type || mailAPI.SENDTYPE.NORMAL);
+        };
+
         var windowTitles = {
             compose: gt('Compose new email'),
             replyall: gt('Reply all'),
@@ -436,6 +441,7 @@ define.async('io.ox/mail/write/main',
             this.setAttachVCard(data.vcard !== undefined ? data.vcard : config.get('mail.vcard', false));
             this.setDeliveryReceipt(data.disp_notification_to !== undefined ? data.disp_notification_to : false);
             this.setMsgRef(data.msgref);
+            this.setSendType(data.sendtype);
             // add files (from file storage)
             this.addFiles(data.infostore_ids);
             // apply mode
@@ -537,6 +543,7 @@ define.async('io.ox/mail/write/main',
             win.busy().show(function () {
                 mailAPI.replyall(obj, defaultEditorMode || 'text')
                 .done(function (data) {
+                    data.sendtype = mailAPI.SENDTYPE.REPLY;
                     app.setMail({ data: data, mode: 'replyall', initial: true })
                     .done(function () {
                         app.getEditor().focus();
@@ -557,6 +564,7 @@ define.async('io.ox/mail/write/main',
             win.busy().show(function () {
                 mailAPI.reply(obj, defaultEditorMode || 'text')
                 .done(function (data) {
+                    data.sendtype = mailAPI.SENDTYPE.REPLY;
                     app.setMail({ data: data, mode: 'reply', initial: true })
                     .done(function () {
                         app.getEditor().focus();
@@ -577,6 +585,7 @@ define.async('io.ox/mail/write/main',
             win.busy().show(function () {
                 mailAPI.forward(obj, defaultEditorMode || 'text')
                 .done(function (data) {
+                    data.sendtype = mailAPI.SENDTYPE.FORWARD;
                     app.setMail({ data: data, mode: 'forward', initial: true })
                     .done(function () {
                         app.getWindowNode().find('input[data-type=to]').focus().select();
@@ -672,6 +681,8 @@ define.async('io.ox/mail/write/main',
             if (data.msgref) {
                 mail.msgref = data.msgref;
             }
+            // sendtype
+            mail.sendtype = data.sendtype || mailAPI.SENDTYPE.NORMAL;
             // get files
             view.form.find(':input[name][type=file]')
                 .each(function () {
@@ -736,7 +747,6 @@ define.async('io.ox/mail/write/main',
             var mail = this.getMail(),
                 def = new $.Deferred();
             // send!
-
             mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
 
             if (_(mail.data.flags).isUndefined()) {

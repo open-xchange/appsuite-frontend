@@ -28,7 +28,7 @@ How to get the UI running in Debian/Ubuntu
 How to get the UI running on MacOS X
 ------------------------------------
 
-1.  Figure out Apache's document root. If you haven't change anything, it's:
+1.  Figure out Apache's document root. If you haven't changed anything, it's:
 
     /Library/WebServer/Documents
     

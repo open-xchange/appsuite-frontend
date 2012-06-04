@@ -14,11 +14,15 @@
 define.async('io.ox/core/date', ['io.ox/core/gettext', 'io.ox/core/config'],
 function (gettext, config) {
     /*jshint white:false */
-
+    
     'use strict';
-
+    
+    var dateTimeFormats = ['', 'E', 'yMd', 'yMEd', 'Hm', 'yMEdHm', 'yMdHm',
+                           'yMEdHm', 'v', 'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Hmv',
+                           'yMEdHmv', 'yMdHmv', 'yMEdHmv'];
+    
     var AVG_YEAR = 31556952000; // average ms / year
-
+    
     var api = {
         SECOND:    1000, // ms / s
         MINUTE:   60000, // ms / min
@@ -34,21 +38,27 @@ function (gettext, config) {
         TIMEZONE:  8,
         
         // Valid format flag combinations as dedicated constants.
-        // In a combination, WEEKDAY implies DATE and TIMEZONE implies TIME.
+        // In a combination, DAYOFWEEK implies DATE and TIMEZONE implies TIME.
         DAYOFWEEK_DATE:       3,
         DATE_TIME:            6,
         DAYOFWEEK_DATE_TIME:  7,
         TIME_TIMEZONE:       12,
         DATE_TIME_TIMEZONE:  14,
-        FULL_DATE:           15
+        FULL_DATE:           15,
+        
+        getFormat: function(format) {
+            format = format || api.DATE_TIME;
+            if (typeof format === 'number') {
+                format = dateTimeFormats[format];
+                if (api.locale.h12) format = format.replace('H', 'h');
+                format = api.locale.formats[format];
+            }
+            return format;
+        }
     };
     
     //@include api.locale = date/date.root.json
     ;
-    
-    var dateTimeFormats = ['', 'E', 'yMd', 'yMEd', 'Hm', 'yMEdHm', 'yMdHm',
-                           'yMEdHm', 'v', 'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Hmv',
-                           'yMEdHmv', 'yMdHmv', 'yMEdHmv'];
     
     // TODO: Difference between server and client clocks.
     var offset = 0;
@@ -65,7 +75,7 @@ function (gettext, config) {
     function getWeekStart(d) {
         return d.getDays() - (d.getDay() - api.locale.weekStart + 7) % 7;
     }
-
+    
     /**
      * Returns the day of the week which decides the week number
      * @return Day of week as the number of days since 1970-01-01.
@@ -174,7 +184,7 @@ function (gettext, config) {
 
         },
         v: function (n, d) {
-            return d.getTimezone();
+            return d.getTimeZone();
         },
         V: function (n, d) {
             
@@ -652,11 +662,7 @@ function (gettext, config) {
         };
         
         LocalDate.parse = function (string, format) {
-            format = format || api.DATE_TIME;
-            if (typeof format === 'number') {
-                format = api.locale.formats[dateTimeFormats[format]];
-            }
-            return parseDateTime(format, string, LocalDate);
+            return parseDateTime(api.getFormat(format), string, LocalDate);
         };
         
         assert(LocalDate.transitions = transitions);
@@ -668,11 +674,14 @@ function (gettext, config) {
         getDays: function () {
             return Math.floor(this.local / api.DAY);
         },
-        getTimezone: function () {
+        getTimeZone: function () {
             return this.constructor.getTTInfo(this.t).abbr;
         },
+        valueOf: function () {
+            return this.t;
+        },
         toString: function () {
-            return this.format();
+            return this.format(api.FULL_DATE);
         },
         add: function(time) {
             this.t = this.constructor.utc(this.local += time);
@@ -769,17 +778,8 @@ function (gettext, config) {
             this.t = this.constructor.utc(this.local = d.getTime());
             return this;
         },
-        getFormat: function(format) {
-            format = format || api.DATE_TIME;
-            if (typeof format === 'number') {
-                format = dateTimeFormats[format];
-                if (api.locale.h12) format = format.replace('H', 'h');
-                format = api.locale.formats[format];
-            }
-            return format;
-        },
         format: function (format) {
-            return formatDateTime(this.getFormat(format), this);
+            return formatDateTime(api.getFormat(format), this);
         },
         getIntervalFormat: function (end, format) {
             var L = api.locale;
@@ -793,7 +793,7 @@ function (gettext, config) {
                         return diff.h;
                     } else if (this.getMinutes() !== end.getMinutes()) {
                         return diff.m;
-                    } else if (this.getTimezone() === end.getTimezone()) {
+                    } else if (this.getTimeZone() === end.getTimeZone()) {
                         return this.getFormat(format);
                     }
                 } else {

@@ -401,6 +401,7 @@ docFile("features", "Features");
 docFile("development_guide", "UI Development Style Guide");
 docFile("vgrid", "VGrid");
 docFile("i18n", "Internationalization");
+docFile("date", "Date and Time");
 
 var indexFiles = ["lib/header.html", "index.html",
     { getData: function() { return titles.join("\n"); } }, "lib/footer.html"];
