@@ -213,6 +213,8 @@ utils.concat("boot.js", [
         //add backbone and dot.js may be a AMD-variant would be better
         "lib/backbone.js",
         "lib/backbone.modelbinder.js",
+        "lib/backbone.validation.js",
+        "lib/backbone.custom.js",
         "lib/doT.js",
 
         "tmp/boot.js"]);

@@ -15,7 +15,7 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/calendar/util',
        'io.ox/core/extensions',
        'io.ox/calendar/edit/ext-helper',
-       'text!io.ox/calendar/edit/tpl/common.tpl',
+       'text!io.ox/calendar/edit/tpl/common.html',
        'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, ext_helper, commontpl, gt) {
 
     'use strict';
@@ -175,6 +175,8 @@ define('io.ox/calendar/edit/view-main',
                 days: {selector: '[name=recurrenceText]', converter: recurTextConverter},
                 month: {selector: '[name=recurrenceText]', converter: recurTextConverter}*/
             };
+
+            Backbone.Validation.bind(this);
 
         },
         render: function () {
