@@ -294,6 +294,23 @@
             );
     };
 
+    $.linkSplit = function(str) {
+        var regex = new RegExp("(?:https?:\/\/|ftp:\/\/|mailto:|news\\\\.|www\\\\.)[-A-Za-z0-9+&@#\/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#\/%=~_()|]", "gi");
+        var parts = [], match, lastIndex = 0;
+        
+        while (match = regex.exec(str)) {
+            parts.push($( document.createTextNode(str.substring(lastIndex, match.index))));
+            parts.push($( document.createTextNode(' ')));
+            parts.push($('<a>', {href: match[0], target: '_blank'}).text(match[0]));
+            parts.push($( document.createTextNode(' ')));
+            lastIndex = match.index + match[0].length;
+        }
+        if(lastIndex < str.length) {
+            parts.push($( document.createTextNode(str.substring(lastIndex, str.length))));
+        }
+        
+    	return parts;
+    }
 
     /** jGrowl Wrapper - Establish a base jGrowl Container for compatibility with older releases. **/
     $.jGrowl = function (m, o) {

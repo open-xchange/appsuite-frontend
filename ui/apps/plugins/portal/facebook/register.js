@@ -161,11 +161,11 @@ define('plugins/portal/facebook/register',
         index: 150,
 
         load: function () {
-            return proxy.request({ api: 'facebook', url: 'https://graph.facebook.com/me/home?limit=5'}).pipe(JSON.parse);
+            return proxy.request({ api: 'facebook', url: 'https://graph.facebook.com/me/feed?limit=5'}).pipe(JSON.parse);
         },
 
         draw: function (wall) {
-
+            console.log(wall, wall.length);
             this.append($('<div>').addClass('clear-title').text('Facebook'));
 
             _(wall.data).each(function (post) {
@@ -267,7 +267,10 @@ define('plugins/portal/facebook/register',
             return (post.type === 'link');
         },
         draw: function (post) {
-            this.text(post.message);
+//            this.text(post.message);
+            var result = $.linkSplit(post.message);
+            this.append.apply(this, result);
+            console.log("Finding links", result);
         }
     });
 
