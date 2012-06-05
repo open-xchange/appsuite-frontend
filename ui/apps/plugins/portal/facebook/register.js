@@ -304,7 +304,7 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             console.log("Please attach when reporting missing type " + post.type, post);
-            this.html('<em style="color: red;">This message is of the type <b>' + post.type + '</b>. We do not know how to render this yet. Please write a e-mail to <a href="mailto:tobias.prinz@open-xchange.com?subject=Unkown Facebook type: ' + post.type + '">tobias.prinz@open-xchange.com</a></em>');
+            this.html('<em style="color: red;">This message is of the type <b>' + post.type + '</b>. We do not know how to render this yet. Please tell us about it!</em>');
         }
     });
 });
