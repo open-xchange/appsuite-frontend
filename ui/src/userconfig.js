@@ -123,6 +123,12 @@ define(function () {
                 category: "Dev",
                 settings: false
             },
+            "io.ox/demo": {
+                title: "Demo Launcher",
+                company: "Cisco Inc.",
+                category: "Dev",
+                settings: false
+            },
             "3rd.party/addr": {
                 title: "Plaxo Address Book",
                 company: "Plaxo Inc.",
