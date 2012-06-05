@@ -100,7 +100,7 @@ define('io.ox/calendar/edit/view-main',
     var CommonView = Backbone.View.extend({
         RECURRENCE_NONE: 0,
         tagName: 'div',
-        className: 'io-ox-calendar-edit',
+        className: 'io-ox-calendar-edit container',
         subviews: {},
         _modelBinder: undefined,
         guid: undefined,
@@ -115,6 +115,7 @@ define('io.ox/calendar/edit/view-main',
             self.template = doT.template(commontpl);
             self._modelBinder = new Backbone.ModelBinder();
             self.guid = _.uniqueId('io_ox_calendar_edit_');
+
 
             //self.participantsCollection = new ParticipantsCollection(self.model.get('participants'));
             //self.participantsView = new ParticipantsView({collection: self.participantsCollection});

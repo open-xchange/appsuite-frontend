@@ -21,8 +21,7 @@ define('io.ox/calendar/edit/model-appointment',
         validation: {
             title: {
                 required: true,
-                minLength: 8,
-                msg: gt('The title have to have minmum 8 characters')
+                msg: gt('You must specify a title')
             }
         },
         toSync: {},
