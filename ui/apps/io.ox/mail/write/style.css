@@ -254,10 +254,18 @@
     background-image: url(../images/attachment.png);
     background-repeat: no-repeat;
     background-position: 10px center;
-    padding-left: 35px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    position: relative;
+    height: 3em;
+    line-height: 1.5em;
+}
+
+.io-ox-mail-write .section-item .row-1 {
+    position: absolute; left: 40px; right: 30px;
+    overflow: hidden; text-overflow: ellipsis;
+}
+
+.io-ox-mail-write .section-item .row-2 {
+    position: absolute; left: 40px; right: 30px; top: 23px;
 }
 
 .io-ox-mail-write .section-item .filesize {

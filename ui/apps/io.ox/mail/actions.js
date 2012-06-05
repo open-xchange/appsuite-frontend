@@ -336,16 +336,17 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/links/toolbar').extend(new links.Link({
         index: 100,
         id: 'compose',
-        label: gt('Compose new email'),
+        label: gt('Compose new mail'),
         ref: 'io.ox/mail/actions/compose'
     }));
 
-    ext.point('io.ox/mail/links/toolbar').extend(new links.Link({
-        index: 200,
-        id: 'reader',
-        label: gt('Light!'),
-        ref: 'io.ox/mail/actions/reader'
-    }));
+    // TODO: reactivate or remove!
+//    ext.point('io.ox/mail/links/toolbar').extend(new links.Link({
+//        index: 200,
+//        id: 'reader',
+//        label: gt('Light!'),
+//        ref: 'io.ox/mail/actions/reader'
+//    }));
 
     // inline links
 

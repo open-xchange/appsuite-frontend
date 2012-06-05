@@ -441,20 +441,24 @@ define("io.ox/mail/api",
     };
 
     var react = function (action, obj, view) {
-        return http.GET({
+        return http.PUT({
                 module: 'mail',
                 params: {
                     action: action || '',
-                    id: obj.id,
-                    folder: obj.folder || obj.folder_id,
                     view: view || 'text'
-                }
+                },
+                data: _([].concat(obj)).map(function (obj) {
+                    return api.reduce(obj);
+                }),
+                appendColumns: false
             })
             .pipe(function (data) {
                 var text = '', quote = '', tmp;
                 // transform pseudo-plain text to real text
                 if (data.attachments && data.attachments.length) {
-                    if (data.attachments[0].content_type === 'text/plain') {
+                    if (data.attachments[0].content === '') {
+                        // nothing to do - nothing to break
+                    } else if (data.attachments[0].content_type === 'text/plain') {
                         $('<div>')
                             // escape everything but BR tags
                             .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
@@ -563,6 +567,7 @@ define("io.ox/mail/api",
     };
 
     api.send = function (data, files) {
+
         var deferred = $.Deferred();
 
         if (Modernizr.file) {
