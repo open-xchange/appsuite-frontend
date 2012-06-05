@@ -6,7 +6,8 @@ define(function () {
         installed: [
             "io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar",
             "io.ox/files", "io.ox/conversations",
-            "io.ox/dev/ajaxDebug", "io.ox/dev/testing", "io.ox/dev/theme-maker"
+            "io.ox/dev/ajaxDebug", "io.ox/dev/testing", "io.ox/dev/theme-maker",
+            "io.ox/demo"
         ],
 
         favorites: [
