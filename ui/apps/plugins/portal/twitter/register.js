@@ -66,10 +66,14 @@ define('plugins/portal/twitter/register',
 
         load: function () {
             var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: {count: 5, include_entities: true}});
-            return def.pipe(function (response) { return JSON.parse(response); });
+            return def.pipe(function (response) { return (response) ? JSON.parse(response) : null; });
         },
 
         draw: function (timeline) {
+            if (!timeline) {
+                this.remove();
+                return $.Deferred().resolve();
+            }
             var self = this;
             self.append($('<div>').addClass('clear-title').text('Twitter'));
 

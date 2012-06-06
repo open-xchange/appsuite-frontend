@@ -645,7 +645,7 @@ define("io.ox/files/view-detail",
             orientation: 'right'
         },
         draw: function (version) {
-            var d = new date.Local(date.Loacl.utc(version.creation_date));
+            var d = new date.Local(date.Local.utc(version.creation_date));
             this.append($("<span>").text(d.format(date.DATE_TIME))
                                    .addClass("pull-right"));
         }

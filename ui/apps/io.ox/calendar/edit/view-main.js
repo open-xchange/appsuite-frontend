@@ -15,8 +15,9 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/calendar/util',
        'io.ox/core/extensions',
        'io.ox/calendar/edit/ext-helper',
-       'text!io.ox/calendar/edit/tpl/common.tpl',
-       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, ext_helper, commontpl, gt) {
+       'io.ox/core/date',
+       'text!io.ox/calendar/edit/tpl/common.html',
+       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, ext_helper, dateAPI, commontpl, gt) {
 
     'use strict';
 
@@ -176,6 +177,8 @@ define('io.ox/calendar/edit/view-main',
                 month: {selector: '[name=recurrenceText]', converter: recurTextConverter}*/
             };
 
+            Backbone.Validation.bind(this);
+
         },
         render: function () {
             var self = this;
@@ -202,6 +205,8 @@ define('io.ox/calendar/edit/view-main',
             var bindings = _.extend(defaultBindings, self.bindings);
 
 
+
+
             // let others modify the bindings - if something is disabled,
             // that has explicit bindings like start_date in this case
             ext.point('io.ox/calendar/edit/bindings/common').invoke('modify', self, {bindings: bindings});
@@ -209,6 +214,11 @@ define('io.ox/calendar/edit/view-main',
 
             // finally bind the model to the dom using the defined bindings
             self._modelBinder.bind(self.model, self.el, bindings);
+
+            //init date picker
+            console.log('MY DATEFORMAT: ' + dateAPI.locale.date);
+            self.$('.startsat-date').datepicker({format: dateAPI.locale.date.toLowerCase()});
+            self.$('.endsat-date').datepicker({format: dateAPI.locale.date.toLowerCase()});
 
 
             return self;

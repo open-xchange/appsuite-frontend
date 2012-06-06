@@ -20,7 +20,7 @@ define('io.ox/calendar/edit/view-app',
 
     var AppView = Backbone.View.extend({
         _modelBinder: undefined,
-        className: 'io-ox-calendar-edit',
+        className: 'io-ox-calendar-edit container',
         subviews: {},
         initialize: function () {
             this._modelBinder = new Backbone.ModelBinder();

@@ -21,9 +21,10 @@ define("io.ox/mail/write/view-main",
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/mail/util',
+     'io.ox/preview/main',
      'gettext!io.ox/mail/mail',
      'io.ox/core/tk/autocomplete'
-    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, gt) {
+    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, gt) {
 
     'use strict';
 
@@ -471,22 +472,39 @@ define("io.ox/mail/write/view-main",
     var handleFileSelect, addUpload, supportsPreview, createPreview;
 
     supportsPreview = function (file) {
-        return window.FileReader &&
-            (/^image\/(png|gif|jpe?g|bmp)$/i).test(file.type);
+        // is not local?
+        if (file.message) {
+            return new pre.Preview({ mimetype: 'message/rfc822' }).supportsPreview();
+        } else {
+            return window.FileReader && (/^image\/(png|gif|jpe?g|bmp)$/i).test(file.type);
+        }
     };
 
     createPreview = function (file) {
-        return $($.txt(' \u2013 ')) // ndash
-            .add(
-                $('<a>', { href: '#' })
-                .text(gt('Preview'))
-                .on('click', { file: file }, function (e) {
-                    e.preventDefault();
-                    // open side popup
-                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        new dialogs.SidePopup().show(e, function (popup) {
+        return $('<a>', { href: '#' })
+            .text(gt('Preview'))
+            .on('click', { file: file }, function (e) {
+                e.preventDefault();
+                // open side popup
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.SidePopup().show(e, function (popup) {
+                        var file = e.data.file, message = file.message, preview, reader;
+                        // nested message?
+                        if (message) {
+                            preview = new pre.Preview({
+                                    data: { nested_message: message },
+                                    mimetype: 'message/rfc822'
+                                }, {
+                                    width: popup.parent().width(),
+                                    height: 'auto'
+                                });
+                            if (preview.supportsPreview()) {
+                                preview.appendTo(popup);
+                                popup.append($('<div>').text('\u00A0'));
+                            }
+                        } else {
                             // inject image as data-url
-                            var reader = new FileReader();
+                            reader = new FileReader();
                             reader.onload = function (e) {
                                 popup.css({ width: '100%', height: '100%' })
                                 .append(
@@ -502,11 +520,11 @@ define("io.ox/mail/write/view-main",
                                 );
                                 reader = reader.onload = null;
                             };
-                            reader.readAsDataURL(e.data.file);
-                        });
+                            reader.readAsDataURL(file);
+                        }
                     });
-                })
-            );
+                });
+            });
     };
 
     function round(num, digits) {
@@ -541,27 +559,31 @@ define("io.ox/mail/write/view-main",
 
     handleFileSelect = function (e, view) {
 
-        if (Modernizr.file) {
+        // look for linked attachments or dropped files
+        var target = $(e.currentTarget),
+            item = target.prop('attachment') || target.prop('file') || target.prop('nested'),
+            list = item ? [item] : e.target.files;
 
-            // look for linked attachments or dropped files
-            var item = $(e.currentTarget).prop('attachment') || $(e.currentTarget).prop('file'),
-                list = item ? [item] : e.target.files;
+        if (list.length) {
             // loop over all attachments
             _(list).each(function (file) {
+                // get size
+                var size = file.size || file.file_size;
+                size = size !== undefined ? filesize(size) + '\u00A0 ' : '';
+                // draw
                 view.sections.attachments.append(
-                    $('<div>').addClass('section-item file')
-                    .append($('<div>').text(file.filename || file.name || ''))
-                    .append(
-                        $('<div>')
-                        .append(
-                            $('<span>').addClass('filesize')
-                            .text(filesize(file.size || file.file_size))
-                        )
-                        .append(
-                            supportsPreview(file) ? createPreview(file) : $()
-                        )
-                    )
-                    .append(
+                    $('<div>').addClass('section-item file').append(
+                        // filename
+                        $('<div class="row-1">').text(file.filename || file.name || ''),
+                        // filesize / preview
+                        $('<div class="row-2">').append(
+                            // filesize
+                            $('<span>').addClass('filesize').text(size),
+                            // preview?
+                            supportsPreview(file) ? createPreview(file) : $(),
+                            // nbsp
+                            $.txt('\u00A0')
+                        ),
                         // remove
                         $('<a>', { href: '#', tabindex: '6' })
                         .addClass('remove')
@@ -579,6 +601,7 @@ define("io.ox/mail/write/view-main",
             // hide current upload field
             $(e.target).closest('.section-item.upload').hide();
         }
+
         view.addUpload(handleFileSelect);
     };
 

@@ -163,8 +163,9 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                         });
                 })
                 .fail(function (err) {
+
                     console.log('error on updating appointment');
-                    console.log(err);
+                    console.log(_.formatError(err));
                 });
             }
 

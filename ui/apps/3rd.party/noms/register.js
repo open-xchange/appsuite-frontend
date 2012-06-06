@@ -10,7 +10,7 @@ define("3rd.party/noms/register", ["io.ox/core/extensions"], function (ext) {
         
     ext.point("io.ox/core/apps/installed").extend({
         id: "3rd.party/noms/photoshop",
-        icon: ox.base + '/apps/io.ox/core/images/default.png',
+        icon: ox.base + '/apps/3rd.party/noms/images/PhotoshopIcon.png',
         title: "Adobe Photoshop",
         description: "Adobe Photoshop",
         visible: true
