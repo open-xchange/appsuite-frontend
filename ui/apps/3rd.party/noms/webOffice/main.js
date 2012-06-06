@@ -17,11 +17,7 @@ define("3rd.party/noms/webOffice/main", function () {
         }));
         
         app.images = [
-            ox.base + '/apps/3rd.party/noms/images/noimg1.jpg',
-            ox.base + '/apps/3rd.party/noms/images/noimg2.jpg',
-            ox.base + '/apps/3rd.party/noms/images/noimg3.jpg',
-            ox.base + '/apps/3rd.party/noms/images/noimg4.jpg',
-            ox.base + '/apps/3rd.party/noms/images/noimg5.jpg'
+            ox.base + '/apps/3rd.party/noms/images/office1.png'
         ];
         
         app.index = -1;

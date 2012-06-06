@@ -13,7 +13,7 @@ define("3rd.party/noms/generic/main", function () {
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: entry.url,
-            title: entry.url,
+            title: entry.name,
             toolbar: false,
             search: false
         }));
@@ -23,7 +23,7 @@ define("3rd.party/noms/generic/main", function () {
             win.nodes.main.append(
                 $("<iframe>", {
                     src: entry.url,
-                    width: 1100,
+                    width: "100%",
                     height: "100%",
                     noBorder: true
                 })
