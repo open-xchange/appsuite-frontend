@@ -184,6 +184,9 @@ define('io.ox/settings/accounts/email/settings',
             })
             .fail(function () {
                 console.log('no configdata recived');
+                if (!e.data) {
+                    e.data = {};
+                }
                 e.data.autoconfig = {
                     'primary_address': newMailaddress
                 };
