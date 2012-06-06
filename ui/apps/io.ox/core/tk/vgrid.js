@@ -14,7 +14,7 @@
 define('io.ox/core/tk/vgrid',
     ['io.ox/core/tk/selection',
      'io.ox/core/event',
-     'gettext!core'
+     'gettext!io.ox/core'
     ], function (Selection, Events, gt) {
 
     'use strict';
