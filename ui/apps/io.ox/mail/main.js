@@ -368,8 +368,8 @@ define("io.ox/mail/main",
 
         grid.setEmptyMessage(function (mode) {
             return mode === 'search' ?
-                gt('No emails found for "%s"', win.search.query) :
-                gt('No emails in this folder');
+                gt('No mails found for "%s"', win.search.query) :
+                gt('No mails in this folder');
         });
 
         // go!

@@ -170,7 +170,7 @@ define("io.ox/contacts/main",
         }
 
         // draw thumb index
-        grid.on('ids-loaded', function () {
+        grid.on('change:ids', function () {
             // get labels
             thumbs.empty();
             var textIndex = grid.getLabels().textIndex || {};

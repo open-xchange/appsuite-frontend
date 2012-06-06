@@ -499,7 +499,7 @@ define('io.ox/core/tk/vgrid',
             }
             // trigger event
             if (!quiet) {
-                self.trigger('ids-loaded change:ids', all);
+                self.trigger('change:ids', all);
             }
             // paint items
             var offset = currentOffset || (getIndex(node.scrollTop()) - (numRows - numVisible));
@@ -519,6 +519,7 @@ define('io.ox/core/tk/vgrid',
 
             if (all.length === 0) {
                 // be busy
+                scrollpane.find('.io-ox-center').remove().end();
                 container.css({ visibility: 'hidden' }).parent().busy();
             }
 
