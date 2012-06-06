@@ -182,6 +182,12 @@ define("io.ox/mail/api",
         YELLOW:   10
     };
 
+    // control for each folder:
+    // undefined -> fetch all
+    // true -> has been loaded in this session
+    // false -> caused by refresh
+    var cacheControl = {};
+
     // ~ all
     api.getAllThreads = function (options, useCache) {
         // request for brand new thread support
@@ -196,6 +202,11 @@ define("io.ox/mail/api",
         });
         var t1, t2;
         console.log('time.pre', 't1', (t1 = _.now()) - ox.t0, new Date(_.now()));
+        // use cache?
+        if (useCache === 'auto') {
+            useCache = cacheControl[options.folder] !== false;
+            options.cache = false;
+        }
         return this.getAll(options, useCache)
             .done(function (data) {
                 _(data).each(function (obj) {
@@ -204,6 +215,7 @@ define("io.ox/mail/api",
                         .concat(options.order === 'desc' ? obj.thread : obj.thread.slice().reverse());
                 });
                 console.log('time.post', '#', data.length, 't2', (t2 = _.now()) - ox.t0, 'took', t2 - t1);
+                cacheControl[options.folder] = true;
             });
     };
 
@@ -742,19 +754,12 @@ define("io.ox/mail/api",
     var lastUnseenMail = 0;
 
     // refresh
-    api.refresh = function (e, folder) {
+    api.refresh = function (e) {
         if (ox.online) {
-            if (folder) {
-                // refresh current view
-                api.getAllThreads({ folder: folder }, false)
-                    .done(function () {
-                        api.trigger('refresh.all');
-                    });
-            } else {
-                api.caches.all.clear().done(function () {
-                    api.trigger('refresh.all');
-                });
-            }
+            // reset cache control
+            _(cacheControl).each(function (val, id) {
+                cacheControl[id] = false;
+            });
             // look for new unseen mails in INBOX
             http.GET({
                 module: 'mail',
@@ -782,6 +787,8 @@ define("io.ox/mail/api",
                     }
                     api.trigger('unseen-mail', unseen);
                 }
+                // trigger
+                api.trigger('refresh.all');
             });
         }
     };
