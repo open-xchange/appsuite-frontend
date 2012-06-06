@@ -11,11 +11,12 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define("io.ox/office/main",
-    ["io.ox/files/api",
-     "gettext!io.ox/office/main",
-     "less!io.ox/office/style.css"
-    ], function (api, gt) {
+define('io.ox/office/main',
+    ['io.ox/files/api',
+     'io.ox/office/editor',
+     'gettext!io.ox/office/main',
+     'less!io.ox/office/style.css'
+    ], function (api, Editor, gt) {
 
     'use strict';
 
@@ -25,10 +26,14 @@ define("io.ox/office/main",
 
         var // application object
             app = ox.ui.createApp({ name: 'io.ox/office', title: gt('OXOffice') }),
-            // app window
+            // options passed to 'load'
+            appOptions = {},
+            // application window
             win = null,
             // default window title
-            winTitle = gt('OX Office');
+            winTitle = gt('OX Office'),
+            // text editor engine
+            editor = new Editor();
 
         // launcher
         app.setLauncher(function () {
@@ -47,16 +52,16 @@ define("io.ox/office/main",
 
         // load document into editor
         app.load = function (options) {
-            options = options || {};
+            appOptions = options || {};
 
             // dump options
-            _(options).each(function (value, id) {
+            _(appOptions).each(function (value, id) {
                 win.nodes.main.append($('<p>').text(id + ' = ' + value));
             });
 
             // add filename to title
-            if (options.filename) {
-                win.setTitle(winTitle + ' - ' + options.filename);
+            if (appOptions.filename) {
+                win.setTitle(winTitle + ' - ' + appOptions.filename);
             }
 
             var def = $.Deferred();
@@ -65,8 +70,8 @@ define("io.ox/office/main",
                 win.busy();
                 $.when(
 /*
-                    api.get(o).fail(showError),
-                    $.ajax({ type: 'GET', url: api.getUrl(o, 'view'), dataType: 'text' })
+                    api.get(appOptions).fail(showError),
+                    $.ajax({ type: 'GET', url: api.getUrl(appOptions, 'view'), dataType: 'text' })
 */
                 )
                 .done(function (/*data, text*/) {
@@ -94,11 +99,17 @@ define("io.ox/office/main",
             var def = $.Deferred();
             if (/*dirty?*/true) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog()
-                    .text(gt('Do you really want to quit?'))
-                    .addPrimaryButton("quit", gt('Yes, lose changes'))
-                    .addButton('cancel', gt('No'))
-                    .on('quit', function () {
+                    new dialogs.ModalDialog({ easyOut: true })
+                    .text(gt('The document has been modified. Do you want to save your changes?'))
+                    .addPrimaryButton('save', gt('Save'))
+                    .addAlternativeButton('discard', gt('Discard'))
+                    .addButton('cancel', gt('Cancel'))
+                    .on('save', function () {
+                        alert('Saving...');
+                        app.destroy();
+                        def.resolve();
+                    })
+                    .on('discard', function () {
                         app.destroy();
                         def.resolve();
                     })
@@ -106,6 +117,7 @@ define("io.ox/office/main",
                     .show();
                 });
             } else {
+                app.destroy();
                 def.resolve();
             }
             return def;
