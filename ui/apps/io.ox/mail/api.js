@@ -183,8 +183,8 @@ define("io.ox/mail/api",
     };
 
     // control for each folder:
-    // undefined -> fetch all
-    // true -> has been loaded in this session
+    // undefined -> first fetch
+    // true -> has been fetched in this session
     // false -> caused by refresh
     var cacheControl = {};
 
@@ -204,8 +204,7 @@ define("io.ox/mail/api",
         console.log('time.pre', 't1', (t1 = _.now()) - ox.t0, new Date(_.now()));
         // use cache?
         if (useCache === 'auto') {
-            useCache = cacheControl[options.folder] !== false;
-            options.cache = false;
+            useCache = options.cache = (cacheControl[options.folder] !== false);
         }
         return this.getAll(options, useCache)
             .done(function (data) {
