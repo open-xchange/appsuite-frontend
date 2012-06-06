@@ -62,23 +62,24 @@ define("io.ox/office/main",
             var def = $.Deferred();
             win.show(function () {
                 // load file
-/*
                 win.busy();
                 $.when(
+/*
                     api.get(o).fail(showError),
                     $.ajax({ type: 'GET', url: api.getUrl(o, 'view'), dataType: 'text' })
+*/
                 )
-                .done(function (data, text) {
-                    model.initialize($.extend(data, { content: text[0] }));
-                    container.find('.title').val($.trim(data.title));
-                    textarea.val(text[0]);
+                .done(function (/*data, text*/) {
+/*
+ * init editor with data returned from loader
+ */
                     win.idle();
-                    textarea.focus();
                     def.resolve();
                 })
-                .fail(win.idle)
-                .fail(def.reject);
-*/
+                .fail(function () {
+                    win.idle();
+                    def.reject();
+                });
             });
             return def;
         };
