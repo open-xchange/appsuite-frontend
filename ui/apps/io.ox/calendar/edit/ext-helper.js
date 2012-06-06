@@ -16,8 +16,6 @@ define('io.ox/calendar/edit/ext-helper',
     'use strict';
 
     var helper = {
-
-
         /**
          * This function is used to define an extesionpoint on a dom-node
          * detach it and draw it in the corresponding draw-method

@@ -22,7 +22,7 @@ define('io.ox/calendar/edit/extensions',
         init: function () {
 
             // RECURRENCE
-            /*ext.point('io.ox/calendar/edit/extrasleft').extend({
+            ext.point('io.ox/calendar/edit/extrasleft').extend({
                 id: 'recurrence_checkbox',
                 description: 'adds the repeat-checkbox',
                 index: 200,
@@ -31,6 +31,8 @@ define('io.ox/calendar/edit/extensions',
                     this.append(options.view.subviews.repeatoption.render().el);
                 }
             });
+
+
             ext.point('io.ox/calendar/edit/section').extend({
                 id: 'recurrence_section',
                 description: 'adds recurrence section',
@@ -40,7 +42,7 @@ define('io.ox/calendar/edit/extensions',
                     this.append(options.view.subviews.recurrenceoptions.render().el);
                     return this;
                 }
-            });*/
+            });
 
 
             /*ext.point('io.ox/calendar/edit/section').extend({

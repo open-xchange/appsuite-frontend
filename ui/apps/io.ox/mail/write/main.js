@@ -365,6 +365,20 @@ define.async('io.ox/mail/write/main',
             }
         };
 
+        app.setNestedMessages = function (list) {
+            app.markDirty();
+            var found = false;
+            _(list || []).each(function (obj) {
+                found = true;
+                view.form.find('input[type=file]').last()
+                    .prop('nested', { message: obj, name: obj.subject, content_type: 'message/rfc822' })
+                    .trigger('change');
+            });
+            if (found) {
+                view.showSection('attachments');
+            }
+        };
+
         app.addFiles = function (list) {
             app.markDirty();
             var found = false;
@@ -437,6 +451,7 @@ define.async('io.ox/mail/write/main',
             this.setCC(data.cc);
             this.setBCC(data.bcc);
             this.setAttachments(data.attachments);
+            this.setNestedMessages(data.nested_msgs);
             this.setPriority(data.priority || 3);
             this.setAttachVCard(data.vcard !== undefined ? data.vcard : config.get('mail.vcard', false));
             this.setDeliveryReceipt(data.disp_notification_to !== undefined ? data.disp_notification_to : false);
@@ -671,7 +686,8 @@ define.async('io.ox/mail/write/main',
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,
                 vcard: parseInt(data.vcard, 10) || 0,
-                attachments: [content]
+                attachments: [content],
+                nested_msgs: []
             };
             // delivery receipt (add only if true)
             if (parseInt(data.receipt, 10)) {
@@ -689,10 +705,15 @@ define.async('io.ox/mail/write/main',
                     // link to existing attachments (e.g. in forwards)
                     var attachment = $(this).prop('attachment'),
                         // get file via property (DND) or files array and add to list
-                        file = $(this).prop('file');
+                        file = $(this).prop('file'),
+                        // get nested messages
+                        nested = $(this).prop('nested');
                     if (attachment) {
                         // add linked attachment
                         mail.attachments.push(attachment);
+                    } else if (nested) {
+                        // add nested message (usually multiple mail forward)
+                        mail.nested_msgs.push(nested.message);
                     } else if (file instanceof window.File) {
                         // add dropped file
                         files.push(file);
@@ -726,6 +747,16 @@ define.async('io.ox/mail/write/main',
             if (mail.data.infostore_ids) {
                 mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
             }
+            // move nested messages into attachment array
+            _(mail.data.nested_msgs).each(function (obj) {
+                mail.data.attachments.push({
+                    id: mail.data.attachments.length + 1,
+                    filemname: obj.subject,
+                    content_type: 'message/rfc822',
+                    msgref: obj.msgref
+                });
+            });
+            delete mail.data.nested_msgs;
             // close window now (!= quit / might be reopened)
             app.markClean();
             win.busy().preQuit();

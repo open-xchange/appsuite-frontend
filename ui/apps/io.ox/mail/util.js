@@ -169,7 +169,9 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
                     return _.pad(d.getUTCDate(), 2) + '.' + _.pad(d.getUTCMonth() + 1, 2) + '.' + d.getUTCFullYear();
                 },
                 isSameDay = function () {
-                    return d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+                    return d.getUTCDate() === now.getUTCDate() &&
+                        d.getUTCMonth() === now.getUTCMonth() &&
+                        d.getUTCFullYear() === now.getUTCFullYear();
                 };
             // today?
             return isSameDay() ? time() : date();

@@ -115,7 +115,7 @@ define("io.ox/mail/main",
             .prop('order', 'desc')
             .prop('unread', false);
 
-        commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads');
+        commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads'); // getAllThreads is redefined below!
         commons.wireGridAndSearch(grid, win, api);
 
         function updateGridOptions() {
@@ -184,18 +184,26 @@ define("io.ox/mail/main",
         );
 
         grid.on('change:ids', function (e, all) {
-            grid.getToolbar().find('.grid-count').text(
-                all.length + ' ' + gt.ngettext('mail', 'mails', all.length)
-            );
+            // get node & clear now
+            var node = grid.getToolbar().find('.grid-count').text('');
+            // be lazy
+            setTimeout(function () {
+                // loop over all top-level items (=threads) to get total number of mails
+                var count = _(all).reduce(function (memo, obj) {
+                    return memo + (obj.thread ? obj.thread.length : 1);
+                }, 0);
+                node.text(count + ' ' + gt.ngettext('mail', 'mails', count));
+            }, 10);
         });
 
         grid.setAllRequest(function () {
-            var sort = this.prop('sort'), unread = this.prop('unread');
+            var sort = this.prop('sort'),
+                unread = this.prop('unread');
             return api[sort === '610' ? 'getAllThreads' : 'getAll']({
                     folder: this.prop('folder'),
                     sort: sort,
                     order: this.prop('order')
-                })
+                }, 'auto')
                 .pipe(function (data) {
                     return !unread ? data : _(data).filter(function (obj) {
                         return (obj.flags & 32) === 0;
@@ -328,6 +336,16 @@ define("io.ox/mail/main",
                 })
             );
         };
+
+        var repaint = function () {
+            var sel = grid.selection.get();
+            if (sel.length === 1) {
+                right.css('height', '');
+                showMail(sel[0]);
+            }
+        };
+
+        api.on('delete', repaint);
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/mail', showMail, right);
         commons.wireGridAndWindow(grid, win);
