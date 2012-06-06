@@ -205,6 +205,7 @@ define("io.ox/mail/api",
         // use cache?
         if (useCache === 'auto') {
             useCache = options.cache = (cacheControl[options.folder] !== false);
+            options.cache = false;
         }
         return this.getAll(options, useCache)
             .done(function (data) {

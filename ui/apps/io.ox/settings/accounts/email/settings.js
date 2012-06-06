@@ -32,7 +32,6 @@ define('io.ox/settings/accounts/email/settings',
             var data,
                 myModel,
                 myView,
-                obj,
                 auto,
                 myViewNode;
             if (evt.data.id) {
@@ -55,17 +54,7 @@ define('io.ox/settings/accounts/email/settings',
             } else {
                 myViewNode = $("<div>").addClass("accountDetail");
                 auto = evt.data.autoconfig;
-                obj = {
-                    'primary_address': auto.primary_address,
-                    'mail_protocol': auto.mailProtocol,
-                    'mail_port': auto.mailport,
-                    'mail_server': auto.mailserver,
-                    'transport_protocol': auto.transportProtocol,
-                    'transport_port': auto.transportport,
-                    'transport_server': auto.transportserver,
-                    'login': auto.username
-                };
-                myModel = new AccountModel({data: obj});
+                myModel = new AccountModel({data: auto});
                 myView = new AccountDetailView({model: myModel, node: myViewNode});
                 myView.dialog = new dialogs.SidePopup('800').show(evt, function (pane) {
                     var myout = myView.draw();
@@ -82,5 +71,243 @@ define('io.ox/settings/accounts/email/settings',
         }
     });
 
-    return {}; //whoa return nothing at first
+    var autoconfigDialogbox,
+        validateDialogbox,
+
+        createExtpointForNewAccount = function (args) {
+            var type = 'email', // TODO add more options
+                node = $('<div>');
+
+            console.log('create a new account');
+            require(['io.ox/settings/accounts/' + type + '/settings'], function (m) {
+                ext.point('io.ox/settings/accounts/' + type + '/settings/detail').invoke('draw', node, args);
+            });
+        },
+
+        drawAlert = function (alertPlaceholder, message) {
+            alertPlaceholder.find('.alert').remove();
+            alertPlaceholder.find('.busynotice').remove();
+            alertPlaceholder.append(
+                $('<div>')
+                .addClass('alert alert-block fade in')
+                .append(
+                    $('<a>').attr({ href: '#', 'data-dismiss': 'alert' })
+                    .addClass('close')
+                    .html('&times;'),
+                    $('<p>').text(message)
+                )
+            );
+        },
+
+        drawBusy = function (alertPlaceholder) {
+            alertPlaceholder.find('.notice').remove();
+            alertPlaceholder.find('.alert').remove();
+            alertPlaceholder.append(
+                $('<div>').addClass('busynotice').text('Trying to auto-configure your mail account')
+                .addClass('notice')
+                .append($('<div>').addClass('busy_pic')
+                )
+            );
+        },
+
+        drawMessage = function (alertPlaceholder) {
+            alertPlaceholder.find('.notice').remove();
+            alertPlaceholder.find('.alert').remove();
+            alertPlaceholder.append(
+                $('<div>').addClass('alert alert-success').text('We now need your password to complete the setup process')
+            );
+        },
+
+        apiCreateNewAccountCall = function (obj, alertPlaceholder) {
+            obj.name = obj.primary_address;
+            obj.personal = obj.primary_address; // needs to be calculated
+            obj.unified_inbox_enabled = false;
+            obj.mail_secure = true;
+            obj.transport_secure = true;
+            obj.transport_credentials = false;
+            obj.spam_handler = "NoSpamHandler";
+            validateMailaccount(obj, alertPlaceholder);
+        },
+
+        drawNewItem = function (id, email) {
+                var item = $('<div>'),
+                    box = $('.listbox'),
+                    checkItem = box.find($('[data-item-id="email/' + id + '"]'));
+                if (!checkItem[0]) { // draw triggers twice at the moment
+                    item.addClass('deletable-item');
+                    item.attr('data-item-id', 'email/' + id);
+
+                    item.append(
+                            $('<a>').html('&times;').addClass('close')
+                          );
+
+                    item.append($('<div>').html(email));
+
+                    item.on('click', function () {
+                        console.log('click');
+                        item.parent().find('div[selected="selected"]').attr('selected', null);
+                        item.attr('selected', 'selected');
+                    });
+                    box.append(item);
+                }
+
+            },
+
+        validateMailaccount = function (obj, alertPlaceholder) {
+            api.on('account_created', function (e, data) {
+                drawNewItem(data.id, data.email);
+                validateDialogbox.close();
+            });
+            api.validate(obj).done(function (data) {
+                if (data === false) {
+                    var message = 'The account could not be validated';
+                    drawAlert(alertPlaceholder, message);
+                    validateDialogbox.idle();
+                } else {
+                    api.create(obj);
+                }
+            });
+        },
+
+        autoconfigApiCall = function (e, newMailaddress) {
+            api.autoconfig({
+                'email': newMailaddress,
+                'password': 'test'
+            }).done(function (data) {
+                if (!e.data) {
+                    e.data = {};
+                }
+                e.data.autoconfig = data;
+                e.data.autoconfig.primary_address = newMailaddress;
+                autoconfigDialogbox.close();
+                inputPasswordDialog(e);
+            })
+            .fail(function () {
+                console.log('no configdata recived');
+                if (!e.data) {
+                    e.data = {};
+                }
+                e.data.autoconfig = {
+                    'primary_address': newMailaddress
+                };
+                createExtpointForNewAccount(e);
+                autoconfigDialogbox.close();
+            });
+        },
+
+        validateEmail = function (newMailaddress) {
+            var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (regEmail.test(newMailaddress)) {
+                return true;
+            }
+        },
+
+        mailAutoconfigDialog = function (e) {
+
+            var label = $('<label>').text('Your email address'),
+                inputField =  $('<input>', { value: '' }).addClass('input-large'),
+                alertPlaceholder = $('<div>');
+            inputField.keyup(function (e) {
+                if (e.keyCode === 13) {
+                    autoconfigDialogbox.trigger('add');
+                }
+            });
+
+            e.preventDefault();
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                var self = this;
+                autoconfigDialogbox = new dialogs.ModalDialog({
+                    width: 400,
+                    easyOut: true,
+                    async: true
+                });
+
+                autoconfigDialogbox.header(
+                    $('<h4>').text('Add email account')
+                )
+                .append(
+                        label.append(inputField)
+                )
+                .append(
+                    alertPlaceholder
+                )
+                .addButton('cancel', 'Cancel')
+                .addPrimaryButton('add', 'Add')
+                .show(function () {
+                    inputField.focus();
+                });
+
+                autoconfigDialogbox.on('add', function () {
+                    var newMailaddress = inputField.val();
+                    if (validateEmail(newMailaddress)) {
+                        drawBusy(alertPlaceholder);
+                        autoconfigApiCall(e, newMailaddress);
+                    } else {
+                        var message = 'This is not an valid email address';
+                        drawAlert(alertPlaceholder, message);
+                        inputField.focus();
+                        autoconfigDialogbox.idle();
+                    }
+                });
+
+            });
+        },
+
+        inputPasswordDialog = function (e) {
+
+            var label = $('<label>').text('Your password'),
+                inputField =  $('<input>', { value: '' }).attr('type', 'password').addClass('input-large'),
+                alertPlaceholder = $('<div>');
+            inputField.keyup(function (e) {
+                if (e.keyCode === 13) {
+                    validateDialogbox.trigger('add');
+                }
+            });
+
+            e.preventDefault();
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                var self = this;
+                validateDialogbox = new dialogs.ModalDialog({
+                    width: 400,
+                    easyOut: true,
+                    async: true
+                });
+
+                validateDialogbox.header(
+                    $('<h4>').text('Add password for email account')
+                )
+                .append(
+                    label.append(inputField)
+                )
+                .append(
+                    alertPlaceholder
+                )
+                .addButton('cancel', 'Cancel')
+                .addPrimaryButton('add', 'Submit')
+                .show(function () {
+                    inputField.focus();
+                });
+                drawMessage(alertPlaceholder);
+
+                validateDialogbox.on('add', function () {
+                    var password = inputField.val(),
+                        obj;
+                    if (password !== '') {
+                        e.data.autoconfig.password = password;
+                        obj =  e.data.autoconfig;
+                        drawBusy(alertPlaceholder);
+                        apiCreateNewAccountCall(obj, alertPlaceholder);
+                    } else {
+                        var message = 'Please fill the password';
+                        drawAlert(alertPlaceholder, message);
+                        inputField.focus();
+                        validateDialogbox.idle();
+                    }
+                });
+            });
+        };
+
+    return {
+        mailAutoconfigDialog: mailAutoconfigDialog
+    }; //whoa return nothing at first
 });
