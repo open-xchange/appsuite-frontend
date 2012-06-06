@@ -57,7 +57,7 @@ define('plugins/portal/facebook/register',
         draw: function (resultsets) {
             var wall = resultsets.data[0].fql_result_set;
             var profiles = resultsets.data[1].fql_result_set;
-            
+            console.log("Wall entries:", wall.length);
             this.append($('<div>').addClass('clear-title').text('Facebook'));
             _(wall).each(function (post) {
                 var entry_id = 'facebook-' + post.post_id;
@@ -130,16 +130,17 @@ define('plugins/portal/facebook/register',
         id: 'youtube',
         index: 128,
         accepts: function (post) {
-            return (post.type === 128 && post.caption === 'www.youtube.com');
+            return (post.type === 80 && post.attachment.caption === 'www.youtube.com');
         },
         draw: function (post) {
-            /watch\?v=(.+)/.exec(post.link);
+            /watch\?v=(.+)/.exec(post.attachment.href);
             var vid_id = RegExp.$1;
+            var media = post.attachment.media[0];
             
             this.text(post.message).append(
-                $('<a class="video">').attr('href', post.link).append(
+                $('<a>', {'class': "video", 'href': media.href}).append(
                     $('<img class="video-preview">').attr('src', 'http://img.youtube.com/vi/' + vid_id + '/2.jpg'),
-                    $('<span class="caption">').text(post.description)));
+                    $('<span class="caption">').text(post.attachment.description)));
         }
     });
     
@@ -156,16 +157,17 @@ define('plugins/portal/facebook/register',
     
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'link',
-        index: 128,
+        index: 196,
         accepts: function (post) {
             return (post.type === 80);
         },
         draw: function (post) {
-            var p = post.attachment.media[0];
+            var media = post.attachment.media[0];
+            console.log("link", post);
             this.append(
                 $('<div>').text(post.description),
-                $('<a>', {href: p.href}).append(
-                    $('<img>', {src: p.src}),
+                $('<a>', {href: media.href}).append(
+                    $('<img>', {src: media.src}),
                     $('<span class="caption">').text(post.attachment.description)
                 )
             );
