@@ -25,7 +25,7 @@ define("3rd.party/noms/generic/main", function () {
                     src: entry.url,
                     width: "100%",
                     height: "100%",
-                    noBorder: true
+                    frameBorder: 0
                 })
             );
         });
