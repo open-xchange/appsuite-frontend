@@ -68,6 +68,18 @@ define("io.ox/files/actions",
         }
     });
 
+    new Action('io.ox/files/actions/office', {
+        id: 'office',
+        requires: function (e) {
+            return e.collection.has('one') && (/\.(odt)$/i).test(e.context.data.filename);
+        },
+        action: function (data) {
+            ox.launch('io.ox/office/main').done(function () {
+                this.load(data);
+            });
+        }
+    });
+
     new Action('io.ox/files/actions/download', {
         id: 'download',
         requires: 'some',
@@ -228,6 +240,14 @@ define("io.ox/files/actions",
         index: 50,
         label: gt("Edit"),
         ref: "io.ox/files/actions/edit"
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: "office",
+        index: 60,
+        prio: 'hi',
+        label: gt("Edit office document"),
+        ref: "io.ox/files/actions/office"
     }));
 
     ext.point("io.ox/files/links/inline").extend(new links.Link({
