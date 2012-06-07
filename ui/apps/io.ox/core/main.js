@@ -81,7 +81,6 @@ define("io.ox/core/main",
     setInterval(globalRefresh, 60000 * 5); // 5 minute refresh interval!
 
     function launch() {
-
         // add small logo to top bar
         $("#io-ox-topbar").append(
             $('<div>', { id: 'io-ox-top-logo-small' })
@@ -128,7 +127,6 @@ define("io.ox/core/main",
                 return $.Deferred().resolve();
             }, gt('Refresh'))
             .attr("id", "io-ox-refresh-icon");
-
         // refresh animation
         initRefreshAnimation();
 
@@ -142,7 +140,6 @@ define("io.ox/core/main",
             }, _.isString(tooltip) ? tooltip : void(0))
             .attr('data-app-name', app.id);
         };
-
         // settings
         addLauncher({ id: 'io.ox/settings', title: $('<i class="icon-cog icon-white">'), side: 'right' }, gt('Settings'));
 
@@ -152,11 +149,9 @@ define("io.ox/core/main",
                 m.show();
             });
         });
-
         _(appAPI.getFavorites()).each(addLauncher);
 
         // initialize empty desktop
-
         /**
          * Exemplary upsell widget
          */
@@ -190,7 +185,7 @@ define("io.ox/core/main",
         ext.point("io.ox/core/desktop").extend({
             id: "welcome",
             draw: function () {
-
+                
                 var d, update;
 
                 this.append(
@@ -209,11 +204,9 @@ define("io.ox/core/main",
                         d = $("<div>").addClass("clock clear-title").text("")
                     )
                 );
-
                 update = function () {
-                    d.text(new date.Local().format(date.FULL_DATE));
+                    //d.text(new date.Local().format(date.FULL_DATE)); // FIXME: Seems to die on android
                 };
-
                 update();
                 _.every(1, "minute", update);
             }
@@ -234,19 +227,16 @@ define("io.ox/core/main",
                 ox.ui.screens.show('windowmanager');
             }
         });
-
         // add some senseless characters to avoid unwanted scrolling
         if (location.hash === '') {
             location.hash = '#' + (_.getCookie('hash') || '!');
         }
-
         var def = $.Deferred(),
             autoLaunch = _.url.hash("app") ? _.url.hash("app").split(/,/) : [],
             autoLaunchModules = _(autoLaunch)
                 .map(function (m) {
                     return m.split(/:/)[0] + '/main';
                 });
-
         $.when(
                 ext.loadPlugins(),
                 require(autoLaunchModules),
@@ -274,10 +264,10 @@ define("io.ox/core/main",
                 // restore apps
                 ox.ui.App.restore();
             });
-
         var restoreLauncher = function (canRestore) {
             if (autoLaunch.length === 0 && !canRestore) {
                 drawDesktop();
+                def.resolve();
             }
             if (autoLaunch.length || canRestore || location.hash === '#!') {
                 // instant fade out
@@ -288,7 +278,6 @@ define("io.ox/core/main",
                 $("#background_loader").idle().fadeOut(DURATION, def.resolve);
             }
         };
-
         ox.ui.App.canRestore()
             .done(function (canRestore) {
                 if (canRestore) {
