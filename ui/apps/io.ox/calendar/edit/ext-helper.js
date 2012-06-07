@@ -109,6 +109,9 @@ define('io.ox/calendar/edit/ext-helper',
                 extpoints = {};
                 _(deepests).each(handleElement);
 
+                console.log('extension points');
+                console.log(extpoints);
+
                 //apply them to their parent with in el
                 _(extpoints).each(invokePoint);
 

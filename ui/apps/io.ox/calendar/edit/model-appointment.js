@@ -17,6 +17,7 @@ define('io.ox/calendar/edit/model-appointment',
 
     'use strict';
 
+
     var AppointmentModel = Backbone.Model.extend({
         validation: {
             title: {

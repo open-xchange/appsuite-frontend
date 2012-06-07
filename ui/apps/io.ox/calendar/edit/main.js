@@ -98,15 +98,18 @@ define('io.ox/calendar/edit/main',
         onSave: function () {
             var self = this;
             console.log('save model');
+            self.win.busy();
             self.model.save()
                 .done(
                     function () {
                         console.log('successful saved');
+                        self.win.idle();
                         self.app.quit();
                     }
                 )
                 .fail(
                     function (err) {
+                        self.win.idle();
                         console.log('failed to save');
                         console.log(err);
                     }
@@ -143,11 +146,9 @@ define('io.ox/calendar/edit/main',
                 //just let it go
                 df.resolve();
             }
-
             return df;
         }
     };
-
 
     function createInstance(data) {
         var controller = new EditAppointmentController(data);

@@ -108,10 +108,6 @@ define('io.ox/calendar/edit/extensions/recurrence/view-repeat-option',
             var self = this;
             var isRecurrence = ($(evt.target).attr('checked') === 'checked');
 
-            window.model = self.model;
-
-            console.log('recurrence: ' + isRecurrence);
-
             if (isRecurrence) {
                 self.$('.editrecurrence_wrapper').show();
                 if (self.model.get('recurrence_type') === 0) {
