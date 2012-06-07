@@ -14,3 +14,23 @@
 .io-ox-office-editor {
     overflow-y: auto;
 }
+
+.io-ox-office-editnode {
+    margin: 1em auto;
+    padding: 1em;
+	width: 600px;
+	border: thin black solid;
+
+	.debug-border(@border-color, @fill-color) {
+	    outline: thin @border-color solid;
+	    background-color: @fill-color;
+	}
+
+    p {
+        .debug-border(#9f9, #efe);
+
+        span {
+            .debug-border(#ccf, #eef);
+		}
+    }
+}

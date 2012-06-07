@@ -26,14 +26,21 @@ define('io.ox/office/main',
 
         var // application object
             app = ox.ui.createApp({ name: 'io.ox/office', title: gt('OXOffice') }),
+
             // options passed to 'load'
             appOptions = {},
+
             // application window
             win = null,
+
             // default window title
             winTitle = gt('OX Office'),
+
+            // the edit area as jQuery object
+            editNode,
+
             // text editor engine
-            editor = new Editor();
+            editor;
 
         // launcher
         app.setLauncher(function () {
@@ -46,8 +53,11 @@ define('io.ox/office/main',
                 search: false
             }));
 
-            // initialize global editor structure
+            // initialize global application structure
             win.nodes.main.addClass('io-ox-office-editor');
+            editNode = $('<div>').addClass('io-ox-office-editnode').attr('contenteditable', true).appendTo(win.nodes.main);
+            editNode.append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
+            editor = new Editor(editNode);
         });
 
         // load document into editor
@@ -62,6 +72,7 @@ define('io.ox/office/main',
             // add filename to title
             if (appOptions.filename) {
                 win.setTitle(winTitle + ' - ' + appOptions.filename);
+                app.setTitle(appOptions.filename);
             }
 
             var def = $.Deferred();
@@ -97,7 +108,7 @@ define('io.ox/office/main',
         // is about to be closed
         app.setQuit(function () {
             var def = $.Deferred();
-            if (/*dirty?*/true) {
+            if (editor.isModified()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog({ easyOut: true })
                     .text(gt('The document has been modified. Do you want to save your changes?'))
