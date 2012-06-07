@@ -67,13 +67,15 @@ define('io.ox/core/event', function () {
         // destroy event hub
         this.destroy = function () {
             hub.off();
-            try {
-                // remove shortcuts
-                delete context.events;
-                delete context.on;
-                delete context.off;
-                delete context.trigger;
-            } catch (e) { }
+            if (context) {
+                try {
+                    // remove shortcuts
+                    delete context.events;
+                    delete context.on;
+                    delete context.off;
+                    delete context.trigger;
+                } catch (e) { }
+            }
             hub = context = null;
             this.on = this.off = this.one = this.trigger = null;
         };

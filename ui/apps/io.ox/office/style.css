@@ -10,27 +10,30 @@
  *
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
-
 .io-ox-office-editor {
-    overflow-y: auto;
-}
+	overflow-x: auto;
+	overflow-y: auto;
 
-.io-ox-office-editnode {
-    margin: 1em auto;
-    padding: 1em;
-	width: 600px;
-	border: thin black solid;
+	.container {
+    	width: 900px;
+		margin: 30px auto;
 
-	.debug-border(@border-color, @fill-color) {
-	    outline: thin @border-color solid;
-	    background-color: @fill-color;
-	}
-
-    p {
-        .debug-border(#9f9, #efe);
-
-        span {
-            .debug-border(#ccf, #eef);
+		.io-ox-office-editnode {
+			margin: 0 auto;
+			padding: 1em;
+			width: 100%;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+			border: thin black solid;
+			cursor: text;
+			
+			.debug-border(@border-color, @fill-color) {
+				outline: thin @border-color solid;
+				background-color: @fill-color;
+			}
+	
+			p { .debug-border(#9f9, #efe); }
+			span { .debug-border(#ccf, #eef); }
 		}
-    }
+	}
 }
