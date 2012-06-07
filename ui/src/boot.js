@@ -24,7 +24,6 @@ if (typeof window.console === 'undefined') {
 }
 
 $(document).ready(function () {
-
     "use strict";
 
     if (1 > 2) {
@@ -78,7 +77,7 @@ $(document).ready(function () {
             $("#background_loader").fadeIn(DURATION, function () {
                 var ref = _.url.hash('ref'),
                     location = "#?" + enc(
-                        _.rot("session=" + ox.session + "&user=" + ox.user + (ref ? "&ref=" + enc(ref) : ''), 1)
+                            _.rot("session=" + ox.session + "&user=" + ox.user + (ref ? "&ref=" + enc(ref) : ''), 1)
                     );
                 // use redirect servlet for real login request
                 // this even makes chrome and safari asking for storing credentials
