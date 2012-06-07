@@ -15,7 +15,7 @@
 require({
     // inject version
     baseUrl: ox.base + "/apps",
-    waitSeconds: _.browser.IE ? 20 : 10
+    waitSeconds: 60 //_.browser.IE ? 20 : 10
 });
 
 // add fake console (esp. for IE)
