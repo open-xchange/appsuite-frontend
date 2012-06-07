@@ -51,12 +51,12 @@ define('io.ox/calendar/edit/main',
                 self.view = new AppView({model: self.model});
                 self.view.on('save', _.bind(self.onSave, self));
 
-                self.win = self.view.render().el;
+                self.win = self.view.render().appwindow;
                 self.app.setWindow(self.win);
                 self.win.show(function () {
                     // what a h4ck
                     self.view.aftershow();
-                    $('.window-content').scrollable();
+                    $(self.view.el).addClass('scrollable');
                 });
             };
 
@@ -80,13 +80,15 @@ define('io.ox/calendar/edit/main',
             self.view = new AppView({model: self.model});
             self.view.on('save', _.bind(self.onSave, self));
 
-            self.win = self.view.render().el;
+            self.win = self.view.render().appwindow;
             self.app.setWindow(self.win);
             self.win.show(function () {
                 // what a h4ck
                 self.view.aftershow();
-                $('.window-content').scrollable();
+                $(self.view.el).addClass('scrollable');
             });
+
+
         },
         remove: function () {
             var self = this;
