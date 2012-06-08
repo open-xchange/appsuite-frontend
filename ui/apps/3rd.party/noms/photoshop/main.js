@@ -31,9 +31,6 @@ define("3rd.party/noms/photoshop/main", function () {
             }
             win.nodes.main.empty();
             $("<img>", {src: app.images[app.index]}).appendTo(win.nodes.main);
-            win.nodes.main.append("<br />");
-            win.nodes.main.append($("<p>").text("Clicking anywhere will advance the mock picture. Please send Cisco some mock application pictures, though, if you want something more beautiful to look at than him..."));
-            
         };
         
 

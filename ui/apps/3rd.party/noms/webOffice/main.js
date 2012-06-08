@@ -17,11 +17,8 @@ define("3rd.party/noms/webOffice/main", function () {
         }));
         
         app.images = [
-            ox.base + '/apps/3rd.party/noms/images/noimg1.jpg',
-            ox.base + '/apps/3rd.party/noms/images/noimg2.jpg',
-            ox.base + '/apps/3rd.party/noms/images/noimg3.jpg',
-            ox.base + '/apps/3rd.party/noms/images/noimg4.jpg',
-            ox.base + '/apps/3rd.party/noms/images/noimg5.jpg'
+            ox.base + '/apps/3rd.party/noms/images/office1.png',
+            ox.base + '/apps/3rd.party/noms/images/office2.png'
         ];
         
         app.index = -1;
@@ -33,8 +30,6 @@ define("3rd.party/noms/webOffice/main", function () {
             }
             win.nodes.main.empty();
             $("<img>", {src: app.images[app.index]}).appendTo(win.nodes.main);
-            win.nodes.main.append("<br />");
-            win.nodes.main.append($("<p>").text("Clicking anywhere will advance the mock picture. Please send Cisco some mock application pictures, though, if you want something more beautiful to look at than him..."));
         };
         
 
@@ -43,6 +38,7 @@ define("3rd.party/noms/webOffice/main", function () {
             win.nodes.main.on("click", function () {
                 app.nextImage();
             });
+            win.nodes.head.hide();
         });
     });
 

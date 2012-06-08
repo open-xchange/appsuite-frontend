@@ -25,7 +25,6 @@ define("3rd.party/noms/view-bss", ["io.ox/core/extensions"], function (ext) {
         
         this.tick = function () {
             var self = this;
-            console.log("tick");
             // We use the AJAX method to not send the loading icon into nervous blinking
             $.ajax("/ox7/api/noms/apps?action=list&session=" + ox.session, {
                 dataType: 'json'
@@ -44,8 +43,8 @@ define("3rd.party/noms/view-bss", ["io.ox/core/extensions"], function (ext) {
             ext.point("io.ox/core/apps/installed").extend({
                 id: entry.url,
                 icon: entry.img,
-                title: entry.url,
-                description: entry.url,
+                title: entry.name,
+                description: entry.name,
                 visible: true,
                 entryModule: "3rd.party/noms/generic/main",
                 launchArguments: [entry]
@@ -60,10 +59,13 @@ define("3rd.party/noms/view-bss", ["io.ox/core/extensions"], function (ext) {
         draw: function () {
             refresher.run();
             return $("<iframe>", {
-                src: "http://marketplace.kumoki.info/fujitsu-bss-portal/marketplace/?mId=FUJITSU",
-                width: 1100,
+                src: "http://marketplace.kumoki.info/fujitsu-bss-portal/marketplace/logindirect.jsf?mId=FUJITSU&u=oxdemo&p=secret",
+                width: "100%",
                 height: "100%",
                 frameBorder: 0
+            }).css({
+                marginLeft: "-40px",
+                marginTop: "-33px"
             });
         },
         refresher: refresher

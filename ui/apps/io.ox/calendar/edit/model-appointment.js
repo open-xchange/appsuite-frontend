@@ -17,12 +17,12 @@ define('io.ox/calendar/edit/model-appointment',
 
     'use strict';
 
+
     var AppointmentModel = Backbone.Model.extend({
         validation: {
             title: {
                 required: true,
-                minLength: 8,
-                msg: gt('The title have to have minmum 8 characters')
+                msg: gt('You must specify a title')
             }
         },
         toSync: {},
