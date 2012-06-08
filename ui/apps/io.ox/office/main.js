@@ -37,10 +37,13 @@ define('io.ox/office/main',
             winTitle = gt('OX Office'),
 
             // main application container
-            container = $('<div>').addClass('container'),
+            container = $('<div>').addClass('container abs'),
 
-            // the edit area as jQuery object
-            editNode = null,
+            // the iframe representing the edited document
+            iframe = $('<iframe>').addClass('io-ox-office-iframe'),
+
+            // the top-level editing container
+            editNode = $('<div>').attr('contenteditable', true).css('border', 'thin blue solid').append('<p>normal1 <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>'),
 
             // text editor engine
             editor = null;
@@ -54,18 +57,28 @@ define('io.ox/office/main',
         app.setLauncher(function () {
 
             // create the application window
-            app.setWindow(win = ox.ui.createWindow({
+            win = ox.ui.createWindow({
                 name: 'io.ox/office',
                 title: winTitle,
                 close: true,
                 search: false
-            }));
+            });
+            app.setWindow(win);
+
+            // we are using an iframe
+            win.detachable = false;
 
             // initialize global application structure
-            win.nodes.main.addClass('io-ox-office-editor').append(container);
-            editNode = $('<div>').addClass('io-ox-office-editnode').attr('contenteditable', true).appendTo(container);
-            editNode.append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
-            editor = new Editor(editNode);
+            win.nodes.main.addClass('io-ox-office-main').append(container.append(iframe));
+            setTimeout(function poll() {
+                try {
+                    var c = iframe.contents();
+                    c.find('body').append(editNode);
+                    editor = new Editor(editNode);
+                } catch (ex) {
+                    setTimeout(poll, 50);
+                }
+            }, 50);
         });
 
         // load document into editor
@@ -83,14 +96,17 @@ define('io.ox/office/main',
                 // load file
                 win.busy();
                 $.when(
+                    // get editor...
                     api.get(appOptions).fail(showError)//,
                     // $.ajax({ type: 'GET', url: api.getUrl(appOptions, 'view'), dataType: 'text' })
                 )
-                .done(function (/*data, text*/) {
+                .done(function (/*editor, data, text*/) {
 /*
  * init editor with data returned from loader
  */
-                    editNode.focus();
+                    if (editNode !== undefined) {
+                        editNode.focus();
+                    }
                     win.idle();
                     def.resolve();
                 })
@@ -103,7 +119,7 @@ define('io.ox/office/main',
         };
 
         app.destroy = function () {
-            app = win = editNode = editor = null;
+            app = win = container = iframe = editNode = editor = null;
         };
 
         // the function passed to setQuit will be called when the application
