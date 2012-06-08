@@ -23,9 +23,9 @@ define('io.ox/office/editor', function () {
      * field 'pos' contains the zero-based character index behind the cursor
      * position.
      */
-    function OXOPaM(para, pos) {
-        this.para = para;
-        this.pos = pos;
+    function OXOPaM(paragraph, position) {
+        this.para = paragraph;
+        this.pos = position;
     }
 
     /**
@@ -36,6 +36,24 @@ define('io.ox/office/editor', function () {
         this.endPaM = end;
     }
 
+    /**
+     * 'Point and mark'. Represents a text position a.k.a. cursor position.
+     * Member field 'aNode' contains the selected node, member field 'aOffset'
+     * contain the offset inside the node, where the selection starts.
+     */
+    function DOMPaM(node, offset) {
+        this.node = node;
+        this.offset = offset;
+    }
+
+    /**
+     * Represents a text range consisting of start position and end position.
+     */
+    function DOMSelection(start, end) {
+        this.startPaM = start;
+        this.endPaM = end;
+    }
+    
     function OXOEditor(editdiv) {
 
         // key codes of navigation keys that will be passed directly to the browser
@@ -114,46 +132,74 @@ define('io.ox/office/editor', function () {
             return '';
         };
 
-        this.getLogicalSelection = function (domSelection) {
+        this.getOXOSelection = function (domSelection) {
+
+            function getOXOPositionFromDOMPosition(node, offset) {
+
+                var pam;
+
+                // check input values
+                if (!node || (offset < 0)) {
+                    return pam;
+                }
+
+                // Check, if the selected node is a descendant of "this.editdiv"
+                // Converting jQuery object to DOMNode using get(0)
+                // Attention: In the future "this.editdiv" is already a jQuery object.
+                var editorDiv = editdiv.has(node).get(0);
+
+                if (!editorDiv) {  // range not in text area
+                    return pam;
+                }
+			
+                var myParagraph = paragraphs.has(node);
+                var paragraphCount = myParagraph.index();
+
+                // Calculating the position inside the paragraph.
+                // Adding the textNodes from all siblings and parents left of the node.
+                // All siblings and parents can have children.
+                // Finally the offset has to be added.
+                var textLength = 0;
+                var nodeParagraph = myParagraph.get(0);
+
+                for (; node && (node !== nodeParagraph); node = node.parentNode) {
+                    for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
+                        textLength += $(prevNode).text().length;
+                    }
+                }
+
+                textLength = textLength + offset;
+
+                if (myParagraph.length !== 0) {
+                    pam = new OXOPaM(paragraphCount, textLength);
+                }
+
+                return pam;
+            }
+
+            // Only supporting single selection at the moment
+            var startPaM = getOXOPositionFromDOMPosition.call(this, domSelection.startPaM.node, domSelection.startPaM.offset);
+            var endPaM = getOXOPositionFromDOMPosition.call(this, domSelection.endPaM.node, domSelection.endPaM.offset);
+
+            var aOXOSelection = new OXOSelection(startPaM, endPaM);
+
+            return aOXOSelection;
+        };
+        
+        this.getCurrentDOMSelection = function () {
+            // DOMSelection consists of Node and Offset for startpoint and for endpoint
+            var windowSel = window.getSelection();
+            var startPaM = new DOMPaM(windowSel.anchorNode, windowSel.anchorOffset);
+            var endPaM = new DOMPaM(windowSel.focusNode, windowSel.focusOffset);
+            var domSelection = new DOMSelection(startPaM, endPaM);
+
+            return domSelection;
+        };
+          
+        this.getDOMSelection = function (OXOSelection) {
             // TODO
         };
-
-        this.getDOMSelection = function (logicalSelection) {
-            // TODO
-        };
-
-        this.getOXOSelection = function () {
-            // Returns an object of type OXOSelection
-            // with a start point and an end point of type OXOPaM.
-            // OXOPaM has the logical member nPara and nPos. These
-            // have to be calculated from the domSelection with the
-            // function getLogicalSelection .
-
-            // 1. Getting the domSelection for Start and End Point
-
-            var allRanges = this.updateRanges();
-            _(allRanges).each(function (range, i) {
-            });
-
-            // 2. Calculating the logical selection from the domSelection
-
-            // 3. Returning start and end point of the logical selection.
-
-
-//          if ( windowSel.isCollapsed ) {
-//              window.alert('Collapsed');
-//          } else {
-//              window.alert(windowSel);
-//          }
-
-            // Returning a dummy object for OXOSelection
-
-            var startPaM = new OXOPaM(1, 3);
-            var endPaM = new OXOPaM(1, 5);
-            var selection = new OXOSelection(startPaM, endPaM);
-
-            return selection;
-        };
+        
 
         this.processKeyDown = function (event) {
 
@@ -189,8 +235,13 @@ define('io.ox/office/editor', function () {
 
                 if (c.length === 1) {
                     this.deleteSelected();
-                    selection = this.getOXOSelection();
-                    this.insertText(c, selection.endPaM.para, selection.endPaM.pos);
+                    var domSelection = this.getCurrentDOMSelection();
+                    var selection = this.getOXOSelection(domSelection);
+                    window.console.log('processKeyPressed', 'OXOSelection, start: ' + selection.startPaM.para + " : " + selection.startPaM.pos);
+                    window.console.log('processKeyPressed', 'OXOSelection, end: ' + selection.endPaM.para + " : " + selection.endPaM.pos);
+                    if (selection !== undefined) {
+                        this.insertText(c, selection.endPaM.para, selection.endPaM.pos);
+                    }
                 }
 
                 if (bBlock) {
@@ -221,92 +272,6 @@ define('io.ox/office/editor', function () {
 
         this.setAttributes = function (para, pos) {
             // TODO
-        };
-
-        /**
-         * Reads the browser selection and translates it into the internal selection
-         * representation. If the selection has changed, all registered event listeners
-         * will be notified.
-         */
-        this.updateRanges = function () {
-            var paraConts = $('div.para-cont', this.editdiv);
-            // this.paragraphs = this.editdiv.getElementsByTagName('p');
-            // var allParagraphs = $('p', this.editdiv);
-
-            // Textnode + Länge des Textnodes abfragen
-
-            var ranges = [];
-
-            /**
-             * Calculates and returns the text position according to the passed DOM
-             * node and offset. If the node is an HTML element, the offset specifies
-             * the index of its child element. If the node is a text node, the offset
-             * specifies the character index. Returns an array of node indexes starting
-             * with the paragraph index (across all pages) and ending with the passed
-             * offset in the passed node.
-             *
-             * Example: Text position is the second character of a span being the third
-             * child node in the fifth paragraph. In this case, the parameter 'node'
-             * points to the (sole) text node of the span, and parameter 'offset'
-             * contains 1 (second character). This function will return the array
-             * [4, 2, 0, 1]. This means:
-             *  4 = the fifth paragraph (counted across all pages),
-             *  2 = the paragraph's third child (the span),
-             *  0 = the span's first child (text node),
-             *  1 = the second character in the span's text node.
-             */
-            function getTextPositionFromAnchor(node, offset) {
-                var textPos = [];
-
-                // check input values
-                if (!node || (offset < 0)) {
-                    return textPos;
-                }
-
-                // check that the node is a descendant of a paragraph container
-                var paraCont = paraConts.has(node).get(0);
-                if (!paraCont) {
-                    return textPos;
-                }
-
-                // collect node indexes from passed node up to but excluding the paragraph container
-                for (; node && (node !== paraCont); node = node.parentNode) {
-                    // Find the index of the node in the list of all child nodes of its
-                    // parent node. jQuery's index() function skips text nodes if the node
-                    // is an element node, and vice versa.
-                    var i = 0;
-                    for (var prevNode = node; (prevNode = prevNode.previousSibling); ++i) {}
-                    textPos.unshift(i);
-                }
-
-                // now, first array element is the paragraph's index in its own page, add number of preceding paragraphs
-                var prevContainers = $(paraCont).parent().parent().prevAll().children().children();
-                textPos[0] += prevContainers.contents().length;
-
-                // append the passed offset
-                textPos.push(offset);
-
-                return textPos;
-            }
-
-            // convert window selection to local array of TextRange object
-            for (var i = 0, windowSel = window.getSelection(); i < windowSel.rangeCount; ++i) {
-
-                var range = windowSel.getRangeAt(i);
-                var startPos = getTextPositionFromAnchor(range.startContainer, range.startOffset);
-                var endPos = getTextPositionFromAnchor(range.endContainer, range.endOffset);
-                // check if selection is inside text area
-                if (startPos.length && endPos.length) {
-                    ranges.push({ start: startPos, end: endPos });
-                }
-            }
-
-            // selection outside text area: ignore
-            if (!ranges.length) {
-                return;
-            }
-
-            return ranges;
         };
 
     } // end of OXOEditor()
