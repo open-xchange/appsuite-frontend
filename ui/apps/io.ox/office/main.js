@@ -25,7 +25,7 @@ define('io.ox/office/main',
     function createInstance() {
 
         var // application object
-            app = ox.ui.createApp({ name: 'io.ox/office', title: gt('OXOffice') }),
+            app = ox.ui.createApp({ name: 'io.ox/office', title: 'OXOffice' }),
 
             // options passed to 'load'
             appOptions = {},
@@ -36,11 +36,19 @@ define('io.ox/office/main',
             // default window title
             winTitle = gt('OX Office'),
 
+            // main application container
+            container = $('<div>').addClass('container'),
+
             // the edit area as jQuery object
-            editNode,
+            editNode = null,
 
             // text editor engine
-            editor;
+            editor = null;
+
+        var showError = function (data) {
+            container.find('.alert').remove();
+            $.alert(gt('Error'), data.error).insertBefore(editNode);
+        };
 
         // launcher
         app.setLauncher(function () {
@@ -54,8 +62,8 @@ define('io.ox/office/main',
             }));
 
             // initialize global application structure
-            win.nodes.main.addClass('io-ox-office-editor');
-            editNode = $('<div>').addClass('io-ox-office-editnode').attr('contenteditable', true).appendTo(win.nodes.main);
+            win.nodes.main.addClass('io-ox-office-editor').append(container);
+            editNode = $('<div>').addClass('io-ox-office-editnode').attr('contenteditable', true).appendTo(container);
             editNode.append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
             editor = new Editor(editNode);
         });
@@ -63,11 +71,6 @@ define('io.ox/office/main',
         // load document into editor
         app.load = function (options) {
             appOptions = options || {};
-
-            // dump options
-            _(appOptions).each(function (value, id) {
-                win.nodes.main.append($('<p>').text(id + ' = ' + value));
-            });
 
             // add filename to title
             if (appOptions.filename) {
@@ -80,15 +83,14 @@ define('io.ox/office/main',
                 // load file
                 win.busy();
                 $.when(
-/*
-                    api.get(appOptions).fail(showError),
-                    $.ajax({ type: 'GET', url: api.getUrl(appOptions, 'view'), dataType: 'text' })
-*/
+                    api.get(appOptions).fail(showError)//,
+                    // $.ajax({ type: 'GET', url: api.getUrl(appOptions, 'view'), dataType: 'text' })
                 )
                 .done(function (/*data, text*/) {
 /*
  * init editor with data returned from loader
  */
+                    editNode.focus();
                     win.idle();
                     def.resolve();
                 })
@@ -101,7 +103,7 @@ define('io.ox/office/main',
         };
 
         app.destroy = function () {
-            app = win = null;
+            app = win = editNode = editor = null;
         };
 
         // the function passed to setQuit will be called when the application
@@ -112,8 +114,8 @@ define('io.ox/office/main',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog({ easyOut: true })
                     .text(gt('The document has been modified. Do you want to save your changes?'))
-                    .addPrimaryButton('save', gt('Save'))
-                    .addAlternativeButton('discard', gt('Discard'))
+                    .addPrimaryButton('discard', gt('Discard'))
+                    .addAlternativeButton('save', gt('Save'))
                     .addButton('cancel', gt('Cancel'))
                     .on('save', function () {
                         alert('Saving...');
