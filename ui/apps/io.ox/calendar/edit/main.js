@@ -21,20 +21,34 @@ define('io.ox/calendar/edit/main',
     'use strict';
 
     var EditAppointmentController = function (data) {
-        console.log('CREATE EDIT APPOINTMENT CONTROLLER');
-        console.log(data);
         var self = this;
         self.app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: gt('Edit Appointment')});
 
         self.data = data;
         self.app.controller = this;
 
-        self.app.setLauncher(function () {
-            return self.launch();
-        });
+        self.app.setLauncher(_.bind(self.launch, self));
+
         self.app.setQuit(function () {
             return self.dispose();
         });
+
+        self.app.failSave = function () {
+            return {
+                module: 'io.ox/calendar/edit',
+                point: self.model.attributes
+            };
+        };
+
+        self.app.failRestore = function (point) {
+            var df = $.Deferred();
+
+            self.data = point;
+            self.edit();
+            df.resolve();
+            console.log('failRestore', point);
+            return df;
+        };
     };
 
     // register to "compile"-time think is a good idea
@@ -42,6 +56,14 @@ define('io.ox/calendar/edit/main',
 
     EditAppointmentController.prototype = {
         launch: function () {
+            var self = this,
+                state = self.app.getState();
+
+            console.log('state', state, arguments);
+
+            if (state.folder && state.id) {
+                self.edit();
+            }
         },
         edit: function () {
             var self = this;
@@ -145,8 +167,6 @@ define('io.ox/calendar/edit/main',
 
             //be gently
             if (self.model.isDirty()) {
-                console.log('is dirty!!');
-                console.log(self.model);
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to lose your changes?'))
@@ -169,6 +189,7 @@ define('io.ox/calendar/edit/main',
             return df;
         }
     };
+
 
     function createInstance(data) {
         var controller = new EditAppointmentController(data);

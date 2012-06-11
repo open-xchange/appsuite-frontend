@@ -37,8 +37,6 @@ define('io.ox/calendar/edit/view-app',
 
             self.el = self.appwindow.nodes.main[0];
 
-
-
             self.subviews.common = new MainView({model: self.model});
             self.subviews.common.on('save', function () {
                 self.trigger('save'); //just bubble manually

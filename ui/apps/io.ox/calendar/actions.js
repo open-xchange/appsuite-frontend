@@ -51,8 +51,6 @@ define('io.ox/calendar/actions',
             api.get(o)
                 .done(function (data) {
                     require(['io.ox/calendar/edit/main'], function (editmain) {
-                        console.log('got data?');
-                        console.log(data);
                         if (data.recurrence_type > 0) {
                             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                                 new dialogs.ModalDialog()

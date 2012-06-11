@@ -116,10 +116,14 @@ define("io.ox/calendar/main",
             );
         };
 
-        commons.wireGridAndSelectionChange(grid, 'io.ox/calendar', showAppointment, right);
+        commons.wireGridAndSelectionChange(grid, 'io.ox/calendar', showAppointment, right, api);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api, win);
+
+        grid.setListRequest(function (ids) {
+            return $.Deferred().resolve(ids);
+        });
 
         // go!
         commons.addFolderSupport(app, grid, 'calendar')

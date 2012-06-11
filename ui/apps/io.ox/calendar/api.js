@@ -39,7 +39,6 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
             }
 
             var key = (o.folder || o.folder_id) + "." + o.id + "." + (o.recurrence_position || 0);
-            console.log('get key:' + key);
 
             if (get_cache[key] === undefined) {
                 return http.GET({
@@ -68,7 +67,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
                     action: "all",
-                    columns: "1,20,207", // id, folder_id, recurrence_position, start_date, title
+                    columns: "1,20,207,201,200,202,400", // id, folder_id, recurrence_position, start_date, title, end_date, location
                     start: o.start,
                     end: o.end,
                     showPrivate: true,
@@ -77,13 +76,11 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                     order: "asc"
                 };
 
-            console.log('getAll key:' + key);
 
             if (o.folder !== undefined) {
                 params.folder = o.folder;
             }
 
-            console.log('get all', key);
             if (all_cache[key] === undefined) {
                 return http.GET({
                         module: "calendar",
@@ -130,7 +127,6 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
 
         update: function (o) {
             var key = o.folder_id + "." + o.id + "." + (o.recurrence_position || 0);
-            console.log('update: ' + key);
             if (_.isEmpty(o)) {
                 return $.when();
             } else {
@@ -147,8 +143,8 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 .pipe(function (obj) {
                     var getObj = {};
                     if (!_.isUndefined(obj.conflicts)) {
-                        console.log('got conflicts');
-                        console.log(obj.conflicts);
+                        //console.log('got conflicts');
+                        //console.log(obj.conflicts);
                         var df = new $.Deferred();
                         df.reject(obj);
                         return df;
@@ -164,9 +160,8 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                     delete get_cache[key];
                     return api.get(getObj)
                         .pipe(function (data) {
-                            console.log('refresh?');
-                            console.log(data);
-                            api.trigger('refresh.list');
+                            api.trigger('refresh.all');
+                            api.trigger('update', data);
                             return data;
                         });
                 });
@@ -184,8 +179,6 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
             .pipe(function (obj) {
                 var getObj = {};
                 if (!_.isUndefined(obj.conflicts)) {
-                    console.log('got conflicts');
-                    console.log(obj.conflicts);
                     var df = new $.Deferred();
                     df.reject(obj);
                     return df;
@@ -218,10 +211,6 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
             .done(function (resp) {
                 all_cache = {};
                 api.trigger('refresh.all');
-            })
-            .fail(function (err) {
-                console.log('error on creating appointment');
-                console.log(err);
             });
         }
     };
