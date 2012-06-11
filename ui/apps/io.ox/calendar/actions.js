@@ -66,14 +66,14 @@ define('io.ox/calendar/actions',
                                         if (action === 'series') {
                                             delete data.recurrence_position;
                                         }
-                                        editmain.getApp(data).launch().done(function () {
-                                            this.controller.edit();
+                                        editmain.getApp().launch().done(function () {
+                                            this.edit(data);
                                         });
                                     });
                             });
                         } else {
-                            editmain.getApp(data).launch().done(function () {
-                                this.controller.edit();
+                            editmain.getApp().launch().done(function () {
+                                this.edit(data);
                             });
                         }
                     });
@@ -151,8 +151,8 @@ define('io.ox/calendar/actions',
             require(['io.ox/calendar/edit/main'], function (editmain) {
                 console.log('create');
                 // FIXME: what a hack > folder_id
-                editmain.getApp({folder_id: data.folder.get()}).launch().done(function () {
-                    this.controller.create();
+                editmain.getApp().launch().done(function () {
+                    this.create({folder_id: data.folder.get()});
                 });
             });
 

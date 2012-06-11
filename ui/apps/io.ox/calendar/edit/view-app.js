@@ -23,7 +23,6 @@ define('io.ox/calendar/edit/view-app',
         subviews: {},
         initialize: function () {
             this._modelBinder = new Backbone.ModelBinder();
-
         },
         render: function () {
             var self = this;
