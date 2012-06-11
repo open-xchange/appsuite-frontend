@@ -101,7 +101,8 @@ define('io.ox/office/editor', function () {
         };
 
         this.initDocument = function () {
-            // TODO
+            var newOperation = { name: 'initDocument' };
+            this.applyOperation(newOperation, true);
         };
 
         // OPERATIONS API
@@ -111,10 +112,26 @@ define('io.ox/office/editor', function () {
         };
 
         // Maybe only applyOperation_s_, where param might be operation or operation[] ?
-        this.applyOperation = function (theOperation, bRecord) {
+        this.applyOperation = function (operation, bRecord) {
             // TODO
             if (bRecord) {
-                // this.operations.append(theOperation); // ToDo
+                this.operations.append(operation);
+            }
+            
+            if (operation.name === "initDocument") {
+                // TODO
+                // Delete DOM, clear operations.
+                // TDB: Create one empty paragraph?!
+            }
+            else if (operation.name === "insertText") {
+                // TODO
+                var domPos = this.getDOMPosition(operation.para, operation.pos);
+                var oldText = domPos.node.text();
+                var newText = oldText.slice(0, domPos.pos) + operation.text + oldText.slice(domPos.pos);
+                // domPos.node.text = newText;
+            }
+            else if (operation.name === "deleteText") {
+                // TODO
             }
         };
 
@@ -212,75 +229,75 @@ define('io.ox/office/editor', function () {
             return aOXOSelection;
         };
 
-        this.getDOMSelection = function (oxoSelection) {
+        this.getDOMPosition = function (para, pos) {
 
-            function getDOMPositionFromOXOPosition(para, pos) {
+            window.console.log('getDOMPosition', 'Paragraph: ' + para + ' , Position: ' + pos);
+            // Converting para and pos to node and offset
+            var pam;
 
-                window.console.log('getDOMPositionFromOXOPosition', 'Paragraph: ' + para + ' , Position: ' + pos);
-                // Converting para and pos to node and offset
-                var pam;
-
-                // Is para an available paragraph? para starts with zero.
-                var maxPara = $(this.paragraphs).size() - 1;
-                if (para > maxPara) {
-                    window.console.log('getDOMPositionFromOXOPosition', 'Warning: Paragraph ' + para + ' is out of range. Last paragraph: ' + maxPara);
-                    return pam;
-                }
-
-                // Checking if this paragraph has children
-                var myParagraph = $(this.paragraphs).get(para);
-                if (! myParagraph.hasChildNodes()) {
-                    window.console.log('getDOMPositionFromOXOPosition', 'Warning: Paragraph is empty');
-                    return pam;
-                }
-
-                // Checking if all children of this paragraph have enough text content to reach pos
-                var maxTextLength = 0;
-                var nodeList = myParagraph.childNodes;
-                for (var i = 0; i < nodeList.length; i++) {
-                    maxTextLength += $(nodeList[i]).text().length;
-                }
-
-                if (maxTextLength < pos) {
-                    window.console.log('getDOMPositionFromOXOPosition', 'Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + maxTextLength);
-                    return pam;
-                }
-
-                var textLength = 0;
-                var currentNode = nodeList.firstChild;
-
-                while (myParagraph.hasChildNodes()) {
-
-                    nodeList = myParagraph.childNodes;
-
-                    for (var i = 0; i < nodeList.length; i++) {
-                        // Searching the children
-                        currentNode = nodeList[i];
-                        var currentLength = $(nodeList[i]).text().length;
-                        if (textLength + currentLength > pos) {
-                            myParagraph = currentNode;
-                            break;  // leaving the for-loop
-                        } else {
-                            textLength += currentLength;
-                            window.console.log('getDOMPositionFromOXOPosition', 'Complete length: ' + textLength);
-                        }
-                    }
-                }
-
-                var node = currentNode;
-                var offset = pos - textLength;
-                window.console.log('getDOMPositionFromOXOPosition', 'Result: ' + node + " : " + offset);
-
-                pam = new DOMPaM();
-                pam.aNode = node;
-                pam.aOffset = offset;
-
+            // Is para an available paragraph? para starts with zero.
+            var maxPara = $(this.paragraphs).size() - 1;
+            if (para > maxPara) {
+                window.console.log('getDOMPosition', 'Warning: Paragraph ' + para + ' is out of range. Last paragraph: ' + maxPara);
                 return pam;
             }
 
+            // Checking if this paragraph has children
+            var myParagraph = $(this.paragraphs).get(para);
+            if (! myParagraph.hasChildNodes()) {
+                window.console.log('getDOMPosition', 'Warning: Paragraph is empty');
+                return pam;
+            }
+
+            // Checking if all children of this paragraph have enough text content to reach pos
+            var maxTextLength = 0;
+            var nodeList = myParagraph.childNodes;
+            for (var i = 0; i < nodeList.length; i++) {
+                maxTextLength += $(nodeList[i]).text().length;
+            }
+
+            if (maxTextLength < pos) {
+                window.console.log('getDOMPosition', 'Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + maxTextLength);
+                return pam;
+            }
+
+            var textLength = 0;
+            var currentNode = nodeList.firstChild;
+
+            while (myParagraph.hasChildNodes()) {
+
+                nodeList = myParagraph.childNodes;
+
+                for (var i = 0; i < nodeList.length; i++) {
+                    // Searching the children
+                    currentNode = nodeList[i];
+                    var currentLength = $(nodeList[i]).text().length;
+                    if (textLength + currentLength > pos) {
+                        myParagraph = currentNode;
+                        break;  // leaving the for-loop
+                    } else {
+                        textLength += currentLength;
+                        window.console.log('getDOMPosition', 'Complete length: ' + textLength);
+                    }
+                }
+            }
+
+            var node = currentNode;
+            var offset = pos - textLength;
+            window.console.log('getDOMPosition', 'Result: ' + node + " : " + offset);
+
+            pam = new DOMPaM();
+            pam.aNode = node;
+            pam.aOffset = offset;
+
+            return pam;
+        };
+        
+        this.getDOMSelection = function (oxoSelection) {
+
             // Only supporting single selection at the moment
-            var startPaM = getDOMPositionFromOXOPosition.call(this, oxoSelection.aStartPaM.nPara, oxoSelection.aStartPaM.nPos);
-            var endPaM = getDOMPositionFromOXOPosition.call(this, oxoSelection.aEndPaM.nPara, oxoSelection.aEndPaM.nPos);
+            var startPaM = this.getDOMPosition(oxoSelection.aStartPaM.nPara, oxoSelection.aStartPaM.nPos);
+            var endPaM = this.getDOMPosition(oxoSelection.aEndPaM.nPara, oxoSelection.aEndPaM.nPos);
 
             var domSelection;
             if ((startPaM) && (endPaM)) {
@@ -386,15 +403,47 @@ define('io.ox/office/editor', function () {
         };
 
         this.deleteSelected = function () {
+            var i, nStartPos, nEndPos;
             var domSelection = this.getCurrentDOMSelection();
             var selection = this.getOXOSelection(domSelection);
-            if (selection !== undefined) {
-                // ...
+            if ((selection !== undefined) && (selection.hasRange())) {
+                // Split into multiple operations:
+                // 1) delete selected part in first para (pos to end)
+                // 2) delete completly slected paragraphs completely
+                // 3) delete selected part in last para (start to pos)
+                selection.adjust();
+                nStartPos = selection.startPaM.pos;
+                nEndPos = selection.endPaM.pos;
+                if (selection.startPaM.para !== selection.endPaM.para) {
+                    nEndPos = 0xFFFF; // TODO: Real para end
+                }
+                this.deleteText(selection.startPaM.para, nStartPos, nEndPos);
+                for (i = selection.startPaM.para + 1; i < selection.endPaM.para; i++)
+                {
+                    // startPaM.para+1 instead of i, because we allways remove a paragraph
+                    this.deleteParagraph(selection.startPaM.para + 1);
+                }
+                if (selection.startPaM.para !== selection.endPaM.para) {
+                    this.deleteText(selection.startPaM.para + 1, 0, selection.endPaM.pos);
+                }
+            }
+        };
+        
+        this.deleteText = function (para, start, end) {
+            if (start !== end) {
+                var newOperation = { name: 'deleteText', para: para, start: start, end: end };
+                this.applyOperation(newOperation, true);
             }
         };
 
-        this.insertParagraph = function (pos) {
-            // TODO
+        this.deleteParagraph = function (para) {
+            var newOperation = { name: 'deleteParagraph', para: para };
+            this.applyOperation(newOperation, true);
+        };
+
+        this.insertParagraph = function (para) {
+            var newOperation = { name: 'insertParagraph', para: para };
+            this.applyOperation(newOperation, true);
         };
 
         // For now, only stuff that we really need, not things that a full featured API would probably offer
@@ -404,7 +453,6 @@ define('io.ox/office/editor', function () {
         // };
 
         this.insertText = function (text, para, pos) {
-            // TODO
             var newOperation = { name: 'insertText', text: text, para: para, pos: pos };
             this.applyOperation(newOperation, true);
         };
