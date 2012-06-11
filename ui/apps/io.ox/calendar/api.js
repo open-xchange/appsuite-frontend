@@ -80,7 +80,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 params.folder = o.folder;
             }
 
-            console.log('getAll - API');
+            console.log('get all', key);
             if (all_cache[key] === undefined) {
                 return http.GET({
                         module: "calendar",
