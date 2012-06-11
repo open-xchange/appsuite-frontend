@@ -41,7 +41,6 @@ define('io.ox/calendar/edit/view-app',
 
             self.subviews.common = new MainView({model: self.model});
             self.subviews.common.on('save', function () {
-                console.log('common trigger save');
                 self.trigger('save'); //just bubble manually
             });
             $(self.el).empty().append(self.subviews.common.render().el);
@@ -59,7 +58,6 @@ define('io.ox/calendar/edit/view-app',
             // updates the title on change
             self._modelBinder.bind(self.model, $('.window-title').parent().get(), bindings);
             // now focus on title
-            console.log('focus:' + '#' + self.subviews.common.guid + '_title');
             $('#' + self.subviews.common.guid + '_title').get(0).focus();
         }
     });
