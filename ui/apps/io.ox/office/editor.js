@@ -117,7 +117,7 @@ define('io.ox/office/editor', function () {
             if (bRecord) {
                 this.operations.append(operation);
             }
-            
+
             if (operation.name === "initDocument") {
                 // TODO
                 // Delete DOM, clear operations.
@@ -292,7 +292,7 @@ define('io.ox/office/editor', function () {
 
             return pam;
         };
-        
+
         this.getDOMSelection = function (oxoSelection) {
 
             // Only supporting single selection at the moment
@@ -428,7 +428,7 @@ define('io.ox/office/editor', function () {
                 }
             }
         };
-        
+
         this.deleteText = function (para, start, end) {
             if (start !== end) {
                 var newOperation = { name: 'deleteText', para: para, start: start, end: end };

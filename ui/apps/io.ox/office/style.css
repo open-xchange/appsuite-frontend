@@ -11,9 +11,6 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 .io-ox-office-main {
-	overflow-x: auto;
-	overflow-y: auto;
-
 	.container {
     	width: 900px;
 		margin: 30px auto;
