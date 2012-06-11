@@ -37,6 +37,15 @@ define('io.ox/office/editor', function () {
         this.hasRange = function () {
             return ((this.startPaM.para !== this.endPaM.para) || (this.startPaM.pos !== this.endPaM.pos)) ? true : false;
         };
+        this.adjust = function () {
+            var tmp;
+            if ((this.startPaM.para > this.endPaM.para) || ((this.startPaM.para === this.endPaM.para) && (this.startPaM.pos > this.endPaM.pos)))
+            {
+                tmp = this.startPaM;
+                this.startPaM = this.endPaM;
+                this.endPaM = tmp;
+            }
+        };
     }
 
     /**
@@ -88,8 +97,7 @@ define('io.ox/office/editor', function () {
          * Returns whether the editor contains unsaved changes.
          */
         this.isModified = function () {
-            // TODO
-            return true;
+            return bModified;
         };
 
         this.initDocument = function () {
@@ -379,7 +387,11 @@ define('io.ox/office/editor', function () {
         };
 
         this.deleteSelected = function () {
-            // TODO
+            var domSelection = this.getCurrentDOMSelection();
+            var selection = this.getOXOSelection(domSelection);
+            if (selection !== undefined) {
+                // ...
+            }
         };
 
         this.insertParagraph = function (pos) {
