@@ -34,6 +34,9 @@ define('io.ox/office/editor', function () {
     function OXOSelection(start, end) {
         this.startPaM = start;
         this.endPaM = end;
+        this.hasRange = function () {
+            return ((this.startPaM.para !== this.endPaM.para) || (this.startPaM.pos !== this.endPaM.pos)) ? true : false;
+        };
     }
 
     /**
@@ -64,13 +67,22 @@ define('io.ox/office/editor', function () {
                 37, 38, 39, 40, // Cursor Left, Up, Right, Down
                 91, 92, // Left Windows, Right Windows
                 144, 145 // NumLock, ScrollLock
-            ]),
+            ]);
 
-            // list of operations
-            operations = [],
+        var bModified = false;
 
-            // list of paragraphs as jQuery object
-            paragraphs = editdiv.children();
+        // list of operations
+        var operations = [];
+
+        // list of paragraphs as jQuery object
+        var paragraphs = editdiv.children();
+
+        // hybrid edit mode
+        $(editdiv).bind('keydown', $.proxy(this, 'processKeyDown'));
+        $(editdiv).bind('keypress', $.proxy(this, 'processKeyPressed'));
+        // TODO
+        $(editdiv).bind('dragover drop', $.proxy(this, 'xxx'));
+        $(editdiv).bind('contextmenu', $.proxy(this, 'xxx'));
 
         /**
          * Returns whether the editor contains unsaved changes.
@@ -139,6 +151,12 @@ define('io.ox/office/editor', function () {
             return '';
         };
 
+        this.hasFocus = function () {
+            var bHasFocus = true;
+            // TODO
+            return bHasFocus;
+        };
+
         this.getOXOSelection = function (domSelection) {
 
             function getOXOPositionFromDOMPosition(node, offset) {
@@ -192,7 +210,6 @@ define('io.ox/office/editor', function () {
 
             return aOXOSelection;
         };
-
 
         this.getDOMSelection = function (oxoSelection) {
 
@@ -298,13 +315,9 @@ define('io.ox/office/editor', function () {
             return aOXOSelection;
         };
 
-        this.getDOMSelection = function (OXOSelection) {
-            // TODO
-        };
-
-
         this.processKeyDown = function (event) {
 
+            // TODO: How to strip away debug code?
             if (event.keyCode && event.shiftKey && event.ctrlKey && event.altKey) {
                 var c = this.getPrintableChar(event);
                 if (c === 'P') {
@@ -314,6 +327,7 @@ define('io.ox/office/editor', function () {
                     alert('#Paragraphs: ' + this.paragraphs.length);
                 }
             }
+
             if (!this.isNavigationKeyEvent(event)) {
                 // Don't block keyDown, or we will never get keyPressed...
                 // Check with different browsers...
@@ -337,8 +351,8 @@ define('io.ox/office/editor', function () {
 
                     // Demo code for calculating DOMSelection from OXOSelection
                     if (0) {
-                        var aOXOSelection = this.getCurrentOXOSelection();
-                        var aDOMSelection = this.getDOMSelection(aOXOSelection);
+                        aOXOSelection = this.getCurrentOXOSelection();
+                        aDOMSelection = this.getDOMSelection(aOXOSelection);
 
                         if (aDOMSelection) {
                             window.console.log('processKeyPressed', 'StartPaM: ' + aDOMSelection.aStartPaM.aNode + ' : ' + aDOMSelection.aStartPaM.aOffset);
