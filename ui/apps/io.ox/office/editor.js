@@ -143,6 +143,10 @@ define('io.ox/office/editor', function () {
             return operations;
         };
 
+        this.setOperations = function (allOperations) {
+            operations = allOperations;
+        };
+
         // GUI/EDITOR API
 
         /**

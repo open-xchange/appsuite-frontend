@@ -74,6 +74,18 @@ define('io.ox/office/main',
             container.find('.alert').remove();
             $.alert(gt('Error'), data.error).prepend(container);
         };
+        
+        var createOperationsList = function (result) {
+            var operations = [];
+            
+            $.each(result, function (i, value) {
+                // iterating over the list of JSON objects
+                $.each(value, function (j, val) {
+                    operations.push(val);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
+                    window.console.log('Operation ' + j + ': ' + JSON.stringify(val));
+                });
+            });
+        };
 
         /*
          * The handler function that will be called while launching the
@@ -151,9 +163,7 @@ define('io.ox/office/main',
                     $.ajax({type: 'GET', url: ox.apiRoot + "/oxodocumentfilter?action=importdocument&id=" +
                         appOptions.id + "&session=" + ox.session, dataType: 'json'}))
                 .done(function (response) {
-/*
- * init editor with data returned from document to operations filter (oxodocumentfilter)
- */
+                    this.createOperationsList(response);
                     editor.focus();
                     win.idle();
                     def.resolve();
