@@ -115,7 +115,7 @@ define('io.ox/office/editor', function () {
         this.applyOperation = function (operation, bRecord) {
             // TODO
             if (bRecord) {
-                this.operations.append(operation);
+                // TODO this.operations.append(operation);
             }
             
             if (operation.name === "initDocument") {
@@ -126,9 +126,9 @@ define('io.ox/office/editor', function () {
             else if (operation.name === "insertText") {
                 // TODO
                 var domPos = this.getDOMPosition(operation.para, operation.pos);
-                var oldText = domPos.node.text();
-                var newText = oldText.slice(0, domPos.pos) + operation.text + oldText.slice(domPos.pos);
-                // domPos.node.text = newText;
+                var oldText = domPos.node.nodeValue;
+                var newText = oldText.slice(0, domPos.offset) + operation.text + oldText.slice(domPos.offset);
+                domPos.node.nodeValue = newText;
             }
             else if (operation.name === "deleteText") {
                 // TODO
@@ -152,9 +152,12 @@ define('io.ox/office/editor', function () {
          * @param event
          *  A jQuery keyboard event object.
          */
+        /* DEPRECATED - keyCode handled differently in keyPressed in different browsers
         this.isNavigationKeyEvent = function (event) {
+            editWindow.console.log('getDOMPosition', 'Paragraph: ' + para + ' , Position: ' + pos);
             return NAVIGATION_KEYS.contains(event.keyCode);
         };
+        */
 
         this.getPrintableChar = function (event) {
             // event.char preferred. DL2, but nyi in most browsers:(
@@ -236,14 +239,14 @@ define('io.ox/office/editor', function () {
             var pam;
 
             // Is para an available paragraph? para starts with zero.
-            var maxPara = $(this.paragraphs).size() - 1;
+            var maxPara = $(paragraphs).size() - 1;
             if (para > maxPara) {
                 editWindow.console.log('getDOMPosition', 'Warning: Paragraph ' + para + ' is out of range. Last paragraph: ' + maxPara);
                 return pam;
             }
 
             // Checking if this paragraph has children
-            var myParagraph = $(this.paragraphs).get(para);
+            var myParagraph = $(paragraphs).get(para);
             if (! myParagraph.hasChildNodes()) {
                 editWindow.console.log('getDOMPosition', 'Warning: Paragraph is empty');
                 return pam;
@@ -287,8 +290,8 @@ define('io.ox/office/editor', function () {
             editWindow.console.log('getDOMPosition', 'Result: ' + node + " : " + offset);
 
             pam = new DOMPaM();
-            pam.aNode = node;
-            pam.aOffset = offset;
+            pam.node = node;
+            pam.offset = offset;
 
             return pam;
         };
@@ -317,20 +320,9 @@ define('io.ox/office/editor', function () {
 
             return domSelection;
         };
-
-        // The current OXOSelection can be read from operations.
-        // This is a test function, that delivers an OXOSelection
-        // object with arbitrary values. Needs to be changed in
-        // the future.
-        this.getCurrentOXOSelection = function () {
-
-            // Setting arbitrary values for paragraph and position
-            // for the startPoint and the endPoint
-            var startPaM = new OXOPaM(1, 10);
-            var endPaM = new OXOPaM(2, 24);
-
-            var aOXOSelection = new OXOSelection(startPaM, endPaM);
-            return aOXOSelection;
+        
+        this.setSelection = function (oxosel) {
+            
         };
 
         this.processKeyDown = function (event) {
@@ -339,66 +331,84 @@ define('io.ox/office/editor', function () {
             if (event.keyCode && event.shiftKey && event.ctrlKey && event.altKey) {
                 var c = this.getPrintableChar(event);
                 if (c === 'P') {
-                    alert('#Paragraphs: ' + this.paragraphs.length);
+                    alert('#Paragraphs: ' + paragraphs.length);
                 }
                 if (c === 'S') {
-                    alert('#Paragraphs: ' + this.paragraphs.length);
+                    alert('#Paragraphs: ' + paragraphs.length);
                 }
             }
 
+            /*
             if (!this.isNavigationKeyEvent(event)) {
                 // Don't block keyDown, or we will never get keyPressed...
                 // Check with different browsers...
-
                 // event.preventDefault();
             }
+            */
         };
 
         this.processKeyPressed = function (event) {
-            var bBlock = true;
 
-            if (!this.isNavigationKeyEvent(event)) {
+            var c, selection;
+            var bBlock = false;
 
-                var c = this.getPrintableChar(event);
+            var domSelection = this.getCurrentDOMSelection();
+            var selection = this.getOXOSelection(domSelection);
+            
+            editWindow.console.log('processKeyPressed', 'OXOSelection, start: ' + selection.startPaM.para + " : " + selection.startPaM.pos);
+            editWindow.console.log('processKeyPressed', 'OXOSelection, end: ' + selection.endPaM.para + " : " + selection.endPaM.pos);
+            
+            selection.adjust();
 
+            /*
+            editWindow.console.log('processKeyPressed', 'keyCode: ' + event.keyCode + ' isNavi: ' + this.isNavigationKeyEvent(event));
+            if (this.isNavigationKeyEvent(event)) {
+                return;
+            }
+            */
+
+            c = this.getPrintableChar(event);
+
+            // TODO
+            // For now (the prototype), only accept single chars, but let the browser process, so we don't need to care about DOM stuff
+            // TODO: But we at least need to check if there is a selection!!!
+
+            if (c.length === 1) {
+
+                // Demo code for calculating DOMSelection from OXOSelection
+                if (0) {
+                    var aOXOSelection = this.getCurrentOXOSelection();
+                    var aDOMSelection = this.getDOMSelection(aOXOSelection);
+
+                    if (aDOMSelection) {
+                        editWindow.console.log('processKeyPressed', 'StartPaM: ' + aDOMSelection.aStartPaM.node + ' : ' + aDOMSelection.aStartPaM.offset);
+                        editWindow.console.log('processKeyPressed', 'EndPaM: ' + aDOMSelection.aEndPaM.node + ' : ' + aDOMSelection.aEndPaM.offset);
+
+                        var range = document.createRange();
+                        range.setStart(aDOMSelection.aStartPaM.node, aDOMSelection.aStartPaM.offset);
+                        range.setEnd(aDOMSelection.aEndPaM.node, aDOMSelection.aEndPaM.offset);
+                        var sel = editWindow.getSelection();
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    }
+                }
+
+                // Code for calculating OXOSelection from DOMSelection
+                this.deleteSelected();
+                // Selection was adjusted, so we need to use start, not end
+                this.insertText(c, selection.startPaM.para, selection.startPaM.pos);
+                selection.startPaM.pos++;
+                selection.endPaM = selection.startPaM;
+                this.setSelection(selection);
+                bBlock = true;
+            }
+            if (c.length > 1) {
                 // TODO
-                // For now (the prototype), only accept single chars, but let the browser process, so we don't need to care about DOM stuff
-                // TODO: But we at least need to check if there is a selection!!!
+                bBlock = true;
+            }
 
-                if (c.length === 1) {
-
-                    // Demo code for calculating DOMSelection from OXOSelection
-                    if (0) {
-                        var aOXOSelection = this.getCurrentOXOSelection();
-                        var aDOMSelection = this.getDOMSelection(aOXOSelection);
-
-                        if (aDOMSelection) {
-                            editWindow.console.log('processKeyPressed', 'StartPaM: ' + aDOMSelection.aStartPaM.aNode + ' : ' + aDOMSelection.aStartPaM.aOffset);
-                            editWindow.console.log('processKeyPressed', 'EndPaM: ' + aDOMSelection.aEndPaM.aNode + ' : ' + aDOMSelection.aEndPaM.aOffset);
-
-                            var range = document.createRange();
-                            range.setStart(aDOMSelection.aStartPaM.aNode, aDOMSelection.aStartPaM.aOffset);
-                            range.setEnd(aDOMSelection.aEndPaM.aNode, aDOMSelection.aEndPaM.aOffset);
-                            var sel = editWindow.getSelection();
-                            sel.removeAllRanges();
-                            sel.addRange(range);
-                        }
-                    }
-
-                    // Code for calculating OXOSelection from DOMSelection
-                    this.deleteSelected();
-                    var domSelection = this.getCurrentDOMSelection();
-                    var selection = this.getOXOSelection(domSelection);
-                    editWindow.console.log('processKeyPressed', 'OXOSelection, start: ' + selection.startPaM.para + " : " + selection.startPaM.pos);
-                    editWindow.console.log('processKeyPressed', 'OXOSelection, end: ' + selection.endPaM.para + " : " + selection.endPaM.pos);
-                    if (selection !== undefined) {
-                        this.insertText(c, selection.endPaM.para, selection.endPaM.pos);
-                    }
-                }
-
-                if (bBlock) {
-                    event.preventDefault();
-                }
+            if (bBlock) {
+                event.preventDefault();
             }
         };
 
