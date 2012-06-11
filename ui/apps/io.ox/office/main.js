@@ -25,19 +25,21 @@ define('io.ox/office/main',
 
     // multi-instance pattern: on each call, create a new application
     // TODO: return open application per file
-    function createInstance() {
+    function createInstance(options) {
 
-        var // application object
-            app = ox.ui.createApp({ name: 'io.ox/office', title: 'OXOffice' }),
+        var // file/document options
+            appOptions = $.extend({
+                filename: gt('Unnamed')
+            }, options),
 
-            // options passed to 'load'
-            appOptions = {},
+            // application object
+            app = ox.ui.createApp({ name: 'io.ox/office', title: appOptions.filename }),
 
             // application window
             win = null,
 
             // default window title
-            winTitle = gt('OX Office'),
+            winBaseTitle = gt('OX Office'),
 
             // main application container
             container = $('<div>').addClass('container abs'),
@@ -66,6 +68,13 @@ define('io.ox/office/main',
             showError(data.responseText);
         };
 
+        var updateTitles = function () {
+            app.setTitle(appOptions.filename);
+            if (win) {
+                win.setTitle(winBaseTitle + ' - ' + appOptions.filename);
+            }
+        };
+
         /*
          * On first call, creates and returns new instance of the Editor class.
          * On subsequent calls, returns the cached editor instance created
@@ -79,8 +88,11 @@ define('io.ox/office/main',
             var // the body element of the document embedded in the iframe
                 body = $('body', iframe.contents())
                     .attr('contenteditable', true)
-                    .css('border', 'thin blue solid')
-                    .append('<p>normal1 <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>'),
+                    .css({
+                        border: 'thin blue solid',
+                        cursor: 'text'
+                    })
+                    .append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>'),
                 // the content window of the iframe document
                 window = iframe.length && iframe.get(0).contentWindow,
                 // the editor API instance
@@ -102,11 +114,11 @@ define('io.ox/office/main',
         var createOperationsList = function (result) {
             var operations = [];
             
-            $.each(result, function (i, value) {
+            _(result).each(function (value) {
                 // iterating over the list of JSON objects
-                $.each(value, function (j, val) {
-                    operations.push(val);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
-                    window.console.log('Operation ' + j + ': ' + JSON.stringify(val));
+                _(value).each(value, function (json, j) {
+                    operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
+                    window.console.log('Operation ' + j + ': ' + JSON.stringify(json));
                 });
             });
         };
@@ -119,7 +131,7 @@ define('io.ox/office/main',
             // create the application window
             win = ox.ui.createWindow({
                 name: 'io.ox/office',
-                title: winTitle,
+                title: winBaseTitle,
                 close: true,
                 search: false,
                 toolbar: true
@@ -130,22 +142,15 @@ define('io.ox/office/main',
             win.detachable = false;
 
             // initialize global application structure
+            updateTitles();
             win.nodes.main.addClass('io-ox-office-main').append(container.append(iframe));
         });
 
         /*
-         * Loads the document described in the passed options map into the
-         * editor, and shows the application window.
+         * Loads the document described in the options map passed in the
+         * constructor of this application, and shows the application window.
          */
-        app.load = function (options) {
-            appOptions = options || {};
-
-            // add filename to title
-            if (appOptions.filename) {
-                win.setTitle(winTitle + ' - ' + appOptions.filename);
-                app.setTitle(appOptions.filename);
-            }
-
+        app.load = function () {
             var def = $.Deferred();
             win.show(function () {
                 // load file
@@ -176,7 +181,7 @@ define('io.ox/office/main',
         app.save = function () {
             var def = $.Deferred();
 
-            def.reject('Saving document not implemented');
+            def.reject('Saving document not implemented.');
 
             return def;
         };
