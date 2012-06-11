@@ -69,14 +69,10 @@ define('io.ox/office/main',
                 // load file
                 win.busy();
                 $.when(
+                    $.ajax({type: 'GET', url: ox.apiRoot + "/oxodocumentfilter?id=" + appOptions.id, dataType: 'json'}))
+                .done(function (data, text) {
 /*
-                    api.get(appOptions).fail(showError),
-                    $.ajax({ type: 'GET', url: api.getUrl(appOptions, 'view'), dataType: 'text' })
-*/
-                )
-                .done(function (/*data, text*/) {
-/*
- * init editor with data returned from loader
+ * init editor with data returned from document to operations filter (oxodocumentfilter)
  */
                     win.idle();
                     def.resolve();
