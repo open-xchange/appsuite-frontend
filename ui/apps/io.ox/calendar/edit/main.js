@@ -143,6 +143,8 @@ define('io.ox/calendar/edit/main',
 
             //be gently
             if (self.model.isDirty()) {
+                console.log('is dirty!!');
+                console.log(self.model);
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to lose your changes?'))

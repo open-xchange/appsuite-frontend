@@ -188,8 +188,6 @@ define('io.ox/calendar/edit/view-main',
             };
 
             Backbone.Validation.bind(this, {forceUpdate: true});
-            window.mymodel = this.model;
-
         },
         render: function () {
             var self = this;
@@ -205,7 +203,6 @@ define('io.ox/calendar/edit/view-main',
 
             // define and invoke extension points
             ext_helper.processDomFragment(self.el, 'io.ox/calendar/edit', {view: self});
-
 
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'name');
             var bindings = _.extend(defaultBindings, self.bindings);

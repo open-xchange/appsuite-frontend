@@ -89,7 +89,6 @@ define('io.ox/calendar/edit/model-appointment',
                 }
             }
 
-            // TODO: recurrence position should be handled
             o.id = self.get('id');
             o.folder = self.get('folder_id');
             o.timestamp = _.now();
@@ -147,7 +146,6 @@ define('io.ox/calendar/edit/model-appointment',
                 }
             }
 
-            // TODO: recurrence position should be handled
             o.id = self.get('id');
             o.folder = self.get('folder_id');
             o.data.folder = o.folder;
