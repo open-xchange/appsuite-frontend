@@ -105,12 +105,10 @@ define('io.ox/office/main',
                 win.busy();
                 var editor = getEditor();
                 $.when(
-                    api.get(appOptions).fail(showError)//,
-                    // $.ajax({ type: 'GET', url: api.getUrl(appOptions, 'view'), dataType: 'text' })
-                )
-                .done(function (/*data, text*/) {
+                    $.ajax({type: 'GET', url: ox.apiRoot + "/oxodocumentfilter?id=" + appOptions.id, dataType: 'json'}))
+                .done(function (data, obj) {
 /*
- * init editor with data returned from loader
+ * init editor with data returned from document to operations filter (oxodocumentfilter)
  */
                     editor.focus();
                     win.idle();
