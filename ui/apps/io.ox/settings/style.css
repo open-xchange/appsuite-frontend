@@ -56,7 +56,8 @@
 	text-align: right;
 }
 
-.settings-detail-pane  .form-horizontal .controls {
+.settings-detail-pane  .form-horizontal .controls,
+.settings-detail-pane .help-inline {
 	margin-left: 170px;
 }
 

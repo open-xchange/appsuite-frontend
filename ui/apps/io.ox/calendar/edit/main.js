@@ -40,7 +40,6 @@ define('io.ox/calendar/edit/main',
 
     EditAppointmentController.prototype = {
         launch: function () {
-            console.log('LAUNCH? ONLY!');
         },
         edit: function (data) {
             var self = this;
@@ -97,12 +96,10 @@ define('io.ox/calendar/edit/main',
         },
         onSave: function () {
             var self = this;
-            console.log('save model');
             self.win.busy();
             self.model.save()
                 .done(
                     function () {
-                        console.log('successful saved');
                         self.win.idle();
                         self.app.quit();
                     }
@@ -121,15 +118,11 @@ define('io.ox/calendar/edit/main',
                                 $('<a>').addClass('btn').text(gt('Cancel'))
                             );
                         } else if (err.error !== undefined) {
-                            console.log('failed to save');
-                            console.log(err);
                             errContainer.append(
                                 $('<a>').addClass('close').attr('data-dismiss', 'alert').attr('type', 'button').text('x'),
                                 $('<p>').text(_.formatError(err))
                             );
                         } else {
-                            console.log('failed to save');
-                            console.log(err);
                             errContainer.append(
                                 $('<a>').addClass('close').attr('data-dismiss', 'alert').attr('type', 'button').text('x'),
                                 $('<p>').text(err)
@@ -150,6 +143,8 @@ define('io.ox/calendar/edit/main',
 
             //be gently
             if (self.model.isDirty()) {
+                console.log('is dirty!!');
+                console.log(self.model);
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to lose your changes?'))

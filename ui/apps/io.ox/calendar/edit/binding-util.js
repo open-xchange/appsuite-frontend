@@ -18,15 +18,10 @@ define('io.ox/calendar/edit/binding-util',
     var BinderUtils = {
         convertDate: function (direction, value, attribute, model) {
             if (direction === 'ModelToView') {
-                console.log('ModelToView');
-                console.log(model);
-                console.log(value);
                 if (!value) {
-                    console.log('no value');
                     return null;
                 }
                 if (!_.isNumber(value)) {
-                    console.log('no number');
                     return value; //do nothing
                 }
                 var formated = new dateAPI.Local(parseInt(value, 10)).format(dateAPI.locale.date);
@@ -36,7 +31,6 @@ define('io.ox/calendar/edit/binding-util',
                 var parsedDate = dateAPI.Local.parse(value, dateAPI.locale.date);
 
                 if (_.isNull(parsedDate)) {
-                    console.log('unparseable date');
                     return value;
                 }
 
@@ -57,8 +51,6 @@ define('io.ox/calendar/edit/binding-util',
                 if (!value) {
                     return null;
                 }
-                console.log('show time:');
-                console.log(value);
                 return new dateAPI.Local(parseInt(value, 10)).format(dateAPI.locale.time);
             } else {
                 var mydate = new dateAPI.Local(parseInt(model.get(attribute), 10));
@@ -66,7 +58,6 @@ define('io.ox/calendar/edit/binding-util',
 
 
                 if (_.isNull(parsedDate)) {
-                    console.log('unparseable time');
                     return mydate.getTime();
                 }
 
@@ -83,13 +74,9 @@ define('io.ox/calendar/edit/binding-util',
             }
         },
         numToString: function (direction, value, attribute, model) {
-            console.log('numToString');
-            console.log(value + '(' + (typeof value) + ')');
             if (direction === 'ModelToView') {
-                console.log('modeltoview?');
                 return value + '';
             } else {
-                console.log('HERE');
                 return parseInt(value, 10);
             }
         }

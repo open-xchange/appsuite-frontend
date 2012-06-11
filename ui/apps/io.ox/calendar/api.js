@@ -179,8 +179,6 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
             })
             .pipe(function (obj) {
                 var getObj = {};
-                console.log('created');
-                console.log(obj);
                 if (!_.isUndefined(obj.conflicts)) {
                     console.log('got conflicts');
                     console.log(obj.conflicts);
@@ -196,12 +194,6 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 all_cache = {};
                 return api.get(getObj)
                         .pipe(function (data) {
-
-                            console.log('loaded');
-                            console.log(data);
-                            console.log('cache resetted');
-                            window.tapi = api;
-
                             api.trigger('refresh.all');
                             api.trigger('created', {
                                 id: o.id,
@@ -227,10 +219,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
             })
             .done(function (resp) {
                 all_cache = {};
-                get_cache = {};
-                console.log('cache resetted');
                 api.trigger('refresh.all');
-                api.trigger('refresh.list');
             })
             .fail(function (err) {
                 console.log('error on creating appointment');

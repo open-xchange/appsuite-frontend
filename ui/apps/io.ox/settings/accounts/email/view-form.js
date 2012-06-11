@@ -13,160 +13,40 @@
 
 define('io.ox/settings/accounts/email/view-form',
     ['io.ox/core/tk/view',
-     'io.ox/core/tk/model'
-
-    ], function (View) {
+     'text!io.ox/settings/accounts/email/account_detail.html'
+    ], function (View, tmpl) {
 
     'use strict';
 
+    var AccountDetailView = Backbone.View.extend({
+        tagName: "div",
+        _modelBinder: undefined,
+        initialize: function (options) {
+            // create template
+            this.template = doT.template(tmpl);
+            this._modelBinder = new Backbone.ModelBinder();
 
-    var AccountDetailView = View.extend({
-        draw: function () {
-            var mynode = $('<div>');
+            Backbone.Validation.bind(this, {selector: 'data-property'});
+        },
+        render: function () {
+            var self = this;
+            window.account = self.model;
 
-            mynode.addClass('settings-detail-pane')
-            .append(
-                $('<div>').addClass('clear-title').text(' ')
-                  .append(this.createSectionDelimiter())
-            )
-            .append(
-                    this.createSectionTitle({text: 'Account Settings'}),
-                    this.createSectionHorizontalWrapper().append(
-                        this.createControlGroup().append(
-                            this.createControlGroupLabel({text: 'Account Name:', 'for': 'auto'}),
-                            this.createControlsWrapper().append(
-                                this.createTextField({id: 'last', property: 'name'})
-                            )
+            self.$el.empty().append(self.template({}));
+            var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
+            self._modelBinder.bind(self.model, self.el, defaultBindings);
 
-                        ),
-                        this.createControlGroup().append(
-                            this.createControlGroupLabel({text: 'E-Mail Address:', 'for': 'auto'}),
-                            this.createControlsWrapper().append(
-                                this.createTextField({id: 'last', property: 'primary_address'})
-                            )
-                        ),
-                        this.createControlGroup().append(
-                                this.createControlsWrapper().append(
-                                    this.createCheckbox({property: 'unified_inbox_enabled', label: 'Use Unified Mail for this account'})
-                                )
-                            ),
-                        this.createSectionDelimiter()
-                    )
-            )
-            .append(
-                this.createSectionTitle({text: 'Server Settings'}),
-                this.createSectionHorizontalWrapper().append(
-                    this.createControlGroup().append(
-                        this.createControlGroupLabel({text: 'Server Type:', 'for': 'auto'}),
-                        this.createControlsWrapper().append(
-                            this.createSelectbox({property: 'mail_protocol', items: {'imap': 'imap', 'pop3': 'pop3'}})
-                        )
-                    ),
-                    this.createControlGroup().append(
-                        this.createControlGroupLabel(),
-                        this.createControlsWrapper().append(
-                            this.createCheckbox({ property: 'mail_secure', label: 'Use SSL connection'})
-                        )
-                    ),
-                    this.createControlGroup().append(
-                        this.createControlGroupLabel({text: 'Server Name:', 'for': 'auto'}),
-                        this.createControlsWrapper().append(
-                            this.createTextField({property: 'mail_server', id: 'last'})
-                        )
-                    ),
-                    this.createControlGroup().append(
-                        this.createControlGroupLabel({text: 'Server Port:', 'for': 'auto'}),
-                        this.createControlsWrapper().append(
-                            this.createTextField({property: 'mail_port', id: 'last'})
-                        )
-                    ),
-                    this.createControlGroup().append(
-                        this.createControlGroupLabel({text: 'Login', 'for': 'auto'}),
-                        this.createControlsWrapper().append(
-                            this.createTextField({property: 'login', id: 'last'})
-                        )
-                    ),
-                    this.createControlGroup().append(
-                        this.createControlGroupLabel({text: 'Password', 'for': 'auto'}),
-                        this.createControlsWrapper().append(
-                            this.createPasswordField({property: 'password', id: 'last'})
-                        )
-                    ),
-                    this.createControlGroup().append(
-                        this.createControlGroupLabel({text: 'Pop3 refresh rate:', 'for': 'auto'}),
-                        this.createControlsWrapper().append(
-                            this.createSelectbox({property: 'pop3_refresh_rate', items: {'3': '3', '5': '5', '10': '10', '15': '15', '30': '30', '60': '60', '360': '360'}})
-                        )
-                    ),
-                    this.createControlGroup().append(
-                        this.createControlGroupLabel(),
-                        this.createControlsWrapper().append(
-                            this.createCheckbox({ property: 'pop3_expunge_on_quit', label: 'Leave messages on server'})
-                        )
-                    ),
-                    this.createControlGroup().append(
-                        this.createControlGroupLabel(),
-                        this.createControlsWrapper().append(
-                            this.createCheckbox({ property: 'pop3_delete_write_through', label: 'Deleting messages on local storage also deletes them on server'})
-                        )
-                    )
-                )
-            )
-            .append(
-                this.createSectionTitle({text: 'Outgoing Server Settings (SMTP)'}),
-                this.createSectionHorizontalWrapper().append(
-                    this.createControlGroup().append(
-                            this.createControlGroupLabel(),
-                            this.createControlsWrapper().append(
-                                this.createCheckbox({ property: 'transport_secure', label: 'Use SSL connection'})
-                            )
-                        ),
-                    this.createControlGroup().append(
-                        this.createControlGroupLabel({text: 'Server Name:', 'for': 'auto'}),
-                        this.createControlsWrapper().append(
-                            this.createTextField({property: 'transport_server', id: 'last'})
-                        )
-                    ),
-                    this.createControlGroup().append(
-                        this.createControlGroupLabel({text: 'Server Port:', 'for': 'auto'}),
-                        this.createControlsWrapper().append(
-                            this.createTextField({property: 'transport_port', id: 'last'})
-                        )
-                    ),
-                    this.createControlGroup().append(
-                        this.createControlGroupLabel(),
-                        this.createControlsWrapper().append(
-                            this.createCheckbox({property: 'mail-common-selectfirst', label: 'Use Login and Password'})
-                        )
-                    ),
-                    this.createControlGroup().append(
-                            this.createControlGroupLabel({text: 'Login', 'for': 'auto'}),
-                            this.createControlsWrapper().append(
-                                this.createTextField({property: 'transport_login', id: 'last'})
-                            )
-                        ),
-                    this.createControlGroup().append(
-                        this.createControlGroupLabel({text: 'Password', 'for': 'auto'}),
-                        this.createControlsWrapper().append(
-                            this.createPasswordField({property: 'transport_password', id: 'last'})
-                        )
-                    ),
-                    // just to have a save option for now
-                    $('<button>').attr('data-action', 'save').text('save').on('click', { model: this.getModel() }, function (e) {
-                        console.log(e.data.model);
-                        e.data.model.save();
-                    })
-
-
-
-
-
-
-                )
-            );
-            return mynode;
+            return self;
+        },
+        events: {
+            'click .save': 'onSave'
+        },
+        onSave: function () {
+            this.model.save();
+            this.dialog.close();
         }
     });
+
 
     return AccountDetailView;
 });

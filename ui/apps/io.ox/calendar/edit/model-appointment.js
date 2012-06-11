@@ -89,22 +89,17 @@ define('io.ox/calendar/edit/model-appointment',
                 }
             }
 
-            // TODO: recurrence position should be handled
             o.id = self.get('id');
             o.folder = self.get('folder_id');
             o.timestamp = _.now();
 
             CalendarAPI.update(o)
                 .done(function () {
-                    console.log('ok');
-                    console.log(arguments);
                     self._resetDirty();
                     df.resolve(true);
 
                 })
                 .fail(function () {
-                    console.log('not ok');
-                    console.log(arguments);
                     df.reject('error on update model on server');
                 });
 
@@ -125,12 +120,9 @@ define('io.ox/calendar/edit/model-appointment',
             CalendarAPI.create(o)
                 .done(function () {
                     self._resetDirty();
-                    console.log('ok');
                     df.resolve(true);
                 })
                 .fail(function (err) {
-                    console.log('not ok');
-                    console.log(err);
                     df.reject(err);
                 });
 
@@ -138,7 +130,6 @@ define('io.ox/calendar/edit/model-appointment',
         },
         // Backbone API for deleting objects on server
         destroy: function () {
-            console.log('now destroy it on server?');
             var self = this,
                 o = {},
                 df = new $.Deferred();
@@ -155,7 +146,6 @@ define('io.ox/calendar/edit/model-appointment',
                 }
             }
 
-            // TODO: recurrence position should be handled
             o.id = self.get('id');
             o.folder = self.get('folder_id');
             o.data.folder = o.folder;
@@ -164,12 +154,9 @@ define('io.ox/calendar/edit/model-appointment',
             CalendarAPI.remove(o)
                 .done(function () {
                     self._resetDirty();
-                    console.log('ok');
                     df.resolve(true);
                 })
                 .fail(function (err) {
-                    console.log('not ok');
-                    console.log(err);
                     df.reject('error on creating model');
                 });
 
@@ -177,8 +164,6 @@ define('io.ox/calendar/edit/model-appointment',
         },
         onChange: function (model, source) {
             var self = this;
-            console.log('model changed');
-            console.log(source.changes);
 
             // silent business logic, modifing attributes and source
             // especially for recurrency
@@ -197,7 +182,6 @@ define('io.ox/calendar/edit/model-appointment',
             _.each(source.changes, function (change, key) {
                 self.toSync[key] = self.get(key);
             });
-            console.log(arguments);
         },
         isDirty: function () {
             return _(this.toSync).size() > 0;

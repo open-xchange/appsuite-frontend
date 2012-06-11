@@ -103,22 +103,15 @@ define('io.ox/calendar/edit/view-main',
         "months": dateAPI.locale.months,
         "monthsShort": dateAPI.locale.monthsShort
     };
-    console.log(dateAPI.locale);
     var dates = $.fn.datepicker.dates;
     $.fn.datepicker.DPGlobal.formatDate = function (date, format, language) {
         if (!date) {
-            console.log('no date');
-            console.log(this);
             return null;
         }
         if (date.constructor.toString().indexOf('Date') === -1) {
-            console.log('no dateclass');
             return date;
         }
         var d = new dateAPI.Local(date.getTime());
-        console.log('formating date:');
-        console.log(d);
-        console.log(format);
         return d.format(format);
     };
 
@@ -195,8 +188,6 @@ define('io.ox/calendar/edit/view-main',
             };
 
             Backbone.Validation.bind(this, {forceUpdate: true});
-            window.mymodel = this.model;
-
         },
         render: function () {
             var self = this;
@@ -212,7 +203,6 @@ define('io.ox/calendar/edit/view-main',
 
             // define and invoke extension points
             ext_helper.processDomFragment(self.el, 'io.ox/calendar/edit', {view: self});
-
 
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'name');
             var bindings = _.extend(defaultBindings, self.bindings);
