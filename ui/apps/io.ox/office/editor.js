@@ -133,6 +133,21 @@ define('io.ox/office/editor', function () {
             else if (operation.name === "deleteText") {
                 // TODO
             }
+            else if (operation.name === "insertParagraph") {
+                // TODO
+            }
+            else if (operation.name === "deleteParagraph") {
+                // TODO
+            }
+            else if (operation.name === "splitParagraph") {
+                // TODO
+            }
+            else if (operation.name === "mergeParagraph") {
+                // TODO
+            }
+            else if (operation.name === "xxxxxxxxxxxxxx") {
+                // TODO
+            }
         };
 
         this.applyOperations = function (theOperations, bRecord) {
@@ -360,7 +375,6 @@ define('io.ox/office/editor', function () {
         this.processKeyPressed = function (event) {
 
             var c, selection;
-            var bBlock = false;
 
             var domSelection = this.getCurrentDOMSelection();
             var selection = this.getOXOSelection(domSelection);
@@ -411,15 +425,24 @@ define('io.ox/office/editor', function () {
                 selection.endPaM = selection.startPaM;
                 event.preventDefault();
                 this.setSelection(selection);
-                bBlock = true;
             }
-            if (c.length > 1) {
-                // TODO
-                bBlock = true;
-            }
-
-            if (bBlock) {
+            else if (c.length > 1) {
+                // TODO?
                 event.preventDefault();
+            }
+            else {
+                
+                if (event.keyCode === 13) { // RETURN
+                    this.deleteSelected();
+                    this.splitParagraph(selection.startPaM.para, selection.startPaM.pos);
+                    // TODO / TBD: Should all API / Operation calls return the new position?!
+                    selection.startPaM.para++;
+                    selection.startPaM.pos = 0;
+                    selection.endPaM = selection.startPaM;
+                    event.preventDefault();
+                    this.setSelection(selection);
+                }
+                
             }
         };
 
@@ -464,6 +487,16 @@ define('io.ox/office/editor', function () {
 
         this.insertParagraph = function (para) {
             var newOperation = { name: 'insertParagraph', para: para };
+            this.applyOperation(newOperation, true);
+        };
+
+        this.splitParagraph = function (para, pos) {
+            var newOperation = { name: 'splitParagraph', para: para, pos: pos };
+            this.applyOperation(newOperation, true);
+        };
+
+        this.mergeParagraph = function (para) {
+            var newOperation = { name: 'mergeParagraph', para: para };
             this.applyOperation(newOperation, true);
         };
 
