@@ -23,12 +23,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
         showWindow: function (win, grid) {
             return function () {
                 var def = $.Deferred();
-                win.show(function () {
-                    if (grid) {
-                        grid.paint();
-                    }
-                    def.resolve();
-                });
+                win.show(def.resolve);
                 return def;
             };
         },
@@ -158,7 +153,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                     });
                 };
             win.on('show', function () {
-                    api.on('refresh.all', refreshAll).on('refresh.list', refreshList);
+                    api.on('refresh.all', refreshAll).on('refresh.list', refreshList).trigger('refresh.all');
                 })
                 .on('hide', function () {
                     api.off('refresh.all', refreshAll).off('refresh.list', refreshList);

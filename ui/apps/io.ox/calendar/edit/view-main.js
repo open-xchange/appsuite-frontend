@@ -106,6 +106,15 @@ define('io.ox/calendar/edit/view-main',
     console.log(dateAPI.locale);
     var dates = $.fn.datepicker.dates;
     $.fn.datepicker.DPGlobal.formatDate = function (date, format, language) {
+        if (!date) {
+            console.log('no date');
+            console.log(this);
+            return null;
+        }
+        if (date.constructor.toString().indexOf('Date') === -1) {
+            console.log('no dateclass');
+            return date;
+        }
         var d = new dateAPI.Local(date.getTime());
         console.log('formating date:');
         console.log(d);
@@ -115,10 +124,13 @@ define('io.ox/calendar/edit/view-main',
 
     $.fn.datepicker.DPGlobal.parseDate = function (date, format, language) {
         // return a non-wrapped date-object
-        var p =  new Date(dateAPI.Local.parse(date, format).local);
-        console.log('parsed date');
-        console.log(p);
-        return p;
+        var parsed = dateAPI.Local.parse(date, format);
+        if (parsed !== null) {
+            var p =  new Date(parsed.local);
+            return p;
+        } else {
+            return date;
+        }
     };
 
     $.fn.datepicker.DPGlobal.parseFormat = function (format) {
@@ -182,12 +194,12 @@ define('io.ox/calendar/edit/view-main',
                 ]
             };
 
-            Backbone.Validation.bind(this);
+            Backbone.Validation.bind(this, {forceUpdate: true});
+            window.mymodel = this.model;
 
         },
         render: function () {
             var self = this;
-
 
             // pre render it
             staticStrings.SAVE_BUTTON_LABEL = (self.model.has('id') ? gt('Save') : gt('Create'));

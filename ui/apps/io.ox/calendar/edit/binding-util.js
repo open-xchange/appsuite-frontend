@@ -18,14 +18,27 @@ define('io.ox/calendar/edit/binding-util',
     var BinderUtils = {
         convertDate: function (direction, value, attribute, model) {
             if (direction === 'ModelToView') {
+                console.log('ModelToView');
+                console.log(model);
+                console.log(value);
                 if (!value) {
+                    console.log('no value');
                     return null;
+                }
+                if (!_.isNumber(value)) {
+                    console.log('no number');
+                    return value; //do nothing
                 }
                 var formated = new dateAPI.Local(parseInt(value, 10)).format(dateAPI.locale.date);
                 return formated;
             } else {
                 var mydate = new dateAPI.Local(parseInt(model.get(attribute), 10));
                 var parsedDate = dateAPI.Local.parse(value, dateAPI.locale.date);
+
+                if (_.isNull(parsedDate)) {
+                    console.log('unparseable date');
+                    return value;
+                }
 
                 // just reject the change, if it's not parsable
                 if (parsedDate.getTime() === 0) {
@@ -44,10 +57,19 @@ define('io.ox/calendar/edit/binding-util',
                 if (!value) {
                     return null;
                 }
+                console.log('show time:');
+                console.log(value);
                 return new dateAPI.Local(parseInt(value, 10)).format(dateAPI.locale.time);
             } else {
                 var mydate = new dateAPI.Local(parseInt(model.get(attribute), 10));
                 var parsedDate = dateAPI.Local.parse(value, dateAPI.locale.time);
+
+
+                if (_.isNull(parsedDate)) {
+                    console.log('unparseable time');
+                    return mydate.getTime();
+                }
+
 
                 if (parsedDate.getTime() === 0) {
                     return model.get(attribute);

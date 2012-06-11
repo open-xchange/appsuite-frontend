@@ -23,7 +23,23 @@ define('io.ox/calendar/edit/model-appointment',
             title: {
                 required: true,
                 msg: gt('You must specify a title')
-            }
+            },
+            start_date: [{
+                required: true,
+                pattern: 'number',
+                msg: gt('You must enter a valid date/time.')
+            }, {
+                smallerThan: 'end_date',
+                msg: gt('Startdate must be smaller than end-date.')
+            }],
+            end_date: [{
+                required: true,
+                pattern: 'number',
+                msg: gt('You must enter a valid date/time.')
+            }, {
+                greaterThan: 'start_date',
+                msg: gt('End-date must be greater than start-date')
+            }]
         },
         toSync: {},
         defaults: {
@@ -36,10 +52,20 @@ define('io.ox/calendar/edit/model-appointment',
         },
         save: function () {
             var self = this;
-            if (self.isDirty() && !self.isNew()) {
+            self.validate();
+
+            if (self.isDirty() && !self.isNew() && self.isValid()) {
                 return self._update();
-            } else if (self.isDirty() && self.isNew()) {
+            } else if (self.isDirty() && self.isNew() && self.isValid()) {
                 return self._create();
+            } else if (!self.isValid()) {
+                var df = new $.Deferred();
+                df.reject('Please correct your inputs');
+                return df;
+            } else {
+                var df = new $.Deferred();
+                df.reject('Nothing to save');
+                return df;
             }
         },
         _update: function () {
@@ -50,7 +76,7 @@ define('io.ox/calendar/edit/model-appointment',
             o.data = self.toSync;
             o.data = self.attributes; //TODO: just everything over the air
 
-            o.data.ignore_conflicts = true; //just for debug
+            //o.data.ignore_conflicts = true; //just for debug
 
             // set recurrence_type if it was set
             if (self.get('recurrence_type')) {
@@ -91,7 +117,7 @@ define('io.ox/calendar/edit/model-appointment',
                 df = new $.Deferred();
 
             o.data = self.attributes;
-            o.data.ignore_conflicts = true; //just for debug
+            //o.data.ignore_conflicts = true; //just for debug
 
             o.folder = self.get('folder_id');
             o.timestamp = _.now();
@@ -105,7 +131,7 @@ define('io.ox/calendar/edit/model-appointment',
                 .fail(function (err) {
                     console.log('not ok');
                     console.log(err);
-                    df.reject('error on creating model');
+                    df.reject(err);
                 });
 
             return df;
