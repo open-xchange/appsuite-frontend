@@ -165,16 +165,21 @@ define("io.ox/settings/accounts/email/test",
             j.describe("Creates a new Emailaccount via ui", function () {
 
                 var app = null, accountPane, buttonAdd, buttonAddAutoconf, buttonAddPassword, dialogAutoconf, dialogPassword,
-                    buttonSave, detailPane, dataId, identifier;
+                    buttonSave, detailPane, dataId, identifier, dialogSuccess, buttonClose;
 
                 j.it('opens settings app ', function () {
 
                     var loaded = new Done();
 
+                    api.on('account_created', function (e, data) {
+                        if (data) {
+                            dataId = data.id;
+                        }
+                    });
+
                     j.waitsFor(loaded, 'Could not load app', TIMEOUT);
 
                     settings.getApp().launch().done(function () {
-                        console.log('is geladen');
                         app = this;
                         loaded.yep();
 
@@ -230,7 +235,6 @@ define("io.ox/settings/accounts/email/test",
 
                 });
 
-
                 j.it('looks for the password form and the add button', function () {
 
                     j.waitsFor(function () {
@@ -252,6 +256,26 @@ define("io.ox/settings/accounts/email/test",
 
                     j.runs(function () {
                         buttonAddPassword.trigger('click');
+                    });
+
+                });
+
+                j.it('looks for the success message and the close button', function () {
+
+                    j.waitsFor(function () {
+                        dialogSuccess = $('.io-ox-dialog-popup');
+                        buttonClose = $(dialogSuccess).find('button.btn.closebutton');
+                        if (buttonClose[0]) {
+                            return true;
+                        }
+                    }, 'looks for dialog', 10000);
+
+                });
+
+                j.it('hits the close button', function () {
+
+                    j.runs(function () {
+                        buttonClose.trigger('click');
                     });
 
                 });
@@ -290,28 +314,13 @@ define("io.ox/settings/accounts/email/test",
                 j.it('gets the id of the created account and deletes', function () {
 
                     j.runs(function () {
-                        var me = this;
-                        me.ready = false;
-                        api.on('account_created', function (e, data) {
-                            if (data) {
-                                dataId = data.id;
-                                api.remove([dataId]);
-                                me.ready = true;
-                            }
-                        });
-
-                        j.waitsFor(function () {
-                            return this.ready;
-                        }, 'catches the id', 15000);
-
+                        api.remove([dataId]);
                     });
+
                 });
-
             });
-
         }
     });
-
 
     ext.point('test/suite').extend({
         id: 'email-autoconfig',
@@ -381,6 +390,8 @@ define("io.ox/settings/accounts/email/test",
             });
         }
     });
+
+
 
 
 

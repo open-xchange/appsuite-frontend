@@ -1,0 +1,166 @@
+<div class="settings-detail-pane">
+	<legend class="sectiontitle">Account Settings</legend>
+	<div class="form-horizontal">
+		<div class="control-group">
+			<label for="label_14" class="control-label">Account Name:</label>
+			<div class="controls">
+				<label class="text">
+					<input type="text" data-property="name" id="label_14" />
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label for="label_15" class="control-label">E-Mail Address:</label>
+			<div class="controls">
+				<label class="text">
+				<input type="text" data-property="primary_address" id="label_15" />
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<label class="checkbox">Use Unified Mail for this account
+					<input type="checkbox" data-property="unified_inbox_enabled" />
+				</label>
+			</div>
+		</div>
+	</div>
+	<legend class="sectiontitle">Server Settings</legend>
+	<div class="form-horizontal">
+		<div class="control-group">
+			<label for="label_16" class="control-label">Server Type:</label>
+			<div class="controls">
+				<label class="select"> 
+					<select data-property="mail_protocol">
+							<option value="imap">imap</option>
+							<option value="pop3">pop3</option>
+					</select>
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label"></label>
+			<div class="controls">
+				<label class="checkbox">Use SSL connection
+					<input type="checkbox" data-property="mail_secure" />
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label for="label_17" class="control-label">Server Name:</label>
+			<div class="controls">
+				<label class="text">
+					<input type="text" data-property="mail_server" id="label_17" />
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label for="label_18" class="control-label">Server Port:</label>
+			<div class="controls">
+				<label class="text">
+					<input type="text" data-property="mail_port" id="label_18" />
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label for="label_19" class="control-label">Login</label>
+			<div class="controls">
+				<label class="text">
+					<input type="text" data-property="login" id="label_19" />
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label for="label_20" class="control-label">Password</label>
+			<div class="controls">
+				<label class="text">
+					<input type="password" data-property="password" id="label_20" />
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label for="label_21" class="control-label">Pop3 refresh rate:</label>
+			<div class="controls">
+				<label class="select">
+					<select data-property="pop3_refresh_rate">
+						<option value="3">3</option>
+						<option value="5">5</option>
+						<option value="10">10</option>
+						<option value="15">15</option>
+						<option value="30">30</option>
+						<option value="60">60</option>
+						<option value="360">360</option>
+					</select>
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label"></label>
+			<div class="controls">
+				<label class="checkbox">Leave messages on server
+					<input type="checkbox" data-property="pop3_expunge_on_quit" />
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label"></label>
+			<div class="controls">
+				<label class="checkbox">Deleting messages on local storage
+					also deletes them on server<input type="checkbox"
+					data-property="pop3_delete_write_through">
+				</label>
+			</div>
+		</div>
+	</div>
+	<legend class="sectiontitle">Outgoing Server Settings (SMTP)</legend>
+	<div class="form-horizontal">
+		<div class="control-group">
+			<label class="control-label"></label>
+			<div class="controls">
+				<label class="checkbox">Use SSL connection
+					<input type="checkbox" data-property="transport_secure" />
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label for="label_22" class="control-label">Server Name:</label>
+			<div class="controls">
+				<label class="text">
+					<input type="text" data-property="transport_server" id="label_22" />
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label for="label_23" class="control-label">Server Port:</label>
+			<div class="controls">
+				<label class="text">
+					<input type="text" data-property="transport_port" id="label_23" /> 
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label"></label>
+			<div class="controls">
+				<label class="checkbox">Use Login and Password
+					<input type="checkbox" data-property="mail-common-selectfirst" />
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label for="label_24" class="control-label">Login</label>
+			<div class="controls">
+				<label class="text">
+					<input type="text" data-property="transport_login" id="label_24" />
+				</label>
+			</div>
+		</div>
+		<div class="control-group">
+			<label for="label_25" class="control-label">Password</label>
+			<div class="controls">
+				<label class="text">
+					<input type="password" data-property="transport_password" id="label_25"></label>
+			</div>
+		</div>
+		<button class="save" data-action="save">save</button>
+	</div>
+</div>
