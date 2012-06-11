@@ -48,12 +48,24 @@ define('io.ox/office/main',
 
             view = new View({ model: model, node: container });
 
+        /*
+         * On first call, creates and returns new instance of the Editor class.
+         * On subsequent calls, returns the cached editor instance created
+         * before. The editor expects a reference to the text area DOM element
+         * which is contained in the iframe element. This DOM element will be
+         * created by the browser AFTER the application window is made visible
+         * (i.e. inserted into the DOM). Therefore, this function MUST NOT be
+         * called before the application window is visible.
+         */
         var getEditor = function () {
             var body = $('body', iframe.contents())
-                .attr('contenteditable', true)
-                .css('border', 'thin blue solid')
-                .append('<p>normal1 <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
-            var editor = new Editor(body);
+                    .attr('contenteditable', true)
+                    .css('border', 'thin blue solid')
+                    .append('<p>normal1 <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>'),
+                window = iframe.get(0).contentWindow,
+                editor = new Editor(body, window);
+
+            // on subsequent calls, return the created editor instance
             getEditor = function () { return editor; };
             return editor;
         };
@@ -63,9 +75,11 @@ define('io.ox/office/main',
             $.alert(gt('Error'), data.error).prepend(container);
         };
 
-        // launcher
+        /*
+         * The handler function that will be called while launching the
+         * application. Creates and initializes a new application window.
+         */
         app.setLauncher(function () {
-
             // create the application window
             win = ox.ui.createWindow({
                 name: 'io.ox/office',
@@ -82,14 +96,43 @@ define('io.ox/office/main',
             win.nodes.main.addClass('io-ox-office-main').append(container.append(iframe));
         });
 
-        app.create = function (options) {
-            appOptions = options || {};
-            win.show(function () {
-                getEditor().focus();
-            });
-        };
+        /*
+         * The handler function that will be called when the application shuts
+         * down. If the edited document has unsaved changes, a dialog will be
+         * shown asking whether to save or drop the changes.
+         */
+        app.setQuit(function () {
+            var def = $.Deferred();
+            if (getEditor().isModified()) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog({ easyOut: true })
+                    .text(gt('The document has been modified. Do you want to save your changes?'))
+                    .addPrimaryButton('discard', gt('Discard'))
+                    .addAlternativeButton('save', gt('Save'))
+                    .addButton('cancel', gt('Cancel'))
+                    .on('save', function () {
+                        alert('Saving...');
+                        app.destroy();
+                        def.resolve();
+                    })
+                    .on('discard', function () {
+                        app.destroy();
+                        def.resolve();
+                    })
+                    .on('cancel', def.reject)
+                    .show();
+                });
+            } else {
+                app.destroy();
+                def.resolve();
+            }
+            return def;
+        });
 
-        // load document into editor
+        /*
+         * Loads the document described in the passed options map into the
+         * editor, and shows the application window.
+         */
         app.load = function (options) {
             appOptions = options || {};
 
@@ -127,36 +170,6 @@ define('io.ox/office/main',
         app.destroy = function () {
             app = win = container = iframe = null;
         };
-
-        // the function passed to setQuit will be called when the application
-        // is about to be closed
-        app.setQuit(function () {
-            var def = $.Deferred();
-            if (getEditor().isModified()) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({ easyOut: true })
-                    .text(gt('The document has been modified. Do you want to save your changes?'))
-                    .addPrimaryButton('discard', gt('Discard'))
-                    .addAlternativeButton('save', gt('Save'))
-                    .addButton('cancel', gt('Cancel'))
-                    .on('save', function () {
-                        alert('Saving...');
-                        app.destroy();
-                        def.resolve();
-                    })
-                    .on('discard', function () {
-                        app.destroy();
-                        def.resolve();
-                    })
-                    .on('cancel', def.reject)
-                    .show();
-                });
-            } else {
-                app.destroy();
-                def.resolve();
-            }
-            return def;
-        });
 
         return app;
     }

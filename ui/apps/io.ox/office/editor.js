@@ -66,7 +66,7 @@ define('io.ox/office/editor', function () {
         this.endPaM = end;
     }
 
-    function OXOEditor(editdiv) {
+    function OXOEditor(editdiv, editWindow) {
 
         // key codes of navigation keys that will be passed directly to the browser
         var NAVIGATION_KEYS = _([
