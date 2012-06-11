@@ -10,7 +10,18 @@
  *
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
+.io-ox-office-main {
+	overflow-x: auto;
+	overflow-y: auto;
 
-.io-ox-office-editor {
-    overflow-y: auto;
+	.container {
+    	width: 900px;
+		margin: 30px auto;
+	}
+}
+
+.io-ox-office-iframe {
+	width: 100%;
+	height: 10cm;
+	border: thin red solid;
 }
