@@ -85,19 +85,19 @@ define('io.ox/office/editor', function () {
 
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
-        
-        // hybrid edit mode
-        $(editdiv).bind('keydown', $.proxy(this, 'processKeyDown'));
-        $(editdiv).bind('keypress', $.proxy(this, 'processKeyPressed'));
-        // TODO
-        $(editdiv).bind('dragover drop', $.proxy(this, 'xxx'));
-        $(editdiv).bind('contextmenu', $.proxy(this, 'xxx'));
 
         /**
          * Returns whether the editor contains unsaved changes.
          */
         this.isModified = function () {
             return bModified;
+        };
+
+        /**
+         * Sets the browser focus into the edit text area.
+         */
+        this.focus = function () {
+            editdiv.focus();
         };
 
         this.initDocument = function () {
@@ -211,7 +211,7 @@ define('io.ox/office/editor', function () {
 
             return aOXOSelection;
         };
-        
+
         this.getDOMSelection = function (oxoSelection) {
 
             function getDOMPositionFromOXOPosition(para, pos) {
@@ -289,8 +289,8 @@ define('io.ox/office/editor', function () {
 
             return domSelection;
         };
-        
-        
+
+
         this.getCurrentDOMSelection = function () {
             // DOMSelection consists of Node and Offset for startpoint and for endpoint
             var windowSel = window.getSelection();
@@ -300,7 +300,7 @@ define('io.ox/office/editor', function () {
 
             return domSelection;
         };
-        
+
         // The current OXOSelection can be read from operations.
         // This is a test function, that delivers an OXOSelection
         // object with arbitrary values. Needs to be changed in
@@ -315,7 +315,7 @@ define('io.ox/office/editor', function () {
             var aOXOSelection = new OXOSelection(startPaM, endPaM);
             return aOXOSelection;
         };
-          
+
         this.processKeyDown = function (event) {
 
             // TODO: How to strip away debug code?
@@ -338,23 +338,22 @@ define('io.ox/office/editor', function () {
         };
 
         this.processKeyPressed = function (event) {
-            var aOXOSelection, aDOMSelection, c, selection;
             var bBlock = true;
 
             if (!this.isNavigationKeyEvent(event)) {
 
-                c = this.getPrintableChar(event);
+                var c = this.getPrintableChar(event);
 
                 // TODO
                 // For now (the prototype), only accept single chars, but let the browser process, so we don't need to care about DOM stuff
                 // TODO: But we at least need to check if there is a selection!!!
 
                 if (c.length === 1) {
-                
+
                     // Demo code for calculating DOMSelection from OXOSelection
                     if (0) {
-                        aOXOSelection = this.getCurrentOXOSelection();
-                        aDOMSelection = this.getDOMSelection(aOXOSelection);
+                        var aOXOSelection = this.getCurrentOXOSelection();
+                        var aDOMSelection = this.getDOMSelection(aOXOSelection);
 
                         if (aDOMSelection) {
                             window.console.log('processKeyPressed', 'StartPaM: ' + aDOMSelection.aStartPaM.aNode + ' : ' + aDOMSelection.aStartPaM.aOffset);
@@ -413,6 +412,14 @@ define('io.ox/office/editor', function () {
         this.setAttributes = function (para, pos) {
             // TODO
         };
+
+        // hybrid edit mode
+        editdiv
+            .on('keydown', $.proxy(this, 'processKeyDown'))
+            .on('keypress', $.proxy(this, 'processKeyPressed'))
+            // TODO
+            .on('dragover drop', $.proxy(this, 'xxx'))
+            .on('contextmenu', $.proxy(this, 'xxx'));
 
     } // end of OXOEditor()
 
