@@ -77,13 +77,6 @@ define('io.ox/office/editor', function () {
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
 
-        // hybrid edit mode
-        $(editdiv).bind('keydown', $.proxy(this, 'processKeyDown'));
-        $(editdiv).bind('keypress', $.proxy(this, 'processKeyPressed'));
-        // TODO
-        $(editdiv).bind('dragover drop', $.proxy(this, 'xxx'));
-        $(editdiv).bind('contextmenu', $.proxy(this, 'xxx'));
-
         /**
          * Returns whether the editor contains unsaved changes.
          */
@@ -407,6 +400,14 @@ define('io.ox/office/editor', function () {
         this.setAttributes = function (para, pos) {
             // TODO
         };
+
+        // hybrid edit mode
+        editdiv
+            .on('keydown', $.proxy(this, 'processKeyDown'))
+            .on('keypress', $.proxy(this, 'processKeyPressed'))
+            // TODO
+            .on('dragover drop', $.proxy(this, 'xxx'))
+            .on('contextmenu', $.proxy(this, 'xxx'));
 
     } // end of OXOEditor()
 
