@@ -17,7 +17,8 @@ define('io.ox/office/main',
      "io.ox/core/tk/view",
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
-     'less!io.ox/office/style.css'
+     'less!io.ox/office/style.css',
+     'io.ox/office/actions'
     ], function (api, Model, View, Editor, gt) {
 
     'use strict';
@@ -48,6 +49,23 @@ define('io.ox/office/main',
 
             view = new View({ model: model, node: container });
 
+        var showError = function (message, title) {
+            container.find('.alert').remove();
+            container.prepend($.alert(title || gt('Error'), message));
+        };
+
+        var showInternalError = function (message) {
+            showError(message, gt("Internal Error"));
+        };
+
+        var showFileApiError = function (data) {
+            showError(data.error);
+        };
+
+        var showAjaxError = function (data) {
+            showError(data.responseText);
+        };
+
         /*
          * On first call, creates and returns new instance of the Editor class.
          * On subsequent calls, returns the cached editor instance created
@@ -58,21 +76,27 @@ define('io.ox/office/main',
          * called before the application window is visible.
          */
         var getEditor = function () {
-            var body = $('body', iframe.contents())
+            var // the body element of the document embedded in the iframe
+                body = $('body', iframe.contents())
                     .attr('contenteditable', true)
                     .css('border', 'thin blue solid')
                     .append('<p>normal1 <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>'),
-                window = iframe.get(0).contentWindow,
-                editor = new Editor(body, window);
+                // the content window of the iframe document
+                window = iframe.length && iframe.get(0).contentWindow,
+                // the editor API instance
+                editor = (body && window) ? new Editor(body, window) : null,
+                // deferred object for user callbacks
+                def = $.Deferred();
 
-            // on subsequent calls, return the created editor instance
-            getEditor = function () { return editor; };
-            return editor;
-        };
+            if (editor) {
+                def.resolve(editor);
+            } else {
+                def.reject("Cannot instantiate editor.");
+            }
 
-        var showError = function (data) {
-            container.find('.alert').remove();
-            $.alert(gt('Error'), data.error).prepend(container);
+            // on subsequent calls, just return the deferred
+            getEditor = function () { return def; };
+            return def;
         };
         
         var createOperationsList = function (result) {
@@ -97,7 +121,8 @@ define('io.ox/office/main',
                 name: 'io.ox/office',
                 title: winTitle,
                 close: true,
-                search: false
+                search: false,
+                toolbar: true
             });
             app.setWindow(win);
 
@@ -106,39 +131,6 @@ define('io.ox/office/main',
 
             // initialize global application structure
             win.nodes.main.addClass('io-ox-office-main').append(container.append(iframe));
-        });
-
-        /*
-         * The handler function that will be called when the application shuts
-         * down. If the edited document has unsaved changes, a dialog will be
-         * shown asking whether to save or drop the changes.
-         */
-        app.setQuit(function () {
-            var def = $.Deferred();
-            if (getEditor().isModified()) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({ easyOut: true })
-                    .text(gt('The document has been modified. Do you want to save your changes?'))
-                    .addPrimaryButton('discard', gt('Discard'))
-                    .addAlternativeButton('save', gt('Save'))
-                    .addButton('cancel', gt('Cancel'))
-                    .on('save', function () {
-                        alert('Saving...');
-                        app.destroy();
-                        def.resolve();
-                    })
-                    .on('discard', function () {
-                        app.destroy();
-                        def.resolve();
-                    })
-                    .on('cancel', def.reject)
-                    .show();
-                });
-            } else {
-                app.destroy();
-                def.resolve();
-            }
-            return def;
         });
 
         /*
@@ -158,12 +150,14 @@ define('io.ox/office/main',
             win.show(function () {
                 // load file
                 win.busy();
-                var editor = getEditor();
                 $.when(
-                    $.ajax({type: 'GET', url: ox.apiRoot + "/oxodocumentfilter?action=importdocument&id=" +
-                        appOptions.id + "&session=" + ox.session, dataType: 'json'}))
-                .done(function (response) {
-                    this.createOperationsList(response);
+                    getEditor().fail(showInternalError),
+                    api.get(appOptions).fail(showFileApiError),
+                    $.ajax({ type: 'GET',
+                        url: ox.apiRoot + "/oxodocumentfilter?action=importdocument&id=" + appOptions.id + "&session=" + ox.session,
+                        dataType: 'json'}).fail(showAjaxError))
+                .done(function (editor, data, response) {
+                    editor.setOperations(createOperationsList(response));
                     editor.focus();
                     win.idle();
                     def.resolve();
@@ -176,9 +170,54 @@ define('io.ox/office/main',
             return def;
         };
 
-        app.destroy = function () {
-            app = win = container = iframe = null;
+        /*
+         * Saves the document.
+         */
+        app.save = function () {
+            var def = $.Deferred();
+
+            def.reject('Saving document not implemented');
+
+            return def;
         };
+
+        /*
+         * The handler function that will be called when the application shuts
+         * down. If the edited document has unsaved changes, a dialog will be
+         * shown asking whether to save or drop the changes.
+         */
+        app.setQuit(function () {
+            var def = $.Deferred();
+            $.when(getEditor()).done(function (editor) {
+                if (editor.isModified()) {
+                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        new dialogs.ModalDialog()
+                        .text(gt("Do you really want to cancel editing this document?"))
+                        .addPrimaryButton("delete", gt('Lose changes'))
+                        .addAlternativeButton('save', gt('Save'))
+                        .addButton("cancel", gt('Cancel'))
+                        .on('delete', function () {
+                            def.resolve();
+                        })
+                        .on('save', function () {
+                            app.save().done(function () {
+                                def.resolve();
+                            }).fail(function (message) {
+                                showInternalError(message);
+                                def.reject(message);
+                            });
+                        })
+                        .on('cancel', function () {
+                            def.reject();
+                        })
+                        .show();
+                    });
+                } else {
+                    def.resolve();
+                }
+            });
+            return def;
+        });
 
         return app;
     }
