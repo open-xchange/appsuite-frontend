@@ -110,8 +110,7 @@ define('io.ox/office/main',
                 title: winTitle,
                 close: true,
                 search: false,
-                toolbar: true,
-                settings: true
+                toolbar: true
             });
             app.setWindow(win);
 
