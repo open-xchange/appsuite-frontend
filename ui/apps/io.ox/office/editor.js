@@ -231,21 +231,21 @@ define('io.ox/office/editor', function () {
 
         this.getDOMPosition = function (para, pos) {
 
-            window.console.log('getDOMPosition', 'Paragraph: ' + para + ' , Position: ' + pos);
+            editWindow.console.log('getDOMPosition', 'Paragraph: ' + para + ' , Position: ' + pos);
             // Converting para and pos to node and offset
             var pam;
 
             // Is para an available paragraph? para starts with zero.
             var maxPara = $(this.paragraphs).size() - 1;
             if (para > maxPara) {
-                window.console.log('getDOMPosition', 'Warning: Paragraph ' + para + ' is out of range. Last paragraph: ' + maxPara);
+                editWindow.console.log('getDOMPosition', 'Warning: Paragraph ' + para + ' is out of range. Last paragraph: ' + maxPara);
                 return pam;
             }
 
             // Checking if this paragraph has children
             var myParagraph = $(this.paragraphs).get(para);
             if (! myParagraph.hasChildNodes()) {
-                window.console.log('getDOMPosition', 'Warning: Paragraph is empty');
+                editWindow.console.log('getDOMPosition', 'Warning: Paragraph is empty');
                 return pam;
             }
 
@@ -257,7 +257,7 @@ define('io.ox/office/editor', function () {
             }
 
             if (maxTextLength < pos) {
-                window.console.log('getDOMPosition', 'Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + maxTextLength);
+                editWindow.console.log('getDOMPosition', 'Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + maxTextLength);
                 return pam;
             }
 
@@ -277,14 +277,14 @@ define('io.ox/office/editor', function () {
                         break;  // leaving the for-loop
                     } else {
                         textLength += currentLength;
-                        window.console.log('getDOMPosition', 'Complete length: ' + textLength);
+                        editWindow.console.log('getDOMPosition', 'Complete length: ' + textLength);
                     }
                 }
             }
 
             var node = currentNode;
             var offset = pos - textLength;
-            window.console.log('getDOMPosition', 'Result: ' + node + " : " + offset);
+            editWindow.console.log('getDOMPosition', 'Result: ' + node + " : " + offset);
 
             pam = new DOMPaM();
             pam.aNode = node;
@@ -310,7 +310,7 @@ define('io.ox/office/editor', function () {
 
         this.getCurrentDOMSelection = function () {
             // DOMSelection consists of Node and Offset for startpoint and for endpoint
-            var windowSel = window.getSelection();
+            var windowSel = editWindow.getSelection();
             var startPaM = new DOMPaM(windowSel.anchorNode, windowSel.anchorOffset);
             var endPaM = new DOMPaM(windowSel.focusNode, windowSel.focusOffset);
             var domSelection = new DOMSelection(startPaM, endPaM);
@@ -373,13 +373,13 @@ define('io.ox/office/editor', function () {
                         var aDOMSelection = this.getDOMSelection(aOXOSelection);
 
                         if (aDOMSelection) {
-                            window.console.log('processKeyPressed', 'StartPaM: ' + aDOMSelection.aStartPaM.aNode + ' : ' + aDOMSelection.aStartPaM.aOffset);
-                            window.console.log('processKeyPressed', 'EndPaM: ' + aDOMSelection.aEndPaM.aNode + ' : ' + aDOMSelection.aEndPaM.aOffset);
+                            editWindow.console.log('processKeyPressed', 'StartPaM: ' + aDOMSelection.aStartPaM.aNode + ' : ' + aDOMSelection.aStartPaM.aOffset);
+                            editWindow.console.log('processKeyPressed', 'EndPaM: ' + aDOMSelection.aEndPaM.aNode + ' : ' + aDOMSelection.aEndPaM.aOffset);
 
                             var range = document.createRange();
                             range.setStart(aDOMSelection.aStartPaM.aNode, aDOMSelection.aStartPaM.aOffset);
                             range.setEnd(aDOMSelection.aEndPaM.aNode, aDOMSelection.aEndPaM.aOffset);
-                            var sel = window.getSelection();
+                            var sel = editWindow.getSelection();
                             sel.removeAllRanges();
                             sel.addRange(range);
                         }
@@ -389,8 +389,8 @@ define('io.ox/office/editor', function () {
                     this.deleteSelected();
                     var domSelection = this.getCurrentDOMSelection();
                     var selection = this.getOXOSelection(domSelection);
-                    window.console.log('processKeyPressed', 'OXOSelection, start: ' + selection.startPaM.para + " : " + selection.startPaM.pos);
-                    window.console.log('processKeyPressed', 'OXOSelection, end: ' + selection.endPaM.para + " : " + selection.endPaM.pos);
+                    editWindow.console.log('processKeyPressed', 'OXOSelection, start: ' + selection.startPaM.para + " : " + selection.startPaM.pos);
+                    editWindow.console.log('processKeyPressed', 'OXOSelection, end: ' + selection.endPaM.para + " : " + selection.endPaM.pos);
                     if (selection !== undefined) {
                         this.insertText(c, selection.endPaM.para, selection.endPaM.pos);
                     }
