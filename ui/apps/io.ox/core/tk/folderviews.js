@@ -621,7 +621,7 @@ define('io.ox/core/tk/folderviews',
                 .append(
                     $('<a>', { href: '#' })
                     .addClass('action-link')
-                    .text('Add new mailaccount ...')
+                    .text('Add mail account ...')
                     .on('click', emailsettings.mailAutoconfigDialog)
                 )
             );
