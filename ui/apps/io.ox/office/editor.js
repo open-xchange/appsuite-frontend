@@ -196,7 +196,86 @@ define('io.ox/office/editor', function () {
 
             return aOXOSelection;
         };
+        
+        this.getDOMSelection = function (oxoSelection) {
 
+            function getDOMPositionFromOXOPosition(para, pos) {
+
+                window.console.log('getDOMPositionFromOXOPosition', 'Paragraph: ' + para + ' , Position: ' + pos);
+                // Converting para and pos to node and offset
+                var pam;
+
+                // Is para an available paragraph? para starts with zero.
+                var maxPara = $(this.paragraphs).size() - 1;
+                if (para > maxPara) {
+                    window.console.log('getDOMPositionFromOXOPosition', 'Warning: Paragraph ' + para + ' is out of range. Last paragraph: ' + maxPara);
+                    return pam;
+                }
+
+                // Checking if this paragraph has children
+                var myParagraph = $(this.paragraphs).get(para);
+                if (! myParagraph.hasChildNodes()) {
+                    window.console.log('getDOMPositionFromOXOPosition', 'Warning: Paragraph is empty');
+                    return pam;
+                }
+
+                // Checking if all children of this paragraph have enough text content to reach pos
+                var maxTextLength = 0;
+                var nodeList = myParagraph.childNodes;
+                for (var i = 0; i < nodeList.length; i++) {
+                    maxTextLength += $(nodeList[i]).text().length;
+                }
+
+                if (maxTextLength < pos) {
+                    window.console.log('getDOMPositionFromOXOPosition', 'Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + maxTextLength);
+                    return pam;
+                }
+
+                var textLength = 0;
+                var currentNode = nodeList.firstChild;
+
+                while (myParagraph.hasChildNodes()) {
+
+                    nodeList = myParagraph.childNodes;
+
+                    for (var i = 0; i < nodeList.length; i++) {
+                        // Searching the children
+                        currentNode = nodeList[i];
+                        var currentLength = $(nodeList[i]).text().length;
+                        if (textLength + currentLength > pos) {
+                            myParagraph = currentNode;
+                            break;  // leaving the for-loop
+                        } else {
+                            textLength += currentLength;
+                            window.console.log('getDOMPositionFromOXOPosition', 'Complete length: ' + textLength);
+                        }
+                    }
+                }
+
+                var node = currentNode;
+                var offset = pos - textLength;
+                window.console.log('getDOMPositionFromOXOPosition', 'Result: ' + node + " : " + offset);
+
+                pam = new DOMPaM();
+                pam.aNode = node;
+                pam.aOffset = offset;
+
+                return pam;
+            }
+
+            // Only supporting single selection at the moment
+            var startPaM = getDOMPositionFromOXOPosition.call(this, oxoSelection.aStartPaM.nPara, oxoSelection.aStartPaM.nPos);
+            var endPaM = getDOMPositionFromOXOPosition.call(this, oxoSelection.aEndPaM.nPara, oxoSelection.aEndPaM.nPos);
+
+            var domSelection;
+            if ((startPaM) && (endPaM)) {
+                domSelection = new DOMSelection(startPaM, endPaM);
+            }
+
+            return domSelection;
+        };
+        
+        
         this.getCurrentDOMSelection = function () {
             // DOMSelection consists of Node and Offset for startpoint and for endpoint
             var windowSel = window.getSelection();
@@ -206,12 +285,22 @@ define('io.ox/office/editor', function () {
 
             return domSelection;
         };
+        
+        // The current OXOSelection can be read from operations.
+        // This is a test function, that delivers an OXOSelection
+        // object with arbitrary values. Needs to be changed in
+        // the future.
+        this.getCurrentOXOSelection = function () {
 
-        this.getDOMSelection = function (OXOSelection) {
-            // TODO
+            // Setting arbitrary values for paragraph and position
+            // for the startPoint and the endPoint
+            var startPaM = new OXOPaM(1, 10);
+            var endPaM = new OXOPaM(2, 24);
+
+            var aOXOSelection = new OXOSelection(startPaM, endPaM);
+            return aOXOSelection;
         };
-
-
+          
         this.processKeyDown = function (event) {
 
             // TODO: How to strip away debug code?
@@ -247,6 +336,26 @@ define('io.ox/office/editor', function () {
                 // TODO: But we at least need to check if there is a selection!!!
 
                 if (c.length === 1) {
+                
+                    // Demo code for calculating DOMSelection from OXOSelection
+                    if (0) {
+                        var aOXOSelection = this.getCurrentOXOSelection();
+                        var aDOMSelection = this.getDOMSelection(aOXOSelection);
+
+                        if (aDOMSelection) {
+                            window.console.log('processKeyPressed', 'StartPaM: ' + aDOMSelection.aStartPaM.aNode + ' : ' + aDOMSelection.aStartPaM.aOffset);
+                            window.console.log('processKeyPressed', 'EndPaM: ' + aDOMSelection.aEndPaM.aNode + ' : ' + aDOMSelection.aEndPaM.aOffset);
+
+                            var range = document.createRange();
+                            range.setStart(aDOMSelection.aStartPaM.aNode, aDOMSelection.aStartPaM.aOffset);
+                            range.setEnd(aDOMSelection.aEndPaM.aNode, aDOMSelection.aEndPaM.aOffset);
+                            var sel = window.getSelection();
+                            sel.removeAllRanges();
+                            sel.addRange(range);
+                        }
+                    }
+
+                    // Code for calculating OXOSelection from DOMSelection
                     this.deleteSelected();
                     var domSelection = this.getCurrentDOMSelection();
                     var selection = this.getOXOSelection(domSelection);
