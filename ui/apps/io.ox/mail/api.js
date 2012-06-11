@@ -22,15 +22,42 @@ define("io.ox/mail/api",
     "use strict";
 
     // simple temporary thread cache
-    var threads = {};
+    var threads = {},
+        threadHash = {},
+        unreadCount = {};
 
     // default separator
     var separator = config.get('modules.mail.defaultseparator', '/');
 
     // helper: get number of mails in thread
-    var threadSize = function (obj) {
+
+    var getThreadSize = function (obj) {
         var key = obj.folder_id + "." + obj.id;
         return key in threads ? threads[key].length - 1 : 0;
+    };
+
+    var getUnreadCount = function (obj) {
+        var key = obj.folder_id + "." + obj.id;
+        return key in unreadCount ? unreadCount[key] : 0;
+    };
+
+    var getThreadRoot = function (obj) {
+        var key = obj.folder_id + "." + obj.id;
+        return key in threadHash ? threadHash[key] : '';
+    };
+
+    var decUnreadCount = function (obj) {
+        var key = getThreadRoot(obj);
+        if (key in unreadCount) {
+            unreadCount[key] = Math.max(0, unreadCount[key] - 1);
+        }
+    };
+
+    var incUnreadCount = function (obj) {
+        var key = getThreadRoot(obj);
+        if (key in unreadCount) {
+            unreadCount[key]++;
+        }
     };
 
     // lookup hash for flags & color_label (since mail has no "updates")
@@ -114,14 +141,8 @@ define("io.ox/mail/api",
         },
         pipe: {
             all: function (data, opt) {
-                // unread count
-                var unread = 0;
-                _(data).each(function (obj) {
-                    // inc unread counter
-                    unread += (obj.flags & 32) === 0 ? 1 : 0;
-                });
-                // update folder
-                folderAPI.setUnread(opt.folder, unread);
+                // apply unread count
+                folderAPI.setUnread(opt.folder, data.unreadCount || 0);
                 return data;
             },
             allPost: function (data) {
@@ -140,6 +161,8 @@ define("io.ox/mail/api",
                 latest[data.folder_id + '.' + data.id] = { flags: data.flags, color_label: data.color_label };
                 // was unseen?
                 if (data.unseen) {
+                    // look for proper thread
+                    decUnreadCount(data);
                     folderAPI.decUnread(data);
                 }
                 return data;
@@ -210,8 +233,14 @@ define("io.ox/mail/api",
             .done(function (data) {
                 _(data).each(function (obj) {
                     // build thread hash
-                    threads[obj.folder_id + '.' + obj.id] = [options.order]
+                    var key = obj.folder_id + '.' + obj.id;
+                    threads[key] = [options.order]
                         .concat(options.order === 'desc' ? obj.thread : obj.thread.slice().reverse());
+                    unreadCount[key] = obj.unreadCount || 0;
+                    _(obj.thread).each(function (o) {
+                        o = String(o).indexOf('.') > -1 ? o : obj.folder_id + '.' + o;
+                        threadHash[o] = key;
+                    });
                 });
                 console.log('time.post', '#', data.length, 't2', (t2 = _.now()) - ox.t0, 'took', t2 - t1);
                 cacheControl[options.folder] = true;
@@ -272,7 +301,8 @@ define("io.ox/mail/api",
                 // inject thread size
                 var i = 0, obj;
                 for (; (obj = data[i]); i++) {
-                    obj.threadSize = threadSize(obj);
+                    obj.threadSize = getThreadSize(obj);
+                    obj.unreadCount = getUnreadCount(obj);
                 }
                 return data;
             });
@@ -411,27 +441,34 @@ define("io.ox/mail/api",
                 }
             });
             // loop over affected 'all' index
-            $.when.apply($,
-                _(folders).map(function (value, folder) {
-                    return updateFlags(api.caches.all, folder, items, bitmask);
-                })
-            )
-            .pipe(function () {
-                return api.update(list, { flags: api.FLAGS.SEEN, value: bool })
-                    .pipe(function () {
-                        folderAPI[call](list);
-                        folders = items = list = null;
-                    });
-            });
+            return $.when.apply($,
+                    _(folders).map(function (value, folder) {
+                        return updateFlags(api.caches.all, folder, items, bitmask);
+                    })
+                )
+                .pipe(function () {
+                    return api.update(list, { flags: api.FLAGS.SEEN, value: bool })
+                        .pipe(function () {
+                            folderAPI[call](list);
+                            folders = items = null;
+                            return list;
+                        });
+                });
         });
     }
 
     api.markUnread = function (list) {
-        return mark(list, 32, ~32, false, 'incUnread');
+        return mark(list, 32, ~32, false, 'incUnread').done(function (list) {
+            _(list).each(incUnreadCount);
+            api.trigger('refresh.list');
+        });
     };
 
     api.markRead = function (list) {
-        return mark(list, 0, 32, true, 'decUnread');
+        return mark(list, 0, 32, true, 'decUnread').done(function (list) {
+            _(list).each(decUnreadCount);
+            api.trigger('refresh.list');
+        });
     };
 
     api.move = function (list, targetFolderId) {
