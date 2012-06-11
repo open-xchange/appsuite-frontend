@@ -386,15 +386,47 @@ define('io.ox/office/editor', function () {
         };
 
         this.deleteSelected = function () {
+            var i, nStartPos, nEndPos;
             var domSelection = this.getCurrentDOMSelection();
             var selection = this.getOXOSelection(domSelection);
-            if (selection !== undefined) {
-                // ...
+            if ((selection !== undefined) && (selection.hasRange())) {
+                // Split into multiple operations:
+                // 1) delete selected part in first para (pos to end)
+                // 2) delete completly slected paragraphs completely
+                // 3) delete selected part in last para (start to pos)
+                selection.adjust();
+                nStartPos = selection.startPaM.pos;
+                nEndPos = selection.endPaM.pos;
+                if (selection.startPaM.para !== selection.endPaM.para) {
+                    nEndPos = 0xFFFF; // TODO: Real para end
+                }
+                this.deleteText(selection.startPaM.para, nStartPos, nEndPos);
+                for (i = selection.startPaM.para + 1; i < selection.endPaM.para; i++)
+                {
+                    // startPaM.para+1 instead of i, because we allways remove a paragraph
+                    this.deleteParagraph(selection.startPaM.para + 1);
+                }
+                if (selection.startPaM.para !== selection.endPaM.para) {
+                    this.deleteText(selection.startPaM.para + 1, 0, selection.endPaM.pos);
+                }
+            }
+        };
+        
+        this.deleteText = function (para, start, end) {
+            if (start !== end) {
+                var newOperation = { name: 'deleteText', para: para, start: start, end: end };
+                this.applyOperation(newOperation, true);
             }
         };
 
-        this.insertParagraph = function (pos) {
-            // TODO
+        this.deleteParagraph = function (para) {
+            var newOperation = { name: 'deleteParagraph', para: para };
+            this.applyOperation(newOperation, true);
+        };
+
+        this.insertParagraph = function (para) {
+            var newOperation = { name: 'insertParagraph', para: para };
+            this.applyOperation(newOperation, true);
         };
 
         // For now, only stuff that we really need, not things that a full featured API would probably offer
@@ -404,7 +436,6 @@ define('io.ox/office/editor', function () {
         // };
 
         this.insertText = function (text, para, pos) {
-            // TODO
             var newOperation = { name: 'insertText', text: text, para: para, pos: pos };
             this.applyOperation(newOperation, true);
         };
