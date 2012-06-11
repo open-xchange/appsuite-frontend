@@ -53,7 +53,7 @@ define('io.ox/office/editor', function () {
         this.startPaM = start;
         this.endPaM = end;
     }
-    
+
     function OXOEditor(editdiv) {
 
         // key codes of navigation keys that will be passed directly to the browser
@@ -78,6 +78,13 @@ define('io.ox/office/editor', function () {
         this.isModified = function () {
             // TODO
             return true;
+        };
+
+        /**
+         * Sets the browser focus into the edit text area.
+         */
+        this.focus = function () {
+            editdiv.focus();
         };
 
         this.initDocument = function () {
@@ -151,7 +158,7 @@ define('io.ox/office/editor', function () {
                 if (!editorDiv) {  // range not in text area
                     return pam;
                 }
-			
+
                 var myParagraph = paragraphs.has(node);
                 var paragraphCount = myParagraph.index();
 
@@ -185,8 +192,8 @@ define('io.ox/office/editor', function () {
 
             return aOXOSelection;
         };
-        
-        
+
+
         this.getDOMSelection = function (oxoSelection) {
 
             function getDOMPositionFromOXOPosition(para, pos) {
@@ -264,8 +271,8 @@ define('io.ox/office/editor', function () {
 
             return domSelection;
         };
-        
-        
+
+
         this.getCurrentDOMSelection = function () {
             // DOMSelection consists of Node and Offset for startpoint and for endpoint
             var windowSel = window.getSelection();
@@ -275,7 +282,7 @@ define('io.ox/office/editor', function () {
 
             return domSelection;
         };
-        
+
         // The current OXOSelection can be read from operations.
         // This is a test function, that delivers an OXOSelection
         // object with arbitrary values. Needs to be changed in
@@ -290,11 +297,11 @@ define('io.ox/office/editor', function () {
             var aOXOSelection = new OXOSelection(startPaM, endPaM);
             return aOXOSelection;
         };
-          
+
         this.getDOMSelection = function (OXOSelection) {
             // TODO
         };
-        
+
 
         this.processKeyDown = function (event) {
 
@@ -316,20 +323,18 @@ define('io.ox/office/editor', function () {
         };
 
         this.processKeyPressed = function (event) {
-            var bBlock = true,
-                c,
-                selection;
+            var bBlock = true;
 
             if (!this.isNavigationKeyEvent(event)) {
 
-                c = this.getPrintableChar(event);
+                var c = this.getPrintableChar(event);
 
                 // TODO
                 // For now (the prototype), only accept single chars, but let the browser process, so we don't need to care about DOM stuff
                 // TODO: But we at least need to check if there is a selection!!!
 
                 if (c.length === 1) {
-                
+
                     // Demo code for calculating DOMSelection from OXOSelection
                     if (0) {
                         var aOXOSelection = this.getCurrentOXOSelection();

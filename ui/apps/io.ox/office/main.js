@@ -13,10 +13,12 @@
 
 define('io.ox/office/main',
     ['io.ox/files/api',
+     "io.ox/core/tk/model",
+     "io.ox/core/tk/view",
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
      'less!io.ox/office/style.css'
-    ], function (api, Editor, gt) {
+    ], function (api, Model, View, Editor, gt) {
 
     'use strict';
 
@@ -42,15 +44,23 @@ define('io.ox/office/main',
             // the iframe representing the edited document
             iframe = $('<iframe>').addClass('io-ox-office-iframe'),
 
-            // the top-level editing container
-            editNode = $('<div>').attr('contenteditable', true).css('border', 'thin blue solid').append('<p>normal1 <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>'),
+            model = new Model(),
 
-            // text editor engine
-            editor = null;
+            view = new View({ model: model, node: container });
+
+        var getEditor = function () {
+            var body = $('body', iframe.contents())
+                .attr('contenteditable', true)
+                .css('border', 'thin blue solid')
+                .append('<p>normal1 <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
+            var editor = new Editor(body);
+            getEditor = function () { return editor; };
+            return editor;
+        };
 
         var showError = function (data) {
             container.find('.alert').remove();
-            $.alert(gt('Error'), data.error).insertBefore(editNode);
+            $.alert(gt('Error'), data.error).prepend(container);
         };
 
         // launcher
@@ -70,16 +80,14 @@ define('io.ox/office/main',
 
             // initialize global application structure
             win.nodes.main.addClass('io-ox-office-main').append(container.append(iframe));
-            setTimeout(function poll() {
-                try {
-                    var c = iframe.contents();
-                    c.find('body').append(editNode);
-                    editor = new Editor(editNode);
-                } catch (ex) {
-                    setTimeout(poll, 50);
-                }
-            }, 50);
         });
+
+        app.create = function (options) {
+            appOptions = options || {};
+            win.show(function () {
+                getEditor().focus();
+            });
+        };
 
         // load document into editor
         app.load = function (options) {
@@ -95,18 +103,16 @@ define('io.ox/office/main',
             win.show(function () {
                 // load file
                 win.busy();
+                var editor = getEditor();
                 $.when(
-                    // get editor...
                     api.get(appOptions).fail(showError)//,
                     // $.ajax({ type: 'GET', url: api.getUrl(appOptions, 'view'), dataType: 'text' })
                 )
-                .done(function (/*editor, data, text*/) {
+                .done(function (/*data, text*/) {
 /*
  * init editor with data returned from loader
  */
-                    if (editNode !== undefined) {
-                        editNode.focus();
-                    }
+                    editor.focus();
                     win.idle();
                     def.resolve();
                 })
@@ -119,14 +125,14 @@ define('io.ox/office/main',
         };
 
         app.destroy = function () {
-            app = win = container = iframe = editNode = editor = null;
+            app = win = container = iframe = null;
         };
 
         // the function passed to setQuit will be called when the application
         // is about to be closed
         app.setQuit(function () {
             var def = $.Deferred();
-            if (editor.isModified()) {
+            if (getEditor().isModified()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog({ easyOut: true })
                     .text(gt('The document has been modified. Do you want to save your changes?'))
