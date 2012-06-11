@@ -351,8 +351,8 @@ define('io.ox/office/editor', function () {
 
                     // Demo code for calculating DOMSelection from OXOSelection
                     if (0) {
-                        aOXOSelection = this.getCurrentOXOSelection();
-                        aDOMSelection = this.getDOMSelection(aOXOSelection);
+                        var aOXOSelection = this.getCurrentOXOSelection();
+                        var aDOMSelection = this.getDOMSelection(aOXOSelection);
 
                         if (aDOMSelection) {
                             window.console.log('processKeyPressed', 'StartPaM: ' + aDOMSelection.aStartPaM.aNode + ' : ' + aDOMSelection.aStartPaM.aOffset);
