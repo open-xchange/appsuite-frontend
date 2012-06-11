@@ -105,8 +105,9 @@ define('io.ox/office/main',
                 win.busy();
                 var editor = getEditor();
                 $.when(
-                    $.ajax({type: 'GET', url: ox.apiRoot + "/oxodocumentfilter?id=" + appOptions.id, dataType: 'json'}))
-                .done(function (data, obj) {
+                    $.ajax({type: 'GET', url: ox.apiRoot + "/oxodocumentfilter?action=importdocument&id=" +
+                        appOptions.id + "&session=" + ox.session, dataType: 'json'}))
+                .done(function (response) {
 /*
  * init editor with data returned from document to operations filter (oxodocumentfilter)
  */
