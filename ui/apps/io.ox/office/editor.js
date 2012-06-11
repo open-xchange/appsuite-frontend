@@ -303,8 +303,8 @@ define('io.ox/office/editor', function () {
         this.getDOMSelection = function (oxoSelection) {
 
             // Only supporting single selection at the moment
-            var startPaM = this.getDOMPosition(oxoSelection.aStartPaM.nPara, oxoSelection.aStartPaM.nPos);
-            var endPaM = this.getDOMPosition(oxoSelection.aEndPaM.nPara, oxoSelection.aEndPaM.nPos);
+            var startPaM = this.getDOMPosition(oxoSelection.startPaM.para, oxoSelection.startPaM.pos);
+            var endPaM = this.getDOMPosition(oxoSelection.endPaM.para, oxoSelection.endPaM.pos);
 
             var domSelection;
             if ((startPaM) && (endPaM)) {
@@ -326,7 +326,13 @@ define('io.ox/office/editor', function () {
         };
         
         this.setSelection = function (oxosel) {
-            
+            var aDOMSelection = this.getDOMSelection(oxosel);
+            var range = editWindow.document.createRange();
+            range.setStart(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset);
+            range.setEnd(aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
+            var sel = editWindow.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
         };
 
         this.processKeyDown = function (event) {
@@ -385,12 +391,12 @@ define('io.ox/office/editor', function () {
                     var aDOMSelection = this.getDOMSelection(aOXOSelection);
 
                     if (aDOMSelection) {
-                        editWindow.console.log('processKeyPressed', 'StartPaM: ' + aDOMSelection.aStartPaM.node + ' : ' + aDOMSelection.aStartPaM.offset);
-                        editWindow.console.log('processKeyPressed', 'EndPaM: ' + aDOMSelection.aEndPaM.node + ' : ' + aDOMSelection.aEndPaM.offset);
+                        editWindow.console.log('processKeyPressed', 'StartPaM: ' + aDOMSelection.startPaM.node + ' : ' + aDOMSelection.startPaM.offset);
+                        editWindow.console.log('processKeyPressed', 'EndPaM: ' + aDOMSelection.endPaM.node + ' : ' + aDOMSelection.endPaM.offset);
 
                         var range = document.createRange();
-                        range.setStart(aDOMSelection.aStartPaM.node, aDOMSelection.aStartPaM.offset);
-                        range.setEnd(aDOMSelection.aEndPaM.node, aDOMSelection.aEndPaM.offset);
+                        range.setStart(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset);
+                        range.setEnd(aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
                         var sel = editWindow.getSelection();
                         sel.removeAllRanges();
                         sel.addRange(range);
@@ -403,6 +409,7 @@ define('io.ox/office/editor', function () {
                 this.insertText(c, selection.startPaM.para, selection.startPaM.pos);
                 selection.startPaM.pos++;
                 selection.endPaM = selection.startPaM;
+                event.preventDefault();
                 this.setSelection(selection);
                 bBlock = true;
             }
