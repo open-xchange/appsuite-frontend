@@ -40,7 +40,6 @@ define('io.ox/calendar/edit/main',
 
     EditAppointmentController.prototype = {
         launch: function () {
-            console.log('LAUNCH? ONLY!');
         },
         edit: function (data) {
             var self = this;
@@ -51,12 +50,12 @@ define('io.ox/calendar/edit/main',
                 self.view = new AppView({model: self.model});
                 self.view.on('save', _.bind(self.onSave, self));
 
-                self.win = self.view.render().el;
+                self.win = self.view.render().appwindow;
                 self.app.setWindow(self.win);
                 self.win.show(function () {
                     // what a h4ck
                     self.view.aftershow();
-                    $('.window-content').scrollable();
+                    $(self.view.el).addClass('scrollable');
                 });
             };
 
@@ -80,13 +79,15 @@ define('io.ox/calendar/edit/main',
             self.view = new AppView({model: self.model});
             self.view.on('save', _.bind(self.onSave, self));
 
-            self.win = self.view.render().el;
+            self.win = self.view.render().appwindow;
             self.app.setWindow(self.win);
             self.win.show(function () {
                 // what a h4ck
                 self.view.aftershow();
-                $('.window-content').scrollable();
+                $(self.view.el).addClass('scrollable');
             });
+
+
         },
         remove: function () {
             var self = this;
@@ -95,18 +96,38 @@ define('io.ox/calendar/edit/main',
         },
         onSave: function () {
             var self = this;
-            console.log('save model');
+            self.win.busy();
             self.model.save()
                 .done(
                     function () {
-                        console.log('successful saved');
+                        self.win.idle();
                         self.app.quit();
                     }
                 )
                 .fail(
                     function (err) {
-                        console.log('failed to save');
-                        console.log(err);
+                        self.win.idle();
+                        var errContainer = $('<div>').addClass('alert alert-error');
+                        $(self.view.el).find('[data-extid=error]').empty().append(errContainer);
+                        if (err.conflicts !== null && err.conflicts !== undefined) {
+                            errContainer.append(
+                                $('<a>').addClass('close').attr('data-dismiss', 'alert').attr('type', 'button').text('x'),
+                                $('<h4>').text(gt('Conflicts detected')),
+                                $('<p>').append('list of conflicts... follow'),
+                                $('<a>').addClass('btn btn-danger').text(gt('Ignore conflicts')),
+                                $('<a>').addClass('btn').text(gt('Cancel'))
+                            );
+                        } else if (err.error !== undefined) {
+                            errContainer.append(
+                                $('<a>').addClass('close').attr('data-dismiss', 'alert').attr('type', 'button').text('x'),
+                                $('<p>').text(_.formatError(err))
+                            );
+                        } else {
+                            errContainer.append(
+                                $('<a>').addClass('close').attr('data-dismiss', 'alert').attr('type', 'button').text('x'),
+                                $('<p>').text(err)
+                            );
+                        }
                     }
                 );
         },
@@ -122,6 +143,8 @@ define('io.ox/calendar/edit/main',
 
             //be gently
             if (self.model.isDirty()) {
+                console.log('is dirty!!');
+                console.log(self.model);
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to lose your changes?'))
@@ -141,11 +164,9 @@ define('io.ox/calendar/edit/main',
                 //just let it go
                 df.resolve();
             }
-
             return df;
         }
     };
-
 
     function createInstance(data) {
         var controller = new EditAppointmentController(data);

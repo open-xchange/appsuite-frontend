@@ -20,26 +20,30 @@ define('io.ox/calendar/edit/view-app',
 
     var AppView = Backbone.View.extend({
         _modelBinder: undefined,
-        className: 'io-ox-calendar-edit container',
         subviews: {},
         initialize: function () {
             this._modelBinder = new Backbone.ModelBinder();
+
         },
         render: function () {
             var self = this;
-            self.el = ox.ui.createWindow({
+            self.appwindow = ox.ui.createWindow({
                 name: 'io.ox/calendar/edit',
                 title: gt('Edit Appointment'),
                 toolbar: true,
                 search: false,
                 close: true
             });
+
+            self.el = self.appwindow.nodes.main[0];
+
+
+
             self.subviews.common = new MainView({model: self.model});
             self.subviews.common.on('save', function () {
-                console.log('common trigger save');
                 self.trigger('save'); //just bubble manually
             });
-            self.el.nodes.main.empty().append(self.subviews.common.render().el);
+            $(self.el).empty().append(self.subviews.common.render().el);
 
 
             return self;
@@ -54,7 +58,6 @@ define('io.ox/calendar/edit/view-app',
             // updates the title on change
             self._modelBinder.bind(self.model, $('.window-title').parent().get(), bindings);
             // now focus on title
-            console.log('focus:' + '#' + self.subviews.common.guid + '_title');
             $('#' + self.subviews.common.guid + '_title').get(0).focus();
         }
     });

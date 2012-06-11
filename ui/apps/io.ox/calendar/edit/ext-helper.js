@@ -97,17 +97,16 @@ define('io.ox/calendar/edit/ext-helper',
                 // so we just need to call the draw function
                 // but we leave the this assignment to global space
                 // so if there is any
-                console.log('invoking: ' + pointname);
                 ext.point(pointname).invoke('draw', $parent, options);
             };
 
 
             var deepests = helper.deepest(el);
             while (deepests.length > 0) {
-                console.log(deepests);
                 //work with deepests
                 extpoints = {};
                 _(deepests).each(handleElement);
+
 
                 //apply them to their parent with in el
                 _(extpoints).each(invokePoint);

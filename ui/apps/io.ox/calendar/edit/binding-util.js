@@ -21,11 +21,18 @@ define('io.ox/calendar/edit/binding-util',
                 if (!value) {
                     return null;
                 }
+                if (!_.isNumber(value)) {
+                    return value; //do nothing
+                }
                 var formated = new dateAPI.Local(parseInt(value, 10)).format(dateAPI.locale.date);
                 return formated;
             } else {
                 var mydate = new dateAPI.Local(parseInt(model.get(attribute), 10));
                 var parsedDate = dateAPI.Local.parse(value, dateAPI.locale.date);
+
+                if (_.isNull(parsedDate)) {
+                    return value;
+                }
 
                 // just reject the change, if it's not parsable
                 if (parsedDate.getTime() === 0) {
@@ -49,6 +56,12 @@ define('io.ox/calendar/edit/binding-util',
                 var mydate = new dateAPI.Local(parseInt(model.get(attribute), 10));
                 var parsedDate = dateAPI.Local.parse(value, dateAPI.locale.time);
 
+
+                if (_.isNull(parsedDate)) {
+                    return mydate.getTime();
+                }
+
+
                 if (parsedDate.getTime() === 0) {
                     return model.get(attribute);
                 }
@@ -61,13 +74,9 @@ define('io.ox/calendar/edit/binding-util',
             }
         },
         numToString: function (direction, value, attribute, model) {
-            console.log('numToString');
-            console.log(value + '(' + (typeof value) + ')');
             if (direction === 'ModelToView') {
-                console.log('modeltoview?');
                 return value + '';
             } else {
-                console.log('HERE');
                 return parseInt(value, 10);
             }
         }

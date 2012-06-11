@@ -24,7 +24,6 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
     var DAY = 60000 * 60 * 24;
 
     var api = {
-
         get: function (o) {
 
             o = o || {};
@@ -81,6 +80,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 params.folder = o.folder;
             }
 
+            console.log('get all', key);
             if (all_cache[key] === undefined) {
                 return http.GET({
                         module: "calendar",
@@ -158,7 +158,6 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                                     folder: o.folder
                                 });
                                 return data;
-
                             });
                         });
                 })
@@ -178,28 +177,30 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 },
                 data: o.data
             })
-            .pipe(function (obj, timestamp) {
-                return api.get({ id: obj.id, folder: o.folder}, false)
-                    .pipe(function (data) {
-                        $.when(
-                        )
-                        .pipe(function () {
-                            all_cache = {};
-                            get_cache = {};
-                            console.log('cache resetted');
+            .pipe(function (obj) {
+                var getObj = {};
+                if (!_.isUndefined(obj.conflicts)) {
+                    console.log('got conflicts');
+                    console.log(obj.conflicts);
+                    var df = new $.Deferred();
+                    df.reject(obj);
+                    return df;
+                }
+                getObj.id = obj.id;
+                getObj.folder = o.folder;
+                if (o.recurrence_position !== null) {
+                    getObj.recurrence_position = o.recurrence_position;
+                }
+                all_cache = {};
+                return api.get(getObj)
+                        .pipe(function (data) {
                             api.trigger('refresh.all');
-                            api.trigger('refresh.list');
-                            api.trigger('edit', {
+                            api.trigger('created', {
                                 id: o.id,
                                 folder: o.folder
                             });
                             return data;
                         });
-                    });
-            })
-            .fail(function (err) {
-                console.log('error on creating appointment');
-                console.log(err);
             });
         },
 
@@ -218,10 +219,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
             })
             .done(function (resp) {
                 all_cache = {};
-                get_cache = {};
-                console.log('cache resetted');
                 api.trigger('refresh.all');
-                api.trigger('refresh.list');
             })
             .fail(function (err) {
                 console.log('error on creating appointment');

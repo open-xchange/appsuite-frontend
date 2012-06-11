@@ -20,7 +20,6 @@ define('io.ox/calendar/actions',
     var Action = links.Action, Link = links.XLink, Dropdown = links.Dropdown;
 
     // Actions
-
     new Action('io.ox/calendar/actions/switch-to-list-view', {
         requires: true,
         action: function (app) {
@@ -78,9 +77,10 @@ define('io.ox/calendar/actions',
         id: 'edit',
         requires: 'one modify',
         action: function (data) {
-            require(['io.ox/calendar/edit/main'], function (editmain) {
+            require(['io.ox/calendar/edit/model-appointment'], function (Model) {
                 // different warnings especially for events with
                 // external users should handled here
+                var myModel = new Model(data);
                 if (data.recurrence_type > 0) {
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         new dialogs.ModalDialog()
@@ -96,9 +96,7 @@ define('io.ox/calendar/actions',
                                 if (action === 'series') {
                                     delete data.recurrence_position;
                                 }
-                                editmain.getApp(data).launch().done(function () {
-                                    this.controller.remove();
-                                });
+                                myModel.destroy();
                             });
                     });
                 } else {
@@ -112,9 +110,7 @@ define('io.ox/calendar/actions',
                                 if (action === 'cancel') {
                                     return;
                                 }
-                                editmain.getApp(data).launch().done(function () {
-                                    this.controller.remove();
-                                });
+                                myModel.destroy();
                             });
                     });
                 }
