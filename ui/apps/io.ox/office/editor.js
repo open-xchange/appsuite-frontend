@@ -76,6 +76,13 @@ define('io.ox/office/editor', function () {
 
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
+        
+        // hybrid edit mode
+        $(editdiv).bind('keydown', $.proxy(this, 'processKeyDown'));
+        $(editdiv).bind('keypress', $.proxy(this, 'processKeyPressed'));
+        // TODO
+        $(editdiv).bind('dragover drop', $.proxy(this, 'xxx'));
+        $(editdiv).bind('contextmenu', $.proxy(this, 'xxx'));
 
         /**
          * Returns whether the editor contains unsaved changes.
@@ -323,9 +330,8 @@ define('io.ox/office/editor', function () {
         };
 
         this.processKeyPressed = function (event) {
-            var bBlock = true,
-                c,
-                selection;
+            var aOXOSelection, aDOMSelection, c, selection;
+            var bBlock = true;
 
             if (!this.isNavigationKeyEvent(event)) {
 
@@ -339,8 +345,8 @@ define('io.ox/office/editor', function () {
                 
                     // Demo code for calculating DOMSelection from OXOSelection
                     if (0) {
-                        var aOXOSelection = this.getCurrentOXOSelection();
-                        var aDOMSelection = this.getDOMSelection(aOXOSelection);
+                        aOXOSelection = this.getCurrentOXOSelection();
+                        aDOMSelection = this.getDOMSelection(aOXOSelection);
 
                         if (aDOMSelection) {
                             window.console.log('processKeyPressed', 'StartPaM: ' + aDOMSelection.aStartPaM.aNode + ' : ' + aDOMSelection.aStartPaM.aOffset);
