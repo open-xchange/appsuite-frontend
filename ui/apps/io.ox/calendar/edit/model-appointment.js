@@ -73,25 +73,19 @@ define('io.ox/calendar/edit/model-appointment',
                 o = {},
                 df = new $.Deferred();
 
-            o.data = self.toSync;
-            o.data = self.attributes; //TODO: just everything over the air
-
-            //o.data.ignore_conflicts = true; //just for debug
+            o = self.toSync;
+            o = self.attributes; //TODO: just everything over the air, fix that
 
             // set recurrence_type if it was set
             if (self.get('recurrence_type')) {
-                o.data.recurrence_type = self.get('recurrence_type');
+                o.recurrence_type = self.get('recurrence_type');
 
-                // none recurrenc
-                if (o.data.recurrence_type === 0) {
-                    delete o.data.recurrence_id;
+                // none recurrence
+                if (o.recurrence_type === 0) {
+                    delete o.recurrence_id;
                     self.unset('recurrence_id');
                 }
             }
-
-            o.id = self.get('id');
-            o.folder = self.get('folder_id');
-            o.timestamp = _.now();
 
             CalendarAPI.update(o)
                 .done(function () {
@@ -111,12 +105,7 @@ define('io.ox/calendar/edit/model-appointment',
                 o = {},
                 df = new $.Deferred();
 
-            o.data = self.attributes;
-            //o.data.ignore_conflicts = true; //just for debug
-
-            o.folder = self.get('folder_id');
-            o.timestamp = _.now();
-
+            o = self.attributes;
             CalendarAPI.create(o)
                 .done(function () {
                     self._resetDirty();
@@ -135,10 +124,10 @@ define('io.ox/calendar/edit/model-appointment',
                 df = new $.Deferred();
 
             o.data = self.attributes;
+
             // set recurrence_type if it was set
             if (self.get('recurrence_type')) {
                 o.data.recurrence_type = self.get('recurrence_type');
-
                 // none recurrenc
                 if (o.data.recurrence_type === 0) {
                     delete o.data.recurrence_id;
@@ -146,10 +135,7 @@ define('io.ox/calendar/edit/model-appointment',
                 }
             }
 
-            o.id = self.get('id');
-            o.folder = self.get('folder_id');
-            o.data.folder = o.folder;
-            o.timestamp = _.now();
+            o.data.folder = self.get('folder_id');
 
             CalendarAPI.remove(o)
                 .done(function () {

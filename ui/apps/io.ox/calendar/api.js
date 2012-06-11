@@ -38,7 +38,8 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 params.recurrence_position = o.recurrence_position;
             }
 
-            var key = o.folder + "." + o.id + "." + (o.recurrence_position || 0);
+            var key = (o.folder || o.folder_id) + "." + o.id + "." + (o.recurrence_position || 0);
+            console.log('get key:' + key);
 
             if (get_cache[key] === undefined) {
                 return http.GET({
@@ -67,7 +68,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
                     action: "all",
-                    columns: "1,20,207,201,200", // id, folder_id, recurrence_position, start_date, title
+                    columns: "1,20,207", // id, folder_id, recurrence_position, start_date, title
                     start: o.start,
                     end: o.end,
                     showPrivate: true,
@@ -75,6 +76,8 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                     sort: "201",
                     order: "asc"
                 };
+
+            console.log('getAll key:' + key);
 
             if (o.folder !== undefined) {
                 params.folder = o.folder;
@@ -126,8 +129,9 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
         },
 
         update: function (o) {
-            var key = o.folder + "." + o.id + "." + (o.recurrence_position || 0);
-            if (_.isEmpty(o.data)) {
+            var key = o.folder_id + "." + o.id + "." + (o.recurrence_position || 0);
+            console.log('update: ' + key);
+            if (_.isEmpty(o)) {
                 return $.when();
             } else {
                 return http.PUT({
@@ -135,36 +139,36 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                     params: {
                         action: 'update',
                         id: o.id,
-                        folder: o.folder,
-                        timestamp: o.timestamp
+                        folder: o.folder_id,
+                        timestamp: _.now()
                     },
-                    data: o.data
+                    data: o
                 })
-                .pipe(function () {
-                    return api.get({ id: o.id, folder: o.folder}, false)
-                        .pipe(function (data) {
-                            $.when(
-                                /*api.caches.all.grepRemove(o.folder + '\t'),
-                                api.caches.list.remove({id: o.id, folder: o.folder })*/
-                            )
-                            .pipe(function () {
-                                all_cache = {};
-                                get_cache = {};
-                                console.log('cache resetted');
-                                api.trigger('refresh.all');
-                                api.trigger('refresh.list');
-                                api.trigger('edit', {
-                                    id: o.id,
-                                    folder: o.folder
-                                });
-                                return data;
-                            });
-                        });
-                })
-                .fail(function (err) {
+                .pipe(function (obj) {
+                    var getObj = {};
+                    if (!_.isUndefined(obj.conflicts)) {
+                        console.log('got conflicts');
+                        console.log(obj.conflicts);
+                        var df = new $.Deferred();
+                        df.reject(obj);
+                        return df;
+                    }
 
-                    console.log('error on updating appointment');
-                    console.log(_.formatError(err));
+                    getObj.id = o.id;
+                    getObj.folder = o.folder_id;
+                    if (o.recurrence_position !== null) {
+                        getObj.recurrence_position = o.recurrence_position;
+                    }
+
+                    all_cache = {};
+                    delete get_cache[key];
+                    return api.get(getObj)
+                        .pipe(function (data) {
+                            console.log('refresh?');
+                            console.log(data);
+                            api.trigger('refresh.list');
+                            return data;
+                        });
                 });
             }
 
@@ -175,7 +179,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 params: {
                     action: 'new'
                 },
-                data: o.data
+                data: o
             })
             .pipe(function (obj) {
                 var getObj = {};
@@ -187,7 +191,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                     return df;
                 }
                 getObj.id = obj.id;
-                getObj.folder = o.folder;
+                getObj.folder = o.folder_id;
                 if (o.recurrence_position !== null) {
                     getObj.recurrence_position = o.recurrence_position;
                 }
@@ -195,10 +199,6 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 return api.get(getObj)
                         .pipe(function (data) {
                             api.trigger('refresh.all');
-                            api.trigger('created', {
-                                id: o.id,
-                                folder: o.folder
-                            });
                             return data;
                         });
             });
@@ -211,9 +211,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 module: 'calendar',
                 params: {
                     action: 'delete',
-                    id: o.id,
-                    folder: o.folder,
-                    timestamp: o.timestamp
+                    timestamp: _.now()
                 },
                 data: o.data
             })

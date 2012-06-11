@@ -21,6 +21,8 @@ define('io.ox/calendar/edit/main',
     'use strict';
 
     var EditAppointmentController = function (data) {
+        console.log('CREATE EDIT APPOINTMENT CONTROLLER');
+        console.log(data);
         var self = this;
         self.app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: gt('Edit Appointment')});
 
@@ -41,7 +43,7 @@ define('io.ox/calendar/edit/main',
     EditAppointmentController.prototype = {
         launch: function () {
         },
-        edit: function (data) {
+        edit: function () {
             var self = this;
             var cont = function (data) {
                 self.data = data;
