@@ -1,4 +1,7 @@
+<div data-extgroup="section" data-extid="error">
+</div>
 <div data-extgroup="section" data-extid="head">
+
     <div class="row-fluid show-grid">
         <div class="span12 control-group">
             <label class="control-label" for="{{=it.uid}}_title">{{= it.strings.SUBJECT }}</label>
@@ -31,16 +34,16 @@
         <div class="control-group span6">
             <label class="control-label" for="{{=it.uid}}_start_date">{{= it.strings.STARTS_ON }}</label>
             <div class="controls">
-                  <input type="date" class="discreet startsat-date input-small" id="{{=it.uid}}_start_date" data-extgroup="startdates" data-extid="date"/>
-                  <input type="time" class="discreet startsat-time input-mini" data-extgroup="startdates" data-extid="time"/>
+                  <input type="date" class="discreet startsat-date input-small" id="{{=it.uid}}_start_date" data-extgroup="startdates" data-extid="date" name="start_date"/>
+                  <input type="time" class="discreet startsat-time input-mini" data-extgroup="startdates" data-extid="time" name="start_date"/>
                   <span class="label" data-original-title="" data-extgroup="startdates" data-extid="timezone">CEST</span>
             </div>
         </div>
         <div class="control-group span6">
             <label class="control-label" for="{{=it.uid}}_end_date">{{= it.strings.ENDS_ON }}</label>
             <div class="controls">
-                <input type="date" class="discreet endsat-date input-small" id="{{=it.uid}}_end_date" data-extgroup="enddates" data-extid="date"/>
-                <input type="time" class="discreet endsat-time input-mini" data-extgroup="enddates" data-extid="time"/>
+                <input type="date" class="discreet endsat-date input-small" id="{{=it.uid}}_end_date" data-extgroup="enddates" data-extid="date" name="end_date"/>
+                <input type="time" class="discreet endsat-time input-mini" data-extgroup="enddates" data-extid="time" name="end_date"/>
                 <span class="label" data-original-title="" data-extgroup="enddates" data-extid="timezone">CEST</span>
             </div>
         </div>

@@ -5,6 +5,8 @@ _.extend(Backbone.Validation.callbacks, {
 
     },
     invalid: function (view, attr, error, selector) {
+        console.log('IS UNVALID');
+        console.log(arguments);
         view.$('[' + selector + '~=' + attr + ']').closest('.control-group').addClass('error');
 
         //clean up first
@@ -14,5 +16,18 @@ _.extend(Backbone.Validation.callbacks, {
                 .addClass('help-inline errortext')
                 .text(error)
         );
+    }
+});
+
+_.extend(Backbone.Validation.validators, {
+    greaterThan: function (value, attr, greaterThan, model, computed) {
+        if (value < computed[greaterThan]) {
+            return 'error';
+        }
+    },
+    smallerThan: function (value, attr, smallerThan, model, computed) {
+        if (value > computed[smallerThan]) {
+            return 'error';
+        }
     }
 });

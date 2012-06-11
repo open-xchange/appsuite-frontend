@@ -110,8 +110,31 @@ define('io.ox/calendar/edit/main',
                 .fail(
                     function (err) {
                         self.win.idle();
-                        console.log('failed to save');
-                        console.log(err);
+                        var errContainer = $('<div>').addClass('alert alert-error');
+                        $(self.view.el).find('[data-extid=error]').empty().append(errContainer);
+                        if (err.conflicts !== null && err.conflicts !== undefined) {
+                            errContainer.append(
+                                $('<a>').addClass('close').attr('data-dismiss', 'alert').attr('type', 'button').text('x'),
+                                $('<h4>').text(gt('Conflicts detected')),
+                                $('<p>').append('list of conflicts... follow'),
+                                $('<a>').addClass('btn btn-danger').text(gt('Ignore conflicts')),
+                                $('<a>').addClass('btn').text(gt('Cancel'))
+                            );
+                        } else if (err.error !== undefined) {
+                            console.log('failed to save');
+                            console.log(err);
+                            errContainer.append(
+                                $('<a>').addClass('close').attr('data-dismiss', 'alert').attr('type', 'button').text('x'),
+                                $('<p>').text(_.formatError(err))
+                            );
+                        } else {
+                            console.log('failed to save');
+                            console.log(err);
+                            errContainer.append(
+                                $('<a>').addClass('close').attr('data-dismiss', 'alert').attr('type', 'button').text('x'),
+                                $('<p>').text(err)
+                            );
+                        }
                     }
                 );
         },

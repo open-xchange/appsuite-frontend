@@ -1,6 +1,6 @@
 
 # Refinement
-- refine layout
+ok refine layout
 OK change all templates to doT
 - refactor participant model handling and rendering
 - Tidy up template code
@@ -12,17 +12,17 @@ OK change all templates to doT
 # Feature
 OK implement dialog for edit serie or just the one event
 - add add participants
-- define default values for recurrence handling
+ok define default values for recurrence handling
 - implement cleanup on recurrencetype change
-- add calendar widget as polyfill
+ok add date - picker
 - enable timezone-popover
 - implement ends after ---> occurrences...
 - implement cache handling within calendar list, after save
-- implement delete appointment
+ok implement delete appointment
 - add rights management
-- throw dialog to series, to edit series or create an exception
+ok throw dialog to series, to edit series or create an exception
 - add  "change timezone" view
-- add form validation (using backbone scheme/validation plugin)
+ok add form validation (using backbone scheme/validation plugin)
 - implement add attachments
 - implement testharness for TDD
 - implement error-handling/display
