@@ -63,6 +63,9 @@ define("3rd.party/noms/view-bss", ["io.ox/core/extensions"], function (ext) {
                 width: "100%",
                 height: "100%",
                 frameBorder: 0
+            }).css({
+                marginLeft: "-40px",
+                marginTop: "-33px"
             });
         },
         refresher: refresher
