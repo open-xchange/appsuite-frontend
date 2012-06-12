@@ -335,7 +335,7 @@ define('io.ox/office/editor', function () {
 
             return domSelection;
         };
-        
+
         this.setSelection = function (oxosel) {
             var aDOMSelection = this.getDOMSelection(oxosel);
             var range = editWindow.document.createRange();
@@ -376,7 +376,7 @@ define('io.ox/office/editor', function () {
 
             var domSelection = this.getCurrentDOMSelection();
             var selection = this.getOXOSelection(domSelection);
-            
+
             this.implDbgOut(event);
 
             selection.adjust();
@@ -428,7 +428,7 @@ define('io.ox/office/editor', function () {
                 event.preventDefault();
             }
             else {
-                
+
                 if (event.keyCode === 13) { // RETURN
                     this.deleteSelected();
                     this.splitParagraph(selection.startPaM.para, selection.startPaM.pos);
@@ -439,7 +439,7 @@ define('io.ox/office/editor', function () {
                     event.preventDefault();
                     this.setSelection(selection);
                 }
-                
+
             }
         };
 
@@ -511,9 +511,9 @@ define('io.ox/office/editor', function () {
         this.setAttributes = function (para, pos) {
             // TODO
         };
-        
+
         this.implDbgOut = function (event) {
-            
+
             function fillstr(str, len, fill, right) {
                 while (str.length < len) {
                     if (right)
@@ -526,14 +526,14 @@ define('io.ox/office/editor', function () {
 
             var domSelection = this.getCurrentDOMSelection();
             var selection = this.getOXOSelection(domSelection);
-            
+
             var dbg = 'evt:' + fillstr(event.type, 10, ' ', true) + ' sel:[' + fillstr(selection.startPaM.para.toString(), 2, '0') + ',' + fillstr(selection.startPaM.pos.toString(), 2, '0') + '/' + fillstr(selection.endPaM.para.toString(), 2, '0') + ',' + fillstr(selection.endPaM.pos.toString(), 2, '0') + ']';
             if ((event.type === "keypress") || (event.type === "keydown")) {
                 dbg += ' key:[keyCode=' + fillstr(event.keyCode.toString(), 3, '0') + ' charCode=' + fillstr(event.charCode.toString(), 3, '0') + ' shift=' + event.shiftKey + ' ctrl=' + event.ctrlKey + ' alt=' + event.altKey + ']';
             }
-            
+
             editWindow.console.log(dbg);
-            
+
         };
 
         // hybrid edit mode
@@ -546,5 +546,8 @@ define('io.ox/office/editor', function () {
 
     } // end of OXOEditor()
 
-    return OXOEditor;
+    // export all public classes
+    return {
+        Editor: OXOEditor
+    };
 });

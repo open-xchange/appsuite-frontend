@@ -19,7 +19,7 @@ define('io.ox/office/main',
      'gettext!io.ox/office/main',
      'less!io.ox/office/main.css',
      'io.ox/office/actions'
-    ], function (api, Model, View, Editor, gt) {
+    ], function (api, Model, View, oxoffice, gt) {
 
     'use strict';
 
@@ -51,19 +51,31 @@ define('io.ox/office/main',
 
             view = new View({ model: model, node: container });
 
+        /*
+         * Shows a closable error message above the editor.
+         *
+         * @param message
+         *  The message text.
+         *
+         * @param title
+         *  (optional) The title of the error message. Defaults to 'Error'.
+         */
         var showError = function (message, title) {
             container.find('.alert').remove();
             container.prepend($.alert(title || gt('Error'), message));
         };
 
+        /*
+         * Shows an internal error message with the specified message text.
+         */
         var showInternalError = function (message) {
             showError(message, gt("Internal Error"));
         };
 
-        var showFileApiError = function (data) {
-            showError(data.error);
-        };
-
+        /*
+         * Shows an error message extracted from the error object returned by
+         * a jQuery AJAX call.
+         */
         var showAjaxError = function (data) {
             showError(data.responseText);
         };
@@ -98,10 +110,11 @@ define('io.ox/office/main',
                 // add a link to the editor.css file
                 head.append($('<link>').attr('rel', 'stylesheet').attr('href', ox.base + '/apps/io.ox/office/editor.css'));
                 // set body of the document to edit mode
-                body.attr('contenteditable', true)
-                    .append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
+                body.attr('contenteditable', true);
+                // append some text to play with, TODO: remove that
+                body.append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
                 // resolve the deferred with a new editor instance
-                def.resolve(new Editor(body, window));
+                def.resolve(new oxoffice.Editor(body, window));
             } else {
                 // creation of the iframe failed: reject the deferred
                 def.reject("Cannot instantiate editor.");
@@ -154,6 +167,9 @@ define('io.ox/office/main',
         /*
          * Loads the document described in the options map passed in the
          * constructor of this application, and shows the application window.
+         *
+         * @returns
+         *  A deferred that reflects the result of the load operation.
          */
         app.load = function () {
             var def = $.Deferred();
@@ -161,11 +177,11 @@ define('io.ox/office/main',
                 win.busy();
                 $.when(
                     getEditor().fail(showInternalError),
-                    api.get(appOptions).fail(showFileApiError),
                     $.ajax({ type: 'GET',
                         url: ox.apiRoot + "/oxodocumentfilter?action=importdocument&id=" + appOptions.id + "&session=" + ox.session,
-                        dataType: 'json'}).fail(showAjaxError))
-                .done(function (editor, data, response) {
+                        dataType: 'json'}).fail(showAjaxError)
+                )
+                .done(function (editor, response) {
                     editor.setOperations(createOperationsList(response));
                     editor.focus();
                     win.idle();
@@ -180,21 +196,27 @@ define('io.ox/office/main',
         };
 
         /*
-         * Saves the document.
+         * Saves the document to its origin.
+         *
+         * @returns
+         *  A deferred that reflects the result of the save operation.
          */
         app.save = function () {
-            var def = $.Deferred().fail(showInternalError);
+            var def = $.Deferred();
             win.busy();
             $.when(
-                getEditor())
+                getEditor().fail(showInternalError),
+                $.Deferred().reject('Saving document not implemented.').fail(showInternalError) // TODO: replace with save action
+            )
             .done(function (editor) {
                 editor.focus();
                 win.idle();
+                def.resolve();
             })
             .fail(function () {
                 win.idle();
+                def.reject();
             });
-            def.reject('Saving document not implemented.');
             return def;
         };
 
@@ -224,6 +246,11 @@ define('io.ox/office/main',
             });
             return def;
         });
+
+        app.destroy = function () {
+            view.destroy();
+            app = win = container = iframe = model = view = null;
+        };
 
         return app;
     }
