@@ -144,14 +144,14 @@ define('io.ox/office/editor', function () {
             }
         };
 
-        this.applyOperations = function (editor, theOperations, bRecord) {
+        this.applyOperations = function (theOperations, bRecord) {
 
             if (_(theOperations).isArray()) {
                 _(theOperations).each(function (operation, i) {
                     if (_(operation).isObject()) {
-                        editor.applyOperation(operation, bRecord);
+                        this.applyOperation(operation, bRecord);
                     }
-                });
+                }, this);
             }
         };
 

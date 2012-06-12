@@ -191,7 +191,7 @@ define('io.ox/office/main',
                     dataType: 'json'
                 })
                 .done(function (response) {
-                    editor.applyOperations(editor, createOperationsList(response), false);
+                    editor.applyOperations(createOperationsList(response), false);
                     editor.focus();
                     win.idle();
                     def.resolve();
@@ -221,7 +221,6 @@ define('io.ox/office/main',
                 $.ajax({
                     type: 'POST',
                     url: ox.apiRoot + "/oxodocumentfilter?action=exportdocument&id=" + appOptions.id + "&session=" + ox.session,  // URL needs to be specified
-                    // url: filterUrl,
                     dataType: 'json',
                     data: operations,
                     beforeSend: function (xhr) {
