@@ -117,15 +117,15 @@ define('io.ox/office/main',
         var createOperationsList = function (result) {
             var operations = [];
 
-            _(result).each(function (value) {
+            if (_(result).isArray()) {
                 // iterating over the list of JSON objects
-                if (_(value).isArray()) {
-                    _(value).each(function (json, j) {
+                _(result).each(function (json, j) {
+                    if (_(json).isObject()) {
                         operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
                         window.console.log('Operation ' + j + ': ' + JSON.stringify(json));
-                    });
-                }
-            });
+                    }
+                });
+            }
 
             return operations;
         };
