@@ -155,8 +155,9 @@ define('io.ox/calendar/edit/main',
             self.getWindow().busy();
             self.model.save()
                 .done(
-                    function () {
+                    function (data) {
                         self.getWindow().idle();
+                        self.trigger('save', data);
                         self.quit();
                     }
                 )
