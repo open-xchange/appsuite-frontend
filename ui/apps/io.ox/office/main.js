@@ -17,9 +17,9 @@ define('io.ox/office/main',
      "io.ox/core/tk/view",
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
-     'less!io.ox/office/style.css',
+     'less!io.ox/office/main.css',
      'io.ox/office/actions'
-    ], function (api, Model, View, Editor, gt) {
+    ], function (api, Model, View, oxoffice, gt) {
 
     'use strict';
 
@@ -51,19 +51,31 @@ define('io.ox/office/main',
 
             view = new View({ model: model, node: container });
 
+        /*
+         * Shows a closable error message above the editor.
+         *
+         * @param message
+         *  The message text.
+         *
+         * @param title
+         *  (optional) The title of the error message. Defaults to 'Error'.
+         */
         var showError = function (message, title) {
             container.find('.alert').remove();
             container.prepend($.alert(title || gt('Error'), message));
         };
 
+        /*
+         * Shows an internal error message with the specified message text.
+         */
         var showInternalError = function (message) {
             showError(message, gt("Internal Error"));
         };
 
-        var showFileApiError = function (data) {
-            showError(data.error);
-        };
-
+        /*
+         * Shows an error message extracted from the error object returned by
+         * a jQuery AJAX call.
+         */
         var showAjaxError = function (data) {
             showError(data.responseText);
         };
@@ -76,33 +88,35 @@ define('io.ox/office/main',
         };
 
         /*
-         * On first call, creates and returns new instance of the Editor class.
-         * On subsequent calls, returns the cached editor instance created
-         * before. The editor expects a reference to the text area DOM element
-         * which is contained in the iframe element. This DOM element will be
-         * created by the browser AFTER the application window is made visible
-         * (i.e. inserted into the DOM). Therefore, this function MUST NOT be
-         * called before the application window is visible.
+         * Returns a deferred that reflects whether initialization of the
+         * editor succeeded. On first call, initializes the editor iframe and
+         * creates a new instance of the Editor class. On subsequent calls,
+         * returns the same deferred object again without initialization.
          */
         var getEditor = function () {
-            var // the body element of the document embedded in the iframe
-                body = $('body', iframe.contents())
-                    .attr('contenteditable', true)
-                    .css({
-                        border: 'thin blue solid',
-                        cursor: 'text'
-                    })
-                    .append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>'),
+            var // the embedded document, wrapped in a jQuery object
+                contents = iframe.contents(),
+                // the head element of the document embedded in the iframe
+                head = $('head', contents),
+                // the body element of the document embedded in the iframe
+                body = $('body', contents),
                 // the content window of the iframe document
                 window = iframe.length && iframe.get(0).contentWindow,
-                // the editor API instance
-                editor = (body && window) ? new Editor(body, window) : null,
                 // deferred object for user callbacks
                 def = $.Deferred();
 
-            if (editor) {
-                def.resolve(editor);
+            // check that all objects are present
+            if (head.length && body.length && window) {
+                // add a link to the editor.css file
+                head.append($('<link>').attr('rel', 'stylesheet').attr('href', ox.base + '/apps/io.ox/office/editor.css'));
+                // set body of the document to edit mode
+                body.attr('contenteditable', true);
+                // append some text to play with, TODO: remove that
+                body.append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
+                // resolve the deferred with a new editor instance
+                def.resolve(new oxoffice.Editor(body, window));
             } else {
+                // creation of the iframe failed: reject the deferred
                 def.reject("Cannot instantiate editor.");
             }
 
@@ -110,17 +124,21 @@ define('io.ox/office/main',
             getEditor = function () { return def; };
             return def;
         };
-        
+
         var createOperationsList = function (result) {
             var operations = [];
-            
-            _(result).each(function (value) {
+
+            if (_(result).isArray()) {
                 // iterating over the list of JSON objects
-                _(value).each(value, function (json, j) {
-                    operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
-                    window.console.log('Operation ' + j + ': ' + JSON.stringify(json));
+                _(result).each(function (json, j) {
+                    if (_(json).isObject()) {
+                        operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
+                        window.console.log('Operation ' + j + ': ' + JSON.stringify(json));
+                    }
                 });
-            });
+            }
+
+            return operations;
         };
 
         /*
@@ -149,19 +167,21 @@ define('io.ox/office/main',
         /*
          * Loads the document described in the options map passed in the
          * constructor of this application, and shows the application window.
+         *
+         * @returns
+         *  A deferred that reflects the result of the load operation.
          */
         app.load = function () {
             var def = $.Deferred();
             win.show(function () {
-                // load file
                 win.busy();
                 $.when(
                     getEditor().fail(showInternalError),
-                    api.get(appOptions).fail(showFileApiError),
                     $.ajax({ type: 'GET',
                         url: ox.apiRoot + "/oxodocumentfilter?action=importdocument&id=" + appOptions.id + "&session=" + ox.session,
-                        dataType: 'json'}).fail(showAjaxError))
-                .done(function (editor, data, response) {
+                        dataType: 'json'}).fail(showAjaxError)
+                )
+                .done(function (editor, response) {
                     editor.setOperations(createOperationsList(response));
                     editor.focus();
                     win.idle();
@@ -176,13 +196,27 @@ define('io.ox/office/main',
         };
 
         /*
-         * Saves the document.
+         * Saves the document to its origin.
+         *
+         * @returns
+         *  A deferred that reflects the result of the save operation.
          */
         app.save = function () {
             var def = $.Deferred();
-
-            def.reject('Saving document not implemented.');
-
+            win.busy();
+            $.when(
+                getEditor().fail(showInternalError),
+                $.Deferred().reject('Saving document not implemented.').fail(showInternalError) // TODO: replace with save action
+            )
+            .done(function (editor) {
+                editor.focus();
+                win.idle();
+                def.resolve();
+            })
+            .fail(function () {
+                win.idle();
+                def.reject();
+            });
             return def;
         };
 
@@ -192,7 +226,7 @@ define('io.ox/office/main',
          * shown asking whether to save or drop the changes.
          */
         app.setQuit(function () {
-            var def = $.Deferred();
+            var def = null;
             $.when(getEditor()).done(function (editor) {
                 if (editor.isModified()) {
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
@@ -201,28 +235,22 @@ define('io.ox/office/main',
                         .addPrimaryButton("delete", gt('Lose changes'))
                         .addAlternativeButton('save', gt('Save'))
                         .addButton("cancel", gt('Cancel'))
-                        .on('delete', function () {
-                            def.resolve();
-                        })
-                        .on('save', function () {
-                            app.save().done(function () {
-                                def.resolve();
-                            }).fail(function (message) {
-                                showInternalError(message);
-                                def.reject(message);
-                            });
-                        })
-                        .on('cancel', function () {
-                            def.reject();
-                        })
+                        .on('delete', function () { def = $.Deferred().resolve(); })
+                        .on('save', function () { def = app.save(); })
+                        .on('cancel', function () { def = $.Deferred().reject(); })
                         .show();
                     });
                 } else {
-                    def.resolve();
+                    def = $.Deferred().resolve();
                 }
             });
             return def;
         });
+
+        app.destroy = function () {
+            view.destroy();
+            app = win = container = iframe = model = view = null;
+        };
 
         return app;
     }

@@ -606,7 +606,6 @@ define('io.ox/office/editor', function () {
             }
         };
 
-
         this.implDbgOut = function (event) {
 
             function fillstr(str, len, fill, right) {
@@ -641,5 +640,8 @@ define('io.ox/office/editor', function () {
 
     } // end of OXOEditor()
 
-    return OXOEditor;
+    // export all public classes
+    return {
+        Editor: OXOEditor
+    };
 });
