@@ -15,56 +15,105 @@ define('io.ox/calendar/edit/main',
       ['io.ox/calendar/edit/model-appointment',
        'io.ox/calendar/api',
        'io.ox/calendar/edit/extensions',
-       'io.ox/calendar/edit/view-app',
-        'gettext!io.ox/calendar/edit/main'], function (AppointmentModel, api, editExtensions, AppView, gt) {
+       'io.ox/calendar/edit/view-main',
+       'gettext!io.ox/calendar/edit/main',
+       'less!io.ox/calendar/edit/style.less'], function (AppointmentModel, api, editExtensions, MainView, gt) {
 
     'use strict';
 
-    var EditAppointmentController = function (data) {
-        var self = this;
-        self.app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: gt('Edit Appointment')});
-
-        self.data = data;
-        self.app.controller = this;
-
-        self.app.setLauncher(function () {
-            return self.launch();
-        });
-        self.app.setQuit(function () {
-            return self.dispose();
-        });
-    };
+    var EditAppointmentController = function () {};
 
     // register to "compile"-time think is a good idea
     editExtensions.init();
 
     EditAppointmentController.prototype = {
-        launch: function () {
+
+        start: function () {
+            var self = this,
+                state = self.getState();
+
+            console.log('state', state, arguments);
+            if (state.folder && state.id) {
+           //     self.edit();
+            }
+        },
+        /*
+        * should cleanly remove every outbounding reference
+        * of all objects created. this could be a awkward task
+        * but better for longtime perf. IE still has a huge memory-leak problem
+        * :(
+        */
+        dispose: function () {
+            var self = this,
+                df = new $.Deferred();
+
+            //be gently
+            if (self.model.isDirty()) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(gt('Do you really want to lose your changes?'))
+                        .addPrimaryButton('delete', gt('Lose changes'))
+                        .addButton('cancel', gt('Cancel'))
+                        .show()
+                        .done(function (action) {
+                            console.debug('Action', action);
+                            if (action === 'delete') {
+                                df.resolve();
+                            } else {
+                                df.reject();
+                            }
+                        });
+                });
+            } else {
+                //just let it go
+                df.resolve();
+            }
+            return df;
         },
         edit: function (data) {
             var self = this;
             var cont = function (data) {
-                self.data = data;
-                self.model = new AppointmentModel(self.data);
+                console.log('cont', data);
+                self.model = new AppointmentModel(data);
 
-                self.view = new AppView({model: self.model});
+                if (self._restored === true) {
+                    self.model.toSync = data; //just to make it dirty
+                }
+
+                self.view = new MainView({model: self.model});
+
                 self.view.on('save', _.bind(self.onSave, self));
 
-                self.win = self.view.render().appwindow;
-                self.app.setWindow(self.win);
-                self.win.show(function () {
-                    // what a h4ck
-                    self.view.aftershow();
-                    $(self.view.el).addClass('scrollable');
+                // create app window
+                self.setWindow(ox.ui.createWindow({
+                    name: 'io.ox/calendar/edit',
+                    title: gt('Edit Appointment'),
+                    toolbar: true,
+                    search: false,
+                    close: true
+                }));
+
+                $(self.getWindow().nodes.main[0]).append(self.view.render().el);
+
+                self.getWindow().show(function () {
+                    if (self.model.get('title')) {
+                        $('.window-title').text(self.model.get('title'));
+                    }
+                    self.model.on('change:title', function (model, value, source) {
+                        $('.window-title').text(value);
+                        console.log('change', arguments);
+                    });
+                    $(self.getWindow().nodes.main[0]).addClass('scrollable');
                 });
             };
 
-            if (self.data) {
+            if (data) {
                 //hash support
-                self.app.setState({ folder: self.data.folder_id, id: self.data.id});
-                cont(self.data);
+                console.log('got data', data);
+                self.setState({ folder: data.folder_id, id: data.id});
+                cont(data);
             } else {
-                api.get(self.app.getState())
+                api.get(self.getState())
                     .done(cont)
                     .fail(function (err) {
                         // FIXME: use general error class, teardown gently for the user
@@ -72,41 +121,49 @@ define('io.ox/calendar/edit/main',
                     });
             }
         },
-        create: function () {
+        create: function (data) {
             var self = this;
 
-            self.model = new AppointmentModel(self.data);
-            self.view = new AppView({model: self.model});
+            self.model = new AppointmentModel(data);
+            self.view = new MainView({model: self.model});
             self.view.on('save', _.bind(self.onSave, self));
 
-            self.win = self.view.render().appwindow;
-            self.app.setWindow(self.win);
-            self.win.show(function () {
-                // what a h4ck
-                self.view.aftershow();
-                $(self.view.el).addClass('scrollable');
+            // create app window
+            self.setWindow(ox.ui.createWindow({
+                name: 'io.ox/calendar/edit',
+                title: gt('Create Appointment'),
+                toolbar: true,
+                search: false,
+                close: true
+            }));
+
+            $(self.getWindow().nodes.main[0]).append(self.view.render().el);
+
+            self.getWindow().show(function () {
+                // init title
+                if (self.model.get('title')) {
+                    $('.window-title').text(self.model.get('title'));
+                }
+                self.model.on('change:title', function (model, value, source) {
+                    $('.window-title').text(value);
+                    console.log('change', arguments);
+                });
+                $(self.getWindow().nodes.main[0]).addClass('scrollable');
             });
-
-
-        },
-        remove: function () {
-            var self = this;
-            self.model = new AppointmentModel(self.data);
-            self.model.destroy();
         },
         onSave: function () {
             var self = this;
-            self.win.busy();
+            self.getWindow().busy();
             self.model.save()
                 .done(
                     function () {
-                        self.win.idle();
-                        self.app.quit();
+                        self.getWindow().idle();
+                        self.quit();
                     }
                 )
                 .fail(
                     function (err) {
-                        self.win.idle();
+                        self.getWindow().idle();
                         var errContainer = $('<div>').addClass('alert alert-error');
                         $(self.view.el).find('[data-extid=error]').empty().append(errContainer);
                         if (err.conflicts !== null && err.conflicts !== undefined) {
@@ -131,46 +188,35 @@ define('io.ox/calendar/edit/main',
                     }
                 );
         },
-        /*
-        * should cleanly remove every outbounding reference
-        * of all objects created. this could be a awkward task
-        * but better for longtime perf. IE still has a huge memory-leak problem
-        * :(
-        */
-        dispose: function () {
-            var self = this,
-                df = new $.Deferred();
-
-            //be gently
-            if (self.model.isDirty()) {
-                console.log('is dirty!!');
-                console.log(self.model);
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog()
-                        .text(gt('Do you really want to lose your changes?'))
-                        .addPrimaryButton('delete', gt('Lose changes'))
-                        .addButton('cancel', gt('Cancel'))
-                        .show()
-                        .done(function (action) {
-                            console.debug('Action', action);
-                            if (action === 'delete') {
-                                df.resolve();
-                            } else {
-                                df.reject();
-                            }
-                        });
-                });
+        failSave: function () {
+            return {
+                module: 'io.ox/calendar/edit',
+                point: this.model.attributes
+            };
+        },
+        failRestore: function (point) {
+            var df = $.Deferred();
+            this._restored = true; //to set model dirty by default
+            if (_.isUndefined(point.id)) {
+                this.create(point);
             } else {
-                //just let it go
-                df.resolve();
+                this.edit(point);
             }
+            df.resolve();
+            console.log('failRestore', point);
             return df;
         }
     };
 
-    function createInstance(data) {
-        var controller = new EditAppointmentController(data);
-        return controller.app;
+
+    function createInstance() {
+        var app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: gt('Edit Appointment')}),
+            controller = _.extend(app, new EditAppointmentController());
+
+        controller.setLauncher(_.bind(controller.start, controller));
+        controller.setQuit(_.bind(controller.dispose, controller));
+        console.log('controller', controller);
+        return controller;
     }
 
     return {

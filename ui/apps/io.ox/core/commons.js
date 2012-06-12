@@ -57,19 +57,29 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             };
         }()),
 
-        wireGridAndSelectionChange: function (grid, id, draw, node) {
-            var last = '';
+        wireGridAndSelectionChange: function (grid, id, draw, node, api) {
+            var last = '',
+                update = function (e, data) {
+                    if (_.cid(e.data.item) === _.cid(data)) {
+                        draw(e.data.item);
+                    }
+                };
+
+            api = api || $({});
+
             grid.selection.on('change', function (e, selection) {
                 var len = selection.length,
                     // work with reduced string-based set
                     flat = JSON.stringify(_([].concat(selection)).map(function (o) {
-                        return { folder_id: o.folder_id || o.folder, id: o.id, recurrence_position: o.recurrence_position };
+                        return { folder_id: String(o.folder_id || o.folder), id: String(o.id), recurrence_position: String(o.recurrence_position || 0) };
                     }));
                 // has anything changed?
                 if (flat !== last) {
+                    api.off('update', update);
                     if (len === 1) {
                         node.css('height', '');
                         draw(selection[0]);
+                        api.on('update', { item: selection[0] }, update);
                     } else if (len > 1) {
                         node.css('height', '100%');
                         commons.multiSelection(id, node, this.unfold());
@@ -148,12 +158,15 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                     grid.refresh();
                 },
                 refreshList = function () {
+                    console.log('refreshlist');
                     grid.repaint().done(function () {
                         grid.selection.retrigger();
                     });
                 };
             win.on('show', function () {
-                    api.on('refresh.all', refreshAll).on('refresh.list', refreshList).trigger('refresh.all');
+                    api.on('refresh.all', refreshAll)
+                        .on('refresh.list', refreshList)
+                        .trigger('refresh.all');
                 })
                 .on('hide', function () {
                     api.off('refresh.all', refreshAll).off('refresh.list', refreshList);
