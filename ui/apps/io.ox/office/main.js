@@ -115,11 +115,9 @@ define('io.ox/office/main',
 
             if (_(result).isArray()) {
                 // iterating over the list of JSON objects
-                _(result).each(function (value) {
-                    _(value).each(function (json, j) {
-                        operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
-                        window.console.log('Operation ' + j + ': ' + JSON.stringify(json));
-                    });
+                _(result).each(function (json, j) {
+                    operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
+                    window.console.log('Operation ' + j + ': ' + JSON.stringify(json));
                 });
             }
 
