@@ -292,7 +292,7 @@ define('io.ox/office/editor', function () {
                     // Searching the children
                     currentNode = nodeList[i];
                     var currentLength = $(nodeList[i]).text().length;
-                    if (textLength + currentLength > pos) {
+                    if (textLength + currentLength >= pos) {
                         myParagraph = currentNode;
                         break;  // leaving the for-loop
                     } else {
