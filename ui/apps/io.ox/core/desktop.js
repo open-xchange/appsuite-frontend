@@ -597,6 +597,36 @@ define("io.ox/core/desktop",
 
     }());
 
+    ox.ui.WindowView = (function () {
+
+        var View = function (name, render) {
+
+            // init
+            var main,
+                initialized = false,
+                initialize = function (app) {
+                    if (!initialized) {
+                        main = app.getWindow().addView(name);
+                        initialized = true;
+                    }
+                };
+
+            this.show = function (app) {
+                // make sure it's initialized
+                initialize(app);
+                // set view
+                app.getWindow().setView(name);
+                // render
+                this.render(main);
+            };
+
+            this.render = render || $.noop;
+        };
+
+        return View;
+
+    }());
+
     ox.ui.windowManager = (function () {
 
         var that = Events.extend({}),
