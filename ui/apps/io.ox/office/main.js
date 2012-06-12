@@ -236,7 +236,7 @@ define('io.ox/office/main',
          */
         app.setQuit(function () {
             var def = null;
-            $.when(getEditor()).done(function (editor) {
+            getEditor().done(function (editor) {
                 if (editor.isModified()) {
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         new dialogs.ModalDialog()
