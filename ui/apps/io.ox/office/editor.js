@@ -144,16 +144,19 @@ define('io.ox/office/editor', function () {
             }
         };
 
-        this.applyOperations = function (theOperations, bRecord) {
-            // TODO
+        this.applyOperations = function (editor, theOperations, bRecord) {
+
+            if (_(theOperations).isArray()) {
+                _(theOperations).each(function (operation, i) {
+                    if (_(operation).isObject()) {
+                        editor.applyOperation(operation, bRecord);
+                    }
+                });
+            }
         };
 
         this.getOperations = function () {
             return operations;
-        };
-
-        this.setOperations = function (allOperations) {
-            operations = allOperations;
         };
 
         // GUI/EDITOR API
