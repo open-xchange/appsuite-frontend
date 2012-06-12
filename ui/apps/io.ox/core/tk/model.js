@@ -62,7 +62,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             if (_.isString(val)) {
                 return new Error(prop, _.printf('%s is not a valide date', def.i18n || prop));
             }
-            
+
             return _.now() > val || new Error(prop, _.printf('%s must be in the past', def.i18n || prop));
         },
         email: function (prop, val, def) {
@@ -312,7 +312,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         // DEPRECATED
         setData: function (data) {
             console.warn('DEPRECATED: setData - use initialize()');
-            this.init(data);
+            this.initialize(data);
         },
 
         /* DEPRECATED - get() without any parameter returns all data as well */
