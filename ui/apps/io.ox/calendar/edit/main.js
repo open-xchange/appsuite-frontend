@@ -169,6 +169,13 @@ define('io.ox/calendar/edit/main',
                                     $('<a>').addClass('close').attr('data-dismiss', 'alert').attr('type', 'button').text('x'),
                                     conView.render().el
                                 );
+                                conView.on('ignore', function () {
+                                    self.model.set('ignore_conflicts', true);
+                                    return self.onSave();
+                                });
+                                conView.on('cancel', function () {
+                                    $(self.view.el).find('[data-extid=error]').empty();
+                                });
 
                             });
                         } else if (err.error !== undefined) {

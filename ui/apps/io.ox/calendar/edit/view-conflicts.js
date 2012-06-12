@@ -18,7 +18,8 @@ define('io.ox/calendar/edit/view-conflicts',
 
     var ConflictsView = Backbone.View.extend({
         events: {
-            'click a.btn-danger[data-action=ignore]': 'onIgnore'
+            'click a.btn-danger[data-action=ignore]': 'onIgnore',
+            'click a.btn[data-action=cancel]': 'onCancel'
         },
         initialize: function () {
 
@@ -31,6 +32,11 @@ define('io.ox/calendar/edit/view-conflicts',
         },
         onIgnore: function () {
             console.log('ignore me');
+            this.trigger('ignore');
+        },
+        onCancel: function () {
+            console.log('cancel me');
+            this.trigger('cancel');
         }
     });
 
