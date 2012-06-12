@@ -173,7 +173,6 @@ define('io.ox/office/editor', function () {
          */
         /* DEPRECATED - keyCode handled differently in keyPressed in different browsers
         this.isNavigationKeyEvent = function (event) {
-            editWindow.console.log('getDOMPosition: Paragraph: ' + para + ' , Position: ' + pos);
             return NAVIGATION_KEYS.contains(event.keyCode);
         };
         */
@@ -253,7 +252,6 @@ define('io.ox/office/editor', function () {
 
         this.getDOMPosition = function (para, pos) {
 
-            editWindow.console.log('getDOMPosition: Paragraph: ' + para + ' , Position: ' + pos);
             // Converting para and pos to node and offset
             var pam;
 
@@ -299,14 +297,12 @@ define('io.ox/office/editor', function () {
                         break;  // leaving the for-loop
                     } else {
                         textLength += currentLength;
-                        editWindow.console.log('getDOMPosition: Complete length: ' + textLength);
                     }
                 }
             }
 
             var node = currentNode;
             var offset = pos - textLength;
-            editWindow.console.log('getDOMPosition: Result: ' + node + " : " + offset);
 
             pam = new DOMPaM();
             pam.node = node;
@@ -352,6 +348,8 @@ define('io.ox/office/editor', function () {
 
         this.processKeyDown = function (event) {
 
+            this.implDbgOut(event);
+
             // TODO: How to strip away debug code?
             if (event.keyCode && event.shiftKey && event.ctrlKey && event.altKey) {
                 var c = this.getPrintableChar(event);
@@ -379,9 +377,8 @@ define('io.ox/office/editor', function () {
             var domSelection = this.getCurrentDOMSelection();
             var selection = this.getOXOSelection(domSelection);
             
-            editWindow.console.log('processKeyPressed: OXOSelection, start: ' + selection.startPaM.para + " : " + selection.startPaM.pos);
-            editWindow.console.log('processKeyPressed: OXOSelection, end: ' + selection.endPaM.para + " : " + selection.endPaM.pos);
-            
+            this.implDbgOut(event);
+
             selection.adjust();
 
             /*
@@ -513,6 +510,30 @@ define('io.ox/office/editor', function () {
 
         this.setAttributes = function (para, pos) {
             // TODO
+        };
+        
+        this.implDbgOut = function (event) {
+            
+            function fillstr(str, len, fill, right) {
+                while (str.length < len) {
+                    if (right)
+                        str = str + fill;
+                    else
+                        str = fill + str;
+                }
+                return str;
+            }
+
+            var domSelection = this.getCurrentDOMSelection();
+            var selection = this.getOXOSelection(domSelection);
+            
+            var dbg = 'evt:' + fillstr(event.type, 10, ' ', true) + ' sel:[' + fillstr(selection.startPaM.para.toString(), 2, '0') + ',' + fillstr(selection.startPaM.pos.toString(), 2, '0') + '/' + fillstr(selection.endPaM.para.toString(), 2, '0') + ',' + fillstr(selection.endPaM.pos.toString(), 2, '0') + ']';
+            if ((event.type === "keypress") || (event.type === "keydown")) {
+                dbg += ' key:[keyCode=' + fillstr(event.keyCode.toString(), 3, '0') + ' charCode=' + fillstr(event.charCode.toString(), 3, '0') + ' shift=' + event.shiftKey + ' ctrl=' + event.ctrlKey + ' alt=' + event.altKey + ']';
+            }
+            
+            editWindow.console.log(dbg);
+            
         };
 
         // hybrid edit mode
