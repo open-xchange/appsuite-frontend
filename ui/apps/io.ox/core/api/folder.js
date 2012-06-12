@@ -469,8 +469,12 @@ define('io.ox/core/api/folder',
             _(list).map(function (o) {
                 var folder = _.isString(o) ? o : o.folder_id;
                 return folderCache.get(folder).pipe(function (data) {
-                    data.unread = Math.max(0, data.unread + delta);
-                    return folderCache.add(folder, data);
+                    if (data) {
+                        data.unread = Math.max(0, data.unread + delta);
+                        return folderCache.add(folder, data);
+                    } else {
+                        return $.when();
+                    }
                 });
             })
         );

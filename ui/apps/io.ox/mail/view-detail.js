@@ -137,6 +137,15 @@ define('io.ox/mail/view-detail',
         return $('<a>', { href: href }).text(href);
     };
 
+    var delayedRead = function (data, node) {
+        setTimeout(function () {
+            node.removeClass('unread');
+            data.unseen = false;
+            api.caches.get.add(data);
+            node = data = null;
+        }, 2000); // 2 seconds
+    };
+
     var blockquoteClickOpen, blockquoteClickClose, mailTo;
 
     blockquoteClickOpen = function () {
@@ -326,6 +335,8 @@ define('io.ox/mail/view-detail',
             // unread?
             if (util.isUnread(data)) {
                 node.addClass('unread');
+            } else if (data.unseen === true) {
+                delayedRead(data, node.addClass('unread'));
             }
 
             // invoke extensions

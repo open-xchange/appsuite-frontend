@@ -12,7 +12,7 @@
  */
 define('io.ox/calendar/edit/extensions/recurrence/view-repeat-option',
       ['io.ox/calendar/util',
-       'text!io.ox/calendar/edit/extensions/recurrence/tpl/repeat-option.tpl',
+       'text!io.ox/calendar/edit/extensions/recurrence/tpl/repeat-option.html',
        'gettext!io.ox/calendar/edit/main'], function (util, template, gt) {
 
     'use strict';
@@ -24,10 +24,8 @@ define('io.ox/calendar/edit/extensions/recurrence/view-repeat-option',
     };
 
 
-
-
-
     var RepeatOptionView = Backbone.View.extend({
+
         RECURRENCE_NONE: 0,
         tagName: 'div',
         _modelBinder: undefined,
@@ -109,10 +107,6 @@ define('io.ox/calendar/edit/extensions/recurrence/view-repeat-option',
         onToggleRepeat: function (evt) {
             var self = this;
             var isRecurrence = ($(evt.target).attr('checked') === 'checked');
-
-            window.model = self.model;
-
-            console.log('recurrence: ' + isRecurrence);
 
             if (isRecurrence) {
                 self.$('.editrecurrence_wrapper').show();

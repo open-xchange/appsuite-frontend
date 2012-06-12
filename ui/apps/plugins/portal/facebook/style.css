@@ -75,6 +75,7 @@
 .facebook .datetime  {
     display: block;
     font-size: 80%;
+    clear: both;
 }
 
 .facebook img.video-preview {
@@ -86,4 +87,20 @@
     font-size: 80%;
     line-height: 80%;
     text-decoration: none;
+}
+
+.facebook .caption.title {
+    font-weight: bold;
+}
+
+.facebook .wall-img-left {
+    float: left;
+    padding-right: .5em;
+}
+
+.facebook .debugging-info {
+    //display: none;
+    font-size: 90%;
+    font-weight: bold;
+    color: #c33;
 }

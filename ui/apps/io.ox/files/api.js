@@ -134,15 +134,16 @@ define("io.ox/files/api",
                 fixPost: true // TODO: temp. backend fix
             })
             .pipe(function (data) {
+                var id = options.json.id || options.id;
                 // clear folder cache
                 return $.when(
                     api.caches.all.grepRemove(options.json.folder_id + '\t'),
                     api.caches.get.remove(options.json),
-                    api.caches.versions.remove(options.json.id)
+                    api.caches.versions.remove(id)
                 )
                 .pipe(function () {
-                    api.trigger("create.version update refresh.all", { id: options.json.id, folder: options.json.folder_id });
-                    return { folder_id: String(options.json.folder_id), id: options.json.id, timestamp: data.timestamp};
+                    api.trigger("create.version update refresh.all", { id: id, folder: options.json.folder_id });
+                    return { folder_id: String(options.json.folder_id), id: id, timestamp: data.timestamp};
                 });
             });
     };

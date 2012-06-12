@@ -13,7 +13,7 @@
 
 define('io.ox/calendar/edit/extensions/recurrence/view-recurrence',
       ['io.ox/calendar/edit/binding-util',
-       'text!io.ox/calendar/edit/extensions/recurrence/tpl/recurrence.tpl',
+       'text!io.ox/calendar/edit/extensions/recurrence/tpl/recurrence.html',
        'gettext!io.ox/calendar/edit/main'], function (BinderUtils, template, gt) {
 
     'use strict';

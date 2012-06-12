@@ -19,6 +19,7 @@ define('io.ox/calendar/edit/main',
         'gettext!io.ox/calendar/edit/main'], function (AppointmentModel, api, editExtensions, AppView, gt) {
 
     'use strict';
+
     var EditAppointmentController = function (data) {
         var self = this;
         self.app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: gt('Edit Appointment')});
@@ -46,16 +47,16 @@ define('io.ox/calendar/edit/main',
             var cont = function (data) {
                 self.data = data;
                 self.model = new AppointmentModel(self.data);
-                self.view = new AppView({model: self.model});
 
+                self.view = new AppView({model: self.model});
                 self.view.on('save', _.bind(self.onSave, self));
 
-                self.win = self.view.render().el;
+                self.win = self.view.render().appwindow;
                 self.app.setWindow(self.win);
                 self.win.show(function () {
                     // what a h4ck
                     self.view.aftershow();
-                    $('.window-content').scrollable();
+                    $(self.view.el).addClass('scrollable');
                 });
             };
 
@@ -79,13 +80,15 @@ define('io.ox/calendar/edit/main',
             self.view = new AppView({model: self.model});
             self.view.on('save', _.bind(self.onSave, self));
 
-            self.win = self.view.render().el;
+            self.win = self.view.render().appwindow;
             self.app.setWindow(self.win);
             self.win.show(function () {
                 // what a h4ck
                 self.view.aftershow();
-                $('.window-content').scrollable();
+                $(self.view.el).addClass('scrollable');
             });
+
+
         },
         remove: function () {
             var self = this;
@@ -95,15 +98,18 @@ define('io.ox/calendar/edit/main',
         onSave: function () {
             var self = this;
             console.log('save model');
+            self.win.busy();
             self.model.save()
                 .done(
                     function () {
                         console.log('successful saved');
+                        self.win.idle();
                         self.app.quit();
                     }
                 )
                 .fail(
                     function (err) {
+                        self.win.idle();
                         console.log('failed to save');
                         console.log(err);
                     }
@@ -140,11 +146,9 @@ define('io.ox/calendar/edit/main',
                 //just let it go
                 df.resolve();
             }
-
             return df;
         }
     };
-
 
     function createInstance(data) {
         var controller = new EditAppointmentController(data);

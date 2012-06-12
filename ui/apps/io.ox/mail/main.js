@@ -115,7 +115,7 @@ define("io.ox/mail/main",
             .prop('order', 'desc')
             .prop('unread', false);
 
-        commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads');
+        commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads'); // getAllThreads is redefined below!
         commons.wireGridAndSearch(grid, win, api);
 
         function updateGridOptions() {
@@ -197,12 +197,13 @@ define("io.ox/mail/main",
         });
 
         grid.setAllRequest(function () {
-            var sort = this.prop('sort'), unread = this.prop('unread');
+            var sort = this.prop('sort'),
+                unread = this.prop('unread');
             return api[sort === '610' ? 'getAllThreads' : 'getAll']({
                     folder: this.prop('folder'),
                     sort: sort,
                     order: this.prop('order')
-                })
+                }, 'auto')
                 .pipe(function (data) {
                     return !unread ? data : _(data).filter(function (obj) {
                         return (obj.flags & 32) === 0;
@@ -367,8 +368,8 @@ define("io.ox/mail/main",
 
         grid.setEmptyMessage(function (mode) {
             return mode === 'search' ?
-                gt('No emails found for "%s"', win.search.query) :
-                gt('No emails in this folder');
+                gt('No mails found for "%s"', win.search.query) :
+                gt('No mails in this folder');
         });
 
         // go!

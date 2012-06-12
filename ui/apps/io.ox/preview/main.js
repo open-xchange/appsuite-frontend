@@ -224,8 +224,8 @@ define("io.ox/preview/main",
             return '';
         }());
 
-        if (this.file.name) {
-            // get matching renderer
+        // get matching renderer
+        if (this.extension || this.file.mimetype) {
             this.renderer = Renderer.getByExtension(this.extension || this.file.mimetype);
         }
     };

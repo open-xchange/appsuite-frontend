@@ -136,6 +136,8 @@ define("io.ox/mail/api",
                 return data;
             },
             get: function (data) {
+                // local update
+                latest[data.folder_id + '.' + data.id] = { flags: data.flags, color_label: data.color_label };
                 // was unseen?
                 if (data.unseen) {
                     folderAPI.decUnread(data);
@@ -180,6 +182,12 @@ define("io.ox/mail/api",
         YELLOW:   10
     };
 
+    // control for each folder:
+    // undefined -> first fetch
+    // true -> has been fetched in this session
+    // false -> caused by refresh
+    var cacheControl = {};
+
     // ~ all
     api.getAllThreads = function (options, useCache) {
         // request for brand new thread support
@@ -194,6 +202,10 @@ define("io.ox/mail/api",
         });
         var t1, t2;
         console.log('time.pre', 't1', (t1 = _.now()) - ox.t0, new Date(_.now()));
+        // use cache?
+        if (useCache === 'auto') {
+            useCache = options.cache = (cacheControl[options.folder] !== false);
+        }
         return this.getAll(options, useCache)
             .done(function (data) {
                 _(data).each(function (obj) {
@@ -202,6 +214,7 @@ define("io.ox/mail/api",
                         .concat(options.order === 'desc' ? obj.thread : obj.thread.slice().reverse());
                 });
                 console.log('time.post', '#', data.length, 't2', (t2 = _.now()) - ox.t0, 'took', t2 - t1);
+                cacheControl[options.folder] = true;
             });
     };
 
@@ -439,20 +452,24 @@ define("io.ox/mail/api",
     };
 
     var react = function (action, obj, view) {
-        return http.GET({
+        return http.PUT({
                 module: 'mail',
                 params: {
                     action: action || '',
-                    id: obj.id,
-                    folder: obj.folder || obj.folder_id,
                     view: view || 'text'
-                }
+                },
+                data: _([].concat(obj)).map(function (obj) {
+                    return api.reduce(obj);
+                }),
+                appendColumns: false
             })
             .pipe(function (data) {
                 var text = '', quote = '', tmp;
                 // transform pseudo-plain text to real text
                 if (data.attachments && data.attachments.length) {
-                    if (data.attachments[0].content_type === 'text/plain') {
+                    if (data.attachments[0].content === '') {
+                        // nothing to do - nothing to break
+                    } else if (data.attachments[0].content_type === 'text/plain') {
                         $('<div>')
                             // escape everything but BR tags
                             .html(data.attachments[0].content.replace(/<(?!br)/ig, '&lt;'))
@@ -561,6 +578,7 @@ define("io.ox/mail/api",
     };
 
     api.send = function (data, files) {
+
         var deferred = $.Deferred();
 
         if (Modernizr.file) {
@@ -735,19 +753,12 @@ define("io.ox/mail/api",
     var lastUnseenMail = 0;
 
     // refresh
-    api.refresh = function (e, folder) {
+    api.refresh = function (e) {
         if (ox.online) {
-            if (folder) {
-                // refresh current view
-                api.getAllThreads({ folder: folder }, false)
-                    .done(function () {
-                        api.trigger('refresh.all');
-                    });
-            } else {
-                api.caches.all.clear().done(function () {
-                    api.trigger('refresh.all');
-                });
-            }
+            // reset cache control
+            _(cacheControl).each(function (val, id) {
+                cacheControl[id] = false;
+            });
             // look for new unseen mails in INBOX
             http.GET({
                 module: 'mail',
@@ -775,6 +786,8 @@ define("io.ox/mail/api",
                     }
                     api.trigger('unseen-mail', unseen);
                 }
+                // trigger
+                api.trigger('refresh.all');
             });
         }
     };
