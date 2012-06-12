@@ -42,9 +42,9 @@ define('io.ox/calendar/actions',
         requires: 'one modify',
         action: function (params) {
             var o = {
-                id: params.id,
-                folder: params.folder_id
-            };
+                    id: params.id,
+                    folder: params.folder_id
+                };
             if (!_.isUndefined(params.recurrence_position)) {
                 o.recurrence_position = params.recurrence_position;
             }

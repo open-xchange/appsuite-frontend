@@ -37,13 +37,7 @@ define('io.ox/calendar/edit/main',
            //     self.edit();
             }
         },
-        /*
-        * should cleanly remove every outbounding reference
-        * of all objects created. this could be a awkward task
-        * but better for longtime perf. IE still has a huge memory-leak problem
-        * :(
-        */
-        dispose: function () {
+        stop: function () {
             var self = this,
                 df = new $.Deferred();
 
@@ -58,6 +52,7 @@ define('io.ox/calendar/edit/main',
                         .done(function (action) {
                             console.debug('Action', action);
                             if (action === 'delete') {
+                                self.dispose();
                                 df.resolve();
                             } else {
                                 df.reject();
@@ -66,9 +61,21 @@ define('io.ox/calendar/edit/main',
                 });
             } else {
                 //just let it go
+                self.dispose();
                 df.resolve();
             }
             return df;
+        },
+        /*
+        * should cleanly remove every outbounding reference
+        * of all objects created. this could be a awkward task
+        * but better for longtime perf. IE still has a huge memory-leak problem
+        * :(
+        */
+        dispose: function () {
+            console.log('disposing....');
+            this.view.off('save', _.bind(this.onSave, this));
+            this.model.off('change:title');
         },
         edit: function (data) {
             var self = this;
@@ -81,7 +88,6 @@ define('io.ox/calendar/edit/main',
                 }
 
                 self.view = new MainView({model: self.model});
-
                 self.view.on('save', _.bind(self.onSave, self));
 
                 // create app window
@@ -94,17 +100,7 @@ define('io.ox/calendar/edit/main',
                 }));
 
                 $(self.getWindow().nodes.main[0]).append(self.view.render().el);
-
-                self.getWindow().show(function () {
-                    if (self.model.get('title')) {
-                        $('.window-title').text(self.model.get('title'));
-                    }
-                    self.model.on('change:title', function (model, value, source) {
-                        $('.window-title').text(value);
-                        console.log('change', arguments);
-                    });
-                    $(self.getWindow().nodes.main[0]).addClass('scrollable');
-                });
+                self.getWindow().show(_.bind(self.onShowWindow, self));
             };
 
             if (data) {
@@ -127,6 +123,7 @@ define('io.ox/calendar/edit/main',
             self.model = new AppointmentModel(data);
             self.view = new MainView({model: self.model});
             self.view.on('save', _.bind(self.onSave, self));
+            self.setTitle(gt('Create Appointment'));
 
             // create app window
             self.setWindow(ox.ui.createWindow({
@@ -138,18 +135,20 @@ define('io.ox/calendar/edit/main',
             }));
 
             $(self.getWindow().nodes.main[0]).append(self.view.render().el);
-
-            self.getWindow().show(function () {
-                // init title
-                if (self.model.get('title')) {
-                    $('.window-title').text(self.model.get('title'));
-                }
-                self.model.on('change:title', function (model, value, source) {
-                    $('.window-title').text(value);
-                    console.log('change', arguments);
-                });
-                $(self.getWindow().nodes.main[0]).addClass('scrollable');
+            self.getWindow().show(_.bind(self.onShowWindow, self));
+        },
+        onShowWindow: function () {
+            var self = this;
+            if (self.model.get('title')) {
+                $('.window-title').text(self.model.get('title'));
+                self.setTitle(self.model.get('title'));
+            }
+            self.model.on('change:title', function (model, value, source) {
+                $('.window-title').text(value);
+                self.setTitle(value);
+                console.log('change', arguments);
             });
+            $(self.getWindow().nodes.main[0]).addClass('scrollable');
         },
         onSave: function () {
             var self = this;
@@ -214,7 +213,7 @@ define('io.ox/calendar/edit/main',
             controller = _.extend(app, new EditAppointmentController());
 
         controller.setLauncher(_.bind(controller.start, controller));
-        controller.setQuit(_.bind(controller.dispose, controller));
+        controller.setQuit(_.bind(controller.stop, controller));
         console.log('controller', controller);
         return controller;
     }

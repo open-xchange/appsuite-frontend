@@ -140,20 +140,13 @@ define('io.ox/calendar/edit/view-main',
         guid: undefined,
         bindings: undefined,
         events: {
- //           'click .editrecurrence': 'toggleRecurrence',
             'click .save': 'onSave'
- //           'click input.repeat': 'onToggleRepeat'
         },
         initialize: function () {
             var self = this;
             self.template = doT.template(commontpl);
             self._modelBinder = new Backbone.ModelBinder();
             self.guid = _.uniqueId('io_ox_calendar_edit_');
-
-
-            //self.participantsCollection = new ParticipantsCollection(self.model.get('participants'));
-            //self.participantsView = new ParticipantsView({collection: self.participantsCollection});
-            //self.recurrenceView = new RecurrenceView({model: self.model});
 
             var recurTextConverter = function (direction, value, attribute, model) {
                 if (direction === 'ModelToView') {
@@ -186,8 +179,7 @@ define('io.ox/calendar/edit/view-main',
                     }
                 ]
             };
-
-            Backbone.Validation.bind(this, {forceUpdate: true});
+            Backbone.Validation.bind(this, {forceUpdate: true, selector: 'data-property'});
         },
         render: function () {
             var self = this;
@@ -204,7 +196,7 @@ define('io.ox/calendar/edit/view-main',
             // define and invoke extension points
             ext_helper.processDomFragment(self.el, 'io.ox/calendar/edit', {view: self});
 
-            var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'name');
+            var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property');
             var bindings = _.extend(defaultBindings, self.bindings);
 
             // let others modify the bindings - if something is disabled,

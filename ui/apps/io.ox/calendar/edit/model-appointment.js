@@ -51,7 +51,9 @@ define('io.ox/calendar/edit/model-appointment',
             this.on('change', _.bind(this.onChange, this));
         },
         save: function () {
-            var self = this;
+            var self = this,
+                df = new $.Deferred();
+
             self.validate();
 
             if (self.isDirty() && !self.isNew() && self.isValid()) {
@@ -59,11 +61,9 @@ define('io.ox/calendar/edit/model-appointment',
             } else if (self.isDirty() && self.isNew() && self.isValid()) {
                 return self._create();
             } else if (!self.isValid()) {
-                var df = new $.Deferred();
                 df.reject('Please correct your inputs');
                 return df;
             } else {
-                var df = new $.Deferred();
                 df.reject('Nothing to save');
                 return df;
             }
