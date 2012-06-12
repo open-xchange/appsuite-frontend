@@ -15,7 +15,7 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/calendar/util',
        'io.ox/core/extensions',
        'io.ox/core/date',
-       'dot!io.ox/calendar/edit/tpl/common.html',
+       'dot!io.ox/calendar/edit/common.html',
        'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, tmpl, gt) {
 
     'use strict';
