@@ -13,8 +13,8 @@
 define('io.ox/calendar/month/view-controller',
     ['io.ox/calendar/util',
      'io.ox/calendar/api',
-     'gettext!io.ox/calendar/month/view',
-     'less!io.ox/calendar/month/style.css'], function (util, api, gt) {
+     'io.ox/calendar/month/view'
+     ], function (util, api, gt, view) {
 
     'use strict';
 
