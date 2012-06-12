@@ -12,11 +12,10 @@
 
 define('io.ox/calendar/month/view',
     ['io.ox/calendar/util',
-     'io.ox/calendar/api',
      'dot!io.ox/calendar/month/template.html',
      'io.ox/core/date',
      'gettext!io.ox/calendar/view',
-     'less!io.ox/calendar/month/style.css'], function (util, api, tmpl, date, gt) {
+     'less!io.ox/calendar/month/style.css'], function (util, tmpl, date, gt) {
 
     'use strict';
 
@@ -24,9 +23,33 @@ define('io.ox/calendar/month/view',
 
         drawScaffold: function (main) {
 
-            var node = tmpl.render('scaffold', { days: date.locale.days });
-            console.log('YEAH', node);
+            var days = _(date.locale.daysShort).slice(1).concat(_(date.locale.daysShort).first());
+            var node = tmpl.render('scaffold', { days: days });
             return node;
+        },
+
+        drawMonth: function (timestamp) {
+
+            var month = $('<div class="month">'),
+                list = util.getMonthScaffold(timestamp);
+
+            _(list).each(function (weeks) {
+                var week = $('<div class="week">').appendTo(month);
+                _(weeks).each(function (day) {
+                    console.log('DAY', day);
+                    week.append(tmpl.render('day', day));
+                });
+            });
+
+            month.append(
+                $('<div class="vertical-name">').text('June 2012')
+            );
+
+            return month;
+        },
+
+        drawAppointment: function (a) {
+            return tmpl.render('appointment', a);
         }
     };
 });

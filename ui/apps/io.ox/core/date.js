@@ -98,14 +98,14 @@ function (gettext, config) {
         var keyDay = getKeyDayOfWeek(d);
         var D = d.constructor;
         var keyDate = new D(keyDay * api.DAY);
-        var jan1st = new D(keyDate.getYear(), inMonth ? keyDate.getMonth() : 1);
+        var jan1st = new D(keyDate.getYear(), inMonth ? keyDate.getMonth() : 0);
         return Math.floor((keyDay - jan1st.getDays()) / 7) + 1;
     }
 
     function getWeekYear(d) {
         var year = d.getYear(), month = d.getMonth(), week = getWeek(d);
-        if (month === 1 && week > 26) year--;
-        if (month === 12 && week < 26) year++;
+        if (month === 0 && week > 26) year--;
+        if (month === 11 && week < 26) year++;
         return year;
     }
 
@@ -133,7 +133,7 @@ function (gettext, config) {
         },
         D: function (n, d) {
             return num(n,
-                d.getDays() - new d.constructor(d.getYear(), 1).getDays() + 1);
+                d.getDays() - new d.constructor(d.getYear(), 0).getDays() + 1);
         },
         d: function (n, d) { return num(n, d.getDate()); },
         E: function (n, d) {
@@ -153,10 +153,9 @@ function (gettext, config) {
         M: function (n, d) {
             var m = d.getMonth();
             if (n >= 3) {
-                return text(n, api.locale.months[m - 1],
-                               api.locale.monthsShort[m - 1]);
+                return text(n, api.locale.months[m], api.locale.monthsShort[m]);
             } else {
-                return num(n, m);
+                return num(n, m + 1);
             }
         },
         m: function (n, d) { return num(n, d.getMinutes()); },
@@ -167,8 +166,8 @@ function (gettext, config) {
         w: function (n, d) { return num(n, getWeek(d)); },
         Y: function (n, d) {
             var y = d.getYear(), m = d.getMonth(), w = getWeek(d);
-            if (m === 1 && w > 26) y--;
-            if (m === 12 && w < 26) y++;
+            if (m === 0 && w > 26) y--;
+            if (m === 11 && w < 26) y++;
             if (y < 1) y = 1 - y;
             return num(n, n === 2 ? y % 100 : y);
         },
@@ -276,8 +275,8 @@ function (gettext, config) {
             return function (s, d) { d.h = s === "24" ? 0 : Number(s); };
         },
         M: function (n) {
-            return n >= 3 ? function (s, d) { d.m = monthMap[s] + 1; }
-                          : function (s, d) { d.m = s; };
+            return n >= 3 ? function (s, d) { d.m = monthMap[s]; }
+                          : function (s, d) { d.m = s - 1; };
         },
         Y: function(n) {
             return function (s, d) {
@@ -321,7 +320,7 @@ function (gettext, config) {
         var match = string.match(new RegExp("^\\s*" + rex + "\\s*$", "i"));
         if (!match) return null;
         var d = { bc: false, century: false, pm: false,
-            y: 1970, m: 1, d: 1, h: 0, h2: 0, min: 0, s: 0, ms: 0,
+            y: 1970, m: 0, d: 1, h: 0, h2: 0, min: 0, s: 0, ms: 0,
             w: 1, wd: 0 };
         for (var i = 0; i < handlers.length; i++)
             handlers[i](match[i + 1], d);
@@ -622,7 +621,6 @@ function (gettext, config) {
                     this.local = LocalDate.localTime(this.t);
                     break;
                 default:
-                    arguments[1]--;
                     this.local = Date.UTC.apply(Date, arguments);
                     this.t = LocalDate.utc(this.local);
             }
@@ -715,17 +713,15 @@ function (gettext, config) {
         },
         setYear: function (year, month, date) {
             var d = new Date(this.local);
-            arguments[1]--;
             d.setUTCFullYear.apply(d, arguments);
             this.t = this.constructor.utc(this.local = d.getTime());
             return this;
         },
         getMonth: function () {
-            return new Date(this.local).getUTCMonth() + 1;
+            return new Date(this.local).getUTCMonth();
         },
         setMonth: function (month, date) {
             var d = new Date(this.local);
-            arguments[0]--;
             d.setUTCMonth.apply(d, arguments);
             this.t = this.constructor.utc(this.local = d.getTime());
             return this;
@@ -794,7 +790,7 @@ function (gettext, config) {
                     } else if (this.getMinutes() !== end.getMinutes()) {
                         return diff.m;
                     } else if (this.getTimeZone() === end.getTimeZone()) {
-                        return this.getFormat(format);
+                        return api.getFormat(format);
                     }
                 } else {
                     format |= api.DATE;
@@ -809,11 +805,11 @@ function (gettext, config) {
                 } else if (this.getDate() !== end.getDate()) {
                     return diff.d;
                 } else {
-                    return this.getFormat(format);
+                    return api.getFormat(format);
                 }
             }
-            return _.printf(L.intervals.fallback, this.getFormat(format),
-                                                  end.getFormat(format));
+            format = api.getFormat(format);
+            return _.printf(L.intervals.fallback, format, format);
         },
         formatInterval: function (end, format) {
             if (typeof format === 'number') {
