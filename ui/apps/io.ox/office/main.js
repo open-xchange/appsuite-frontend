@@ -210,6 +210,20 @@ define('io.ox/office/main',
             )
             .done(function (editor) {
                 editor.focus();
+                var allOperations = editor.getOperations();
+                // var operations = convertAllOperations(allOperations);
+                var operations = {"Operations": ["{name:insertParagraph, para:0}", "{name:insertText, para:0, pos:3, text:hallo}", "{name:insertText, para:1, pos:6, text:Welt}"]};
+                $.ajax({ type: 'GET',
+                    data: operations,
+                    url: ox.apiRoot + "/oxodocumentfilter?action=exportdocument&id=" + appOptions.id + "&session=" + ox.session,  // URL needs to be specified
+                    dataType: 'json',
+                    beforeSend: function (xhr) {
+                        if (xhr && xhr.overrideMimeType) {
+                            xhr.overrideMimeType("application/j-son;charset=UTF-8");
+                        }
+                    }
+                })
+                .fail(showAjaxError);
                 win.idle();
                 def.resolve();
             })
