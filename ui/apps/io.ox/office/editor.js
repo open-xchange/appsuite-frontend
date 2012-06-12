@@ -113,34 +113,28 @@ define('io.ox/office/editor', function () {
 
         // Maybe only applyOperation_s_, where param might be operation or operation[] ?
         this.applyOperation = function (operation, bRecord) {
-            // TODO
+
             if (bRecord) {
-                // TODO this.operations.append(operation);
+                operations.push(operation);
             }
 
             if (operation.name === "initDocument") {
-                // TODO
-                // Delete DOM, clear operations.
-                // TDB: Create one empty paragraph?!
+                this.implInitDocument();
             }
             else if (operation.name === "insertText") {
-                // TODO
-                var domPos = this.getDOMPosition(operation.para, operation.pos);
-                var oldText = domPos.node.nodeValue;
-                var newText = oldText.slice(0, domPos.offset) + operation.text + oldText.slice(domPos.offset);
-                domPos.node.nodeValue = newText;
+                this.implInsertText(operation.para, operation.pos, operation.text);
             }
             else if (operation.name === "deleteText") {
-                // TODO
+                this.implDeleteText(operation.para, operation.start, operation.end);
             }
             else if (operation.name === "insertParagraph") {
-                // TODO
+                this.implInsertParagraph(operation.para);
             }
             else if (operation.name === "deleteParagraph") {
-                // TODO
+                this.implDeleteParagraph(operation.para);
             }
             else if (operation.name === "splitParagraph") {
-                // TODO
+                this.implSplitParagraph(operation.para, operation.pos);
             }
             else if (operation.name === "mergeParagraph") {
                 // TODO
@@ -269,20 +263,10 @@ define('io.ox/office/editor', function () {
                 return pam;
             }
 
-            // Checking if all children of this paragraph have enough text content to reach pos
-            var maxTextLength = 0;
-            var nodeList = myParagraph.childNodes;
-            for (var i = 0; i < nodeList.length; i++) {
-                maxTextLength += $(nodeList[i]).text().length;
-            }
-
-            if (maxTextLength < pos) {
-                editWindow.console.log('getDOMPosition: Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + maxTextLength);
-                return pam;
-            }
-
             var textLength = 0;
+            var nodeList = myParagraph.childNodes;
             var currentNode = nodeList.firstChild;
+            var bFound = false;
 
             while (myParagraph.hasChildNodes()) {
 
@@ -293,12 +277,18 @@ define('io.ox/office/editor', function () {
                     currentNode = nodeList[i];
                     var currentLength = $(nodeList[i]).text().length;
                     if (textLength + currentLength >= pos) {
+                        bFound = true;
                         myParagraph = currentNode;
                         break;  // leaving the for-loop
                     } else {
                         textLength += currentLength;
                     }
                 }
+            }
+
+            if (!bFound) {
+                editWindow.console.log('getDOMPosition: Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + textLength);
+                return pam;
             }
 
             var node = currentNode;
@@ -361,6 +351,42 @@ define('io.ox/office/editor', function () {
                 }
             }
 
+            // For some keys we only get keyDown, not keyPressed!
+
+            var domSelection = this.getCurrentDOMSelection();
+            var selection = this.getOXOSelection(domSelection);
+            selection.adjust();
+
+            if (event.keyCode === 46) { // DELETE
+                this.deleteSelected();
+                var paraLen = this.implGetParagraphLen(selection.startPaM.para);
+                if (selection.startPaM.pos < paraLen) {
+                    this.deleteText(selection.startPaM.para, selection.startPaM.pos, selection.startPaM.pos + 1);
+                }
+                else {
+                    this.mergeParagraph(selection.startPaM.para);
+                }
+                selection.endPaM = selection.startPaM;
+                event.preventDefault();
+                this.setSelection(selection);
+            }
+            if (event.keyCode === 8) { // BACKSPACE
+                this.deleteSelected();
+                if (selection.startPaM.pos > 0) {
+                    this.deleteText(selection.startPaM.para, selection.startPaM.pos - 1, selection.startPaM.pos);
+                    selection.startPaM.pos--;
+                }
+                else if (selection.startPaM.para > 0) {
+                    this.mergeParagraph(selection.startPaM.para - 1);
+                    selection.startPaM.para--;
+                    selection.startPaM.pos = this.implGetParagraphLen(selection.startPaM.para);
+                }
+                selection.endPaM = selection.startPaM;
+                event.preventDefault();
+                this.setSelection(selection);
+            }
+
+
             /*
             if (!this.isNavigationKeyEvent(event)) {
                 // Don't block keyDown, or we will never get keyPressed...
@@ -372,13 +398,10 @@ define('io.ox/office/editor', function () {
 
         this.processKeyPressed = function (event) {
 
-            var c, selection;
+            this.implDbgOut(event);
 
             var domSelection = this.getCurrentDOMSelection();
             var selection = this.getOXOSelection(domSelection);
-
-            this.implDbgOut(event);
-
             selection.adjust();
 
             /*
@@ -388,7 +411,7 @@ define('io.ox/office/editor', function () {
             }
             */
 
-            c = this.getPrintableChar(event);
+            var c = this.getPrintableChar(event);
 
             // TODO
             // For now (the prototype), only accept single chars, but let the browser process, so we don't need to care about DOM stuff
@@ -510,6 +533,77 @@ define('io.ox/office/editor', function () {
 
         this.setAttributes = function (para, pos) {
             // TODO
+        };
+
+        // ==================================================================
+        // IMPL METHODS
+        // ==================================================================
+
+        this.implGetParagraphLen = function (para) {
+            var textLength = 0;
+            var nodeList = paragraphs[para].childNodes;
+            for (var i = 0; i < nodeList.length; i++) {
+                textLength += $(nodeList[i]).text().length;
+            }
+            return textLength;
+        };
+
+
+        this.implParagraphChanged = function (para) {
+            // TODO
+            // 1) Adjust tabs
+            // 2) ???
+        };
+
+        this.implInitDocument = function () {
+            // TODO
+        };
+
+        this.implInsertText = function (para, pos, text) {
+            var domPos = this.getDOMPosition(para, pos);
+            var oldText = domPos.node.nodeValue;
+            var newText = oldText.slice(0, domPos.offset) + text + oldText.slice(domPos.offset);
+            domPos.node.nodeValue = newText;
+            this.implParagraphChanged(para);
+        };
+
+        this.implInsertParagraph = function (para) {
+            // HACK?
+            if (para === -1) para = paragraphs.length;
+            var splitpara = para ? para - 1 : 0;
+            var splitpos = para ? -1 : 0;
+            this.implSplitParagraph(splitpara, splitpos);
+        };
+
+        this.implSplitParagraph = function (para, pos) {
+            var paraclone = $(paragraphs[para]).clone();
+            paraclone.insertAfter(paragraphs[para]);
+            paragraphs = editdiv.children();
+            if (pos !== -1)
+                this.implDeleteText(para, pos, -1);
+            this.implDeleteText(para + 1, 0, pos);
+        };
+
+        this.implMergeParagraph = function (para) {
+            // TODO
+        };
+
+        this.implDeleteParagraph = function (para) {
+            // TODO
+        };
+
+        this.implDeleteText = function (para, start, end) {
+//            var para = $(paragraphs[para]);
+            var startPaM = this.getDOMPosition(para, start);
+            var endPaM = this.getDOMPosition(para, start);
+
+            if (startPaM.node === endPaM.node) {
+                var oldText = startPaM.node.nodeValue;
+                var nodeStart = start - startPaM.offset;
+                var newText = oldText.slice(0, start - nodeStart) + oldText.slice(end - nodeStart);
+                startPaM.node.nodeValue = newText;
+                this.implParagraphChanged(para);
+            }
         };
 
         this.implDbgOut = function (event) {
