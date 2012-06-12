@@ -1,12 +1,25 @@
-<!-- YEAH -->
+<!--
+  This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+  LICENSE. This work is protected by copyright and/or other applicable
+  law. Any use of the work other than as authorized under this license
+  or copyright law is prohibited.
+
+  http://creativecommons.org/licenses/by-nc-sa/2.5/
+  © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+
+  @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+-->
 
 <part id='scaffold'>
-    <h1>Hallo Welt</h1>
-    <div>Lorem ipsum ... {{=it.a}}</div>
-</part>
-
-<part id='io.ox/calendar/month'>
-    <extension id='day'>
-        <div>Hallo Welt! {{=it.a}}!</div>
-    </extension>
+    <div class="abs month-view ">
+        <div class="header">
+            <div>
+                {{~it.days :value:index}}
+                <div class="day">{{=value}}</div>
+                {{~}}
+                <div class="day">&nbsp;</div>
+            </div>
+        </div>
+        <div class="scrollpane"></div>
+    </div>
 </part>
