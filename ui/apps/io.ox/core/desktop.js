@@ -603,6 +603,7 @@ define("io.ox/core/desktop",
 
             // init
             var main,
+                rendered = false,
                 initialized = false,
                 initialize = function (app) {
                     if (!initialized) {
@@ -616,8 +617,11 @@ define("io.ox/core/desktop",
                 initialize(app);
                 // set view
                 app.getWindow().setView(name);
-                // render
-                this.render(main);
+                // render?
+                if (!rendered) {
+                    this.render(main, app);
+                    rendered = true;
+                }
             };
 
             this.render = render || $.noop;

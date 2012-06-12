@@ -24,7 +24,9 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/actions/switch-to-list-view', {
         requires: true,
         action: function (app) {
-            app.getWindow().setView('main');
+            require(['io.ox/calendar/list/view-controller'], function (view) {
+                view.show(app);
+            });
         }
     });
 
