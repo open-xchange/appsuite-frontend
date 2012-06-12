@@ -24,6 +24,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
     var DAY = 60000 * 60 * 24;
 
     var api = {
+
         get: function (o) {
 
             o = o || {};
@@ -67,7 +68,8 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
                     action: "all",
-                    columns: "1,20,207,201,200,202,400", // id, folder_id, recurrence_position, start_date, title, end_date, location
+                    // id, folder_id, recurrence_position, start_date, title, end_date, location, shown_as
+                    columns: "1,20,207,201,200,202,400,402",
                     start: o.start,
                     end: o.end,
                     showPrivate: true,

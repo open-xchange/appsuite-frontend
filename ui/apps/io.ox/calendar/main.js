@@ -127,7 +127,13 @@ define("io.ox/calendar/main",
 
         // go!
         commons.addFolderSupport(app, grid, 'calendar')
-            .done(commons.showWindow(win, grid));
+            .pipe(commons.showWindow(win, grid))
+            .done(function () {
+                // switch to month view
+                require(['io.ox/calendar/month/view-controller'], function (view) {
+                    view.show(app);
+                });
+            });
     });
 
     return {
