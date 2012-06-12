@@ -147,12 +147,16 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/create', {
         id: 'create',
         requires: 'one create',
-        action: function (data) {
+        action: function (app) {
             require(['io.ox/calendar/edit/main'], function (editmain) {
                 console.log('create');
                 // FIXME: what a hack > folder_id
                 editmain.getApp().launch().done(function () {
-                    this.create({folder_id: data.folder.get()});
+                    this.on('save', function (evt, data) {
+                        console.log('create save', arguments, app.getGrid());
+                        app.getGrid().selection.set(data);
+                    });
+                    this.create({folder_id: app.folder.get()});
                 });
             });
 

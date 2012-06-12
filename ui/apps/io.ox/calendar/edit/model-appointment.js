@@ -88,9 +88,10 @@ define('io.ox/calendar/edit/model-appointment',
             }
 
             CalendarAPI.update(o)
-                .done(function () {
+                .done(function (data) {
                     self._resetDirty();
-                    df.resolve(true);
+                    self.attributes = data;
+                    df.resolve(data);
 
                 })
                 .fail(function () {
@@ -107,9 +108,10 @@ define('io.ox/calendar/edit/model-appointment',
 
             o = self.attributes;
             CalendarAPI.create(o)
-                .done(function () {
+                .done(function (data) {
                     self._resetDirty();
-                    df.resolve(true);
+                    self.attributes = data;
+                    df.resolve(data);
                 })
                 .fail(function (err) {
                     df.reject(err);

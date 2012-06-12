@@ -192,6 +192,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 return api.get(getObj)
                         .pipe(function (data) {
                             api.trigger('refresh.all');
+                            api.trigger('created', getObj);
                             return data;
                         });
             });

@@ -14,10 +14,9 @@ define('io.ox/calendar/edit/view-main',
        ['io.ox/calendar/edit/binding-util',
        'io.ox/calendar/util',
        'io.ox/core/extensions',
-       'io.ox/calendar/edit/ext-helper',
        'io.ox/core/date',
-       'text!io.ox/calendar/edit/tpl/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, ext_helper, dateAPI, commontpl, gt) {
+       'dot!io.ox/calendar/edit/tpl/common.html',
+       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, tmpl, gt) {
 
     'use strict';
 
@@ -144,7 +143,6 @@ define('io.ox/calendar/edit/view-main',
         },
         initialize: function () {
             var self = this;
-            self.template = doT.template(commontpl);
             self._modelBinder = new Backbone.ModelBinder();
             self.guid = _.uniqueId('io_ox_calendar_edit_');
 
@@ -187,14 +185,12 @@ define('io.ox/calendar/edit/view-main',
             // pre render it
             staticStrings.SAVE_BUTTON_LABEL = (self.model.has('id') ? gt('Save') : gt('Create'));
 
-            self.$el.empty().append(self.template({
+            self.$el.empty().append(tmpl.render('common', {
                 strings: staticStrings,
                 reminderList: reminderListValues,
                 uid: self.guid
             }));
 
-            // define and invoke extension points
-            ext_helper.processDomFragment(self.el, 'io.ox/calendar/edit', {view: self});
 
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property');
             var bindings = _.extend(defaultBindings, self.bindings);
