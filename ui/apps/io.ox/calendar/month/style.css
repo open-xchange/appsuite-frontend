@@ -17,26 +17,25 @@
 .window-content.month-view {
     
     .header {
-        font-size: 14px;
-        line-height: 40px;
         position: absolute;
-        top: 0; right: 0; height: 40px; left: 0;
+        right: 0; height: 30px; bottom: 0; left: 0;
         white-space: nowrap;
         background-color: white;
     }
     
     .header .weekday {
         font-family: @font-light;
-        width: 12.5%;
+        font-size: 12px;
+        line-height: 30px;
+        width: 12.50%;
         display: inline-block;
-        overflow: hidden;
-        padding: 0 13px 0 13px;
-    }         
+        padding-left: 13px;
+    }
     
     .scrollpane {
         overflow: auto;
         position: absolute;
-        top: 40px; right: 0; bottom: 0; left: 0;
+        top: 0; right: 0; bottom: 30px; left: 0;
     }
     
     .month {
@@ -53,15 +52,16 @@
         height: 100%;
         position: relative;
         display: inline-block;
-        border-top: 1px solid #ccc;    
-        border-right: 1px solid #ccc;
-        padding: 13px;
+        border-color: #ccc;
+        border-style: solid;
+        border-width: 0 1px 1px 0;
+        overflow: hidden;
     }
     
     .day.out {
         background-color: #f5f5f5;
     }
-    
+
     .day .number {
         position: absolute;
         color: #aaa;
@@ -79,6 +79,9 @@
         color: #a00;
     }
     
+    .day.today { background-color: #daefFf; }
+    .day.today .number { color: #08c; }
+    
     .vertical-name {
         position: absolute;
         top: 50%;
@@ -92,17 +95,26 @@
     }
     
     .day .list {
-        top: 13px; right: 13px; bottom: 13px; left: 13px;
+        top: 6px; right: 6px; bottom: 6px; left: 6px;
         z-index: 2;
     }
     
     .appointment {
+        font-size: 11px;
         background-color: #08c;
         color: white;
-        margin-bottom: 2px;
-        padding: 2px 13px 2px 13px;
+        margin-bottom: 1px;
+        padding: 2px 7px 2px 7px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        cursor: pointer;
     }
+    
+    .appointment.reserved { background-color: #08c; } /* blue */
+    .appointment.temporary { background-color: #FFBB00; } /* yellow */
+    .appointment.absent { background-color: #913F3F; } /* red */
+    .appointment.free { background-color: #8EB360; } /* green */
+    
+    .appointment:hover { background-color: #555; }
 }

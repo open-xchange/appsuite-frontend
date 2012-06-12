@@ -17,11 +17,27 @@ define('io.ox/calendar/month/view-controller',
 
     return new ox.ui.WindowView('month-view', function (main) {
 
+        console.log('month view render');
+
         var now = Date.UTC(2012, 5, 1),
             scaffold = view.drawScaffold();
 
         scaffold.find('.scrollpane').append(view.drawMonth(now));
-        main.addClass('month-view').append(scaffold);
+        main.empty().addClass('month-view').append(scaffold);
+
+        // add click support
+        main.on('click', '.appointment', function (e) {
+            var obj = _.cid($(this).attr('data-cid'));
+            // open appointment details
+            api.get(obj).done(function (data) {
+                require(["io.ox/core/tk/dialogs", "io.ox/calendar/view-detail"])
+                .done(function (dialogs, detailView) {
+                    new dialogs.SidePopup().show(e, function (popup) {
+                        popup.append(detailView.draw(data));
+                    });
+                });
+            });
+        });
 
         // get appointments
         api.getAll({ start: now, end: Date.UTC(2012, 5, 30) }).done(function (appointments) {
@@ -34,80 +50,4 @@ define('io.ox/calendar/month/view-controller',
             });
         });
     });
-
-
-//        var drawTs = _.now(),
-//            drawDate = new Date(drawTs),
-//            list = util.getMonthScaffold(drawTs),
-//            appointmentFilter = {},
-//            drawMonth = drawDate.getUTCMonth();
-//
-//        var calendarCheck = $('ol.calendar', main),
-//            render = false,
-//            monthView, prevMonth, thisMonth, nextMonth;
-//
-//        if (!calendarCheck || calendarCheck.length === 0) {
-//            render = true;
-//
-//            monthView = $('<ol>', {"class": "calendar", "start": drawMonth});
-//            prevMonth = $('<ol>', {"class": "lastmonth"});
-//            thisMonth = $('<ol>', {"class": "thismonth"});
-//            nextMonth = $('<ol>', {"class": "nextmonth"});
-//
-//            monthView.append($('<li>').append(prevMonth))
-//                .append($('<li>').append(thisMonth))
-//                .append($('<li>').append(nextMonth));
-//        }
-//
-//        _(list).each(function (weeks) {
-//            _(weeks).each(function (day) {
-//                var actualList;
-//
-//                if (!appointmentFilter.start) {
-//                    appointmentFilter.start = day.timestamp;
-//                }
-//                appointmentFilter.end = day.timestamp;
-//
-//                if (day.month < drawDate.getUTCMonth()) {
-//                    actualList = prevMonth;
-//                    if (prevMonth && !prevMonth.attr('start')) {
-//                        prevMonth.attr('start', day.date);
-//                    }
-//                } else if (day.month > drawDate.getUTCMonth()) {
-//                    actualList = nextMonth;
-//                } else {
-//                    actualList = thisMonth;
-//                }
-//
-//                if (render) {
-//                    var actualDay = $("<li>", {"class": "calendarday day" + day.year + '-' + day.month + '-' + day.date});
-//                    actualDay.data('date', day);
-//                    actualDay.text(day.date + '.' + (day.month + 1));
-//
-//                    actualList.append(actualDay);
-//                }
-//            });
-//        });
-//
-//        // add the data to the calendar
-//        api.getAll(appointmentFilter).done(function (appointments) {
-//            _(appointments).each(function (appointment) {
-//
-//                var appointmentId = 'appointment_' + appointment.folder_id + '_' + appointment.id,
-//                    appointmentDate = new Date(appointment.start_date),
-//                    dateStr = appointmentDate.getUTCFullYear() + '-' + appointmentDate.getUTCMonth() + '-' + appointmentDate.getUTCDate(),
-//                    liItem = $('.calendarday.day' + dateStr, main),
-//                    appointmentCheck = $('.day' + dateStr + ' .' + appointmentId, main);
-//
-//                if (!appointmentCheck || appointmentCheck.length === 0) {
-//                    liItem.append($('<p>', {'class': 'appointmentItem ' + appointmentId}).data('appointment', appointment).text(appointment.title));
-//                }
-//            });
-//
-//        });
-//
-//        if (render) {
-//            main.append(monthView);
-//            main.scrollable();
-//        }
 });

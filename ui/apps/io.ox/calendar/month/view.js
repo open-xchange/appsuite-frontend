@@ -23,9 +23,9 @@ define('io.ox/calendar/month/view',
 
         drawScaffold: function (main) {
 
-            var days = _(date.locale.daysShort).slice(1).concat(_(date.locale.daysShort).first());
-            var node = tmpl.render('scaffold', { days: days });
-            return node;
+            var days = date.locale.days;
+            days = days.slice(1).concat(days[0]);
+            return tmpl.render('scaffold', { days: days });
         },
 
         drawMonth: function (timestamp) {
@@ -49,7 +49,12 @@ define('io.ox/calendar/month/view',
         },
 
         drawAppointment: function (a) {
-            return tmpl.render('appointment', a);
+            return tmpl.render('appointment', {
+                cid: _.cid(a),
+                start: util.getTime(a.start_date),
+                subject: a.title,
+                shownAs: util.getShownAsClass(a)
+            });
         }
     };
 });

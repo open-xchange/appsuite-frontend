@@ -14,23 +14,18 @@
     <div class="abs month-view">
         <div class="scrollpane"></div>
         <div class="header">
-            <div>
-                {{~it.days :value:index}}
-                <div class="weekday">{{=value}}</div>
-                {{~}}
-                <div class="weekday">&nbsp;</div>
-            </div>
+            {{~it.days :value:index}}<div class="weekday">{{=value}}</div>{{~}}<div class="weekday">&nbsp;</div>
         </div>
     </div>
 </part>
 
 <part id="day">
-    <div class="day{{= it.isOut ? ' out' : ''}} date-{{= it.month + '-' + it.date }}">
+    <div class="day{{= it.isOut ? ' out' : ''}}{{= it.isToday ? ' today' : ''}} date-{{= it.month + '-' + it.date }}">
         <div class="list abs"></div>
         <div class="number{{= it.isWeekend ? ' weekend' : ''}}">{{=it.date}}</div>
     </div>
 </part>
 
 <part id="appointment">
-    <div class="appointment">{{= it.title }}</div>
+    <div class="appointment {{= it.shownAs }}" data-cid="{{= it.cid }}">{{= it.start }} {{= it.subject }}</div>
 </part>
