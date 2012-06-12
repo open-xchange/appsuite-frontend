@@ -11,18 +11,30 @@
  */
 
 define('io.ox/calendar/month/view-controller',
-    ['io.ox/calendar/util',
-     'io.ox/calendar/api',
-     'io.ox/calendar/month/view'
-     ], function (util, api, view) {
+    ['io.ox/calendar/month/view', 'io.ox/calendar/api'], function (view, api) {
 
     'use strict';
 
     return new ox.ui.WindowView('month-view', function (main) {
 
-        main.addClass('month-view').append(
-            view.drawScaffold()
-        );
+        var now = Date.UTC(2012, 5, 1),
+            scaffold = view.drawScaffold();
+
+        scaffold.find('.scrollpane').append(view.drawMonth(now));
+        main.addClass('month-view').append(scaffold);
+
+        // get appointments
+        api.getAll({ start: now, end: Date.UTC(2012, 5, 30) }).done(function (appointments) {
+            _(appointments).each(function (a) {
+                console.log('appointment', a);
+                var d = new Date(a.start_date), selector = '.date-' + d.getUTCMonth() + '-' + d.getUTCDate() + ' .list';
+                scaffold.find(selector).append(
+                    view.drawAppointment(a)
+                );
+            });
+        });
+    });
+
 
 //        var drawTs = _.now(),
 //            drawDate = new Date(drawTs),
@@ -98,5 +110,4 @@ define('io.ox/calendar/month/view-controller',
 //            main.append(monthView);
 //            main.scrollable();
 //        }
-    });
 });

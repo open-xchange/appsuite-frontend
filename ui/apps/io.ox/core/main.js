@@ -173,10 +173,10 @@ define("io.ox/core/main",
                         $("<div>", { id: "io-ox-welcome-upsell" })
                         .addClass('abs')
                         .css({
-                            padding: "40px",
+                            padding: "30px",
                             zIndex: 1
                         })
-                        .text("Click me for a 90-day free trial!")
+                        .text("Confidential! Not to be disclosed to third parties.")
                     )
                 );
             }
@@ -185,7 +185,7 @@ define("io.ox/core/main",
         ext.point("io.ox/core/desktop").extend({
             id: "welcome",
             draw: function () {
-                
+
                 var d, update;
 
                 this.append(
