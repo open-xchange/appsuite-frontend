@@ -24,7 +24,7 @@ define('io.ox/calendar/month/view',
 
         drawScaffold: function (main) {
 
-            var node = tmpl.render('scaffold', { days: date.locale.days });
+            var node = tmpl.render('scaffold', { days: date.locale.daysShort });
             console.log('YEAH', node);
             return node;
         }
