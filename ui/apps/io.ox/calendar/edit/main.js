@@ -160,13 +160,24 @@ define('io.ox/calendar/edit/main',
                         var errContainer = $('<div>').addClass('alert alert-error');
                         $(self.view.el).find('[data-extid=error]').empty().append(errContainer);
                         if (err.conflicts !== null && err.conflicts !== undefined) {
-                            errContainer.append(
-                                $('<a>').addClass('close').attr('data-dismiss', 'alert').attr('type', 'button').text('x'),
-                                $('<h4>').text(gt('Conflicts detected')),
-                                $('<p>').append('list of conflicts... follow'),
-                                $('<a>').addClass('btn btn-danger').text(gt('Ignore conflicts')),
-                                $('<a>').addClass('btn').text(gt('Cancel'))
-                            );
+                            require(['io.ox/calendar/edit/view-conflicts', 'io.ox/calendar/edit/collection-conflicts'], function (ConflictsView, ConflictsCollection) {
+                                console.log('class', ConflictsView);
+                                var conflicts = new ConflictsCollection(err.conflicts);
+                                var conView = new ConflictsView({collection: conflicts});
+                                window.cview = conView;
+                                errContainer.empty().append(
+                                    $('<a>').addClass('close').attr('data-dismiss', 'alert').attr('type', 'button').text('x'),
+                                    conView.render().el
+                                );
+                                conView.on('ignore', function () {
+                                    self.model.set('ignore_conflicts', true);
+                                    return self.onSave();
+                                });
+                                conView.on('cancel', function () {
+                                    $(self.view.el).find('[data-extid=error]').empty();
+                                });
+
+                            });
                         } else if (err.error !== undefined) {
                             errContainer.append(
                                 $('<a>').addClass('close').attr('data-dismiss', 'alert').attr('type', 'button').text('x'),

@@ -15,7 +15,7 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/calendar/util',
        'io.ox/core/extensions',
        'io.ox/core/date',
-       'dot!io.ox/calendar/edit/tpl/common.html',
+       'dot!io.ox/calendar/edit/common.html',
        'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, tmpl, gt) {
 
     'use strict';
@@ -176,6 +176,7 @@ define('io.ox/calendar/edit/view-main',
                 ]
             };
             self.model.on('change:start_date', _.bind(self.onStartDateChange, self));
+            self.model.on('change:end_date', _.bind(self.onEndDateChange, self));
             Backbone.Validation.bind(this, {forceUpdate: true, selector: 'data-property'});
         },
         render: function () {
@@ -206,7 +207,7 @@ define('io.ox/calendar/edit/view-main',
 
             return self;
         },
-        onStartDateChange: function (evt) {
+        onStartDateChange: function () {
             var self = this,
                 start = self.model.previous('start_date'),
                 curstart = self.model.get('start_date'),
@@ -214,10 +215,25 @@ define('io.ox/calendar/edit/view-main',
                 shift = end - start,
                 newEnd = curstart + shift;
 
-            if (_.isNumber(newEnd)) {
+            if (!self.model.hasChanged('end_date') && _.isNumber(newEnd)) {
                 self.model.set('end_date', newEnd);
             }
 
+        },
+        onEndDateChange: function () {
+            var self = this,
+                start = self.model.get('start_date'),
+                end = self.model.previous('end_date'),
+                curEnd = self.model.get('end_date'),
+                shift, newStart;
+
+            if (start > curEnd) {
+                shift = end - start;
+                newStart = curEnd - shift;
+                if (_.isNumber(newStart)) {
+                    self.model.set('start_date', newStart);
+                }
+            }
         },
         onSave: function () {
             var self = this;

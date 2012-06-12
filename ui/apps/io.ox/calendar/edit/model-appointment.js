@@ -38,7 +38,7 @@ define('io.ox/calendar/edit/model-appointment',
                 msg: gt('You must enter a valid date/time.')
             }, {
                 smallerThan: 'end_date',
-                msg: gt('Startdate must be smaller than end-date.')
+                msg: gt('Start date must be  than end-date.')
             }],
             end_date: [{
                 required: true,
@@ -46,7 +46,7 @@ define('io.ox/calendar/edit/model-appointment',
                 msg: gt('You must enter a valid date/time.')
             }, {
                 greaterThan: 'start_date',
-                msg: gt('End-date must be greater than start-date')
+                msg: gt('End date must be greater than start-date')
             }]
         },
         defaults: {
