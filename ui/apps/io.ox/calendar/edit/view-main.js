@@ -185,7 +185,7 @@ define('io.ox/calendar/edit/view-main',
             // pre render it
             staticStrings.SAVE_BUTTON_LABEL = (self.model.has('id') ? gt('Save') : gt('Create'));
 
-            self.$el.empty().append(tmpl.render('common', {
+            self.$el.empty().append(tmpl.render('io.ox/calendar/edit/section', {
                 strings: staticStrings,
                 reminderList: reminderListValues,
                 uid: self.guid
