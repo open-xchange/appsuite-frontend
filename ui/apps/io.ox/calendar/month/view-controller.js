@@ -17,11 +17,13 @@ define('io.ox/calendar/month/view-controller',
 
     return new ox.ui.WindowView('month-view', function (main) {
 
+        console.log('month view render');
+
         var now = Date.UTC(2012, 5, 1),
             scaffold = view.drawScaffold();
 
         scaffold.find('.scrollpane').append(view.drawMonth(now));
-        main.addClass('month-view').append(scaffold);
+        main.empty().addClass('month-view').append(scaffold);
 
         // add click support
         main.on('click', '.appointment', function (e) {
