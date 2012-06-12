@@ -17,7 +17,7 @@ define('io.ox/office/main',
      "io.ox/core/tk/view",
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
-     'less!io.ox/office/style.css',
+     'less!io.ox/office/main.css',
      'io.ox/office/actions'
     ], function (api, Model, View, Editor, gt) {
 
@@ -85,13 +85,12 @@ define('io.ox/office/main',
          * called before the application window is visible.
          */
         var getEditor = function () {
-            var // the body element of the document embedded in the iframe
+            var // the head element of the document embedded in the iframe
+                head = $('head', iframe.contents())
+                    .append($('<link>').attr('rel', 'stylesheet').attr('href', 'apps/io.ox/office/editor.css')),
+                // the body element of the document embedded in the iframe
                 body = $('body', iframe.contents())
                     .attr('contenteditable', true)
-                    .css({
-                        border: 'thin blue solid',
-                        cursor: 'text'
-                    })
                     .append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>'),
                 // the content window of the iframe document
                 window = iframe.length && iframe.get(0).contentWindow,
@@ -110,17 +109,21 @@ define('io.ox/office/main',
             getEditor = function () { return def; };
             return def;
         };
-        
+
         var createOperationsList = function (result) {
             var operations = [];
-            
+
             _(result).each(function (value) {
                 // iterating over the list of JSON objects
-                _(value).each(value, function (json, j) {
-                    operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
-                    window.console.log('Operation ' + j + ': ' + JSON.stringify(json));
-                });
+                if (_(value).isArray()) {
+                    _(value).each(function (json, j) {
+                        operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
+                        window.console.log('Operation ' + j + ': ' + JSON.stringify(json));
+                    });
+                }
             });
+
+            return operations;
         };
 
         /*
