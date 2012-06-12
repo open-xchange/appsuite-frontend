@@ -49,7 +49,9 @@ define('io.ox/office/main',
 
             model = new Model(),
 
-            view = new View({ model: model, node: container });
+            view = new View({ model: model, node: container }),
+
+            filterUrl = ox.apiRoot + '/oxodocumentfilter?action=importdocument&id=' + appOptions.id + '&session=' + ox.session;
 
         /*
          * Shows a closable error message above the editor.
@@ -183,7 +185,7 @@ define('io.ox/office/main',
                 win.busy();
                 $.ajax({
                     type: 'GET',
-                    url: ox.apiRoot + '/oxodocumentfilter?action=importdocument&id=' + appOptions.id + '&session=' + ox.session,
+                    url: filterUrl,
                     dataType: 'json'
                 })
                 .done(function (response) {
@@ -214,10 +216,11 @@ define('io.ox/office/main',
                 var allOperations = editor.getOperations();
                 // var operations = convertAllOperations(allOperations);
                 var operations = {"Operations": ["{name:insertParagraph, para:0}", "{name:insertText, para:0, pos:3, text:hallo}", "{name:insertText, para:1, pos:6, text:Welt}"]};
-                $.ajax({ type: 'GET',
-                    data: operations,
-                    url: ox.apiRoot + "/oxodocumentfilter?action=exportdocument&id=" + appOptions.id + "&session=" + ox.session,  // URL needs to be specified
+                $.ajax({
+                    type: 'GET',
+                    url: filterUrl,
                     dataType: 'json',
+                    data: operations,
                     beforeSend: function (xhr) {
                         if (xhr && xhr.overrideMimeType) {
                             xhr.overrideMimeType("application/j-son;charset=UTF-8");
