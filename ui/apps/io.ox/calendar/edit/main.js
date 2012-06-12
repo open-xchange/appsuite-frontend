@@ -15,8 +15,9 @@ define('io.ox/calendar/edit/main',
       ['io.ox/calendar/edit/model-appointment',
        'io.ox/calendar/api',
        'io.ox/calendar/edit/extensions',
-       'io.ox/calendar/edit/view-app',
-        'gettext!io.ox/calendar/edit/main'], function (AppointmentModel, api, editExtensions, AppView, gt) {
+       'io.ox/calendar/edit/view-main',
+       'gettext!io.ox/calendar/edit/main',
+       'less!io.ox/calendar/edit/style.less'], function (AppointmentModel, api, editExtensions, MainView, gt) {
 
     'use strict';
 
@@ -74,16 +75,35 @@ define('io.ox/calendar/edit/main',
             var cont = function (data) {
                 console.log('cont', data);
                 self.model = new AppointmentModel(data);
+
                 if (self._restored === true) {
                     self.model.toSync = data; //just to make it dirty
                 }
-                self.view = new AppView({model: self.model});
+
+                self.view = new MainView({model: self.model});
+
                 self.view.on('save', _.bind(self.onSave, self));
-                self.setWindow(self.view.render().appwindow);
+
+                // create app window
+                self.setWindow(ox.ui.createWindow({
+                    name: 'io.ox/calendar/edit',
+                    title: gt('Edit Appointment'),
+                    toolbar: true,
+                    search: false,
+                    close: true
+                }));
+
+                $(self.getWindow().nodes.main[0]).append(self.view.render().el);
+
                 self.getWindow().show(function () {
-                    // what a h4ck
-                    self.view.aftershow();
-                    $(self.view.el).addClass('scrollable');
+                    if (self.model.get('title')) {
+                        $('.window-title').text(self.model.get('title'));
+                    }
+                    self.model.on('change:title', function (model, value, source) {
+                        $('.window-title').text(value);
+                        console.log('change', arguments);
+                    });
+                    $(self.getWindow().nodes.main[0]).addClass('scrollable');
                 });
             };
 
@@ -105,14 +125,30 @@ define('io.ox/calendar/edit/main',
             var self = this;
 
             self.model = new AppointmentModel(data);
-            self.view = new AppView({model: self.model});
+            self.view = new MainView({model: self.model});
             self.view.on('save', _.bind(self.onSave, self));
 
-            self.setWindow(self.view.render().appwindow);
+            // create app window
+            self.setWindow(ox.ui.createWindow({
+                name: 'io.ox/calendar/edit',
+                title: gt('Create Appointment'),
+                toolbar: true,
+                search: false,
+                close: true
+            }));
+
+            $(self.getWindow().nodes.main[0]).append(self.view.render().el);
+
             self.getWindow().show(function () {
-                // what a h4ck
-                self.view.aftershow();
-                $(self.view.el).addClass('scrollable');
+                // init title
+                if (self.model.get('title')) {
+                    $('.window-title').text(self.model.get('title'));
+                }
+                self.model.on('change:title', function (model, value, source) {
+                    $('.window-title').text(value);
+                    console.log('change', arguments);
+                });
+                $(self.getWindow().nodes.main[0]).addClass('scrollable');
             });
         },
         onSave: function () {
