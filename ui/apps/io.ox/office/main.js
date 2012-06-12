@@ -133,14 +133,16 @@ define('io.ox/office/main',
         };
 
         var createOperationsList = function (result) {
-            var operations = [];
 
-            if (_(result).isArray()) {
+            var operations = [];
+            var value = JSON.parse(result.data);
+
+            if (_(value).isArray()) {
                 // iterating over the list of JSON objects
-                _(result).each(function (json, j) {
+                _(value).each(function (json, j) {
                     if (_(json).isObject()) {
                         operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
-                        window.console.log('Operation ' + j + ': ' + JSON.stringify(json));
+                        // window.console.log('Operation ' + j + ': ' + JSON.stringify(json));
                     }
                 });
             }
@@ -189,7 +191,7 @@ define('io.ox/office/main',
                     dataType: 'json'
                 })
                 .done(function (response) {
-                    editor.setOperations(createOperationsList(response));
+                    editor.applyOperations(createOperationsList(response), false);
                     editor.focus();
                     win.idle();
                     def.resolve();
@@ -217,8 +219,8 @@ define('io.ox/office/main',
                 // var operations = convertAllOperations(allOperations);
                 var operations = {"Operations": ["{name:insertParagraph, para:0}", "{name:insertText, para:0, pos:3, text:hallo}", "{name:insertText, para:1, pos:6, text:Welt}"]};
                 $.ajax({
-                    type: 'GET',
-                    url: filterUrl,
+                    type: 'POST',
+                    url: ox.apiRoot + "/oxodocumentfilter?action=exportdocument&id=" + appOptions.id + "&session=" + ox.session,  // URL needs to be specified
                     dataType: 'json',
                     data: operations,
                     beforeSend: function (xhr) {
