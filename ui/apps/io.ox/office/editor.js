@@ -546,8 +546,6 @@ define('io.ox/office/editor', function () {
 
     } // end of OXOEditor()
 
-    // export all public classes
-    return {
-        Editor: OXOEditor
-    };
+    // export the OXOEditor class directly
+    return OXOEditor;
 });
