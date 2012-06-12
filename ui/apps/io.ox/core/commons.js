@@ -20,7 +20,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
         /**
          * Common show window routine
          */
-        showWindow: function (win, grid) {
+        showWindow: function (win) {
             return function () {
                 var def = $.Deferred();
                 win.show(def.resolve);
@@ -203,11 +203,16 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                 .updateTitle(app.getWindow())
                 .updateGrid(grid)
                 .setType(type);
+            if (grid) {
+                app.folder.updateGrid(grid);
+            }
             // add visual caret
             app.getWindow().nodes.title.append($('<b>').addClass('caret'));
             // hash support
             app.getWindow().on('show', function () {
-                grid.selection.retriggerUnlessEmpty();
+                if (grid) {
+                    grid.selection.retriggerUnlessEmpty();
+                }
                 _.url.hash('folder', app.folder.get());
             });
             defaultFolderId = _.url.hash('folder') || defaultFolderId;
@@ -221,6 +226,13 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             app.on('folder:change', function () {
                 console.log('mmmh');
                 //grid.setMode('all');
+            });
+        },
+
+        addGridFolderSupport: function (app, grid) {
+            app.folder.updateGrid(grid);
+            app.getWindow().on('show', function () {
+                grid.selection.retriggerUnlessEmpty();
             });
         },
 

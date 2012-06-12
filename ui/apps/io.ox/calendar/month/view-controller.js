@@ -15,7 +15,7 @@ define('io.ox/calendar/month/view-controller',
 
     'use strict';
 
-    return new ox.ui.WindowView('month-view', function (main) {
+    return new ox.ui.WindowView('month-view', function (main, app) {
 
         console.log('month view render');
 
