@@ -6,7 +6,7 @@
         <div class="span12 control-group">
             <label class="control-label" for="{{=it.uid}}_title">{{= it.strings.SUBJECT }}</label>
             <div class="controls">
-                <input type="text" class="discreet title" name="title" id="{{=it.uid}}_title"/>
+                <input type="text" class="discreet title" name="title" data-property="title" id="{{=it.uid}}_title"/>
             </div>
         </div>
     </div>
@@ -15,7 +15,7 @@
         <div class="span10 control-group">
             <label class="control-label" for="{{=it.uid}}_location">{{= it.strings.LOCATION }}</label>
             <div class="controls">
-                <input type="text" class="discreet location" name="location" id="{{=it.uid}}_location"  />
+                <input type="text" class="discreet location" name="location" data-property="location" id="{{=it.uid}}_location"  />
             </div>
         </div>
         <div class="span2 control-group">
@@ -34,16 +34,16 @@
         <div class="control-group span6">
             <label class="control-label" for="{{=it.uid}}_start_date">{{= it.strings.STARTS_ON }}</label>
             <div class="controls">
-                  <input type="date" class="discreet startsat-date input-small" id="{{=it.uid}}_start_date" data-extgroup="startdates" data-extid="date" name="start_date"/>
-                  <input type="time" class="discreet startsat-time input-mini" data-extgroup="startdates" data-extid="time" name="start_date"/>
+                  <input type="date" class="discreet startsat-date input-small" id="{{=it.uid}}_start_date" data-extgroup="startdates" data-extid="date" data-property="start_date"/>
+                  <input type="time" class="discreet startsat-time input-mini" data-extgroup="startdates" data-extid="time" data-property="start_date"/>
                   <span class="label" data-original-title="" data-extgroup="startdates" data-extid="timezone">CEST</span>
             </div>
         </div>
         <div class="control-group span6">
             <label class="control-label" for="{{=it.uid}}_end_date">{{= it.strings.ENDS_ON }}</label>
             <div class="controls">
-                <input type="date" class="discreet endsat-date input-small" id="{{=it.uid}}_end_date" data-extgroup="enddates" data-extid="date" name="end_date"/>
-                <input type="time" class="discreet endsat-time input-mini" data-extgroup="enddates" data-extid="time" name="end_date"/>
+                <input type="date" class="discreet endsat-date input-small" id="{{=it.uid}}_end_date" data-extgroup="enddates" data-extid="date" data-property="end_date"/>
+                <input type="time" class="discreet endsat-time input-mini" data-extgroup="enddates" data-extid="time" data-property="end_date"/>
                 <span class="label" data-original-title="" data-extgroup="enddates" data-extid="timezone">CEST</span>
             </div>
         </div>
@@ -57,7 +57,7 @@
         <div class="control-group span12">
             <div class="controls">
                 <div data-extgroup="extrasleft" data-extid="fulltime">
-                    <input type="checkbox" class="full_time" name="full_time" id="{{=it.uid}}_full_time"/>
+                    <input type="checkbox" class="full_time" name="full_time" id="{{=it.uid}}_full_time" data-property="full_time" />
                     <label style="display: inline;" for="{{=it.uid}}_full_time">{{= it.strings.ALL_DAY }}</label>
                 </div>
             </div>
@@ -70,7 +70,7 @@
         <div class="control-group span12">
             <label class="control-label" for="{{=it.uid}}_note">{{= it.strings.DESCRIPTION }}</label>
             <div class="controls">
-                <textarea class="note" name="note" id="{{=it.uid}}_note"></textarea>
+                <textarea class="note" name="note" id="{{=it.uid}}_note" data-property="note"></textarea>
             </div>
         </div>
     </div>
@@ -83,7 +83,7 @@
         <div class="control-group span4">
             <label class="control-label" for="{{=it.uid}}_alarm">{{= it.strings.REMINDER}}</label>
             <div class="controls">
-                <select name="alarm" id="{{=it.uid}}_alarm">
+                <select name="alarm" id="{{=it.uid}}_alarm" data-property="alarm">
                     <option value="-1">{{= it.strings.NO_REMINDER }}</option>
                     {{~ it.reminderList :item:index }}
                     <option value="{{=item.value}}">{{=item.label}}</option>
@@ -94,7 +94,7 @@
         <div class="control-group span4">
             <label class="control-label" for="shown_as">{{= it.strings.DISPLAY_AS}}</label>
             <div class="controls">
-                <select name="shown_as" id="{{=it.uid}}_shown_as">
+                <select name="shown_as" id="{{=it.uid}}_shown_as" data-property="shown_as">
                     <option value="1" data-extgroup="shownas" data-extid="reserved">{{= it.strings.RESERVED }}</option>
                     <option value="2" data-extgroup="shownas" data-extid="temporary">{{= it.strings.TEMPORARY }}</option>
                     <option value="3" data-extgroup="shownas" data-extid="absent">{{= it.strings.ABSENT }}</option>
@@ -105,7 +105,8 @@
         <div class="control-group span4">
             <label for="{{=it.uid}}_private_flag">{{= it.strings.TYPE }}</label>
             <div class="controls">
-                <input type="checkbox" name="private_flag" id="{{=it.uid}}_private_flag"><span style="margin-left:4px;">{{= it.strings.PRIVATE}}</span>
+                <input type="checkbox" name="private_flag" id="{{=it.uid}}_private_flag" data-property="private_flag"/>
+                <span style="margin-left:4px;">{{= it.strings.PRIVATE}}</span>
             </div>
         </div>
     </div>
