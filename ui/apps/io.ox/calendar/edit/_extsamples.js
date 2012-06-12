@@ -1,6 +1,5 @@
 // NOJSHINT
 
-
 // adds a new available option
 require(['io.ox/core/extensions'], function (ext) {
     ext.point('io.ox/calendar/edit/shownas').extend({
@@ -15,11 +14,6 @@ require(['io.ox/core/extensions'], function (ext) {
 require(['io.ox/core/extensions'], function (ext) {
     ext.point('io.ox/calendar/edit/section').disable('description');
 });
-
-
-
-
-
 
 // now disabling startdate and remove the corresponding binding
 // so its save to edit the rest except the start-date (just a unuseful show case :))
@@ -97,15 +91,10 @@ require(['io.ox/core/extensions'], function (ext) {
     });
 });
 
-
-
-
-
-
 // not possible yet
 require(['io.ox/core/extensions'], function (ext) {
     ext.point('io.ox/calendar/edit/head').replace({
-        id: 'location',
+        id: 'head',
         draw: function () {
             this.append(
                 $('<input>', {type: 'text'})

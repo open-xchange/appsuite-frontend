@@ -32,7 +32,6 @@ define('io.ox/calendar/edit/main',
             var self = this,
                 state = self.getState();
 
-            console.log('state', state, arguments);
             if (state.folder && state.id) {
            //     self.edit();
             }
@@ -73,14 +72,12 @@ define('io.ox/calendar/edit/main',
         * :(
         */
         dispose: function () {
-            console.log('disposing....');
             this.view.off('save', _.bind(this.onSave, this));
             this.model.off('change:title');
         },
         edit: function (data) {
             var self = this;
             var cont = function (data) {
-                console.log('cont', data);
                 self.model = new AppointmentModel(data);
 
                 if (self._restored === true) {
@@ -105,7 +102,6 @@ define('io.ox/calendar/edit/main',
 
             if (data) {
                 //hash support
-                console.log('got data', data);
                 self.setState({ folder: data.folder_id, id: data.id});
                 cont(data);
             } else {
@@ -146,7 +142,6 @@ define('io.ox/calendar/edit/main',
             self.model.on('change:title', function (model, value, source) {
                 $('.window-title').text(value);
                 self.setTitle(value);
-                console.log('change', arguments);
             });
             $(self.getWindow().nodes.main[0]).addClass('scrollable');
         },
@@ -203,7 +198,6 @@ define('io.ox/calendar/edit/main',
                 this.edit(point);
             }
             df.resolve();
-            console.log('failRestore', point);
             return df;
         }
     };
@@ -215,7 +209,6 @@ define('io.ox/calendar/edit/main',
 
         controller.setLauncher(_.bind(controller.start, controller));
         controller.setQuit(_.bind(controller.stop, controller));
-        console.log('controller', controller);
         return controller;
     }
 
