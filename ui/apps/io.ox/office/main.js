@@ -76,32 +76,36 @@ define('io.ox/office/main',
         };
 
         /*
-         * On first call, creates and returns new instance of the Editor class.
-         * On subsequent calls, returns the cached editor instance created
-         * before. The editor expects a reference to the text area DOM element
-         * which is contained in the iframe element. This DOM element will be
-         * created by the browser AFTER the application window is made visible
-         * (i.e. inserted into the DOM). Therefore, this function MUST NOT be
-         * called before the application window is visible.
+         * Returns a deferred that reflects whether initialization of the
+         * editor succeeded. On first call, initializes the editor iframe and
+         * creates a new instance of the Editor class. On subsequent calls,
+         * returns the same deferred object again without initialization.
          */
         var getEditor = function () {
-            var // the head element of the document embedded in the iframe
-                head = $('head', iframe.contents())
-                    .append($('<link>').attr('rel', 'stylesheet').attr('href', 'apps/io.ox/office/editor.css')),
+            var // the embedded document, wrapped in a jQuery object
+                contents = iframe.contents(),
+                // the head element of the document embedded in the iframe
+                head = $('head', contents),
                 // the body element of the document embedded in the iframe
-                body = $('body', iframe.contents())
-                    .attr('contenteditable', true)
-                    .append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>'),
+                body = $('body', contents),
                 // the content window of the iframe document
                 window = iframe.length && iframe.get(0).contentWindow,
-                // the editor API instance
-                editor = (body && window) ? new Editor(body, window) : null,
                 // deferred object for user callbacks
                 def = $.Deferred();
 
-            if (editor) {
-                def.resolve(editor);
+            // check that all objects are present
+            if (head.length && body.length && window) {
+                // add a link to the editor.css file
+                // hack: append current time to the link to bypass browser cache
+                // (some browsers will not refresh iframe contents after reload)
+                head.append($('<link>').attr('rel', 'stylesheet').attr('href', 'apps/io.ox/office/editor.css?dummy=' + _.now()));
+                // set body of the document to edit mode
+                body.attr('contenteditable', true)
+                    .append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
+                // resolve the deferred with a new editor instance
+                def.resolve(new Editor(body, window));
             } else {
+                // creation of the iframe failed: reject the deferred
                 def.reject("Cannot instantiate editor.");
             }
 
@@ -156,7 +160,6 @@ define('io.ox/office/main',
         app.load = function () {
             var def = $.Deferred();
             win.show(function () {
-                // load file
                 win.busy();
                 $.when(
                     getEditor().fail(showInternalError),
@@ -182,10 +185,18 @@ define('io.ox/office/main',
          * Saves the document.
          */
         app.save = function () {
-            var def = $.Deferred();
-
+            var def = $.Deferred().fail(showInternalError);
+            win.busy();
+            $.when(
+                getEditor())
+            .done(function (editor) {
+                editor.focus();
+                win.idle();
+            })
+            .fail(function () {
+                win.idle();
+            });
             def.reject('Saving document not implemented.');
-
             return def;
         };
 
@@ -195,7 +206,7 @@ define('io.ox/office/main',
          * shown asking whether to save or drop the changes.
          */
         app.setQuit(function () {
-            var def = $.Deferred();
+            var def = null;
             $.when(getEditor()).done(function (editor) {
                 if (editor.isModified()) {
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
@@ -204,24 +215,13 @@ define('io.ox/office/main',
                         .addPrimaryButton("delete", gt('Lose changes'))
                         .addAlternativeButton('save', gt('Save'))
                         .addButton("cancel", gt('Cancel'))
-                        .on('delete', function () {
-                            def.resolve();
-                        })
-                        .on('save', function () {
-                            app.save().done(function () {
-                                def.resolve();
-                            }).fail(function (message) {
-                                showInternalError(message);
-                                def.reject(message);
-                            });
-                        })
-                        .on('cancel', function () {
-                            def.reject();
-                        })
+                        .on('delete', function () { def = $.Deferred().resolve(); })
+                        .on('save', function () { def = app.save(); })
+                        .on('cancel', function () { def = $.Deferred().reject(); })
                         .show();
                     });
                 } else {
-                    def.resolve();
+                    def = $.Deferred().resolve();
                 }
             });
             return def;
