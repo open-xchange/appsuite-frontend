@@ -103,8 +103,8 @@ define('io.ox/calendar/edit/model-appointment',
                     df.resolve(data);
 
                 })
-                .fail(function () {
-                    df.reject('error on update model on server');
+                .fail(function (err) {
+                    df.reject(err);
                 });
 
             return df;
