@@ -13,108 +13,20 @@
 define('io.ox/calendar/month/view',
     ['io.ox/calendar/util',
      'io.ox/calendar/api',
-     'gettext!io.ox/calendar/month/view',
-     'less!io.ox/calendar/month/style.css'], function (util, api, gt) {
+     'dot!io.ox/calendar/month/template.html',
+     'io.ox/core/date',
+     'gettext!io.ox/calendar/view',
+     'less!io.ox/calendar/month/style.css'], function (util, api, tmpl, date, gt) {
 
     'use strict';
 
-    var // vars
-        app, win, main,
-        // init
-        initialized = false,
-        initialize = function (a) {
-            if (!initialized) {
-                app = a;
-                win = app.getWindow();
-                main = win.addView('month-view');
-                initialized = true;
-            }
-        };
-
     return {
 
-        show: function (app) {
+        drawScaffold: function (main) {
 
-            // init first
-            initialize(app);
-
-            // set view
-            win.setView('month-view');
-
-            var drawTs = _.now(),
-                drawDate = new Date(drawTs),
-                list = util.getMonthScaffold(drawTs),
-                appointmentFilter = {},
-                drawMonth = drawDate.getUTCMonth();
-
-            var calendarCheck = $('ol.calendar', main),
-                render = false,
-                monthView, prevMonth, thisMonth, nextMonth;
-
-            if (!calendarCheck || calendarCheck.length === 0) {
-                render = true;
-
-                monthView = $('<ol>', {"class": "calendar", "start": drawMonth});
-                prevMonth = $('<ol>', {"class": "lastmonth"});
-                thisMonth = $('<ol>', {"class": "thismonth"});
-                nextMonth = $('<ol>', {"class": "nextmonth"});
-
-                monthView.append($('<li>').append(prevMonth))
-                    .append($('<li>').append(thisMonth))
-                    .append($('<li>').append(nextMonth));
-            }
-
-            _(list).each(function (weeks) {
-                _(weeks).each(function (day) {
-                    var actualList;
-
-                    if (!appointmentFilter.start) {
-                        appointmentFilter.start = day.timestamp;
-                    }
-                    appointmentFilter.end = day.timestamp;
-
-                    if (day.month < drawDate.getUTCMonth()) {
-                        actualList = prevMonth;
-                        if (prevMonth && !prevMonth.attr('start')) {
-                            prevMonth.attr('start', day.date);
-                        }
-                    } else if (day.month > drawDate.getUTCMonth()) {
-                        actualList = nextMonth;
-                    } else {
-                        actualList = thisMonth;
-                    }
-
-                    if (render) {
-                        var actualDay = $("<li>", {"class": "calendarday day" + day.year + '-' + day.month + '-' + day.date});
-                        actualDay.data('date', day);
-                        actualDay.text(day.date + '.' + (day.month + 1));
-
-                        actualList.append(actualDay);
-                    }
-                });
-            });
-
-            // add the data to the calendar
-            api.getAll(appointmentFilter).done(function (appointments) {
-                _(appointments).each(function (appointment) {
-
-                    var appointmentId = 'appointment_' + appointment.folder_id + '_' + appointment.id,
-                        appointmentDate = new Date(appointment.start_date),
-                        dateStr = appointmentDate.getUTCFullYear() + '-' + appointmentDate.getUTCMonth() + '-' + appointmentDate.getUTCDate(),
-                        liItem = $('.calendarday.day' + dateStr, main),
-                        appointmentCheck = $('.day' + dateStr + ' .' + appointmentId, main);
-
-                    if (!appointmentCheck || appointmentCheck.length === 0) {
-                        liItem.append($('<p>', {'class': 'appointmentItem ' + appointmentId}).data('appointment', appointment).text(appointment.title));
-                    }
-                });
-
-            });
-
-            if (render) {
-                main.append(monthView);
-                main.scrollable();
-            }
+            var node = tmpl.render('scaffold', { days: date.locale.days });
+            console.log('YEAH', node);
+            return node;
         }
     };
 });

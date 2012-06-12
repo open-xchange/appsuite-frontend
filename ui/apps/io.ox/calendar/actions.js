@@ -31,7 +31,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/actions/switch-to-month-view', {
         requires: true,
         action: function (app) {
-            require(['io.ox/calendar/month/view'], function (view) {
+            require(['io.ox/calendar/month/view-controller'], function (view) {
                 view.show(app);
             });
         }
@@ -166,9 +166,16 @@ define('io.ox/calendar/actions',
 
     // Links - toolbar
 
+    new Link('io.ox/calendar/links/toolbar', {
+        index: 100,
+        id: 'create',
+        label: gt('Create'),
+        ref: 'io.ox/calendar/detail/actions/create'
+    });
+
     new Dropdown('io.ox/calendar/links/toolbar', {
         id: 'view',
-        index: 100,
+        index: 200,
         label: gt('View')
     });
 
@@ -177,13 +184,6 @@ define('io.ox/calendar/actions',
         index: 100,
         label: gt('List'),
         ref: 'io.ox/calendar/actions/switch-to-list-view'
-    });
-
-    new Link('io.ox/calendar/links/toolbar', {
-        index: 100,
-        id: 'create',
-        label: gt('Create'),
-        ref: 'io.ox/calendar/detail/actions/create'
     });
 
     new Link('io.ox/calendar/links/toolbar/view', {
