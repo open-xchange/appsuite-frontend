@@ -98,7 +98,7 @@ define('io.ox/calendar/edit/view-main',
     $.fn.datepicker.dates.en = {
         "days": dateAPI.locale.days,
         "daysShort": dateAPI.locale.daysShort,
-        "daysMin": dateAPI.locale.daysShort,
+        "daysMin": dateAPI.locale.daysStandalone,
         "months": dateAPI.locale.months,
         "monthsShort": dateAPI.locale.monthsShort
     };
@@ -135,14 +135,12 @@ define('io.ox/calendar/edit/view-main',
         tagName: 'div',
         className: 'io-ox-calendar-edit container',
         subviews: {},
-        _modelBinder: undefined,
-        guid: undefined,
-        bindings: undefined,
         events: {
             'click .save': 'onSave'
         },
         initialize: function () {
             var self = this;
+            self.subviews = {};
             self._modelBinder = new Backbone.ModelBinder();
             self.guid = _.uniqueId('io_ox_calendar_edit_');
 
@@ -177,6 +175,7 @@ define('io.ox/calendar/edit/view-main',
                     }
                 ]
             };
+            self.model.on('change:start_date', _.bind(self.onStartDateChange, self));
             Backbone.Validation.bind(this, {forceUpdate: true, selector: 'data-property'});
         },
         render: function () {
@@ -191,7 +190,6 @@ define('io.ox/calendar/edit/view-main',
                 uid: self.guid
             }));
 
-
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property');
             var bindings = _.extend(defaultBindings, self.bindings);
 
@@ -203,12 +201,24 @@ define('io.ox/calendar/edit/view-main',
             self._modelBinder.bind(self.model, self.el, bindings);
 
             //init date picker
-            self.$('.startsat-date').datepicker({format: dateAPI.locale.date});
-            self.$('.endsat-date').datepicker({format: dateAPI.locale.date});
+            self.$('.startsat-date').datepicker({format: dateAPI.DATE});
+            self.$('.endsat-date').datepicker({format: dateAPI.DATE});
 
             return self;
         },
+        onStartDateChange: function (evt) {
+            var self = this,
+                start = self.model.previous('start_date'),
+                curstart = self.model.get('start_date'),
+                end = self.model.get('end_date'),
+                shift = end - start,
+                newEnd = curstart + shift;
 
+            if (_.isNumber(newEnd)) {
+                self.model.set('end_date', newEnd);
+            }
+
+        },
         onSave: function () {
             var self = this;
             self.trigger('save');

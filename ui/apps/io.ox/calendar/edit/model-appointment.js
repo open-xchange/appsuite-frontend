@@ -13,9 +13,17 @@
 
 define('io.ox/calendar/edit/model-appointment',
       ['io.ox/calendar/api',
-       'gettext!io.ox/calendar/edit/main'], function (CalendarAPI, gt) {
+       'io.ox/core/date',
+       'gettext!io.ox/calendar/edit/main'], function (CalendarAPI, dateAPI, gt) {
 
     'use strict';
+
+    var defStart = new dateAPI.Local();
+    var defEnd = new dateAPI.Local();
+    defStart.setMinutes(0);
+    defStart.setHours(defStart.getHours() + 1);
+    defEnd.setMinutes(0);
+    defEnd.setHours(defEnd.getHours() + 2);
 
 
     var AppointmentModel = Backbone.Model.extend({
@@ -41,15 +49,16 @@ define('io.ox/calendar/edit/model-appointment',
                 msg: gt('End-date must be greater than start-date')
             }]
         },
-        toSync: {},
         defaults: {
-            start_date: new Date().getTime(),
-            end_date: new Date().getTime(),
+            start_date: dateAPI.Local.localTime(defStart.getTime()),
+            end_date: dateAPI.Local.localTime(defEnd.getTime()),
             recurrence_type: 0
         },
         initialize: function () {
+            this.toSync = {}; //no proto?
             this.on('change', _.bind(this.onChange, this));
         },
+
         save: function () {
             var self = this,
                 df = new $.Deferred();
@@ -178,6 +187,8 @@ define('io.ox/calendar/edit/model-appointment',
             this.toSync = {};
         }
     });
+
+
 
     return AppointmentModel;
 });
