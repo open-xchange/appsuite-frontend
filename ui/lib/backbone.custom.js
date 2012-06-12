@@ -5,8 +5,6 @@ _.extend(Backbone.Validation.callbacks, {
 
     },
     invalid: function (view, attr, error, selector) {
-        console.log('IS UNVALID');
-        console.log(arguments);
         view.$('[' + selector + '~=' + attr + ']').closest('.control-group').addClass('error');
 
         //clean up first

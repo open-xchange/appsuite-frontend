@@ -25,16 +25,11 @@ define('io.ox/calendar/edit/main',
 
     // register to "compile"-time think is a good idea
     editExtensions.init();
+    window.AppointmentModel = AppointmentModel;
 
     EditAppointmentController.prototype = {
-
         start: function () {
-            var self = this,
-                state = self.getState();
 
-            if (state.folder && state.id) {
-           //     self.edit();
-            }
         },
         stop: function () {
             var self = this,
@@ -79,6 +74,8 @@ define('io.ox/calendar/edit/main',
             var self = this;
             var cont = function (data) {
                 self.model = new AppointmentModel(data);
+
+                window.mymodel = self.model;
 
                 if (self._restored === true) {
                     self.model.toSync = data; //just to make it dirty
@@ -143,6 +140,7 @@ define('io.ox/calendar/edit/main',
                 $('.window-title').text(value);
                 self.setTitle(value);
             });
+            $('#' + self.view.guid + '_title').get(0).focus();
             $(self.getWindow().nodes.main[0]).addClass('scrollable');
         },
         onSave: function () {
