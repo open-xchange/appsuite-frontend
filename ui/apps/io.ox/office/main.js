@@ -96,9 +96,7 @@ define('io.ox/office/main',
             // check that all objects are present
             if (head.length && body.length && window) {
                 // add a link to the editor.css file
-                // hack: append current time to the link to bypass browser cache
-                // (some browsers will not refresh iframe contents after reload)
-                head.append($('<link>').attr('rel', 'stylesheet').attr('href', 'apps/io.ox/office/editor.css?dummy=' + _.now()));
+                head.append($('<link>').attr('rel', 'stylesheet').attr('href', ox.base + '/apps/io.ox/office/editor.css'));
                 // set body of the document to edit mode
                 body.attr('contenteditable', true)
                     .append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
