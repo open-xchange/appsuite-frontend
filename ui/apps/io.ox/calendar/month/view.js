@@ -19,52 +19,78 @@ define('io.ox/calendar/month/view',
 
     'use strict';
 
-    return {
+    var View = Backbone.View.extend({
 
-        drawScaffold: function (weekend) {
+        className: 'month',
 
-            var days = date.locale.days, node;
-            days = days.slice(1).concat(days[0]);
-            if (weekend === false) {
-                days = days.slice(0, 5);
-            }
-            node = tmpl.render('scaffold', { days: days });
-            if (weekend === false) {
-                node.addClass('hide-weekend');
-            }
-            return node;
+        events: {
+            'click .appointment': 'onClickAppointment'
         },
 
-        drawMonth: function (timestamp, weekend) {
+        initialize: function (options) {
+            this.collection.on('reset', this.renderAppointments, this);
+        },
 
-            var month = $('<div class="month">'),
-                list = util.getMonthScaffold(timestamp),
-                hideWeekend = weekend === false;
+        onClickAppointment: function (e) {
+            var obj = _.cid($(e.currentTarget).attr('data-cid'));
+            this.trigger('showAppoinment', e, obj);
+        },
+
+        render: function () {
+
+            var list = util.getMonthScaffold(_.now()),
+                hideWeekend = false;
 
             _(list).each(function (weeks) {
-                var week = $('<div class="week">').appendTo(month);
+                var week = $('<div class="week">').appendTo(this.el);
                 _(weeks).each(function (day) {
                     if (!hideWeekend || !day.isWeekend) {
-                        console.log('DAY', day);
                         week.append(tmpl.render('day', day));
                     }
-                });
-            });
+                }, this);
+            }, this);
 
-            month.append(
+            this.$el.append(
                 $('<div class="vertical-name">').text('June 2012')
             );
 
-            return month;
+            return this;
         },
 
-        drawAppointment: function (a) {
+        renderAppointment: function (a) {
             return tmpl.render('appointment', {
                 cid: _.cid(a),
                 start: util.getTime(a.start_date),
                 subject: a.title,
                 shownAs: util.getShownAsClass(a)
             });
+        },
+
+        renderAppointments: function () {
+            this.collection.each(function (model) {
+                console.log('appointment', model, model.get('title'));
+                var d = new Date(model.get('start_date')),
+                    selector = '.date-' + d.getUTCMonth() + '-' + d.getUTCDate() + ' .list';
+                this.$(selector).append(
+                    this.renderAppointment(model.attributes)
+                );
+            }, this);
         }
+    });
+
+    View.drawScaffold = function (weekend) {
+
+        var days = date.locale.days, node;
+        days = days.slice(1).concat(days[0]);
+        if (weekend === false) {
+            days = days.slice(0, 5);
+        }
+        node = tmpl.render('scaffold', { days: days });
+        if (weekend === false) {
+            node.addClass('hide-weekend');
+        }
+        return node;
     };
+
+    return View;
 });

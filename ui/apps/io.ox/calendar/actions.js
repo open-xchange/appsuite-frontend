@@ -24,8 +24,8 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/actions/switch-to-list-view', {
         requires: true,
         action: function (app) {
-            require(['io.ox/calendar/list/view-controller'], function (view) {
-                view.show(app);
+            require(['io.ox/calendar/list/perspective'], function (perspective) {
+                perspective.show(app);
             });
         }
     });
@@ -33,8 +33,8 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/actions/switch-to-month-view', {
         requires: true,
         action: function (app) {
-            require(['io.ox/calendar/month/view-controller'], function (view) {
-                view.show(app);
+            require(['io.ox/calendar/month/perspective'], function (perspective) {
+                perspective.show(app);
             });
         }
     });

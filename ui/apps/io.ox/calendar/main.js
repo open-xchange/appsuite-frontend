@@ -49,7 +49,7 @@ define("io.ox/calendar/main",
             .pipe(commons.showWindow(win))
             .done(function () {
                 // switch to month view
-                require(['io.ox/calendar/month/view-controller'], function (view) {
+                require(['io.ox/calendar/month/perspective'], function (view) {
                     view.show(app);
                 });
             });

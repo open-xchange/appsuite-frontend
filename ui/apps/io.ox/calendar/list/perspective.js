@@ -10,7 +10,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/calendar/list/view-controller',
+define('io.ox/calendar/list/perspective',
     ['io.ox/calendar/api',
      'io.ox/core/tk/vgrid',
      'io.ox/calendar/view-grid-template',
@@ -20,7 +20,11 @@ define('io.ox/calendar/list/view-controller',
 
     'use strict';
 
-    return new ox.ui.WindowView('list-view', function (main, app) {
+    var perspective = new ox.ui.Perspective('list');
+
+    perspective.render = function (main, app) {
+
+        console.log('RENDER list');
 
         var win = app.getWindow(),
             GRID_WIDTH = 330,
@@ -99,6 +103,8 @@ define('io.ox/calendar/list/view-controller',
         });
 
         grid.prop('folder', app.folder.get());
-        grid.refresh();
-    });
+        grid.paint();
+    };
+
+    return perspective;
 });
