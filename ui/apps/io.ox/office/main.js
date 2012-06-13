@@ -42,14 +42,26 @@ define('io.ox/office/main',
             win = null,
 
             // main application container
-            container = $('<div>').addClass('container abs'),
-
-            // the iframe representing the edited document
-            iframe = $('<iframe>').addClass('io-ox-office-iframe'),
+            container = $('<div>').addClass('container'),
 
             model = new Model(),
 
-            view = new View({ model: model, node: container });
+            view = new View({ model: model, node: container }),
+
+            // editors mapped by text mode
+            editors = {},
+
+            // main editor used in save, quit, etc.
+            editor;
+
+        // create the editor divs and editors for all text modes
+        _(Editor.TextMode).each(function (textMode) {
+            var node = $('<div>').addClass('io-ox-office-editor user-select-text ' + textMode).attr('contenteditable', true);
+            node.append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
+            container.append(node);
+            editors[textMode] = new Editor(node, textMode);
+        });
+        editor = editors[Editor.TextMode.RICH];
 
         /*
          * Shows a closable error message above the editor.
@@ -63,13 +75,6 @@ define('io.ox/office/main',
         var showError = function (message, title) {
             container.find('.alert').remove();
             container.prepend($.alert(title || gt('Error'), message));
-        };
-
-        /*
-         * Shows an internal error message with the specified message text.
-         */
-        var showInternalError = function (message) {
-            showError(message, gt('Internal Error'));
         };
 
         /*
@@ -89,49 +94,6 @@ define('io.ox/office/main',
             if (win) {
                 win.setTitle(baseTitle + (docOptions.filename ? (' - ' + docOptions.filename) : ''));
             }
-        };
-
-        /*
-         * Returns a deferred that reflects whether initialization of the
-         * editor succeeded. On first call, initializes the editor iframe and
-         * creates a new instance of the Editor class. On subsequent calls,
-         * returns the same deferred object again without initialization.
-         */
-        var getEditor = function () {
-            // the return value
-            var def = $.Deferred();
-
-            // put the code to manipulate the embedded document into a timeout
-            setTimeout(function () {
-                var // the embedded document, wrapped in a jQuery object
-                    contents = iframe.contents(),
-                    // the head element of the document embedded in the iframe
-                    frameHead = $('head', contents),
-                    // the body element of the document embedded in the iframe
-                    frameBody = $('body', contents),
-                    // the content window of the iframe document
-                    frameWindow = iframe.length && iframe.get(0).contentWindow;
-
-                // check that all components of the embedded document are valid
-                if (frameHead.length && frameBody.length && frameWindow) {
-                    // add a link to the editor.css file
-                    frameHead.append($('<link>').attr('rel', 'stylesheet').attr('href', ox.base + '/apps/io.ox/office/editor.css'));
-                    // set body of the document to edit mode
-                    frameBody.attr('contenteditable', true);
-                    // append some text to play with, TODO: remove that
-                    frameBody.append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
-                    // resolve the deferred with a new editor instance
-                    def.resolve(new Editor(frameBody, frameWindow));
-                } else {
-                    // creation of the iframe failed: reject the deferred
-                    showInternalError('Cannot instantiate editor.');
-                    def.reject();
-                }
-            });
-
-            // on subsequent calls, just return the deferred
-            getEditor = function () { return def; };
-            return def;
         };
 
         var getOperationsCount = function (result) {
@@ -179,7 +141,7 @@ define('io.ox/office/main',
 
             // initialize global application structure
             updateTitles();
-            win.nodes.main.addClass('io-ox-office-main').append(container.append(iframe));
+            win.nodes.main.addClass('io-ox-office-main').append(container);
         });
 
         /*
@@ -191,28 +153,28 @@ define('io.ox/office/main',
          */
         app.load = function () {
             var def = $.Deferred();
-            win.show();
-            getEditor().done(function (editor) {
-                win.busy();
-                $.ajax({
-                    type: 'GET',
-                    url: getFilterUrl('importdocument'),
-                    dataType: 'json'
-                })
-                .done(function (response) {
-                    // editor.applyOperations(createOperationsList(response), false);
-                    editor.applyOperations(createOperationsList(response), true);  // only for testing reasons "true"
-                    editor.focus();
-                    win.idle();
-                    def.resolve();
-                })
-                .fail(function (response) {
-                    showAjaxError(response);
-                    win.idle();
-                    def.reject();
+            win.show().busy();
+            $.ajax({
+                type: 'GET',
+                url: getFilterUrl('importdocument'),
+                dataType: 'json'
+            })
+            .done(function (response) {
+                var operations = createOperationsList(response);
+                _(editors).each(function (editor) {
+                    // editor.applyOperations(operations, false);
+                    editor.applyOperations(operations, true);  // only for testing reasons "true"
                 });
-                return def;
+                editor.focus();
+                win.idle();
+                def.resolve();
+            })
+            .fail(function (response) {
+                showAjaxError(response);
+                win.idle();
+                def.reject();
             });
+            return def;
         };
 
         /*
@@ -223,33 +185,31 @@ define('io.ox/office/main',
          */
         app.save = function () {
             var def = $.Deferred();
-            getEditor().done(function (editor) {
-                win.busy();
-                var allOperations = editor.getOperations();
-                var dataObject = {"operations": JSON.stringify(allOperations)};
+            win.busy();
+            var allOperations = editor.getOperations();
+            var dataObject = {"operations": JSON.stringify(allOperations)};
 
-                $.ajax({
-                    type: 'POST',
-                    url: getFilterUrl('exportdocument'),
-                    dataType: 'json',
-                    data: dataObject,
-                    beforeSend: function (xhr) {
-                        if (xhr && xhr.overrideMimeType) {
-                            xhr.overrideMimeType("application/j-son;charset=UTF-8");
-                        }
+            $.ajax({
+                type: 'POST',
+                url: getFilterUrl('exportdocument'),
+                dataType: 'json',
+                data: dataObject,
+                beforeSend: function (xhr) {
+                    if (xhr && xhr.overrideMimeType) {
+                        xhr.overrideMimeType("application/j-son;charset=UTF-8");
                     }
-                })
-                .done(function (response) {
-                    getOperationsCount(response);
-                    editor.focus();
-                    win.idle();
-                    def.resolve();
-                })
-                .fail(function (response) {
-                    showAjaxError(response);
-                    win.idle();
-                    def.reject();
-                });
+                }
+            })
+            .done(function (response) {
+                getOperationsCount(response);
+                editor.focus();
+                win.idle();
+                def.resolve();
+            })
+            .fail(function (response) {
+                showAjaxError(response);
+                win.idle();
+                def.reject();
             });
             return def;
         };
@@ -267,29 +227,27 @@ define('io.ox/office/main',
          */
         app.setQuit(function () {
             var def = null;
-            getEditor().done(function (editor) {
-                if (editor.isModified()) {
-                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        new dialogs.ModalDialog()
-                        .text(gt('Do you really want to cancel editing this document?'))
-                        .addPrimaryButton('delete', gt('Lose changes'))
-                        .addAlternativeButton('save', gt('Save'))
-                        .addButton('cancel', gt('Cancel'))
-                        .on('delete', function () { def = $.Deferred().resolve(); })
-                        .on('save', function () { def = app.save(); })
-                        .on('cancel', function () { def = $.Deferred().reject(); })
-                        .show();
-                    });
-                } else {
-                    def = $.Deferred().resolve();
-                }
-            });
+            if (editor.isModified()) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog()
+                    .text(gt('Do you really want to cancel editing this document?'))
+                    .addPrimaryButton('delete', gt('Lose changes'))
+                    .addAlternativeButton('save', gt('Save'))
+                    .addButton('cancel', gt('Cancel'))
+                    .on('delete', function () { def = $.when(); })
+                    .on('save', function () { def = app.save(); })
+                    .on('cancel', function () { def = $.Deferred().reject(); })
+                    .show();
+                });
+            } else {
+                def = $.Deferred().resolve();
+            }
             return def;
         });
 
         app.destroy = function () {
             view.destroy();
-            app = win = container = iframe = model = view = null;
+            app = win = container = model = view = editors = editor = null;
         };
 
         return app;
