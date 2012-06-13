@@ -250,8 +250,9 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
 
             var container,
                 visible = false,
+                permanent = false,
                 top = 0,
-                fnChangeFolder, fnShow, fnToggle, toggle, loadTree, initTree;
+                fnChangeFolder, fnShow, togglePermanent, fnToggle, toggle, loadTree, initTree;
 
             container = $('<div>')
                 .addClass('abs border-right')
@@ -262,7 +263,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                     zIndex: 3
                 })
                 .hide()
-                .appendTo(app.getWindow().nodes.main);
+                .appendTo(app.getWindow().nodes.body);
 
             fnChangeFolder = function (e, selection) {
                 var folder = selection[0];
@@ -284,22 +285,36 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                 return $.when();
             };
 
-            toggle = function () {
+            togglePermanent = function () {
+                var width;
+                if (permanent) {
+                    app.getWindow().nodes.body.css('left', '0px');
+                    container.css('left', '0px');
+                } else {
+                    width = container.outerWidth();
+                    app.getWindow().nodes.body.css('left', width + 'px');
+                    container.css('left', -width + 'px');
+                }
+                permanent = !permanent;
+            };
+
+            toggle = function (e) {
                 if (visible) {
                     top = container.scrollTop();
                     container.hide();
                     visible = false;
+                    if (permanent) { togglePermanent(); }
                 } else {
                     fnShow();
+                    if (e.altKey) { togglePermanent(); }
                 }
             };
 
             fnToggle = function (e) {
                 if (!e.isDefaultPrevented()) {
-                    toggle();
+                    toggle(e);
                 }
             };
-
 
             initTree = function (views) {
                 var tree = app.folderView = new views[options.view](container, {
@@ -319,7 +334,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             loadTree = function (e) {
                 if (!e.isDefaultPrevented()) {
                     container.busy();
-                    toggle();
+                    toggle(e);
                     app.showFolderView = fnShow;
                     app.getWindow().nodes.title.off('click', loadTree);
                     return require(['io.ox/core/tk/folderviews']).pipe(initTree);
