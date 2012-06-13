@@ -725,9 +725,9 @@ define('io.ox/core/tk/vgrid',
             return paused ? $.when() : apply([], true);
         };
 
-        this.refresh = function () {
+        this.refresh = function (force) {
             // load all (if painted before)
-            return firstRun ? this.paint() : loadAll();
+            return !firstRun ? loadAll() : (force === true ? this.paint() : DONE);
         };
 
         this.getMode = function () {

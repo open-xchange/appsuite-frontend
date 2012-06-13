@@ -155,7 +155,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
          */
         wireGridAndRefresh: function (grid, api, win) {
             var refreshAll = function () {
-                    grid.refresh();
+                    grid.refresh(true);
                 },
                 refreshList = function () {
                     console.log('refreshlist');
