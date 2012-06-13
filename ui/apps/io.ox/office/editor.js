@@ -375,6 +375,18 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             sel.addRange(range);
         };
 
+        this.processDragOver = function (event) {
+            event.preventDefault();
+        };
+
+        this.processDrop = function (event) {
+            event.preventDefault();
+        };
+
+        this.processContextMenu = function (event) {
+            event.preventDefault();
+        };
+
         this.processKeyDown = function (event) {
 
             this.implDbgOutEvent(event);
@@ -785,9 +797,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         editdiv
             .on('keydown', $.proxy(this, 'processKeyDown'))
             .on('keypress', $.proxy(this, 'processKeyPressed'))
-            // TODO
-            .on('dragover drop', $.proxy(this, 'xxx'))
-            .on('contextmenu', $.proxy(this, 'xxx'));
+            .on('dragover', $.proxy(this, 'processDragOver'))
+            .on('drop', $.proxy(this, 'processDrop'))
+            .on('contextmenu', $.proxy(this, 'processContextMenu'));
 
     } // end of OXOEditor()
 
