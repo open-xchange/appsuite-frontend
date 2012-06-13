@@ -579,7 +579,7 @@ define('io.ox/office/editor', function () {
         };
 
         this.implInitDocument = function () {
-            editdiv.innerHTMl = '<html><p><br></p></html>';
+            editdiv[0].innerHTML = '<html><p><br></p></html>';
             paragraphs = editdiv.children();
         };
 
