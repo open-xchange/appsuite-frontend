@@ -27,19 +27,19 @@ define('io.ox/office/main',
     // TODO: return open application per file
     function createInstance(options) {
 
-        var // file/document options
-            appOptions = $.extend({
+        var // document options
+            docOptions = $.extend({
                 filename: gt('Unnamed')
             }, options),
 
+            // default title for launcher and window
+            baseTitle = gt('OX Office'),
+
             // application object
-            app = ox.ui.createApp({ name: 'io.ox/office', title: appOptions.filename }),
+            app = ox.ui.createApp({ name: 'io.ox/office', title: baseTitle }),
 
             // application window
             win = null,
-
-            // default window title
-            winBaseTitle = gt('OX Office'),
 
             // main application container
             container = $('<div>').addClass('container abs'),
@@ -49,9 +49,7 @@ define('io.ox/office/main',
 
             model = new Model(),
 
-            view = new View({ model: model, node: container }),
-
-            filterUrl = ox.apiRoot + '/oxodocumentfilter?action=importdocument&id=' + appOptions.id + '&session=' + ox.session;
+            view = new View({ model: model, node: container });
 
         /*
          * Shows a closable error message above the editor.
@@ -82,10 +80,14 @@ define('io.ox/office/main',
             showError(data.responseText);
         };
 
+        var getFilterUrl = function (action) {
+            return ox.apiRoot + '/oxodocumentfilter?action=' + action + '&id=' + docOptions.id + '&session=' + ox.session;
+        };
+
         var updateTitles = function () {
-            app.setTitle(appOptions.filename);
+            app.setTitle(docOptions.filename || baseTitle);
             if (win) {
-                win.setTitle(winBaseTitle + ' - ' + appOptions.filename);
+                win.setTitle(baseTitle + (docOptions.filename ? (' - ' + docOptions.filename) : ''));
             }
         };
 
@@ -158,7 +160,7 @@ define('io.ox/office/main',
             // create the application window
             win = ox.ui.createWindow({
                 name: 'io.ox/office',
-                title: winBaseTitle,
+                title: baseTitle,
                 close: true,
                 search: false,
                 toolbar: true
@@ -187,7 +189,7 @@ define('io.ox/office/main',
                 win.busy();
                 $.ajax({
                     type: 'GET',
-                    url: filterUrl,
+                    url: getFilterUrl('importdocument'),
                     dataType: 'json'
                 })
                 .done(function (response) {
@@ -220,7 +222,7 @@ define('io.ox/office/main',
                 var operations = {"Operations": ["{name:insertParagraph, para:0}", "{name:insertText, para:0, pos:3, text:hallo}", "{name:insertText, para:1, pos:6, text:Welt}"]};
                 $.ajax({
                     type: 'POST',
-                    url: ox.apiRoot + "/oxodocumentfilter?action=exportdocument&id=" + appOptions.id + "&session=" + ox.session,  // URL needs to be specified
+                    url: getFilterUrl('exportdocument'),
                     dataType: 'json',
                     data: operations,
                     beforeSend: function (xhr) {
@@ -247,6 +249,12 @@ define('io.ox/office/main',
          * The handler function that will be called when the application shuts
          * down. If the edited document has unsaved changes, a dialog will be
          * shown asking whether to save or drop the changes.
+         *
+         * @returns
+         *  A deferred that will be resolved if the application can be closed
+         *  (either if it is unchanged, or the user has chosen to save or lose
+         *  the changes), or will be rejected if the application must remain
+         *  alive (user has cancelled the dialog).
          */
         app.setQuit(function () {
             var def = null;
