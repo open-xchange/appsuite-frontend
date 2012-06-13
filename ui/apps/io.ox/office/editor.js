@@ -17,6 +17,16 @@ define('io.ox/office/editor', function () {
 
     'use strict';
 
+    function fillstr(str, len, fill, right) {
+        while (str.length < len) {
+            if (right)
+                str = str + fill;
+            else
+                str = fill + str;
+        }
+        return str;
+    }
+
     /**
      * 'Point and mark'. Represents a text position a.k.a. cursor position.
      * Member field 'para' contains the zero-based paragraph index, member
@@ -123,7 +133,7 @@ define('io.ox/office/editor', function () {
         // Maybe only applyOperation_s_, where param might be operation or operation[] ?
         this.applyOperation = function (operation, bRecord) {
 
-            this.implDbgOutOperation(operation);
+            this.implDbgOutObject({type: 'operation', value: operation});
 
             if (bRecord) {
                 operations.push(operation);
@@ -204,7 +214,7 @@ define('io.ox/office/editor', function () {
             return bHasFocus;
         };
 
-        this.getOXOSelection = function (domSelection) {
+        this.implGetOXOSelection = function (domSelection) {
 
             function getOXOPositionFromDOMPosition(node, offset) {
 
@@ -247,8 +257,32 @@ define('io.ox/office/editor', function () {
             }
 
             // Only supporting single selection at the moment
-            var startPaM = getOXOPositionFromDOMPosition.call(this, domSelection.startPaM.node, domSelection.startPaM.offset);
-            var endPaM = getOXOPositionFromDOMPosition.call(this, domSelection.endPaM.node, domSelection.endPaM.offset);
+
+            var startPaM, endPaM;
+
+            // Checking selection - setting a valid selection doesn't always work on para end, browser is manipulating it....
+            // Assume this only happens on para end - seems we are always directly in a p-element when this error occurs.
+            if (domSelection.startPaM.node.nodeType === 3) {
+                startPaM = getOXOPositionFromDOMPosition.call(this, domSelection.startPaM.node, domSelection.startPaM.offset);
+            }
+            else {
+                // Work around browser selection bugs...
+                var myParagraph = paragraphs.has(domSelection.startPaM.node.firstChild);
+                var para = myParagraph.index();
+                startPaM = new OXOPaM(para, this.implGetParagraphLen(para));
+                editWindow.console.log('warning: fixed invalid selection (start)');
+            }
+
+            if (domSelection.endPaM.node.nodeType === 3) {
+                endPaM = getOXOPositionFromDOMPosition.call(this, domSelection.endPaM.node, domSelection.endPaM.offset);
+            }
+            else {
+                // Work around browser selection bugs...
+                var myParagraph = paragraphs.has(domSelection.endPaM.node.firstChild);
+                var para = myParagraph.index();
+                endPaM = new OXOPaM(para, this.implGetParagraphLen(para));
+                editWindow.console.log('warning: fixed invalid selection (end)');
+            }
 
             var aOXOSelection = new OXOSelection(startPaM, endPaM);
 
@@ -319,18 +353,15 @@ define('io.ox/office/editor', function () {
         };
 
 
-        this.getCurrentDOMSelection = function () {
-            // DOMSelection consists of Node and Offset for startpoint and for endpoint
-            var windowSel = editWindow.getSelection();
-            var startPaM = new DOMPaM(windowSel.anchorNode, windowSel.anchorOffset);
-            var endPaM = new DOMPaM(windowSel.focusNode, windowSel.focusOffset);
-            var domSelection = new DOMSelection(startPaM, endPaM);
-
-            return domSelection;
+        this.getSelection = function () {
+            var domSelection = this.implGetCurrentDOMSelection();
+            var selection = this.implGetOXOSelection(domSelection);
+            return selection;
         };
 
         this.setSelection = function (oxosel) {
             var aDOMSelection = this.getDOMSelection(oxosel);
+            this.implSetDOMSelection(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset, aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
             var range = editWindow.document.createRange();
             range.setStart(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset);
             range.setEnd(aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
@@ -342,6 +373,7 @@ define('io.ox/office/editor', function () {
         this.processKeyDown = function (event) {
 
             this.implDbgOutEvent(event);
+            // this.implCheckSelection();
 
             // TODO: How to strip away debug code?
             if (event.keyCode && event.shiftKey && event.ctrlKey && event.altKey) {
@@ -359,13 +391,12 @@ define('io.ox/office/editor', function () {
 
             // For some keys we only get keyDown, not keyPressed!
 
-            var domSelection = this.getCurrentDOMSelection();
-            var selection = this.getOXOSelection(domSelection);
+            var selection = this.getSelection();
             selection.adjust();
 
             if (event.keyCode === 46) { // DELETE
                 if (selection.hasRange()) {
-                    this.deleteSelected();
+                    this.deleteSelected(selection);
                 }
                 else {
                     var paraLen = this.implGetParagraphLen(selection.startPaM.para);
@@ -382,7 +413,7 @@ define('io.ox/office/editor', function () {
             }
             if (event.keyCode === 8) { // BACKSPACE
                 if (selection.hasRange()) {
-                    this.deleteSelected();
+                    this.deleteSelected(selection);
                 }
                 else {
                     if (selection.startPaM.pos > 0) {
@@ -413,9 +444,9 @@ define('io.ox/office/editor', function () {
         this.processKeyPressed = function (event) {
 
             this.implDbgOutEvent(event);
+            // this.implCheckSelection();
 
-            var domSelection = this.getCurrentDOMSelection();
-            var selection = this.getOXOSelection(domSelection);
+            var selection = this.getSelection();
             selection.adjust();
 
             /*
@@ -433,26 +464,7 @@ define('io.ox/office/editor', function () {
 
             if (c.length === 1) {
 
-                // Demo code for calculating DOMSelection from OXOSelection
-                if (0) {
-                    var aOXOSelection = this.getCurrentOXOSelection();
-                    var aDOMSelection = this.getDOMSelection(aOXOSelection);
-
-                    if (aDOMSelection) {
-                        editWindow.console.log('processKeyPressed: StartPaM: ' + aDOMSelection.startPaM.node + ' : ' + aDOMSelection.startPaM.offset);
-                        editWindow.console.log('processKeyPressed: EndPaM: ' + aDOMSelection.endPaM.node + ' : ' + aDOMSelection.endPaM.offset);
-
-                        var range = document.createRange();
-                        range.setStart(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset);
-                        range.setEnd(aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
-                        var sel = editWindow.getSelection();
-                        sel.removeAllRanges();
-                        sel.addRange(range);
-                    }
-                }
-
-                // Code for calculating OXOSelection from DOMSelection
-                this.deleteSelected();
+                this.deleteSelected(selection);
                 // Selection was adjusted, so we need to use start, not end
                 this.insertText(c, selection.startPaM.para, selection.startPaM.pos);
                 selection.startPaM.pos++;
@@ -467,7 +479,7 @@ define('io.ox/office/editor', function () {
             else {
 
                 if (event.keyCode === 13) { // RETURN
-                    this.deleteSelected();
+                    this.deleteSelected(selection);
                     this.splitParagraph(selection.startPaM.para, selection.startPaM.pos);
                     // TODO / TBD: Should all API / Operation calls return the new position?!
                     selection.startPaM.para++;
@@ -480,10 +492,10 @@ define('io.ox/office/editor', function () {
             }
         };
 
-        this.deleteSelected = function () {
+        this.deleteSelected = function (_selection) {
+            // this.implCheckSelection();
             var i, nStartPos, nEndPos;
-            var domSelection = this.getCurrentDOMSelection();
-            var selection = this.getOXOSelection(domSelection);
+            var selection = _selection || this.getSelection();
             if ((selection !== undefined) && (selection.hasRange())) {
                 // Split into multiple operations:
                 // 1) delete selected part in first para (pos to end)
@@ -493,7 +505,7 @@ define('io.ox/office/editor', function () {
                 nStartPos = selection.startPaM.pos;
                 nEndPos = selection.endPaM.pos;
                 if (selection.startPaM.para !== selection.endPaM.para) {
-                    nEndPos = 0xFFFF; // TODO: Real para end
+                    nEndPos = -1;
                 }
                 this.deleteText(selection.startPaM.para, nStartPos, nEndPos);
                 for (i = selection.startPaM.para + 1; i < selection.endPaM.para; i++)
@@ -567,6 +579,60 @@ define('io.ox/office/editor', function () {
             // TODO
             // 1) Adjust tabs
             // 2) ???
+        };
+
+        this.implSetDOMSelection = function (startnode, startpos, endnode, endpos) {
+            var range = editWindow.document.createRange();
+            range.setStart(startnode, startpos);
+            range.setEnd(endnode, endpos);
+            var sel = editWindow.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        };
+
+        this.implGetCurrentDOMSelection = function () {
+            // DOMSelection consists of Node and Offset for startpoint and for endpoint
+            var windowSel = editWindow.getSelection();
+            var startPaM = new DOMPaM(windowSel.anchorNode, windowSel.anchorOffset);
+            var endPaM = new DOMPaM(windowSel.focusNode, windowSel.focusOffset);
+            var domSelection = new DOMSelection(startPaM, endPaM);
+
+            return domSelection;
+        };
+
+        this.implCheckSelection = function () {
+            var node;
+            var windowSel = editWindow.getSelection();
+            if ((windowSel.anchorNode.nodeType !== 3) || (windowSel.focusNode.nodeType !== 3)) {
+
+                editWindow.console.log('warning: invalid selection');
+
+                var selection = this.getSelection();
+
+                // var node, startnode = windowSel.anchorNode, startpos = windowSel.anchorOffset, endnode = windowSel.focusNode, endpos = windowSel.focusOffset;
+
+                if (windowSel.anchorNode.nodeType !== 3) {
+                    // Assume this only happens on para end - seems we are always directly in a p-element when this error occurs.
+                    selection.startPaM.pos = this.implGetParagraphLen(selection.startPaM.para);
+                    /*
+                    node = windowSel.anchorNode;
+                    while ((node = node.previousSibling)) {
+                        if (node.nodeType === 3) {
+                            startnode = node;
+                            startpos = node.nodeValue.length;
+                            break;
+                        }
+                    }
+                    */
+                }
+
+                if (windowSel.focusNode.nodeType !== 3) {
+                    selection.endPaM.pos = this.implGetParagraphLen(selection.endPaM.para);
+
+                }
+
+                this.setSelection(selection);
+            }
         };
 
         this.implInitDocument = function () {
@@ -683,20 +749,9 @@ define('io.ox/office/editor', function () {
 
         this.implDbgOutEvent = function (event) {
 
-            function fillstr(str, len, fill, right) {
-                while (str.length < len) {
-                    if (right)
-                        str = str + fill;
-                    else
-                        str = fill + str;
-                }
-                return str;
-            }
+            var selection = this.getSelection();
 
-            var domSelection = this.getCurrentDOMSelection();
-            var selection = this.getOXOSelection(domSelection);
-
-            var dbg = 'evt:' + fillstr(event.type, 10, ' ', true) + ' sel:[' + fillstr(selection.startPaM.para.toString(), 2, '0') + ',' + fillstr(selection.startPaM.pos.toString(), 2, '0') + '/' + fillstr(selection.endPaM.para.toString(), 2, '0') + ',' + fillstr(selection.endPaM.pos.toString(), 2, '0') + ']';
+            var dbg = fillstr(event.type, 10, ' ', true) + ' sel:[' + fillstr(selection.startPaM.para.toString(), 2, '0') + ',' + fillstr(selection.startPaM.pos.toString(), 2, '0') + '/' + fillstr(selection.endPaM.para.toString(), 2, '0') + ',' + fillstr(selection.endPaM.pos.toString(), 2, '0') + ']';
             if ((event.type === "keypress") || (event.type === "keydown")) {
                 dbg += ' key:[keyCode=' + fillstr(event.keyCode.toString(), 3, '0') + ' charCode=' + fillstr(event.charCode.toString(), 3, '0') + ' shift=' + event.shiftKey + ' ctrl=' + event.ctrlKey + ' alt=' + event.altKey + ']';
             }
@@ -705,8 +760,8 @@ define('io.ox/office/editor', function () {
 
         };
 
-        this.implDbgOutOperation = function (operation) {
-            var dbg = 'operation: ' + JSON.stringify(operation);
+        this.implDbgOutObject = function (obj) {
+            var dbg = fillstr(obj.type + ': ', 10, ' ', true) + JSON.stringify(obj.value);
             editWindow.console.log(dbg);
         };
 
