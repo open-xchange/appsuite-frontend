@@ -58,6 +58,15 @@ define('io.ox/office/editor', function () {
         this.offset = offset;
     }
 
+    function collectTextNodes(element, textNodes) {
+        for (var child = element.firstChild; child !== null; child = child.nextSibling) {
+            if (child.nodeType === 3)
+                textNodes.push(child);
+            else if (child.nodeType === 1)
+                collectTextNodes(child, textNodes);
+        }
+    }
+
     /**
      * Represents a text range consisting of start position and end position.
      */
@@ -349,8 +358,11 @@ define('io.ox/office/editor', function () {
                 if (c === 'P') {
                     alert('#Paragraphs: ' + paragraphs.length);
                 }
-                if (c === 'S') {
-                    alert('#Paragraphs: ' + paragraphs.length);
+                if (c === 'I') {
+                    this.insertParagraph(-1);
+                }
+                if (c === 'D') {
+                    this.initDocument();
                 }
             }
 
@@ -361,28 +373,36 @@ define('io.ox/office/editor', function () {
             selection.adjust();
 
             if (event.keyCode === 46) { // DELETE
-                this.deleteSelected();
-                var paraLen = this.implGetParagraphLen(selection.startPaM.para);
-                if (selection.startPaM.pos < paraLen) {
-                    this.deleteText(selection.startPaM.para, selection.startPaM.pos, selection.startPaM.pos + 1);
+                if (selection.hasRange()) {
+                    this.deleteSelected();
                 }
                 else {
-                    this.mergeParagraph(selection.startPaM.para);
+                    var paraLen = this.implGetParagraphLen(selection.startPaM.para);
+                    if (selection.startPaM.pos < paraLen) {
+                        this.deleteText(selection.startPaM.para, selection.startPaM.pos, selection.startPaM.pos + 1);
+                    }
+                    else {
+                        this.mergeParagraph(selection.startPaM.para);
+                    }
                 }
                 selection.endPaM = selection.startPaM;
                 event.preventDefault();
                 this.setSelection(selection);
             }
             if (event.keyCode === 8) { // BACKSPACE
-                this.deleteSelected();
-                if (selection.startPaM.pos > 0) {
-                    this.deleteText(selection.startPaM.para, selection.startPaM.pos - 1, selection.startPaM.pos);
-                    selection.startPaM.pos--;
+                if (selection.hasRange()) {
+                    this.deleteSelected();
                 }
-                else if (selection.startPaM.para > 0) {
-                    this.mergeParagraph(selection.startPaM.para - 1);
-                    selection.startPaM.para--;
-                    selection.startPaM.pos = this.implGetParagraphLen(selection.startPaM.para);
+                else {
+                    if (selection.startPaM.pos > 0) {
+                        this.deleteText(selection.startPaM.para, selection.startPaM.pos - 1, selection.startPaM.pos);
+                        selection.startPaM.pos--;
+                    }
+                    else if (selection.startPaM.para > 0) {
+                        this.mergeParagraph(selection.startPaM.para - 1);
+                        selection.startPaM.para--;
+                        selection.startPaM.pos = this.implGetParagraphLen(selection.startPaM.para);
+                    }
                 }
                 selection.endPaM = selection.startPaM;
                 event.preventDefault();
@@ -559,7 +579,8 @@ define('io.ox/office/editor', function () {
         };
 
         this.implInitDocument = function () {
-            // TODO
+            editdiv[0].innerHTML = '<html><p><br></p></html>';
+            paragraphs = editdiv.children();
         };
 
         this.implInsertText = function (para, pos, text) {
@@ -571,11 +592,22 @@ define('io.ox/office/editor', function () {
         };
 
         this.implInsertParagraph = function (para) {
-            // HACK?
-            if (para === -1) para = paragraphs.length;
-            var splitpara = para ? para - 1 : 0;
-            var splitpos = para ? -1 : 0;
-            this.implSplitParagraph(splitpara, splitpos);
+            var newPara = editWindow.document.createElement('p');
+            newPara.appendChild(editWindow.document.createTextNode(''));
+            newPara.appendChild(editWindow.document.createElement('br'));
+            newPara = $(newPara);
+
+            if (para === -1) {
+                para = paragraphs.size();
+            }
+
+            if (para > 0) {
+                newPara.insertAfter(paragraphs[para - 1]);
+            }
+            else {
+                newPara.insertBefore(paragraphs[0]);
+            }
+            paragraphs = editdiv.children();
         };
 
         this.implSplitParagraph = function (para, pos) {
@@ -596,17 +628,65 @@ define('io.ox/office/editor', function () {
         };
 
         this.implDeleteText = function (para, start, end) {
-//            var para = $(paragraphs[para]);
+
+            if (end === -1) {
+                end = this.implGetParagraphLen(para);
+            }
+
+            if (start === end) {
+                return;
+            }
+
+/*
             var startPaM = this.getDOMPosition(para, start);
-            var endPaM = this.getDOMPosition(para, start);
+            var endPaM = this.getDOMPosition(para, end);
 
             if (startPaM.node === endPaM.node) {
                 var oldText = startPaM.node.nodeValue;
                 var nodeStart = start - startPaM.offset;
                 var newText = oldText.slice(0, start - nodeStart) + oldText.slice(end - nodeStart);
                 startPaM.node.nodeValue = newText;
-                this.implParagraphChanged(para);
             }
+            else
+*/
+            if (1)
+            {
+                var textNodes = [];
+                collectTextNodes(paragraphs[para], textNodes);
+                var node, nodeLen, delStart, delEnd;
+                var nodes = textNodes.length;
+                var nodeStart = 0;
+                var del = end - start;
+                for (var i = 0; i < nodes; i++) {
+                    node = textNodes[i];
+                    nodeLen = node.nodeValue.length;
+                    if ((nodeStart + nodeLen) > start) {
+                        delStart = 0;
+                        delEnd = nodeLen;
+                        if (nodeStart <= start)  { // node matching startPaM
+                            delStart = start - nodeStart;
+                        }
+                        if ((nodeStart + nodeLen) >= end) { // node matching endPaM
+                            delEnd = end - nodeStart;
+                        }
+                        if ((delEnd - delStart) === nodeLen) {
+                            // remove element completely. Need to take care for empty elements.
+                            // HACK
+                            node.nodeValue = '';
+                        }
+                        else {
+                            var oldText = node.nodeValue;
+                            var newText = oldText.slice(0, delStart) + oldText.slice(delEnd);
+                            node.nodeValue = newText;
+                        }
+                    }
+                    nodeStart += nodeLen;
+                    if (nodeStart >= end)
+                        break;
+                }
+
+            }
+            this.implParagraphChanged(para);
         };
 
         this.implDbgOut = function (event) {

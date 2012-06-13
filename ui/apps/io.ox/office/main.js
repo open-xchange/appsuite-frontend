@@ -13,7 +13,7 @@
 
 define('io.ox/office/main',
     ['io.ox/files/api',
-     'io.ox/core/tk/model',
+     'io.ox/office/model',
      'io.ox/core/tk/view',
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
