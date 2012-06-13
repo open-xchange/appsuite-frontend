@@ -191,7 +191,8 @@ define('io.ox/office/main',
                     dataType: 'json'
                 })
                 .done(function (response) {
-                    editor.applyOperations(createOperationsList(response), false);
+                    // editor.applyOperations(createOperationsList(response), false);
+                    editor.applyOperations(createOperationsList(response), true);  // only for testing reasons "true"
                     editor.focus();
                     win.idle();
                     def.resolve();
@@ -216,13 +217,13 @@ define('io.ox/office/main',
             getEditor().done(function (editor) {
                 win.busy();
                 var allOperations = editor.getOperations();
-                // var operations = convertAllOperations(allOperations);
-                var operations = {"Operations": ["{name:insertParagraph, para:0}", "{name:insertText, para:0, pos:3, text:hallo}", "{name:insertText, para:1, pos:6, text:Welt}"]};
+                var dataObject = {"operations": JSON.stringify(allOperations)};
+
                 $.ajax({
-                    type: 'POST',
+                    type: 'GET',
                     url: ox.apiRoot + "/oxodocumentfilter?action=exportdocument&id=" + appOptions.id + "&session=" + ox.session,  // URL needs to be specified
                     dataType: 'json',
-                    data: operations,
+                    data: dataObject,
                     beforeSend: function (xhr) {
                         if (xhr && xhr.overrideMimeType) {
                             xhr.overrideMimeType("application/j-son;charset=UTF-8");
