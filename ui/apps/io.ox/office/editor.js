@@ -99,6 +99,8 @@ define('io.ox/office/editor', function () {
 
         var bModified = false;
 
+        var lastKeyDownEvent;
+
         // list of operations
         var operations = [];
 
@@ -373,6 +375,7 @@ define('io.ox/office/editor', function () {
         this.processKeyDown = function (event) {
 
             this.implDbgOutEvent(event);
+            lastKeyDownEvent = event;
             // this.implCheckSelection();
 
             // TODO: How to strip away debug code?
@@ -446,6 +449,13 @@ define('io.ox/office/editor', function () {
             this.implDbgOutEvent(event);
             // this.implCheckSelection();
 
+            if (this.isNavigationKeyEvent(lastKeyDownEvent)) {
+                // Don't block cursor navigation keys.
+                // Use lastKeyDownEvent, because some browsers (eg Chrome) change keyCode to become the charCode in keyPressed
+                return;
+            }
+
+
             var selection = this.getSelection();
             selection.adjust();
 
@@ -490,6 +500,9 @@ define('io.ox/office/editor', function () {
                 }
 
             }
+
+            // Block everything else to be on the save side....
+            event.preventDefault();
         };
 
         this.deleteSelected = function (_selection) {
