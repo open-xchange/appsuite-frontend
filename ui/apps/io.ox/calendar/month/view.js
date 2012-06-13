@@ -21,23 +21,33 @@ define('io.ox/calendar/month/view',
 
     return {
 
-        drawScaffold: function (main) {
+        drawScaffold: function (weekend) {
 
-            var days = date.locale.days;
+            var days = date.locale.days, node;
             days = days.slice(1).concat(days[0]);
-            return tmpl.render('scaffold', { days: days });
+            if (weekend === false) {
+                days = days.slice(0, 5);
+            }
+            node = tmpl.render('scaffold', { days: days });
+            if (weekend === false) {
+                node.addClass('hide-weekend');
+            }
+            return node;
         },
 
-        drawMonth: function (timestamp) {
+        drawMonth: function (timestamp, weekend) {
 
             var month = $('<div class="month">'),
-                list = util.getMonthScaffold(timestamp);
+                list = util.getMonthScaffold(timestamp),
+                hideWeekend = weekend === false;
 
             _(list).each(function (weeks) {
                 var week = $('<div class="week">').appendTo(month);
                 _(weeks).each(function (day) {
-                    console.log('DAY', day);
-                    week.append(tmpl.render('day', day));
+                    if (!hideWeekend || !day.isWeekend) {
+                        console.log('DAY', day);
+                        week.append(tmpl.render('day', day));
+                    }
                 });
             });
 

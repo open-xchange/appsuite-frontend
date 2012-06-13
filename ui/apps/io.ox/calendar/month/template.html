@@ -11,7 +11,7 @@
 -->
 
 <part id="scaffold">
-    <div class="abs month-view">
+    <div class="abs">
         <div class="scrollpane"></div>
         <div class="header">
             {{~it.days :value:index}}<div class="weekday">{{=value}}</div>{{~}}<div class="weekday">&nbsp;</div>
@@ -27,5 +27,7 @@
 </part>
 
 <part id="appointment">
-    <div class="appointment {{= it.shownAs }}" data-cid="{{= it.cid }}">{{= it.start }} {{= it.subject }}</div>
+    <div class="appointment {{= it.shownAs }}" data-cid="{{= it.cid }}">
+        {{= it.start }} {{= it.subject }}
+    </div>
 </part>

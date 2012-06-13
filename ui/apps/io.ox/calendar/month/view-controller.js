@@ -17,12 +17,12 @@ define('io.ox/calendar/month/view-controller',
 
     return new ox.ui.WindowView('month-view', function (main, app) {
 
-        console.log('month view render');
+        var weekend = true,
+            scaffold = view.drawScaffold(weekend);
 
-        var now = Date.UTC(2012, 5, 1),
-            scaffold = view.drawScaffold();
+        scaffold.find('.scrollpane')
+            .append(view.drawMonth(Date.UTC(2012, 5, 1), weekend));
 
-        scaffold.find('.scrollpane').append(view.drawMonth(now));
         main.empty().addClass('month-view').append(scaffold);
 
         // add click support
@@ -40,7 +40,7 @@ define('io.ox/calendar/month/view-controller',
         });
 
         // get appointments
-        api.getAll({ start: now, end: Date.UTC(2012, 5, 30) }).done(function (appointments) {
+        api.getAll({ start: Date.UTC(2012, 5, 1), end: Date.UTC(2012, 5, 30) }).done(function (appointments) {
             _(appointments).each(function (a) {
                 console.log('appointment', a);
                 var d = new Date(a.start_date), selector = '.date-' + d.getUTCMonth() + '-' + d.getUTCDate() + ' .list';
