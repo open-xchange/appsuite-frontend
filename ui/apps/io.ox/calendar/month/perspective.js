@@ -26,7 +26,7 @@ define('io.ox/calendar/month/perspective',
             var start = Date.UTC(year, month, 1),
                 end = Date.UTC(year, month + 1, 0),
                 collection = new Backbone.Collection([]),
-                view = new View({ collection: collection });
+                view = new View({ collection: collection, year: year, month: month });
 
             // add and render view
             this.scaffold.find('.scrollpane').append(view.render().el);
@@ -52,12 +52,19 @@ define('io.ox/calendar/month/perspective',
             });
         },
 
+        scrollTop: function (top) {
+            return this.scaffold.find('.scrollpane').scrollTop(top);
+        },
+
         render: function (app) {
 
             var weekend = true;
             this.scaffold = View.drawScaffold(weekend);
+            this.drawMonth(2012, 4);
             this.drawMonth(2012, 5);
+            this.drawMonth(2012, 6);
             this.main.empty().addClass('month-view').append(this.scaffold);
+            this.scrollTop(this.main.find('.month-2012-6').position().top);
         }
     });
 

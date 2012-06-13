@@ -38,8 +38,14 @@ define('io.ox/calendar/month/view',
 
         render: function () {
 
-            var list = util.getMonthScaffold(_.now()),
+            var year = this.options.year,
+                month = this.options.month,
+                list = util.getMonthScaffold(Date.UTC(year, month, 1)),
                 hideWeekend = false;
+
+            if (list.length === 5) {
+                this.$el.addClass('row5');
+            }
 
             _(list).each(function (weeks) {
                 var week = $('<div class="week">').appendTo(this.el);
@@ -50,9 +56,11 @@ define('io.ox/calendar/month/view',
                 }, this);
             }, this);
 
-            this.$el.append(
-                $('<div class="vertical-name">').text('June 2012')
-            );
+            this.$el
+                .addClass('month-' + year + '-' + (month + 1))
+                .append(
+                    $('<div class="vertical-name">').text(date.locale.months[month] + ' ' + year)
+                );
 
             return this;
         },
