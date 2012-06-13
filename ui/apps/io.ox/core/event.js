@@ -26,7 +26,7 @@ define('io.ox/core/event', function () {
      * Event Hub. Based on jQuery's on, off, one, and trigger.
      * Differences: 1. trigger allows multiple types separated by spaces.
      * 2. trigger actually calls triggerHandler since we are not in the DOM.
-     * 3. Hub provides excplity destroy to clean up.
+     * 3. Hub provides explicit destroy to clean up.
      */
     var Events = function (context) {
 
