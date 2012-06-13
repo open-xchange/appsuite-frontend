@@ -142,7 +142,6 @@ define('io.ox/office/main',
                 _(value).each(function (json, j) {
                     if (_(json).isObject()) {
                         operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
-                        // window.console.log('Operation ' + j + ': ' + JSON.stringify(json));
                     }
                 });
             }
@@ -221,7 +220,7 @@ define('io.ox/office/main',
 
                 $.ajax({
                     type: 'GET',
-                    url: ox.apiRoot + "/oxodocumentfilter?action=exportdocument&id=" + appOptions.id + "&session=" + ox.session,  // URL needs to be specified
+                    url: ox.apiRoot + "/oxodocumentfilter?action=exportdocument&id=" + appOptions.id + "&session=" + ox.session,
                     dataType: 'json',
                     data: dataObject,
                     beforeSend: function (xhr) {
