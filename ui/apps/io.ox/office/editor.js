@@ -32,8 +32,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
      * Represents a text range consisting of start position and end position.
      */
     function OXOSelection(start, end) {
-        this.startPaM = start;
-        this.endPaM = end;
+        this.startPaM = start ? _.clone(start) : new OXOPaM(0, 0);
+        this.endPaM = end ? _.clone(end) : _.clone(this.startPaM);
         this.hasRange = function () {
             return ((this.startPaM.para !== this.endPaM.para) || (this.startPaM.pos !== this.endPaM.pos)) ? true : false;
         };
@@ -41,8 +41,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             var tmp;
             if ((this.startPaM.para > this.endPaM.para) || ((this.startPaM.para === this.endPaM.para) && (this.startPaM.pos > this.endPaM.pos)))
             {
-                tmp = this.startPaM;
-                this.startPaM = this.endPaM;
+                tmp = _.clone(this.startPaM);
+                this.startPaM = _.clone(this.endPaM);
                 this.endPaM = tmp;
             }
         };
@@ -125,6 +125,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         // Maybe only applyOperation_s_, where param might be operation or operation[] ?
         this.applyOperation = function (operation, bRecord) {
+
+            this.implDbgOutOperation(operation);
 
             if (bRecord) {
                 operations.push(operation);
@@ -209,11 +211,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
             function getOXOPositionFromDOMPosition(node, offset) {
 
-                var pam;
-
                 // check input values
                 if (!node || (offset < 0)) {
-                    return pam;
+                    return;
                 }
 
                 // Check, if the selected node is a descendant of "this.editdiv"
@@ -222,11 +222,16 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var editorDiv = editdiv.has(node).get(0);
 
                 if (!editorDiv) {  // range not in text area
-                    return pam;
+                    return;
                 }
 
                 var myParagraph = paragraphs.has(node);
-                var paragraphCount = myParagraph.index();
+
+                if (myParagraph.length === 0) {
+                    return;
+                }
+
+                var para = myParagraph.index();
 
                 // Calculating the position inside the paragraph.
                 // Adding the textNodes from all siblings and parents left of the node.
@@ -241,13 +246,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     }
                 }
 
-                textLength = textLength + offset;
-
-                if (myParagraph.length !== 0) {
-                    pam = new OXOPaM(paragraphCount, textLength);
-                }
-
-                return pam;
+                return new OXOPaM(para, textLength + offset);
             }
 
             // Only supporting single selection at the moment
@@ -262,20 +261,18 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         this.getDOMPosition = function (para, pos) {
 
             // Converting para and pos to node and offset
-            var pam;
-
             // Is para an available paragraph? para starts with zero.
             var maxPara = $(paragraphs).size() - 1;
             if (para > maxPara) {
                 editWindow.console.log('getDOMPosition: Warning: Paragraph ' + para + ' is out of range. Last paragraph: ' + maxPara);
-                return pam;
+                return;
             }
 
             // Checking if this paragraph has children
             var myParagraph = $(paragraphs).get(para);
             if (! myParagraph.hasChildNodes()) {
                 editWindow.console.log('getDOMPosition: Warning: Paragraph is empty');
-                return pam;
+                return;
             }
 
             var textLength = 0;
@@ -303,17 +300,11 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
             if (!bFound) {
                 editWindow.console.log('getDOMPosition: Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + textLength);
-                return pam;
+                return;
             }
 
-            var node = currentNode;
             var offset = pos - textLength;
-
-            pam = new DOMPaM();
-            pam.node = node;
-            pam.offset = offset;
-
-            return pam;
+            return new DOMPaM(currentNode, offset);
         };
 
         this.getDOMSelection = function (oxoSelection) {
@@ -353,7 +344,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.processKeyDown = function (event) {
 
-            this.implDbgOut(event);
+            this.implDbgOutEvent(event);
 
             // TODO: How to strip away debug code?
             if (event.keyCode && event.shiftKey && event.ctrlKey && event.altKey) {
@@ -388,7 +379,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                         this.mergeParagraph(selection.startPaM.para);
                     }
                 }
-                selection.endPaM = selection.startPaM;
+                selection.endPaM = _.clone(selection.startPaM);
                 event.preventDefault();
                 this.setSelection(selection);
             }
@@ -407,7 +398,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                         selection.startPaM.pos = this.implGetParagraphLen(selection.startPaM.para);
                     }
                 }
-                selection.endPaM = selection.startPaM;
+                selection.endPaM = _.clone(selection.startPaM);
                 event.preventDefault();
                 this.setSelection(selection);
             }
@@ -424,7 +415,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.processKeyPressed = function (event) {
 
-            this.implDbgOut(event);
+            this.implDbgOutEvent(event);
 
             var domSelection = this.getCurrentDOMSelection();
             var selection = this.getOXOSelection(domSelection);
@@ -468,7 +459,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 // Selection was adjusted, so we need to use start, not end
                 this.insertText(c, selection.startPaM.para, selection.startPaM.pos);
                 selection.startPaM.pos++;
-                selection.endPaM = selection.startPaM;
+                selection.endPaM = _.clone(selection.startPaM);
                 event.preventDefault();
                 this.setSelection(selection);
             }
@@ -484,7 +475,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     // TODO / TBD: Should all API / Operation calls return the new position?!
                     selection.startPaM.para++;
                     selection.startPaM.pos = 0;
-                    selection.endPaM = selection.startPaM;
+                    selection.endPaM = _.clone(selection.startPaM);
                     event.preventDefault();
                     this.setSelection(selection);
                 }
@@ -582,8 +573,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.implInitDocument = function () {
-            editdiv[0].innerHTML = '<html><p><br></p></html>';
+            editdiv[0].innerHTML = '<html><p> <br></p></html>';
             paragraphs = editdiv.children();
+            this.setSelection(new OXOSelection());
         };
 
         this.implInsertText = function (para, pos, text) {
@@ -692,7 +684,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.implParagraphChanged(para);
         };
 
-        this.implDbgOut = function (event) {
+        this.implDbgOutEvent = function (event) {
 
             function fillstr(str, len, fill, right) {
                 while (str.length < len) {
@@ -714,6 +706,11 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
             editWindow.console.log(dbg);
 
+        };
+
+        this.implDbgOutOperation = function (operation) {
+            var dbg = 'operation: ' + JSON.stringify(operation);
+            editWindow.console.log(dbg);
         };
 
         // hybrid edit mode
