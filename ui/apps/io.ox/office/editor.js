@@ -163,7 +163,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 this.implSplitParagraph(operation.para, operation.pos);
             }
             else if (operation.name === "mergeParagraph") {
-                // TODO
+                this.implMergeParagraph(operation.para);
             }
             else if (operation.name === "xxxxxxxxxxxxxx") {
                 // TODO
@@ -194,11 +194,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
          * @param event
          *  A jQuery keyboard event object.
          */
-        /* DEPRECATED - keyCode handled differently in keyPressed in different browsers
         this.isNavigationKeyEvent = function (event) {
             return NAVIGATION_KEYS.contains(event.keyCode);
         };
-        */
 
         this.getPrintableChar = function (event) {
             // event.char preferred. DL2, but nyi in most browsers:(
@@ -711,6 +709,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.implDeleteParagraph = function (para) {
             // TODO
+            var paragraph = paragraphs[para];
+            paragraph.parentNode.removeChild(paragraph);
+            paragraphs = editdiv.children();
         };
 
         this.implDeleteText = function (para, start, end) {
@@ -723,54 +724,37 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 return;
             }
 
-/*
-            var startPaM = this.getDOMPosition(para, start);
-            var endPaM = this.getDOMPosition(para, end);
-
-            if (startPaM.node === endPaM.node) {
-                var oldText = startPaM.node.nodeValue;
-                var nodeStart = start - startPaM.offset;
-                var newText = oldText.slice(0, start - nodeStart) + oldText.slice(end - nodeStart);
-                startPaM.node.nodeValue = newText;
-            }
-            else
-*/
-            if (1)
-            {
-                var textNodes = [];
-                collectTextNodes(paragraphs[para], textNodes);
-                var node, nodeLen, delStart, delEnd;
-                var nodes = textNodes.length;
-                var nodeStart = 0;
-                var del = end - start;
-                for (var i = 0; i < nodes; i++) {
-                    node = textNodes[i];
-                    nodeLen = node.nodeValue.length;
-                    if ((nodeStart + nodeLen) > start) {
-                        delStart = 0;
-                        delEnd = nodeLen;
-                        if (nodeStart <= start)  { // node matching startPaM
-                            delStart = start - nodeStart;
-                        }
-                        if ((nodeStart + nodeLen) >= end) { // node matching endPaM
-                            delEnd = end - nodeStart;
-                        }
-                        if ((delEnd - delStart) === nodeLen) {
-                            // remove element completely. Need to take care for empty elements.
-                            // HACK
-                            node.nodeValue = '';
-                        }
-                        else {
-                            var oldText = node.nodeValue;
-                            var newText = oldText.slice(0, delStart) + oldText.slice(delEnd);
-                            node.nodeValue = newText;
-                        }
+            var textNodes = [];
+            collectTextNodes(paragraphs[para], textNodes);
+            var node, nodeLen, delStart, delEnd;
+            var nodes = textNodes.length;
+            var nodeStart = 0;
+            for (var i = 0; i < nodes; i++) {
+                node = textNodes[i];
+                nodeLen = node.nodeValue.length;
+                if ((nodeStart + nodeLen) > start) {
+                    delStart = 0;
+                    delEnd = nodeLen;
+                    if (nodeStart <= start)  { // node matching startPaM
+                        delStart = start - nodeStart;
                     }
-                    nodeStart += nodeLen;
-                    if (nodeStart >= end)
-                        break;
+                    if ((nodeStart + nodeLen) >= end) { // node matching endPaM
+                        delEnd = end - nodeStart;
+                    }
+                    if ((delEnd - delStart) === nodeLen) {
+                        // remove element completely.
+                        // TODO: Need to take care for empty elements!
+                        node.nodeValue = '';
+                    }
+                    else {
+                        var oldText = node.nodeValue;
+                        var newText = oldText.slice(0, delStart) + oldText.slice(delEnd);
+                        node.nodeValue = newText;
+                    }
                 }
-
+                nodeStart += nodeLen;
+                if (nodeStart >= end)
+                    break;
             }
             this.implParagraphChanged(para);
         };
