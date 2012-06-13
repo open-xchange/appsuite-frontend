@@ -227,7 +227,7 @@ define('io.ox/office/main',
                 var dataObject = {"operations": JSON.stringify(allOperations)};
 
                 $.ajax({
-                    type: 'GET',
+                    type: 'POST',
                     url: getFilterUrl('exportdocument'),
                     dataType: 'json',
                     data: dataObject,
