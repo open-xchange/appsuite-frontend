@@ -134,6 +134,15 @@ define('io.ox/office/main',
             return def;
         };
 
+        var getAjaxResult = function (result) {
+
+            // The result is a JSONObject
+            if (_(result).isObject()) {
+                window.console.log(JSON.stringify(result));
+            }
+
+        };
+
         var createOperationsList = function (result) {
 
             var operations = [];
@@ -232,6 +241,7 @@ define('io.ox/office/main',
                     }
                 })
                 .done(function (response) {
+                    editor.getAjaxResult(response);
                     editor.focus();
                     win.idle();
                     def.resolve();
