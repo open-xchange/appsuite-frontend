@@ -44,9 +44,6 @@ define('io.ox/office/main',
             // main application container
             container = $('<div>').addClass('container abs'),
 
-            // the iframe representing the edited document
-            iframe = $('<iframe>').addClass('io-ox-office-iframe'),
-
             model = new Model(),
 
             view = new View({ model: model, node: container });
@@ -96,43 +93,64 @@ define('io.ox/office/main',
          * editor succeeded. On first call, initializes the editor iframe and
          * creates a new instance of the Editor class. On subsequent calls,
          * returns the same deferred object again without initialization.
+         *
+         * @param textMode
+         *  One of the constants defined in Editor.TextMode (office/editor.js).
          */
-        var getEditor = function () {
-            // the return value
-            var def = $.Deferred();
+        var getEditor = (function () {
 
-            // put the code to manipulate the embedded document into a timeout
-            setTimeout(function () {
-                var // the embedded document, wrapped in a jQuery object
-                    contents = iframe.contents(),
-                    // the head element of the document embedded in the iframe
-                    frameHead = $('head', contents),
-                    // the body element of the document embedded in the iframe
-                    frameBody = $('body', contents),
-                    // the content window of the iframe document
-                    frameWindow = iframe.length && iframe.get(0).contentWindow;
+            // local cache, maps existing deferreds by text mode
+            var deferreds = {};
 
-                // check that all components of the embedded document are valid
-                if (frameHead.length && frameBody.length && frameWindow) {
-                    // add a link to the editor.css file
-                    frameHead.append($('<link>').attr('rel', 'stylesheet').attr('href', ox.base + '/apps/io.ox/office/editor.css'));
-                    // set body of the document to edit mode
-                    frameBody.attr('contenteditable', true);
-                    // append some text to play with, TODO: remove that
-                    frameBody.append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
-                    // resolve the deferred with a new editor instance
-                    def.resolve(new Editor(frameBody, frameWindow));
-                } else {
-                    // creation of the iframe failed: reject the deferred
-                    showInternalError('Cannot instantiate editor.');
-                    def.reject();
+            // create the function and return it, will be assigned the getEditor variable
+            return function (textMode) {
+                var def, iframe;
+
+                // return cached deferred
+                if (textMode in deferreds) {
+                    return deferreds[textMode];
                 }
-            });
 
-            // on subsequent calls, just return the deferred
-            getEditor = function () { return def; };
-            return def;
-        };
+                // craete a deferred and a new iframe
+                def = deferreds[textMode] = $.Deferred();
+                iframe = $('<iframe>').addClass('io-ox-office-iframe-' + textMode).appendTo(container);
+
+                /*
+                 * Put the code to manipulate the embedded document into a timeout.
+                 * This is needed to give the browser time to create the embedded
+                 * HTML document inside the iframe.
+                 */
+                setTimeout(function () {
+
+                    var // the content window of the iframe document
+                        frameWindow = iframe.length && iframe.get(0).contentWindow,
+                        // the content window of the iframe document
+                        frameDocument = iframe.length && iframe.get(0).contentDocument,
+                        // the head element of the document embedded in the iframe
+                        frameHead = $('head', frameDocument),
+                        // the body element of the document embedded in the iframe
+                        frameBody = $('body', frameDocument);
+
+                    // check that all components of the embedded document are valid
+                    if (frameWindow && frameHead.length && frameBody.length) {
+                        // add a link to the editor.css file
+                        frameHead.append($('<link>').attr('rel', 'stylesheet').attr('href', ox.base + '/apps/io.ox/office/editor.css'));
+                        // set body of the document to edit mode
+                        frameBody.addClass(textMode).attr('contenteditable', true);
+                        // append some text to play with, TODO: remove that
+                        frameBody.append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
+                        // resolve the deferred with a new editor instance
+                        def.resolve(new Editor(frameBody, frameWindow, textMode));
+                    } else {
+                        // creation of the iframe failed: reject the deferred
+                        showInternalError('Cannot instantiate editor for text mode "' + textMode + '".');
+                        def.reject();
+                    }
+                });
+
+                return def;
+            };
+        }());
 
         var getAjaxResult = function (result) {
 
@@ -180,7 +198,7 @@ define('io.ox/office/main',
 
             // initialize global application structure
             updateTitles();
-            win.nodes.main.addClass('io-ox-office-main').append(container.append(iframe));
+            win.nodes.main.addClass('io-ox-office-main').append(container);
         });
 
         /*
@@ -193,7 +211,11 @@ define('io.ox/office/main',
         app.load = function () {
             var def = $.Deferred();
             win.show();
-            getEditor().done(function (editor) {
+            $.when(
+                getEditor(Editor.TextMode.RICH),
+                getEditor(Editor.TextMode.PLAIN)
+            )
+            .done(function (editor) {
                 win.busy();
                 $.ajax({
                     type: 'GET',
@@ -224,7 +246,7 @@ define('io.ox/office/main',
          */
         app.save = function () {
             var def = $.Deferred();
-            getEditor().done(function (editor) {
+            getEditor(Editor.TextMode.RICH).done(function (editor) {
                 win.busy();
                 var allOperations = editor.getOperations();
                 var dataObject = {"operations": JSON.stringify(allOperations)};
@@ -268,7 +290,7 @@ define('io.ox/office/main',
          */
         app.setQuit(function () {
             var def = null;
-            getEditor().done(function (editor) {
+            getEditor(Editor.TextMode.RICH).done(function (editor) {
                 if (editor.isModified()) {
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         new dialogs.ModalDialog()
@@ -276,7 +298,7 @@ define('io.ox/office/main',
                         .addPrimaryButton('delete', gt('Lose changes'))
                         .addAlternativeButton('save', gt('Save'))
                         .addButton('cancel', gt('Cancel'))
-                        .on('delete', function () { def = $.Deferred().resolve(); })
+                        .on('delete', function () { def = $.when(); })
                         .on('save', function () { def = app.save(); })
                         .on('cancel', function () { def = $.Deferred().reject(); })
                         .show();
@@ -290,7 +312,7 @@ define('io.ox/office/main',
 
         app.destroy = function () {
             view.destroy();
-            app = win = container = iframe = model = view = null;
+            app = win = container = model = view = null;
         };
 
         return app;

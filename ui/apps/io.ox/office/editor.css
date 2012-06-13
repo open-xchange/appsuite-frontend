@@ -16,6 +16,16 @@ body {
 	cursor: text;
 }
 
+body.rich {
+    font-family: 'Times New Roman',Times,serif;
+    font-size: 12pt;
+}
+
+body.plain {
+    font-family: 'Courier New',Courier,monospace;
+    font-size: 12pt;
+}
+
 p {
 	margin: 0;
 

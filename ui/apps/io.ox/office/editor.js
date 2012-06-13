@@ -13,7 +13,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/editor', function () {
+define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
     'use strict';
 
@@ -75,7 +75,7 @@ define('io.ox/office/editor', function () {
         this.endPaM = end;
     }
 
-    function OXOEditor(editdiv, editWindow) {
+    function OXOEditor(editdiv, editWindow, textMode) {
 
         // key codes of navigation keys that will be passed directly to the browser
         var NAVIGATION_KEYS = _([
@@ -94,6 +94,9 @@ define('io.ox/office/editor', function () {
 
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
+
+        // add event hub
+        Events.extend(this);
 
         /**
          * Returns whether the editor contains unsaved changes.
@@ -722,6 +725,12 @@ define('io.ox/office/editor', function () {
             .on('contextmenu', $.proxy(this, 'xxx'));
 
     } // end of OXOEditor()
+
+    // static constants, used as map keys, and as CSS class names
+    OXOEditor.TextMode = {
+        RICH: 'rich',
+        PLAIN: 'plain'
+    };
 
     // export the OXOEditor class directly
     return OXOEditor;
