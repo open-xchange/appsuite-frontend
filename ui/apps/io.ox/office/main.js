@@ -13,7 +13,7 @@
 
 define('io.ox/office/main',
     ['io.ox/files/api',
-     'io.ox/core/tk/model',
+     'io.ox/office/model',
      'io.ox/core/tk/view',
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
@@ -49,7 +49,9 @@ define('io.ox/office/main',
 
             model = new Model(),
 
-            view = new View({ model: model, node: container });
+            view = new View({ model: model, node: container }),
+
+            filterUrl = ox.apiRoot + '/oxodocumentfilter?action=importdocument&id=' + appOptions.id + '&session=' + ox.session;
 
         /*
          * Shows a closable error message above the editor.
@@ -131,14 +133,16 @@ define('io.ox/office/main',
         };
 
         var createOperationsList = function (result) {
-            var operations = [];
 
-            if (_(result).isArray()) {
+            var operations = [];
+            var value = JSON.parse(result.data);
+
+            if (_(value).isArray()) {
                 // iterating over the list of JSON objects
-                _(result).each(function (json, j) {
+                _(value).each(function (json, j) {
                     if (_(json).isObject()) {
                         operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
-                        window.console.log('Operation ' + j + ': ' + JSON.stringify(json));
+                        // window.console.log('Operation ' + j + ': ' + JSON.stringify(json));
                     }
                 });
             }
@@ -183,11 +187,11 @@ define('io.ox/office/main',
                 win.busy();
                 $.ajax({
                     type: 'GET',
-                    url: ox.apiRoot + '/oxodocumentfilter?action=importdocument&id=' + appOptions.id + '&session=' + ox.session,
+                    url: filterUrl,
                     dataType: 'json'
                 })
                 .done(function (response) {
-                    editor.setOperations(createOperationsList(response));
+                    editor.applyOperations(createOperationsList(response), false);
                     editor.focus();
                     win.idle();
                     def.resolve();
@@ -211,8 +215,19 @@ define('io.ox/office/main',
             var def = $.Deferred();
             getEditor().done(function (editor) {
                 win.busy();
+                var allOperations = editor.getOperations();
+                // var operations = convertAllOperations(allOperations);
+                var operations = {"Operations": ["{name:insertParagraph, para:0}", "{name:insertText, para:0, pos:3, text:hallo}", "{name:insertText, para:1, pos:6, text:Welt}"]};
                 $.ajax({
-
+                    type: 'POST',
+                    url: ox.apiRoot + "/oxodocumentfilter?action=exportdocument&id=" + appOptions.id + "&session=" + ox.session,  // URL needs to be specified
+                    dataType: 'json',
+                    data: operations,
+                    beforeSend: function (xhr) {
+                        if (xhr && xhr.overrideMimeType) {
+                            xhr.overrideMimeType("application/j-son;charset=UTF-8");
+                        }
+                    }
                 })
                 .done(function (response) {
                     editor.focus();
@@ -224,7 +239,6 @@ define('io.ox/office/main',
                     win.idle();
                     def.reject();
                 });
-                showInternalError('Save operation not implemented.');
             });
             return def;
         };
