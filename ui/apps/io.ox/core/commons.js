@@ -252,7 +252,8 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                 visible = false,
                 permanent = false,
                 top = 0,
-                fnChangeFolder, fnShow, togglePermanent, fnToggle, toggle, loadTree, initTree;
+                fnChangeFolder, fnShow, togglePermanent,
+                fnToggle, toggle, loadTree, initTree;
 
             container = $('<div>')
                 .addClass('abs border-right')
@@ -269,11 +270,15 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                 var folder = selection[0];
                 if (folder.module === options.type) {
                     app.folder.unset();
-                    top = container.scrollTop();
-                    container.fadeOut('fast', function () {
+                    if (permanent) {
                         app.folder.set(folder.id);
-                    });
-                    visible = false;
+                    } else {
+                        top = container.scrollTop();
+                        container.fadeOut('fast', function () {
+                            app.folder.set(folder.id);
+                        });
+                        visible = false;
+                    }
                 }
             };
 
