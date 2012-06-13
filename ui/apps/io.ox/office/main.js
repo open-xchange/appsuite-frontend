@@ -134,11 +134,11 @@ define('io.ox/office/main',
             return def;
         };
 
-        var getAjaxResult = function (result) {
+        var getOperationsCount = function (result) {
 
             // The result is a JSONObject
             if (_(result).isObject()) {
-                window.console.log(JSON.stringify(result));
+                window.console.log("Number of operations received by the server: " + result.data.count);
             }
 
         };
@@ -146,16 +146,13 @@ define('io.ox/office/main',
         var createOperationsList = function (result) {
 
             var operations = [];
-            var value = JSON.parse(result.data);
+            var value = result.data.operations;
 
-            if (_(value).isArray()) {
-                // iterating over the list of JSON objects
-                _(value).each(function (json, j) {
-                    if (_(json).isObject()) {
-                        operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
-                    }
-                });
-            }
+            _(value).each(function (json, j) {
+                if (_(json).isObject()) {
+                    operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
+                }
+            });
 
             return operations;
         };
@@ -241,7 +238,7 @@ define('io.ox/office/main',
                     }
                 })
                 .done(function (response) {
-                    editor.getAjaxResult(response);
+                    getOperationsCount(response);
                     editor.focus();
                     win.idle();
                     def.resolve();
