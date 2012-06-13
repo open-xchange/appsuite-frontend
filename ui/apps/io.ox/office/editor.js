@@ -275,7 +275,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var myParagraph = paragraphs.has(domSelection.startPaM.node.firstChild);
                 var para = myParagraph.index();
                 startPaM = new OXOPaM(para, this.implGetParagraphLen(para));
-                editWindow.console.log('warning: fixed invalid selection (start)');
+                window.console.log('warning: fixed invalid selection (start)');
             }
 
             if (domSelection.endPaM.node.nodeType === 3) {
@@ -286,7 +286,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var myParagraph = paragraphs.has(domSelection.endPaM.node.firstChild);
                 var para = myParagraph.index();
                 endPaM = new OXOPaM(para, this.implGetParagraphLen(para));
-                editWindow.console.log('warning: fixed invalid selection (end)');
+                window.console.log('warning: fixed invalid selection (end)');
             }
 
             var aOXOSelection = new OXOSelection(startPaM, endPaM);
@@ -598,17 +598,17 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.implSetDOMSelection = function (startnode, startpos, endnode, endpos) {
-            var range = editWindow.document.createRange();
+            var range = window.document.createRange();
             range.setStart(startnode, startpos);
             range.setEnd(endnode, endpos);
-            var sel = editWindow.getSelection();
+            var sel = window.getSelection();
             sel.removeAllRanges();
             sel.addRange(range);
         };
 
         this.implGetCurrentDOMSelection = function () {
             // DOMSelection consists of Node and Offset for startpoint and for endpoint
-            var windowSel = editWindow.getSelection();
+            var windowSel = window.getSelection();
             var startPaM = new DOMPaM(windowSel.anchorNode, windowSel.anchorOffset);
             var endPaM = new DOMPaM(windowSel.focusNode, windowSel.focusOffset);
             var domSelection = new DOMSelection(startPaM, endPaM);
@@ -618,10 +618,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.implCheckSelection = function () {
             var node;
-            var windowSel = editWindow.getSelection();
+            var windowSel = window.getSelection();
             if ((windowSel.anchorNode.nodeType !== 3) || (windowSel.focusNode.nodeType !== 3)) {
 
-                editWindow.console.log('warning: invalid selection');
+                window.console.log('warning: invalid selection');
 
                 var selection = this.getSelection();
 
