@@ -148,11 +148,13 @@ define('io.ox/office/main',
             var operations = [];
             var value = result.data.operations;
 
-            _(value).each(function (json, j) {
-                if (_(json).isObject()) {
-                    operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
-                }
-            });
+            if (_(value).isArray()) {
+                _(value).each(function (json, j) {
+                    if (_(json).isObject()) {
+                        operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
+                    }
+                });
+            }
 
             return operations;
         };
