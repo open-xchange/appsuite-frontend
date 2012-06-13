@@ -14,18 +14,50 @@
 .io-ox-office-main {
 	.container {
     	width: 100%;
-		margin: 30px auto;
-	}
+		padding: 30px;
+	    -webkit-box-sizing: border-box;
+	    -moz-box-sizing: border-box;
+	    -ms-box-sizing: border-box;
+	    box-sizing: border-box; 
+    }
 }
 
-.io-ox-office-iframe-rich {
-	width: 100%;
-	height: 10cm;
-	border: thin black solid;
-}
-
-.io-ox-office-iframe-plain {
+.io-ox-office-editor {
     width: 100%;
     height: 10cm;
-    border: thin red solid;
+    overflow-y: auto;
+    cursor: text;
+
+    &.rich {
+        border: thin black solid;
+
+        p {
+	        font-family: 'Times New Roman',Times,serif;
+	        font-size: 12pt;
+	    }
+    }
+
+    &.plain {
+        border: thin red solid;
+	    
+	    p {
+	        font-family: 'Courier New',Courier,monospace;
+	        font-size: 12pt;
+	    }
+    }
+
+	p {
+	    margin: 0;
+	
+	    /* debug borders and background */
+	    outline: thin #8f8 solid;
+	    background-color: #efe;
+	}
+
+	span {
+	    
+	    /* debug borders and background */
+	    outline: thin #88f solid;
+	    background-color: #eef;
+	}
 }

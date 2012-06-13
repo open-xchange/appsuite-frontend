@@ -75,7 +75,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         this.endPaM = end;
     }
 
-    function OXOEditor(editdiv, editWindow, textMode) {
+    function OXOEditor(editdiv, textMode) {
 
         // key codes of navigation keys that will be passed directly to the browser
         var NAVIGATION_KEYS = _([
@@ -264,14 +264,14 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // Is para an available paragraph? para starts with zero.
             var maxPara = $(paragraphs).size() - 1;
             if (para > maxPara) {
-                editWindow.console.log('getDOMPosition: Warning: Paragraph ' + para + ' is out of range. Last paragraph: ' + maxPara);
+                window.console.log('getDOMPosition: Warning: Paragraph ' + para + ' is out of range. Last paragraph: ' + maxPara);
                 return;
             }
 
             // Checking if this paragraph has children
             var myParagraph = $(paragraphs).get(para);
             if (! myParagraph.hasChildNodes()) {
-                editWindow.console.log('getDOMPosition: Warning: Paragraph is empty');
+                window.console.log('getDOMPosition: Warning: Paragraph is empty');
                 return;
             }
 
@@ -299,7 +299,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
 
             if (!bFound) {
-                editWindow.console.log('getDOMPosition: Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + textLength);
+                window.console.log('getDOMPosition: Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + textLength);
                 return;
             }
 
@@ -324,7 +324,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.getCurrentDOMSelection = function () {
             // DOMSelection consists of Node and Offset for startpoint and for endpoint
-            var windowSel = editWindow.getSelection();
+            var windowSel = window.getSelection();
             var startPaM = new DOMPaM(windowSel.anchorNode, windowSel.anchorOffset);
             var endPaM = new DOMPaM(windowSel.focusNode, windowSel.focusOffset);
             var domSelection = new DOMSelection(startPaM, endPaM);
@@ -334,10 +334,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.setSelection = function (oxosel) {
             var aDOMSelection = this.getDOMSelection(oxosel);
-            var range = editWindow.document.createRange();
+            var range = document.createRange();
             range.setStart(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset);
             range.setEnd(aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
-            var sel = editWindow.getSelection();
+            var sel = window.getSelection();
             sel.removeAllRanges();
             sel.addRange(range);
         };
@@ -422,7 +422,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             selection.adjust();
 
             /*
-            editWindow.console.log('processKeyPressed: keyCode: ' + event.keyCode + ' isNavi: ' + this.isNavigationKeyEvent(event));
+            window.console.log('processKeyPressed: keyCode: ' + event.keyCode + ' isNavi: ' + this.isNavigationKeyEvent(event));
             if (this.isNavigationKeyEvent(event)) {
                 return;
             }
@@ -442,13 +442,13 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     var aDOMSelection = this.getDOMSelection(aOXOSelection);
 
                     if (aDOMSelection) {
-                        editWindow.console.log('processKeyPressed: StartPaM: ' + aDOMSelection.startPaM.node + ' : ' + aDOMSelection.startPaM.offset);
-                        editWindow.console.log('processKeyPressed: EndPaM: ' + aDOMSelection.endPaM.node + ' : ' + aDOMSelection.endPaM.offset);
+                        window.console.log('processKeyPressed: StartPaM: ' + aDOMSelection.startPaM.node + ' : ' + aDOMSelection.startPaM.offset);
+                        window.console.log('processKeyPressed: EndPaM: ' + aDOMSelection.endPaM.node + ' : ' + aDOMSelection.endPaM.offset);
 
                         var range = document.createRange();
                         range.setStart(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset);
                         range.setEnd(aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
-                        var sel = editWindow.getSelection();
+                        var sel = window.getSelection();
                         sel.removeAllRanges();
                         sel.addRange(range);
                     }
@@ -587,9 +587,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.implInsertParagraph = function (para) {
-            var newPara = editWindow.document.createElement('p');
-            newPara.appendChild(editWindow.document.createTextNode(''));
-            newPara.appendChild(editWindow.document.createElement('br'));
+            var newPara = document.createElement('p');
+            newPara.appendChild(document.createTextNode(''));
+            newPara.appendChild(document.createElement('br'));
             newPara = $(newPara);
 
             if (para === -1) {
@@ -704,13 +704,13 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 dbg += ' key:[keyCode=' + fillstr(event.keyCode.toString(), 3, '0') + ' charCode=' + fillstr(event.charCode.toString(), 3, '0') + ' shift=' + event.shiftKey + ' ctrl=' + event.ctrlKey + ' alt=' + event.altKey + ']';
             }
 
-            editWindow.console.log(dbg);
+            window.console.log(dbg);
 
         };
 
         this.implDbgOutOperation = function (operation) {
             var dbg = 'operation: ' + JSON.stringify(operation);
-            editWindow.console.log(dbg);
+            window.console.log(dbg);
         };
 
         // hybrid edit mode
