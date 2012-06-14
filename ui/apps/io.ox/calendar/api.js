@@ -121,6 +121,88 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                     }
                 });
         },
+        searchParticipants: function (query) {
+            var userColumns = '20,1,500,501,502,505,520,555,556,557,569,602,606';
+
+            return http.PUT({
+                module: "multiple",
+                "continue": true,
+                data: [
+                    {
+                        module: 'user',
+                        action: 'search',
+                        columns: userColumns,
+                        sort: '500',
+                        order: 'asc',
+                        data: {
+                            pattern: query
+                        }
+                    },
+                    {
+                        module: 'group',
+                        action: 'search',
+                        data: {
+                            pattern: query
+                        }
+                    },
+                    {
+                        module: 'resource',
+                        action: 'search',
+                        data: {
+                            pattern: query
+                        }
+                    },
+                    {
+                        module: 'contacts',
+                        action: 'search',
+                        columns: '1,20,500,555,602,524,556,557,501,502',
+                        sort: '500',
+                        order: 'asc',
+                        data: {
+                            display_name: query,
+                            email1: query,
+                            email2: query,
+                            email3: query,
+                            last_name: query,
+                            first_name: query,
+                            orSearch: true
+                        }
+                    }
+                ]
+            }).pipe(function (data) {
+                data[0].data = _(data[0].data).map(function (dataItem) {
+                    var myobj = http.makeObject(dataItem, 'user', userColumns.split(','));
+                    console.log('mapped', myobj, dataItem, userColumns.split(','));
+                    return myobj;
+                });
+                console.log('searched', data);
+                _(data).each(function (type, index) {
+                    _(type.data).each(function (item) {
+                        switch (index) {
+                        case 0:
+                            item.type = 1; //user
+                            break;
+                        case 1:
+                            item.type = 2; //group
+                            break;
+                        case 2:
+                            item.type = 3; //resource
+                            break;
+                        case 3:
+                            item.type = 5; //xternal
+                            break;
+                        }
+                    });
+                });
+
+                var ret = [];
+                ret = data[0].data.concat(data[1].data, data[2].data, data[3].data);
+                ret = _(ret).sortBy(function (item) {
+                    return item.display_name;
+                });
+                return ret;
+            });
+        },
 
         needsRefresh: function (folder) {
             // has entries in 'all' cache for specific folder

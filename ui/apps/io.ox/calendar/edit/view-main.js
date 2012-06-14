@@ -15,8 +15,11 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/calendar/util',
        'io.ox/core/extensions',
        'io.ox/core/date',
+       'io.ox/calendar/edit/view-participants',
+       'io.ox/calendar/edit/view-addparticipants',
+       'io.ox/calendar/edit/collection-participants',
        'dot!io.ox/calendar/edit/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, tmpl, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, ParticipantsView, AddParticipantsView, ParticipantsCollection, tmpl, gt) {
 
     'use strict';
 
@@ -89,6 +92,7 @@ define('io.ox/calendar/edit/view-main',
         PARTICIPANTS:       gt('Participants'),
         PRIVATE:            gt('Private'),
         NOTIFY_ALL:         gt('Notify all')
+
     };
 
     /// strings end
@@ -205,6 +209,17 @@ define('io.ox/calendar/edit/view-main',
             self.$('.startsat-date').datepicker({format: dateAPI.DATE});
             self.$('.endsat-date').datepicker({format: dateAPI.DATE});
 
+
+            var participants = new ParticipantsCollection(self.model.get('participants'));
+            self.subviews.participants = new ParticipantsView({collection: participants, el: $(self.el).find('.participants')});
+            self.subviews.participants.render();
+            participants.on('remove', _.bind(self.onRemoveParticipant, self));
+
+            self.subviews.addparticipants = new AddParticipantsView({ el: $(self.el).find('.add-participants')});
+            self.subviews.addparticipants.render();
+            self.subviews.addparticipants.on('select', _.bind(self.onAddParticipant, self));
+            //$(self.el).find('.participants').empty().append(self.subviews.participants.render().el);
+
             return self;
         },
         onStartDateChange: function () {
@@ -238,6 +253,35 @@ define('io.ox/calendar/edit/view-main',
         onSave: function () {
             var self = this;
             self.trigger('save');
+        },
+        onAddParticipant: function (data) {
+            var participants = this.model.get('participants'),
+                notIn = true;
+
+            console.log('adding participants', arguments);
+            this.subviews.participants.collection.add(data);
+
+            notIn = !_(participants).any(function (item) {
+                return (item.id === data.id && item.type === data.type);
+            });
+
+            if (notIn) {
+                participants.push({id: data.id, type: data.type});
+            }
+
+            this.model.set('participants', participants);
+            console.log('participants in model', this.model);
+
+        },
+        onRemoveParticipant: function (model, collection) {
+            var participants = this.model.get('participants');
+            participants = _(participants).filter(function (item) {
+                if (item.id === model.get('id') && item.type === model.get('type')) {
+                    return false;
+                }
+                return true;
+            });
+            this.model.set('participants', participants);
         }
     });
 
