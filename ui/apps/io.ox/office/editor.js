@@ -79,6 +79,22 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         }
     }
 
+    function hasTextContent(element) {
+        for (var child = element.firstChild; child !== null; child = child.nextSibling) {
+            if (child.nodeName === 'BR') {
+                if (!child.dummyBR) // regular line break is content
+                    return true;
+            }
+            if (child.nodeType === 3) {
+                if (child.nodeValue.length)
+                    return true;
+            }
+            else if (child.nodeType === 1)
+                return hasTextContent(child);
+        }
+        return false;
+    }
+
     /**
      * Represents a text range consisting of start position and end position.
      */
@@ -105,9 +121,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         // list of operations
         var operations = [];
-
-        // list of operations notify handler
-        var operationsNotifyHandler = [];
 
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
@@ -635,9 +648,28 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
 
         this.implParagraphChanged = function (para) {
-            // TODO
-            // 1) Adjust tabs
-            // 2) ???
+
+            // Make sure that a completly empty para has the dummy br element, and that all others don't have it anymore...
+            var paragraph = paragraphs[para];
+
+            if (!hasTextContent(paragraph)) {
+                // We need an empty text node and a br
+                if (!paragraph.lastChild || !paragraph.lastChild.dummyBR) {
+                    paragraph.appendChild(document.createTextNode(''));
+                    var dummyBR = document.createElement('br');
+                    dummyBR.dummyBR = true;
+                    paragraph.appendChild(dummyBR);
+                }
+            }
+            else {
+                // only keep it when inserted by the user
+                if (paragraph.lastChild.dummyBR) {
+                    paragraph.removeChild(paragraph.lastChild);
+                }
+
+                // TODO: Adjust tabs, ...
+            }
+
         };
 
         this.implSetDOMSelection = function (startnode, startpos, endnode, endpos) {
@@ -687,12 +719,19 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         */
 
         this.implInitDocument = function () {
-            editdiv[0].innerHTML = '<html><p> <br></p></html>';
+            editdiv[0].innerHTML = '<html><p></p></html>';
             paragraphs = editdiv.children();
+            this.implParagraphChanged(0);
             this.setSelection(new OXOSelection());
         };
 
         this.implInsertText = function (para, pos, text) {
+            // -1 not allowed here - but code need to be robust
+            if ((para < 0) || (para >= paragraphs.size())) {
+                this.implDbgOutInfo('error: invalid para pos in implInsertText (' + para + ')');
+                para = paragraphs.size() - 1;
+                // return;
+            }
             var domPos = this.getDOMPosition(para, pos);
             var oldText = domPos.node.nodeValue;
             var newText = oldText.slice(0, domPos.offset) + text + oldText.slice(domPos.offset);
@@ -702,8 +741,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.implInsertParagraph = function (para) {
             var newPara = document.createElement('p');
-            newPara.appendChild(document.createTextNode(''));
-            newPara.appendChild(document.createElement('br'));
             newPara = $(newPara);
 
             if (para === -1) {
@@ -717,6 +754,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 newPara.insertBefore(paragraphs[0]);
             }
             paragraphs = editdiv.children();
+            this.implParagraphChanged(para);
         };
 
         this.implSplitParagraph = function (para, pos) {
