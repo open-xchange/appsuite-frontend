@@ -17,6 +17,7 @@ define('io.ox/office/main',
      'io.ox/core/tk/view',
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
+     'io.ox/core/bootstrap/basics',
      'less!io.ox/office/main.css',
      'io.ox/office/actions'
     ], function (api, Model, View, Editor, gt) {
@@ -57,11 +58,11 @@ define('io.ox/office/main',
         // create the editor divs and editors for all text modes
         _(Editor.TextMode).each(function (textMode) {
             var node = $('<div>').addClass('io-ox-office-editor user-select-text ' + textMode).attr('contenteditable', true);
-            node.append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
             container.append(node);
-            editors[textMode] = (new Editor(node, textMode)).on('office:operation', function (event, operation, record) {
+            var editor = editors[textMode] = new Editor(node, textMode);
+            editor.on('office:operation', {editor: editor}, function (event, operation, record) {
                 _(editors).each(function (editor) {
-                    if (event.target !== editor) {
+                    if (event.data.editor !== editor) {
                         editor.applyOperation(operation, record, false);
                     }
                 });
@@ -91,6 +92,10 @@ define('io.ox/office/main',
             showError(data.responseText);
         };
 
+        /*
+         * Returns the URL passed to the AJAX calls used to convert a document
+         * file from and to an operations list.
+         */
         var getFilterUrl = function (action) {
             return ox.apiRoot + '/oxodocumentfilter?action=' + action + '&id=' + docOptions.id + '&session=' + ox.session;
         };
@@ -141,9 +146,6 @@ define('io.ox/office/main',
                 toolbar: true
             });
             app.setWindow(win);
-
-            // we are using an iframe
-            win.detachable = false;
 
             // initialize global application structure
             updateTitles();
@@ -246,7 +248,7 @@ define('io.ox/office/main',
                     .show();
                 });
             } else {
-                def = $.Deferred().resolve();
+                def = $.when();
             }
             return def;
         });
