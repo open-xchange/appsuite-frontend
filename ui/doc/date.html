@@ -219,6 +219,25 @@ for (; g.getYear() < 2013; d.addMonths(1)) {
 }
 </script>
 
+<p>Finally, most calendars default to displaying the current date, and therefore
+need to figure out the iteration range based on an arbitrary point inside that
+range. In most cases, the start can be computed by simply calling
+the appropriate setters with all zeros as parameters to find the start of
+the range, and adding the range duration to find the end. One exception is
+the week. There is no setter for the day of the week. Instead, the method
+<code>LocalDate.prototype.setStartOfWeek()</code> can be used to find the start
+of a week.</p>
+
+<script type="text/example">
+// Find the start and the end of the current week
+var d = new date.Local().setStartOfWeek();
+var end = new date.Local(start).add(date.WEEK);
+// Iterate over the week
+for (; d < end; d.add(date.DAY)) {
+    // Display a day in a week view.
+}
+</script>
+
 <p>In addition to explicit method calls, the JavaScript standard method
 <code>LocalDate.prototype.valueOf()</code> allows native comparison, addition
 and subtraction operators to work on <code>LocalDate</code> objects. The result
@@ -243,8 +262,7 @@ constructor does in this case nothing useful anyway.</li>
 
 <li><code>Date.UTC()</code> should not be necessary, but since it returns
 a numeric timestamp and has nothing to do with time zones, it can still be used
-directly. Remember that the month numbering differs from
-<code>LocalDate</code>.</li>
+directly.</li>
 
 <li>Except for <code>LocalDate.prototype.toString()</code>, all
 <code>to*String()</code> methods are replaced by
@@ -257,6 +275,9 @@ for the time zone 'UTC' instead.</li>
 <li>The getter and setter for the year are called <code>getYear</code> and
 <code>setYear</code> instead of <code>getFullYear</code> and
 <code>setFullYear</code> since we have no legacy code with Y2K issues.</li>
+
+<li>Setters return the modified object instead of the timestamp. This is useful
+for chaining of method calls.</li>
 
 <li><code>Date.prototype.getTimeZoneOffset()</code> should not be necessary,
 since hiding these details is the whole point of the <code>date</code> module.
@@ -617,8 +638,8 @@ individual fields.</p>
 </dl>
 
 <p>While setters can be used to perform date arithmetic, <code>LocalDate</code>
-provides convenience functions for the most frequent case of adding and
-subtracting a time period.</p>
+provides convenience functions for the most frequent cases of adding and
+subtracting a time period and finding the start of a week.</p>
 
 <dl>
     <dt>LocalDate.prototype.add(time)</dt>
@@ -666,6 +687,14 @@ subtracting a time period.</p>
             <li><code>years</code> <i>Number</i> - The number of years to add.
             Use negative values to subtract.</li>
             
+            <li><b>Returns</b> <i>this</i> - This object for chaining.</li>
+        </ul>
+    </dd>
+    
+    <dt>LocalDate.prototype.setStartOfWeek()</dt>
+    <dd>Sets the date to the start of the same week as determined by
+    <code>locale.weekStart</code>. The time is reset to midnight.
+        <ul class="params">
             <li><b>Returns</b> <i>this</i> - This object for chaining.</li>
         </ul>
     </dd>
