@@ -923,6 +923,13 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // But anyway, it's just a hack, and in the future we need to do the DOM manipulations on our own...
             document.execCommand(attr);
             this.setSelection(oldselection);
+
+            // The right thing to do is DOM manipulation, take care for correctly terminating/starting attributes.
+            // See also http://dvcs.w3.org/hg/editing/raw-file/tip/editing.html#set-the-selection%27s-value
+
+            // Alternative: Simply span new atributes. Results in ugly HTML, but the operations that we record are correct,
+            // and we don't care too much for the current/temporary HTML in this editor.
+            // It will not negativly unfluence the resulting document.
         };
 
         this.implInsertParagraph = function (para) {
