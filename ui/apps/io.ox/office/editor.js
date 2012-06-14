@@ -38,6 +38,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
     function OXOPaM(paragraph, position) {
         this.para = paragraph;
         this.pos = position;
+        this.toString = function () {
+            return ("(para: " + this.para + ", pos: " + this.pos + ")");
+        };
     }
 
     /**
@@ -58,6 +61,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 this.endPaM = tmp;
             }
         };
+        this.toString = function () {
+            return ("Startpoint: " + this.startPaM.toString() + ", Endpoint: " + this.endPaM.toString());
+        };
     }
 
     /**
@@ -68,6 +74,20 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
     function DOMPaM(node, offset) {
         this.node = node;
         this.offset = offset;
+        this.toString = function () {
+            return ("(node: " + this.node.nodeName + ", offset: " + this.offset + ")");
+        };
+    }
+
+    /**
+     * Represents a text range consisting of start position and end position.
+     */
+    function DOMSelection(start, end) {
+        this.startPaM = start;
+        this.endPaM = end;
+        this.toString = function () {
+            return ("Startpoint: " + this.startPaM.toString() + ", Endpoint: " + this.endPaM.toString());
+        };
     }
 
     function collectTextNodes(element, textNodes) {
@@ -95,14 +115,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         return false;
     }
 
-    /**
-     * Represents a text range consisting of start position and end position.
-     */
-    function DOMSelection(start, end) {
-        this.startPaM = start;
-        this.endPaM = end;
-    }
-
     function OXOEditor(editdiv, textMode) {
 
         // key codes of navigation keys that will be passed directly to the browser
@@ -122,6 +134,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         // list of operations
         var operations = [];
 
+        var blockOperations = false;
+        var blockOperationNotifications = false;
+
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
 
@@ -138,6 +153,15 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         // Maybe only applyOperation_s_, where param might be operation or operation[] ?
         this.applyOperation = function (operation, bRecord, bNotify) {
+
+            if (blockOperations) {
+                // This can only happen if someone tries to apply new operation in the operation notify.
+                // This is not allowed because a document manipulation method might be split into multiple operations, following operations would have invalid positions then.
+                this.implDbgOutInfo('applyOperation - operations blocked');
+                return;
+            }
+
+            blockOperations = true;
 
             this.implDbgOutObject({type: 'operation', value: operation});
 
@@ -170,10 +194,12 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 // TODO
             }
 
-            if (bNotify) {
+            if (bNotify && !blockOperationNotifications) {
                 this.trigger("office:operation", operation);
                 // TBD: Use operation directly, or copy?
             }
+
+            blockOperations = false;
         };
 
         this.applyOperations = function (theOperations, bRecord, notify) {
@@ -278,8 +304,12 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 // Work around browser selection bugs...
                 var myParagraph = paragraphs.has(domSelection.startPaM.node.firstChild);
                 var para = myParagraph.index();
-                startPaM = new OXOPaM(para, this.implGetParagraphLen(para));
-                this.implDbgOutInfo('info: fixed invalid selection (start)');
+                var nPos = 0;
+                if ((domSelection.startPaM.node === domSelection.endPaM.node) && (domSelection.startPaM.offset === domSelection.endPaM.offset)) {
+                    nPos = this.implGetParagraphLen(para);
+                }
+                startPaM = new OXOPaM(para, nPos);
+                this.implDbgOutInfo('info: fixed invalid selection (start): ' + startPaM.toString());
             }
 
             if (domSelection.endPaM.node.nodeType === 3) {
@@ -290,7 +320,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var myParagraph = paragraphs.has(domSelection.endPaM.node.firstChild);
                 var para = myParagraph.index();
                 endPaM = new OXOPaM(para, this.implGetParagraphLen(para));
-                this.implDbgOutInfo('info: fixed invalid selection (end)');
+                this.implDbgOutInfo('info: fixed invalid selection (end):' + endPaM.toString());
             }
 
             var aOXOSelection = new OXOSelection(startPaM, endPaM);
@@ -385,7 +415,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.initDocument = function () {
             var newOperation = { name: 'initDocument' };
-            this.applyOperation(newOperation, true, false);
+            this.applyOperation(newOperation, true, true);
         };
 
         this.getSelection = function () {
@@ -437,15 +467,19 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 }
                 if (c === '1') {
                     dbgoutEvents = !dbgoutEvents;
-                    window.console.log('dbgoutEvents in now ' + dbgoutEvents);
+                    window.console.log('dbgoutEvents is now ' + dbgoutEvents);
                 }
                 if (c === '2') {
                     dbgoutObjects = !dbgoutObjects;
-                    window.console.log('dbgoutObjects in now ' + dbgoutObjects);
+                    window.console.log('dbgoutObjects is now ' + dbgoutObjects);
                 }
                 if (c === '3') {
                     dbgoutInfos = !dbgoutInfos;
-                    window.console.log('dbgoutInfos in now ' + dbgoutInfos);
+                    window.console.log('dbgoutInfos is now ' + dbgoutInfos);
+                }
+                if (c === '4') {
+                    blockOperationNotifications = !blockOperationNotifications;
+                    window.console.log('block operation notifications is now ' + blockOperationNotifications);
                 }
             }
 
@@ -515,8 +549,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 return;
             }
 
-
             var selection = this.getSelection();
+
             selection.adjust();
 
             /*
@@ -595,7 +629,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 }
 
                 // 4) merge first and last para
-                this.mergeParagraph(selection.startPaM.para);
+                if (selection.startPaM.para !== selection.endPaM.para) {
+                    this.mergeParagraph(selection.startPaM.para);
+                }
             }
         };
 
@@ -674,6 +710,38 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 // only keep it when inserted by the user
                 if (paragraph.lastChild.dummyBR) {
                     paragraph.removeChild(paragraph.lastChild);
+                }
+
+                // Browser show multiple spaces in a row as single space, and space at paragraph end is problematic for selection...
+                var textNodes = [];
+                collectTextNodes(paragraphs[para], textNodes);
+                var oldText, newText, charPos, nNode, nChar;
+                var currChar = 0, prevChar = 0;
+                var node, nodes = textNodes.length;
+                for (nNode = 0; nNode < nodes; nNode++) {
+
+                    node = textNodes[nNode];
+
+                    if (!node.nodeValue.length)
+                        continue;
+
+                    for (nChar = 0; nChar < node.nodeValue.length; nChar++) {
+                        currChar = node.nodeValue.charCodeAt(nChar);
+                        if ((currChar === 32) && (prevChar === 32)) { // Space - make sure there is no space before
+                            currChar = 160; // NBSP
+                            node.nodeValue = node.nodeValue.slice(0, nChar) + String.fromCharCode(currChar) + node.nodeValue.slice(nChar);
+                        }
+                        else if ((currChar === 160) && (prevChar !== 32)) { // NBSP not needed (until we support them for doc content, then we need to flag them somehow)
+                            currChar = 32; // BLANK
+                            node.nodeValue = node.nodeValue.slice(0, nChar) + String.fromCharCode(currChar) + node.nodeValue.slice(nChar);
+                        }
+                        prevChar = currChar;
+                    }
+                }
+
+                if (prevChar === 32) { // BLANK hat para end is a problem in some browsers
+                    currChar = 160; // NBSP
+                    node.nodeValue = node.nodeValue.slice(0, node.nodeValue.length - 1) + String.fromCharCode(currChar);
                 }
 
                 // TODO: Adjust tabs, ...
