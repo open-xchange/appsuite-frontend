@@ -46,15 +46,9 @@
         height: 100%;
     }
     
-    .month.row5 {
-        height: 100/6*5%;
-    }
-    
     .week {
-        height: 100/6%;
+        height: 20%;
     }
-    
-    .month.row5 .week { height: 100/5%; }
     
     .day {
         width: 100/8%;
@@ -77,9 +71,11 @@
         position: absolute;
         color: #aaa;
         text-align: right;
-        right: 13px;
-        bottom: 7px;
+        right: 7px;
+        bottom: 5px;
         z-index: 1;
+        font-size: 11px;
+        line-height: 1em;
     }
     
     .day.out .number {
@@ -93,7 +89,14 @@
     .day.today { background-color: #daefFf; }
     .day.today .number { color: #08c; }
     
-    .vertical-name {
+    .vertical-box {
+        float: right;
+        position: relative;
+        height: 100%;
+        width: 100/8%;
+    }
+    
+    .vertical-box .name {
         position: absolute;
         top: 50%;
         right: -50px;
