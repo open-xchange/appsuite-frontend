@@ -16,9 +16,8 @@ define('io.ox/office/main',
      'io.ox/office/toolbar',
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
-     'io.ox/core/bootstrap/basics',
-     'less!io.ox/office/main.css',
-     'io.ox/office/actions'
+     'io.ox/office/actions',
+     'less!io.ox/office/main.css'
     ], function (api, ToolBar, Editor, gt) {
 
     'use strict';
@@ -100,6 +99,17 @@ define('io.ox/office/main',
                     });
                 });
             });
+
+            toolbar.createButtonGroup()
+                .addButton({ label: 'B', iconlike: true, toggle: true }, function () { this.css('font-weight', 'bold'); })
+                .addButton({ label: 'I', iconlike: true, toggle: true }, function () { this.css('font-style', 'italic'); })
+                .addButton({ label: 'U', iconlike: true, toggle: true }, function () { this.css('text-decoration', 'underline'); });
+
+            toolbar.createButtonGroup({ radio: true })
+                .addButton({ icon: 'align-left' })
+                .addButton({ icon: 'align-center' })
+                .addButton({ icon: 'align-right' })
+                .addButton({ icon: 'align-justify' });
 
         }()); // end of local namespace
 
@@ -284,7 +294,6 @@ define('io.ox/office/main',
         });
 
         app.destroy = function () {
-            toolbar.destroy();
             app = win = toolbar = container = editor = null;
         };
 
