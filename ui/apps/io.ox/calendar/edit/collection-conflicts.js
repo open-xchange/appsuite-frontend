@@ -12,12 +12,20 @@
  */
 
 define('io.ox/calendar/edit/collection-conflicts',
-      ['io.ox/calendar/edit/model-conflict'], function (ConflictModel) {
+      ['io.ox/calendar/edit/model-conflict',
+       'io.ox/core/http'], function (ConflictModel, http) {
 
     'use strict';
 
     var ConflictCollection = Backbone.Collection.extend({
-        model: ConflictModel
+        model: ConflictModel,
+        fetch: function () {
+            http.pause();
+            this.each(function (model) {
+                model.fetch(model.toJSON());
+            });
+            return http.resume();
+        }
     });
     return ConflictCollection;
 

@@ -4,6 +4,10 @@
 
        </div>
     </extension>
+    <extension id='additionalinfo'>
+       <div class="additional-info">
+       </div>
+    </extension>
     <extension id='head'>
        <div class="row-fluid show-grid">
            <div class="span12 control-group">
@@ -137,11 +141,14 @@
     </extension>
 </part>
 <part id='io.ox/calendar/edit/conflicts'>
-    <h4>Conflicts detected</h4>
-    <p>list of conflicts follow....</p>
-    <a class='btn btn-danger' data-action="ignore">Ignore conflicts</a>
-    <a class='btn'>Cancel</a>
+    <div class="row-fluid show-grid" style='margin-top: 10px;'>
+        <span style='text-align: right;' class='span12'>
+            <a class='btn' data-action="cancel">Cancel</a>
+            <a class='btn btn-danger' data-action="ignore">Ignore conflicts</a>
+        </span>
+    </div>
 </part>
+
 <part id='io.ox/calendar/edit/particpant/user'>
     <div>
         <div class='contact-image'></div>

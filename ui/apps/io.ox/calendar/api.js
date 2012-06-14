@@ -229,7 +229,11 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                     if (!_.isUndefined(obj.conflicts)) {
                         //console.log('got conflicts');
                         //console.log(obj.conflicts);
+                        //
                         var df = new $.Deferred();
+                        _(obj.conflicts).each(function (item) {
+                            item.folder_id = o.folder_id;
+                        });
                         df.reject(obj);
                         return df;
                     }
@@ -264,6 +268,9 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 var getObj = {};
                 if (!_.isUndefined(obj.conflicts)) {
                     var df = new $.Deferred();
+                    _(obj.conflicts).each(function (item) {
+                        item.folder_id = o.folder_id;
+                    });
                     df.reject(obj);
                     return df;
                 }
@@ -285,6 +292,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
         // delete is a reserved word :( - but this will delete the
         // appointment on the server
         remove: function (o) {
+            console.log('wann remove:', o);
             return http.PUT({
                 module: 'calendar',
                 params: {
@@ -294,6 +302,8 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 data: o.data
             })
             .done(function (resp) {
+                console.log('now deleted');
+
                 all_cache = {};
                 api.trigger('refresh.all');
             });

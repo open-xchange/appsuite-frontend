@@ -49,12 +49,10 @@ define('io.ox/calendar/edit/view-participant',
         renderUser: function () {
             var self = this;
 
-            console.log('render user');
             this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/user', {}));
 
             // take util function
             var convertImage = function (dir, value) {
-                console.log('convert image');
                 var url = '';
                 if (value) {
                     url = value.replace(/^\/ajax/, ox.apiRoot);
@@ -76,7 +74,6 @@ define('io.ox/calendar/edit/view-participant',
         renderUserGroup: function () {
             var self = this;
 
-            console.log('render usergroup');
             this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/usergroup', {strings: {
                 GROUP: gt('Group')
             }}));
@@ -103,7 +100,6 @@ define('io.ox/calendar/edit/view-participant',
         renderResource: function () {
             var self = this;
 
-            console.log('renderResource');
             this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/resource', {strings: {
                 RESOURCE: gt('Resource')
             }}));

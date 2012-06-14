@@ -48,7 +48,6 @@ define('io.ox/calendar/edit/view-addparticipants',
                     }
                 })
                 .on('selected', function (e, selected) {
-                    console.log('selected', arguments);
                     self.$('.add-participant').val('');
                     self.trigger('select', selected);
                 });
