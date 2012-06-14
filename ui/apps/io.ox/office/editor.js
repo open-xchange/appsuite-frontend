@@ -356,6 +356,14 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         /**
+         * Sets the cursor position after loading a document.
+         */
+
+        this.setStartSelection = function () {
+            this.setSelection(new OXOSelection(new OXOPaM(0, 0), new OXOPaM(0, 0)));
+        };
+
+        /**
          * Returns whether the editor contains unsaved changes.
          */
         this.isModified = function () {
@@ -626,13 +634,14 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.implGetParagraphLen = function (para) {
             var textLength = 0;
-            var nodeList = paragraphs[para].childNodes;
-            for (var i = 0; i < nodeList.length; i++) {
-                textLength += $(nodeList[i]).text().length;
+            if (paragraphs[para] !== undefined) {
+                var nodeList = paragraphs[para].childNodes;
+                for (var i = 0; i < nodeList.length; i++) {
+                    textLength += $(nodeList[i]).text().length;
+                }
             }
             return textLength;
         };
-
 
         this.implParagraphChanged = function (para) {
             // TODO

@@ -174,6 +174,7 @@ define('io.ox/office/main',
                     editor.applyOperations(operations, true);  // only for testing reasons "true"
                 });
                 editor.focus();
+                editor.setStartSelection();
                 win.idle();
                 def.resolve();
             })
