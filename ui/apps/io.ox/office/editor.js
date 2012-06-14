@@ -112,7 +112,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
 
-        var dbgoutEvents = true, dbgoutObjects = true, dbgoutInfos = true;
+        var dbgoutEvents = false, dbgoutObjects = false, dbgoutInfos = true;
 
         // add event hub
         Events.extend(this);
@@ -266,7 +266,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var myParagraph = paragraphs.has(domSelection.startPaM.node.firstChild);
                 var para = myParagraph.index();
                 startPaM = new OXOPaM(para, this.implGetParagraphLen(para));
-                window.console.log('info: fixed invalid selection (start)');
+                this.implDbgOutInfo('info: fixed invalid selection (start)');
             }
 
             if (domSelection.endPaM.node.nodeType === 3) {
@@ -277,7 +277,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var myParagraph = paragraphs.has(domSelection.endPaM.node.firstChild);
                 var para = myParagraph.index();
                 endPaM = new OXOPaM(para, this.implGetParagraphLen(para));
-                window.console.log('info: fixed invalid selection (end)');
+                this.implDbgOutInfo('info: fixed invalid selection (end)');
             }
 
             var aOXOSelection = new OXOSelection(startPaM, endPaM);
@@ -291,14 +291,14 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // Is para an available paragraph? para starts with zero.
             var maxPara = $(paragraphs).size() - 1;
             if (para > maxPara) {
-                window.console.log('getDOMPosition: Warning: Paragraph ' + para + ' is out of range. Last paragraph: ' + maxPara);
+                this.implDbgOutInfo('getDOMPosition: Warning: Paragraph ' + para + ' is out of range. Last paragraph: ' + maxPara);
                 return;
             }
 
             // Checking if this paragraph has children
             var myParagraph = $(paragraphs).get(para);
             if (! myParagraph.hasChildNodes()) {
-                window.console.log('getDOMPosition: Warning: Paragraph is empty');
+                this.implDbgOutInfo('getDOMPosition: Warning: Paragraph is empty');
                 return;
             }
 
@@ -326,7 +326,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
 
             if (!bFound) {
-                window.console.log('getDOMPosition: Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + textLength);
+                this.implDbgOutInfo('getDOMPosition: Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + textLength);
                 return;
             }
 
@@ -414,14 +414,27 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 if (c === 'D') {
                     this.initDocument();
                 }
+                if (c === '1') {
+                    dbgoutEvents = !dbgoutEvents;
+                    window.console.log('dbgoutEvents in now ' + dbgoutEvents);
+                }
+                if (c === '2') {
+                    dbgoutObjects = !dbgoutObjects;
+                    window.console.log('dbgoutObjects in now ' + dbgoutObjects);
+                }
+                if (c === '3') {
+                    dbgoutInfos = !dbgoutInfos;
+                    window.console.log('dbgoutInfos in now ' + dbgoutInfos);
+                }
             }
 
             // For some keys we only get keyDown, not keyPressed!
 
-            var selection = this.getSelection();
-            selection.adjust();
+            var selection; // only get when really needed...
 
             if (event.keyCode === 46) { // DELETE
+                selection = this.getSelection();
+                selection.adjust();
                 if (selection.hasRange()) {
                     this.deleteSelected(selection);
                 }
@@ -439,6 +452,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 this.setSelection(selection);
             }
             if (event.keyCode === 8) { // BACKSPACE
+                selection = this.getSelection();
+                selection.adjust();
                 if (selection.hasRange()) {
                     this.deleteSelected(selection);
                 }
@@ -534,25 +549,32 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             var i, nStartPos, nEndPos;
             var selection = _selection || this.getSelection();
             if ((selection !== undefined) && (selection.hasRange())) {
-                // Split into multiple operations:
-                // 1) delete selected part in first para (pos to end)
-                // 2) delete completly slected paragraphs completely
-                // 3) delete selected part in last para (start to pos)
+
                 selection.adjust();
+
                 nStartPos = selection.startPaM.pos;
                 nEndPos = selection.endPaM.pos;
+
+                // 1) delete selected part or rest of para in first para (pos to end)
                 if (selection.startPaM.para !== selection.endPaM.para) {
                     nEndPos = -1;
                 }
                 this.deleteText(selection.startPaM.para, nStartPos, nEndPos);
+
+                // 2) delete completly slected paragraphs completely
                 for (i = selection.startPaM.para + 1; i < selection.endPaM.para; i++)
                 {
                     // startPaM.para+1 instead of i, because we allways remove a paragraph
                     this.deleteParagraph(selection.startPaM.para + 1);
                 }
+
+                // 3) delete selected part in last para (start to pos)
                 if (selection.startPaM.para !== selection.endPaM.para) {
                     this.deleteText(selection.startPaM.para + 1, 0, selection.endPaM.pos);
                 }
+
+                // 4) merge first and last para
+                this.mergeParagraph(selection.startPaM.para);
             }
         };
 
@@ -637,12 +659,13 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             return domSelection;
         };
 
+        /* This didn't work - browser doesn't accept the corrected selection, is changing it again immediatly...
         this.implCheckSelection = function () {
             var node;
             var windowSel = window.getSelection();
             if ((windowSel.anchorNode.nodeType !== 3) || (windowSel.focusNode.nodeType !== 3)) {
 
-                window.console.log('warning: invalid selection');
+                this.implDbgOutInfo('warning: invalid selection');
 
                 var selection = this.getSelection();
 
@@ -651,16 +674,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 if (windowSel.anchorNode.nodeType !== 3) {
                     // Assume this only happens on para end - seems we are always directly in a p-element when this error occurs.
                     selection.startPaM.pos = this.implGetParagraphLen(selection.startPaM.para);
-                    /*
-                    node = windowSel.anchorNode;
-                    while ((node = node.previousSibling)) {
-                        if (node.nodeType === 3) {
-                            startnode = node;
-                            startpos = node.nodeValue.length;
-                            break;
-                        }
-                    }
-                    */
                 }
 
                 if (windowSel.focusNode.nodeType !== 3) {
@@ -671,6 +684,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 this.setSelection(selection);
             }
         };
+        */
 
         this.implInitDocument = function () {
             editdiv[0].innerHTML = '<html><p> <br></p></html>';
@@ -787,6 +801,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.implDbgOutEvent = function (event) {
 
+            if (!dbgoutEvents)
+                return;
+
             var selection = this.getSelection();
 
             var dbg = fillstr(event.type, 10, ' ', true) + ' sel:[' + fillstr(selection.startPaM.para.toString(), 2, '0') + ',' + fillstr(selection.startPaM.pos.toString(), 2, '0') + '/' + fillstr(selection.endPaM.para.toString(), 2, '0') + ',' + fillstr(selection.endPaM.pos.toString(), 2, '0') + ']';
@@ -799,8 +816,20 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.implDbgOutObject = function (obj) {
+
+            if (!dbgoutObjects)
+                return;
+
             var dbg = fillstr(obj.type + ': ', 10, ' ', true) + JSON.stringify(obj.value);
             window.console.log(dbg);
+        };
+
+        this.implDbgOutInfo = function (str) {
+
+            if (!dbgoutInfos)
+                return;
+
+            window.console.log(str);
         };
 
         // hybrid edit mode
