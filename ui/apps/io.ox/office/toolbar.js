@@ -16,42 +16,25 @@ define('io.ox/office/toolbar', function () {
     'use strict';
 
     /**
-     * Creates and returns a new 'button' element.
+     * Returns whether the passed button is active.
      */
-    function createButton(options, callback) {
+    function getButtonState(button) {
+        return button.hasClass('btn-primary');
+    }
 
-        // create the button element
-        var button = $('<button>').addClass('btn');
-
-        // shift parameters, if 'options' is missing
-        if ((callback === undefined) && (_.isFunction(options))) {
-            callback = options;
-            options = {};
-        } else {
-            options = options || {};
-        }
-
-        // handle options
-        if (typeof options.icon === 'string') {
-            button.append($('<i>').addClass('icon-' + options.icon));
-        }
-        if (typeof options.label === 'string') {
-            var prefix = button.has('i') ? ' ' : '';
-            button.append($('<span>').text(prefix + options.label));
-        }
-        if (options.iconlike === true) {
-            button.addClass('btn-iconlike');
-        }
-        if (options.toggle === true) {
-            button.click(function () { $(this).toggleClass('btn-primary'); });
-        }
-
-        // handle callback, pass the button as context
-        if (_.isFunction(callback)) {
-            callback.call(button);
-        }
-
-        return button;
+    /**
+     * Activates, deactivates, or toggles the passed button or collection of
+     * buttons.
+     * 
+     * @param buttons {jQuery}
+     *  A jQuery collection containing one or more button elements.
+     *
+     * @param state {Boolean}
+     *  (optional) If omitted, toggles the state of all buttons. Otherwise,
+     *  activates or deactivates all buttons.
+     */
+    function toggleButtonState(buttons, state) {
+        buttons.toggleClass('btn-primary', state).find('> i').toggleClass('icon-white', state);
     }
 
     /**
@@ -65,19 +48,55 @@ define('io.ox/office/toolbar', function () {
             // the options
             groupOptions = options || {};
 
-        this.addButton = function (options, callback) {
-            // create the new button
-            var button = createButton(options, callback).appendTo(node);
+        /**
+         * Creates a new button and appends it to this button group.
+         *
+         * @param options
+         *  (optional) A map of options to control the properties of the button.
+         *  - icon: The name of the Bootstrap icon class, without the 'icon-'
+         *      prefix.
+         *  - label: The text label of the button. Will follow an icon.
+         *  - class: Additional CSS classes to be set at the button (string).
+         *  - css: Additional CSS formatting (key/value map).
+         *  - toggle: If set to true, the button works as toggle button
+         *      (similar to a check box). Do not use in radio groups!
+         *
+         * @returns
+         *  A reference to this button group.
+         */
+        this.addButton = function (options) {
 
-            // add radio group behavior
+            // create the button element
+            var button = $('<button>').addClass('btn').appendTo(node);
+                
+            // handle display options
+            options = options || {};
+            if (typeof options.icon === 'string') {
+                button.append($('<i>').addClass('icon-' + options.icon));
+            }
+            if (typeof options.label === 'string') {
+                var prefix = button.has('i') ? ' ' : '';
+                button.append($('<span>').text(prefix + options.label));
+            }
+            if (typeof options['class'] === 'string') {
+                button.addClass(options['class']);
+            }
+            if (typeof options.css === 'object') {
+                button.css(options.css);
+            }
+
+            // add radio group or toggle behavior
             if (groupOptions.radio === true) {
                 button.click(function () {
                     var self = $(this);
                     // do nothing, if clicked button is already active
-                    if (!self.hasClass('btn-primary')) {
-                        self.siblings().removeClass('btn-primary').end().addClass('btn-primary');
+                    if (!getButtonState(self)) {
+                        toggleButtonState(self.siblings(), false);
+                        toggleButtonState(self, true);
                     }
                 });
+            } else if (options.toggle === true) {
+                button.click(function () { toggleButtonState($(this)); });
             }
 
             return this;
@@ -93,24 +112,6 @@ define('io.ox/office/toolbar', function () {
          */
         this.getNode = function () {
             return node;
-        };
-
-        /**
-         * Creates a new button and appends it to this tool bar.
-         *
-         * @param options
-         *  (optional) A map of options to control the properties of the button.
-         *  - icon: The name of the Bootstrap icon class, without the 'icon-' prefix.
-         *  - label: The text label of the button. Will follow an icon.
-         *  - iconlike: If set to true, the button gets a fixed width as if it is
-         *      a single Bootstrap icon without text.
-         *
-         * @returns
-         *  A reference to this tool bar.
-         */
-        this.addButton = function (options, callback) {
-            node.append(createButton(options, callback));
-            return this;
         };
 
         /**
@@ -130,6 +131,22 @@ define('io.ox/office/toolbar', function () {
          */
         this.createButtonGroup = function (options) {
             return new ButtonGroup(node, options);
+        };
+
+        /**
+         * Creates a new single button in its own button group and appends it
+         * to this tool bar.
+         *
+         * @param options
+         *  (optional) A map of options to control the properties of the
+         *  button. See method ButtonGroup.addButton() for details.
+         *
+         * @returns
+         *  A reference to this tool bar.
+         */
+        this.addButton = function (options) {
+            this.createButtonGroup().addButton(options);
+            return this;
         };
 
     } // end of ToolBar class
