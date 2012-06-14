@@ -38,6 +38,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
     function OXOPaM(paragraph, position) {
         this.para = paragraph;
         this.pos = position;
+        this.toString = function () {
+            return ("(para: " + this.para + ", pos: " + this.pos + ")");
+        };
     }
 
     /**
@@ -58,6 +61,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 this.endPaM = tmp;
             }
         };
+        this.toString = function () {
+            return ("Startpoint: " + this.startPaM.toString() + ", Endpoint: " + this.endPaM.toString());
+        };
     }
 
     /**
@@ -68,6 +74,20 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
     function DOMPaM(node, offset) {
         this.node = node;
         this.offset = offset;
+        this.toString = function () {
+            return ("(node: " + this.node.nodeName + ", offset: " + this.offset + ")");
+        };
+    }
+
+    /**
+     * Represents a text range consisting of start position and end position.
+     */
+    function DOMSelection(start, end) {
+        this.startPaM = start;
+        this.endPaM = end;
+        this.toString = function () {
+            return ("Startpoint: " + this.startPaM.toString() + ", Endpoint: " + this.endPaM.toString());
+        };
     }
 
     function collectTextNodes(element, textNodes) {
@@ -93,14 +113,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 return hasTextContent(child);
         }
         return false;
-    }
-
-    /**
-     * Represents a text range consisting of start position and end position.
-     */
-    function DOMSelection(start, end) {
-        this.startPaM = start;
-        this.endPaM = end;
     }
 
     function OXOEditor(editdiv, textMode) {
@@ -278,8 +290,12 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 // Work around browser selection bugs...
                 var myParagraph = paragraphs.has(domSelection.startPaM.node.firstChild);
                 var para = myParagraph.index();
-                startPaM = new OXOPaM(para, this.implGetParagraphLen(para));
-                this.implDbgOutInfo('info: fixed invalid selection (start)');
+                var nPos = 0;
+                if ((domSelection.startPaM.node === domSelection.endPaM.node) && (domSelection.startPaM.offset === domSelection.endPaM.offset)) {
+                    nPos = this.implGetParagraphLen(para);
+                }
+                startPaM = new OXOPaM(para, nPos);
+                this.implDbgOutInfo('info: fixed invalid selection (start): ' + startPaM.toString());
             }
 
             if (domSelection.endPaM.node.nodeType === 3) {
@@ -290,7 +306,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var myParagraph = paragraphs.has(domSelection.endPaM.node.firstChild);
                 var para = myParagraph.index();
                 endPaM = new OXOPaM(para, this.implGetParagraphLen(para));
-                this.implDbgOutInfo('info: fixed invalid selection (end)');
+                this.implDbgOutInfo('info: fixed invalid selection (end):' + endPaM.toString());
             }
 
             var aOXOSelection = new OXOSelection(startPaM, endPaM);
@@ -515,8 +531,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 return;
             }
 
-
             var selection = this.getSelection();
+
             selection.adjust();
 
             /*
