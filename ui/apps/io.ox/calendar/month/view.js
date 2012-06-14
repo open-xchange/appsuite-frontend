@@ -45,13 +45,14 @@ define('io.ox/calendar/month/view',
                 if (!hideWeekend || !day.isWeekend) {
                     this.$el.append(tmpl.render('day', day));
                 }
+                if (day.isFirst) {
+                    this.$el.prepend(
+                        $('<div>').addClass('vertical').html(
+                            date.locale.months[day.month] + '<br>' + day.year
+                        )
+                    );
+                }
             }, this);
-
-//            this.$el
-//                .addClass('month-' + year + '-' + (month + 1))
-//                .append(
-//                    $('<div class="vertical-box">').text(date.locale.months[month] + ' ' + year)
-//                );
 
             return this;
         },

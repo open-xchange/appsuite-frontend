@@ -106,9 +106,9 @@ define('io.ox/calendar/month/perspective',
             this.pane.on('scroll', magneticScroll);
 
             this.pane.one('scroll', $.proxy(function (e) {
-                var top = this.pane.scrollTop();
+                var top = this.pane.scrollTop() - 200; /* cheap trick */
                 this.pane.find('.first').each(function () {
-                    tops[$(this).position().top + top] = $(this).attr('month');
+                    tops[Math.max(0, $(this).position().top + top)] = $(this).attr('month');
                 });
             }, this));
 
