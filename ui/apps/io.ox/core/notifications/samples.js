@@ -1,6 +1,6 @@
 // NOJSHINT
 require(['io.ox/core/notifications/main'], function (notifications) {
-    var n = notifications.getNotifications('noob', 'Test it!');
+    var n = notifications.get('noob', 'Test it!');
     n.add({
         title: 'here i am',
         thumbnail: '',

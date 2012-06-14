@@ -60,7 +60,7 @@ define('io.ox/core/notifications/main',
             desktop.addLauncher("right", this.badgeView.render().$el, _.bind(this.toggleList, this));
             $('#io-ox-core').prepend($('<div id="io-ox-notifications">'));
         },
-        getNotifications: function (key, display_name) {
+        get: function (key, display_name) {
             if (_.isUndefined(this.notifications[key])) {
                 console.log('created notfication collection', this.notifications);
                 this.notifications[key] = new NotificationCollection({display_name: display_name});
