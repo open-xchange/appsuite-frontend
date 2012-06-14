@@ -17,21 +17,38 @@ define('io.ox/calendar/month/perspective',
 
     var perspective = new ox.ui.Perspective('month');
 
+    var magneticScroll = _.debounce(function () {
+        var self = $(this),
+            month = self.find('.month'),
+            weeks = month.find('.week'),
+            height = weeks.outerHeight(),
+            top = self.scrollTop(),
+            y = Math.round(top / height);
+        self.off('scroll', magneticScroll)
+            .animate({ scrollTop: (weeks.eq(y).position() || { top: 0 }).top }, 100, function () {
+                self.on('scroll', magneticScroll);
+                self = month = weeks = null;
+            });
+    }, 500);
+
     _.extend(perspective, {
 
         scaffold: $(),
 
         drawMonth: function (year, month) {
 
-            var start = Date.UTC(year, month, 1),
-                end = Date.UTC(year, month + 1, 0),
-                collection = new Backbone.Collection([]),
+            var collection = new Backbone.Collection([]),
                 view = new View({ collection: collection, year: year, month: month });
 
             // add and render view
-            this.scaffold.find('.scrollpane').append(view.render().el);
+            this.scaffold.find('.scrollpane')
+                .on('scroll', magneticScroll)
+                .append(view.render().el);
 
-            api.getAll({ start: start, end: end }).done(function (list) {
+            api.getAll({
+                start: Date.UTC(year, month - 1, 1),
+                end: Date.UTC(year, month + 2, 0)
+            }).done(function (list) {
                 collection.reset(_(list).map(function (obj) {
                     var m = new Backbone.Model(obj);
                     m.id = _.cid(obj);
@@ -58,13 +75,11 @@ define('io.ox/calendar/month/perspective',
 
         render: function (app) {
 
-            var weekend = true;
+            var weekend = true, year = 2012, month = 5;
             this.scaffold = View.drawScaffold(weekend);
-            this.drawMonth(2012, 4);
-            this.drawMonth(2012, 5);
-            this.drawMonth(2012, 6);
+            this.drawMonth(year, month);
             this.main.empty().addClass('month-view').append(this.scaffold);
-            this.scrollTop(this.main.find('.month-2012-6').position().top);
+            this.scrollTop(this.main.find('.date-' + month + '-1').position().top);
         }
     });
 

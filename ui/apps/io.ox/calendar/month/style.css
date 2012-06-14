@@ -64,7 +64,7 @@
     .hide-weekend .day { width: 100/6%; }
 
     .day.out {
-        background-color: #f5f5f5;
+        background-color: #f0f0f0;
     }
 
     .day .number {
@@ -90,15 +90,8 @@
     .day.today .number { color: #08c; }
     
     .vertical-box {
-        float: right;
-        position: relative;
-        height: 100%;
-        width: 100/8%;
-    }
-    
-    .vertical-box .name {
         position: absolute;
-        top: 50%;
+        top: 130%;
         right: -50px;
         font-size: 60px;
         color: #ccc;
@@ -130,5 +123,8 @@
     .appointment.absent { background-color: #913F3F; } /* red */
     .appointment.free { background-color: #8EB360; } /* green */
     
+    .day.out .appointment { opacity: 0.80; }
+    
     .appointment:hover { background-color: #555; }
+    .day.out .appointment:hover { opacity: 1; }
 }

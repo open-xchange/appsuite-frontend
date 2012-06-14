@@ -375,17 +375,17 @@ define("io.ox/calendar/util",
             var firstDayOfMonth = Date.UTC(year, month, 1),
                 // apply week day shift
                 shift = (7 + (new Date(firstDayOfMonth)).getDay() - that.getFirstWeekDay()) % 7,
-                // get number of days in month
-                max = that.getDaysInMonth(year, month) + shift,
-                // loop
-                rows = [],
                 day = firstDayOfMonth - DAY * shift,
-                row,
-                obj,
-                d;
+                // loop
+                rows = [], row, obj, d;
+
+            function getMax() {
+                // get number of days in month
+                return that.getDaysInMonth(year, month) + shift;
+            }
 
             function loop(max) {
-                for (var i = 0; i < max || i % 7 !== 0; i += 1, day += DAY) {
+                for (var i = 0; i < max || (i % 7 !== 0); i += 1, day += DAY) {
                     if (i % 7 === 0) {
                         row = [];
                         rows.push(row);
@@ -409,9 +409,16 @@ define("io.ox/calendar/util",
             }
 
             // forerun?
-            if (forerun < 0) {
-                day = firstDayOfMonth - DAY * shift - forerun * WEEK;
-                loop();
+            if (forerun > 0) {
+                day -= forerun * WEEK;
+                loop(forerun * 7);
+            }
+
+            loop(getMax());
+
+            // overrun?
+            if (overrun > 0) {
+                loop(overrun * 7);
             }
 
             return rows;

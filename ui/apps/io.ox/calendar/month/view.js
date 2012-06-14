@@ -40,7 +40,7 @@ define('io.ox/calendar/month/view',
 
             var year = this.options.year,
                 month = this.options.month,
-                list = util.getMonthScaffold(Date.UTC(year, month, 1), -2, +2),
+                list = util.getMonthScaffold(year, month, 4, 4),
                 hideWeekend = false;
 
             _(list).each(function (weeks) {
@@ -55,9 +55,7 @@ define('io.ox/calendar/month/view',
             this.$el
                 .addClass('month-' + year + '-' + (month + 1))
                 .append(
-                    $('<div class="vertical-box">').append(
-                        $('<div class="content">').text(date.locale.months[month] + ' ' + year)
-                    )
+                    $('<div class="vertical-box">').text(date.locale.months[month] + ' ' + year)
                 );
 
             return this;
