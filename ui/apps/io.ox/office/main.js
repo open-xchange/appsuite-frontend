@@ -59,7 +59,13 @@ define('io.ox/office/main',
             var node = $('<div>').addClass('io-ox-office-editor user-select-text ' + textMode).attr('contenteditable', true);
             node.append('<p>normal <span style="font-weight: bold">bold</span> normal <span style="font-style: italic">italic</span> normal</p>');
             container.append(node);
-            editors[textMode] = new Editor(node, textMode);
+            editors[textMode] = (new Editor(node, textMode)).on('office:operation', function (event, operation, record) {
+                _(editors).each(function (editor) {
+                    if (event.target !== editor) {
+                        editor.applyOperation(operation, record, false);
+                    }
+                });
+            });
         });
         editor = editors[Editor.TextMode.RICH];
 
