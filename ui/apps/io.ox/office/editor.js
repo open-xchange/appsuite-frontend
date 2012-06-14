@@ -15,6 +15,8 @@
 
 define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
+    // TODO: namespace for helper functions/structs, or is that handle by the require struct???
+
     'use strict';
 
     function fillstr(str, len, fill, right) {
@@ -107,36 +109,27 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
 
+        var dbgoutEvents = true, dbgoutObjects = true, dbgoutInfos = true;
+
         // add event hub
         Events.extend(this);
 
-        /**
-         * Returns whether the editor contains unsaved changes.
-         */
-        this.isModified = function () {
-            return bModified;
-        };
-
-        /**
-         * Sets the browser focus into the edit text area.
-         */
-        this.focus = function () {
-            editdiv.focus();
-        };
-
-        this.initDocument = function () {
-            var newOperation = { name: 'initDocument' };
-            this.applyOperation(newOperation, true);
-        };
-
         // OPERATIONS API
+
+        this.addOperationsNotifyHdl = function (hdl) {
+            // TODO
+        };
+
+        this.removeOperationsNotifyHdl = function (hdl) {
+            // TODO
+        };
 
         this.clearOperations = function () {
             operations = [];
         };
 
         // Maybe only applyOperation_s_, where param might be operation or operation[] ?
-        this.applyOperation = function (operation, bRecord) {
+        this.applyOperation = function (operation, bRecord, bNotify) {
 
             this.implDbgOutObject({type: 'operation', value: operation});
 
@@ -167,6 +160,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
             else if (operation.name === "xxxxxxxxxxxxxx") {
                 // TODO
+            }
+
+            if (bNotify) {
+                // TBD: Use operation directly, or copy?
             }
         };
 
@@ -273,7 +270,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var myParagraph = paragraphs.has(domSelection.startPaM.node.firstChild);
                 var para = myParagraph.index();
                 startPaM = new OXOPaM(para, this.implGetParagraphLen(para));
-                window.console.log('warning: fixed invalid selection (start)');
+                window.console.log('info: fixed invalid selection (start)');
             }
 
             if (domSelection.endPaM.node.nodeType === 3) {
@@ -284,7 +281,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var myParagraph = paragraphs.has(domSelection.endPaM.node.firstChild);
                 var para = myParagraph.index();
                 endPaM = new OXOPaM(para, this.implGetParagraphLen(para));
-                window.console.log('warning: fixed invalid selection (end)');
+                window.console.log('info: fixed invalid selection (end)');
             }
 
             var aOXOSelection = new OXOSelection(startPaM, endPaM);
@@ -355,6 +352,24 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             return domSelection;
         };
 
+        /**
+         * Sets the browser focus into the edit text area.
+         */
+        this.focus = function () {
+            editdiv.focus();
+        };
+
+        /**
+         * Returns whether the editor contains unsaved changes.
+         */
+        this.isModified = function () {
+            return bModified;
+        };
+
+        this.initDocument = function () {
+            var newOperation = { name: 'initDocument' };
+            this.applyOperation(newOperation, true, false);
+        };
 
         this.getSelection = function () {
             var domSelection = this.implGetCurrentDOMSelection();
@@ -548,28 +563,28 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         this.deleteText = function (para, start, end) {
             if (start !== end) {
                 var newOperation = { name: 'deleteText', para: para, start: start, end: end };
-                this.applyOperation(newOperation, true);
+                this.applyOperation(newOperation, true, true);
             }
         };
 
         this.deleteParagraph = function (para) {
             var newOperation = { name: 'deleteParagraph', para: para };
-            this.applyOperation(newOperation, true);
+            this.applyOperation(newOperation, true, true);
         };
 
         this.insertParagraph = function (para) {
             var newOperation = { name: 'insertParagraph', para: para };
-            this.applyOperation(newOperation, true);
+            this.applyOperation(newOperation, true, true);
         };
 
         this.splitParagraph = function (para, pos) {
             var newOperation = { name: 'splitParagraph', para: para, pos: pos };
-            this.applyOperation(newOperation, true);
+            this.applyOperation(newOperation, true, true);
         };
 
         this.mergeParagraph = function (para) {
             var newOperation = { name: 'mergeParagraph', para: para };
-            this.applyOperation(newOperation, true);
+            this.applyOperation(newOperation, true, true);
         };
 
         // For now, only stuff that we really need, not things that a full featured API would probably offer
@@ -580,7 +595,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.insertText = function (text, para, pos) {
             var newOperation = { name: 'insertText', text: text, para: para, pos: pos };
-            this.applyOperation(newOperation, true);
+            this.applyOperation(newOperation, true, true);
         };
 
         this.setAttributes = function (para, pos) {
@@ -704,11 +719,26 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.implMergeParagraph = function (para) {
-            // TODO
+            if  (para < (paragraphs.size() - 1)) {
+
+                var thisPara = paragraphs[para];
+                var nextPara = paragraphs[para + 1];
+
+                var lastCurrentChild = thisPara.lastChild;
+                if (lastCurrentChild && (lastCurrentChild.nodeName === 'BR'))
+                    thisPara.removeChild(lastCurrentChild);
+
+                for (var child = nextPara.firstChild; child !== null; child = child.nextSibling) {
+                    thisPara.appendChild(child);
+                }
+
+                this.implDeleteParagraph(para + 1);
+
+                this.implParagraphChanged(para);
+            }
         };
 
         this.implDeleteParagraph = function (para) {
-            // TODO
             var paragraph = paragraphs[para];
             paragraph.parentNode.removeChild(paragraph);
             paragraphs = editdiv.children();
