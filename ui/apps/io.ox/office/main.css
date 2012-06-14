@@ -15,15 +15,6 @@
     margin: 0;
     padding: 0;
 
-	.btn-toolbar {
-        padding-left: 13px;
-        padding-right: 13px;
-
-        .btn-iconlike {
-	        width: 34px;
-	    }
-	}
-
     .container {
     	width: 100%;
     	padding: 0 13px;
@@ -36,6 +27,17 @@
 	       width: 100%;
 	    } 
     }
+}
+
+.io-ox-office-toolbar {
+    padding-left: 13px;
+    padding-right: 13px;
+
+    /* class for small buttons containing e.g. a single character */
+    .btn-iconlike {
+        width: 34px;
+    }
+
 }
 
 .io-ox-office-editor {
