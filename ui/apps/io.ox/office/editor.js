@@ -106,6 +106,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         // list of operations
         var operations = [];
 
+        // list of operations notify handler
+        var operationsNotifyHandler = [];
+
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
 
@@ -115,14 +118,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         Events.extend(this);
 
         // OPERATIONS API
-
-        this.addOperationsNotifyHdl = function (hdl) {
-            // TODO
-        };
-
-        this.removeOperationsNotifyHdl = function (hdl) {
-            // TODO
-        };
 
         this.clearOperations = function () {
             operations = [];
@@ -163,6 +158,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
 
             if (bNotify) {
+                this.trigger("office:operation", operation);
                 // TBD: Use operation directly, or copy?
             }
         };
