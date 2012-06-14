@@ -158,7 +158,7 @@ define('io.ox/calendar/edit/main',
                     function (err) {
                         self.getWindow().idle();
                         var errContainer = $('<div>').addClass('alert alert-error');
-                        $(self.view.el).find('[data-extid=error]').empty().append(errContainer);
+                        $(self.view.el).find('.error-display').empty().append(errContainer);
                         if (err.conflicts !== null && err.conflicts !== undefined) {
                             require(['io.ox/calendar/edit/view-conflicts', 'io.ox/calendar/edit/collection-conflicts'], function (ConflictsView, ConflictsCollection) {
                                 console.log('class', ConflictsView);

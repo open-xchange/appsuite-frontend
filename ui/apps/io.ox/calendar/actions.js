@@ -158,7 +158,7 @@ define('io.ox/calendar/actions',
                         console.log('create save', arguments, app.getGrid());
                         app.getGrid().selection.set(data);
                     });
-                    this.create({folder_id: app.folder.get()});
+                    this.create({folder_id: app.folder.get(), participants: []});
                 });
             });
 
