@@ -137,6 +137,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         var blockOperations = false;
         var blockOperationNotifications = false;
 
+        var charcodeSPACE = 32;
+        var charcodeNBSP = 160;
+
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
 
@@ -715,7 +718,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 // Browser show multiple spaces in a row as single space, and space at paragraph end is problematic for selection...
                 var textNodes = [];
                 collectTextNodes(paragraphs[para], textNodes);
-                var oldText, newText, charPos, nNode, nChar;
+                var nNode, nChar;
                 var currChar = 0, prevChar = 0;
                 var node, nodes = textNodes.length;
                 for (nNode = 0; nNode < nodes; nNode++) {
@@ -725,23 +728,27 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     if (!node.nodeValue.length)
                         continue;
 
+                    // this.implDbgOutInfo(node.nodeValue, true);
                     for (nChar = 0; nChar < node.nodeValue.length; nChar++) {
                         currChar = node.nodeValue.charCodeAt(nChar);
-                        if ((currChar === 32) && (prevChar === 32)) { // Space - make sure there is no space before
-                            currChar = 160; // NBSP
-                            node.nodeValue = node.nodeValue.slice(0, nChar) + String.fromCharCode(currChar) + node.nodeValue.slice(nChar);
+                        if ((currChar === charcodeSPACE) && (prevChar === charcodeSPACE)) { // Space - make sure there is no space before
+                            currChar = charcodeNBSP;
+                            node.nodeValue = node.nodeValue.slice(0, nChar) + String.fromCharCode(currChar) + node.nodeValue.slice(nChar + 1);
                         }
-                        else if ((currChar === 160) && (prevChar !== 32)) { // NBSP not needed (until we support them for doc content, then we need to flag them somehow)
-                            currChar = 32; // BLANK
-                            node.nodeValue = node.nodeValue.slice(0, nChar) + String.fromCharCode(currChar) + node.nodeValue.slice(nChar);
+                        else if ((currChar === charcodeNBSP) && (prevChar !== charcodeSPACE)) { // NBSP not needed (until we support them for doc content, then we need to flag them somehow)
+                            currChar = charcodeSPACE;
+                            node.nodeValue = node.nodeValue.slice(0, nChar) + String.fromCharCode(currChar) + node.nodeValue.slice(nChar + 1);
                         }
                         prevChar = currChar;
                     }
+                    // this.implDbgOutInfo(node.nodeValue, true);
                 }
 
-                if (prevChar === 32) { // BLANK hat para end is a problem in some browsers
-                    currChar = 160; // NBSP
+                if (prevChar === charcodeSPACE) { // SPACE hat para end is a problem in some browsers
+                    // this.implDbgOutInfo(node.nodeValue, true);
+                    currChar = charcodeNBSP;
                     node.nodeValue = node.nodeValue.slice(0, node.nodeValue.length - 1) + String.fromCharCode(currChar);
+                    // this.implDbgOutInfo(node.nodeValue, true);
                 }
 
                 // TODO: Adjust tabs, ...
@@ -939,12 +946,21 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             window.console.log(dbg);
         };
 
-        this.implDbgOutInfo = function (str) {
+        this.implDbgOutInfo = function (str, showStrCodePoints) {
 
             if (!dbgoutInfos)
                 return;
 
-            window.console.log(str);
+            var msg = str;
+
+            if (showStrCodePoints) {
+                msg = msg + ' (' + str.length + ' code points: ';
+                for (var i = 0; i < str.length; i++) {
+                    msg = msg + '[' + str.charCodeAt(i) + ']';
+                }
+            }
+
+            window.console.log(msg);
         };
 
         // hybrid edit mode
