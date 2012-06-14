@@ -170,8 +170,7 @@ define('io.ox/office/main',
             .done(function (response) {
                 var operations = createOperationsList(response);
                 _(editors).each(function (editor) {
-                    // editor.applyOperations(operations, false);
-                    editor.applyOperations(operations, true);  // only for testing reasons "true"
+                    editor.applyOperations(operations, false);
                 });
                 editor.focus();
                 editor.setStartSelection();
