@@ -12,24 +12,29 @@
  */
 
 .io-ox-office-main {
+    padding: 30px;
+	
 	.container {
     	width: 100%;
-		padding: 30px;
 	    -webkit-box-sizing: border-box;
 	    -moz-box-sizing: border-box;
 	    -ms-box-sizing: border-box;
-	    box-sizing: border-box; 
+	    box-sizing: border-box;
+	    
+	    table {
+	       width: 100%;
+	    } 
     }
 }
 
 .io-ox-office-editor {
-    width: 100%;
-    height: 10cm;
     overflow-y: auto;
+    border: thin gray solid;
     cursor: text;
 
     &.rich {
-        border: thin black solid;
+        width: 100%;
+        height: 10cm;
 
         p {
 	        font-family: 'Times New Roman',Times,serif;
@@ -38,26 +43,40 @@
     }
 
     &.plain {
-        border: thin red solid;
+        width: 100%;
+        height: 8cm;
+        margin-top: 30px;
 	    
 	    p {
 	        font-family: 'Courier New',Courier,monospace;
-	        font-size: 12pt;
+	        font-size: 10pt;
 	    }
     }
+
+    &.output {
+        width: 100%;
+        height: 8cm;
+        margin-top: 30px;
+        
+        p {
+            border-top: thin gray dotted;
+            font-family: Arial,sans-serif;
+            font-size: 8pt;
+        }
+	}
 
 	p {
 	    margin: 0;
 	
 	    /* debug borders and background */
-	    outline: thin #8f8 solid;
-	    background-color: #efe;
+//	    outline: thin #8f8 solid;
+//	    background-color: #efe;
 	}
 
 	span {
 	    
 	    /* debug borders and background */
-	    outline: thin #88f solid;
-	    background-color: #eef;
+//	    outline: thin #88f solid;
+//	    background-color: #eef;
 	}
 }

@@ -52,23 +52,56 @@ define('io.ox/office/main',
             // editors mapped by text mode
             editors = {},
 
-            // main editor used in save, quit, etc.
+            nodes = {},
+
+            // primary editor used in save, quit, etc.
             editor;
 
-        // create the editor divs and editors for all text modes
+        // create the rich-text and plain-text editor
         _(Editor.TextMode).each(function (textMode) {
-            var node = $('<div>').addClass('io-ox-office-editor user-select-text ' + textMode).attr('contenteditable', true);
-            container.append(node);
-            var editor = editors[textMode] = new Editor(node, textMode);
-            editor.on('office:operation', {editor: editor}, function (event, operation, record) {
+            nodes[textMode] = $('<div>')
+                .addClass('io-ox-office-editor user-select-text ' + textMode)
+                .attr('contenteditable', true);
+            editors[textMode] = new Editor(nodes[textMode], textMode);
+        });
+
+        // primary editor for save operation
+        editor = editors[Editor.TextMode.RICH];
+
+        // operations output console
+        nodes.output = $('<div>').addClass('io-ox-office-editor user-select-text output');
+        editors.output = {
+            _node: nodes.output,
+            on: function () {},
+            applyOperation: function (operation) {
+                this._node.append($('<p>').text(JSON.stringify(operation)));
+                this._node.scrollTop(this._node.get(0).scrollHeight);
+            },
+            applyOperations: function (operations) {
+                _(operations).each(this.applyOperation, this);
+            }
+        };
+
+        // build table for temporary plain-text editor and operations output console
+        container
+            .append(nodes[Editor.TextMode.RICH])
+            .append($('<table>')
+                .append('<colgroup><col width="50%"><col width="50%"></colgroup>')
+                .append($('<tr>')
+                    .append($('<td>').append(nodes[Editor.TextMode.PLAIN]))
+                    .append($('<td>').append(nodes.output))));
+
+        // listen to operations and deliver them to editors and output console
+        _(editors).each(function (editor) {
+            editor.on('office:operation', function (event, operation) {
+                var source = this;
                 _(editors).each(function (editor) {
-                    if (event.data.editor !== editor) {
-                        editor.applyOperation(operation, record, false);
+                    if (source !== editor) {
+                        editor.applyOperation(operation);
                     }
                 });
             });
         });
-        editor = editors[Editor.TextMode.RICH];
 
         /*
          * Shows a closable error message above the editor.

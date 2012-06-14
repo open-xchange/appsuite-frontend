@@ -106,9 +106,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         // list of operations
         var operations = [];
 
-        // list of operations notify handler
-        var operationsNotifyHandler = [];
-
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
 
