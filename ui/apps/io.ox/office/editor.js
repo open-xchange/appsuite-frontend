@@ -322,6 +322,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 // Work around browser selection bugs...
                 var myParagraph = paragraphs.has(domSelection.endPaM.node.firstChild);
                 var para = myParagraph.index();
+                // Special handling for triple click in Chrome, that selects the start of the following paragraph as end point
+                if ((domSelection.startPaM.node.nodeType === 3) && (domSelection.endPaM.node.nodeName === 'P') && (domSelection.endPaM.offset === 0)) {
+                    para--;
+                }
                 endPaM = new OXOPaM(para, this.implGetParagraphLen(para));
                 this.implDbgOutInfo('info: fixed invalid selection (end):' + endPaM.toString());
             }
