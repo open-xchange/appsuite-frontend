@@ -11,122 +11,6 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author  Tobias Prinz <tobias.prinz@open-xchange.com>
  */
-/* EXAMPLE:
-{
-    'data': [{
-        'id': '100000510769600_397839420255304',
-        'from': {
-            'name': 'Ewald Bartkowiak',
-            'id': '100000510769600'
-        },
-        'message': 'A message from Burt Gummer: http:\/\/www.youtube.com\/watch?v=rDQ8J_HJ7iw',
-        'picture': 'http:\/\/external.ak.fbcdn.net\/safe_image.php?d=AQCmH9VAOrHny4KP&w=130&h=130&url=http\u00253A\u00252F\u00252Fi3.ytimg.com\u00252Fvi\u00252FrDQ8J_HJ7iw\u00252Fhqdefault.jpg',
-        'link': 'http:\/\/www.youtube.com\/watch?v=rDQ8J_HJ7iw',
-        'source': 'http:\/\/www.youtube.com\/v\/rDQ8J_HJ7iw?version=3&autohide=1&autoplay=1',
-        'name': 'A Message From Burt Gummer',
-        'caption': 'www.youtube.com',
-        'description': 'A Promo for the show Tremors: The Series. This played before different episodes during a Tremors the series Marathon back when the show aired on Scifi (SyFy).',
-        'icon': 'http:\/\/static.ak.fbcdn.net\/rsrc.php\/v2\/yj\/r\/v2OnaTyTQZE.gif',
-        'actions': [{
-            'name': 'Comment',
-            'link': 'http:\/\/www.facebook.com\/100000510769600\/posts\/397839420255304'
-        },
-        {
-            'name': 'Like',
-            'link': 'http:\/\/www.facebook.com\/100000510769600\/posts\/397839420255304'
-        }],
-        'privacy': {
-            'description': 'Public',
-            'value': 'EVERYONE'
-        },
-        'type': 'video',
-        'created_time': '2012-05-25T14:14:05+0000',
-        'updated_time': '2012-05-25T14:14:05+0000',
-        'comments': {
-            'count': 0
-        }
-    },
-    {
-        'id': '100000510769600_466646893362332',
-        'from': {
-            'name': 'Ewald Bartkowiak',
-            'id': '100000510769600'
-        },
-        'story': 'Ewald Bartkowiak added a new photo.',
-        'picture': 'http:\/\/photos-b.ak.fbcdn.net\/hphotos-ak-ash3\/559582_466646870029001_100000510769600_1849523_1665212338_s.jpg',
-        'link': 'http:\/\/www.facebook.com\/photo.php?fbid=466646870029001&set=a.466646866695668.127206.100000510769600&type=1',
-        'icon': 'http:\/\/static.ak.fbcdn.net\/rsrc.php\/v2\/yz\/r\/StEh3RhPvjk.gif',
-        'actions': [{
-            'name': 'Comment',
-            'link': 'http:\/\/www.facebook.com\/100000510769600\/posts\/466646893362332'
-        },
-        {
-            'name': 'Like',
-            'link': 'http:\/\/www.facebook.com\/100000510769600\/posts\/466646893362332'
-        }],
-        'privacy': {
-            'description': 'Public',
-            'value': 'EVERYONE'
-        },
-        'type': 'photo',
-        'object_id': '466646870029001',
-        'created_time': '2012-05-21T14:22:29+0000',
-        'updated_time': '2012-05-21T14:22:29+0000',
-        'comments': {
-            'count': 0
-        }
-    },
-    {
-        'id': '100000510769600_466519373375084',
-        'from': {
-            'name': 'Ewald Bartkowiak',
-            'id': '100000510769600'
-        },
-        'message': 'Hey, ich benutze jetzt Facebook! Facebook ist cool. Jetzt muss ich noch Freunde finden!',
-        'actions': [{
-            'name': 'Comment',
-            'link': 'http:\/\/www.facebook.com\/100000510769600\/posts\/466519373375084'
-        },
-        {
-            'name': 'Like',
-            'link': 'http:\/\/www.facebook.com\/100000510769600\/posts\/466519373375084'
-        }],
-        'privacy': {
-            'description': 'Public',
-            'value': 'EVERYONE'
-        },
-        'type': 'status',
-        'created_time': '2012-05-21T09:57:02+0000',
-        'updated_time': '2012-05-21T14:19:54+0000',
-        'comments': {
-            'data': [{
-                'id': '100000510769600_466519373375084_5788194',
-                'from': {
-                    'name': 'Ewald Bartkowiak',
-                    'id': '100000510769600'
-                },
-                'message': 'Hm. Ich kenne immer noch niemanden',
-                'created_time': '2012-05-21T14:19:17+0000',
-                'likes': 1
-            },
-            {
-                'id': '100000510769600_466519373375084_5788199',
-                'from': {
-                    'name': 'Ewald Bartkowiak',
-                    'id': '100000510769600'
-                },
-                'message': 'Immer noch nicht...',
-                'created_time': '2012-05-21T14:19:54+0000'
-            }],
-            'count': 2
-        }
-    }],
-    'paging': {
-        'previous': 'https:\/\/graph.facebook.com\/me\/feed?access_token=AAAAADOoW7OkBAKIwvixUNrIfPhGZAlitW5I3uwCKsbbDMODUsJARfOb3e63yISxnC57tNG68H2moGXMpp66gLEVpHZAxS1sVtlpLGMwQZDZD&limit=25&since=1337610149&__previous=1',
-        'next': 'https:\/\/graph.facebook.com\/me\/feed?access_token=AAAAADOoW7OkBAKIwvixUNrIfPhGZAlitW5I3uwCKsbbDMODUsJARfOb3e63yISxnC57tNG68H2moGXMpp66gLEVpHZAxS1sVtlpLGMwQZDZD&limit=25&until=1291995039'
-    }
-}
-*/
 
 define('plugins/portal/facebook/register',
     ['io.ox/core/extensions',
@@ -144,7 +28,6 @@ define('plugins/portal/facebook/register',
 
     var createCommentIterator = function (id, node) {
         return function (comment) {
-            console.log(this);
             $('<div class="wall-comment">').append(
                 $('<img class="picture">').attr('src', 'https://graph.facebook.com/' + comment.from.id + '/picture'),
                 $('<div class="wall-comment-content">').append(
@@ -154,6 +37,10 @@ define('plugins/portal/facebook/register',
                 .appendTo($(node));
         };
     };
+    
+    var getProfile = function (profiles, actor_id) {
+        return _.find(profiles, function (profile) { return profile.id === actor_id; });
+    };
 
     ext.point('io.ox/portal/widget').extend({
 
@@ -161,32 +48,40 @@ define('plugins/portal/facebook/register',
         index: 150,
 
         load: function () {
-            return proxy.request({ api: 'facebook', url: 'https://graph.facebook.com/me/feed?limit=15'})
-                .pipe(function (response) { return (response) ? JSON.parse(response) : null; });
+            return proxy.request({
+                api: 'facebook',
+                url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
+                    newsfeed: "SELECT post_id, actor_id, message, type, description, likes, comments, action_links, app_data, attachment, created_time FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0",
+                    profiles: "SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id FROM #newsfeed)"
+                })
+            }).pipe(JSON.parse);
         },
 
-        draw: function (wall) {
+        draw: function (resultsets) {
+            var wall = resultsets.data[0].fql_result_set;
+            var profiles = resultsets.data[1].fql_result_set;
+
             if (!wall) {
                 this.remove();
                 return $.Deferred().resolve();
             }
 
             this.append($('<div>').addClass('clear-title').text('Facebook'));
-
-            _(wall.data).each(function (post) {
-                var entry_id = 'facebook-' + post.id;
+            _(wall).each(function (post) {
+                var profile = getProfile(profiles, post.actor_id);
+                var entry_id = 'facebook-' + post.post_id;
                 var wall_content = $('<div class="facebook wall-entry">').attr('id', entry_id);
-                var profile_link = 'http://www.facebook.com/profile.php?id=' + post.from.id;
                 var foundHandler = false;
 
                 // basic wall post skeleton
                 wall_content.append(
-                    $('<a class="profile-picture">').attr('href', profile_link).append(
-                        $('<img class="picture">').attr('src', 'https://graph.facebook.com/' + post.from.id + '/picture')),
+                    $('<a class="profile-picture">').attr('href', profile.url).append(
+                        $('<img class="picture">').attr('src', profile.pic_square)),
                     $('<div class="wall-post">').append(
-                        $('<a class="from">').text(post.from.name).attr('href', profile_link),
+                        $('<a class="from">').text(profile.name).attr('href', profile.url),
                         $('<div class="wall-post-content">'),
-                        $('<span class="datetime">').text(post.created_time)
+                        $('<span class="datetime">').text(new Date(post.created_time * 1000))
+//                        $('<span class="debugging-info">').text('Message type: ' + post.type + ', actor_id: ' + post.actor_id)
                     ));
 
                 //use extension mechanism to enable rendering of different contents
@@ -224,16 +119,18 @@ define('plugins/portal/facebook/register',
         }
     });
 
+
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'photo',
         index: 128,
         accepts: function (post) {
-            return (post.type === 'photo');
+            return (post.type === 247);
         },
         draw: function (post) {
+            var media = post.attachment.media[0];
             this.text(post.story || post.message).append(
-                $('<a class="posted-image">').attr('href', post.link)
-                    .append($('<img class="posted-image">').attr('src', post.picture)));
+                $('<a>', {'class': "posted-image", 'href': media.href})
+                    .append($('<img>', {'class': "posted-image", 'src': media.src, alt: media.alt, title: media.alt})));
         }
     });
 
@@ -241,7 +138,7 @@ define('plugins/portal/facebook/register',
         id: 'youtube',
         index: 128,
         accepts: function (post) {
-            return (post.type === 'video' && post.caption === 'www.youtube.com');
+            return (post.type === 80 && post.attachment.caption === 'www.youtube.com');
         },
         draw: function (post) {
             var vid_id = /[?&]v=(.+)/.exec(post.link);
@@ -253,7 +150,7 @@ define('plugins/portal/facebook/register',
             } else {
                 this.text(post.message).append(
                     $('<a class="video">').attr('href', post.link).append(
-                        $('<img class="video-preview">').attr('src', 'http://img.youtube.com/vi/' + vid_id[1] + '/2.jpg'),
+                        $('<img class="video-preview wall-img-left">').attr('src', 'http://img.youtube.com/vi/' + vid_id[1] + '/2.jpg'),
                         $('<span class="caption">').text(post.description)));
             }
         }
@@ -263,7 +160,7 @@ define('plugins/portal/facebook/register',
         id: 'status',
         index: 128,
         accepts: function (post) {
-            return (post.type === 'status');
+            return (post.type === 46);
         },
         draw: function (post) {
             this.text(post.message);
@@ -272,15 +169,19 @@ define('plugins/portal/facebook/register',
 
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'link',
-        index: 128,
+        index: 196,
         accepts: function (post) {
-            return (post.type === 'link');
+            return (post.type === 80);
         },
         draw: function (post) {
-//            this.text(post.message);
-            var result = $.linkSplit(post.message);
-            this.append.apply(this, result);
-            console.log("Finding links", result);
+            var media = post.attachment.media[0];
+            this.append(
+                $('<div>').text(post.description),
+                $('<a>', {href: media.href}).append(
+                    $('<img class="wall-img-left">', {src: media.src}),
+                    $('<span class="caption">').text(post.attachment.description)
+                )
+            );
         }
     });
 
@@ -288,7 +189,7 @@ define('plugins/portal/facebook/register',
         id: 'other_video',
         index: 196,
         accepts: function (post) {
-            return (post.type === 'video');
+            return (post.type === 128);
         },
         draw: function (post) {
             this.text(post.message);
@@ -305,6 +206,25 @@ define('plugins/portal/facebook/register',
         draw: function (post) {
             console.log("Please attach when reporting missing type " + post.type, post);
             this.html('<em style="color: red;">This message is of the type <b>' + post.type + '</b>. We do not know how to render this yet. Please tell us about it!</em>');
+        }
+    });
+    
+    
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'app_story',
+        index: 196,
+        accepts: function (post) {
+            return (post.type === 237);
+        },
+        draw: function (post) {
+            var media = post.attachment.media[0];
+            this.append(
+                $('<div class="message">').text(post.message),
+                $('<a class="app-story">').attr('href', media.href).append(
+                    $('<img class="wall-img-left">').attr('src', media.src),
+                    $('<span class="caption title">').text(post.attachment.name),
+                    $('<br>'),
+                    $('<span class="caption">').text(post.attachment.description)));
         }
     });
 });
