@@ -183,15 +183,54 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 #io-ox-screens {
     top: 40px;
     overflow: hidden;
+    transition: all 0.1s;
+    transform: translate3d(0px,0px,0px);
+
+    -webkit-transition: all 0.1s;
+    -webkit-transform: translate3d(0px,0px,0px);
+    -moz-transition: all 0.1s;
+    -moz-transform: translate3d(0px,0px,0px);
+}
+
+#io-ox-screens.beside {
+    transform: translate3d(-300px,0px,0px);
+    -webkit-transform: translate3d(-300px,0px,0px);
+    -moz-transform: translate3d(-300px,0px,0px);
+}
+#io-ox-notifications {
+    background-color: #000;
+    top: 40px;
+    width: 300px;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+
+    transform: translate3d(300px,0px,0px);
+
+    -webkit-transition: all 0.1s;
+    -webkit-transform: translate3d(300px,0px,0px);
+    -moz-transition: all 0.1s;
+    -moz-transform: translate3d(300px,0px,0px);
+}
+
+#io-ox-notifications.active {
+    transform: translate3d(0px,0px,0px);
+    -webkit-transform: translate3d(0px,0px,0px);
+    -moz-transform: translate3d(0px,0px,0px);
 }
 
 #io-ox-windowmanager {
     overflow: hidden;
+
 }
+
+
 
 #io-ox-windowmanager-pane {
     left: 0%;
     width: 100%;
+
+
 }
 
 /* .csstransforms3d.touch #io-ox-windowmanager-pane { */
