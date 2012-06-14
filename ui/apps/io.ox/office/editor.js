@@ -176,12 +176,12 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
         };
 
-        this.applyOperations = function (theOperations, bRecord) {
+        this.applyOperations = function (theOperations, bRecord, notify) {
 
             if (_(theOperations).isArray()) {
                 _(theOperations).each(function (operation, i) {
                     if (_(operation).isObject()) {
-                        this.applyOperation(operation, bRecord);
+                        this.applyOperation(operation, bRecord, notify);
                     }
                 }, this);
             }

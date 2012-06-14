@@ -42,66 +42,86 @@ define('io.ox/office/main',
             // application window
             win = null,
 
+            // main toolbar
+            toolbar = $('<div>').addClass('btn-toolbar'),
+
             // main application container
             container = $('<div>').addClass('container'),
 
             model = new Model(),
 
-            view = new View({ model: model, node: container }),
-
-            // editors mapped by text mode
-            editors = {},
-
-            nodes = {},
+            view = new View({ model: model, node: toolbar }),
 
             // primary editor used in save, quit, etc.
-            editor;
+            editor = null;
 
-        // create the rich-text and plain-text editor
-        _(Editor.TextMode).each(function (textMode) {
-            nodes[textMode] = $('<div>')
-                .addClass('io-ox-office-editor user-select-text ' + textMode)
-                .attr('contenteditable', true);
-            editors[textMode] = new Editor(nodes[textMode], textMode);
-        });
+        // initialization code, in local namespace for temporary variables
+        (function () {
 
-        // primary editor for save operation
-        editor = editors[Editor.TextMode.RICH];
+            var // root nodes of all editors
+                nodes = {},
+                // editors mapped by text mode
+                editors = {};
 
-        // operations output console
-        nodes.output = $('<div>').addClass('io-ox-office-editor user-select-text output');
-        editors.output = {
-            _node: nodes.output,
-            on: function () {},
-            applyOperation: function (operation) {
-                this._node.append($('<p>').text(JSON.stringify(operation)));
-                this._node.scrollTop(this._node.get(0).scrollHeight);
-            },
-            applyOperations: function (operations) {
-                _(operations).each(this.applyOperation, this);
-            }
-        };
+            // build the toolbar
+            toolbar.append(
+                $('<div>').addClass('btn-group').append(
+                    $('<button>').addClass('btn btn-iconlike').text('B').css('font-weight', 'bold'),
+                    $('<button>').addClass('btn btn-iconlike').text('I').css('font-style', 'italic'),
+                    $('<button>').addClass('btn btn-iconlike').text('U').css('text-decoration', 'underline')
+                ),
+                $('<div>').addClass('btn-group').append(
+                    $('<button>').addClass('btn').append($('<i>').addClass('icon-align-left')),
+                    $('<button>').addClass('btn').append($('<i>').addClass('icon-align-center')),
+                    $('<button>').addClass('btn').append($('<i>').addClass('icon-align-right')),
+                    $('<button>').addClass('btn').append($('<i>').addClass('icon-align-justify'))
+                )
+            );
 
-        // build table for temporary plain-text editor and operations output console
-        container
-            .append(nodes[Editor.TextMode.RICH])
-            .append($('<table>')
-                .append('<colgroup><col width="50%"><col width="50%"></colgroup>')
-                .append($('<tr>')
-                    .append($('<td>').append(nodes[Editor.TextMode.PLAIN]))
-                    .append($('<td>').append(nodes.output))));
+            // create the rich-text and plain-text editor
+            _(Editor.TextMode).each(function (textMode) {
+                nodes[textMode] = $('<div>')
+                    .addClass('io-ox-office-editor user-select-text ' + textMode)
+                    .attr('contenteditable', true);
+                editors[textMode] = new Editor(nodes[textMode], textMode);
+            });
 
-        // listen to operations and deliver them to editors and output console
-        _(editors).each(function (editor) {
-            editor.on('office:operation', function (event, operation) {
-                var source = this;
-                _(editors).each(function (editor) {
-                    if (source !== editor) {
-                        editor.applyOperation(operation);
-                    }
+            // primary editor for save operation
+            editor = editors[Editor.TextMode.RICH];
+
+            // operations output console
+            nodes.output = $('<div>').addClass('io-ox-office-editor user-select-text output');
+            editors.output = {
+                _node: nodes.output,
+                on: function () {},
+                applyOperation: function (operation) {
+                    this._node.append($('<p>').text(JSON.stringify(operation)));
+                    this._node.scrollTop(this._node.get(0).scrollHeight);
+                }
+            };
+
+            // build table for temporary plain-text editor and operations output console
+            container
+                .append(nodes[Editor.TextMode.RICH])
+                .append($('<table>')
+                    .append('<colgroup><col width="50%"><col width="50%"></colgroup>')
+                    .append($('<tr>')
+                        .append($('<td>').append(nodes[Editor.TextMode.PLAIN]))
+                        .append($('<td>').append(nodes.output))));
+
+            // listen to operations and deliver them to editors and output console
+            _(editors).each(function (editor) {
+                editor.on('office:operation', function (event, operation) {
+                    var source = this;
+                    _(editors).each(function (editor) {
+                        if (source !== editor) {
+                            editor.applyOperation(operation);
+                        }
+                    });
                 });
             });
-        });
+
+        }()); // end of local namespace
 
         /*
          * Shows a closable error message above the editor.
@@ -182,7 +202,7 @@ define('io.ox/office/main',
 
             // initialize global application structure
             updateTitles();
-            win.nodes.main.addClass('io-ox-office-main').append(container);
+            win.nodes.main.addClass('io-ox-office-main').append(toolbar, container);
         });
 
         /*
@@ -202,9 +222,7 @@ define('io.ox/office/main',
             })
             .done(function (response) {
                 var operations = createOperationsList(response);
-                _(editors).each(function (editor) {
-                    editor.applyOperations(operations, false);
-                });
+                editor.applyOperations(operations, false, true);
                 editor.focus();
                 editor.setStartSelection();
                 win.idle();
@@ -288,7 +306,7 @@ define('io.ox/office/main',
 
         app.destroy = function () {
             view.destroy();
-            app = win = container = model = view = editors = editor = null;
+            app = win = container = model = view = editor = null;
         };
 
         return app;
