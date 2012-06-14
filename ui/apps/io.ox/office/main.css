@@ -12,10 +12,21 @@
  */
 
 .io-ox-office-main {
-    padding: 30px;
-	
-	.container {
+    margin: 0;
+    padding: 0;
+
+	.btn-toolbar {
+        padding-left: 13px;
+        padding-right: 13px;
+
+        .btn-iconlike {
+	        width: 34px;
+	    }
+	}
+
+    .container {
     	width: 100%;
+    	padding: 0 13px;
 	    -webkit-box-sizing: border-box;
 	    -moz-box-sizing: border-box;
 	    -ms-box-sizing: border-box;
