@@ -13,14 +13,13 @@
 
 define('io.ox/office/main',
     ['io.ox/files/api',
-     'io.ox/office/model',
-     'io.ox/core/tk/view',
+     'io.ox/office/toolbar',
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
      'io.ox/core/bootstrap/basics',
      'less!io.ox/office/main.css',
      'io.ox/office/actions'
-    ], function (api, Model, View, Editor, gt) {
+    ], function (api, ToolBar, Editor, gt) {
 
     'use strict';
 
@@ -42,15 +41,11 @@ define('io.ox/office/main',
             // application window
             win = null,
 
-            // main toolbar
-            toolbar = $('<div>').addClass('btn-toolbar'),
+            // main tool bar
+            toolbar = new ToolBar(),
 
             // main application container
             container = $('<div>').addClass('container'),
-
-            model = new Model(),
-
-            view = new View({ model: model, node: toolbar }),
 
             // primary editor used in save, quit, etc.
             editor = null;
@@ -62,21 +57,6 @@ define('io.ox/office/main',
                 nodes = {},
                 // editors mapped by text mode
                 editors = {};
-
-            // build the toolbar
-            toolbar.append(
-                $('<div>').addClass('btn-group').append(
-                    $('<button>').addClass('btn btn-iconlike').text('B').css('font-weight', 'bold'),
-                    $('<button>').addClass('btn btn-iconlike').text('I').css('font-style', 'italic'),
-                    $('<button>').addClass('btn btn-iconlike').text('U').css('text-decoration', 'underline')
-                ),
-                $('<div>').addClass('btn-group').append(
-                    $('<button>').addClass('btn').append($('<i>').addClass('icon-align-left')),
-                    $('<button>').addClass('btn').append($('<i>').addClass('icon-align-center')),
-                    $('<button>').addClass('btn').append($('<i>').addClass('icon-align-right')),
-                    $('<button>').addClass('btn').append($('<i>').addClass('icon-align-justify'))
-                )
-            );
 
             // create the rich-text and plain-text editor
             _(Editor.TextMode).each(function (textMode) {
@@ -202,7 +182,7 @@ define('io.ox/office/main',
 
             // initialize global application structure
             updateTitles();
-            win.nodes.main.addClass('io-ox-office-main').append(toolbar, container);
+            win.nodes.main.addClass('io-ox-office-main').append(toolbar.getNode(), container);
         });
 
         /*
@@ -305,8 +285,8 @@ define('io.ox/office/main',
         });
 
         app.destroy = function () {
-            view.destroy();
-            app = win = container = model = view = editor = null;
+            toolbar.destroy();
+            app = win = toolbar = container = editor = null;
         };
 
         return app;
