@@ -94,6 +94,10 @@ function (date, ext) {
                     expect(new D(2012, 2, 1).addYears(1))
                         .toEqual(new D(2013, 2, 1));
                 });
+                it('rounds weeks', function () {
+                    expect(new D(2012, 2, 25, 12, 34).setStartOfWeek())
+                        .toEqual(new D(2012, 2, 19));
+                });
             });
             describe('Parsing', function () {
                 _.each({

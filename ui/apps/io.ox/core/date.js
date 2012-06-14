@@ -66,8 +66,8 @@ function (gettext, config) {
     /**
      * Computes the number of the first day of the specified week, taking into
      * account weekStart.
-     * @param  {Date} d The date for which to calculate the first day of week
-     * number.
+     * @param  {LocalDate} d The date for which to calculate the first day of
+     * week number.
      * @type Number
      * @return First day in the week as the number of days since 1970-01-01.
      * @ignore
@@ -699,6 +699,11 @@ function (gettext, config) {
             var d = new Date(this.local);
             d.setUTCFullYear(d.getUTCFullYear() + years);
             this.t = this.constructor.utc(this.local = d.getTime());
+            return this;
+        },
+        setStartOfWeek: function () {
+            this.local = api.DAY * getWeekStart(this);
+            this.t = this.constructor.utc(this.local);
             return this;
         },
         getTime: function () {

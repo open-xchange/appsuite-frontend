@@ -154,11 +154,7 @@ define('io.ox/calendar/actions',
                 console.log('create');
                 // FIXME: what a hack > folder_id
                 editmain.getApp().launch().done(function () {
-                    this.on('save', function (evt, data) {
-                        console.log('create save', arguments, app.getGrid());
-                        app.getGrid().selection.set(data);
-                    });
-                    this.create({folder_id: app.folder.get()});
+                    this.create({folder_id: app.folder.get(), participants: []});
                 });
             });
 

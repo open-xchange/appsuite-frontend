@@ -153,6 +153,7 @@ define('io.ox/core/tk/autocomplete', function () {
                             e.preventDefault();
                             if (!e.shiftKey) { // ignore back-tab
                                 update();
+                                $(this).trigger('selected', scrollpane.children().eq(Math.max(0, index)).data('data'));
                                 close();
                             }
                             break;
