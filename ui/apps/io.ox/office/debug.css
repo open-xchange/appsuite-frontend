@@ -1,0 +1,26 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2012
+ * Mail: info@open-xchange.com
+ *
+ * @author Daniel Rentz <daniel.rentz@open-xchange.com>
+ */
+
+ /* debug borders and background for text elements */
+
+.io-ox-office-editor {
+
+	.debug-highlight(@border-color, @fill-color) {
+        outline: thin @border-color solid;
+        background-color: @fill-color;
+    }
+
+    p { .debug-highlight(#8f8, #efe); }
+    span { .debug-highlight(#88f, #eef; }
+
+}

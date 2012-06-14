@@ -25,7 +25,7 @@ define('io.ox/office/toolbar', function () {
     /**
      * Activates, deactivates, or toggles the passed button or collection of
      * buttons.
-     * 
+     *
      * @param buttons {jQuery}
      *  A jQuery collection containing one or more button elements.
      *
@@ -68,7 +68,7 @@ define('io.ox/office/toolbar', function () {
 
             // create the button element
             var button = $('<button>').addClass('btn').appendTo(node);
-                
+
             // handle display options
             options = options || {};
             if (typeof options.icon === 'string') {

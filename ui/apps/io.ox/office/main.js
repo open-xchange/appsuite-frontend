@@ -17,7 +17,8 @@ define('io.ox/office/main',
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
      'io.ox/office/actions',
-     'less!io.ox/office/main.css'
+     'less!io.ox/office/main.css',
+     'less!io.ox/office/debug.css'
     ], function (api, ToolBar, Editor, gt) {
 
     'use strict';
