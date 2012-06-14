@@ -258,7 +258,6 @@ define('io.ox/calendar/edit/view-main',
             var participants = this.model.get('participants'),
                 notIn = true;
 
-            console.log('adding participants', arguments);
             this.subviews.participants.collection.add(data);
 
             notIn = !_(participants).any(function (item) {
@@ -270,7 +269,6 @@ define('io.ox/calendar/edit/view-main',
             }
 
             this.model.set('participants', participants);
-            console.log('participants in model', this.model);
 
         },
         onRemoveParticipant: function (model, collection) {

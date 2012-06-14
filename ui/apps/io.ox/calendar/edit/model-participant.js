@@ -34,6 +34,7 @@ define('io.ox/calendar/edit/model-participant',
             var self = this,
                 df = new $.Deferred();
 
+
             switch (self.get('type')) {
             case self.TYPE_USER:
                 //fetch user contact

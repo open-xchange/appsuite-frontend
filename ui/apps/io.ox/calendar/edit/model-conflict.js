@@ -12,13 +12,43 @@
  */
 
 define('io.ox/calendar/edit/model-conflict',
-      ['io.ox/calendar/api'], function (CalendarAPI) {
+      ['io.ox/calendar/edit/model-appointment',
+       'io.ox/calendar/edit/collection-participants',
+       'io.ox/calendar/api',
+       'gettext!io.ox/calendar/edit/main'], function (AppointmentModel, ParticipantsCollection, CalendarAPI, gt) {
 
     'use strict';
 
-    var ConflictModel = Backbone.Model.extend({
+    var ConflictModel = AppointmentModel.extend({
         initialize: function () {
+            var self = this,
+                conflicting_participants = new ParticipantsCollection(self.get('participants'));
+            self.set('conflicting_participants', conflicting_participants);
+        },
+        fetch: function (options) {
+            var self = this,
+                df = new $.Deferred();
 
+            CalendarAPI.get(options)
+                .done(function (data) {
+                    if (data.data) {
+                        data.data.conflicting_participants = self.get('conflicting_participants');
+                        self.set(data.data);
+                        df.resolve(self, data);
+                    } else if (data.error) {
+                        if (data.error.categories === 'PERMISSION_DENIED') {
+                            self.set('title', gt('Unknown'));
+                            self.set('location', gt('No read permission!'));
+                            df.resolve(self, data);
+                            //self.set('additional_info', [gt('Permission denied, this appointment is private.')]);
+                        }
+                    }
+                })
+                .fail(function (err) {
+                    df.reject(self, err);
+                });
+
+            return df;
         }
     });
 

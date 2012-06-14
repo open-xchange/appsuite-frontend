@@ -65,6 +65,12 @@ define('io.ox/calendar/list/perspective',
         commons.wireGridAndAPI(grid, api);
         commons.wireGridAndSearch(grid, win, api);
 
+        api.on('created', function (e, data) {
+            if (app.folder.get() === data.folder) {
+                grid.selection.set(data);
+            }
+        });
+
         // special search: list request
         grid.setListRequest("search", function (ids) {
             return $.Deferred().resolve(ids);

@@ -59,6 +59,21 @@ define('io.ox/calendar/edit/model-appointment',
             this.on('change', _.bind(this.onChange, this));
         },
 
+        fetch: function (options) {
+            var self = this,
+                df = new $.Deferred();
+
+            CalendarAPI.get(options)
+                .done(function (data) {
+                    self.set(data.data);
+                    df.resolve(self, data);
+                })
+                .fail(function (err) {
+                    df.reject(self, err);
+                });
+
+            return df;
+        },
         save: function () {
             var self = this,
                 df = new $.Deferred();
