@@ -18,6 +18,7 @@ define.async('io.ox/portal/main',
      'io.ox/core/api/user',
      'io.ox/core/date',
      'gettext!io.ox/portal/portal',
+     'apps/io.ox/portal/jquery.masonry.min.js',
      'less!io.ox/portal/style.css'],
 function (ext, config, userAPI, date, gt) {
 
@@ -31,6 +32,8 @@ function (ext, config, userAPI, date, gt) {
         var app = ox.ui.createApp({ name: 'io.ox/portal' }),
             // app window
             win,
+            leftSide = $('<div class="io-ox-portal-left">'),
+            rightSide = $('<div class="io-ox-portal-right">'),
             // update window title
             updateTitle = function () {
                 win.setTitle(
@@ -56,6 +59,25 @@ function (ext, config, userAPI, date, gt) {
             }
         }
         
+        function makeClickHandler(extension) {
+            return function (event) {
+                rightSide.empty(); // TODO: Maybe keep these around and only send a refresh event or call
+                var $node = $("<div/>").appendTo(rightSide).busy();
+
+                return extension.invoke('load')
+                    .pipe(function (data) {
+                        return (extension.invoke('draw', $node, data) || $.Deferred())
+                            .done(function () {
+                                $node.idle();
+                                extension.invoke('post', $node, extension);
+                            });
+                    })
+                    .fail(function (e) {
+                        $node.idle().remove();
+                    });
+            };
+        }
+        
         // launcher
         app.setLauncher(function () {
 
@@ -68,56 +90,23 @@ function (ext, config, userAPI, date, gt) {
             updateTitle();
             _.every(1, 'hour', updateTitle);
 
-            var scrollpane = win.nodes.main.addClass('io-ox-portal').scrollable(),
-                widgets = $(),
-                lastCols = 0,
-                columnTemplate = $('<div>').addClass('io-ox-portal-column');
-
-            var resize = function () {
-
-                var availWidth = scrollpane.width(),
-                    numColumns = Math.max(1, availWidth / 400 >> 0),
-                    width = 100 / numColumns,
-                    columns = $(),
-                    i, last;
-
-                // create layout
-                if (numColumns !== lastCols) {
-
-                    scrollpane.find('.io-ox-portal-widget').detach();
-
-                    for (i = 0; i < numColumns; i++) {
-                        last = i % numColumns === numColumns - 1;
-                        columns = columns.add(
-                            columnTemplate.clone().css({
-                                width: width - (last ? 0 : 5) + '%',
-                                marginRight: last ? '0%': '5%'
-                            })
-                        );
-                    }
-
-                    scrollpane.empty().append(columns);
-
-                    widgets.each(function (i, node) {
-                        columns.eq(i % numColumns).append(node);
-                    });
-
-                    lastCols = numColumns;
-                }
-            };
+            win.nodes.main
+                .addClass('io-ox-portal')
+                .append(leftSide, rightSide);
 
             // demo AD widget
             ext.point('io.ox/portal/widget').extend({
-                index: 410,
+                index: 200,
                 id: 'ad',
-                load: function () {
+                tileHeight: 2,
+                loadTile: function () {
                     return $.when();
                 },
-                draw: function (data) {
+                drawTile: function (data) {
                     this.append(
                         $('<img>')
                         .attr({ src: ox.base + '/apps/themes/default/ad2.jpg', alt: 'ad' })
-                        .css({ width: '100%', height: 'auto', marginTop: '1em' })
+                        .css({ width: '100%', height: 'auto' })
                     );
                     return $.when();
                 }
@@ -127,18 +116,43 @@ function (ext, config, userAPI, date, gt) {
             ext.point('io.ox/portal/widget')
                 .each(function (extension) {
                     var $node = $('<div>')
-                        .addClass('io-ox-portal-widget')
+                        .addClass('io-ox-portal-widget-tile')
                         .attr('widget-id', extension.id)
-                        .busy();
-
-                    widgets = widgets.add($node);
-
-                    return extension.invoke('load')
+                        .busy()
+                        .appendTo(leftSide),
+                        tileWidth,
+                        tileHeight;
+                    
+                    tileWidth = (extension.metadata("tileWidth") || 1);
+                    tileHeight = (extension.metadata("tileHeight") || 1);
+                    
+                    $node.css({
+                        width: (tileWidth * 180 + (tileWidth - 1) * 10) + "px",
+                        height: (tileHeight * 180 + (tileHeight - 1) * 10) + "px",
+                        margin: "5px"
+                    });
+                        
+                    $node.on('click', makeClickHandler(extension));
+                    
+                    if (!extension.loadTile) {
+                        extension.loadTile = function () {
+                            return $.Deferred().resolve();
+                        };
+                    }
+                    
+                    if (!extension.drawTile) {
+                        extension.drawTile = function () {
+                            this.append($("<div>").text(extension.id));
+                            return $.Deferred().resolve();
+                        };
+                    }
+                    
+                    return extension.invoke('loadTile')
                         .pipe(function (data) {
-                            return (extension.invoke('draw', $node, data) || $.Deferred())
+                            return (extension.invoke('drawTile', $node, data) || $.Deferred())
                                 .done(function () {
                                     $node.idle();
-                                    extension.invoke('post', $node, extension);
+                                    extension.invoke('postTile', $node, extension);
                                 });
                         })
                         .fail(function (e) {
@@ -146,17 +160,14 @@ function (ext, config, userAPI, date, gt) {
                         });
                 });
 
-            win.on('show', function () {
-                $(window).on('resize', resize);
-                resize();
-            });
-
-            win.on('hide', function () {
-                $(window).off('resize', resize);
-            });
 
             // go!
-            win.show();
+            win.show(function () {
+                leftSide.masonry({
+                    itemSelector: '.io-ox-portal-widget-tile',
+                    columnWidth: 190
+                });
+            });
         });
 
         return {

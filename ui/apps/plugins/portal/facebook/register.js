@@ -46,7 +46,44 @@ define('plugins/portal/facebook/register',
 
         id: 'facebook',
         index: 150,
+        loadTile: function () {
+            return proxy.request({
+                api: 'facebook',
+                url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
+                    newsfeed: "SELECT actor_id, message, description , created_time FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0 LIMIT 1",
+                    profiles: "SELECT id, name FROM profile WHERE id IN (SELECT actor_id FROM #newsfeed)"
+                })
+            }).pipe(JSON.parse);
+        },
+        drawTile: function (resultsets) {
+            var wall = resultsets.data[0].fql_result_set;
+            var profiles = resultsets.data[1].fql_result_set;
 
+            $(this)
+                .append($('<img>').attr({src: 'apps/plugins/portal/facebook/f_logo.png', alt: '', width: '50px', height: 'auto'}).css({'float': 'left'}))
+                .append($('<h1>').text('Facebook').css({color: '#fff'}))
+                .append($('<span>').html('&nbsp;').css({clear: 'both'}))
+                .css({background: '#3B5998', padding: '10px', color: '#fff'});
+                
+            if (!wall) {
+                this.remove();
+                return $.Deferred().resolve();
+            }
+            if (wall.length === 0) {
+                $(this).append(
+                    $('<div>').text('No wall posts yet.'));
+            } else {
+                var post = wall[0];
+                var message = post.message || post.description;
+                if (message.length > 75) {
+                    message = message.substring(0, 72) + '...';
+                }
+                $(this).append(
+                    $('<div>').text('Latest wall post:'),
+                    $('<div>').append($('<b>').text(getProfile(profiles, post.actor_id).name + ':')),
+                    $('<div>').text(message));
+            }
+        },
         load: function () {
             return proxy.request({
                 api: 'facebook',

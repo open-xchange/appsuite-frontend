@@ -12,13 +12,53 @@
  */
 
 define("plugins/portal/appointments/register",
-    ["io.ox/core/extensions"], function (ext) {
+    ["io.ox/core/extensions", "io.ox/core/date"], function (ext, date) {
 
     "use strict";
 
     var appointmentPortal = {
         id: "appointments",
         index: 100,
+        tileWidth: 1,
+        tileHeight: 1,
+        loadTile: function () {
+            var loadingTile = new $.Deferred();
+            require(["io.ox/calendar/api"], function (api) {
+                api.getAll()
+                    .done(function (ids) {
+                        api.getList(ids.slice(0, 10))
+                            .done(loadingTile.resolve)
+                            .fail(loadingTile.reject);
+                    })
+                    .fail(loadingTile.reject); // This should be easier
+            });
+            return loadingTile;
+        },
+        drawTile: function (appointments) {
+            var startSpan = new date.Local();
+            var endSpan = startSpan + (24 * 60 * 60 * 1000);
+            
+            var nextAppointments = _(appointments).filter(function (app) {
+                console.log(app.start_date, endSpan, app.end_date, startSpan, app);
+                return app.start_date > endSpan || app.end_date < startSpan;
+            });
+            
+            var today = new date.Local().format(date.DATE);
+            $(this).append(
+                $('<h1>').text('Appointments'),
+                $('<div>').text("in the next 24h: ").append($('<span class="badge">').text(nextAppointments.length)),
+                $('<br>'),
+                $('<div>').text(today),
+                $('<br>')
+            );
+            if (appointments.length > 0) {
+                var nextApp = appointments[0];
+                var deltaT = 0;//startSpan.formatInterval(new date.Local(), date.MINUTE);
+                $('<div>').html("Next:<br/>" + nextApp.title + ' (in ' + deltaT + ')').appendTo(this);
+            }
+            $(this).css({background: '#eee', padding: '10px'}).center();
+            return $.when();
+        },
         load: function () {
             var loading = new $.Deferred();
             require(["io.ox/calendar/api"], function (api) {
