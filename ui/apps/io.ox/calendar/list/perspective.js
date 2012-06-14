@@ -22,7 +22,7 @@ define('io.ox/calendar/list/perspective',
 
     var perspective = new ox.ui.Perspective('list');
 
-    perspective.render = function (main, app) {
+    perspective.render = function (app) {
 
         console.log('RENDER list');
 
@@ -37,13 +37,13 @@ define('io.ox/calendar/list/perspective',
                 width: GRID_WIDTH + "px",
                 overflow: "auto"
             })
-            .appendTo(main);
+            .appendTo(this.main);
 
         // right panel
         right = $("<div>")
             .css({ left: GRID_WIDTH + 1 + "px", overflow: "auto" })
             .addClass("rightside default-content-padding calendar-detail-pane")
-            .appendTo(main);
+            .appendTo(this.main);
 
         // grid
         grid = new VGrid(left);
