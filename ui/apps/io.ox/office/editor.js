@@ -181,6 +181,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             else if (operation.name === "deleteText") {
                 this.implDeleteText(operation.para, operation.start, operation.end);
             }
+            else if (operation.name === "setAttribute") {
+                this.implSetAttribute(operation.value, operation.para, operation.start, operation.end);
+            }
             else if (operation.name === "insertParagraph") {
                 this.implInsertParagraph(operation.para);
             }
@@ -239,7 +242,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 return String.fromCharCode(event.char);
             }
             // event.which deprecated, but seems to work well
-            if (event.which && (event.which >= 32) && (event.which <= 127)) {
+            if (event.which && (event.which >= 32) /* && (event.which <= 255)*/) {
                 return String.fromCharCode(event.which);
             }
             // TODO: Need to handle other cases - later...
@@ -309,7 +312,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var para = myParagraph.index();
                 var nPos = 0;
                 if ((domSelection.startPaM.node === domSelection.endPaM.node) && (domSelection.startPaM.offset === domSelection.endPaM.offset)) {
-                    nPos = this.implGetParagraphLen(para);
+                    nPos = this.getParagraphLen(para);
                 }
                 startPaM = new OXOPaM(para, nPos);
                 this.implDbgOutInfo('info: fixed invalid selection (start): ' + startPaM.toString());
@@ -326,7 +329,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 if ((domSelection.startPaM.node.nodeType === 3) && (domSelection.endPaM.node.nodeName === 'P') && (domSelection.endPaM.offset === 0)) {
                     para--;
                 }
-                endPaM = new OXOPaM(para, this.implGetParagraphLen(para));
+                endPaM = new OXOPaM(para, this.GetParagraphLen(para));
                 this.implDbgOutInfo('info: fixed invalid selection (end):' + endPaM.toString());
             }
 
@@ -401,16 +404,12 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         /**
          * Sets the browser focus into the edit text area.
          */
-        this.focus = function () {
+        this.focus = function (initSelection) {
             editdiv.focus();
-        };
+            if (initSelection) {
+                this.setSelection(new OXOSelection(new OXOPaM(0, 0), new OXOPaM(0, 0)));
+            }
 
-        /**
-         * Sets the cursor position after loading a document.
-         */
-
-        this.setStartSelection = function () {
-            this.setSelection(new OXOSelection(new OXOPaM(0, 0), new OXOPaM(0, 0)));
         };
 
         /**
@@ -434,12 +433,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         this.setSelection = function (oxosel) {
             var aDOMSelection = this.getDOMSelection(oxosel);
             this.implSetDOMSelection(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset, aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
-            var range = document.createRange();
-            range.setStart(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset);
-            range.setEnd(aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
-            var sel = window.getSelection();
-            sel.removeAllRanges();
-            sel.addRange(range);
         };
 
         this.processDragOver = function (event) {
@@ -471,6 +464,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 }
                 if (c === 'D') {
                     this.initDocument();
+                    this.focus(true);
                 }
                 if (c === '1') {
                     dbgoutEvents = !dbgoutEvents;
@@ -501,7 +495,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     this.deleteSelected(selection);
                 }
                 else {
-                    var paraLen = this.implGetParagraphLen(selection.startPaM.para);
+                    var paraLen = this.getParagraphLen(selection.startPaM.para);
                     if (selection.startPaM.pos < paraLen) {
                         this.deleteText(selection.startPaM.para, selection.startPaM.pos, selection.startPaM.pos + 1);
                     }
@@ -513,7 +507,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 event.preventDefault();
                 this.setSelection(selection);
             }
-            if (event.keyCode === 8) { // BACKSPACE
+            else if (event.keyCode === 8) { // BACKSPACE
                 selection = this.getSelection();
                 selection.adjust();
                 if (selection.hasRange()) {
@@ -527,22 +521,59 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     else if (selection.startPaM.para > 0) {
                         this.mergeParagraph(selection.startPaM.para - 1);
                         selection.startPaM.para--;
-                        selection.startPaM.pos = this.implGetParagraphLen(selection.startPaM.para);
+                        selection.startPaM.pos = this.getParagraphLen(selection.startPaM.para);
                     }
                 }
                 selection.endPaM = _.clone(selection.startPaM);
                 event.preventDefault();
                 this.setSelection(selection);
             }
-
-
-            /*
-            if (!this.isNavigationKeyEvent(event)) {
-                // Don't block keyDown, or we will never get keyPressed...
-                // Check with different browsers...
-                // event.preventDefault();
+            else if (event.ctrlKey) {
+                var c = this.getPrintableChar(event);
+                if (c === 'A') {
+                    selection = new OXOSelection(new OXOPaM(0, 0), new OXOPaM(0, 0));
+                    var lastPara = this.getParagraphCount() - 1;
+                    selection.endPaM.para = lastPara;
+                    selection.endPaM.pos = this.getParagraphLen(lastPara);
+                    event.preventDefault();
+                    this.setSelection(selection);
+                }
+                else if (c === 'Z') {
+                    this.undo();
+                    event.preventDefault();
+                }
+                else if (c === 'Y') {
+                    this.redo();
+                    event.preventDefault();
+                }
+                else if (c === 'X') {
+                    this.cut();
+                    event.preventDefault();
+                }
+                else if (c === 'C') {
+                    this.copy();
+                    event.preventDefault();
+                }
+                else if (c === 'V') {
+                    this.paste();
+                    event.preventDefault();
+                }
+                else if (c === 'B') {
+                    this.setAttribute('bold');
+                    event.preventDefault();
+                }
+                else if (c === 'I') {
+                    this.setAttribute('italic');
+                    event.preventDefault();
+                }
+                else if (c === 'U') {
+                    this.setAttribute('underline');
+                    event.preventDefault();
+                }
+                else if (c === 'xxxxxxx') {
+                    event.preventDefault();
+                }
             }
-            */
         };
 
         this.processKeyPressed = function (event) {
@@ -606,37 +637,54 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             event.preventDefault();
         };
 
+        this.undo = function () {
+            // TODO
+            this.implDbgOutInfo('NIY: undo()');
+        };
+
+        this.redo = function () {
+            // TODO
+            this.implDbgOutInfo('NIY: redo()');
+        };
+
+        this.cut = function () {
+            // TODO
+            this.implDbgOutInfo('NIY: cut()');
+        };
+
+        this.copy = function () {
+            // TODO
+            this.implDbgOutInfo('NIY: copy()');
+        };
+
+        this.paste = function () {
+            // TODO
+            this.implDbgOutInfo('NIY: paste()');
+        };
+
         this.deleteSelected = function (_selection) {
             // this.implCheckSelection();
-            var i, nStartPos, nEndPos;
             var selection = _selection || this.getSelection();
-            if ((selection !== undefined) && (selection.hasRange())) {
+            if (selection.hasRange()) {
 
                 selection.adjust();
 
-                nStartPos = selection.startPaM.pos;
-                nEndPos = selection.endPaM.pos;
-
                 // 1) delete selected part or rest of para in first para (pos to end)
+                var nEndPos = selection.endPaM.pos;
                 if (selection.startPaM.para !== selection.endPaM.para) {
                     nEndPos = -1;
                 }
-                this.deleteText(selection.startPaM.para, nStartPos, nEndPos);
+                this.deleteText(selection.startPaM.para, selection.startPaM.pos, nEndPos);
 
                 // 2) delete completly slected paragraphs completely
-                for (i = selection.startPaM.para + 1; i < selection.endPaM.para; i++)
-                {
+                for (var i = selection.startPaM.para + 1; i < selection.endPaM.para; i++) {
                     // startPaM.para+1 instead of i, because we allways remove a paragraph
                     this.deleteParagraph(selection.startPaM.para + 1);
                 }
 
-                // 3) delete selected part in last para (start to pos)
+                // 3) delete selected part in last para (start to pos) and merge first and last para
                 if (selection.startPaM.para !== selection.endPaM.para) {
                     this.deleteText(selection.startPaM.para + 1, 0, selection.endPaM.pos);
-                }
-
-                // 4) merge first and last para
-                if (selection.startPaM.para !== selection.endPaM.para) {
                     this.mergeParagraph(selection.startPaM.para);
                 }
             }
@@ -680,15 +728,45 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.applyOperation(newOperation, true, true);
         };
 
-        this.setAttributes = function (para, pos) {
+        this.setAttribute = function (attr, para, start, end) {
             // TODO
+            if (para === undefined) {
+                // Set attr to current selection
+                var selection = this.getSelection();
+                if (selection.hasRange()) {
+
+                    selection.adjust();
+
+
+                    // 1) selected part or rest of para in first para (pos to end)
+                    var nEndPos = selection.endPaM.pos;
+                    if (selection.startPaM.para !== selection.endPaM.para) {
+                        nEndPos = -1;
+                    }
+                    this.setAttribute(attr, selection.startPaM.para, selection.startPaM.pos, nEndPos);
+
+                    // 2) completly slected paragraphs
+                    for (var i = selection.startPaM.para + 1; i < selection.endPaM.para; i++) {
+                        this.setAttribute(attr, i, 0, -1);
+                    }
+
+                    // 3) selected part in last para
+                    if (selection.startPaM.para !== selection.endPaM.para) {
+                        this.setAttribute(attr, selection.endPaM.para, 0, selection.endPaM.pos);
+                    }
+                }
+            }
+            else {
+                var newOperation = { name: 'setAttribute', value: attr, para: para, start: start, end: end };
+                this.applyOperation(newOperation, true, true);
+            }
         };
 
-        // ==================================================================
-        // IMPL METHODS
-        // ==================================================================
+        this.getParagraphCount = function () {
+            return paragraphs.size();
+        };
 
-        this.implGetParagraphLen = function (para) {
+        this.getParagraphLen = function (para) {
             var textLength = 0;
             if (paragraphs[para] !== undefined) {
                 var nodeList = paragraphs[para].childNodes;
@@ -698,6 +776,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
             return textLength;
         };
+
+        // ==================================================================
+        // IMPL METHODS
+        // ==================================================================
 
         this.implParagraphChanged = function (para) {
 
@@ -793,11 +875,11 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
                 if (windowSel.anchorNode.nodeType !== 3) {
                     // Assume this only happens on para end - seems we are always directly in a p-element when this error occurs.
-                    selection.startPaM.pos = this.implGetParagraphLen(selection.startPaM.para);
+                    selection.startPaM.pos = this.getParagraphLen(selection.startPaM.para);
                 }
 
                 if (windowSel.focusNode.nodeType !== 3) {
-                    selection.endPaM.pos = this.implGetParagraphLen(selection.endPaM.para);
+                    selection.endPaM.pos = this.getParagraphLen(selection.endPaM.para);
 
                 }
 
@@ -825,6 +907,29 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             var newText = oldText.slice(0, domPos.offset) + text + oldText.slice(domPos.offset);
             domPos.node.nodeValue = newText;
             this.implParagraphChanged(para);
+        };
+
+        this.implSetAttribute = function (attr, para, start, end) {
+            if ((start === undefined) || (start === -1)) {
+                start = 0;
+            }
+            if ((end === undefined) || (end === -1)) {
+                end = this.getParagraphLen(para);
+            }
+            // HACK
+            var oldselection = this.getSelection();
+            this.setSelection(new OXOSelection(new OXOPaM(para, start), new OXOPaM(para, end)));
+            // This will only work if the editor has the focus. Grabbing it would be ugly, can't restore.
+            // But anyway, it's just a hack, and in the future we need to do the DOM manipulations on our own...
+            document.execCommand(attr);
+            this.setSelection(oldselection);
+
+            // The right thing to do is DOM manipulation, take care for correctly terminating/starting attributes.
+            // See also http://dvcs.w3.org/hg/editing/raw-file/tip/editing.html#set-the-selection%27s-value
+
+            // Alternative: Simply span new atributes. Results in ugly HTML, but the operations that we record are correct,
+            // and we don't care too much for the current/temporary HTML in this editor.
+            // It will not negativly unfluence the resulting document.
         };
 
         this.implInsertParagraph = function (para) {
@@ -883,7 +988,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         this.implDeleteText = function (para, start, end) {
 
             if (end === -1) {
-                end = this.implGetParagraphLen(para);
+                end = this.getParagraphLen(para);
             }
 
             if (start === end) {

@@ -216,8 +216,7 @@ define('io.ox/office/main',
             .done(function (response) {
                 var operations = createOperationsList(response);
                 editor.applyOperations(operations, false, true);
-                editor.focus();
-                editor.setStartSelection();
+                editor.focus(true);
                 win.idle();
                 def.resolve();
             })
