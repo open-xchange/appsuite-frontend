@@ -21,7 +21,7 @@ define('io.ox/calendar/month/view',
 
     var View = Backbone.View.extend({
 
-        className: 'month',
+        className: 'week',
 
         events: {
             'click .appointment': 'onClickAppointment'
@@ -38,25 +38,20 @@ define('io.ox/calendar/month/view',
 
         render: function () {
 
-            var year = this.options.year,
-                month = this.options.month,
-                list = util.getMonthScaffold(year, month, 4, 4),
+            var list = util.getWeekScaffold(this.options.day),
                 hideWeekend = false;
 
-            _(list).each(function (weeks) {
-                var week = $('<div class="week">').appendTo(this.el);
-                _(weeks).each(function (day) {
-                    if (!hideWeekend || !day.isWeekend) {
-                        week.append(tmpl.render('day', day));
-                    }
-                }, this);
+            _(list).each(function (day) {
+                if (!hideWeekend || !day.isWeekend) {
+                    this.$el.append(tmpl.render('day', day));
+                }
             }, this);
 
-            this.$el
-                .addClass('month-' + year + '-' + (month + 1))
-                .append(
-                    $('<div class="vertical-box">').text(date.locale.months[month] + ' ' + year)
-                );
+//            this.$el
+//                .addClass('month-' + year + '-' + (month + 1))
+//                .append(
+//                    $('<div class="vertical-box">').text(date.locale.months[month] + ' ' + year)
+//                );
 
             return this;
         },
@@ -72,9 +67,8 @@ define('io.ox/calendar/month/view',
 
         renderAppointments: function () {
             this.collection.each(function (model) {
-                console.log('appointment', model, model.get('title'));
                 var d = new Date(model.get('start_date')),
-                    selector = '.date-' + d.getUTCMonth() + '-' + d.getUTCDate() + ' .list';
+                    selector = '[date="' + d.getUTCFullYear() + '-' + d.getUTCMonth() + '-' + d.getUTCDate() + '"] .list';
                 this.$(selector).append(
                     this.renderAppointment(model.attributes)
                 );

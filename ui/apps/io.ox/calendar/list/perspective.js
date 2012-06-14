@@ -24,8 +24,6 @@ define('io.ox/calendar/list/perspective',
 
     perspective.render = function (app) {
 
-        console.log('RENDER list');
-
         var win = app.getWindow(),
             GRID_WIDTH = 330,
             left, right, grid;

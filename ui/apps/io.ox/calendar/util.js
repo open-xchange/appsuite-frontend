@@ -422,6 +422,41 @@ define("io.ox/calendar/util",
             }
 
             return rows;
+        },
+
+        getWeekStart: function (timestamp) {
+
+            timestamp = ((timestamp || _.now()) / DAY >> 0) * DAY;
+
+            var d = new Date(timestamp),
+                // apply week day shift
+                shift = (7 + d.getUTCDay() - this.getFirstWeekDay()) % 7;
+
+            return d.getTime() - DAY * shift;
+        },
+
+        getWeekScaffold: function (timestamp) {
+
+            var day = this.getWeekStart(timestamp),
+                i = 0, d, obj, days = [];
+
+            for (; i < 7; i += 1, day += DAY) {
+                d = new Date(day);
+                days.push(obj = {
+                    year: d.getUTCFullYear(),
+                    month: d.getUTCMonth(),
+                    date: d.getUTCDate(),
+                    day: d.getUTCDay(),
+                    timestamp: day,
+                    isToday: that.isToday(day),
+                    col: i % 7
+                });
+                // is weekend?
+                obj.isWeekend = obj.day === 0 || obj.day === 6;
+                obj.isFirst = d.getUTCDate() === 1;
+            }
+
+            return days;
         }
     };
 

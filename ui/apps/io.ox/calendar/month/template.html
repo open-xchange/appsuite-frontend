@@ -20,7 +20,8 @@
 </part>
 
 <part id="day">
-    <div class="day{{= it.isOut ? ' out' : ''}}{{= it.isToday ? ' today' : ''}} date-{{= it.month + '-' + it.date }}">
+    <div class="day out{{= it.isFirst ? ' first' : '' }}{{= it.isToday ? ' today' : '' }}"
+        month="{{= it.year }}-{{= it.month }}" date="{{= it.year }}-{{= it.month + '-' + it.date }}">
         <div class="list abs"></div>
         <div class="number{{= it.isWeekend ? ' weekend' : ''}}">{{=it.date}}</div>
     </div>

@@ -64,6 +64,10 @@
     .hide-weekend .day { width: 100/6%; }
 
     .day.out {
+        background-color: #e5e5e5;
+    }
+    
+    .day.out.today {
         background-color: #f0f0f0;
     }
 
