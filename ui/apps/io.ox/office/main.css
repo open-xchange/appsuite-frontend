@@ -60,7 +60,7 @@
 
     &.plain {
         width: 100%;
-        height: 8cm;
+        height: 6cm;
         margin-top: 13px;
         padding: 6px;
 
@@ -72,7 +72,7 @@
 
     &.output {
         width: 100%;
-        height: 8cm;
+        height: 6cm;
         margin-top: 13px;
         
         p {
