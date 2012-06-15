@@ -31,6 +31,26 @@ define('io.ox/core/notifications/main',
         }
     });
 
+    var NotificationsView = Backbone.View.extend({
+        initialize: function (options) {
+            options = options || {};
+            this.subviews = options.subviews || [];
+        },
+        render: function (notifications) {
+            var self = this;
+            console.log('render notifications', self, notifications);
+
+            self.$el.empty();
+
+
+            _(notifications).each(function (category) {
+                var v = new category.ListView({ collection: category.collection});
+                self.$el.append(v.render().el);
+            });
+            return self;
+        }
+    });
+
 
     var NotificationModel = Backbone.Model.extend({
         defaults: {
@@ -43,9 +63,10 @@ define('io.ox/core/notifications/main',
     var NotificationCollection = Backbone.Collection.extend({
         model: NotificationModel,
         initialize: function (options) {
-            this.display_name = options.display_name || 'Unknown';
         }
     });
+
+
 
 
 
@@ -57,16 +78,20 @@ define('io.ox/core/notifications/main',
         attach: function (desktop, pos) {
             //view
             this.badgeView = new BadgeView({model: new Backbone.Model({ count: 0})});
+            this.notificationsView = new NotificationsView();
             desktop.addLauncher("right", this.badgeView.render().$el, _.bind(this.toggleList, this));
-            $('#io-ox-core').prepend($('<div id="io-ox-notifications">'));
+            $('#io-ox-core').prepend($('<div id="io-ox-notifications">').addClass('scrollable'));
         },
-        get: function (key, display_name) {
+        get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {
                 console.log('created notfication collection', this.notifications);
-                this.notifications[key] = new NotificationCollection({display_name: display_name});
-                this.notifications[key].on('add', _.bind(this.onAddNotification, this));
-                this.notifications[key].on('remove', _.bind(this.onRemoveNotification, this));
-                this.notifications[key].on('reset', _.bind(this.onResetNotifications, this));
+                var module = {};
+                module.collection = new NotificationCollection([]);
+                module.ListView = listview;
+                module.collection.on('add', _.bind(this.onAddNotification, this));
+                module.collection.on('remove', _.bind(this.onRemoveNotification, this));
+                module.collection.on('reset', _.bind(this.onResetNotifications, this));
+                this.notifications[key] = module;
             }
 
             return this.notifications[key];
@@ -88,8 +113,8 @@ define('io.ox/core/notifications/main',
         update: function () {
             console.log('update', this.notifications);
 
-            var count = _.reduce(this.notifications, function (memo, collection) {
-                if (collection.size() > 0) {
+            var count = _.reduce(this.notifications, function (memo, module) {
+                if (module.collection.size() > 0) {
                     return memo + 1;
                 }
             }, 0);
@@ -109,6 +134,7 @@ define('io.ox/core/notifications/main',
             } else {
                 $('#io-ox-screens').addClass('beside');
                 $('#io-ox-notifications').addClass('active');
+                $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
             }
         }
 

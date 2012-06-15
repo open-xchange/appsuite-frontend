@@ -802,7 +802,7 @@ define("io.ox/mail/api",
                 params: {
                     action: 'all',
                     folder: 'default0/INBOX',
-                    columns: '610',
+                    columns: '610,600,601', //received_date, id, folder_id
                     unseen: 'true',
                     deleted: 'false',
                     sort: '610',
