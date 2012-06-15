@@ -64,6 +64,9 @@ define('io.ox/calendar/month/view',
         },
 
         renderAppointments: function () {
+            // clear first
+            this.$el.find('.appointment').remove();
+            // loop over all appointments
             this.collection.each(function (model) {
                 var d = new Date(model.get('start_date')),
                     selector = '[date="' + d.getUTCFullYear() + '-' + d.getUTCMonth() + '-' + d.getUTCDate() + '"] .list';

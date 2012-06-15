@@ -299,8 +299,6 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 data: o.data
             })
             .done(function (resp) {
-
-                all_cache = {};
                 api.trigger('refresh.all');
             });
         }
