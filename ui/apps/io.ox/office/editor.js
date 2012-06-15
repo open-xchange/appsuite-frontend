@@ -762,6 +762,25 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
         };
 
+        this.getAttribute = function (attr, para, start, end) {
+            // TODO
+            if (attr === undefined) {
+                this.implDbgOutInfo('getAttribute - no attribute specified');
+                return;
+            }
+
+            // TODO
+            if (para === undefined) {
+                // Get Attr for selection
+                return document.queryCommandState(attr);
+            }
+            else {
+                // TODO
+                this.implDbgOutInfo('niy: getAttribute with selection parameter');
+                // implGetAttribute( attr, para, start, end );
+            }
+        };
+
         this.getParagraphCount = function () {
             return paragraphs.size();
         };
@@ -921,6 +940,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
             // HACK
             var oldselection = this.getSelection();
+            this.focus(); // this is really ugly, but execCommand only works when having the focus. Can we restore the focus in case we didn't have it???
             this.setSelection(new OXOSelection(new OXOPaM(para, start), new OXOPaM(para, end)));
             // This will only work if the editor has the focus. Grabbing it would be ugly, can't restore.
             // But anyway, it's just a hack, and in the future we need to do the DOM manipulations on our own...
