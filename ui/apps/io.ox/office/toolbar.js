@@ -57,8 +57,13 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
 
         var // create the group element
             node = $('<div>').addClass('btn-group').appendTo(toolbar.getNode()),
+
             // the options
             groupOptions = options || {},
+
+            // buttons mapped by identifier
+            buttons = {},
+
             // event handler container
             events = new Events();
 
@@ -92,7 +97,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
         this.addButton = function (id, options) {
 
             var // create the button element
-                button = $('<button>').addClass('btn').appendTo(node),
+                button = buttons[id] = $('<button>').addClass('btn').appendTo(node),
 
                 // click handler, calls the Events.trigger() method
                 trigger = function () {
@@ -144,7 +149,10 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
 
         this.poll = function (callback, millis) {
             window.setTimeout(function timer() {
-
+                _(buttons).each(function (button, id) {
+                    var state = callback(id);
+                    toggleButtonState(button, state);
+                });
                 window.setTimeout(timer, millis);
             }, millis);
             return this;
