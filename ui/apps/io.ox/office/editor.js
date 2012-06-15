@@ -605,7 +605,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // For now (the prototype), only accept single chars, but let the browser process, so we don't need to care about DOM stuff
             // TODO: But we at least need to check if there is a selection!!!
 
-            if (c.length === 1) {
+            if ((!event.ctrlKey) && (c.length === 1)) {
 
                 this.deleteSelected(selection);
                 // Selection was adjusted, so we need to use start, not end
@@ -957,6 +957,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             } else {
                 document.execCommand(attr, false, value);
             }
+            oldselection.adjust(); // FireFox can'r restore selection if end < start
             this.setSelection(oldselection);
 
             // The right thing to do is DOM manipulation, take care for correctly terminating/starting attributes.

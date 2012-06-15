@@ -109,7 +109,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
         this.addButton = function (id, options) {
 
             var // create the button element
-                button = buttons[id] = $('<div>').addClass('btn').appendTo(node),
+                button = buttons[id] = $('<button>').addClass('btn').appendTo(node),
 
                 // update handler, updates toggle/radio buttons after a click
                 updater = $.noop;
