@@ -20,8 +20,8 @@ define('io.ox/calendar/edit/view-participant',
 
     //just a single participant
     var ParticipantView = Backbone.View.extend({
-        tagName: 'li',
-        className: 'edit-appointment-participant', //'edit-appointment-participant',
+        tagName: 'div',
+        className: 'edit-appointment-participant span6', //'edit-appointment-participant',
         _modelBinder: undefined,
         initialize: function () {
             var self = this;
@@ -42,6 +42,8 @@ define('io.ox/calendar/edit/view-participant',
                 return this.renderUserGroup();
             case this.model.TYPE_RESOURCE:
                 return this.renderResource();
+            case this.model.TYPE_EXTERNAL_USER:
+                return this.renderExternalUser();
             }
 
 
@@ -54,7 +56,7 @@ define('io.ox/calendar/edit/view-participant',
             // take util function
             var convertImage = function (dir, value) {
                 var url = '';
-                if (value) {
+                if (value && _.isString(value) && value.length > 1) {
                     url = value.replace(/^\/ajax/, ox.apiRoot);
                 } else {
                     url = ox.base + '/apps/themes/default/dummypicture.png';
@@ -120,6 +122,32 @@ define('io.ox/calendar/edit/view-participant',
             bindings = _(bindings).extend({
                 image1_url: [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImage}]
             });
+
+            this._modelBinder.bind(self.model, this.el, bindings);
+            return self;
+        },
+        renderExternalUser: function () {
+            var self = this;
+
+            this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/externaluser', {}));
+
+            // take util function
+            var convertImage = function (dir, value) {
+                var url = '';
+                if (value && _.isString(value) && value.length > 1) {
+                    url = value.replace(/^\/ajax/, ox.apiRoot);
+                } else {
+                    url = ox.base + '/apps/themes/default/dummypicture.png';
+                }
+
+                return 'background: url("' + url + '");';
+            };
+            console.log('render:', this);
+            var bindings = {
+                display_name: '.person-link',
+                image1_url: [{selector: '.contact-image', elAttribute: 'style', converter: convertImage}],
+                email1: '.email'
+            };
 
             this._modelBinder.bind(self.model, this.el, bindings);
             return self;

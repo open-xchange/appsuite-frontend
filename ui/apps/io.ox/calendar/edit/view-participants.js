@@ -23,7 +23,9 @@ define('io.ox/calendar/edit/view-participants',
         className: 'edit-appointment-participants',
         events: {
             'click .person-link': 'onClickPersonLink',
-            'click .remove': 'onClickRemove'
+            'click .remove': 'onClickRemove',
+            'mouseover .remove': 'onMouseOverRemove',
+            'mouseout .remove': 'onMouseOutRemove'
         },
         initialize: function (options) {
             var self = this;
@@ -39,7 +41,7 @@ define('io.ox/calendar/edit/view-participants',
         },
         render: function () {
             var self = this;
-            self.list = $('<ul>'); //.addClass('edit-appointment-participantslist');
+            self.list = $('<div>'); //.addClass('edit-appointment-participantslist');
             self.$el.empty().append(self.list);
             _(self._participantViews).each(function (participantView) {
                 self.list.append(participantView.render().el);
@@ -68,6 +70,12 @@ define('io.ox/calendar/edit/view-participants',
 
             self.collection.remove(self.collection.getByCid(itemid));
         },
+        onMouseOverRemove: function (e) {
+            $(e.target).find('i').addClass('icon-white');
+        },
+        onMouseOutRemove: function (e) {
+            $(e.target).find('i').removeClass('icon-white');
+        },
 
         onClickPersonLink: function (evt) {
             var self = this,
@@ -76,7 +84,11 @@ define('io.ox/calendar/edit/view-participants',
 
             var obj = self.collection.getByCid(itemid);
 
-            evt.data = {id: obj.get('id'), email1: obj.get('email1')};
+            if (obj.get('type') !== 5) { // no external
+                evt.data = {id: obj.get('id'), email1: obj.get('email1')};
+            } else {
+                evt.data = {email1: obj.get('email1'), display_name: obj.get('display_name')};
+            }
             ext.point('io.ox/core/person:action').each(function (ext) {
                 _.call(ext.action, evt.data, evt);
             });

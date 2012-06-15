@@ -135,21 +135,21 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                         sort: '500',
                         order: 'asc',
                         data: {
-                            pattern: query
+                            pattern: '*' + query + '*'
                         }
                     },
                     {
                         module: 'group',
                         action: 'search',
                         data: {
-                            pattern: query
+                            pattern: '*' + query + '*'
                         }
                     },
                     {
                         module: 'resource',
                         action: 'search',
                         data: {
-                            pattern: query
+                            pattern: '*' + query + '*'
                         }
                     },
                     {
@@ -172,10 +172,8 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
             }).pipe(function (data) {
                 data[0].data = _(data[0].data).map(function (dataItem) {
                     var myobj = http.makeObject(dataItem, 'user', userColumns.split(','));
-                    console.log('mapped', myobj, dataItem, userColumns.split(','));
                     return myobj;
                 });
-                console.log('searched', data);
                 _(data).each(function (type, index) {
                     _(type.data).each(function (item) {
                         switch (index) {
@@ -292,7 +290,6 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
         // delete is a reserved word :( - but this will delete the
         // appointment on the server
         remove: function (o) {
-            console.log('wann remove:', o);
             return http.PUT({
                 module: 'calendar',
                 params: {
@@ -302,7 +299,6 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 data: o.data
             })
             .done(function (resp) {
-                console.log('now deleted');
 
                 all_cache = {};
                 api.trigger('refresh.all');

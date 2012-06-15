@@ -91,7 +91,7 @@ define('io.ox/calendar/edit/view-main',
         TYPE:               gt('Type'),
         PARTICIPANTS:       gt('Participants'),
         PRIVATE:            gt('Private'),
-        NOTIFY_ALL:         gt('Notify all')
+        NOTIFY_ALL:         gt('Notify all participants about this change')
 
     };
 
@@ -265,7 +265,11 @@ define('io.ox/calendar/edit/view-main',
             });
 
             if (notIn) {
-                participants.push({id: data.id, type: data.type});
+                if (data.type !== 5) {
+                    participants.push({id: data.id, type: data.type});
+                } else {
+                    participants.push({type: data.type, mail: data.mail, display_name: data.display_name});
+                }
             }
 
             this.model.set('participants', participants);
