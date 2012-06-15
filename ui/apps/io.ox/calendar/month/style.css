@@ -53,23 +53,30 @@
         border-style: solid;
         border-width: 0 1px 1px 0;
         overflow: hidden;
+    
+        background-color: #fff;
+        -webkit-transition: background-color 0.5s;
+        -moz-transition: background-color 0.5s;
+        transition: background-color 0.5s;
     }
     
     .vertical {
+        font-family: @font-light;
         font-size: 30px;
-        line-height: 1em;
-        color: #ccc;
+        line-height: 1.1em;
+        color: #aaa;
         position: absolute;
         right: 0;
         width: 12.5%;
         height: 20%;
-        padding: 1em 0 0 1em;
+        padding: 0.5em;
+        text-align: right;
     }
     
     .hide-weekend .day { width: 100/6%; }
 
     .day.out {
-        background-color: #e5e5e5;
+        background-color: #e0e0e0;
     }
     
     .day.out.today {
@@ -125,6 +132,10 @@
         overflow: hidden;
         text-overflow: ellipsis;
         cursor: pointer;
+    
+        -webkit-transition: background-color 0.5s;
+        -moz-transition: background-color 0.5s;
+        transition: background-color 0.5s;
     }
     
     .appointment.reserved { background-color: #08c; } /* blue */
@@ -132,7 +143,7 @@
     .appointment.absent { background-color: #913F3F; } /* red */
     .appointment.free { background-color: #8EB360; } /* green */
     
-    .day.out .appointment { opacity: 0.80; }
+    .day.out .appointment { background-color: #aaa; }
     
     .appointment:hover { background-color: #555; }
     .day.out .appointment:hover { opacity: 1; }

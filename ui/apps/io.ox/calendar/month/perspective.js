@@ -30,13 +30,14 @@ define('io.ox/calendar/month/perspective',
             weeks = self.find('.week'),
             height = weeks.outerHeight(),
             top = self.scrollTop(),
-            y = Math.round(top / height);
-        self.off('scroll', magneticScroll)
-            .stop()
-            .animate({ scrollTop: top + (weeks.eq(y).position() || { top: 0 }).top }, 50, function () {
-                self.on('scroll', magneticScroll);
-                self = weeks = null;
-            });
+            y = Math.round(top / height),
+            delta = (weeks.eq(y).position() || { top: 0 }).top;
+        if (Math.abs(delta) < 30) {
+            self.off('scroll', magneticScroll)
+                .scrollTop(top + delta)
+                .on('scroll', magneticScroll);
+        }
+        self = weeks = null;
     }, 500);
 
     _.extend(perspective, {
