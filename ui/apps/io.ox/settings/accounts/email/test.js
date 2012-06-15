@@ -206,7 +206,7 @@ define("io.ox/settings/accounts/email/test",
                     }, 'looks for add button', TIMEOUT);
 
                     j.runs(function () {
-                        buttonAdd.triggerHandler('click');
+                        buttonAdd.trigger('click');
                     });
                 });
 
@@ -312,7 +312,7 @@ define("io.ox/settings/accounts/email/test",
 //                });
 
                 j.it('gets the id of the created account and deletes', function () {
-
+                    j.expect(dataId).not.toBeUndefined();
                     j.runs(function () {
                         api.remove([dataId]);
                     });

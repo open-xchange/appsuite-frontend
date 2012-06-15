@@ -13,7 +13,8 @@
 define('io.ox/calendar/month/perspective',
     ['io.ox/calendar/month/view',
      'io.ox/calendar/api',
-     'io.ox/calendar/util'], function (View, api, util) {
+     'io.ox/calendar/util',
+     'io.ox/core/http'], function (View, api, util, http) {
 
     'use strict';
 
@@ -45,6 +46,8 @@ define('io.ox/calendar/month/perspective',
         scaffold: $(),
         pane: $(),
 
+        collections: {},
+
         showAppointment: function (e, obj) {
             // open appointment details
             api.get(obj).done(function (data) {
@@ -57,32 +60,41 @@ define('io.ox/calendar/month/perspective',
             });
         },
 
-        drawWeek: function (day) {
-
-            day = day || _.now();
-
-            var collection = new Backbone.Collection([]),
-                view = new View({ collection: collection, day: day });
-
-            // add and render view
-            this.pane.append(view.render().el);
-
-            api.getAll({
-                start: day,
-                end: day + util.DAY * 7
-            }).done(function (list) {
-                collection.reset(_(list).map(function (obj) {
+        updateWeek: function (start, end) {
+            // fetch appointments
+            var self = this;
+            api.getAll({ start: start, end: end }).done(function (list) {
+                self.collections[start].reset(_(list).map(function (obj) {
                     var m = new Backbone.Model(obj);
                     m.id = _.cid(obj);
                     return m;
                 }));
             });
+        },
 
+        drawWeek: function (day) {
+            this.collections[day] = new Backbone.Collection([]);
+            var view = new View({ collection: this.collections[day], day: day });
+            // add and render view
+            this.pane.append(view.render().el);
+            // update collection
+            this.updateWeek(day, day + util.DAY * 7);
             view.on('showAppoinment', this.showAppointment, this);
         },
 
         scrollTop: function (top) {
             return this.pane.scrollTop(top);
+        },
+
+        update: function () {
+            var year = 2012,
+                month = 5,
+                first = Date.UTC(year, month, 1),
+                start = util.getWeekStart(first) - 10 * util.WEEK,
+                i;
+            for (i = 0; i < 20; i += 1, start += util.WEEK) {
+                this.updateWeek(start, start + util.DAY * 7);
+            }
         },
 
         render: function (app) {
@@ -100,6 +112,8 @@ define('io.ox/calendar/month/perspective',
             for (i = 0; i < 20; i += 1, start += util.WEEK) {
                 this.drawWeek(start);
             }
+
+            window.HANS = this;
 
             this.main.addClass('month-view').empty().append(this.scaffold);
             this.scrollTop(this.main.find('[date="' + year + '-' + month + '-1"]').position().top);
@@ -133,6 +147,15 @@ define('io.ox/calendar/month/perspective',
             }, this));
 
             this.pane.find('[month="' + year + '-' + month + '"]').removeClass('out');
+
+            var refresh = $.proxy(function () {
+                this.update();
+                this.scrollTop(this.main.find('[date="' + year + '-' + month + '-1"]').position().top);
+            }, this);
+
+            // watch for api refresh
+            api.on('refresh.all', refresh);
+            app.getWindow().on('show', refresh);
         }
     });
 

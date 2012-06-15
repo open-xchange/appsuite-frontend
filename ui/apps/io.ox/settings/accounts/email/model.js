@@ -19,6 +19,10 @@ define('io.ox/settings/accounts/email/model',
 
     var AccountModel = Backbone.Model.extend({
 
+        defaults: {
+            spam_handler: "NoSpamHandler"
+        },
+
         validation: {
             name: {
                 required: true,
@@ -60,17 +64,41 @@ define('io.ox/settings/accounts/email/model',
 
         },
 
-        save: function (obj) {
+        validationCheck: function (defered, data) {
+            data.name = data.primary_address;
+            data.personal = data.primary_address; // needs to be calculated
+            data.unified_inbox_enabled = false;
+            data.mail_secure = true;
+            data.transport_secure = true;
+            data.transport_credentials = false;
+
+            AccountApi.validate(data).done(function (response) {
+                return defered.resolve(response);
+            }).fail(function (response) {
+                return defered.resolve(response);
+            });
+        },
+
+        save: function (obj, defered) {
             if (this.attributes.id) {
                 AccountApi.update(this.attributes);
             } else {
                 if (obj) {
                     this.attributes = obj;
+                    this.attributes.spam_handler = "NoSpamHandler";
                 }
-                this.attributes.spam_handler = "NoSpamHandler"; // just to fix it now
-                AccountApi.create(this.attributes);
+                AccountApi.create(this.attributes).done(function (response) {
+                    return defered.resolve(response);
+                }).fail(function (response) {
+                    return defered.resolve(response);
+                });
             }
 
+        },
+
+        destroy: function (options) {
+            AccountApi.remove([this.attributes.id]);
+            var model = this;
         }
 
     });
