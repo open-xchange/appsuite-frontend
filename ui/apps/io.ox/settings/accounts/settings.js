@@ -20,64 +20,26 @@ define('io.ox/settings/accounts/settings',
        'io.ox/core/tk/dialogs',
        'io.ox/core/api/account',
        'io.ox/core/tk/forms',
-       'io.ox/settings/accounts/email/settings'
-       ], function (ext, View, utils, dialogs, api, forms, email) {
+       'io.ox/settings/accounts/email/settings',
+       'io.ox/settings/accounts/email/model',
+       'text!io.ox/settings/accounts/email/tpl/account_select.html',
+       'text!io.ox/settings/accounts/email/tpl/listbox.html'
+       ], function (ext, View, utils, dialogs, api, forms, email, AccountModel, tmpl, listboxtmpl) {
 
 
     'use strict';
 
-
-
-
-    var listOfAccounts,
-        listbox = null,
-
-        createAccountItem = function (val) {
-            listOfAccounts.push({
-                dataid: 'email/' + val.id,
-                html: val.primary_address
-            });
-        },
-
-        seperateEachAccount = function (data) {
-            listOfAccounts = [];
-            _.each(data, function (val) {
-                createAccountItem(val);
-            });
-        },
+    var collection,
 
         createExtpointForSelectedAccount = function (args) {
-            var selectedItemID = args.data.listbox.find('div[selected="selected"]').attr('data-item-id'),
-                splitedObj;
-            if (selectedItemID !== undefined) {
-                splitedObj = splitDataItemId(selectedItemID);
-                args.data.id = splitedObj.dataid;
-                require(['io.ox/settings/accounts/' + splitedObj.type + '/settings'], function (m) {
-                    ext.point('io.ox/settings/accounts/' + splitedObj.type + '/settings/detail').invoke('draw', args.data.self.node, args);
+            if (args.data.id !== undefined) {
+                require(['io.ox/settings/accounts/email/settings'], function (m) {
+                    ext.point('io.ox/settings/accounts/email/settings/detail').invoke('draw', args.data.node, args);
                 });
             }
         },
 
-        createExtpointForNewAccount = function (args) {
-            var type = 'email'; // TODO add more options
-            console.log('create a new account');
-            require(['io.ox/settings/accounts/' + type + '/settings'], function (m) {
-                ext.point('io.ox/settings/accounts/' + type + '/settings/detail').invoke('draw', args.data.self.node, args);
-            });
-        },
-
-        splitDataItemId = function (selectedItemID) {
-            if (selectedItemID !== undefined) {
-                var type = selectedItemID.split(/\//)[0],
-                    dataid = selectedItemID.split(/\//)[1];
-                return {
-                    dataid: dataid,
-                    type: type
-                };
-            }
-        },
-
-        removeSelectedItem = function (dataid, selectedItemID) {
+        removeSelectedItem = function (dataid) {
             var def = $.Deferred();
 
             require(["io.ox/core/tk/dialogs"], function (dialogs) {
@@ -89,11 +51,11 @@ define('io.ox/settings/accounts/settings',
                     .done(function (action) {
                         if (action === 'delete') {
                             def.resolve();
-                            api.remove([dataid]).done(
-                                function () {
-                                    listbox.find('[data-item-id="' + selectedItemID + '"]').remove();
-                                }
-                            );
+
+                            var obj = collection.get([dataid]);
+                            collection.remove([dataid]);
+                            obj.destroy();
+
                         } else {
                             def.reject();
                         }
@@ -101,58 +63,44 @@ define('io.ox/settings/accounts/settings',
             });
         },
 
-        getSelectedItem = function (args) {
-            var dataid,
-                selectedItemID,
-                splitedObj;
-            if (args.data !== undefined) {
-                selectedItemID = listbox.find('div[selected="selected"]').attr('data-item-id');
-            } else {
-                selectedItemID = $(args.srcElement.parentNode).attr('data-item-id');
+        AccountSelectView = Backbone.View.extend({
+
+            _modelBinder: undefined,
+            initialize: function (options) {
+
+                this.template = doT.template(tmpl);
+                this._modelBinder = new Backbone.ModelBinder();
+
+            },
+            render: function () {
+                var self = this;
+
+                self.$el.empty().append(self.template({
+                    id: this.model.get('id')
+                }));
+                var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
+                self._modelBinder.bind(self.model, self.el, defaultBindings);
+
+                return self;
+            },
+            events: {
+                'click .close': 'onClose',
+                'click .deletable-item': 'onSelect'
+            },
+            onClose: function () {
+                removeSelectedItem(this.model.get('id'));
+            },
+            onSelect: function () {
+                this.$el.parent().find('div[selected="selected"]').attr('selected', null);
+                this.$el.find('.deletable-item').attr('selected', 'selected');
             }
-            splitedObj = splitDataItemId(selectedItemID);
-            removeSelectedItem(splitedObj.dataid, selectedItemID);
-        },
 
-        AccountsSettingsModelView = {
-        draw: function (data) {
-            var self = this;
+        }),
 
-            self.node = $('<div>');
+        Collection = Backbone.Collection.extend({
 
-            self.node.append(forms.createSettingsHead(data))
-            .append(
-                    forms.createSection()
-                    .append(
-                        forms.createSectionTitle({text: 'Accounts'})
-                        )
-                    .append(
-                        forms.createSectionContent()
-                        .append(
-                            listbox = forms.createListBox({
-                                dataid: 'accounts-list',
-                                model: {
-                                    get: function () {
-                                        return listOfAccounts;
-                                    }
-                                }
-                            }).delegate('.close', 'click', getSelectedItem)
-                        )
-                        .append(
-                            forms.createButton({label: 'Add ...', btnclass: 'btn'}).attr('data-action', 'add').css({'margin-right': '15px'})
-                                 .on('click', {self: self}, email.mailAutoconfigDialog),
-                            forms.createButton({label: 'Edit ...', btnclass: 'btn'}).attr('data-action', 'edit').css({'margin-right': '15px'})
-                                .on('click', {listbox: listbox, self: self}, createExtpointForSelectedAccount),
-                            forms.createButton({label: 'Delete ...', btnclass: 'btn'}).attr('data-action', 'delete')
-                                .on('click', {self: self}, getSelectedItem)
-                        )
-                    )
-                    .append(forms.createSectionDelimiter())
-                );
-            return self;
-
-        }
-    };
+            model: AccountModel
+        });
 
     ext.point("io.ox/settings/accounts/settings/detail").extend({
         index: 200,
@@ -160,11 +108,60 @@ define('io.ox/settings/accounts/settings',
         draw: function (data) {
             var  that = this;
             api.all().done(function (allAccounts) {
-                seperateEachAccount(allAccounts);
-                that.append(AccountsSettingsModelView.draw(data).node);
+
+                collection = new Collection(allAccounts);
+
+                var AccountsView = Backbone.View.extend({
+
+                    initialize: function () {
+                        this.template = doT.template(listboxtmpl);
+                        _.bindAll(this);
+                        this.collection = collection;
+
+                        this.collection.bind('add', this.render);
+                        this.collection.bind('remove', this.render);
+                    },
+                    render: function () {
+                        var self = this;
+                        self.$el.empty().append(self.template({}));
+
+                        this.collection.each(function (item) {
+                            self.$el.find('.listbox').append(new AccountSelectView({ model: item }).render().el);
+                        });
+
+                        return this;
+                    },
+
+                    events: {
+                        'click [data-action="add"]': 'onAdd',
+                        'click [data-action="edit"]': 'onEdit',
+                        'click [data-action="delete"]': 'onDelete'
+                    },
+
+                    onAdd: function (args) {
+                        email.mailAutoconfigDialog(args, {
+                            collection: collection
+                        });
+                    },
+
+                    onEdit: function (args) {
+                        args.data = {};
+                        args.data.id = this.$el.find('[selected]').data('id');
+                        args.data.node = this.el;
+                        createExtpointForSelectedAccount(args);
+                    },
+                    onDelete: function () {
+                        var id = this.$el.find('[selected]').data('id');
+                        removeSelectedItem(id);
+                    }
+
+                });
+
+                var accountsList = new AccountsView();
+
+                that.append(accountsList.render().el);
             });
 
-            return AccountsSettingsModelView.node;
         },
         save: function () {
             console.log('now accounts get saved?');
