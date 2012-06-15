@@ -944,7 +944,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.setSelection(new OXOSelection(new OXOPaM(para, start), new OXOPaM(para, end)));
             // This will only work if the editor has the focus. Grabbing it would be ugly, can't restore.
             // But anyway, it's just a hack, and in the future we need to do the DOM manipulations on our own...
-            document.execCommand(attr);
+            // FF requires the second and third parameters
+            document.execCommand(attr, false, null);
             this.setSelection(oldselection);
 
             // The right thing to do is DOM manipulation, take care for correctly terminating/starting attributes.
