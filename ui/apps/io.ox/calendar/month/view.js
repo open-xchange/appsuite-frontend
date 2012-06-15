@@ -38,13 +38,10 @@ define('io.ox/calendar/month/view',
 
         render: function () {
 
-            var list = util.getWeekScaffold(this.options.day),
-                hideWeekend = false;
+            var list = util.getWeekScaffold(this.options.day);
 
             _(list).each(function (day) {
-                if (!hideWeekend || !day.isWeekend) {
-                    this.$el.append(tmpl.render('day', day));
-                }
+                this.$el.append(tmpl.render('day', day));
                 if (day.isFirst) {
                     this.$el.prepend(
                         $('<div>').addClass('vertical').html(
@@ -77,17 +74,11 @@ define('io.ox/calendar/month/view',
         }
     });
 
-    View.drawScaffold = function (weekend) {
+    View.drawScaffold = function () {
 
         var days = date.locale.days, node;
         days = days.slice(1).concat(days[0]);
-        if (weekend === false) {
-            days = days.slice(0, 5);
-        }
         node = tmpl.render('scaffold', { days: days });
-        if (weekend === false) {
-            node.addClass('hide-weekend');
-        }
         return node;
     };
 

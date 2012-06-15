@@ -87,15 +87,14 @@ define('io.ox/calendar/month/perspective',
 
         render: function (app) {
 
-            var weekend = true,
-                year = 2012,
+            var year = 2012,
                 month = 5,
                 first = Date.UTC(year, month, 1),
                 start = util.getWeekStart(first) - 10 * util.WEEK,
                 i,
                 tops = {};
 
-            this.scaffold = View.drawScaffold(weekend);
+            this.scaffold = View.drawScaffold();
             this.pane = this.scaffold.find('.scrollpane');
 
             for (i = 0; i < 20; i += 1, start += util.WEEK) {
