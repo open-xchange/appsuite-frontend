@@ -530,48 +530,51 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
             else if (event.ctrlKey) {
                 var c = this.getPrintableChar(event);
-                if (c === 'A') {
-                    selection = new OXOSelection(new OXOPaM(0, 0), new OXOPaM(0, 0));
-                    var lastPara = this.getParagraphCount() - 1;
-                    selection.endPaM.para = lastPara;
-                    selection.endPaM.pos = this.getParagraphLen(lastPara);
-                    event.preventDefault();
-                    this.setSelection(selection);
-                }
-                else if (c === 'Z') {
-                    this.undo();
-                    event.preventDefault();
-                }
-                else if (c === 'Y') {
-                    this.redo();
-                    event.preventDefault();
-                }
-                else if (c === 'X') {
-                    this.cut();
-                    event.preventDefault();
-                }
-                else if (c === 'C') {
-                    this.copy();
-                    event.preventDefault();
-                }
-                else if (c === 'V') {
-                    this.paste();
-                    event.preventDefault();
-                }
-                else if (c === 'B') {
-                    this.setAttribute('bold', !this.getAttribute('bold'));
-                    event.preventDefault();
-                }
-                else if (c === 'I') {
-                    this.setAttribute('italic', !this.getAttribute('italic'));
-                    event.preventDefault();
-                }
-                else if (c === 'U') {
-                    this.setAttribute('underline', !this.getAttribute('underline'));
-                    event.preventDefault();
-                }
-                else if (c === 'xxxxxxx') {
-                    event.preventDefault();
+                if ((c !== '') && (!event.ctrlKey))
+                {
+                    if (c === 'A') {
+                        selection = new OXOSelection(new OXOPaM(0, 0), new OXOPaM(0, 0));
+                        var lastPara = this.getParagraphCount() - 1;
+                        selection.endPaM.para = lastPara;
+                        selection.endPaM.pos = this.getParagraphLen(lastPara);
+                        event.preventDefault();
+                        this.setSelection(selection);
+                    }
+                    else if (c === 'Z') {
+                        this.undo();
+                        event.preventDefault();
+                    }
+                    else if (c === 'Y') {
+                        this.redo();
+                        event.preventDefault();
+                    }
+                    else if (c === 'X') {
+                        this.cut();
+                        event.preventDefault();
+                    }
+                    else if (c === 'C') {
+                        this.copy();
+                        event.preventDefault();
+                    }
+                    else if (c === 'V') {
+                        this.paste();
+                        event.preventDefault();
+                    }
+                    else if (c === 'B') {
+                        this.setAttribute('bold', !this.getAttribute('bold'));
+                        event.preventDefault();
+                    }
+                    else if (c === 'I') {
+                        this.setAttribute('italic', !this.getAttribute('italic'));
+                        event.preventDefault();
+                    }
+                    else if (c === 'U') {
+                        this.setAttribute('underline', !this.getAttribute('underline'));
+                        event.preventDefault();
+                    }
+                    else if (c === 'xxxxxxx') {
+                        event.preventDefault();
+                    }
                 }
             }
         };
