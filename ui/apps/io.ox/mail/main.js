@@ -20,10 +20,11 @@ define("io.ox/mail/main",
      "io.ox/core/tk/vgrid",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
+     "io.ox/core/notifications/main",
      "gettext!io.ox/mail/main",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt) {
+    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, notificationService, gt) {
 
     'use strict';
 
@@ -59,6 +60,7 @@ define("io.ox/mail/main",
     // launcher
     app.setLauncher(function () {
 
+        var notifications = notificationService.get('io.ox/mail', gt('Mails'));
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/mail',
@@ -78,7 +80,13 @@ define("io.ox/mail/main",
         audio = $('<audio>', { src: ox.base + '/apps/io.ox/mail/images/ping.mp3' })
             .hide().prop('volume', 0.40).appendTo(win.nodes.main);
         api.on('new-mail', function () {
+            console.log('new mail', arguments);
             audio.get(0).play();
+            notifications.add({
+                title: ''
+            });
+
+
         });
 
         // left panel
