@@ -84,7 +84,7 @@ define("io.ox/mail/main",
         api.on('new-mail', function (e, mails) {
             console.log('new mail', arguments, api);
             audio.get(0).play();
-            api.getList(mails.splice(0, 10))
+            api.getList(_(mails).clone().splice(0, 10))
                 .done(function (data) {
                     _(data).each(function (mail) {
                         var f = mail.from || [['', '']];

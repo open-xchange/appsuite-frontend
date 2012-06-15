@@ -817,9 +817,10 @@ define("io.ox/mail/api",
                     recent = _(unseen).filter(function (obj) {
                         return obj.received_date > lastUnseenMail;
                     });
-                    if (recent.length) {
+                    if (recent.length > 0) {
                         api.trigger('new-mail', recent);
                         lastUnseenMail = recent[0].received_date;
+
                     }
                     api.trigger('unseen-mail', unseen);
                 }
