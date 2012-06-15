@@ -1,0 +1,104 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2012
+ * Mail: info@open-xchange.com
+ *
+ * @author Daniel Rentz <daniel.rentz@open-xchange.com>
+ */
+
+.io-ox-office-main {
+    margin: 0;
+    padding: 0;
+
+    .container {
+    	width: 100%;
+    	padding: 0 13px;
+	    -webkit-box-sizing: border-box;
+	    -moz-box-sizing: border-box;
+	    box-sizing: border-box;
+
+	    table {
+	       width: 100%;
+	    } 
+    }
+}
+
+.io-ox-office-toolbar {
+    padding-left: 13px;
+    padding-right: 13px;
+
+    /* class for small buttons containing e.g. a single character */
+    .btn-iconlike {
+        width: 34px;
+    }
+
+}
+
+.io-ox-office-editor {
+    overflow-y: auto;
+    border: thin gray solid;
+    cursor: text;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    &.rich {
+        width: 100%;
+        height: 10cm;
+        padding: 6px;
+
+        p {
+	        font-family: 'Times New Roman',Times,serif;
+	        font-size: 12pt;
+	    }
+    }
+
+    &.plain {
+        width: 100%;
+        height: 8cm;
+        margin-top: 13px;
+        padding: 6px;
+
+	    p {
+	        font-family: 'Courier New',Courier,monospace;
+	        font-size: 10pt;
+	    }
+    }
+
+    &.output {
+        width: 100%;
+        height: 8cm;
+        margin-top: 13px;
+        
+        p {
+            border-top: thin gray dotted;
+            font-family: Arial,sans-serif;
+            font-size: 8pt;
+        }
+	}
+
+    .debug-highlight-mixin(@border-color, @fill-color) {
+        outline: thin @border-color solid;
+        background-color: @fill-color;
+    }
+
+    &.debug-highlight {
+        p { 
+            .debug-highlight-mixin(#8f8, #efe);
+        }
+        
+        span {
+            .debug-highlight-mixin(#88f, #eef);
+        }
+    }
+    
+    p {
+	    margin: 0;
+	}
+
+}

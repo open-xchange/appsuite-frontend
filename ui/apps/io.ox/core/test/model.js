@@ -87,7 +87,7 @@ define("io.ox/core/test/model",
                         called = true;
                     });
                     model.set('firstName', 'Matthias B.');
-                    called = true;
+                    j.expect(called).toEqual(true);
                 });
 
                 j.it('triggers specific change event', function () {
