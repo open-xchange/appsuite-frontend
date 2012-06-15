@@ -541,7 +541,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
             else if (event.ctrlKey) {
                 var c = this.getPrintableChar(event);
-                if ((c !== '') && (!event.ctrlKey))
+                if (c !== '')
                 {
                     if (c === 'A') {
                         selection = new OXOSelection(new OXOPaM(0, 0), new OXOPaM(0, 0));
@@ -552,36 +552,36 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                         this.setSelection(selection);
                     }
                     else if (c === 'Z') {
-                        this.undo();
                         event.preventDefault();
+                        this.undo();
                     }
                     else if (c === 'Y') {
-                        this.redo();
                         event.preventDefault();
+                        this.redo();
                     }
                     else if (c === 'X') {
-                        this.cut();
                         event.preventDefault();
+                        this.cut();
                     }
                     else if (c === 'C') {
-                        this.copy();
                         event.preventDefault();
+                        this.copy();
                     }
                     else if (c === 'V') {
-                        this.paste();
                         event.preventDefault();
+                        this.paste();
                     }
                     else if (c === 'B') {
-                        this.setAttribute('bold', !this.getAttribute('bold'));
                         event.preventDefault();
+                        this.setAttribute('bold', !this.getAttribute('bold'));
                     }
                     else if (c === 'I') {
-                        this.setAttribute('italic', !this.getAttribute('italic'));
                         event.preventDefault();
+                        this.setAttribute('italic', !this.getAttribute('italic'));
                     }
                     else if (c === 'U') {
-                        this.setAttribute('underline', !this.getAttribute('underline'));
                         event.preventDefault();
+                        this.setAttribute('underline', !this.getAttribute('underline'));
                     }
                     else if (c === 'xxxxxxx') {
                         event.preventDefault();
@@ -618,7 +618,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // For now (the prototype), only accept single chars, but let the browser process, so we don't need to care about DOM stuff
             // TODO: But we at least need to check if there is a selection!!!
 
-            if (c.length === 1) {
+            if ((!event.ctrlKey) && (c.length === 1)) {
 
                 this.deleteSelected(selection);
                 // Selection was adjusted, so we need to use start, not end
@@ -970,6 +970,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             } else {
                 document.execCommand(attr, false, value);
             }
+            oldselection.adjust(); // FireFox can'r restore selection if end < start
             this.setSelection(oldselection);
 
             // The right thing to do is DOM manipulation, take care for correctly terminating/starting attributes.
