@@ -329,7 +329,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 if ((domSelection.startPaM.node.nodeType === 3) && (domSelection.endPaM.node.nodeName === 'P') && (domSelection.endPaM.offset === 0)) {
                     para--;
                 }
-                endPaM = new OXOPaM(para, this.GetParagraphLen(para));
+                endPaM = new OXOPaM(para, this.getParagraphLen(para));
                 this.implDbgOutInfo('info: fixed invalid selection (end):' + endPaM.toString());
             }
 
