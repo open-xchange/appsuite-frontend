@@ -201,7 +201,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
 
             if (bNotify && !blockOperationNotifications) {
-                this.trigger("office:operation", operation);
+                this.trigger("operation", operation);
                 // TBD: Use operation directly, or copy?
             }
 
@@ -910,6 +910,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.implSetAttribute = function (attr, para, start, end) {
+            if (textMode === OXOEditor.TextMode.PLAIN) {
+                return;
+            }
             if ((start === undefined) || (start === -1)) {
                 start = 0;
             }

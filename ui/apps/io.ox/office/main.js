@@ -17,8 +17,7 @@ define('io.ox/office/main',
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
      'io.ox/office/actions',
-     'less!io.ox/office/main.css',
-     'less!io.ox/office/debug.css'
+     'less!io.ox/office/main.css'
     ], function (api, ToolBar, Editor, gt) {
 
     'use strict';
@@ -61,7 +60,7 @@ define('io.ox/office/main',
             // create the rich-text and plain-text editor
             _(Editor.TextMode).each(function (textMode) {
                 nodes[textMode] = $('<div>')
-                    .addClass('io-ox-office-editor user-select-text ' + textMode)
+                    .addClass('io-ox-office-editor user-select-text debug-highlight ' + textMode)
                     .attr('contenteditable', true);
                 editors[textMode] = new Editor(nodes[textMode], textMode);
             });
@@ -91,7 +90,7 @@ define('io.ox/office/main',
 
             // listen to operations and deliver them to editors and output console
             _(editors).each(function (editor) {
-                editor.on('office:operation', function (event, operation) {
+                editor.on('operation', function (event, operation) {
                     var source = this;
                     _(editors).each(function (editor) {
                         if (source !== editor) {
