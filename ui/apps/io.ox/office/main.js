@@ -90,7 +90,7 @@ define('io.ox/office/main',
 
             // listen to operations and deliver them to editors and output console
             _(editors).each(function (editor) {
-                editor.on('office:operation', function (event, operation) {
+                editor.on('operation', function (event, operation) {
                     var source = this;
                     _(editors).each(function (editor) {
                         if (source !== editor) {
@@ -101,15 +101,22 @@ define('io.ox/office/main',
             });
 
             toolbar.createButtonGroup()
-                .addButton({ label: 'B', iconlike: true, toggle: true }, function () { this.css('font-weight', 'bold'); })
-                .addButton({ label: 'I', iconlike: true, toggle: true }, function () { this.css('font-style', 'italic'); })
-                .addButton({ label: 'U', iconlike: true, toggle: true }, function () { this.css('text-decoration', 'underline'); });
+                .addButton({ label: 'B', 'class': 'btn-iconlike', css: { fontWeight: 'bold' }, toggle: true })
+                .addButton({ label: 'I', 'class': 'btn-iconlike', css: { fontStyle: 'italic' }, toggle: true })
+                .addButton({ label: 'U', 'class': 'btn-iconlike', css: { textDecoration: 'underline' }, toggle: true });
 
             toolbar.createButtonGroup({ radio: true })
                 .addButton({ icon: 'align-left' })
                 .addButton({ icon: 'align-center' })
                 .addButton({ icon: 'align-right' })
                 .addButton({ icon: 'align-justify' });
+
+            toolbar.addButton({ icon: 'eye-open', toggle: true }, function (state) {
+                _(nodes).each(function (node) {
+                    node.toggleClass('debug-highlight', state);
+                });
+                editor.focus();
+            });
 
         }()); // end of local namespace
 

@@ -20,9 +20,8 @@
     	padding: 0 13px;
 	    -webkit-box-sizing: border-box;
 	    -moz-box-sizing: border-box;
-	    -ms-box-sizing: border-box;
 	    box-sizing: border-box;
-	    
+
 	    table {
 	       width: 100%;
 	    } 
@@ -44,10 +43,14 @@
     overflow-y: auto;
     border: thin gray solid;
     cursor: text;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 
     &.rich {
         width: 100%;
         height: 10cm;
+        padding: 6px;
 
         p {
 	        font-family: 'Times New Roman',Times,serif;
@@ -58,8 +61,9 @@
     &.plain {
         width: 100%;
         height: 8cm;
-        margin-top: 30px;
-	    
+        margin-top: 13px;
+        padding: 6px;
+
 	    p {
 	        font-family: 'Courier New',Courier,monospace;
 	        font-size: 10pt;
@@ -69,7 +73,7 @@
     &.output {
         width: 100%;
         height: 8cm;
-        margin-top: 30px;
+        margin-top: 13px;
         
         p {
             border-top: thin gray dotted;
@@ -78,18 +82,23 @@
         }
 	}
 
-	p {
+    .debug-highlight-mixin(@border-color, @fill-color) {
+        outline: thin @border-color solid;
+        background-color: @fill-color;
+    }
+
+    &.debug-highlight {
+        p { 
+            .debug-highlight-mixin(#8f8, #efe);
+        }
+        
+        span {
+            .debug-highlight-mixin(#88f, #eef);
+        }
+    }
+    
+    p {
 	    margin: 0;
-	
-	    /* debug borders and background */
-	    outline: thin #8f8 solid;
-	    background-color: #efe;
 	}
 
-	span {
-	    
-	    /* debug borders and background */
-	    outline: thin #88f solid;
-	    background-color: #eef;
-	}
 }

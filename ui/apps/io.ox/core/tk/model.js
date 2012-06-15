@@ -210,7 +210,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             // however, the model is not dirty
             this._data = _.extend({}, this._defaults, _.copy(data || {}, true));
 
-            // set the id addionally if possible (useful for identifying duplicates and the likes
+            // set the id additionally if possible (useful for identifying duplicates and the likes
             if (this.idAttribute in this._data) {
                 this.id = this._data[this.idAttribute];
             }
