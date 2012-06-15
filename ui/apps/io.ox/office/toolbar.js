@@ -11,9 +11,11 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/toolbar', function () {
+define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
 
     'use strict';
+
+    // local functions ========================================================
 
     /**
      * Returns whether the passed button is active.
@@ -37,19 +39,36 @@ define('io.ox/office/toolbar', function () {
         buttons.toggleClass('btn-primary', state).find('> i').toggleClass('icon-white', state);
     }
 
+    // class ButtonGroup ======================================================
+
     /**
      * Represents a group of buttons. A button group will be drawn by Bootstrap
      * as a composite component (no spacing between the buttons).
+     *
+     * @param id
+     *  The identifier of this button group.
+     *
+     * @param options
+     *  (optional) An option map that controls global behavior of the
+     *  entire button group. See method Toolbar.createButtonGroup() for
+     *  details.
      */
-    function ButtonGroup(parent, options) {
+    function ButtonGroup(toolbar, id, options) {
 
         var // create the group element
-            node = $('<div>').addClass('btn-group').appendTo(parent),
+            node = $('<div>').addClass('btn-group').appendTo(toolbar.getNode()),
             // the options
             groupOptions = options || {};
 
+        // the button group is an event source
+        Events.extend(this);
+
         /**
          * Creates a new button and appends it to this button group.
+         *
+         * @param id
+         *  The identifier of this button. Must be unique inside the button
+         *  group.
          *
          * @param options
          *  (optional) A map of options to control the properties of the button.
@@ -70,10 +89,15 @@ define('io.ox/office/toolbar', function () {
          * @returns
          *  A reference to this button group.
          */
-        this.addButton = function (options, action) {
+        this.addButton = function (id, options) {
 
-            // create the button element
-            var button = $('<button>').addClass('btn').appendTo(node);
+            var // create the button element
+                button = $('<button>').addClass('btn').appendTo(node),
+
+                // click handler, calls the Events.trigger() method
+                trigger = _.bind(function () {
+                    this.trigger('click:' + id + ' click', id, getButtonState(button));
+                }, this);
 
             // handle display options
             options = options || {};
@@ -92,30 +116,36 @@ define('io.ox/office/toolbar', function () {
             }
 
             // add radio group or toggle behavior
-            action = _.isFunction(action) ? action : $.noop;
             if (groupOptions.radio === true) {
                 button.click(function () {
-                    var self = $(this);
                     // do nothing, if clicked button is already active
-                    if (!getButtonState(self)) {
-                        toggleButtonState(self.siblings(), false);
-                        toggleButtonState(self, true);
-                        action();
+                    if (!getButtonState(button)) {
+                        toggleButtonState(button.siblings(), false);
+                        toggleButtonState(button, true);
+                        trigger();
                     }
                 });
-            } else if (options.toggle === true) {
+            } else if ((groupOptions.toggle === true) || (options.toggle === true)) {
                 button.click(function () {
-                    var self = $(this);
-                    toggleButtonState(self);
-                    action(getButtonState(self));
+                    toggleButtonState(button);
+                    trigger();
                 });
             } else {
-                action();
+                trigger();
             }
 
             return this;
         };
+
+        /**
+         * Returns the parent tool bar. Can be used for method chaining.
+         */
+        this.end = function () {
+            return toolbar;
+        };
     }
+
+    // public class ToolBar ===================================================
 
     function ToolBar() {
 
@@ -131,9 +161,15 @@ define('io.ox/office/toolbar', function () {
         /**
          * Creates a new button group, and appends it to this tool bar.
          *
+         * @param id
+         *  The identifier of the button group. Must be unique inside the tool
+         *  bar.
+         *
          * @param options
          *  (optional) An option map that controls global behavior of the
          *  entire button group.
+         *  - toggle: If set to true, all buttons added to the button group
+         *      will become toggle buttons.
          *  - radio: If set to true, the button group behaves like a group of
          *      radio buttons, i. e. one of the buttons is in 'active' state at
          *      any time. If another button is clicked, the active button will
@@ -143,27 +179,13 @@ define('io.ox/office/toolbar', function () {
          * @returns
          *  The new ButtonGroup instance.
          */
-        this.createButtonGroup = function (options) {
-            return new ButtonGroup(node, options);
+        this.createButtonGroup = function (id, options) {
+            return new ButtonGroup(this, id, options);
         };
 
-        /**
-         * Creates a new single button in its own button group and appends it
-         * to this tool bar.
-         *
-         * @param options
-         *  (optional) A map of options to control the properties of the
-         *  button. See method ButtonGroup.addButton() for details.
-         *
-         * @returns
-         *  A reference to this tool bar.
-         */
-        this.addButton = function (options, action) {
-            this.createButtonGroup().addButton(options, action);
-            return this;
-        };
+    }
 
-    } // end of ToolBar class
+    // exports ================================================================
 
     return ToolBar;
 });

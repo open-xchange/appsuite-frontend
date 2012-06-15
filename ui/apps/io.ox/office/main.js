@@ -100,23 +100,30 @@ define('io.ox/office/main',
                 });
             });
 
-            toolbar.createButtonGroup()
-                .addButton({ label: 'B', 'class': 'btn-iconlike', css: { fontWeight: 'bold' }, toggle: true })
-                .addButton({ label: 'I', 'class': 'btn-iconlike', css: { fontStyle: 'italic' }, toggle: true })
-                .addButton({ label: 'U', 'class': 'btn-iconlike', css: { textDecoration: 'underline' }, toggle: true });
-
-            toolbar.createButtonGroup({ radio: true })
-                .addButton({ icon: 'align-left' })
-                .addButton({ icon: 'align-center' })
-                .addButton({ icon: 'align-right' })
-                .addButton({ icon: 'align-justify' });
-
-            toolbar.addButton({ icon: 'eye-open', toggle: true }, function (state) {
-                _(nodes).each(function (node) {
-                    node.toggleClass('debug-highlight', state);
-                });
-                editor.focus();
-            });
+            toolbar
+                .createButtonGroup('fontAttr', { toggle: true })
+                    .addButton('bold',      { label: 'B', 'class': 'btn-iconlike', css: { fontWeight: 'bold' } })
+                    .addButton('italic',    { label: 'I', 'class': 'btn-iconlike', css: { fontStyle: 'italic' } })
+                    .addButton('underline', { label: 'U', 'class': 'btn-iconlike', css: { textDecoration: 'underline' } })
+                    .on('click', function (event, id, state) {
+                        editor.setAttribute(id);
+                    })
+                .end()
+                .createButtonGroup('paraAlign', { radio: true })
+                    .addButton('left',    { icon: 'align-left' })
+                    .addButton('center',  { icon: 'align-center' })
+                    .addButton('right',   { icon: 'align-right' })
+                    .addButton('justify', { icon: 'align-justify' })
+                .end()
+                .createButtonGroup('debug')
+                    .addButton('highlight', { icon: 'eye-open', toggle: true })
+                    .on('click', function (event, id, state) {
+                        _(nodes).each(function (node) {
+                            node.toggleClass('debug-highlight', state);
+                        });
+                        editor.focus();
+                    })
+                .end();
 
         }()); // end of local namespace
 
