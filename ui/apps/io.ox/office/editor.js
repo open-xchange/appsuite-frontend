@@ -127,7 +127,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 144, 145 // NumLock, ScrollLock
             ]);
 
-        var bModified = false;
+        var modified = false;
+        var focused = false;
 
         var lastKeyDownEvent;
 
@@ -247,12 +248,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
             // TODO: Need to handle other cases - later...
             return '';
-        };
-
-        this.hasFocus = function () {
-            var bHasFocus = true;
-            // TODO
-            return bHasFocus;
         };
 
         this.implGetOXOSelection = function (domSelection) {
@@ -402,6 +397,20 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         /**
+         * Returns whether the editor contains unsaved changes.
+         */
+        this.isModified = function () {
+            return modified;
+        };
+
+        /**
+         * Returns whether the editor is currently focused.
+         */
+        this.hasFocus = function () {
+            return focused;
+        };
+
+        /**
          * Sets the browser focus into the edit text area.
          */
         this.focus = function (initSelection) {
@@ -410,13 +419,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 this.setSelection(new OXOSelection(new OXOPaM(0, 0), new OXOPaM(0, 0)));
             }
 
-        };
-
-        /**
-         * Returns whether the editor contains unsaved changes.
-         */
-        this.isModified = function () {
-            return bModified;
         };
 
         this.initDocument = function () {
@@ -1117,6 +1119,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         // hybrid edit mode
         editdiv
+            .on('focus', $.proxy(function () { focused = true; this.trigger('focus:got'); }, this))
+            .on('blur', $.proxy(function () { focused = false; this.trigger('focus:lost'); }, this))
             .on('keydown', $.proxy(this, 'processKeyDown'))
             .on('keypress', $.proxy(this, 'processKeyPressed'))
             .on('dragover', $.proxy(this, 'processDragOver'))
