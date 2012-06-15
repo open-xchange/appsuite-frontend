@@ -58,10 +58,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
         var // create the group element
             node = $('<div>').addClass('btn-group').appendTo(toolbar.getNode()),
             // the options
-            groupOptions = options || {};
-
-        // the button group is an event source
-        Events.extend(this);
+            groupOptions = options || {},
+            // event handler container
+            events = new Events();
 
         /**
          * Creates a new button and appends it to this button group.
@@ -78,7 +77,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
          *  - class: Additional CSS classes to be set at the button (string).
          *  - css: Additional CSS formatting (key/value map).
          *  - toggle: If set to true, the button works as toggle button
-         *      (similar to a check box). Do not use in radio groups!
+         *      (similar to a check box), i.e. it maintains its state
+         *      internally.
          *
          * @param action
          *  Callback that will be called when the button has been pressed. For
@@ -95,9 +95,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
                 button = $('<button>').addClass('btn').appendTo(node),
 
                 // click handler, calls the Events.trigger() method
-                trigger = _.bind(function () {
-                    this.trigger('click:' + id + ' click', id, getButtonState(button));
-                }, this);
+                trigger = function () {
+                    events.trigger('click', id, getButtonState(button));
+                };
 
             // handle display options
             options = options || {};
@@ -115,7 +115,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
                 button.css(options.css);
             }
 
-            // add radio group or toggle behavior
+            // behavior of regular, radio, or toggle buttons
             if (groupOptions.radio === true) {
                 button.click(function () {
                     // do nothing, if clicked button is already active
@@ -125,15 +125,28 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
                         trigger();
                     }
                 });
-            } else if ((groupOptions.toggle === true) || (options.toggle === true)) {
+            } else if (options.toggle === true) {
                 button.click(function () {
                     toggleButtonState(button);
                     trigger();
                 });
             } else {
-                trigger();
+                button.click(trigger);
             }
 
+            return this;
+        };
+
+        this.click = function (callback) {
+            events.on('click', callback);
+            return this;
+        };
+
+        this.poll = function (callback, millis) {
+            window.setTimeout(function timer() {
+
+                window.setTimeout(timer, millis);
+            }, millis);
             return this;
         };
 
@@ -168,8 +181,6 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
          * @param options
          *  (optional) An option map that controls global behavior of the
          *  entire button group.
-         *  - toggle: If set to true, all buttons added to the button group
-         *      will become toggle buttons.
          *  - radio: If set to true, the button group behaves like a group of
          *      radio buttons, i. e. one of the buttons is in 'active' state at
          *      any time. If another button is clicked, the active button will

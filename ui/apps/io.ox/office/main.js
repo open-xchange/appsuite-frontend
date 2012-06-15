@@ -101,13 +101,17 @@ define('io.ox/office/main',
             });
 
             toolbar
-                .createButtonGroup('fontAttr', { toggle: true })
+                .createButtonGroup('fontAttr')
                     .addButton('bold',      { label: 'B', 'class': 'btn-iconlike', css: { fontWeight: 'bold' } })
                     .addButton('italic',    { label: 'I', 'class': 'btn-iconlike', css: { fontStyle: 'italic' } })
                     .addButton('underline', { label: 'U', 'class': 'btn-iconlike', css: { textDecoration: 'underline' } })
-                    .on('click', function (event, id, state) {
+                    .click(function (event, id) {
                         editor.setAttribute(id);
+                        editor.focus();
                     })
+                    .poll(function (id) {
+                        return editor.getAttribute(id);
+                    }, 200)
                 .end()
                 .createButtonGroup('paraAlign', { radio: true })
                     .addButton('left',    { icon: 'align-left' })
@@ -117,7 +121,7 @@ define('io.ox/office/main',
                 .end()
                 .createButtonGroup('debug')
                     .addButton('highlight', { icon: 'eye-open', toggle: true })
-                    .on('click', function (event, id, state) {
+                    .click(function (event, id, state) {
                         _(nodes).each(function (node) {
                             node.toggleClass('debug-highlight', state);
                         });
