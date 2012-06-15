@@ -418,7 +418,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             if (initSelection) {
                 this.setSelection(new OXOSelection(new OXOPaM(0, 0), new OXOPaM(0, 0)));
             }
-
         };
 
         this.initDocument = function () {
@@ -435,15 +434,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         this.setSelection = function (oxosel) {
             var aDOMSelection = this.getDOMSelection(oxosel);
             this.implSetDOMSelection(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset, aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
-        };
-
-        this.setReliableSelection = function (oxosel) {
-            var def = $.Deferred();
-            setTimeout(function () {
-                this.setSelection(oxosel);
-                def.resolve();
-            });
-            return def;
         };
 
         this.processDragOver = function (event) {
@@ -550,36 +540,36 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     this.setSelection(selection);
                 }
                 else if (c === 'Z') {
-                    this.undo();
                     event.preventDefault();
+                    this.undo();
                 }
                 else if (c === 'Y') {
-                    this.redo();
                     event.preventDefault();
+                    this.redo();
                 }
                 else if (c === 'X') {
-                    this.cut();
                     event.preventDefault();
+                    this.cut();
                 }
                 else if (c === 'C') {
-                    this.copy();
                     event.preventDefault();
+                    this.copy();
                 }
                 else if (c === 'V') {
-                    this.paste();
                     event.preventDefault();
+                    this.paste();
                 }
                 else if (c === 'B') {
-                    this.setAttribute('bold', !this.getAttribute('bold'));
                     event.preventDefault();
+                    this.setAttribute('bold', !this.getAttribute('bold'));
                 }
                 else if (c === 'I') {
-                    this.setAttribute('italic', !this.getAttribute('italic'));
                     event.preventDefault();
+                    this.setAttribute('italic', !this.getAttribute('italic'));
                 }
                 else if (c === 'U') {
-                    this.setAttribute('underline', !this.getAttribute('underline'));
                     event.preventDefault();
+                    this.setAttribute('underline', !this.getAttribute('underline'));
                 }
                 else if (c === 'xxxxxxx') {
                     event.preventDefault();
