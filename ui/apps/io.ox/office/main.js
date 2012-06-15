@@ -118,7 +118,7 @@ define('io.ox/office/main',
                     .addButton('center',  { icon: 'align-center' })
                     .addButton('right',   { icon: 'align-right' })
                     .addButton('justify', { icon: 'align-justify' })
-                    .click(function (id) {
+                    .click(function () {
                         editor.focus();
                     })
                 .end()
