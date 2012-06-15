@@ -105,8 +105,8 @@ define('io.ox/office/main',
                     .addButton('bold',      { label: 'B', 'class': 'btn-iconlike', css: { fontWeight: 'bold' } })
                     .addButton('italic',    { label: 'I', 'class': 'btn-iconlike', css: { fontStyle: 'italic' } })
                     .addButton('underline', { label: 'U', 'class': 'btn-iconlike', css: { textDecoration: 'underline' } })
-                    .click(function (event, id) {
-                        editor.setAttribute(id);
+                    .click(function (event, id, state) {
+                        editor.setAttribute(id, !state);
                         editor.focus();
                     })
                     .poll(function (id) {
