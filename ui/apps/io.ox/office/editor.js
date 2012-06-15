@@ -435,6 +435,15 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.implSetDOMSelection(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset, aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
         };
 
+        this.setReliableSelection = function (oxosel) {
+            var def = $.Deferred();
+            setTimeout(function () {
+                this.setSelection(oxosel);
+                def.resolve();
+            });
+            return def;
+        };
+
         this.processDragOver = function (event) {
             event.preventDefault();
         };
