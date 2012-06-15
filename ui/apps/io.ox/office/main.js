@@ -60,7 +60,7 @@ define('io.ox/office/main',
             // create the rich-text and plain-text editor
             _(Editor.TextMode).each(function (textMode) {
                 nodes[textMode] = $('<div>')
-                    .addClass('io-ox-office-editor user-select-text debug-highlight ' + textMode)
+                    .addClass('io-ox-office-editor user-select-text ' + textMode)
                     .attr('contenteditable', true);
                 editors[textMode] = new Editor(nodes[textMode], textMode);
             });
@@ -111,7 +111,12 @@ define('io.ox/office/main',
                 .addButton({ icon: 'align-right' })
                 .addButton({ icon: 'align-justify' });
 
-            toolbar.addButton({ icon: 'eye-open', toggle: true });
+            toolbar.addButton({ icon: 'eye-open', toggle: true }, function (state) {
+                _(nodes).each(function (node) {
+                    node.toggleClass('debug-highlight', state);
+                });
+                editor.focus();
+            });
 
         }()); // end of local namespace
 

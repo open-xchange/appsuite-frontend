@@ -61,10 +61,16 @@ define('io.ox/office/toolbar', function () {
          *  - toggle: If set to true, the button works as toggle button
          *      (similar to a check box). Do not use in radio groups!
          *
+         * @param action
+         *  Callback that will be called when the button has been pressed. For
+         *  regular push buttons, the function will be called without
+         *  arguments. For toggle buttons, the button state will be passed in
+         *  the first parameter.
+         *
          * @returns
          *  A reference to this button group.
          */
-        this.addButton = function (options) {
+        this.addButton = function (options, action) {
 
             // create the button element
             var button = $('<button>').addClass('btn').appendTo(node);
@@ -86,6 +92,7 @@ define('io.ox/office/toolbar', function () {
             }
 
             // add radio group or toggle behavior
+            action = _.isFunction(action) ? action : $.noop;
             if (groupOptions.radio === true) {
                 button.click(function () {
                     var self = $(this);
@@ -93,10 +100,17 @@ define('io.ox/office/toolbar', function () {
                     if (!getButtonState(self)) {
                         toggleButtonState(self.siblings(), false);
                         toggleButtonState(self, true);
+                        action();
                     }
                 });
             } else if (options.toggle === true) {
-                button.click(function () { toggleButtonState($(this)); });
+                button.click(function () {
+                    var self = $(this);
+                    toggleButtonState(self);
+                    action(getButtonState(self));
+                });
+            } else {
+                action();
             }
 
             return this;
@@ -144,8 +158,8 @@ define('io.ox/office/toolbar', function () {
          * @returns
          *  A reference to this tool bar.
          */
-        this.addButton = function (options) {
-            this.createButtonGroup().addButton(options);
+        this.addButton = function (options, action) {
+            this.createButtonGroup().addButton(options, action);
             return this;
         };
 
