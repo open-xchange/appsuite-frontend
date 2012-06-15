@@ -14,10 +14,12 @@ define('io.ox/calendar/edit/view-main',
        ['io.ox/calendar/edit/binding-util',
        'io.ox/calendar/util',
        'io.ox/core/extensions',
-       'io.ox/calendar/edit/ext-helper',
        'io.ox/core/date',
-       'text!io.ox/calendar/edit/tpl/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, ext_helper, dateAPI, commontpl, gt) {
+       'io.ox/calendar/edit/view-participants',
+       'io.ox/calendar/edit/view-addparticipants',
+       'io.ox/calendar/edit/collection-participants',
+       'dot!io.ox/calendar/edit/common.html',
+       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, ParticipantsView, AddParticipantsView, ParticipantsCollection, tmpl, gt) {
 
     'use strict';
 
@@ -89,7 +91,8 @@ define('io.ox/calendar/edit/view-main',
         TYPE:               gt('Type'),
         PARTICIPANTS:       gt('Participants'),
         PRIVATE:            gt('Private'),
-        NOTIFY_ALL:         gt('Notify all')
+        NOTIFY_ALL:         gt('Notify all participants about this change')
+
     };
 
     /// strings end
@@ -99,7 +102,7 @@ define('io.ox/calendar/edit/view-main',
     $.fn.datepicker.dates.en = {
         "days": dateAPI.locale.days,
         "daysShort": dateAPI.locale.daysShort,
-        "daysMin": dateAPI.locale.daysShort,
+        "daysMin": dateAPI.locale.daysStandalone,
         "months": dateAPI.locale.months,
         "monthsShort": dateAPI.locale.monthsShort
     };
@@ -136,24 +139,14 @@ define('io.ox/calendar/edit/view-main',
         tagName: 'div',
         className: 'io-ox-calendar-edit container',
         subviews: {},
-        _modelBinder: undefined,
-        guid: undefined,
-        bindings: undefined,
         events: {
- //           'click .editrecurrence': 'toggleRecurrence',
             'click .save': 'onSave'
- //           'click input.repeat': 'onToggleRepeat'
         },
         initialize: function () {
             var self = this;
-            self.template = doT.template(commontpl);
+            self.subviews = {};
             self._modelBinder = new Backbone.ModelBinder();
             self.guid = _.uniqueId('io_ox_calendar_edit_');
-
-
-            //self.participantsCollection = new ParticipantsCollection(self.model.get('participants'));
-            //self.participantsView = new ParticipantsView({collection: self.participantsCollection});
-            //self.recurrenceView = new RecurrenceView({model: self.model});
 
             var recurTextConverter = function (direction, value, attribute, model) {
                 if (direction === 'ModelToView') {
@@ -186,8 +179,9 @@ define('io.ox/calendar/edit/view-main',
                     }
                 ]
             };
-
-            Backbone.Validation.bind(this, {forceUpdate: true});
+            self.model.on('change:start_date', _.bind(self.onStartDateChange, self));
+            self.model.on('change:end_date', _.bind(self.onEndDateChange, self));
+            Backbone.Validation.bind(this, {forceUpdate: true, selector: 'data-property'});
         },
         render: function () {
             var self = this;
@@ -195,16 +189,13 @@ define('io.ox/calendar/edit/view-main',
             // pre render it
             staticStrings.SAVE_BUTTON_LABEL = (self.model.has('id') ? gt('Save') : gt('Create'));
 
-            self.$el.empty().append(self.template({
+            self.$el.empty().append(tmpl.render('io.ox/calendar/edit/section', {
                 strings: staticStrings,
                 reminderList: reminderListValues,
                 uid: self.guid
             }));
 
-            // define and invoke extension points
-            ext_helper.processDomFragment(self.el, 'io.ox/calendar/edit', {view: self});
-
-            var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'name');
+            var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property');
             var bindings = _.extend(defaultBindings, self.bindings);
 
             // let others modify the bindings - if something is disabled,
@@ -215,15 +206,84 @@ define('io.ox/calendar/edit/view-main',
             self._modelBinder.bind(self.model, self.el, bindings);
 
             //init date picker
-            self.$('.startsat-date').datepicker({format: dateAPI.locale.date});
-            self.$('.endsat-date').datepicker({format: dateAPI.locale.date});
+            self.$('.startsat-date').datepicker({format: dateAPI.DATE});
+            self.$('.endsat-date').datepicker({format: dateAPI.DATE});
+
+
+            var participants = new ParticipantsCollection(self.model.get('participants'));
+            self.subviews.participants = new ParticipantsView({collection: participants, el: $(self.el).find('.participants')});
+            self.subviews.participants.render();
+            participants.on('remove', _.bind(self.onRemoveParticipant, self));
+
+            self.subviews.addparticipants = new AddParticipantsView({ el: $(self.el).find('.add-participants')});
+            self.subviews.addparticipants.render();
+            self.subviews.addparticipants.on('select', _.bind(self.onAddParticipant, self));
+            //$(self.el).find('.participants').empty().append(self.subviews.participants.render().el);
 
             return self;
         },
+        onStartDateChange: function () {
+            var self = this,
+                start = self.model.previous('start_date'),
+                curstart = self.model.get('start_date'),
+                end = self.model.get('end_date'),
+                shift = end - start,
+                newEnd = curstart + shift;
 
+            if (!self.model.hasChanged('end_date') && _.isNumber(newEnd)) {
+                self.model.set('end_date', newEnd);
+            }
+
+        },
+        onEndDateChange: function () {
+            var self = this,
+                start = self.model.get('start_date'),
+                end = self.model.previous('end_date'),
+                curEnd = self.model.get('end_date'),
+                shift, newStart;
+
+            if (start > curEnd) {
+                shift = end - start;
+                newStart = curEnd - shift;
+                if (_.isNumber(newStart)) {
+                    self.model.set('start_date', newStart);
+                }
+            }
+        },
         onSave: function () {
             var self = this;
             self.trigger('save');
+        },
+        onAddParticipant: function (data) {
+            var participants = this.model.get('participants'),
+                notIn = true;
+
+            this.subviews.participants.collection.add(data);
+
+            notIn = !_(participants).any(function (item) {
+                return (item.id === data.id && item.type === data.type);
+            });
+
+            if (notIn) {
+                if (data.type !== 5) {
+                    participants.push({id: data.id, type: data.type});
+                } else {
+                    participants.push({type: data.type, mail: data.mail, display_name: data.display_name});
+                }
+            }
+
+            this.model.set('participants', participants);
+
+        },
+        onRemoveParticipant: function (model, collection) {
+            var participants = this.model.get('participants');
+            participants = _(participants).filter(function (item) {
+                if (item.id === model.get('id') && item.type === model.get('type')) {
+                    return false;
+                }
+                return true;
+            });
+            this.model.set('participants', participants);
         }
     });
 

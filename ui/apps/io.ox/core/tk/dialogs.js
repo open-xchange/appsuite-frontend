@@ -447,7 +447,9 @@ define("io.ox/core/tk/dialogs",
 
         this.delegate = function (node, selector, handler) {
             $(node).on("click", selector, function (e) {
-                open.call(this, e, handler);
+                if (!e.isDefaultPrevented()) {
+                    open.call(this, e, handler);
+                }
             });
             return this;
         };

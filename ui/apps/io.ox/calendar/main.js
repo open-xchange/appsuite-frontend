@@ -14,13 +14,10 @@
 define("io.ox/calendar/main",
     ["io.ox/calendar/api",
      "io.ox/calendar/util",
-     "io.ox/calendar/view-detail",
      "io.ox/core/config",
      "io.ox/core/commons",
-     "io.ox/core/tk/vgrid",
-     "io.ox/calendar/view-grid-template",
      "io.ox/calendar/actions",
-     "less!io.ox/calendar/style.css"], function (api, util, viewDetail, config, commons, VGrid, tmpl) {
+     "less!io.ox/calendar/style.css"], function (api, util, config, commons, VGrid, tmpl) {
 
     "use strict";
 
@@ -29,11 +26,7 @@ define("io.ox/calendar/main",
         // app window
         win,
         // grid
-        grid,
-        GRID_WIDTH = 330,
-        // nodes
-        left,
-        right;
+        GRID_WIDTH = 330;
 
     // launcher
     app.setLauncher(function () {
@@ -51,79 +44,15 @@ define("io.ox/calendar/main",
         // folder tree
         commons.addFolderView(app, { width: GRID_WIDTH, type: 'calendar', view: 'FolderList' });
 
-        // DOM scaffold
-
-        // left panel
-        left = $("<div>")
-            .addClass("leftside border-right")
-            .css({
-                width: GRID_WIDTH + "px",
-                overflow: "auto"
-            })
-            .appendTo(win.nodes.main);
-
-        // right panel
-        right = $("<div>")
-            .css({ left: GRID_WIDTH + 1 + "px", overflow: "auto" })
-            .addClass("rightside default-content-padding calendar-detail-pane")
-            .appendTo(win.nodes.main);
-
-        // grid
-        grid = new VGrid(left);
-
-        // fix selection's serialize
-        grid.selection.serialize = function (obj) {
-            return typeof obj === "object" ? (obj.folder_id || obj.folder || 0) + "." + obj.id + "." + (obj.recurrence_position || 0) : obj;
-        };
-
-        // add template
-        grid.addTemplate(tmpl.main);
-
-        // add label template
-        grid.addLabelTemplate(tmpl.label);
-
-        // requires new label?
-        grid.requiresLabel = tmpl.requiresLabel;
-
-        commons.wireGridAndAPI(grid, api);
-        commons.wireGridAndSearch(grid, win, api);
-
-        // special search: list request
-        grid.setListRequest("search", function (ids) {
-            return $.Deferred().resolve(ids);
-        });
-
-        var showAppointment, drawAppointment, drawFail;
-
-        showAppointment = function (obj) {
-            // be busy
-            right.busy(true);
-            // get appointment
-            api.get(obj)
-                .done(_.lfo(drawAppointment))
-                .fail(_.lfo(drawFail, obj));
-        };
-
-        drawAppointment = function (data) {
-            right.idle().empty().append(viewDetail.draw(data));
-        };
-
-        drawFail = function (obj) {
-            right.idle().empty().append(
-                $.fail("Oops, couldn't load appointment data.", function () {
-                    showAppointment(obj);
-                })
-            );
-        };
-
-        commons.wireGridAndSelectionChange(grid, 'io.ox/calendar', showAppointment, right);
-        commons.wireGridAndWindow(grid, win);
-        commons.wireFirstRefresh(app, api);
-        commons.wireGridAndRefresh(grid, api, win);
-
         // go!
-        commons.addFolderSupport(app, grid, 'calendar')
-            .done(commons.showWindow(win, grid));
+        commons.addFolderSupport(app, null, 'calendar')
+            .pipe(commons.showWindow(win))
+            .done(function () {
+                // switch to month view
+                require(['io.ox/calendar/month/perspective'], function (view) {
+                    view.show(app);
+                });
+            });
     });
 
     return {

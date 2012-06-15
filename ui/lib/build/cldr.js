@@ -73,12 +73,12 @@ downloadFile("supplemental/supplementalData", function (supp) {
         }
         return parent;
     }
-    
+
     return {
         minDays: mapTerritories(supp.weekData.minDays, "count"),
         firstDay: mapTerritories(supp.weekData.firstDay, "day")
     };
-    
+
     function mapTerritories(tags, attr) {
         var map = {};
         _.each(tags, function (tag) {
@@ -105,7 +105,7 @@ function downloadFile(name, filter) {
     var dest = "tmp/cldr/" + name + ".json";
     if (jake.Task[dest]) return;
     utils.file(dest, [], download, { async: true });
-    
+
     function download() {
         http.get({ host: "unicode.org", path: svnPath + name + ".xml" },
             parse).on("error", function (e) {
@@ -138,12 +138,12 @@ function processLanguage(lang) {
                              sat: 6 };
             var match = lang.split(/[_-]/),
                 territory = match[match.length > 2 ? 2 : 1];
-            
+
             function format(s, params) {
                 return s.replace(/\{(\d+)\}/g,
                                  function(_, n) { return params[n]; });
             }
-            
+
             function mapDays(context, width) {
                 var array = [];
                 var path = format("days/dayContext[@type='{0}']/" +
@@ -162,7 +162,7 @@ function processLanguage(lang) {
                 });
                 return array;
             }
-            
+
             function getFormat(type, choice) {
                 choice = choice ||
                     ldml.get(gregorian + type + "Formats/default")["@"].choice;
@@ -175,7 +175,7 @@ function processLanguage(lang) {
                 "appendItem[@request='Timezone']")['#'];
             var vName = ldml.get(gregorian +
                 "fields/field[@type='zone']/displayName");
-            
+
             function getFormats() {
                 var formats = {};
                 _.each(['E', 'yMd', 'yMEd', 'yMMMd', 'yMMMEd', 'hm', 'Hm', 'v'],
@@ -195,7 +195,7 @@ function processLanguage(lang) {
                 }
                 return formats;
             }
-            
+
             function getIntervals() {
                 var intervals = {
                     fallback: reformat(ldml.get(gregorian + "dateTimeFormats/" +
@@ -214,7 +214,7 @@ function processLanguage(lang) {
                     });
                 return intervals;
             }
-            
+
             function getDayPeriods(type) {
                 var retval = {};
                 _.each(ldml.get(gregorian +
@@ -225,7 +225,7 @@ function processLanguage(lang) {
                     });
                 return retval;
             }
-            
+
             function getEras() {
                 var array = [];
                 _.each(ldml.get(gregorian + "eras/eraAbbr/era"), function(era) {
@@ -233,27 +233,27 @@ function processLanguage(lang) {
                 });
                 return array;
             }
-            
+
             function reformat(s) {
                 return s.replace(/\{(\d)\}/g, function(_, d) {
                     return '%' + (Number(d) + 1) + '$s';
                 });
             }
-            
+
             var dtFormat = getFormat('dateTime');
             var data = {
                 daysInFirstWeek: Number(supp.minDays[territory]),
                 weekStart: weekDays[supp.firstDay[territory]],
                 days: mapDays('format', 'wide'),
                 daysShort: mapDays('format', 'abbreviated'),
-                daysStandalone: mapDays('stand-alone', 'abbreviated'),
+                daysStandalone: mapDays('stand-alone', 'short'),
                 months: mapMonths('format', 'wide'),
                 monthsShort: mapMonths('format', 'abbreviated'),
                 formats: getFormats(),
 
                 date: getFormat('date'),
                 time: getFormat('time', 'short'),
-                
+
                 dateTimeFormat: reformat(dtFormat),
 
                 intervals: getIntervals(),
@@ -290,7 +290,7 @@ var loadLanguage = _.memoize(function (lang) {
             return n === undefined && parent ? parent.resolve(path) : n;
         },
         list: function (path) {
-            
+
         }
     };
 });

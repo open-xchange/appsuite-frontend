@@ -99,6 +99,8 @@ define('io.ox/mail/view-detail',
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=\d+)(\s*)$/i,
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i,
         regLink = /^(.*)(http:\/\/\S+)(\s.*)?$/i,
+        regMail = /(\S+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/i,
+        regMailReplace = /(\S+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/ig, /* dedicated one to avoid strange side effects */
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
     var openDocumentLink = function (e) {
@@ -259,7 +261,7 @@ define('io.ox/mail/view-detail',
 
             // process all text nodes unless mail is too large (> 512 KB)
             if (!isLarge) {
-                content.find('*').contents().each(function () {
+                content.contents().add(content.find('*').contents()).each(function () {
                     if (this.nodeType === 3) {
                         var node = $(this), text = this.nodeValue, length = text.length, m;
                         // split long character sequences for better wrapping
@@ -280,6 +282,13 @@ define('io.ox/mail/view-detail',
                         } else if ((m = text.match(regLink)) && m.length && node.closest('a').length === 0) {
                             node.replaceWith(
                                 $($.txt(m[1] || '')).add(drawLink(m[2])).add($.txt(m[3]))
+                            );
+                        } else if (regMail.test(text) && node.closest('a').length === 0) {
+                            // links
+                            node.replaceWith(
+                                $('<div>')
+                                .html(text.replace(regMailReplace, '<a href="mailto:$1">$1</a>'))
+                                .contents()
                             );
                         }
                     }

@@ -30,6 +30,13 @@
     font-weight: bold;
 }
 
+.vgrid-cell.calendar .private {
+    color: #555;
+    float: right;
+    display: inline-block;
+}
+
+
 .vgrid-cell.calendar .location {
     color: #888;
 }

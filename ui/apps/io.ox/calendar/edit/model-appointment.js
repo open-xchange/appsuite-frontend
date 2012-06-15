@@ -13,9 +13,17 @@
 
 define('io.ox/calendar/edit/model-appointment',
       ['io.ox/calendar/api',
-       'gettext!io.ox/calendar/edit/main'], function (CalendarAPI, gt) {
+       'io.ox/core/date',
+       'gettext!io.ox/calendar/edit/main'], function (CalendarAPI, dateAPI, gt) {
 
     'use strict';
+
+    var defStart = new dateAPI.Local();
+    var defEnd = new dateAPI.Local();
+    defStart.setMinutes(0);
+    defStart.setHours(defStart.getHours() + 1);
+    defEnd.setMinutes(0);
+    defEnd.setHours(defEnd.getHours() + 2);
 
 
     var AppointmentModel = Backbone.Model.extend({
@@ -30,7 +38,7 @@ define('io.ox/calendar/edit/model-appointment',
                 msg: gt('You must enter a valid date/time.')
             }, {
                 smallerThan: 'end_date',
-                msg: gt('Startdate must be smaller than end-date.')
+                msg: gt('Start date must be  than end-date.')
             }],
             end_date: [{
                 required: true,
@@ -38,20 +46,38 @@ define('io.ox/calendar/edit/model-appointment',
                 msg: gt('You must enter a valid date/time.')
             }, {
                 greaterThan: 'start_date',
-                msg: gt('End-date must be greater than start-date')
+                msg: gt('End date must be greater than start-date')
             }]
         },
-        toSync: {},
         defaults: {
-            start_date: new Date().getTime(),
-            end_date: new Date().getTime(),
+            start_date: dateAPI.Local.localTime(defStart.getTime()),
+            end_date: dateAPI.Local.localTime(defEnd.getTime()),
             recurrence_type: 0
         },
         initialize: function () {
+            this.toSync = {}; //no proto?
             this.on('change', _.bind(this.onChange, this));
         },
+
+        fetch: function (options) {
+            var self = this,
+                df = new $.Deferred();
+
+            CalendarAPI.get(options)
+                .done(function (data) {
+                    self.set(data.data);
+                    df.resolve(self, data);
+                })
+                .fail(function (err) {
+                    df.reject(self, err);
+                });
+
+            return df;
+        },
         save: function () {
-            var self = this;
+            var self = this,
+                df = new $.Deferred();
+
             self.validate();
 
             if (self.isDirty() && !self.isNew() && self.isValid()) {
@@ -59,11 +85,9 @@ define('io.ox/calendar/edit/model-appointment',
             } else if (self.isDirty() && self.isNew() && self.isValid()) {
                 return self._create();
             } else if (!self.isValid()) {
-                var df = new $.Deferred();
                 df.reject('Please correct your inputs');
                 return df;
             } else {
-                var df = new $.Deferred();
                 df.reject('Nothing to save');
                 return df;
             }
@@ -73,34 +97,29 @@ define('io.ox/calendar/edit/model-appointment',
                 o = {},
                 df = new $.Deferred();
 
-            o.data = self.toSync;
-            o.data = self.attributes; //TODO: just everything over the air
-
-            //o.data.ignore_conflicts = true; //just for debug
+            o = self.toSync;
+            o = self.attributes; //TODO: just everything over the air, fix that
 
             // set recurrence_type if it was set
             if (self.get('recurrence_type')) {
-                o.data.recurrence_type = self.get('recurrence_type');
+                o.recurrence_type = self.get('recurrence_type');
 
-                // none recurrenc
-                if (o.data.recurrence_type === 0) {
-                    delete o.data.recurrence_id;
+                // none recurrence
+                if (o.recurrence_type === 0) {
+                    delete o.recurrence_id;
                     self.unset('recurrence_id');
                 }
             }
 
-            o.id = self.get('id');
-            o.folder = self.get('folder_id');
-            o.timestamp = _.now();
-
             CalendarAPI.update(o)
-                .done(function () {
+                .done(function (data) {
                     self._resetDirty();
-                    df.resolve(true);
+                    self.attributes = data;
+                    df.resolve(data);
 
                 })
-                .fail(function () {
-                    df.reject('error on update model on server');
+                .fail(function (err) {
+                    df.reject(err);
                 });
 
             return df;
@@ -111,16 +130,12 @@ define('io.ox/calendar/edit/model-appointment',
                 o = {},
                 df = new $.Deferred();
 
-            o.data = self.attributes;
-            //o.data.ignore_conflicts = true; //just for debug
-
-            o.folder = self.get('folder_id');
-            o.timestamp = _.now();
-
+            o = self.attributes;
             CalendarAPI.create(o)
-                .done(function () {
+                .done(function (data) {
                     self._resetDirty();
-                    df.resolve(true);
+                    self.attributes = data;
+                    df.resolve(data);
                 })
                 .fail(function (err) {
                     df.reject(err);
@@ -135,10 +150,10 @@ define('io.ox/calendar/edit/model-appointment',
                 df = new $.Deferred();
 
             o.data = self.attributes;
+
             // set recurrence_type if it was set
             if (self.get('recurrence_type')) {
                 o.data.recurrence_type = self.get('recurrence_type');
-
                 // none recurrenc
                 if (o.data.recurrence_type === 0) {
                     delete o.data.recurrence_id;
@@ -146,10 +161,7 @@ define('io.ox/calendar/edit/model-appointment',
                 }
             }
 
-            o.id = self.get('id');
-            o.folder = self.get('folder_id');
-            o.data.folder = o.folder;
-            o.timestamp = _.now();
+            o.data.folder = self.get('folder_id');
 
             CalendarAPI.remove(o)
                 .done(function () {
@@ -190,6 +202,8 @@ define('io.ox/calendar/edit/model-appointment',
             this.toSync = {};
         }
     });
+
+
 
     return AppointmentModel;
 });

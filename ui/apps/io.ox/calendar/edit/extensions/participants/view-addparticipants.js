@@ -15,24 +15,18 @@ define('io.ox/calendar/edit/view-addparticipants',
       ['io.ox/core/api/user',
        'io.ox/contacts/api',
        'io.ox/core/tk/autocomplete',
-       'text!io.ox/calendar/edit/tpl/addparticipant.tpl',
-       'gettext!io.ox/calendar/edit/main'], function (userAPI, contactAPI, autocomplete, tpl, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (userAPI, contactAPI, autocomplete, gt) {
 
     'use strict';
 
     var AddParticipantView = Backbone.View.extend({
         initialize: function () {
             var self = this;
-            self.el = $('<div>').attr('data-holder', 'data-holder');
         },
         // TODO: should refactored to a controller
         render: function () {
             var self = this,
                 renderedContent;
-
-            self.template = doT.template(tpl);
-            renderedContent = self.template({});
-            self.el.empty().append(renderedContent);
 
             self.el.find('#enter_name')
                 .attr('autocapitalize', 'off')

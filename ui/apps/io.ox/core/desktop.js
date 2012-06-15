@@ -597,6 +597,38 @@ define("io.ox/core/desktop",
 
     }());
 
+    ox.ui.Perspective = (function () {
+
+        var Perspective = function (name) {
+
+            // init
+            var rendered = false,
+                initialized = false;
+
+            this.main = $();
+
+            this.show = function (app) {
+                // make sure it's initialized
+                if (!initialized) {
+                    this.main = app.getWindow().addPerspective(name);
+                    initialized = true;
+                }
+                // set perspective
+                app.getWindow().setPerspective(name);
+                // render?
+                if (!rendered) {
+                    this.render(app);
+                    rendered = true;
+                }
+            };
+
+            this.render = $.noop;
+        };
+
+        return Perspective;
+
+    }());
+
     ox.ui.windowManager = (function () {
 
         var that = Events.extend({}),
@@ -732,9 +764,9 @@ define("io.ox/core/desktop",
                 this.detachable = true;
 
                 var quitOnClose = false,
-                    // views
-                    views = { main: true },
-                    currentView = "main",
+                    // perspectives
+                    perspectives = { main: true },
+                    currentPerspective = "main",
                     self = this,
                     firstShow = true;
 
@@ -943,20 +975,20 @@ define("io.ox/core/desktop",
                         .appendTo(this.nodes.toolbar);
                 };
 
-                this.addView = function (id) {
+                this.addPerspective = function (id) {
                     if (this.nodes[id] === undefined) {
                         var node = $("<div>")
                             .addClass("window-content").hide()
                             .appendTo(this.nodes.body);
-                        return (this.nodes[id] = views[id] = node);
+                        return (this.nodes[id] = perspectives[id] = node);
                     }
                 };
 
-                this.setView = function (id) {
-                    if (id !== currentView) {
-                        if (views[id] !== undefined) {
-                            this.nodes[currentView].hide();
-                            this.nodes[currentView = id].show();
+                this.setPerspective = function (id) {
+                    if (id !== currentPerspective) {
+                        if (perspectives[id] !== undefined) {
+                            this.nodes[currentPerspective].hide();
+                            this.nodes[currentPerspective = id].show();
                         }
                     }
                     return this;

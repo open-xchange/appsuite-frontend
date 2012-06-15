@@ -98,7 +98,6 @@ define('io.ox/calendar/edit/extensions/recurrence/view-recurrence',
             'change [name=yearly_option]': 'changeYearlyOption'
         },
         tagName: 'div',
-        _modelBinder: undefined,
         className: 'control-group recurrence',
         initialize: function () {
             var self = this;

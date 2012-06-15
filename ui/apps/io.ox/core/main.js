@@ -18,8 +18,9 @@ define("io.ox/core/main",
      "io.ox/core/api/apps",
      "io.ox/core/extensions",
      "io.ox/core/date",
+     'io.ox/core/notifications/main',
      "gettext!io.ox/core/main",
-     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, date, gt) {
+     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, date, notifications, gt) {
 
     "use strict";
 
@@ -130,6 +131,9 @@ define("io.ox/core/main",
         // refresh animation
         initRefreshAnimation();
 
+
+
+
         var addLauncher = function (app, tooltip) {
             var launcher = desktop.addLauncher(app.side || 'left', app.title, function () {
                 return require([app.id + '/main'], function (m) {
@@ -142,6 +146,10 @@ define("io.ox/core/main",
         };
         // settings
         addLauncher({ id: 'io.ox/settings', title: $('<i class="icon-cog icon-white">'), side: 'right' }, gt('Settings'));
+
+
+        // notifications
+        notifications.attach(desktop, "right");
 
         // apps
         desktop.addLauncher("left", $('<i class="icon-th icon-white">'), function () {
@@ -173,10 +181,10 @@ define("io.ox/core/main",
                         $("<div>", { id: "io-ox-welcome-upsell" })
                         .addClass('abs')
                         .css({
-                            padding: "40px",
+                            padding: "30px",
                             zIndex: 1
                         })
-                        .text("Click me for a 90-day free trial!")
+                        .text("Confidential! Not to be disclosed to third parties.")
                     )
                 );
             }
@@ -185,7 +193,7 @@ define("io.ox/core/main",
         ext.point("io.ox/core/desktop").extend({
             id: "welcome",
             draw: function () {
-                
+
                 var d, update;
 
                 this.append(

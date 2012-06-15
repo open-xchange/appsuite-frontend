@@ -183,15 +183,45 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 #io-ox-screens {
     top: 40px;
     overflow: hidden;
+    transition: all 0.1s;
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+}
+
+#io-ox-screens.beside {
+    right: 300px;
+    left: -300px;
+}
+#io-ox-notifications {
+    background-color: #222;
+    top: 40px;
+    width: 300px;
+    position: absolute;
+    right: -300px;
+    bottom: 0px;
+    transition: all 0.1s;
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    border-top: 1px solid #000;
+    overflow: hidden;
+}
+
+#io-ox-notifications.active {
+    right: 0px;
 }
 
 #io-ox-windowmanager {
     overflow: hidden;
+
 }
+
+
 
 #io-ox-windowmanager-pane {
     left: 0%;
     width: 100%;
+
+
 }
 
 /* .csstransforms3d.touch #io-ox-windowmanager-pane { */

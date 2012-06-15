@@ -12,109 +12,75 @@
 
 define('io.ox/calendar/month/view',
     ['io.ox/calendar/util',
-     'io.ox/calendar/api',
-     'gettext!io.ox/calendar/month/view',
-     'less!io.ox/calendar/month/style.css'], function (util, api, gt) {
+     'dot!io.ox/calendar/month/template.html',
+     'io.ox/core/date',
+     'gettext!io.ox/calendar/view',
+     'less!io.ox/calendar/month/style.css'], function (util, tmpl, date, gt) {
 
     'use strict';
 
-    var // vars
-        app, win, main,
-        // init
-        initialized = false,
-        initialize = function (a) {
-            if (!initialized) {
-                app = a;
-                win = app.getWindow();
-                main = win.addView('month-view');
-                initialized = true;
-            }
-        };
+    var View = Backbone.View.extend({
 
-    return {
+        className: 'week',
 
-        show: function (app) {
+        events: {
+            'click .appointment': 'onClickAppointment'
+        },
 
-            // init first
-            initialize(app);
+        initialize: function (options) {
+            this.collection.on('reset', this.renderAppointments, this);
+        },
 
-            // set view
-            win.setView('month-view');
+        onClickAppointment: function (e) {
+            var obj = _.cid($(e.currentTarget).attr('data-cid'));
+            this.trigger('showAppoinment', e, obj);
+        },
 
-            var drawTs = _.now(),
-                drawDate = new Date(drawTs),
-                list = util.getMonthScaffold(drawTs),
-                appointmentFilter = {},
-                drawMonth = drawDate.getUTCMonth();
+        render: function () {
 
-            var calendarCheck = $('ol.calendar', main),
-                render = false,
-                monthView, prevMonth, thisMonth, nextMonth;
+            var list = util.getWeekScaffold(this.options.day);
 
-            if (!calendarCheck || calendarCheck.length === 0) {
-                render = true;
+            _(list).each(function (day) {
+                this.$el.append(tmpl.render('day', day));
+                if (day.isFirst) {
+                    this.$el.prepend(
+                        $('<div>').addClass('vertical').html(
+                            date.locale.months[day.month] + '<br>' + day.year
+                        )
+                    );
+                }
+            }, this);
 
-                monthView = $('<ol>', {"class": "calendar", "start": drawMonth});
-                prevMonth = $('<ol>', {"class": "lastmonth"});
-                thisMonth = $('<ol>', {"class": "thismonth"});
-                nextMonth = $('<ol>', {"class": "nextmonth"});
+            return this;
+        },
 
-                monthView.append($('<li>').append(prevMonth))
-                    .append($('<li>').append(thisMonth))
-                    .append($('<li>').append(nextMonth));
-            }
-
-            _(list).each(function (weeks) {
-                _(weeks).each(function (day) {
-                    var actualList;
-
-                    if (!appointmentFilter.start) {
-                        appointmentFilter.start = day.timestamp;
-                    }
-                    appointmentFilter.end = day.timestamp;
-
-                    if (day.month < drawDate.getUTCMonth()) {
-                        actualList = prevMonth;
-                        if (prevMonth && !prevMonth.attr('start')) {
-                            prevMonth.attr('start', day.date);
-                        }
-                    } else if (day.month > drawDate.getUTCMonth()) {
-                        actualList = nextMonth;
-                    } else {
-                        actualList = thisMonth;
-                    }
-
-                    if (render) {
-                        var actualDay = $("<li>", {"class": "calendarday day" + day.year + '-' + day.month + '-' + day.date});
-                        actualDay.data('date', day);
-                        actualDay.text(day.date + '.' + (day.month + 1));
-
-                        actualList.append(actualDay);
-                    }
-                });
+        renderAppointment: function (a) {
+            return tmpl.render('appointment', {
+                cid: _.cid(a),
+                start: util.getTime(a.start_date),
+                subject: a.title,
+                shownAs: util.getShownAsClass(a)
             });
+        },
 
-            // add the data to the calendar
-            api.getAll(appointmentFilter).done(function (appointments) {
-                _(appointments).each(function (appointment) {
-
-                    var appointmentId = 'appointment_' + appointment.folder_id + '_' + appointment.id,
-                        appointmentDate = new Date(appointment.start_date),
-                        dateStr = appointmentDate.getUTCFullYear() + '-' + appointmentDate.getUTCMonth() + '-' + appointmentDate.getUTCDate(),
-                        liItem = $('.calendarday.day' + dateStr, main),
-                        appointmentCheck = $('.day' + dateStr + ' .' + appointmentId, main);
-
-                    if (!appointmentCheck || appointmentCheck.length === 0) {
-                        liItem.append($('<p>', {'class': 'appointmentItem ' + appointmentId}).data('appointment', appointment).text(appointment.title));
-                    }
-                });
-
-            });
-
-            if (render) {
-                main.append(monthView);
-                main.scrollable();
-            }
+        renderAppointments: function () {
+            this.collection.each(function (model) {
+                var d = new Date(model.get('start_date')),
+                    selector = '[date="' + d.getUTCFullYear() + '-' + d.getUTCMonth() + '-' + d.getUTCDate() + '"] .list';
+                this.$(selector).append(
+                    this.renderAppointment(model.attributes)
+                );
+            }, this);
         }
+    });
+
+    View.drawScaffold = function () {
+
+        var days = date.locale.days, node;
+        days = days.slice(1).concat(days[0]);
+        node = tmpl.render('scaffold', { days: days });
+        return node;
     };
+
+    return View;
 });
