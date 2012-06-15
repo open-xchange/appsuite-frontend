@@ -437,3 +437,40 @@ h4.mail-attachment-preview {
 .io-ox-mail-main .window-title .badge {
     cursor: pointer;
 }
+
+
+/*NOTIFICATIONS*/
+
+.io-ox-notifications-mail {
+    .title {
+        color: #EEE;
+        margin-bottom: 15px;
+    }
+
+    .notifications {
+    }
+
+    .item {
+        width: 100%;
+        height: auto;
+        background-color: #222;
+        padding: 5px;
+
+        .title {
+            color: #EEE;
+        }
+
+        .subject {
+            color: #EEE;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    }
+
+    .item:hover {
+        background-color: #333;
+        cursor: pointer;
+    }
+
+}

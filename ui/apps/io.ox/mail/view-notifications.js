@@ -30,6 +30,7 @@ define('io.ox/mail/view-notifications',
     });
 
     var NotificationsView = Backbone.View.extend({
+        className: 'io-ox-notifications-mail',
         _collectionBinder: undefined,
         initialize: function () {
             var viewCreator = function (model) {

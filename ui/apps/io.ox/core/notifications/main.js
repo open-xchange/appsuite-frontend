@@ -32,6 +32,8 @@ define('io.ox/core/notifications/main',
     });
 
     var NotificationsView = Backbone.View.extend({
+        tagName: 'div',
+        id: 'io-ox-notifications-display',
         initialize: function (options) {
             options = options || {};
             this.subviews = options.subviews || [];
