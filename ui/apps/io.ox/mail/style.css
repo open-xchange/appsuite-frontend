@@ -187,7 +187,9 @@
 .mail-detail.by-myself {
 }
 
-.mail-detail.by-myself a {
+.mail-detail.by-myself .from.list a,
+.mail-detail.by-myself .to-cc.list a,
+.mail-detail.by-myself .io-ox-inline-links a {
     color: #888 !important;
 }
 
