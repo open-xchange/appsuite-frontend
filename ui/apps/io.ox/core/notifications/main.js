@@ -123,7 +123,7 @@ define('io.ox/core/notifications/main',
 
             window.badge = this.badgeView.model;
 
-            this.badgeView.model.set('count', count);
+            this.badgeView.model.set('count', (count || 0));
         },
         toggleList: function () {
             //create nice listing view of all notifications grouped by

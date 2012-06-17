@@ -39,17 +39,15 @@ define('io.ox/calendar/view-notifications',
             var self = this;
             var getObj = {
                 folder: this.model.get('data').folder_id,
-                id: this.model.get('data').folder_id + '.' + this.model.get('data').id
+                id: this.model.get('data').folder_id + '.' + this.model.get('data').id + '.' + (this.model.get('data').recurrence_position || '')
             };
             console.log('clicking launching', getObj, this.model);
-            /*ox.launch('io.ox/mail/main', getObj).done(function () {
+            ox.launch('io.ox/calendar/main', getObj).done(function () {
                 console.log('launched', this);
-
-                self.model.destroy(); // destroy the model
                 this.setState(getObj);
             }).fail(function () {
                 console.log('failed launching app', arguments);
-            });*/
+            });
         }
     });
 

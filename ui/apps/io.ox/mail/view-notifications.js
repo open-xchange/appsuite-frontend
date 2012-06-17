@@ -24,7 +24,6 @@ define('io.ox/mail/view-notifications',
         _modelBinder: undefined,
         initialize: function () {
             this._modelBinder = new Backbone.ModelBinder();
-
         },
         render: function () {
             this.$el.empty().append(tpl.render('io.ox/mail/notification', {}));
