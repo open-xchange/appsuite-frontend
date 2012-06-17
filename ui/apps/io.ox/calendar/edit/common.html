@@ -13,7 +13,7 @@
            <div class="span12 control-group">
                <label class="control-label desc" for="{{=it.uid}}_title">{{= it.strings.SUBJECT }}</label>
                <div class="controls">
-                   <input type="text" class="discreet title" name="title" data-property="title" id="{{=it.uid}}_title"/>
+                   <input type="text" class="discreet title" name="title" data-property="title" id="{{=it.uid}}_title">
                </div>
            </div>
        </div>
@@ -22,7 +22,7 @@
            <div class="span10 control-group">
                <label class="control-label desc" for="{{=it.uid}}_location">{{= it.strings.LOCATION }}</label>
                <div class="controls">
-                   <input type="text" class="discreet location" name="location" data-property="location" id="{{=it.uid}}_location"  />
+                   <input type="text" class="discreet location" name="location" data-property="location" id="{{=it.uid}}_location" >
                </div>
            </div>
            <div class="span2 control-group">
@@ -39,16 +39,16 @@
             <div class="control-group span6">
                 <label class="control-label desc" for="{{=it.uid}}_start_date">{{= it.strings.STARTS_ON }}</label>
                 <div class="controls">
-                      <input type="date" class="discreet startsat-date input-small" id="{{=it.uid}}_start_date" data-extgroup="startdates" data-extid="date" data-property="start_date"/>
-                      <input type="time" class="discreet startsat-time input-mini" data-extgroup="startdates" data-extid="time" data-property="start_date"/>
+                      <input type="date" class="discreet startsat-date input-small" id="{{=it.uid}}_start_date" data-extgroup="startdates" data-extid="date" data-property="start_date">
+                      <input type="time" class="discreet startsat-time input-mini" data-extgroup="startdates" data-extid="time" data-property="start_date">
                       <span class="label" data-original-title="" data-extgroup="startdates" data-extid="timezone">CEST</span>
                 </div>
             </div>
             <div class="control-group span6">
                 <label class="control-label desc" for="{{=it.uid}}_end_date">{{= it.strings.ENDS_ON }}</label>
                 <div class="controls">
-                    <input type="date" class="discreet endsat-date input-small" id="{{=it.uid}}_end_date" data-extgroup="enddates" data-extid="date" data-property="end_date"/>
-                    <input type="time" class="discreet endsat-time input-mini" data-extgroup="enddates" data-extid="time" data-property="end_date"/>
+                    <input type="date" class="discreet endsat-date input-small" id="{{=it.uid}}_end_date" data-extgroup="enddates" data-extid="date" data-property="end_date">
+                    <input type="time" class="discreet endsat-time input-mini" data-extgroup="enddates" data-extid="time" data-property="end_date">
                     <span class="label" data-original-title="" data-extgroup="enddates" data-extid="timezone">CEST</span>
                 </div>
             </div>
@@ -60,7 +60,7 @@
             <div class="control-group span12">
                 <div class="controls">
                     <div data-extgroup="extrasleft" data-extid="fulltime">
-                        <input type="checkbox" class="full_time" name="full_time" id="{{=it.uid}}_full_time" data-property="full_time" />
+                        <input type="checkbox" class="full_time" name="full_time" id="{{=it.uid}}_full_time" data-property="full_time">
                         <label style="display: inline;" for="{{=it.uid}}_full_time">{{= it.strings.ALL_DAY }}</label>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
             <div class="control-group span3">
                 <label class="control-label desc" for="{{=it.uid}}_private_flag">{{= it.strings.TYPE }}</label>
                 <div class="controls">
-                    <input type="checkbox" name="private_flag" id="{{=it.uid}}_private_flag" data-property="private_flag"/>
+                    <input type="checkbox" name="private_flag" id="{{=it.uid}}_private_flag" data-property="private_flag">
                     <label style="display: inline;" for="{{=it.uid}}_private_flag">{{= it.strings.PRIVATE}}</label>
                 </div>
             </div>
@@ -126,14 +126,15 @@
             <div class="span6 control-group">
                 <div class="controls">
                     <div class="input-append">
-                        <input type="text" class="add-participant"></input>
-                        <button class="btn" type="button" data-action='add'><i class="icon-plus"></i></button>
+                        <input type="text" class="add-participant"><button
+                            class="btn" type="button" data-action='add'><i class="icon-plus"></i>
+                        </button>
                     </div>
                 </div>
             </div>
             <div class="control-group span6" style="text-align: right;">
                 <div class="controls" >
-                    <input type="checkbox" data-property="notification" id="{{=it.uid}}_notification"/>
+                    <input type="checkbox" data-property="notification" id="{{=it.uid}}_notification">
                     <label style="display: inline;" for="{{=it.uid}}_notification">{{= it.strings.NOTIFY_ALL}}</label>
                 </div>
             </div>
