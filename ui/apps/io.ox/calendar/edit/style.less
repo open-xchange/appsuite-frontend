@@ -9,7 +9,11 @@ div.io-ox-calendar-edit {
         color: black;
         line-height: 1.25em;
         padding: 0px 0px 0px 0px;
-        font-family: @font-light;
+        font-family: @font-normal;
+    }
+
+    label.desc {
+        color: #888;
     }
 
     div.section {
@@ -44,23 +48,6 @@ div.io-ox-calendar-edit {
     input.startsat-time, input.endsat-time {
         margin-right: 8px;
         margin-bottom: 0px;
-    }
-
-    div.tablerow {
-        display: table-row;
-    }
-    div.tablecell {
-        display: table-cell;
-    }
-
-    div.left {
-        width: 400px;
-        display: table-cell;
-    }
-
-    div.right {
-        width: 400px;
-        display: table-cell;
     }
 
 
@@ -172,8 +159,9 @@ div.io-ox-calendar-edit {
         width: 342px;
     }
 
-
-
+    select {
+        width: 100%;
+    }
 }
 
 
@@ -206,9 +194,9 @@ div.edit-appointment-participant .remove {
     display: inline-block;
     position: absolute;
     top: 1px;
-    right: 1px;
+    right: 12px;
     bottom: 1px;
-    width: 2em;
+    width: 27px;
     line-height: 1em;
     background-color: white;
     color: #CCC;

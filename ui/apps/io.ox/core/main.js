@@ -151,6 +151,14 @@ define("io.ox/core/main",
         // notifications
         notifications.attach(desktop, "right");
 
+        // now register default notification handler
+        require(['io.ox/mail/notifications',
+                 'io.ox/calendar/notifications'], function (mailNotifications, calNotifications) {
+            mailNotifications.register();
+            calNotifications.register();
+        });
+
+
         // apps
         desktop.addLauncher("left", $('<i class="icon-th icon-white">'), function () {
             return require(["io.ox/launchpad/main"], function (m) {

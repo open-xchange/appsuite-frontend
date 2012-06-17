@@ -55,7 +55,7 @@ define('io.ox/calendar/edit/view-addparticipants',
 
                             // just hack a bit to make it work easely
                             $(this).css({height: '39px'});
-                            $(markup).css('list-style', 'none');
+                            $(markup).css({'list-style': 'none', 'margin-left': '0px'});
                             $(markup).find('.person-link').removeClass('person-link');
 
                             $(markup).find('.remove').remove();

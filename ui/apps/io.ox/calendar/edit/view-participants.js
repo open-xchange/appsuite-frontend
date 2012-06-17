@@ -41,10 +41,10 @@ define('io.ox/calendar/edit/view-participants',
         },
         render: function () {
             var self = this;
-            self.list = $('<div>'); //.addClass('edit-appointment-participantslist');
-            self.$el.empty().append(self.list);
+            //self.list = $('<div>'); //.addClass('edit-appointment-participantslist');
+            self.$el.empty(); //.append(self.list);
             _(self._participantViews).each(function (participantView) {
-                self.list.append(participantView.render().el);
+                self.$el.append(participantView.render().el);
             });
             return self;
         },
@@ -52,7 +52,7 @@ define('io.ox/calendar/edit/view-participants',
             var self = this;
             var myview = new ParticipantView({model: model});
             self._participantViews.push(myview);
-            self.list.append(myview.render().el);
+            self.$el.append(myview.render().el);
         },
         onRemove: function (model, collection, options) {
             var self = this;

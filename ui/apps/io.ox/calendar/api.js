@@ -13,7 +13,7 @@
  *
  */
 
-define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (http, Events) {
+define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event", "io.ox/core/api/user"], function (http, Events, userAPI) {
 
     "use strict";
 
@@ -68,8 +68,8 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
                     action: "all",
-                    // id, folder_id, private_flag, recurrence_position, start_date, title, end_date, location, shown_as
-                    columns: "1,20,101,207,201,200,202,400,402",
+                    // id, folder_id, private_flag, recurrence_position, start_date, title, end_date, location, shown_as, users
+                    columns: "1,20,101,207,201,200,202,400,402,221",
                     start: o.start,
                     end: o.end,
                     showPrivate: true,
@@ -308,11 +308,34 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
 
     // global refresh
     api.refresh = function () {
-        // clear caches
-        all_cache = {};
-        // trigger local refresh
-        api.trigger("refresh.all");
+        console.log('refreshing calendar');
+        userAPI.get().done(function (user) {
+            console.log('got user:', user);
+            api.getAll({}).done(function (list) {
+
+                var invites = _(list).filter(function (item) {
+                    return _(item.users).any(function (item_user) {
+                        return (item_user.id === user.id && item_user.confirmation === 0);
+                    });
+                });
+
+                if (invites.length > 0) {
+                    console.log('got invites', invites);
+                    api.trigger('invites', invites);
+                }
+                console.log('got all', list);
+                // clear caches
+                all_cache = {};
+                // trigger local refresh
+                api.trigger("refresh.all");
+
+            });
+        });
     };
+
+    ox.on('refresh^', function () {
+        api.refresh();
+    });
 
     return api;
 });

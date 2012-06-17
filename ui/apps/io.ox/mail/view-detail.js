@@ -21,7 +21,8 @@ define('io.ox/mail/view-detail',
      'io.ox/core/http',
      'io.ox/core/api/account',
      'gettext!io.ox/mail/mail',
-     'io.ox/mail/actions'
+     'io.ox/mail/actions',
+     'less!io.ox/mail/style.css'
     ], function (ext, links, util, api, config, http, account, gt) {
 
     'use strict';

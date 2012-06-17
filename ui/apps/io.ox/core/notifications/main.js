@@ -32,6 +32,8 @@ define('io.ox/core/notifications/main',
     });
 
     var NotificationsView = Backbone.View.extend({
+        tagName: 'div',
+        id: 'io-ox-notifications-display',
         initialize: function (options) {
             options = options || {};
             this.subviews = options.subviews || [];
@@ -121,21 +123,28 @@ define('io.ox/core/notifications/main',
 
             window.badge = this.badgeView.model;
 
-            this.badgeView.model.set('count', count);
+            this.badgeView.model.set('count', (count || 0));
         },
         toggleList: function () {
             //create nice listing view of all notifications grouped by
             //their app
             console.log('toggle list now');
             if ($('#io-ox-screens').hasClass('beside')) {
-                $('#io-ox-screens').removeClass('beside');
-                this.badgeView.$el.removeClass('badge-error');
-                $('#io-ox-notifications').removeClass('active');
+                this.hideList();
             } else {
-                $('#io-ox-screens').addClass('beside');
-                $('#io-ox-notifications').addClass('active');
-                $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
+                this.showList();
             }
+        },
+        showList: function () {
+            $('#io-ox-screens').addClass('beside');
+            $('#io-ox-notifications').addClass('active');
+            $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
+        },
+        hideList: function () {
+            console.log('hide list');
+            $('#io-ox-screens').removeClass('beside');
+            this.badgeView.$el.removeClass('badge-error');
+            $('#io-ox-notifications').removeClass('active');
         }
 
     };

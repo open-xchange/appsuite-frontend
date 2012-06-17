@@ -20,12 +20,11 @@ define("io.ox/mail/main",
      "io.ox/core/tk/vgrid",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
-     "io.ox/core/notifications/main",
-     "io.ox/mail/view-notifications",
+     "io.ox/mail/notifications",
      "gettext!io.ox/mail/main",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, notificationService, NotificationView, gt) {
+    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, notifications, gt) {
 
     'use strict';
 
@@ -61,7 +60,8 @@ define("io.ox/mail/main",
     // launcher
     app.setLauncher(function () {
 
-        var notifications = notificationService.get('io.ox/mail', NotificationView);
+        // just register the notification handler
+        notifications.register();
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/mail',
@@ -82,26 +82,7 @@ define("io.ox/mail/main",
             .hide().prop('volume', 0.40).appendTo(win.nodes.main);
 
         api.on('new-mail', function (e, mails) {
-            console.log('new mail', arguments, api);
             audio.get(0).play();
-            api.getList(_(mails).clone().splice(0, 10))
-                .done(function (data) {
-                    _(data).each(function (mail) {
-                        var f = mail.from || [['', '']];
-                        notifications.collection.add({
-                            title: util.getDisplayName(f[0]),
-                            subject: mail.subject
-                        });
-                    });
-                    console.log('fetched mails', arguments);
-                });
-            /*_(mails).each(function (mailspart, key) {
-                console.log('mailpart', mailspart);
-                notifications.collection.add({
-                    title: 'here i am'
-                });
-            });*/
-
         });
 
         // left panel
