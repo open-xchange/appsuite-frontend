@@ -58,8 +58,9 @@ define('io.ox/calendar/month/view',
             return tmpl.render('appointment', {
                 cid: _.cid(a),
                 start: util.getTime(a.start_date),
-                subject: a.title,
-                shownAs: util.getShownAsClass(a)
+                title: a.title,
+                shownAs: util.getShownAsClass(a),
+                private_flag: a.private_flag
             });
         },
 

@@ -28,7 +28,7 @@
 </part>
 
 <part id="appointment">
-    <div class="appointment {{= it.shownAs }}" data-cid="{{= it.cid }}">
-        {{= it.start }} {{= it.subject }}
+    <div class="appointment {{= it.shownAs }}{{= it.private_flag ? ' private' : '' }}" data-cid="{{= it.cid }}">
+        {{= it.start }} {{= it.title }}
     </div>
 </part>

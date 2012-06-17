@@ -68,8 +68,8 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
                     action: "all",
-                    // id, folder_id, recurrence_position, start_date, title, end_date, location, shown_as
-                    columns: "1,20,207,201,200,202,400,402",
+                    // id, folder_id, private_flag, recurrence_position, start_date, title, end_date, location, shown_as
+                    columns: "1,20,101,207,201,200,202,400,402",
                     start: o.start,
                     end: o.end,
                     showPrivate: true,

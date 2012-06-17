@@ -20,26 +20,31 @@ define('io.ox/calendar/month/perspective',
 
     var perspective = new ox.ui.Perspective('month');
 
-//    $.easing.frrrr = function (x, t, b, c, d) {
-//        var ts = (t /= d) * t,
-//            tc = ts * t;
-//        return b + c * (-8.1525 * tc * ts + 28.5075 * ts * ts + -35.105 * tc + 16 * ts + -0.25 * t);
-//    };
+    var lastScrollTop = 0,
 
-    var magneticScroll = _.debounce(function () {
-        var self = $(this),
-            weeks = self.find('.week'),
-            height = weeks.outerHeight(),
-            top = self.scrollTop(),
-            y = Math.round(top / height),
-            delta = (weeks.eq(y).position() || { top: 0 }).top;
-        if (Math.abs(delta) < 30) {
+        scrollAhead = true,
+
+        getLastScrollTop = function () {
+            var top = $(this).scrollTop();
+            scrollAhead = lastScrollTop < top;
+            lastScrollTop = top;
+        },
+
+        magneticScroll = _.debounce(function () {
+            var self = $(this),
+                weeks = self.find('.week'),
+                height = weeks.outerHeight(),
+                top = self.scrollTop(),
+                y = Math[scrollAhead ? 'ceil' : 'floor'](top / height),
+                delta = (weeks.eq(y).position() || { top: 0 }).top;
+            // adjust scroll position
             self.off('scroll', magneticScroll)
-                .scrollTop(top + delta)
-                .on('scroll', magneticScroll);
-        }
-        self = weeks = null;
-    }, 500);
+                .stop()
+                .animate({ scrollTop: top + delta }, 100, function () {
+                    self.on('scroll', magneticScroll);
+                    self = weeks = null;
+                });
+        }, 50);
 
     _.extend(perspective, {
 
@@ -104,7 +109,7 @@ define('io.ox/calendar/month/perspective',
                 first = Date.UTC(year, month, 1),
                 start = util.getWeekStart(first) - 10 * util.WEEK,
                 i,
-                tops = {};
+                tops;
 
             this.scaffold = View.drawScaffold();
             this.pane = this.scaffold.find('.scrollpane');
@@ -113,18 +118,21 @@ define('io.ox/calendar/month/perspective',
                 this.drawWeek(start);
             }
 
-            window.HANS = this;
-
             this.main.addClass('month-view').empty().append(this.scaffold);
             this.scrollTop(this.main.find('[date="' + year + '-' + month + '-1"]').position().top);
-            this.pane.on('scroll', magneticScroll);
+            this.pane.on('scroll', magneticScroll)
+                .on('scroll', getLastScrollTop);
 
-            this.pane.one('scroll', $.proxy(function (e) {
+            var getFirsts = $.proxy(function (e) {
+                tops = {};
                 var top = this.pane.scrollTop() - 200; /* cheap trick */
                 this.pane.find('.first').each(function () {
                     tops[Math.max(0, $(this).position().top + top)] = $(this).attr('month');
                 });
-            }, this));
+            }, this);
+
+            this.pane.one('scroll', getFirsts);
+            $(window).on('resize', getFirsts);
 
             var currentMonth;
 
