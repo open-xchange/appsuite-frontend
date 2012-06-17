@@ -130,14 +130,21 @@ define('io.ox/core/notifications/main',
             //their app
             console.log('toggle list now');
             if ($('#io-ox-screens').hasClass('beside')) {
-                $('#io-ox-screens').removeClass('beside');
-                this.badgeView.$el.removeClass('badge-error');
-                $('#io-ox-notifications').removeClass('active');
+                this.hideList();
             } else {
-                $('#io-ox-screens').addClass('beside');
-                $('#io-ox-notifications').addClass('active');
-                $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
+                this.showList();
             }
+        },
+        showList: function () {
+            $('#io-ox-screens').addClass('beside');
+            $('#io-ox-notifications').addClass('active');
+            $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
+        },
+        hideList: function () {
+            console.log('hide list');
+            $('#io-ox-screens').removeClass('beside');
+            this.badgeView.$el.removeClass('badge-error');
+            $('#io-ox-notifications').removeClass('active');
         }
 
     };

@@ -10,10 +10,10 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
-define('io.ox/mail/view-notifications',
+define('io.ox/calendar/view-notifications',
       ['io.ox/core/notifications/main',
-       'dot!io.ox/mail/template.html',
-       'less!io.ox/mail/style.css'], function (notficationsConroller, tpl) {
+       'dot!io.ox/calendar/template.html',
+       'less!io.ox/calendar/style.css'], function (notficationsConroller, tpl) {
 
     'use strict';
 
@@ -27,7 +27,7 @@ define('io.ox/mail/view-notifications',
 
         },
         render: function () {
-            this.$el.empty().append(tpl.render('io.ox/mail/notification', {}));
+            this.$el.empty().append(tpl.render('io.ox/calendar/notification', {}));
             this._modelBinder.bind(this.model, this.el, Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property'));
             return this;
 
@@ -42,20 +42,20 @@ define('io.ox/mail/view-notifications',
                 id: this.model.get('data').folder_id + '.' + this.model.get('data').id
             };
             console.log('clicking launching', getObj, this.model);
-            ox.launch('io.ox/mail/main', getObj).done(function () {
+            /*ox.launch('io.ox/mail/main', getObj).done(function () {
                 console.log('launched', this);
 
                 self.model.destroy(); // destroy the model
                 this.setState(getObj);
             }).fail(function () {
                 console.log('failed launching app', arguments);
-            });
+            });*/
         }
     });
 
     var NotificationsView = Backbone.View.extend({
         className: 'notifications',
-        id: 'io-ox-notifications-mail',
+        id: 'io-ox-notifications-calendar',
         _collectionBinder: undefined,
         initialize: function () {
             var viewCreator = function (model) {
@@ -65,8 +65,8 @@ define('io.ox/mail/view-notifications',
             this._collectionBinder = new Backbone.CollectionBinder(elManagerFactory);
         },
         render: function () {
-            console.log('render mail notifications');
-            this.$el.empty().append(tpl.render('io.ox/mail/notifications', {}));
+            console.log('render calendar notifications');
+            this.$el.empty().append(tpl.render('io.ox/calendar/notifications', {}));
             this._collectionBinder.bind(this.collection, this.$('.notifications'));
             return this;
         }
