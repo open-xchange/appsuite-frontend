@@ -88,7 +88,7 @@ define("io.ox/mail/main",
                 .done(function (data) {
                     _(data).each(function (mail) {
                         var f = mail.from || [['', '']];
-                        notifications.collection.add({
+                        notifications.collection.unshift({
                             title: util.getDisplayName(f[0]),
                             subject: mail.subject
                         });
