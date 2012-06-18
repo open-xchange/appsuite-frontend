@@ -95,6 +95,11 @@
         span {
             .debug-highlight-mixin(#88f, #eef);
         }
+        
+        table p {
+              .debug-highlight-mixin(#f88, #efe);
+        }    
+        
     }
     
     p {
