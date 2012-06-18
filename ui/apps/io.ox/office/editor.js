@@ -201,6 +201,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 // TODO
             }
 
+            // document state
+            this.setModified(true);
+
             if (bNotify && !blockOperationNotifications) {
                 this.trigger("operation", operation);
                 // TBD: Use operation directly, or copy?
@@ -403,6 +406,13 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             return modified;
         };
 
+        this.setModified = function (state) {
+            if (modified !== state) {
+                modified = state;
+                this.trigger('modified', state);
+            }
+        };
+
         /**
          * Returns whether the editor is currently focused.
          */
@@ -434,6 +444,13 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         this.setSelection = function (oxosel) {
             var aDOMSelection = this.getDOMSelection(oxosel);
             this.implSetDOMSelection(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset, aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
+        };
+
+        this.processFocus = function (state) {
+            if (focused !== state) {
+                focused = state;
+                this.trigger('focus', state);
+            }
         };
 
         this.processDragOver = function (event) {
@@ -1110,8 +1127,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         // hybrid edit mode
         editdiv
-            .on('focus', $.proxy(function () { focused = true; this.trigger('focus:got'); }, this))
-            .on('blur', $.proxy(function () { focused = false; this.trigger('focus:lost'); }, this))
+            .on('focus', _.bind(this.processFocus, this, true))
+            .on('blur', _.bind(this.processFocus, this, false))
             .on('keydown', $.proxy(this, 'processKeyDown'))
             .on('keypress', $.proxy(this, 'processKeyPressed'))
             .on('dragover', $.proxy(this, 'processDragOver'))
