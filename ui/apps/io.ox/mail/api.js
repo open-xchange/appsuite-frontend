@@ -882,5 +882,9 @@ define("io.ox/mail/api",
         );
     };
 
+    api.getDefaultFolder = function () {
+        return config.get('mail.folder.inbox', 'default0' + separator + 'INBOX');
+    };
+
     return api;
 });
