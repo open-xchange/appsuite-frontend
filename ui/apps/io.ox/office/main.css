@@ -93,8 +93,18 @@
 	}
 
     &.debug-highlight {
-        p { .ox-io-office-debug-highlight-mixin(#8f8, #efe); }
-        span { .ox-io-office-debug-highlight-mixin(#88f, #eef); }
+        > p {
+            .ox-io-office-debug-highlight-mixin(#8f8, #efe);
+        }
+        
+        span {
+            .ox-io-office-debug-highlight-mixin(#88f, #eef);
+        }
+
+        table p {
+            .ox-io-office-debug-highlight-mixin(#f88, #fee);
+        }    
+        
     }
     
 }
