@@ -97,4 +97,11 @@
 .io-ox-portal-widget-tile {
     background: #cce;
     float: left;
+    padding: 0 .5em 1em .5em;
+}
+.io-ox-portal-widget-tile h1 {
+    line-height: 2em;
+}
+.io-ox-portal-widget-tile .badge {
+    float: right;
 }

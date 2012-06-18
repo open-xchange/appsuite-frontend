@@ -46,6 +46,8 @@ define('plugins/portal/facebook/register',
 
         id: 'facebook',
         index: 150,
+        tileHeight: 2,
+
         loadTile: function () {
             return proxy.request({
                 api: 'facebook',

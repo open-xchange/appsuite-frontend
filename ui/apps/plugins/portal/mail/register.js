@@ -13,7 +13,10 @@
  */
 
 define('plugins/portal/mail/register',
-    ['io.ox/core/extensions', "io.ox/core/extPatterns/links"], function (ext, links, api) {
+    ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
+     'io.ox/core/strings',
+     'less!plugins/portal/mail/style.css'], function (ext, links, strings) {
 
     'use strict';
 
@@ -48,6 +51,47 @@ define('plugins/portal/mail/register',
     ext.point('io.ox/portal/widget').extend({
         id: 'mail',
         index: 300,
+        tileHeight: 2,
+
+        loadTile: function () {
+            var loading = new $.Deferred();
+            require(['io.ox/core/api/folder'], function (folders) {
+                folders.get(
+                    {
+                        cache: true
+                    })
+                    .done(function (myfolder) {
+                        console.log(myfolder);
+                    })
+                    .fail(loading.reject);
+            });
+            return loading;
+        },
+        drawTile: function (mails) {
+            var $node = $(this);
+            $node.addClass('mail-portal-tile');
+            var subject = 'This is a dummy e-mail subject';
+            var mailtext = 'This is my dummy mail text, which is too long to fit the box, so we recommend it to be shortened. Preferably by our own most excellent shortening function.';
+            var len = 72;
+            if (subject >= len) {
+                subject = strings.shorten(subject, len);
+                mailtext = '';
+            } else {
+                mailtext = strings.shorten(mailtext, len - subject.length);
+            }
+            
+            
+            $node.append(
+                $('<h1>').text("Mail"),
+                $('<span class="unread-mail-count">').text('Unread:'),
+                $('<span class="badge badge-info unread-mail-count">').text("555"),
+                $('<div class="io-ox-clear">').append(
+                    $('<div class="">').append($("<b>").text(subject), $('<br>'), $("<span>").text(mailtext))
+                )
+            );
+            
+            return $.when();
+        },
         load: function () {
             var loading = new $.Deferred();
             require(['io.ox/mail/api'], function (api) {

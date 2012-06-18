@@ -20,7 +20,7 @@ define("plugins/portal/appointments/register",
         id: "appointments",
         index: 100,
         tileWidth: 1,
-        tileHeight: 1,
+        tileHeight: 2,
         loadTile: function () {
             var loadingTile = new $.Deferred();
             require(["io.ox/calendar/api"], function (api) {
@@ -46,17 +46,15 @@ define("plugins/portal/appointments/register",
             var today = new date.Local().format(date.DATE);
             $(this).append(
                 $('<h1>').text('Appointments'),
-                $('<div>').text("in the next 24h: ").append($('<span class="badge">').text(nextAppointments.length)),
-                $('<br>'),
-                $('<div>').text(today),
+                $('<div>').text("in the next 24h: ").append($('<span class="badge badge-info">').text(nextAppointments.length)),
                 $('<br>')
             );
             if (appointments.length > 0) {
                 var nextApp = appointments[0];
-                var deltaT = 0;//startSpan.formatInterval(new date.Local(), date.MINUTE);
-                $('<div>').html("Next:<br/>" + nextApp.title + ' (in ' + deltaT + ')').appendTo(this);
+                var deltaT = 'in 2 days';//startSpan.formatInterval(new date.Local(), date.MINUTE);
+                $('<div>').html("Next: <b>" + nextApp.title + '</b> (' + deltaT + ')').appendTo(this);
             }
-            $(this).css({background: '#eee', padding: '10px'}).center();
+            $(this).css({background: '#eee', padding: '1em'});
             return $.when();
         },
         load: function () {

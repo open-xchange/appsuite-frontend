@@ -11,7 +11,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("plugins/portal/linkedin/register", ["io.ox/core/extensions", "io.ox/core/http"], function (ext, http) {
+define("plugins/portal/linkedin/register",
+    ['io.ox/core/extensions',
+     'io.ox/core/http',
+     'less!plugins/portal/linkedIn/style.css'], function (ext, http) {
 
     "use strict";
 
@@ -101,7 +104,14 @@ define("plugins/portal/linkedin/register", ["io.ox/core/extensions", "io.ox/core
                 }
             });
         },
-
+        loadTile: function () {
+            return $.when();
+        },
+        drawTile: function (activityFeed) {
+            $(this).append(
+                $('<img>').attr({src: 'apps/plugins/portal/linkedIn/linkedin175.jpg', alt: 'LinkedIn', width: '175px', height: 'auto'})
+            ).addClass('io-ox-portal-tile-linkedin');
+        },
         draw: function (activityFeed) {
 
             var drawing = new $.Deferred(),

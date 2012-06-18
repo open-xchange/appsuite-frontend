@@ -98,7 +98,6 @@ function (ext, config, userAPI, date, gt) {
             ext.point('io.ox/portal/widget').extend({
                 index: 200,
                 id: 'ad',
-                tileHeight: 2,
                 loadTile: function () {
                     return $.when();
                 },
@@ -128,7 +127,7 @@ function (ext, config, userAPI, date, gt) {
                     
                     $node.css({
                         width: (tileWidth * 180 + (tileWidth - 1) * 10) + "px",
-                        height: (tileHeight * 180 + (tileHeight - 1) * 10) + "px",
+                        height: (tileHeight * 90 + (tileHeight - 1) * 10) + "px",
                         margin: "5px"
                     });
                         

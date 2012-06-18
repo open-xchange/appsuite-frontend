@@ -63,6 +63,8 @@ define('plugins/portal/twitter/register',
     ext.point('io.ox/portal/widget').extend({
         id: 'twitter',
         index: 140,
+        tileHeight: 2,
+
         loadTile: function () {
             var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: {count: 1, include_entities: true}});
             return def.pipe(function (response) { return (response) ? JSON.parse(response) : null; });
@@ -71,12 +73,11 @@ define('plugins/portal/twitter/register',
             $(this)
                 .append($('<img>').attr({src: 'apps/plugins/portal/twitter/twitter-bird-dark-bgs.png', alt: '', width: '50px', height: 'auto'}).css({'float': 'left'}))
                 .append($('<h1>').text('Twitter').css({color: '#fff'}))
-                .append($('<span>').html('&nbsp;').css({clear: 'both'}))
                 .css({background: '#49f', padding: '10px', color: '#fff'});
             
             if (tweets.length === 0) {
                 $(this).append(
-                    $('<div>').text('No tweets yet.'));
+                    $('<div class="io-ox-clear">').text('No tweets yet.'));
             } else {
                 var tweet = tweets[0];
                 var message = $('<div>').html(tweet.text).text();
@@ -84,8 +85,7 @@ define('plugins/portal/twitter/register',
                     message = message.substring(0, 72) + '...';
                 }
                 $(this).append(
-                    $('<div>').text('Latest tweet:'),
-                    $('<div>').append($('<b>').text('@' + tweet.user.name + ':')),
+                    $('<div class="io-ox-clear">').append($('<b>').text('@' + tweet.user.name + ':')),
                     $('<div>').text(message));
             }
         },
