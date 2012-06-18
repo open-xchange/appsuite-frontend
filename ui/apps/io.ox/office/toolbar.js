@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
+define('io.ox/office/toolbar', function () {
 
     'use strict';
 
@@ -72,10 +72,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
             node = $('<div>').addClass('btn-group').appendTo(toolbar.getNode()),
 
             // buttons mapped by identifier
-            buttons = {},
-
-            // event handler container
-            events = new Events();
+            buttons = {};
 
         // listen to controller updates for radio groups
         if (type === 'radio') {
@@ -209,9 +206,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
          * group with all its buttons from the tool bar.
          */
         this.destroy = function () {
-            events.destroy();
             node.remove();
-            node = buttons = events = null;
+            node = buttons = null;
         };
 
     }

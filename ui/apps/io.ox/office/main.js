@@ -93,11 +93,13 @@ define('io.ox/office/main',
 
         var updateTitles = function () {
             app.setTitle(docOptions.filename || baseTitle);
-            if (win) {
-                win.setTitle(baseTitle + (docOptions.filename ? (' - ' + docOptions.filename) : '') + (editor.isModified() ? ' (*)' : ''));
-            }
+            win.setTitle(baseTitle + (docOptions.filename ? (' - ' + docOptions.filename) : ''));
         };
 
+        /**
+         * Recalculates the size of the editor frame according to the current
+         * view port size.
+         */
         var updateWindowSize = function () {
             var debugHeight = debugMode ? debugNode.outerHeight() : 0;
             editorNode.height(window.innerHeight - container.offset().top - debugHeight);
