@@ -13,7 +13,10 @@
  *
  */
 
-define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event", "io.ox/core/api/user"], function (http, Events, userAPI) {
+define("io.ox/calendar/api",
+    ["io.ox/core/http",
+     "io.ox/core/event",
+     "io.ox/core/api/user"], function (http, Events, userAPI) {
 
     "use strict";
 
@@ -68,8 +71,9 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event", "io.ox/core
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
                     action: "all",
-                    // id, folder_id, private_flag, recurrence_position, start_date, title, end_date, location, shown_as, users
-                    columns: "1,20,101,207,201,200,202,400,402,221",
+                    // id, folder_id, private_flag, recurrence_position, start_date,
+                    // title, end_date, location, full_time, shown_as, users
+                    columns: "1,20,101,207,201,200,202,400,401,402,221",
                     start: o.start,
                     end: o.end,
                     showPrivate: true,

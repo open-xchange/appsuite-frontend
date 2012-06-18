@@ -145,4 +145,6 @@
     .day.out .appointment { background-color: #aaa; }
     
     .appointment:hover { background-color: #ccc; color: #333; }
+    
+    .appointment .location { color: #ccc; color: rgba(255, 255, 255, 0.6); }
 }

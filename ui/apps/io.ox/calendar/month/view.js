@@ -55,12 +55,15 @@ define('io.ox/calendar/month/view',
         },
 
         renderAppointment: function (a) {
+            console.log('full_time', a.title, a, a.location, typeof a.location);
             return tmpl.render('appointment', {
                 cid: _.cid(a),
-                start: util.getTime(a.start_date),
-                title: a.title,
+                full_time: a.full_time,
+                location: a.location,
+                private_flag: a.private_flag,
                 shownAs: util.getShownAsClass(a),
-                private_flag: a.private_flag
+                start: util.getTime(a.start_date),
+                title: a.title
             });
         },
 

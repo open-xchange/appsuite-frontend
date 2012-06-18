@@ -469,6 +469,15 @@
                 if (o[r] !== undefined && o[r] !== null) { tmp += '.' + o[r]; }
             }
             return tmp;
+        },
+
+        // if someone has a better name ...
+        isSet: function (o) {
+            return o !== null && o !== undefined && o !== '';
+        },
+
+        fallback: function (o, defaultValue) {
+            return _.isSet(o) ? o : defaultValue;
         }
     });
 
