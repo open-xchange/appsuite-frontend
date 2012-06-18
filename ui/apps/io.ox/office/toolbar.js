@@ -22,11 +22,14 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
     }
 
     /**
-     * Returns whether the passed button is active.
+     * CSS class for active toggle buttons.
      */
-    Util.isButtonActive = function (button) {
-        return button.hasClass('btn-primary');
-    };
+    Util.ACTIVE_CLASS = 'btn-primary';
+
+    /**
+     * CSS class for toggle buttons in undefined state.
+     */
+    Util.TRISTATE_CLASS = 'btn-info';
 
     /**
      * Activates, deactivates, or toggles the passed button or collection of
@@ -40,7 +43,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
      *  activates or deactivates all buttons.
      */
     Util.toggleButtons = function (buttons, state) {
-        buttons.toggleClass('btn-primary', state).find('> i').toggleClass('icon-white', state);
+        buttons.toggleClass(Util.ACTIVE_CLASS, state).find('> i').toggleClass('icon-white', state);
     };
 
     /**
@@ -49,15 +52,6 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
     Util.activateRadioButton = function (button) {
         Util.toggleButtons(button.siblings(), false);
         Util.toggleButtons(button, true);
-    };
-
-    Util.isButtonEnabled = function (button) {
-        return !button.hasClass('disabled');
-    };
-
-    Util.enableButtons = function (buttons, state) {
-        var enabled =  (state === true) || (state === undefined);
-        buttons.toggleClass('disabled', !enabled);
     };
 
     // class ToolBarButtonGroup ===============================================
@@ -71,12 +65,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
      *
      * @param groupId
      *  The identifier of this button group.
-     *
-     * @param buttonOptions
-     *  (optional) Default options for all buttons that will be added to this
-     *  button group. See method ToolBar.createButton() for details.
      */
-    function ToolBarButtonGroup(toolbar, type, groupId, buttonOptions) {
+    function ToolBarButtonGroup(toolbar, type, groupId) {
 
         var // create the DOM container element
             node = $('<div>').addClass('btn-group').appendTo(toolbar.getNode()),
@@ -87,8 +77,14 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
             // event handler container
             events = new Events();
 
-        // the default options for new buttons
-        buttonOptions = buttonOptions || {};
+        // listen to controller updates for radio groups
+        if (type === 'radio') {
+            toolbar.getController().on('update:' + groupId, function (event, id) {
+                if (id in buttons) {
+                    Util.activateRadioButton(buttons[id]);
+                }
+            });
+        }
 
         /**
          * Creates a new button and appends it to this button group.
@@ -99,9 +95,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
          *
          * @param options
          *  (optional) A map of options to control the properties of the new
-         *  button. These options extend the default options passed to the
-         *  constructor of this button group. See method ToolBar.createButton()
-         *  for details.
+         *  button. See method ToolBar.createButton() for details.
          *
          * @returns {ToolBarButtonGroup}
          *  A reference back to this button group.
@@ -109,13 +103,19 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
         this.addButton = function (id, options) {
 
             var // create the button element
-                button = buttons[id] = $('<button>').addClass('btn').appendTo(node),
+                button = buttons[id] = $('<button>').addClass('btn').attr('data-id', id).appendTo(node),
 
-                // update handler, updates toggle/radio buttons after a click
-                updater = $.noop;
+                // updates toggle/radio buttons after a click, returns new state
+                clickUpdater = $.noop,
+
+                // controller item key
+                key = ((type === 'single') || (type === 'radio')) ? groupId : (groupId + '.' + id);
+
+            // validate button options
+            options = options || {};
+            options.toggle = options.toggle && (type !== 'radio');
 
             // button formatting
-            options = _.extend(buttonOptions, options);
             if (typeof options.icon === 'string') {
                 button.append($('<i>').addClass('icon-' + options.icon));
             }
@@ -129,66 +129,44 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
             if (typeof options.css === 'object') {
                 button.css(options.css);
             }
+            if (typeof options.tooltip === 'string') {
+                button.attr('title', options.tooltip);
+            }
 
             // prepare update handler
             if (type === 'radio') {
                 // radio handler: activate clicked button, then trigger
-                updater = function () { Util.activateRadioButton(button); };
+                clickUpdater = function () {
+                    Util.activateRadioButton(button);
+                    // button identifier is the state of the radio group
+                    return id;
+                };
             } else if (options.toggle === true) {
                 // toggle handler: first change the button state, then trigger
-                updater = function () { Util.toggleButtons(button); };
+                clickUpdater = function () {
+                    var state = !button.hasClass(Util.ACTIVE_CLASS);
+                    Util.toggleButtons(button, state);
+                    // button state is the state of the toggle button
+                    return state;
+                };
             }
+            // else: stateless push button
 
             // add handling for disabled state to the button click handler
             button.click(function () {
-                if (Util.isButtonEnabled(button)) {
-                    updater();
-                    events.trigger('click', id, Util.isButtonActive(button));
+                if (!button.is(':disabled')) {
+                    var state = clickUpdater();
+                    toolbar.getController().set(key, state);
                 }
             });
 
-            return this;
-        };
+            // listen to controller updates for toggle buttons
+            if (options.toggle === true) {
+                toolbar.getController().on('update:' + key, function (event, state) {
+                    Util.toggleButtons(button, state);
+                });
+            }
 
-        /**
-         * Adds a click handler to this button group.
-         *
-         * @param handler
-         *  The handler function that will be called when a button in this
-         *  group has been clicked. The handler receives the button identifier
-         *  and the current state of the button (useful for toggle buttons).
-         *
-         * @returns {ToolBarButtonGroup}
-         *  A reference back to this button group.
-         */
-        this.click = function (handler) {
-            // attach a custom function that filters the jQuery event object
-            events.on('click', function (event, id, state) {
-                handler(id, state);
-            });
-            return this;
-        };
-
-        this.pollState = function (handler, millis) {
-            window.setTimeout(function timer() {
-                if (type === 'radio') {
-                    // in radio groups, poll state for entire group, handler
-                    // must return button identifier
-                    var id = handler(groupId);
-                    if (id in buttons) {
-                        Util.activateRadioButton(buttons[id]);
-                    }
-                } else {
-                    // in button groups, poll state for each button, handler
-                    // must return button state
-                    _(buttons).each(function (button, id) {
-                        var state = handler(id);
-                        Util.toggleButtons(button, state);
-                    });
-                }
-                // restart timer
-                window.setTimeout(timer, millis);
-            }, millis);
             return this;
         };
 
@@ -200,8 +178,13 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
          *  enabled. Otherwise, all buttons will be disabled.
          */
         this.enable = function (state) {
+            var enabled = (state === true) || (state === undefined);
             _(buttons).each(function (button) {
-                Util.enableButtons(button, state);
+                if (enabled) {
+                    button.removeAttr('disabled');
+                } else {
+                    button.attr('disabled', 'disabled');
+                }
             });
             return this;
         };
@@ -221,49 +204,21 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
             return toolbar;
         };
 
-    }
-
-    // class ToolBarButton ====================================================
-
-    /**
-     * Represents a single button in a tool bar. Behaves like an instance of
-     * class ToolBarButtonGroup with a single child button, and inherits its
-     * functionality from that class (except the method addButton()).
-     *
-     * @param toolbar
-     *  The parent tool bar that will contain this button.
-     *
-     * @param id
-     *  The identifier of this button.
-     *
-     * @param options
-     *  (optional) A map of options to control the properties of the new
-     *  button. See method ToolBar.createButton() for details.
-     */
-    function ToolBarButton(toolbar, id, options) {
-
-        var // a dummy button group that will host the new button
-            buttonGroup = new ToolBarButtonGroup(toolbar, 'button', id).addButton(id, options);
-
-        // implement all chainable methods by delegating them to the button group,
-        // but return a reference to this ToolBarButton instance
-        _(['click', 'pollState', 'enable', 'disable']).each(function (method) {
-            this[method] = function () {
-                buttonGroup[method].apply(buttonGroup, arguments);
-                return this;
-            };
-        }, this);
-
-        // implement other methods that return a result by delegating them to the button group
-        _(['end']).each(function (method) {
-            this[method] = buttonGroup[method];
-        }, this);
+        /**
+         * Destructor. Detaches all event listeners, and removes this button
+         * group with all its buttons from the tool bar.
+         */
+        this.destroy = function () {
+            events.destroy();
+            node.remove();
+            node = buttons = events = null;
+        };
 
     }
 
     // public class ToolBar ===================================================
 
-    function ToolBar() {
+    function ToolBar(controller) {
 
         var // create the DOM container element
             node = $('<div>').addClass('btn-toolbar io-ox-office-toolbar'),
@@ -272,14 +227,22 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
             objects = {};
 
         /**
-         * Returns the root DOM element containing this tool bar.
+         * Returns the controller this tool bar is connected to.
+         */
+        this.getController = function () {
+            return controller;
+        };
+
+        /**
+         * Returns the root DOM element containing this tool bar as jQuery
+         * object.
          */
         this.getNode = function () {
             return node;
         };
 
         /**
-         * Creates a new button and appends it to this tool bar.
+         * Creates a new single push button and appends it to this tool bar.
          *
          * @param id
          *  The identifier of this button. Must be unique inside the tool bar.
@@ -292,15 +255,18 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
          *  - label: The text label of the button. Will follow an icon.
          *  - class: Additional CSS classes to be set at the button (string).
          *  - css: Additional CSS formatting (key/value map).
+         *  - tooltip: Textual tool tip.
          *  - toggle: If set to true, the button works as toggle button
          *      (similar to a check box), i.e. it maintains its state
          *      internally.
          *
-         * @returns {ToolBarButton}
-         *  The new button instance.
+         * @returns {ToolBar}
+         *  A reference to this tool bar.
          */
         this.createButton = function (id, options) {
-            return objects[id] = new ToolBarButton(this, id, options);
+            // create a dummy button group that will host the new button
+            objects[id] = new ToolBarButtonGroup(this, 'single', id).addButton(id, options);
+            return this;
         };
 
         /**
@@ -310,15 +276,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
          *  The identifier of the button group. Must be unique inside the tool
          *  bar.
          *
-         * @param options
-         *  (optional) Default options for all buttons that will be added to
-         *  this button group. See ToolBarButtonGroup.addButton() for details.
-         *
          * @returns {ToolBarButtonGroup}
          *  The new button group instance.
          */
-        this.createButtonGroup = function (id, options) {
-            return objects[id] = new ToolBarButtonGroup(this, 'button', id, options);
+        this.createButtonGroup = function (id) {
+            return objects[id] = new ToolBarButtonGroup(this, 'button', id);
         };
 
         /**
@@ -332,15 +294,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
          *  The identifier of the button group. Must be unique inside the tool
          *  bar.
          *
-         * @param options
-         *  (optional) Default options for all buttons that will be added to
-         *  this button group. See ToolBarButtonGroup.addButton() for details.
-         *
          * @returns {ToolBarButtonGroup}
          *  The new button group instance.
          */
-        this.createRadioGroup = function (id, options) {
-            return objects[id] = new ToolBarButtonGroup(this, 'radio', id, options);
+        this.createRadioGroup = function (id) {
+            return objects[id] = new ToolBarButtonGroup(this, 'radio', id);
         };
 
         /**
@@ -353,6 +311,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
          * @param state
          *  (optional) If omitted or set to true, all child objects will be
          *  enabled. Otherwise, all objects will be disabled.
+         *
+         * @returns {ToolBar}
+         *  A reference to this tool bar.
          */
         this.enable = function (ids, state) {
             _(ids.split(/\s+/)).each(function (id) {
@@ -370,9 +331,22 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
          * @param ids
          *  The identifiers of the child objects to enable or disable, as
          *  space-separated string.
+         *
+         * @returns {ToolBar}
+         *  A reference to this tool bar.
          */
         this.disable = function (ids) {
             return this.enable(ids, false);
+        };
+
+        /**
+         * Destructor. Calls the destructor function of all child objects, and
+         * removes this tool bar from the page.
+         */
+        this.destroy = function () {
+            _(objects).invoke('destroy');
+            node.remove();
+            node = objects = null;
         };
 
     }

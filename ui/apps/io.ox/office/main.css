@@ -17,10 +17,8 @@
 
     .container {
     	width: 100%;
-    	padding: 0 13px;
-	    -webkit-box-sizing: border-box;
-	    -moz-box-sizing: border-box;
-	    box-sizing: border-box;
+    	margin: 0;
+    	padding: 0;
 
 	    table {
 	       width: 100%;
@@ -28,13 +26,24 @@
     }
 }
 
+.ox-io-office-debug-highlight-mixin(@border-color, @fill-color) {
+    outline: thin @border-color solid;
+    background-color: @fill-color;
+}
+
 .io-ox-office-toolbar {
     padding-left: 13px;
     padding-right: 13px;
 
     /* class for small buttons containing e.g. a single character */
-    .btn-iconlike {
+    button.btn-iconlike {
         width: 34px;
+    }
+
+    &.debug-highlight {
+        .ox-io-office-debug-highlight-mixin(#88f, #eef);
+    
+        .btn-group { .ox-io-office-debug-highlight-mixin(#f88, #fee); }
     }
 
 }
@@ -47,9 +56,12 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 
+    p {
+        margin: 0;
+    }
+
     &.rich {
         width: 100%;
-        height: 10cm;
         padding: 6px;
 
         p {
@@ -60,8 +72,7 @@
 
     &.plain {
         width: 100%;
-        height: 6cm;
-        margin-top: 13px;
+        height: 5cm;
         padding: 6px;
 
 	    p {
@@ -72,8 +83,7 @@
 
     &.output {
         width: 100%;
-        height: 6cm;
-        margin-top: 13px;
+        height: 5cm;
         
         p {
             border-top: thin gray dotted;
@@ -82,23 +92,24 @@
         }
 	}
 
-    .debug-highlight-mixin(@border-color, @fill-color) {
-        outline: thin @border-color solid;
-        background-color: @fill-color;
-    }
-
     &.debug-highlight {
-        p { 
-            .debug-highlight-mixin(#8f8, #efe);
+        > p {
+            .ox-io-office-debug-highlight-mixin(#8f8, #efe);
         }
         
         span {
-            .debug-highlight-mixin(#88f, #eef);
+            .ox-io-office-debug-highlight-mixin(#88f, #eef);
         }
+
+        table p {
+            .ox-io-office-debug-highlight-mixin(#f88, #fee);
+        }    
+        
     }
     
-    p {
-	    margin: 0;
-	}
+}
 
+.io-ox-office-debug-table {
+	width: 100%;
+    table-layout: fixed;
 }

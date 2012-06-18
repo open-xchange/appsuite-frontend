@@ -201,6 +201,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 // TODO
             }
 
+            // document state
+            this.setModified(true);
+
             if (bNotify && !blockOperationNotifications) {
                 this.trigger("operation", operation);
                 // TBD: Use operation directly, or copy?
@@ -396,11 +399,48 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             return domSelection;
         };
 
+        this.addExampleTable = function () {
+            // build table for testing reasons
+
+            window.console.log("Number of children of editdiv before inserting table: " + paragraphs.length);
+
+            editdiv
+                .append($('<table>').attr('border', '4').attr('cellspacing', '10').attr('cellpadding', '20').attr('width', '60%')
+                    .append('<colgroup><col width="40%"><col width="30%"><col width="30%"></colgroup>')
+                    .append($('<tr>').attr('valign', 'top')
+                        .append('<td><p>This is paragraph 1 in row 1 and column 1.</p><p>Second paragraph.</p><p>Third paragraph.</p></td>')
+                        .append('<td><p>This is paragraph 1 in row 1 and column 2.</p></td>')
+                        .append('<td><p>This is paragraph 1 in row 1 and column 3.</p></td>'))
+                    .append($('<tr>').attr('valign', 'top')
+                        .append('<td><p>This is paragraph 1 in row 2 and column 1.</p><p>Second paragraph.</p><p>Third paragraph.</p></td>')
+                        .append('<td><p>This is a paragraph in row 2 and column 2.</p></td>')
+                        .append('<td><p>This is a paragraph in row 2 and column 3.</p></td>'))
+                    .append($('<tr>').attr('valign', 'top')
+                        .append('<td><p>This is paragraph 1 in row 3 and column 1.</p><p>Second paragraph.</p><p>Third paragraph.</p></td>')
+                        .append('<td><p>This is a paragraph in row 3 and column 2.</p></td>')
+                        .append('<td><p>This is a paragraph in row 3 and column 3.</p></td>'))
+                    .append($('<tr>').attr('valign', 'top')
+                        .append('<td><p>This is paragraph 1 in row 4 and column 1.</p><p>Second paragraph.</p><p>Third paragraph.</p></td>')
+                        .append('<td><p>This is a paragraph in row 4 and column 2.</p></td>')
+                        .append('<td><p>This is a paragraph in row 4 and column 3.</p></td>')));
+
+            paragraphs = editdiv.children();
+
+            window.console.log("Number of children of editdiv after inserting table: " + paragraphs.length);
+        };
+
         /**
          * Returns whether the editor contains unsaved changes.
          */
         this.isModified = function () {
             return modified;
+        };
+
+        this.setModified = function (state) {
+            if (modified !== state) {
+                modified = state;
+                this.trigger('modified', state);
+            }
         };
 
         /**
@@ -436,6 +476,13 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.implSetDOMSelection(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset, aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
         };
 
+        this.processFocus = function (state) {
+            if (focused !== state) {
+                focused = state;
+                this.trigger('focus', state);
+            }
+        };
+
         this.processDragOver = function (event) {
             event.preventDefault();
         };
@@ -466,6 +513,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 if (c === 'D') {
                     this.initDocument();
                     this.focus(true);
+                }
+                if (c === 'T') {
+                    this.insertParagraph(-1);
+                    this.addExampleTable();
                 }
                 if (c === '1') {
                     dbgoutEvents = !dbgoutEvents;
@@ -1110,8 +1161,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         // hybrid edit mode
         editdiv
-            .on('focus', $.proxy(function () { focused = true; this.trigger('focus:got'); }, this))
-            .on('blur', $.proxy(function () { focused = false; this.trigger('focus:lost'); }, this))
+            .on('focus', _.bind(this.processFocus, this, true))
+            .on('blur', _.bind(this.processFocus, this, false))
             .on('keydown', $.proxy(this, 'processKeyDown'))
             .on('keypress', $.proxy(this, 'processKeyPressed'))
             .on('dragover', $.proxy(this, 'processDragOver'))
