@@ -100,22 +100,44 @@ define('io.ox/office/main',
                 });
             });
 
-            toolbar.createButtonGroup()
-                .addButton({ label: 'B', 'class': 'btn-iconlike', css: { fontWeight: 'bold' }, toggle: true })
-                .addButton({ label: 'I', 'class': 'btn-iconlike', css: { fontStyle: 'italic' }, toggle: true })
-                .addButton({ label: 'U', 'class': 'btn-iconlike', css: { textDecoration: 'underline' }, toggle: true });
+            toolbar
+                .createButtonGroup('fontAttr', { 'class': 'btn-iconlike', toggle: true })
+                    .addButton('bold',      { label: 'B', css: { fontWeight: 'bold' } })
+                    .addButton('italic',    { label: 'I', css: { fontStyle: 'italic' } })
+                    .addButton('underline', { label: 'U', css: { textDecoration: 'underline' } })
+                    .click(function (id, state) {
+                        editor.setAttribute(id, state);
+                        editor.focus();
+                    })
+                    .pollState(function (id) {
+                        return editor.getAttribute(id);
+                    }, 200)
+                .end()
+                .createRadioGroup('paraAlign')
+                    .addButton('left',    { icon: 'align-left' })
+                    .addButton('center',  { icon: 'align-center' })
+                    .addButton('right',   { icon: 'align-right' })
+                    .addButton('justify', { icon: 'align-justify' })
+                    .click(function () {
+                        editor.focus();
+                    })
+                .end()
+                .createButton('highlight', { icon: 'eye-open', toggle: true })
+                    .click(function (id, state) {
+                        _(nodes).each(function (node) {
+                            node.toggleClass('debug-highlight', state);
+                        });
+                        editor.focus();
+                    })
+                .end();
 
-            toolbar.createButtonGroup({ radio: true })
-                .addButton({ icon: 'align-left' })
-                .addButton({ icon: 'align-center' })
-                .addButton({ icon: 'align-right' })
-                .addButton({ icon: 'align-justify' });
-
-            toolbar.addButton({ icon: 'eye-open', toggle: true }, function (state) {
-                _(nodes).each(function (node) {
-                    node.toggleClass('debug-highlight', state);
-                });
-                editor.focus();
+            // enable/disable tool bar items depending on editor focus
+            var richTools = 'fontAttr paraAlign';
+            editors[Editor.TextMode.RICH].on('focus:got', function () {
+                toolbar.enable(richTools);
+            });
+            editors[Editor.TextMode.PLAIN].on('focus:got', function () {
+                toolbar.disable(richTools);
             });
 
         }()); // end of local namespace

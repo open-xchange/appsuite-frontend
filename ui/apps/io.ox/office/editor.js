@@ -127,7 +127,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 144, 145 // NumLock, ScrollLock
             ]);
 
-        var bModified = false;
+        var modified = false;
+        var focused = false;
 
         var lastKeyDownEvent;
 
@@ -182,7 +183,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 this.implDeleteText(operation.para, operation.start, operation.end);
             }
             else if (operation.name === "setAttribute") {
-                this.implSetAttribute(operation.value, operation.para, operation.start, operation.end);
+                this.implSetAttribute(operation.attr, operation.value, operation.para, operation.start, operation.end);
             }
             else if (operation.name === "insertParagraph") {
                 this.implInsertParagraph(operation.para);
@@ -247,12 +248,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
             // TODO: Need to handle other cases - later...
             return '';
-        };
-
-        this.hasFocus = function () {
-            var bHasFocus = true;
-            // TODO
-            return bHasFocus;
         };
 
         this.implGetOXOSelection = function (domSelection) {
@@ -402,6 +397,20 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         /**
+         * Returns whether the editor contains unsaved changes.
+         */
+        this.isModified = function () {
+            return modified;
+        };
+
+        /**
+         * Returns whether the editor is currently focused.
+         */
+        this.hasFocus = function () {
+            return focused;
+        };
+
+        /**
          * Sets the browser focus into the edit text area.
          */
         this.focus = function (initSelection) {
@@ -409,14 +418,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             if (initSelection) {
                 this.setSelection(new OXOSelection(new OXOPaM(0, 0), new OXOPaM(0, 0)));
             }
-
-        };
-
-        /**
-         * Returns whether the editor contains unsaved changes.
-         */
-        this.isModified = function () {
-            return bModified;
         };
 
         this.initDocument = function () {
@@ -539,36 +540,36 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     this.setSelection(selection);
                 }
                 else if (c === 'Z') {
-                    this.undo();
                     event.preventDefault();
+                    this.undo();
                 }
                 else if (c === 'Y') {
-                    this.redo();
                     event.preventDefault();
+                    this.redo();
                 }
                 else if (c === 'X') {
-                    this.cut();
                     event.preventDefault();
+                    this.cut();
                 }
                 else if (c === 'C') {
-                    this.copy();
                     event.preventDefault();
+                    this.copy();
                 }
                 else if (c === 'V') {
-                    this.paste();
                     event.preventDefault();
+                    this.paste();
                 }
                 else if (c === 'B') {
-                    this.setAttribute('bold');
                     event.preventDefault();
+                    this.setAttribute('bold', !this.getAttribute('bold'));
                 }
                 else if (c === 'I') {
-                    this.setAttribute('italic');
                     event.preventDefault();
+                    this.setAttribute('italic', !this.getAttribute('italic'));
                 }
                 else if (c === 'U') {
-                    this.setAttribute('underline');
                     event.preventDefault();
+                    this.setAttribute('underline', !this.getAttribute('underline'));
                 }
                 else if (c === 'xxxxxxx') {
                     event.preventDefault();
@@ -604,7 +605,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // For now (the prototype), only accept single chars, but let the browser process, so we don't need to care about DOM stuff
             // TODO: But we at least need to check if there is a selection!!!
 
-            if (c.length === 1) {
+            if ((!event.ctrlKey) && (c.length === 1)) {
 
                 this.deleteSelected(selection);
                 // Selection was adjusted, so we need to use start, not end
@@ -728,7 +729,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.applyOperation(newOperation, true, true);
         };
 
-        this.setAttribute = function (attr, para, start, end) {
+        this.setAttribute = function (attr, value, para, start, end) {
             // TODO
             if (para === undefined) {
                 // Set attr to current selection
@@ -743,21 +744,21 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     if (selection.startPaM.para !== selection.endPaM.para) {
                         nEndPos = -1;
                     }
-                    this.setAttribute(attr, selection.startPaM.para, selection.startPaM.pos, nEndPos);
+                    this.setAttribute(attr, value, selection.startPaM.para, selection.startPaM.pos, nEndPos);
 
                     // 2) completly slected paragraphs
                     for (var i = selection.startPaM.para + 1; i < selection.endPaM.para; i++) {
-                        this.setAttribute(attr, i, 0, -1);
+                        this.setAttribute(attr, value, i, 0, -1);
                     }
 
                     // 3) selected part in last para
                     if (selection.startPaM.para !== selection.endPaM.para) {
-                        this.setAttribute(attr, selection.endPaM.para, 0, selection.endPaM.pos);
+                        this.setAttribute(attr, value, selection.endPaM.para, 0, selection.endPaM.pos);
                     }
                 }
             }
             else {
-                var newOperation = { name: 'setAttribute', value: attr, para: para, start: start, end: end };
+                var newOperation = { name: 'setAttribute', attr: attr, value: value, para: para, start: start, end: end };
                 this.applyOperation(newOperation, true, true);
             }
         };
@@ -928,7 +929,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.implParagraphChanged(para);
         };
 
-        this.implSetAttribute = function (attr, para, start, end) {
+        this.implSetAttribute = function (attr, value, para, start, end) {
             if (textMode === OXOEditor.TextMode.PLAIN) {
                 return;
             }
@@ -940,11 +941,23 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
             // HACK
             var oldselection = this.getSelection();
-            this.focus(); // this is really ugly, but execCommand only works when having the focus. Can we restore the focus in case we didn't have it???
+            // DR: works without focus
+            //this.focus(); // this is really ugly, but execCommand only works when having the focus. Can we restore the focus in case we didn't have it???
             this.setSelection(new OXOSelection(new OXOPaM(para, start), new OXOPaM(para, end)));
             // This will only work if the editor has the focus. Grabbing it would be ugly, can't restore.
             // But anyway, it's just a hack, and in the future we need to do the DOM manipulations on our own...
-            document.execCommand(attr);
+            // The boolean formatting attributes (e.g. bold/italic/underline) do always toggle, they
+            // cannot be set or cleared explicitly. Therefore, first check if anything needs to be done.
+            // Note that document.queryCommandState() returns false for mixed formatting, but execCommand()
+            // will set the formatting in this case too.
+            if (typeof value === 'boolean') {
+                if (document.queryCommandState(attr) !== value) {
+                    document.execCommand(attr, false, null);
+                }
+            } else {
+                document.execCommand(attr, false, value);
+            }
+            oldselection.adjust(); // FireFox can'r restore selection if end < start
             this.setSelection(oldselection);
 
             // The right thing to do is DOM manipulation, take care for correctly terminating/starting attributes.
@@ -1097,6 +1110,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         // hybrid edit mode
         editdiv
+            .on('focus', $.proxy(function () { focused = true; this.trigger('focus:got'); }, this))
+            .on('blur', $.proxy(function () { focused = false; this.trigger('focus:lost'); }, this))
             .on('keydown', $.proxy(this, 'processKeyDown'))
             .on('keypress', $.proxy(this, 'processKeyPressed'))
             .on('dragover', $.proxy(this, 'processDragOver'))
