@@ -55,7 +55,6 @@ define('io.ox/calendar/month/view',
         },
 
         renderAppointment: function (a) {
-            console.log('full_time', a.title, a, a.location, typeof a.location);
             return tmpl.render('appointment', {
                 cid: _.cid(a),
                 full_time: a.full_time,
