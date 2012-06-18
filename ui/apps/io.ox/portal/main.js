@@ -118,16 +118,11 @@ function (ext, config, userAPI, date, gt) {
                         .addClass('io-ox-portal-widget-tile')
                         .attr('widget-id', extension.id)
                         .busy()
-                        .appendTo(leftSide),
-                        tileWidth,
-                        tileHeight;
-                    
-                    tileWidth = (extension.metadata("tileWidth") || 1);
-                    tileHeight = (extension.metadata("tileHeight") || 1);
+                        .appendTo(leftSide);
                     
                     $node.css({
-                        width: (tileWidth * 180 + (tileWidth - 1) * 10) + "px",
-                        height: (tileHeight * 90 + (tileHeight - 1) * 10) + "px",
+                        width: "180px",
+                        height: "180px",
                         margin: "5px"
                     });
                         
@@ -147,8 +142,9 @@ function (ext, config, userAPI, date, gt) {
                     }
                     
                     return extension.invoke('loadTile')
-                        .pipe(function (data) {
-                            return (extension.invoke('drawTile', $node, data) || $.Deferred())
+                        .pipe(function (a1, a2) {
+                            console.log("loadTile Result", extension.id, a1, a2);
+                            return (extension.invoke.apply(extension, ['drawTile', $node].concat($.makeArray(arguments))) || $.Deferred())
                                 .done(function () {
                                     $node.idle();
                                     extension.invoke('postTile', $node, extension);

@@ -54,37 +54,54 @@ define('plugins/portal/mail/register',
         tileHeight: 2,
 
         loadTile: function () {
-            var loading = new $.Deferred();
-            require(['io.ox/core/api/folder'], function (folders) {
-                folders.get(
+            var folderLoaded = $.Deferred();
+            var mailsLoaded = $.Deferred();
+            
+            require(['io.ox/core/api/folder', 'io.ox/mail/api'], function (folderApi, mailApi) {
+                folderApi.get(
                     {
-                        cache: true
+                        folder: folderApi.getDefaultFolder('mail'),
+                        cache: false
                     })
-                    .done(function (myfolder) {
-                        console.log(myfolder);
+                    .done(function (folder) {
+                        folderLoaded.resolve(folder);
                     })
-                    .fail(loading.reject);
+                    .fail(folderLoaded.reject);
+                console.log("Lulli");
+                mailApi.getAll({
+                    folder: folderApi.getDefaultFolder('mail'),
+                    cache: false
+                }, false)
+                    .done(function (mails) {
+                        if (mails.length === 0) {
+                            mailsLoaded.resolve(null);
+                        } else {
+                            var mail = _.extend({view: "text"}, mails[0]);
+                            mailApi.get(mail).done(function (loadedMail) {
+                                console.log("Loaded Mails", loadedMail);
+                                mailsLoaded.resolve(loadedMail);
+                            }).fail(mailsLoaded.reject);
+                        }
+                    })
+                    .fail(mailsLoaded.reject);
             });
-            return loading;
+            return $.when(folderLoaded, mailsLoaded);
         },
-        drawTile: function (mails) {
+        drawTile: function (folder, mail) {
+            console.log("Hmmmmmm", folder, mail);
+            
             var $node = $(this);
             $node.addClass('mail-portal-tile');
-            var subject = 'This is a dummy e-mail subject';
-            var mailtext = 'This is my dummy mail text, which is too long to fit the box, so we recommend it to be shortened. Preferably by our own most excellent shortening function.';
-            var len = 72;
-            if (subject >= len) {
-                subject = strings.shorten(subject, len);
-                mailtext = '';
-            } else {
-                mailtext = strings.shorten(mailtext, len - subject.length);
-            }
+            var subject = mail.subject;
+            var mailtext = $("<div>").html(mail.attachments[0].content).text(); // Hihi
+            subject = strings.shorten(subject, 40);
+            mailtext = strings.shorten(mailtext, 60);
             
             
             $node.append(
                 $('<h1>').text("Mail"),
                 $('<span class="unread-mail-count">').text('Unread:'),
-                $('<span class="badge badge-info unread-mail-count">').text("555"),
+                $('<span class="badge badge-info unread-mail-count">').text(folder.unread),
                 $('<div class="io-ox-clear">').append(
                     $('<div class="">').append($("<b>").text(subject), $('<br>'), $("<span>").text(mailtext))
                 )
