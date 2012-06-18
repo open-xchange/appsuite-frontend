@@ -8,8 +8,12 @@ div.io-ox-calendar-edit {
     label {
         color: black;
         line-height: 1.25em;
-        padding: 0px 0px 5px 0px;
-        font-family: OpenSans, Helvetica, Arial, sans-serif;
+        padding: 0px 0px 0px 0px;
+        font-family: @font-normal;
+    }
+
+    label.desc {
+        color: #888;
     }
 
     div.section {
@@ -19,7 +23,7 @@ div.io-ox-calendar-edit {
     }
 
     input.title {
-        width: 100%;
+        width: 99%;
         font-weight: bold;
         font-size: 14px;
         text-overflow: ellipsis;
@@ -30,35 +34,20 @@ div.io-ox-calendar-edit {
     }
 
     a.save {
-        width:100%;
+        width:94%;
         padding: 4px;
         position: relative;
-        top: 25px;
+        top: 20px;
     }
 
     input.startsat-date, input.endsat-date {
-        width: 80px;
+        margin-right: 8px;
+        margin-bottom: 0px;
     }
 
     input.startsat-time, input.endsat-time {
-        width: 35px;
-    }
-
-    div.tablerow {
-        display: table-row;
-    }
-    div.tablecell {
-        display: table-cell;
-    }
-
-    div.left {
-        width: 400px;
-        display: table-cell;
-    }
-
-    div.right {
-        width: 400px;
-        display: table-cell;
+        margin-right: 8px;
+        margin-bottom: 0px;
     }
 
 
@@ -74,7 +63,7 @@ div.io-ox-calendar-edit {
         border-radius: 3px;
     }
     textarea.note {
-        font-family: Monaco, monospace;
+        font-family: @font-normal;
         font-size: 13px;
         line-height: 18px;
         color: black;
@@ -86,7 +75,7 @@ div.io-ox-calendar-edit {
         resize: vertical;
         padding: 10px;
         margin: 0px;
-        min-height: 200px;
+        min-height: 120px;
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
         -ms-box-sizing: border-box;
@@ -108,15 +97,15 @@ div.io-ox-calendar-edit {
     }
 
 
-    li.edit-appointment-participant {
+    div.edit-appointment-participant {
         /*    clear: both;*/
         position: relative;
         line-height: 1.5em;
         background-color: white;
         margin-bottom: 2px;
-        padding: 4px 2.5em 4px 5px;
+        padding: 4px 0px 4px 1px;
         float: left;
-        width: 216px;
+        margin-left: 0px;
     }
 
     div.recurrence {
@@ -148,12 +137,30 @@ div.io-ox-calendar-edit {
     }
 
     .sectiontitle {
-        margin: 0px 0 15px 0;
-        font-size: 1.25em;
+        font-size: 13px;
+        margin: 20px 0 15px 0;
         color: #888;
-        font-family: OpenSans, Helvetica, Arial, sans-serif;
         font-weight: 200;
-        line-height: 1.15em;
+    }
+
+    legend {
+        display: block;
+        width: 100%;
+        padding: 0;
+        margin-bottom: 27px;
+        font-size: 19.5px;
+        line-height: 26px;
+        color: #333;
+        border: 0;
+        border-bottom: 1px solid #AAA;
+    }
+
+    input.add-participant {
+        width: 342px;
+    }
+
+    select {
+        width: 100%;
     }
 }
 
@@ -173,7 +180,7 @@ div.edit-appointment-participants {
 
 
 
-li.edit-appointment-participant .contact-image {
+div.edit-appointment-participant .contact-image {
     height: 3em;
     width: 3em;
     margin-right: 1em;
@@ -183,24 +190,25 @@ li.edit-appointment-participant .contact-image {
     float: left;
 }
 
-li.edit-appointment-participant .remove {
+div.edit-appointment-participant .remove {
     display: inline-block;
     position: absolute;
     top: 1px;
-    right: 1px;
+    right: 12px;
     bottom: 1px;
-    width: 2em;
+    width: 27px;
     line-height: 1em;
     background-color: white;
     color: #CCC;
     cursor: pointer;
 }
-li.edit-appointment-participant .remove:hover {
+div.edit-appointment-participant .remove:hover {
     background-color: #a00;
     color: #fff;
     text-decoration: none;
 }
-li.edit-appointment-participant .icon {
+
+div.edit-appointment-participant .icon {
     position: absolute;
     top: 50%;
     left: 0;
@@ -209,7 +217,7 @@ li.edit-appointment-participant .icon {
     text-align: center;
 }
 
-li.edit-appointment-participant div {
+div.edit-appointment-participant div {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

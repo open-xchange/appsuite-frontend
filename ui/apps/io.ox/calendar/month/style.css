@@ -1,33 +1,152 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
 
-/*
- * CSS Calendar
- * Tim Wright
- * Chris Coyier
- -----------------------------*/
-ol.calendar         			{width:60em;margin:0 auto;display:block;}
-ol.calendar li                  {list-style:none;}
-ol.calendar p.link              {text-align:center;display:block;}
+.window-content.month-view * {
+    box-sizing: border-box;
+}
 
-/*
- * Day styles
- -------------------------*/
-ol.calendar li li               {width:7em;height:7em;float:left;margin:.1em;border:1px solid #444;padding:.2em;overflow:auto;}
+.window-content.month-view {
+    
+    .footer {
+        position: absolute;
+        right: 0; height: 30px; bottom: 0; left: 0;
+        white-space: nowrap;
+        background-color: white;
+        font-family: @font-light;
+        font-size: 12px;
+        line-height: 30px;
+    }
+    
+    .weekday {
+        width: 100/8%;
+        display: inline-block;
+        padding-left: 13px;
+    }
+    
+    .scrollpane {
+        overflow: auto;
+        position: absolute;
+        top: 0; right: 0; bottom: 30px; left: 0;
+    }
+    
+    .week {
+        height: 20%;
+        min-height: 80px;
+        max-height: 160px;
+    }
+    
+    .day {
+        width: 100/8%;
+        height: 100%;
+        min-height: 80px;
+        max-height: 160px;
+        position: relative;
+        display: inline-block;
+        border-color: #ccc;
+        border-style: solid;
+        border-width: 0 1px 1px 0;
+        overflow: hidden;
+    
+        background-color: #fff;
+        -webkit-transition: background-color 0.5s;
+        -moz-transition: background-color 0.5s;
+        transition: background-color 0.5s;
+    }
+    
+    .vertical {
+        font-family: @font-light;
+        font-size: 30px;
+        line-height: 1.1em;
+        color: #aaa;
+        position: absolute;
+        right: 0;
+        width: 12.5%;
+        height: 20%;
+        padding: 13px;
+        text-align: right;
+    }
+    
+    .day.out {
+        background-color: #e0e0e0;
+    }
+    
+    .day.out.today {
+        background-color: #f0f0f0;
+    }
 
-/*
- * Day content (UL/OL & P)
- -------------------------*/
-ol.calendar li li p             {font-size:.7em;display:block;border-bottom:1px solid #ddd;}
-ol.calendar li li ol            {width:auto;}
-ol.calendar li li ul li,
-ol.calendar li li ol li         {font-size:.7em;display:block;height:auto;width:auto;margin:0;padding:.2em 0;float:none;border:0;border-bottom:1px solid #ddd;}
-
-/*
- * Holiday class
- -------------------------*/
-ol.calendar li li.holiday       {border-color:#f00;}
-
-/*
- * Inactive months
- -------------------------*/
-ol.calendar li.lastmonth li,
-ol.calendar li.nextmonth li     {background:#f5f5f5;border:1px solid #999;}
+    .day .number {
+        position: absolute;
+        color: #aaa;
+        text-align: right;
+        right: 7px;
+        bottom: 5px;
+        z-index: 1;
+        font-size: 11px;
+        line-height: 1em;
+    }
+    
+    .day.out .number {
+        color: #aaa;
+    }
+    
+    .day.weekend .number {
+        color: #a00;
+    }
+    
+    .day.today { background-color: #daefFf; background-color: rgba(0, 136, 204, 0.25); }
+    .day.today .number { color: darken(#08c, 10%); }
+    
+    .vertical-box {
+        position: absolute;
+        top: 130%;
+        right: -50px;
+        font-size: 60px;
+        color: #ccc;
+        writing-mode: tb-rl;
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        filter: ~"progid:DXImageTransform.Microsoft.BasicImage(rotation=3);"
+    }
+    
+    .day .list {
+        top: 6px; right: 6px; bottom: 6px; left: 6px;
+        z-index: 2;
+    }
+    
+    .appointment {
+        font-size: 11px;
+        background-color: #08c;
+        color: white;
+        margin-bottom: 1px;
+        padding: 2px 7px 2px 7px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+    
+        -webkit-transition: background-color, color 0.5s;
+        -moz-transition: background-color, color 0.5s;
+        transition: background-color, color 0.5s;
+    }
+    
+    .appointment.reserved { background-color: #08c; } /* blue */
+    .appointment.temporary { background-color: #FFBB00; } /* yellow */
+    .appointment.absent { background-color: #913F3F; } /* red */
+    .appointment.free { background-color: #8EB360; } /* green */
+    .appointment.private { background-color: #555; }
+    
+    .day.out .appointment { background-color: #aaa; }
+    
+    .appointment:hover { background-color: #ccc; color: #333; }
+    
+    .appointment .location { color: #ccc; color: rgba(255, 255, 255, 0.6); }
+}

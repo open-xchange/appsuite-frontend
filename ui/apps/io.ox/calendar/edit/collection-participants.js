@@ -22,3 +22,4 @@ define('io.ox/calendar/edit/collection-participants',
     return ParticipantsCollection;
 
 });
+

@@ -36,7 +36,7 @@ to e.g. convert between time zones.</p>
 <script type="text/example">
 date.getTimeZone('America/New_York').done(function (NewYork) {
     alert(gettext('New York celebrated New Year\'s at %1$s',
-                  new date.Local(new NewYork(2012, 1, 1))));
+                  new date.Local(new NewYork(2012, 0, 1))));
 });
 </script>
 
@@ -198,8 +198,8 @@ which can also be negative. There are predefined
 periods.</p>
 
 <script type="text/example">
-var d = new date.Local(2012, 3);
-for (; d.getMonth() < 4; d.add(date.DAY)) {
+var d = new date.Local(2012, 2);
+for (; d.getMonth() < 3; d.add(date.DAY)) {
     // Display a day in a month view.
 } 
 </script>
@@ -213,9 +213,28 @@ solve this, there are separate methods for months and years:
 respective years as parameter.</p>
 
 <script type="text/example">
-var d = new date.Local(2012, 1);
+var d = new date.Local(2012, 0);
 for (; g.getYear() < 2013; d.addMonths(1)) {
     // Display a month in a year view.
+}
+</script>
+
+<p>Finally, most calendars default to displaying the current date, and therefore
+need to figure out the iteration range based on an arbitrary point inside that
+range. In most cases, the start can be computed by simply calling
+the appropriate setters with all zeros as parameters to find the start of
+the range, and adding the range duration to find the end. One exception is
+the week. There is no setter for the day of the week. Instead, the method
+<code>LocalDate.prototype.setStartOfWeek()</code> can be used to find the start
+of a week.</p>
+
+<script type="text/example">
+// Find the start and the end of the current week
+var d = new date.Local().setStartOfWeek();
+var end = new date.Local(start).add(date.WEEK);
+// Iterate over the week
+for (; d < end; d.add(date.DAY)) {
+    // Display a day in a week view.
 }
 </script>
 
@@ -238,20 +257,12 @@ if (end < start) alert(gettext('Invalid date range!'));
 API with a few exceptions:</p>
 
 <ul>
-<li>When the <code>Local</code> constructor is used to create an instance
-from multiple parameters, month numbering starts at 1 and not 0. This allows for
-intuitive specification of dates, but makes array indexing into
-<code>locale.months</code> and <code>locale.monthsShort</code> less intuitive.
-<span class="TODO">Change it back? <code>format('MMMM')</code> and
-<code>format('MMM')</code> do the same, even if slightly slower.</span></li>
-
 <li>The constructor can not be called as a function. The <code>Date</code>
 constructor does in this case nothing useful anyway.</li>
 
 <li><code>Date.UTC()</code> should not be necessary, but since it returns
 a numeric timestamp and has nothing to do with time zones, it can still be used
-directly. Remember that the month numbering differs from
-<code>LocalDate</code>.</li>
+directly.</li>
 
 <li>Except for <code>LocalDate.prototype.toString()</code>, all
 <code>to*String()</code> methods are replaced by
@@ -264,6 +275,9 @@ for the time zone 'UTC' instead.</li>
 <li>The getter and setter for the year are called <code>getYear</code> and
 <code>setYear</code> instead of <code>getFullYear</code> and
 <code>setFullYear</code> since we have no legacy code with Y2K issues.</li>
+
+<li>Setters return the modified object instead of the timestamp. This is useful
+for chaining of method calls.</li>
 
 <li><code>Date.prototype.getTimeZoneOffset()</code> should not be necessary,
 since hiding these details is the whole point of the <code>date</code> module.
@@ -425,7 +439,7 @@ can't be called as a function.</p>
     <dt>new LocalDate(timestamp)</dt>
     <dt>new LocalDate(year, month, date, hours, minutes, seconds, ms)</dt>
     <dd>The constructor accepts the same parameters as the <code>Date</code>
-    constructor. One exception is the month number, which starts at 1.</dd>
+    constructor.</dd>
 </dl>
 
 <p>The entire functionality of the class is based on a few low level functions.
@@ -554,7 +568,7 @@ local time.</p>
             <li><code>year</code> <i>Number</i> - The year.</li>
             
             <li><code>month</code> <i>Number</i> - The month. Values range from
-            1 for January to 12 for December.</li>
+            0 for January to 11 for December.</li>
             
             <li><code>date</code> <i>Number</i> - The date. Values range from 1
             to 31.</li>
@@ -565,11 +579,11 @@ local time.</p>
             <li><code>min</code> <i>Number</i> - The minutes. Values range from
             0 to 59.</li>
             
-            <li><code>sec</code> <i>Number</i> - The year. Values range from 0
-            to 59.</li>
+            <li><code>sec</code> <i>Number</i> - The seconds. Values range from
+            0 to 59.</li>
             
-            <li><code>ms</code> <i>Number</i> - The year. Values range from 0 to
-            999.</li>
+            <li><code>ms</code> <i>Number</i> - The milliseconds. Values range
+            from 0 to 999.</li>
         </ul>
     </dd>
     
@@ -624,8 +638,8 @@ individual fields.</p>
 </dl>
 
 <p>While setters can be used to perform date arithmetic, <code>LocalDate</code>
-provides convenience functions for the most frequent case of adding and
-subtracting a time period.</p>
+provides convenience functions for the most frequent cases of adding and
+subtracting a time period and finding the start of a week.</p>
 
 <dl>
     <dt>LocalDate.prototype.add(time)</dt>
@@ -673,6 +687,14 @@ subtracting a time period.</p>
             <li><code>years</code> <i>Number</i> - The number of years to add.
             Use negative values to subtract.</li>
             
+            <li><b>Returns</b> <i>this</i> - This object for chaining.</li>
+        </ul>
+    </dd>
+    
+    <dt>LocalDate.prototype.setStartOfWeek()</dt>
+    <dd>Sets the date to the start of the same week as determined by
+    <code>locale.weekStart</code>. The time is reset to midnight.
+        <ul class="params">
             <li><b>Returns</b> <i>this</i> - This object for chaining.</li>
         </ul>
     </dd>

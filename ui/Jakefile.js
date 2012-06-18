@@ -213,6 +213,7 @@ utils.concat("boot.js", [
         //add backbone and dot.js may be a AMD-variant would be better
         "lib/backbone.js",
         "lib/backbone.modelbinder.js",
+        "lib/backbone.collectionbinder.js",
         "lib/backbone.validation.js",
         "lib/backbone.custom.js",
         "lib/doT.js",
@@ -224,7 +225,7 @@ utils.concat("pre-core.js",
         "event.js", "extensions.js", "http.js",
         "cache.js", "cache/*.js", // cache + cache storage layers
         "config.js", "session.js", "gettext.js",
-        "tk/selection.js", "tk/vgrid.js", "tk/model.js", "tk/upload.js",
+        "tk/selection.js", "tk/model.js", "tk/upload.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js", "api/account.js",
         "api/folder.js", "desktop.js", "commons.js", "collection.js",
         "extPatterns/actions.js", "extPatterns/links.js",

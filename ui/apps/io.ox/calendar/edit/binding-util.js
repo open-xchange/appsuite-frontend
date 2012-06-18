@@ -18,60 +18,102 @@ define('io.ox/calendar/edit/binding-util',
     var BinderUtils = {
         convertDate: function (direction, value, attribute, model) {
             if (direction === 'ModelToView') {
-                if (!value) {
-                    return null;
-                }
-                var formated = new dateAPI.Local(parseInt(value, 10)).format(dateAPI.locale.date);
-                return formated;
+                return BinderUtils._toDate(value, attribute, model);
             } else {
-                var mydate = new dateAPI.Local(parseInt(model.get(attribute), 10));
-                var parsedDate = dateAPI.Local.parse(value, dateAPI.locale.date);
-
-                // just reject the change, if it's not parsable
-                if (parsedDate.getTime() === 0) {
-                    return model.get(attribute);
-                }
-
-                mydate.setDate(parsedDate.getDate());
-                mydate.setMonth(parsedDate.getMonth());
-                mydate.setYear(parsedDate.getYear());
-
-                return mydate.getTime();
+                return BinderUtils._dateStrToDate(value, attribute, model);
             }
         },
         convertTime: function (direction, value, attribute, model) {
             if (direction === 'ModelToView') {
-                if (!value) {
-                    return null;
-                }
-                return new dateAPI.Local(parseInt(value, 10)).format(dateAPI.locale.time);
+                return BinderUtils._toTime(value, attribute, model);
             } else {
-                var mydate = new dateAPI.Local(parseInt(model.get(attribute), 10));
-                var parsedDate = dateAPI.Local.parse(value, dateAPI.locale.time);
-
-                if (parsedDate.getTime() === 0) {
-                    return model.get(attribute);
-                }
-
-                mydate.setHours(parsedDate.getHours());
-                mydate.setMinutes(parsedDate.getMinutes());
-                mydate.setSeconds(parsedDate.getSeconds());
-
-                return mydate.getTime();
+                return BinderUtils._timeStrToDate(value, attribute, model);
             }
         },
         numToString: function (direction, value, attribute, model) {
-            console.log('numToString');
-            console.log(value + '(' + (typeof value) + ')');
             if (direction === 'ModelToView') {
-                console.log('modeltoview?');
                 return value + '';
             } else {
-                console.log('HERE');
                 return parseInt(value, 10);
             }
-        }
+        },
 
+        _toDate: function (value, attribute, model) {
+            var mydate, formatted;
+            if (!value) {
+                return null;
+            }
+            if (!_.isNumber(value)) {
+                return value; //do nothing
+            }
+            mydate = dateAPI.Local.utc(parseInt(value, 10));
+
+            if (_.isNull(mydate)) {
+                return value;
+            }
+
+            formatted = new dateAPI.Local(mydate).format(dateAPI.DATE);
+            return formatted;
+        },
+        _toTime: function (value, attribute, model) {
+            var myTime, formatted;
+            if (!value) {
+                return null;
+            }
+            myTime = dateAPI.Local.utc(parseInt(value, 10));
+
+            if (_.isNull(myTime)) {
+                return value;
+            }
+            formatted =  new dateAPI.Local(myTime).format(dateAPI.TIME);
+            return formatted;
+        },
+        _timeStrToDate: function (value, attribute, model) {
+            var myValue = parseInt(model.get(attribute), 10) || false;
+            if (!myValue) {
+                return value;
+            }
+            var mydate = new dateAPI.Local(dateAPI.Local.utc(myValue));
+            var parsedDate = dateAPI.Local.parse(value, dateAPI.TIME);
+
+            if (_.isNull(parsedDate)) {
+                return mydate.getTime();
+            }
+
+
+            if (parsedDate.getTime() === 0) {
+                return model.get(attribute);
+            }
+
+            mydate.setHours(parsedDate.getHours());
+            mydate.setMinutes(parsedDate.getMinutes());
+            mydate.setSeconds(parsedDate.getSeconds());
+
+            return dateAPI.Local.localTime(mydate.getTime());
+        },
+        _dateStrToDate: function (value, attribute, model) {
+            var myValue = parseInt(model.get(attribute), 10) || false;
+            if (!myValue) {
+                return value;
+            }
+            var mydate = new dateAPI.Local(dateAPI.Local.utc(myValue));
+            var parsedDate = dateAPI.Local.parse(value, dateAPI.DATE);
+
+            if (_.isNull(parsedDate)) {
+                return value;
+            }
+
+            // just reject the change, if it's not parsable
+            if (parsedDate.getTime() === 0) {
+                return model.get(attribute);
+            }
+
+            mydate.setDate(parsedDate.getDate());
+            mydate.setMonth(parsedDate.getMonth());
+            mydate.setYear(parsedDate.getYear());
+
+            return dateAPI.Local.localTime(mydate.getTime());
+        }
     };
 
     return BinderUtils;

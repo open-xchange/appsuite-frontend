@@ -18,8 +18,9 @@ define('io.ox/core/tk/folderviews',
      'io.ox/core/api/user',
      'io.ox/core/extensions',
      'io.ox/core/event',
-     'io.ox/core/config'
-    ], function (Selection, api, account, userAPI, ext, Events, config) {
+     'io.ox/core/config',
+     'io.ox/settings/accounts/email/settings'
+    ], function (Selection, api, account, userAPI, ext, Events, config, emailsettings) {
 
     'use strict';
 
@@ -606,6 +607,22 @@ define('io.ox/core/tk/folderviews',
                     .addClass('action-link')
                     .text('Add new folder ...')
                     .on('click', { folder: data.rootFolderId, tree: data.tree }, fnCreateFolder)
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/application-foldertree/links').extend({
+        index: 100,
+        id: 'create-mailaccount',
+        draw:  function (data) {
+            this.append(
+                $('<div>')
+                .append(
+                    $('<a>', { href: '#' })
+                    .addClass('action-link')
+                    .text('Add mail account ...')
+                    .on('click', emailsettings.mailAutoconfigDialog)
                 )
             );
         }

@@ -28,9 +28,6 @@ define('io.ox/calendar/edit/extensions/recurrence/view-repeat-option',
 
         RECURRENCE_NONE: 0,
         tagName: 'div',
-        _modelBinder: undefined,
-        bindings: undefined,
-        parentview: undefined,
         events: {
             'click .editrecurrence': 'toggleRecurrence',
             'change input.repeat': 'onToggleRepeat'
@@ -107,10 +104,6 @@ define('io.ox/calendar/edit/extensions/recurrence/view-repeat-option',
         onToggleRepeat: function (evt) {
             var self = this;
             var isRecurrence = ($(evt.target).attr('checked') === 'checked');
-
-            window.model = self.model;
-
-            console.log('recurrence: ' + isRecurrence);
 
             if (isRecurrence) {
                 self.$('.editrecurrence_wrapper').show();

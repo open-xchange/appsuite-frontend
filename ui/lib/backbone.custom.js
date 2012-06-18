@@ -16,3 +16,16 @@ _.extend(Backbone.Validation.callbacks, {
         );
     }
 });
+
+_.extend(Backbone.Validation.validators, {
+    greaterThan: function (value, attr, greaterThan, model, computed) {
+        if (value < computed[greaterThan]) {
+            return 'error';
+        }
+    },
+    smallerThan: function (value, attr, smallerThan, model, computed) {
+        if (value > computed[smallerThan]) {
+            return 'error';
+        }
+    }
+});

@@ -15,8 +15,8 @@ define('io.ox/calendar/edit/model-participant',
       ['io.ox/core/api/user',
        'io.ox/core/api/group',
        'io.ox/core/api/resource'], function (userAPI, groupAPI, resourceAPI) {
-    'use strict';
 
+    'use strict';
 
     var ParticipantModel = Backbone.Model.extend({
         TYPE_USER: 1,
@@ -27,11 +27,13 @@ define('io.ox/calendar/edit/model-participant',
 
         defaults: {
             display_name: '...',
-            email1: ''
+            email1: '',
+            image1_url: ''
         },
         fetch: function (options) {
             var self = this,
                 df = new $.Deferred();
+
 
             switch (self.get('type')) {
             case self.TYPE_USER:

@@ -15,7 +15,7 @@ define("plugins/portal/appointments/register",
     ["io.ox/core/extensions"], function (ext) {
 
     "use strict";
-    
+
     var appointmentPortal = {
         id: "appointments",
         index: 100,
@@ -43,12 +43,9 @@ define("plugins/portal/appointments/register",
                 );
 
             if (appointments.length === 0) {
-
                 $node.append("<div><b>You don't have any appointments in the near future. Go take a walk!</b></div>");
                 deferred.resolve();
-
             } else {
-
                 require(
                     ["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
                     function (dialogs, viewGrid) {

@@ -367,48 +367,96 @@ define("io.ox/calendar/util",
 
         // returns a set of rows, each containing 7 days
         // helps at drawing a mini calendar or a month view
-        getMonthScaffold: function (timestamp) {
+        getMonthScaffold: function (year, month, forerun, overrun) {
 
-            // use timestamp or current time
-            var d = new Date(timestamp || _.now()),
-                year = d.getUTCFullYear(),
-                month = d.getUTCMonth(),
-                weekday = d.getUTCDay(),
-                firstDayOfMonth = Date.UTC(year, month, 1),
+            forerun = forerun || 0;
+            overrun = overrun || 0;
+
+            var firstDayOfMonth = Date.UTC(year, month, 1),
                 // apply week day shift
                 shift = (7 + (new Date(firstDayOfMonth)).getDay() - that.getFirstWeekDay()) % 7,
-                // get number of days in month
-                max = that.getDaysInMonth(year, month) + shift,
-                // loop
-                i = 0,
-                rows = [],
                 day = firstDayOfMonth - DAY * shift,
-                row,
-                obj;
+                // loop
+                rows = [], row, obj, d;
 
-            for (; i < max || i % 7 !== 0; i += 1, day += DAY) {
-                if (i % 7 === 0) {
-                    row = [];
-                    rows.push(row);
+            function getMax() {
+                // get number of days in month
+                return that.getDaysInMonth(year, month) + shift;
+            }
+
+            function loop(max) {
+                for (var i = 0; i < max || (i % 7 !== 0); i += 1, day += DAY) {
+                    if (i % 7 === 0) {
+                        row = [];
+                        rows.push(row);
+                    }
+                    d = new Date(day);
+                    row.push(obj = {
+                        year: d.getUTCFullYear(),
+                        month: d.getUTCMonth(),
+                        date: d.getUTCDate(),
+                        day: d.getUTCDay(),
+                        timestamp: day,
+                        isToday: that.isToday(day),
+                        col: i % 7,
+                        row: rows.length - 1
+                    });
+                    // is weekend?
+                    obj.isWeekend = obj.day === 0 || obj.day === 6;
+                    // is out of current month?
+                    obj.isOut = obj.year !== year || obj.month !== month;
                 }
+            }
+
+            // forerun?
+            if (forerun > 0) {
+                day -= forerun * WEEK;
+                loop(forerun * 7);
+            }
+
+            loop(getMax());
+
+            // overrun?
+            if (overrun > 0) {
+                loop(overrun * 7);
+            }
+
+            return rows;
+        },
+
+        getWeekStart: function (timestamp) {
+
+            timestamp = ((timestamp || _.now()) / DAY >> 0) * DAY;
+
+            var d = new Date(timestamp),
+                // apply week day shift
+                shift = (7 + d.getUTCDay() - this.getFirstWeekDay()) % 7;
+
+            return d.getTime() - DAY * shift;
+        },
+
+        getWeekScaffold: function (timestamp) {
+
+            var day = this.getWeekStart(timestamp),
+                i = 0, d, obj, days = [];
+
+            for (; i < 7; i += 1, day += DAY) {
                 d = new Date(day);
-                row.push(obj = {
+                days.push(obj = {
                     year: d.getUTCFullYear(),
                     month: d.getUTCMonth(),
                     date: d.getUTCDate(),
                     day: d.getUTCDay(),
                     timestamp: day,
                     isToday: that.isToday(day),
-                    col: i % 7,
-                    row: rows.length - 1
+                    col: i % 7
                 });
                 // is weekend?
                 obj.isWeekend = obj.day === 0 || obj.day === 6;
-                // is out of current month?
-                obj.isOut = obj.year !== year || obj.month !== month;
+                obj.isFirst = d.getUTCDate() === 1;
             }
 
-            return rows;
+            return days;
         }
     };
 

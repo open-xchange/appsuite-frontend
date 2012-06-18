@@ -466,9 +466,18 @@
                 tmp = o.id;
                 f = o.folder_id !== undefined ? o.folder_id : o.folder;
                 if (f !== undefined) { tmp = f + '.' + tmp; }
-                if (o[r] !== undefined) { tmp += '.' + o[r]; }
+                if (o[r] !== undefined && o[r] !== null) { tmp += '.' + o[r]; }
             }
             return tmp;
+        },
+
+        // if someone has a better name ...
+        isSet: function (o) {
+            return o !== null && o !== undefined && o !== '';
+        },
+
+        fallback: function (o, defaultValue) {
+            return _.isSet(o) ? o : defaultValue;
         }
     });
 

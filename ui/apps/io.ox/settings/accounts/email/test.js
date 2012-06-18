@@ -23,34 +23,45 @@ define("io.ox/settings/accounts/email/test",
     var TIMEOUT = 5000,
 
         TESTACCOUNT = {
-//          "primary_address": "tester@gmx.net",
-//          "mail_protocol": "pop3",
-//          "mail_port": 995,
-//          "mail_server": "pop.gmx.net",
-//          "transport_protocol": "smtp",
-//          "transport_port": 465,
-//          "transport_server": "mail.gmx.net",
-//          "login": "tester@gmx.net",
-            "mail_protocol": "pop3",
-            "name": "Ein Account",
-            "personal": "Tester",
+            "primary_address": "oxtestermail@googlemail.com",
+            "mail_protocol": "imap",
+            "mail_port": "993",
+            "mail_server": "imap.googlemail.com",
+            "transport_protocol": "smtp",
+            "transport_port": "465",
+            "transport_server": "smtp.googlemail.com",
+            "login": "oxtestermail@googlemail.com",
+            "name": "Neuer Account",
+            "personal": "oxtestermail",
             "unified_inbox_enabled": false,
             "mail_secure": true,
-            "password": "test",
-            "pop3_refresh_rate": "3",
-            "pop3_expunge_on_quit": true,
+            "password": "supersicher0815",
             "transport_secure": true,
-            "transport_login": "tester@gmx.net",
-            "transport_password": "test",
             "pop3_storage": "mailaccount",
             "spam_handler": "NoSpamHandler"
         },
 
+        TESTACCOUNTVALDIDATION = {
+            "name": "Neuer Account",
+            "primary_address": "oxtestermail@googlemail.com",
+            "personal": "oxtestermail",
+            "unified_inbox_enabled": false,
+            "mail_protocol": "imap",
+            "mail_secure": true,
+            "mail_server": "imap.googlemail.com",
+            "mail_port": "993",
+            "login": "oxtestermail@googlemail.com",
+            "password": "supersicher0815",
+            "transport_secure": true,
+            "transport_server": "smtp.googlemail.com",
+            "transport_port": "465",
+            "transport_credentials": false
+        },
+
         TESTMAILAUTOCONFIG = {
-            'email': 'tester@gmx.net',
-            'password': 'test'
+            'email': 'oxtestermail@googlemail.com',
+            'password': 'supersicher0815'
         };
-    //christoph-kopp@gmx.net
 
 
 
@@ -140,7 +151,7 @@ define("io.ox/settings/accounts/email/test",
 
                 j.it('deletes the created account', function () {
 //                    console.log('delete');
-//                    api.remove([dataId]);
+                    api.remove([dataId]);
                 });
 
             });
@@ -153,24 +164,28 @@ define("io.ox/settings/accounts/email/test",
         test: function (j) {
             j.describe("Creates a new Emailaccount via ui", function () {
 
-                var app = null, accountPane, buttonAdd, buttonAddAutoconf, dialog,
-                    buttonSave, detailPane, dataId;
+                var app = null, accountPane, buttonAdd, buttonAddAutoconf, buttonAddPassword, dialogAutoconf, dialogPassword,
+                    buttonSave, detailPane, dataId, identifier, dialogSuccess, buttonClose;
 
                 j.it('opens settings app ', function () {
 
                     var loaded = new Done();
 
+                    api.on('account_created', function (e, data) {
+                        if (data) {
+                            dataId = data.id;
+                        }
+                    });
+
                     j.waitsFor(loaded, 'Could not load app', TIMEOUT);
 
                     settings.getApp().launch().done(function () {
-                        console.log('is geladen');
                         app = this;
                         loaded.yep();
 
                         j.waitsFor(function () {
                             accountPane = $('[data-obj-id="io.ox/settings/accounts"]');
                             if (accountPane[0]) {
-                                console.log(accountPane);
                                 accountPane.trigger('click');
                                 return true;
                             }
@@ -191,7 +206,7 @@ define("io.ox/settings/accounts/email/test",
                     }, 'looks for add button', TIMEOUT);
 
                     j.runs(function () {
-                        buttonAdd.triggerHandler('click');
+                        buttonAdd.trigger('click');
                     });
                 });
 
@@ -199,9 +214,9 @@ define("io.ox/settings/accounts/email/test",
                 j.it('looks for the autoconf form and the add button', function () {
 
                     j.waitsFor(function () {
-                        dialog = $('.io-ox-dialog-popup');
-                        buttonAddAutoconf = $('button.btn-primary');
-                        if (dialog[0] && buttonAddAutoconf[0]) {
+                        dialogAutoconf = $('.io-ox-dialog-popup');
+                        buttonAddAutoconf = $(dialogAutoconf).find('button.btn-primary');
+                        if (dialogAutoconf[0] && buttonAddAutoconf[0]) {
                             return true;
                         }
                     }, 'looks for dialog', TIMEOUT);
@@ -209,7 +224,7 @@ define("io.ox/settings/accounts/email/test",
                 });
 
                 j.it('fills the form', function () {
-                    dialog.find('input').val(TESTMAILAUTOCONFIG.email);
+                    $(dialogAutoconf).find('input').val(TESTMAILAUTOCONFIG.email);
                 });
 
                 j.it('hits the add button', function () {
@@ -220,67 +235,92 @@ define("io.ox/settings/accounts/email/test",
 
                 });
 
-                j.it('looks for the add form and save button', function () {
+                j.it('looks for the password form and the add button', function () {
 
                     j.waitsFor(function () {
-                        detailPane = $('.settings-detail-pane');
-                        buttonSave = $('[data-action="save"]');
-                        if (detailPane[0] && buttonSave[0]) {
+                        dialogPassword = $('.io-ox-dialog-popup');
+                        identifier = $(dialogPassword).find('input[type="password"]');
+                        buttonAddPassword = $(dialogPassword).find('button.btn-primary');
+                        if (dialogPassword[0] && buttonAddPassword[0] && identifier[0]) {
                             return true;
                         }
-                    }, 'looks for detailPane', TIMEOUT);
-
-                });
-
-                j.it('compares the autofilled primary address with the testobject', function () {
-
-                    j.expect(detailPane.find('[data-property="primary_address"]').val()).toEqual(TESTMAILAUTOCONFIG.email);
+                    }, 'looks for dialog', TIMEOUT);
 
                 });
 
                 j.it('fills the form', function () {
-                    _.each(TESTACCOUNT, function (value, key) {
-                        detailPane.find('[data-property="' + key + '"]').val(value).trigger('change');
-                    });
+                    $(dialogPassword).find('input').val(TESTMAILAUTOCONFIG.password);
                 });
 
-                j.it('hits the save button', function () {
+                j.it('hits the add button', function () {
 
                     j.runs(function () {
-                        console.log(buttonSave + ' gedrueckt');
-                        buttonSave.trigger('click');
+                        buttonAddPassword.trigger('click');
                     });
+
                 });
 
-                j.it('gets the id of the created account', function () {
+                j.it('looks for the success message and the close button', function () {
+
+                    j.waitsFor(function () {
+                        dialogSuccess = $('.io-ox-dialog-popup');
+                        buttonClose = $(dialogSuccess).find('button.btn.closebutton');
+                        if (buttonClose[0]) {
+                            return true;
+                        }
+                    }, 'looks for dialog', 10000);
+
+                });
+
+                j.it('hits the close button', function () {
 
                     j.runs(function () {
-                        var me = this;
-                        me.ready = false;
-                        api.on('account_created', function (e, data) {
-                            if (data) {
-                                dataId = data.id;
-                                me.ready = true;
-                            }
-                        });
-
-                        j.waitsFor(function () {
-                            return this.ready;
-                        }, 'catches the id', TIMEOUT);
-
+                        buttonClose.trigger('click');
                     });
 
                 });
 
-                j.it('deletes the created account', function () {
-                    api.remove([dataId]);
-                });
+//                j.it('looks for the add form and save button', function () {
+//
+//                    j.waitsFor(function () {
+//                        detailPane = $('.settings-detail-pane');
+//                        buttonSave = $('[data-action="save"]');
+//                        if (detailPane[0] && buttonSave[0]) {
+//                            return true;
+//                        }
+//                    }, 'looks for detailPane', TIMEOUT);
+//
+//                });
+//
+//                j.it('compares the autofilled primary address with the testobject', function () {
+//
+//                    j.expect(detailPane.find('[data-property="primary_address"]').val()).toEqual(TESTMAILAUTOCONFIG.email);
+//
+//                });
+//
+//                j.it('fills the form', function () {
+//                    _.each(TESTACCOUNT, function (value, key) {
+//                        detailPane.find('[data-property="' + key + '"]').val(value).trigger('change');
+//                    });
+//                });
+//
+//                j.it('hits the save button', function () {
+//
+//                    j.runs(function () {
+//                        buttonSave.trigger('click');
+//                    });
+//                });
 
+                j.it('gets the id of the created account and deletes', function () {
+                    j.expect(dataId).not.toBeUndefined();
+                    j.runs(function () {
+                        api.remove([dataId]);
+                    });
+
+                });
             });
-
         }
     });
-
 
     ext.point('test/suite').extend({
         id: 'email-autoconfig',
@@ -297,6 +337,7 @@ define("io.ox/settings/accounts/email/test",
                         me.ready = false;
                         api.autoconfig(TESTMAILAUTOCONFIG)
                         .done(function (data) {
+                            console.log(data);
                             me.ready = true;
                         })
                         .fail(function () {
@@ -314,6 +355,42 @@ define("io.ox/settings/accounts/email/test",
             });
         }
     });
+
+    ext.point('test/suite').extend({
+        id: 'email-validate',
+        index: 100,
+        test: function (j) {
+            j.describe("Tests the validate functions of the api", function () {
+
+                var emailConfigData;
+
+                j.it('tests the validate functions', function () {
+
+                    j.runs(function () {
+                        var me = this;
+                        me.ready = false;
+                        api.validate(TESTACCOUNTVALDIDATION)
+                        .done(function (data) {
+                            if (data === true) {
+                                me.ready = true;
+                            }
+                        })
+                        .fail(function () {
+                            console.log('no configdata recived');
+                        });
+
+                        j.waitsFor(function () {
+                            return this.ready;
+                        }, 'response from autoconfig arrived', TIMEOUT);
+
+                    });
+
+                });
+
+            });
+        }
+    });
+
 
 
 

@@ -77,27 +77,26 @@ function (date, ext) {
                     change(false, 2100, 10, 31, 3);
                 });
             });
-            describe('Constructor', function () {
-                it('uses proper month numbers', function () {
-                    expect(new D(1970, 1, 1).getTime()).toEqual(-date.HOUR);
-                });
-            });
             describe('Date arithmetic', function () {
                 it('adds UTC time', function () {
-                    expect(new D(2012, 3, 25).addUTC(date.DAY))
-                        .toEqual(new D(2012, 3, 26, 1));
+                    expect(new D(2012, 2, 25).addUTC(date.DAY))
+                        .toEqual(new D(2012, 2, 26, 1));
                 });
                 it('adds local time', function () {
-                    expect(new D(2012, 3, 25).add(date.DAY))
-                        .toEqual(new D(2012, 3, 26));
+                    expect(new D(2012, 2, 25).add(date.DAY))
+                        .toEqual(new D(2012, 2, 26));
                 });
                 it('adds months', function () {
-                    expect(new D(2012, 3, 1).addMonths(1))
-                        .toEqual(new D(2012, 4, 1));
+                    expect(new D(2012, 2, 1).addMonths(1))
+                        .toEqual(new D(2012, 3, 1));
                 });
                 it('adds years', function () {
-                    expect(new D(2012, 3, 1).addYears(1))
-                        .toEqual(new D(2013, 3, 1));
+                    expect(new D(2012, 2, 1).addYears(1))
+                        .toEqual(new D(2013, 2, 1));
+                });
+                it('rounds weeks', function () {
+                    expect(new D(2012, 2, 25, 12, 34).setStartOfWeek())
+                        .toEqual(new D(2012, 2, 19));
                 });
             });
             describe('Parsing', function () {
@@ -119,14 +118,14 @@ function (date, ext) {
             });
             describe('Formatting', function () {
                 it('v in standard time', function () {
-                    expect(new D(2012, 1, 1).format('v')).toEqual('CET');
+                    expect(new D(2012, 0, 1).format('v')).toEqual('CET');
                 });
                 it('v in DST', function () {
-                    expect(new D(2012, 6, 1).format('v')).toEqual('CEST');
+                    expect(new D(2012, 5, 1).format('v')).toEqual('CEST');
                 });
             });
             describe('Localized formatting', function () {
-                var d = new D(2012, 5, 16, 12, 34);
+                var d = new D(2012, 4, 16, 12, 34);
                 _.each([['day of week',   date.DAYOFWEEK, 'Mi.'      ],
                         ['date',          date.DATE,      '16.5.2012'],
                         ['time',          date.TIME,      '12:34'    ],
@@ -150,24 +149,24 @@ function (date, ext) {
                     });
             });
             describe('Intervals', function () {
-                var d = new D(2012, 5, 16, 12, 34);
+                var d = new D(2012, 4, 16, 12, 34);
                 _.each([['Timezone with same date',
-                         new D(2012, 5, 16, 12, 56), date.TIMEZONE, 'CEST'],
+                         new D(2012, 4, 16, 12, 56), date.TIMEZONE, 'CEST'],
                         ['Time with same date',
-                         new D(2012, 5, 16, 12, 56), date.TIME, '12:34-12:56'],
+                         new D(2012, 4, 16, 12, 56), date.TIME, '12:34-12:56'],
                         ['Time with different dates',
-                         new D(2012, 6, 16, 12, 34), date.TIME,
+                         new D(2012, 5, 16, 12, 34), date.TIME,
                          '16.5.2012 12:34 - 16.6.2012 12:34'],
                         ['Date with same date',
-                         new D(2012, 5, 16, 12, 34), date.DATE, '16.5.2012'],
+                         new D(2012, 4, 16, 12, 34), date.DATE, '16.5.2012'],
                         ['Date with different days',
-                         new D(2012, 5, 17, 12, 34), date.DATE,
+                         new D(2012, 4, 17, 12, 34), date.DATE,
                          '16.-17. Mai 2012'],
                         ['Date with different months',
-                         new D(2012, 6, 16, 12, 34), date.DATE,
+                         new D(2012, 5, 16, 12, 34), date.DATE,
                          '16. Mai - 16. Jun 2012'],
                         ['Date with different years',
-                         new D(2013, 5, 16, 12, 34), date.DATE,
+                         new D(2013, 4, 16, 12, 34), date.DATE,
                          '16. Mai 2012 - 16. Mai 2013']],
                     function (item) {
                         it(item[0], function () {

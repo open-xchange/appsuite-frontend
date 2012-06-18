@@ -20,10 +20,11 @@ define("io.ox/mail/main",
      "io.ox/core/tk/vgrid",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
+     "io.ox/mail/notifications",
      "gettext!io.ox/mail/main",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt) {
+    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, notifications, gt) {
 
     'use strict';
 
@@ -59,6 +60,8 @@ define("io.ox/mail/main",
     // launcher
     app.setLauncher(function () {
 
+        // just register the notification handler
+        notifications.register();
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/mail',
@@ -77,7 +80,8 @@ define("io.ox/mail/main",
         // sound
         audio = $('<audio>', { src: ox.base + '/apps/io.ox/mail/images/ping.mp3' })
             .hide().prop('volume', 0.40).appendTo(win.nodes.main);
-        api.on('new-mail', function () {
+
+        api.on('new-mail', function (e, mails) {
             audio.get(0).play();
         });
 
@@ -115,7 +119,7 @@ define("io.ox/mail/main",
             .prop('order', 'desc')
             .prop('unread', false);
 
-        commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads');
+        commons.wireGridAndAPI(grid, api, 'getAllThreads', 'getThreads'); // getAllThreads is redefined below!
         commons.wireGridAndSearch(grid, win, api);
 
         function updateGridOptions() {
@@ -197,12 +201,13 @@ define("io.ox/mail/main",
         });
 
         grid.setAllRequest(function () {
-            var sort = this.prop('sort'), unread = this.prop('unread');
+            var sort = this.prop('sort'),
+                unread = this.prop('unread');
             return api[sort === '610' ? 'getAllThreads' : 'getAll']({
                     folder: this.prop('folder'),
                     sort: sort,
                     order: this.prop('order')
-                })
+                }, 'auto')
                 .pipe(function (data) {
                     return !unread ? data : _(data).filter(function (obj) {
                         return (obj.flags & 32) === 0;
@@ -367,8 +372,8 @@ define("io.ox/mail/main",
 
         grid.setEmptyMessage(function (mode) {
             return mode === 'search' ?
-                gt('No emails found for "%s"', win.search.query) :
-                gt('No emails in this folder');
+                gt('No mails found for "%s"', win.search.query) :
+                gt('No mails in this folder');
         });
 
         // go!

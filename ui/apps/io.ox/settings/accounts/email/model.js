@@ -11,53 +11,99 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 define('io.ox/settings/accounts/email/model',
-      ['io.ox/core/tk/model'], function (Model) {
+      ['io.ox/core/tk/model',
+       'io.ox/core/api/account'
+       ], function (Model, AccountApi) {
 
     'use strict';
 
-    var accountSchema = new Model.Schema({
+    var AccountModel = Backbone.Model.extend({
 
-        'id': {format: 'number', label: 'Id'},
-        'login': {format: 'string'},
-        'password': {format: 'string'},
-        'mail_url': {format: 'string'},
-        'transport_url': {format: 'string'},
-        'name': { format: 'string', label: 'name'},
-        'primary_address': {format: 'string'},
-        'spam_handler': {format: 'string'},
-        'trash': {format: 'string'},
-        'sent': {format: 'string'},
-        'drafts': {format: 'string'},
-        'spam': {format: 'string'},
-        'confirmed_spam': {format: 'string'},
-        'confirmed_ham': {format: 'string'},
-        'mail_server': {format: 'string'},
-        'mail_port': {format: 'number'},
-        'mail_protocol': {format: 'string'},
-        'mail_secure': {format: 'boolean'},
-        'transport_server': {format: 'string'},
-        'transport_port': {format: 'number'},
-        'transport_protocol': {fomrat: 'string'},
-        'transport_secure': {format: 'boolean'},
-        'transport_login': {format: 'string'},
-        'transport_password': {format: 'string'},
-        'unified_inbox_enabled': {format: 'boolean'},
-        'trash_fullname': {format: 'string'},
-        'sent_fullname': {format: 'string'},
-        'drafts_fullname': {format: 'string'},
-        'spam_fullname': {format: 'string'},
-        'confirmed_spam_fullname': {format: 'string'},
-        'confirmed_ham_fullname': {format: 'string'},
-        'pop3_refresh_rate': {format: 'number'},
-        'pop3_expunge_on_quit': {format: 'boolean'},
-        'pop3_delete_write_through': {format: 'boolean'},
-        'pop3_storage': {format: 'string'},
-        'pop3_path': {format: 'string'},
-        'personal': {format: 'string'},
-        'reply_to': {format: 'string'}
+        defaults: {
+            spam_handler: "NoSpamHandler"
+        },
+
+        validation: {
+            name: {
+                required: true,
+                msg: 'The account must be named'
+            },
+            primary_address: {
+                required: true,
+                fn: 'isMailAddress'
+            },
+            mail_server: {
+                required: true,
+                msg: 'This field has to be filled'
+            },
+            mail_port: {
+                required: true,
+                msg: 'This field has to be filled'
+            },
+            login: {
+                required: true,
+                msg: 'This field has to be filled'
+            },
+            transport_server: {
+                required: true,
+                msg: 'This field has to be filled'
+            },
+            transport_port: {
+                required: true,
+                msg: 'This field has to be filled'
+            }
+        },
+        isMailAddress: function (newMailaddress) {
+            var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (!regEmail.test(newMailaddress)) {
+                return 'This is not a valid email address';
+            }
+        },
+
+        initialize: function (options) {
+
+        },
+
+        validationCheck: function (defered, data) {
+            data.name = data.primary_address;
+            data.personal = data.primary_address; // needs to be calculated
+            data.unified_inbox_enabled = false;
+            data.mail_secure = true;
+            data.transport_secure = true;
+            data.transport_credentials = false;
+
+            AccountApi.validate(data).done(function (response) {
+                return defered.resolve(response);
+            }).fail(function (response) {
+                return defered.resolve(response);
+            });
+        },
+
+        save: function (obj, defered) {
+            if (this.attributes.id) {
+                AccountApi.update(this.attributes);
+            } else {
+                if (obj) {
+                    this.attributes = obj;
+                    this.attributes.spam_handler = "NoSpamHandler";
+                }
+                AccountApi.create(this.attributes).done(function (response) {
+                    return defered.resolve(response);
+                }).fail(function (response) {
+                    return defered.resolve(response);
+                });
+            }
+
+        },
+
+        destroy: function (options) {
+            AccountApi.remove([this.attributes.id]);
+            var model = this;
+        }
+
     });
 
-    return Model.extend({ schema: accountSchema });
+    return AccountModel;
 });
 
 

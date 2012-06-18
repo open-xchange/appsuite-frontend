@@ -56,7 +56,8 @@
 	text-align: right;
 }
 
-.settings-detail-pane  .form-horizontal .controls {
+.settings-detail-pane  .form-horizontal .controls,
+.settings-detail-pane .help-inline {
 	margin-left: 170px;
 }
 
@@ -86,7 +87,7 @@
   z-index: 2;
 }
 
-.settings-detail-pane .listbox > [selected] {
+.settings-detail-pane .listbox [selected] {
 	background-color: @selected-background !important;
     background-image: -webkit-gradient(
         linear,
@@ -137,6 +138,10 @@
 
 .io-ox-dialog-popup input.input-large {
 	width: 360px;	
+}
+
+.io-ox-dialog-popup .busynotice {
+	text-align: center;
 }
 
 .io-ox-dialog-popup .busy_pic {

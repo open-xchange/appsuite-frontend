@@ -38,7 +38,10 @@ define("io.ox/core/extPatterns/links",
             this.append(
                 $("<a>", { href: "#", tabindex: "1", "data-action": self.id })
                 .addClass('io-ox-action-link')
-                .attr('data-prio', options.prio || 'lo')
+                .attr({
+                    'data-prio': options.prio || 'lo',
+                    'data-ref': self.ref
+                })
                 .data({ ref: self.ref, context: context })
                 .click(click)
                 .text(String(self.label))

@@ -65,11 +65,13 @@ define("io.ox/core/tk/dialogs",
             },
 
             busy = function () {
-                nodes.footer.find('input, button').attr('disabled', 'disabled');
+                nodes.footer.find('button').attr('disabled', 'disabled');
+                nodes.body.find('input').attr('disabled', 'disabled');
             },
 
             idle = function () {
-                nodes.footer.find('input, button').removeAttr('disabled');
+                nodes.footer.find('button').removeAttr('disabled');
+                nodes.body.find('input').removeAttr('disabled');
             },
 
             process = function (e) {
@@ -445,7 +447,9 @@ define("io.ox/core/tk/dialogs",
 
         this.delegate = function (node, selector, handler) {
             $(node).on("click", selector, function (e) {
-                open.call(this, e, handler);
+                if (!e.isDefaultPrevented()) {
+                    open.call(this, e, handler);
+                }
             });
             return this;
         };

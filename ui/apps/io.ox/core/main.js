@@ -18,8 +18,9 @@ define("io.ox/core/main",
      "io.ox/core/api/apps",
      "io.ox/core/extensions",
      "io.ox/core/date",
+     'io.ox/core/notifications/main',
      "gettext!io.ox/core/main",
-     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, date, gt) {
+     "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, date, notifications, gt) {
 
     "use strict";
 
@@ -81,7 +82,6 @@ define("io.ox/core/main",
     setInterval(globalRefresh, 60000 * 5); // 5 minute refresh interval!
 
     function launch() {
-
         // add small logo to top bar
         $("#io-ox-topbar").append(
             $('<div>', { id: 'io-ox-top-logo-small' })
@@ -128,9 +128,11 @@ define("io.ox/core/main",
                 return $.Deferred().resolve();
             }, gt('Refresh'))
             .attr("id", "io-ox-refresh-icon");
-
         // refresh animation
         initRefreshAnimation();
+
+
+
 
         var addLauncher = function (app, tooltip) {
             var launcher = desktop.addLauncher(app.side || 'left', app.title, function () {
@@ -142,9 +144,20 @@ define("io.ox/core/main",
             }, _.isString(tooltip) ? tooltip : void(0))
             .attr('data-app-name', app.id);
         };
-
         // settings
         addLauncher({ id: 'io.ox/settings', title: $('<i class="icon-cog icon-white">'), side: 'right' }, gt('Settings'));
+
+
+        // notifications
+        notifications.attach(desktop, "right");
+
+        // now register default notification handler
+        require(['io.ox/mail/notifications',
+                 'io.ox/calendar/notifications'], function (mailNotifications, calNotifications) {
+            mailNotifications.register();
+            calNotifications.register();
+        });
+
 
         // apps
         desktop.addLauncher("left", $('<i class="icon-th icon-white">'), function () {
@@ -152,11 +165,9 @@ define("io.ox/core/main",
                 m.show();
             });
         });
-
         _(appAPI.getFavorites()).each(addLauncher);
 
         // initialize empty desktop
-
         /**
          * Exemplary upsell widget
          */
@@ -178,10 +189,10 @@ define("io.ox/core/main",
                         $("<div>", { id: "io-ox-welcome-upsell" })
                         .addClass('abs')
                         .css({
-                            padding: "40px",
+                            padding: "30px",
                             zIndex: 1
                         })
-                        .text("Click me for a 90-day free trial!")
+                        .text("Confidential! Not to be disclosed to third parties.")
                     )
                 );
             }
@@ -209,11 +220,9 @@ define("io.ox/core/main",
                         d = $("<div>").addClass("clock clear-title").text("")
                     )
                 );
-
                 update = function () {
-                    d.text(new date.Local().format(date.FULL_DATE));
+                    //d.text(new date.Local().format(date.FULL_DATE)); // FIXME: Seems to die on android
                 };
-
                 update();
                 _.every(1, "minute", update);
             }
@@ -234,19 +243,16 @@ define("io.ox/core/main",
                 ox.ui.screens.show('windowmanager');
             }
         });
-
         // add some senseless characters to avoid unwanted scrolling
         if (location.hash === '') {
             location.hash = '#' + (_.getCookie('hash') || '!');
         }
-
         var def = $.Deferred(),
             autoLaunch = _.url.hash("app") ? _.url.hash("app").split(/,/) : [],
             autoLaunchModules = _(autoLaunch)
                 .map(function (m) {
                     return m.split(/:/)[0] + '/main';
                 });
-
         $.when(
                 ext.loadPlugins(),
                 require(autoLaunchModules),
@@ -274,10 +280,10 @@ define("io.ox/core/main",
                 // restore apps
                 ox.ui.App.restore();
             });
-
         var restoreLauncher = function (canRestore) {
             if (autoLaunch.length === 0 && !canRestore) {
                 drawDesktop();
+                def.resolve();
             }
             if (autoLaunch.length || canRestore || location.hash === '#!') {
                 // instant fade out
@@ -288,7 +294,6 @@ define("io.ox/core/main",
                 $("#background_loader").idle().fadeOut(DURATION, def.resolve);
             }
         };
-
         ox.ui.App.canRestore()
             .done(function (canRestore) {
                 if (canRestore) {

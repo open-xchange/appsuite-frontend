@@ -13,7 +13,10 @@
  *
  */
 
-define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (http, Events) {
+define("io.ox/calendar/api",
+    ["io.ox/core/http",
+     "io.ox/core/event",
+     "io.ox/core/api/user"], function (http, Events, userAPI) {
 
     "use strict";
 
@@ -39,7 +42,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 params.recurrence_position = o.recurrence_position;
             }
 
-            var key = o.folder + "." + o.id + "." + (o.recurrence_position || 0);
+            var key = (o.folder || o.folder_id) + "." + o.id + "." + (o.recurrence_position || 0);
 
             if (get_cache[key] === undefined) {
                 return http.GET({
@@ -68,7 +71,9 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
                     action: "all",
-                    columns: "1,20,207,201,200", // id, folder_id, recurrence_position, start_date, title
+                    // id, folder_id, private_flag, recurrence_position, start_date,
+                    // title, end_date, location, full_time, shown_as, users
+                    columns: "1,20,101,207,201,200,202,400,401,402,221",
                     start: o.start,
                     end: o.end,
                     showPrivate: true,
@@ -76,6 +81,7 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                     sort: "201",
                     order: "asc"
                 };
+
 
             if (o.folder !== undefined) {
                 params.folder = o.folder;
@@ -119,6 +125,86 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                     }
                 });
         },
+        searchParticipants: function (query) {
+            var userColumns = '20,1,500,501,502,505,520,555,556,557,569,602,606';
+
+            return http.PUT({
+                module: "multiple",
+                "continue": true,
+                data: [
+                    {
+                        module: 'user',
+                        action: 'search',
+                        columns: userColumns,
+                        sort: '500',
+                        order: 'asc',
+                        data: {
+                            pattern: '*' + query + '*'
+                        }
+                    },
+                    {
+                        module: 'group',
+                        action: 'search',
+                        data: {
+                            pattern: '*' + query + '*'
+                        }
+                    },
+                    {
+                        module: 'resource',
+                        action: 'search',
+                        data: {
+                            pattern: '*' + query + '*'
+                        }
+                    },
+                    {
+                        module: 'contacts',
+                        action: 'search',
+                        columns: '1,20,500,555,602,524,556,557,501,502',
+                        sort: '500',
+                        order: 'asc',
+                        data: {
+                            display_name: query,
+                            email1: query,
+                            email2: query,
+                            email3: query,
+                            last_name: query,
+                            first_name: query,
+                            orSearch: true
+                        }
+                    }
+                ]
+            }).pipe(function (data) {
+                data[0].data = _(data[0].data).map(function (dataItem) {
+                    var myobj = http.makeObject(dataItem, 'user', userColumns.split(','));
+                    return myobj;
+                });
+                _(data).each(function (type, index) {
+                    _(type.data).each(function (item) {
+                        switch (index) {
+                        case 0:
+                            item.type = 1; //user
+                            break;
+                        case 1:
+                            item.type = 2; //group
+                            break;
+                        case 2:
+                            item.type = 3; //resource
+                            break;
+                        case 3:
+                            item.type = 5; //xternal
+                            break;
+                        }
+                    });
+                });
+
+                var ret = [];
+                ret = data[0].data.concat(data[1].data, data[2].data, data[3].data);
+                ret = _(ret).sortBy(function (item) {
+                    return item.display_name;
+                });
+                return ret;
+            });
+        },
 
         needsRefresh: function (folder) {
             // has entries in 'all' cache for specific folder
@@ -126,8 +212,8 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
         },
 
         update: function (o) {
-            var key = o.folder + "." + o.id + "." + (o.recurrence_position || 0);
-            if (_.isEmpty(o.data)) {
+            var key = o.folder_id + "." + o.id + "." + (o.recurrence_position || 0);
+            if (_.isEmpty(o)) {
                 return $.when();
             } else {
                 return http.PUT({
@@ -135,37 +221,39 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                     params: {
                         action: 'update',
                         id: o.id,
-                        folder: o.folder,
-                        timestamp: o.timestamp
+                        folder: o.folder_id,
+                        timestamp: _.now()
                     },
-                    data: o.data
+                    data: o
                 })
-                .pipe(function () {
-                    return api.get({ id: o.id, folder: o.folder}, false)
-                        .pipe(function (data) {
-                            $.when(
-                                /*api.caches.all.grepRemove(o.folder + '\t'),
-                                api.caches.list.remove({id: o.id, folder: o.folder })*/
-                            )
-                            .pipe(function () {
-                                all_cache = {};
-                                get_cache = {};
-                                console.log('cache resetted');
-                                api.trigger('refresh.all');
-                                api.trigger('refresh.list');
-                                api.trigger('edit', {
-                                    id: o.id,
-                                    folder: o.folder
-                                });
-                                return data;
-
-                            });
+                .pipe(function (obj) {
+                    var getObj = {};
+                    if (!_.isUndefined(obj.conflicts)) {
+                        //console.log('got conflicts');
+                        //console.log(obj.conflicts);
+                        //
+                        var df = new $.Deferred();
+                        _(obj.conflicts).each(function (item) {
+                            item.folder_id = o.folder_id;
                         });
-                })
-                .fail(function (err) {
+                        df.reject(obj);
+                        return df;
+                    }
 
-                    console.log('error on updating appointment');
-                    console.log(_.formatError(err));
+                    getObj.id = o.id;
+                    getObj.folder = o.folder_id;
+                    if (o.recurrence_position !== null) {
+                        getObj.recurrence_position = o.recurrence_position;
+                    }
+
+                    all_cache = {};
+                    delete get_cache[key];
+                    return api.get(getObj)
+                        .pipe(function (data) {
+                            api.trigger('refresh.all');
+                            api.trigger('update', data);
+                            return data;
+                        });
                 });
             }
 
@@ -176,30 +264,30 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 params: {
                     action: 'new'
                 },
-                data: o.data
+                data: o
             })
-            .pipe(function (obj, timestamp) {
-                return api.get({ id: obj.id, folder: o.folder}, false)
-                    .pipe(function (data) {
-                        $.when(
-                        )
-                        .pipe(function () {
-                            all_cache = {};
-                            get_cache = {};
-                            console.log('cache resetted');
+            .pipe(function (obj) {
+                var getObj = {};
+                if (!_.isUndefined(obj.conflicts)) {
+                    var df = new $.Deferred();
+                    _(obj.conflicts).each(function (item) {
+                        item.folder_id = o.folder_id;
+                    });
+                    df.reject(obj);
+                    return df;
+                }
+                getObj.id = obj.id;
+                getObj.folder = o.folder_id;
+                if (o.recurrence_position !== null) {
+                    getObj.recurrence_position = o.recurrence_position;
+                }
+                all_cache = {};
+                return api.get(getObj)
+                        .pipe(function (data) {
                             api.trigger('refresh.all');
-                            api.trigger('refresh.list');
-                            api.trigger('edit', {
-                                id: o.id,
-                                folder: o.folder
-                            });
+                            api.trigger('created', getObj);
                             return data;
                         });
-                    });
-            })
-            .fail(function (err) {
-                console.log('error on creating appointment');
-                console.log(err);
             });
         },
 
@@ -210,22 +298,12 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
                 module: 'calendar',
                 params: {
                     action: 'delete',
-                    id: o.id,
-                    folder: o.folder,
-                    timestamp: o.timestamp
+                    timestamp: _.now()
                 },
                 data: o.data
             })
             .done(function (resp) {
-                all_cache = {};
-                get_cache = {};
-                console.log('cache resetted');
                 api.trigger('refresh.all');
-                api.trigger('refresh.list');
-            })
-            .fail(function (err) {
-                console.log('error on creating appointment');
-                console.log(err);
             });
         }
     };
@@ -234,11 +312,34 @@ define("io.ox/calendar/api", ["io.ox/core/http", "io.ox/core/event"], function (
 
     // global refresh
     api.refresh = function () {
-        // clear caches
-        all_cache = {};
-        // trigger local refresh
-        api.trigger("refresh.all");
+        console.log('refreshing calendar');
+        userAPI.get().done(function (user) {
+            console.log('got user:', user);
+            api.getAll({}).done(function (list) {
+
+                var invites = _(list).filter(function (item) {
+                    return _(item.users).any(function (item_user) {
+                        return (item_user.id === user.id && item_user.confirmation === 0);
+                    });
+                });
+
+                if (invites.length > 0) {
+                    console.log('got invites', invites);
+                    api.trigger('invites', invites);
+                }
+                console.log('got all', list);
+                // clear caches
+                all_cache = {};
+                // trigger local refresh
+                api.trigger("refresh.all");
+
+            });
+        });
     };
+
+    ox.on('refresh^', function () {
+        api.refresh();
+    });
 
     return api;
 });
