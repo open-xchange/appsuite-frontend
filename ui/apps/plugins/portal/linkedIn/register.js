@@ -14,7 +14,8 @@
 define("plugins/portal/linkedin/register",
     ['io.ox/core/extensions',
      'io.ox/core/http',
-     'less!plugins/portal/linkedIn/style.css'], function (ext, http) {
+     'io.ox/oauth/proxy',
+     'less!plugins/portal/linkedIn/style.css'], function (ext, http, proxy) {
 
     "use strict";
 
@@ -73,7 +74,6 @@ define("plugins/portal/linkedin/register",
             }
 
             function displayName(person) {
-
                 var dname = person.firstName + " " + person.lastName;
                 return $("<a href='#' />")
                     .text(dname)
@@ -97,26 +97,45 @@ define("plugins/portal/linkedin/register",
         id: "linkedinUpdates",
         index: 200,
         load: function () {
-            return http.GET({
+            var activityFeed = $.Deferred(),
+                messages = $.Deferred();
+
+            http.GET({
                 module: "integrations/linkedin/portal",
                 params: {
                     action: "updates"
                 }
-            });
+            })
+            .done(function (activities) {
+                activityFeed.resolve(activities);
+            })
+            .fail(activityFeed.reject);
+            
+            proxy.request({
+                api: 'linkedin',
+                url: 'http://api.linkedin.com/v1/people/~/mailbox:(id,folder,from:(person:(id,first-name,last-name,picture-url,headline)),recipients:(person:(id,first-name,last-name,picture-url,headline)),subject,short-body,last-modified,timestamp,mailbox-item-actions,body)?message-type=message-connections,invitation-request,invitation-reply,inmail-direct-connection&format=json'
+            })
+            .done(function (msgs) {
+                messages.resolve(msgs);
+            })
+            .fail(messages.reject);
+            
+            return $.when(activityFeed, messages);
+                
         },
         loadTile: function () {
             return $.when();
         },
-        drawTile: function (activityFeed) {
+        drawTile: function () {
             $(this).append(
                 $('<img>').attr({src: 'apps/plugins/portal/linkedIn/linkedin175.jpg', alt: 'LinkedIn', width: '175px', height: 'auto'})
             ).addClass('io-ox-portal-tile-linkedin');
         },
-        draw: function (activityFeed) {
-
+        draw: function (activityFeed, messages) {
             var drawing = new $.Deferred(),
                 $node = this,
                 $box = $("<div>");
+                
 
             $node.append(
                     $("<div/>").addClass("clear-title")

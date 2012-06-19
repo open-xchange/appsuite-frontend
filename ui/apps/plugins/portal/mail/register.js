@@ -67,7 +67,7 @@ define('plugins/portal/mail/register',
                         folderLoaded.resolve(folder);
                     })
                     .fail(folderLoaded.reject);
-                console.log("Lulli");
+
                 mailApi.getAll({
                     folder: folderApi.getDefaultFolder('mail'),
                     cache: false
