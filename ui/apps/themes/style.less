@@ -221,6 +221,43 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 
 }
 
+#io-ox-notifications-display .title {
+    color: #EEE;
+    margin-bottom: 10px;
+    border: none;
+    font-size: 26px;
+    font-family: @font-light;
+    margin-left: 10px;
+}
+
+#io-ox-notifications-display .item {
+    width: 100%;
+    height: auto;
+    background-color: #444;
+    padding: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+#io-ox-notifications-display .item:hover {
+    background-color: #333;
+}
+#io-ox-notifications-display .item .title {
+    color:  #EEE;
+    font-size: 14px;
+    font-family: @font-normal;
+    margin-left: 5px;
+    pointer-events: none;
+}
+
+#io-ox-notifications-display .item .subject {
+    color: #EEE;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-left: 5px;
+    font-size: 12px;
+    pointer-events: none;
+}
 
 
 #io-ox-windowmanager-pane {

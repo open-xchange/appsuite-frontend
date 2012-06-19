@@ -441,37 +441,8 @@ h4.mail-attachment-preview {
 
 /*NOTIFICATIONS*/
 
-#io-ox-notifications-mail {
-    .title {
-        color: #EEE;
-        margin-bottom: 0px;
-        border: none;
-    }
+/*
+ * #io-ox-notifications-mail {
+ */
 
-    .notifications {
-    }
 
-    .item {
-        width: 100%;
-        height: auto;
-        background-color: #222;
-        padding: 5px;
-
-        .title {
-            color: #EEE;
-        }
-
-        .subject {
-            color: #EEE;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-    }
-
-    .item:hover {
-        background-color: #333;
-        cursor: pointer;
-    }
-
-}
