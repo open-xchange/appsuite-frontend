@@ -88,7 +88,8 @@ define('io.ox/calendar/month/perspective',
         },
 
         scrollTop: function (top) {
-            return this.pane.scrollTop(top);
+            // scrollTop checks arity, so just passing an undefined top does not work here
+            return top === undefined ? this.pane.scrollTop() : this.pane.scrollTop(top);
         },
 
         update: function () {
@@ -158,7 +159,9 @@ define('io.ox/calendar/month/perspective',
 
             var refresh = $.proxy(function () {
                 this.update();
-                this.scrollTop(this.main.find('[date="' + year + '-' + month + '-1"]').position().top);
+                var first = this.main.find('[date="' + year + '-' + month + '-1"]'),
+                    top = this.scrollTop() + first.position().top;
+                this.scrollTop(top);
             }, this);
 
             // watch for api refresh
