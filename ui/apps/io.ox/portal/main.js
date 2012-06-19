@@ -143,7 +143,6 @@ function (ext, config, userAPI, date, gt) {
                     
                     return extension.invoke('loadTile')
                         .pipe(function (a1, a2) {
-                            console.log("loadTile Result", extension.id, a1, a2);
                             return (extension.invoke.apply(extension, ['drawTile', $node].concat($.makeArray(arguments))) || $.Deferred())
                                 .done(function () {
                                     $node.idle();
@@ -154,9 +153,6 @@ function (ext, config, userAPI, date, gt) {
                             $node.idle().remove();
                         });
                 });
-
-
-
         });
 
         return {

@@ -111,7 +111,6 @@ define('plugins/portal/facebook/register',
                 var entry_id = 'facebook-' + post.post_id;
                 var wall_content = $('<div class="facebook wall-entry">').attr('id', entry_id);
                 var foundHandler = false;
-
                 // basic wall post skeleton
                 wall_content.append(
                     $('<a class="profile-picture">').attr('href', profile.url).append(
@@ -127,6 +126,7 @@ define('plugins/portal/facebook/register',
                 ext.point('plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
                     if (renderer.accepts(post) && ! foundHandler) {
+                        console.log(profile.name, renderer.id, post);
                         renderer.draw.apply(content_container, [post]);
                         foundHandler = true;
                     }
@@ -167,33 +167,12 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             var media = post.attachment.media[0];
-            this.text(post.story || post.message).append(
+            this.text(post.story || post.message || post.attachment.name).append(
                 $('<a>', {'class': "posted-image", 'href': media.href})
                     .append($('<img>', {'class': "posted-image", 'src': media.src, alt: media.alt, title: media.alt})));
         }
     });
 
-    ext.point('plugins/portal/facebook/renderer').extend({
-        id: 'youtube',
-        index: 128,
-        accepts: function (post) {
-            return (post.type === 80 && post.attachment.caption === 'www.youtube.com');
-        },
-        draw: function (post) {
-            var vid_id = /[?&]v=(.+)/.exec(post.link);
-            if (!vid_id) {
-                this.text(post.message).append(
-                    $('<br>'),
-                    $('<a class="video">').attr('href', post.link).append(
-                        $('<span class="caption">').text(post.description)));
-            } else {
-                this.text(post.message).append(
-                    $('<a class="video">').attr('href', post.link).append(
-                        $('<img class="video-preview wall-img-left">').attr('src', 'http://img.youtube.com/vi/' + vid_id[1] + '/2.jpg'),
-                        $('<span class="caption">').text(post.description)));
-            }
-        }
-    });
 
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'status',
@@ -210,7 +189,7 @@ define('plugins/portal/facebook/register',
         id: 'link',
         index: 196,
         accepts: function (post) {
-            return (post.type === 80);
+            return (post.type === 80 && post.attachment.caption !== "www.youtube.com");
         },
         draw: function (post) {
             var media = post.attachment.media[0];
@@ -225,26 +204,20 @@ define('plugins/portal/facebook/register',
     });
 
     ext.point('plugins/portal/facebook/renderer').extend({
-        id: 'other_video',
+        id: 'video',
         index: 196,
         accepts: function (post) {
-            return (post.type === 128);
+            return (post.type === 128) || (post.type === 80 && post.attachment.caption === "www.youtube.com");
         },
         draw: function (post) {
-            this.text(post.message);
-        }
-    });
-
-
-    ext.point('plugins/portal/facebook/renderer').extend({
-        id: 'fallback',
-        index: 256,
-        accepts: function (post) {
-            return true;
-        },
-        draw: function (post) {
-            console.log("Please attach when reporting missing type " + post.type, post);
-            this.html('<em style="color: red;">This message is of the type <b>' + post.type + '</b>. We do not know how to render this yet. Please tell us about it!</em>');
+            var media = post.attachment.media[0];
+            
+            $('<div class="message">').text(post.attachment.name || post.message).appendTo($(this));
+            if (media !== undefined) {
+                $('<a>').attr({href: media.href})
+                    .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
+                    .appendTo($(this));
+            }
         }
     });
     
@@ -257,13 +230,28 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             var media = post.attachment.media[0];
-            this.append(
-                $('<div class="message">').text(post.message),
+            
+            $('<div class="message">').text(post.message).appendTo($(this));
+            if (media !== undefined) {
                 $('<a class="app-story">').attr('href', media.href).append(
                     $('<img class="wall-img-left">').attr('src', media.src),
                     $('<span class="caption title">').text(post.attachment.name),
                     $('<br>'),
-                    $('<span class="caption">').text(post.attachment.description)));
+                    $('<span class="caption">').text(post.attachment.description)).appendTo($(this));
+            }
+        }
+    });
+    
+    
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'fallback',
+        index: 256,
+        accepts: function (post) {
+            return true;
+        },
+        draw: function (post) {
+            console.log("Please attach when reporting missing type " + post.type, post);
+            this.html('<em style="color: red;">This message is of the type <b>' + post.type + '</b>. We do not know how to render this yet. Please tell us about it!</em>');
         }
     });
 });
