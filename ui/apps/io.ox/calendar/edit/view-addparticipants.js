@@ -56,8 +56,8 @@ define('io.ox/calendar/edit/view-addparticipants',
                             var markup = pview.render().el;
 
                             // just hack a bit to make it work easely
-                            $(this).css({height: '39px'});
-                            $(markup).css({'list-style': 'none', 'margin-left': '0px'});
+                            $(this).css({height: '47px'});
+                            $(markup).css({'list-style': 'none', 'margin-left': '0px', 'background': 'none'});
                             $(markup).find('.person-link').removeClass('person-link');
 
                             $(markup).find('.remove').remove();
