@@ -159,7 +159,76 @@ define('io.ox/calendar/actions',
             });
 
         }
+    });
 
+    new Action('io.ox/calendar/detail/actions/changestatus', {
+        id: 'change_status',
+        requires: 'one modify',
+        action: function (params) {
+            var o = {
+                id: params.id,
+                folder: params.folder_id
+            };
+
+            var inputid = _.cid('dialog');
+
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                new dialogs.ModalDialog()
+                    .text(gt('Change confirmation status'))
+                    .append($('<p>').text(gt('You are about the change your confiration status for this appointment. Please be so kind to leave a comment about your change for the other participants.')))
+                    .append(
+                        $('<div>').addClass('row-fluid form-horizontal').css({'margin-top': '20px'}).append(
+                            $('<div>').addClass('control-group span12').css({'margin-bottom': '0px'}).append(
+                                $('<label>').addClass('control-label').css({'width': '0px'}).attr('for', inputid).text(gt('Comment:')),
+                                $('<div>').addClass('controls').css({'margin-left': '70px', 'margin-right': '10px'}).append(
+                                    $('<input>')
+                                    .css({'width': '100%'})
+                                    .attr('data-property', 'comment')
+                                    .attr('id', inputid))
+                                )
+                            )
+                        )
+                    .addButton('cancel', gt('Cancel'))
+                    .addDangerButton('declined', gt('Decline'))
+                    .addWarningButton('tentative', gt('Tentative'))
+                    .addSuccessButton('accepted', gt('Accept'))
+                    .show(function () {
+                        $(this).find('[data-property="comment"]').focus();
+                    })
+                    .done(function (action, data, node) {
+                        var val = $.trim($(node).find('[data-property="comment"]').val());
+                        if (action === 'cancel') {
+                            return;
+                        }
+                        o.data = {};
+                        o.data.confirmmessage = val;
+
+                        switch (action) {
+                        case 'cancel':
+                            return;
+                        case 'accepted':
+                            o.data.confirmation = 1;
+                            break;
+                        case 'declined':
+                            o.data.confirmation = 2;
+                            break;
+                        case 'tentative':
+                            o.data.confirmation = 3;
+                            break;
+                        }
+
+                        api.confirm(o)
+                            .done(function (data) {
+                                console.log('changed status successfully', data);
+                            })
+                            .fail(function (err) {
+                                console.log('ERROR', err);
+                            });
+                    });
+
+
+            });
+        }
     });
 
     // Links - toolbar
@@ -212,6 +281,14 @@ define('io.ox/calendar/actions',
         id: 'delete',
         label: gt('Delete'),
         ref: 'io.ox/calendar/detail/actions/delete'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'changestatus',
+        label: gt('Status'),
+        ref: 'io.ox/calendar/detail/actions/changestatus'
     }));
 
     /*ext.point('io.ox/calendar/links/inline').extend(new links.DropdownLinks({

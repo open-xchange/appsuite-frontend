@@ -305,6 +305,21 @@ define("io.ox/calendar/api",
             .done(function (resp) {
                 api.trigger('refresh.all');
             });
+        },
+
+        confirm: function (o) {
+            return http.PUT({
+                module: 'calendar',
+                params: {
+                    action: 'confirm',
+                    folder: o.folder,
+                    id: o.id
+                },
+                data: o.data
+            })
+            .done(function (resp) {
+                api.trigger('refresh.all');
+            });
         }
     };
 
