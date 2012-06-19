@@ -502,7 +502,7 @@
 					this.hide();
 					e.preventDefault();
 					break;
-				case 37: // left
+				/*case 37: // left
 				case 39: // right
 					dir = e.keyCode == 37 ? -1 : 1;
 					if (e.ctrlKey){
@@ -519,7 +519,7 @@
 					this.update();
 					e.preventDefault();
 					dateChanged = true;
-					break;
+					break;*/
 				case 38: // up
 				case 40: // down
 					dir = e.keyCode == 38 ? -1 : 1;
