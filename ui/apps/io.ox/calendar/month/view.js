@@ -19,6 +19,10 @@ define('io.ox/calendar/month/view',
 
     'use strict';
 
+    function formatDate(d) {
+        return d.getUTCFullYear() + '-' + d.getUTCMonth() + '-' + d.getUTCDate();
+    }
+
     var View = Backbone.View.extend({
 
         className: 'week',
@@ -71,11 +75,25 @@ define('io.ox/calendar/month/view',
             this.$el.find('.appointment').remove();
             // loop over all appointments
             this.collection.each(function (model) {
-                var d = new Date(model.get('start_date')),
-                    selector = '[date="' + d.getUTCFullYear() + '-' + d.getUTCMonth() + '-' + d.getUTCDate() + '"] .list';
-                this.$(selector).append(
-                    this.renderAppointment(model.attributes)
-                );
+                var start = formatDate(new Date(model.get('start_date'))),
+                    end = formatDate(new Date(model.get('end_date') - 1)),
+                    copy = _.copy(model.attributes, true),
+                    selector, d;
+                // draw across multiple days
+                while (true) {
+                    selector = '[date="' + start + '"] .list';
+                    this.$(selector).append(this.renderAppointment(copy));
+                    // inc date
+                    if (start !== end) {
+                        copy.start_date += date.DAY;
+                        d = new Date(copy.start_date);
+                        d.setUTCHours(0, 0, 0, 0);
+                        copy.start_date = d.getTime();
+                        start = formatDate(d);
+                    } else {
+                        break;
+                    }
+                }
             }, this);
         }
     });
