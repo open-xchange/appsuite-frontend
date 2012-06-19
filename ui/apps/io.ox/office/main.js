@@ -13,15 +13,110 @@
 
 define('io.ox/office/main',
     ['io.ox/files/api',
-     'io.ox/office/controller',
      'io.ox/office/toolbar',
+     'io.ox/office/controller',
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
      'io.ox/office/actions',
      'less!io.ox/office/main.css'
-    ], function (api, Controller, ToolBar, Editor, gt) {
+    ], function (api, ToolBar, Controller, Editor, gt) {
 
     'use strict';
+
+    // class MainToolBar ======================================================
+
+    /**
+     * Creates and returns a new instance of the main editor tool bar.
+     */
+    var MainToolBar = ToolBar.extend({
+
+        constructor: function () {
+
+            // call base constructor
+            ToolBar.call(this);
+
+            // add all tool bar controls
+            this
+            .createButtonGroup()
+                .addButton('action/undo', { label: 'Undo' })
+                .addButton('action/redo', { label: 'Redo' })
+            .end()
+            .createButtonGroup()
+                .addButton('font/bold',      { label: 'B', 'class': 'btn-iconlike', css: { fontWeight: 'bold' },          tooltip: gt('Bold'),      toggle: true })
+                .addButton('font/italic',    { label: 'I', 'class': 'btn-iconlike', css: { fontStyle: 'italic' },         tooltip: gt('Italic'),    toggle: true })
+                .addButton('font/underline', { label: 'U', 'class': 'btn-iconlike', css: { textDecoration: 'underline' }, tooltip: gt('Underline'), toggle: true })
+            .end()
+            .createRadioGroup('paragraph/align')
+                .addButton('left',    { icon: 'align-left',    tooltip: gt('Left') })
+                .addButton('center',  { icon: 'align-center',  tooltip: gt('Center') })
+                .addButton('right',   { icon: 'align-right',   tooltip: gt('Right') })
+                .addButton('justify', { icon: 'align-justify', tooltip: gt('Justify') })
+            .end()
+            .createButton('action/debug', { icon: 'eye-open', tooltip: gt('Debug Mode'), toggle: true });
+        }
+
+    });
+
+    // class EditorController =================================================
+
+    var EditorController = Controller.extend({
+
+        constructor: function (app, editor) {
+
+            /**
+             * Creates a simple controller item that calls a single getter or
+             * setter method at a context object.
+             *
+             * @param context
+             *  The object that contains the getter and setter methods.
+             *
+             * @param options
+             *  An options map similar to an item definition. For details, see
+             *  Controller.registerItemDefinitions() method. If the attributes
+             *  'get' and/or 'set' are strings, their values are interpreted as
+             *  names of the getter/setter methods at the context object.
+             */
+            function createSimpleItem(context, options) {
+                options = options || {};
+                if (_.isString(options.get) && _.isFunction(context[options.get])) {
+                    options.get = _.bind(context[options.get], context);
+                }
+                if (_.isString(options.set) && _.isFunction(context[options.set])) {
+                    options.set = _.bind(context[options.set], context);
+                }
+                options.focus = _.bind(editor.grabFocus, editor);
+                return options;
+            }
+
+            /**
+             * Creates a controller item for the specified font attribute.
+             */
+            function createFontAttrItem(attr) {
+                // poll font attributes from editor
+                return {
+                    get: _.bind(editor.getAttribute, editor, attr),
+                    set: _.bind(editor.setAttribute, editor, attr),
+                    focus: _.bind(editor.grabFocus, editor),
+                    poll: true
+                };
+            }
+
+            // call base constructor
+            Controller.call(this, {
+
+                'action/undo':      {},
+                'action/redo':      {},
+                'action/debug':     createSimpleItem(app, { get: 'isDebugMode', set: 'setDebugMode' }),
+
+                'font/bold':        createFontAttrItem('bold'),
+                'font/italic':      createFontAttrItem('italic'),
+                'font/underline':   createFontAttrItem('underline'),
+
+                'paragraph/align':  {}
+            });
+        }
+
+    });
 
     // create application instance ============================================
 
@@ -43,23 +138,18 @@ define('io.ox/office/main',
             // application window
             win = null,
 
-            // controller representing the state of all editor attributes/settings
-            controller = null,
-
             // main tool bar
-            toolbar = null,
+            toolbar = new MainToolBar(),
 
             // main application container
             container = $('<div>').addClass('container'),
 
-            editorNode = null,
-
-            debugMode = false,
-
-            debugNode = $('<div>'),
-
             // primary editor used in save, quit, etc.
-            editor = null;
+            editor = null,
+
+            debugMode = null,
+
+            debugNode = $('<div>');
 
         /*
          * Shows a closable error message above the editor.
@@ -102,21 +192,7 @@ define('io.ox/office/main',
          */
         var updateWindowSize = function () {
             var debugHeight = debugMode ? debugNode.outerHeight() : 0;
-            editorNode.height(window.innerHeight - container.offset().top - debugHeight);
-        };
-
-        /**
-         * Enables or disables the debug mode. In debug mode, displays colored
-         * borders and background for 'p' and 'span' elements in the rich-text
-         * editor, and shows a plain-text editor and an output console for
-         * processed operations.
-         */
-        var toggleDebugMode = function (state) {
-            debugMode = state;
-            editorNode.toggleClass('debug-highlight', state);
-            toolbar.getNode().toggleClass('debug-highlight', state);
-            if (state) { debugNode.show(); } else { debugNode.hide(); }
-            updateWindowSize();
+            editor.getNode().height(window.innerHeight - container.offset().top - debugHeight);
         };
 
         var getOperationsCount = function (result) {
@@ -188,7 +264,7 @@ define('io.ox/office/main',
                 var operations = createOperationsList(response);
                 editor.applyOperations(operations, false, true);
                 editor.setModified(false);
-                editor.focus();
+                editor.grabFocus(true);
                 win.idle();
                 def.resolve();
             })
@@ -226,7 +302,7 @@ define('io.ox/office/main',
             .done(function (response) {
                 getOperationsCount(response);
                 editor.setModified(false);
-                editor.focus();
+                editor.grabFocus();
                 win.idle();
                 def.resolve();
             })
@@ -277,8 +353,27 @@ define('io.ox/office/main',
         app.destroy = function () {
             $(window).off('resize', updateWindowSize);
             toolbar.destroy();
-            controller.destroy();
-            app = win = controller = toolbar = container = editor = null;
+            app = win = toolbar = container = editor = null;
+        };
+
+        app.isDebugMode = function () {
+            return debugMode;
+        };
+
+        /**
+         * Enables or disables the debug mode. In debug mode, displays colored
+         * borders and background for 'p' and 'span' elements in the rich-text
+         * editor, and shows a plain-text editor and an output console for
+         * processed operations.
+         */
+        app.setDebugMode = function (state) {
+            if (debugMode !== state) {
+                debugMode = state;
+                editor.getNode().toggleClass('debug-highlight', state);
+                toolbar.getNode().toggleClass('debug-highlight', state);
+                if (state) { debugNode.show(); } else { debugNode.hide(); }
+                updateWindowSize();
+            }
         };
 
         // initialization -----------------------------------------------------
@@ -286,59 +381,31 @@ define('io.ox/office/main',
         // initialization code, in local namespace for temporary variables
         (function () {
 
-            var // root nodes of all editors
-                nodes = {},
-                // editors mapped by text mode
-                editors = {};
-
-            /**
-             * Creates a dummy controller item that simply returns the focus to
-             * the editor.
-             */
-            var createDummyItem = function () {
-                return {
-                    get: $.noop,
-                    set: function () { editor.focus(); }
-                };
-            };
-
-            /**
-             * Creates a controller item (an object with get() and set()
-             * methods) for the specified font attribute.
-             */
-            var createFontAttrItem = function (attr) {
-                return {
-                    get: function () {
-                        return editor.getAttribute(attr);
-                    },
-                    set: function (state) {
-                        editor.setAttribute(attr, state);
-                        editor.focus();
-                    },
-                    poll: true  // poll font attributes from editor
-                };
-            };
+            var // editors mapped by text mode
+                editors = {},
+                // editor controllers mapped by text mode
+                controllers = {};
 
             // create the rich-text and plain-text editor
             _(Editor.TextMode).each(function (textMode) {
-                nodes[textMode] = $('<div>')
+                var node = $('<div>')
                     .addClass('io-ox-office-editor user-select-text ' + textMode)
                     .attr('contenteditable', true);
-                editors[textMode] = new Editor(nodes[textMode], textMode);
+                editors[textMode] = new Editor(node, textMode);
+                controllers[textMode] = new EditorController(app, editors[textMode]);
+                controllers[textMode].registerViewComponent(toolbar);
             });
 
             // primary editor for save operation
-            editorNode = nodes[Editor.TextMode.RICH];
             editor = editors[Editor.TextMode.RICH];
 
             // operations output console
-            nodes.output = $('<div>').addClass('io-ox-office-editor user-select-text output');
             editors.output = {
-                _node: nodes.output,
+                node: $('<div>').addClass('io-ox-office-editor user-select-text output'),
                 on: $.noop,
                 applyOperation: function (operation) {
-                    this._node.append($('<p>').text(JSON.stringify(operation)));
-                    this._node.scrollTop(this._node.get(0).scrollHeight);
+                    this.node.append($('<p>').text(JSON.stringify(operation)));
+                    this.node.scrollTop(this.node.get(0).scrollHeight);
                 }
             };
 
@@ -347,11 +414,11 @@ define('io.ox/office/main',
                 .addClass('io-ox-office-debug-table')
                 .append('<colgroup><col width="50%"><col width="50%"></colgroup>')
                 .append($('<tr>')
-                    .append($('<td>').append(nodes[Editor.TextMode.PLAIN]))
-                    .append($('<td>').append(nodes.output))));
+                    .append($('<td>').append(editors[Editor.TextMode.PLAIN].getNode()))
+                    .append($('<td>').append(editors.output.node))));
 
             // insert divs into main container
-            container.append(editorNode, debugNode);
+            container.append(editor.getNode(), debugNode);
 
             // listen to operations and deliver them to editors and output console
             _(editors).each(function (editor) {
@@ -365,53 +432,8 @@ define('io.ox/office/main',
                 });
             });
 
-            // controller
-            controller = new Controller({
-
-                'FontAttr.Bold': createFontAttrItem('bold'),
-                'FontAttr.Italic': createFontAttrItem('italic'),
-                'FontAttr.Underline': createFontAttrItem('underline'),
-
-                'ParaAlign': createDummyItem(),
-
-                'DebugMode': {
-                    get: function () {
-                        return debugMode;
-                    },
-                    set: function (state) {
-                        toggleDebugMode(state);
-                        editor.focus();
-                    }
-                }
-            });
-
-            // main tool bar
-            toolbar = new ToolBar(controller);
-            toolbar
-                .createButtonGroup('FontAttr')
-                    .addButton('Bold',      { label: 'B', 'class': 'btn-iconlike', css: { fontWeight: 'bold' },          tooltip: gt('Bold'),      toggle: true })
-                    .addButton('Italic',    { label: 'I', 'class': 'btn-iconlike', css: { fontStyle: 'italic' },         tooltip: gt('Italic'),    toggle: true })
-                    .addButton('Underline', { label: 'U', 'class': 'btn-iconlike', css: { textDecoration: 'underline' }, tooltip: gt('Underline'), toggle: true })
-                .end()
-                .createRadioGroup('ParaAlign')
-                    .addButton('Left',    { icon: 'align-left',    tooltip: gt('Left') })
-                    .addButton('Center',  { icon: 'align-center',  tooltip: gt('Center') })
-                    .addButton('Right',   { icon: 'align-right',   tooltip: gt('Right') })
-                    .addButton('Justify', { icon: 'align-justify', tooltip: gt('Justify') })
-                .end()
-                .createButton('DebugMode', { icon: 'eye-open', tooltip: gt('Debug Mode'), toggle: true });
-
             // initially disable debug mode
-            toggleDebugMode(false);
-
-            // enable/disable tool bar items depending on editor focus
-            var richTools = 'FontAttr ParaAlign';
-            editors[Editor.TextMode.RICH].on('focus', function (event, state) {
-                if (state) { toolbar.enable(richTools); }
-            });
-            editors[Editor.TextMode.PLAIN].on('focus', function (event, state) {
-                if (state) { toolbar.disable(richTools); }
-            });
+            app.setDebugMode(false);
 
         }()); // end of local namespace
 

@@ -149,6 +149,51 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         // add event hub
         Events.extend(this);
 
+        // global editor settings ---------------------------------------------
+
+        /**
+         * Returns the root DOM element representing this editor.
+         */
+        this.getNode = function () {
+            return editdiv;
+        };
+
+        /**
+         * Returns whether the editor contains unsaved changes.
+         */
+        this.isModified = function () {
+            return modified;
+        };
+
+        /**
+         * Sets the editor to modified or unmodified state, and triggers a
+         * 'modified' event, if the state has been changed.
+         */
+        this.setModified = function (state) {
+            if (modified !== state) {
+                modified = state;
+                this.trigger('modified', state);
+            }
+        };
+
+        /**
+         * Returns whether the editor is currently focused.
+         */
+        this.hasFocus = function () {
+            return focused;
+        };
+
+        /**
+         * Sets the browser focus into the edit text area, and triggers a
+         * 'focus' event, if the state has been changed.
+         */
+        this.grabFocus = function (initSelection) {
+            editdiv.focus();
+            if (initSelection) {
+                this.setSelection(new OXOSelection(new OXOPaM(0, 0), new OXOPaM(0, 0)));
+            }
+        };
+
         // OPERATIONS API
 
         this.clearOperations = function () {
@@ -427,37 +472,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             paragraphs = editdiv.children();
 
             window.console.log("Number of children of editdiv after inserting table: " + paragraphs.length);
-        };
-
-        /**
-         * Returns whether the editor contains unsaved changes.
-         */
-        this.isModified = function () {
-            return modified;
-        };
-
-        this.setModified = function (state) {
-            if (modified !== state) {
-                modified = state;
-                this.trigger('modified', state);
-            }
-        };
-
-        /**
-         * Returns whether the editor is currently focused.
-         */
-        this.hasFocus = function () {
-            return focused;
-        };
-
-        /**
-         * Sets the browser focus into the edit text area.
-         */
-        this.focus = function (initSelection) {
-            editdiv.focus();
-            if (initSelection) {
-                this.setSelection(new OXOSelection(new OXOPaM(0, 0), new OXOPaM(0, 0)));
-            }
         };
 
         this.initDocument = function () {
@@ -993,7 +1007,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // HACK
             var oldselection = this.getSelection();
             // DR: works without focus
-            //this.focus(); // this is really ugly, but execCommand only works when having the focus. Can we restore the focus in case we didn't have it???
+            //this.grabFocus(); // this is really ugly, but execCommand only works when having the focus. Can we restore the focus in case we didn't have it???
             this.setSelection(new OXOSelection(new OXOPaM(para, start), new OXOPaM(para, end)));
             // This will only work if the editor has the focus. Grabbing it would be ugly, can't restore.
             // But anyway, it's just a hack, and in the future we need to do the DOM manipulations on our own...
