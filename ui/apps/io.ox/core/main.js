@@ -120,7 +120,10 @@ define("io.ox/core/main",
         }, gt('Sign out'));
 
         // help
-        desktop.addLauncher("right", $('<i class="icon-question-sign icon-white">'), void(0), gt('Help'));
+        desktop.addLauncher("right", $('<i class="icon-question-sign icon-white">'), function () {
+            //var helpMap = loadHelpTexts();
+            //addMouseOverHelp()
+        }, gt('Help'));
 
         // refresh
         desktop.addLauncher("right", $('<i class="icon-refresh icon-white">'), function () {
