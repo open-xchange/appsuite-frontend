@@ -33,11 +33,13 @@ define('io.ox/calendar/edit/view-addparticipants',
             var self = this,
                 renderedContent;
 
+
             self.$el.find('.add-participant')
                 .attr('autocapitalize', 'off')
                 .attr('autocorrect', 'off')
                 .attr('autocomplete', 'off')
                 .autocomplete({
+                    parentSelector: '.io-ox-calendar-edit',
                     source: function (query) {
                         var df = new $.Deferred();
                         //return contactAPI.autocomplete(query);

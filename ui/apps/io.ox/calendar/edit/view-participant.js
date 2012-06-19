@@ -151,7 +151,11 @@ define('io.ox/calendar/edit/view-participant',
 
             this._modelBinder.bind(self.model, this.el, bindings);
             return self;
+        },
+        close: function () {
+            this.remove();
         }
+
     });
 
     return ParticipantView;

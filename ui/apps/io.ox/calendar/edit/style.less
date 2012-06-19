@@ -1,4 +1,13 @@
+@fluidGridColumnWidth:    6.382978723%;
+@fluidGridGutterWidth:    2.127659574%;
 
+#fluidGridSystem {
+  // Setup the mixins to be used
+  .columns(@fluidGridGutterWidth, @fluidGridColumnWidth, @columns) {
+    width: 1% * (@fluidGridColumnWidth * @columns) + (@fluidGridGutterWidth * (@columns - 1));
+    margin-left: @fluidGridGutterWidth;
+  }
+}
 div.io-ox-calendar-edit {
     max-width: 800px;
     margin-left: auto;
@@ -103,10 +112,18 @@ div.io-ox-calendar-edit {
         line-height: 1.5em;
         background-color: white;
         margin-bottom: 2px;
-        padding: 4px 0px 4px 1px;
-        float: left;
+        padding: 4px 0px 4px 0px;
+        /*background-color: #feb;*/
+    }
+
+    div.edit-appointment-participant.odd {
         margin-left: 0px;
     }
+
+    div.edit-appointment-participant.even {
+        #fluidGridSystem > .columns(@fluidGridGutterWidth, @fluidGridColumnWidth, 6);
+    }
+
 
     div.recurrence {
         display: none;
@@ -156,7 +173,7 @@ div.io-ox-calendar-edit {
     }
 
     input.add-participant {
-        width: 342px;
+        width: 345px;
     }
 
     select {
@@ -194,9 +211,9 @@ div.edit-appointment-participant .remove {
     display: inline-block;
     position: absolute;
     top: 1px;
-    right: 12px;
+    right: 1px;
     bottom: 1px;
-    width: 27px;
+    width: 36px;
     line-height: 1em;
     background-color: white;
     color: #CCC;

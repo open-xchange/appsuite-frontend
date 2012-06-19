@@ -28,6 +28,7 @@ define('io.ox/core/tk/autocomplete', function () {
             draw: null,
             blur: $.noop,
             click: $.noop,
+            parentSelector: 'body',
             stringify: JSON.stringify
         }, o || {});
 
@@ -91,10 +92,13 @@ define('io.ox/core/tk/autocomplete', function () {
                         self.off('blur', o.blur).on('blur', fnBlur);
                         // calculate position/dimension and show popup
                         var off = self.offset(),
+                            parentOff = self.offsetParent().offset(),
+                            parentScrollTop = self.offsetParent().scrollTop(),
                             w = self.outerWidth(),
                             h = self.outerHeight();
-                        popup.css({ top: off.top + h, left: off.left, width: w })
-                            .appendTo('body');
+
+                        popup.css({ top: off.top + h - parentOff.top + parentScrollTop, left: off.left - parentOff.left, width: w })
+                            .appendTo(self.closest(o.parentSelector));
                         isOpen = true;
                     }
                 },
