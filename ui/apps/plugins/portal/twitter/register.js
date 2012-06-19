@@ -70,6 +70,10 @@ define('plugins/portal/twitter/register',
             return def.pipe(function (response) { return (response) ? JSON.parse(response) : null; });
         },
         drawTile: function (tweets) {
+            if (tweets === null) {
+                this.remove();
+                return $.Deferred().resolve();
+            }
             $(this)
                 .append($('<img>').attr({src: 'apps/plugins/portal/twitter/twitter-bird-dark-bgs.png', alt: '', width: '50px', height: 'auto'}).css({'float': 'left'}))
                 .append($('<h1>').text('Twitter').css({color: '#fff'}))

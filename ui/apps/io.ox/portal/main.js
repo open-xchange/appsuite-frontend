@@ -156,13 +156,7 @@ function (ext, config, userAPI, date, gt) {
                 });
 
 
-            // go!
-            win.show(function () {
-                leftSide.masonry({
-                    itemSelector: '.io-ox-portal-widget-tile',
-                    columnWidth: 190
-                });
-            });
+
         });
 
         return {
