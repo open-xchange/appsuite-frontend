@@ -79,8 +79,18 @@ define('io.ox/calendar/month/view',
                     end = formatDate(new Date(model.get('end_date') - 1)),
                     copy = _.copy(model.attributes, true),
                     selector, d;
+
+                if (model.get('start_date') < 0) {
+                    console.error('FIXME: start_date should not be negative');
+                    throw 'FIXME: start_date should not be negative';
+                }
+
+                // FIXE ME: just to make it work and safe
+                var maxCount = 100;
                 // draw across multiple days
-                while (true) {
+                while (true && maxCount) {
+                    maxCount--;
+                    //console.log('start/end', start, end);
                     selector = '[date="' + start + '"] .list';
                     this.$(selector).append(this.renderAppointment(copy));
                     // inc date
