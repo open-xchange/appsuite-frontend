@@ -88,8 +88,6 @@ define('plugins/portal/mail/register',
             return $.when(folderLoaded, mailsLoaded);
         },
         drawTile: function (folder, mail) {
-            console.log("Hmmmmmm", folder, mail);
-            
             var $node = $(this);
             $node.addClass('mail-portal-tile');
             var subject = mail.subject;

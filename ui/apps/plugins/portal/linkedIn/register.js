@@ -81,13 +81,13 @@ define("plugins/portal/linkedin/register",
             }
 
             // Check presence of all variables
-            $updateEntry.append(
-                displayName(activity.updateContent.person)
-            ).append(
-                $("<span />").text(" is now connected with ")
-            ).append(
-                displayName(activity.updateContent.person.connections.values[0])
-            );
+            if (activity.updateContent.person.connections) {
+                $updateEntry.append(
+                    displayName(activity.updateContent.person),
+                    $("<span />").text(" is now connected with "),
+                    displayName(activity.updateContent.person.connections.values[0])
+                );
+            }
 
             return deferred.resolve();
         }
