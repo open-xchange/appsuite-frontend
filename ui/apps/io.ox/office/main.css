@@ -43,7 +43,9 @@
     &.debug-highlight {
         .ox-io-office-debug-highlight-mixin(#88f, #eef);
     
-        .btn-group { .ox-io-office-debug-highlight-mixin(#f88, #fee); }
+        .btn-group {
+            .ox-io-office-debug-highlight-mixin(#f88, #fee);
+        }
     }
 
 }

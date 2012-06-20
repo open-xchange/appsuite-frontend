@@ -77,11 +77,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
     /**
      * Creates and returns a new push button element.
      *
-     * @param key
+     * @param key {String}
      *  The key associated to this button element. Will be stored in the
      *  'data-key' attribute of the button.
      *
-     * @param options
+     * @param options {Object}
      *  (optional) A map of options to control the properties of the new
      *  button. See method ToolBar.createButton() for details.
      *
@@ -151,14 +151,38 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
         var // create the DOM container element
             node = $('<div>').addClass('btn-toolbar io-ox-office-toolbar'),
 
-            // all controls as jQuery objects mapped by their keys
-            controls = {},
+            // control update handlers, mapped by key
+            updateHandlers = {},
 
             // function returning a reference to this tool bar
             getToolBar = _.bind(function () { return this; }, this);
 
+        /**
+         * Returns the control with the specified key as jQuery collection. The
+         * returned object may contain multiple elements, e.g. for radio button
+         * groups.
+         *
+         * @param key {String}
+         *  The key of the control.
+         *
+         * @returns {jQuery}
+         *  The controls matching the specified key, as jQuery collection.
+         */
+        function selectControl(key) {
+            return $('[data-key="' + key + '"]', node);
+        }
+
+        // initialization -----------------------------------------------------
+
         // add event hub
         Events.extend(this);
+
+        // listen to 'update' events and update the associated control
+        this.on('update', _.bind(function (event, key, value) {
+            if (key in updateHandlers) {
+                updateHandlers[key].call(this, value);
+            }
+        }, this));
 
         // class ButtonGroupProxy ---------------------------------------------
 
@@ -172,10 +196,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
          *  on the type of this button group. Receives all parameters passed
          *  to the addButton() method.
          *
-         * @param buttonClickFunc
+         * @param buttonClickFunc {Function}
          *  The click handler that will be called if the button is currently
-         *  enabled has been clicked in the user interface. Must return the
-         *  current value represented by the button (e.g. state of a toggle
+         *  enabled has been clicked in the user interface. Receives the
+         *  clicked button as jQuery object. Must return the current value
+         *  represented by the button (e.g. state of a toggle
          *  button, or value of a radio group button).
          */
         function ButtonGroupProxy(buttonGeneratorFunc, buttonClickFunc) {
@@ -235,17 +260,24 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
 
             // create a proxy and pass a button generator function
             return new ButtonGroupProxy(
+
                 // button generator
                 function (key, options) {
-                    var button = controls[key] = Buttons.createButton(key, options);
+                    var button = Buttons.createButton(key, options);
+                    // special preparation for toggle buttons
                     if (options && (options.toggle === true)) {
                         button.attr('data-toggle', 'toggle');
+                        updateHandlers[key] = function (state) {
+                            // translate undefined (no value) to false (prevent toggle)
+                            Buttons.toggleButtons(button, _.isUndefined(state) ? false : state);
+                        };
                     }
                     return button;
                 },
+
                 // click handler
                 function (button) {
-                    if (button.attr('data-toggle')) {
+                    if (button.attr('data-toggle') === 'toggle') {
                         Buttons.toggleButtons(button);
                         return Buttons.isButtonActive(button);
                     }
@@ -257,31 +289,39 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
         /**
          * Creates a radio button group, and appends it to this tool bar.
          *
-         * @param key
+         * @param key {String}
          *  The unique key of the group.
          *
          * @returns {ButtonGroupProxy}
          *  A proxy object that implements the methods addButton() and end().
          *  The addButton() method expects the parameters 'value' representing
-         *  the value associated to the button, and an optional 'options' map
-         *  containing formatting information for the button.
+         *  the string (!) value associated to the button, and an optional
+         *  'options' map containing formatting information for the button.
          */
         this.createRadioGroup = function (key) {
 
-            var // container for all buttons in this radio group
-                buttons = controls[key] = $();
+            // create a single update handler for the entire radio group
+            updateHandlers[key] = function (value) {
+                var buttons = selectControl(key);
+                Buttons.toggleButtons(buttons, false);
+                // ambiguous state indicated by null value
+                if (!_.isUndefined(value) && !_.isNull(value)) {
+                    Buttons.toggleButtons(buttons.find('[data-value="' + value + '"]'), true);
+                }
+            };
 
             // create a proxy and pass a radio button generator function
             return new ButtonGroupProxy(
+
                 // button generator function
                 function (value, options) {
-                    var button = Buttons.createButton(key, options).attr('data-value', value);
-                    buttons.add(button);
-                    return button;
+                    return Buttons.createButton(key, options).attr('data-value', value);
                 },
+
                 // click handler (returns value associated to the radio button)
                 function (button) {
-                    Buttons.toggleButtons(button.siblings(), false);
+                    // deactivate all buttons matching the own key
+                    Buttons.toggleButtons(selectControl(key), false);
                     Buttons.toggleButtons(button, true);
                     return button.attr('data-value');
                 }
@@ -292,10 +332,10 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
          * Creates a new push button in its own button group, and appends it to
          * this tool bar.
          *
-         * @param key
+         * @param key {String}
          *  The unique key of this button.
          *
-         * @param options
+         * @param options {Object}
          *  (optional) A map of options to control the properties of the new
          *  button.
          *  - icon: (optional) The name of the Bootstrap icon class, without
@@ -315,11 +355,10 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
         };
 
         /**
-         * Enables or disables the specified controls of this tool bar.
+         * Enables or disables the specified control of this tool bar.
          *
-         * @param keys {Array} {String}
-         *  The keys of the form controls to enable or disable, as array of
-         *  strings, or as space-separated string.
+         * @param key {String}
+         *  The keys of the control to be enabled or disabled.
          *
          * @param state {Boolean}
          *  (optional) If omitted or set to true, all controls will be enabled.
@@ -328,34 +367,40 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
          * @returns {ToolBar}
          *  A reference to this tool bar.
          */
-        this.enable = function (keys, state) {
-
-            // convert space separated string to array
-            keys = _.isString(keys) ? keys.split(/\s+/) : keys;
-
-            // enable/disable the controls picked by the keys
-            _(keys).each(function (key) {
-                if (key in controls) {
-                    Controls.enableControls(controls[key], state);
-                }
-            });
-
+        this.enable = function (key, state) {
+            Controls.enableControls(selectControl(key), state);
             return this;
         };
 
         /**
-         * Disables the specified children of this tool bar. Has the
-         * same effect as calling ToolBar.enable(ids, false).
+         * Disables the specified control of this tool bar. Has the same effect
+         * as calling ToolBar.enable(key, false).
          *
-         * @param ids
-         *  The identifiers of the child objects to enable or disable, as
-         *  space-separated string.
+         * @param key {String}
+         *  The key of the control to be disabled.
          *
          * @returns {ToolBar}
          *  A reference to this tool bar.
          */
-        this.disable = function (ids) {
-            return this.enable(ids, false);
+        this.disable = function (key) {
+            return this.enable(key, false);
+        };
+
+        /**
+         * Updates the specified control with the specified value.
+         *
+         * @param key {String}
+         *  The key of the control to be updated.
+         *
+         * @param value
+         *  The new value to be displayed in the control.
+         *
+         * @returns {ToolBar}
+         *  A reference to this tool bar.
+         */
+        this.update = function (key, value) {
+            this.trigger('update', key, value);
+            return this;
         };
 
         /**
@@ -365,7 +410,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event'], function (Events) {
         this.destroy = function () {
             this.events.destroy();
             node.remove();
-            node = controls = getToolBar = null;
+            node = getToolBar = null;
         };
 
     }

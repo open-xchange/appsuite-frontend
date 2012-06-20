@@ -53,7 +53,8 @@ define('io.ox/office/main',
                 .addButton('justify', { icon: 'align-justify', tooltip: gt('Justify') })
             .end()
             .createButton('action/debug', { icon: 'eye-open', tooltip: gt('Debug Mode'), toggle: true });
-        }
+
+        } // end of constructor
 
     });
 
@@ -61,60 +62,68 @@ define('io.ox/office/main',
 
     var EditorController = Controller.extend({
 
-        constructor: function (app, editor) {
+        constructor: function (app) {
 
-            /**
-             * Creates a simple controller item that calls a single getter or
-             * setter method at a context object.
-             *
-             * @param context
-             *  The object that contains the getter and setter methods.
-             *
-             * @param options
-             *  An options map similar to an item definition. For details, see
-             *  Controller.registerItemDefinitions() method. If the attributes
-             *  'get' and/or 'set' are strings, their values are interpreted as
-             *  names of the getter/setter methods at the context object.
-             */
-            function createSimpleItem(context, options) {
-                options = options || {};
-                if (_.isString(options.get) && _.isFunction(context[options.get])) {
-                    options.get = _.bind(context[options.get], context);
-                }
-                if (_.isString(options.set) && _.isFunction(context[options.set])) {
-                    options.set = _.bind(context[options.set], context);
-                }
-                options.focus = _.bind(editor.grabFocus, editor);
-                return options;
-            }
+            var // current editor having the focus
+                editor = null;
 
-            /**
-             * Creates a controller item for the specified font attribute.
-             */
-            function createFontAttrItem(attr) {
-                // poll font attributes from editor
-                return {
-                    get: _.bind(editor.getAttribute, editor, attr),
-                    set: _.bind(editor.setAttribute, editor, attr),
-                    focus: _.bind(editor.grabFocus, editor),
-                    poll: true
-                };
-            }
+            // base constructor -----------------------------------------------
 
-            // call base constructor
             Controller.call(this, {
 
-                'action/undo':      {},
-                'action/redo':      {},
-                'action/debug':     createSimpleItem(app, { get: 'isDebugMode', set: 'setDebugMode' }),
+                'action/undo': {
+                    set: function () { editor.grabFocus(); }
+                },
+                'action/redo': {
+                    set: function () { editor.grabFocus(); }
+                },
+                'action/debug': {
+                    get: function () { return app.isDebugMode(); },
+                    set: function (state) { app.setDebugMode(state); editor.grabFocus(); }
+                },
 
-                'font/bold':        createFontAttrItem('bold'),
-                'font/italic':      createFontAttrItem('italic'),
-                'font/underline':   createFontAttrItem('underline'),
+                'font/bold': {
+                    get: function () { return editor.getAttribute('bold'); },
+                    set: function (state) { editor.setAttribute('bold', state); editor.grabFocus(); },
+                    poll: true
+                },
+                'font/italic': {
+                    get: function () { return editor.getAttribute('italic'); },
+                    set: function (state) { editor.setAttribute('italic', state); editor.grabFocus(); },
+                    poll: true
+                },
+                'font/underline': {
+                    get: function () { return editor.getAttribute('underline'); },
+                    set: function (state) { editor.setAttribute('underline', state); editor.grabFocus(); },
+                    poll: true
+                },
 
-                'paragraph/align':  {}
+                'paragraph/align': {
+                    set: function (value) { editor.grabFocus(); }
+                }
+
             });
-        }
+
+            // methods --------------------------------------------------------
+
+            /**
+             * Registers a new editor instance. If the editor has the browser
+             * focus, this controller will use it as target for item actions
+             * triggered by any registered view component.
+             */
+            this.registerEditor = function (newEditor, supportedItems) {
+                newEditor.on('focus', _.bind(function (event, focused) {
+                    if (focused && (editor !== newEditor)) {
+                        // set as current editor
+                        editor = newEditor;
+                        // update view components
+                        this.enableAndDisable(supportedItems);
+                    }
+                }, this));
+                return this;
+            };
+
+        } // end of constructor
 
     });
 
@@ -146,6 +155,9 @@ define('io.ox/office/main',
 
             // primary editor used in save, quit, etc.
             editor = null,
+
+            // controller as single connection point between editors and view elements
+            controller = new EditorController(app),
 
             debugMode = null,
 
@@ -345,17 +357,6 @@ define('io.ox/office/main',
             return def.done(app.destroy);
         });
 
-        /**
-         * Destructs the application. Will be called automatically in a forced
-         * quit, but has to be called manually for a regular quit (e.g. from
-         * window close button).
-         */
-        app.destroy = function () {
-            $(window).off('resize', updateWindowSize);
-            toolbar.destroy();
-            app = win = toolbar = container = editor = null;
-        };
-
         app.isDebugMode = function () {
             return debugMode;
         };
@@ -376,33 +377,47 @@ define('io.ox/office/main',
             }
         };
 
+        /**
+         * Destructs the application. Will be called automatically in a forced
+         * quit, but has to be called manually for a regular quit (e.g. from
+         * window close button).
+         */
+        app.destroy = function () {
+            $(window).off('resize', updateWindowSize);
+            controller.destroy();
+            toolbar.destroy();
+            app = win = toolbar = container = editor = null;
+        };
+
         // initialization -----------------------------------------------------
 
         // initialization code, in local namespace for temporary variables
         (function () {
 
             var // editors mapped by text mode
-                editors = {},
-                // editor controllers mapped by text mode
-                controllers = {};
+                editors = {};
 
             // create the rich-text and plain-text editor
             _(Editor.TextMode).each(function (textMode) {
                 var node = $('<div>')
-                    .addClass('io-ox-office-editor user-select-text ' + textMode)
-                    .attr('contenteditable', true);
-                editors[textMode] = new Editor(node, textMode);
-                controllers[textMode] = new EditorController(app, editors[textMode]);
-                controllers[textMode].registerViewComponent(toolbar);
+                        .addClass('io-ox-office-editor user-select-text ' + textMode)
+                        .attr('contenteditable', true);
+                editors[textMode] = new Editor(controller, node, textMode);
             });
 
-            // primary editor for save operation
+            // register GUI elements and editors at the controller
+            controller
+                .registerViewComponent(toolbar)
+                .registerEditor(editors[Editor.TextMode.RICH])
+                .registerEditor(editors[Editor.TextMode.PLAIN], /^action\//);
+
+            // primary editor for global operations (e.g. save)
             editor = editors[Editor.TextMode.RICH];
 
             // operations output console
             editors.output = {
                 node: $('<div>').addClass('io-ox-office-editor user-select-text output'),
-                on: $.noop,
+                on: function () { return this; },
                 applyOperation: function (operation) {
                     this.node.append($('<p>').text(JSON.stringify(operation)));
                     this.node.scrollTop(this.node.get(0).scrollHeight);
@@ -423,10 +438,9 @@ define('io.ox/office/main',
             // listen to operations and deliver them to editors and output console
             _(editors).each(function (editor) {
                 editor.on('operation', function (event, operation) {
-                    var source = this;
-                    _(editors).each(function (editor) {
-                        if (source !== editor) {
-                            editor.applyOperation(operation);
+                    _(editors).each(function (targetEditor) {
+                        if (editor !== targetEditor) {
+                            targetEditor.applyOperation(operation);
                         }
                     });
                 });

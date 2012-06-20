@@ -115,7 +115,17 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         return false;
     }
 
-    function OXOEditor(editdiv, textMode) {
+    // class OXOEditor ========================================================
+
+    /**
+     * The text editor.
+     *
+     * Triggers the following events:
+     * - 'focus': When the editor container got or lost browser focus.
+     * - 'operation': When a new operation has been applied.
+     * - 'modified': When the modified flag has been changed.
+     */
+    function OXOEditor(controller, editdiv, textMode) {
 
         // key codes of navigation keys that will be passed directly to the browser
         var NAVIGATION_KEYS = _([
@@ -1191,6 +1201,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         PLAIN: 'plain'
     };
 
-    // export the OXOEditor class directly
+    // exports ================================================================
+
     return OXOEditor;
 });
