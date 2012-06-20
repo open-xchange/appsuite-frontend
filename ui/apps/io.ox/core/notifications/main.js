@@ -58,8 +58,7 @@ define('io.ox/core/notifications/main',
         defaults: {
             'thumbnail': '',
             'title': '',
-            'description': '',
-            render: $.noop()
+            'content': ''
         }
     });
     var NotificationCollection = Backbone.Collection.extend({
@@ -94,6 +93,7 @@ define('io.ox/core/notifications/main',
                 module.collection.on('remove', _.bind(this.onRemoveNotification, this));
                 module.collection.on('reset', _.bind(this.onResetNotifications, this));
                 this.notifications[key] = module;
+                $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
             }
 
             return this.notifications[key];
@@ -138,7 +138,7 @@ define('io.ox/core/notifications/main',
         showList: function () {
             $('#io-ox-screens').addClass('beside');
             $('#io-ox-notifications').addClass('active');
-            $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
+            //$('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
         },
         hideList: function () {
             console.log('hide list');

@@ -830,6 +830,29 @@ define("io.ox/mail/api",
         }
     };
 
+
+    api.getMailsWithOptions = function (mails, options) {
+        http.pause();
+        console.log('GETTING', mails);
+        _(mails).each(function (mail) {
+            api.get({
+                folder: mail.folder_id || mail.folder,
+                id: mail.id,
+                unseen: options.unseen || "false",
+                view: options.view || "html"
+            });
+        });
+        return http.resume().pipe(function (fetched) {
+            var data = [];
+            _(fetched).each(function (item) {
+                data.push(item.data);
+            });
+
+            return data;
+
+        });
+    };
+
     function updateTopLevel(folder_id, mapper) {
         // grep keys
         var cache = api.caches.all;

@@ -22,7 +22,8 @@ define("io.ox/calendar/api",
 
     // really stupid caching for speed
     var all_cache = {},
-        get_cache = {};
+        get_cache = {},
+        participant_cache = {};
 
     var DAY = 60000 * 60 * 24;
 
@@ -128,6 +129,11 @@ define("io.ox/calendar/api",
         searchParticipants: function (query) {
             var userColumns = '20,1,500,501,502,505,520,555,556,557,569,602,606';
 
+            // use stupid cache for now
+            if (participant_cache[query]) {
+                return $.Deferred().resolve(participant_cache[query]);
+            }
+
             return http.PUT({
                 module: "multiple",
                 "continue": true,
@@ -202,6 +208,10 @@ define("io.ox/calendar/api",
                 ret = _(ret).sortBy(function (item) {
                     return item.display_name;
                 });
+
+                // do simple optimistic cache
+                participant_cache[query] = ret;
+
                 return ret;
             });
         },
@@ -319,6 +329,8 @@ define("io.ox/calendar/api",
                 data: o.data
             })
             .done(function (resp) {
+                console.log('clearing get cache');
+                get_cache = {};
                 api.trigger('refresh.all');
             });
         }

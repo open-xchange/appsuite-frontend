@@ -12,8 +12,9 @@
  */
 define('io.ox/mail/view-notifications',
       ['io.ox/core/notifications/main',
+       'io.ox/mail/api',
        'dot!io.ox/mail/template.html',
-       'less!io.ox/mail/style.css'], function (notficationsConroller, tpl) {
+       'less!io.ox/mail/style.css'], function (notficationsConroller, api, tpl) {
 
     'use strict';
 
@@ -28,6 +29,8 @@ define('io.ox/mail/view-notifications',
         render: function () {
             this.$el.empty().append(tpl.render('io.ox/mail/notification', {}));
             this._modelBinder.bind(this.model, this.el, Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property'));
+
+            this.$('.content').html(this.model.get('content'));
             return this;
 
         },
@@ -57,17 +60,38 @@ define('io.ox/mail/view-notifications',
         id: 'io-ox-notifications-mail',
         _collectionBinder: undefined,
         initialize: function () {
+            var self = this;
+
+            this.model = new Backbone.Model({unread: 0});
+            this.model.on('change:unread', _.bind(this.onChangeCount, this));
             var viewCreator = function (model) {
                 return new NotificationView({model: model});
             };
             var elManagerFactory = new Backbone.CollectionBinder.ViewManagerFactory(viewCreator);
             this._collectionBinder = new Backbone.CollectionBinder(elManagerFactory);
+
+            api.on('unseen-mail', function (e, data) {
+                self.model.set('unread', _(data).size());
+                console.log('unseen mails:', data);
+            });
         },
         render: function () {
             console.log('render mail notifications');
             this.$el.empty().append(tpl.render('io.ox/mail/notifications', {}));
             this._collectionBinder.bind(this.collection, this.$('.notifications'));
             return this;
+        },
+        onChangeCount: function () {
+            var unread = this.model.get('unread');
+            var $badge = this.$el.find('[data-property="unread"]');
+
+            $badge.text(unread);
+
+            if (unread > 0) {
+                $badge.addClass('badge-error');
+            } else {
+                $badge.removeClass('badge-error');
+            }
         }
     });
 
