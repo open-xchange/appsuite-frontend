@@ -21,6 +21,7 @@ define('io.ox/calendar/edit/view-participants',
     var ParticipantsView = Backbone.View.extend({
         tagName: 'div',
         className: 'edit-appointment-participants',
+        _collectionBinder: undefined,
         events: {
             'click .person-link': 'onClickPersonLink',
             'click .remove': 'onClickRemove',
@@ -28,39 +29,29 @@ define('io.ox/calendar/edit/view-participants',
             'mouseout .remove': 'onMouseOutRemove'
         },
         initialize: function (options) {
-            var self = this;
-            self._participantViews = [];
+            window.parts = this.collection;
+            console.log('init:', options);
+            var viewCreator = function (model) {
+                return new ParticipantView({model: model});
+            };
+            var elManagerFactory = new Backbone.CollectionBinder.ViewManagerFactory(viewCreator);
+            this._collectionBinder = new Backbone.CollectionBinder(elManagerFactory);
 
-            self.collection.on('reset', _.bind(self.render, self));
-            self.collection.on('add', _.bind(self.onAdd, self));
-            self.collection.on('remove', _.bind(self.onRemove, self));
-
-            self.collection.each(function (participant) {
-                self._participantViews.push(new ParticipantView({model: participant}));
-            });
+            this._collectionBinder.on('elCreated', _.bind(this.updateCSS, this));
+            this._collectionBinder.on('elRemoved', _.bind(this.updateCSS, this));
         },
         render: function () {
-            var self = this;
-            self.list = $('<div>'); //.addClass('edit-appointment-participantslist');
-            self.$el.empty().append(self.list);
-            _(self._participantViews).each(function (participantView) {
-                self.list.append(participantView.render().el);
-            });
-            return self;
+            this.$el.empty();
+            this._collectionBinder.bind(this.collection, this.$el);
+            return this;
+        },
+        updateCSS: function () {
+            console.log('update css');
+            this.$el.find(':nth-child(even)').removeClass('odd').addClass('even');
+            this.$el.find(':nth-child(odd)').removeClass('even').addClass('odd');
         },
         onAdd: function (model) {
-            var self = this;
-            var myview = new ParticipantView({model: model});
-            self._participantViews.push(myview);
-            self.list.append(myview.render().el);
-        },
-        onRemove: function (model, collection, options) {
-            var self = this;
-            // find view
-            // tear down model of view
-            // tear down view
-            // remove artifacts
-            self.$el.find('[data-cid=' + model.cid + ']').remove();
+            this.collection.add(model);
         },
 
         onClickRemove: function (evt) {

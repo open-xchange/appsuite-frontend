@@ -21,7 +21,8 @@ define('io.ox/mail/view-detail',
      'io.ox/core/http',
      'io.ox/core/api/account',
      'gettext!io.ox/mail/mail',
-     'io.ox/mail/actions'
+     'io.ox/mail/actions',
+     'less!io.ox/mail/style.css'
     ], function (ext, links, util, api, config, http, account, gt) {
 
     'use strict';
@@ -69,6 +70,17 @@ define('io.ox/mail/view-detail',
         return text;
     };
 
+    var regHTML = /^text\/html$/i,
+        regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
+        regFolder = /^(\s*)(http[^#]+#m=infostore&f=\d+)(\s*)$/i,
+        regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i,
+        regLink = /^(.*)(http:\/\/\S+)(\s.*)?$/i,
+        regMail = /(\S+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/i,
+        regMailReplace = /(\S+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/ig, /* dedicated one to avoid strange side effects */
+        regMailComplex = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/, /* "name" <address> */
+        regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/g, /* "name" <address> */
+        regImageSrc = /(<img[^>]+src=")\/ajax/g;
+
     var beautifyText = function (text) {
 
         var content = markupQuotes(
@@ -82,7 +94,7 @@ define('io.ox/mail/view-detail',
             // remove split block quotes
             .replace(/<\/blockquote>\s*(<br\/?>\s*)+<blockquote[^>]+>/g, '<br><br>')
             // add markup for email addresses
-            .replace(/(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/g, '<a href="mailto:$6">$2$3</a>')
+            .replace(regMailComplex, '<a href="mailto:$6">$2$3</a>')
         );
 
         return content;
@@ -93,15 +105,6 @@ define('io.ox/mail/view-detail',
         var split = (type || 'unknown').split(/;/);
         return split[0];
     };
-
-    var regHTML = /^text\/html$/i,
-        regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
-        regFolder = /^(\s*)(http[^#]+#m=infostore&f=\d+)(\s*)$/i,
-        regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i,
-        regLink = /^(.*)(http:\/\/\S+)(\s.*)?$/i,
-        regMail = /(\S+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/i,
-        regMailReplace = /(\S+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/ig, /* dedicated one to avoid strange side effects */
-        regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
     var openDocumentLink = function (e) {
         e.preventDefault();
@@ -285,11 +288,22 @@ define('io.ox/mail/view-detail',
                             );
                         } else if (regMail.test(text) && node.closest('a').length === 0) {
                             // links
-                            node.replaceWith(
-                                $('<div>')
-                                .html(text.replace(regMailReplace, '<a href="mailto:$1">$1</a>'))
-                                .contents()
-                            );
+                            // escape first
+                            text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                            // try the "NAME" <ADDRESS> pattern
+                            if (regMailComplex.test(text)) {
+                                node.replaceWith(
+                                    $('<div>')
+                                    .html(text.replace(regMailComplexReplace, '<a href="mailto:$6">$2$3</a>'))
+                                    .contents()
+                                );
+                            } else {
+                                node.replaceWith(
+                                    $('<div>')
+                                    .html(text.replace(regMailReplace, '<a href="mailto:$1">$1</a>'))
+                                    .contents()
+                                );
+                            }
                         }
                     }
                 });

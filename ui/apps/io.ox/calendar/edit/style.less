@@ -1,4 +1,13 @@
+@fluidGridColumnWidth:    6.382978723%;
+@fluidGridGutterWidth:    2.127659574%;
 
+#fluidGridSystem {
+  // Setup the mixins to be used
+  .columns(@fluidGridGutterWidth, @fluidGridColumnWidth, @columns) {
+    width: 1% * (@fluidGridColumnWidth * @columns) + (@fluidGridGutterWidth * (@columns - 1));
+    margin-left: @fluidGridGutterWidth;
+  }
+}
 div.io-ox-calendar-edit {
     max-width: 800px;
     margin-left: auto;
@@ -9,7 +18,11 @@ div.io-ox-calendar-edit {
         color: black;
         line-height: 1.25em;
         padding: 0px 0px 0px 0px;
-        font-family: @font-light;
+        font-family: @font-normal;
+    }
+
+    label.desc {
+        color: #888;
     }
 
     div.section {
@@ -44,23 +57,6 @@ div.io-ox-calendar-edit {
     input.startsat-time, input.endsat-time {
         margin-right: 8px;
         margin-bottom: 0px;
-    }
-
-    div.tablerow {
-        display: table-row;
-    }
-    div.tablecell {
-        display: table-cell;
-    }
-
-    div.left {
-        width: 400px;
-        display: table-cell;
-    }
-
-    div.right {
-        width: 400px;
-        display: table-cell;
     }
 
 
@@ -116,10 +112,18 @@ div.io-ox-calendar-edit {
         line-height: 1.5em;
         background-color: white;
         margin-bottom: 2px;
-        padding: 4px 0px 4px 1px;
-        float: left;
+        padding: 4px 0px 4px 0px;
+        /*background-color: #feb;*/
+    }
+
+    div.edit-appointment-participant.odd {
         margin-left: 0px;
     }
+
+    div.edit-appointment-participant.even {
+        #fluidGridSystem > .columns(@fluidGridGutterWidth, @fluidGridColumnWidth, 6);
+    }
+
 
     div.recurrence {
         display: none;
@@ -169,10 +173,21 @@ div.io-ox-calendar-edit {
     }
 
     input.add-participant {
-        width: 342px;
+        width: 345px;
     }
 
+    select {
+        width: 100%;
+    }
 
+    .autocomplete-popup .autocomplete-item {
+        padding: 0 5px 5px 0px;
+        line-height: 1.5em;
+        cursor: pointer;
+    }
+    .autocomplete-popup .autocomplete-item.selected {
+        background-color: #EEE;
+    }
 
 }
 
@@ -208,7 +223,7 @@ div.edit-appointment-participant .remove {
     top: 1px;
     right: 1px;
     bottom: 1px;
-    width: 2em;
+    width: 36px;
     line-height: 1em;
     background-color: white;
     color: #CCC;

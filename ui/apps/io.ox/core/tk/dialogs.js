@@ -85,7 +85,7 @@ define("io.ox/core/tk/dialogs",
                 self.trigger('action ' + action, data);
                 // resolve & close?
                 if (!async) {
-                    deferred.resolve(action, data);
+                    deferred.resolve(action, data, self.getContentNode().get(0));
                     close();
                 }
             };
@@ -168,7 +168,18 @@ define("io.ox/core/tk/dialogs",
             nodes.footer.prepend(button);
             return this;
         };
-
+        this.addSuccessButton = function (action, label, dataaction, options) {
+            var button = addButton(action, label, dataaction, options);
+            button.addClass('btn-success');
+            nodes.footer.prepend(button);
+            return this;
+        };
+        this.addWarningButton = function (action, label, dataaction, options) {
+            var button = addButton(action, label, dataaction, options);
+            button.addClass('btn-warning');
+            nodes.footer.prepend(button);
+            return this;
+        };
         this.addPrimaryButton = function (action, label, dataaction, options) {
             var button = addButton(action, label, dataaction, options);
             button.addClass('btn-primary');

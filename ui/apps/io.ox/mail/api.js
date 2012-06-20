@@ -882,5 +882,9 @@ define("io.ox/mail/api",
         );
     };
 
+    api.getDefaultFolder = function () {
+        return folderAPI.getDefaultFolder('mail');
+    };
+
     return api;
 });

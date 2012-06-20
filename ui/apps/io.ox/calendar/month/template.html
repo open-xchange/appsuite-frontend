@@ -28,7 +28,8 @@
 </part>
 
 <part id="appointment">
-    <div class="appointment {{= it.shownAs }}" data-cid="{{= it.cid }}">
-        {{= it.start }} {{= it.subject }}
+    <div class="appointment {{= it.shownAs }}{{= it.private_flag ? ' private' : '' }}" data-cid="{{= it.cid }}">
+        {{= it.full_time ? '' : it.start }} {{= it.title }}
+        <span class="location">{{= _.fallback(it.location, '') }}</span>
     </div>
 </part>
