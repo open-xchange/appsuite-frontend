@@ -150,8 +150,8 @@ define('io.ox/calendar/month/perspective',
                     }
                 }
                 if (month !== currentMonth) {
+                    this.pane.find('[month="' + currentMonth + '"]').addClass('out');
                     currentMonth = month;
-                    this.pane.find('.day').addClass('out');
                     this.pane.find('[month="' + month + '"]').removeClass('out');
                 }
 
