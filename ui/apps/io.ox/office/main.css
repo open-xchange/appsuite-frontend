@@ -11,6 +11,11 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
+.ox-io-office-debug-highlight-mixin(@border-color, @fill-color) {
+    outline: thin @border-color solid;
+    background-color: @fill-color;
+}
+
 .io-ox-office-main {
     margin: 0;
     padding: 0;
@@ -24,27 +29,30 @@
 	       width: 100%;
 	    } 
     }
-}
 
-.ox-io-office-debug-highlight-mixin(@border-color, @fill-color) {
-    outline: thin @border-color solid;
-    background-color: @fill-color;
-}
+    .btn-toolbar {
+	    padding-left: 13px;
+	    padding-right: 13px;
+        white-space: nowrap;
 
-.io-ox-office-toolbar {
-    padding-left: 13px;
-    padding-right: 13px;
-
-    /* class for small buttons containing e.g. a single character */
-    button.btn-iconlike {
-        width: 34px;
-    }
-
-    &.debug-highlight {
-        .ox-io-office-debug-highlight-mixin(#88f, #eef);
-    
-        .btn-group { .ox-io-office-debug-highlight-mixin(#f88, #fee); }
-    }
+	    /* class for small buttons containing e.g. a single character */
+	    button.btn-iconlike {
+	        width: 34px;
+	    }
+	
+	    .btn-group .dropdown-menu {
+	        border: none;
+	        padding: 0;
+	    }
+	
+	    &.debug-highlight {
+	        .ox-io-office-debug-highlight-mixin(#88f, #eef);
+	    
+	        .btn-group {
+	            .ox-io-office-debug-highlight-mixin(#f88, #fee);
+	        }
+	    }
+	}
 
 }
 
