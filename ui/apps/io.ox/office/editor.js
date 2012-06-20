@@ -500,6 +500,12 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.implSetDOMSelection(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset, aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
         };
 
+        this.undo = function () {
+        };
+
+        this.redo = function () {
+        };
+
         this.processFocus = function (state) {
             if (focused !== state) {
                 focused = state;

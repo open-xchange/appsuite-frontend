@@ -72,10 +72,10 @@ define('io.ox/office/main',
             Controller.call(this, {
 
                 'action/undo': {
-                    set: function () { editor.grabFocus(); }
+                    set: function () { editor.undo(); editor.grabFocus(); }
                 },
                 'action/redo': {
-                    set: function () { editor.grabFocus(); }
+                    set: function () { editor.redo(); editor.grabFocus(); }
                 },
                 'action/debug': {
                     get: function () { return app.isDebugMode(); },
