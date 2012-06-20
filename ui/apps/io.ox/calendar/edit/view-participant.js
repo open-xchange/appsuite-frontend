@@ -126,6 +126,7 @@ define('io.ox/calendar/edit/view-participant',
         renderExternalUser: function () {
             var self = this;
 
+            console.log('render external', self.model);
             this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/externaluser', {}));
 
             // take util function

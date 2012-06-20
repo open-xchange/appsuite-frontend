@@ -268,7 +268,8 @@ define('io.ox/calendar/edit/view-main',
                 if (data.type !== 5) {
                     participants.push({id: data.id, type: data.type});
                 } else {
-                    participants.push({type: data.type, mail: data.mail, display_name: data.display_name});
+                    // FIXME: data should be unified over all - mail vs. email1, email2, email3
+                    participants.push({type: data.type, mail: data.mail || data.email1, display_name: data.display_name});
                 }
             }
 
