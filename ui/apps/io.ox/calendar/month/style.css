@@ -11,6 +11,8 @@
  */
 
 .window-content.month-view * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 
@@ -39,7 +41,7 @@
     }
     
     .week {
-        height: 20%;
+        height: 100/6%; /* might be 6 wweks in a month */
         min-height: 80px;
         max-height: 160px;
     }
@@ -70,7 +72,7 @@
         position: absolute;
         right: 0;
         width: 12.5%;
-        height: 20%;
+        height: 100/6%;
         padding: 13px;
         text-align: right;
     }

@@ -344,6 +344,18 @@ define('io.ox/core/api/account',
         });
     };
 
+//    api.configtest = function () {
+//        return http.GET({
+//            module: 'jslob',
+//            params: {
+//                action: 'all',
+//                serviceId: 'com.openexchange.jslob.config'
+//            }
+//        }).done(function (data) {
+//            console.log(data);
+//        });
+//    };
+
 
     return api;
 });

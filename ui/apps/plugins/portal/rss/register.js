@@ -60,6 +60,15 @@ define("plugins/portal/rss/register",
         ext.point("io.ox/portal/widget").extend({
             id: extension.id,
             index: extension.index,
+            loadTile: function () {
+                return $.when();
+            },
+            drawTile: function () {
+                $(this).append(
+                    $('<img>').attr({src: 'apps/plugins/portal/rss/rss.png', alt: '', width: '28px', height: 'auto'}).css({'float': 'left', 'margin': '1em .5em 0 0'}),
+                    $('<h1>').text(extension.id)
+                );
+            },
             load: function () {
                 // get RSS feed via Google Feed API
                 var url = "http://ajax.googleapis.com/ajax/services/feed/" +
