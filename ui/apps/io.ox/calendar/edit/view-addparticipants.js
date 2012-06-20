@@ -69,8 +69,12 @@ define('io.ox/calendar/edit/view-addparticipants',
                     }
                 })
                 .on('selected', function (e, selected) {
-                    self.$('.add-participant').val('');
-                    self.trigger('select', selected);
+                    if (_.isObject(selected)) {
+                        self.$('.add-participant').val('');
+                        self.trigger('select', selected);
+                    } else {
+                        self.onClickAdd();
+                    }
                 });
             return self;
         },

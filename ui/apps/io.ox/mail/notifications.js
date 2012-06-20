@@ -51,7 +51,7 @@ define('io.ox/mail/notifications',
                         items.unshift({
                             title: util.getDisplayName(f[0]),
                             subject: mail.subject,
-                            content: mail.attachments[0].content,
+                            content: $.trim(mail.attachments[0].content.replace(/<br\s?\/?>/ig, ' ')),
                             data: mail
                         });
                         if (items.length > 3) {
