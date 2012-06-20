@@ -328,7 +328,6 @@ define("io.ox/settings/accounts/email/test",
         test: function (j) {
             j.describe("Tests the mail-autoconfig api", function () {
 
-                var emailConfigData;
 
                 j.it('tests the autoconfig api', function () {
 
@@ -362,7 +361,6 @@ define("io.ox/settings/accounts/email/test",
         test: function (j) {
             j.describe("Tests the validate functions of the api", function () {
 
-                var emailConfigData;
 
                 j.it('tests the validate functions', function () {
 
@@ -390,6 +388,40 @@ define("io.ox/settings/accounts/email/test",
             });
         }
     });
+
+//    ext.point('test/suite').extend({
+//        id: 'settings-get-test',
+//        index: 100,
+//        test: function (j) {
+//            j.describe("Tests the get function of the jslob", function () {
+//
+//
+//                j.it('tests the validate functions', function () {
+//
+//                    j.runs(function () {
+//                        var me = this;
+//                        me.ready = false;
+//                        api.configtest()
+//                        .done(function (data) {
+//                            if (data === true) {
+//                                me.ready = true;
+//                            }
+//                        })
+//                        .fail(function () {
+//                            console.log('no settingsdata recived');
+//                        });
+//
+//                        j.waitsFor(function () {
+//                            return this.ready;
+//                        }, 'response from settings arrived', TIMEOUT);
+//
+//                    });
+//
+//                });
+//
+//            });
+//        }
+//    });
 
 
 
