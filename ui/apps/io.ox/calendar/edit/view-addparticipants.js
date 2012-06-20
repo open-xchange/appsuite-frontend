@@ -34,7 +34,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                 renderedContent;
 
 
-            self.$el.find('.add-participant')
+            self.autoparticpants = window.auto = self.$el.find('.add-participant')
                 .attr('autocapitalize', 'off')
                 .attr('autocorrect', 'off')
                 .attr('autocomplete', 'off')
@@ -63,6 +63,9 @@ define('io.ox/calendar/edit/view-addparticipants',
                             $(markup).find('.remove').remove();
                             this.append(markup);
                         }
+                    },
+                    click: function () {
+                        self.autoparticpants.trigger('selected', self.autoparticpants.getSelectedItem());
                     }
                 })
                 .on('selected', function (e, selected) {
@@ -72,25 +75,31 @@ define('io.ox/calendar/edit/view-addparticipants',
             return self;
         },
         onClickAdd: function (e) {
-            var node = this.$('input.add-participant');
-            var val = node.val();
-            var list = mailUtil.parseRecipients(val);
-            if (list.length) {
-                this.select({
-                    id: Math.random(),
-                    display_name: list[0][0],
-                    mail: list[0][1],
-                    image1_url: '',
-                    type: 5 // TYPE_EXTERNAL_USER
-                });
+            var selectedItem = this.autoparticpants.getSelectedItem();
+
+            if (selectedItem) {
+                return this.autoparticpants.trigger('selected', selectedItem);
             } else {
-                node.attr('disabled', 'disabled')
-                    .css({border: '1px solid #a00', backgroundColor: '#fee'})
-                    .shake()
-                    .done(function () {
-                        node.css({ border: '', backgroundColor: '' })
-                            .removeAttr('disabled').focus();
+                var node = this.$('input.add-participant');
+                var val = node.val();
+                var list = mailUtil.parseRecipients(val);
+                if (list.length) {
+                    this.select({
+                        id: Math.random(),
+                        display_name: list[0][0],
+                        mail: list[0][1],
+                        image1_url: '',
+                        type: 5 // TYPE_EXTERNAL_USER
                     });
+                } else {
+                    node.attr('disabled', 'disabled')
+                        .css({border: '1px solid #a00', backgroundColor: '#fee'})
+                        .shake()
+                        .done(function () {
+                            node.css({ border: '', backgroundColor: '' })
+                                .removeAttr('disabled').focus();
+                        });
+                }
             }
         },
         select: function (obj) {

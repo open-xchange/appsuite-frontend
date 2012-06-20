@@ -18,6 +18,7 @@ define('io.ox/mail/notifications',
 
     'use strict';
 
+    // STRATEGY: save an shadow collection and splice it on remove, and load its contents to render next items
     function register() {
         var notifications = notificationService.get('io.ox/mail', NotificationView);
         notifications.collection.shadow_collection = new Backbone.Collection([]);

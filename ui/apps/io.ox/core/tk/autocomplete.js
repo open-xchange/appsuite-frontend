@@ -32,6 +32,8 @@ define('io.ox/core/tk/autocomplete', function () {
             stringify: JSON.stringify
         }, o || {});
 
+
+
         var self = $(this),
 
             // last search
@@ -57,8 +59,6 @@ define('io.ox/core/tk/autocomplete', function () {
                     relatedField.val(relatedValue);
                     dataHolder.data(data);
                 }
-
-
             },
 
             select = function (i) {
@@ -207,6 +207,12 @@ define('io.ox/core/tk/autocomplete', function () {
                         close();
                     }
                 }, o.delay);
+
+
+        this.getSelectedItem = function () {
+            var data = scrollpane.children().eq(Math.max(0, index)).data('data');
+            return data || false;
+        };
 
         if (_.isFunction(o.source) && _.isFunction(o.draw)) {
 
