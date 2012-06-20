@@ -88,7 +88,12 @@ define('io.ox/office/main',
          * file from and to an operations list.
          */
         var getFilterUrl = function (action) {
-            return ox.apiRoot + '/oxodocumentfilter?action=' + action + '&id=' + docOptions.id + '&session=' + ox.session;
+            return ox.apiRoot + '/oxodocumentfilter?action=' + action +
+                '&id=' + docOptions.id +
+                '&version=' + docOptions.version +
+                '&filename=' + docOptions.filename +
+                '&session=' + ox.session +
+                '';
         };
 
         var updateTitles = function () {
