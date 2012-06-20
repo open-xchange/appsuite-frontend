@@ -65,7 +65,7 @@ define('io.ox/calendar/edit/model-participant',
                 df.resolve();
                 break;
             case self.TYPE_EXTERNAL_USER:
-                self.set({display_name: self.get('display_name'), email1: self.get('mail')});
+                self.set({display_name: self.get('display_name'), email1: self.get('mail') || self.get('email1')});
                 self.trigger('change', self);
                 df.resolve();
                 break;

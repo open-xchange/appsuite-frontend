@@ -128,6 +128,7 @@ define("io.ox/calendar/api",
         },
         searchParticipants: function (query) {
             var userColumns = '20,1,500,501,502,505,520,555,556,557,569,602,606';
+            var contactColums = '1,20,500,555,602,524,556,557,501,502';
 
             // use stupid cache for now
             if (participant_cache[query]) {
@@ -165,7 +166,7 @@ define("io.ox/calendar/api",
                     {
                         module: 'contacts',
                         action: 'search',
-                        columns: '1,20,500,555,602,524,556,557,501,502',
+                        columns: contactColums,
                         sort: '500',
                         order: 'asc',
                         data: {
@@ -183,6 +184,13 @@ define("io.ox/calendar/api",
                 data[0].data = _(data[0].data).map(function (dataItem) {
                     var myobj = http.makeObject(dataItem, 'user', userColumns.split(','));
                     return myobj;
+                });
+                data[3].data = _(data[3].data).map(function (dataItem) {
+                    var myobj = http.makeObject(dataItem, 'contacts', contactColums.split(','));
+                    return myobj;
+                });
+                data[3].data = _(data[3].data).filter(function (dataItem) {
+                    return (!dataItem.internal_userid);
                 });
                 _(data).each(function (type, index) {
                     _(type.data).each(function (item) {
@@ -211,7 +219,6 @@ define("io.ox/calendar/api",
 
                 // do simple optimistic cache
                 participant_cache[query] = ret;
-
                 return ret;
             });
         },
