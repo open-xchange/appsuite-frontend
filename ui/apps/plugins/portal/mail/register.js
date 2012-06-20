@@ -16,7 +16,8 @@ define('plugins/portal/mail/register',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/core/strings',
-     'less!plugins/portal/mail/style.css'], function (ext, links, strings) {
+     'gettext!plugins/portal/mail',
+     'less!plugins/portal/mail/style.css'], function (ext, links, strings, gt) {
 
     'use strict';
 
@@ -36,7 +37,7 @@ define('plugins/portal/mail/register',
     ext.point('io.ox/portal/widget/mail/links/inline').extend(new links.Link({
         index: 100,
         id: 'compose',
-        label: 'Compose new email',
+        label: gt('Compose new email'),
         ref: 'io.ox/portal/widget/mail/actions/compose'
     }));
 
@@ -78,7 +79,6 @@ define('plugins/portal/mail/register',
                         } else {
                             var mail = _.extend({view: "text"}, mails[0]);
                             mailApi.get(mail).done(function (loadedMail) {
-                                console.log("Loaded Mails", loadedMail);
                                 mailsLoaded.resolve(loadedMail);
                             }).fail(mailsLoaded.reject);
                         }
@@ -97,8 +97,8 @@ define('plugins/portal/mail/register',
             
             
             $node.append(
-                $('<h1>').text("Mail"),
-                $('<span class="unread-mail-count">').text('Unread:'),
+                $('<h1>').text(gt("Mail")),
+                $('<span class="unread-mail-count">').text(gt('Unread:')),
                 $('<span class="badge badge-info unread-mail-count">').text(folder.unread),
                 $('<div class="io-ox-clear">').append(
                     $('<div class="">').append($("<b>").text(subject), $('<br>'), $("<span>").text(mailtext))
@@ -128,14 +128,14 @@ define('plugins/portal/mail/register',
                 .addClass('io-ox-portal-mail')
                 .append(
                     $('<div>').addClass('clear-title')
-                        .text('New emails')
+                        .text(gt('New emails'))
                 );
 
             ext.point('io.ox/portal/widget/mail').invoke('draw', node);
 
             if (list.length === 0) {
 
-                node.append('<div><b>No mails at all!</b></div>');
+                node.append('<div><b>' + gt('No mails at all!') + '</b></div>');
                 return $.when();
 
             } else {

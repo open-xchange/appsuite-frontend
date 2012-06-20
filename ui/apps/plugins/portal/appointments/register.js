@@ -12,7 +12,7 @@
  */
 
 define("plugins/portal/appointments/register",
-    ["io.ox/core/extensions", "io.ox/core/date"], function (ext, date) {
+    ["io.ox/core/extensions", "io.ox/core/date", "gettext!plugins/portal/appointments"], function (ext, date, gt) {
 
     "use strict";
 
@@ -45,8 +45,8 @@ define("plugins/portal/appointments/register",
             
             var today = new date.Local().format(date.DATE);
             $(this).append(
-                $('<h1>').text('Appointments'),
-                $('<div>').text("in the next 24h: ").append($('<span class="badge badge-info">').text(nextAppointments.length)),
+                $('<h1>').text(gt('Appointments')),
+                $('<div>').text(gt("in the next 24h: ")).append($('<span class="badge badge-info">').text(nextAppointments.length)),
                 $('<br>')
             );
             if (appointments.length > 0) {
@@ -81,7 +81,7 @@ define("plugins/portal/appointments/register",
                 );
 
             if (appointments.length === 0) {
-                $node.append("<div><b>You don't have any appointments in the near future. Go take a walk!</b></div>");
+                $node.append("<div><b>" + gt("You don't have any appointments in the near future. Go take a walk!") + "</b></div>");
                 deferred.resolve();
             } else {
                 require(

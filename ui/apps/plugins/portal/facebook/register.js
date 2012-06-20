@@ -15,14 +15,15 @@
 define('plugins/portal/facebook/register',
     ['io.ox/core/extensions',
      'io.ox/oauth/proxy',
-     'less!plugins/portal/facebook/style.css'], function (ext, proxy) {
+     'gettext!plugins/portal/facebook',
+     'less!plugins/portal/facebook/style.css'], function (ext, proxy, gt) {
 
     'use strict';
 
     var fnToggle = function () {
         var self = $(this);
         self.data('unfolded', !self.data('unfolded'))
-            .text(self.data('unfolded') ? 'Hide comments' : 'Show comments')
+            .text(self.data('unfolded') ? gt('Hide comments') : gt('Show comments'))
             .parent().find('.wall-comment').toggle('fast');
     };
 
@@ -73,15 +74,15 @@ define('plugins/portal/facebook/register',
             }
             if (wall.length === 0) {
                 $(this).append(
-                    $('<div>').text('No wall posts yet.'));
+                    $('<div>').text(gt('No wall posts yet.')));
             } else {
                 var post = wall[0];
-                var message = post.message || post.description;
+                var message = post.message || post.description || '';
                 if (message.length > 75) {
                     message = message.substring(0, 72) + '...';
                 }
                 $(this).append(
-                    $('<div>').text('Latest wall post:'),
+                    $('<div>').text(gt('Latest wall post:')),
                     $('<div>').append($('<b>').text(getProfile(profiles, post.actor_id).name + ':')),
                     $('<div>').text(message));
             }
@@ -126,7 +127,7 @@ define('plugins/portal/facebook/register',
                 ext.point('plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
                     if (renderer.accepts(post) && ! foundHandler) {
-                        //console.log(profile.name, ' Renderer: ', renderer.id, post);
+                        console.log(profile.name, ' Renderer: ', renderer.id, post);
                         renderer.draw.apply(content_container, [post]);
                         foundHandler = true;
                     }
@@ -140,7 +141,7 @@ define('plugins/portal/facebook/register',
                 if (post.comments && post.comments.data) {
                     //toggle comments on/off
                     $('<a class="comment-toggle">')
-                        .text('Show comments')
+                        .text(gt('Show comments'))
                         .on('click', fnToggle)
                         .data('unfolded', false)
                         .appendTo(wall_content);
@@ -194,7 +195,7 @@ define('plugins/portal/facebook/register',
         draw: function (post) {
             var media = post.attachment.media[0];
             this.append(
-                $('<div>').text(post.description),
+                $('<div>').text(post.description || post.message || ''),
                 $('<a>', {href: media.href}).append(
                     $('<img class="wall-img-left">', {src: media.src}),
                     $('<span class="caption">').text(post.attachment.description)

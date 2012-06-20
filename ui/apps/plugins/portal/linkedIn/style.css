@@ -3,3 +3,26 @@
     border: 1px solid #333;
     padding-top: .5em;
 }
+
+.linkedin-preview {
+    margin-top: .5em;
+}
+
+.linkedin-counter {
+    margin-top: .5em;
+}
+
+.linkedin-subject {
+    font-weight: bold;
+}
+
+.linkedin-content .linkedin-message {
+    padding-bottom: 1em;
+}
+img.linkedin-logo {
+    display: block;
+}
+
+.linkedin-message.odd {
+    background-color: #f4f4f4;
+}
