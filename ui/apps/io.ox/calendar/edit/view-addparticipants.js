@@ -46,7 +46,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                         return calendarAPI.searchParticipants(query); //, {columns: '20,1,500,501,502,505,520,555,556,557,569,602,606'});
                     },
                     stringify: function (data) {
-                        return (data) ? data.display_name: '';
+                        return (data) ? data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''): '';
                     },
                     draw: function (data) {
                         if (data.constructor.toString().indexOf('Object') !== -1) {

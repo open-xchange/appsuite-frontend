@@ -81,17 +81,18 @@ define('io.ox/calendar/edit/view-main',
         CHANGE_TIMEZONE:    gt('Change timezone'),
         DESCRIPTION:        gt('Description'),
         REMINDER:           gt('Reminder'),
-        NO_REMINDER:        gt('no reminder'),
+        NO_REMINDER:        gt('No reminder'),
 
         DISPLAY_AS:         gt('Display as'),
-        RESERVED:           gt('reserved'),
+        RESERVED:           gt('Reserved'),
         TEMPORARY:          gt('Temporary'),
-        ABSENT:             gt('absent'),
-        FREE:               gt('free'),
+        ABSENT:             gt('Absent'),
+        FREE:               gt('Free'),
         TYPE:               gt('Type'),
         PARTICIPANTS:       gt('Participants'),
         PRIVATE:            gt('Private'),
-        NOTIFY_ALL:         gt('Notify all participants about this change')
+        NOTIFY_ALL:         gt('Notify all participants about this change'),
+        HELP_ADD_PARTICIPANTS_MANUALLY:     gt('To add participants manually, just provide a valid email address (p.e. john.doe@example.com)')
 
     };
 
