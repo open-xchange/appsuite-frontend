@@ -99,9 +99,7 @@
         table p {
             .ox-io-office-debug-highlight-mixin(#f88, #fee);
         }    
-        
     }
-    
 }
 
 .io-ox-office-debug-pane {
@@ -112,5 +110,4 @@
 	    width: 100%;
 	    table-layout: fixed;
 	}
-
 }

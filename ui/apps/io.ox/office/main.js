@@ -38,8 +38,8 @@ define('io.ox/office/main',
             // add all tool bar controls
             this
             .createButtonGroup()
-                .addButton('action/undo', { label: 'Undo' })
-                .addButton('action/redo', { label: 'Redo' })
+                .addButton('action/undo', { label: 'Undo', disableOn: null })
+                .addButton('action/redo', { label: 'Redo', disableOn: null })
             .end()
             .createButtonGroup()
                 .addButton('font/bold',      { label: 'B', 'class': 'btn-iconlike', css: { fontWeight: 'bold' },          tooltip: gt('Bold'),      toggle: true })
@@ -47,6 +47,12 @@ define('io.ox/office/main',
                 .addButton('font/underline', { label: 'U', 'class': 'btn-iconlike', css: { textDecoration: 'underline' }, tooltip: gt('Underline'), toggle: true })
             .end()
             .createRadioGroup('paragraph/align')
+                .addButton('left',    { icon: 'align-left',    tooltip: gt('Left') })
+                .addButton('center',  { icon: 'align-center',  tooltip: gt('Center') })
+                .addButton('right',   { icon: 'align-right',   tooltip: gt('Right') })
+                .addButton('justify', { icon: 'align-justify', tooltip: gt('Justify') })
+            .end()
+            .createRadioDropDown('paragraph/align', { columns: 2 })
                 .addButton('left',    { icon: 'align-left',    tooltip: gt('Left') })
                 .addButton('center',  { icon: 'align-center',  tooltip: gt('Center') })
                 .addButton('right',   { icon: 'align-right',   tooltip: gt('Right') })
@@ -72,12 +78,14 @@ define('io.ox/office/main',
             Controller.call(this, {
 
                 'action/undo': {
-                    get: function () { return editor.hasUndo(1); },
-                    set: function (list) { editor.undo(1); editor.grabFocus(); }
+                    get: function () { return editor.hasUndo() || null; },
+                    set: function (list) { editor.undo(); editor.grabFocus(); },
+                    poll: true
                 },
                 'action/redo': {
-                    get: function () { return editor.hasRedo(); },
-                    set: function (list) { editor.redo(1); editor.grabFocus(); }
+                    get: function () { return editor.hasRedo() || null; },
+                    set: function (list) { editor.redo(); editor.grabFocus(); },
+                    poll: true
                 },
                 'action/debug': {
                     get: function () { return app.isDebugMode(); },

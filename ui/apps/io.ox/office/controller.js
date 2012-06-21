@@ -51,39 +51,6 @@ define('io.ox/office/controller', function () {
             timeout = null;
 
         /**
-         * Updates the specified view components. Enables/disables all controls
-         * associated to the specified items of this controller, and updates
-         * the control state according to the current item values.
-         *
-         * @param components {Array}
-         *  View components to be updated, as array.
-         *
-         * @param items {Object}
-         *  Items to be updated in the view components.
-         */
-        function updateComponents(components, items) {
-            _(items).each(function (item, key) {
-                _(components).each(function (component) {
-                    // pass undefined value for disabled items
-                    component
-                        .enable(key, item.enabled)
-                        .update(key, item.enabled ? item.get() : undefined);
-                });
-            });
-        }
-
-        /**
-         * The listener function that will listen to 'change' events in all
-         * registered view components.
-         */
-        function componentListener(event, key, value) {
-            var item = allItems[key];
-            if (item && item.enabled) {
-                item.set(value);
-            }
-        }
-
-        /**
          * Returns all items matching the passed key selector in a map.
          *
          * @param keys {String} {RegExp} {Array} {Null}
@@ -127,6 +94,53 @@ define('io.ox/office/controller', function () {
             return matchingItems;
         }
 
+        /**
+         * Enables/disables all controls associated to the specified items in
+         * the specified view components.
+         *
+         * @param components {Array}
+         *  View components to be processed, as array.
+         *
+         * @param items {Object}
+         *  Items to be enabled/disabled in the view components, according to
+         *  their enabled attribute.
+         */
+        function enableComponents(components, items) {
+            _(items).each(function (item, key) {
+                _(components).invoke('enable', key, item.enabled);
+            });
+        }
+
+        /**
+         * Updates all controls associated to the specified items according to
+         * the current item value.
+         *
+         * @param components {Array}
+         *  View components to be updated, as array.
+         *
+         * @param items {Object}
+         *  Items to be updated in the view components, according to their
+         *  current value.
+         */
+        function updateComponents(components, items) {
+            _(items).each(function (item, key) {
+                // pass undefined value for disabled items
+                var value = item.enabled ? item.get() : undefined;
+                _(components).invoke('update', key, value);
+            });
+        }
+
+        /**
+         * The listener function that will listen to 'change' events in all
+         * registered view components.
+         */
+        function componentListener(event, key, value) {
+            var item = allItems[key];
+            if (item && item.enabled) {
+                item.set(value);
+            }
+        }
+
         // initialization -----------------------------------------------------
 
         // process passed definitions
@@ -168,9 +182,8 @@ define('io.ox/office/controller', function () {
          *  The view component to be registered. Must trigger 'change' events
          *  passing the item key and value as parameters, if a control has been
          *  activated in the user interface. Must support the method enable()
-         *  with the arguments of the own enableItems() and disableItems()
-         *  methods. Must support the method update() taking the key and value
-         *  of an item.
+         *  taking an item key and state parameter. Must support the method
+         *  update() taking the key and value of an item.
          *
          * @returns {Controller}
          *  A reference to this controller instance.
@@ -178,6 +191,7 @@ define('io.ox/office/controller', function () {
         this.registerViewComponent = function (component) {
             if (!_(components).contains(component)) {
                 components.push(component);
+                enableComponents([component], allItems);
                 updateComponents([component], allItems);
                 component.on('change', componentListener);
             }
@@ -233,6 +247,7 @@ define('io.ox/office/controller', function () {
             });
 
             // update all view components
+            enableComponents(components, items);
             updateComponents(components, items);
 
             return this;
@@ -282,6 +297,7 @@ define('io.ox/office/controller', function () {
             });
 
             // update all view components
+            enableComponents(components, allItems);
             updateComponents(components, allItems);
 
             return this;
