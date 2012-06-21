@@ -58,11 +58,10 @@ define('io.ox/calendar/edit/view-participant',
                 var url = '';
                 if (value && _.isString(value) && value.length > 1) {
                     url = value.replace(/^\/ajax/, ox.apiRoot);
+                    return 'background: url("' + url + '");';
                 } else {
-                    url = ox.base + '/apps/themes/default/dummypicture.png';
+                    return '';
                 }
-
-                return 'background: url("' + url + '");';
             };
             var bindings = {
                 display_name: '.person-link',
@@ -85,11 +84,10 @@ define('io.ox/calendar/edit/view-participant',
                 var url = '';
                 if (value) {
                     url = value.replace(/^\/ajax/, ox.apiRoot);
+                    return 'background: url("' + url + '");';
                 } else {
-                    url = ox.base + '/apps/themes/default/dummypicture_group.png';
+                    return '';
                 }
-
-                return 'background: url("' + url + '");';
             };
             var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
             bindings = _(bindings).extend({
@@ -111,11 +109,10 @@ define('io.ox/calendar/edit/view-participant',
                 var url = '';
                 if (value) {
                     url = value.replace(/^\/ajax/, ox.apiRoot);
+                    return 'background: url("' + url + '");';
                 } else {
-                    url = ox.base + '/apps/themes/default/dummypicture_resource.png';
+                    return '';
                 }
-
-                return 'background: url("' + url + '");';
             };
 
             var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
@@ -129,6 +126,7 @@ define('io.ox/calendar/edit/view-participant',
         renderExternalUser: function () {
             var self = this;
 
+            console.log('render external', self.model);
             this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/externaluser', {}));
 
             // take util function
@@ -136,16 +134,15 @@ define('io.ox/calendar/edit/view-participant',
                 var url = '';
                 if (value && _.isString(value) && value.length > 1) {
                     url = value.replace(/^\/ajax/, ox.apiRoot);
+                    return 'background: url("' + url + '");';
                 } else {
-                    url = ox.base + '/apps/themes/default/dummypicture.png';
+                    return '';
                 }
-
-                return 'background: url("' + url + '");';
             };
             console.log('render:', this);
             var bindings = {
                 display_name: '.person-link',
-                image1_url: [{selector: '.contact-image', elAttribute: 'style', converter: convertImage}],
+                image1_url: [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImage}],
                 email1: '.email'
             };
 
