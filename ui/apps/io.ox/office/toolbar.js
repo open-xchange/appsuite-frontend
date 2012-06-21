@@ -102,7 +102,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         // button formatting
         options = options || {};
         if (typeof options.icon === 'string') {
-            button.append($('<i>').addClass('icon-' + options.icon));
+            button.append($('<i>').addClass(options.icon));
         }
         if (typeof options.label === 'string') {
             var prefix = button.has('> i') ? ' ' : '';
