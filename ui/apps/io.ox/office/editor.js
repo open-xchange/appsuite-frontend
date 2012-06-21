@@ -319,7 +319,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             else if (operation.name === "insertParagraph") {
                 this.implInsertParagraph(operation.start);
                 if (operation.text)
-                    this.implInsertText(new OXOPaM(operation.start));
+                    this.implInsertText(operation.text, [operation.start[0], 0]);
             }
             else if (operation.name === "deleteParagraph") {
                 this.implDeleteParagraph(operation.start);
@@ -505,6 +505,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             var para = oxoPos.shift();
             if (para > maxPara) {
                 this.implDbgOutInfo('getDOMPosition: Warning: Paragraph ' + para + ' is out of range. Last paragraph: ' + maxPara);
+                return;
+            }
+            if (oxoPos[0] === undefined) {
+                this.implDbgOutInfo('getDOMPosition: position is undefined!');
                 return;
             }
 
@@ -726,7 +730,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                         this.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
                     }
                     else {
-                        this.mergeParagraph(selection.startPaM.oxoPosition);
+                        var mergeselection = _.copy(selection.startPaM.oxoPosition);
+                        mergeselection.pop();
+                        this.mergeParagraph(mergeselection);
                     }
                 }
                 selection.endPaM = _.copy(selection.startPaM, true);
@@ -750,6 +756,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     else if (selection.startPaM.oxoPosition[0] > 0) {
                         var startPosition = _.copy(selection.startPaM.oxoPosition, true);
                         startPosition[0] -= 1;
+                        startPosition.pop();
                         var length = this.getParagraphLen(startPosition[0]);
                         this.mergeParagraph(startPosition);
                         selection.startPaM.oxoPosition[0] -= 1;
@@ -907,6 +914,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     // startPaM.oxoPosition[0]+1 instead of i, because we always remove a paragraph
                     var startPosition = _.copy(selection.startPaM.oxoPosition, true);
                     startPosition[0] += 1;
+                    startPosition.pop();    // don't pass char pos
                     this.deleteParagraph(startPosition);
                 }
 
@@ -915,8 +923,12 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     var startPosition = _.copy(selection.startPaM.oxoPosition, true);
                     startPosition[0] += 1;
                     startPosition[1] = 0;
-                    this.deleteText(startPosition, selection.endPaM.oxoPosition);
-                    this.mergeParagraph(selection.startPaM.oxoPosition);
+                    var endPosition = _.copy(startPosition, true);
+                    endPosition[1] = selection.endPaM.oxoPosition[1];
+                    this.deleteText(startPosition, endPosition);
+                    var mergeselection = _.copy(selection.startPaM.oxoPosition);
+                    mergeselection.pop();
+                    this.mergeParagraph(mergeselection);
                 }
             }
         };
@@ -955,7 +967,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.mergeParagraph = function (position) {
             var newOperation = {name: 'mergeParagraph', start: _.copy(position)};
-            var undoOperation = { name: 'splitParagraph', start: _.copy(position, true) };
+            var sel = _.copy(position);
+            sel.push(this.getParagraphLen(sel[0]));
+            var undoOperation = { name: 'splitParagraph', start: sel };
             undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
             this.applyOperation(newOperation, true, true);
         };
@@ -1322,7 +1336,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
             this.implParagraphChanged(para);
             this.implParagraphChanged(para + 1);
-            lastOperationEnd = new OXOPaM([para, pos]);
+            lastOperationEnd = new OXOPaM(startPosition);
         };
 
         this.implMergeParagraph = function (position) {
