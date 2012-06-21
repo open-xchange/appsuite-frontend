@@ -20,11 +20,11 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
     function OXOUndoAction(undoOperation, redoOperation) {
 
         this.undo = function (editor) {
-            editor.applyOperation(undoOperation, true);  // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
+            editor.applyOperation(undoOperation, true, true);  // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
         };
 
         this.redo = function (editor) {
-            editor.applyOperation(redoOperation, true);
+            editor.applyOperation(redoOperation, true, true);
         };
     }
 
@@ -343,6 +343,13 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
 
             blockOperations = false;
+
+            // DEBUG STUFF
+            if (this.getParagraphCount() !== editdiv.children().size()) {
+                this.implDbgOutInfo('applyOperation - para count invalid!');
+                debugger;
+            }
+
         };
 
         this.applyOperations = function (theOperations, bRecord, notify) {
@@ -473,7 +480,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     nPos = this.getParagraphLen(para);
                 }
                 startPaM = new OXOPaM([para, nPos]);
-                this.implDbgOutInfo('info: fixed invalid selection (start): ' + startPaM.toString());
+                // this.implDbgOutInfo('info: fixed invalid selection (start): ' + startPaM.toString());
             }
 
             if (domSelection.endPaM.node.nodeType === 3) {
@@ -488,7 +495,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     para--;
                 }
                 endPaM = new OXOPaM([para, this.getParagraphLen(para)]);
-                this.implDbgOutInfo('info: fixed invalid selection (end):' + endPaM.toString());
+                // this.implDbgOutInfo('info: fixed invalid selection (end):' + endPaM.toString());
             }
 
             var aOXOSelection = new OXOSelection(startPaM, endPaM);
@@ -813,6 +820,11 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     event.preventDefault();
                 }
             }
+            // DEBUG STUFF
+            if (this.getParagraphCount() !== editdiv.children().size()) {
+                this.implDbgOutInfo('processKeyDown - para count invalid!');
+                debugger;
+            }
         };
 
         this.processKeyPressed = function (event) {
@@ -874,6 +886,13 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
             // Block everything else to be on the save side....
             event.preventDefault();
+
+            // DEBUG STUFF
+            if (this.getParagraphCount() !== editdiv.children().size()) {
+                this.implDbgOutInfo('processKeyPressed - para count invalid!');
+                debugger;
+            }
+
         };
 
         this.cut = function () {
@@ -1316,6 +1335,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.implSplitParagraph = function (position) {
+            var dbg_oldparacount = paragraphs.size();
             var para = position[0];
             var pos = position[1]; // invalid for tables!
             var paraclone = $(paragraphs[para]).clone();
@@ -1337,11 +1357,19 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.implParagraphChanged(para);
             this.implParagraphChanged(para + 1);
             lastOperationEnd = new OXOPaM(startPosition);
+
+            // DEBUG STUFF
+            if (paragraphs.size() !== (dbg_oldparacount + 1)) {
+                this.implDbgOutInfo('implSplitParagraph - para count invalid!');
+                debugger;
+            }
         };
 
         this.implMergeParagraph = function (position) {
             var para = position[0];
             if (para < (paragraphs.size() - 1)) {
+
+                var dbg_oldparacount = paragraphs.size();
 
                 var thisPara = paragraphs[para];
                 var nextPara = paragraphs[para + 1];
@@ -1368,7 +1396,14 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
                 lastOperationEnd = new OXOPaM([para, oldParaLen]);
                 this.implParagraphChanged(para);
+
+                // DEBUG STUFF
+                if (paragraphs.size() !== (dbg_oldparacount - 1)) {
+                    this.implDbgOutInfo('implMergeParagraph - para count invalid!');
+                    debugger;
+                }
             }
+
         };
 
         this.implDeleteParagraph = function (position) {
