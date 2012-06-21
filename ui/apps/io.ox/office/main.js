@@ -38,8 +38,8 @@ define('io.ox/office/main',
             // add all tool bar controls
             this
             .createButtonGroup()
-                .addButton('action/undo', { label: 'Undo', disableOn: null })
-                .addButton('action/redo', { label: 'Redo', disableOn: null })
+                .addButton('action/undo', { label: 'Undo', tooltip: gt('Revert last operation'),  disableOn: false })
+                .addButton('action/redo', { label: 'Redo', tooltip: gt('Restore last operation'), disableOn: false })
             .end()
             .createButtonGroup()
                 .addButton('font/bold',      { label: 'B', 'class': 'btn-iconlike', css: { fontWeight: 'bold' },          tooltip: gt('Bold'),      toggle: true })
@@ -78,12 +78,12 @@ define('io.ox/office/main',
             Controller.call(this, {
 
                 'action/undo': {
-                    get: function () { return editor.hasUndo() || null; },
+                    get: function () { return editor.hasUndo(); },
                     set: function (list) { editor.undo(); editor.grabFocus(); },
                     poll: true
                 },
                 'action/redo': {
-                    get: function () { return editor.hasRedo() || null; },
+                    get: function () { return editor.hasRedo(); },
                     set: function (list) { editor.redo(); editor.grabFocus(); },
                     poll: true
                 },
