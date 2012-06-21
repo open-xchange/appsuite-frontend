@@ -38,8 +38,8 @@ define('io.ox/office/main',
             // add all tool bar controls
             this
             .createButtonGroup()
-                .addButton('action/undo', { label: 'Undo', tooltip: gt('Revert last operation'),  disableOn: false })
-                .addButton('action/redo', { label: 'Redo', tooltip: gt('Restore last operation'), disableOn: false })
+                .addButton('action/undo', { icon: 'io-ox-undo', tooltip: gt('Revert last operation'),  disableOn: false })
+                .addButton('action/redo', { icon: 'io-ox-redo', tooltip: gt('Restore last operation'), disableOn: false })
             .end()
             .createButtonGroup()
                 .addButton('font/bold',      { label: 'B', 'class': 'btn-iconlike', css: { fontWeight: 'bold' },          tooltip: gt('Bold'),      toggle: true })
