@@ -562,10 +562,18 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.implSetDOMSelection(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset, aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
         };
 
-        this.undo = function () {
+        this.getUndoStack = function () {
+            return [];
         };
 
-        this.redo = function () {
+        this.undo = function (count) {
+        };
+
+        this.getRedoStack = function () {
+            return [];
+        };
+
+        this.redo = function (count) {
         };
 
         this.processFocus = function (state) {

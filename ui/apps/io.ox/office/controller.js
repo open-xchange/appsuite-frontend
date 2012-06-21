@@ -18,8 +18,9 @@ define('io.ox/office/controller', function () {
     // class Controller =======================================================
 
     /**
-     * A controller is a collection of items, consisting of key and value, and
-     * providing arbitrary getter and setter methods for their values.
+     * A controller contains a collection of items, consisting of unique key
+     * and value, and providing arbitrary getter and setter methods for their
+     * values.
      *
      * @param definitions
      *  A map of key/definition pairs. Each attribute in this map defines an
@@ -36,7 +37,7 @@ define('io.ox/office/controller', function () {
      *      Defaults to a no-op function. Will be executed in the context of
      *      this controller.
      *  - poll: (optional) If set to true, the controller will constantly poll
-     *      the item value and notify its clients.
+     *      the item value and update its view components.
      */
     function Controller(definitions) {
 
