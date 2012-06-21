@@ -72,11 +72,11 @@ define('io.ox/office/main',
             Controller.call(this, {
 
                 'action/undo': {
-                    get: function () { return editor.getUndoStack(); },
+                    get: function () { return editor.hasUndo(1); },
                     set: function (list) { editor.undo(1); editor.grabFocus(); }
                 },
                 'action/redo': {
-                    get: function () { return editor.getRedoStack(); },
+                    get: function () { return editor.hasRedo(); },
                     set: function (list) { editor.redo(1); editor.grabFocus(); }
                 },
                 'action/debug': {
