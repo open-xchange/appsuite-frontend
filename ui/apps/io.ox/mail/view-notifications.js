@@ -20,13 +20,17 @@ define('io.ox/mail/view-notifications',
     'use strict';
 
     function beatifyMailText(str) {
-        str = $.trim(String(str).substr(0, 500)); // trim & limit overall length
-        return str
+        str = String(str)
+            .substr(0, 500) // limit overall length
             .replace(/-{3,}/g, '---') // reduce dashes
             .replace(/<br\s?\/?>(&gt;)+/ig, ' ') // remove quotes after line breaks
             .replace(/<br\s?\/?>/ig, ' ') // remove line breaks
             .replace(/<[^>]+(>|$)/g, '') // strip tags
-            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank">http$2://...</a>'); // links
+            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank">http$2://...</a>') // links
+            .replace(/&#160;/g, ' ') // convert to simple white space
+            .replace(/\s{2,}/g, ' '); // reduce consecutive white space
+        // trim
+        return $.trim(str);
     }
 
 
@@ -60,35 +64,47 @@ define('io.ox/mail/view-notifications',
 
         },
         onClickItem: function (e) {
-            console.log('click item', arguments);
-            // #!&app=io.ox/mail&folder=default0/INBOX&id=default0/INBOX.3098
-            notficationsConroller.hideList();
-            var self = this;
-            var getObj = {
-                folder: this.model.get('data').folder_id,
-                id: this.model.get('data').folder_id + '.' + this.model.get('data').id
-            };
-            console.log('clicking launching', getObj, this.model);
 
-            require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
-                var msg = self.model.toJSON();
-                var popup = new dialogs.SidePopup();
-                window.sidepop = popup;
-                console.log('popup', popup);
+            // fetch proper mail first
+            api.get(api.reduce(this.model.get('data'))).done(function (data) {
+                require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
+                    // open SidePopup without array
+                    new dialogs.SidePopup({ arrow: false }).show(e, function (popup) {
+                        popup.append(view.draw(data));
+                    });
+                });
             });
 
-
-            /*ox.launch('io.ox/mail/main', getObj).done(function () {
-                console.log('launched', this);
-
-                if (self.model.collection) {
-                    self.model.collection.remove(self.model);
-                }
-                //self.model.destroy(); // destroy the model
-                this.setState(getObj);
-            }).fail(function () {
-                console.log('failed launching app', arguments);
-            });*/
+//            console.log('click item', arguments);
+//            // #!&app=io.ox/mail&folder=default0/INBOX&id=default0/INBOX.3098
+//            notficationsConroller.hideList();
+//
+//            var self = this;
+//            var getObj = {
+//                folder: .folder_id,
+//                id: this.model.get('data').folder_id + '.' + this.model.get('data').id
+//            };
+//            console.log('clicking launching', getObj, this.model);
+//
+//            require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
+//                var msg = self.model.toJSON();
+//                var popup = new dialogs.SidePopup();
+//                window.sidepop = popup;
+//                console.log('popup', popup);
+//            });
+//
+//
+//            /*ox.launch('io.ox/mail/main', getObj).done(function () {
+//                console.log('launched', this);
+//
+//                if (self.model.collection) {
+//                    self.model.collection.remove(self.model);
+//                }
+//                //self.model.destroy(); // destroy the model
+//                this.setState(getObj);
+//            }).fail(function () {
+//                console.log('failed launching app', arguments);
+//            });*/
         }
     });
 

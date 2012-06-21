@@ -310,7 +310,9 @@ define("io.ox/core/tk/dialogs",
         Dialog.call(this, options);
     };
 
-    var SidePopup = function (width) {
+    var SidePopup = function (options) {
+
+        options = options || {};
 
         var processEvent,
             isProcessed,
@@ -330,7 +332,8 @@ define("io.ox/core/tk/dialogs",
                 .addClass("io-ox-sidepopup abs")
                 .append(closeIcon, pane),
 
-            arrow = $("<div>")
+            arrow = options.arrow === false ? $() :
+                $("<div>")
                 .addClass("io-ox-sidepopup-arrow")
                 .append($("<div>").addClass("border"))
                 .append($("<div>").addClass("triangle")),
