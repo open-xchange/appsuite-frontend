@@ -18,6 +18,16 @@ define('io.ox/mail/notifications',
 
     'use strict';
 
+    function beatifyMailText(str) {
+        str = $.trim(String(str).substr(0, 500)); // trim & limit overall length
+        return str
+            .replace(/-{3,}/g, '---') // reduce dashes
+            .replace(/<br\s?\/?>(&gt;)+/ig, ' ') // remove quotes after line breaks
+            .replace(/<br\s?\/?>/ig, ' ') // remove line breaks
+            .replace(/<[^>]+(>|$)/g, '') // strip tags
+            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank">http$2://...</a>'); // links
+    }
+
     // STRATEGY: save an shadow collection and splice it on remove, and load its contents to render next items
     function register() {
         var notifications = notificationService.get('io.ox/mail', NotificationView);
@@ -51,7 +61,7 @@ define('io.ox/mail/notifications',
                         items.unshift({
                             title: util.getDisplayName(f[0]),
                             subject: mail.subject,
-                            content: $.trim(mail.attachments[0].content.replace(/<br\s?\/?>/ig, ' ')),
+                            content: beatifyMailText(mail.attachments[0].content),
                             data: mail
                         });
                         if (items.length > 3) {
