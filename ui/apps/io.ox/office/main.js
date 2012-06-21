@@ -72,10 +72,12 @@ define('io.ox/office/main',
             Controller.call(this, {
 
                 'action/undo': {
-                    set: function () { editor.undo(); editor.grabFocus(); }
+                    get: function () { return editor.getUndoStack(); },
+                    set: function (list) { editor.undo(1); editor.grabFocus(); }
                 },
                 'action/redo': {
-                    set: function () { editor.redo(); editor.grabFocus(); }
+                    get: function () { return editor.getRedoStack(); },
+                    set: function (list) { editor.redo(1); editor.grabFocus(); }
                 },
                 'action/debug': {
                     get: function () { return app.isDebugMode(); },
@@ -147,11 +149,17 @@ define('io.ox/office/main',
             // application window
             win = null,
 
-            // main tool bar
-            toolbar = new MainToolBar(),
+            // top pane for tool bars
+            toolPane = $('<div>').addClass('io-ox-office-tool-pane'),
 
             // main application container
-            container = $('<div>').addClass('container'),
+            appPane = $('<div>').addClass('container'),
+
+            // bottom pane for debug output
+            debugPane = $('<div>').addClass('io-ox-office-debug-pane'),
+
+            // main tool bar
+            toolbar = new MainToolBar(),
 
             // primary editor used in save, quit, etc.
             editor = null,
@@ -159,9 +167,7 @@ define('io.ox/office/main',
             // controller as single connection point between editors and view elements
             controller = new EditorController(app),
 
-            debugMode = null,
-
-            debugNode = $('<div>');
+            debugMode = null;
 
         /*
          * Shows a closable error message above the editor.
@@ -173,8 +179,8 @@ define('io.ox/office/main',
          *  (optional) The title of the error message. Defaults to 'Error'.
          */
         var showError = function (message, title) {
-            container.find('.alert').remove();
-            container.prepend($.alert(title || gt('Error'), message));
+            appPane.find('.alert').remove();
+            appPane.prepend($.alert(title || gt('Error'), message));
         };
 
         /*
@@ -208,8 +214,8 @@ define('io.ox/office/main',
          * view port size.
          */
         var updateWindowSize = function () {
-            var debugHeight = debugMode ? debugNode.outerHeight() : 0;
-            editor.getNode().height(window.innerHeight - container.offset().top - debugHeight);
+            var debugHeight = debugMode ? debugPane.outerHeight() : 0;
+            appPane.height(window.innerHeight - appPane.offset().top - debugHeight);
         };
 
         var getOperationsCount = function (result) {
@@ -254,7 +260,7 @@ define('io.ox/office/main',
 
             // initialize global application structure
             updateTitles();
-            win.nodes.main.addClass('io-ox-office-main').append(toolbar.getNode(), container);
+            win.nodes.main.addClass('io-ox-office-main').append(toolPane, appPane, debugPane);
 
             // update editor 'div' on window size change
             $(window).resize(updateWindowSize);
@@ -340,7 +346,7 @@ define('io.ox/office/main',
          *  A deferred that will be resolved if the application can be closed
          *  (either if it is unchanged, or the user has chosen to save or lose
          *  the changes), or will be rejected if the application must remain
-         *  alive (user has cancelled the dialog).
+         *  alive (user has cancelled the dialog, save operation failed).
          */
         app.setQuit(function () {
             var def = null;
@@ -362,6 +368,10 @@ define('io.ox/office/main',
             return def.done(app.destroy);
         });
 
+        /**
+         * Returns whether the application is in debug mode. See method
+         * setDebugMode() for details.
+         */
         app.isDebugMode = function () {
             return debugMode;
         };
@@ -377,7 +387,7 @@ define('io.ox/office/main',
                 debugMode = state;
                 editor.getNode().toggleClass('debug-highlight', state);
                 toolbar.getNode().toggleClass('debug-highlight', state);
-                if (state) { debugNode.show(); } else { debugNode.hide(); }
+                if (state) { debugPane.show(); } else { debugPane.hide(); }
                 updateWindowSize();
             }
         };
@@ -391,7 +401,7 @@ define('io.ox/office/main',
             $(window).off('resize', updateWindowSize);
             controller.destroy();
             toolbar.destroy();
-            app = win = toolbar = container = editor = null;
+            app = win = toolbar = appPane = debugPane = controller = editor = null;
         };
 
         // initialization -----------------------------------------------------
@@ -430,15 +440,15 @@ define('io.ox/office/main',
             };
 
             // build debug table for plain-text editor and operations output console
-            debugNode.append($('<table>')
-                .addClass('io-ox-office-debug-table')
+            debugPane.append($('<table>')
                 .append('<colgroup><col width="50%"><col width="50%"></colgroup>')
                 .append($('<tr>')
                     .append($('<td>').append(editors[Editor.TextMode.PLAIN].getNode()))
                     .append($('<td>').append(editors.output.node))));
 
-            // insert divs into main container
-            container.append(editor.getNode(), debugNode);
+            // insert elements into panes
+            toolPane.append(toolbar.getNode());
+            appPane.append(editor.getNode());
 
             // listen to operations and deliver them to editors and output console
             _(editors).each(function (editor) {

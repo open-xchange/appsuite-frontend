@@ -1,0 +1,33 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2012
+ * Mail: info@open-xchange.com
+ *
+ * @author Daniel Rentz <daniel.rentz@open-xchange.com>
+ */
+
+.btn-toolbar {
+
+	/* redefine margin, padding, formatting for usage in OX */
+	margin: 0;
+	padding: 13px 9px;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #d5d5d5;
+
+    /* prevent multi-line layout of button groups */
+    white-space: nowrap;
+
+    /*
+     * Class for small buttons containing e.g. a single character. Sets button
+     * width to the same width a simple icon button has.
+     */
+    button.btn.btn-iconlike {
+        width: 34px;
+    }
+
+}
