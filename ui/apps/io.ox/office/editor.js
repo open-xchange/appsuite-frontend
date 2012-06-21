@@ -1061,7 +1061,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.getParagraphText = function (para, start, end) {
 
-            var text;
+            var text = '';
             var textNodes = [];
 
             if (start === undefined)
