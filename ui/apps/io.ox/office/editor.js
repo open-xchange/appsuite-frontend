@@ -1207,13 +1207,19 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var thisPara = paragraphs[para];
                 var nextPara = paragraphs[para + 1];
 
+                window.console.log("AAA1: thisPara : " + thisPara + " : Calling mergeParagraph: " + position.toString());
+
                 var lastCurrentChild = thisPara.lastChild;
                 if (lastCurrentChild && (lastCurrentChild.nodeName === 'BR')) {
                     thisPara.removeChild(lastCurrentChild);
                 }
 
                 for (var child = nextPara.firstChild; child !== null; child = child.nextSibling) {
-                    thisPara.appendChild(child);
+                    if ((child.nodeType === 3) && (thisPara.lastChild.nodeType === 3)) {
+                        thisPara.lastChild.nodeValue += child.nodeValue;
+                    } else {
+                        thisPara.appendChild(child);
+                    }
                 }
 
                 var localPosition = _.copy(position, true);
