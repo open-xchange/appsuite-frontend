@@ -600,14 +600,14 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     alert('#Paragraphs: ' + paragraphs.length);
                 }
                 if (c === 'I') {
-                    this.insertParagraph([-1]);
+                    this.insertParagraph([paragraphs.length]);
                 }
                 if (c === 'D') {
                     this.initDocument();
                     this.grabFocus(true);
                 }
                 if (c === 'T') {
-                    this.insertParagraph([-1]);
+                    this.insertParagraph([paragraphs.length]);
                     this.addExampleTable();
                 }
                 if (c === '1') {
@@ -825,7 +825,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 // 1) delete selected part or rest of para in first para (pos to end)
                 if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
                     endPosition[0] = selection.startPaM.oxoPosition[0];
-                    endPosition[1] = -1;
+                    endPosition[1] = this.getParagraphLen(endPosition[0]);  // invalid for tables
                 }
                 this.deleteText(selection.startPaM.oxoPosition, endPosition);
 
@@ -911,7 +911,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
                         endPosition = _.copy(selection.endPaM.oxoPosition, true);
                         endPosition[0] = selection.startPaM.oxoPosition[0]; // invalid for tables
-                        endPosition[1] = -1; // invalid for tables
+                        endPosition[1] = this.getParagraphLen(endPosition[0]); // invalid for tables
                     }
                     this.setAttribute(attr, value, selection.startPaM.oxoPosition, endPosition);
 
@@ -922,7 +922,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                         startPosition[1] = 0; // invalid for tables
                         var endPosition = _.copy(selection.endPaM.oxoPosition, true);
                         endPosition[0] = i;
-                        endPosition[1] = -1; // invalid for tables
+                        endPosition[1] = this.getParagraphLen(endPosition[0]); // invalid for tables
                         this.setAttribute(attr, value, startPosition, endPosition);
                     }
 
