@@ -20,11 +20,11 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
     function OXOUndoAction(undoOperation, redoOperation) {
 
         this.undo = function (editor) {
-            editor.applyOperation(undoOperation);
+            editor.applyOperation(undoOperation, true);  // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
         };
 
         this.redo = function (editor) {
-            editor.applyOperation(redoOperation);
+            editor.applyOperation(redoOperation, true);
         };
     }
 
@@ -1340,7 +1340,11 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 }
 
                 for (var child = nextPara.firstChild; child !== null; child = child.nextSibling) {
-                    thisPara.appendChild(child);
+                    if ((child.nodeType === 3) && (thisPara.lastChild.nodeType === 3)) {
+                        thisPara.lastChild.nodeValue += child.nodeValue;
+                    } else {
+                        thisPara.appendChild(child);
+                    }
                 }
 
                 var localPosition = _.copy(position, true);
