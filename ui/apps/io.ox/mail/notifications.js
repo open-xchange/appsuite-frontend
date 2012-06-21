@@ -18,29 +18,17 @@ define('io.ox/mail/notifications',
 
     'use strict';
 
-    function beatifyMailText(str) {
-        str = $.trim(String(str).substr(0, 500)); // trim & limit overall length
-        return str
-            .replace(/-{3,}/g, '---') // reduce dashes
-            .replace(/<br\s?\/?>(&gt;)+/ig, ' ') // remove quotes after line breaks
-            .replace(/<br\s?\/?>/ig, ' ') // remove line breaks
-            .replace(/<[^>]+(>|$)/g, '') // strip tags
-            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank">http$2://...</a>'); // links
-    }
 
-    // STRATEGY: save an shadow collection and splice it on remove, and load its contents to render next items
     function register() {
         var notifications = notificationService.get('io.ox/mail', NotificationView);
-        notifications.collection.shadow_collection = new Backbone.Collection([]);
-
-        window.mail_not = notifications;
-
         mailApi.on('new-mail', function (e, mails) {
-            window.col = notifications.collection;
+            _(mails.reverse()).each(function (mail) {
+                console.log('adding mail', mail);
+                notifications.collection.unshift(new Backbone.Model(mail), {silent: true}); ///_(mails).clone());
+            });
+            notifications.collection.trigger('reset');
 
-            notifications.collection.shadow_collection.add(_(mails).clone());
-
-            console.log("size before splice", notifications.collection.shadow_collection.size());
+            /*console.log("size before splice", notifications.collection.shadow_collection.size());
             var toFetch = _(notifications.collection.shadow_collection.models.splice(0, 3)).map(function (val) {
                 return val.toJSON();
             });
@@ -51,7 +39,6 @@ define('io.ox/mail/notifications',
             mailApi.getMailsWithOptions(toFetch, {unseen: 'true', view: 'text'})
             //$.when.apply($, mailDFs)
                 .done(function (data) {
-                    /*var data = _(arguments).clone();*/
                     console.log('FETCHED MAILS', data.reverse());
                     var items = notifications.collection.toJSON();
 
@@ -73,7 +60,7 @@ define('io.ox/mail/notifications',
                     // just reset at once
                     notifications.collection.reset(items);
                     console.log('fetched mails', arguments);
-                });
+                });*/
         });
     }
 
