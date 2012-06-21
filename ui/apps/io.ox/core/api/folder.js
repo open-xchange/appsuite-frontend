@@ -506,6 +506,11 @@ define('io.ox/core/api/folder',
         return changeUnread(folder, +1);
     };
 
+    api.getDefaultFolder = function (type) {
+        type = type || 'mail';
+        return config.get(type === 'mail' ? 'mail.folder.inbox' : 'folder.' + type);
+    };
+
     Events.extend(api);
 
     return api;

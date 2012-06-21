@@ -168,6 +168,21 @@ define('io.ox/core/tk/autocomplete', function () {
                             select(index + 1);
                             break;
                         }
+                    } else {
+                        switch (e.which) {
+                        case 27: // escape
+                            $(this).val(''); //empty it
+                            close();
+                            break;
+                        case 39:
+                        case 13:
+                        case 9:
+                            var val = $.trim($(this).val());
+                            if (val.length > 0) {
+                                $(this).trigger('selected', val);
+                            }
+                            break;
+                        }
                     }
                 },
 

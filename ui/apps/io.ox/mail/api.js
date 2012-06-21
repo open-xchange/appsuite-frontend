@@ -802,7 +802,7 @@ define("io.ox/mail/api",
                 params: {
                     action: 'all',
                     folder: 'default0/INBOX',
-                    columns: '610',
+                    columns: '610,600,601', //received_date, id, folder_id
                     unseen: 'true',
                     deleted: 'false',
                     sort: '610',
@@ -817,9 +817,10 @@ define("io.ox/mail/api",
                     recent = _(unseen).filter(function (obj) {
                         return obj.received_date > lastUnseenMail;
                     });
-                    if (recent.length) {
+                    if (recent.length > 0) {
                         api.trigger('new-mail', recent);
                         lastUnseenMail = recent[0].received_date;
+
                     }
                     api.trigger('unseen-mail', unseen);
                 }
@@ -879,6 +880,10 @@ define("io.ox/mail/api",
                 }
             })
         );
+    };
+
+    api.getDefaultFolder = function () {
+        return folderAPI.getDefaultFolder('mail');
     };
 
     return api;

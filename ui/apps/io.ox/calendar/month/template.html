@@ -13,22 +13,23 @@
 <part id="scaffold">
     <div class="abs">
         <div class="scrollpane"></div>
-        <div class="header">
+        <div class="footer">
             {{~it.days :value:index}}<div class="weekday">{{=value}}</div>{{~}}<div class="weekday">&nbsp;</div>
         </div>
     </div>
 </part>
 
 <part id="day">
-    <div class="day out{{= it.isFirst ? ' first' : '' }}{{= it.isToday ? ' today' : '' }}"
+    <div class="day out{{= it.isFirst ? ' first' : '' }}{{= it.isToday ? ' today' : '' }}{{= it.isWeekend ? ' weekend' : ''}}"
         month="{{= it.year }}-{{= it.month }}" date="{{= it.year }}-{{= it.month + '-' + it.date }}">
         <div class="list abs"></div>
-        <div class="number{{= it.isWeekend ? ' weekend' : ''}}">{{=it.date}}</div>
+        <div class="number">{{=it.date}}</div>
     </div>
 </part>
 
 <part id="appointment">
-    <div class="appointment {{= it.shownAs }}" data-cid="{{= it.cid }}">
-        {{= it.start }} {{= it.subject }}
+    <div class="appointment {{= it.shownAs }}{{= it.private_flag ? ' private' : '' }}" data-cid="{{= it.cid }}">
+        {{= it.full_time ? '' : it.start }} {{= it.title }}
+        <span class="location">{{= _.fallback(it.location, '') }}</span>
     </div>
 </part>

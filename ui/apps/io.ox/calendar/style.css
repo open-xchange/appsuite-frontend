@@ -226,3 +226,42 @@
     display: inline-block;
     float: right;
 }
+
+
+/*NOTIFICATIONS*/
+
+#io-ox-notifications-calendar {
+    .title {
+        color: #EEE;
+        margin-bottom: 0px;
+        border: none;
+    }
+
+    .notifications {
+    }
+
+
+    .item {
+        width: 100%;
+        height: auto;
+        background-color: #222;
+        padding: 5px;
+
+        .title {
+            color: #EEE;
+        }
+
+        .subject {
+            color: #EEE;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    }
+
+    .item:hover {
+        background-color: #333;
+        cursor: pointer;
+    }
+
+}

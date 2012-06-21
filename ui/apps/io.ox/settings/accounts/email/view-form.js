@@ -13,7 +13,7 @@
 
 define('io.ox/settings/accounts/email/view-form',
     ['io.ox/core/tk/view',
-     'text!io.ox/settings/accounts/email/account_detail.html'
+     'text!io.ox/settings/accounts/email/tpl/account_detail.html'
     ], function (View, tmpl) {
 
     'use strict';
@@ -31,7 +31,6 @@ define('io.ox/settings/accounts/email/view-form',
         render: function () {
             var self = this;
             window.account = self.model;
-
             self.$el.empty().append(self.template({}));
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
             self._modelBinder.bind(self.model, self.el, defaultBindings);
@@ -42,8 +41,18 @@ define('io.ox/settings/accounts/email/view-form',
             'click .save': 'onSave'
         },
         onSave: function () {
-            this.model.save();
-            this.dialog.close();
+            var self = this,
+                deferedSave = $.Deferred();
+            this.model.save(false, deferedSave);
+            deferedSave.done(function (data) {
+                self.dialog.close();
+                if (self.collection) {
+                    self.collection.add([data]);
+                }
+                if (self.model.isNew()) {
+                    self.succes();
+                }
+            });
         }
     });
 

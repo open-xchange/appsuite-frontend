@@ -87,7 +87,7 @@
   z-index: 2;
 }
 
-.settings-detail-pane .listbox > [selected] {
+.settings-detail-pane .listbox [selected] {
 	background-color: @selected-background !important;
     background-image: -webkit-gradient(
         linear,
