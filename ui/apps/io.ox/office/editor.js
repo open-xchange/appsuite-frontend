@@ -15,9 +15,67 @@
 
 define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
-    // TODO: namespace for helper functions/structs, or is that handle by the require struct???
-
     'use strict';
+
+    function OXOUndoAction(undoOperation, redoOperation) {
+
+        this.undo = function (editor) {
+            editor.applyOperation(undoOperation, true);  // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
+        };
+
+        this.redo = function (editor) {
+            editor.applyOperation(redoOperation, true);
+        };
+    }
+
+
+    function OXOUndoManager() {
+        var actions = [];
+        // var nMaxActions = 1000;
+        var nCurrentAction = 0;
+
+        this.clear = function () {
+            actions = [];
+            nCurrentAction = 0;
+        };
+
+        this.addUndo = function (oxoUndoAction) {
+
+            // remove undone actions
+            if (nCurrentAction < actions.length)
+                actions.splice(nCurrentAction);
+
+            actions.push(oxoUndoAction);
+            nCurrentAction = actions.length;
+        };
+
+        this.hasUndo = function () {
+            return nCurrentAction > 0 ? true : false;
+        };
+
+        this.undo = function (editor) {
+
+            if (!this.hasUndo())
+                return;
+
+            nCurrentAction--;
+            actions[nCurrentAction].undo(editor);
+        };
+
+        this.hasRedo = function () {
+            return nCurrentAction < actions.length ? true : false;
+        };
+
+        this.redo = function (editor) {
+
+            if (!this.hasRedo())
+                return;
+
+            actions[nCurrentAction].redo(editor);
+            nCurrentAction++;
+        };
+
+    }
 
     function fillstr(str, len, fill, right) {
         while (str.length < len) {
@@ -159,6 +217,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         // list of operations
         var operations = [];
 
+        var undomgr = new OXOUndoManager();
+
+        var lastOperationEnd;     // Need to decide: Should the last operation modify this member, or should the selection be passed up the whole call chain?!
+
         var blockOperations = false;
         var blockOperationNotifications = false;
 
@@ -256,6 +318,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
             else if (operation.name === "insertParagraph") {
                 this.implInsertParagraph(operation.start);
+                if (operation.text)
+                    this.implInsertText(new OXOPaM(operation.start));
             }
             else if (operation.name === "deleteParagraph") {
                 this.implDeleteParagraph(operation.start);
@@ -562,18 +626,26 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.implSetDOMSelection(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset, aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
         };
 
-        this.getUndoStack = function () {
-            return [];
+        this.clearUndo = function () {
+            undomgr.clear();
         };
 
-        this.undo = function (count) {
+        this.undo = function () {
+            undomgr.undo(this);
+            this.setSelection(new OXOSelection(lastOperationEnd));
         };
 
-        this.getRedoStack = function () {
-            return [];
+        this.redo = function () {
+            undomgr.redo(this);
+            this.setSelection(new OXOSelection(lastOperationEnd));
         };
 
-        this.redo = function (count) {
+        this.hasUndo = function () {
+            return undomgr.hasUndo();
+        };
+
+        this.hasRedo = function () {
+            return undomgr.hasUndo();
         };
 
         this.processFocus = function (state) {
@@ -595,6 +667,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             event.preventDefault();
         };
 
+
         this.processKeyDown = function (event) {
 
             this.implDbgOutEvent(event);
@@ -608,14 +681,14 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     alert('#Paragraphs: ' + paragraphs.length);
                 }
                 if (c === 'I') {
-                    this.insertParagraph([-1]);
+                    this.insertParagraph([paragraphs.length]);
                 }
                 if (c === 'D') {
                     this.initDocument();
                     this.grabFocus(true);
                 }
                 if (c === 'T') {
-                    this.insertParagraph([-1]);
+                    this.insertParagraph([paragraphs.length]);
                     this.addExampleTable();
                 }
                 if (c === '1') {
@@ -796,16 +869,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             event.preventDefault();
         };
 
-        this.undo = function () {
-            // TODO
-            this.implDbgOutInfo('NIY: undo()');
-        };
-
-        this.redo = function () {
-            // TODO
-            this.implDbgOutInfo('NIY: redo()');
-        };
-
         this.cut = function () {
             // TODO
             this.implDbgOutInfo('NIY: cut()');
@@ -821,6 +884,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.implDbgOutInfo('NIY: paste()');
         };
 
+        // HIGH LEVEL EDITOR API which finally results in Operations and creates Undo Actions
+
         this.deleteSelected = function (_selection) {
 
             // this.implCheckSelection();
@@ -833,7 +898,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 // 1) delete selected part or rest of para in first para (pos to end)
                 if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
                     endPosition[0] = selection.startPaM.oxoPosition[0];
-                    endPosition[1] = -1;
+                    endPosition[1] = this.getParagraphLen(endPosition[0]);  // invalid for tables
                 }
                 this.deleteText(selection.startPaM.oxoPosition, endPosition);
 
@@ -859,38 +924,46 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         this.deleteText = function (startposition, endposition) {
             if (startposition !== endposition) {
                 var newOperation = { name: 'deleteText', start: startposition, end: endposition };
+                // Hack for now. Might span multiple elements later, and we also need to keep attributes!
+                // Right now, dleteText is only valid for single paragraphs...
+                var undoOperation = { name: 'insertText', start: _.copy(startposition, true), text: this.getParagraphText(startposition[0], startposition[1], endposition[1]) };
+                undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
                 this.applyOperation(newOperation, true, true);
             }
         };
 
         this.deleteParagraph = function (position) {
-            var newOperation = { name: 'deleteParagraph', start: position };
+            var newOperation = { name: 'deleteParagraph', start: _.copy(position, true) };
+            var undoOperation = { name: 'insertParagraph', start: _.copy(position, true), text: this.getParagraphText(position[0]) }; // HACK: Text is not part of the official operation, but I need it for Undo. Can be changed once we can have multiple undos for one operation.
+            undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
             this.applyOperation(newOperation, true, true);
         };
 
         this.insertParagraph = function (position) {
-            var newOperation = {name: 'insertParagraph', start: position};
+            var newOperation = {name: 'insertParagraph', start: _.copy(position, true)};
+            var undoOperation = { name: 'deleteParagraph', start: _.copy(position, true) };
+            undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
             this.applyOperation(newOperation, true, true);
         };
 
         this.splitParagraph = function (position) {
-            var newOperation = {name: 'splitParagraph', start: position};
+            var newOperation = {name: 'splitParagraph', start: _.copy(position, true)};
+            var undoOperation = { name: 'mergeParagraph', start: _.copy(position, true) };
+            undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
             this.applyOperation(newOperation, true, true);
         };
 
         this.mergeParagraph = function (position) {
-            var newOperation = {name: 'mergeParagraph', start: position};
+            var newOperation = {name: 'mergeParagraph', start: _.copy(position)};
+            var undoOperation = { name: 'splitParagraph', start: _.copy(position, true) };
+            undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
             this.applyOperation(newOperation, true, true);
         };
 
-        // For now, only stuff that we really need, not things that a full featured API would probably offer
-        // this.getParagraphCount() = function() {
-        //  // TODO
-        //  return 1;
-        // };
-
         this.insertText = function (text, position) {
-            var newOperation = { name: 'insertText', text: text, start: position };
+            var newOperation = { name: 'insertText', text: text, start: _.copy(position, true) };
+            var undoOperation = { name: 'deleteText', start: _.copy(position, true), end: [position[0], position[1] + text.length] };
+            undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
             this.applyOperation(newOperation, true, true);
         };
 
@@ -919,7 +992,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
                         endPosition = _.copy(selection.endPaM.oxoPosition, true);
                         endPosition[0] = selection.startPaM.oxoPosition[0]; // invalid for tables
-                        endPosition[1] = -1; // invalid for tables
+                        endPosition[1] = this.getParagraphLen(endPosition[0]); // invalid for tables
                     }
                     this.setAttribute(attr, value, selection.startPaM.oxoPosition, endPosition);
 
@@ -930,7 +1003,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                         startPosition[1] = 0; // invalid for tables
                         var endPosition = _.copy(selection.endPaM.oxoPosition, true);
                         endPosition[0] = i;
-                        endPosition[1] = -1; // invalid for tables
+                        endPosition[1] = this.getParagraphLen(endPosition[0]); // invalid for tables
                         this.setAttribute(attr, value, startPosition, endPosition);
                     }
 
@@ -944,7 +1017,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 }
             }
             else {
-                var newOperation = {name: 'setAttribute', attr: attr, value: value, start: startPosition, end: endPosition};
+                var newOperation = {name: 'setAttribute', attr: attr, value: value, start: _.copy(startPosition, true), end: _.copy(endPosition, true)};
+                // Hack - this is not the correct Undo - but the attr toggle from the browser will have the effect we want to see ;)
+                var undoOperation = {name: 'setAttribute', attr: attr, value: !value, start: _.copy(startPosition, true), end: _.copy(endPosition, true)};
+                undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
                 this.applyOperation(newOperation, true, true);
             }
         };
@@ -982,6 +1058,44 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
             return textLength;
         };
+
+        this.getParagraphText = function (para, start, end) {
+
+            var text;
+            var textNodes = [];
+
+            if (start === undefined)
+                start = 0;
+            if (end === undefined)
+                end = 0xFFFF; // don't need correct len, just a very large value
+
+            collectTextNodes(paragraphs[para], textNodes);
+            var node, nodeLen, startpos, endpos;
+            var nodes = textNodes.length;
+            var nodeStart = 0;
+            for (var i = 0; i < nodes; i++) {
+                node = textNodes[i];
+                nodeLen = node.nodeValue.length;
+                if ((nodeStart + nodeLen) > start) {
+                    startpos = 0;
+                    endpos = nodeLen;
+                    if (nodeStart <= start) { // node matching startPaM
+                        startpos = start - nodeStart;
+                    }
+                    if ((nodeStart + nodeLen) >= end) { // node matching endPaM
+                        endpos = end - nodeStart;
+                    }
+                    text = text + node.nodeValue.slice(startpos, endpos);
+                }
+                nodeStart += nodeLen;
+                if (nodeStart >= end)
+                    break;
+            }
+            return text;
+        };
+
+
+
 
         // ==================================================================
         // IMPL METHODS
@@ -1099,6 +1213,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             paragraphs = editdiv.children();
             this.implParagraphChanged(0);
             this.setSelection(new OXOSelection());
+            lastOperationEnd = new OXOPaM([0, 0]);
+            this.clearUndo();
         };
 
         this.implInsertText = function (text, position) {
@@ -1114,10 +1230,18 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             var oldText = domPos.node.nodeValue;
             var newText = oldText.slice(0, domPos.offset) + text + oldText.slice(domPos.offset);
             domPos.node.nodeValue = newText;
+            lastOperationEnd = new OXOPaM([position[0], position[1] + text.length]);
             this.implParagraphChanged(para);
         };
 
         this.implSetAttribute = function (attr, value, startposition, endposition) {
+
+            // The right thing to do is DOM manipulation, take care for correctly terminating/starting attributes.
+            // See also http://dvcs.w3.org/hg/editing/raw-file/tip/editing.html#set-the-selection%27s-value
+
+            // Alternative: Simply span new atributes. Results in ugly HTML, but the operations that we record are correct,
+            // and we don't care too much for the current/temporary HTML in this editor.
+            // It will not negativly unfluence the resulting document.
 
             var para = startposition[0];
             var start = startposition[1]; // invalid for tables
@@ -1153,12 +1277,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             oldselection.adjust(); // FireFox can'r restore selection if end < start
             this.setSelection(oldselection);
 
-            // The right thing to do is DOM manipulation, take care for correctly terminating/starting attributes.
-            // See also http://dvcs.w3.org/hg/editing/raw-file/tip/editing.html#set-the-selection%27s-value
-
-            // Alternative: Simply span new atributes. Results in ugly HTML, but the operations that we record are correct,
-            // and we don't care too much for the current/temporary HTML in this editor.
-            // It will not negativly unfluence the resulting document.
+            lastOperationEnd = new OXOPaM([para, end]);
         };
 
         this.implInsertParagraph = function (position) {
@@ -1177,6 +1296,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 newPara.insertBefore(paragraphs[0]);
             }
             paragraphs = editdiv.children();
+
+            lastOperationEnd = new OXOPaM([para, 0]);
             this.implParagraphChanged(para);
         };
 
@@ -1198,6 +1319,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             var endPosition = _.copy(position, true);
             endPosition[0] = startPosition[0];
             this.implDeleteText(startPosition, endPosition);
+
+            this.implParagraphChanged(para);
+            this.implParagraphChanged(para + 1);
+            lastOperationEnd = new OXOPaM([para, pos]);
         };
 
         this.implMergeParagraph = function (position) {
@@ -1207,13 +1332,19 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var thisPara = paragraphs[para];
                 var nextPara = paragraphs[para + 1];
 
+                var oldParaLen = this.getParagraphLen(para);
+
                 var lastCurrentChild = thisPara.lastChild;
                 if (lastCurrentChild && (lastCurrentChild.nodeName === 'BR')) {
                     thisPara.removeChild(lastCurrentChild);
                 }
 
                 for (var child = nextPara.firstChild; child !== null; child = child.nextSibling) {
-                    thisPara.appendChild(child);
+                    if ((child.nodeType === 3) && (thisPara.lastChild.nodeType === 3)) {
+                        thisPara.lastChild.nodeValue += child.nodeValue;
+                    } else {
+                        thisPara.appendChild(child);
+                    }
                 }
 
                 var localPosition = _.copy(position, true);
@@ -1221,6 +1352,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
                 this.implDeleteParagraph(localPosition);
 
+                lastOperationEnd = new OXOPaM([para, oldParaLen]);
                 this.implParagraphChanged(para);
             }
         };
@@ -1230,6 +1362,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             var paragraph = paragraphs[para];
             paragraph.parentNode.removeChild(paragraph);
             paragraphs = editdiv.children();
+            lastOperationEnd = new OXOPaM([para ? para - 1 : 0, 0]);    // pos not corrct, but doesn't matter. Deleting paragraphs always happens between other operations, never at the last one.
         };
 
         this.implDeleteText = function (startPosition, endPosition) {
@@ -1278,6 +1411,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 if (nodeStart >= end)
                     break;
             }
+
+            lastOperationEnd = new OXOPaM([para, start]);
             this.implParagraphChanged(para);
         };
 
