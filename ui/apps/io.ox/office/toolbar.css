@@ -74,7 +74,7 @@
     /*
      * Replace images for icon classes starting with "icon-io-ox-".
      */
-    [class^="icon-io-ox-"] {
+    i[class^="icon-io-ox-"] {
         background-image: url(img/ox-icons-black.png);
         &.icon-white { background-image: url(img/ox-icons-white.png); }
     }
@@ -82,8 +82,8 @@
     /*
      * Define class names for all icons.
      */
-    .icon-io-ox-undo { background-position:      0    0; }
-    .icon-io-ox-redo { background-position:  -24px    0; }
+    i.icon-io-ox-undo { background-position:      0    0; }
+    i.icon-io-ox-redo { background-position:  -24px    0; }
 
     /* table-style button drop-downs ======================================= */
 
