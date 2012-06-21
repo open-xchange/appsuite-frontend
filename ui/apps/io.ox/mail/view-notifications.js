@@ -13,10 +13,22 @@
 define('io.ox/mail/view-notifications',
       ['io.ox/core/notifications/main',
        'io.ox/mail/api',
+       'io.ox/mail/util',
        'dot!io.ox/mail/template.html',
-       'less!io.ox/mail/style.css'], function (notficationsConroller, api, tpl) {
+       'less!io.ox/mail/style.css'], function (notficationsConroller, api, util, tpl) {
 
     'use strict';
+
+    function beatifyMailText(str) {
+        str = $.trim(String(str).substr(0, 500)); // trim & limit overall length
+        return str
+            .replace(/-{3,}/g, '---') // reduce dashes
+            .replace(/<br\s?\/?>(&gt;)+/ig, ' ') // remove quotes after line breaks
+            .replace(/<br\s?\/?>/ig, ' ') // remove line breaks
+            .replace(/<[^>]+(>|$)/g, '') // strip tags
+            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank">http$2://...</a>'); // links
+    }
+
 
     var NotificationView = Backbone.View.extend({
         events: {
@@ -27,10 +39,23 @@ define('io.ox/mail/view-notifications',
             this._modelBinder = new Backbone.ModelBinder();
         },
         render: function () {
-            this.$el.empty().append(tpl.render('io.ox/mail/notification', {}));
-            this._modelBinder.bind(this.model, this.el, Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property'));
+            var self = this;
+            self.$el.empty().append(tpl.render('io.ox/mail/notification', {}));
+            self._modelBinder.bind(self.model, self.el, Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property'));
 
-            this.$('.content').html(this.model.get('content'));
+            api.get(self.model.toJSON(), {unseen: true, view: 'text'})
+                .done(function (data) {
+                    console.log('model loaded', data);
+                    var f = data.from || [['', '']];
+                    self.model.set({
+                        title: util.getDisplayName(f[0]),
+                        subject: data.subject,
+                        content: beatifyMailText(data.attachments[0].content),
+                        data: data
+                    });
+                    self.$('.content').html(self.model.get('content'));
+                });
+
             return this;
 
         },
@@ -44,14 +69,26 @@ define('io.ox/mail/view-notifications',
                 id: this.model.get('data').folder_id + '.' + this.model.get('data').id
             };
             console.log('clicking launching', getObj, this.model);
-            ox.launch('io.ox/mail/main', getObj).done(function () {
+
+            require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
+                var msg = self.model.toJSON();
+                var popup = new dialogs.SidePopup();
+                window.sidepop = popup;
+                console.log('popup', popup);
+            });
+
+
+            /*ox.launch('io.ox/mail/main', getObj).done(function () {
                 console.log('launched', this);
 
-                self.model.destroy(); // destroy the model
+                if (self.model.collection) {
+                    self.model.collection.remove(self.model);
+                }
+                //self.model.destroy(); // destroy the model
                 this.setState(getObj);
             }).fail(function () {
                 console.log('failed launching app', arguments);
-            });
+            });*/
         }
     });
 
@@ -62,13 +99,12 @@ define('io.ox/mail/view-notifications',
         initialize: function () {
             var self = this;
 
+            this.notificationviews = [];
             this.model = new Backbone.Model({unread: 0});
             this.model.on('change:unread', _.bind(this.onChangeCount, this));
-            var viewCreator = function (model) {
-                return new NotificationView({model: model});
-            };
-            var elManagerFactory = new Backbone.CollectionBinder.ViewManagerFactory(viewCreator);
-            this._collectionBinder = new Backbone.CollectionBinder(elManagerFactory);
+            this.collection.on('reset', _.bind(this.render, this));
+            this.collection.on('add', _.bind(this.render, this));
+            this.collection.on('remove', _.bind(this.render, this));
 
             api.on('unseen-mail', function (e, data) {
                 self.model.set('unread', _(data).size());
@@ -78,7 +114,12 @@ define('io.ox/mail/view-notifications',
         render: function () {
             console.log('render mail notifications');
             this.$el.empty().append(tpl.render('io.ox/mail/notifications', {}));
-            this._collectionBinder.bind(this.collection, this.$('.notifications'));
+
+            for (var i = 0; i < this.collection.size() && i < 3; i++) {
+                this.notificationviews[i] = new NotificationView({ model: this.collection.at(i)});
+                this.$('.notifications').append(this.notificationviews[i].render().el);
+            }
+
             return this;
         },
         onChangeCount: function () {
