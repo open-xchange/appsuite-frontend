@@ -92,13 +92,16 @@ define('io.ox/core/tk/autocomplete', function () {
                         self.off('blur', o.blur).on('blur', fnBlur);
                         // calculate position/dimension and show popup
                         var off = self.offset(),
-                            parentOff = self.offsetParent().offset(),
-                            parentScrollTop = self.offsetParent().scrollTop(),
                             w = self.outerWidth(),
                             h = self.outerHeight();
 
-                        popup.css({ top: off.top + h - parentOff.top + parentScrollTop, left: off.left - parentOff.left, width: w })
-                            .appendTo(self.closest(o.parentSelector));
+                        popup.hide().appendTo(self.closest(o.parentSelector));
+
+                        var myTop = off.top + h - (self.closest(o.parentSelector).offsetParent().offset().top) + self.offsetParent().scrollTop();
+                        var myLeft = off.left - (self.closest(o.parentSelector).offsetParent().offset().left);
+
+                        popup.css({ top: myTop, left: myLeft, width: w }).show();
+
                         isOpen = true;
                     }
                 },
