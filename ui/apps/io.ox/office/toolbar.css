@@ -11,23 +11,101 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-.btn-toolbar {
+.btn-toolbar.io-ox-toolbar {
 
-	/* redefine margin, padding, formatting for usage in OX */
-	margin: 0;
-	padding: 13px 9px;
+    /* definitions ========================================================= */
+
+    @button-radius: 4px;
+    @dropdown-radius: 5px;
+
+    .border-radius(@radius) {
+        -webkit-border-radius: @radius;
+        -moz-border-radius: @radius;
+        border-radius: @radius;
+    }
+
+    .border-top-left-radius(@radius) {
+        -webkit-border-top-left-radius: @radius;
+        -moz-border-radius-topleft: @radius;
+        border-top-left-radius: @radius;
+    }
+
+    .border-top-right-radius(@radius) {
+        -webkit-border-top-right-radius: @radius;
+        -moz-border-radius-topright: @radius;
+        border-top-right-radius: @radius;
+    }
+
+    .border-bottom-left-radius(@radius) {
+        -webkit-border-bottom-left-radius: @radius;
+        -moz-border-radius-bottomleft: @radius;
+        border-bottom-left-radius: @radius;
+    }
+
+    .border-bottom-right-radius(@radius) {
+        -webkit-border-bottom-right-radius: @radius;
+        -moz-border-radius-bottomright: @radius;
+        border-bottom-right-radius: @radius;
+    }
+
+    /* tool bar formatting ================================================= */
+
+    /* redefine margin, padding, formatting for usage in OX */
+    margin: 0;
+    padding: 6px 13px;
     background-color: #f5f5f5;
     border-bottom: 1px solid #d5d5d5;
 
     /* prevent multi-line layout of button groups */
     white-space: nowrap;
 
+    /* buttons ============================================================= */
+
     /*
-     * Class for small buttons containing e.g. a single character. Sets button
-     * width to the same width a simple icon button has.
+     * Class 'btn-iconlike' for small buttons containing e.g. a single
+     * character. Sets button width to the width of a simple icon button.
      */
     button.btn.btn-iconlike {
         width: 34px;
     }
 
+    /* table-style button drop-downs ======================================= */
+
+    table.dropdown-menu {
+        padding: 0;
+        border-collapse: collapse;
+        border-spacing: 0;
+
+        > tbody > tr {
+            > td {
+                padding: 0;
+
+                /* all buttons: adjust margin and border for table view */
+                > .btn {
+                    width: 100%;
+                    margin: 0 -1px 0 0;
+                    border-top: none;
+                    border-left: none;
+                    .border-radius(0);
+                }
+
+                /* last button in a row: no border (has table border) */
+                &:last-child > .btn {
+                    border-right: none;
+                }
+            }
+
+            /* first row: radius for first and last button */
+            &:first-child > td {
+                &:first-child > .btn { .border-top-left-radius(@dropdown-radius); }
+                &:last-child > .btn { .border-top-right-radius(@dropdown-radius); }
+            }
+
+            /* last row: radius for first and last button */
+            &:last-child > td {
+                &:first-child > .btn { .border-bottom-left-radius(@dropdown-radius); }
+                &:last-child > .btn { .border-bottom-right-radius(@dropdown-radius); }
+            }
+        }
+    }
 }

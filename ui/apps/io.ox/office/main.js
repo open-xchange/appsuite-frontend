@@ -52,6 +52,12 @@ define('io.ox/office/main',
                 .addButton('right',   { icon: 'align-right',   tooltip: gt('Right') })
                 .addButton('justify', { icon: 'align-justify', tooltip: gt('Justify') })
             .end()
+            .createRadioDropDown('paragraph/align', { columns: 2 })
+                .addButton('left',    { icon: 'align-left',    tooltip: gt('Left') })
+                .addButton('center',  { icon: 'align-center',  tooltip: gt('Center') })
+                .addButton('right',   { icon: 'align-right',   tooltip: gt('Right') })
+                .addButton('justify', { icon: 'align-justify', tooltip: gt('Justify') })
+            .end()
             .createButton('action/debug', { icon: 'eye-open', tooltip: gt('Debug Mode'), toggle: true });
 
         } // end of constructor

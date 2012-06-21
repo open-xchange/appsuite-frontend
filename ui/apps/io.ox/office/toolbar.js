@@ -15,8 +15,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
 
     'use strict';
 
-    // generic static helper functions for form controls ======================
+    // static class Controls ==================================================
 
+    /**
+     * Generic static helper functions for form controls.
+     */
     function Controls() {
         throw new Error('do not instantiate this class');
     }
@@ -58,8 +61,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         }
     };
 
-    // static helper functions for push buttons ===============================
+    // static class Buttons ===================================================
 
+    /**
+     * Static helper functions for push buttons.
+     */
     function Buttons() {
         throw new Error('do not instantiate this class');
     }
@@ -111,8 +117,57 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         if (typeof options.tooltip === 'string') {
             button.attr('title', options.tooltip);
         }
+        if (options.toggle === true) {
+            button.attr('data-toggle', 'toggle');
+        }
 
         return button;
+    };
+
+    /**
+     * Creates and returns a new drop-down button element.
+     *
+     * @param key {String}
+     *  The key associated to this button element. Will be stored in the
+     *  'data-key' attribute of the button.
+     *
+     * @param options {Object}
+     *  (optional) A map of options to control the properties of the new
+     *  button. See method ToolBar.createButton() for details.
+     *
+     * @returns {jQuery}
+     *  A jQuery object containing the new button element.
+     */
+    Buttons.createDropDownButton = function (key, options) {
+
+        var // create a simple button
+            button = Buttons.createButton(key, options).addClass('dropdown-toggle').attr('data-toggle', 'dropdown');
+
+        // add a white space separator before the drop-down arrow
+        if (button.text().length) {
+            button.text(button.text() + ' ');
+        } else if (button.has('> i')) {
+            button.append($('<span>').text(' '));
+        }
+
+        // add the drop-down arrow
+        button.append($('<span>').addClass('caret'));
+
+        return button;
+    };
+
+    /**
+     * Returns whether the first button control in the passed jQuery collection
+     * is a toggle button.
+     *
+     * @param button {jQuery}
+     *  A jQuery collection containing a button element.
+     *
+     * @returns {Boolean}
+     *  True, if the button is a toggle button.
+     */
+    Buttons.isToggleButton = function (button) {
+        return button.first().attr('data-toggle') === 'toggle';
     };
 
     /**
@@ -146,10 +201,14 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
 
     // public class ToolBar ===================================================
 
+    /**
+     * A tool bar is a container of form controls which are organized and
+     * displayed as a horizontal bar.
+     */
     function ToolBar() {
 
         var // create the DOM container element
-            node = $('<div>').addClass('btn-toolbar io-ox-office-toolbar'),
+            node = $('<div>').addClass('btn-toolbar io-ox-toolbar'),
 
             // control update handlers, mapped by key
             updateHandlers = {},
@@ -163,7 +222,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          * groups.
          *
          * @param key {String}
-         *  The key of the control.
+         *  The unique key of the control.
          *
          * @returns {jQuery}
          *  The controls matching the specified key, as jQuery collection.
@@ -172,60 +231,189 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             return $('[data-key="' + key + '"]', node);
         }
 
+        /**
+         * Registers the passed update handler for a specific control. Update
+         * handlers will be executed, when the tool bar receives 'update'
+         * events.
+         *
+         * @param key
+         *  The unique key of the control.
+         *
+         * @param updateHandler
+         *  The update handler function. Will be called in the context of this
+         *  tool bar. Receives the control associated to the passed key, and
+         *  the value passed to the 'update' event.
+         */
+        function registerUpdateHandler(key, updateHandler) {
+            updateHandlers[key] = updateHandler;
+        }
+
+        function registerActionHandler(control, action, actionHandler) {
+            control.on(action, function () {
+                var toolbar, key, value;
+                if (Controls.isControlEnabled(control)) {
+                    toolbar = getToolBar();
+                    key = control.attr('data-key');
+                    value = actionHandler.call(toolbar, control);
+                    toolbar.trigger('change', key, value);
+                }
+            });
+        }
+
         // initialization -----------------------------------------------------
 
         // add event hub
         Events.extend(this);
 
-        // listen to 'update' events and update the associated control
+        // listen to 'update' events and update the associated control(s)
         this.on('update', _.bind(function (event, key, value) {
             if (key in updateHandlers) {
-                updateHandlers[key].call(this, value);
+                updateHandlers[key].call(this, selectControl(key), value);
             }
         }, this));
+
+        // class RadioDropDownProxy -------------------------------------------
+
+        /**
+         * Proxy class returned as inserter for buttons into a button radio
+         * drop-down control.
+         */
+        function RadioDropDownProxy(node, key, options) {
+
+            var // the drop-down button
+                dropDownButton,
+                // the button container
+                groupNode;
+
+            // create a single update handler for the entire radio group
+            registerUpdateHandler(key, RadioGroupProxy.updateHandler);
+
+            /**
+             * Adds a new button to this radio group.
+             *
+             * @param value {String}
+             *  The unique value associated to this button.
+             *
+             * @param options {Object}
+             *  (optional) A map of options to control the properties of the
+             *  new button. See method ToolBar.createButton() for details.
+             */
+            this.addButton = function (value, options) {
+
+                var // create the button
+                    button = Buttons.createButton(key, options).attr('data-value', value);
+
+                // create drop-down button and button container on first call
+                if (!dropDownButton) {
+                    dropDownButton = Buttons.createDropDownButton(key, options).appendTo(node);
+                    groupNode = $('<table>').addClass('dropdown-menu').appendTo(node);
+                }
+
+                return this;
+            };
+
+            /**
+             * Returns a reference to the parent button group containing this
+             * drop-down button. Useful for method chaining.
+             */
+            this.end = function () { return node; };
+        }
+
+        RadioDropDownProxy.updateHandler = function (buttons, value) {
+        };
+
+        RadioDropDownProxy.clickHandler = function (button) {
+        };
 
         // class ButtonGroupProxy ---------------------------------------------
 
         /**
          * Proxy class returned as inserter for buttons into a button group.
-         *
-         * @param buttonGeneratorFunc {Function}
-         *  The generator function that has to return a new button that will
-         *  be inserted into this button group. Will be called from the own
-         *  addButton() method, and may implement different behavior depending
-         *  on the type of this button group. Receives all parameters passed
-         *  to the addButton() method.
-         *
-         * @param buttonClickFunc {Function}
-         *  The click handler that will be called if the button is currently
-         *  enabled has been clicked in the user interface. Receives the
-         *  clicked button as jQuery object. Must return the current value
-         *  represented by the button (e.g. state of a toggle
-         *  button, or value of a radio group button).
          */
-        function ButtonGroupProxy(buttonGeneratorFunc, buttonClickFunc) {
+        function ButtonGroupProxy() {
 
             var // create a new button group container
-                buttonGroup = $('<div>').addClass('btn-group').appendTo(node);
+                groupNode = $('<div>').addClass('btn-group').appendTo(node);
 
             /**
-             * Adds a new button to this button group. The parameters expected
-             * by this function depend on the type of this button group.
+             * Adds a new button to this button group.
+             *
+             * @param key {String}
+             *  The unique key of this button.
+             *
+             * @param options {Object}
+             *  (optional) A map of options to control the properties of the
+             *  new button. See method ToolBar.createButton() for details.
              */
-            this.addButton = function () {
+            this.addButton = function (key, options) {
 
                 var // create the button
-                    button = buttonGeneratorFunc.apply(this, arguments).appendTo(buttonGroup);
+                    button = Buttons.createButton(key, options).appendTo(groupNode);
 
-                // register click handler (checks disabled state, triggers tool bar event)
-                button.click(_.bind(function () {
-                    if (Controls.isControlEnabled(button)) {
-                        var value = buttonClickFunc.call(this, button);
-                        getToolBar().trigger('change', button.attr('data-key'), value);
-                    }
-                }, this));
+                // add handlers
+                registerUpdateHandler(key, ButtonGroupProxy.updateHandler);
+                registerActionHandler(button, 'click', ButtonGroupProxy.clickHandler);
 
-                // return reference to this proxy
+                return this;
+            };
+
+            this.addRadioDropDown = function (key, options) {
+                return new RadioDropDownProxy(groupNode, key, options);
+            };
+
+            /**
+             * Returns a reference to the tool bar containing this button
+             * group. Useful for method chaining.
+             */
+            this.end = getToolBar;
+        }
+
+        ButtonGroupProxy.updateHandler = function (button, state) {
+            if (Buttons.isToggleButton(button)) {
+                // translate undefined (no value) to false (prevent toggle)
+                Buttons.toggleButtons(button, _.isUndefined(state) ? false : state);
+            }
+        };
+
+        ButtonGroupProxy.clickHandler = function (button) {
+            if (Buttons.isToggleButton(button)) {
+                Buttons.toggleButtons(button);
+                return Buttons.isButtonActive(button);
+            } // else: push button, return undefined
+        };
+
+        // class RadioGroupProxy ----------------------------------------------
+
+        /**
+         * Proxy class returned as inserter for buttons into a button radio
+         * group.
+         */
+        function RadioGroupProxy(key) {
+
+            var // create a new button group container
+                groupNode = $('<div>').addClass('btn-group').appendTo(node);
+
+            // create a single update handler for the entire radio group
+            registerUpdateHandler(key, RadioGroupProxy.updateHandler);
+
+            /**
+             * Adds a new button to this radio group.
+             *
+             * @param value {String}
+             *  The unique value associated to this button.
+             *
+             * @param options {Object}
+             *  (optional) A map of options to control the properties of the
+             *  new button. See method ToolBar.createButton() for details.
+             */
+            this.addButton = function (value, options) {
+
+                var // create the button
+                    button = Buttons.createButton(key, options).attr('data-value', value).appendTo(groupNode);
+
+                // add click handler
+                registerActionHandler(button, 'click', RadioGroupProxy.clickHandler);
+
                 return this;
             };
 
@@ -235,6 +423,22 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              */
             this.end = getToolBar;
         }
+
+        RadioGroupProxy.updateHandler = function (buttons, value) {
+            Buttons.toggleButtons(buttons, false);
+            // ambiguous state indicated by null value
+            if (!_.isUndefined(value) && !_.isNull(value)) {
+                Buttons.toggleButtons(buttons.find('[data-value="' + value + '"]'), true);
+            }
+        };
+
+        RadioGroupProxy.clickHandler = function (button) {
+            var key = button.attr('data-key');
+            // deactivate all buttons matching the own key
+            Buttons.toggleButtons(selectControl(key), false);
+            Buttons.toggleButtons(button, true);
+            return button.attr('data-value');
+        };
 
         // methods ------------------------------------------------------------
 
@@ -251,39 +455,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          * groups contain several independent buttons.
          *
          * @returns {ButtonGroupProxy}
-         *  A proxy object that implements the methods addButton() and end().
-         *  The addButton() method expects the parameters 'key' containing the
-         *  unique key for the button, and an optional 'options' map containing
-         *  formatting information for the button.
+         *  A proxy object that implements methods to add controls to the
+         *  group.
          */
         this.createButtonGroup = function () {
-
-            // create a proxy and pass a button generator function
-            return new ButtonGroupProxy(
-
-                // button generator
-                function (key, options) {
-                    var button = Buttons.createButton(key, options);
-                    // special preparation for toggle buttons
-                    if (options && (options.toggle === true)) {
-                        button.attr('data-toggle', 'toggle');
-                        updateHandlers[key] = function (state) {
-                            // translate undefined (no value) to false (prevent toggle)
-                            Buttons.toggleButtons(button, _.isUndefined(state) ? false : state);
-                        };
-                    }
-                    return button;
-                },
-
-                // click handler
-                function (button) {
-                    if (button.attr('data-toggle') === 'toggle') {
-                        Buttons.toggleButtons(button);
-                        return Buttons.isButtonActive(button);
-                    }
-                    // else: stateless push button, return undefined
-                }
-            );
+            return new ButtonGroupProxy();
         };
 
         /**
@@ -292,40 +468,12 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          * @param key {String}
          *  The unique key of the group.
          *
-         * @returns {ButtonGroupProxy}
-         *  A proxy object that implements the methods addButton() and end().
-         *  The addButton() method expects the parameters 'value' representing
-         *  the string (!) value associated to the button, and an optional
-         *  'options' map containing formatting information for the button.
+         * @returns {RadioGroupProxy}
+         *  A proxy object that implements methods to add controls to the
+         *  group.
          */
         this.createRadioGroup = function (key) {
-
-            // create a single update handler for the entire radio group
-            updateHandlers[key] = function (value) {
-                var buttons = selectControl(key);
-                Buttons.toggleButtons(buttons, false);
-                // ambiguous state indicated by null value
-                if (!_.isUndefined(value) && !_.isNull(value)) {
-                    Buttons.toggleButtons(buttons.find('[data-value="' + value + '"]'), true);
-                }
-            };
-
-            // create a proxy and pass a radio button generator function
-            return new ButtonGroupProxy(
-
-                // button generator function
-                function (value, options) {
-                    return Buttons.createButton(key, options).attr('data-value', value);
-                },
-
-                // click handler (returns value associated to the radio button)
-                function (button) {
-                    // deactivate all buttons matching the own key
-                    Buttons.toggleButtons(selectControl(key), false);
-                    Buttons.toggleButtons(button, true);
-                    return button.attr('data-value');
-                }
-            );
+            return new RadioGroupProxy(key);
         };
 
         /**
@@ -346,12 +494,24 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          *  - class: (optional) Additional CSS classes to be set at the button
          *      (space-separated string).
          *  - css: (optional) Additional CSS formatting (key/value map).
+         *  - toggle: (optional) If set to true, the button toggles its state
+         *      and passes a boolean value to change listeners. Otherwise, the
+         *      button is a simple push button and passes undefined to its
+         *      change listeners.
          *
          * @returns {ToolBar}
          *  A reference to this tool bar.
          */
         this.createButton = function (key, options) {
             return this.createButtonGroup().addButton(key, options).end();
+        };
+
+        this.createRadioDropDown = function (key, options) {
+            // create a drop-down proxy whose end() method returns this tool bar
+            // instead of the dummy button group
+            var proxy = this.createButtonGroup().addRadioDropDown(key, options);
+            proxy.end = getToolBar;
+            return proxy;
         };
 
         /**
