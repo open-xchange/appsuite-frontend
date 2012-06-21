@@ -222,7 +222,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 
 }
 
-#io-ox-notifications-display .title {
+#io-ox-notifications-display .section-title {
     color: #EEE;
     margin-bottom: 13px;
     border: none;
@@ -232,43 +232,39 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 }
 
 #io-ox-notifications-display .item {
-    width: 100%;
-    height: auto;
-    background-color: #444;
-    padding: 5px 13px 13px 9px;
-    margin-bottom: 2px;
+    color: #fff;
+    background-color: #333;
+    padding: 5px 13px 13px 13px;
+    margin-bottom: 1px;
     cursor: pointer;
 }
+
 #io-ox-notifications-display .item:hover {
-    background-color: #333;
-}
-#io-ox-notifications-display .item .title {
-    color:  #FFF;
-    font-size: 13px;
-    font-family: @font-normal;
-    margin-left: 5px;
-    pointer-events: none;
-    font-weight: bold;
+    background-color: #444;
 }
 
-#io-ox-notifications-display .item .subject {
-    color: #EEE;
+#io-ox-notifications-display .item .title {
+    pointer-events: none;
+    font-weight: bold;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    margin-left: 5px;
-    font-size: 13px;
+}
+
+#io-ox-notifications-display .item .subject {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
     pointer-events: none;
 }
 
 #io-ox-notifications-display .item .content {
-    margin-left: 5px;
-    color: #CCC;
-    font-size: 13px;
-    line-height: 17px;
-    height: 30px;
+    color: #aaa;
+    line-height: 15px;
+    max-height: 5 * 15px; /* 5 rows */
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-top: 3px;
 }
 
 #io-ox-windowmanager-pane {
