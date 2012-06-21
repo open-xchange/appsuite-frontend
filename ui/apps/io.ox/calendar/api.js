@@ -170,12 +170,12 @@ define("io.ox/calendar/api",
                         sort: '500',
                         order: 'asc',
                         data: {
-                            display_name: query,
-                            email1: query,
-                            email2: query,
-                            email3: query,
-                            last_name: query,
-                            first_name: query,
+                            display_name: '*' + query + '*',
+                            email1: '*' + query + '*',
+                            email2: '*' + query + '*',
+                            email3: '*' + query + '*',
+                            last_name: '*' + query + '*',
+                            first_name: '*' + query + '*',
                             orSearch: true
                         }
                     }
