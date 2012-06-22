@@ -47,9 +47,10 @@ define('io.ox/mail/view-notifications',
             self.$el.empty().append(tpl.render('io.ox/mail/notification', {}));
             self._modelBinder.bind(self.model, self.el, Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property'));
 
-            api.get(self.model.toJSON(), {unseen: true, view: 'text'})
+            // fetch plain text mail; don't use cache
+            var obj = _.extend(api.reduce(self.model.toJSON()), { unseen: true, view: 'text' });
+            api.get(obj, false)
                 .done(function (data) {
-                    console.log('model loaded', data);
                     var f = data.from || [['', '']];
                     self.model.set({
                         title: util.getDisplayName(f[0]),

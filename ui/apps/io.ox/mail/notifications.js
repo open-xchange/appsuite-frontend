@@ -20,12 +20,15 @@ define('io.ox/mail/notifications',
 
 
     function register() {
+
         var notifications = notificationService.get('io.ox/mail', NotificationView);
+
         mailApi.on('new-mail', function (e, mails) {
+
             _(mails.reverse()).each(function (mail) {
-                console.log('adding mail', mail);
                 notifications.collection.unshift(new Backbone.Model(mail), {silent: true}); ///_(mails).clone());
             });
+
             notifications.collection.trigger('reset');
 
             /*console.log("size before splice", notifications.collection.shadow_collection.size());
