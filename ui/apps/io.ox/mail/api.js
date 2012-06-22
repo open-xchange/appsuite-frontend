@@ -174,10 +174,10 @@ define("io.ox/mail/api",
     });
 
     api.SENDTYPE = {
-        NORMAL:  1,
-        REPLY:   2,
-        FORWARD: 3,
-        DRAFT:   4
+        NORMAL:  0,
+        REPLY:   1,
+        FORWARD: 2,
+        DRAFT:   3
     };
 
     api.FLAGS = {
