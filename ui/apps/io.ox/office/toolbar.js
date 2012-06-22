@@ -102,7 +102,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         // button formatting
         options = options || {};
         if (typeof options.icon === 'string') {
-            button.append($('<i>').addClass('icon-' + options.icon));
+            button.append($('<i>').addClass(options.icon));
         }
         if (typeof options.label === 'string') {
             var prefix = button.has('> i') ? ' ' : '';
@@ -119,6 +119,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         }
         if (options.toggle === true) {
             button.attr('data-toggle', 'toggle');
+        }
+        if ('disableOn' in options) {
+            button.attr('data-disable-on', JSON.stringify(options.disableOn));
         }
 
         return button;
@@ -369,7 +372,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         }
 
         ButtonGroupProxy.updateHandler = function (button, state) {
-            if (Buttons.isToggleButton(button)) {
+            // check if the button disables itself on a specific value
+            var disableOn = button.attr('data-disable-on'),
+                enabled = !disableOn || (JSON.parse(disableOn) !== state);
+            Controls.enableControls(button, enabled);
+            if (enabled && Buttons.isToggleButton(button)) {
                 // translate undefined (no value) to false (prevent toggle)
                 Buttons.toggleButtons(button, _.isUndefined(state) ? false : state);
             }
