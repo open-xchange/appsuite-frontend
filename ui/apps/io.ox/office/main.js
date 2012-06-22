@@ -38,21 +38,27 @@ define('io.ox/office/main',
             // add all tool bar controls
             this
             .createButtonGroup()
-                .addButton('action/undo', { label: 'Undo' })
-                .addButton('action/redo', { label: 'Redo' })
+                .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert last operation'),  disableOn: false })
+                .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation'), disableOn: false })
             .end()
             .createButtonGroup()
-                .addButton('font/bold',      { label: 'B', 'class': 'btn-iconlike', css: { fontWeight: 'bold' },          tooltip: gt('Bold'),      toggle: true })
-                .addButton('font/italic',    { label: 'I', 'class': 'btn-iconlike', css: { fontStyle: 'italic' },         tooltip: gt('Italic'),    toggle: true })
-                .addButton('font/underline', { label: 'U', 'class': 'btn-iconlike', css: { textDecoration: 'underline' }, tooltip: gt('Underline'), toggle: true })
+                .addButton('font/bold',      { icon: gt('icon-io-ox-bold'),      tooltip: gt('Bold'),      toggle: true })
+                .addButton('font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
+                .addButton('font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
             .end()
             .createRadioGroup('paragraph/align')
-                .addButton('left',    { icon: 'align-left',    tooltip: gt('Left') })
-                .addButton('center',  { icon: 'align-center',  tooltip: gt('Center') })
-                .addButton('right',   { icon: 'align-right',   tooltip: gt('Right') })
-                .addButton('justify', { icon: 'align-justify', tooltip: gt('Justify') })
+                .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
+                .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
+                .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
+                .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
             .end()
-            .createButton('action/debug', { icon: 'eye-open', tooltip: gt('Debug Mode'), toggle: true });
+            .createRadioDropDown('paragraph/align', { columns: 2 })
+                .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
+                .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
+                .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
+                .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
+            .end()
+            .createButton('action/debug', { icon: 'icon-eye-open', tooltip: gt('Debug Mode'), toggle: true });
 
         } // end of constructor
 
@@ -72,12 +78,14 @@ define('io.ox/office/main',
             Controller.call(this, {
 
                 'action/undo': {
-                    get: function () { return editor.hasUndo(1); },
-                    set: function (list) { editor.undo(1); editor.grabFocus(); }
+                    get: function () { return editor.hasUndo(); },
+                    set: function (list) { editor.undo(); editor.grabFocus(); },
+                    poll: true
                 },
                 'action/redo': {
                     get: function () { return editor.hasRedo(); },
-                    set: function (list) { editor.redo(1); editor.grabFocus(); }
+                    set: function (list) { editor.redo(); editor.grabFocus(); },
+                    poll: true
                 },
                 'action/debug': {
                     get: function () { return app.isDebugMode(); },
