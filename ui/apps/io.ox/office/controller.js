@@ -103,23 +103,6 @@ define('io.ox/office/controller', function () {
         }
 
         /**
-         * Enables/disables all controls associated to the specified items in
-         * the specified view components.
-         *
-         * @param components {Array}
-         *  View components to be processed, as array.
-         *
-         * @param items {Object}
-         *  Items to be enabled/disabled in the view components, according to
-         *  their enabled attribute.
-         */
-        function enableComponents(components, items) {
-            _(items).each(function (item, key) {
-                _(components).invoke('enable', key, item.enabled);
-            });
-        }
-
-        /**
          * Updates all controls associated to the specified items according to
          * the current item value.
          *
@@ -128,12 +111,15 @@ define('io.ox/office/controller', function () {
          *
          * @param items {Object}
          *  Items to be updated in the view components, according to their
-         *  current value.
+         *  current value and enabled state.
          */
         function updateComponents(components, items) {
             _(items).each(function (item, key) {
+                // ask if item is dynamically disabled
+                var enabled = item.enabled && item.enable();
+                _(components).invoke('enable', key, enabled);
                 // pass undefined value for disabled items
-                var value = item.enabled ? item.get() : undefined;
+                var value = enabled ? item.get() : undefined;
                 _(components).invoke('update', key, value);
             });
         }
@@ -200,7 +186,6 @@ define('io.ox/office/controller', function () {
         this.registerViewComponent = function (component) {
             if (!_(components).contains(component)) {
                 components.push(component);
-                enableComponents([component], allItems);
                 updateComponents([component], allItems);
                 component.on('change', componentListener);
             }
@@ -256,7 +241,6 @@ define('io.ox/office/controller', function () {
             });
 
             // update all view components
-            enableComponents(components, items);
             updateComponents(components, items);
 
             return this;
@@ -306,7 +290,6 @@ define('io.ox/office/controller', function () {
             });
 
             // update all view components
-            enableComponents(components, allItems);
             updateComponents(components, allItems);
 
             return this;

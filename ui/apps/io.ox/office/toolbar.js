@@ -198,24 +198,6 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         buttons.toggleClass(Buttons.ACTIVE_CLASS, state).find('> i').toggleClass('icon-white', state);
     };
 
-    Buttons.activateToggleButton = function (button, value) {
-        if (Buttons.isToggleButton(button)) {
-            // Translate undefined (special 'no value' state) or null (special
-            // 'ambiguous' state) to false to prevent toggling the button as
-            // implemented by the method Buttons.toggleButtons().
-            // TODO: Support for null (tristate).
-            Buttons.toggleButtons(button, (_.isUndefined(value) || _.isNull(value)) ? false : value);
-        }
-    };
-
-    Buttons.activateRadioButton = function (buttons, value) {
-        Buttons.toggleButtons(buttons, false);
-        // ambiguous state indicated by null value
-        if (!_.isUndefined(value) && !_.isNull(value)) {
-            Buttons.toggleButtons(buttons.filter('[data-value="' + value + '"]'), true);
-        }
-    };
-
     // public class ToolBar ===================================================
 
     /**
@@ -314,27 +296,32 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 // number of inserted buttons
                 buttonCount = 0;
 
-            function updateHandler(buttons, value) {
-                var button = buttons.filter('[data-value="' + value + '"]:first');
-                if (!button.length) {
-                    button = tableNode.find('button:first');
-                }
-                Buttons.activateRadioButton(buttons, value);
-                // update the contents of the drop-down button
+            function updateHandler(value) {
+                var // find all embedded option buttons
+                    buttons = tableNode.find('button'),
+                    // ambiguous state indicated by null value
+                    inactive = _.isUndefined(value) || _.isNull(value),
+                    // find the button to activate
+                    button = inactive ? $() : buttons.filter('[data-value="' + value + '"]');
+
+                // remove highlighting from all buttons
+                Buttons.toggleButtons(buttons, false);
+
+                // update the contents of the drop-down button (use first button if no button is active)
                 dropDownButton.empty().append(
-                    button.contents().clone(),
+                    (button.length ? button : buttons.first()).contents().clone(),
                     $('<span>').addClass('whitespace'),
                     $('<span>').addClass('caret'));
+
+                // highlight active button
+                Buttons.toggleButtons(button, true);
             }
 
             function clickHandler(button) {
                 var value = button.attr('data-value');
-                updateHandler(selectControl(key), value);
+                updateHandler(value);
                 return value;
             }
-
-            // create a single update handler for the entire radio group
-            registerUpdateHandler(key, updateHandler);
 
             /*
              * The width of the table is restricted to the parent button group
@@ -359,6 +346,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                     }
                 });
             });
+
+            // create a single update handler for the entire radio group
+            registerUpdateHandler(key, updateHandler);
 
             /**
              * Adds a new button to this radio group.
@@ -399,6 +389,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 // add click handler
                 registerActionHandler(button, 'click', clickHandler);
 
+                // copy formatting of first button to drop-down button
+                if (buttonCount === 0) {
+                    updateHandler();    // pass undefined (do not activate the button)
+                }
+
                 ++buttonCount;
                 return this;
             };
@@ -420,6 +415,13 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             var // create a new button group container
                 groupNode = $('<div>').addClass('btn-group').appendTo(node);
 
+            function clickHandler(button) {
+                if (Buttons.isToggleButton(button)) {
+                    Buttons.toggleButtons(button);
+                    return Buttons.isButtonActive(button);
+                } // else: push button, return undefined
+            }
+
             /**
              * Adds a new push button or toggle button to this button group.
              *
@@ -436,8 +438,16 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                     button = Buttons.createButton(key, options).appendTo(groupNode);
 
                 // add handlers
-                registerUpdateHandler(key, Buttons.activateToggleButton);
-                registerActionHandler(button, 'click', ButtonGroupProxy.clickHandler);
+                registerUpdateHandler(key, function (value) {
+                    if (Buttons.isToggleButton(button)) {
+                        // Translate undefined (special 'no value' state) or null (special
+                        // 'ambiguous' state) to false to prevent toggling the button as
+                        // implemented by the method Buttons.toggleButtons().
+                        // TODO: Support for null (tristate).
+                        Buttons.toggleButtons(button, (_.isUndefined(value) || _.isNull(value)) ? false : value);
+                    }
+                });
+                registerActionHandler(button, 'click', clickHandler);
 
                 return this;
             };
@@ -472,13 +482,6 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             this.end = getToolBar;
         }
 
-        ButtonGroupProxy.clickHandler = function (button) {
-            if (Buttons.isToggleButton(button)) {
-                Buttons.toggleButtons(button);
-                return Buttons.isButtonActive(button);
-            } // else: push button, return undefined
-        };
-
         // class RadioGroupProxy ----------------------------------------------
 
         /**
@@ -490,14 +493,28 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             var // create a new button group container
                 groupNode = $('<div>').addClass('btn-group').appendTo(node);
 
+            function updateHandler(value) {
+                var // find all embedded option buttons
+                    buttons = groupNode.find('button'),
+                    // ambiguous state indicated by null value
+                    inactive = _.isUndefined(value) || _.isNull(value),
+                    // find the button to activate
+                    button = inactive ? $() : buttons.filter('[data-value="' + value + '"]');
+
+                // remove highlighting from all buttons
+                Buttons.toggleButtons(buttons, false);
+                // highlight active button
+                Buttons.toggleButtons(button, true);
+            }
+
             function clickHandler(button) {
                 var value = button.attr('data-value');
-                Buttons.activateRadioButton(selectControl(key), value);
+                updateHandler(value);
                 return value;
             }
 
             // create a single update handler for the entire radio group
-            registerUpdateHandler(key, Buttons.activateRadioButton);
+            registerUpdateHandler(key, updateHandler);
 
             /**
              * Adds a new button to this radio group.
@@ -668,7 +685,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          */
         this.update = function (key, value) {
             if (key in updateHandlers) {
-                updateHandlers[key].call(this, selectControl(key), value);
+                updateHandlers[key].call(this, value);
             }
             return this;
         };
