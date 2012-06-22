@@ -596,9 +596,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
             window.console.log("Number of children of editdiv before inserting table: " + paragraphs.length);
 
-            // .attr('width', '80%')
             editdiv
-                .append($('<table>').attr('border', '4').attr('cellspacing', '10').attr('cellpadding', '20').attr('margin', '4cm 1cm 1cm 2cm')
+                .append($('<table>').attr('border', '4').attr('cellspacing', '10').attr('cellpadding', '20').attr('width', '80%')
                     .append('<colgroup><col width="40%"><col width="30%"><col width="30%"></colgroup>')
                     .append($('<tr>').attr('valign', 'top')
                         .append('<td><p id="1_1_1">This is paragraph 1 in row 1 and column 1.</p><p id="1_1_2">Second paragraph.</p><p id="1_1_3">Third paragraph.</p></td>')
