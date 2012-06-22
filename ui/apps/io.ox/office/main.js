@@ -238,7 +238,8 @@ define('io.ox/office/main',
         var createOperationsList = function (result) {
 
             var operations = [];
-            var value = result.data.operations;
+            var value = JSON.parse(result.data).operations;
+            // var value = result.data.operations; // code for Dummy Operations.
 
             if (_(value).isArray()) {
                 _(value).each(function (json, j) {
