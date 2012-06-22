@@ -131,31 +131,6 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
     };
 
     /**
-     * Creates and returns a new drop-down button element.
-     *
-     * @param key {String}
-     *  The key associated to this button element. Will be stored in the
-     *  'data-key' attribute of the button.
-     *
-     * @param options {Object}
-     *  (optional) A map of options to control the properties of the new
-     *  button. See method ToolBar.createButton() for details.
-     *
-     * @returns {jQuery}
-     *  A jQuery object containing the new button element.
-     */
-    Buttons.createDropDownButton = function (key, options) {
-
-        var // create a simple button
-            button = Buttons.createButton(key, options).addClass('dropdown-toggle').attr('data-toggle', 'dropdown');
-
-        // add a white space separator and the drop-down arrow
-        button.append($('<span>').addClass('whitespace'), $('<span>').addClass('caret'));
-
-        return button;
-    };
-
-    /**
      * Returns whether the first button control in the passed jQuery collection
      * is a toggle button.
      *
@@ -285,7 +260,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         function RadioDropDownProxy(node, key, options) {
 
             var // create the drop-down button
-                dropDownButton = Buttons.createDropDownButton(key).appendTo(node),
+                dropDownButton = Buttons.createButton(key).addClass('dropdown-toggle').attr('data-toggle', 'dropdown').appendTo(node),
 
                 // create the table area
                 tableNode = $('<table>').addClass('dropdown-menu').appendTo(node),
