@@ -321,6 +321,7 @@ define("io.ox/core/tk/dialogs",
             closeByEscapeKey,
             closeByScroll,
             closeByClick,
+            previousProp,
             timer = null,
 
             pane = $("<div>")
@@ -376,9 +377,9 @@ define("io.ox/core/tk/dialogs",
         close = function (e) {
             // remove handlers & avoid leaks
             $(document).off("keydown", closeByEscapeKey);
-            self.nodes.closest.off("scroll", closeByScroll);
+            self.nodes.closest.off("scroll", closeByScroll).prop('sidepopup', previousProp);
             self.nodes.click.off("click", closeByClick);
-            self.lastTrigger = null;
+            self.lastTrigger = previousProp = null;
             // use time to avoid flicker
             timer = setTimeout(function () {
                 arrow.detach();
@@ -399,7 +400,7 @@ define("io.ox/core/tk/dialogs",
             // get proper elements
             var my = $(this), zIndex, sidepopup;
             self.nodes = {
-                closest: my.parents(".io-ox-sidepopup-pane, .window-content, .notifications-overlay"),
+                closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .notifications-overlay"),
                 click: my.parents(".io-ox-sidepopup-pane, .window-body, .notifications-overlay"),
                 target: target || my.parents(".window-body, .notifications-overlay")
             };
@@ -420,6 +421,7 @@ define("io.ox/core/tk/dialogs",
 
                 // remember as current trigger
                 self.lastTrigger = this;
+                previousProp = sidepopup;
                 self.nodes.closest.prop("sidepopup", self);
 
                 // prevent default to avoid close

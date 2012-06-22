@@ -66,18 +66,28 @@ define('io.ox/mail/view-notifications',
         },
         onClickItem: function (e) {
 
-            // fetch proper mail first
-            api.get(api.reduce(this.model.get('data'))).done(function (data) {
-                require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
-                    // open SidePopup without array
-                    new dialogs.SidePopup({ arrow: false, side: 'right' })
-                        .setTarget($('#io-ox-notifications-overlay').empty())
-                        .show(e, function (popup) {
-                            popup.append(view.draw(data))
-                                .parent().removeClass('default-content-padding');
-                        });
+            var obj = api.reduce(this.model.get('data')),
+                overlay = $('#io-ox-notifications-overlay'),
+                sidepopup = overlay.prop('sidepopup'),
+                cid = overlay.find('[data-cid]').data('cid');
+
+            // toggle?
+            if (sidepopup && cid === _.cid(obj)) {
+                sidepopup.close();
+            } else {
+                // fetch proper mail first
+                api.get(obj).done(function (data) {
+                    require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
+                        // open SidePopup without array
+                        new dialogs.SidePopup({ arrow: false, side: 'right' })
+                            .setTarget(overlay.empty())
+                            .show(e, function (popup) {
+                                popup.append(view.draw(data))
+                                    .parent().removeClass('default-content-padding');
+                            });
+                    });
                 });
-            });
+            }
 
 //            console.log('click item', arguments);
 //            // #!&app=io.ox/mail&folder=default0/INBOX&id=default0/INBOX.3098
