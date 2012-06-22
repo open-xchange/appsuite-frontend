@@ -197,7 +197,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
      * - 'operation': When a new operation has been applied.
      * - 'modified': When the modified flag has been changed.
      */
-    function OXOEditor(controller, editdiv, textMode) {
+    function OXOEditor(editdiv, textMode) {
 
         // key codes of navigation keys that will be passed directly to the browser
         var NAVIGATION_KEYS = _([
