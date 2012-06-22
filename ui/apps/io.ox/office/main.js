@@ -231,15 +231,19 @@ define('io.ox/office/main',
 
             // The result is a JSONObject
             if (_(result).isObject()) {
-                window.console.log("Number of operations received by the server: " + result.data.count);
+                window.console.log('Number of operations received by the server: ' + result.data.count);
             }
 
         };
 
         var createOperationsList = function (result) {
 
-            var operations = [];
-            var value = JSON.parse(result.data).operations;
+            var operations = [], value;
+            try {
+                value = JSON.parse(result.data).operations;
+            } catch (ex) {
+                window.console.log('Exception caught: ' + ex);
+            }
             // var value = result.data.operations; // code for Dummy Operations.
 
             if (_(value).isArray()) {
@@ -319,7 +323,7 @@ define('io.ox/office/main',
             var def = $.Deferred();
             win.busy();
             var allOperations = editor.getOperations();
-            var dataObject = {"operations": JSON.stringify(allOperations)};
+            var dataObject = {'operations': JSON.stringify(allOperations)};
 
             $.ajax({
                 type: 'POST',
@@ -328,7 +332,7 @@ define('io.ox/office/main',
                 data: dataObject,
                 beforeSend: function (xhr) {
                     if (xhr && xhr.overrideMimeType) {
-                        xhr.overrideMimeType("application/j-son;charset=UTF-8");
+                        xhr.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 }
             })
