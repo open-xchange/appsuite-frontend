@@ -38,8 +38,8 @@ define('io.ox/office/main',
             // add all tool bar controls
             this
             .createButtonGroup()
-                .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert last operation'),  disableOn: false })
-                .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation'), disableOn: false })
+                .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert last operation') })
+                .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation') })
             .end()
             .createButtonGroup()
                 .addButton('font/bold',      { icon: gt('icon-io-ox-bold'),      tooltip: gt('Bold'),      toggle: true })
@@ -52,13 +52,13 @@ define('io.ox/office/main',
                 .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
                 .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
             .end()
-            .createRadioDropDown('paragraph/align', { columns: 2 })
+            .createRadioDropDown('paragraph/align/test', { columns: 2 })
                 .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
                 .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
                 .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
                 .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
             .end()
-            .createButton('action/debug', { icon: 'icon-eye-open', tooltip: gt('Debug Mode'), toggle: true });
+            .createButton('action/debug', { icon: 'icon-eye-open', tooltip: gt('Debug mode'), toggle: true });
 
         } // end of constructor
 
@@ -78,12 +78,12 @@ define('io.ox/office/main',
             Controller.call(this, {
 
                 'action/undo': {
-                    get: function () { return editor.hasUndo(); },
+                    enable: function () { return editor.hasUndo(); },
                     set: function (list) { editor.undo(); editor.grabFocus(); },
                     poll: true
                 },
                 'action/redo': {
-                    get: function () { return editor.hasRedo(); },
+                    enable: function () { return editor.hasRedo(); },
                     set: function (list) { editor.redo(); editor.grabFocus(); },
                     poll: true
                 },
@@ -122,14 +122,15 @@ define('io.ox/office/main',
              * triggered by any registered view component.
              */
             this.registerEditor = function (newEditor, supportedItems) {
-                newEditor.on('focus', _.bind(function (event, focused) {
-                    if (focused && (editor !== newEditor)) {
-                        // set as current editor
-                        editor = newEditor;
-                        // update view components
-                        this.enableAndDisable(supportedItems);
-                    }
-                }, this));
+                newEditor
+                    .on('focus', _.bind(function (event, focused) {
+                        if (focused && (editor !== newEditor)) {
+                            // set as current editor
+                            editor = newEditor;
+                            // update view components
+                            this.enableAndDisable(supportedItems);
+                        }
+                    }, this));
                 return this;
             };
 
@@ -426,7 +427,7 @@ define('io.ox/office/main',
                 var node = $('<div>')
                         .addClass('io-ox-office-editor user-select-text ' + textMode)
                         .attr('contenteditable', true);
-                editors[textMode] = new Editor(controller, node, textMode);
+                editors[textMode] = new Editor(node, textMode);
             });
 
             // register GUI elements and editors at the controller

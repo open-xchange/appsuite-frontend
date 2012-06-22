@@ -15,6 +15,11 @@ define('io.ox/office/controller', function () {
 
     'use strict';
 
+    /**
+     * Dummy predicate function returning always true.
+     */
+    function TRUE() { return true; }
+
     // class Controller =======================================================
 
     /**
@@ -26,6 +31,9 @@ define('io.ox/office/controller', function () {
      *  A map of key/definition pairs. Each attribute in this map defines an
      *  item, keyed by its name. Definitions are maps themselves, supporting
      *  the following attributes:
+     *  - enable: (optional) Predicate function returning true if the item is
+     *      enabled, and false otherwise. Defaults to a function returning
+     *      always true.
      *  - get: (optional) Getter function returning the current value of the
      *      item. Can be omitted for one-way action items (actions without a
      *      return value). May return null to indicate an ambiguous state, or
@@ -149,6 +157,7 @@ define('io.ox/office/controller', function () {
                 // build the item object
                 var item = allItems[key] = {
                     // bind getters and setters to this controller instance
+                    enable: _.isFunction(def.enable) ? _.bind(def.enable, this) : TRUE,
                     get: _.isFunction(def.get) ? _.bind(def.get, this) : $.noop,
                     set: _.isFunction(def.set) ? _.bind(def.set, this) : $.noop,
                     // items are initially disabled

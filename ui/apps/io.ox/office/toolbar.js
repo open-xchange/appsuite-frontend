@@ -64,7 +64,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
     // static class Buttons ===================================================
 
     /**
-     * Static helper functions for push buttons.
+     * Static helper functions for any button elements.
      */
     function Buttons() {
         throw new Error('do not instantiate this class');
@@ -84,8 +84,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      * Creates and returns a new push button element.
      *
      * @param key {String}
-     *  The key associated to this button element. Will be stored in the
-     *  'data-key' attribute of the button.
+     *  (optional) The key associated to this button element. Will be stored in
+     *  the 'data-key' attribute of the button.
      *
      * @param options {Object}
      *  (optional) A map of options to control the properties of the new
@@ -97,31 +97,34 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
     Buttons.createButton = function (key, options) {
 
         var // create the DOM button element
-            button = $('<button>').addClass('btn').attr('data-key', key);
+            button = $('<button>').addClass('btn');
 
-        // button formatting
-        options = options || {};
-        if (typeof options.icon === 'string') {
-            button.append($('<i>').addClass(options.icon));
+        // add the key as data attribute
+        if (_.isString(key)) {
+            button.attr('data-key', key);
         }
-        if (typeof options.label === 'string') {
-            var prefix = button.has('> i') ? ' ' : '';
-            button.append($('<span>').text(prefix + options.label));
-        }
-        if (typeof options['class'] === 'string') {
-            button.addClass(options['class']);
-        }
-        if (typeof options.css === 'object') {
-            button.css(options.css);
-        }
-        if (typeof options.tooltip === 'string') {
-            button.attr('title', options.tooltip);
-        }
-        if (options.toggle === true) {
-            button.attr('data-toggle', 'toggle');
-        }
-        if ('disableOn' in options) {
-            button.attr('data-disable-on', JSON.stringify(options.disableOn));
+
+        // button attributes
+        if (_.isObject(options)) {
+            // add icon in an i element
+            if (_.isString(options.icon)) {
+                button.append($('<i>').addClass(options.icon));
+            }
+            // add text label, separate it from the icon
+            if (_.isString(options.label)) {
+                if (button.has('> i')) {
+                    button.append($('<span>').addClass('whitespace'));
+                }
+                button.append($('<span>').text(options.label));
+            }
+            // add tool tip text
+            if (_.isString(options.tooltip)) {
+                button.attr('title', options.tooltip);
+            }
+            // add toggle button marker
+            if (options.toggle === true) {
+                button.attr('data-toggle', 'toggle');
+            }
         }
 
         return button;
@@ -146,15 +149,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         var // create a simple button
             button = Buttons.createButton(key, options).addClass('dropdown-toggle').attr('data-toggle', 'dropdown');
 
-        // add a white space separator before the drop-down arrow
-        if (button.text().length) {
-            button.text(button.text() + ' ');
-        } else if (button.has('> i')) {
-            button.append($('<span>').text(' '));
-        }
-
-        // add the drop-down arrow
-        button.append($('<span>').addClass('caret'));
+        // add a white space separator and the drop-down arrow
+        button.append($('<span>').addClass('whitespace'), $('<span>').addClass('caret'));
 
         return button;
     };
@@ -200,6 +196,24 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      */
     Buttons.toggleButtons = function (buttons, state) {
         buttons.toggleClass(Buttons.ACTIVE_CLASS, state).find('> i').toggleClass('icon-white', state);
+    };
+
+    Buttons.activateToggleButton = function (button, value) {
+        if (Buttons.isToggleButton(button)) {
+            // Translate undefined (special 'no value' state) or null (special
+            // 'ambiguous' state) to false to prevent toggling the button as
+            // implemented by the method Buttons.toggleButtons().
+            // TODO: Support for null (tristate).
+            Buttons.toggleButtons(button, (_.isUndefined(value) || _.isNull(value)) ? false : value);
+        }
+    };
+
+    Buttons.activateRadioButton = function (buttons, value) {
+        Buttons.toggleButtons(buttons, false);
+        // ambiguous state indicated by null value
+        if (!_.isUndefined(value) && !_.isNull(value)) {
+            Buttons.toggleButtons(buttons.filter('[data-value="' + value + '"]'), true);
+        }
     };
 
     // public class ToolBar ===================================================
@@ -268,28 +282,83 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         // add event hub
         Events.extend(this);
 
-        // listen to 'update' events and update the associated control(s)
-        this.on('update', _.bind(function (event, key, value) {
-            if (key in updateHandlers) {
-                updateHandlers[key].call(this, selectControl(key), value);
-            }
-        }, this));
-
         // class RadioDropDownProxy -------------------------------------------
 
         /**
-         * Proxy class returned as inserter for buttons into a button radio
-         * drop-down control.
+         * Proxy class returned as inserter for buttons into a radio drop-down
+         * control.
+         *
+         * @param node {jQuery}
+         *  The parent DOM element used to insert the drop-down button and the
+         *  table area containing the radio buttons.
+         *
+         * @param key {String}
+         *  The unique key of this drop-down button.
+         *
+         * @param options {Object}
+         *  (optional) A map of options to control the properties of the
+         *  drop-down button or the table area. See method
+         *  ToolBar.createRadioDropDown() for details.
          */
         function RadioDropDownProxy(node, key, options) {
 
-            var // the drop-down button
-                dropDownButton,
-                // the button container
-                groupNode;
+            var // create the drop-down button
+                dropDownButton = Buttons.createDropDownButton(key).appendTo(node),
+
+                // create the table area
+                tableNode = $('<table>').addClass('dropdown-menu').appendTo(node),
+
+                // number of columns in the table
+                columns = (options && _.isNumber(options.columns) && (options.columns >= 1)) ? options.columns : 3,
+
+                // number of inserted buttons
+                buttonCount = 0;
+
+            function updateHandler(buttons, value) {
+                var button = buttons.filter('[data-value="' + value + '"]:first');
+                if (!button.length) {
+                    button = tableNode.find('button:first');
+                }
+                Buttons.activateRadioButton(buttons, value);
+                // update the contents of the drop-down button
+                dropDownButton.empty().append(
+                    button.contents().clone(),
+                    $('<span>').addClass('whitespace'),
+                    $('<span>').addClass('caret'));
+            }
+
+            function clickHandler(button) {
+                var value = button.attr('data-value');
+                updateHandler(selectControl(key), value);
+                return value;
+            }
 
             // create a single update handler for the entire radio group
-            registerUpdateHandler(key, RadioGroupProxy.updateHandler);
+            registerUpdateHandler(key, updateHandler);
+
+            /*
+             * The width of the table is restricted to the parent button group
+             * element, thus the table shrinks its buttons way too much. The
+             * only way (?) to expand the table to the correct width is to set
+             * its min-width property to the calculated width of the tbody. To
+             * do this, it is required to expand the min-width to a large value
+             * to give the tbody enough space, and then query its calculated
+             * width.
+             */
+            dropDownButton.on('click.io-ox-click-once', function () {
+                // calculate the width only on very first click
+                dropDownButton.off('click.io-ox-click-once');
+                // wait for the button to really become visible
+                window.setTimeout(function timer() {
+                    if (tableNode.css('display') !== 'none') {
+                        tableNode
+                            .css('min-width', '10000px')
+                            .css('min-width', tableNode.find('tbody').outerWidth() + 'px');
+                    } else {
+                        window.setTimeout(timer, 25);
+                    }
+                });
+            });
 
             /**
              * Adds a new button to this radio group.
@@ -304,14 +373,33 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             this.addButton = function (value, options) {
 
                 var // create the button
-                    button = Buttons.createButton(key, options).attr('data-value', value);
+                    button = Buttons.createButton(key, options).attr('data-value', value),
+                    // table row taking the new button
+                    tableRow = null,
+                    // column index for the new button
+                    column = buttonCount % columns;
 
-                // create drop-down button and button container on first call
-                if (!dropDownButton) {
-                    dropDownButton = Buttons.createDropDownButton(key, options).appendTo(node);
-                    groupNode = $('<table>').addClass('dropdown-menu').appendTo(node);
+                // create a new row in the table, and fill it with dummy buttons
+                if (column === 0) {
+                    tableRow = $('<tr>').appendTo(tableNode);
+                    _(columns).times(function () {
+                        // dummy button must contain something to get its correct height
+                        var dummy = Buttons.createButton(undefined, { label: ' ' });
+                        Controls.enableControls(dummy, false);
+                        tableRow.append($('<td>').append(dummy));
+                    });
+                } else {
+                    tableRow = tableNode.find('tr:last-child');
                 }
 
+                // select table cell (the :nth-child selector is 1-based), and
+                // replace the dummy button with the real button
+                tableRow.find('td:nth-child(' + (column + 1) + ')').empty().append(button);
+
+                // add click handler
+                registerActionHandler(button, 'click', clickHandler);
+
+                ++buttonCount;
                 return this;
             };
 
@@ -321,12 +409,6 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              */
             this.end = function () { return node; };
         }
-
-        RadioDropDownProxy.updateHandler = function (buttons, value) {
-        };
-
-        RadioDropDownProxy.clickHandler = function (button) {
-        };
 
         // class ButtonGroupProxy ---------------------------------------------
 
@@ -339,10 +421,10 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 groupNode = $('<div>').addClass('btn-group').appendTo(node);
 
             /**
-             * Adds a new button to this button group.
+             * Adds a new push button or toggle button to this button group.
              *
              * @param key {String}
-             *  The unique key of this button.
+             *  The unique key of the button.
              *
              * @param options {Object}
              *  (optional) A map of options to control the properties of the
@@ -354,12 +436,31 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                     button = Buttons.createButton(key, options).appendTo(groupNode);
 
                 // add handlers
-                registerUpdateHandler(key, ButtonGroupProxy.updateHandler);
+                registerUpdateHandler(key, Buttons.activateToggleButton);
                 registerActionHandler(button, 'click', ButtonGroupProxy.clickHandler);
 
                 return this;
             };
 
+            /**
+             * Adds a new drop-down button to this button group. When clicked,
+             * a table of buttons representing different values/options will be
+             * opened. One button is activated at a time (similar to a radio
+             * button group, see below).
+             *
+             * @param key {String}
+             *  The unique key of the radio drop-down button. This key is
+             *  shared by all buttons embedded in the drop-down table.
+             *
+             * @param options {Object}
+             *  (optional) A map of options to control the properties of the
+             *  drop-down group. See method ToolBar.createRadioDropDown() for
+             *  details.
+             *
+             * @returns {RadioDropDownPropxy}
+             *  A proxy object that implements the method addButton() to add
+             *  option buttons to the radio group.
+             */
             this.addRadioDropDown = function (key, options) {
                 return new RadioDropDownProxy(groupNode, key, options);
             };
@@ -370,17 +471,6 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              */
             this.end = getToolBar;
         }
-
-        ButtonGroupProxy.updateHandler = function (button, state) {
-            // check if the button disables itself on a specific value
-            var disableOn = button.attr('data-disable-on'),
-                enabled = !disableOn || (JSON.parse(disableOn) !== state);
-            Controls.enableControls(button, enabled);
-            if (enabled && Buttons.isToggleButton(button)) {
-                // translate undefined (no value) to false (prevent toggle)
-                Buttons.toggleButtons(button, _.isUndefined(state) ? false : state);
-            }
-        };
 
         ButtonGroupProxy.clickHandler = function (button) {
             if (Buttons.isToggleButton(button)) {
@@ -400,8 +490,14 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             var // create a new button group container
                 groupNode = $('<div>').addClass('btn-group').appendTo(node);
 
+            function clickHandler(button) {
+                var value = button.attr('data-value');
+                Buttons.activateRadioButton(selectControl(key), value);
+                return value;
+            }
+
             // create a single update handler for the entire radio group
-            registerUpdateHandler(key, RadioGroupProxy.updateHandler);
+            registerUpdateHandler(key, Buttons.activateRadioButton);
 
             /**
              * Adds a new button to this radio group.
@@ -419,7 +515,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                     button = Buttons.createButton(key, options).attr('data-value', value).appendTo(groupNode);
 
                 // add click handler
-                registerActionHandler(button, 'click', RadioGroupProxy.clickHandler);
+                registerActionHandler(button, 'click', clickHandler);
 
                 return this;
             };
@@ -430,22 +526,6 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              */
             this.end = getToolBar;
         }
-
-        RadioGroupProxy.updateHandler = function (buttons, value) {
-            Buttons.toggleButtons(buttons, false);
-            // ambiguous state indicated by null value
-            if (!_.isUndefined(value) && !_.isNull(value)) {
-                Buttons.toggleButtons(buttons.find('[data-value="' + value + '"]'), true);
-            }
-        };
-
-        RadioGroupProxy.clickHandler = function (button) {
-            var key = button.attr('data-key');
-            // deactivate all buttons matching the own key
-            Buttons.toggleButtons(selectControl(key), false);
-            Buttons.toggleButtons(button, true);
-            return button.attr('data-value');
-        };
 
         // methods ------------------------------------------------------------
 
@@ -473,34 +553,32 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          * Creates a radio button group, and appends it to this tool bar.
          *
          * @param key {String}
-         *  The unique key of the group.
+         *  The unique key of the group. This key is shared by all buttons
+         *  inserted into this group.
          *
          * @returns {RadioGroupProxy}
-         *  A proxy object that implements methods to add controls to the
-         *  group.
+         *  A proxy object that implements methods to add option buttons to the
+         *  radio group.
          */
         this.createRadioGroup = function (key) {
             return new RadioGroupProxy(key);
         };
 
         /**
-         * Creates a new push button in its own button group, and appends it to
-         * this tool bar.
+         * Creates a new push button or toggle button in its own button group,
+         * and appends it to this tool bar.
          *
          * @param key {String}
-         *  The unique key of this button.
+         *  The unique key of the button.
          *
          * @param options {Object}
          *  (optional) A map of options to control the properties of the new
-         *  button.
-         *  - icon: (optional) The name of the Bootstrap icon class, without
-         *      the 'icon-' prefix.
+         *  button. The following options are supported:
+         *  - icon: (optional) The full name of the Bootstrap or OX icon class.
          *  - label: (optional) The text label of the button. Will follow an
          *      icon.
-         *  - tooltip: (optional) Tool tip text.
-         *  - class: (optional) Additional CSS classes to be set at the button
-         *      (space-separated string).
-         *  - css: (optional) Additional CSS formatting (key/value map).
+         *  - tooltip: (optional) Tool tip text shown when the mouse hovers the
+         *      button.
          *  - toggle: (optional) If set to true, the button toggles its state
          *      and passes a boolean value to change listeners. Otherwise, the
          *      button is a simple push button and passes undefined to its
@@ -513,9 +591,32 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             return this.createButtonGroup().addButton(key, options).end();
         };
 
+        /**
+         * Creates a new drop-down button in its own button group, and appends
+         * it to this tool bar. When clicked, a table of buttons representing
+         * different values/options will be opened. One button is activated at
+         * a time (similar to a radio button group, see above).
+         *
+         * @param key {String}
+         *  The unique key of the radio drop-down button. This key is shared by
+         *  all buttons embedded in the drop-down table.
+         *
+         * @param options {Object}
+         *  (optional) A map of options to control the properties of the
+         *  drop-down group. Note that there are no options to specify the
+         *  contents of the drop-down button itself, because these contents
+         *  will be cloned dynamically from the embedded option button that is
+         *  currently active. The following options are supported:
+         *  - columns: (optional) Number of columns used to build the drop-down
+         *      button table. Defaults to the value 3.
+         *
+         * @returns {RadioDropDownPropxy}
+         *  A proxy object that implements the method addButton() to add option
+         *  buttons to the radio group.
+         */
         this.createRadioDropDown = function (key, options) {
-            // create a drop-down proxy whose end() method returns this tool bar
-            // instead of the dummy button group
+            // create a drop-down proxy whose end() method returns this tool
+            // bar instead of the dummy button group holding the drop-down
             var proxy = this.createButtonGroup().addRadioDropDown(key, options);
             proxy.end = getToolBar;
             return proxy;
@@ -566,7 +667,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          *  A reference to this tool bar.
          */
         this.update = function (key, value) {
-            this.trigger('update', key, value);
+            if (key in updateHandlers) {
+                updateHandlers[key].call(this, selectControl(key), value);
+            }
             return this;
         };
 
