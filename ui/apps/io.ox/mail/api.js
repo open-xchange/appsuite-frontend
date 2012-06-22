@@ -501,7 +501,7 @@ define("io.ox/mail/api",
                 appendColumns: false
             })
             .pipe(function (data) {
-                var text = '', quote = '', tmp;
+                var text = '', quote = '', tmp = '';
                 // transform pseudo-plain text to real text
                 if (data.attachments && data.attachments.length) {
                     if (data.attachments[0].content === '') {
