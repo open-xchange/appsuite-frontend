@@ -186,12 +186,14 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     transition: all 0.1s;
     -webkit-transition: all 0.1s;
     -moz-transition: all 0.1s;
+    z-index: 10;
 }
 
 #io-ox-screens.beside {
     right: 300px;
     left: -300px;
 }
+
 #io-ox-notifications {
     background-color: #222;
     top: 40px;
@@ -204,6 +206,20 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     -moz-transition: all 0.1s;
     border-top: 1px solid #000;
     overflow: hidden;
+    z-index: 30;
+}
+
+#io-ox-notifications-overlay {
+    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.05);
+    top: 40px;
+    right: 300px;
+    display: none;
+    z-index: 20;
+}
+
+#io-ox-notifications-overlay.active {
+    display: block;
 }
 
 .notifications {

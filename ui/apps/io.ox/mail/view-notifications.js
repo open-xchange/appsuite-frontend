@@ -70,9 +70,12 @@ define('io.ox/mail/view-notifications',
             api.get(api.reduce(this.model.get('data'))).done(function (data) {
                 require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
                     // open SidePopup without array
-                    new dialogs.SidePopup({ arrow: false }).show(e, function (popup) {
-                        popup.append(view.draw(data));
-                    });
+                    new dialogs.SidePopup({ arrow: false, side: 'right' })
+                        .setTarget($('#io-ox-notifications-overlay').empty())
+                        .show(e, function (popup) {
+                            popup.append(view.draw(data))
+                                .parent().removeClass('default-content-padding');
+                        });
                 });
             });
 
