@@ -203,7 +203,7 @@ define('io.ox/mail/view-detail',
                 return $('<div>').addClass('content').append(
                     $('<div>')
                     .addClass('infoblock backstripes')
-                    .text(gt('This email has no content'))
+                    .text(gt('This mail has no content'))
                 );
             }
 
