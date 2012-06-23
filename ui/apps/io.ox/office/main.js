@@ -27,6 +27,8 @@ define('io.ox/office/main',
 
     /**
      * Creates and returns a new instance of the main editor tool bar.
+     *
+     * @constructor
      */
     var MainToolBar = ToolBar.extend({
 
@@ -178,21 +180,21 @@ define('io.ox/office/main',
 
             debugMode = null;
 
-        /*
+        /**
          * Shows a closable error message above the editor.
          *
-         * @param message
+         * @param {String} message
          *  The message text.
          *
-         * @param title
-         *  (optional) The title of the error message. Defaults to 'Error'.
+         * @param {String} [title='Error']
+         *  The title of the error message. Defaults to 'Error'.
          */
         var showError = function (message, title) {
             appPane.find('.alert').remove();
             appPane.prepend($.alert(title || gt('Error'), message));
         };
 
-        /*
+        /**
          * Shows an error message extracted from the error object returned by
          * a jQuery AJAX call.
          */
@@ -200,7 +202,7 @@ define('io.ox/office/main',
             showError(data.responseText);
         };
 
-        /*
+        /**
          * Returns the URL passed to the AJAX calls used to convert a document
          * file from and to an operations list.
          */
@@ -285,7 +287,7 @@ define('io.ox/office/main',
          * Loads the document described in the options map passed in the
          * constructor of this application, and shows the application window.
          *
-         * @returns
+         * @returns {jQuery.Deferred}
          *  A deferred that reflects the result of the load operation.
          */
         app.load = function () {
@@ -316,7 +318,7 @@ define('io.ox/office/main',
         /**
          * Saves the document to its origin.
          *
-         * @returns
+         * @returns {jQuery.Deferred}
          *  A deferred that reflects the result of the save operation.
          */
         app.save = function () {
@@ -356,7 +358,7 @@ define('io.ox/office/main',
          * down. If the edited document has unsaved changes, a dialog will be
          * shown asking whether to save or drop the changes.
          *
-         * @returns
+         * @returns {jQuery.Deferred}
          *  A deferred that will be resolved if the application can be closed
          *  (either if it is unchanged, or the user has chosen to save or lose
          *  the changes), or will be rejected if the application must remain

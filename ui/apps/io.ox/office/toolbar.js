@@ -28,7 +28,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      * Returns whether the first form control in the passed jQuery collection
      * is enabled.
      *
-     * @param control {jQuery}
+     * @param {jQuery} control
      *  A jQuery collection containing a form control supporting the 'disabled'
      *  attribute.
      *
@@ -44,13 +44,13 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      * Enables or disables all form controls in the passed jQuery collection by
      * changing their 'disabled' attributes.
      *
-     * @param controls {jQuery}
+     * @param {jQuery} controls
      *  A jQuery collection containing one or more form controls supporting the
      *  'disabled' attribute.
      *
-     * @param state {Boolean}
-     *  (optional) If omitted or set to true, all form controls in the passed
-     *  collection will be enabled. Otherwise, all controls will be disabled.
+     * @param {Boolean} [state]
+     *  If omitted or set to true, all form controls in the passed collection
+     *  will be enabled. Otherwise, all controls will be disabled.
      */
     Controls.enableControls = function (controls, state) {
         var enabled = (state === true) || (state === undefined);
@@ -83,13 +83,13 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
     /**
      * Creates and returns a new push button element.
      *
-     * @param key {String}
-     *  (optional) The key associated to this button element. Will be stored in
-     *  the 'data-key' attribute of the button.
+     * @param {String} [key]
+     *  The key associated to this button element. Will be stored in the
+     *  'data-key' attribute of the button.
      *
-     * @param options {Object}
-     *  (optional) A map of options to control the properties of the new
-     *  button. See method ToolBar.createButton() for details.
+     * @param {Object} [options]
+     *  A map of options to control the properties of the new button. See
+     *  method ToolBar.createButton() for details.
      *
      * @returns {jQuery}
      *  A jQuery object containing the new button element.
@@ -134,7 +134,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      * Returns whether the first button control in the passed jQuery collection
      * is a toggle button.
      *
-     * @param button {jQuery}
+     * @param {jQuery} button
      *  A jQuery collection containing a button element.
      *
      * @returns {Boolean}
@@ -148,7 +148,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      * Returns whether the first button control in the passed jQuery collection
      * is active.
      *
-     * @param button {jQuery}
+     * @param {jQuery} button
      *  A jQuery collection containing a button element.
      *
      * @returns {Boolean}
@@ -162,12 +162,12 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      * Activates, deactivates, or toggles the passed button or collection of
      * buttons.
      *
-     * @param buttons {jQuery}
+     * @param {jQuery} buttons
      *  A jQuery collection containing one or more button elements.
      *
-     * @param state {Boolean}
-     *  (optional) If omitted, toggles the state of all buttons. Otherwise,
-     *  activates or deactivates all buttons.
+     * @param {Boolean} [state]
+     *  If omitted, toggles the state of all buttons. Otherwise, activates or
+     *  deactivates all buttons.
      */
     Buttons.toggleButtons = function (buttons, state) {
         buttons.toggleClass(Buttons.ACTIVE_CLASS, state).find('> i').toggleClass('icon-white', state);
@@ -178,6 +178,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
     /**
      * A tool bar is a container of form controls which are organized and
      * displayed as a horizontal bar.
+     *
+     * @constructor
      */
     function ToolBar() {
 
@@ -187,7 +189,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             // control update handlers, mapped by key
             updateHandlers = {},
 
-            // function returning a reference to this tool bar
+            // helper function returning a reference to this tool bar
             getToolBar = _.bind(function () { return this; }, this);
 
         /**
@@ -195,7 +197,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          * returned object may contain multiple elements, e.g. for radio button
          * groups.
          *
-         * @param key {String}
+         * @param {String} key
          *  The unique key of the control.
          *
          * @returns {jQuery}
@@ -210,10 +212,10 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          * handlers will be executed, when the tool bar receives 'update'
          * events.
          *
-         * @param key
+         * @param {String} key
          *  The unique key of the control.
          *
-         * @param updateHandler
+         * @param {Function} updateHandler
          *  The update handler function. Will be called in the context of this
          *  tool bar. Receives the control associated to the passed key, and
          *  the value passed to the 'update' event.
@@ -245,19 +247,21 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          * Proxy class returned as inserter for buttons into a radio drop-down
          * control.
          *
-         * @param node {jQuery}
+         * @constructor
+         *
+         * @param {jQuery} node
          *  The parent DOM element used to insert the drop-down button and the
          *  table area containing the radio buttons.
          *
-         * @param key {String}
+         * @param {String} key
          *  The unique key of this drop-down button.
          *
-         * @param options {Object}
-         *  (optional) A map of options to control the properties of the
-         *  drop-down button or the table area. See method
-         *  ToolBar.createRadioDropDown() for details.
+         * @param {Object} [options]
+         *  A map of options to control the properties of the drop-down button
+         *  or the table area. See method ToolBar.createRadioDropDown() for
+         *  details.
          */
-        function RadioDropDownProxy(node, key, options) {
+        function RadioDropDownProxy(parent, node, key, options) {
 
             var // create the drop-down button
                 dropDownButton = Buttons.createButton(key).addClass('dropdown-toggle').attr('data-toggle', 'dropdown').appendTo(node),
@@ -307,9 +311,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              * to give the tbody enough space, and then query its calculated
              * width.
              */
-            dropDownButton.on('click.io-ox-click-once', function () {
-                // calculate the width only on very first click
-                dropDownButton.off('click.io-ox-click-once');
+            dropDownButton.one('click', function () {
                 // wait for the button to really become visible
                 window.setTimeout(function timer() {
                     if (tableNode.css('display') !== 'none') {
@@ -328,12 +330,12 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             /**
              * Adds a new button to this radio group.
              *
-             * @param value {String}
+             * @param {String} value
              *  The unique value associated to this button.
              *
-             * @param options {Object}
-             *  (optional) A map of options to control the properties of the
-             *  new button. See method ToolBar.createButton() for details.
+             * @param {Object} [options]
+             *  A map of options to control the properties of the new button.
+             *  See method ToolBar.createButton() for details.
              */
             this.addButton = function (value, options) {
 
@@ -377,13 +379,15 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              * Returns a reference to the parent button group containing this
              * drop-down button. Useful for method chaining.
              */
-            this.end = function () { return node; };
+            this.end = function () { return parent; };
         }
 
         // class ButtonGroupProxy ---------------------------------------------
 
         /**
          * Proxy class returned as inserter for buttons into a button group.
+         *
+         * @constructor
          */
         function ButtonGroupProxy() {
 
@@ -400,12 +404,12 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             /**
              * Adds a new push button or toggle button to this button group.
              *
-             * @param key {String}
+             * @param {String} key
              *  The unique key of the button.
              *
-             * @param options {Object}
-             *  (optional) A map of options to control the properties of the
-             *  new button. See method ToolBar.createButton() for details.
+             * @param {Object} [options]
+             *  A map of options to control the properties of the new button.
+             *  See method ToolBar.createButton() for details.
              */
             this.addButton = function (key, options) {
 
@@ -433,21 +437,20 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              * opened. One button is activated at a time (similar to a radio
              * button group, see below).
              *
-             * @param key {String}
+             * @param {String} key
              *  The unique key of the radio drop-down button. This key is
              *  shared by all buttons embedded in the drop-down table.
              *
-             * @param options {Object}
-             *  (optional) A map of options to control the properties of the
-             *  drop-down group. See method ToolBar.createRadioDropDown() for
-             *  details.
+             * @param {Object} options
+             *  A map of options to control the properties of the drop-down
+             *  group. See method ToolBar.createRadioDropDown() for details.
              *
              * @returns {RadioDropDownPropxy}
              *  A proxy object that implements the method addButton() to add
              *  option buttons to the radio group.
              */
             this.addRadioDropDown = function (key, options) {
-                return new RadioDropDownProxy(groupNode, key, options);
+                return new RadioDropDownProxy(this, groupNode, key, options);
             };
 
             /**
@@ -462,6 +465,12 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         /**
          * Proxy class returned as inserter for buttons into a button radio
          * group.
+         *
+         * @constructor
+         *
+         * @param {String} key
+         *  The unique key of the radio group. This key is shared by all
+         *  buttons inserted into this group.
          */
         function RadioGroupProxy(key) {
 
@@ -494,12 +503,12 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             /**
              * Adds a new button to this radio group.
              *
-             * @param value {String}
+             * @param {String} value
              *  The unique value associated to this button.
              *
-             * @param options {Object}
-             *  (optional) A map of options to control the properties of the
-             *  new button. See method ToolBar.createButton() for details.
+             * @param {Object} [options]
+             *  A map of options to control the properties of the new button.
+             *  See method ToolBar.createButton() for details.
              */
             this.addButton = function (value, options) {
 
@@ -544,7 +553,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         /**
          * Creates a radio button group, and appends it to this tool bar.
          *
-         * @param key {String}
+         * @param {String} key
          *  The unique key of the group. This key is shared by all buttons
          *  inserted into this group.
          *
@@ -560,21 +569,19 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          * Creates a new push button or toggle button in its own button group,
          * and appends it to this tool bar.
          *
-         * @param key {String}
+         * @param {String} key
          *  The unique key of the button.
          *
-         * @param options {Object}
-         *  (optional) A map of options to control the properties of the new
-         *  button. The following options are supported:
-         *  - icon: (optional) The full name of the Bootstrap or OX icon class.
-         *  - label: (optional) The text label of the button. Will follow an
-         *      icon.
-         *  - tooltip: (optional) Tool tip text shown when the mouse hovers the
-         *      button.
-         *  - toggle: (optional) If set to true, the button toggles its state
-         *      and passes a boolean value to change listeners. Otherwise, the
-         *      button is a simple push button and passes undefined to its
-         *      change listeners.
+         * @param {Object} [options]
+         *  A map of options to control the properties of the new button. The
+         *  following options are supported:
+         *  - icon: The full name of the Bootstrap or OX icon class.
+         *  - label: The text label of the button. Will follow an icon.
+         *  - tooltip: Tool tip text shown when the mouse hovers the button.
+         *  - toggle: If set to true, the button toggles its state and passes a
+         *      boolean value to change listeners. Otherwise, the button is a
+         *      simple push button and passes undefined to its change
+         *      listeners.
          *
          * @returns {ToolBar}
          *  A reference to this tool bar.
@@ -589,18 +596,18 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          * different values/options will be opened. One button is activated at
          * a time (similar to a radio button group, see above).
          *
-         * @param key {String}
+         * @param {String} key
          *  The unique key of the radio drop-down button. This key is shared by
          *  all buttons embedded in the drop-down table.
          *
-         * @param options {Object}
-         *  (optional) A map of options to control the properties of the
-         *  drop-down group. Note that there are no options to specify the
-         *  contents of the drop-down button itself, because these contents
-         *  will be cloned dynamically from the embedded option button that is
-         *  currently active. The following options are supported:
-         *  - columns: (optional) Number of columns used to build the drop-down
-         *      button table. Defaults to the value 3.
+         * @param {Object} [options]
+         *  A map of options to control the properties of the drop-down group.
+         *  Note that there are no options to specify the contents of the
+         *  drop-down button itself, because these contents will be cloned
+         *  dynamically from the embedded option button that is currently
+         *  active. The following options are supported:
+         *  - columns: Number of columns used to build the drop-down button
+         *      table. Defaults to the value 3.
          *
          * @returns {RadioDropDownPropxy}
          *  A proxy object that implements the method addButton() to add option
@@ -617,12 +624,12 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         /**
          * Enables or disables the specified control of this tool bar.
          *
-         * @param key {String}
+         * @param {String} key
          *  The keys of the control to be enabled or disabled.
          *
-         * @param state {Boolean}
-         *  (optional) If omitted or set to true, all controls will be enabled.
-         *  Otherwise, all controls will be disabled.
+         * @param {Boolean} [state]
+         *  If omitted or set to true, all controls will be enabled. Otherwise,
+         *  all controls will be disabled.
          *
          * @returns {ToolBar}
          *  A reference to this tool bar.
@@ -636,7 +643,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          * Disables the specified control of this tool bar. Has the same effect
          * as calling ToolBar.enable(key, false).
          *
-         * @param key {String}
+         * @param {String} key
          *  The key of the control to be disabled.
          *
          * @returns {ToolBar}
@@ -649,7 +656,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         /**
          * Updates the specified control with the specified value.
          *
-         * @param key {String}
+         * @param {String} key
          *  The key of the control to be updated.
          *
          * @param value
