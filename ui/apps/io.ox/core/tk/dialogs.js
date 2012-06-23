@@ -393,6 +393,8 @@ define("io.ox/core/tk/dialogs",
         open = function (e, handler) {
             // get proper elements
             var my = $(this), zIndex, sidepopup;
+            console.log('open sidepopup', my);
+
             self.nodes = {
                 closest: my.parents(".io-ox-sidepopup-pane, .window-content"),
                 click: my.parents(".io-ox-sidepopup-pane, .window-body"),

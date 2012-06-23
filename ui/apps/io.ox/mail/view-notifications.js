@@ -72,9 +72,10 @@ define('io.ox/mail/view-notifications',
 
             require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
                 var msg = self.model.toJSON();
-                var popup = new dialogs.SidePopup().show(e, function () {
+                console.log('try to open sidepopup', e);
+                var popup = new dialogs.SidePopup().show.apply(self.el, [e, function () {
                     console.log('handler is called', arguments);
-                });
+                }]);
                 window.sidepop = popup;
                 console.log('popup', popup);
             });

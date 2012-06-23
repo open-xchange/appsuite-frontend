@@ -16,10 +16,13 @@ define('io.ox/calendar/edit/view-addparticipants',
        'io.ox/core/tk/autocomplete',
        'io.ox/calendar/edit/view-participant',
        'io.ox/calendar/edit/model-participant',
+       'io.ox/core/api/autocomplete',
        'io.ox/mail/util',
-       'gettext!io.ox/calendar/edit/main'], function (calendarAPI, autocomplete, ParticipantView, ParticipantModel, mailUtil, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (calendarAPI, autocomplete, ParticipantView, ParticipantModel, AutocompleteAPI, mailUtil, gt) {
 
     'use strict';
+
+    var autocompleteAPI = new AutocompleteAPI({id: 'participants', contacts: true, groups: true, resources: true});
 
     var AddParticipantView = Backbone.View.extend({
         events: {
@@ -41,12 +44,18 @@ define('io.ox/calendar/edit/view-addparticipants',
                 .autocomplete({
                     parentSelector: '.io-ox-calendar-edit',
                     source: function (query) {
-                        var df = new $.Deferred();
+                        var ret = autocompleteAPI.search(query);
+                        console.log('on source', ret);
+                        ret.done(function (a) {
+                            console.log('got results hrere', arguments);
+                        });
+                        return ret;
+                        //var df = new $.Deferred();
                         //return contactAPI.autocomplete(query);
-                        return calendarAPI.searchParticipants(query); //, {columns: '20,1,500,501,502,505,520,555,556,557,569,602,606'});
+                        //return calendarAPI.searchParticipants(query); //, {columns: '20,1,500,501,502,505,520,555,556,557,569,602,606'});
                     },
                     stringify: function (data) {
-                        return (data) ? data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''): '';
+                        return (data && data.display_name) ? data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''): '';
                     },
                     draw: function (data) {
                         if (data.constructor.toString().indexOf('Object') !== -1) {

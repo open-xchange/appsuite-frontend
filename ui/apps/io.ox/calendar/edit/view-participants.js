@@ -29,8 +29,6 @@ define('io.ox/calendar/edit/view-participants',
             'mouseout .remove': 'onMouseOutRemove'
         },
         initialize: function (options) {
-            window.parts = this.collection;
-            console.log('init:', options);
             var viewCreator = function (model) {
                 return new ParticipantView({model: model});
             };

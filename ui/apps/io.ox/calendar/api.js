@@ -146,21 +146,21 @@ define("io.ox/calendar/api",
                         sort: '500',
                         order: 'asc',
                         data: {
-                            pattern: '*' + query + '*'
+                            pattern: query + '*'
                         }
                     },
                     {
                         module: 'group',
                         action: 'search',
                         data: {
-                            pattern: '*' + query + '*'
+                            pattern: query + '*'
                         }
                     },
                     {
                         module: 'resource',
                         action: 'search',
                         data: {
-                            pattern: '*' + query + '*'
+                            pattern: query + '*'
                         }
                     },
                     {
@@ -170,12 +170,12 @@ define("io.ox/calendar/api",
                         sort: '500',
                         order: 'asc',
                         data: {
-                            display_name: '*' + query + '*',
-                            email1: '*' + query + '*',
-                            email2: '*' + query + '*',
-                            email3: '*' + query + '*',
-                            last_name: '*' + query + '*',
-                            first_name: '*' + query + '*',
+                            display_name: query + '*',
+                            email1: query + '*',
+                            email2: query + '*',
+                            email3: query + '*',
+                            last_name: query + '*',
+                            first_name: query + '*',
                             orSearch: true
                         }
                     }

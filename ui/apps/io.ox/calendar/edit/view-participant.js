@@ -46,7 +46,7 @@ define('io.ox/calendar/edit/view-participant',
                 return this.renderExternalUser();
             }
 
-
+            return this;
         },
         renderUser: function () {
             var self = this;
