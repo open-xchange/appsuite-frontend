@@ -37,27 +37,49 @@ define('io.ox/calendar/edit/view-addparticipants',
                 renderedContent;
 
 
-            self.autoparticpants = window.auto = self.$el.find('.add-participant')
+            // rework to work this with the given object, without piping it
+            // so the choosen email could be rendered in the selected
+            // entries - or even think about it, because if its a internal user
+            // the user should be rendered
+            // if its an external user, than the mail - where the match was
+
+            self.autoparticpants = self.$el.find('.add-participant')
                 .attr('autocapitalize', 'off')
                 .attr('autocorrect', 'off')
                 .attr('autocomplete', 'off')
                 .autocomplete({
                     parentSelector: '.io-ox-calendar-edit',
                     source: function (query) {
-                        var ret = autocompleteAPI.search(query);
-                        console.log('on source', ret);
-                        ret.done(function (a) {
-                            console.log('got results hrere', arguments);
-                        });
-                        return ret;
-                        //var df = new $.Deferred();
-                        //return contactAPI.autocomplete(query);
-                        //return calendarAPI.searchParticipants(query); //, {columns: '20,1,500,501,502,505,520,555,556,557,569,602,606'});
+                        return autocompleteAPI.search(query)
+                            .pipe(function (data) {
+                                var ndata = _(data).map(function (dataItem) {
+                                    switch (dataItem.type) {
+                                    case 'contact':
+                                        if (dataItem.data.internal_userid) {
+                                            dataItem.data.type = 1; //user
+                                            dataItem.data.id = dataItem.data.internal_userid; //just to fix a little issue
+                                        } else {
+                                            dataItem.data.type = 5; //external
+                                        }
+                                        return dataItem.data;
+                                    case 'resource':
+                                        dataItem.data.type = 3; //resource
+                                        return dataItem.data;
+                                    case 'group':
+                                        dataItem.data.type = 2; //group
+                                        return dataItem.data;
+                                    }
+                                });
+
+                                console.log('piping source:', ndata);
+                                return ndata;
+                            });
                     },
                     stringify: function (data) {
                         return (data && data.display_name) ? data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''): '';
                     },
                     draw: function (data) {
+                        console.log('draw', data);
                         if (data.constructor.toString().indexOf('Object') !== -1) {
                             data.image1_url = data.image1_url || '';
                             var pmodel = new ParticipantModel(data);

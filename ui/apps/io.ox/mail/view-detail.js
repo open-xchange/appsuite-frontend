@@ -264,7 +264,7 @@ define('io.ox/mail/view-detail',
 
             // process all text nodes unless mail is too large (> 512 KB)
             if (!isLarge) {
-                content.contents().add(content.find('*').contents()).each(function () {
+                content.contents().add(content.find('*').not('style').contents()).each(function () {
                     if (this.nodeType === 3) {
                         var node = $(this), text = this.nodeValue, length = text.length, m;
                         // split long character sequences for better wrapping

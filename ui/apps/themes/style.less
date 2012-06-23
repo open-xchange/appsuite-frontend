@@ -186,12 +186,14 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     transition: all 0.1s;
     -webkit-transition: all 0.1s;
     -moz-transition: all 0.1s;
+    z-index: 10;
 }
 
 #io-ox-screens.beside {
     right: 300px;
     left: -300px;
 }
+
 #io-ox-notifications {
     background-color: #222;
     top: 40px;
@@ -204,6 +206,20 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     -moz-transition: all 0.1s;
     border-top: 1px solid #000;
     overflow: hidden;
+    z-index: 30;
+}
+
+#io-ox-notifications-overlay {
+    background-color: transparent;
+    background-color: rgba(255, 255, 255, 0.10);
+    top: 40px;
+    right: 300px;
+    display: none;
+    z-index: 20;
+}
+
+#io-ox-notifications-overlay.active {
+    display: block;
 }
 
 .notifications {
@@ -233,7 +249,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 #io-ox-notifications-display .item {
     color: #fff;
     background-color: #333;
-    padding: 5px 13px 13px 13px;
+    padding: 7px 13px 7px 13px;
     margin-bottom: 1px;
     cursor: pointer;
 }
@@ -265,6 +281,8 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     text-overflow: ellipsis;
     margin-top: 3px;
 }
+
+#io-ox-notifications-display a { color: #17B2FF; }
 
 #io-ox-windowmanager-pane {
     left: 0%;

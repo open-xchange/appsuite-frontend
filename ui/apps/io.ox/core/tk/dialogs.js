@@ -310,7 +310,9 @@ define("io.ox/core/tk/dialogs",
         Dialog.call(this, options);
     };
 
-    var SidePopup = function (width) {
+    var SidePopup = function (options) {
+
+        options = options || {};
 
         var processEvent,
             isProcessed,
@@ -319,6 +321,7 @@ define("io.ox/core/tk/dialogs",
             closeByEscapeKey,
             closeByScroll,
             closeByClick,
+            previousProp,
             timer = null,
 
             pane = $("<div>")
@@ -330,10 +333,13 @@ define("io.ox/core/tk/dialogs",
                 .addClass("io-ox-sidepopup abs")
                 .append(closeIcon, pane),
 
-            arrow = $("<div>")
+            arrow = options.arrow === false ? $() :
+                $("<div>")
                 .addClass("io-ox-sidepopup-arrow")
                 .append($("<div>").addClass("border"))
                 .append($("<div>").addClass("triangle")),
+
+            target = null,
 
             self = this;
 
@@ -371,9 +377,9 @@ define("io.ox/core/tk/dialogs",
         close = function (e) {
             // remove handlers & avoid leaks
             $(document).off("keydown", closeByEscapeKey);
-            self.nodes.closest.off("scroll", closeByScroll);
+            self.nodes.closest.off("scroll", closeByScroll).prop('sidepopup', previousProp);
             self.nodes.click.off("click", closeByClick);
-            self.lastTrigger = null;
+            self.lastTrigger = previousProp = null;
             // use time to avoid flicker
             timer = setTimeout(function () {
                 arrow.detach();
@@ -396,15 +402,15 @@ define("io.ox/core/tk/dialogs",
             console.log('open sidepopup', my);
 
             self.nodes = {
-                closest: my.parents(".io-ox-sidepopup-pane, .window-content"),
-                click: my.parents(".io-ox-sidepopup-pane, .window-body"),
-                target: my.parents(".window-body")
+                closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .notifications-overlay"),
+                click: my.parents(".io-ox-sidepopup-pane, .window-body, .notifications-overlay"),
+                target: target || my.parents(".window-body, .notifications-overlay")
             };
             // get active side popup & triggering element
             sidepopup = self.nodes.closest.prop("sidepopup") || null;
             self.lastTrigger = sidepopup ? sidepopup.lastTrigger : null;
             // get zIndex for visual stacking
-            zIndex = (my.parents(".io-ox-sidepopup, .window-content").css("zIndex") || 1) + 2;
+            zIndex = (my.parents(".io-ox-sidepopup, .window-content, .notifications-overlay").css("zIndex") || 1) + 2;
             // second click?
             if (self.lastTrigger === this) {
                 close(e);
@@ -417,6 +423,7 @@ define("io.ox/core/tk/dialogs",
 
                 // remember as current trigger
                 self.lastTrigger = this;
+                previousProp = sidepopup;
                 self.nodes.closest.prop("sidepopup", self);
 
                 // prevent default to avoid close
@@ -435,8 +442,12 @@ define("io.ox/core/tk/dialogs",
                     firstPopup = parentPopup.length === 0;
 
                 // get side
-                mode = (firstPopup && my.offset().left > docWidth / 2) ||
-                    parentPopup.hasClass("right")  ? 'left' : 'right';
+                if (/^(left|right)$/.test(options.side)) {
+                    mode = options.side;
+                } else {
+                    mode = (firstPopup && my.offset().left > docWidth / 2) ||
+                        parentPopup.hasClass("right")  ? 'left' : 'right';
+                }
 
                 popup.add(arrow).removeClass("left right").addClass(mode).css('zIndex', zIndex);
                 arrow.css('zIndex', zIndex + 1);
@@ -464,6 +475,11 @@ define("io.ox/core/tk/dialogs",
                     open.call(this, e, handler);
                 }
             });
+            return this;
+        };
+
+        this.setTarget = function (t) {
+            target = $(t);
             return this;
         };
 

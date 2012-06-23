@@ -20,13 +20,17 @@ define('io.ox/mail/view-notifications',
     'use strict';
 
     function beatifyMailText(str) {
-        str = $.trim(String(str).substr(0, 500)); // trim & limit overall length
-        return str
+        str = String(str)
+            .substr(0, 500) // limit overall length
             .replace(/-{3,}/g, '---') // reduce dashes
             .replace(/<br\s?\/?>(&gt;)+/ig, ' ') // remove quotes after line breaks
             .replace(/<br\s?\/?>/ig, ' ') // remove line breaks
             .replace(/<[^>]+(>|$)/g, '') // strip tags
-            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank">http$2://...</a>'); // links
+            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank">http$2://...</a>') // links
+            .replace(/&#160;/g, ' ') // convert to simple white space
+            .replace(/\s{2,}/g, ' '); // reduce consecutive white space
+        // trim
+        return $.trim(str);
     }
 
 
@@ -43,9 +47,10 @@ define('io.ox/mail/view-notifications',
             self.$el.empty().append(tpl.render('io.ox/mail/notification', {}));
             self._modelBinder.bind(self.model, self.el, Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property'));
 
-            api.get(self.model.toJSON(), {unseen: true, view: 'text'})
+            // fetch plain text mail; don't use cache
+            var obj = _.extend(api.reduce(self.model.toJSON()), { unseen: true, view: 'text' });
+            api.get(obj, false)
                 .done(function (data) {
-                    console.log('model loaded', data);
                     var f = data.from || [['', '']];
                     self.model.set({
                         title: util.getDisplayName(f[0]),
@@ -60,38 +65,59 @@ define('io.ox/mail/view-notifications',
 
         },
         onClickItem: function (e) {
-            console.log('click item', arguments);
-            // #!&app=io.ox/mail&folder=default0/INBOX&id=default0/INBOX.3098
-            notficationsConroller.hideList();
-            var self = this;
-            var getObj = {
-                folder: this.model.get('data').folder_id,
-                id: this.model.get('data').folder_id + '.' + this.model.get('data').id
-            };
-            console.log('clicking launching', getObj, this.model);
+            var obj = api.reduce(this.model.get('data')),
+                overlay = $('#io-ox-notifications-overlay'),
+                sidepopup = overlay.prop('sidepopup'),
+                cid = overlay.find('[data-cid]').data('cid');
 
-            require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
-                var msg = self.model.toJSON();
-                console.log('try to open sidepopup', e);
-                var popup = new dialogs.SidePopup().show.apply(self.el, [e, function () {
-                    console.log('handler is called', arguments);
-                }]);
-                window.sidepop = popup;
-                console.log('popup', popup);
-            });
+            // toggle?
+            if (sidepopup && cid === _.cid(obj)) {
+                sidepopup.close();
+            } else {
+                // fetch proper mail first
+                api.get(obj).done(function (data) {
+                    require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
+                        // open SidePopup without array
+                        new dialogs.SidePopup({ arrow: false, side: 'right' })
+                            .setTarget(overlay.empty())
+                            .show(e, function (popup) {
+                                popup.append(view.draw(data))
+                                    .parent().removeClass('default-content-padding');
+                            });
+                    });
+                });
+            }
 
-
-            /*ox.launch('io.ox/mail/main', getObj).done(function () {
-                console.log('launched', this);
-
-                if (self.model.collection) {
-                    self.model.collection.remove(self.model);
-                }
-                //self.model.destroy(); // destroy the model
-                this.setState(getObj);
-            }).fail(function () {
-                console.log('failed launching app', arguments);
-            });*/
+//            console.log('click item', arguments);
+//            // #!&app=io.ox/mail&folder=default0/INBOX&id=default0/INBOX.3098
+//            notficationsConroller.hideList();
+//
+//            var self = this;
+//            var getObj = {
+//                folder: .folder_id,
+//                id: this.model.get('data').folder_id + '.' + this.model.get('data').id
+//            };
+//            console.log('clicking launching', getObj, this.model);
+//
+//            require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
+//                var msg = self.model.toJSON();
+//                var popup = new dialogs.SidePopup();
+//                window.sidepop = popup;
+//                console.log('popup', popup);
+//            });
+//
+//
+//            /*ox.launch('io.ox/mail/main', getObj).done(function () {
+//                console.log('launched', this);
+//
+//                if (self.model.collection) {
+//                    self.model.collection.remove(self.model);
+//                }
+//                //self.model.destroy(); // destroy the model
+//                this.setState(getObj);
+//            }).fail(function () {
+//                console.log('failed launching app', arguments);
+//            });*/
         }
     });
 

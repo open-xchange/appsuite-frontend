@@ -174,10 +174,10 @@ define("io.ox/mail/api",
     });
 
     api.SENDTYPE = {
-        NORMAL:  1,
-        REPLY:   2,
-        FORWARD: 3,
-        DRAFT:   4
+        NORMAL:  0,
+        REPLY:   1,
+        FORWARD: 2,
+        DRAFT:   3
     };
 
     api.FLAGS = {
@@ -501,7 +501,7 @@ define("io.ox/mail/api",
                 appendColumns: false
             })
             .pipe(function (data) {
-                var text = '', quote = '', tmp;
+                var text = '', quote = '', tmp = '';
                 // transform pseudo-plain text to real text
                 if (data.attachments && data.attachments.length) {
                     if (data.attachments[0].content === '') {
@@ -828,29 +828,6 @@ define("io.ox/mail/api",
                 api.trigger('refresh.all');
             });
         }
-    };
-
-
-    api.getMailsWithOptions = function (mails, options) {
-        http.pause();
-        console.log('GETTING', mails);
-        _(mails).each(function (mail) {
-            api.get({
-                folder: mail.folder_id || mail.folder,
-                id: mail.id,
-                unseen: options.unseen || "false",
-                view: options.view || "html"
-            });
-        });
-        return http.resume().pipe(function (fetched) {
-            var data = [];
-            _(fetched).each(function (item) {
-                data.push(item.data);
-            });
-
-            return data;
-
-        });
     };
 
     function updateTopLevel(folder_id, mapper) {
