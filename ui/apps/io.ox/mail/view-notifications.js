@@ -87,37 +87,6 @@ define('io.ox/mail/view-notifications',
                     });
                 });
             }
-
-//            console.log('click item', arguments);
-//            // #!&app=io.ox/mail&folder=default0/INBOX&id=default0/INBOX.3098
-//            notficationsConroller.hideList();
-//
-//            var self = this;
-//            var getObj = {
-//                folder: .folder_id,
-//                id: this.model.get('data').folder_id + '.' + this.model.get('data').id
-//            };
-//            console.log('clicking launching', getObj, this.model);
-//
-//            require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
-//                var msg = self.model.toJSON();
-//                var popup = new dialogs.SidePopup();
-//                window.sidepop = popup;
-//                console.log('popup', popup);
-//            });
-//
-//
-//            /*ox.launch('io.ox/mail/main', getObj).done(function () {
-//                console.log('launched', this);
-//
-//                if (self.model.collection) {
-//                    self.model.collection.remove(self.model);
-//                }
-//                //self.model.destroy(); // destroy the model
-//                this.setState(getObj);
-//            }).fail(function () {
-//                console.log('failed launching app', arguments);
-//            });*/
         }
     });
 
@@ -137,11 +106,9 @@ define('io.ox/mail/view-notifications',
 
             api.on('unseen-mail', function (e, data) {
                 self.model.set('unread', _(data).size());
-                console.log('unseen mails:', data);
             });
         },
         render: function () {
-            console.log('render mail notifications');
             this.$el.empty().append(tpl.render('io.ox/mail/notifications', {}));
 
             for (var i = 0; i < this.collection.size() && i < 3; i++) {

@@ -40,7 +40,6 @@ define('io.ox/core/notifications/main',
         },
         render: function (notifications) {
             var self = this;
-            console.log('render notifications', self, notifications);
 
             self.$el.empty();
 
@@ -93,7 +92,6 @@ define('io.ox/core/notifications/main',
         },
         get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {
-                console.log('created notfication collection', this.notifications);
                 var module = {};
                 module.collection = new NotificationCollection([]);
                 module.ListView = listview;
@@ -107,21 +105,17 @@ define('io.ox/core/notifications/main',
             return this.notifications[key];
         },
         onAddNotification: function () {
-            console.log('add notification', arguments);
             this.badgeView.$el.addClass('badge-error');
             this.update();
         },
         onRemoveNotification: function () {
-            console.log('remove notification', arguments);
             this.update();
         },
         onResetNotifications: function () {
-            console.log('reset notifications', arguments);
             this.badgeView.$el.addClass('badge-error');
             this.update();
         },
         update: function () {
-            console.log('update', this.notifications);
 
             var count = _.reduce(this.notifications, function (memo, module) {
                 if (module.collection.size() > 0) {
@@ -136,7 +130,6 @@ define('io.ox/core/notifications/main',
         toggleList: function () {
             //create nice listing view of all notifications grouped by
             //their app
-            console.log('toggle list now');
             if ($('#io-ox-screens').hasClass('beside')) {
                 this.hideList();
             } else {

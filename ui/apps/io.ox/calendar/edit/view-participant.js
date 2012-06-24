@@ -18,12 +18,24 @@ define('io.ox/calendar/edit/view-participant',
 
     'use strict';
 
+    // take util function
+    var convertImage = function (dir, value) {
+        var url = '';
+        if (value && _.isString(value) && value.length > 1) {
+            url = value.replace(/^\/ajax/, ox.apiRoot);
+            return 'background: url("' + url + '");';
+        } else {
+            return '';
+        }
+    };
+
+
     //just a single participant
     var ParticipantView = Backbone.View.extend({
         tagName: 'div',
         className: 'edit-appointment-participant span6', //'edit-appointment-participant',
         _modelBinder: undefined,
-        initialize: function () {
+        initialize: function (options) {
             var self = this;
             self.$el.attr('data-cid', self.model.cid);
 
@@ -52,22 +64,10 @@ define('io.ox/calendar/edit/view-participant',
             var self = this;
 
             this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/user', {}));
-
-            // take util function
-            var convertImage = function (dir, value) {
-                var url = '';
-                if (value && _.isString(value) && value.length > 1) {
-                    url = value.replace(/^\/ajax/, ox.apiRoot);
-                    return 'background: url("' + url + '");';
-                } else {
-                    return '';
-                }
-            };
-            var bindings = {
-                display_name: '.person-link',
-                image1_url: [{selector: '.contact-image', elAttribute: 'style', converter: convertImage}],
-                email1: '.email'
-            };
+            bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
+            var bindings = _(bindings).extend({
+                image1_url: [{selector: '.contact-image', elAttribute: 'style', converter: convertImage}]
+            });
 
             this._modelBinder.bind(self.model, this.el, bindings);
             return self;
@@ -79,16 +79,6 @@ define('io.ox/calendar/edit/view-participant',
                 GROUP: gt('Group')
             }}));
 
-            // take util function
-            var convertImage = function (dir, value) {
-                var url = '';
-                if (value) {
-                    url = value.replace(/^\/ajax/, ox.apiRoot);
-                    return 'background: url("' + url + '");';
-                } else {
-                    return '';
-                }
-            };
             var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
             bindings = _(bindings).extend({
                 image1_url: [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImage}]
@@ -104,17 +94,6 @@ define('io.ox/calendar/edit/view-participant',
                 RESOURCE: gt('Resource')
             }}));
 
-            // take util function
-            var convertImage = function (dir, value) {
-                var url = '';
-                if (value) {
-                    url = value.replace(/^\/ajax/, ox.apiRoot);
-                    return 'background: url("' + url + '");';
-                } else {
-                    return '';
-                }
-            };
-
             var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
             bindings = _(bindings).extend({
                 image1_url: [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImage}]
@@ -126,25 +105,11 @@ define('io.ox/calendar/edit/view-participant',
         renderExternalUser: function () {
             var self = this;
 
-            console.log('render external', self.model);
             this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/externaluser', {}));
-
-            // take util function
-            var convertImage = function (dir, value) {
-                var url = '';
-                if (value && _.isString(value) && value.length > 1) {
-                    url = value.replace(/^\/ajax/, ox.apiRoot);
-                    return 'background: url("' + url + '");';
-                } else {
-                    return '';
-                }
-            };
-            console.log('render:', this);
-            var bindings = {
-                display_name: '.person-link',
-                image1_url: [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImage}],
-                email1: '.email'
-            };
+            var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
+            bindings = _(bindings).extend({
+                image1_url: [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImage}]
+            });
 
             this._modelBinder.bind(self.model, this.el, bindings);
             return self;

@@ -21,7 +21,6 @@ define('io.ox/calendar/notifications',
     function register() {
         var notifications = notificationService.get('io.ox/calendar', NotificationView);
         calApi.on('invites', function (e, invites) {
-            console.log('got invites in collection now', arguments);
             notifications.collection.reset([]);
             _(invites).each(function (invite) {
                 notifications.collection.unshift({
@@ -31,20 +30,6 @@ define('io.ox/calendar/notifications',
                 });
             });
         });
-        /*mailApi.on('new-mail', function (e, mails) {
-            mailApi.getList(_(mails).clone().splice(0, 10))
-                .done(function (data) {
-                    _(data).each(function (mail) {
-                        var f = mail.from || [['', '']];
-                        notifications.collection.unshift({
-                            title: util.getDisplayName(f[0]),
-                            subject: mail.subject,
-                            data: mail
-                        });
-                    });
-                    console.log('fetched mails', arguments);
-                });
-        });*/
     }
 
     return {

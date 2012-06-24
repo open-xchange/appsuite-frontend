@@ -125,7 +125,6 @@ define('io.ox/core/tk/autocomplete', function () {
 
             // handle search result
             cbSearchResult = function (query, list) {
-                    console.log('cbSearchResult', query, list);
                     if (list.length) {
                         // draw results
                         popup.idle();

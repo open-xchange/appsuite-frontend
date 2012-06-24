@@ -151,7 +151,6 @@ define('io.ox/calendar/actions',
         requires: 'one create',
         action: function (app) {
             require(['io.ox/calendar/edit/main'], function (editmain) {
-                console.log('create');
                 // FIXME: what a hack > folder_id
                 editmain.getApp().launch().done(function () {
                     this.create({folder_id: app.folder.get(), participants: []});
@@ -218,15 +217,10 @@ define('io.ox/calendar/actions',
                         }
 
                         api.confirm(o)
-                            .done(function (data) {
-                                console.log('changed status successfully', data);
-                            })
                             .fail(function (err) {
                                 console.log('ERROR', err);
                             });
                     });
-
-
             });
         }
     });

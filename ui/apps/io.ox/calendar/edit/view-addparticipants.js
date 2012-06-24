@@ -22,7 +22,7 @@ define('io.ox/calendar/edit/view-addparticipants',
 
     'use strict';
 
-    var autocompleteAPI = new AutocompleteAPI({id: 'participants', contacts: true, groups: true, resources: true});
+    var autocompleteAPI = new AutocompleteAPI({id: 'participants', contacts: true, groups: true, resources: true, distributionlists: false});
 
     var AddParticipantView = Backbone.View.extend({
         events: {
@@ -36,12 +36,11 @@ define('io.ox/calendar/edit/view-addparticipants',
             var self = this,
                 renderedContent;
 
+            function highlight(text, query) {
+                return String(text).replace(/</g, '&lt;')
+                    .replace(new RegExp(query, 'i'), '<b>' + query + '</b>');
+            }
 
-            // rework to work this with the given object, without piping it
-            // so the choosen email could be rendered in the selected
-            // entries - or even think about it, because if its a internal user
-            // the user should be rendered
-            // if its an external user, than the mail - where the match was
 
             self.autoparticpants = self.$el.find('.add-participant')
                 .attr('autocapitalize', 'off')
@@ -50,39 +49,34 @@ define('io.ox/calendar/edit/view-addparticipants',
                 .autocomplete({
                     parentSelector: '.io-ox-calendar-edit',
                     source: function (query) {
-                        return autocompleteAPI.search(query)
-                            .pipe(function (data) {
-                                var ndata = _(data).map(function (dataItem) {
-                                    switch (dataItem.type) {
-                                    case 'contact':
-                                        if (dataItem.data.internal_userid) {
-                                            dataItem.data.type = 1; //user
-                                            dataItem.data.id = dataItem.data.internal_userid; //just to fix a little issue
-                                        } else {
-                                            dataItem.data.type = 5; //external
-                                        }
-                                        return dataItem.data;
-                                    case 'resource':
-                                        dataItem.data.type = 3; //resource
-                                        return dataItem.data;
-                                    case 'group':
-                                        dataItem.data.type = 2; //group
-                                        return dataItem.data;
-                                    }
-                                });
+                        return autocompleteAPI.search(query);
+                    },
+                    stringify: function (obj) {
+                        return (obj && obj.data && obj.data.display_name) ? obj.data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''): '';
+                    },
+                    draw: function (obj) {
+                        if (obj && obj.data.constructor.toString().indexOf('Object') !== -1) {
+                            switch (obj.type) {
+                            case 'contact':
+                                if (obj.data.internal_userid && obj.data.email1 === obj.email) {
+                                    obj.data.type = 1; //user
+                                    obj.data.id = obj.data.internal_userid;
+                                } else {
+                                    obj.data.type = 5;
+                                    // h4ck
+                                    obj.data.email1 = obj.email;
+                                }
+                                break;
+                            case 'resource':
+                                obj.data.type = 3; //resource
+                                break;
+                            case 'group':
+                                obj.data.type = 2; //group
+                                break;
+                            }
 
-                                console.log('piping source:', ndata);
-                                return ndata;
-                            });
-                    },
-                    stringify: function (data) {
-                        return (data && data.display_name) ? data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''): '';
-                    },
-                    draw: function (data) {
-                        console.log('draw', data);
-                        if (data.constructor.toString().indexOf('Object') !== -1) {
-                            data.image1_url = data.image1_url || '';
-                            var pmodel = new ParticipantModel(data);
+                            obj.data.image1_url = obj.data.image1_url || '';
+                            var pmodel = new ParticipantModel(obj.data);
                             var pview = new ParticipantView({model: pmodel});
                             var markup = pview.render().el;
 
@@ -102,7 +96,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                 .on('selected', function (e, selected) {
                     if (_.isObject(selected)) {
                         self.$('.add-participant').val('');
-                        self.trigger('select', selected);
+                        self.trigger('select', selected.data);
                     } else {
                         self.onClickAdd();
                     }

@@ -14,7 +14,8 @@
 define('io.ox/calendar/edit/model-participant',
       ['io.ox/core/api/user',
        'io.ox/core/api/group',
-       'io.ox/core/api/resource'], function (userAPI, groupAPI, resourceAPI) {
+       'io.ox/core/api/resource',
+       'io.ox/contacts/api'], function (userAPI, groupAPI, resourceAPI, contactAPI) {
 
     'use strict';
 
@@ -65,9 +66,23 @@ define('io.ox/calendar/edit/model-participant',
                 df.resolve();
                 break;
             case self.TYPE_EXTERNAL_USER:
-                self.set({display_name: self.get('display_name').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''), email1: self.get('mail') || self.get('email1')});
-                self.trigger('change', self);
-                df.resolve();
+                contactAPI.search(self.get('mail')).done(function (results) {
+                    if (results && results.length > 0) {
+                        var itemWithImage = _(results).find(function (item) {
+                            return item.image1_url && item.image1_url !== '';
+                        });
+                        itemWithImage = itemWithImage || results[0]; // take with image or just the first one
+                        self.set({
+                            display_name: itemWithImage.display_name,
+                            email1: self.get('mail') || self.get('email1'),
+                            image1_url: itemWithImage.image1_url
+                        });
+                    } else {
+                        self.set({display_name: self.get('display_name').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''), email1: self.get('mail') || self.get('email1')});
+                    }
+                    self.trigger('change', self);
+                    df.resolve();
+                });
                 break;
             default:
                 self.set({display_name: 'unknown'});

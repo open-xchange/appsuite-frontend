@@ -19,10 +19,13 @@ define('io.ox/contacts/distrib/create-dist-view',
      'io.ox/core/tk/view',
      'io.ox/core/tk/model',
      'io.ox/core/tk/autocomplete',
+     'io.ox/core/api/autocomplete',
      'io.ox/core/config'
-    ], function (ext, gt, util, api, View, Model, autocomplete, config) {
+    ], function (ext, gt, util, api, View, Model, autocomplete, AutocompleteAPI, config) {
 
     'use strict';
+
+    var autocompleteAPI = new AutocompleteAPI({id: 'createDistributionList', contacts: true, distributionlists: false});
 
     var saveButton = function (model) {
         return $('<a>', {
@@ -80,6 +83,7 @@ define('io.ox/contacts/distrib/create-dist-view',
             var data = options.node.find('[data-holder="data-holder"]').data(),
                 mailValue = options.node.find('input#mail').val(),
                 nameValue = options.node.find('input#name').val();
+
             if (data.contact) {
                 copyContact(options, data.contact, data.email);
             } else {
@@ -100,10 +104,9 @@ define('io.ox/contacts/distrib/create-dist-view',
         return $('<div>').attr('id', _.uniqueId('box_')).addClass('item-list');
     }
 
-    function drawAutoCompleteItem(node, data) {
-
+    function drawAutoCompleteItem(node, obj) {
         var img = $('<div>').addClass('create-distributionlist-contact-image'),
-            url = util.getImage(data.contact);
+            url = util.getImage(obj.data);
 
         if (Modernizr.backgroundsize) {
             img.css('backgroundImage', 'url(' + url + ')');
@@ -115,8 +118,8 @@ define('io.ox/contacts/distrib/create-dist-view',
 
         node.append(
             img,
-            $('<div>').addClass('person-link ellipsis').text(data.display_name),
-            $('<div>').addClass('ellipsis').text(data.email)
+            $('<div>').addClass('person-link ellipsis').text(obj.display_name),
+            $('<div>').addClass('ellipsis').text(obj.email)
         );
     }
 
@@ -239,27 +242,28 @@ define('io.ox/contacts/distrib/create-dist-view',
             .addClass('discreet input-large')
             .autocomplete({
                 source: function (query) {
-                    return api.autocomplete(query);
+                    return autocompleteAPI.search(query);
+                    //return api.autocomplete(query);
                 },
-                stringify: function (data) {
+                stringify: function (obj) {
                     if (related === 'input#mail') {
-                        return data.display_name;
+                        return obj.display_name;
                     } else {
-                        return data.email;
+                        return obj.email;
                     }
 
                 },
                 // for a second (related) Field
-                stringifyrelated: function (data) {
+                stringifyrelated: function (obj) {
                     if (related === 'input#mail') {
-                        return data.email;
+                        return obj.email;
                     } else {
-                        return data.display_name;
+                        return obj.display_name;
                     }
 
                 },
-                draw: function (data) {
-                    drawAutoCompleteItem.call(null, this, data);
+                draw: function (obj) {
+                    drawAutoCompleteItem.call(null, this, obj);
                 },
                 // to specify the related Field
                 related: function () {

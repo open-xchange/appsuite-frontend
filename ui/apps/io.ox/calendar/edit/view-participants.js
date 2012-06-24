@@ -44,7 +44,6 @@ define('io.ox/calendar/edit/view-participants',
             return this;
         },
         updateCSS: function () {
-            console.log('update css');
             this.$el.find(':nth-child(even)').removeClass('odd').addClass('even');
             this.$el.find(':nth-child(odd)').removeClass('even').addClass('odd');
         },

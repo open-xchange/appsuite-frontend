@@ -42,7 +42,6 @@ define('io.ox/core/api/autocomplete',
                 df = new $.Deferred();
 
             self.cache.get(query).pipe(function (data) {
-                console.log('return from cache', data);
                 if (data !== undefined && data !== null) {
                     df.resolve(data);
                     //return data;
@@ -60,7 +59,7 @@ define('io.ox/core/api/autocomplete',
                             _(self.apis).each(function (apiModule, index) {
                                 switch (apiModule.type) {
                                 case 'contact':
-                                    retData = retData.concat(self.processContacts(data[index]));
+                                    retData = self.processContactResults(retData.concat(self.processContacts(data[index])), query);
                                     break;
                                 case 'resource':
                                     retData = retData.concat(self.processResources(data[index]));
@@ -69,14 +68,11 @@ define('io.ox/core/api/autocomplete',
                                     retData = retData.concat(self.processGroups(data[index]));
                                 }
                             });
-                            retData = self.processResults(retData, query);
-                            console.log('hey got awesome results', data);
                             return retData;
                         })
                         .done(function (data) {
-                            console.log('done', data);
                             df.resolve(data);
-                            //self.cache.add(query, data);
+                            self.cache.add(query, data);
                         });
                 }
             });
@@ -95,7 +91,6 @@ define('io.ox/core/api/autocomplete',
                 return myobj;
             });
 
-            console.log('processContacts', result);
             return result;
         },
         processResources: function (data) {
@@ -106,11 +101,9 @@ define('io.ox/core/api/autocomplete',
                 };
                 return obj;
             });
-            console.log('processResources', result);
             return result;
         },
         processGroups: function (data) {
-
             var result = _(data.data).map(function (dataItem) {
                 var obj = {
                     data: dataItem,
@@ -118,13 +111,11 @@ define('io.ox/core/api/autocomplete',
                 };
                 return obj;
             });
-            console.log('processGroups', result);
             return result;
         },
-        processResults: function (data, query) {
+        processContactResults: function (data, query) {
             var tmp = [], hash = {}, self = this;
 
-            console.log('process Results', data, query);
             // improve response
             // 1/2: resolve email addresses
             _(data).each(function (obj) {
@@ -132,15 +123,15 @@ define('io.ox/core/api/autocomplete',
                     // distribution list
                     tmp.push({
                         type: obj.type,
-                        display_name: obj.display_name || '',
+                        display_name: obj.data.display_name || '',
                         email: 'will not be resolved',
                         data: obj.data
                     });
                 } else {
                     // email
-                    self.processItem(tmp, obj, 'email1');
-                    self.processItem(tmp, obj, 'email2');
-                    self.processItem(tmp, obj, 'email3');
+                    self.processContactItem(tmp, obj, 'email1');
+                    self.processContactItem(tmp, obj, 'email2');
+                    self.processContactItem(tmp, obj, 'email3');
                 }
             });
             // 2/2: filter distribution lists & remove email duplicates
@@ -149,6 +140,9 @@ define('io.ox/core/api/autocomplete',
                     isDuplicate = obj.email in hash;
 
                 if (isDistributionList) {
+                    if (self.options.distributionlists === false) {
+                        return false;
+                    }
                     return String(obj.display_name || '').toLowerCase().indexOf(query) > -1;
                 } else {
                     return isDuplicate ? false : (hash[obj.email] = true);
@@ -157,7 +151,7 @@ define('io.ox/core/api/autocomplete',
             hash = null;
             return tmp;
         },
-        processItem: function (list, obj, field) {
+        processContactItem: function (list, obj, field) {
             if (obj.data[field]) {
                 var name, a = obj.data.last_name, b = obj.data.first_name, c = obj.data.display_name;
                 if (a && b) {
@@ -177,7 +171,7 @@ define('io.ox/core/api/autocomplete',
                     type: obj.type,
                     display_name: name,
                     email: obj.data[field].toLowerCase(),
-                    data: obj.data
+                    data: _(obj.data).clone()
                 });
             }
         }

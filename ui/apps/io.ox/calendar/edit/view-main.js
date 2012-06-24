@@ -257,23 +257,30 @@ define('io.ox/calendar/edit/view-main',
         },
         onAddParticipant: function (data) {
             var participants = this.model.get('participants'),
-                notIn = true;
-
-            this.subviews.participants.collection.add(data);
+                notIn = true, obj;
 
             notIn = !_(participants).any(function (item) {
-                return (item.id === data.id && item.type === data.type);
+                if (data.type === 5) {
+                    return (item.mail === data.email1);
+                } else {
+                    return (item.id === data.id && item.type === data.type);
+                }
             });
 
             if (notIn) {
                 if (data.type !== 5) {
-                    participants.push({id: data.id, type: data.type});
+                    obj = {id: data.id, type: data.type};
+                    this.subviews.participants.collection.add(obj);
+                    participants.push(obj);
                 } else {
-                    // FIXME: data should be unified over all - mail vs. email1, email2, email3
-                    participants.push({type: data.type, mail: data.mail || data.email1, display_name: data.display_name});
+                    obj = {type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || ''};
+                    participants.push(obj);
+                    this.subviews.participants.collection.add(obj);
                 }
             }
-
+            // nasty hack, cause [Array] keeps [Array] and no change event will be fired
+            // since we reset it silently and set this again
+            this.model.set({'participants': undefined}, {silent: true});
             this.model.set('participants', participants);
 
         },
