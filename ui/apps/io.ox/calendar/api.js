@@ -247,11 +247,14 @@ define("io.ox/calendar/api",
     // global refresh
     api.refresh = function () {
         userAPI.get().done(function (user) {
-            api.getAll({}).done(function (list) {
+            api.getAll({
+                start: _.now(),
+                end: _.now() + 28 * 4 * DAY //next four month?!?
+            }).done(function (list) {
 
                 var invites = _(list).filter(function (item) {
                     return _(item.users).any(function (item_user) {
-                        return (item_user.id === user.id && item_user.confirmation === 0);
+                        return (item_user.id === user.id && (item_user.confirmation === 0 || item_user.confirmation === 3)); // also tentatives?
                     });
                 });
 

@@ -24,8 +24,10 @@ define('io.ox/calendar/notifications',
             notifications.collection.reset([]);
             _(invites).each(function (invite) {
                 notifications.collection.unshift({
-                    title: invite.location,
-                    subject: invite.title,
+                    title: invite.title,
+                    subject: invite.location,
+                    date: util.getDateInterval(invite),
+                    time: util.getTimeInterval(invite),
                     data: invite
                 });
             });
