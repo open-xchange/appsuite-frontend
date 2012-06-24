@@ -15,11 +15,10 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/calendar/util',
        'io.ox/core/extensions',
        'io.ox/core/date',
-       'io.ox/calendar/edit/view-participants',
        'io.ox/calendar/edit/view-addparticipants',
-       'io.ox/calendar/edit/collection-participants',
+       'io.ox/calendar/edit/module-participants',
        'dot!io.ox/calendar/edit/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, ParticipantsView, AddParticipantsView, ParticipantsCollection, tmpl, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, participantsModule, tmpl, gt) {
 
     'use strict';
 
@@ -211,8 +210,8 @@ define('io.ox/calendar/edit/view-main',
             self.$('.endsat-date').datepicker({format: dateAPI.DATE});
 
 
-            var participants = new ParticipantsCollection(self.model.get('participants'));
-            self.subviews.participants = new ParticipantsView({collection: participants, el: $(self.el).find('.participants')});
+            var participants = new participantsModule.Collection(self.model.get('participants'));
+            self.subviews.participants = new participantsModule.CollectionView({collection: participants, el: $(self.el).find('.participants')});
             self.subviews.participants.render();
             participants.on('remove', _.bind(self.onRemoveParticipant, self));
 

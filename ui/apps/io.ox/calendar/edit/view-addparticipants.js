@@ -12,13 +12,11 @@
  */
 
 define('io.ox/calendar/edit/view-addparticipants',
-      ['io.ox/calendar/api',
+      ['io.ox/calendar/edit/module-participants',
        'io.ox/core/tk/autocomplete',
-       'io.ox/calendar/edit/view-participant',
-       'io.ox/calendar/edit/model-participant',
        'io.ox/core/api/autocomplete',
        'io.ox/mail/util',
-       'gettext!io.ox/calendar/edit/main'], function (calendarAPI, autocomplete, ParticipantView, ParticipantModel, AutocompleteAPI, mailUtil, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (participants, autocomplete, AutocompleteAPI, mailUtil, gt) {
 
     'use strict';
 
@@ -76,8 +74,8 @@ define('io.ox/calendar/edit/view-addparticipants',
                             }
 
                             obj.data.image1_url = obj.data.image1_url || '';
-                            var pmodel = new ParticipantModel(obj.data);
-                            var pview = new ParticipantView({model: pmodel});
+                            var pmodel = new participants.Model(obj.data);
+                            var pview = new participants.ItemView({model: pmodel});
                             var markup = pview.render().el;
 
                             // just hack a bit to make it work easely
