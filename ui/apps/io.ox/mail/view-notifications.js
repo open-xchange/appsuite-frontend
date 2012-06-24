@@ -15,7 +15,8 @@ define('io.ox/mail/view-notifications',
        'io.ox/mail/api',
        'io.ox/mail/util',
        'dot!io.ox/mail/template.html',
-       'less!io.ox/mail/style.css'], function (notficationsConroller, api, util, tpl) {
+       'gettext!io.ox/mail/mail',
+       'less!io.ox/mail/style.css'], function (notficationsConroller, api, util, tpl, gt) {
 
     'use strict';
 
@@ -93,6 +94,9 @@ define('io.ox/mail/view-notifications',
     var NotificationsView = Backbone.View.extend({
         className: 'notifications',
         id: 'io-ox-notifications-mail',
+        events: {
+            'click [data-action="openApp"]': 'onOpenApp'
+        },
         _collectionBinder: undefined,
         initialize: function () {
             var self = this;
@@ -109,7 +113,10 @@ define('io.ox/mail/view-notifications',
             });
         },
         render: function () {
-            this.$el.empty().append(tpl.render('io.ox/mail/notifications', {}));
+
+            this.$el.empty().append(tpl.render('io.ox/mail/notifications', { strings: {
+                OPEN_APP: gt('Open Mail App')
+            }}));
 
             for (var i = 0; i < this.collection.size() && i < 3; i++) {
                 this.notificationviews[i] = new NotificationView({ model: this.collection.at(i)});
@@ -129,6 +136,14 @@ define('io.ox/mail/view-notifications',
             } else {
                 $badge.removeClass('badge-error');
             }
+        },
+        onOpenApp: function () {
+            console.log('open app now');
+            notficationsConroller.hideList();
+            ox.launch('io.ox/mail/main').fail(function () {
+                console.log('failed launching app', arguments);
+            });
+
         }
     });
 
