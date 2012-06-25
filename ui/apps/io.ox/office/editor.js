@@ -453,7 +453,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // DEBUG STUFF
             if (this.getParagraphCount() !== editdiv.children().size()) {
                 this.implDbgOutInfo('applyOperation - para count invalid!');
-                debugger;
             }
 
         };
@@ -936,7 +935,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // DEBUG STUFF
             if (this.getParagraphCount() !== editdiv.children().size()) {
                 this.implDbgOutInfo('processKeyDown - para count invalid!');
-                debugger;
             }
         };
 
@@ -1003,7 +1001,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // DEBUG STUFF
             if (this.getParagraphCount() !== editdiv.children().size()) {
                 this.implDbgOutInfo('processKeyPressed - para count invalid!');
-                debugger;
             }
 
         };
@@ -1485,7 +1482,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // DEBUG STUFF
             if (paragraphs.size() !== (dbg_oldparacount + 1)) {
                 this.implDbgOutInfo('implSplitParagraph - para count invalid!');
-                debugger;
             }
         };
 
@@ -1530,7 +1526,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 // DEBUG STUFF
                 if (paragraphs.size() !== (dbg_oldparacount - 1)) {
                     this.implDbgOutInfo('implMergeParagraph - para count invalid!');
-                    debugger;
                 }
             }
 
