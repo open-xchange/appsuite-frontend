@@ -15,9 +15,10 @@ define('plugins/notifications/mail/register',
        'io.ox/mail/api',
        'io.ox/mail/util',
        'io.ox/core/extensions',
+       'io.ox/core/config',
        'dot!plugins/notifications/mail/template.html',
        'gettext!plugins/notifications/mail',
-       'less!plugins/notifications/mail/style.css'], function (notificationsController, mailApi, util, ext, tpl, gt) {
+       'less!plugins/notifications/mail/style.css'], function (notificationsController, mailApi, util, ext, config, tpl, gt) {
 
     'use strict';
 
@@ -107,7 +108,7 @@ define('plugins/notifications/mail/register',
 
             this.notificationviews = [];
             this.model = new Backbone.Model({unread: 0});
-            this.model.on('change:unread', _.bind(this.onChangeCount, this));
+            //this.model.on('change:unread', _.bind(this.onChangeCount, this));
             this.collection.on('reset', _.bind(this.render, this));
             this.collection.on('add', _.bind(this.render, this));
             this.collection.on('remove', _.bind(this.render, this));
@@ -130,7 +131,7 @@ define('plugins/notifications/mail/register',
 
             return this;
         },
-        onChangeCount: function () {
+       /* onChangeCount: function () {
             var unread = this.model.get('unread');
             var $badge = this.$el.find('[data-property="unread"]');
 
@@ -141,11 +142,15 @@ define('plugins/notifications/mail/register',
             } else {
                 $badge.removeClass('badge-error');
             }
-        },
+        },*/
         onOpenApp: function () {
+            var defaultInboxFolderId = config.get('modules.mail.defaultFolder.inbox');
             console.log('open app now');
             notificationsController.hideList();
-            ox.launch('io.ox/mail/main').fail(function () {
+            ox.launch('io.ox/mail/main').done(function () {
+                this.folder.set(defaultInboxFolderId); // go to inbox
+            })
+            .fail(function () {
                 console.log('failed launching app', arguments);
             });
 
@@ -158,6 +163,8 @@ define('plugins/notifications/mail/register',
         register: function (controller) {
             console.log('register mail notifications');
             var notifications = controller.get('io.ox/mail', NotificationsView);
+
+            mailApi.refresh();
             mailApi.on('new-mail', function (e, mails) {
                 _(mails.reverse()).each(function (mail) {
                     notifications.collection.unshift(new Backbone.Model(mail), {silent: true}); ///_(mails).clone());

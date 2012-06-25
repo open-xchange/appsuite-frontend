@@ -141,6 +141,7 @@ define('io.ox/core/notifications',
                 if (module.collection.size() > 0) {
                     return memo + 1;
                 }
+                return memo;
             }, 0);
 
             this.badgeView.model.set('count', (count || 0));
