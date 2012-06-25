@@ -75,7 +75,7 @@ define('io.ox/calendar/edit/view-addparticipants',
 
                             obj.data.image1_url = obj.data.image1_url || '';
                             var pmodel = new participants.Model(obj.data);
-                            var pview = new participants.ItemView({model: pmodel});
+                            var pview = new participants.ItemView({model: pmodel, prefetched: true});
                             var markup = pview.render().el;
 
                             // just hack a bit to make it work easely

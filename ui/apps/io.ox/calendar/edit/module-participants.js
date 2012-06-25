@@ -130,7 +130,9 @@ define('io.ox/calendar/edit/module-participants',
             this._modelBinder = new Backbone.ModelBinder();
 
             // FIXME: polymorph model so fetch on initialize, may be it's not a good idea
-            self.model.fetch();
+            if (options.prefetched !== true) {
+                self.model.fetch();
+            }
         },
         render: function () {
             switch (this.model.get('type')) {
