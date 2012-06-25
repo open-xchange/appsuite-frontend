@@ -54,12 +54,6 @@ define('io.ox/office/main',
                 .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
                 .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
             .end()
-            .addRadioGroup('paragraph/alignment/test/1', { type: 'dropdown', columns: 3 }) // TODO: remove, test only
-                .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
-                .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
-                .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
-                .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
-            .end()
             .addButton('action/debug', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
         } // end of constructor
@@ -111,9 +105,6 @@ define('io.ox/office/main',
                 },
 
                 'paragraph/alignment': {
-                    set: function (value) { editor.grabFocus(); }
-                },
-                'paragraph/alignment/test/1': { // TODO: remove, test only
                     set: function (value) { editor.grabFocus(); }
                 }
 

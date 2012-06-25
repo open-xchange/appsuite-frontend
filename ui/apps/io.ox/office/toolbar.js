@@ -194,11 +194,17 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         var // create the DOM container element
             node = $('<div>').addClass('btn-toolbar io-ox-toolbar'),
 
+            sizeSpan = $('<span>').appendTo(node),
+
             // control update handlers, mapped by key
             updateHandlers = {},
 
             // helper function returning a reference to this tool bar
             getToolBar = _.bind(function () { return this; }, this);
+
+        function createGroupNode() {
+            return $('<div>').addClass('btn-group').appendTo(sizeSpan);
+        }
 
         /**
          * Returns the control with the specified key as jQuery collection. The
@@ -232,6 +238,25 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             updateHandlers[key] = updateHandler;
         }
 
+        /**
+         * Registers the passed action handler for a specific control. Action
+         * handlers will be executed, when the control has been activated in
+         * the user interface. Will trigger a 'change' event at the tool bar,
+         * passing the key of the source control, and its current value as
+         * returned by the passed action handler.
+         *
+         * @param {jQuery} control
+         *  The control which triggers an action event.
+         *
+         * @param {String} action
+         *  The name of the action event, e.g. 'click' or 'change'.
+         *
+         * @param {Function} actionHandler
+         *  The action handler function. Will be called in the context of this
+         *  tool bar. Receives the control passed to this function. Must return
+         *  the current value of the control (e.g. the boolean state of a
+         *  toggle button, or the text of a text field).
+         */
         function registerActionHandler(control, action, actionHandler) {
             control.on(action, function () {
                 var toolbar, key, value;
@@ -244,10 +269,20 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             });
         }
 
+        function registerResizable(object) {
+        }
+
+        function resizeHandler() {
+            console.log('toolbar.width=' + node.width() + ', toolbar.span.width=' + sizeSpan.width());
+        }
+
         // initialization -----------------------------------------------------
 
         // add event hub
         Events.extend(this);
+
+        // add resize handler
+        $(window).on('resize', resizeHandler);
 
         // class ButtonGroupProxy ---------------------------------------------
 
@@ -259,7 +294,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         function ButtonGroupProxy() {
 
             var // create a new button group container
-                groupNode = $('<div>').addClass('btn-group').appendTo(node);
+                groupNode = createGroupNode();
 
             function clickHandler(button) {
                 if (Buttons.isToggleButton(button)) {
@@ -327,20 +362,23 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          */
         function RadioGroupProxy(key, options) {
 
-            var // create a new button group container
-                groupNode = $('<div>').addClass('btn-group').appendTo(node),
-
-                // type of the group
+            var // type of the group
                 type = (options && _.isString(options.type)) ? options.type : 'buttons',
+
+                // create a new group container for the button group
+                buttonGroupNode = createGroupNode(),
+
+                // create a new group container for the drop-down group
+                dropDownGroupNode = createGroupNode(),
 
                 // number of columns in the drop-down menu
                 columns = (options && _.isNumber(options.columns) && (options.columns >= 1)) ? options.columns : 3,
 
                 // drop-down button
-                dropDownButton = null,
+                dropDownButton = Buttons.createButton(key).addClass('dropdown-toggle').attr('data-toggle', 'dropdown').appendTo(dropDownGroupNode),
 
                 // drop-down menu area
-                dropDownMenu = null,
+                dropDownMenu = $('<table>').addClass('dropdown-menu').appendTo(dropDownGroupNode),
 
                 // number of buttons inserted into the group
                 buttonCount = 0;
@@ -355,8 +393,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              */
             function updateHandler(value) {
 
-                var // find all option buttons (either in drop-down menu, or in button group)
-                    buttons = (dropDownMenu || groupNode).find('button'),
+                var // find all option buttons (in button group and drop-down menu)
+                    buttons = buttonGroupNode.add(dropDownMenu).find('button'),
                     // ambiguous state indicated by null value
                     inactive = _.isUndefined(value) || _.isNull(value),
                     // find the button to activate
@@ -365,13 +403,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 // remove highlighting from all buttons
                 Buttons.toggleButtons(buttons, false);
 
-                // update the contents of the drop-down button (use first button if no button is active)
-                if (dropDownButton) {
-                    dropDownButton.empty().append(
-                        (button.length ? button : buttons.first()).contents().clone(),
-                        $('<span>').addClass('whitespace'),
-                        $('<span>').addClass('caret'));
-                }
+                // update the contents of the drop-down button (use first button in group if no button is active)
+                dropDownButton.empty().append(
+                    (button.length ? button : buttons).first().contents().clone(),
+                    $('<span>').addClass('whitespace'),
+                    $('<span>').addClass('caret'));
 
                 // highlight active button
                 Buttons.toggleButtons(button, true);
@@ -394,41 +430,39 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 return value;
             }
 
+            function insertButton(node, value, options) {
+                var // create the new button element
+                    button = Buttons.createButton(key, options).attr('data-value', value).appendTo(node);
+                // add click handler
+                registerActionHandler(button, 'click', clickHandler);
+            }
+
             // initialization -------------------------------------------------
 
-            if (type === 'dropdown') {
-
-                // create the dropdown elements
-                dropDownButton = Buttons.createButton(key)
-                    .addClass('dropdown-toggle')
-                    .attr('data-toggle', 'dropdown')
-                    .appendTo(groupNode);
-
-                dropDownMenu = $('<table>')
-                    .addClass('dropdown-menu')
-                    .appendTo(groupNode);
-
-                /*
-                 * The width of the table is restricted to the parent button
-                 * group element, thus the table shrinks its buttons way too
-                 * much. The only way (?) to expand the table to the correct
-                 * width is to set its min-width property to the calculated
-                 * width of the tbody. To do this, it is required to expand the
-                 * min-width to a large value to give the tbody enough space,
-                 * and then query its calculated width.
-                 */
-                dropDownButton.one('click', function () {
-                    // wait for the button to really become visible (done by Bootstrap)
-                    window.setTimeout(function timer() {
-                        if (dropDownMenu.css('display') !== 'none') {
-                            dropDownMenu
-                                .css('min-width', '10000px')
-                                .css('min-width', dropDownMenu.find('tbody').outerWidth() + 'px');
-                        } else {
-                            window.setTimeout(timer, 25);
-                        }
-                    });
+            /*
+             * The width of the table is restricted to the parent button group
+             * element, thus the table shrinks its buttons way too much. The
+             * only way (?) to expand the table to the correct width is to set
+             * its min-width property to the calculated width of the tbody. To
+             * do this, it is required to expand the min-width to a large value
+             * to give the tbody enough space, and then query its calculated
+             * width.
+             */
+            dropDownButton.one('click', function () {
+                // wait for the button to really become visible (done by Bootstrap)
+                window.setTimeout(function timer() {
+                    if (dropDownMenu.css('display') !== 'none') {
+                        dropDownMenu
+                            .css('min-width', '10000px')
+                            .css('min-width', dropDownMenu.find('tbody').outerWidth() + 'px');
+                    } else {
+                        window.setTimeout(timer, 25);
+                    }
                 });
+            });
+
+            if (type === 'auto') {
+                registerResizable(this);
             }
 
             // create a single update handler for the entire radio group
@@ -448,46 +482,40 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              */
             this.addButton = function (value, options) {
 
-                var // create the button
-                    button = Buttons.createButton(key, options).attr('data-value', value),
-
-                    // table row taking the new button
+                var // table row taking the new button
                     tableRow = null,
-
+                    // table cell taking the new button
+                    tableCell = null,
                     // column index for the new button
                     column = buttonCount % columns;
 
-                if (type === 'dropdown') {
-                    // drop-down group: create a new cell in the drop-down menu
-                    if (column === 0) {
-                        // create a new row in the table, and fill it with dummy buttons
-                        tableRow = $('<tr>').appendTo(dropDownMenu);
-                        _(columns).times(function () {
-                            // dummy button must contain something to get its correct height
-                            var dummy = Buttons.createButton(undefined, { label: ' ' });
-                            Controls.enableControls(dummy, false);
-                            tableRow.append($('<td>').append(dummy));
-                        });
-                    } else {
-                        // select last table row
-                        tableRow = dropDownMenu.find('tr:last-child');
-                    }
+                // append a button to the button group
+                insertButton(buttonGroupNode, value, options);
 
-                    // select table cell (the :nth-child selector is 1-based), and
-                    // replace the dummy button with the real button
-                    tableRow.find('td:nth-child(' + (column + 1) + ')').empty().append(button);
-
-                    // copy formatting of first inserted button to drop-down button
-                    if (buttonCount === 0) {
-                        updateHandler();    // pass undefined (do not activate the button)
-                    }
+                // get/create table row with empty cell from drop-down menu
+                if (column === 0) {
+                    // create a new row in the table, and fill it with dummy buttons
+                    tableRow = $('<tr>').appendTo(dropDownMenu);
+                    _(columns).times(function () {
+                        // dummy button must contain something to get its correct height
+                        var dummy = Buttons.createButton(undefined, { label: ' ' });
+                        Controls.enableControls(dummy, false);
+                        tableRow.append($('<td>').append(dummy));
+                    });
                 } else {
-                    // button group: simply append the button to the group
-                    groupNode.append(button);
+                    // select last table row
+                    tableRow = dropDownMenu.find('tr:last-child');
                 }
 
-                // add click handler
-                registerActionHandler(button, 'click', clickHandler);
+                // select table cell (the :nth-child selector is 1-based), and
+                // replace the dummy button with a new real button
+                tableCell = tableRow.find('td:nth-child(' + (column + 1) + ')').empty();
+                insertButton(tableCell, value, options);
+
+                // copy formatting of first inserted button to drop-down button
+                if (buttonCount === 0) {
+                    updateHandler();    // pass undefined (do not activate the button)
+                }
 
                 buttonCount += 1;
                 return this;
@@ -572,8 +600,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          *  dynamically from the embedded option button that is currently
          *  active. The following options are supported:
          *  @param {String} [options.type]
+         *      If set to 'buttons' or omitted, a button group will be created.
          *      If set to 'dropdown', a drop-down group will be created. If set
-         *      to 'buttons' or omitted, a button group will be created.
+         *      to 'auto', the type will change between 'buttons' and
+         *      'dropdown' according to the horizontal space available for the
+         *      tool bar.
          *  @param {Number} [options.columns]
          *      Number of columns used to build the drop-down menu. Defaults
          *      to the value 3.
@@ -643,6 +674,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          */
         this.destroy = function () {
             this.events.destroy();
+            $(window).off('resize', resizeHandler);
             node.remove();
             node = getToolBar = null;
         };
