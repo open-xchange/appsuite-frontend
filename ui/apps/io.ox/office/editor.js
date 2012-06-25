@@ -106,10 +106,13 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                                 var nCharPosInArray = prevUndo.redoOperation.start.length - 1;
                                 var prevCharEnd = prevUndo.redoOperation.start[nCharPosInArray] + prevUndo.redoOperation.text.length;
                                 if (prevCharEnd === oxoUndoAction.redoOperation.start[nCharPosInArray]) {
-                                    // Merge Undo...
-                                    prevUndo.redoOperation.text +=  oxoUndoAction.redoOperation.text;
-                                    prevUndo.undoOperation.end[nCharPosInArray] += oxoUndoAction.redoOperation.text.length;
-                                    bDone = true;
+                                    var lastChar = prevUndo.redoOperation.text[prevUndo.redoOperation.text.length - 1];     // text len can't be 0 in undo action...
+                                    if (lastChar !== ' ') {
+                                        // Merge Undo...
+                                        prevUndo.redoOperation.text +=  oxoUndoAction.redoOperation.text;
+                                        prevUndo.undoOperation.end[nCharPosInArray] += oxoUndoAction.redoOperation.text.length;
+                                        bDone = true;
+                                    }
                                 }
                             }
                         }
