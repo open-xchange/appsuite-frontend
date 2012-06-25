@@ -15,11 +15,10 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/calendar/util',
        'io.ox/core/extensions',
        'io.ox/core/date',
-       'io.ox/calendar/edit/view-participants',
        'io.ox/calendar/edit/view-addparticipants',
-       'io.ox/calendar/edit/collection-participants',
+       'io.ox/calendar/edit/module-participants',
        'dot!io.ox/calendar/edit/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, ParticipantsView, AddParticipantsView, ParticipantsCollection, tmpl, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, participantsModule, tmpl, gt) {
 
     'use strict';
 
@@ -211,8 +210,8 @@ define('io.ox/calendar/edit/view-main',
             self.$('.endsat-date').datepicker({format: dateAPI.DATE});
 
 
-            var participants = new ParticipantsCollection(self.model.get('participants'));
-            self.subviews.participants = new ParticipantsView({collection: participants, el: $(self.el).find('.participants')});
+            var participants = new participantsModule.Collection(self.model.get('participants'));
+            self.subviews.participants = new participantsModule.CollectionView({collection: participants, el: $(self.el).find('.participants')});
             self.subviews.participants.render();
             participants.on('remove', _.bind(self.onRemoveParticipant, self));
 
@@ -257,23 +256,30 @@ define('io.ox/calendar/edit/view-main',
         },
         onAddParticipant: function (data) {
             var participants = this.model.get('participants'),
-                notIn = true;
-
-            this.subviews.participants.collection.add(data);
+                notIn = true, obj;
 
             notIn = !_(participants).any(function (item) {
-                return (item.id === data.id && item.type === data.type);
+                if (data.type === 5) {
+                    return (item.mail === data.email1);
+                } else {
+                    return (item.id === data.id && item.type === data.type);
+                }
             });
 
             if (notIn) {
                 if (data.type !== 5) {
-                    participants.push({id: data.id, type: data.type});
+                    obj = {id: data.id, type: data.type};
+                    this.subviews.participants.collection.add(obj);
+                    participants.push(obj);
                 } else {
-                    // FIXME: data should be unified over all - mail vs. email1, email2, email3
-                    participants.push({type: data.type, mail: data.mail || data.email1, display_name: data.display_name});
+                    obj = {type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || ''};
+                    participants.push(obj);
+                    this.subviews.participants.collection.add(obj);
                 }
             }
-
+            // nasty hack, cause [Array] keeps [Array] and no change event will be fired
+            // since we reset it silently and set this again
+            this.model.set({'participants': undefined}, {silent: true});
             this.model.set('participants', participants);
 
         },

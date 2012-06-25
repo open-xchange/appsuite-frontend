@@ -22,13 +22,16 @@ define("io.ox/mail/write/view-main",
      'io.ox/contacts/util',
      'io.ox/mail/util',
      'io.ox/preview/main',
-     'gettext!io.ox/mail/mail',
-     'io.ox/core/tk/autocomplete'
-    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, gt) {
+     'io.ox/core/tk/autocomplete',
+     'io.ox/core/api/autocomplete',
+     'gettext!io.ox/mail/mail'
+    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, autocomplete, AutocompleteAPI, gt) {
 
     'use strict';
 
     var GRID_WIDTH = 330;
+
+    var autocompleteAPI = new AutocompleteAPI({id: 'mailwrite', contacts: true });
 
     var view = View.extend({
 
@@ -148,7 +151,7 @@ define("io.ox/mail/write/view-main",
                     .addClass('discreet')
                     .autocomplete({
                         source: function (query) {
-                            return contactsAPI.autocomplete(query)
+                            return autocompleteAPI.search(query)
                                 .pipe(function (data) {
                                     // remove duplicates
                                     var hash = {};
@@ -160,6 +163,18 @@ define("io.ox/mail/write/view-main",
                                         return hash[o.email] === undefined;
                                     });
                                 });
+                            /*return contactsAPI.autocomplete(query)
+                                .pipe(function (data) {
+                                    // remove duplicates
+                                    var hash = {};
+                                    node.find('input[name=' + id + ']').map(function () {
+                                        var rcpt = mailUtil.parseRecipient($(this).val())[1];
+                                        hash[rcpt] = true;
+                                    });
+                                    return _(data).filter(function (o) {
+                                        return hash[o.email] === undefined;
+                                    });
+                                });*/
                         },
                         stringify: function (data) {
                             return data.display_name ?
@@ -652,7 +667,7 @@ define("io.ox/mail/write/view-main",
     function drawAutoCompleteItem(node, data, query) {
 
         var img = $('<div>').addClass('contact-image'),
-            url = contactsUtil.getImage(data.contact),
+            url = contactsUtil.getImage(data.data),
             name = highlight(data.display_name, query),
             email = highlight(data.email, query);
 

@@ -15,7 +15,8 @@ define('io.ox/mail/view-notifications',
        'io.ox/mail/api',
        'io.ox/mail/util',
        'dot!io.ox/mail/template.html',
-       'less!io.ox/mail/style.css'], function (notficationsConroller, api, util, tpl) {
+       'gettext!io.ox/mail/mail',
+       'less!io.ox/mail/style.css'], function (notficationsConroller, api, util, tpl, gt) {
 
     'use strict';
 
@@ -65,7 +66,6 @@ define('io.ox/mail/view-notifications',
 
         },
         onClickItem: function (e) {
-
             var obj = api.reduce(this.model.get('data')),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup'),
@@ -88,43 +88,15 @@ define('io.ox/mail/view-notifications',
                     });
                 });
             }
-
-//            console.log('click item', arguments);
-//            // #!&app=io.ox/mail&folder=default0/INBOX&id=default0/INBOX.3098
-//            notficationsConroller.hideList();
-//
-//            var self = this;
-//            var getObj = {
-//                folder: .folder_id,
-//                id: this.model.get('data').folder_id + '.' + this.model.get('data').id
-//            };
-//            console.log('clicking launching', getObj, this.model);
-//
-//            require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
-//                var msg = self.model.toJSON();
-//                var popup = new dialogs.SidePopup();
-//                window.sidepop = popup;
-//                console.log('popup', popup);
-//            });
-//
-//
-//            /*ox.launch('io.ox/mail/main', getObj).done(function () {
-//                console.log('launched', this);
-//
-//                if (self.model.collection) {
-//                    self.model.collection.remove(self.model);
-//                }
-//                //self.model.destroy(); // destroy the model
-//                this.setState(getObj);
-//            }).fail(function () {
-//                console.log('failed launching app', arguments);
-//            });*/
         }
     });
 
     var NotificationsView = Backbone.View.extend({
         className: 'notifications',
         id: 'io-ox-notifications-mail',
+        events: {
+            'click [data-action="openApp"]': 'onOpenApp'
+        },
         _collectionBinder: undefined,
         initialize: function () {
             var self = this;
@@ -138,12 +110,13 @@ define('io.ox/mail/view-notifications',
 
             api.on('unseen-mail', function (e, data) {
                 self.model.set('unread', _(data).size());
-                console.log('unseen mails:', data);
             });
         },
         render: function () {
-            console.log('render mail notifications');
-            this.$el.empty().append(tpl.render('io.ox/mail/notifications', {}));
+
+            this.$el.empty().append(tpl.render('io.ox/mail/notifications', { strings: {
+                OPEN_APP: gt('Open Mail App')
+            }}));
 
             for (var i = 0; i < this.collection.size() && i < 3; i++) {
                 this.notificationviews[i] = new NotificationView({ model: this.collection.at(i)});
@@ -163,6 +136,14 @@ define('io.ox/mail/view-notifications',
             } else {
                 $badge.removeClass('badge-error');
             }
+        },
+        onOpenApp: function () {
+            console.log('open app now');
+            notficationsConroller.hideList();
+            ox.launch('io.ox/mail/main').fail(function () {
+                console.log('failed launching app', arguments);
+            });
+
         }
     });
 

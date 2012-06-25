@@ -163,12 +163,11 @@ define('io.ox/calendar/edit/main',
                         if (err.conflicts !== null && err.conflicts !== undefined) {
                             errContainer.text(gt('Conflicts detected'));
 
-                            require(['io.ox/calendar/edit/view-conflicts', 'io.ox/calendar/edit/collection-conflicts'], function (ConflictsView, ConflictsCollection) {
-                                console.log('class', ConflictsView);
-                                var conflicts = new ConflictsCollection(err.conflicts);
+                            require(['io.ox/calendar/edit/module-conflicts'], function (conflictsModule) {
+                                var conflicts = new conflictsModule.Collection(err.conflicts);
                                 conflicts.fetch()
                                     .done(function () {
-                                        var conView = new ConflictsView({collection: conflicts});
+                                        var conView = new conflictsModule.CollectionView({collection: conflicts});
                                         window.cview = conView;
                                         $(self.view.el).find('.additional-info').empty().append(
                                             conView.render().el
@@ -178,7 +177,6 @@ define('io.ox/calendar/edit/main',
                                             return self.onSave();
                                         });
                                         conView.on('cancel', function () {
-                                            console.log('cancel was hit, i disappear now');
                                             $(conView.el).remove();
                                             $(self.view.el).find('.error-display').empty();
                                         });
