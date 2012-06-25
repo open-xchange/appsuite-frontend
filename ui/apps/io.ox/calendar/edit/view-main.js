@@ -263,7 +263,7 @@ define('io.ox/calendar/edit/view-main',
 
             notIn = !_(participants).any(function (item) {
                 if (data.type === 5) {
-                    return (item.mail === data.mail);
+                    return (item.mail === data.mail && item.type === data.type) || (item.mail === data.email1 && item.type === data.type);
                 } else {
                     return (item.id === data.id && item.type === data.type);
                 }
