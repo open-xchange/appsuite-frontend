@@ -282,7 +282,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
      * - 'operation': When a new operation has been applied.
      * - 'modified': When the modified flag has been changed.
      */
-    function OXOEditor(controller, editdiv, textMode) {
+    function OXOEditor(editdiv, textMode) {
 
         // key codes of navigation keys that will be passed directly to the browser
         var NAVIGATION_KEYS = _([
@@ -1485,12 +1485,18 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     thisPara.removeChild(lastCurrentChild);
                 }
 
-                for (var child = nextPara.firstChild; child !== null; child = child.nextSibling) {
+                var child = nextPara.firstChild;
+
+                while (child !== null) {
+                    var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
+
                     if ((child.nodeType === 3) && (thisPara.lastChild.nodeType === 3)) {
                         thisPara.lastChild.nodeValue += child.nodeValue;
                     } else {
                         thisPara.appendChild(child);
                     }
+
+                    child = nextChild;
                 }
 
                 var localPosition = _.copy(position, true);

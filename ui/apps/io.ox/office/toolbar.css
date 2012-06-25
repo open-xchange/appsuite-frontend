@@ -15,8 +15,17 @@
 
     /* definitions ========================================================= */
 
+    /* border radius of regular tool bar buttons or button groups */
     @button-radius: 4px;
+
+    /* border radius of drop-down areas */
     @dropdown-radius: 5px;
+
+    /* spacing between elements in a button */
+    @whitespace-width: 4px;
+
+    /* blur radius for hover and focus shadows */
+    @shadow-radius: 5px;
 
     .border-radius(@radius) {
         -webkit-border-radius: @radius;
@@ -48,6 +57,12 @@
         border-bottom-right-radius: @radius;
     }
 
+    .box-shadow(@shadow) {
+        -webkit-box-shadow: @shadow;
+        -moz-box-shadow: @shadow;
+        box-shadow: @shadow;
+    }
+
     /* tool bar formatting ================================================= */
 
     /* redefine margin, padding, formatting for usage in OX */
@@ -59,6 +74,33 @@
     /* prevent multi-line layout of button groups */
     white-space: nowrap;
 
+    /* buttons ============================================================= */
+    
+    .btn {
+        .button-shadow(@opacity) {
+            .box-shadow(0 0 @shadow-radius rgba(82, 168, 236, @opacity));
+        }
+        
+        /* prevent dotted focus rectangle around buttons */
+        &:focus, &:active {
+            outline: none;
+        }
+
+        &:hover:not(:disabled) {
+            .button-shadow(0.4);
+        }
+
+        &:focus {
+            .button-shadow(0.8);
+        }
+
+        /* class for whitespace between icons, text, and dropdown arrows */
+        > span.whitespace {
+            display: inline-block;
+            width: @whitespace-width;
+        }
+    }
+    
     /* icons =============================================================== */
 
     /*
@@ -82,28 +124,31 @@
 
     /* table-style button drop-downs ======================================= */
 
-    table.dropdown-menu {
+    .btn-group > table.dropdown-menu {
         padding: 0;
         border-collapse: collapse;
         border-spacing: 0;
+        border: none;
 
         > tbody > tr {
             > td {
                 padding: 0;
 
-                /* all buttons: adjust margin and border for table view */
+                /* all buttons: adjust for table view */
                 > .btn {
                     width: 100%;
-                    margin: 0 -1px 0 0;
-                    border-top: none;
-                    border-left: none;
                     .border-radius(0);
                 }
-
-                /* last button in a row: no border (has table border) */
-                &:last-child > .btn {
-                    border-right: none;
+                
+                /* all buttons but the first in a row: remove left border */
+                &:not(:first-child) > .btn {
+                    border-left: none;
                 }
+            }
+
+            /* all buttons but in the first row: remove top border */
+            &:not(:first-child) > td > .btn {
+                border-top: none;
             }
 
             /* first row: radius for first and last button */

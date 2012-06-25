@@ -27,6 +27,8 @@ define('io.ox/office/main',
 
     /**
      * Creates and returns a new instance of the main editor tool bar.
+     *
+     * @constructor
      */
     var MainToolBar = ToolBar.extend({
 
@@ -37,28 +39,44 @@ define('io.ox/office/main',
 
             // add all tool bar controls
             this
-            .createButtonGroup()
-                .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert last operation'),  disableOn: false })
-                .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation'), disableOn: false })
+            .addButtonGroup()
+                .addButton('action/undo', { icon: gt('icon-io-ox-undo'), tooltip: gt('Revert last operation') })
+                .addButton('action/redo', { icon: gt('icon-io-ox-redo'), tooltip: gt('Restore last operation') })
             .end()
-            .createButtonGroup()
-                .addButton('font/bold',      { icon: gt('icon-io-ox-bold'),      tooltip: gt('Bold'),      toggle: true })
-                .addButton('font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
-                .addButton('font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
+            .addButtonGroup()
+                .addButton('character/font/bold',      { icon: gt('icon-io-ox-bold'),      tooltip: gt('Bold'),      toggle: true })
+                .addButton('character/font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
+                .addButton('character/font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
             .end()
-            .createRadioGroup('paragraph/align')
+            .addRadioGroup('paragraph/alignment')
+                .addButton('left',    { icon: gt('icon-align-left'),    tooltip: gt('Left') })
+                .addButton('center',  { icon: gt('icon-align-center'),  tooltip: gt('Center') })
+                .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
+                .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
+            .end()
+            .addRadioDropDown('paragraph/align/test/1', { columns: 2 })
                 .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
                 .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
                 .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
                 .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
             .end()
-            .createRadioDropDown('paragraph/align', { columns: 2 })
-                .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
-                .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
-                .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
-                .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
+/*
+            .addButtonGroup()
+                .addRadioDropDown('paragraph/align/test/2', { columns: 2 })
+                    .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
+                    .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
+                    .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
+                    .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
+                .end()
+                .addRadioDropDown('paragraph/align/test/3', { columns: 2 })
+                    .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
+                    .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
+                    .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
+                    .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
+                .end()
             .end()
-            .createButton('action/debug', { icon: 'icon-eye-open', tooltip: gt('Debug Mode'), toggle: true });
+*/
+            .addButton('action/debug', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
         } // end of constructor
 
@@ -78,12 +96,12 @@ define('io.ox/office/main',
             Controller.call(this, {
 
                 'action/undo': {
-                    get: function () { return editor.hasUndo(); },
+                    enable: function () { return editor.hasUndo(); },
                     set: function (list) { editor.undo(); editor.grabFocus(); },
                     poll: true
                 },
                 'action/redo': {
-                    get: function () { return editor.hasRedo(); },
+                    enable: function () { return editor.hasRedo(); },
                     set: function (list) { editor.redo(); editor.grabFocus(); },
                     poll: true
                 },
@@ -92,23 +110,23 @@ define('io.ox/office/main',
                     set: function (state) { app.setDebugMode(state); editor.grabFocus(); }
                 },
 
-                'font/bold': {
+                'character/font/bold': {
                     get: function () { return editor.getAttribute('bold'); },
                     set: function (state) { editor.setAttribute('bold', state); editor.grabFocus(); },
                     poll: true
                 },
-                'font/italic': {
+                'character/font/italic': {
                     get: function () { return editor.getAttribute('italic'); },
                     set: function (state) { editor.setAttribute('italic', state); editor.grabFocus(); },
                     poll: true
                 },
-                'font/underline': {
+                'character/font/underline': {
                     get: function () { return editor.getAttribute('underline'); },
                     set: function (state) { editor.setAttribute('underline', state); editor.grabFocus(); },
                     poll: true
                 },
 
-                'paragraph/align': {
+                'paragraph/alignment': {
                     set: function (value) { editor.grabFocus(); }
                 }
 
@@ -122,14 +140,15 @@ define('io.ox/office/main',
              * triggered by any registered view component.
              */
             this.registerEditor = function (newEditor, supportedItems) {
-                newEditor.on('focus', _.bind(function (event, focused) {
-                    if (focused && (editor !== newEditor)) {
-                        // set as current editor
-                        editor = newEditor;
-                        // update view components
-                        this.enableAndDisable(supportedItems);
-                    }
-                }, this));
+                newEditor
+                    .on('focus', _.bind(function (event, focused) {
+                        if (focused && (editor !== newEditor)) {
+                            // set as current editor
+                            editor = newEditor;
+                            // update view components
+                            this.enableAndDisable(supportedItems);
+                        }
+                    }, this));
                 return this;
             };
 
@@ -177,21 +196,21 @@ define('io.ox/office/main',
 
             debugMode = null;
 
-        /*
+        /**
          * Shows a closable error message above the editor.
          *
-         * @param message
+         * @param {String} message
          *  The message text.
          *
-         * @param title
-         *  (optional) The title of the error message. Defaults to 'Error'.
+         * @param {String} [title='Error']
+         *  The title of the error message. Defaults to 'Error'.
          */
         var showError = function (message, title) {
             appPane.find('.alert').remove();
             appPane.prepend($.alert(title || gt('Error'), message));
         };
 
-        /*
+        /**
          * Shows an error message extracted from the error object returned by
          * a jQuery AJAX call.
          */
@@ -199,7 +218,7 @@ define('io.ox/office/main',
             showError(data.responseText);
         };
 
-        /*
+        /**
          * Returns the URL passed to the AJAX calls used to convert a document
          * file from and to an operations list.
          */
@@ -230,15 +249,16 @@ define('io.ox/office/main',
 
             // The result is a JSONObject
             if (_(result).isObject()) {
-                window.console.log("Number of operations received by the server: " + result.data.count);
+                window.console.log('Number of operations received by the server: ' + result.data.count);
             }
 
         };
 
         var createOperationsList = function (result) {
 
-            var operations = [];
-            var value = result.data.operations;
+            var operations = [],
+                value = JSON.parse(result.data).operations;
+            // var value = result.data.operations; // code for Dummy Operations.
 
             if (_(value).isArray()) {
                 _(value).each(function (json, j) {
@@ -279,28 +299,43 @@ define('io.ox/office/main',
          * Loads the document described in the options map passed in the
          * constructor of this application, and shows the application window.
          *
-         * @returns
+         * @returns {jQuery.Deferred}
          *  A deferred that reflects the result of the load operation.
          */
         app.load = function () {
             var def = $.Deferred();
+
+            // show application window
             win.show().busy();
             $(window).resize();
+
+            // initialize editor, MUST be done in visible application,
+            // otherwise IE fails to set the browser selection
+            editor.initDocument();
+
             $.ajax({
                 type: 'GET',
                 url: getFilterUrl('importdocument'),
                 dataType: 'json'
             })
             .done(function (response) {
-                var operations = createOperationsList(response);
-                editor.applyOperations(operations, false, true);
-                editor.setModified(false);
-                editor.grabFocus(true);
-                win.idle();
-                def.resolve();
+                try {
+                    var operations = createOperationsList(response);
+                    editor.applyOperations(operations, false, true);
+                    editor.setModified(false);
+                    editor.grabFocus(true);
+                    win.idle();
+                    def.resolve();
+                } catch (ex) {
+                    showError('Exception caught: ' + ex, 'Internal Error');
+                    editor.grabFocus(true);
+                    win.idle();
+                    def.reject();
+                }
             })
             .fail(function (response) {
                 showAjaxError(response);
+                editor.grabFocus(true);
                 win.idle();
                 def.reject();
             });
@@ -310,14 +345,14 @@ define('io.ox/office/main',
         /**
          * Saves the document to its origin.
          *
-         * @returns
+         * @returns {jQuery.Deferred}
          *  A deferred that reflects the result of the save operation.
          */
         app.save = function () {
             var def = $.Deferred();
             win.busy();
             var allOperations = editor.getOperations();
-            var dataObject = {"operations": JSON.stringify(allOperations)};
+            var dataObject = {'operations': JSON.stringify(allOperations)};
 
             $.ajax({
                 type: 'POST',
@@ -326,7 +361,7 @@ define('io.ox/office/main',
                 data: dataObject,
                 beforeSend: function (xhr) {
                     if (xhr && xhr.overrideMimeType) {
-                        xhr.overrideMimeType("application/j-son;charset=UTF-8");
+                        xhr.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 }
             })
@@ -350,14 +385,14 @@ define('io.ox/office/main',
          * down. If the edited document has unsaved changes, a dialog will be
          * shown asking whether to save or drop the changes.
          *
-         * @returns
+         * @returns {jQuery.Deferred}
          *  A deferred that will be resolved if the application can be closed
          *  (either if it is unchanged, or the user has chosen to save or lose
          *  the changes), or will be rejected if the application must remain
          *  alive (user has cancelled the dialog, save operation failed).
          */
         app.setQuit(function () {
-            var def = null;
+            var def = $.Deferred();
             if (editor.isModified()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
@@ -365,13 +400,18 @@ define('io.ox/office/main',
                     .addPrimaryButton('delete', gt('Lose changes'))
                     .addAlternativeButton('save', gt('Save'))
                     .addButton('cancel', gt('Cancel'))
-                    .on('delete', function () { def = $.when(); })
-                    .on('save', function () { def = app.save(); })
-                    .on('cancel', function () { def = $.Deferred().reject(); })
+                    .on('delete', function () { def.resolve(); })
+                    .on('cancel', function () { def.reject(); })
+                    .on('save', function () {
+                        app.save().then(
+                            function () { def.resolve(); },
+                            function () { def.reject(); }
+                        );
+                    })
                     .show();
                 });
             } else {
-                def = $.when();
+                def.resolve();
             }
             return def.done(app.destroy);
         });
@@ -425,7 +465,7 @@ define('io.ox/office/main',
                 var node = $('<div>')
                         .addClass('io-ox-office-editor user-select-text ' + textMode)
                         .attr('contenteditable', true);
-                editors[textMode] = new Editor(controller, node, textMode);
+                editors[textMode] = new Editor(node, textMode);
             });
 
             // register GUI elements and editors at the controller
