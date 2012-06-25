@@ -121,8 +121,9 @@ define("io.ox/core/main",
 
         // help
         desktop.addLauncher("right", $('<i class="icon-question-sign icon-white">'), function () {
-            //var helpMap = loadHelpTexts();
-            //addMouseOverHelp()
+            require(['io.ox/help/center'], function (center) {
+                center.toggle();
+            });
         }, gt('Help'));
 
         // refresh
