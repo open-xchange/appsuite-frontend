@@ -42,10 +42,8 @@ define('io.ox/settings/accounts/email/settings',
                     myView.dialog = new dialogs.SidePopup('800').show(evt, function (pane) {
                         pane.append(myView.render().el);
                     });
-
                     return myView.node;
                 });
-
             } else {
                 myViewNode = $("<div>").addClass("accountDetail");
                 myModel = new AccountModel(evt.data);
@@ -57,18 +55,15 @@ define('io.ox/settings/accounts/email/settings',
                 myView.collection = collection;
                 return myView.node;
             }
-
         }
     });
 
     var autoconfigDialogbox,
-        validateDialogbox,
         collection,
         myModel = new AccountModel({}),
 
         createExtpointForNewAccount = function (args) {
             var node = $('<div>');
-
             require(['io.ox/settings/accounts/email/settings'], function (m) {
                 ext.point('io.ox/settings/accounts/email/settings/detail').invoke('draw', node, args);
             });
@@ -123,41 +118,48 @@ define('io.ox/settings/accounts/email/settings',
             myModel.validationCheck(deferedValidation, data);
             deferedValidation.done(function (response) {
                 if (response === false) {
-                    var message = gt('Failed to connect. Please check your password and try again');
+                    var message = gt('There was no suitable server found for this mail/password combination');
                     drawAlert(alertPlaceholder, message);
-                    validateDialogbox.idle();
+                    autoconfigDialogbox.idle();
                 } else {
-
                     myModel.save(data, deferedSave);
                     deferedSave.done(function (response) {
                         if (response.error_id) {
-                            validateDialogbox.close();
+                            autoconfigDialogbox.close();
                             failDialog(response.error);
                         } else {
-                            validateDialogbox.close();
+                            autoconfigDialogbox.close();
                             if (collection) {
                                 collection.add([response]);
                             }
                             successDialog();
                         }
-
                     });
                 }
             }).fail(function () {
                 var message = gt('Failed to connect.');
                 drawAlert(alertPlaceholder, message);
-                validateDialogbox.idle();
+                autoconfigDialogbox.idle();
             });
         },
 
-        autoconfigApiCall = function (args, newMailaddress) {
+        autoconfigApiCall = function (args, newMailaddress, newPassword, alertPlaceholder) {
             api.autoconfig({
                 'email': newMailaddress,
-                'password': 'test'
+                'password': newPassword
             }).done(function (data) {
-                data.primary_address = newMailaddress;
-                autoconfigDialogbox.close();
-                inputPasswordDialog(data, collection);
+                if (data.login) {
+                    data.primary_address = newMailaddress;
+                    data.password = newPassword;
+                    validateMailaccount(data, alertPlaceholder);
+                } else {
+                    var data = {};
+                    console.log('no configdata recived');
+                    data.primary_address = newMailaddress;
+                    args.data = data;
+                    createExtpointForNewAccount(args);
+                    autoconfigDialogbox.close();
+                }
             })
             .fail(function () {
                 var data = {};
@@ -169,27 +171,21 @@ define('io.ox/settings/accounts/email/settings',
             });
         },
 
-        validateEmail = function (newMailaddress) {
-            var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            if (regEmail.test(newMailaddress)) {
-                return true;
-            }
-        },
-
         mailAutoconfigDialog = function (args, o) {
             if (o) {
                 collection = o.collection;
             }
-            var label = $('<label>').text(gt('Your mail address')),
-                inputField =  $('<input>', { value: '' }).addClass('input-large'),
+            var labelMail = $('<label>').text(gt('Your mail address')),
+                labelPassword = $('<label>').text(gt('The corresponding password')),
+                inputFieldMail =  $('<input>', { value: '' }).attr('type', 'text').addClass('input-large'),
+                inputFieldPassword = $('<input>', { value: '' }).attr('type', 'password').addClass('input-large'),
                 alertPlaceholder = $('<div>');
-            inputField.keyup(function (e) {
+            inputFieldPassword.keyup(function (e) {
                 if (e.keyCode === 13) {
                     var addButton = autoconfigDialogbox.getFooter().find('.btn-primary');
                     addButton.trigger('click');
                 }
             });
-
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var self = this;
                 autoconfigDialogbox = new dialogs.ModalDialog({
@@ -202,7 +198,10 @@ define('io.ox/settings/accounts/email/settings',
                     $('<h4>').text(gt('Add mail account'))
                 )
                 .append(
-                        label.append(inputField)
+                        labelMail.append(inputFieldMail)
+                )
+                .append(
+                        labelPassword.append(inputFieldPassword)
                 )
                 .append(
                     alertPlaceholder
@@ -210,74 +209,20 @@ define('io.ox/settings/accounts/email/settings',
                 .addButton('cancel', 'Cancel')
                 .addPrimaryButton('add', 'Add')
                 .show(function () {
-                    inputField.focus();
+                    inputFieldMail.focus();
                 });
 
                 autoconfigDialogbox.on('add', function (e) {
-                    var newMailaddress = inputField.val();
-                    if (validateEmail(newMailaddress)) {
+                    var newMailaddress = inputFieldMail.val(),
+                        newPassword = inputFieldPassword.val();
+                    if (myModel.isMailAddress(newMailaddress) === true) {
                         drawBusy(alertPlaceholder);
-                        autoconfigApiCall(args, newMailaddress);
+                        autoconfigApiCall(args, newMailaddress, newPassword, alertPlaceholder);
                     } else {
                         var message = gt('This is not a valid mail address');
                         drawAlert(alertPlaceholder, message);
-                        inputField.focus();
+                        inputFieldPassword.focus();
                         autoconfigDialogbox.idle();
-                    }
-                });
-
-            });
-        },
-
-        inputPasswordDialog = function (data, collection) {
-
-            var label = $('<label>').text(gt('Your password')),
-                inputField =  $('<input>', { value: '' }).attr('type', 'password').addClass('input-large'),
-                alertPlaceholder = $('<div>');
-            inputField.keyup(function (e) {
-                if (e.keyCode === 13) {
-                    var submitButton = validateDialogbox.getFooter().find('.btn-primary');
-                    submitButton.trigger('click');
-                }
-            });
-
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                var self = this;
-                validateDialogbox = new dialogs.ModalDialog({
-                    width: 400,
-                    easyOut: true,
-                    async: true
-                });
-
-                validateDialogbox.header(
-                    $('<h4>').text(gt('Add password for mail account'))
-                )
-                .append(
-                    label.append(inputField)
-                )
-                .append(
-                    alertPlaceholder
-                )
-                .addButton('cancel', gt('Cancel'))
-                .addPrimaryButton('add', gt('Submit'))
-                .show(function () {
-                    inputField.focus();
-                });
-                var message = gt('We now need your password to complete the setup process');
-                drawMessage(alertPlaceholder, message);
-
-                validateDialogbox.on('add', function (event) {
-                    var password = inputField.val(),
-                        obj;
-                    if (password !== '') {
-                        data.password = password;
-                        drawBusy(alertPlaceholder);
-                        validateMailaccount(data, alertPlaceholder);
-                    } else {
-                        var message = gt('Please fill the password');
-                        drawAlert(alertPlaceholder, message);
-                        inputField.focus();
-                        validateDialogbox.idle();
                     }
                 });
             });
