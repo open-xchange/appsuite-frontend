@@ -257,8 +257,21 @@ define('io.ox/office/main',
         var createOperationsList = function (result) {
 
             var operations = [],
+                value;
+
+            try {
                 value = JSON.parse(result.data).operations;
-            // var value = result.data.operations; // code for Dummy Operations.
+            } catch (e) {
+                window.console.warn("Failed to parse JSON data. Trying second parse process.");
+            }
+
+            if (! value) {
+                try {
+                    value = result.data.operations; // code for Dummy Operations.
+                } catch (e) {
+                    window.console.warn("Failed to parse JSON data. No JSON data could be loaded.");
+                }
+            }
 
             if (_(value).isArray()) {
                 _(value).each(function (json, j) {
