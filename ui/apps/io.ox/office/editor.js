@@ -712,6 +712,13 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.getSelection = function () {
+
+            // quick check - no selection.
+            // TODO: Also check wether or not the selection is inside our edit div.
+            var windowSel = window.getSelection();
+            if (!windowSel.anchorNode)
+                return;
+
             var domSelection = this.implGetCurrentDOMSelection();
             var selection = this.implGetOXOSelection(domSelection);
             return selection;
@@ -1086,8 +1093,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             var newOperation = { name: OP_INSERT_TEXT, text: text, start: _.copy(position, true) };
             var undoOperation = { name: 'deleteText', start: _.copy(position, true), end: [position[0], position[1] + text.length] };
             var undoAction = new OXOUndoAction(undoOperation, newOperation);
-            if (text.length === 1)
-                undoAction.allowMerge = true;
+            // if (text.length === 1)
+            //  undoAction.allowMerge = true;
             undomgr.addUndo(undoAction);
             this.applyOperation(newOperation, true, true);
         };
@@ -1393,6 +1400,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             if ((end === undefined) || (end === -1)) {
                 end = this.getParagraphLen(para);
             }
+
             // HACK
             var oldselection = this.getSelection();
             // DR: works without focus
@@ -1411,8 +1419,11 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             } else {
                 document.execCommand(attr, false, value);
             }
-            oldselection.adjust(); // FireFox can'r restore selection if end < start
-            this.setSelection(oldselection);
+
+            if (oldselection !== undefined) {
+                oldselection.adjust(); // FireFox can't restore selection if end < start
+                this.setSelection(oldselection);
+            }
 
             lastOperationEnd = new OXOPaM([para, end]);
         };
