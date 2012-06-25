@@ -19,14 +19,18 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
     var OP_INSERT_TEXT = "insertText";
 
-    function OXOUndoAction(undoOperation, redoOperation) {
+    function OXOUndoAction(_undoOperation, _redoOperation) {
+
+        // Need to store as member, because of the feature to merge undos afterwards...
+        this.undoOperation = _undoOperation;
+        this.redoOperation = _redoOperation;
 
         this.undo = function (editor) {
-            editor.applyOperation(undoOperation, true, true);  // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
+            editor.applyOperation(this.undoOperation, true, true);  // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
         };
 
         this.redo = function (editor) {
-            editor.applyOperation(redoOperation, true, true);
+            editor.applyOperation(this.redoOperation, true, true);
         };
     }
 
@@ -98,13 +102,17 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     var prevUndo = actions[currentAction - 1];
                     if (prevUndo.allowMerge && (prevUndo.redoOperation.name === oxoUndoAction.redoOperation.name)) {
                         if (oxoUndoAction.redoOperation.name === OP_INSERT_TEXT) {
-                            if (this.isSameParagraph(oxoUndoAction.redoOperation.start, prevUndo.redoOperation.start, false)) {
-                                var nCharPosInArray = prevUndo.redoOperation.start.size() - 1;
+                            if (isSameParagraph(oxoUndoAction.redoOperation.start, prevUndo.redoOperation.start, false)) {
+                                var nCharPosInArray = prevUndo.redoOperation.start.length - 1;
                                 var prevCharEnd = prevUndo.redoOperation.start[nCharPosInArray] + prevUndo.redoOperation.text.length;
-                                if (prevCharEnd === oxoUndoAction.redoOperation.start[prevCharEnd]) {
-                                    // Merge Undo...
-                                    prevUndo.redoOperation.text +=  oxoUndoAction.redoOperation.text;
-                                    prevUndo.undoOperation.end[nCharPosInArray] += oxoUndoAction.redoOperation.text.length;
+                                if (prevCharEnd === oxoUndoAction.redoOperation.start[nCharPosInArray]) {
+                                    var lastChar = prevUndo.redoOperation.text[prevUndo.redoOperation.text.length - 1];     // text len can't be 0 in undo action...
+                                    if (lastChar !== ' ') {
+                                        // Merge Undo...
+                                        prevUndo.redoOperation.text +=  oxoUndoAction.redoOperation.text;
+                                        prevUndo.undoOperation.end[nCharPosInArray] += oxoUndoAction.redoOperation.text.length;
+                                        bDone = true;
+                                    }
                                 }
                             }
                         }
@@ -246,6 +254,19 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             return ("Startpoint: " + this.startPaM.toString() + ", Endpoint: " + this.endPaM.toString());
         };
     }
+
+    function isSameParagraph(pos1, pos2, includeLastPos) {
+        if (pos1.length !== pos2.length)
+            return false;
+        if (pos1.length < (includeLastPos ? 1 : 2))
+            return false;
+        var n = pos1.length - (includeLastPos ? 1 : 2);
+        for (var i = 0; i <= n; i++)
+            if (pos1[n] !== pos2[n])
+                return false;
+        return true;
+    }
+
 
     function collectTextNodes(element, textNodes) {
         for (var child = element.firstChild; child !== null; child = child.nextSibling) {
@@ -1093,8 +1114,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             var newOperation = { name: OP_INSERT_TEXT, text: text, start: _.copy(position, true) };
             var undoOperation = { name: 'deleteText', start: _.copy(position, true), end: [position[0], position[1] + text.length] };
             var undoAction = new OXOUndoAction(undoOperation, newOperation);
-            // if (text.length === 1)
-            //  undoAction.allowMerge = true;
+            if (text.length === 1)
+                undoAction.allowMerge = true;
             undomgr.addUndo(undoAction);
             this.applyOperation(newOperation, true, true);
         };
@@ -1174,18 +1195,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 this.implDbgOutInfo('niy: getAttribute with selection parameter');
                 // implGetAttribute( attr, para, start, end );
             }
-        };
-
-        this.isSameParagraph = function (pos1, pos2, includeLastPos) {
-            if (pos1.size() !== pos2.size())
-                return false;
-            if (pos1.size() < (includeLastPos ? 1 : 2))
-                return false;
-            var n = pos1.size() - (includeLastPos ? 1 : 2);
-            for (var i = 0; i <= n; i++)
-                if (pos1[n] !== pos2[n])
-                    return false;
-            return true;
         };
 
         this.getParagraphCount = function () {
