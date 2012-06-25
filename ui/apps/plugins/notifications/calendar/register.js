@@ -15,9 +15,10 @@ define('plugins/notifications/calendar/register',
        'io.ox/calendar/api',
        'io.ox/calendar/util',
        'io.ox/core/extensions',
+       'io.ox/core/api/user',
        'dot!plugins/notifications/calendar/template.html',
        'gettext!plugins/notifications/calendar',
-       'less!plugins/notifications/calendar/style.css'], function (notificationController, calApi, util, ext, tpl, gt) {
+       'less!plugins/notifications/calendar/style.css'], function (notificationController, calApi, util, ext, userApi, tpl, gt) {
 
     'use strict';
 
@@ -35,7 +36,6 @@ define('plugins/notifications/calendar/register',
         render: function () {
             this.$el.empty().append(tpl.render('plugins/notifications/calendar/inviteitem', {}));
             var bindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property');
-
             this._modelBinder.bind(this.model, this.el, bindings);
             return this;
 
@@ -170,20 +170,37 @@ define('plugins/notifications/calendar/register',
             calApi.on('invites', function (e, invites) {
                 notifications.collection.reset([]);
                 _(invites).each(function (invite) {
-                    notifications.collection.unshift({
+                    console.log('invite', invite);
+                    var inObj = {
                         title: invite.title,
                         subject: invite.location,
                         date: util.getDateInterval(invite),
                         time: util.getTimeInterval(invite),
-                        organizer: 'mario',
                         data: invite
-                    });
+                    };
+                    if (invite.organizer && !invite.organizerId) {
+                        inObj.organizer = gt('organized by %1$s', invite.organizer);
+                        notifications.collection.unshift(inObj);
+                    } else {
+                        var userId = invite.organizerId || invite.created_by;
+                        userApi.get(userId)
+                            .done(function (user) {
+                                console.log('organizer', user);
+                                inObj.organizer = gt('organized by %1$s', user.display_name);
+                                notifications.collection.unshift(inObj);
+                            })
+                            .fail(function () {
+                                // no organizer
+                                inObj.organizer = false;
+                                notifications.collection.unshift(inObj);
+                            });
+
+                    }
+
                 });
             });
         }
     });
-
-
     return true;
 });
 
