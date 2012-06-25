@@ -392,7 +392,7 @@ define('io.ox/office/main',
          *  alive (user has cancelled the dialog, save operation failed).
          */
         app.setQuit(function () {
-            var def = null;
+            var def = $.Deferred();
             if (editor.isModified()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
@@ -400,13 +400,18 @@ define('io.ox/office/main',
                     .addPrimaryButton('delete', gt('Lose changes'))
                     .addAlternativeButton('save', gt('Save'))
                     .addButton('cancel', gt('Cancel'))
-                    .on('delete', function () { def = $.when(); })
-                    .on('save', function () { def = app.save(); })
-                    .on('cancel', function () { def = $.Deferred().reject(); })
+                    .on('delete', function () { def.resolve(); })
+                    .on('cancel', function () { def.reject(); })
+                    .on('save', function () {
+                        app.save().then(
+                            function () { def.resolve(); },
+                            function () { def.reject(); }
+                        );
+                    })
                     .show();
                 });
             } else {
-                def = $.when();
+                def.resolve();
             }
             return def.done(app.destroy);
         });
