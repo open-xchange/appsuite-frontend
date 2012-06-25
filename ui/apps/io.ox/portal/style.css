@@ -1,6 +1,15 @@
 
 .io-ox-portal {
     padding: 0 13px 0 13px;
+    position: relative;
+    height: 100%;
+    overflow: auto;
+}
+.io-ox-portal, .io-ox-portal * {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .io-ox-portal .clear-title {
@@ -70,4 +79,31 @@
     margin: 0 1.5em 1em 0;
     border: 0px none;
     max-width: 250px;
+}
+
+
+.io-ox-portal-left {
+    width: 30%;
+}
+
+.io-ox-portal-right {
+    margin-left: 30%;
+    position: absolute;
+    top: 0;
+    width: 70%;
+    padding: 0 10% 0 1em;
+    overflow: auto;
+    min-height: 100px;
+}
+.io-ox-portal-widget-tile {
+    background: #cce;
+    float: left;
+    padding: 0 .5em 1em .5em;
+    overflow: hidden;
+}
+.io-ox-portal-widget-tile h1 {
+    line-height: 2em;
+}
+.io-ox-portal-widget-tile .badge {
+    float: right;
 }

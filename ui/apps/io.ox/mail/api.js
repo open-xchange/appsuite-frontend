@@ -174,10 +174,10 @@ define("io.ox/mail/api",
     });
 
     api.SENDTYPE = {
-        NORMAL:  1,
-        REPLY:   2,
-        FORWARD: 3,
-        DRAFT:   4
+        NORMAL:  0,
+        REPLY:   1,
+        FORWARD: 2,
+        DRAFT:   3
     };
 
     api.FLAGS = {
@@ -501,7 +501,7 @@ define("io.ox/mail/api",
                 appendColumns: false
             })
             .pipe(function (data) {
-                var text = '', quote = '', tmp;
+                var text = '', quote = '', tmp = '';
                 // transform pseudo-plain text to real text
                 if (data.attachments && data.attachments.length) {
                     if (data.attachments[0].content === '') {

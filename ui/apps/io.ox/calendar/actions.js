@@ -151,7 +151,6 @@ define('io.ox/calendar/actions',
         requires: 'one create',
         action: function (app) {
             require(['io.ox/calendar/edit/main'], function (editmain) {
-                console.log('create');
                 // FIXME: what a hack > folder_id
                 editmain.getApp().launch().done(function () {
                     this.create({folder_id: app.folder.get(), participants: []});
@@ -174,13 +173,13 @@ define('io.ox/calendar/actions',
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 new dialogs.ModalDialog()
-                    .text(gt('Change confirmation status'))
-                    .append($('<p>').text(gt('You are about the change your confiration status for this appointment. Please be so kind to leave a comment about your change for the other participants.')))
+                    .header($('<h3>').text('Change confirmation status'))
+                    .append($('<p>').text(gt('You are about the change your confirmation status. Please leave a comment for other participants.')))
                     .append(
-                        $('<div>').addClass('row-fluid form-horizontal').css({'margin-top': '20px'}).append(
+                        $('<div>').addClass('row-fluid').css({'margin-top': '20px'}).append(
                             $('<div>').addClass('control-group span12').css({'margin-bottom': '0px'}).append(
-                                $('<label>').addClass('control-label').css({'width': '0px'}).attr('for', inputid).text(gt('Comment:')),
-                                $('<div>').addClass('controls').css({'margin-left': '70px', 'margin-right': '10px'}).append(
+                                $('<label>').addClass('control-label').attr('for', inputid).text(gt('Comment:')),
+                                $('<div>').addClass('controls').css({'margin-right': '10px'}).append(
                                     $('<input>')
                                     .css({'width': '100%'})
                                     .attr('data-property', 'comment')
@@ -188,7 +187,7 @@ define('io.ox/calendar/actions',
                                 )
                             )
                         )
-                    .addButton('cancel', gt('Cancel'))
+                    .addAlternativeButton('cancel', gt('Cancel'))
                     .addDangerButton('declined', gt('Decline'))
                     .addWarningButton('tentative', gt('Tentative'))
                     .addSuccessButton('accepted', gt('Accept'))
@@ -218,15 +217,10 @@ define('io.ox/calendar/actions',
                         }
 
                         api.confirm(o)
-                            .done(function (data) {
-                                console.log('changed status successfully', data);
-                            })
                             .fail(function (err) {
                                 console.log('ERROR', err);
                             });
                     });
-
-
             });
         }
     });
@@ -287,7 +281,7 @@ define('io.ox/calendar/actions',
         index: 100,
         prio: 'hi',
         id: 'changestatus',
-        label: gt('Status'),
+        label: gt('Change status'),
         ref: 'io.ox/calendar/detail/actions/changestatus'
     }));
 

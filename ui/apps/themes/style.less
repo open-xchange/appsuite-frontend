@@ -186,12 +186,14 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     transition: all 0.1s;
     -webkit-transition: all 0.1s;
     -moz-transition: all 0.1s;
+    z-index: 10;
 }
 
 #io-ox-screens.beside {
     right: 300px;
     left: -300px;
 }
+
 #io-ox-notifications {
     background-color: #222;
     top: 40px;
@@ -204,61 +206,98 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     -moz-transition: all 0.1s;
     border-top: 1px solid #000;
     overflow: hidden;
+    z-index: 30;
+}
+
+#io-ox-notifications-overlay {
+    background-color: transparent;
+    background-color: rgba(255, 255, 255, 0.10);
+    top: 40px;
+    right: 300px;
+    display: none;
+    z-index: 20;
+}
+
+#io-ox-notifications-overlay.active {
+    display: block;
 }
 
 .notifications {
-    margin-bottom: 20px;
+    margin-bottom: 13px;
 }
 
 #io-ox-notifications.active {
     right: 0px;
 }
 #io-ox-notifications-display {
-    padding: 20px;
+    padding: 13px;
 }
 #io-ox-windowmanager {
     overflow: hidden;
 
 }
 
-#io-ox-notifications-display .title {
+#io-ox-notifications-display .section-title {
     color: #EEE;
-    margin-bottom: 10px;
+    margin-bottom: 13px;
     border: none;
     font-size: 26px;
     font-family: @font-light;
-    margin-left: 10px;
+    margin-left: 13px;
 }
 
 #io-ox-notifications-display .item {
-    width: 100%;
-    height: auto;
-    background-color: #444;
-    padding: 5px;
-    margin-bottom: 5px;
+    color: #fff;
+    background-color: #333;
+    padding: 7px 13px 7px 13px;
+    margin-bottom: 1px;
     cursor: pointer;
 }
+
 #io-ox-notifications-display .item:hover {
-    background-color: #333;
-}
-#io-ox-notifications-display .item .title {
-    color:  #EEE;
-    font-size: 14px;
-    font-family: @font-normal;
-    margin-left: 5px;
-    pointer-events: none;
+    background-color: #444;
 }
 
-#io-ox-notifications-display .item .subject {
-    color: #EEE;
+#io-ox-notifications-display .item .title {
+    pointer-events: none;
+    font-weight: bold;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    margin-left: 5px;
-    font-size: 12px;
+}
+
+#io-ox-notifications-display .item .subject {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
     pointer-events: none;
 }
 
+#io-ox-notifications-display .item .content {
+    color: #aaa;
+    line-height: 15px;
+    max-height: 5 * 15px; /* 5 rows */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 3px;
+}
+
+#io-ox-notifications-display .item .time {
+    float: right;
+    display: inline-block;
+}
+
+#io-ox-notifications-display .item .date {
+
+}
+#io-ox-notifications-display .item .actions {
+    text-align: right;
+    margin: 5px 0 5px 0;
+}
+#io-ox-notifications-display a { color: #17B2FF; }
+#io-ox-notifications-display .open-app {
+    text-align: right;
+}
 
 #io-ox-windowmanager-pane {
     left: 0%;
@@ -1222,6 +1261,10 @@ input.nice-input {
     cursor: pointer;
 }
 
+.io-ox-clear {
+    clear: both;
+}
+
 /*OMG find better place*/
 div.jGrowl {
 	z-index: 			9999;
@@ -1315,6 +1358,51 @@ div.jGrowl div.jGrowl-closer {
 	font-size:				.9em;
 	font-weight: 			bold;
 	text-align: 			center;
+}
+
+div.contact-image {
+    background-image: url(dummypicture.xpng);
+    height: 3em;
+    width: 3em;
+    margin-right: 1em;
+    display: inline-block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    float: left;
+}
+
+div.group-image {
+    background-image: url(dummypicture_group.xpng);
+    background-position: 0px -4px;
+    height: 3em;
+    width: 3em;
+    margin-right: 1em;
+    display: inline-block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    float: left;
+}
+
+div.resource-image {
+    background-image: url(dummypicture_resource.xpng);
+    height: 3em;
+    width: 3em;
+    margin-right: 1em;
+    display: inline-block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    float: left;
+}
+
+div.external-user-image {
+    background-image: url(dummypicture.xpng);
+    height: 3em;
+    width: 3em;
+    margin-right: 1em;
+    display: inline-block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    float: left;
 }
 
 /** Hide jGrowl when printing **/

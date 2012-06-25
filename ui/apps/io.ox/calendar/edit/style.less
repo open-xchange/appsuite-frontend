@@ -22,7 +22,9 @@ div.io-ox-calendar-edit {
     }
 
     label.desc {
+        font-size: 13px;
         color: #888;
+        font-family: @font-light;
     }
 
     div.section {
@@ -155,9 +157,9 @@ div.io-ox-calendar-edit {
 
     .sectiontitle {
         font-size: 13px;
+        font-family: @font-light;
         margin: 20px 0 15px 0;
         color: #888;
-        font-weight: 200;
     }
 
     legend {
@@ -181,12 +183,31 @@ div.io-ox-calendar-edit {
     }
 
     .autocomplete-popup .autocomplete-item {
-        padding: 0 5px 5px 0px;
+        padding: 0px 5px 5px 1px;
         line-height: 1.5em;
         cursor: pointer;
     }
     .autocomplete-popup .autocomplete-item.selected {
         background-color: #EEE;
+    }
+    .notify-participants {
+        text-align: right;
+        margin-top: 5px;
+    }
+    .participantsrow {
+        margin-bottom: 30px;
+    }
+    .add-participants {
+        margin-bottom: 200px;
+
+        .help {
+            color: #888;
+            margin-top: 5px;
+        }
+    }
+
+    label.label-inline {
+        display: inline;
     }
 
 }
@@ -229,6 +250,11 @@ div.edit-appointment-participant .remove {
     color: #CCC;
     cursor: pointer;
 }
+
+div.edit-appointment-participant .remove i.icon-remove {
+    pointer-events: none;
+}
+
 div.edit-appointment-participant .remove:hover {
     background-color: #a00;
     color: #fff;

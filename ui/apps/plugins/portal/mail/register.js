@@ -13,7 +13,11 @@
  */
 
 define('plugins/portal/mail/register',
-    ['io.ox/core/extensions', "io.ox/core/extPatterns/links"], function (ext, links, api) {
+    ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
+     'io.ox/core/strings',
+     'gettext!plugins/portal/mail',
+     'less!plugins/portal/mail/style.css'], function (ext, links, strings, gt) {
 
     'use strict';
 
@@ -33,7 +37,7 @@ define('plugins/portal/mail/register',
     ext.point('io.ox/portal/widget/mail/links/inline').extend(new links.Link({
         index: 100,
         id: 'compose',
-        label: 'Compose new email',
+        label: gt('Compose new email'),
         ref: 'io.ox/portal/widget/mail/actions/compose'
     }));
 
@@ -48,6 +52,61 @@ define('plugins/portal/mail/register',
     ext.point('io.ox/portal/widget').extend({
         id: 'mail',
         index: 300,
+        tileHeight: 2,
+
+        loadTile: function () {
+            var folderLoaded = $.Deferred();
+            var mailsLoaded = $.Deferred();
+            
+            require(['io.ox/core/api/folder', 'io.ox/mail/api'], function (folderApi, mailApi) {
+                folderApi.get(
+                    {
+                        folder: folderApi.getDefaultFolder('mail'),
+                        cache: false
+                    })
+                    .done(function (folder) {
+                        folderLoaded.resolve(folder);
+                    })
+                    .fail(folderLoaded.reject);
+
+                mailApi.getAll({
+                    folder: folderApi.getDefaultFolder('mail'),
+                    cache: false
+                }, false)
+                    .done(function (mails) {
+                        if (mails.length === 0) {
+                            mailsLoaded.resolve(null);
+                        } else {
+                            var mail = _.extend({view: "text"}, mails[0]);
+                            mailApi.get(mail).done(function (loadedMail) {
+                                mailsLoaded.resolve(loadedMail);
+                            }).fail(mailsLoaded.reject);
+                        }
+                    })
+                    .fail(mailsLoaded.reject);
+            });
+            return $.when(folderLoaded, mailsLoaded);
+        },
+        drawTile: function (folder, mail) {
+            var $node = $(this);
+            $node.addClass('mail-portal-tile');
+            var subject = mail.subject;
+            var mailtext = $("<div>").html(mail.attachments[0].content).text(); // Hihi
+            subject = strings.shorten(subject, 40);
+            mailtext = strings.shorten(mailtext, 60);
+            
+            
+            $node.append(
+                $('<h1>').text(gt("Mail")),
+                $('<span class="unread-mail-count">').text(gt('Unread:')),
+                $('<span class="badge badge-info unread-mail-count">').text(folder.unread),
+                $('<div class="io-ox-clear">').append(
+                    $('<div class="">').append($("<b>").text(subject), $('<br>'), $("<span>").text(mailtext))
+                )
+            );
+            
+            return $.when();
+        },
         load: function () {
             var loading = new $.Deferred();
             require(['io.ox/mail/api'], function (api) {
@@ -69,14 +128,14 @@ define('plugins/portal/mail/register',
                 .addClass('io-ox-portal-mail')
                 .append(
                     $('<div>').addClass('clear-title')
-                        .text('New emails')
+                        .text(gt('New emails'))
                 );
 
             ext.point('io.ox/portal/widget/mail').invoke('draw', node);
 
             if (list.length === 0) {
 
-                node.append('<div><b>No mails at all!</b></div>');
+                node.append('<div><b>' + gt('No mails at all!') + '</b></div>');
                 return $.when();
 
             } else {
@@ -102,14 +161,6 @@ define('plugins/portal/mail/register',
                     }
                 );
             }
-        },
-        post: function (ext) {
-            var self = this;
-            require(['io.ox/mail/api'], function (api) {
-                api.on('refresh.all', function () {
-                    ext.load().done(_.bind(ext.draw, self));
-                });
-            });
         }
     });
 });

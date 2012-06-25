@@ -20,11 +20,10 @@ define("io.ox/mail/main",
      "io.ox/core/tk/vgrid",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
-     "io.ox/mail/notifications",
      "gettext!io.ox/mail/main",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, notifications, gt) {
+    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt) {
 
     'use strict';
 
@@ -60,8 +59,6 @@ define("io.ox/mail/main",
     // launcher
     app.setLauncher(function () {
 
-        // just register the notification handler
-        notifications.register();
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/mail',

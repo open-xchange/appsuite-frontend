@@ -32,6 +32,8 @@ define('io.ox/core/tk/autocomplete', function () {
             stringify: JSON.stringify
         }, o || {});
 
+
+
         var self = $(this),
 
             // last search
@@ -57,8 +59,6 @@ define('io.ox/core/tk/autocomplete', function () {
                     relatedField.val(relatedValue);
                     dataHolder.data(data);
                 }
-
-
             },
 
             select = function (i) {
@@ -92,13 +92,16 @@ define('io.ox/core/tk/autocomplete', function () {
                         self.off('blur', o.blur).on('blur', fnBlur);
                         // calculate position/dimension and show popup
                         var off = self.offset(),
-                            parentOff = self.offsetParent().offset(),
-                            parentScrollTop = self.offsetParent().scrollTop(),
                             w = self.outerWidth(),
                             h = self.outerHeight();
 
-                        popup.css({ top: off.top + h - parentOff.top + parentScrollTop, left: off.left - parentOff.left, width: w })
-                            .appendTo(self.closest(o.parentSelector));
+                        popup.hide().appendTo(self.closest(o.parentSelector));
+
+                        var myTop = off.top + h - (self.closest(o.parentSelector).offsetParent().offset().top) + self.offsetParent().scrollTop();
+                        var myLeft = off.left - (self.closest(o.parentSelector).offsetParent().offset().left);
+
+                        popup.css({ top: myTop, left: myLeft, width: w }).show();
+
                         isOpen = true;
                     }
                 },
@@ -152,6 +155,11 @@ define('io.ox/core/tk/autocomplete', function () {
                             close();
                             break;
                         case 39: // cursor right
+                            e.preventDefault();
+                            if (!e.shiftKey) {
+                                update();
+                            }
+                            break;
                         case 13: // enter
                         case 9:  // tab
                             e.preventDefault();
@@ -178,7 +186,13 @@ define('io.ox/core/tk/autocomplete', function () {
                             $(this).val(''); //empty it
                             close();
                             break;
-                        case 39:
+                        /*case 39: // cursor right
+                            e.preventDefault();
+                            if (!e.shiftKey) {
+                                update();
+                                close();
+                            }
+                            break;*/
                         case 13:
                         case 9:
                             var val = $.trim($(this).val());
@@ -207,6 +221,12 @@ define('io.ox/core/tk/autocomplete', function () {
                         close();
                     }
                 }, o.delay);
+
+
+        this.getSelectedItem = function () {
+            var data = scrollpane.children().eq(Math.max(0, index)).data('data');
+            return data || false;
+        };
 
         if (_.isFunction(o.source) && _.isFunction(o.draw)) {
 

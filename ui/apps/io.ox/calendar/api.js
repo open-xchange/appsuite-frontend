@@ -22,7 +22,8 @@ define("io.ox/calendar/api",
 
     // really stupid caching for speed
     var all_cache = {},
-        get_cache = {};
+        get_cache = {},
+        participant_cache = {};
 
     var DAY = 60000 * 60 * 24;
 
@@ -125,86 +126,6 @@ define("io.ox/calendar/api",
                     }
                 });
         },
-        searchParticipants: function (query) {
-            var userColumns = '20,1,500,501,502,505,520,555,556,557,569,602,606';
-
-            return http.PUT({
-                module: "multiple",
-                "continue": true,
-                data: [
-                    {
-                        module: 'user',
-                        action: 'search',
-                        columns: userColumns,
-                        sort: '500',
-                        order: 'asc',
-                        data: {
-                            pattern: '*' + query + '*'
-                        }
-                    },
-                    {
-                        module: 'group',
-                        action: 'search',
-                        data: {
-                            pattern: '*' + query + '*'
-                        }
-                    },
-                    {
-                        module: 'resource',
-                        action: 'search',
-                        data: {
-                            pattern: '*' + query + '*'
-                        }
-                    },
-                    {
-                        module: 'contacts',
-                        action: 'search',
-                        columns: '1,20,500,555,602,524,556,557,501,502',
-                        sort: '500',
-                        order: 'asc',
-                        data: {
-                            display_name: query,
-                            email1: query,
-                            email2: query,
-                            email3: query,
-                            last_name: query,
-                            first_name: query,
-                            orSearch: true
-                        }
-                    }
-                ]
-            }).pipe(function (data) {
-                data[0].data = _(data[0].data).map(function (dataItem) {
-                    var myobj = http.makeObject(dataItem, 'user', userColumns.split(','));
-                    return myobj;
-                });
-                _(data).each(function (type, index) {
-                    _(type.data).each(function (item) {
-                        switch (index) {
-                        case 0:
-                            item.type = 1; //user
-                            break;
-                        case 1:
-                            item.type = 2; //group
-                            break;
-                        case 2:
-                            item.type = 3; //resource
-                            break;
-                        case 3:
-                            item.type = 5; //xternal
-                            break;
-                        }
-                    });
-                });
-
-                var ret = [];
-                ret = data[0].data.concat(data[1].data, data[2].data, data[3].data);
-                ret = _(ret).sortBy(function (item) {
-                    return item.display_name;
-                });
-                return ret;
-            });
-        },
 
         needsRefresh: function (folder) {
             // has entries in 'all' cache for specific folder
@@ -229,9 +150,6 @@ define("io.ox/calendar/api",
                 .pipe(function (obj) {
                     var getObj = {};
                     if (!_.isUndefined(obj.conflicts)) {
-                        //console.log('got conflicts');
-                        //console.log(obj.conflicts);
-                        //
                         var df = new $.Deferred();
                         _(obj.conflicts).each(function (item) {
                             item.folder_id = o.folder_id;
@@ -318,6 +236,7 @@ define("io.ox/calendar/api",
                 data: o.data
             })
             .done(function (resp) {
+                get_cache = {};
                 api.trigger('refresh.all');
             });
         }
@@ -327,22 +246,21 @@ define("io.ox/calendar/api",
 
     // global refresh
     api.refresh = function () {
-        console.log('refreshing calendar');
         userAPI.get().done(function (user) {
-            console.log('got user:', user);
-            api.getAll({}).done(function (list) {
+            api.getAll({
+                start: _.now(),
+                end: _.now() + 28 * 4 * DAY //next four month?!?
+            }).done(function (list) {
 
                 var invites = _(list).filter(function (item) {
                     return _(item.users).any(function (item_user) {
-                        return (item_user.id === user.id && item_user.confirmation === 0);
+                        return (item_user.id === user.id && (item_user.confirmation === 0));
                     });
                 });
 
                 if (invites.length > 0) {
-                    console.log('got invites', invites);
                     api.trigger('invites', invites);
                 }
-                console.log('got all', list);
                 // clear caches
                 all_cache = {};
                 // trigger local refresh

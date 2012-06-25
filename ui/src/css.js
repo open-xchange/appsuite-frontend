@@ -274,6 +274,7 @@ define("gettext", function (gettext) {
                 var fragment = $(html).filter(function () { return this.nodeType === 1; }),
                     parts = fragment.filter('part'),
                     tmpl = new Template(ext);
+
                 // just consider parts
                 parts.each(function () {
                     var node = $(this), html = node.html(), id = node.attr('id') || 'default';

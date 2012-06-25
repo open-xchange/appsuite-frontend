@@ -74,7 +74,7 @@ define('io.ox/mail/view-detail',
         regImage = /^image\/(jpe?g|png|gif|bmp)$/i,
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=\d+)(\s*)$/i,
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i,
-        regLink = /^(.*)(http:\/\/\S+)(\s.*)?$/i,
+        regLink = /^(.*)(https?:\/\/\S+)(\s.*)?$/i,
         regMail = /(\S+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/i,
         regMailReplace = /(\S+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/ig, /* dedicated one to avoid strange side effects */
         regMailComplex = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/, /* "name" <address> */
@@ -264,7 +264,7 @@ define('io.ox/mail/view-detail',
 
             // process all text nodes unless mail is too large (> 512 KB)
             if (!isLarge) {
-                content.contents().add(content.find('*').contents()).each(function () {
+                content.contents().add(content.find('*').not('style').contents()).each(function () {
                     if (this.nodeType === 3) {
                         var node = $(this), text = this.nodeValue, length = text.length, m;
                         // split long character sequences for better wrapping

@@ -11,6 +11,8 @@
  */
 
 .window-content.month-view * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 
@@ -39,7 +41,7 @@
     }
     
     .week {
-        height: 20%;
+        height: 100/6%; /* might be 6 wweks in a month */
         min-height: 80px;
         max-height: 160px;
     }
@@ -70,7 +72,7 @@
         position: absolute;
         right: 0;
         width: 12.5%;
-        height: 20%;
+        height: 100/6%;
         padding: 13px;
         text-align: right;
     }
@@ -104,18 +106,6 @@
     
     .day.today { background-color: #daefFf; background-color: rgba(0, 136, 204, 0.25); }
     .day.today .number { color: darken(#08c, 10%); }
-    
-    .vertical-box {
-        position: absolute;
-        top: 130%;
-        right: -50px;
-        font-size: 60px;
-        color: #ccc;
-        writing-mode: tb-rl;
-        -webkit-transform: rotate(90deg);
-        -moz-transform: rotate(90deg);
-        filter: ~"progid:DXImageTransform.Microsoft.BasicImage(rotation=3);"
-    }
     
     .day .list {
         top: 6px; right: 6px; bottom: 6px; left: 6px;
