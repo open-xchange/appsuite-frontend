@@ -11,17 +11,16 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 define('plugins/notifications/mail/register',
-      ['io.ox/core/notifications',
-       'io.ox/mail/api',
-       'io.ox/mail/util',
-       'io.ox/core/extensions',
-       'io.ox/core/config',
-       'dot!plugins/notifications/mail/template.html',
-       'gettext!plugins/notifications/mail',
-       'less!plugins/notifications/mail/style.css'], function (notificationsController, mailApi, util, ext, config, tpl, gt) {
+    ['io.ox/core/notifications',
+     'io.ox/mail/api',
+     'io.ox/mail/util',
+     'io.ox/core/extensions',
+     'io.ox/core/config',
+     'dot!plugins/notifications/mail/template.html',
+     'gettext!plugins/notifications/mail'
+    ], function (notificationsController, mailApi, util, ext, config, tpl, gt) {
 
     'use strict';
-
 
     function beatifyMailText(str) {
         str = String(str)
@@ -36,7 +35,6 @@ define('plugins/notifications/mail/register',
         // trim
         return $.trim(str);
     }
-
 
     var NotificationView = Backbone.View.extend({
         events: {
