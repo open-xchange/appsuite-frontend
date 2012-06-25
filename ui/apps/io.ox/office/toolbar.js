@@ -105,7 +105,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
     Buttons.createButton = function (key, options) {
 
         var // create the DOM button element
-            button = $('<button>').addClass('btn');
+            button = $('<button>').addClass('btn btn-small');
 
         // add the key as data attribute
         if (_.isString(key)) {
@@ -272,7 +272,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         function RadioDropDownProxy(node, key, options) {
 
             var // create the drop-down button
-                dropDownButton = Buttons.createButton(key).addClass('dropdown-toggle').attr('data-toggle', 'dropdown').appendTo(node),
+                dropDownButton = Buttons.createButton(key).addClass('dropdown-toggle').appendTo(node),
 
                 // create the table area
                 tableNode = $('<table>').addClass('dropdown-menu').appendTo(node),
@@ -283,6 +283,14 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 // number of inserted buttons
                 buttonCount = 0;
 
+            /**
+             * Activates a button in this radio group.
+             *
+             * @param {String|Null} [value]
+             *  The unique value associated to the button to be activated. If
+             *  omitted or set to null, does not activate any button (ambiguous
+             *  state).
+             */
             function updateHandler(value) {
                 var // find all embedded option buttons
                     buttons = tableNode.find('button'),

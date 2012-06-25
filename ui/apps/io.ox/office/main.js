@@ -54,12 +54,28 @@ define('io.ox/office/main',
                 .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
                 .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
             .end()
-            .createRadioDropDown('paragraph/align/test', { columns: 2 })
+/*
+            .createRadioDropDown('paragraph/align/test/1', { columns: 2 })
                 .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
                 .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
                 .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
                 .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
             .end()
+            .createButtonGroup()
+                .addRadioDropDown('paragraph/align/test/2', { columns: 2 })
+                    .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
+                    .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
+                    .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
+                    .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
+                .end()
+                .addRadioDropDown('paragraph/align/test/3', { columns: 2 })
+                    .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
+                    .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
+                    .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
+                    .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
+                .end()
+            .end()
+*/
             .createButton('action/debug', { icon: 'icon-eye-open', tooltip: gt('Debug mode'), toggle: true });
 
         } // end of constructor
@@ -240,12 +256,8 @@ define('io.ox/office/main',
 
         var createOperationsList = function (result) {
 
-            var operations = [], value;
-            try {
+            var operations = [],
                 value = JSON.parse(result.data).operations;
-            } catch (ex) {
-                window.console.log('Exception caught: ' + ex);
-            }
             // var value = result.data.operations; // code for Dummy Operations.
 
             if (_(value).isArray()) {
@@ -292,23 +304,38 @@ define('io.ox/office/main',
          */
         app.load = function () {
             var def = $.Deferred();
+
+            // show application window
             win.show().busy();
             $(window).resize();
+
+            // initialize editor, MUST be done in visible application,
+            // otherwise IE fails to set the browser selection
+            editor.initDocument();
+
             $.ajax({
                 type: 'GET',
                 url: getFilterUrl('importdocument'),
                 dataType: 'json'
             })
             .done(function (response) {
-                var operations = createOperationsList(response);
-                editor.applyOperations(operations, false, true);
-                editor.setModified(false);
-                editor.grabFocus(true);
-                win.idle();
-                def.resolve();
+                try {
+                    var operations = createOperationsList(response);
+                    editor.applyOperations(operations, false, true);
+                    editor.setModified(false);
+                    editor.grabFocus(true);
+                    win.idle();
+                    def.resolve();
+                } catch (ex) {
+                    showError('Exception caught: ' + ex, 'Internal Error');
+                    editor.grabFocus(true);
+                    win.idle();
+                    def.reject();
+                }
             })
             .fail(function (response) {
                 showAjaxError(response);
+                editor.grabFocus(true);
                 win.idle();
                 def.reject();
             });
