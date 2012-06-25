@@ -17,6 +17,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
     'use strict';
 
+    var OP_INSERT_TEXT = "insertText";
+
     function OXOUndoAction(undoOperation, redoOperation) {
 
         this.undo = function (editor) {
@@ -79,15 +81,37 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 return;
             }
 
+            var tryToMerge = true;
+
             // remove undone actions
-            if (currentAction < actions.length)
+            if (currentAction < actions.length) {
                 actions.splice(currentAction);
+                tryToMerge = false;
+            }
 
             if (groupLevel) {
                 currentGroupActions.push(oxoUndoAction);
             }
             else {
-                actions.push(oxoUndoAction);
+                var bDone = false;
+                if (tryToMerge && currentAction && oxoUndoAction.allowMerge) {
+                    var prevUndo = actions[currentAction - 1];
+                    if (prevUndo.allowMerge && (prevUndo.redoOperation.name === oxoUndoAction.redoOperation.name)) {
+                        if (oxoUndoAction.redoOperation.name === OP_INSERT_TEXT) {
+                            if (this.isSameParagraph(oxoUndoAction.redoOperation.start, prevUndo.redoOperation.start, false)) {
+                                var nCharPosInArray = prevUndo.redoOperation.start.size() - 1;
+                                var prevCharEnd = prevUndo.redoOperation.start[nCharPosInArray] + prevUndo.redoOperation.text.length;
+                                if (prevCharEnd === oxoUndoAction.redoOperation.start[prevCharEnd]) {
+                                    // Merge Undo...
+                                    prevUndo.redoOperation.text +=  oxoUndoAction.redoOperation.text;
+                                    prevUndo.undoOperation.end[nCharPosInArray] += oxoUndoAction.redoOperation.text.length;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!bDone)
+                    actions.push(oxoUndoAction);
                 currentAction = actions.length;
             }
         };
@@ -368,7 +392,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             if (operation.name === "initDocument") {
                 this.implInitDocument();
             }
-            else if (operation.name === "insertText") {
+            else if (operation.name === OP_INSERT_TEXT) {
                 this.implInsertText(operation.text, operation.start);
             }
             else if (operation.name === "deleteText") {
@@ -399,8 +423,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.setModified(true);
 
             if (bNotify && !blockOperationNotifications) {
-                this.trigger("operation", operation);
-                // TBD: Use operation directly, or copy?
+                // Will give everybody the same copy - how to give everybody his own copy?
+                this.trigger("operation", _.copy(operation, true));
             }
 
             blockOperations = false;
@@ -1022,7 +1046,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var newOperation = { name: 'deleteText', start: startposition, end: endposition };
                 // Hack for now. Might span multiple elements later, and we also need to keep attributes!
                 // Right now, dleteText is only valid for single paragraphs...
-                var undoOperation = { name: 'insertText', start: _.copy(startposition, true), text: this.getParagraphText(startposition[0], startposition[1], endposition[1]) };
+                var undoOperation = { name: OP_INSERT_TEXT, start: _.copy(startposition, true), text: this.getParagraphText(startposition[0], startposition[1], endposition[1]) };
                 undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
                 this.applyOperation(newOperation, true, true);
             }
@@ -1059,9 +1083,12 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.insertText = function (text, position) {
-            var newOperation = { name: 'insertText', text: text, start: _.copy(position, true) };
+            var newOperation = { name: OP_INSERT_TEXT, text: text, start: _.copy(position, true) };
             var undoOperation = { name: 'deleteText', start: _.copy(position, true), end: [position[0], position[1] + text.length] };
-            undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
+            var undoAction = new OXOUndoAction(undoOperation, newOperation);
+            if (text.length === 1)
+                undoAction.allowMerge = true;
+            undomgr.addUndo(undoAction);
             this.applyOperation(newOperation, true, true);
         };
 
@@ -1140,6 +1167,18 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 this.implDbgOutInfo('niy: getAttribute with selection parameter');
                 // implGetAttribute( attr, para, start, end );
             }
+        };
+
+        this.isSameParagraph = function (pos1, pos2, includeLastPos) {
+            if (pos1.size() !== pos2.size())
+                return false;
+            if (pos1.size() < (includeLastPos ? 1 : 2))
+                return false;
+            var n = pos1.size() - (includeLastPos ? 1 : 2);
+            for (var i = 0; i <= n; i++)
+                if (pos1[n] !== pos2[n])
+                    return false;
+            return true;
         };
 
         this.getParagraphCount = function () {
