@@ -94,7 +94,7 @@ define('io.ox/calendar/edit/view-main',
         PARTICIPANTS:       gt('Participants'),
         PRIVATE:            gt('Private'),
         NOTIFY_ALL:         gt('Notify all participants about this change'),
-        HELP_ADD_PARTICIPANTS_MANUALLY:     gt('To add participants manually, just provide a valid email address (p.e. john.doe@example.com)')
+        HELP_ADD_PARTICIPANTS_MANUALLY:     gt('To add participants manually, just provide a valid email address (e.g just@mail.com, "more sophisticated" <yeah@profi.com>)')
 
     };
 
@@ -263,7 +263,7 @@ define('io.ox/calendar/edit/view-main',
 
             notIn = !_(participants).any(function (item) {
                 if (data.type === 5) {
-                    return (item.mail === data.email1);
+                    return (item.mail === data.mail);
                 } else {
                     return (item.id === data.id && item.type === data.type);
                 }
