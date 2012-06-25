@@ -235,7 +235,7 @@ define('io.ox/office/main',
         var createOperationsList = function (result) {
 
             var operations = [],
-                value;
+                value = null;
 
             try {
                 value = JSON.parse(result.data).operations;
@@ -243,7 +243,7 @@ define('io.ox/office/main',
                 window.console.warn("Failed to parse JSON data. Trying second parse process.");
             }
 
-            if (! value) {
+            if (!value) {
                 try {
                     value = result.data.operations; // code for Dummy Operations.
                 } catch (e) {
