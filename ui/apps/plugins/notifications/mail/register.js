@@ -162,13 +162,14 @@ define('plugins/notifications/mail/register',
             console.log('register mail notifications');
             var notifications = controller.get('io.ox/mail', NotificationsView);
 
-            mailApi.refresh();
             mailApi.on('new-mail', function (e, mails) {
                 _(mails.reverse()).each(function (mail) {
                     notifications.collection.unshift(new Backbone.Model(mail), {silent: true}); ///_(mails).clone());
                 });
                 notifications.collection.trigger('reset');
             });
+
+            mailApi.checkInbox();
         }
     });
 

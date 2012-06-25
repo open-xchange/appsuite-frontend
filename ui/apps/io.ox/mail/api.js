@@ -789,6 +789,42 @@ define("io.ox/mail/api",
 
     var lastUnseenMail = 0;
 
+    api.checkInbox = function () {
+        // look for new unseen mails in INBOX
+        return http.GET({
+            module: 'mail',
+            params: {
+                action: 'all',
+                folder: 'default0/INBOX',
+                columns: '610,600,601', //received_date, id, folder_id
+                unseen: 'true',
+                deleted: 'false',
+                sort: '610',
+                order: 'desc'
+            }
+        })
+        .pipe(function (unseen) {
+            var recent;
+            // found unseen mails?
+            if (unseen.length) {
+                // check most recent mail
+                recent = _(unseen).filter(function (obj) {
+                    return obj.received_date > lastUnseenMail;
+                });
+                if (recent.length > 0) {
+                    api.trigger('new-mail', recent);
+                    lastUnseenMail = recent[0].received_date;
+
+                }
+                api.trigger('unseen-mail', unseen);
+            }
+            return {
+                unseen: unseen,
+                recent: recent || []
+            };
+        });
+    };
+
     // refresh
     api.refresh = function (e) {
         if (ox.online) {
@@ -796,34 +832,7 @@ define("io.ox/mail/api",
             _(cacheControl).each(function (val, id) {
                 cacheControl[id] = false;
             });
-            // look for new unseen mails in INBOX
-            http.GET({
-                module: 'mail',
-                params: {
-                    action: 'all',
-                    folder: 'default0/INBOX',
-                    columns: '610,600,601', //received_date, id, folder_id
-                    unseen: 'true',
-                    deleted: 'false',
-                    sort: '610',
-                    order: 'desc'
-                }
-            })
-            .done(function (unseen) {
-                var recent;
-                // found unseen mails?
-                if (unseen.length) {
-                    // check most recent mail
-                    recent = _(unseen).filter(function (obj) {
-                        return obj.received_date > lastUnseenMail;
-                    });
-                    if (recent.length > 0) {
-                        api.trigger('new-mail', recent);
-                        lastUnseenMail = recent[0].received_date;
-
-                    }
-                    api.trigger('unseen-mail', unseen);
-                }
+            api.checkInbox().done(function () {
                 // trigger
                 api.trigger('refresh.all');
             });
