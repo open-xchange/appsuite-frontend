@@ -57,6 +57,8 @@ define('io.ox/settings/accounts/email/model',
             var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
             if (!regEmail.test(newMailaddress)) {
                 return 'This is not a valid email address';
+            } else {
+                return true;
             }
         },
 

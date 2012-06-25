@@ -344,17 +344,47 @@ define('io.ox/core/api/account',
         });
     };
 
-//    api.configtest = function () {
-//        return http.GET({
-//            module: 'jslob',
-//            params: {
-//                action: 'all',
-//                serviceId: 'com.openexchange.jslob.config'
-//            }
-//        }).done(function (data) {
-//            console.log(data);
-//        });
-//    };
+    // jslob testapi
+    api.configtestGet = function () {
+        return http.GET({
+            module: 'jslob',
+            params: {
+                action: 'all'
+            }
+        });
+    };
+
+    api.configtestList = function (data) {
+        return http.PUT({
+            module: 'jslob',
+            params: {
+                action: 'list'
+            },
+            data: data
+        });
+    };
+
+    api.configtestUpdate = function (data, id) {
+        return http.PUT({
+            module: 'jslob',
+            params: {
+                action: 'update',
+                id: id
+            },
+            data: data
+        });
+    };
+
+    api.configtestSet = function (data, id) {
+        return http.PUT({
+            module: 'jslob',
+            params: {
+                action: 'set',
+                id: id
+            },
+            data: data
+        });
+    };
 
 
     return api;

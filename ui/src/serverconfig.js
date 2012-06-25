@@ -31,7 +31,7 @@ define(function () {
             halo: ['halo/contacts', 'halo/appointments', 'halo/linkedIn', 'halo/mail'],
             portal: ['appointments', 'linkedIn', 'mail', 'rss', 'facebook', 'twitter'],
             tests: ["io.ox/mail/write", "plugins/halo", "io.ox/contacts", "io.ox/contacts/edit", "io.ox/contacts/distrib",
-                    "io.ox/core", "io.ox/files/tests/interface", "io.ox/files/tests/unit", "io.ox/settings/accounts/email"]
+                    "io.ox/core", "io.ox/files/tests/interface", "io.ox/files/tests/unit", "io.ox/settings/accounts/email", "io.ox/settings"]
         },
 
         previewExtensions : ['doc', 'dot', 'docx', 'dotx', 'docm', 'dotm', 'xls', 'xlt', 'xla', 'xlsx', 'xltx', 'xlsm',
