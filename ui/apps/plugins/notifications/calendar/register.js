@@ -166,7 +166,7 @@ define('plugins/notifications/calendar/register',
             console.log('registering calendar notifications');
             var notifications = controller.get('io.ox/calendar', NotificationsView);
 
-            calApi.refresh();
+            calApi.getInvites();
             calApi.on('invites', function (e, invites) {
                 notifications.collection.reset([]);
                 _(invites).each(function (invite) {
