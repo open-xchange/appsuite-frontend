@@ -228,9 +228,7 @@ define('io.ox/office/main',
         var getOperationsCount = function (result) {
 
             // The result is a JSONObject
-            if (_(result).isObject()) {
-                window.console.log('Number of operations received by the server: ' + result.data.count);
-            }
+            // Evaluating the result is possible.
 
         };
 
