@@ -130,7 +130,6 @@ function (ext, config, userAPI, date, gt) {
         
         // launcher
         app.setLauncher(function () {
-
             // get window
             app.setWindow(win = ox.ui.createWindow({
                 toolbar: true,
@@ -140,15 +139,13 @@ function (ext, config, userAPI, date, gt) {
             updateTitle();
             _.every(1, 'hour', updateTitle);
 
+            drawTiles();
             win.nodes.main
                 .addClass('io-ox-portal')
                 .append(leftSide, rightSide);
 
-
-            //TODO: Add Configurability
+            console.log(win.nodes.main);
             
-            drawTiles();
-                
             ox.on('refresh^', function () {
                 leftSide.empty();
                 drawTiles();
@@ -158,6 +155,8 @@ function (ext, config, userAPI, date, gt) {
                     drawContent(app.active);
                 }
             });
+            
+            win.show();
         });
 
         return {

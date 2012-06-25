@@ -17,8 +17,9 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/core/date',
        'io.ox/calendar/edit/view-addparticipants',
        'io.ox/calendar/edit/module-participants',
+       'io.ox/calendar/edit/module-recurrence',
        'dot!io.ox/calendar/edit/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, participantsModule, tmpl, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, participantsModule, recurrenceModule, tmpl, gt) {
 
     'use strict';
 
@@ -75,6 +76,8 @@ define('io.ox/calendar/edit/view-main',
         STARTS_ON:          gt('Starts on'),
         ENDS_ON:            gt('Ends on'),
         ALL_DAY:            gt('All day'),
+        REPEAT:             gt('Repeat'),
+        EDIT:               gt('edit'),
 
 
         CHANGE_TIMEZONE:    gt('Change timezone'),
