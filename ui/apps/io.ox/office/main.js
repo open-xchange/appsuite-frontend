@@ -75,13 +75,11 @@ define('io.ox/office/main',
 
                 'action/undo': {
                     enable: function () { return editor.hasUndo(); },
-                    set: function (list) { editor.undo(); editor.grabFocus(); },
-                    poll: true
+                    set: function (list) { editor.undo(); editor.grabFocus(); }
                 },
                 'action/redo': {
                     enable: function () { return editor.hasRedo(); },
-                    set: function (list) { editor.redo(); editor.grabFocus(); },
-                    poll: true
+                    set: function (list) { editor.redo(); editor.grabFocus(); }
                 },
                 'action/debug': {
                     get: function () { return app.isDebugMode(); },
@@ -126,6 +124,9 @@ define('io.ox/office/main',
                             // update view components
                             this.enableAndDisable(supportedItems);
                         }
+                    }, this))
+                    .on('operation', _.bind(function () {
+                        this.update(['action/undo', 'action/redo']);
                     }, this));
                 return this;
             };
