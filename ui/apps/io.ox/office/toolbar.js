@@ -15,13 +15,15 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
 
     'use strict';
 
-    // static class Controls ==================================================
+    // namespace Controls =====================================================
 
     /**
      * Generic static helper functions for form controls.
+     *
+     * @static
      */
     function Controls() {
-        throw new Error('do not instantiate this class');
+        throw new Error('do not instantiate');
     }
 
     /**
@@ -61,22 +63,28 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         }
     };
 
-    // static class Buttons ===================================================
+    // namespace Buttons ======================================================
 
     /**
      * Static helper functions for any button elements.
+     *
+     * @static
      */
     function Buttons() {
-        throw new Error('do not instantiate this class');
+        throw new Error('do not instantiate');
     }
 
     /**
      * CSS class for active toggle buttons.
+     *
+     * @constant
      */
     Buttons.ACTIVE_CLASS = 'btn-primary';
 
     /**
      * CSS class for toggle buttons in undefined state.
+     *
+     * @constant
      */
     Buttons.TRISTATE_CLASS = 'btn-info';
 
@@ -261,7 +269,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          *  or the table area. See method ToolBar.createRadioDropDown() for
          *  details.
          */
-        function RadioDropDownProxy(parent, node, key, options) {
+        function RadioDropDownProxy(node, key, options) {
 
             var // create the drop-down button
                 dropDownButton = Buttons.createButton(key).addClass('dropdown-toggle').attr('data-toggle', 'dropdown').appendTo(node),
@@ -374,12 +382,6 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 ++buttonCount;
                 return this;
             };
-
-            /**
-             * Returns a reference to the parent button group containing this
-             * drop-down button. Useful for method chaining.
-             */
-            this.end = function () { return parent; };
         }
 
         // class ButtonGroupProxy ---------------------------------------------
@@ -450,7 +452,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              *  option buttons to the radio group.
              */
             this.addRadioDropDown = function (key, options) {
-                return new RadioDropDownProxy(this, groupNode, key, options);
+                var proxy = new RadioDropDownProxy(groupNode, key, options);
+                proxy.end = _.bind(function () { return this; }, this);
+                return proxy;
             };
 
             /**
