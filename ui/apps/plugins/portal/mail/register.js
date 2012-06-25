@@ -161,14 +161,6 @@ define('plugins/portal/mail/register',
                     }
                 );
             }
-        },
-        post: function (ext) {
-            var self = this;
-            require(['io.ox/mail/api'], function (api) {
-                api.on('refresh.all', function () {
-                    ext.load().done(_.bind(ext.draw, self));
-                });
-            });
         }
     });
 });

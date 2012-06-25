@@ -1,0 +1,21 @@
+<part id='plugins/notifications/appointments/invites'>
+    <extension id="list">
+        <legend class='section-title'>{{=it.strings.NEW_INVITES}}</legend>
+        <div class='notifications'>
+
+        </div>
+    </extension>
+</part>
+<part id='plugins/notifications/appointments/inviteitem'>
+    <extension id="item">
+        <div class='item'>
+          <div data-property="time" class="time"></div>
+          <div data-property="date" class="date"></div>
+          <div data-property='title' class='title' ></div>
+          <div data-property='subject' class='subject location' ></div>
+          <div class="actions">
+              <button class="btn btn-primary" data-action='accept_decline'><span>Accept / Decline</span></button>
+          </div>
+        </div>
+    </extension>
+</part>

@@ -232,3 +232,6 @@
 /*
 #io-ox-notifications-calendar {
 */
+#io-ox-notifications-display .item .location {
+    color: #AAA;
+}

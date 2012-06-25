@@ -59,8 +59,16 @@ function (ext, config, userAPI, date, gt) {
             }
         }
         
+        var nodes = {};
+        
         function drawContent(extension) {
+            if (nodes[extension.id]) {
+                rightSide.append(nodes[extension.id]);
+                rightSide.idle();
+                return;
+            }
             var $node = $("<div/>").appendTo(rightSide);
+            nodes[extension.id] = $node;
             return extension.invoke('load')
                 .pipe(function () {
                     return (extension.invoke.apply(extension, ['draw', $node].concat($.makeArray(arguments))) || $.Deferred())
@@ -77,7 +85,7 @@ function (ext, config, userAPI, date, gt) {
         
         function makeClickHandler(extension) {
             return function (event) {
-                rightSide.empty(); // TODO: Maybe keep these around and only send a refresh event or call
+                rightSide.empty();
                 rightSide.busy();
                 app.active = extension;
                 
@@ -143,13 +151,12 @@ function (ext, config, userAPI, date, gt) {
             win.nodes.main
                 .addClass('io-ox-portal')
                 .append(leftSide, rightSide);
-
-            console.log(win.nodes.main);
             
             ox.on('refresh^', function () {
                 leftSide.empty();
                 drawTiles();
                 if (app.active) {
+                    nodes = {};
                     rightSide.empty();
                     rightSide.busy();
                     drawContent(app.active);

@@ -18,7 +18,7 @@ define("io.ox/core/main",
      "io.ox/core/api/apps",
      "io.ox/core/extensions",
      "io.ox/core/date",
-     'io.ox/core/notifications/main',
+     'io.ox/core/notifications',
      "gettext!io.ox/core/main",
      "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, date, notifications, gt) {
 
@@ -151,12 +151,7 @@ define("io.ox/core/main",
         // notifications
         notifications.attach(desktop, "right");
 
-        // now register default notification handler
-        require(['io.ox/mail/notifications',
-                 'io.ox/calendar/notifications'], function (mailNotifications, calNotifications) {
-            mailNotifications.register();
-            calNotifications.register();
-        });
+
 
 
         // apps
