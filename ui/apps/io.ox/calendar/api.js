@@ -254,7 +254,7 @@ define("io.ox/calendar/api",
 
                 var invites = _(list).filter(function (item) {
                     return _(item.users).any(function (item_user) {
-                        return (item_user.id === user.id && (item_user.confirmation === 0 || item_user.confirmation === 3)); // also tentatives?
+                        return (item_user.id === user.id && (item_user.confirmation === 0));
                     });
                 });
 
