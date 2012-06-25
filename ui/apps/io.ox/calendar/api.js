@@ -247,7 +247,9 @@ define("io.ox/calendar/api",
             console.log('defaultFolder', defaultCalFolder);
             o = $.extend({
                 start: _.now(),
-                end: _.now() + 28 * 1 * DAY
+                end: _.now() + 28 * 1 * DAY,
+                timestamp:  _.now() - (2 * DAY),
+                ignore: 'deleted'
             }, o || {});
 
             // round start & end date
@@ -258,13 +260,14 @@ define("io.ox/calendar/api",
                 params = {
                     action: "updates",
                     // id, folder_id, private_flag, recurrence_position, start_date,
-                    // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by
-                    columns: "1,20,101,207,201,200,202,400,401,402,221,224,227,2",
+                    // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by, recurrence_type
+                    columns: "1,20,101,207,201,200,202,400,401,402,221,224,227,2,209",
                     start: o.start,
                     end: o.end,
                     showPrivate: true,
                     recurrence_master: false,
-                    timestamp: _.now() - (2 * DAY),
+                    timestamp: o.timestamp,
+                    ignore: o.ignore,
                     sort: "201",
                     order: "asc"
                 };
@@ -326,7 +329,8 @@ define("io.ox/calendar/api",
         userAPI.get().done(function (user) {
             api.getUpdates({
                 start: _.now(),
-                end: _.now() + 28 * 5 * DAY //next four month?!?
+                end: _.now() + 28 * 5 * DAY, //next four month?!?
+                timestamp: 0
             }).done(function (list) {
 
                 var invites = _(list).filter(function (item) {
