@@ -209,6 +209,7 @@ define('io.ox/office/main',
         var getFilterUrl = function (action) {
             return ox.apiRoot + '/oxodocumentfilter?action=' + action +
                 '&id=' + docOptions.id +
+                '&folder_id=' + docOptions.folder_id +
                 '&version=' + docOptions.version +
                 '&filename=' + docOptions.filename +
                 '&session=' + ox.session +
