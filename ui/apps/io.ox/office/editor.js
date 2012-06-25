@@ -1451,7 +1451,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 while (child !== null) {
                     var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
 
-                    if ((child.nodeType === 3) && (thisPara.lastChild.nodeType === 3)) {
+                    if ((child.nodeType === 3) && (thisPara.lastChild !== null) && (thisPara.lastChild.nodeType === 3)) {
                         thisPara.lastChild.nodeValue += child.nodeValue;
                     } else {
                         thisPara.appendChild(child);
