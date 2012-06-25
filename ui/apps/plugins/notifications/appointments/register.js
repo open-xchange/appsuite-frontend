@@ -10,14 +10,17 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
-define('io.ox/calendar/view-notifications',
-      ['io.ox/core/notifications/main',
+define('plugins/notifications/appointments/register',
+      ['io.ox/core/notifications',
        'io.ox/calendar/api',
-       'dot!io.ox/calendar/template.html',
-       'gettext!io.ox/calendar/notifications',
-       'less!io.ox/calendar/style.css'], function (notficationsConroller, api, tpl, gt) {
+       'io.ox/calendar/util',
+       'io.ox/core/extensions',
+       'dot!plugins/notifications/appointments/template.html',
+       'gettext!plugins/notifications/appointments',
+       'less!plugins/notifications/appointments/style.css'], function (notificationController, calApi, util, ext, tpl, gt) {
 
     'use strict';
+
 
     var NotificationView = Backbone.View.extend({
         events: {
@@ -30,7 +33,7 @@ define('io.ox/calendar/view-notifications',
 
         },
         render: function () {
-            this.$el.empty().append(tpl.render('io.ox/calendar/notification', {}));
+            this.$el.empty().append(tpl.render('plugins/notifications/appointments/inviteitem', {}));
             this._modelBinder.bind(this.model, this.el, Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property'));
             return this;
 
@@ -39,14 +42,14 @@ define('io.ox/calendar/view-notifications',
             var obj = this.model.get('data'),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup'),
-                cid = overlay.find('[data-cid]').data('cid');
+                cid = String(overlay.find('[data-cid]').data('cid'));
 
             // toggle?
             if (sidepopup && cid === _.cid(obj)) {
                 sidepopup.close();
             } else {
-                // fetch proper mail first
-                api.get(obj).done(function (data) {
+                // fetch proper appointment first
+                calApi.get(obj).done(function (data) {
                     require(['io.ox/core/tk/dialogs', 'io.ox/calendar/view-detail'], function (dialogs, view) {
                         // open SidePopup without array
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
@@ -58,8 +61,6 @@ define('io.ox/calendar/view-notifications',
                     });
                 });
             }
-
-
         },
         onClickChangeStatus: function (e) {
             // stopPropagation could be prevented by another markup structure
@@ -124,7 +125,7 @@ define('io.ox/calendar/view-notifications',
                             break;
                         }
 
-                        api.confirm(o)
+                        calApi.confirm(o)
                             .fail(function (err) {
                                 console.log('ERROR', err);
                             });
@@ -146,9 +147,9 @@ define('io.ox/calendar/view-notifications',
             this._collectionBinder = new Backbone.CollectionBinder(elManagerFactory);
         },
         render: function () {
-            this.$el.empty().append(tpl.render('io.ox/calendar/notifications', {
+            this.$el.empty().append(tpl.render('plugins/notifications/appointments/invites', {
                 strings: {
-                    NEW_INVITES: gt('New Invites')
+                    NEW_INVITES: gt('Invitations')
                 }
             }));
             this._collectionBinder.bind(this.collection, this.$('.notifications'));
@@ -156,6 +157,28 @@ define('io.ox/calendar/view-notifications',
         }
     });
 
-    return NotificationsView;
+    ext.point('io.ox/core/notifications/register').extend({
+        id: 'appointments',
+        index: 100,
+        register: function (controller) {
+            console.log('registering calendar notifications');
+            var notifications = controller.get('io.ox/calendar', NotificationsView);
+            calApi.on('invites', function (e, invites) {
+                notifications.collection.reset([]);
+                _(invites).each(function (invite) {
+                    notifications.collection.unshift({
+                        title: invite.title,
+                        subject: invite.location,
+                        date: util.getDateInterval(invite),
+                        time: util.getTimeInterval(invite),
+                        data: invite
+                    });
+                });
+            });
+        }
+    });
 
+
+    return true;
 });
+

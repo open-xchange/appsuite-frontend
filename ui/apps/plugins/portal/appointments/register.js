@@ -37,12 +37,12 @@ define("plugins/portal/appointments/register",
         drawTile: function (appointments) {
             var startSpan = new date.Local();
             var endSpan = startSpan + (24 * 60 * 60 * 1000);
-            
+
             var nextAppointments = _(appointments).filter(function (app) {
                 console.log(app.start_date, endSpan, app.end_date, startSpan, app);
                 return app.start_date > endSpan || app.end_date < startSpan;
             });
-            
+
             var today = new date.Local().format(date.DATE);
             $(this).append(
                 $('<h1>').text(gt('Appointments')),

@@ -14,18 +14,13 @@
 define('io.ox/calendar/edit/main',
       ['io.ox/calendar/edit/model-appointment',
        'io.ox/calendar/api',
-       'io.ox/calendar/edit/extensions',
        'io.ox/calendar/edit/view-main',
        'gettext!io.ox/calendar/edit/main',
-       'less!io.ox/calendar/edit/style.less'], function (AppointmentModel, api, editExtensions, MainView, gt) {
+       'less!io.ox/calendar/edit/style.less'], function (AppointmentModel, api, MainView, gt) {
 
     'use strict';
 
     var EditAppointmentController = function () {};
-
-    // register to "compile"-time think is a good idea
-    editExtensions.init();
-    window.AppointmentModel = AppointmentModel;
 
     EditAppointmentController.prototype = {
         start: function () {
