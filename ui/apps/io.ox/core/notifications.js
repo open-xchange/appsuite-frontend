@@ -45,8 +45,10 @@ define('io.ox/core/notifications',
 
 
             _(notifications).each(function (category) {
-                var v = new category.ListView({ collection: category.collection});
-                self.$el.append(v.render().el);
+                if (category.collection.size() > 0) {
+                    var v = new category.ListView({ collection: category.collection});
+                    self.$el.append(v.render().el);
+                }
             });
             return self;
         }
@@ -141,9 +143,8 @@ define('io.ox/core/notifications',
                 }
             }, 0);
 
-            window.badge = this.badgeView.model;
-
             this.badgeView.model.set('count', (count || 0));
+            $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
         },
         toggleList: function () {
             //create nice listing view of all notifications grouped by
