@@ -63,6 +63,12 @@
         box-shadow: @shadow;
     }
 
+    .opacity(@opacity) {
+        @opacity-percent: @opacity * 100;
+        opacity: @opacity;
+        filter: alpha(opacity=@opacity-percent);
+    }
+
     /* tool bar formatting ================================================= */
 
     /* redefine margin, padding, formatting for usage in OX */
@@ -86,18 +92,30 @@
             outline: none;
         }
 
+        /* add mouse hover highlighting */
         &:hover:not(:disabled) {
-            .button-shadow(0.4);
+            .button-shadow(.4);
         }
 
+        /* add focus highlighting */
         &:focus {
-            .button-shadow(0.8);
+            .button-shadow(.8);
         }
 
         /* class for whitespace between icons, text, and dropdown arrows */
         > span.whitespace {
             display: inline-block;
             width: @whitespace-width;
+        }
+        
+        /* move drop-down arrow down to the center of the button */
+        > span.caret {
+            margin-top: 6px;
+        }
+
+        /* remove hover highlight of drop-down arrow for disabled buttons */
+        &:hover:disabled > span.caret {
+            .opacity(.3);
         }
     }
     
