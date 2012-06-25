@@ -17,7 +17,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
     'use strict';
 
-    var OP_INSERT_TEXT = "insertText";
+    var OP_TEXT_INSERT = 'insertText';
+    var OP_TEXT_DELETE = 'deleteText';
 
     function OXOUndoAction(_undoOperation, _redoOperation) {
 
@@ -101,7 +102,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 if (tryToMerge && currentAction && oxoUndoAction.allowMerge) {
                     var prevUndo = actions[currentAction - 1];
                     if (prevUndo.allowMerge && (prevUndo.redoOperation.name === oxoUndoAction.redoOperation.name)) {
-                        if (oxoUndoAction.redoOperation.name === OP_INSERT_TEXT) {
+                        if (oxoUndoAction.redoOperation.name === OP_TEXT_INSERT) {
                             if (isSameParagraph(oxoUndoAction.redoOperation.start, prevUndo.redoOperation.start, false)) {
                                 var nCharPosInArray = prevUndo.redoOperation.start.length - 1;
                                 var prevCharEnd = prevUndo.redoOperation.start[nCharPosInArray] + prevUndo.redoOperation.text.length;
@@ -413,10 +414,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             if (operation.name === "initDocument") {
                 this.implInitDocument();
             }
-            else if (operation.name === OP_INSERT_TEXT) {
+            else if (operation.name === OP_TEXT_INSERT) {
                 this.implInsertText(operation.text, operation.start);
             }
-            else if (operation.name === "deleteText") {
+            else if (operation.name === OP_TEXT_DELETE) {
                 this.implDeleteText(operation.start, operation.end);
             }
             else if (operation.name === "setAttribute") {
@@ -769,7 +770,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.hasRedo = function () {
-            return undomgr.hasUndo();
+            return undomgr.hasRedo();
         };
 
         this.processFocus = function (state) {
@@ -1071,10 +1072,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.deleteText = function (startposition, endposition) {
             if (startposition !== endposition) {
-                var newOperation = { name: 'deleteText', start: startposition, end: endposition };
+                var newOperation = { name: OP_TEXT_DELETE, start: startposition, end: endposition };
                 // Hack for now. Might span multiple elements later, and we also need to keep attributes!
                 // Right now, dleteText is only valid for single paragraphs...
-                var undoOperation = { name: OP_INSERT_TEXT, start: _.copy(startposition, true), text: this.getParagraphText(startposition[0], startposition[1], endposition[1]) };
+                var undoOperation = { name: OP_TEXT_INSERT, start: _.copy(startposition, true), text: this.getParagraphText(startposition[0], startposition[1], endposition[1]) };
                 undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
                 this.applyOperation(newOperation, true, true);
             }
@@ -1111,8 +1112,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.insertText = function (text, position) {
-            var newOperation = { name: OP_INSERT_TEXT, text: text, start: _.copy(position, true) };
-            var undoOperation = { name: 'deleteText', start: _.copy(position, true), end: [position[0], position[1] + text.length] };
+            var newOperation = { name: OP_TEXT_INSERT, text: text, start: _.copy(position, true) };
+            var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(position, true), end: [position[0], position[1] + text.length] };
             var undoAction = new OXOUndoAction(undoOperation, newOperation);
             if (text.length === 1)
                 undoAction.allowMerge = true;
