@@ -48,34 +48,12 @@ define('io.ox/office/main',
                 .addButton('character/font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
                 .addButton('character/font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
             .end()
-            .addRadioGroup('paragraph/alignment')
+            .addRadioGroup('paragraph/alignment', { type: 'auto', columns: 2 })
                 .addButton('left',    { icon: gt('icon-align-left'),    tooltip: gt('Left') })
                 .addButton('center',  { icon: gt('icon-align-center'),  tooltip: gt('Center') })
                 .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
                 .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
             .end()
-            .addRadioDropDown('paragraph/align/test/1', { columns: 2 })
-                .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
-                .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
-                .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
-                .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
-            .end()
-/*
-            .addButtonGroup()
-                .addRadioDropDown('paragraph/align/test/2', { columns: 2 })
-                    .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
-                    .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
-                    .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
-                    .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
-                .end()
-                .addRadioDropDown('paragraph/align/test/3', { columns: 2 })
-                    .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
-                    .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
-                    .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
-                    .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
-                .end()
-            .end()
-*/
             .addButton('action/debug', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
         } // end of constructor
@@ -97,13 +75,11 @@ define('io.ox/office/main',
 
                 'action/undo': {
                     enable: function () { return editor.hasUndo(); },
-                    set: function (list) { editor.undo(); editor.grabFocus(); },
-                    poll: true
+                    set: function (list) { editor.undo(); editor.grabFocus(); }
                 },
                 'action/redo': {
                     enable: function () { return editor.hasRedo(); },
-                    set: function (list) { editor.redo(); editor.grabFocus(); },
-                    poll: true
+                    set: function (list) { editor.redo(); editor.grabFocus(); }
                 },
                 'action/debug': {
                     get: function () { return app.isDebugMode(); },
@@ -148,6 +124,9 @@ define('io.ox/office/main',
                             // update view components
                             this.enableAndDisable(supportedItems);
                         }
+                    }, this))
+                    .on('operation', _.bind(function () {
+                        this.update(['action/undo', 'action/redo']);
                     }, this));
                 return this;
             };
@@ -225,6 +204,7 @@ define('io.ox/office/main',
         var getFilterUrl = function (action) {
             return ox.apiRoot + '/oxodocumentfilter?action=' + action +
                 '&id=' + docOptions.id +
+                '&folder_id=' + docOptions.folder_id +
                 '&version=' + docOptions.version +
                 '&filename=' + docOptions.filename +
                 '&session=' + ox.session +
@@ -257,8 +237,21 @@ define('io.ox/office/main',
         var createOperationsList = function (result) {
 
             var operations = [],
+                value;
+
+            try {
                 value = JSON.parse(result.data).operations;
-            // var value = result.data.operations; // code for Dummy Operations.
+            } catch (e) {
+                window.console.warn("Failed to parse JSON data. Trying second parse process.");
+            }
+
+            if (! value) {
+                try {
+                    value = result.data.operations; // code for Dummy Operations.
+                } catch (e) {
+                    window.console.warn("Failed to parse JSON data. No JSON data could be loaded.");
+                }
+            }
 
             if (_(value).isArray()) {
                 _(value).each(function (json, j) {
@@ -464,6 +457,7 @@ define('io.ox/office/main',
             _(Editor.TextMode).each(function (textMode) {
                 var node = $('<div>')
                         .addClass('io-ox-office-editor user-select-text ' + textMode)
+                        .attr('lang', 'undefined')  // TODO
                         .attr('contenteditable', true);
                 editors[textMode] = new Editor(node, textMode);
             });

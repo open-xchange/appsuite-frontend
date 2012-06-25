@@ -454,7 +454,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // DEBUG STUFF
             if (this.getParagraphCount() !== editdiv.children().size()) {
                 this.implDbgOutInfo('applyOperation - para count invalid!');
-                debugger;
             }
 
         };
@@ -560,7 +559,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 oxoPosition.push(para);
 
                 if ((column !== undefined) && (row !== undefined) && (cellpara !== undefined)) {
-                    oxoPosition.push([column, row]);
+                    // oxoPosition.push([column, row]);  // no more an array for column and row
+                    oxoPosition.push(column);
+                    oxoPosition.push(row);
                     oxoPosition.push(cellpara);
                 }
 
@@ -628,11 +629,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
             var myParagraph = $(paragraphs).get(para);
 
-            if (_(oxoPos[0]).isArray()) {
+            if (myParagraph.nodeName === 'TABLE') {
 
-                var tableCell = oxoPos.shift();
-                var column = tableCell[0];
-                var row = tableCell[1];
+                var column = oxoPos.shift();
+                var row = oxoPos.shift();
                 var cellpara = oxoPos.shift();
 
                 // In tables it is necessary, to find the correct
@@ -937,7 +937,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // DEBUG STUFF
             if (this.getParagraphCount() !== editdiv.children().size()) {
                 this.implDbgOutInfo('processKeyDown - para count invalid!');
-                debugger;
             }
         };
 
@@ -1004,7 +1003,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // DEBUG STUFF
             if (this.getParagraphCount() !== editdiv.children().size()) {
                 this.implDbgOutInfo('processKeyPressed - para count invalid!');
-                debugger;
             }
 
         };
@@ -1486,7 +1484,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // DEBUG STUFF
             if (paragraphs.size() !== (dbg_oldparacount + 1)) {
                 this.implDbgOutInfo('implSplitParagraph - para count invalid!');
-                debugger;
             }
         };
 
@@ -1531,7 +1528,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 // DEBUG STUFF
                 if (paragraphs.size() !== (dbg_oldparacount - 1)) {
                     this.implDbgOutInfo('implMergeParagraph - para count invalid!');
-                    debugger;
                 }
             }
 
