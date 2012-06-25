@@ -24,6 +24,9 @@
     /* spacing between elements in a button */
     @whitespace-width: 4px;
 
+    /* blur radius for hover and focus shadows */
+    @shadow-radius: 5px;
+
     .border-radius(@radius) {
         -webkit-border-radius: @radius;
         -moz-border-radius: @radius;
@@ -54,6 +57,12 @@
         border-bottom-right-radius: @radius;
     }
 
+    .box-shadow(@shadow) {
+        -webkit-box-shadow: @shadow;
+        -moz-box-shadow: @shadow;
+        box-shadow: @shadow;
+    }
+
     /* tool bar formatting ================================================= */
 
     /* redefine margin, padding, formatting for usage in OX */
@@ -67,9 +76,29 @@
 
     /* buttons ============================================================= */
     
-    .btn > span.whitespace {
-        display: inline-block;
-        width: @whitespace-width;
+    .btn {
+        .button-shadow(@opacity) {
+            .box-shadow(0 0 @shadow-radius rgba(82, 168, 236, @opacity));
+        }
+        
+        /* prevent dotted focus rectangle around buttons */
+        &:focus, &:active {
+            outline: none;
+        }
+
+        &:hover:not(:disabled) {
+            .button-shadow(0.4);
+        }
+
+        &:focus {
+            .button-shadow(0.8);
+        }
+
+        /* class for whitespace between icons, text, and dropdown arrows */
+        > span.whitespace {
+            display: inline-block;
+            width: @whitespace-width;
+        }
     }
     
     /* icons =============================================================== */

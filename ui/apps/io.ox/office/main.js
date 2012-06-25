@@ -39,28 +39,44 @@ define('io.ox/office/main',
 
             // add all tool bar controls
             this
-            .createButtonGroup()
-                .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert last operation') })
-                .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation') })
+            .addButtonGroup()
+                .addButton('action/undo', { icon: gt('icon-io-ox-undo'), tooltip: gt('Revert last operation') })
+                .addButton('action/redo', { icon: gt('icon-io-ox-redo'), tooltip: gt('Restore last operation') })
             .end()
-            .createButtonGroup()
-                .addButton('font/bold',      { icon: gt('icon-io-ox-bold'),      tooltip: gt('Bold'),      toggle: true })
-                .addButton('font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
-                .addButton('font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
+            .addButtonGroup()
+                .addButton('character/font/bold',      { icon: gt('icon-io-ox-bold'),      tooltip: gt('Bold'),      toggle: true })
+                .addButton('character/font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
+                .addButton('character/font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
             .end()
-            .createRadioGroup('paragraph/align')
+            .addRadioGroup('paragraph/alignment')
+                .addButton('left',    { icon: gt('icon-align-left'),    tooltip: gt('Left') })
+                .addButton('center',  { icon: gt('icon-align-center'),  tooltip: gt('Center') })
+                .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
+                .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
+            .end()
+            .addRadioDropDown('paragraph/align/test/1', { columns: 2 })
                 .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
                 .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
                 .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
                 .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
             .end()
-            .createRadioDropDown('paragraph/align/test', { columns: 2 })
-                .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
-                .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
-                .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
-                .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
+/*
+            .addButtonGroup()
+                .addRadioDropDown('paragraph/align/test/2', { columns: 2 })
+                    .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
+                    .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
+                    .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
+                    .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
+                .end()
+                .addRadioDropDown('paragraph/align/test/3', { columns: 2 })
+                    .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
+                    .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
+                    .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
+                    .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
+                .end()
             .end()
-            .createButton('action/debug', { icon: 'icon-eye-open', tooltip: gt('Debug mode'), toggle: true });
+*/
+            .addButton('action/debug', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
         } // end of constructor
 
@@ -94,23 +110,23 @@ define('io.ox/office/main',
                     set: function (state) { app.setDebugMode(state); editor.grabFocus(); }
                 },
 
-                'font/bold': {
+                'character/font/bold': {
                     get: function () { return editor.getAttribute('bold'); },
                     set: function (state) { editor.setAttribute('bold', state); editor.grabFocus(); },
                     poll: true
                 },
-                'font/italic': {
+                'character/font/italic': {
                     get: function () { return editor.getAttribute('italic'); },
                     set: function (state) { editor.setAttribute('italic', state); editor.grabFocus(); },
                     poll: true
                 },
-                'font/underline': {
+                'character/font/underline': {
                     get: function () { return editor.getAttribute('underline'); },
                     set: function (state) { editor.setAttribute('underline', state); editor.grabFocus(); },
                     poll: true
                 },
 
-                'paragraph/align': {
+                'paragraph/alignment': {
                     set: function (value) { editor.grabFocus(); }
                 }
 
@@ -240,12 +256,8 @@ define('io.ox/office/main',
 
         var createOperationsList = function (result) {
 
-            var operations = [], value;
-            try {
+            var operations = [],
                 value = JSON.parse(result.data).operations;
-            } catch (ex) {
-                window.console.log('Exception caught: ' + ex);
-            }
             // var value = result.data.operations; // code for Dummy Operations.
 
             if (_(value).isArray()) {
@@ -292,23 +304,38 @@ define('io.ox/office/main',
          */
         app.load = function () {
             var def = $.Deferred();
+
+            // show application window
             win.show().busy();
             $(window).resize();
+
+            // initialize editor, MUST be done in visible application,
+            // otherwise IE fails to set the browser selection
+            editor.initDocument();
+
             $.ajax({
                 type: 'GET',
                 url: getFilterUrl('importdocument'),
                 dataType: 'json'
             })
             .done(function (response) {
-                var operations = createOperationsList(response);
-                editor.applyOperations(operations, false, true);
-                editor.setModified(false);
-                editor.grabFocus(true);
-                win.idle();
-                def.resolve();
+                try {
+                    var operations = createOperationsList(response);
+                    editor.applyOperations(operations, false, true);
+                    editor.setModified(false);
+                    editor.grabFocus(true);
+                    win.idle();
+                    def.resolve();
+                } catch (ex) {
+                    showError('Exception caught: ' + ex, 'Internal Error');
+                    editor.grabFocus(true);
+                    win.idle();
+                    def.reject();
+                }
             })
             .fail(function (response) {
                 showAjaxError(response);
+                editor.grabFocus(true);
                 win.idle();
                 def.reject();
             });

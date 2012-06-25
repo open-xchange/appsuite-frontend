@@ -97,7 +97,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the new button. See
-     *  method ToolBar.createButton() for details.
+     *  method ToolBar.addButton() for details.
      *
      * @returns {jQuery}
      *  A jQuery object containing the new button element.
@@ -105,7 +105,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
     Buttons.createButton = function (key, options) {
 
         var // create the DOM button element
-            button = $('<button>').addClass('btn');
+            button = $('<button>').addClass('btn btn-small');
 
         // add the key as data attribute
         if (_.isString(key)) {
@@ -266,13 +266,13 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          *
          * @param {Object} [options]
          *  A map of options to control the properties of the drop-down button
-         *  or the table area. See method ToolBar.createRadioDropDown() for
+         *  or the table area. See method ToolBar.addRadioDropDown() for
          *  details.
          */
         function RadioDropDownProxy(node, key, options) {
 
-            var // create the drop-down button
-                dropDownButton = Buttons.createButton(key).addClass('dropdown-toggle').attr('data-toggle', 'dropdown').appendTo(node),
+            var // create the empty drop-down button
+                dropDownButton = Buttons.createButton(key).addClass('dropdown-toggle').appendTo(node),
 
                 // create the table area
                 tableNode = $('<table>').addClass('dropdown-menu').appendTo(node),
@@ -283,6 +283,14 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 // number of inserted buttons
                 buttonCount = 0;
 
+            /**
+             * Activates a button in this radio group.
+             *
+             * @param {String|Null} [value]
+             *  The unique value associated to the button to be activated. If
+             *  omitted or set to null, does not activate any button (ambiguous
+             *  state).
+             */
             function updateHandler(value) {
                 var // find all embedded option buttons
                     buttons = tableNode.find('button'),
@@ -343,7 +351,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              *
              * @param {Object} [options]
              *  A map of options to control the properties of the new button.
-             *  See method ToolBar.createButton() for details.
+             *  See method ToolBar.addButton() for details.
              */
             this.addButton = function (value, options) {
 
@@ -411,7 +419,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              *
              * @param {Object} [options]
              *  A map of options to control the properties of the new button.
-             *  See method ToolBar.createButton() for details.
+             *  See method ToolBar.addButton() for details.
              */
             this.addButton = function (key, options) {
 
@@ -445,7 +453,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              *
              * @param {Object} options
              *  A map of options to control the properties of the drop-down
-             *  group. See method ToolBar.createRadioDropDown() for details.
+             *  group. See method ToolBar.addRadioDropDown() for details.
              *
              * @returns {RadioDropDownPropxy}
              *  A proxy object that implements the method addButton() to add
@@ -512,7 +520,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              *
              * @param {Object} [options]
              *  A map of options to control the properties of the new button.
-             *  See method ToolBar.createButton() for details.
+             *  See method ToolBar.addButton() for details.
              */
             this.addButton = function (value, options) {
 
@@ -550,7 +558,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          *  A proxy object that implements methods to add controls to the
          *  group.
          */
-        this.createButtonGroup = function () {
+        this.addButtonGroup = function () {
             return new ButtonGroupProxy();
         };
 
@@ -565,7 +573,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          *  A proxy object that implements methods to add option buttons to the
          *  radio group.
          */
-        this.createRadioGroup = function (key) {
+        this.addRadioGroup = function (key) {
             return new RadioGroupProxy(key);
         };
 
@@ -590,8 +598,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          * @returns {ToolBar}
          *  A reference to this tool bar.
          */
-        this.createButton = function (key, options) {
-            return this.createButtonGroup().addButton(key, options).end();
+        this.addButton = function (key, options) {
+            return this.addButtonGroup().addButton(key, options).end();
         };
 
         /**
@@ -614,13 +622,13 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          *      table. Defaults to the value 3.
          *
          * @returns {RadioDropDownPropxy}
-         *  A proxy object that implements the method addButton() to add option
-         *  buttons to the radio group.
+         *  A proxy object that implements the method addButton() to add
+         *  option buttons to the radio group.
          */
-        this.createRadioDropDown = function (key, options) {
+        this.addRadioDropDown = function (key, options) {
             // create a drop-down proxy whose end() method returns this tool
             // bar instead of the dummy button group holding the drop-down
-            var proxy = this.createButtonGroup().addRadioDropDown(key, options);
+            var proxy = this.addButtonGroup().addRadioDropDown(key, options);
             proxy.end = getToolBar;
             return proxy;
         };
