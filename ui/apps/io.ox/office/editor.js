@@ -30,27 +30,70 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
 
     function OXOUndoManager() {
+
         var actions = [];
-        // var nMaxActions = 1000;
-        var nCurrentAction = 0;
+        // var maxActions = 1000;   // not clear if really wanted/needed...
+        var currentAction = 0;
+
+        var groupLevel = 0;
+        var currentGroupActions = [];
+
+        var processingUndoRedo = false;
 
         this.clear = function () {
             actions = [];
-            nCurrentAction = 0;
+            currentAction = 0;
+        };
+
+        this.startGroup = function () {
+            // I don't think we really need complex structure with nested arrays here.
+            // Once we start a group, undo will allways undo everything withing
+            // Just using ++/-- so other code don't needs to take care wether or not grouping is already active...
+            groupLevel++;
+        };
+
+        this.endGroup = function () {
+
+            if (!groupLevel) {
+                dbgOutError("ERROR - not in undo group!");
+                return;
+            }
+
+            groupLevel--;
+
+            if (groupLevel === 0) {
+                actions.push(currentGroupActions);
+                currentAction = actions.length;
+                currentGroupActions = [];
+            }
+        };
+
+        this.isInUndo = function () {
+            return processingUndoRedo;
         };
 
         this.addUndo = function (oxoUndoAction) {
 
-            // remove undone actions
-            if (nCurrentAction < actions.length)
-                actions.splice(nCurrentAction);
+            if (this.isInUndo()) {
+                dbgOutError("ERROR - creating undo while processing undo!");
+                return;
+            }
 
-            actions.push(oxoUndoAction);
-            nCurrentAction = actions.length;
+            // remove undone actions
+            if (currentAction < actions.length)
+                actions.splice(currentAction);
+
+            if (groupLevel) {
+                currentGroupActions.push(oxoUndoAction);
+            }
+            else {
+                actions.push(oxoUndoAction);
+                currentAction = actions.length;
+            }
         };
 
         this.hasUndo = function () {
-            return nCurrentAction > 0 ? true : false;
+            return currentAction > 0 ? true : false;
         };
 
         this.undo = function (editor) {
@@ -58,12 +101,22 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             if (!this.hasUndo())
                 return;
 
-            nCurrentAction--;
-            actions[nCurrentAction].undo(editor);
+            processingUndoRedo = true;
+            currentAction--;
+            var action = actions[currentAction];
+            if (_.isArray(action)) {
+                for (var i = action.length; i;) {
+                    action[--i].undo(editor);
+                }
+            }
+            else {
+                action.undo(editor);
+            }
+            processingUndoRedo = false;
         };
 
         this.hasRedo = function () {
-            return nCurrentAction < actions.length ? true : false;
+            return currentAction < actions.length ? true : false;
         };
 
         this.redo = function (editor) {
@@ -71,8 +124,16 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             if (!this.hasRedo())
                 return;
 
-            actions[nCurrentAction].redo(editor);
-            nCurrentAction++;
+            processingUndoRedo = true;
+            var action = actions[currentAction];
+            if (_.isArray(action)) {
+                _.invoke(action, "redo", editor);
+            }
+            else {
+                action.redo(editor);
+            }
+            currentAction++;
+            processingUndoRedo = false;
         };
 
     }
@@ -197,7 +258,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
      * - 'operation': When a new operation has been applied.
      * - 'modified': When the modified flag has been changed.
      */
-    function OXOEditor(controller, editdiv, textMode) {
+    function OXOEditor(editdiv, textMode) {
 
         // key codes of navigation keys that will be passed directly to the browser
         var NAVIGATION_KEYS = _([
@@ -918,6 +979,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             var selection = _selection || this.getSelection();
             if (selection.hasRange()) {
 
+                undomgr.startGroup();
+
                 selection.adjust();
 
                 var endPosition = _.copy(selection.endPaM.oxoPosition, true);
@@ -949,6 +1012,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     mergeselection.pop();
                     this.mergeParagraph(mergeselection);
                 }
+
+                undomgr.endGroup();
             }
         };
 
@@ -1516,6 +1581,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             .on('drop', $.proxy(this, 'processDrop'))
             .on('contextmenu', $.proxy(this, 'processContextMenu'));
 
+        // initializing the document
+        this.initDocument();
+
     } // end of OXOEditor()
 
     // static constants, used as map keys, and as CSS class names
@@ -1523,6 +1591,16 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         RICH: 'rich',
         PLAIN: 'plain'
     };
+
+    // DEBUG FUNCTIONS
+    function dbgOutError(str) {
+
+        // if (!dbgoutErrors)
+        //    return;
+
+        window.console.log(str);
+    }
+
 
     // exports ================================================================
 

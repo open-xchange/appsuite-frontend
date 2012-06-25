@@ -15,6 +15,11 @@ define('io.ox/office/controller', function () {
 
     'use strict';
 
+    /**
+     * Dummy predicate function returning always true.
+     */
+    function TRUE() { return true; }
+
     // class Controller =======================================================
 
     /**
@@ -22,10 +27,15 @@ define('io.ox/office/controller', function () {
      * and value, and providing arbitrary getter and setter methods for their
      * values.
      *
-     * @param definitions
+     * @constructor
+     *
+     * @param {Object} definitions
      *  A map of key/definition pairs. Each attribute in this map defines an
      *  item, keyed by its name. Definitions are maps themselves, supporting
      *  the following attributes:
+     *  - enable: (optional) Predicate function returning true if the item is
+     *      enabled, and false otherwise. Defaults to a function returning
+     *      always true.
      *  - get: (optional) Getter function returning the current value of the
      *      item. Can be omitted for one-way action items (actions without a
      *      return value). May return null to indicate an ambiguous state, or
@@ -53,8 +63,8 @@ define('io.ox/office/controller', function () {
         /**
          * Returns all items matching the passed key selector in a map.
          *
-         * @param keys {String} {RegExp} {Array} {Null}
-         *  (optional) The keys of the items to be included into the result, as
+         * @param {String|RegExp|String[]|RegExp[]|Null} [keys]
+         *  The keys of the items to be included into the result, as
          *  space-separated string, or as regular expression, or as array of
          *  strings or regular expressions (also mixed). Strings have to match
          *  the keys exactly. If omitted, all registered items will be
@@ -95,37 +105,23 @@ define('io.ox/office/controller', function () {
         }
 
         /**
-         * Enables/disables all controls associated to the specified items in
-         * the specified view components.
-         *
-         * @param components {Array}
-         *  View components to be processed, as array.
-         *
-         * @param items {Object}
-         *  Items to be enabled/disabled in the view components, according to
-         *  their enabled attribute.
-         */
-        function enableComponents(components, items) {
-            _(items).each(function (item, key) {
-                _(components).invoke('enable', key, item.enabled);
-            });
-        }
-
-        /**
          * Updates all controls associated to the specified items according to
          * the current item value.
          *
-         * @param components {Array}
+         * @param {Object[]} components
          *  View components to be updated, as array.
          *
-         * @param items {Object}
+         * @param {Object} items
          *  Items to be updated in the view components, according to their
-         *  current value.
+         *  current value and enabled state.
          */
         function updateComponents(components, items) {
             _(items).each(function (item, key) {
+                // ask if item is dynamically disabled
+                var enabled = item.enabled && item.enable();
+                _(components).invoke('enable', key, enabled);
                 // pass undefined value for disabled items
-                var value = item.enabled ? item.get() : undefined;
+                var value = enabled ? item.get() : undefined;
                 _(components).invoke('update', key, value);
             });
         }
@@ -149,6 +145,7 @@ define('io.ox/office/controller', function () {
                 // build the item object
                 var item = allItems[key] = {
                     // bind getters and setters to this controller instance
+                    enable: _.isFunction(def.enable) ? _.bind(def.enable, this) : TRUE,
                     get: _.isFunction(def.get) ? _.bind(def.get, this) : $.noop,
                     set: _.isFunction(def.set) ? _.bind(def.set, this) : $.noop,
                     // items are initially disabled
@@ -178,7 +175,7 @@ define('io.ox/office/controller', function () {
          * Registers a view component (e.g. a tool bar) that contains form
          * controls used to display item values and trigger item actions.
          *
-         * @param component
+         * @param {Object} component
          *  The view component to be registered. Must trigger 'change' events
          *  passing the item key and value as parameters, if a control has been
          *  activated in the user interface. Must support the method enable()
@@ -191,7 +188,6 @@ define('io.ox/office/controller', function () {
         this.registerViewComponent = function (component) {
             if (!_(components).contains(component)) {
                 components.push(component);
-                enableComponents([component], allItems);
                 updateComponents([component], allItems);
                 component.on('change', componentListener);
             }
@@ -202,7 +198,7 @@ define('io.ox/office/controller', function () {
          * Unregisters a view component that has been registered with the
          * method registerViewComponent().
          *
-         * @param component
+         * @param {Object} component
          *  A view component that has been registered with the method
          *  registerViewComponent() before.
          *
@@ -221,16 +217,16 @@ define('io.ox/office/controller', function () {
          * Enables or disables the specified items, and updates all registered
          * view components.
          *
-         * @param keys {String} {RegExp} {Array} {Null}
-         *  (optional) The keys of the items to be enabled or disabled, as
-         *  space-separated string, or as regular expression, or as array of
-         *  strings or regular expressions (also mixed). Strings have to match
-         *  the keys exactly. If omitted, all items will be enabled. If set to
-         *  null, all items will be disabled.
+         * @param {String|RegExp|String[]|RegExp[]|Null} [keys]
+         *  The keys of the items to be enabled or disabled, as space-separated
+         *  string, or as regular expression, or as array of strings or regular
+         *  expressions (also mixed). Strings have to match the keys exactly.
+         *  If omitted, all items will be enabled. If set to null, all items
+         *  will be disabled.
          *
-         * @param state {Boolean}
-         *  (optional) If omitted or set to true, the items will be enabled.
-         *  Otherwise, the items will be disabled.
+         * @param {Boolean} [state]
+         *  If omitted or set to true, the items will be enabled. Otherwise,
+         *  the items will be disabled.
          *
          * @returns {Controller}
          *  A reference to this controller.
@@ -247,7 +243,6 @@ define('io.ox/office/controller', function () {
             });
 
             // update all view components
-            enableComponents(components, items);
             updateComponents(components, items);
 
             return this;
@@ -257,9 +252,9 @@ define('io.ox/office/controller', function () {
          * Disables the specified items, and updates all registered view
          * components. Shortcut for Controller.enable(keys, false).
          *
-         * @param keys {String} {RegExp} {Array} {Null}
-         *  (optional) The keys of the items to be disabled, as space-separated
-         *  string, or as regular expression, or as array of strings or regular
+         * @param {String|RegExp|String[]|RegExp[]|Null} [keys]
+         *  The keys of the items to be disabled, as space-separated string, or
+         *  as regular expression, or as array of strings or regular
          *  expressions (also mixed). Strings have to match the keys exactly.
          *  If omitted, all items will be enabled. If set to null, all items
          *  will be disabled.
@@ -276,9 +271,9 @@ define('io.ox/office/controller', function () {
          * components. Items matching the specified selector will be enabled,
          * all other items will be disabled.
          *
-         * @param keys {String} {RegExp} {Array} {Null}
-         *  (optional) The keys of the items to be enabled, as space-separated
-         *  string, or as regular expression, or as array of strings or regular
+         * @param {String|RegExp|String[]|RegExp[]|Null} [keys]
+         *  The keys of the items to be enabled, as space-separated string, or
+         *  as regular expression, or as array of strings or regular
          *  expressions (also mixed). Strings have to match the keys exactly.
          *  If omitted, all items will be enabled. If set to null, all items
          *  will be disabled.
@@ -297,7 +292,6 @@ define('io.ox/office/controller', function () {
             });
 
             // update all view components
-            enableComponents(components, allItems);
             updateComponents(components, allItems);
 
             return this;
@@ -307,9 +301,9 @@ define('io.ox/office/controller', function () {
          * Updates the values of the specified items, and updates all
          * registered view components.
          *
-         * @param keys {String} {RegExp} {Array} {Null}
-         *  (optional) The keys of the items to be updated, as space-separated
-         *  string, or as regular expression, or as array of strings or regular
+         * @param {String|RegExp|String[]|RegExp[]|Null} [keys]
+         *  The keys of the items to be updated, as space-separated string, or
+         *  as regular expression, or as array of strings or regular
          *  expressions (also mixed). Strings have to match the keys exactly.
          *  If omitted, all items will be updated. If set to null, no item will
          *  be updated.
