@@ -48,7 +48,7 @@ define('io.ox/office/main',
                 .addButton('character/font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
                 .addButton('character/font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
             .end()
-            .addRadioGroup('paragraph/alignment')
+            .addRadioGroup('paragraph/alignment', { type: 'auto', columns: 2 })
                 .addButton('left',    { icon: gt('icon-align-left'),    tooltip: gt('Left') })
                 .addButton('center',  { icon: gt('icon-align-center'),  tooltip: gt('Center') })
                 .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })

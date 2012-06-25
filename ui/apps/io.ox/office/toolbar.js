@@ -194,14 +194,27 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         var // create the DOM container element
             node = $('<div>').addClass('btn-toolbar io-ox-toolbar'),
 
+            // DOM sub element measuring the total width of the controls
             sizeSpan = $('<span>').appendTo(node),
 
             // control update handlers, mapped by key
             updateHandlers = {},
 
+            // objects supporting flexible sizing
+            resizeables = [],
+
             // helper function returning a reference to this tool bar
             getToolBar = _.bind(function () { return this; }, this);
 
+        // private methods ----------------------------------------------------
+
+        /**
+         * Creates and returns a container element used to hold single
+         * controls. All controls must be inserted into group containers.
+         *
+         * @returns {jQuery}
+         *  A new control container, already inserted into this tool bar.
+         */
         function createGroupNode() {
             return $('<div>').addClass('btn-group').appendTo(sizeSpan);
         }
@@ -269,20 +282,40 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             });
         }
 
-        function registerResizable(object) {
-        }
-
+        /**
+         * Listens to size events of the browser window, and tries to expand or
+         * shrink resizeable controls according ot the available space.
+         */
         function resizeHandler() {
-            console.log('toolbar.width=' + node.width() + ', toolbar.span.width=' + sizeSpan.width());
+            var loopBreaker = {};
+
+            // try to shrink one or more controls
+            try {
+                _(resizeables).each(function (resizeable) {
+                    var minWidth, width, maxWidth;
+                    // check tool bar size, escape from loop
+                    if (node.width() >= sizeSpan.width()) {
+                        throw loopBreaker;
+                    }
+                    minWidth = resizeable.getMinWidth();
+                    width = resizeable.getWidth();
+                    maxWidth = resizeable.getMaxWidth();
+                });
+            } catch (ex) {
+                if (ex !== loopBreaker) {
+                    throw ex;
+                }
+            }
         }
 
-        // initialization -----------------------------------------------------
-
-        // add event hub
-        Events.extend(this);
-
-        // add resize handler
-        $(window).on('resize', resizeHandler);
+        function registerResizeable(resizeable) {
+            // add resize handler on first call
+            if (!resizeables.length) {
+                $(window).on('resize', resizeHandler);
+            }
+            // store the resizeable object
+            resizeables.push(resizeable);
+        }
 
         // class ButtonGroupProxy ---------------------------------------------
 
@@ -295,6 +328,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
 
             var // create a new button group container
                 groupNode = createGroupNode();
+
+            // private methods ------------------------------------------------
 
             function clickHandler(button) {
                 if (Buttons.isToggleButton(button)) {
@@ -340,7 +375,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              * group. Useful for method chaining.
              */
             this.end = getToolBar;
-        }
+
+        } // class ButtonGroupProxy
 
         // class RadioGroupProxy ----------------------------------------------
 
@@ -368,8 +404,14 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 // create a new group container for the button group
                 buttonGroupNode = createGroupNode(),
 
+                // total width of the button group
+                buttonGroupWidth = 0,
+
                 // create a new group container for the drop-down group
                 dropDownGroupNode = createGroupNode(),
+
+                // total width of the drop-down button
+                dropDownGroupWidth = 0,
 
                 // number of columns in the drop-down menu
                 columns = (options && _.isNumber(options.columns) && (options.columns >= 1)) ? options.columns : 3,
@@ -382,6 +424,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
 
                 // number of buttons inserted into the group
                 buttonCount = 0;
+
+            // private methods ------------------------------------------------
 
             /**
              * Activates a button in this radio group.
@@ -408,6 +452,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                     (button.length ? button : buttons).first().contents().clone(),
                     $('<span>').addClass('whitespace'),
                     $('<span>').addClass('caret'));
+                if (dropDownButton.css('display') !== 'none') {
+                    dropDownGroupWidth = dropDownGroupNode.outerWidth();
+                }
 
                 // highlight active button
                 Buttons.toggleButtons(button, true);
@@ -437,37 +484,6 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 registerActionHandler(button, 'click', clickHandler);
             }
 
-            // initialization -------------------------------------------------
-
-            /*
-             * The width of the table is restricted to the parent button group
-             * element, thus the table shrinks its buttons way too much. The
-             * only way (?) to expand the table to the correct width is to set
-             * its min-width property to the calculated width of the tbody. To
-             * do this, it is required to expand the min-width to a large value
-             * to give the tbody enough space, and then query its calculated
-             * width.
-             */
-            dropDownButton.one('click', function () {
-                // wait for the button to really become visible (done by Bootstrap)
-                window.setTimeout(function timer() {
-                    if (dropDownMenu.css('display') !== 'none') {
-                        dropDownMenu
-                            .css('min-width', '10000px')
-                            .css('min-width', dropDownMenu.find('tbody').outerWidth() + 'px');
-                    } else {
-                        window.setTimeout(timer, 25);
-                    }
-                });
-            });
-
-            if (type === 'auto') {
-                registerResizable(this);
-            }
-
-            // create a single update handler for the entire radio group
-            registerUpdateHandler(key, updateHandler);
-
             // methods --------------------------------------------------------
 
             /**
@@ -491,6 +507,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
 
                 // append a button to the button group
                 insertButton(buttonGroupNode, value, options);
+                buttonGroupWidth = buttonGroupNode.outerWidth();
 
                 // get/create table row with empty cell from drop-down menu
                 if (column === 0) {
@@ -526,7 +543,54 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              * group. Useful for method chaining.
              */
             this.end = getToolBar;
-        }
+
+            // initialization -------------------------------------------------
+
+            /*
+             * The width of the table is restricted to the parent button group
+             * element, thus the table shrinks its buttons way too much. The
+             * only way (?) to expand the table to the correct width is to set
+             * its min-width property to the calculated width of the tbody. To
+             * do this, it is required to expand the min-width to a large value
+             * to give the tbody enough space, and then query its calculated
+             * width.
+             */
+            dropDownButton.one('click', function () {
+                // wait for the button to really become visible (done by Bootstrap)
+                window.setTimeout(function timer() {
+                    if (dropDownMenu.css('display') !== 'none') {
+                        dropDownMenu
+                            .css('min-width', '10000px')
+                            .css('min-width', dropDownMenu.find('tbody').outerWidth() + 'px');
+                    } else {
+                        window.setTimeout(timer, 25);
+                    }
+                });
+            });
+
+            // configure according to group type
+            switch (type) {
+            case 'buttons':
+                dropDownGroupNode.hide();
+                break;
+
+            case 'auto':
+                registerResizeable({
+                    getMinWidth: function () { return dropDownGroupWidth; },
+                    getWidth: function () { return buttonGroupWidth; },
+                    getMaxWidth: function () { return buttonGroupWidth; }
+                });
+                break;
+
+            default: // 'dropdown'
+                buttonGroupNode.hide();
+                break;
+            }
+
+            // create a single update handler for the entire radio group
+            registerUpdateHandler(key, updateHandler);
+
+        } // class RadioGroupProxy
 
         // methods ------------------------------------------------------------
 
@@ -557,7 +621,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          *  @param {String} [options.tooltip]
          *      Tool tip text shown when the mouse hovers the button. If
          *      omitted, the button will not show a tool tip.
-         *  @param {Boolean} [option.toggle]
+         *  @param {Boolean} [option.toggle=false]
          *      If set to true, the button toggles its state and passes a
          *      boolean value to change listeners. Otherwise, the button is a
          *      simple push button and passes undefined to its change
@@ -599,13 +663,13 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          *  drop-down button itself, because these contents will be cloned
          *  dynamically from the embedded option button that is currently
          *  active. The following options are supported:
-         *  @param {String} [options.type]
-         *      If set to 'buttons' or omitted, a button group will be created.
-         *      If set to 'dropdown', a drop-down group will be created. If set
+         *  @param {String} [options.type='dropdown']
+         *      If set to 'buttons', a button group will be created. If omitted
+         *      or set to 'dropdown', a drop-down group will be created. If set
          *      to 'auto', the type will change between 'buttons' and
          *      'dropdown' according to the horizontal space available for the
          *      tool bar.
-         *  @param {Number} [options.columns]
+         *  @param {Number} [options.columns=3]
          *      Number of columns used to build the drop-down menu. Defaults
          *      to the value 3.
          *
@@ -623,7 +687,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          * @param {String} key
          *  The keys of the control to be enabled or disabled.
          *
-         * @param {Boolean} [state]
+         * @param {Boolean} [state=true]
          *  If omitted or set to true, all controls will be enabled. Otherwise,
          *  all controls will be disabled.
          *
@@ -678,6 +742,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             node.remove();
             node = getToolBar = null;
         };
+
+        // initialization -----------------------------------------------------
+
+        // add event hub
+        Events.extend(this);
 
     }
 
