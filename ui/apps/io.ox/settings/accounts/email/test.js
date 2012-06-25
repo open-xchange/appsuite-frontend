@@ -210,7 +210,6 @@ define("io.ox/settings/accounts/email/test",
                     });
                 });
 
-
                 j.it('looks for the autoconf form and the add button', function () {
 
                     j.waitsFor(function () {
@@ -224,38 +223,14 @@ define("io.ox/settings/accounts/email/test",
                 });
 
                 j.it('fills the form', function () {
-                    $(dialogAutoconf).find('input').val(TESTMAILAUTOCONFIG.email);
+                    $(dialogAutoconf).find('input[type="text"]').val(TESTMAILAUTOCONFIG.email);
+                    $(dialogAutoconf).find('input[type="password"]').val(TESTMAILAUTOCONFIG.password);
                 });
 
                 j.it('hits the add button', function () {
 
                     j.runs(function () {
                         buttonAddAutoconf.trigger('click');
-                    });
-
-                });
-
-                j.it('looks for the password form and the add button', function () {
-
-                    j.waitsFor(function () {
-                        dialogPassword = $('.io-ox-dialog-popup');
-                        identifier = $(dialogPassword).find('input[type="password"]');
-                        buttonAddPassword = $(dialogPassword).find('button.btn-primary');
-                        if (dialogPassword[0] && buttonAddPassword[0] && identifier[0]) {
-                            return true;
-                        }
-                    }, 'looks for dialog', TIMEOUT);
-
-                });
-
-                j.it('fills the form', function () {
-                    $(dialogPassword).find('input').val(TESTMAILAUTOCONFIG.password);
-                });
-
-                j.it('hits the add button', function () {
-
-                    j.runs(function () {
-                        buttonAddPassword.trigger('click');
                     });
 
                 });
@@ -280,37 +255,6 @@ define("io.ox/settings/accounts/email/test",
 
                 });
 
-//                j.it('looks for the add form and save button', function () {
-//
-//                    j.waitsFor(function () {
-//                        detailPane = $('.settings-detail-pane');
-//                        buttonSave = $('[data-action="save"]');
-//                        if (detailPane[0] && buttonSave[0]) {
-//                            return true;
-//                        }
-//                    }, 'looks for detailPane', TIMEOUT);
-//
-//                });
-//
-//                j.it('compares the autofilled primary address with the testobject', function () {
-//
-//                    j.expect(detailPane.find('[data-property="primary_address"]').val()).toEqual(TESTMAILAUTOCONFIG.email);
-//
-//                });
-//
-//                j.it('fills the form', function () {
-//                    _.each(TESTACCOUNT, function (value, key) {
-//                        detailPane.find('[data-property="' + key + '"]').val(value).trigger('change');
-//                    });
-//                });
-//
-//                j.it('hits the save button', function () {
-//
-//                    j.runs(function () {
-//                        buttonSave.trigger('click');
-//                    });
-//                });
-
                 j.it('gets the id of the created account and deletes', function () {
                     j.expect(dataId).not.toBeUndefined();
                     j.runs(function () {
@@ -327,7 +271,6 @@ define("io.ox/settings/accounts/email/test",
         index: 100,
         test: function (j) {
             j.describe("Tests the mail-autoconfig api", function () {
-
 
                 j.it('tests the autoconfig api', function () {
 
@@ -361,7 +304,6 @@ define("io.ox/settings/accounts/email/test",
         test: function (j) {
             j.describe("Tests the validate functions of the api", function () {
 
-
                 j.it('tests the validate functions', function () {
 
                     j.runs(function () {
@@ -388,43 +330,6 @@ define("io.ox/settings/accounts/email/test",
             });
         }
     });
-
-//    ext.point('test/suite').extend({
-//        id: 'settings-get-test',
-//        index: 100,
-//        test: function (j) {
-//            j.describe("Tests the get function of the jslob", function () {
-//
-//
-//                j.it('tests the validate functions', function () {
-//
-//                    j.runs(function () {
-//                        var me = this;
-//                        me.ready = false;
-//                        api.configtest()
-//                        .done(function (data) {
-//                            if (data === true) {
-//                                me.ready = true;
-//                            }
-//                        })
-//                        .fail(function () {
-//                            console.log('no settingsdata recived');
-//                        });
-//
-//                        j.waitsFor(function () {
-//                            return this.ready;
-//                        }, 'response from settings arrived', TIMEOUT);
-//
-//                    });
-//
-//                });
-//
-//            });
-//        }
-//    });
-
-
-
 
 
 
