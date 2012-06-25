@@ -12,7 +12,7 @@
  */
 define('io.ox/calendar/edit/module-conflicts',
       ['io.ox/calendar/edit/model-appointment',
-       'io.ox/calendar/edit/participants',
+       'io.ox/calendar/edit/module-participants',
        'io.ox/calendar/api',
        'io.ox/core/http',
        'io.ox/calendar/view-grid-template',
@@ -110,8 +110,6 @@ define('io.ox/calendar/edit/module-conflicts',
             }
 
             this.isResource = isResource;
-
-
             return this;
         },
         onIgnore: function () {

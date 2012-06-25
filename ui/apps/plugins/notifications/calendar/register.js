@@ -10,14 +10,15 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
-define('plugins/notifications/appointments/register',
+define('plugins/notifications/calendar/register',
       ['io.ox/core/notifications',
        'io.ox/calendar/api',
        'io.ox/calendar/util',
        'io.ox/core/extensions',
-       'dot!plugins/notifications/appointments/template.html',
-       'gettext!plugins/notifications/appointments',
-       'less!plugins/notifications/appointments/style.css'], function (notificationController, calApi, util, ext, tpl, gt) {
+       'io.ox/core/api/user',
+       'dot!plugins/notifications/calendar/template.html',
+       'gettext!plugins/notifications/calendar',
+       'less!plugins/notifications/calendar/style.css'], function (notificationController, calApi, util, ext, userApi, tpl, gt) {
 
     'use strict';
 
@@ -33,8 +34,9 @@ define('plugins/notifications/appointments/register',
 
         },
         render: function () {
-            this.$el.empty().append(tpl.render('plugins/notifications/appointments/inviteitem', {}));
-            this._modelBinder.bind(this.model, this.el, Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property'));
+            this.$el.empty().append(tpl.render('plugins/notifications/calendar/inviteitem', {}));
+            var bindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property');
+            this._modelBinder.bind(this.model, this.el, bindings);
             return this;
 
         },
@@ -147,7 +149,7 @@ define('plugins/notifications/appointments/register',
             this._collectionBinder = new Backbone.CollectionBinder(elManagerFactory);
         },
         render: function () {
-            this.$el.empty().append(tpl.render('plugins/notifications/appointments/invites', {
+            this.$el.empty().append(tpl.render('plugins/notifications/calendar/invites', {
                 strings: {
                     NEW_INVITES: gt('Invitations')
                 }
@@ -168,19 +170,37 @@ define('plugins/notifications/appointments/register',
             calApi.on('invites', function (e, invites) {
                 notifications.collection.reset([]);
                 _(invites).each(function (invite) {
-                    notifications.collection.unshift({
+                    console.log('invite', invite);
+                    var inObj = {
                         title: invite.title,
                         subject: invite.location,
                         date: util.getDateInterval(invite),
                         time: util.getTimeInterval(invite),
                         data: invite
-                    });
+                    };
+                    if (invite.organizer && !invite.organizerId) {
+                        inObj.organizer = gt('organized by %1$s', invite.organizer);
+                        notifications.collection.unshift(inObj);
+                    } else {
+                        var userId = invite.organizerId || invite.created_by;
+                        userApi.get(userId)
+                            .done(function (user) {
+                                console.log('organizer', user);
+                                inObj.organizer = gt('organized by %1$s', user.display_name);
+                                notifications.collection.unshift(inObj);
+                            })
+                            .fail(function () {
+                                // no organizer
+                                inObj.organizer = false;
+                                notifications.collection.unshift(inObj);
+                            });
+
+                    }
+
                 });
             });
         }
     });
-
-
     return true;
 });
 
