@@ -36,7 +36,6 @@ define('plugins/notifications/calendar/register',
             this.$el.empty().append(tpl.render('plugins/notifications/calendar/inviteitem', {}));
             var bindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property');
             bindings.cid = { selector: "[data-cid]", elAttribute: 'data-cid' };
-            console.log('Sooo', bindings);
             this._modelBinder.bind(this.model, this.el, bindings);
             return this;
         },
