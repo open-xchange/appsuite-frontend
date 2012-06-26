@@ -107,3 +107,6 @@
 .io-ox-portal-widget-tile .badge {
     float: right;
 }
+.io-ox-portal-right .vgrid-cell.mail {
+    height: 4em;
+}
