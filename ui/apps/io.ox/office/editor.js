@@ -17,14 +17,21 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
     'use strict';
 
-    function OXOUndoAction(undoOperation, redoOperation) {
+    var OP_TEXT_INSERT = 'insertText';
+    var OP_TEXT_DELETE = 'deleteText';
+
+    function OXOUndoAction(_undoOperation, _redoOperation) {
+
+        // Need to store as member, because of the feature to merge undos afterwards...
+        this.undoOperation = _undoOperation;
+        this.redoOperation = _redoOperation;
 
         this.undo = function (editor) {
-            editor.applyOperation(undoOperation, true, true);  // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
+            editor.applyOperation(this.undoOperation, true, true);  // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
         };
 
         this.redo = function (editor) {
-            editor.applyOperation(redoOperation, true, true);
+            editor.applyOperation(this.redoOperation, true, true);
         };
     }
 
@@ -79,15 +86,41 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 return;
             }
 
+            var tryToMerge = true;
+
             // remove undone actions
-            if (currentAction < actions.length)
+            if (currentAction < actions.length) {
                 actions.splice(currentAction);
+                tryToMerge = false;
+            }
 
             if (groupLevel) {
                 currentGroupActions.push(oxoUndoAction);
             }
             else {
-                actions.push(oxoUndoAction);
+                var bDone = false;
+                if (tryToMerge && currentAction && oxoUndoAction.allowMerge) {
+                    var prevUndo = actions[currentAction - 1];
+                    if (prevUndo.allowMerge && (prevUndo.redoOperation.name === oxoUndoAction.redoOperation.name)) {
+                        if (oxoUndoAction.redoOperation.name === OP_TEXT_INSERT) {
+                            if (isSameParagraph(oxoUndoAction.redoOperation.start, prevUndo.redoOperation.start, false)) {
+                                var nCharPosInArray = prevUndo.redoOperation.start.length - 1;
+                                var prevCharEnd = prevUndo.redoOperation.start[nCharPosInArray] + prevUndo.redoOperation.text.length;
+                                if (prevCharEnd === oxoUndoAction.redoOperation.start[nCharPosInArray]) {
+                                    var lastChar = prevUndo.redoOperation.text[prevUndo.redoOperation.text.length - 1];     // text len can't be 0 in undo action...
+                                    if (lastChar !== ' ') {
+                                        // Merge Undo...
+                                        prevUndo.redoOperation.text +=  oxoUndoAction.redoOperation.text;
+                                        prevUndo.undoOperation.end[nCharPosInArray] += oxoUndoAction.redoOperation.text.length;
+                                        bDone = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!bDone)
+                    actions.push(oxoUndoAction);
                 currentAction = actions.length;
             }
         };
@@ -222,6 +255,19 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             return ("Startpoint: " + this.startPaM.toString() + ", Endpoint: " + this.endPaM.toString());
         };
     }
+
+    function isSameParagraph(pos1, pos2, includeLastPos) {
+        if (pos1.length !== pos2.length)
+            return false;
+        if (pos1.length < (includeLastPos ? 1 : 2))
+            return false;
+        var n = pos1.length - (includeLastPos ? 1 : 2);
+        for (var i = 0; i <= n; i++)
+            if (pos1[n] !== pos2[n])
+                return false;
+        return true;
+    }
+
 
     function collectTextNodes(element, textNodes) {
         for (var child = element.firstChild; child !== null; child = child.nextSibling) {
@@ -368,10 +414,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             if (operation.name === "initDocument") {
                 this.implInitDocument();
             }
-            else if (operation.name === "insertText") {
+            else if (operation.name === OP_TEXT_INSERT) {
                 this.implInsertText(operation.text, operation.start);
             }
-            else if (operation.name === "deleteText") {
+            else if (operation.name === OP_TEXT_DELETE) {
                 this.implDeleteText(operation.start, operation.end);
             }
             else if (operation.name === "setAttribute") {
@@ -399,8 +445,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.setModified(true);
 
             if (bNotify && !blockOperationNotifications) {
-                this.trigger("operation", operation);
-                // TBD: Use operation directly, or copy?
+                // Will give everybody the same copy - how to give everybody his own copy?
+                this.trigger("operation", _.copy(operation, true));
             }
 
             blockOperations = false;
@@ -408,7 +454,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // DEBUG STUFF
             if (this.getParagraphCount() !== editdiv.children().size()) {
                 this.implDbgOutInfo('applyOperation - para count invalid!');
-                //debugger;
             }
 
         };
@@ -514,7 +559,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 oxoPosition.push(para);
 
                 if ((column !== undefined) && (row !== undefined) && (cellpara !== undefined)) {
-                    oxoPosition.push([column, row]);
+                    // oxoPosition.push([column, row]);  // no more an array for column and row
+                    oxoPosition.push(column);
+                    oxoPosition.push(row);
                     oxoPosition.push(cellpara);
                 }
 
@@ -582,11 +629,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
             var myParagraph = $(paragraphs).get(para);
 
-            if (_(oxoPos[0]).isArray()) {
+            if (myParagraph.nodeName === 'TABLE') {
 
-                var tableCell = oxoPos.shift();
-                var column = tableCell[0];
-                var row = tableCell[1];
+                var column = oxoPos.shift();
+                var row = oxoPos.shift();
                 var cellpara = oxoPos.shift();
 
                 // In tables it is necessary, to find the correct
@@ -688,6 +734,13 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.getSelection = function () {
+
+            // quick check - no selection.
+            // TODO: Also check wether or not the selection is inside our edit div.
+            var windowSel = window.getSelection();
+            if (!windowSel.anchorNode)
+                return;
+
             var domSelection = this.implGetCurrentDOMSelection();
             var selection = this.implGetOXOSelection(domSelection);
             return selection;
@@ -717,7 +770,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.hasRedo = function () {
-            return undomgr.hasUndo();
+            return undomgr.hasRedo();
         };
 
         this.processFocus = function (state) {
@@ -884,7 +937,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // DEBUG STUFF
             if (this.getParagraphCount() !== editdiv.children().size()) {
                 this.implDbgOutInfo('processKeyDown - para count invalid!');
-                //debugger;
             }
         };
 
@@ -951,7 +1003,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // DEBUG STUFF
             if (this.getParagraphCount() !== editdiv.children().size()) {
                 this.implDbgOutInfo('processKeyPressed - para count invalid!');
-                //debugger;
             }
 
         };
@@ -1019,10 +1070,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.deleteText = function (startposition, endposition) {
             if (startposition !== endposition) {
-                var newOperation = { name: 'deleteText', start: startposition, end: endposition };
+                var newOperation = { name: OP_TEXT_DELETE, start: startposition, end: endposition };
                 // Hack for now. Might span multiple elements later, and we also need to keep attributes!
                 // Right now, dleteText is only valid for single paragraphs...
-                var undoOperation = { name: 'insertText', start: _.copy(startposition, true), text: this.getParagraphText(startposition[0], startposition[1], endposition[1]) };
+                var undoOperation = { name: OP_TEXT_INSERT, start: _.copy(startposition, true), text: this.getParagraphText(startposition[0], startposition[1], endposition[1]) };
                 undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
                 this.applyOperation(newOperation, true, true);
             }
@@ -1059,9 +1110,12 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.insertText = function (text, position) {
-            var newOperation = { name: 'insertText', text: text, start: _.copy(position, true) };
-            var undoOperation = { name: 'deleteText', start: _.copy(position, true), end: [position[0], position[1] + text.length] };
-            undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
+            var newOperation = { name: OP_TEXT_INSERT, text: text, start: _.copy(position, true) };
+            var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(position, true), end: [position[0], position[1] + text.length] };
+            var undoAction = new OXOUndoAction(undoOperation, _.copy(newOperation, true));
+            if (text.length === 1)
+                undoAction.allowMerge = true;
+            undomgr.addUndo(undoAction);
             this.applyOperation(newOperation, true, true);
         };
 
@@ -1354,6 +1408,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             if ((end === undefined) || (end === -1)) {
                 end = this.getParagraphLen(para);
             }
+
             // HACK
             var oldselection = this.getSelection();
             // DR: works without focus
@@ -1372,8 +1427,11 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             } else {
                 document.execCommand(attr, false, value);
             }
-            oldselection.adjust(); // FireFox can'r restore selection if end < start
-            this.setSelection(oldselection);
+
+            if (oldselection !== undefined) {
+                oldselection.adjust(); // FireFox can't restore selection if end < start
+                this.setSelection(oldselection);
+            }
 
             lastOperationEnd = new OXOPaM([para, end]);
         };
@@ -1426,7 +1484,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // DEBUG STUFF
             if (paragraphs.size() !== (dbg_oldparacount + 1)) {
                 this.implDbgOutInfo('implSplitParagraph - para count invalid!');
-                //debugger;
             }
         };
 
@@ -1446,12 +1503,18 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     thisPara.removeChild(lastCurrentChild);
                 }
 
-                for (var child = nextPara.firstChild; child !== null; child = child.nextSibling) {
-                    if ((child.nodeType === 3) && (thisPara.lastChild.nodeType === 3)) {
+                var child = nextPara.firstChild;
+
+                while (child !== null) {
+                    var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
+
+                    if ((child.nodeType === 3) && (thisPara.lastChild !== null) && (thisPara.lastChild.nodeType === 3)) {
                         thisPara.lastChild.nodeValue += child.nodeValue;
                     } else {
                         thisPara.appendChild(child);
                     }
+
+                    child = nextChild;
                 }
 
                 var localPosition = _.copy(position, true);
@@ -1465,7 +1528,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 // DEBUG STUFF
                 if (paragraphs.size() !== (dbg_oldparacount - 1)) {
                     this.implDbgOutInfo('implMergeParagraph - para count invalid!');
-                    //debugger;
                 }
             }
 
@@ -1580,9 +1642,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             .on('dragover', $.proxy(this, 'processDragOver'))
             .on('drop', $.proxy(this, 'processDrop'))
             .on('contextmenu', $.proxy(this, 'processContextMenu'));
-
-        // initializing the document
-        this.initDocument();
 
     } // end of OXOEditor()
 

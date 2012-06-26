@@ -60,6 +60,8 @@ define('io.ox/office/controller', function () {
             // timeout handler for polling
             timeout = null;
 
+        // private methods ----------------------------------------------------
+
         /**
          * Returns all items matching the passed key selector in a map.
          *
@@ -137,38 +139,6 @@ define('io.ox/office/controller', function () {
             }
         }
 
-        // initialization -----------------------------------------------------
-
-        // process passed definitions
-        _(definitions).each(function (def, key) {
-            if (key && _.isObject(def)) {
-                // build the item object
-                var item = allItems[key] = {
-                    // bind getters and setters to this controller instance
-                    enable: _.isFunction(def.enable) ? _.bind(def.enable, this) : TRUE,
-                    get: _.isFunction(def.get) ? _.bind(def.get, this) : $.noop,
-                    set: _.isFunction(def.set) ? _.bind(def.set, this) : $.noop,
-                    // items are initially disabled
-                    enabled: false
-                };
-
-                // collect items whose state will be polled constantly
-                if (def.poll === true) {
-                    pollItems[key] = item;
-                }
-            }
-        });
-
-        // poll item values
-        if (!_.isEmpty(pollItems)) {
-            timeout = window.setTimeout(function timer() {
-                // update all view components
-                updateComponents(components, pollItems);
-                // and restart timer
-                timeout = window.setTimeout(timer, 200);
-            }, 200);
-        }
-
         // methods ------------------------------------------------------------
 
         /**
@@ -224,7 +194,7 @@ define('io.ox/office/controller', function () {
          *  If omitted, all items will be enabled. If set to null, all items
          *  will be disabled.
          *
-         * @param {Boolean} [state]
+         * @param {Boolean} [state=true]
          *  If omitted or set to true, the items will be enabled. Otherwise,
          *  the items will be disabled.
          *
@@ -330,6 +300,38 @@ define('io.ox/office/controller', function () {
             }
             allItems = pollItems = components = timeout = null;
         };
+
+        // initialization -----------------------------------------------------
+
+        // process passed definitions
+        _(definitions).each(function (def, key) {
+            if (key && _.isObject(def)) {
+                // build the item object
+                var item = allItems[key] = {
+                    // bind getters and setters to this controller instance
+                    enable: _.isFunction(def.enable) ? _.bind(def.enable, this) : TRUE,
+                    get: _.isFunction(def.get) ? _.bind(def.get, this) : $.noop,
+                    set: _.isFunction(def.set) ? _.bind(def.set, this) : $.noop,
+                    // items are initially disabled
+                    enabled: false
+                };
+
+                // collect items whose state will be polled constantly
+                if (def.poll === true) {
+                    pollItems[key] = item;
+                }
+            }
+        });
+
+        // poll item values
+        if (!_.isEmpty(pollItems)) {
+            timeout = window.setTimeout(function timer() {
+                // update all view components
+                updateComponents(components, pollItems);
+                // and restart timer
+                timeout = window.setTimeout(timer, 200);
+            }, 200);
+        }
 
     }
 

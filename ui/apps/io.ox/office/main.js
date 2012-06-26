@@ -39,28 +39,22 @@ define('io.ox/office/main',
 
             // add all tool bar controls
             this
-            .createButtonGroup()
-                .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert last operation') })
-                .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation') })
+            .addButtonGroup()
+                .addButton('action/undo', { icon: gt('icon-io-ox-undo'), tooltip: gt('Revert last operation') })
+                .addButton('action/redo', { icon: gt('icon-io-ox-redo'), tooltip: gt('Restore last operation') })
             .end()
-            .createButtonGroup()
-                .addButton('font/bold',      { icon: gt('icon-io-ox-bold'),      tooltip: gt('Bold'),      toggle: true })
-                .addButton('font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
-                .addButton('font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
+            .addButtonGroup()
+                .addButton('character/font/bold',      { icon: gt('icon-io-ox-bold'),      tooltip: gt('Bold'),      toggle: true })
+                .addButton('character/font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
+                .addButton('character/font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
             .end()
-            .createRadioGroup('paragraph/align')
-                .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
-                .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
-                .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
-                .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
+            .addRadioGroup('paragraph/alignment', { type: 'auto', columns: 2 })
+                .addButton('left',    { icon: gt('icon-align-left'),    tooltip: gt('Left') })
+                .addButton('center',  { icon: gt('icon-align-center'),  tooltip: gt('Center') })
+                .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
+                .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
             .end()
-            .createRadioDropDown('paragraph/align/test', { columns: 2 })
-                .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
-                .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
-                .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
-                .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
-            .end()
-            .createButton('action/debug', { icon: 'icon-eye-open', tooltip: gt('Debug mode'), toggle: true });
+            .addButton('action/debug', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
         } // end of constructor
 
@@ -81,36 +75,34 @@ define('io.ox/office/main',
 
                 'action/undo': {
                     enable: function () { return editor.hasUndo(); },
-                    set: function (list) { editor.undo(); editor.grabFocus(); },
-                    poll: true
+                    set: function (list) { editor.undo(); editor.grabFocus(); }
                 },
                 'action/redo': {
                     enable: function () { return editor.hasRedo(); },
-                    set: function (list) { editor.redo(); editor.grabFocus(); },
-                    poll: true
+                    set: function (list) { editor.redo(); editor.grabFocus(); }
                 },
                 'action/debug': {
                     get: function () { return app.isDebugMode(); },
                     set: function (state) { app.setDebugMode(state); editor.grabFocus(); }
                 },
 
-                'font/bold': {
+                'character/font/bold': {
                     get: function () { return editor.getAttribute('bold'); },
                     set: function (state) { editor.setAttribute('bold', state); editor.grabFocus(); },
                     poll: true
                 },
-                'font/italic': {
+                'character/font/italic': {
                     get: function () { return editor.getAttribute('italic'); },
                     set: function (state) { editor.setAttribute('italic', state); editor.grabFocus(); },
                     poll: true
                 },
-                'font/underline': {
+                'character/font/underline': {
                     get: function () { return editor.getAttribute('underline'); },
                     set: function (state) { editor.setAttribute('underline', state); editor.grabFocus(); },
                     poll: true
                 },
 
-                'paragraph/align': {
+                'paragraph/alignment': {
                     set: function (value) { editor.grabFocus(); }
                 }
 
@@ -132,6 +124,9 @@ define('io.ox/office/main',
                             // update view components
                             this.enableAndDisable(supportedItems);
                         }
+                    }, this))
+                    .on('operation', _.bind(function () {
+                        this.update(['action/undo', 'action/redo']);
                     }, this));
                 return this;
             };
@@ -209,6 +204,7 @@ define('io.ox/office/main',
         var getFilterUrl = function (action) {
             return ox.apiRoot + '/oxodocumentfilter?action=' + action +
                 '&id=' + docOptions.id +
+                '&folder_id=' + docOptions.folder_id +
                 '&version=' + docOptions.version +
                 '&filename=' + docOptions.filename +
                 '&session=' + ox.session +
@@ -232,21 +228,28 @@ define('io.ox/office/main',
         var getOperationsCount = function (result) {
 
             // The result is a JSONObject
-            if (_(result).isObject()) {
-                window.console.log('Number of operations received by the server: ' + result.data.count);
-            }
+            // Evaluating the result is possible.
 
         };
 
         var createOperationsList = function (result) {
 
-            var operations = [], value;
+            var operations = [],
+                value = null;
+
             try {
                 value = JSON.parse(result.data).operations;
-            } catch (ex) {
-                window.console.log('Exception caught: ' + ex);
+            } catch (e) {
+                window.console.warn("Failed to parse JSON data. Trying second parse process.");
             }
-            // var value = result.data.operations; // code for Dummy Operations.
+
+            if (!value) {
+                try {
+                    value = result.data.operations; // code for Dummy Operations.
+                } catch (e) {
+                    window.console.warn("Failed to parse JSON data. No JSON data could be loaded.");
+                }
+            }
 
             if (_(value).isArray()) {
                 _(value).each(function (json, j) {
@@ -292,23 +295,38 @@ define('io.ox/office/main',
          */
         app.load = function () {
             var def = $.Deferred();
+
+            // show application window
             win.show().busy();
             $(window).resize();
+
+            // initialize editor, MUST be done in visible application,
+            // otherwise IE fails to set the browser selection
+            editor.initDocument();
+
             $.ajax({
                 type: 'GET',
                 url: getFilterUrl('importdocument'),
                 dataType: 'json'
             })
             .done(function (response) {
-                var operations = createOperationsList(response);
-                editor.applyOperations(operations, false, true);
-                editor.setModified(false);
-                editor.grabFocus(true);
-                win.idle();
-                def.resolve();
+                try {
+                    var operations = createOperationsList(response);
+                    editor.applyOperations(operations, false, true);
+                    editor.setModified(false);
+                    editor.grabFocus(true);
+                    win.idle();
+                    def.resolve();
+                } catch (ex) {
+                    showError('Exception caught: ' + ex, 'Internal Error');
+                    editor.grabFocus(true);
+                    win.idle();
+                    def.reject();
+                }
             })
             .fail(function (response) {
                 showAjaxError(response);
+                editor.grabFocus(true);
                 win.idle();
                 def.reject();
             });
@@ -365,7 +383,7 @@ define('io.ox/office/main',
          *  alive (user has cancelled the dialog, save operation failed).
          */
         app.setQuit(function () {
-            var def = null;
+            var def = $.Deferred();
             if (editor.isModified()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
@@ -373,13 +391,18 @@ define('io.ox/office/main',
                     .addPrimaryButton('delete', gt('Lose changes'))
                     .addAlternativeButton('save', gt('Save'))
                     .addButton('cancel', gt('Cancel'))
-                    .on('delete', function () { def = $.when(); })
-                    .on('save', function () { def = app.save(); })
-                    .on('cancel', function () { def = $.Deferred().reject(); })
+                    .on('delete', function () { def.resolve(); })
+                    .on('cancel', function () { def.reject(); })
+                    .on('save', function () {
+                        app.save().then(
+                            function () { def.resolve(); },
+                            function () { def.reject(); }
+                        );
+                    })
                     .show();
                 });
             } else {
-                def = $.when();
+                def.resolve();
             }
             return def.done(app.destroy);
         });
@@ -432,6 +455,7 @@ define('io.ox/office/main',
             _(Editor.TextMode).each(function (textMode) {
                 var node = $('<div>')
                         .addClass('io-ox-office-editor user-select-text ' + textMode)
+                        .attr('lang', 'undefined')  // TODO
                         .attr('contenteditable', true);
                 editors[textMode] = new Editor(node, textMode);
             });

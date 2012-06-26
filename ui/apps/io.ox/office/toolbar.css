@@ -24,6 +24,9 @@
     /* spacing between elements in a button */
     @whitespace-width: 4px;
 
+    /* blur radius for hover and focus shadows */
+    @shadow-radius: 5px;
+
     .border-radius(@radius) {
         -webkit-border-radius: @radius;
         -moz-border-radius: @radius;
@@ -54,6 +57,18 @@
         border-bottom-right-radius: @radius;
     }
 
+    .box-shadow(@shadow) {
+        -webkit-box-shadow: @shadow;
+        -moz-box-shadow: @shadow;
+        box-shadow: @shadow;
+    }
+
+    .opacity(@opacity) {
+        @opacity-percent: @opacity * 100;
+        opacity: @opacity;
+        filter: alpha(opacity=@opacity-percent);
+    }
+
     /* tool bar formatting ================================================= */
 
     /* redefine margin, padding, formatting for usage in OX */
@@ -67,9 +82,41 @@
 
     /* buttons ============================================================= */
     
-    .btn > span.whitespace {
-        display: inline-block;
-        width: @whitespace-width;
+    .btn {
+        .button-shadow(@opacity) {
+            .box-shadow(0 0 @shadow-radius rgba(82, 168, 236, @opacity));
+        }
+        
+        /* prevent dotted focus rectangle around buttons */
+        &:focus, &:active {
+            outline: none;
+        }
+
+        /* add mouse hover highlighting */
+        &:hover:not(:disabled) {
+            .button-shadow(.4);
+        }
+
+        /* add focus highlighting */
+        &:focus {
+            .button-shadow(.8);
+        }
+
+        /* class for whitespace between icons, text, and dropdown arrows */
+        > span.whitespace {
+            display: inline-block;
+            width: @whitespace-width;
+        }
+        
+        /* move drop-down arrow down to the center of the button */
+        > span.caret {
+            margin-top: 6px;
+        }
+
+        /* remove hover highlight of drop-down arrow for disabled buttons */
+        &:hover:disabled > span.caret {
+            .opacity(.3);
+        }
     }
     
     /* icons =============================================================== */
