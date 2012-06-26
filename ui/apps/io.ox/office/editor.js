@@ -527,14 +527,13 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 // Adding the textNodes from all siblings and parents left of the node.
                 // All siblings and parents can have children.
                 // Finally the offset has to be added.
-                var para = myParagraph.index();
-                var textLength = 0;
-                var column;
-                var row;
-                var cellpara;
-                var countTextLength = true;
-
-                var nodeParagraph = myParagraph.get(0);
+                var para = myParagraph.index(),
+                    textLength = 0,
+                    column = null,
+                    row = null,
+                    cellpara = null,
+                    countTextLength = true,
+                    nodeParagraph = myParagraph.get(0);
 
                 for (; node && (node !== nodeParagraph); node = node.parentNode) {
                     if ((node.nodeName === 'TD') || (node.nodeName === 'TH')) {
@@ -635,8 +634,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var row = oxoPos.shift();
                 var cellpara = oxoPos.shift();
 
-                // In tables it is necessary, to find the correct
-                // paragraph inside the table
+                // In tables it is necessary, to find the correct paragraph inside the table
                 if ((column !== undefined) && (row !== undefined) && (cellpara !== undefined)) {
                     var tablerow = $('tr', myParagraph).get(row);
                     var tablecell = $('th, td', tablerow).get(column);
@@ -687,10 +685,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         this.getDOMSelection = function (oxoSelection) {
 
             // Only supporting single selection at the moment
-            var startPaM = this.getDOMPosition(oxoSelection.startPaM.oxoPosition);
-            var endPaM = this.getDOMPosition(oxoSelection.endPaM.oxoPosition);
+            var startPaM = this.getDOMPosition(oxoSelection.startPaM.oxoPosition),
+                endPaM = this.getDOMPosition(oxoSelection.endPaM.oxoPosition),
+                domSelection = null;
 
-            var domSelection;
             if ((startPaM) && (endPaM)) {
                 domSelection = new DOMSelection(startPaM, endPaM);
             }
@@ -1121,9 +1119,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.setAttribute = function (attr, value, startPosition, endPosition) {
 
-            var para;
-            var start;
-            var end;
+            var para,
+                start,
+                end;
 
             if ((startPosition !== undefined) && (endPosition !== undefined)) {
                 para = startPosition[0];
