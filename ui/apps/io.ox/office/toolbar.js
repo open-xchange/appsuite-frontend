@@ -194,7 +194,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         var // create the DOM container element
             node = $('<div>').addClass('btn-toolbar io-ox-toolbar'),
 
-            // DOM sub element measuring the total width of the controls
+            // DOM child element measuring the total width of the controls
             sizeSpan = $('<span>').appendTo(node),
 
             // control update handlers, mapped by key
@@ -298,17 +298,18 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          * tool bar.
          */
         function resizeHandler() {
+
+            var // available space (width() returns content width without padding)
+                width = node.width();
+
             // try to enlarge one or more controls, until tool bar overflows
             _(resizeables).each(function (resizeable) {
-                if (sizeSpan.width() < node.width()) {
-                    resizeable.enlarge();
-                }
+                if (sizeSpan.width() < width) { resizeable.enlarge(); }
             });
+
             // try to shrink one or more controls, until tool bar does not overflow
             _(resizeables).each(function (resizeable) {
-                if (sizeSpan.width() > node.width()) {
-                    resizeable.shrink();
-                }
+                if (sizeSpan.width() > width) { resizeable.shrink(); }
             });
         }
 

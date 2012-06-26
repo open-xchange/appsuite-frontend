@@ -173,8 +173,6 @@ define('io.ox/office/main',
             // controller as single connection point between editors and view elements
             controller = new EditorController(app),
 
-            loaded = false,
-
             debugMode = null;
 
         /**
@@ -310,6 +308,27 @@ define('io.ox/office/main',
         });
 
         /**
+         * Shows the application window and activates the editor.
+         *
+         * @returns {jQuery.Deferred}
+         *  A deferred that is resolved if the application has been made
+         *  visible, or rejected if the application is in an invalid state.
+         */
+        app.show = function () {
+            var def = $.Deferred();
+
+            if (win && editor) {
+                win.show();
+                editor.grabFocus();
+                def.resolve();
+            } else {
+                def.reject();
+            }
+
+            return def;
+        };
+
+        /**
          * Loads the document described in the options map passed in the
          * constructor of this application, and shows the application window.
          *
@@ -320,12 +339,7 @@ define('io.ox/office/main',
             var def = $.Deferred();
 
             // do not load twice (may be called repeatedly from app launcher)
-            if (loaded) {
-                win.show();
-                editor.grabFocus();
-                return def.resolve();
-            }
-            loaded = true;
+            app.load = app.show;
 
             // show application window
             win.show().busy();
