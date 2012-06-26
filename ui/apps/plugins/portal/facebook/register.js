@@ -245,6 +245,22 @@ define('plugins/portal/facebook/register',
         }
     });
 
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'new-cover-photo',
+        index: 197,
+        accepts: function (post) {
+            return post.type === 373 && post.attachment.media[0];
+        },
+        draw: function (post) {
+            var media = post.attachment.media[0];
+            this.append(
+                $('<div>').text(post.description || post.message || ''),
+                $('<a>', { href: media.href }).append(
+                    $('<img class="wall-img-left">').attr({ src: media.src })
+                )
+            );
+        }
+    });
 
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'fallback',
