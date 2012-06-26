@@ -78,7 +78,7 @@ define("io.ox/core/api/factory",
 
                 // merge defaults for "all"
                 var opt = $.extend({}, o.requests.all, options || {}),
-                    cid = opt.folder + '\t' + (opt.sortKey || opt.sort) + '.' + opt.order + '.' + opt.limit;
+                    cid = opt.folder + '\t' + (opt.sortKey || opt.sort) + '.' + opt.order + '.' + (opt.max || opt.limit || 0);
 
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;

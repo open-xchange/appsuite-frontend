@@ -221,7 +221,8 @@ define("io.ox/mail/api",
             sort: options.sort || '610',
             sortKey: 'threaded-' + (options.sort || '610'),
             order: options.order || 'desc',
-            includeSent: false //!accountAPI.is(options.folder, 'sent')
+            includeSent: false, //!accountAPI.is(options.folder, 'sent')
+            max: 100 // apply internal limit to build threads
         });
         var t1, t2;
         console.log('time.pre', 't1', (t1 = _.now()) - ox.t0, new Date(_.now()));
