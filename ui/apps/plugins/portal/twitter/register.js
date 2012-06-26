@@ -86,9 +86,6 @@ define('plugins/portal/twitter/register',
             } else {
                 var tweet = tweets[0];
                 var message = $('<div>').html(tweet.text).text();
-                if (message.length > 75) {
-                    message = message.substring(0, 72) + '...';
-                }
                 $(this).append(
                     $('<div class="io-ox-clear">').append($('<b>').text('@' + tweet.user.name + ':')),
                     $('<div>').text(message));

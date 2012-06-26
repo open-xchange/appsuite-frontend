@@ -78,8 +78,8 @@ define('plugins/portal/facebook/register',
             } else {
                 var post = wall[0];
                 var message = post.message || post.description || '';
-                if (message.length > 75) {
-                    message = message.substring(0, 72) + '...';
+                if (message.length > 150) {
+                    message = message.substring(0, 150) + '...';
                 }
                 $(this).append(
                     $('<div>').text(gt('Latest wall post:')),

@@ -894,6 +894,22 @@ define("io.ox/mail/api",
     api.getDefaultFolder = function () {
         return folderAPI.getDefaultFolder('mail');
     };
+    
+    api.beautifyMailText = function (str, lengthLimit) {
+        lengthLimit = lengthLimit || 500;
+        str = String(str)
+            .substr(0, lengthLimit) // limit overall length
+            .replace(/-{3,}/g, '---') // reduce dashes
+            .replace(/<br\s?\/?>(&gt;)+/ig, ' ') // remove quotes after line breaks
+            .replace(/<br\s?\/?>/ig, ' ') // remove line breaks
+            .replace(/<[^>]+(>|$)/g, '') // strip tags
+            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank">http$2://...</a>') // links
+            .replace(/&#160;/g, ' ') // convert to simple white space
+            .replace(/\s{2,}/g, ' '); // reduce consecutive white space
+        // trim
+        return $.trim(str);
+    };
+    
 
     return api;
 });
