@@ -164,7 +164,16 @@ function (ext, config, userAPI, date, tasks, gt) {
             updateTitle();
             _.every(1, 'hour', updateTitle);
 
+
             initExtensions();
+
+
+            app.active = _(ext.point('io.ox/portal/widget').all()).first();
+            if (app.active) {
+                rightSide.busy();
+                drawContent(app.active);
+            }
+            
             win.nodes.main
                 .addClass('io-ox-portal')
                 .append(leftSide, rightSide);
