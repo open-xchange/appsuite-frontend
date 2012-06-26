@@ -283,7 +283,9 @@ define('io.ox/office/main',
 
             // update editor 'div' on window size change
             $(window).resize(updateWindowSize);
-            win.on('show', updateWindowSize);
+
+            // trigger all window resize handlers on show()
+            win.on('show', function () { $(window).resize(); });
         });
 
         /**
@@ -425,7 +427,6 @@ define('io.ox/office/main',
             if (debugMode !== state) {
                 debugMode = state;
                 editor.getNode().toggleClass('debug-highlight', state);
-                toolbar.getNode().toggleClass('debug-highlight', state);
                 if (state) { debugPane.show(); } else { debugPane.hide(); }
                 updateWindowSize();
             }

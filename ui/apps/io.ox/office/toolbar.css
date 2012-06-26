@@ -73,28 +73,53 @@
 
     /* redefine margin, padding, formatting for usage in OX */
     margin: 0;
-    padding: 6px 13px;
+    padding: 6px 13px 2px 13px;
     background-color: #f5f5f5;
     border-bottom: 1px solid #d5d5d5;
 
     /* prevent multi-line layout of button groups */
     white-space: nowrap;
 
+    /* icons =============================================================== */
+
+    /*
+     * Replace images for icon classes starting with "icon-io-ox-".
+     */
+    i[class^="icon-io-ox-"] {
+        background-image: url(img/ox-icons-black.png);
+        &.icon-white { background-image: url(img/ox-icons-white.png); }
+    }
+
+    /*
+     * Define class names for all icons.
+     */
+    i.icon-io-ox-undo           { background-position:      0    0; }
+    i.icon-io-ox-redo           { background-position:  -24px    0; }
+    i.icon-io-ox-bold           { background-position:  -48px    0; }
+    i.icon-io-ox-bold-f         { background-position:  -72px    0; }
+    i.icon-io-ox-italic         { background-position:  -96px    0; }
+    i.icon-io-ox-italic-k       { background-position: -120px    0; }
+    i.icon-io-ox-underline      { background-position: -144px    0; }
+
+    /* button groups ======================================================= */
+    
+    /*
+     * The class 'hidden' is used to hide button groups.
+     */
+    .btn-group.hidden {
+        display: none;
+    }
+    
     /* buttons ============================================================= */
     
     .btn {
         .button-shadow(@opacity) {
             .box-shadow(0 0 @shadow-radius rgba(82, 168, 236, @opacity));
         }
-        
+    
         /* prevent dotted focus rectangle around buttons */
         &:focus, &:active {
             outline: none;
-        }
-
-        /* add mouse hover highlighting */
-        &:hover:not(:disabled) {
-            .button-shadow(.4);
         }
 
         /* add focus highlighting */
@@ -119,27 +144,6 @@
         }
     }
     
-    /* icons =============================================================== */
-
-    /*
-     * Replace images for icon classes starting with "icon-io-ox-".
-     */
-    i[class^="icon-io-ox-"] {
-        background-image: url(img/ox-icons-black.png);
-        &.icon-white { background-image: url(img/ox-icons-white.png); }
-    }
-
-    /*
-     * Define class names for all icons.
-     */
-    i.icon-io-ox-undo           { background-position:      0    0; }
-    i.icon-io-ox-redo           { background-position:  -24px    0; }
-    i.icon-io-ox-bold           { background-position:  -48px    0; }
-    i.icon-io-ox-bold-f         { background-position:  -72px    0; }
-    i.icon-io-ox-italic         { background-position:  -96px    0; }
-    i.icon-io-ox-italic-k       { background-position: -120px    0; }
-    i.icon-io-ox-underline      { background-position: -144px    0; }
-
     /* table-style button drop-downs ======================================= */
 
     .btn-group > table.dropdown-menu {
