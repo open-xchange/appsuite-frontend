@@ -14,8 +14,7 @@
 define("io.ox/office/actions",
     ["io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
-     "io.ox/files/api",
-     "gettext!io.ox/office/main"], function (ext, links, api, gt) {
+     "gettext!io.ox/office/main"], function (ext, links, gt) {
 
     'use strict';
 
@@ -28,10 +27,7 @@ define("io.ox/office/actions",
 
     new Action('io.ox/office/actions/save', {
         id: 'save',
-        action: function (app) {
-            app.save();
-            api.update(app.getFileDescriptor()).done();
-        }
+        action: function (app) { app.save(); }
     });
 
     // links

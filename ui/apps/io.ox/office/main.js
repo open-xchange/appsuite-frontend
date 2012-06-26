@@ -12,13 +12,14 @@
  */
 
 define('io.ox/office/main',
-    ['io.ox/office/toolbar',
+    ['io.ox/files/api',
+     'io.ox/office/toolbar',
      'io.ox/office/controller',
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
      'io.ox/office/actions',
      'less!io.ox/office/main.css'
-    ], function (ToolBar, Controller, Editor, gt) {
+    ], function (filesApi, ToolBar, Controller, Editor, gt) {
 
     'use strict';
 
@@ -172,6 +173,8 @@ define('io.ox/office/main',
             // controller as single connection point between editors and view elements
             controller = new EditorController(app),
 
+            loaded = false,
+
             debugMode = null;
 
         /**
@@ -278,10 +281,6 @@ define('io.ox/office/main',
             return operations;
         };
 
-        app.getFileDescriptor = function () {
-            return options;
-        };
-
         /**
          * The handler function that will be called while launching the
          * application. Creates and initializes a new application window.
@@ -294,9 +293,12 @@ define('io.ox/office/main',
                 search: false,
                 toolbar: true
             });
-            app.setWindow(win);
+
+            // do not detach when hiding to keep edit selection alive
+            win.detachable = false;
 
             // initialize global application structure
+            app.setWindow(win);
             updateTitles();
             win.nodes.main.addClass('io-ox-office-main').append(toolPane, appPane, debugPane);
 
@@ -316,6 +318,14 @@ define('io.ox/office/main',
          */
         app.load = function () {
             var def = $.Deferred();
+
+            // do not load twice (may be called repeatedly from app launcher)
+            if (loaded) {
+                win.show();
+                editor.grabFocus();
+                return def.resolve();
+            }
+            loaded = true;
 
             // show application window
             win.show().busy();
@@ -379,6 +389,7 @@ define('io.ox/office/main',
             })
             .done(function (response) {
                 getOperationsCount(response);
+                filesApi.update(options);
                 editor.setModified(false);
                 editor.grabFocus();
                 win.idle();
