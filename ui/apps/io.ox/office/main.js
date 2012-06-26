@@ -192,9 +192,22 @@ define('io.ox/office/main',
         /**
          * Shows an error message extracted from the error object returned by
          * a jQuery AJAX call.
+         *
+         * @param {Object} response
+         *  Response object returned by the failed AJAX call.
          */
-        var showAjaxError = function (data) {
-            showError(data.responseText);
+        var showAjaxError = function (response) {
+            showError(response.responseText, gt('AJAX Error'));
+        };
+
+        /**
+         * Shows an error message for an unhandled exception.
+         *
+         * @param exception
+         *  The exception to be reported.
+         */
+        var showExceptionError = function (exception) {
+            showError('Exception caught: ' + exception, 'Internal Error');
         };
 
         /**
@@ -202,15 +215,19 @@ define('io.ox/office/main',
          * file from and to an operations list.
          */
         var getFilterUrl = function (action) {
-            return ox.apiRoot + '/oxodocumentfilter?action=' + action +
+            return ox.apiRoot + '/oxodocumentfilter' +
+                '?action=' + action +
                 '&id=' + docOptions.id +
                 '&folder_id=' + docOptions.folder_id +
                 '&version=' + docOptions.version +
                 '&filename=' + docOptions.filename +
-                '&session=' + ox.session +
-                '';
+                '&session=' + ox.session;
         };
 
+        /**
+         * Sets application title (launcher) and window title according to the
+         * current file name.
+         */
         var updateTitles = function () {
             app.setTitle(docOptions.filename || baseTitle);
             win.setTitle(baseTitle + (docOptions.filename ? (' - ' + docOptions.filename) : ''));
@@ -320,7 +337,7 @@ define('io.ox/office/main',
                     win.idle();
                     def.resolve();
                 } catch (ex) {
-                    showError('Exception caught: ' + ex, 'Internal Error');
+                    showExceptionError(ex);
                     editor.grabFocus(true);
                     win.idle();
                     def.reject();
