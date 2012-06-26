@@ -19,7 +19,6 @@ define.async('io.ox/portal/main',
      'io.ox/core/date',
      'io.ox/core/taskQueue',
      'gettext!io.ox/portal/portal',
-     'apps/io.ox/portal/jquery.masonry.min.js',
      'less!io.ox/portal/style.css'],
 function (ext, config, userAPI, date, tasks, gt) {
 

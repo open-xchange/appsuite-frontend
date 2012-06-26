@@ -88,24 +88,26 @@ define('plugins/portal/mail/register',
             return $.when(folderLoaded, mailsLoaded);
         },
         drawTile: function (folder, mail) {
+            var deferred = $.Deferred();
             var $node = $(this);
-            $node.addClass('mail-portal-tile');
-            var subject = mail.subject;
-            var mailtext = $("<div>").html(mail.attachments[0].content).text(); // Hihi
-            subject = strings.shorten(subject, 40);
-            mailtext = strings.shorten(mailtext, 60);
+            require(["io.ox/mail/api"], function (mailApi) {
+                $node.addClass('mail-portal-tile');
+                var subject = mail.subject;
+                var mailtext = mailApi.beautifyMailText(mail.attachments[0].content, 140) + " ...";
+                subject = strings.shorten(subject, 40);
+
+                $node.append(
+                    $('<h1>').text(gt("Mail")),
+                    $('<span class="unread-mail-count">').text(gt('Unread:')),
+                    $('<span class="badge badge-info unread-mail-count">').text(folder.unread),
+                    $('<div class="io-ox-clear">').append(
+                        $('<div class="">').append($("<b>").text(subject), $('<br>'), $("<span>").text(mailtext))
+                    )
+                );
+                deferred.resolve();
+            });
             
-            
-            $node.append(
-                $('<h1>').text(gt("Mail")),
-                $('<span class="unread-mail-count">').text(gt('Unread:')),
-                $('<span class="badge badge-info unread-mail-count">').text(folder.unread),
-                $('<div class="io-ox-clear">').append(
-                    $('<div class="">').append($("<b>").text(subject), $('<br>'), $("<span>").text(mailtext))
-                )
-            );
-            
-            return $.when();
+            return deferred;
         },
         load: function () {
             var loading = new $.Deferred();
