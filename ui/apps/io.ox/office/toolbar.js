@@ -426,8 +426,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 // number of columns in the drop-down menu
                 columns = (options && _.isNumber(options.columns) && (options.columns >= 1)) ? options.columns : 3,
 
+                // options for the drop-down button
+                dropDownOptions = (options && _.isString(options.tooltip)) ? { tooltip: options.tooltip } : undefined,
+
                 // drop-down button
-                dropDownButton = Buttons.createButton(key).addClass('dropdown-toggle').attr('data-toggle', 'dropdown').appendTo(dropDownGroupNode),
+                dropDownButton = Buttons.createButton(key, dropDownOptions).addClass('dropdown-toggle').attr('data-toggle', 'dropdown').appendTo(dropDownGroupNode),
 
                 // drop-down menu area
                 dropDownMenu = $('<table>').addClass('dropdown-menu').appendTo(dropDownGroupNode),
@@ -701,7 +704,12 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          *      tool bar.
          *  @param {Number} [options.columns=3]
          *      Number of columns used to build the drop-down menu. Defaults
-         *      to the value 3.
+         *      to the value 3. Not used if the button group is shown instead
+         *      of a drop-down button.
+         *  @param {String} [options.tooltip]
+         *      Tool tip text shown when the mouse hovers the drop-down button.
+         *      If omitted, the button will not show a tool tip. Not used if
+         *      the button group is shown instead of a drop-down button.
          *
          * @returns {RadioGroupProxy}
          *  A proxy object that implements methods to add option buttons to the
