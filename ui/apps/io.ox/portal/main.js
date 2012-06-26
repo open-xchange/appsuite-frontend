@@ -19,7 +19,6 @@ define.async('io.ox/portal/main',
      'io.ox/core/date',
      'io.ox/core/taskQueue',
      'gettext!io.ox/portal/portal',
-     'apps/io.ox/portal/jquery.masonry.min.js',
      'less!io.ox/portal/style.css'],
 function (ext, config, userAPI, date, tasks, gt) {
 
@@ -115,11 +114,6 @@ function (ext, config, userAPI, date, tasks, gt) {
                     var $node = $('<div>')
                         .addClass('io-ox-portal-widget-tile')
                         .attr('widget-id', extension.id)
-                        .css({
-                            width: "180px",
-                            height: "180px",
-                            margin: "5px"
-                        })
                         .appendTo(leftSide)
                         .busy();
 
@@ -164,7 +158,16 @@ function (ext, config, userAPI, date, tasks, gt) {
             updateTitle();
             _.every(1, 'hour', updateTitle);
 
+
             initExtensions();
+
+
+            app.active = _(ext.point('io.ox/portal/widget').all()).first();
+            if (app.active) {
+                rightSide.busy();
+                drawContent(app.active);
+            }
+            
             win.nodes.main
                 .addClass('io-ox-portal')
                 .append(leftSide, rightSide);
