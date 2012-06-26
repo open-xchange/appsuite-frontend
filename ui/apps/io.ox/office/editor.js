@@ -557,7 +557,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var oxoPosition = [];
                 oxoPosition.push(para);
 
-                if ((column !== undefined) && (row !== undefined) && (cellpara !== undefined)) {
+                if ((column !== null) && (row !== null) && (cellpara !== null)) {
                     // oxoPosition.push([column, row]);  // no more an array for column and row
                     oxoPosition.push(column);
                     oxoPosition.push(row);
