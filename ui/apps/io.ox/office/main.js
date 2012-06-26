@@ -12,14 +12,13 @@
  */
 
 define('io.ox/office/main',
-    ['io.ox/files/api',
-     'io.ox/office/toolbar',
+    ['io.ox/office/toolbar',
      'io.ox/office/controller',
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
      'io.ox/office/actions',
      'less!io.ox/office/main.css'
-    ], function (api, ToolBar, Controller, Editor, gt) {
+    ], function (ToolBar, Controller, Editor, gt) {
 
     'use strict';
 
@@ -137,20 +136,20 @@ define('io.ox/office/main',
 
     // create application instance ============================================
 
-    // multi-instance pattern: on each call, create a new application
-    // TODO: return open application per file
-    function createInstance(options) {
+    var // cache for open applications
+        appCache = {};
 
-        var // document options
-            docOptions = $.extend({
-                filename: gt('Unnamed')
-            }, options),
+    /**
+     * Creates and returns a new application instance based on the file
+     * described in the passed options object.
+     */
+    function createNewInstance(appKey, options) {
 
-            // default title for launcher and window
-            baseTitle = gt('OX Office'),
+        var // application object
+            app = ox.ui.createApp({ name: 'io.ox/office' }),
 
-            // application object
-            app = ox.ui.createApp({ name: 'io.ox/office', title: baseTitle }),
+            // the file name to be shown in the user interface
+            fileName = options.filename || gt('Unnamed'),
 
             // application window
             win = null,
@@ -217,10 +216,10 @@ define('io.ox/office/main',
         var getFilterUrl = function (action) {
             return ox.apiRoot + '/oxodocumentfilter' +
                 '?action=' + action +
-                '&id=' + docOptions.id +
-                '&folder_id=' + docOptions.folder_id +
-                '&version=' + docOptions.version +
-                '&filename=' + docOptions.filename +
+                '&id=' + options.id +
+                '&folder_id=' + options.folder_id +
+                '&version=' + options.version +
+                '&filename=' + options.filename +
                 '&session=' + ox.session;
         };
 
@@ -229,8 +228,8 @@ define('io.ox/office/main',
          * current file name.
          */
         var updateTitles = function () {
-            app.setTitle(docOptions.filename || baseTitle);
-            win.setTitle(baseTitle + (docOptions.filename ? (' - ' + docOptions.filename) : ''));
+            app.setTitle(fileName);
+            win.setTitle(gt('OX Office') + ' - ' + fileName);
         };
 
         /**
@@ -279,6 +278,10 @@ define('io.ox/office/main',
             return operations;
         };
 
+        app.getFileDescriptor = function () {
+            return options;
+        };
+
         /**
          * The handler function that will be called while launching the
          * application. Creates and initializes a new application window.
@@ -287,7 +290,6 @@ define('io.ox/office/main',
             // create the application window
             win = ox.ui.createWindow({
                 name: 'io.ox/office',
-                title: baseTitle,
                 close: true,
                 search: false,
                 toolbar: true
@@ -458,6 +460,7 @@ define('io.ox/office/main',
             $(window).off('resize', updateWindowSize);
             controller.destroy();
             toolbar.destroy();
+            delete appCache[appKey];
             app = win = toolbar = appPane = debugPane = controller = editor = null;
         };
 
@@ -526,9 +529,35 @@ define('io.ox/office/main',
 
         return app;
 
-    } // end of createInstance()
+    } // end of createNewInstance()
+
+    /**
+     * Creates a new or returns an existing instance based on the file
+     * described in the passed options object.
+     */
+    function createInstance(options) {
+
+        var // unique identifier for the application, based on passed document descriptor
+            appKey;
+
+        // check that the passed options object is a valid document descriptor
+        if (_.isObject(options) && _.isString(options.id) && _.isString(options.folder_id) && _.isNumber(options.version)) {
+
+            // check if an application exists already
+            appKey = options.id + '&' + options.folder_id + '&' + options.version;
+            if (appKey in appCache) {
+                return appCache[appKey];
+            }
+
+            // create and return a new application instance
+            return appCache[appKey] = createNewInstance(appKey, options);
+        }
+
+        return createNewInstance('', {});
+    }
 
     // exports ================================================================
 
+    // io.ox.launch() expects an object with the method getApp()
     return { getApp: createInstance };
 });
