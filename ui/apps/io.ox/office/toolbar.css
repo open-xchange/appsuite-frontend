@@ -24,9 +24,6 @@
     /* spacing between elements in a button */
     @whitespace-width: 4px;
 
-    /* blur radius for hover and focus shadows */
-    @shadow-radius: 5px;
-
     .border-radius(@radius) {
         -webkit-border-radius: @radius;
         -moz-border-radius: @radius;
@@ -63,10 +60,24 @@
         box-shadow: @shadow;
     }
 
+    .box-shadow(@outset-shadow, @inset-shadow) {
+        -webkit-box-shadow: @outset-shadow, inset @inset-shadow;
+        -moz-box-shadow: @outset-shadow, inset @inset-shadow;
+        box-shadow: @outset-shadow, inset @inset-shadow;
+    }
+
     .opacity(@opacity) {
         @opacity-percent: @opacity * 100;
         opacity: @opacity;
         filter: alpha(opacity=@opacity-percent);
+    }
+
+    .transition(@transition) {
+        -webkit-transition: @transition;
+        -moz-transition: @transition;
+        -ms-transition: @transition;
+        -o-transition: @transition;
+        transition: @transition;
     }
 
     /* tool bar formatting ================================================= */
@@ -113,10 +124,10 @@
     /* buttons ============================================================= */
     
     .btn {
-        .button-shadow(@opacity) {
-            .box-shadow(0 0 @shadow-radius rgba(82, 168, 236, @opacity));
-        }
-    
+        /* explicit box shadow 'none', required for transition effect */
+        .box-shadow(none);
+        .transition(box-shadow linear 0.15s);
+
         /* prevent dotted focus rectangle around buttons */
         &:focus, &:active {
             outline: none;
@@ -124,7 +135,7 @@
 
         /* add focus highlighting */
         &:focus {
-            .button-shadow(.8);
+            .box-shadow(0 0 6px rgba(82, 168, 236, 0.6), 0 0 2px rgba(82, 168, 236, 0.6));
         }
 
         /* class for whitespace between icons, text, and dropdown arrows */
