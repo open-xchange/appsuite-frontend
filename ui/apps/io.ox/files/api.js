@@ -158,7 +158,10 @@ define("io.ox/files/api",
             })
             .pipe(function () {
                 // clear all cache since titles and thus the order might have changed
-                return api.caches.all.grepRemove(file.folder_id + '\t');
+                return $.when(
+                    api.caches.all.grepRemove(file.folder_id + '\t'),
+                    api.caches.versions.remove(file.id)
+                );
             })
             .pipe(function () {
                 return api.get(obj, false);
