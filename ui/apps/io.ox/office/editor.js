@@ -1112,7 +1112,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         this.insertText = function (text, position) {
             var newOperation = { name: OP_TEXT_INSERT, text: text, start: _.copy(position, true) };
             var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(position, true), end: [position[0], position[1] + text.length] };
-            var undoAction = new OXOUndoAction(undoOperation, newOperation);
+            var undoAction = new OXOUndoAction(undoOperation, _.copy(newOperation, true));
             if (text.length === 1)
                 undoAction.allowMerge = true;
             undomgr.addUndo(undoAction);
