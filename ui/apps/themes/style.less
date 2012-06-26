@@ -1159,6 +1159,7 @@ input.nice-input {
     text-overflow: ellipsis;
 }
 
+.io-ox-foldertree .folder.expandable:hover,
 .io-ox-foldertree .folder.selectable:hover {
     background-color: #efefef;
     cursor: pointer;
@@ -1199,7 +1200,9 @@ input.nice-input {
     opacity: 0.30;
 }
 
-.io-ox-foldertree .subfolders { }
+.io-ox-foldertree .subfolders.io-ox-busy {
+    min-height: 70px;
+}
 
 .io-ox-foldertree .folder-arrow {
     float: left;
