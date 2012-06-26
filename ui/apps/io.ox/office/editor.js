@@ -216,13 +216,27 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             return hasRange;
         };
         this.adjust = function () {
-            var tmp;
-            var startPara = this.startPaM.oxoPosition[0];
-            var endPara = this.endPaM.oxoPosition[0];
-            var startPos = this.startPaM.oxoPosition[1]; // invalid for tables!
-            var endPos = this.endPaM.oxoPosition[1]; // invalid for tables!
-            if ((startPara > endPara) || ((startPara === endPara) && (startPos > endPos))) { // invalid for tables
-                tmp = _.copy(this.startPaM, true);
+            var change = false,
+                minLength = 0;
+
+            if (this.startPaM.oxoPosition.length > this.endPaM.oxoPosition.length) {
+                minLength = this.endPaM.oxoPosition.length;
+            } else {
+                minLength = this.startPaM.oxoPosition.length;
+            }
+
+            for (var i = 0; i < minLength; i++) {
+                if (this.startPaM.oxoPosition[i] > this.endPaM.oxoPosition[i]) {
+                    change = true;
+                    break;
+                } else if (this.startPaM.oxoPosition[i] < this.endPaM.oxoPosition[i]) {
+                    change = false;
+                    break;
+                }
+            }
+
+            if (change) {
+                var tmp = _.copy(this.startPaM, true);
                 this.startPaM = _.copy(this.endPaM, true);
                 this.endPaM = tmp;
             }
