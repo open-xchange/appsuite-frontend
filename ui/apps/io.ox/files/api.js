@@ -138,7 +138,7 @@ define("io.ox/files/api",
                 // clear folder cache
                 return $.when(
                     api.caches.all.grepRemove(options.json.folder_id + '\t'),
-                    api.caches.get.remove(options.json),
+                    api.caches.get.remove({ folder_id: options.json.folder_id, id: options.id }),
                     api.caches.versions.remove(id)
                 )
                 .pipe(function () {

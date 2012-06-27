@@ -222,7 +222,7 @@ define("io.ox/mail/api",
             sortKey: 'threaded-' + (options.sort || '610'),
             order: options.order || 'desc',
             includeSent: false, //!accountAPI.is(options.folder, 'sent')
-            max: 100 // apply internal limit to build threads
+            max: 1000 // apply internal limit to build threads fast enough
         });
         var t1, t2;
         console.log('time.pre', 't1', (t1 = _.now()) - ox.t0, new Date(_.now()));
@@ -894,7 +894,7 @@ define("io.ox/mail/api",
     api.getDefaultFolder = function () {
         return folderAPI.getDefaultFolder('mail');
     };
-    
+
     api.beautifyMailText = function (str, lengthLimit) {
         lengthLimit = lengthLimit || 500;
         str = String(str)
@@ -909,7 +909,7 @@ define("io.ox/mail/api",
         // trim
         return $.trim(str);
     };
-    
+
 
     return api;
 });
