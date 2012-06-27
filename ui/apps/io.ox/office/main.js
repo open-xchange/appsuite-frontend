@@ -403,7 +403,9 @@ define('io.ox/office/main',
             })
             .done(function (response) {
                 getOperationsCount(response);
-                filesApi.update(options);
+                filesApi.caches.get.clear(); // TODO
+                filesApi.caches.versions.clear();
+                filesApi.trigger('refresh.all');
                 editor.setModified(false);
                 editor.grabFocus();
                 win.idle();

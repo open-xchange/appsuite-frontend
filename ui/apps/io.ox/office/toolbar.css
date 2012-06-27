@@ -117,14 +117,16 @@
     /*
      * The class 'hidden' is used to hide button groups.
      */
-    .btn-group.hidden {
-        display: none;
+    .btn-group {
+        &.hidden {
+            display: none;
+        }
     }
     
     /* buttons ============================================================= */
     
     .btn {
-        /* explicit box shadow 'none', required for transition effect */
+        /* explicit box shadow 'none', required for focus transition effect */
         .box-shadow(none);
         .transition(box-shadow linear 0.15s);
 
