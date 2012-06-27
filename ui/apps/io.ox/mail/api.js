@@ -221,7 +221,8 @@ define("io.ox/mail/api",
             sort: options.sort || '610',
             sortKey: 'threaded-' + (options.sort || '610'),
             order: options.order || 'desc',
-            includeSent: false //!accountAPI.is(options.folder, 'sent')
+            includeSent: false, //!accountAPI.is(options.folder, 'sent')
+            max: 100 // apply internal limit to build threads
         });
         var t1, t2;
         console.log('time.pre', 't1', (t1 = _.now()) - ox.t0, new Date(_.now()));
@@ -789,6 +790,41 @@ define("io.ox/mail/api",
 
     var lastUnseenMail = 0;
 
+    api.checkInbox = function () {
+        // look for new unseen mails in INBOX
+        return http.GET({
+            module: 'mail',
+            params: {
+                action: 'all',
+                folder: 'default0/INBOX',
+                columns: '610,600,601', //received_date, id, folder_id
+                unseen: 'true',
+                deleted: 'false',
+                sort: '610',
+                order: 'desc'
+            }
+        })
+        .pipe(function (unseen) {
+            var recent;
+            // found unseen mails?
+            if (unseen.length) {
+                // check most recent mail
+                recent = _(unseen).filter(function (obj) {
+                    return obj.received_date > lastUnseenMail;
+                });
+                if (recent.length > 0) {
+                    api.trigger('new-mail', recent);
+                    lastUnseenMail = recent[0].received_date;
+                }
+                api.trigger('unseen-mail', unseen);
+            }
+            return {
+                unseen: unseen,
+                recent: recent || []
+            };
+        });
+    };
+
     // refresh
     api.refresh = function (e) {
         if (ox.online) {
@@ -796,34 +832,7 @@ define("io.ox/mail/api",
             _(cacheControl).each(function (val, id) {
                 cacheControl[id] = false;
             });
-            // look for new unseen mails in INBOX
-            http.GET({
-                module: 'mail',
-                params: {
-                    action: 'all',
-                    folder: 'default0/INBOX',
-                    columns: '610,600,601', //received_date, id, folder_id
-                    unseen: 'true',
-                    deleted: 'false',
-                    sort: '610',
-                    order: 'desc'
-                }
-            })
-            .done(function (unseen) {
-                var recent;
-                // found unseen mails?
-                if (unseen.length) {
-                    // check most recent mail
-                    recent = _(unseen).filter(function (obj) {
-                        return obj.received_date > lastUnseenMail;
-                    });
-                    if (recent.length > 0) {
-                        api.trigger('new-mail', recent);
-                        lastUnseenMail = recent[0].received_date;
-
-                    }
-                    api.trigger('unseen-mail', unseen);
-                }
+            api.checkInbox().done(function () {
                 // trigger
                 api.trigger('refresh.all');
             });
@@ -885,6 +894,22 @@ define("io.ox/mail/api",
     api.getDefaultFolder = function () {
         return folderAPI.getDefaultFolder('mail');
     };
+    
+    api.beautifyMailText = function (str, lengthLimit) {
+        lengthLimit = lengthLimit || 500;
+        str = String(str)
+            .substr(0, lengthLimit) // limit overall length
+            .replace(/-{3,}/g, '---') // reduce dashes
+            .replace(/<br\s?\/?>(&gt;)+/ig, ' ') // remove quotes after line breaks
+            .replace(/<br\s?\/?>/ig, ' ') // remove line breaks
+            .replace(/<[^>]+(>|$)/g, '') // strip tags
+            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank">http$2://...</a>') // links
+            .replace(/&#160;/g, ' ') // convert to simple white space
+            .replace(/\s{2,}/g, ' '); // reduce consecutive white space
+        // trim
+        return $.trim(str);
+    };
+    
 
     return api;
 });

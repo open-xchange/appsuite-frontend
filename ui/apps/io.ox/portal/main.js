@@ -17,10 +17,10 @@ define.async('io.ox/portal/main',
      'io.ox/core/config',
      'io.ox/core/api/user',
      'io.ox/core/date',
+     'io.ox/core/taskQueue',
      'gettext!io.ox/portal/portal',
-     'apps/io.ox/portal/jquery.masonry.min.js',
      'less!io.ox/portal/style.css'],
-function (ext, config, userAPI, date, gt) {
+function (ext, config, userAPI, date, tasks, gt) {
 
     'use strict';
 
@@ -59,28 +59,40 @@ function (ext, config, userAPI, date, gt) {
             }
         }
         
-        var nodes = {};
+        var contentQueue = new tasks.Queue();
+        
+        
+        function createContentTask(extension) {
+            return {
+                id: extension.id,
+                perform: function () {
+                    var def = $.Deferred(),
+                        $node = $("<div/>");
+                    
+                    extension.invoke('load')
+                        .pipe(function () {
+                            return (extension.invoke.apply(extension, ['draw', $node].concat($.makeArray(arguments))) || $.Deferred())
+                                .done(function () {
+                                    extension.invoke('post', $node, extension);
+                                    def.resolve($node);
+                                });
+                        })
+                        .fail(function (e) {
+                            $node.remove();
+                            rightSide.idle();
+                            def.reject(e);
+                        });
+                    
+                    return def;
+                }
+            };
+        }
         
         function drawContent(extension) {
-            if (nodes[extension.id]) {
-                rightSide.append(nodes[extension.id]);
+            contentQueue.fasttrack(extension.id).done(function (node) {
+                rightSide.append(node);
                 rightSide.idle();
-                return;
-            }
-            var $node = $("<div/>").appendTo(rightSide);
-            nodes[extension.id] = $node;
-            return extension.invoke('load')
-                .pipe(function () {
-                    return (extension.invoke.apply(extension, ['draw', $node].concat($.makeArray(arguments))) || $.Deferred())
-                        .done(function () {
-                            rightSide.idle();
-                            extension.invoke('post', $node, extension);
-                        });
-                })
-                .fail(function (e) {
-                    $node.remove();
-                    rightSide.idle();
-                });
+            });
         }
         
         function makeClickHandler(extension) {
@@ -93,17 +105,15 @@ function (ext, config, userAPI, date, gt) {
             };
         }
         
-        function drawTiles() {
+        function initExtensions() {
             ext.point('io.ox/portal/widget')
                 .each(function (extension) {
+                    
+                    contentQueue.enqueue(createContentTask(extension));
+                    
                     var $node = $('<div>')
                         .addClass('io-ox-portal-widget-tile')
                         .attr('widget-id', extension.id)
-                        .css({
-                            width: "180px",
-                            height: "180px",
-                            margin: "5px"
-                        })
                         .appendTo(leftSide)
                         .busy();
 
@@ -138,6 +148,7 @@ function (ext, config, userAPI, date, gt) {
         
         // launcher
         app.setLauncher(function () {
+            contentQueue.start();
             // get window
             app.setWindow(win = ox.ui.createWindow({
                 toolbar: true,
@@ -147,16 +158,26 @@ function (ext, config, userAPI, date, gt) {
             updateTitle();
             _.every(1, 'hour', updateTitle);
 
-            drawTiles();
+
+            initExtensions();
+
+
+            app.active = _(ext.point('io.ox/portal/widget').all()).first();
+            if (app.active) {
+                rightSide.busy();
+                drawContent(app.active);
+            }
+            
             win.nodes.main
                 .addClass('io-ox-portal')
                 .append(leftSide, rightSide);
             
             ox.on('refresh^', function () {
                 leftSide.empty();
-                drawTiles();
+                contentQueue = new tasks.Queue();
+                contentQueue.start();
+                initExtensions();
                 if (app.active) {
-                    nodes = {};
                     rightSide.empty();
                     rightSide.busy();
                     drawContent(app.active);

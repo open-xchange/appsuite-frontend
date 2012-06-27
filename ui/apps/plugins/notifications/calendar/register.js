@@ -10,18 +10,18 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
+
 define('plugins/notifications/calendar/register',
-      ['io.ox/core/notifications',
-       'io.ox/calendar/api',
-       'io.ox/calendar/util',
-       'io.ox/core/extensions',
-       'io.ox/core/api/user',
-       'dot!plugins/notifications/calendar/template.html',
-       'gettext!plugins/notifications/calendar',
-       'less!plugins/notifications/calendar/style.css'], function (notificationController, calApi, util, ext, userApi, tpl, gt) {
+    ['io.ox/core/notifications',
+     'io.ox/calendar/api',
+     'io.ox/calendar/util',
+     'io.ox/core/extensions',
+     'io.ox/core/api/user',
+     'dot!plugins/notifications/calendar/template.html',
+     'gettext!plugins/notifications/calendar'
+    ], function (notificationController, calApi, util, ext, userApi, tpl, gt) {
 
     'use strict';
-
 
     var NotificationView = Backbone.View.extend({
         events: {
@@ -31,14 +31,13 @@ define('plugins/notifications/calendar/register',
         _modelBinder: undefined,
         initialize: function () {
             this._modelBinder = new Backbone.ModelBinder();
-
         },
         render: function () {
             this.$el.empty().append(tpl.render('plugins/notifications/calendar/inviteitem', {}));
             var bindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property');
+            bindings.cid = { selector: "[data-cid]", elAttribute: 'data-cid' };
             this._modelBinder.bind(this.model, this.el, bindings);
             return this;
-
         },
         onClickItem: function (e) {
             var obj = this.model.get('data'),
@@ -68,72 +67,9 @@ define('plugins/notifications/calendar/register',
             // stopPropagation could be prevented by another markup structure
             e.stopPropagation();
             var self = this;
-
-
-            // this is plain copy of the one in the actions.js - may be add it to something like dialogs.js in the calendar view
-            var o = {
-                id: this.model.get('data').id,
-                folder: this.model.get('data').folder_id
-            };
-
-            var inputid = _.cid('dialog');
-
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog()
-                    .header($('<h3>').text('Change confirmation status'))
-                    .append($('<p>').text(gt('You are about the change your confirmation status. Please leave a comment for other participants.')))
-                    .append(
-                        $('<div>').addClass('row-fluid').css({'margin-top': '20px'}).append(
-                            $('<div>').addClass('control-group span12').css({'margin-bottom': '0px'}).append(
-                                $('<label>').addClass('control-label').attr('for', inputid).text(gt('Comment:')),
-                                $('<div>').addClass('controls').css({'margin-right': '10px'}).append(
-                                    $('<input>')
-                                    .css({'width': '100%'})
-                                    .attr('data-property', 'comment')
-                                    .attr('id', inputid))
-                                )
-                            )
-                        )
-                    .addAlternativeButton('cancel', gt('Cancel'))
-                    .addDangerButton('declined', gt('Decline'))
-                    .addWarningButton('tentative', gt('Tentative'))
-                    .addSuccessButton('accepted', gt('Accept'))
-                    .show(function () {
-                        $(this).find('[data-property="comment"]').focus();
-                    })
-                    .done(function (action, data, node) {
-                        var val = $.trim($(node).find('[data-property="comment"]').val());
-                        if (action === 'cancel') {
-                            return;
-                        }
-                        o.data = {};
-                        o.data.confirmmessage = val;
-
-                        switch (action) {
-                        case 'cancel':
-                            return;
-                        case 'accepted':
-                            o.data.confirmation = 1;
-                            self.model.collection.remove(self.model); //just remove it from collection
-                            break;
-                        case 'declined':
-                            o.data.confirmation = 2;
-                            self.model.collection.remove(self.model); //just remove it from collection
-                            break;
-                        case 'tentative':
-                            // should be viewable next time only
-                            o.data.confirmation = 3;
-                            self.model.collection.remove(self.model); //just remove it from collection
-                            break;
-                        }
-
-                        calApi.confirm(o)
-                            .fail(function (err) {
-                                console.log('ERROR', err);
-                            });
-                    });
+            require(['io.ox/calendar/acceptdeny']).done(function (acceptdeny) {
+                acceptdeny(self.model.get('data'));
             });
-
         }
     });
 
@@ -163,42 +99,36 @@ define('plugins/notifications/calendar/register',
         id: 'appointments',
         index: 100,
         register: function (controller) {
-            console.log('registering calendar notifications');
+
             var notifications = controller.get('io.ox/calendar', NotificationsView);
 
-            calApi.getInvites();
-            calApi.on('invites', function (e, invites) {
+            calApi.on('new-invites', function (e, invites) {
                 notifications.collection.reset([]);
                 _(invites).each(function (invite) {
-                    console.log('invite', invite);
                     var inObj = {
+                        cid: _.cid(invite),
                         title: invite.title,
                         subject: invite.location,
                         date: util.getDateInterval(invite),
                         time: util.getTimeInterval(invite),
                         data: invite
                     };
-                    if (invite.organizer && !invite.organizerId) {
-                        inObj.organizer = gt('organized by %1$s', invite.organizer);
-                        notifications.collection.unshift(inObj);
-                    } else {
-                        var userId = invite.organizerId || invite.created_by;
-                        userApi.get(userId)
-                            .done(function (user) {
-                                console.log('organizer', user);
-                                inObj.organizer = gt('organized by %1$s', user.display_name);
-                                notifications.collection.unshift(inObj);
-                            })
-                            .fail(function () {
-                                // no organizer
-                                inObj.organizer = false;
-                                notifications.collection.unshift(inObj);
-                            });
-
-                    }
-
+                    // TODO: ignore organizerId until we know better
+                    var userId = invite.organizerId || invite.created_by;
+                    userApi.get({ id: userId })
+                        .done(function (user) {
+                            inObj.organizer = user.display_name;
+                            notifications.collection.push(inObj);
+                        })
+                        .fail(function () {
+                            // no organizer
+                            inObj.organizer = invite.organizer || false;
+                            notifications.collection.push(inObj);
+                        });
                 });
             });
+
+            calApi.getInvites();
         }
     });
     return true;

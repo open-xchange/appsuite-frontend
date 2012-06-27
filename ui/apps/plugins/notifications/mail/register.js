@@ -11,32 +11,16 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 define('plugins/notifications/mail/register',
-      ['io.ox/core/notifications',
-       'io.ox/mail/api',
-       'io.ox/mail/util',
-       'io.ox/core/extensions',
-       'io.ox/core/config',
-       'dot!plugins/notifications/mail/template.html',
-       'gettext!plugins/notifications/mail',
-       'less!plugins/notifications/mail/style.css'], function (notificationsController, mailApi, util, ext, config, tpl, gt) {
+    ['io.ox/core/notifications',
+     'io.ox/mail/api',
+     'io.ox/mail/util',
+     'io.ox/core/extensions',
+     'io.ox/core/config',
+     'dot!plugins/notifications/mail/template.html',
+     'gettext!plugins/notifications/mail'
+    ], function (notificationsController, mailApi, util, ext, config, tpl, gt) {
 
     'use strict';
-
-
-    function beatifyMailText(str) {
-        str = String(str)
-            .substr(0, 500) // limit overall length
-            .replace(/-{3,}/g, '---') // reduce dashes
-            .replace(/<br\s?\/?>(&gt;)+/ig, ' ') // remove quotes after line breaks
-            .replace(/<br\s?\/?>/ig, ' ') // remove line breaks
-            .replace(/<[^>]+(>|$)/g, '') // strip tags
-            .replace(/(http(s?):\/\/\S+)/i, '<a href="$1" target="_blank">http$2://...</a>') // links
-            .replace(/&#160;/g, ' ') // convert to simple white space
-            .replace(/\s{2,}/g, ' '); // reduce consecutive white space
-        // trim
-        return $.trim(str);
-    }
-
 
     var NotificationView = Backbone.View.extend({
         events: {
@@ -59,7 +43,7 @@ define('plugins/notifications/mail/register',
                     self.model.set({
                         title: util.getDisplayName(f[0]),
                         subject: data.subject,
-                        content: beatifyMailText(data.attachments[0].content),
+                        content: mailApi.beautifyMailText(data.attachments[0].content),
                         data: data
                     });
                     self.$('.content').html(self.model.get('content'));
@@ -164,13 +148,14 @@ define('plugins/notifications/mail/register',
             console.log('register mail notifications');
             var notifications = controller.get('io.ox/mail', NotificationsView);
 
-            mailApi.refresh();
             mailApi.on('new-mail', function (e, mails) {
                 _(mails.reverse()).each(function (mail) {
                     notifications.collection.unshift(new Backbone.Model(mail), {silent: true}); ///_(mails).clone());
                 });
                 notifications.collection.trigger('reset');
             });
+
+            mailApi.checkInbox();
         }
     });
 

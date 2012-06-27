@@ -230,7 +230,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     right: 0px;
 }
 #io-ox-notifications-display {
-    padding: 13px;
+    padding: 0 13px 0 13px;
 }
 #io-ox-windowmanager {
     overflow: hidden;
@@ -239,11 +239,11 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 
 #io-ox-notifications-display .section-title {
     color: #EEE;
-    margin-bottom: 13px;
     border: none;
-    font-size: 26px;
+    font-size: 24px;
     font-family: @font-light;
-    margin-left: 13px;
+    margin: 0 0 4px 13px;
+    line-height: 46px;
 }
 
 #io-ox-notifications-display .item {
@@ -288,13 +288,22 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 }
 
 #io-ox-notifications-display .item .date {
-
 }
+
+#io-ox-notifications-display .item .location {
+    color: #AAA;
+}
+
 #io-ox-notifications-display .item .actions {
     text-align: right;
     margin: 5px 0 5px 0;
 }
-#io-ox-notifications-display a { color: #17B2FF; }
+
+#io-ox-notifications-display .item .blue,
+#io-ox-notifications-display a {
+    color: #17B2FF;
+}
+
 #io-ox-notifications-display .open-app {
     text-align: left;
     padding: 0 13px 0;
@@ -1150,6 +1159,7 @@ input.nice-input {
     text-overflow: ellipsis;
 }
 
+.io-ox-foldertree .folder.expandable:hover,
 .io-ox-foldertree .folder.selectable:hover {
     background-color: #efefef;
     cursor: pointer;
@@ -1190,7 +1200,9 @@ input.nice-input {
     opacity: 0.30;
 }
 
-.io-ox-foldertree .subfolders { }
+.io-ox-foldertree .subfolders.io-ox-busy {
+    min-height: 70px;
+}
 
 .io-ox-foldertree .folder-arrow {
     float: left;

@@ -26,7 +26,16 @@ define("io.ox/core/api/factory",
 
     var GET_IDS = 'id: folder_id:folder folder: recurrence_position:'.split(' ');
 
-    return function (o) {
+    // reduce object to id, folder, recurrence_position
+    var reduce = function (obj) {
+        return !obj ? obj : _(GET_IDS).reduce(function (memo, prop) {
+            var p = prop.split(':'), source = p[0], target = p[1] || p[0];
+            if (source in obj) { memo[target] = obj[source]; }
+            return memo;
+        }, {});
+    };
+
+    var factory = function (o) {
 
         // extend default options (deep)
         o = $.extend(true, {
@@ -69,7 +78,7 @@ define("io.ox/core/api/factory",
 
                 // merge defaults for "all"
                 var opt = $.extend({}, o.requests.all, options || {}),
-                    cid = opt.folder + '\t' + (opt.sortKey || opt.sort) + '.' + opt.order + '.' + opt.limit;
+                    cid = opt.folder + '\t' + (opt.sortKey || opt.sort) + '.' + opt.order + '.' + (opt.max || opt.limit || 0);
 
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;
@@ -259,14 +268,7 @@ define("io.ox/core/api/factory",
                 });
             },
 
-            // reduce object to id, folder, recurrence_position
-            reduce: function (obj) {
-                return !obj ? obj : _(GET_IDS).reduce(function (memo, prop) {
-                    var p = prop.split(':'), source = p[0], target = p[1] || p[0];
-                    if (source in obj) { memo[target] = obj[source]; }
-                    return memo;
-                }, {});
-            },
+            reduce: reduce,
 
             caches: caches
         };
@@ -308,4 +310,7 @@ define("io.ox/core/api/factory",
         return api;
     };
 
+    factory.reduce = reduce;
+
+    return factory;
 });

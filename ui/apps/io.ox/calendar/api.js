@@ -298,53 +298,38 @@ define("io.ox/calendar/api",
 
     Events.extend(api);
 
-    // global refresh
-    api.refresh = function () {
-        userAPI.get().done(function (user) {
-            api.getAll({
-                start: _.now(),
-                end: _.now() + 28 * 4 * DAY //next four month?!?
-            }).done(function (list) {
+    api.getInvites = function () {
 
+        var start = _.now();
+
+        return userAPI.get().pipe(function (user) {
+            api.getUpdates({
+                start: start,
+                end: start + 28 * 5 * DAY, //next four month?!?
+                timestamp: 0
+            })
+            .pipe(function (list) {
                 var invites = _(list).filter(function (item) {
-                    return _(item.users).any(function (item_user) {
+                    return item.end_date > start && _(item.users).any(function (item_user) {
                         return (item_user.id === user.id && (item_user.confirmation === 0));
                     });
                 });
-
                 if (invites.length > 0) {
-                    api.trigger('invites', invites);
+                    api.trigger('new-invites', invites);
                 }
-                // clear caches
-                all_cache = {};
-                // trigger local refresh
-                if (list.length > 0) {
-                    api.trigger("refresh.all");
-                }
+                return invites;
             });
         });
     };
 
-    api.getInvites = function () {
-        userAPI.get().done(function (user) {
-            api.getUpdates({
-                start: _.now(),
-                end: _.now() + 28 * 5 * DAY, //next four month?!?
-                timestamp: 0
-            }).done(function (list) {
-
-                var invites = _(list).filter(function (item) {
-                    return _(item.users).any(function (item_user) {
-                        return (item_user.id === user.id && (item_user.confirmation === 0));
-                    });
-                });
-
-                if (invites.length > 0) {
-                    api.trigger('invites', invites);
-                }
-            });
+    // global refresh
+    api.refresh = function () {
+        api.getInvites().done(function () {
+            // clear caches
+            all_cache = {};
+            // trigger local refresh
+            api.trigger("refresh.all");
         });
-
     };
 
     ox.on('refresh^', function () {

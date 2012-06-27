@@ -182,8 +182,12 @@ define("io.ox/calendar/util",
             }
         },
 
+        onSameDay: function (t1, t2) {
+            return new Date(t1).setUTCHours(0, 0, 0, 0) === new Date(t2).setUTCHours(0, 0, 0, 0);
+        },
+
         getTimeInterval: function (data, D) {
-            var length, start, end;
+            var length, start, end, suffix;
             D = D || date.Local;
             if (data.full_time) {
                 length = (data.end_date - data.start_date) / DAY >> 0;
@@ -193,7 +197,8 @@ define("io.ox/calendar/util",
             } else {
                 start = D.localTime(date.Local.utc(data.start_date));
                 end = D.localTime(date.Local.utc(data.end_date));
-                return that.getTime(start) + " \u2013 " + that.getTime(end);
+                suffix = this.onSameDay(data.start_date, data.end_date) ? '' : ' ' + this.getDate(data.end_date);
+                return that.getTime(start) + " \u2013 " + that.getTime(end) + suffix;
             }
         },
 

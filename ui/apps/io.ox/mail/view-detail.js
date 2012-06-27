@@ -75,8 +75,8 @@ define('io.ox/mail/view-detail',
         regFolder = /^(\s*)(http[^#]+#m=infostore&f=\d+)(\s*)$/i,
         regDocument = /^(\s*)(http[^#]+#m=infostore&f=\d+&i=\d+)(\s*)$/i,
         regLink = /^(.*)(https?:\/\/\S+)(\s.*)?$/i,
-        regMail = /(\S+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/i,
-        regMailReplace = /(\S+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/ig, /* dedicated one to avoid strange side effects */
+        regMail = /([^\s<;]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/i,
+        regMailReplace = /([^\s<;]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/ig, /* dedicated one to avoid strange side effects */
         regMailComplex = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/, /* "name" <address> */
         regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/g, /* "name" <address> */
         regImageSrc = /(<img[^>]+src=")\/ajax/g;
@@ -203,7 +203,7 @@ define('io.ox/mail/view-detail',
                 return $('<div>').addClass('content').append(
                     $('<div>')
                     .addClass('infoblock backstripes')
-                    .text(gt('This email has no content'))
+                    .text(gt('This mail has no content'))
                 );
             }
 

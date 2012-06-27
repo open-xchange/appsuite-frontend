@@ -83,14 +83,14 @@
 
 
 .io-ox-portal-left {
-    width: 30%;
+    width: 40%;
 }
 
 .io-ox-portal-right {
-    margin-left: 30%;
+    margin-left: 40%;
     position: absolute;
     top: 0;
-    width: 70%;
+    width: 60%;
     padding: 0 10% 0 1em;
     overflow: auto;
     min-height: 100px;
@@ -100,6 +100,9 @@
     float: left;
     padding: 0 .5em 1em .5em;
     overflow: hidden;
+    width: 270px;
+    height: 180px;
+    margin: 5px;
 }
 .io-ox-portal-widget-tile h1 {
     line-height: 2em;

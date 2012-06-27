@@ -38,7 +38,7 @@ define('plugins/portal/facebook/register',
                 .appendTo($(node));
         };
     };
-    
+
     var getProfile = function (profiles, actor_id) {
         return _.find(profiles, function (profile) { return profile.id === actor_id; });
     };
@@ -67,7 +67,7 @@ define('plugins/portal/facebook/register',
                 .append($('<h1>').text('Facebook').css({color: '#fff'}))
                 .append($('<span>').html('&nbsp;').css({clear: 'both'}))
                 .css({background: '#3B5998', padding: '10px', color: '#fff'});
-                
+
             if (!wall) {
                 this.remove();
                 return $.Deferred().resolve();
@@ -78,8 +78,8 @@ define('plugins/portal/facebook/register',
             } else {
                 var post = wall[0];
                 var message = post.message || post.description || '';
-                if (message.length > 75) {
-                    message = message.substring(0, 72) + '...';
+                if (message.length > 150) {
+                    message = message.substring(0, 150) + '...';
                 }
                 $(this).append(
                     $('<div>').text(gt('Latest wall post:')),
@@ -190,7 +190,9 @@ define('plugins/portal/facebook/register',
         id: 'link',
         index: 196,
         accepts: function (post) {
-            return (post.type === 80 && post.attachment.caption !== "www.youtube.com");
+            return post.type === 80 &&
+                post.attachment.caption !== "www.youtube.com" &&
+                post.attachment.media[0];
         },
         draw: function (post) {
             var media = post.attachment.media[0];
@@ -212,7 +214,7 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             var media = post.attachment.media[0];
-            
+
             $('<div class="message">').text(post.attachment.name || post.message).appendTo($(this));
             if (media !== undefined) {
                 $('<a>').attr({href: media.href})
@@ -221,8 +223,8 @@ define('plugins/portal/facebook/register',
             }
         }
     });
-    
-    
+
+
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'app_story',
         index: 196,
@@ -231,7 +233,7 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             var media = post.attachment.media[0];
-            
+
             $('<div class="message">').text(post.message).appendTo($(this));
             if (media !== undefined) {
                 $('<a class="app-story">').attr('href', media.href).append(
@@ -242,8 +244,24 @@ define('plugins/portal/facebook/register',
             }
         }
     });
-    
-    
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'new-cover-photo',
+        index: 197,
+        accepts: function (post) {
+            return post.type === 373 && post.attachment.media[0];
+        },
+        draw: function (post) {
+            var media = post.attachment.media[0];
+            this.append(
+                $('<div>').text(post.description || post.message || ''),
+                $('<a>', { href: media.href }).append(
+                    $('<img class="wall-img-left">').attr({ src: media.src })
+                )
+            );
+        }
+    });
+
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'fallback',
         index: 256,
