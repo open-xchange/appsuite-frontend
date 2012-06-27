@@ -11,23 +11,23 @@
     <extension id='head'>
        <div class="row-fluid show-grid">
            <div class="span12 control-group">
-               <label class="control-label desc" for="{{=it.uid}}_title">{{= it.strings.SUBJECT }}</label>
+               <label class="control-label desc" for="{{!it.uid}}_title">{{! it.strings.SUBJECT }}</label>
                <div class="controls">
-                   <input type="text" class="discreet title" name="title" data-property="title" id="{{=it.uid}}_title">
+                   <input type="text" class="discreet title" name="title" data-property="title" id="{{!it.uid}}_title">
                </div>
            </div>
        </div>
 
        <div class="row-fluid show-grid">
            <div class="span10 control-group">
-               <label class="control-label desc" for="{{=it.uid}}_location">{{= it.strings.LOCATION }}</label>
+               <label class="control-label desc" for="{{!it.uid}}_location">{{! it.strings.LOCATION }}</label>
                <div class="controls">
-                   <input type="text" class="discreet location" name="location" data-property="location" id="{{=it.uid}}_location" >
+                   <input type="text" class="discreet location" name="location" data-property="location" id="{{!it.uid}}_location" >
                </div>
            </div>
            <div class="span2 control-group">
                <div class="controls">
-                   <a class="btn btn-primary save" >{{= it.strings.SAVE_BUTTON_LABEL }}</a>
+                   <a class="btn btn-primary save" >{{! it.strings.SAVE_BUTTON_LABEL }}</a>
                </div>
            </div>
        </div>
@@ -37,17 +37,17 @@
     <extension id="dates">
         <div class="row-fluid show-grid">
             <div class="control-group span6">
-                <label class="control-label desc" for="{{=it.uid}}_start_date">{{= it.strings.STARTS_ON }}</label>
+                <label class="control-label desc" for="{{!it.uid}}_start_date">{{! it.strings.STARTS_ON }}</label>
                 <div class="controls">
-                      <input type="date" class="discreet startsat-date input-small" id="{{=it.uid}}_start_date" data-extgroup="startdates" data-extid="date" data-property="start_date">
+                      <input type="date" class="discreet startsat-date input-small" id="{{!it.uid}}_start_date" data-extgroup="startdates" data-extid="date" data-property="start_date">
                       <input type="time" class="discreet startsat-time input-mini" data-extgroup="startdates" data-extid="time" data-property="start_date">
                       <span class="label" data-original-title="" data-extgroup="startdates" data-extid="timezone">CEST</span>
                 </div>
             </div>
             <div class="control-group span6">
-                <label class="control-label desc" for="{{=it.uid}}_end_date">{{= it.strings.ENDS_ON }}</label>
+                <label class="control-label desc" for="{{!it.uid}}_end_date">{{! it.strings.ENDS_ON }}</label>
                 <div class="controls">
-                    <input type="date" class="discreet endsat-date input-small" id="{{=it.uid}}_end_date" data-extgroup="enddates" data-extid="date" data-property="end_date">
+                    <input type="date" class="discreet endsat-date input-small" id="{{!it.uid}}_end_date" data-extgroup="enddates" data-extid="date" data-property="end_date">
                     <input type="time" class="discreet endsat-time input-mini" data-extgroup="enddates" data-extid="time" data-property="end_date">
                     <span class="label" data-original-title="" data-extgroup="enddates" data-extid="timezone">CEST</span>
                 </div>
@@ -60,8 +60,8 @@
             <div class="control-group span12">
                 <div class="controls">
                     <div data-extgroup="extrasleft" data-extid="fulltime">
-                        <input type="checkbox" class="full_time" name="full_time" id="{{=it.uid}}_full_time" data-property="full_time">
-                        <label style="display: inline;" for="{{=it.uid}}_full_time">{{= it.strings.ALL_DAY }}</label>
+                        <input type="checkbox" class="full_time" name="full_time" id="{{!it.uid}}_full_time" data-property="full_time">
+                        <label style="display: inline;" for="{{!it.uid}}_full_time">{{! it.strings.ALL_DAY }}</label>
                     </div>
                 </div>
             </div>
@@ -73,9 +73,9 @@
     <extension id="description">
         <div class="row-fluid show-grid">
             <div class="control-group span12">
-                <label class="control-label desc" for="{{=it.uid}}_note">{{= it.strings.DESCRIPTION }}</label>
+                <label class="control-label desc" for="{{!it.uid}}_note">{{! it.strings.DESCRIPTION }}</label>
                 <div class="controls">
-                    <textarea class="note" name="note" id="{{=it.uid}}_note" data-property="note"></textarea>
+                    <textarea class="note" name="note" id="{{!it.uid}}_note" data-property="note"></textarea>
                 </div>
             </div>
         </div>
@@ -84,32 +84,32 @@
     <extension id="options">
         <div class="row-fluid show-grid">
             <div class="control-group span3">
-                <label class="control-label desc" for="{{=it.uid}}_alarm">{{= it.strings.REMINDER}}</label>
+                <label class="control-label desc" for="{{!it.uid}}_alarm">{{! it.strings.REMINDER}}</label>
                 <div class="controls">
-                    <select name="alarm" id="{{=it.uid}}_alarm" data-property="alarm">
-                        <option value="-1">{{= it.strings.NO_REMINDER }}</option>
+                    <select name="alarm" id="{{!it.uid}}_alarm" data-property="alarm">
+                        <option value="-1">{{! it.strings.NO_REMINDER }}</option>
                         {{~ it.reminderList :item:index }}
-                        <option value="{{=item.value}}">{{=item.label}}</option>
+                        <option value="{{!item.value}}">{{!item.label}}</option>
                         {{~}}
                     </select>
                 </div>
             </div>
             <div class="control-group span3">
-                <label class="control-label desc" for="shown_as">{{= it.strings.DISPLAY_AS}}</label>
+                <label class="control-label desc" for="shown_as">{{! it.strings.DISPLAY_AS}}</label>
                 <div class="controls">
-                    <select name="shown_as" id="{{=it.uid}}_shown_as" data-property="shown_as">
-                        <option value="1" data-extgroup="shownas" data-extid="reserved">{{= it.strings.RESERVED }}</option>
-                        <option value="2" data-extgroup="shownas" data-extid="temporary">{{= it.strings.TEMPORARY }}</option>
-                        <option value="3" data-extgroup="shownas" data-extid="absent">{{= it.strings.ABSENT }}</option>
-                        <option value="4" data-extgroup="shownas" data-extid="free">{{= it.strings.FREE }}</option>
+                    <select name="shown_as" id="{{!it.uid}}_shown_as" data-property="shown_as">
+                        <option value="1" data-extgroup="shownas" data-extid="reserved">{{! it.strings.RESERVED }}</option>
+                        <option value="2" data-extgroup="shownas" data-extid="temporary">{{! it.strings.TEMPORARY }}</option>
+                        <option value="3" data-extgroup="shownas" data-extid="absent">{{! it.strings.ABSENT }}</option>
+                        <option value="4" data-extgroup="shownas" data-extid="free">{{! it.strings.FREE }}</option>
                     </select>
                 </div>
             </div>
             <div class="control-group span3">
-                <label class="control-label desc" for="{{=it.uid}}_private_flag">{{= it.strings.TYPE }}</label>
+                <label class="control-label desc" for="{{!it.uid}}_private_flag">{{! it.strings.TYPE }}</label>
                 <div class="controls">
-                    <input type="checkbox" name="private_flag" id="{{=it.uid}}_private_flag" data-property="private_flag">
-                    <label style="display: inline;" for="{{=it.uid}}_private_flag">{{= it.strings.PRIVATE}}</label>
+                    <input type="checkbox" name="private_flag" id="{{!it.uid}}_private_flag" data-property="private_flag">
+                    <label style="display: inline;" for="{{!it.uid}}_private_flag">{{! it.strings.PRIVATE}}</label>
                 </div>
             </div>
             <div class="span3"></div>
@@ -118,7 +118,7 @@
     <extension id="participants">
         <div class="row-fluid show-grid">
             <div class="span12">
-                <legend class="sectiontitle">{{= it.strings.PARTICIPANTS}}</legend>
+                <legend class="sectiontitle">{{! it.strings.PARTICIPANTS}}</legend>
             </div>
         </div>
         <div class="row-fluid show-grid participantsrow">
@@ -131,14 +131,14 @@
                         <input type="text" class="add-participant"><button
                             class="btn" type="button" data-action='add'><i class="icon-plus"></i>
                         </button>
-                        <div class='help'>{{= it.strings.HELP_ADD_PARTICIPANTS_MANUALLY}}</div>
+                        <div class='help'>{{! it.strings.HELP_ADD_PARTICIPANTS_MANUALLY}}</div>
                     </div>
                 </div>
             </div>
             <div class="control-group span6 notify-participants">
                 <div class="controls" >
-                    <input type="checkbox" data-property="notification" id="{{=it.uid}}_notification">
-                    <label class="label-inline" for="{{=it.uid}}_notification">{{= it.strings.NOTIFY_ALL}}</label>
+                    <input type="checkbox" data-property="notification" id="{{!it.uid}}_notification">
+                    <label class="label-inline" for="{{!it.uid}}_notification">{{! it.strings.NOTIFY_ALL}}</label>
                 </div>
             </div>
         </div>
@@ -167,7 +167,7 @@
 <part id='io.ox/calendar/edit/particpant/usergroup'>
     <div class='group-image' data-property='image1_url'></div>
     <div data-property='display_name'></div>
-    {{= it.strings.GROUP }}
+    {{! it.strings.GROUP }}
     <a href='#' class='remove'>
         <div class='icon'><i class='icon-remove'></i></div>
     </a>
@@ -175,7 +175,7 @@
 <part id='io.ox/calendar/edit/particpant/resource'>
     <div class='resource-image' data-property='image1_url'></div>
     <div data-property='display_name'></div>
-    {{= it.strings.RESOURCE }}
+    {{! it.strings.RESOURCE }}
     <a href='#' class='remove'>
         <div class='icon'><i class='icon-remove'></i></div>
     </a>
@@ -194,31 +194,31 @@
 <part id='io.ox/calendar/edit/recurrence'>
     <div class="row-fluid show-grid">
         <div class="control-group span6">
-            <label for="{{=it.uid}}_recurrence_start" class="control-label">{{= it.strings.STARTS_ON }}</label>
+            <label for="{{!it.uid}}_recurrence_start" class="control-label">{{! it.strings.STARTS_ON }}</label>
             <div class="controls">
-                <input id="{{=it.uid}}_recurrence_start" type="text" class="discreet startsat-date" name='recurrence_start'/>
+                <input id="{{!it.uid}}_recurrence_start" type="text" class="discreet startsat-date" name='recurrence_start'/>
             </div>
         </div>
         <div class="control-group span6">
-            <label for="{{=it.uid}}_recurrence_endings" class="control-label">{{= it.strings.ENDS }}</label>
+            <label for="{{!it.uid}}_recurrence_endings" class="control-label">{{! it.strings.ENDS }}</label>
             <div class="controls">
                 <div>
                     <input type="radio" name='endingoption'/>
-                    <label class="radio inline">{{= it.strings.NEVER }}</label>
+                    <label class="radio inline">{{! it.strings.NEVER }}</label>
                 </div>
                 <div>
-                    <input id="{{=it.uid}}_recurrence_endings" type="radio" name='endingoption'/>
+                    <input id="{{!it.uid}}_recurrence_endings" type="radio" name='endingoption'/>
                     <label class="radio inline">
-                       {{= it.strings.ON }}
+                       {{! it.strings.ON }}
                        <input type="text" class="discreet until" name='until'/>
                     </label>
                 </div>
                 <div>
                     <input type="radio" name='endingoption'/>
                     <label class="radio inline">
-                        {{= it.strings.AFTER }}
+                        {{! it.strings.AFTER }}
                         <input type="text" class="discreet until short" name='occurrences'/>
-                        <span class="help-inline">{{= it.strings.TIMES }}</span>
+                        <span class="help-inline">{{! it.strings.TIMES }}</span>
                     </label>
                 </div>
             </div>
@@ -229,20 +229,20 @@
         <div class='control-group span12'>
             <div class='controls'>
                 <div style='width: 200px;' class="tablecell">
-                    <input type="radio" name="recurrence_type" value="1" id="{{=it.uid}}_daily"/>
-                    <label style="display: inline;" for="{{=it.uid}}_daily">{{= it.strings.DAILY }}</label>
+                    <input type="radio" name="recurrence_type" value="1" id="{{!it.uid}}_daily"/>
+                    <label style="display: inline;" for="{{!it.uid}}_daily">{{! it.strings.DAILY }}</label>
                 </div>
                 <div style='width: 200px;' class="tablecell">
-                    <input type="radio" name="recurrence_type" value="2" id="{{=it.uid}}_weekly"/>
-                    <label style="display: inline;" for="{{=it.uid}}_weekly">{{= it.strings.WEEKLY }}</label>
+                    <input type="radio" name="recurrence_type" value="2" id="{{!it.uid}}_weekly"/>
+                    <label style="display: inline;" for="{{!it.uid}}_weekly">{{! it.strings.WEEKLY }}</label>
                 </div>
                 <div style='width: 200px;' class="tablecell">
-                    <input type="radio" name="recurrence_type" value="3" id="{{=it.uid}}_monthly"/>
-                    <label style="display: inline;" for="{{=it.uid}}_monthly">{{= it.strings.MONTHLY }}</label>
+                    <input type="radio" name="recurrence_type" value="3" id="{{!it.uid}}_monthly"/>
+                    <label style="display: inline;" for="{{!it.uid}}_monthly">{{! it.strings.MONTHLY }}</label>
                 </div>
                 <div style='width: 200px;' class="tablecell">
-                    <input type="radio" name="recurrence_type" value="4" id="{{=it.uid}}_yearly"/>
-                    <label style="display: inline;" for="{{=it.uid}}_yearly">{{= it.strings.YEARLY }}</label>
+                    <input type="radio" name="recurrence_type" value="4" id="{{!it.uid}}_yearly"/>
+                    <label style="display: inline;" for="{{!it.uid}}_yearly">{{! it.strings.YEARLY }}</label>
                 </div>
             </div>
         </div>
@@ -250,10 +250,10 @@
 
     <div class="row-fluid show-grid recurrence_details daily">
         <div class='control-group span12'>
-            <label class="control-label" for="{{=it.uid}}_daily_interval">{{= it.strings.EVERY }}</label>
+            <label class="control-label" for="{{!it.uid}}_daily_interval">{{! it.strings.EVERY }}</label>
             <div class="controls">
-                <input type="text" class="discreet short" name='interval' id="{{=it.uid}}_daily_interval"/>
-                <span class="help-inline">{{= it.strings.DAY }}</span>
+                <input type="text" class="discreet short" name='interval' id="{{!it.uid}}_daily_interval"/>
+                <span class="help-inline">{{! it.strings.DAY }}</span>
             </div>
         </div>
     </div>
@@ -263,9 +263,9 @@
             <div class="row-fluid show-grid">
                 <div class="control-group span12">
                     <div class="controls">
-                        <label for="{{=it.uid}}_weekly_interval">{{= it.strings.EVERY }}</label>
-                        <input type="text" name='interval' class="discreet weeks short" id="{{=it.uid}}_weekly_interval"/>
-                        <span class="help-inline">{{= it.strings.WEEKS }}</span>
+                        <label for="{{!it.uid}}_weekly_interval">{{! it.strings.EVERY }}</label>
+                        <input type="text" name='interval' class="discreet weeks short" id="{{!it.uid}}_weekly_interval"/>
+                        <span class="help-inline">{{! it.strings.WEEKS }}</span>
                     </div>
                 </div>
             </div>
@@ -273,8 +273,8 @@
                 <div class="control-group span12">
                     <div class="controls">
                         {{~ it.weekDayList :item:index }}
-                        <input type='checkbox' name='day{{= item.value }}' id="{{=it.uid}}_weekly_days_monday"/>
-                        <label style="display: inline;" for="{{=it.uid}}_weekly_days_monday">{{= item.label }}</label>
+                        <input type='checkbox' name='day{{! item.value }}' id="{{!it.uid}}_weekly_days_monday"/>
+                        <label style="display: inline;" for="{{!it.uid}}_weekly_days_monday">{{! item.label }}</label>
                         {{~}}
                     </div>
                 </div>
@@ -288,32 +288,32 @@
                 <div class="control-group span12">
                     <div class="controls">
                         <input type='radio' name='monthly_option' value='one'>
-                        <span class='help-inline'>{{= it.strings.AT }}</span>
+                        <span class='help-inline'>{{! it.strings.AT }}</span>
                         <input type='text' name='day_in_month' class='discreet short'/>
-                        <span class='help-inline'>{{= it.strings.TH_DAY_EVERY }}</span>
+                        <span class='help-inline'>{{! it.strings.TH_DAY_EVERY }}</span>
                         <input type='text' name='interval' class='discreet short'/>
-                        <span class='help-inline'>{{= it.strings.TH_MONTH }}</span>
+                        <span class='help-inline'>{{! it.strings.TH_MONTH }}</span>
                     </div>
                 </div>
             </div>
             <div class="row-fluid show-grid">
                 <div class="control-group span12">
                     <input type='radio' name='monthly_option' value='two'>
-                    <span class='help-inline'>{{= it.strings.AT }}</span>
+                    <span class='help-inline'>{{! it.strings.AT }}</span>
                     <select name='day_in_month'>
-                        <option value='1'>{{= it.strings.FIRST }}</option>
-                        <option value='2'>{{= it.strings.SECOND }}</option>
-                        <option value='3'>{{= it.strings.THIRD }}</option>
-                        <option value='4'>{{= it.strings.FOURTH }}</option>
-                        <option value='5'>{{= it.strings.LAST }}</option>
+                        <option value='1'>{{! it.strings.FIRST }}</option>
+                        <option value='2'>{{! it.strings.SECOND }}</option>
+                        <option value='3'>{{! it.strings.THIRD }}</option>
+                        <option value='4'>{{! it.strings.FOURTH }}</option>
+                        <option value='5'>{{! it.strings.LAST }}</option>
                     </select>
                     <select name='days' class='days'>
                         {{~it.weekDayList :item:index }}
-                        <option value='{{= item.value }}'>{{= item.label }}</option>
+                        <option value='{{! item.value }}'>{{! item.label }}</option>
                         {{~}}
                     </select>
-                    <span class='help-inline'>{{= it.strings.EVERY }}</span>
-                    <input type='text' name='interval' class='discreet short'/><span class='help-inline'>{{= it.strings.TH_MONTH }}</span>
+                    <span class='help-inline'>{{! it.strings.EVERY }}</span>
+                    <input type='text' name='interval' class='discreet short'/><span class='help-inline'>{{! it.strings.TH_MONTH }}</span>
                 </div>
             </div>
         </div>
@@ -324,34 +324,34 @@
             <div class='controls'>
                 <div>
                     <input type='radio' name='yearly_option' value='one'>
-                    <span class='help-inline'>{{= it.strings.EVERY }}</span>
+                    <span class='help-inline'>{{! it.strings.EVERY }}</span>
                     <input type='text' name='day_in_month' class='short'/>
-                    <span class='help-inline'>{{= it.strings.TH }}</span>
+                    <span class='help-inline'>{{! it.strings.TH }}</span>
                     <select name='month' class='month'>
                         {{~ it.monthList :item:index }}
-                        <option value='{{= item.value }}'>{{= item.label }}</option>
+                        <option value='{{! item.value }}'>{{! item.label }}</option>
                         {{~}}
                     </select>
                 </div>
                 <div>
                     <input type='radio' name='yearly_option' value='two'>
-                    <span class='help-inline'>{{= it.strings.AT }}</span>
+                    <span class='help-inline'>{{! it.strings.AT }}</span>
                     <select name='day_in_month'>
-                        <option value='1'>{{= it.strings.FIRST }}</option>
-                        <option value='2'>{{= it.strings.SECOND }}</option>
-                        <option value='3'>{{= it.strings.THIRD }}</option>
-                        <option value='4'>{{= it.strings.FOURTH }}</option>
-                        <option value='5'>{{= it.strings.LAST }}</option>
+                        <option value='1'>{{! it.strings.FIRST }}</option>
+                        <option value='2'>{{! it.strings.SECOND }}</option>
+                        <option value='3'>{{! it.strings.THIRD }}</option>
+                        <option value='4'>{{! it.strings.FOURTH }}</option>
+                        <option value='5'>{{! it.strings.LAST }}</option>
                     </select>
                     <select name='days' class='days'>
                         {{~ it.weekDayList :item:index }}
-                        <option value='{{= item.value }}'>{{= item.label }}</option>
+                        <option value='{{! item.value }}'>{{! item.label }}</option>
                         {{~}}
                     </select>
-                    <span class='help-inline'>{{= it.strings.IN }}</span>
+                    <span class='help-inline'>{{! it.strings.IN }}</span>
                     <select name='month' class='month'>
                         {{~ it.monthList :item:index }}
-                        <option value='{{= item.value }}'>{{= item.label }}</option>
+                        <option value='{{! item.value }}'>{{! item.label }}</option>
                         {{~}}
                     </select>
                 </div>
@@ -365,11 +365,11 @@
         <div class="row-fluid show-grid">
             <div class="control-group span12">
                 <div class="controls">
-                    <input type="checkbox" class="repeat" name="repeat" id="{{=it.uid}}_repeat"/>
-                    <label style="display: inline; margin-right: -4px;" for="{{=it.uid}}_repeat">{{= it.strings.REPEAT }}</label>
+                    <input type="checkbox" class="repeat" name="repeat" id="{{!it.uid}}_repeat"/>
+                    <label style="display: inline; margin-right: -4px;" for="{{!it.uid}}_repeat">{{! it.strings.REPEAT }}</label>
                     <span name="recurrenceText"></span>
                     <span class='editrecurrence_wrapper' style="display:none;">
-                    (<a class="editrecurrence">{{= it.strings.EDIT }}</a>)
+                    (<a class="editrecurrence">{{! it.strings.EDIT }}</a>)
                     </span>
                 </div>
             </div>
