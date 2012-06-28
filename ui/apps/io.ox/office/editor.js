@@ -1669,7 +1669,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 }
                 localPos.push(paraInCell);
                 localPos.push(0);  // new position
-                var lastOperationEnd = new OXOPaM(localPos);
+                lastOperationEnd = new OXOPaM(localPos);
             }
         };
 
