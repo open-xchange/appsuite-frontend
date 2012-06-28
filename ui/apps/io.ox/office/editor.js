@@ -862,8 +862,16 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 }
                 else {
                     var lastValue = selection.startPaM.oxoPosition.length - 1;
-                    var paraLen = this.getParagraphLen(selection.startPaM.oxoPosition[lastValue - 1]);
-                    if (selection.startPaM.oxoPosition[lastValue] < paraLen) {
+                    var startPosition = selection.startPaM.oxoPosition;
+                    var paraLen = 0;
+
+                    if (this.getParagraphNodeName(startPosition[0]) === 'TABLE') {
+                        paraLen = this.getParagraphLenInCell(startPosition[0], startPosition[1], startPosition[2], startPosition[3]);
+                    } else {
+                        paraLen = this.getParagraphLen(startPosition[0]);
+                    }
+
+                    if (startPosition[lastValue] < paraLen) {
                         selection.endPaM.oxoPosition[lastValue]++;
                         this.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
                     }
