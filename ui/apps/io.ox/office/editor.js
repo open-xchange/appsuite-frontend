@@ -739,6 +739,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                         .append('<td><p id="4_3_1">This is a paragraph in row 4 and column 3.</p><p id="4_3_2">Second paragraph.</p><p id="4_3_3">Third paragraph.</p></td>')));
 
             paragraphs = editdiv.children();
+            blockOperationNotifications = true;  // test table does not work in second editor.
 
             window.console.log("Number of children of editdiv after inserting table: " + paragraphs.length);
         };
@@ -1342,6 +1343,17 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             return paraLen;
         };
 
+        this.getParagraphFromTable = function (table, column, row, para) {
+            var paragraph = null;
+            if ((paragraphs[table] !== undefined) && (this.getParagraphNodeName(table) === 'TABLE')) {
+                var row = $('TR', paragraphs[table]).get(row);
+                var cell = $('TH, TD', row).get(column);
+                var len = $('P', cell).length;
+                paragraph = $('P', cell).get(para);
+            }
+            return paragraph;
+        };
+
         // ==================================================================
         // IMPL METHODS
         // ==================================================================
@@ -1637,12 +1649,22 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.implDeleteText = function (startPosition, endPosition) {
 
+            var lastValue = startPosition.length - 1;
             var para = startPosition[0];
-            var start = startPosition[1]; // invalid for tables
-            var end = endPosition[1]; // invalid for tables
+            var start = startPosition[lastValue];
+            var end = endPosition[lastValue];
+
+            var isTablePara = false;
+            if (this.getParagraphNodeName(para) === 'TABLE') {
+                isTablePara = true;
+            }
 
             if (end === -1) {
-                end = this.getParagraphLen(para);
+                if (isTablePara) {
+                    end = this.getParagraphLenInCell(para, startPosition[1], startPosition[2], startPosition[3]);
+                } else {
+                    end = this.getParagraphLen(para);
+                }
             }
 
             if (start === end) {
@@ -1650,7 +1672,13 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
 
             var textNodes = [];
-            collectTextNodes(paragraphs[para], textNodes);
+            var oneParagraph = null;
+            if (isTablePara) {
+                oneParagraph = this.getParagraphFromTable(para, startPosition[1], startPosition[2], startPosition[3]);
+            } else {
+                oneParagraph = paragraphs[para];
+            }
+            collectTextNodes(oneParagraph, textNodes);
             var node, nodeLen, delStart, delEnd;
             var nodes = textNodes.length;
             var nodeStart = 0;
@@ -1682,7 +1710,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     break;
             }
 
-            lastOperationEnd = new OXOPaM([para, start]);
+            lastOperationEnd = new OXOPaM(_.copy(startPosition, true));
+            // old:  lastOperationEnd = new OXOPaM([para, start]);
+
             this.implParagraphChanged(para);
         };
 
