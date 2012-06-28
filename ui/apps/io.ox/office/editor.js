@@ -863,7 +863,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 else {
                     var lastValue = selection.startPaM.oxoPosition.length - 1;
                     var paraLen = this.getParagraphLen(selection.startPaM.oxoPosition[lastValue - 1]);
-                    if (selection.startPaM.oxoPosition[lastValue] < paraLen) { // fixed for tables
+                    if (selection.startPaM.oxoPosition[lastValue] < paraLen) {
                         selection.endPaM.oxoPosition[lastValue]++;
                         this.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
                     }
@@ -885,7 +885,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 }
                 else {
                     var lastValue = selection.startPaM.oxoPosition.length - 1;
-                    if (selection.startPaM.oxoPosition[lastValue] > 0) { // fixed for tables
+                    if (selection.startPaM.oxoPosition[lastValue] > 0) {
                         var startPosition = _.copy(selection.startPaM.oxoPosition, true);
                         var endPosition = _.copy(selection.startPaM.oxoPosition, true);
                         startPosition[lastValue] -= 1;
@@ -896,7 +896,15 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                         var startPosition = _.copy(selection.startPaM.oxoPosition, true);
                         startPosition[lastValue - 1] -= 1;
                         startPosition.pop();
-                        var length = this.getParagraphLen(startPosition[lastValue - 1]);
+
+                        var length = 0;
+
+                        if (this.getParagraphNodeName(startPosition[0]) === 'TABLE') {
+                            length = this.getParagraphLenInCell(startPosition[0], startPosition[1], startPosition[2], startPosition[3]);
+                        } else {
+                            length = this.getParagraphLen(startPosition[0]);
+                        }
+
                         this.mergeParagraph(startPosition);
                         selection.startPaM.oxoPosition[lastValue - 1] -= 1;
                         selection.startPaM.oxoPosition[lastValue] = length;
@@ -1645,6 +1653,24 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             paragraph.parentNode.removeChild(paragraph);
             paragraphs = editdiv.children();
             lastOperationEnd = new OXOPaM([para ? para - 1 : 0, 0]);    // pos not corrct, but doesn't matter. Deleting paragraphs always happens between other operations, never at the last one.
+        };
+
+        this.implDeleteParagraphInTable = function (position) {
+            var para = position[0];
+            if (this.getParagraphNodeName(para) === 'TABLE') {
+                var paragraph = this.getParagraphFromTable(para, position[1], position[2], position[3]);
+                paragraph.parentNode.removeChild(paragraph);
+                var localPos = _.copy(position, true);
+                var paraInCell = position[3];
+                localPos.pop();
+                // localPos.pop(); // 'pos' was already removed from position before calling implDeleteParagraphInTable
+                if (paraInCell > 0) {
+                    paraInCell -= 1;
+                }
+                localPos.push(paraInCell);
+                localPos.push(0);  // new position
+                var lastOperationEnd = new OXOPaM(localPos);
+            }
         };
 
         this.implDeleteText = function (startPosition, endPosition) {
