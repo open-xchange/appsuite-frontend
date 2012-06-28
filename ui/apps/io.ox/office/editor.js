@@ -922,10 +922,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     var lastPara = this.getParagraphCount() - 1;
 
                     if (this.getParagraphNodeName(lastPara) === 'TABLE') {
-                        var lastRow = this.getLastRowIndexInTable(lastPara);
-                        var lastColumn = this.getLastColumnIndexInRow(lastPara, lastRow);
-                        var lastParaInCell = this.getLastParaIndexInCell(lastPara, lastColumn, lastRow);
-                        var paraLen = this.getParagraphLenInCell(lastPara, lastColumn, lastRow, lastParaInCell);
+                        var lastRow = this.getLastRowIndexInTable(lastPara),
+                            lastColumn = this.getLastColumnIndexInRow(lastPara, lastRow),
+                            lastParaInCell = this.getLastParaIndexInCell(lastPara, lastColumn, lastRow),
+                            paraLen = this.getParagraphLenInCell(lastPara, lastColumn, lastRow, lastParaInCell);
 
                         selection.endPaM.oxoPosition = [];
                         selection.endPaM.oxoPosition.push(lastPara);
@@ -1015,7 +1015,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 this.deleteSelected(selection);
                 // Selection was adjusted, so we need to use start, not end
                 this.insertText(c, selection.startPaM.oxoPosition);
-                selection.startPaM.oxoPosition[1]++; // invalid for tables
+                var lastValue = selection.startPaM.oxoPosition.length - 1;
+                selection.startPaM.oxoPosition[lastValue]++;
                 selection.endPaM = _.copy(selection.startPaM, true);
                 event.preventDefault();
                 this.setSelection(selection);
@@ -1465,7 +1466,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // -1 not allowed here - but code need to be robust
             var para = position[0];
             if ((para < 0) || (para >= paragraphs.size())) {
-                this.implDbgOutInfo('error: invalid para pos in implInsertText (' + para + ')');
+                this.implDbgOutInfo('error: invalid para pos in implInsertText (' + para + ', maximum: ' + paragraphs.size() + ')');
                 para = paragraphs.size() - 1;
                 // return;
             }
@@ -1474,7 +1475,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             var oldText = domPos.node.nodeValue;
             var newText = oldText.slice(0, domPos.offset) + text + oldText.slice(domPos.offset);
             domPos.node.nodeValue = newText;
-            lastOperationEnd = new OXOPaM([position[0], position[1] + text.length]);
+            var lastValue = position.length - 1;
+            lastOperationEnd = new OXOPaM([position[lastValue - 1], position[lastValue] + text.length]);
             this.implParagraphChanged(para);
         };
 
