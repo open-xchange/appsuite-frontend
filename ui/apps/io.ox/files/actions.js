@@ -74,7 +74,9 @@ define("io.ox/files/actions",
             return e.collection.has('one') && /\.(odt)$/i.test(e.context.data.filename);
         },
         action: function (data) {
-            ox.launch('io.ox/office/main', data).done(function () { this.load(); });
+            ox.launch('io.ox/office/main', { file: data }).done(function () {
+                this.load();
+            });
         }
     });
 

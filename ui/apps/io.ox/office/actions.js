@@ -20,8 +20,8 @@ define("io.ox/office/actions",
 
     // imports
 
-    var Action = links.Action;
-    var Link = links.Link;
+    var Action = links.Action,
+        Link = links.Link;
 
     // actions
 

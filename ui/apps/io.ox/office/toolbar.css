@@ -24,6 +24,20 @@
     /* spacing between elements in a button */
     @whitespace-width: 4px;
 
+    /* tool bar background color */
+    @background-color: #f5f5f5;
+
+    /* tool bar border color */
+    @border-color: #d5d5d5;
+
+    /* focus border color for regular buttons */
+    @focus-color: #3399ff;
+
+    /* focus border color for activated buttons */
+    @active-focus-color: #ffcc33;
+
+/* mixin classes ======================================================= */
+
     .border-radius(@radius) {
         -webkit-border-radius: @radius;
         -moz-border-radius: @radius;
@@ -72,21 +86,13 @@
         filter: alpha(opacity=@opacity-percent);
     }
 
-    .transition(@transition) {
-        -webkit-transition: @transition;
-        -moz-transition: @transition;
-        -ms-transition: @transition;
-        -o-transition: @transition;
-        transition: @transition;
-    }
-
     /* tool bar formatting ================================================= */
 
     /* redefine margin, padding, formatting for usage in OX */
     margin: 0;
     padding: 6px 13px 2px 13px;
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #d5d5d5;
+    background-color: @background-color;
+    border-bottom: 1px solid @border-color;
 
     /* prevent multi-line layout of button groups */
     white-space: nowrap;
@@ -114,11 +120,10 @@
 
     /* button groups ======================================================= */
     
-    /*
-     * The class 'hidden' is used to hide button groups.
-     */
     .btn-group {
-        &.hidden {
+        
+        /* The class 'hidden' is used to hide button groups. */
+	    &.hidden {
             display: none;
         }
     }
@@ -126,18 +131,23 @@
     /* buttons ============================================================= */
     
     .btn {
-        /* explicit box shadow 'none', required for focus transition effect */
-        .box-shadow(none);
-        .transition(box-shadow linear 0.15s);
+        
+        /* add focus highlighting (but not for clicked buttons) */
+        .focus-border(@color, @inset-width) {
+            border-color: @color;
+            .box-shadow(0 0 0 1px @color, 0 0 3px @inset-width @color);
+        }
+        &:focus:not(:active) {
+            .focus-border(@focus-color, 1px);
+        
+            &.btn-primary {
+                .focus-border(@active-focus-color, 2px);
+            }
+        }
 
         /* prevent dotted focus rectangle around buttons */
         &:focus, &:active {
             outline: none;
-        }
-
-        /* add focus highlighting */
-        &:focus {
-            .box-shadow(0 0 6px rgba(82, 168, 236, 0.6), 0 0 2px rgba(82, 168, 236, 0.6));
         }
 
         /* class for whitespace between icons, text, and dropdown arrows */
