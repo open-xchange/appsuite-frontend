@@ -82,22 +82,17 @@
 }
 
 
-.io-ox-portal-left {
-    position: absolute;
-    top: 0;
-    right: 50%;
-    max-width: 560px;
-    min-width: 280px;
+.io-ox-portal-tiles {
+    margin-left: 400px;
+    max-width: 840px;
 }
 
-.io-ox-portal-right {
-    position: absolute;
-    top: 0;
-    left: 50%;
+.io-ox-portal-content {
     width: 400px;
     overflow: auto;
-    min-height: 100px;
+    min-height: 95%;
     padding: 0 1em;
+    float: left;
 }
 
 .io-ox-portal-widget-tile {
@@ -115,6 +110,6 @@
 .io-ox-portal-widget-tile .badge {
     float: right;
 }
-.io-ox-portal-right .vgrid-cell.mail {
+.io-ox-portal-content .vgrid-cell.mail {
     height: 4em;
 }
