@@ -57,6 +57,7 @@ define('io.ox/office/main',
                 .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
                 .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
             .end()
+            .addButton('action/table', { label: 'Table', tooltip: 'Insert test table' })
             .addButton('action/debug', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
         } // end of constructor
@@ -83,6 +84,9 @@ define('io.ox/office/main',
                 'action/redo': {
                     enable: function () { return editor.hasRedo(); },
                     set: function (list) { editor.redo(); editor.grabFocus(); }
+                },
+                'action/table': {
+                    set: function () { editor.insertTable(); editor.grabFocus(); }
                 },
                 'action/debug': {
                     get: function () { return app.isDebugMode(); },

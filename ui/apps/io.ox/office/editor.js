@@ -801,9 +801,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     this.grabFocus(true);
                 }
                 if (c === 'T') {
-                    selection = this.getSelection();
-                    selection.adjust();
-                    this.insertTable([selection.startPaM.oxoPosition[0]]);
+                    this.insertTable();
                 }
                 if (c === '1') {
                     dbgoutEvents = !dbgoutEvents;
@@ -1127,7 +1125,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.applyOperation(newOperation, true, true);
         };
 
-        this.insertTable = function (position) {
+        this.insertTable = function () {
+            var selection = this.getSelection();
+            selection.adjust();
+            var position = [selection.startPaM.oxoPosition[0]];
             var newOperation = {name: 'insertTable', start: _.copy(position, true)};
             var undoOperation = { name: 'deleteTable', start: _.copy(position, true) };
             undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
