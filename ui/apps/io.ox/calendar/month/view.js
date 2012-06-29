@@ -70,8 +70,6 @@ define('io.ox/calendar/month/view',
                     return o.id === myself;
                 }) || { type: 0 }).type;
 
-            console.log('Soo', state, myself);
-
             return tmpl.render('appointment', {
                 cid: _.cid(a),
                 full_time: a.full_time,
