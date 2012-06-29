@@ -15,6 +15,8 @@ define('io.ox/office/controller', function () {
 
     'use strict';
 
+    // static functions =======================================================
+
     /**
      * Dummy predicate function returning always true.
      */

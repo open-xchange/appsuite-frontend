@@ -15,16 +15,14 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
 
     'use strict';
 
-    // namespace Controls =====================================================
-
     /**
-     * Generic static helper functions for form controls.
+     * CSS class for active toggle buttons.
      *
-     * @static
+     * @constant
      */
-    function Controls() {
-        throw new Error('do not instantiate');
-    }
+    var ACTIVE_CLASS = 'btn-primary';
+
+    // static functions =======================================================
 
     /**
      * Returns whether the first form control in the passed jQuery collection
@@ -38,9 +36,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      *  True, if the form control is enabled (its 'disabled' attribute is not
      *  set).
      */
-    Controls.isControlEnabled = function (control) {
+    function isControlEnabled(control) {
         return !control.is(':disabled');
-    };
+    }
 
     /**
      * Enables or disables all form controls in the passed jQuery collection by
@@ -54,44 +52,19 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      *  If omitted or set to true, all form controls in the passed collection
      *  will be enabled. Otherwise, all controls will be disabled.
      */
-    Controls.enableControls = function (controls, state) {
+    function enableControls(controls, state) {
         var enabled = (state === true) || (state === undefined);
         if (enabled) {
             controls.removeAttr('disabled');
         } else {
             controls.attr('disabled', 'disabled');
         }
-    };
-
-    // namespace Buttons ======================================================
-
-    /**
-     * Static helper functions for any button elements.
-     *
-     * @static
-     */
-    function Buttons() {
-        throw new Error('do not instantiate');
     }
-
-    /**
-     * CSS class for active toggle buttons.
-     *
-     * @constant
-     */
-    Buttons.ACTIVE_CLASS = 'btn-primary';
-
-    /**
-     * CSS class for toggle buttons in undefined state.
-     *
-     * @constant
-     */
-    Buttons.TRISTATE_CLASS = 'btn-info';
 
     /**
      * Creates and returns a new push button element.
      *
-     * @param {String} [key]
+     * @param {String} key
      *  The key associated to this button element. Will be stored in the
      *  'data-key' attribute of the button.
      *
@@ -102,10 +75,10 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      * @returns {jQuery}
      *  A jQuery object containing the new button element.
      */
-    Buttons.createButton = function (key, options) {
+    function createButton(key, options) {
 
         var // create the DOM button element
-            button = $('<button>', { 'class': 'btn btn-small' });
+            button = $('<button>').addClass('btn');
 
         // add the key as data attribute
         if (_.isString(key)) {
@@ -116,14 +89,14 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         if (_.isObject(options)) {
             // add icon in an i element
             if (_.isString(options.icon)) {
-                button.append($('<i>', { 'class': options.icon }));
+                button.append($('<i>').addClass(options.icon));
             }
             // add text label, separate it from the icon
             if (_.isString(options.label)) {
-                if (button.has('> i')) {
-                    button.append($('<span>', { 'class': 'whitespace' }));
+                if (button.find('> i').length) {
+                    button.append($('<span>').addClass('whitespace'));
                 }
-                button.append($('<span>', { text: options.label }));
+                button.append($('<span>').text(options.label));
             }
             // add tool tip text
             if (_.isString(options.tooltip)) {
@@ -136,7 +109,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         }
 
         return button;
-    };
+    }
 
     /**
      * Returns whether the first button control in the passed jQuery collection
@@ -148,9 +121,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      * @returns {Boolean}
      *  True, if the button is a toggle button.
      */
-    Buttons.isToggleButton = function (button) {
+    function isToggleButton(button) {
         return button.first().attr('data-toggle') === 'toggle';
-    };
+    }
 
     /**
      * Returns whether the first button control in the passed jQuery collection
@@ -162,9 +135,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      * @returns {Boolean}
      *  True, if the button is active.
      */
-    Buttons.isButtonActive = function (button) {
-        return button.first().hasClass(Buttons.ACTIVE_CLASS);
-    };
+    function isButtonActive(button) {
+        return button.first().hasClass(ACTIVE_CLASS);
+    }
 
     /**
      * Activates, deactivates, or toggles the passed button or collection of
@@ -177,9 +150,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      *  If omitted, toggles the state of all buttons. Otherwise, activates or
      *  deactivates all buttons.
      */
-    Buttons.toggleButtons = function (buttons, state) {
-        buttons.toggleClass(Buttons.ACTIVE_CLASS, state).find('> i').toggleClass('icon-white', state);
-    };
+    function toggleButtons(buttons, state) {
+        buttons.toggleClass(ACTIVE_CLASS, state).find('> i').toggleClass('icon-white', state);
+    }
 
     // public class ToolBar ===================================================
 
@@ -192,7 +165,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
     function ToolBar() {
 
         var // create the DOM container element
-            node = $('<div>', { 'class': 'btn-toolbar io-ox-toolbar' }),
+            node = $('<div>').addClass('btn-toolbar io-ox-toolbar'),
 
             // DOM child element measuring the total width of the controls
             sizeSpan = $('<span>').appendTo(node),
@@ -221,7 +194,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          *  A new control container, already inserted into this tool bar.
          */
         function createGroupNode() {
-            var groupNode = $('<div>', { 'class': 'btn-group' }).appendTo(sizeSpan);
+            var groupNode = $('<div>').addClass('btn-group').appendTo(sizeSpan);
             // overwrite the show() and hide() methods
             groupNode.show = function () { return this.removeClass('hidden'); };
             groupNode.hide = function () { return this.addClass('hidden'); };
@@ -283,7 +256,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         function registerActionHandler(control, action, actionHandler) {
             control.on(action, function () {
                 var toolbar, key, value;
-                if (Controls.isControlEnabled(control)) {
+                if (isControlEnabled(control)) {
                     toolbar = getToolBar();
                     key = control.attr('data-key');
                     value = actionHandler.call(toolbar, control);
@@ -348,9 +321,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             // private methods ------------------------------------------------
 
             function clickHandler(button) {
-                if (Buttons.isToggleButton(button)) {
-                    Buttons.toggleButtons(button);
-                    return Buttons.isButtonActive(button);
+                if (isToggleButton(button)) {
+                    toggleButtons(button);
+                    return isButtonActive(button);
                 } // else: push button, return undefined
             }
 
@@ -369,16 +342,16 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             this.addButton = function (key, options) {
 
                 var // create the button
-                    button = Buttons.createButton(key, options).appendTo(groupNode);
+                    button = createButton(key, options).appendTo(groupNode);
 
                 // add handlers
                 registerUpdateHandler(key, function (value) {
-                    if (Buttons.isToggleButton(button)) {
+                    if (isToggleButton(button)) {
                         // Translate undefined (special 'no value' state) or null (special
                         // 'ambiguous' state) to false to prevent toggling the button as
-                        // implemented by the method Buttons.toggleButtons().
+                        // implemented by the static method toggleButtons().
                         // TODO: Support for null (tristate).
-                        Buttons.toggleButtons(button, (_.isUndefined(value) || _.isNull(value)) ? false : value);
+                        toggleButtons(button, (_.isUndefined(value) || _.isNull(value)) ? false : value);
                     }
                 });
                 registerActionHandler(button, 'click', clickHandler);
@@ -430,13 +403,13 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 dropDownOptions = (options && _.isString(options.tooltip)) ? { tooltip: options.tooltip } : undefined,
 
                 // drop-down button
-                dropDownButton = Buttons.createButton(key, dropDownOptions).addClass('dropdown-toggle').attr('data-toggle', 'dropdown').appendTo(dropDownGroupNode),
+                dropDownButton = createButton(key, dropDownOptions).addClass('dropdown-toggle').attr('data-toggle', 'dropdown').appendTo(dropDownGroupNode),
 
                 // drop-down menu area
-                dropDownMenu = $('<table>', { 'class': 'dropdown-menu' }).appendTo(dropDownGroupNode),
+                dropDownMenu = $('<table>').addClass('dropdown-menu').appendTo(dropDownGroupNode),
 
                 // prototype for dummy buttons in unused table cells (must contain something to get its correct height)
-                dummyButton = Buttons.createButton(undefined, { label: ' ' }).attr('enabled', false),
+                dummyButton = createButton(undefined, { label: '\xa0' }),
 
                 // number of buttons inserted into the group
                 buttonCount = 0;
@@ -461,17 +434,17 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                     button = inactive ? $() : buttons.filter('[data-value="' + value + '"]');
 
                 // remove highlighting from all buttons
-                Buttons.toggleButtons(buttons, false);
+                toggleButtons(buttons, false);
 
                 // update the contents of the drop-down button (use first button in group if no button is active)
                 dropDownButton.empty().append(
                     (button.length ? button : buttons).first().contents().clone(),
-                    $('<span>', { 'class': 'whitespace' }),
-                    $('<span>', { 'class': 'caret' })
+                    $('<span>').addClass('whitespace'),
+                    $('<span>').addClass('caret')
                 );
 
                 // highlight active button
-                Buttons.toggleButtons(button, true);
+                toggleButtons(button, true);
             }
 
             /**
@@ -506,7 +479,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              */
             function insertButton(node, value, options) {
                 var // create the new button element
-                    button = Buttons.createButton(key, options).attr('data-value', value).appendTo(node);
+                    button = createButton(key, options).attr('data-value', value).appendTo(node);
                 // add click handler
                 registerActionHandler(button, 'click', clickHandler);
             }
@@ -596,6 +569,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             this.end = getToolBar;
 
             // initialization -------------------------------------------------
+
+            enableControls(dummyButton, false);
 
             // configure according to group type
             switch (type) {
@@ -734,7 +709,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          *  A reference to this tool bar.
          */
         this.enable = function (key, state) {
-            Controls.enableControls(selectControl(key), state);
+            enableControls(selectControl(key), state);
             return this;
         };
 
