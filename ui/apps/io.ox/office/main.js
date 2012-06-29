@@ -57,7 +57,7 @@ define('io.ox/office/main',
                 .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
                 .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
             .end()
-            .addButton('action/table', { label: 'Table', tooltip: 'Insert test table' })
+            .addButton('action/table', { label: 'Table', tooltip: gt('Insert new table') })
             .addButton('action/debug', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
         } // end of constructor
@@ -280,11 +280,11 @@ define('io.ox/office/main',
             // create panes and attach them to the main window
             win.nodes.main.addClass('io-ox-office-main').append(
                 // top pane for tool bars
-                win.nodes.toolPane = $('<div>', { 'class': 'io-ox-office-tool-pane' }).append(toolbar.getNode()),
+                win.nodes.toolPane = $('<div>').addClass('io-ox-office-tool-pane').append(toolbar.getNode()),
                 // main application container
-                win.nodes.appPane = $('<div>', { 'class': 'container' }).append(editor.getNode()),
+                win.nodes.appPane = $('<div>').addClass('container').append(editor.getNode()),
                 // bottom pane for debug output
-                win.nodes.debugPane = $('<div>', { 'class': 'io-ox-office-debug-pane' }).append(debugTable)
+                win.nodes.debugPane = $('<div>').addClass('io-ox-office-debug-pane').append(debugTable)
             );
             updateDebugMode();
 
@@ -375,7 +375,7 @@ define('io.ox/office/main',
 
                 // check all operation objects in the array
                 _(response.data.operations).each(function (operation) {
-                    if (!_.isObject(operation) || !('name' in operation)) {
+                    if (!_.isObject(operation) || !_.isString(operation.name)) {
                         throw 'Invalid element in operations list.';
                     }
                 });
@@ -533,6 +533,7 @@ define('io.ox/office/main',
 
         app.failRestore = function (point) {
             initializeApp(point);
+            updateDebugMode();
             return app.load();
         };
 
@@ -577,7 +578,7 @@ define('io.ox/office/main',
             var // class names for the editor
                 classes = 'io-ox-office-editor user-select-text ' + textMode,
                 // the editor root node, TODO: language support (set undefined to prevent spell checking)
-                node = $('<div>', { 'class': classes, lang: 'undefined', contenteditable: true });
+                node = $('<div>', { lang: 'undefined', contenteditable: true }).addClass(classes);
             editors[textMode] = new Editor(node, textMode);
         });
 
@@ -592,7 +593,7 @@ define('io.ox/office/main',
 
         // operations output console
         editors.output = {
-            node: $('<div>', { 'class': 'io-ox-office-editor user-select-text output' }),
+            node: $('<div>').addClass('io-ox-office-editor user-select-text output'),
             on: function () { return this; },
             applyOperation: function (operation) {
                 this.node.append($('<p>').text(JSON.stringify(operation)));
