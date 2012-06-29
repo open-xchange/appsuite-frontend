@@ -44,48 +44,48 @@ define('plugins/portal/facebook/register',
     };
 
     ext.point('io.ox/portal/widget').extend({
-
         id: 'facebook',
         index: 150,
-        tileHeight: 2,
-
-        loadTile: function () {
-            return proxy.request({
+        title: 'Facebook',
+        icon: 'apps/plugins/portal/facebook/f_logo.png',
+        background: '#3B5998',
+        color: 'bright',
+        preview: function () {
+            var deferred = $.Deferred();
+            
+            proxy.request({
                 api: 'facebook',
                 url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
                     newsfeed: "SELECT actor_id, message, description , created_time FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0 LIMIT 1",
                     profiles: "SELECT id, name FROM profile WHERE id IN (SELECT actor_id FROM #newsfeed)"
                 })
-            }).pipe(JSON.parse);
-        },
-        drawTile: function (resultsets) {
-            var wall = resultsets.data[0].fql_result_set;
-            var profiles = resultsets.data[1].fql_result_set;
-
-            $(this)
-                .append($('<img>').attr({src: 'apps/plugins/portal/facebook/f_logo.png', alt: '', width: '50px', height: 'auto'}).css({'float': 'left'}))
-                .append($('<h1>').text('Facebook').css({color: '#fff'}))
-                .append($('<span>').html('&nbsp;').css({clear: 'both'}))
-                .css({background: '#3B5998', padding: '10px', color: '#fff'});
-
-            if (!wall) {
-                this.remove();
-                return $.Deferred().resolve();
-            }
-            if (wall.length === 0) {
-                $(this).append(
-                    $('<div>').text(gt('No wall posts yet.')));
-            } else {
-                var post = wall[0];
-                var message = post.message || post.description || '';
-                if (message.length > 150) {
-                    message = message.substring(0, 150) + '...';
+            }).pipe(JSON.parse).done(function (resultsets) {
+                var wall = resultsets.data[0].fql_result_set;
+                var profiles = resultsets.data[1].fql_result_set;
+                var $previewNode = $("<div />");
+               
+                if (!wall) {
+                    return $.Deferred().resolve();
                 }
-                $(this).append(
-                    $('<div>').text(gt('Latest wall post:')),
-                    $('<div>').append($('<b>').text(getProfile(profiles, post.actor_id).name + ':')),
-                    $('<div>').text(message));
-            }
+                if (wall.length === 0) {
+                    $previewNode.append(
+                        $('<div>').text(gt('No wall posts yet.')));
+                } else {
+                    var post = wall[0];
+                    var message = post.message || post.description || '';
+                    if (message.length > 150) {
+                        message = message.substring(0, 150) + '...';
+                    }
+                    $previewNode.append(
+                        $('<div>').text(gt('Latest wall post:')),
+                        $('<div>').append($('<b>').text(getProfile(profiles, post.actor_id).name + ':')),
+                        $('<div>').text(message));
+                }
+                
+                deferred.resolve($previewNode);
+            });
+            
+            return deferred;
         },
         load: function () {
             return proxy.request({

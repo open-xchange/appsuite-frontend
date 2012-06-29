@@ -98,8 +98,6 @@ define('plugins/portal/mail/register',
 
                 $node.append(
                     $('<h1>').text(gt("Mail")),
-                    $('<span class="unread-mail-count">').text(gt('Unread:')),
-                    $('<span class="badge badge-info unread-mail-count">').text(folder.unread),
                     $('<div class="io-ox-clear">').append(
                         $('<div class="">').append($("<b>").text(subject), $('<br>'), $("<span>").text(mailtext))
                     )

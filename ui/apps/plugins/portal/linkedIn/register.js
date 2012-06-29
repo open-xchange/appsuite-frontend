@@ -108,8 +108,7 @@ define("plugins/portal/linkedin/register",
             
             
             $(this).append(
-                $('<img>').attr({src: 'apps/plugins/portal/linkedIn/linkedin175.jpg', alt: 'LinkedIn', width: '175px', height: 'auto', 'class': 'linkedin-logo'}),
-                $('<div class="linkedin-counter">').append(gt("Messages:")).append($('<span class="badge bade-info">').text(values.length))
+                $('<img>').attr({src: 'apps/plugins/portal/linkedIn/linkedin175.jpg', alt: 'LinkedIn', width: '175px', height: 'auto', 'class': 'linkedin-logo'})
             ).addClass('io-ox-portal-tile-linkedin');
             
             if (message) {
