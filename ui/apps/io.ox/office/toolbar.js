@@ -164,7 +164,10 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      */
     function ToolBar() {
 
-        var // create the DOM container element
+        var // reference to this tool bar
+            toolbar = this,
+
+            // create the DOM container element
             node = $('<div>').addClass('btn-toolbar io-ox-toolbar'),
 
             // DOM child element measuring the total width of the controls
@@ -173,11 +176,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             // control update handlers, mapped by key
             updateHandlers = {},
 
-            // objects supporting flexible sizing
-            resizeables = [],
-
-            // helper function returning a reference to this tool bar
-            getToolBar = _.bind(function () { return this; }, this);
+            // resize handler objects supporting flexible tool bar sizing
+            resizeHandlers = [];
 
         // private methods ----------------------------------------------------
 
@@ -218,6 +218,27 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         }
 
         /**
+         * Listens to size events of the browser window, and tries to expand or
+         * shrink resizeable button groups according to the available space in
+         * the tool bar.
+         */
+        function updateGroupSizes() {
+
+            var // available space (width() returns content width without padding)
+                width = node.width();
+
+            // try to enlarge one or more controls, until tool bar overflows
+            _(resizeHandlers).each(function (resizeHandler) {
+                if (sizeSpan.width() < width) { resizeHandler.call(toolbar, true); }
+            });
+
+            // try to shrink one or more controls, until tool bar does not overflow
+            _(resizeHandlers).each(function (resizeHandler) {
+                if (sizeSpan.width() > width) { resizeHandler.call(toolbar, false); }
+            });
+        }
+
+        /**
          * Registers the passed update handler for a specific control. Update
          * handlers will be executed, when the tool bar receives 'update'
          * events.
@@ -255,9 +276,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          */
         function registerActionHandler(control, action, actionHandler) {
             control.on(action, function () {
-                var toolbar, key, value;
+                var key, value;
                 if (isControlEnabled(control)) {
-                    toolbar = getToolBar();
                     key = control.attr('data-key');
                     value = actionHandler.call(toolbar, control);
                     toolbar.trigger('change', key, value);
@@ -266,44 +286,22 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         }
 
         /**
-         * Listens to size events of the browser window, and tries to expand or
-         * shrink resizeable controls according to the available space in the
-         * tool bar.
-         */
-        function resizeHandler() {
-
-            var // available space (width() returns content width without padding)
-                width = node.width();
-
-            // try to enlarge one or more controls, until tool bar overflows
-            _(resizeables).each(function (resizeable) {
-                if (sizeSpan.width() < width) { resizeable.enlarge(); }
-            });
-
-            // try to shrink one or more controls, until tool bar does not overflow
-            _(resizeables).each(function (resizeable) {
-                if (sizeSpan.width() > width) { resizeable.shrink(); }
-            });
-        }
-
-        /**
-         * Registers a resizeable button group object.
+         * Registers a resize handler function provided by a button group
+         * object.
          *
-         * @param {Object} resizeable
-         *  The resizeable button group object. Must implement the following
-         *  methods:
-         *  @param {Function} resizeable.shrink
-         *      Decrease the width of the group, if possible.
-         *  @param {Function} resizeable.enlarge
-         *      Increase the width of the group, if possible.
+         * @param {Function} resizeHandler
+         *  The resize handler. Receives a boolean parameter 'enlarge'
+         *  specifying whether to try to increase the width of the button group
+         *  (true), or to try to decrease the width of the button group
+         *  (false).
          */
-        function registerResizeable(resizeable) {
+        function registerResizeHandler(resizeHandler) {
             // add window resize listener on first call
-            if (!resizeables.length) {
-                $(window).on('resize', resizeHandler);
+            if (!resizeHandlers.length) {
+                $(window).on('resize', updateGroupSizes);
             }
-            // store the resizeable object
-            resizeables.push(resizeable);
+            // store the resize handler object
+            resizeHandlers.push(resizeHandler);
         }
 
         // class ButtonGroupProxy ---------------------------------------------
@@ -363,7 +361,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              * Returns a reference to the tool bar containing this button
              * group. Useful for method chaining.
              */
-            this.end = getToolBar;
+            this.end = function () { return toolbar; };
 
         } // class ButtonGroupProxy
 
@@ -566,7 +564,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              * Returns a reference to the tool bar containing this button
              * group. Useful for method chaining.
              */
-            this.end = getToolBar;
+            this.end = function () { return toolbar; };
 
             // initialization -------------------------------------------------
 
@@ -579,15 +577,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 break;
 
             case 'auto':
-                registerResizeable({
-                    enlarge: function () {
-                        dropDownGroupNode.hide();
-                        buttonGroupNode.show();
-                    },
-                    shrink: function () {
-                        buttonGroupNode.hide();
-                        dropDownGroupNode.show();
-                    }
+                registerResizeHandler(function (enlarge) {
+                    (enlarge ? dropDownGroupNode : buttonGroupNode).hide();
+                    (enlarge ? buttonGroupNode : dropDownGroupNode).show();
                 });
                 break;
 
@@ -752,9 +744,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          */
         this.destroy = function () {
             this.events.destroy();
-            $(window).off('resize', resizeHandler);
+            $(window).off('resize', updateGroupSizes);
             node.remove();
-            node = getToolBar = null;
+            toolbar = node = sizeSpan = updateHandlers = resizeHandlers = null;
         };
 
         // initialization -----------------------------------------------------
