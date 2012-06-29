@@ -119,7 +119,7 @@ function (ext, config, userAPI, date, tasks, gt) {
                         .busy();
 
                     $node.on('click', makeClickHandler(extension));
-
+                    
                     if (!extension.loadTile) {
                         extension.loadTile = function () {
                             return $.Deferred().resolve();
@@ -128,7 +128,30 @@ function (ext, config, userAPI, date, tasks, gt) {
 
                     if (!extension.drawTile) {
                         extension.drawTile = function () {
-                            this.append($("<div>").text(extension.id));
+                            $(this).append('<img class="tile-image"/><h1 class="tile-heading"/>');
+                            var $node = $(this);
+                            extension.asyncMetadata("title").done(function (title) {
+                                $node.find(".tile-heading").text(title);
+                            });
+                            extension.asyncMetadata("icon").done(function (icon) {
+                                if (icon) {
+                                    $node.find(".tile-image").attr("src", icon);
+                                } else {
+                                    $node.find(".tile-image").remove();
+                                }
+                            });
+                            extension.asyncMetadata("preview").done(function (preview) {
+                                if (preview) {
+                                    $node.append(preview);
+                                }
+                            });
+                            extension.asyncMetadata("background").done(function (bgColor) {
+                                $node.css("background", bgColor);
+                            });
+                            extension.asyncMetadata("color").done(function (color) {
+                                $node.addClass("tile-" + color);
+                            });
+                            
                             return $.Deferred().resolve();
                         };
                     }

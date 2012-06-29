@@ -15,44 +15,50 @@ define("plugins/portal/appointments/register",
     ["io.ox/core/extensions", "io.ox/core/date", "gettext!plugins/portal/appointments"], function (ext, date, gt) {
 
     "use strict";
+    var loadTile = function () {
+        var loadingTile = new $.Deferred();
+        require(["io.ox/calendar/api"], function (api) {
+            api.getAll()
+                .done(function (ids) {
+                    api.getList(ids.slice(0, 10))
+                        .done(loadingTile.resolve)
+                        .fail(loadingTile.reject);
+                })
+                .fail(loadingTile.reject); // This should be easier
+        });
+        return loadingTile;
+    };
+    var drawTile = function (appointments, $node) {
+        var startSpan = new date.Local();
+        var endSpan = startSpan + (24 * 60 * 60 * 1000);
+
+        var nextAppointments = _(appointments).filter(function (app) {
+            return app.start_date > endSpan || app.end_date < startSpan;
+        });
+
+        var today = new date.Local().format(date.DATE);
+
+        if (appointments.length > 0) {
+            var nextApp = appointments[0];
+            var deltaT = 'in 2 days';//startSpan.formatInterval(new date.Local(), date.MINUTE);
+            $('<div>').html(gt("Next") + ": <b>" + nextApp.title + '</b> (' + deltaT + ')').appendTo($node);
+        }
+    };
 
     var appointmentPortal = {
         id: "appointments",
         index: 100,
         tileWidth: 1,
         tileHeight: 2,
-        loadTile: function () {
-            var loadingTile = new $.Deferred();
-            require(["io.ox/calendar/api"], function (api) {
-                api.getAll()
-                    .done(function (ids) {
-                        api.getList(ids.slice(0, 10))
-                            .done(loadingTile.resolve)
-                            .fail(loadingTile.reject);
-                    })
-                    .fail(loadingTile.reject); // This should be easier
+        title: gt('Appointments'),
+        preview: function () {
+            var deferred = $.Deferred();
+            loadTile().done(function (appointments) {
+                var $node = $('<div>');
+                drawTile(appointments, $node);
+                deferred.resolve($node);
             });
-            return loadingTile;
-        },
-        drawTile: function (appointments) {
-            var startSpan = new date.Local();
-            var endSpan = startSpan + (24 * 60 * 60 * 1000);
-
-            var nextAppointments = _(appointments).filter(function (app) {
-                console.log(app.start_date, endSpan, app.end_date, startSpan, app);
-                return app.start_date > endSpan || app.end_date < startSpan;
-            });
-
-            var today = new date.Local().format(date.DATE);
-            $(this).append(
-                $('<h1>').text(gt('Appointments'))
-            );
-            if (appointments.length > 0) {
-                var nextApp = appointments[0];
-                var deltaT = 'in 2 days';//startSpan.formatInterval(new date.Local(), date.MINUTE);
-                $('<div>').html("Next: <b>" + nextApp.title + '</b> (' + deltaT + ')').appendTo(this);
-            }
-            return $.when();
+            return deferred;
         },
         load: function () {
             var loading = new $.Deferred();

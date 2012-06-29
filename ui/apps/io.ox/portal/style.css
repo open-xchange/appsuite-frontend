@@ -95,3 +95,14 @@
 .io-ox-portal-tile-active {
     border-left: 4px solid #B94A48;
 }
+.io-ox-portal .tile-image {
+    width: 80px;
+    height: auto;
+    float: right;
+}
+.io-ox-portal .tile-bright, .io-ox-portal .tile-bright *{
+    color: white;
+}    
+.io-ox-portal .tile-dark, .io-ox-portal .tile-dark * {
+    color: #333;
+}
