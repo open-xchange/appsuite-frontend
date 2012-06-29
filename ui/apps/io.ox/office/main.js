@@ -439,9 +439,16 @@ define('io.ox/office/main',
          */
         app.save = function () {
             var def = $.Deferred();
+
+            // do not try to save, if file descriptor is missing
+            if (!file) {
+                editor.grabFocus();
+                return def.reject();
+            }
+
             win.busy();
             var allOperations = editor.getOperations();
-            var dataObject = {'operations': JSON.stringify(allOperations)};
+            var dataObject = { operations: JSON.stringify(allOperations) };
 
             $.ajax({
                 type: 'POST',
@@ -465,6 +472,7 @@ define('io.ox/office/main',
             })
             .fail(function (response) {
                 showAjaxError(response);
+                editor.grabFocus();
                 win.idle();
                 def.reject();
             });
@@ -550,11 +558,16 @@ define('io.ox/office/main',
         };
 
         // build debug table for plain-text editor and operations output console
-        debugPane.append($('<table>')
-            .append('<colgroup><col width="50%"><col width="50%"></colgroup>')
-            .append($('<tr>')
-                .append($('<td>').append(editors[Editor.TextMode.PLAIN].getNode()))
-                .append($('<td>').append(editors.output.node))));
+        debugPane.append($('<table>').append(
+            $('<colgroup>').append(
+                $('<col>').attr('width', '50%'),
+                $('<col>').attr('width', '50%')
+            ),
+            $('<tr>').append(
+                $('<td>').append(editors[Editor.TextMode.PLAIN].getNode()),
+                $('<td>').append(editors.output.node)
+            )
+        ));
 
         // insert elements into panes
         toolPane.append(toolbar.getNode());
