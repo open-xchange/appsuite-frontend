@@ -155,15 +155,6 @@ define('io.ox/office/main',
             // connection to infostore file
             file = null,
 
-            // top pane for tool bars
-            toolPane = $('<div>').addClass('io-ox-office-tool-pane'),
-
-            // main application container
-            appPane = $('<div>').addClass('container'),
-
-            // bottom pane for debug output
-            debugPane = $('<div>').addClass('io-ox-office-debug-pane'),
-
             // controller as single connection point between editors and view elements
             controller = new EditorController(app),
 
@@ -176,14 +167,17 @@ define('io.ox/office/main',
             // primary editor used in save, quit, etc.
             editor = null,
 
-            debugMode = null;
+            // table element containing the debug mode elements
+            debugTable = null,
+
+            // if true, debug mode is active (second editor and operations output console)
+            debugMode = false;
 
         // private functions --------------------------------------------------
 
         function initializeApp(options) {
             file = _.isObject(options) ? options.file : null;
-
-            app.setDebugMode(options && (options.debugMode === true));
+            debugMode = _.isObject(options) && (options.debugMode === true);
         }
 
         /**
@@ -211,8 +205,9 @@ define('io.ox/office/main',
          *  The title of the error message. Defaults to 'Error'.
          */
         function showError(message, title) {
-            appPane.find('.alert').remove();
-            appPane.prepend($.alert(title || gt('Error'), message));
+            win.nodes.appPane
+                .find('.alert').remove().end()
+                .prepend($.alert(title || gt('Error'), message));
         }
 
         /**
@@ -247,12 +242,22 @@ define('io.ox/office/main',
         }
 
         /**
+         * Updates the view according to the current state of the debug mode.
+         */
+        function updateDebugMode() {
+            editor.getNode().toggleClass('debug-highlight', debugMode);
+            win.nodes.debugPane[debugMode ? 'show' : 'hide']();
+            // resize editor pane
+            windowResizeHandler();
+        }
+
+        /**
          * Recalculates the size of the editor frame according to the current
          * view port size.
          */
         function windowResizeHandler() {
-            var debugHeight = debugMode ? debugPane.outerHeight() : 0;
-            appPane.height(window.innerHeight - appPane.offset().top - debugHeight);
+            var debugHeight = debugMode ? win.nodes.debugPane.outerHeight() : 0;
+            win.nodes.appPane.height(window.innerHeight - win.nodes.appPane.offset().top - debugHeight);
         }
 
         /**
@@ -267,13 +272,21 @@ define('io.ox/office/main',
                 search: false,
                 toolbar: true
             });
+            app.setWindow(win);
 
             // do not detach when hiding to keep edit selection alive
             win.detachable = false;
 
-            // initialize global application structure
-            app.setWindow(win);
-            win.nodes.main.addClass('io-ox-office-main').append(toolPane, appPane, debugPane);
+            // create panes and attach them to the main window
+            win.nodes.main.addClass('io-ox-office-main').append(
+                // top pane for tool bars
+                win.nodes.toolPane = $('<div>', { 'class': 'io-ox-office-tool-pane' }).append(toolbar.getNode()),
+                // main application container
+                win.nodes.appPane = $('<div>', { 'class': 'container' }).append(editor.getNode()),
+                // bottom pane for debug output
+                win.nodes.debugPane = $('<div>', { 'class': 'io-ox-office-debug-pane' }).append(debugTable)
+            );
+            updateDebugMode();
 
             // update editor 'div' on window size change
             $(window).resize(windowResizeHandler);
@@ -296,8 +309,13 @@ define('io.ox/office/main',
         function quitHandler() {
             var def = $.Deferred().done(app.destroy);
 
+            // callback function for the 'Save' button
             function saveChanges() {
-                app.save().pipe(function () { def.resolve(); }, function () { def.reject(); });
+                // save and resolve/reject the own deferred according to the deferred returned by save()
+                app.save().pipe(
+                    function () { def.resolve(); },
+                    function () { def.reject(); }
+                );
             }
 
             if (editor && editor.isModified()) {
@@ -319,38 +337,63 @@ define('io.ox/office/main',
             return def;
         }
 
-        function createOperationsList(result) {
+        /**
+         * Extracts the operations list from the passed response object of an
+         * AJAX import request.
+         *
+         * @param {Object} response
+         *  The response object of the AJAX request.
+         *
+         * @return {jQuery.Deferred}
+         *  A deferred indicating the success or failure of the operations
+         *  import. On success, passes an array of operations to the done
+         *  handler. On failure, passes an exception object or a string to the
+         *  fail handler.
+         */
+        function importOperations(response) {
 
-            var operations = [],
-                value = null;
+            var // the deferred return value
+                def = $.Deferred();
 
+            // big try/catch, exception handler will reject the deferred with the exception
             try {
-                value = JSON.parse(result.data).operations;
-            } catch (e) {
-                window.console.warn("Failed to parse JSON data. Trying second parse process.");
-            }
 
-            if (!value) {
-                try {
-                    value = result.data.operations; // code for Dummy Operations.
-                } catch (e) {
-                    window.console.warn("Failed to parse JSON data. No JSON data could be loaded.");
+                // check that the passed AJAX result is an object
+                if (!_.isObject(response)) {
+                    throw 'Missing AJAX result.';
                 }
-            }
 
-            if (_(value).isArray()) {
-                _(value).each(function (json, j) {
-                    if (_(json).isObject()) {
-                        operations.push(json);  // the value has already the correct object notation, if it was sent as JSONObject from Java code
+                // convert JSON result string to object (may throw)
+                if (_.isString(response.data)) {
+                    response.data = JSON.parse(response.data);
+                }
+
+                // check that a result object exists and contains an operations array
+                if (!_.isObject(response.data) || !_.isArray(response.data.operations)) {
+                    throw 'Missing AJAX result data.';
+                }
+
+                // check all operation objects in the array
+                _(response.data.operations).each(function (operation) {
+                    if (!_.isObject(operation) || !('name' in operation)) {
+                        throw 'Invalid element in operations list.';
                     }
                 });
+
+            } catch (ex) {
+                // reject deferred on error
+                return def.reject(ex);
             }
 
-            return operations;
+            // resolve the deferred with the operations list
+            return def.resolve(response.data.operations);
         }
 
         // methods ============================================================
 
+        /**
+         * Returns the infostore file descriptor of the edited document.
+         */
         app.getFileDescriptor = function () {
             return file;
         };
@@ -400,8 +443,9 @@ define('io.ox/office/main',
             $(window).resize();
             updateTitles();
 
-            // initialize the deferred return
+            // initialize the deferred to be returned
             def = $.Deferred().always(function () {
+                win.idle();
                 editor.setModified(false);
                 editor.grabFocus(true);
             });
@@ -413,22 +457,20 @@ define('io.ox/office/main',
                 dataType: 'json'
             })
             .done(function (response) {
-                try {
-                    var operations = createOperationsList(response);
+                importOperations(response)
+                .done(function (operations) {
                     editor.applyOperations(operations, false, true);
-                    win.idle();
                     def.resolve();
-                } catch (ex) {
+                })
+                .fail(function (ex) {
                     showExceptionError(ex);
                     editor.initDocument();
-                    win.idle();
                     def.reject();
-                }
+                });
             })
             .fail(function (response) {
                 showAjaxError(response);
                 editor.initDocument();
-                win.idle();
                 def.reject();
             });
 
@@ -442,11 +484,15 @@ define('io.ox/office/main',
          *  A deferred that reflects the result of the save operation.
          */
         app.save = function () {
-            var def = $.Deferred();
+
+            var // initialize the deferred to be returned
+                def = $.Deferred().always(function () {
+                    win.idle();
+                    editor.grabFocus();
+                });
 
             // do not try to save, if file descriptor is missing
             if (!file) {
-                editor.grabFocus();
                 return def.reject();
             }
 
@@ -470,14 +516,10 @@ define('io.ox/office/main',
                 filesApi.caches.versions.clear();
                 filesApi.trigger('refresh.all');
                 editor.setModified(false);
-                editor.grabFocus();
-                win.idle();
                 def.resolve();
             })
             .fail(function (response) {
                 showAjaxError(response);
-                editor.grabFocus();
-                win.idle();
                 def.reject();
             });
 
@@ -511,10 +553,7 @@ define('io.ox/office/main',
         app.setDebugMode = function (state) {
             if (debugMode !== state) {
                 debugMode = state;
-                editor.getNode().toggleClass('debug-highlight', state);
-                if (state) { debugPane.show(); } else { debugPane.hide(); }
-                // resize editor pane
-                windowResizeHandler();
+                updateDebugMode();
             }
             return this;
         };
@@ -528,17 +567,17 @@ define('io.ox/office/main',
             $(window).off('resize', windowResizeHandler);
             controller.destroy();
             toolbar.destroy();
-            app = win = toolbar = toolPane = appPane = debugPane = controller = editors = editor = null;
+            app = win = toolbar = controller = editors = editor = null;
         };
 
         // initialization -----------------------------------------------------
 
         // create the rich-text and plain-text editor
         _(Editor.TextMode).each(function (textMode) {
-            var node = $('<div>')
-                    .addClass('io-ox-office-editor user-select-text ' + textMode)
-                    .attr('lang', 'undefined')  // TODO
-                    .attr('contenteditable', true);
+            var // class names for the editor
+                classes = 'io-ox-office-editor user-select-text ' + textMode,
+                // the editor root node, TODO: language support (set undefined to prevent spell checking)
+                node = $('<div>', { 'class': classes, lang: 'undefined', contenteditable: true });
             editors[textMode] = new Editor(node, textMode);
         });
 
@@ -553,7 +592,7 @@ define('io.ox/office/main',
 
         // operations output console
         editors.output = {
-            node: $('<div>').addClass('io-ox-office-editor user-select-text output'),
+            node: $('<div>', { 'class': 'io-ox-office-editor user-select-text output' }),
             on: function () { return this; },
             applyOperation: function (operation) {
                 this.node.append($('<p>').text(JSON.stringify(operation)));
@@ -562,20 +601,16 @@ define('io.ox/office/main',
         };
 
         // build debug table for plain-text editor and operations output console
-        debugPane.append($('<table>').append(
+        debugTable = $('<table>').append(
             $('<colgroup>').append(
-                $('<col>').attr('width', '50%'),
-                $('<col>').attr('width', '50%')
+                $('<col>', { width: '50%' }),
+                $('<col>', { width: '50%' })
             ),
             $('<tr>').append(
                 $('<td>').append(editors[Editor.TextMode.PLAIN].getNode()),
                 $('<td>').append(editors.output.node)
             )
-        ));
-
-        // insert elements into panes
-        toolPane.append(toolbar.getNode());
-        appPane.append(editor.getNode());
+        );
 
         // listen to operations and deliver them to editors and output console
         _(editors).each(function (editor) {

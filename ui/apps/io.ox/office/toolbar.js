@@ -105,7 +105,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
     Buttons.createButton = function (key, options) {
 
         var // create the DOM button element
-            button = $('<button>').addClass('btn btn-small');
+            button = $('<button>', { 'class': 'btn btn-small' });
 
         // add the key as data attribute
         if (_.isString(key)) {
@@ -116,14 +116,14 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         if (_.isObject(options)) {
             // add icon in an i element
             if (_.isString(options.icon)) {
-                button.append($('<i>').addClass(options.icon));
+                button.append($('<i>', { 'class': options.icon }));
             }
             // add text label, separate it from the icon
             if (_.isString(options.label)) {
                 if (button.has('> i')) {
-                    button.append($('<span>').addClass('whitespace'));
+                    button.append($('<span>', { 'class': 'whitespace' }));
                 }
-                button.append($('<span>').text(options.label));
+                button.append($('<span>', { text: options.label }));
             }
             // add tool tip text
             if (_.isString(options.tooltip)) {
@@ -192,7 +192,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
     function ToolBar() {
 
         var // create the DOM container element
-            node = $('<div>').addClass('btn-toolbar io-ox-toolbar'),
+            node = $('<div>', { 'class': 'btn-toolbar io-ox-toolbar' }),
 
             // DOM child element measuring the total width of the controls
             sizeSpan = $('<span>').appendTo(node),
@@ -221,7 +221,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
          *  A new control container, already inserted into this tool bar.
          */
         function createGroupNode() {
-            var groupNode = $('<div>').addClass('btn-group').appendTo(sizeSpan);
+            var groupNode = $('<div>', { 'class': 'btn-group' }).appendTo(sizeSpan);
             // overwrite the show() and hide() methods
             groupNode.show = function () { return this.removeClass('hidden'); };
             groupNode.hide = function () { return this.addClass('hidden'); };
@@ -433,7 +433,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 dropDownButton = Buttons.createButton(key, dropDownOptions).addClass('dropdown-toggle').attr('data-toggle', 'dropdown').appendTo(dropDownGroupNode),
 
                 // drop-down menu area
-                dropDownMenu = $('<table>').addClass('dropdown-menu').appendTo(dropDownGroupNode),
+                dropDownMenu = $('<table>', { 'class': 'dropdown-menu' }).appendTo(dropDownGroupNode),
 
                 // prototype for dummy buttons in unused table cells (must contain something to get its correct height)
                 dummyButton = Buttons.createButton(undefined, { label: ' ' }).attr('enabled', false),
@@ -466,8 +466,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 // update the contents of the drop-down button (use first button in group if no button is active)
                 dropDownButton.empty().append(
                     (button.length ? button : buttons).first().contents().clone(),
-                    $('<span>').addClass('whitespace'),
-                    $('<span>').addClass('caret'));
+                    $('<span>', { 'class': 'whitespace' }),
+                    $('<span>', { 'class': 'caret' })
+                );
 
                 // highlight active button
                 Buttons.toggleButtons(button, true);
