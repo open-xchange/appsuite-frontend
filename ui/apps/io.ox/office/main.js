@@ -151,15 +151,6 @@ define('io.ox/office/main',
             // connection to infostore file
             file = null,
 
-            // top pane for tool bars
-            toolPane = $('<div>').addClass('io-ox-office-tool-pane'),
-
-            // main application container
-            appPane = $('<div>').addClass('container'),
-
-            // bottom pane for debug output
-            debugPane = $('<div>').addClass('io-ox-office-debug-pane'),
-
             // controller as single connection point between editors and view elements
             controller = new EditorController(app),
 
@@ -207,8 +198,9 @@ define('io.ox/office/main',
          *  The title of the error message. Defaults to 'Error'.
          */
         function showError(message, title) {
-            appPane.find('.alert').remove();
-            appPane.prepend($.alert(title || gt('Error'), message));
+            win.nodes.appPane
+                .find('.alert').remove().end()
+                .prepend($.alert(title || gt('Error'), message));
         }
 
         /**
@@ -247,8 +239,8 @@ define('io.ox/office/main',
          * view port size.
          */
         function windowResizeHandler() {
-            var debugHeight = debugMode ? debugPane.outerHeight() : 0;
-            appPane.height(window.innerHeight - appPane.offset().top - debugHeight);
+            var debugHeight = debugMode ? win.nodes.debugPane.outerHeight() : 0;
+            win.nodes.appPane.height(window.innerHeight - win.nodes.appPane.offset().top - debugHeight);
         }
 
         /**
@@ -263,13 +255,20 @@ define('io.ox/office/main',
                 search: false,
                 toolbar: true
             });
+            app.setWindow(win);
 
             // do not detach when hiding to keep edit selection alive
             win.detachable = false;
 
-            // initialize global application structure
-            app.setWindow(win);
-            win.nodes.main.addClass('io-ox-office-main').append(toolPane, appPane, debugPane);
+            // create panes and attach them to the main window
+            win.nodes.main.addClass('io-ox-office-main').append(
+                // top pane for tool bars
+                win.nodes.toolPane = $('<div>').addClass('io-ox-office-tool-pane'),
+                // main application container
+                win.nodes.appPane = $('<div>').addClass('container'),
+                // bottom pane for debug output
+                win.nodes.debugPane = $('<div>').addClass('io-ox-office-debug-pane')
+            );
 
             // update editor 'div' on window size change
             $(window).resize(windowResizeHandler);
@@ -508,7 +507,7 @@ define('io.ox/office/main',
             if (debugMode !== state) {
                 debugMode = state;
                 editor.getNode().toggleClass('debug-highlight', state);
-                if (state) { debugPane.show(); } else { debugPane.hide(); }
+                win.nodes.debugPane[state ? 'show' : 'hide']();
                 // resize editor pane
                 windowResizeHandler();
             }
@@ -524,7 +523,7 @@ define('io.ox/office/main',
             $(window).off('resize', windowResizeHandler);
             controller.destroy();
             toolbar.destroy();
-            app = win = toolbar = toolPane = appPane = debugPane = controller = editors = editor = null;
+            app = win = toolbar = controller = editors = editor = null;
         };
 
         // initialization -----------------------------------------------------
@@ -558,7 +557,7 @@ define('io.ox/office/main',
         };
 
         // build debug table for plain-text editor and operations output console
-        debugPane.append($('<table>').append(
+        win.nodes.debugPane.append($('<table>').append(
             $('<colgroup>').append(
                 $('<col>').attr('width', '50%'),
                 $('<col>').attr('width', '50%')
@@ -570,8 +569,8 @@ define('io.ox/office/main',
         ));
 
         // insert elements into panes
-        toolPane.append(toolbar.getNode());
-        appPane.append(editor.getNode());
+        win.nodes.toolPane.append(toolbar.getNode());
+        win.nodes.appPane.append(editor.getNode());
 
         // listen to operations and deliver them to editors and output console
         _(editors).each(function (editor) {
