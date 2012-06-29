@@ -15,9 +15,10 @@ define("plugins/portal/rss/register",
     ["io.ox/core/extensions"], function (ext, api) {
 
     "use strict";
-
+    
     var feeds = [];
-
+    
+    /*
     // SPIEGEL Online
     feeds.push({
         id: "rss-spiegel",
@@ -54,7 +55,8 @@ define("plugins/portal/rss/register",
 //        url: "http://www.handelsblatt.com/contentexport/feed/schlagzeilen",
 //        index: 600
 //    });
-
+    */
+    
     _(feeds).each(function (extension) {
 
         ext.point("io.ox/portal/widget").extend({

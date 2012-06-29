@@ -106,6 +106,7 @@ define("plugins/portal/linkedin/register",
         drawTile: function (values) {
             var message = values[0];
             
+            
             $(this).append(
                 $('<img>').attr({src: 'apps/plugins/portal/linkedIn/linkedin175.jpg', alt: 'LinkedIn', width: '175px', height: 'auto', 'class': 'linkedin-logo'}),
                 $('<div class="linkedin-counter">').append(gt("Messages:")).append($('<span class="badge bade-info">').text(values.length))

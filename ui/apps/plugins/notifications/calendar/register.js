@@ -31,14 +31,13 @@ define('plugins/notifications/calendar/register',
         _modelBinder: undefined,
         initialize: function () {
             this._modelBinder = new Backbone.ModelBinder();
-
         },
         render: function () {
             this.$el.empty().append(tpl.render('plugins/notifications/calendar/inviteitem', {}));
             var bindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property');
+            bindings.cid = { selector: "[data-cid]", elAttribute: 'data-cid' };
             this._modelBinder.bind(this.model, this.el, bindings);
             return this;
-
         },
         onClickItem: function (e) {
             var obj = this.model.get('data'),
@@ -107,6 +106,7 @@ define('plugins/notifications/calendar/register',
                 notifications.collection.reset([]);
                 _(invites).each(function (invite) {
                     var inObj = {
+                        cid: _.cid(invite),
                         title: invite.title,
                         subject: invite.location,
                         date: util.getDateInterval(invite),

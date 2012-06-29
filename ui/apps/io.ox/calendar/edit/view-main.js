@@ -94,7 +94,7 @@ define('io.ox/calendar/edit/view-main',
         PARTICIPANTS:       gt('Participants'),
         PRIVATE:            gt('Private'),
         NOTIFY_ALL:         gt('Notify all participants about this change'),
-        HELP_ADD_PARTICIPANTS_MANUALLY:     gt('To add participants manually, just provide a valid email address (e.g just@mail.com, "more sophisticated" <yeah@profi.com>)')
+        HELP_ADD_PARTICIPANTS_MANUALLY:     gt('To add participants manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)')
 
     };
 

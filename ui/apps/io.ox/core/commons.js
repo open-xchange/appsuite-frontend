@@ -338,7 +338,6 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
 
             loadTree = function (e) {
                 if (!e.isDefaultPrevented()) {
-                    container.busy();
                     toggle(e);
                     app.showFolderView = fnShow;
                     app.getWindow().nodes.title.off('click', loadTree);
