@@ -1,4 +1,3 @@
-
 .io-ox-portal {
     padding: 0 13px 0 13px;
     position: relative;
@@ -11,52 +10,41 @@
     -ms-box-sizing: border-box;
     box-sizing: border-box;
 }
-
 .io-ox-portal .clear-title {
     margin: 0.5em 0 1em 0;
     font-size: 16pt;
 }
-
 .io-ox-portal .vgrid-cell:last-child {
     border-bottom: 0px none;
 }
-
 .io-ox-portal h1 {
     font-size: 24px;
     font-weight: normal;
 }
-
 .io-ox-portal h2 {
     font-size: 18px;
 }
-
 .io-ox-portal-column {
     display: inline-block;
     float: left;
 }
-
 .io-ox-portal-widget {
     min-height: 100px;
     margin-bottom: 40px;
 }
-
 .io-ox-portal-widget .clear-title {
     margin-bottom: 0.5em;
 }
-
 .io-ox-portal-linkedin-updates-entry {
     margin-bottom: 0.5em;
 }
-
 .io-ox-portal-linkedin-updates-details {
     margin: 1em 0 1em 4em;
 }
-
 .io-ox-portal-rss .rss-entry {
     max-width: 450px;
     clear: both;
 }
-
 .io-ox-portal-rss .rss-title {
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 1.2em;
@@ -64,29 +52,22 @@
     color: #000;
     margin: 2em 0 1em 0;
 }
-
 .io-ox-portal-rss.spiegel .rss-title {
-    /*color: #900;*/
 }
-
 .io-ox-portal-rss .rss-content {
     font-family: Verdana, Arial, Helvetica, sans-serif;
     line-height: 1.2em;
 }
-
 .io-ox-portal-rss .rss-content img {
     float: left;
     margin: 0 1.5em 1em 0;
     border: 0px none;
     max-width: 250px;
 }
-
-
 .io-ox-portal-tiles {
     margin-left: 400px;
     max-width: 840px;
 }
-
 .io-ox-portal-content {
     width: 400px;
     overflow: auto;
@@ -94,7 +75,6 @@
     padding: 0 1em;
     float: left;
 }
-
 .io-ox-portal-widget-tile {
     background: #cce;
     float: left;
@@ -103,12 +83,10 @@
     width: 270px;
     height: 180px;
     margin: 5px;
+    cursor: pointer;
 }
 .io-ox-portal-widget-tile h1 {
     line-height: 2em;
-}
-.io-ox-portal-widget-tile .badge {
-    float: right;
 }
 .io-ox-portal-content .vgrid-cell.mail {
     height: 4em;

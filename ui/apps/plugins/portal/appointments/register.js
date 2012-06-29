@@ -45,16 +45,13 @@ define("plugins/portal/appointments/register",
 
             var today = new date.Local().format(date.DATE);
             $(this).append(
-                $('<h1>').text(gt('Appointments')),
-                $('<div>').text(gt("in the next 24h: ")).append($('<span class="badge badge-info">').text(nextAppointments.length)),
-                $('<br>')
+                $('<h1>').text(gt('Appointments'))
             );
             if (appointments.length > 0) {
                 var nextApp = appointments[0];
                 var deltaT = 'in 2 days';//startSpan.formatInterval(new date.Local(), date.MINUTE);
                 $('<div>').html("Next: <b>" + nextApp.title + '</b> (' + deltaT + ')').appendTo(this);
             }
-            $(this).css({background: '#eee', padding: '1em'});
             return $.when();
         },
         load: function () {
