@@ -1587,21 +1587,21 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 .append($('<table>').attr('border', '4').attr('cellspacing', '10').attr('cellpadding', '20').attr('width', '80%')
                     .append('<colgroup><col width="40%"><col width="30%"><col width="30%"></colgroup>')
                     .append($('<tr>').attr('valign', 'top')
-                        .append('<td><p>(1/1)</p></td>')
-                        .append('<td><p>(2/1)</p></td>')
-                        .append('<td><p>(3/1)</p></td>'))
+                        .append('<td><p>&nbsp;</p></td>')
+                        .append('<td><p>&nbsp;</p></td>')
+                        .append('<td><p>&nbsp;</p></td>'))
                     .append($('<tr>').attr('valign', 'top')
-                        .append('<td><p>(1/2)</p></td>')
-                        .append('<td><p>(2/2)</p></td>')
-                        .append('<td><p>(3/2)</p></td>'))
+                        .append('<td><p>&nbsp;</p></td>')
+                        .append('<td><p>&nbsp;</p></td>')
+                        .append('<td><p>&nbsp;</p></td>'))
                     .append($('<tr>').attr('valign', 'top')
-                        .append('<td><p>(1/3)</p></td>')
-                        .append('<td><p>(2/3)</p></td>')
-                        .append('<td><p>(3/3)</p></td>'))
+                        .append('<td><p>&nbsp;</p></td>')
+                        .append('<td><p>&nbsp;</p></td>')
+                        .append('<td><p>&nbsp;</p></td>'))
                     .append($('<tr>').attr('valign', 'top')
-                        .append('<td><p>(1/4)</p></td>')
-                        .append('<td><p>(2/4)</p></td>')
-                        .append('<td><p>(3/4)</p></td>')));
+                        .append('<td><p>&nbsp;</p></td>')
+                        .append('<td><p>&nbsp;</p></td>')
+                        .append('<td><p>&nbsp;</p></td>')));
 
             if (para === -1) {
                 para = paragraphs.size();
