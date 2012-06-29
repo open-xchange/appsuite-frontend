@@ -894,7 +894,7 @@ define("io.ox/mail/api",
     api.getDefaultFolder = function () {
         return folderAPI.getDefaultFolder('mail');
     };
-    
+
     api.beautifyMailText = function (str, lengthLimit) {
         lengthLimit = lengthLimit || 500;
         str = String(str)
@@ -909,7 +909,7 @@ define("io.ox/mail/api",
         // trim
         return $.trim(str);
     };
-    
+
 
     return api;
 });
