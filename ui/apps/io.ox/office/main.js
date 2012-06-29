@@ -57,7 +57,7 @@ define('io.ox/office/main',
                 .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
                 .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
             .end()
-            .addButton('action/table', { label: 'Table', tooltip: gt('Insert new table') })
+            .addButton('action/table', { label: gt('Table'), tooltip: gt('Insert new table') })
             .addButton('action/debug', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
         } // end of constructor
@@ -90,7 +90,7 @@ define('io.ox/office/main',
                 },
                 'action/debug': {
                     get: function () { return app.isDebugMode(); },
-                    set: function (state) { app.setDebugMode(state); editor.grabFocus(); }
+                    set: function (state) { app.setDebugMode(state); app.getEditor().grabFocus(); }
                 },
 
                 'character/font/bold': {
@@ -399,6 +399,13 @@ define('io.ox/office/main',
         };
 
         /**
+         * Returns the editor instance.
+         */
+        app.getEditor = function () {
+            return editor;
+        };
+
+        /**
          * Shows the application window and activates the editor.
          *
          * @returns {jQuery.Deferred}
@@ -586,7 +593,7 @@ define('io.ox/office/main',
         controller
             .registerViewComponent(toolbar)
             .registerEditor(editors[Editor.TextMode.RICH])
-            .registerEditor(editors[Editor.TextMode.PLAIN], /^action\//);
+            .registerEditor(editors[Editor.TextMode.PLAIN], /^action\/(undo|redo|debug)$/);
 
         // primary editor for global operations (e.g. save)
         editor = editors[Editor.TextMode.RICH];
