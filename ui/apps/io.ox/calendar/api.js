@@ -74,8 +74,9 @@ define("io.ox/calendar/api",
                 params = {
                     action: "all",
                     // id, folder_id, private_flag, recurrence_position, start_date,
-                    // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by
-                    columns: "1,20,101,207,201,200,202,400,401,402,221,224,227,2",
+                    // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by,
+                    // participants
+                    columns: "1,20,101,207,201,200,202,400,401,402,221,224,227,2,220",
                     start: o.start,
                     end: o.end,
                     showPrivate: true,

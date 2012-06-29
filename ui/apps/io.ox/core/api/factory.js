@@ -164,14 +164,19 @@ define("io.ox/core/api/factory",
                         return (o.pipe.get || _.identity)(data, opt);
                     })
                     .done(function (data) {
-                        // add to cache
-                        caches.get.add(data);
-                        // update list cache
-                        caches.list.merge(data).done(function (ok) {
-                            if (ok) {
-                                api.trigger("refresh.list", data);
-                            }
-                        });
+                        // use cache?
+                        if (useCache) {
+                            // add to cache
+                            caches.get.add(data);
+                            // update list cache
+                            caches.list.merge(data).done(function (ok) {
+                                if (ok) {
+                                    api.trigger("refresh.list", data);
+                                }
+                            });
+                        } else {
+                            api.trigger("refresh.list", data);
+                        }
                     })
                     .fail(function (e) {
                         _.call(o.fail.get, e, opt, o);
