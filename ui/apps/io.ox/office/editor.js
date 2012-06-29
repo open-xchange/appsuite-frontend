@@ -445,6 +445,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     this.implInsertText(operation.text, startPos);
                 }
             }
+            else if (operation.name === "insertTable") {
+                this.implInsertTable(operation.start);
+            }
             else if (operation.name === "deleteParagraph") {
                 this.implDeleteParagraph(operation.start);
             }
@@ -713,37 +716,6 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             return domSelection;
         };
 
-        this.addExampleTable = function () {
-            // build table for testing reasons
-
-            window.console.log("Number of children of editdiv before inserting table: " + paragraphs.length);
-
-            editdiv
-                .append($('<table>').attr('border', '4').attr('cellspacing', '10').attr('cellpadding', '20').attr('width', '80%')
-                    .append('<colgroup><col width="40%"><col width="30%"><col width="30%"></colgroup>')
-                    .append($('<tr>').attr('valign', 'top')
-                        .append('<td><p id="1_1_1">This is paragraph 1 in row 1 and column 1.</p><p id="1_1_2">Second paragraph.</p><p id="1_1_3">Third paragraph.</p></td>')
-                        .append('<td><p id="1_2_1">This is paragraph 1 in row 1 and column 2.</p><p id="1_2_2">Second paragraph.</p><p id="1_2_3">Third paragraph.</p></td>')
-                        .append('<td><p id="1_3_1">This is paragraph 1 in row 1 and column 3.</p><p id="1_3_2">Second paragraph.</p><p id="1_3_3">Third paragraph.</p></td>'))
-                    .append($('<tr>').attr('valign', 'top')
-                        .append('<td><p id="2_1_1">This is paragraph 1 in row 2 and column 1.</p><p id="2_1_2">Second paragraph.</p><p id="2_1_3">Third paragraph.</p></td>')
-                        .append('<td><p id="2_2_1">This is a paragraph in row 2 and column 2.</p><p id="2_2_2">Second paragraph.</p><p id="2_2_3">Third paragraph.</p></td>')
-                        .append('<td><p id="2_3_1">This is a paragraph in row 2 and column 3.</p><p id="2_3_2">Second paragraph.</p><p id="2_3_3">Third paragraph.</p></td>'))
-                    .append($('<tr>').attr('valign', 'top')
-                        .append('<td><p id="3_1_1">This is paragraph 1 in row 3 and column 1.</p><p id="3_1_2">Second paragraph.</p><p id="3_1_3">Third paragraph.</p></td>')
-                        .append('<td><p id="3_2_1">This is a paragraph in row 3 and column 2.</p><p id="3_2_2">Second paragraph.</p><p id="3_2_3">Third paragraph.</p></td>')
-                        .append('<td><p id="3_3_1">This is a paragraph in row 3 and column 3.</p><p id="3_3_2">Second paragraph.</p><p id="3_3_3">Third paragraph.</p></td>'))
-                    .append($('<tr>').attr('valign', 'top')
-                        .append('<td><p id="4_1_1">This is paragraph 1 in row 4 and column 1.</p><p id="4_1_2">Second paragraph.</p><p id="4_1_3">Third paragraph.</p></td>')
-                        .append('<td><p id="4_2_1">This is a paragraph in row 4 and column 2.</p><p id="4_2_2">Second paragraph.</p><p id="4_2_3">Third paragraph.</p></td>')
-                        .append('<td><p id="4_3_1">This is a paragraph in row 4 and column 3.</p><p id="4_3_2">Second paragraph.</p><p id="4_3_3">Third paragraph.</p></td>')));
-
-            paragraphs = editdiv.children();
-            blockOperationNotifications = true;  // test table does not work in second editor.
-
-            window.console.log("Number of children of editdiv after inserting table: " + paragraphs.length);
-        };
-
         this.initDocument = function () {
             var newOperation = { name: 'initDocument' };
             this.applyOperation(newOperation, true, true);
@@ -829,8 +801,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     this.grabFocus(true);
                 }
                 if (c === 'T') {
-                    this.insertParagraph([paragraphs.length]);
-                    this.addExampleTable();
+                    this.insertTable();
                 }
                 if (c === '1') {
                     dbgoutEvents = !dbgoutEvents;
@@ -1049,8 +1020,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     var startPosition = _.copy(selection.startPaM.oxoPosition, true);
                     this.splitParagraph(startPosition);
                     // TODO / TBD: Should all API / Operation calls return the new position?!
-                    selection.startPaM.oxoPosition[0] += 1;
-                    selection.startPaM.oxoPosition[1] = 0; // invalid for tables
+                    var lastValue = selection.startPaM.oxoPosition.length - 1;
+                    selection.startPaM.oxoPosition[lastValue - 1] += 1;
+                    selection.startPaM.oxoPosition[lastValue] = 0;
                     selection.endPaM = _.copy(selection.startPaM, true);
                     event.preventDefault();
                     this.setSelection(selection);
@@ -1153,6 +1125,16 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.applyOperation(newOperation, true, true);
         };
 
+        this.insertTable = function () {
+            var selection = this.getSelection();
+            selection.adjust();
+            var position = [selection.startPaM.oxoPosition[0]];
+            var newOperation = {name: 'insertTable', start: _.copy(position, true)};
+            var undoOperation = { name: 'deleteTable', start: _.copy(position, true) };
+            undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
+            this.applyOperation(newOperation, true, true);
+        };
+
         this.splitParagraph = function (position) {
             var newOperation = {name: 'splitParagraph', start: _.copy(position, true)};
             var undoOperation = { name: 'mergeParagraph', start: _.copy(position, true) };
@@ -1163,7 +1145,13 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         this.mergeParagraph = function (position) {
             var newOperation = {name: 'mergeParagraph', start: _.copy(position)};
             var sel = _.copy(position);
-            sel.push(this.getParagraphLen(sel[0]));
+            var paraLen = 0;
+            if (this.getParagraphNodeName(sel[0]) === 'TABLE') {
+                paraLen = this.getParagraphLenInCell(sel[0], sel[1], sel[2], sel[3]);
+            } else {
+                paraLen = this.getParagraphLen(sel[0]);
+            }
+            sel.push(paraLen);
             var undoOperation = { name: 'splitParagraph', start: sel };
             undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
             this.applyOperation(newOperation, true, true);
@@ -1368,6 +1356,17 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 paragraph = $('P', cell).get(para);
             }
             return paragraph;
+        };
+
+        this.getAllParagraphsFromTableCell = function (table, column, row) {
+            var allParagraphs = [];
+            if ((paragraphs[table] !== undefined) && (this.getParagraphNodeName(table) === 'TABLE')) {
+                var row = $('TR', paragraphs[table]).get(row);
+                var cell = $('TH, TD', row).get(column);
+                allParagraphs = $(cell).children();
+            }
+
+            return allParagraphs;
         };
 
         // ==================================================================
@@ -1579,28 +1578,89 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             this.implParagraphChanged(para);
         };
 
-        this.implSplitParagraph = function (position) {
-            var dbg_oldparacount = paragraphs.size();
+        this.implInsertTable = function (position) {
             var para = position[0];
-            var pos = position[1]; // invalid for tables!
-            var paraclone = $(paragraphs[para]).clone();
-            paraclone.insertAfter(paragraphs[para]);
+            var newPara = document.createElement('table');
+            newPara = $(newPara);
+
+            newPara
+                .append($('<table>').attr('border', '4').attr('cellspacing', '10').attr('cellpadding', '20').attr('width', '80%')
+                    .append('<colgroup><col width="40%"><col width="30%"><col width="30%"></colgroup>')
+                    .append($('<tr>').attr('valign', 'top')
+                        .append('<td><p>(1/1)</p></td>')
+                        .append('<td><p>(2/1)</p></td>')
+                        .append('<td><p>(3/1)</p></td>'))
+                    .append($('<tr>').attr('valign', 'top')
+                        .append('<td><p>(1/2)</p></td>')
+                        .append('<td><p>(2/2)</p></td>')
+                        .append('<td><p>(3/2)</p></td>'))
+                    .append($('<tr>').attr('valign', 'top')
+                        .append('<td><p>(1/3)</p></td>')
+                        .append('<td><p>(2/3)</p></td>')
+                        .append('<td><p>(3/3)</p></td>'))
+                    .append($('<tr>').attr('valign', 'top')
+                        .append('<td><p>(1/4)</p></td>')
+                        .append('<td><p>(2/4)</p></td>')
+                        .append('<td><p>(3/4)</p></td>')));
+
+            if (para === -1) {
+                para = paragraphs.size();
+            }
+
+            if (para > 0) {
+                newPara.insertAfter(paragraphs[para - 1]);
+            }
+            else {
+                newPara.insertBefore(paragraphs[0]);
+            }
             paragraphs = editdiv.children();
+            blockOperationNotifications = true;  // test table does not work in second editor.
+
+            lastOperationEnd = new OXOPaM([para, 0]);  // table?
+            this.implParagraphChanged(para);
+        };
+
+        this.implSplitParagraph = function (position) {
+
+            var posLength = position.length - 1,
+                para = position[posLength - 1],
+                pos = position[posLength],
+                allParagraphs = null,
+                isTable = false;
+
+            if (this.getParagraphNodeName(position[0]) === 'TABLE') {
+                isTable = true;
+                allParagraphs = this.getAllParagraphsFromTableCell(position[0], position[1], position[2]);
+            } else {
+                allParagraphs = paragraphs;
+            }
+
+            var dbg_oldparacount = allParagraphs.size();
+            var paraclone = $(allParagraphs[para]).clone();
+            paraclone.insertAfter(allParagraphs[para]);
+
+            if (isTable) {
+                allParagraphs = this.getAllParagraphsFromTableCell(position[0], position[1], position[2]);
+            } else {
+                paragraphs = editdiv.children();
+                allParagraphs = paragraphs;
+            }
+
             if (pos !== -1) {
                 var startPos = _.copy(position, true);
                 var endPos = _.copy(position, true);
-                endPos[1] = -1;
+                endPos[posLength] = -1;
                 this.implDeleteText(startPos, endPos);
             }
             var startPosition = _.copy(position, true);
-            startPosition[0] += 1;
-            startPosition[1] = 0;
+            startPosition[posLength - 1] += 1;
+            startPosition[posLength] = 0;
             var endPosition = _.copy(position, true);
-            endPosition[0] = startPosition[0];
+            endPosition[posLength - 1] = startPosition[posLength - 1];
             this.implDeleteText(startPosition, endPosition);
 
-            this.implParagraphChanged(para);
-            this.implParagraphChanged(para + 1);
+            this.implParagraphChanged(para);  // for tables?
+            this.implParagraphChanged(para + 1);  // for tables?
             lastOperationEnd = new OXOPaM(startPosition);
 
             // DEBUG STUFF
@@ -1610,15 +1670,32 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.implMergeParagraph = function (position) {
-            var para = position[0];
-            if (para < (paragraphs.size() - 1)) {
 
-                var dbg_oldparacount = paragraphs.size();
+            var posLength = position.length - 1,
+                para = position[posLength],
+                allParagraphs = null,
+                isTable = false;
 
-                var thisPara = paragraphs[para];
-                var nextPara = paragraphs[para + 1];
+            if (this.getParagraphNodeName(position[0]) === 'TABLE') {
+                isTable = true;
+                allParagraphs = this.getAllParagraphsFromTableCell(position[0], position[1], position[2]);
+            } else {
+                allParagraphs = paragraphs;
+            }
 
-                var oldParaLen = this.getParagraphLen(para);
+            if (para < (allParagraphs.size() - 1)) {
+
+                var dbg_oldparacount = allParagraphs.size();
+
+                var thisPara = allParagraphs[para];
+                var nextPara = allParagraphs[para + 1];
+
+                var oldParaLen = 0;
+                if (isTable) {
+                    oldParaLen = this.getParagraphLenInCell(position[0], position[1], position[2], para);
+                } else {
+                    oldParaLen = this.getParagraphLen(para);
+                }
 
                 var lastCurrentChild = thisPara.lastChild;
                 if (lastCurrentChild && (lastCurrentChild.nodeName === 'BR')) {
@@ -1640,12 +1717,18 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 }
 
                 var localPosition = _.copy(position, true);
-                localPosition[0] += 1;
+                localPosition[posLength] += 1;  // posLength is 0 for non-tables
 
-                this.implDeleteParagraph(localPosition);
+                if (isTable) {
+                    this.implDeleteParagraphInTable(localPosition);
+                } else {
+                    this.implDeleteParagraph(localPosition);
+                }
 
-                lastOperationEnd = new OXOPaM([para, oldParaLen]);
-                this.implParagraphChanged(para);
+                var lastPos = _.copy(position);
+                lastPos.push(oldParaLen);
+                lastOperationEnd = new OXOPaM(lastPos);
+                this.implParagraphChanged(para);   // for tables?
 
                 // DEBUG STUFF
                 if (paragraphs.size() !== (dbg_oldparacount - 1)) {
