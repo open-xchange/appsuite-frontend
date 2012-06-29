@@ -1101,7 +1101,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     startPosition[startposLength - 1] += 1;
                     startPosition[startposLength] = 0;
                     var endPosition = _.copy(startPosition, true);
-                    endPosition[endposLength] = selection.endPaM.oxoPosition[endposLength];
+                    endPosition[startposLength] = selection.endPaM.oxoPosition[endposLength];
                     this.deleteText(startPosition, endPosition);
                     var mergeselection = _.copy(selection.startPaM.oxoPosition);
                     mergeselection.pop();
@@ -1240,8 +1240,8 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     // 3) selected part in last para
                     if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
                         var startPosition = _.copy(selection.endPaM.oxoPosition, true);
-                        startPosition[startposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
-                        startPosition[startposLength] = 0;
+                        startPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
+                        startPosition[endposLength] = 0;
                         this.setAttribute(attr, value, startPosition, selection.endPaM.oxoPosition);
                     }
                 }
