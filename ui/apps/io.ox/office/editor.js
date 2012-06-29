@@ -1066,30 +1066,42 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
                 selection.adjust();
 
-                var endPosition = _.copy(selection.endPaM.oxoPosition, true);
+                var endPosition = _.copy(selection.endPaM.oxoPosition, true),
+                    startposLength = selection.startPaM.oxoPosition.length - 1,
+                    endposLength = selection.endPaM.oxoPosition.length - 1,
+                    isTable = false;
+
+                if (this.getParagraphNodeName(endPosition[0]) === 'TABLE') {
+                    isTable = true;
+                }
+
                 // 1) delete selected part or rest of para in first para (pos to end)
-                if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
-                    endPosition[0] = selection.startPaM.oxoPosition[0];
-                    endPosition[1] = this.getParagraphLen(endPosition[0]);  // invalid for tables
+                if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
+                    endPosition[endposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1];
+                    if (isTable) {
+                        endPosition[endposLength] = this.getParagraphLenInCell(endPosition[0], endPosition[1], endPosition[2], endPosition[3]);
+                    } else {
+                        endPosition[endposLength] = this.getParagraphLen(endPosition[endposLength - 1]);
+                    }
                 }
                 this.deleteText(selection.startPaM.oxoPosition, endPosition);
 
                 // 2) delete completly slected paragraphs completely
-                for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
+                for (var i = selection.startPaM.oxoPosition[startposLength - 1] + 1; i < selection.endPaM.oxoPosition[endposLength - 1]; i++) {
                     // startPaM.oxoPosition[0]+1 instead of i, because we always remove a paragraph
                     var startPosition = _.copy(selection.startPaM.oxoPosition, true);
-                    startPosition[0] += 1;
+                    startPosition[startposLength - 1] += 1;
                     startPosition.pop();    // don't pass char pos
                     this.deleteParagraph(startPosition);
                 }
 
                 // 3) delete selected part in last para (start to pos) and merge first and last para
-                if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
+                if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
                     var startPosition = _.copy(selection.startPaM.oxoPosition, true);
-                    startPosition[0] += 1;
-                    startPosition[1] = 0;
+                    startPosition[startposLength - 1] += 1;
+                    startPosition[startposLength] = 0;
                     var endPosition = _.copy(startPosition, true);
-                    endPosition[1] = selection.endPaM.oxoPosition[1];
+                    endPosition[endposLength] = selection.endPaM.oxoPosition[endposLength];
                     this.deleteText(startPosition, endPosition);
                     var mergeselection = _.copy(selection.startPaM.oxoPosition);
                     mergeselection.pop();
@@ -1174,9 +1186,11 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 end;
 
             if ((startPosition !== undefined) && (endPosition !== undefined)) {
-                para = startPosition[0];
-                start = startPosition[1]; // invalid for tables
-                end = endPosition[1]; // invalid for tables
+                var startposLength = startPosition.length - 1,
+                    endposLength = endPosition.length - 1;
+                para = startPosition[startposLength - 1];
+                start = startPosition[startposLength];
+                end = endPosition[endposLength];
             }
 
             // TODO
@@ -1188,30 +1202,46 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     selection.adjust();
 
                     // 1) selected part or rest of para in first para (pos to end)
-                    var endPosition = selection.endPaM.oxoPosition;
-                    if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
+                    var startposLength = selection.startPaM.oxoPosition.length - 1,
+                        endposLength = selection.endPaM.oxoPosition.length - 1,
+                        endPosition = selection.endPaM.oxoPosition,
+                        isTable = false;
+
+                    if (this.getParagraphNodeName(endPosition[0]) === 'TABLE') {
+                        isTable = true;
+                    }
+
+                    if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
                         endPosition = _.copy(selection.endPaM.oxoPosition, true);
-                        endPosition[0] = selection.startPaM.oxoPosition[0]; // invalid for tables
-                        endPosition[1] = this.getParagraphLen(endPosition[0]); // invalid for tables
+                        endPosition[endposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1];
+                        if (isTable) {
+                            endPosition[endposLength] = this.getParagraphLenInCell(endPosition[0], endPosition[1], endPosition[2], endPosition[3]);
+                        } else {
+                            endPosition[endposLength] = this.getParagraphLen(endPosition[endposLength - 1]);
+                        }
                     }
                     this.setAttribute(attr, value, selection.startPaM.oxoPosition, endPosition);
 
                     // 2) completly slected paragraphs
-                    for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
+                    for (var i = selection.startPaM.oxoPosition[startposLength - 1] + 1; i < selection.endPaM.oxoPosition[endposLength - 1]; i++) {
                         var startPosition = _.copy(selection.startPaM.oxoPosition, true);
-                        startPosition[0] = i;
-                        startPosition[1] = 0; // invalid for tables
+                        startPosition[startposLength - 1] = i;
+                        startPosition[startposLength] = 0;
                         var endPosition = _.copy(selection.endPaM.oxoPosition, true);
-                        endPosition[0] = i;
-                        endPosition[1] = this.getParagraphLen(endPosition[0]); // invalid for tables
+                        endPosition[endposLength - 1] = i;
+                        if (isTable) {
+                            endPosition[endposLength] = this.getParagraphLenInCell(endPosition[0], endPosition[1], endPosition[2], endPosition[3]);
+                        } else {
+                            endPosition[endposLength] = this.getParagraphLen(endPosition[endposLength - 1]);
+                        }
                         this.setAttribute(attr, value, startPosition, endPosition);
                     }
 
                     // 3) selected part in last para
-                    if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
+                    if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
                         var startPosition = _.copy(selection.endPaM.oxoPosition, true);
-                        startPosition[0] = selection.endPaM.oxoPosition[0];
-                        startPosition[1] = 0; // invalid for tables
+                        startPosition[startposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
+                        startPosition[startposLength] = 0;
                         this.setAttribute(attr, value, startPosition, selection.endPaM.oxoPosition);
                     }
                 }
@@ -1491,10 +1521,21 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         this.implInsertText = function (text, position) {
             // -1 not allowed here - but code need to be robust
-            var para = position[0];
-            if ((para < 0) || (para >= paragraphs.size())) {
-                this.implDbgOutInfo('error: invalid para pos in implInsertText (' + para + ', maximum: ' + paragraphs.size() + ')');
-                para = paragraphs.size() - 1;
+            var posLength = position.length - 1,
+                para = position[posLength - 1],
+                allParagraphs = null,
+                isTable = false;
+
+            if (this.getParagraphNodeName(position[0]) === 'TABLE') {
+                isTable = true;
+                allParagraphs = this.getAllParagraphsFromTableCell(position[0], position[1], position[2]);
+            } else {
+                allParagraphs = paragraphs;
+            }
+
+            if ((para < 0) || (para >= allParagraphs.size())) {
+                this.implDbgOutInfo('error: invalid para pos in implInsertText (' + para + ', maximum: ' + allParagraphs.size() + ')');
+                para = allParagraphs.size() - 1;
                 // return;
             }
 
@@ -1502,9 +1543,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             var oldText = domPos.node.nodeValue;
             var newText = oldText.slice(0, domPos.offset) + text + oldText.slice(domPos.offset);
             domPos.node.nodeValue = newText;
-            var lastValue = position.length - 1;
-            lastOperationEnd = new OXOPaM([position[lastValue - 1], position[lastValue] + text.length]);
-            this.implParagraphChanged(para);
+            var lastPos = _.copy(position);
+            lastPos[posLength] = position[posLength] + text.length;
+            lastOperationEnd = new OXOPaM(lastPos);
+            this.implParagraphChanged(para);  // tables?
         };
 
         this.implSetAttribute = function (attr, value, startposition, endposition) {
@@ -1516,9 +1558,16 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             // and we don't care too much for the current/temporary HTML in this editor.
             // It will not negativly unfluence the resulting document.
 
-            var para = startposition[0];
-            var start = startposition[1]; // invalid for tables
-            var end = endposition[1]; // invalid for tables
+            var startposLength = startposition.length - 1,
+                endposLength = endposition.length - 1,
+                para = startposition[startposLength - 1],
+                start = startposition[startposLength],
+                end = endposition[endposLength],
+                isTable = false;
+
+            if (this.getParagraphNodeName(startposition[0]) === 'TABLE') {
+                isTable = true;
+            }
 
             if (textMode === OXOEditor.TextMode.PLAIN) {
                 return;
@@ -1527,14 +1576,22 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 start = 0;
             }
             if ((end === undefined) || (end === -1)) {
-                end = this.getParagraphLen(para);
+                if (isTable) {
+                    end = this.getParagraphLenInCell(startposition[0], startposition[1], startposition[2], para);
+                } else {
+                    end = this.getParagraphLen(para);
+                }
             }
 
             // HACK
             var oldselection = this.getSelection();
             // DR: works without focus
             //this.grabFocus(); // this is really ugly, but execCommand only works when having the focus. Can we restore the focus in case we didn't have it???
-            this.setSelection(new OXOSelection(new OXOPaM([para, start]), new OXOPaM([para, end])));
+            var startPos = _.copy(startposition);
+            startPos[startposLength] = start;
+            var endPos = _.copy(endposition);
+            endPos[endposLength] = end;
+            this.setSelection(new OXOSelection(new OXOPaM(startPos), new OXOPaM(endPos)));
             // This will only work if the editor has the focus. Grabbing it would be ugly, can't restore.
             // But anyway, it's just a hack, and in the future we need to do the DOM manipulations on our own...
             // The boolean formatting attributes (e.g. bold/italic/underline) do always toggle, they
@@ -1554,28 +1611,44 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 this.setSelection(oldselection);
             }
 
-            lastOperationEnd = new OXOPaM([para, end]);
+            lastOperationEnd = new OXOPaM(endPos);
         };
 
         this.implInsertParagraph = function (position) {
-            var para = position[0];
+            var posLength = position.length - 1,
+                para = position[posLength],
+                allParagraphs = null,
+                isTable = false;
+
+            if (this.getParagraphNodeName(position[0]) === 'TABLE') {
+                isTable = true;
+                allParagraphs = this.getAllParagraphsFromTableCell(position[0], position[1], position[2]);
+            } else {
+                allParagraphs = paragraphs;
+            }
+
             var newPara = document.createElement('p');
             newPara = $(newPara);
 
             if (para === -1) {
-                para = paragraphs.size();
+                para = allParagraphs.size();
             }
 
             if (para > 0) {
-                newPara.insertAfter(paragraphs[para - 1]);
+                newPara.insertAfter(allParagraphs[para - 1]);
             }
             else {
-                newPara.insertBefore(paragraphs[0]);
+                newPara.insertBefore(allParagraphs[0]);
             }
-            paragraphs = editdiv.children();
 
-            lastOperationEnd = new OXOPaM([para, 0]);
-            this.implParagraphChanged(para);
+            if (! isTable) {
+                paragraphs = editdiv.children();
+            }
+
+            var lastPos = _.copy(position);
+            lastPos.push(0);
+            lastOperationEnd = new OXOPaM(lastPos);
+            this.implParagraphChanged(para);  // for table?
         };
 
         this.implInsertTable = function (position) {
@@ -1719,11 +1792,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 var localPosition = _.copy(position, true);
                 localPosition[posLength] += 1;  // posLength is 0 for non-tables
 
-                if (isTable) {
-                    this.implDeleteParagraphInTable(localPosition);
-                } else {
-                    this.implDeleteParagraph(localPosition);
-                }
+                this.implDeleteParagraph(localPosition);
 
                 var lastPos = _.copy(position);
                 lastPos.push(oldParaLen);
@@ -1739,28 +1808,30 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         };
 
         this.implDeleteParagraph = function (position) {
-            var para = position[0];
-            var paragraph = paragraphs[para];
-            paragraph.parentNode.removeChild(paragraph);
-            paragraphs = editdiv.children();
-            lastOperationEnd = new OXOPaM([para ? para - 1 : 0, 0]);    // pos not corrct, but doesn't matter. Deleting paragraphs always happens between other operations, never at the last one.
-        };
+            var posLength = position.length - 1,
+                para = position[posLength],
+                allParagraphs = null,
+                isTable = false;
 
-        this.implDeleteParagraphInTable = function (position) {
-            var para = position[0];
-            if (this.getParagraphNodeName(para) === 'TABLE') {
-                var paragraph = this.getParagraphFromTable(para, position[1], position[2], position[3]);
-                paragraph.parentNode.removeChild(paragraph);
-                var localPos = _.copy(position, true);
-                var paraInCell = position[3];
-                localPos.pop();
-                // localPos.pop(); // 'pos' was already removed from position before calling implDeleteParagraphInTable
-                if (paraInCell > 0) {
-                    paraInCell -= 1;
-                }
-                localPos.push(paraInCell);
-                localPos.push(0);  // new position
-                lastOperationEnd = new OXOPaM(localPos);
+            if (this.getParagraphNodeName(position[0]) === 'TABLE') {
+                isTable = true;
+                allParagraphs = this.getAllParagraphsFromTableCell(position[0], position[1], position[2]);
+            } else {
+                allParagraphs = paragraphs;
+            }
+
+            var paragraph = allParagraphs[para];
+            paragraph.parentNode.removeChild(paragraph);
+
+            var localPos = _.copy(position, true);
+            if (para > 0) {
+                para -= 1;
+            }
+            localPos[posLength] = para;
+            localPos.push(0); // pos not corrct, but doesn't matter. Deleting paragraphs always happens between other operations, never at the last one.
+            lastOperationEnd = new OXOPaM(localPos);
+            if (! isTable) {
+                paragraphs = editdiv.children();
             }
         };
 
