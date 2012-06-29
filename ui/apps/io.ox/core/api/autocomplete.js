@@ -14,16 +14,13 @@ define('io.ox/core/api/autocomplete',
       ['io.ox/core/http',
        'io.ox/contacts/api',
        'io.ox/core/api/resource',
-       'io.ox/core/api/group',
-       'io.ox/core/cache'], function (http, contactsAPI, resourceAPI, groupAPI, cache) {
+       'io.ox/core/api/group'], function (http, contactsAPI, resourceAPI, groupAPI) {
 
     'use strict';
 
-
     function Autocomplete(options) {
-        this.id = options.id = options.id || (Math.random() * 1000);
-        this.cache = new cache.SimpleCache(options.id, true);
-        this.options = options;
+        this.options = options || {};
+        this.cache = {};
         this.apis = [];
         if (options.contacts) {
             this.apis.push({type: 'contact', api: contactsAPI});
@@ -38,45 +35,39 @@ define('io.ox/core/api/autocomplete',
 
     Autocomplete.prototype = {
         search: function (query) {
-            var self = this,
-                df = new $.Deferred();
 
-            self.cache.get(query).pipe(function (data) {
-                if (data !== undefined && data !== null) {
-                    df.resolve(data);
-                    //return data;
-                } else {
-                    query = String(query || '').toLowerCase();
-                    http.pause();
-                    _(self.apis).each(function (apiModule) {
-                        apiModule.api.search(query, true);
+            query = typeof query !== 'string' ? '' : $.trim(query).toLowerCase();
+
+            var self = this;
+
+            if (query in this.cache) {
+                // cache hit
+                return $.Deferred().resolve(this.cache[query]);
+            } else {
+                // cache miss
+                http.pause();
+                _(self.apis).each(function (apiModule) {
+                    apiModule.api.search(query, true);
+                });
+                return http.resume().pipe(function (data) {
+                    //unify and process
+                    var retData = [];
+                    _(self.apis).each(function (apiModule, index) {
+                        switch (apiModule.type) {
+                        case 'contact':
+                            retData = self.processContactResults(retData.concat(self.processContacts(data[index])), query);
+                            break;
+                        case 'resource':
+                            retData = retData.concat(self.processResources(data[index]));
+                            break;
+                        case 'group':
+                            retData = retData.concat(self.processGroups(data[index]));
+                        }
                     });
-
-                    http.resume()
-                        .pipe(function (data) {
-                            //unify and process
-                            var retData = [];
-                            _(self.apis).each(function (apiModule, index) {
-                                switch (apiModule.type) {
-                                case 'contact':
-                                    retData = self.processContactResults(retData.concat(self.processContacts(data[index])), query);
-                                    break;
-                                case 'resource':
-                                    retData = retData.concat(self.processResources(data[index]));
-                                    break;
-                                case 'group':
-                                    retData = retData.concat(self.processGroups(data[index]));
-                                }
-                            });
-                            return retData;
-                        })
-                        .done(function (data) {
-                            df.resolve(data);
-                            self.cache.add(query, data);
-                        });
-                }
-            });
-            return df;
+                    // add to cache
+                    return (self.cache[query] = retData);
+                });
+            }
         },
         processContacts: function (data) {
             var result = _(data.data).map(function (dataItem) {
