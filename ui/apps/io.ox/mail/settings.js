@@ -18,11 +18,15 @@ define('io.ox/mail/settings',
         'io.ox/core/tk/view',
         'io.ox/core/tk/model',
         'gettext!io.ox/mail/mail',
-        'settings!io.ox/mail'],
+        'settings!io.ox/mail', 'io.ox/core/api/account'],
 
-function (ext, View, Model, gt, settings) {
+function (ext, View, Model, gt, settings, api) {
 
     'use strict';
+
+
+
+
 
 
     var MailSettingsModel = Model.extend({
@@ -58,97 +62,92 @@ function (ext, View, Model, gt, settings) {
         index: 200,
         id: 'section_compose',
         draw: function (options) {
-            this.append(
 
-                        this.createSectionHorizontalWrapper().append(
-                        this.createControlGroup().append(
-                            this.createControlGroupLabel({text: gt('Compose')}),
-                            this.createControlsWrapper().append(
-                                this.createCheckbox({property: 'appendVcard', label: gt('Append vcard')}),
-                                this.createCheckbox({ property: 'appendMailTextOnReply', label: gt('Insert the original E-Mail text to a reply')}).addClass('expertmode')
-//                                this.createCheckbox({property: 'autocompleteEmailAddresses', label: gt('Enable auto completion of E-Mail addresses')})
-                            )
+            var that = this;
+            var itemList = {};
 
-                        ),
+            var getAllAccounts = function () {
+                var arrayOfAllAccount;
 
+                api.all().done(function (array) {
 
-                        this.createSectionDelimiter().addClass('expertmode'),
+                    _.each(array, function (key, value) {
+                        itemList[key.primary_address] = key.primary_address;
+                    });
 
+                    that.append(
 
-
-                        this.createControlGroup().addClass('expertmode').append(
-                                this.createControlGroupLabel({text: gt('Forward E-Mails as:')}),
-                                this.createControlsWrapper().append(
-                                    this.createRadioButton({property: 'forwardMessageAs', label: gt('Inline'), value: 'Inline'}),
-                                    this.createRadioButton({property: 'forwardMessageAs', label: gt('Attachment'), value: 'Attachment'})
+                            that.createSectionHorizontalWrapper().append(
+                            that.createControlGroup().append(
+                                that.createControlGroupLabel({text: gt('Compose')}),
+                                that.createControlsWrapper().append(
+                                    that.createCheckbox({property: 'appendVcard', label: gt('Append vcard')}),
+                                    that.createCheckbox({ property: 'appendMailTextOnReply', label: gt('Insert the original E-Mail text to a reply')}).addClass('expertmode')
                                 )
-                        ),
 
-//                        this.createSectionDelimiter(),
-//
-//
-//                        this.createControlGroup().append(
-//                           this.createControlGroupLabel({text: gt('When "reply all":')}),
-//                           this.createControlsWrapper().append(
-//                               this.createRadioButton({property: 'replyAllCc', label: gt('Add sender and recipients to "To", Cc to "Cc"'), value: false}),
-//                               this.createRadioButton({property: 'replyAllCc', label: gt('Add sender to "To", recipients to "Cc"'), value: true })
-//                           )
-//
-//                        ),
+                            ),
 
 
-                        this.createSectionDelimiter(),
-
-                        this.createControlGroup().append(
-                            this.createControlGroupLabel({text: gt('Format E-Mails as:')}),
-                            this.createControlsWrapper().append(
-                                this.createRadioButton({property: 'messageFormat', label: gt('HTML'), value: 'html'}),
-                                this.createRadioButton({property: 'messageFormat', label: gt('Plain text'), value: 'plain' }),
-                                this.createRadioButton({property: 'messageFormat', label: gt('HTML and Plain text'), value: 'both'})
-                            )
-                        ),
-
-                        this.createSectionDelimiter(),
-
-//                        this.createControlGroup().append(
-//                            this.createControlGroupLabel({text: gt('Default E-Mail font:'), 'for': 'auto'}),
-//                            this.createControlsWrapper().append(
-//                                this.createSelectbox({property: 'defaultMailFont', classes: 'input-xlarge', id: 'last', items: {'Default': 'default', 'Andale Mono': 'andale_mono', 'Arial': 'arial', 'Arial Black': 'arial_black', 'Book Antiqua': 'book_antiqua'}}).addClass('expertmode')
-//                            )
-//                        ),
-//                        this.createControlGroup().append(
-//                            this.createControlGroupLabel({text: gt('Default E-Mail font size:'), 'for': 'auto'}),
-//                            this.createControlsWrapper().append(
-//                                this.createSelectbox({property: 'defaultMailFontSize', id: 'last', classes: 'input-xlarge', items: {'Default': 'default', '1 (8pt)': '8_pt', '2 (10pt)': '10_pt'}}).addClass('expertmode')
-//                            )
-//                        ),
+                            that.createSectionDelimiter().addClass('expertmode'),
 
 
-                        this.createInlineControlGroup().append(
-                            this.createControlsWrapper().append(
 
-                                this.createText({ text: gt('Line wrap when sending text mails after: ') }),
-                                this.createTextField({ property: 'lineWrapAfter', classes: 'span1', label: false}),
-                                this.createText({ text: ' characters' })
-                            )
+                            that.createControlGroup().addClass('expertmode').append(
+                                    that.createControlGroupLabel({text: gt('Forward E-Mails as:')}),
+                                    that.createControlsWrapper().append(
+                                        that.createRadioButton({property: 'forwardMessageAs', label: gt('Inline'), value: 'Inline'}),
+                                        that.createRadioButton({property: 'forwardMessageAs', label: gt('Attachment'), value: 'Attachment'})
+                                    )
+                            ),
 
-                        ).addClass('expertmode'),
-                        this.createControlGroup().append(
-                            this.createControlGroupLabel({text: gt('Default sender address:'), 'for': 'auto'}),
-                            this.createControlsWrapper().append(
-                                this.createSelectbox({property: 'defaultSendAddress', id: 'last', classes: 'input-xlarge', items: { 'mario@sourcegarden.de': 'mario@sourcegarden.de', 'mario@sourcegarden.com': 'mario@sourcegarden.com', 'mario.scheliga@open-xchange.com': 'mario.scheliga@open-xchange.com' }})
-                            )
-                        ),
-                        this.createControlGroup().addClass('expertmode').append(
-                            this.createControlGroupLabel({text: gt('Auto-save Email drafts?'), 'for': 'auto'}),
-                            this.createControlsWrapper().append(
-                                this.createSelectbox({property: 'autoSafeDraftsAfter', id: 'last', classes: 'input-xlarge', items: {'Disabled': 'disabled', '1 Minute': '1_minute', '3 Minutes': '3_minutes', '5 Minutes': '5_minutes', '10 Minutes': '10_minutes' }})
-                            )
-                        ),
-                        this.createSectionDelimiter()
-                    )
 
-            );
+
+                            that.createSectionDelimiter(),
+
+                            that.createControlGroup().append(
+                                that.createControlGroupLabel({text: gt('Format E-Mails as:')}),
+                                that.createControlsWrapper().append(
+                                    that.createRadioButton({property: 'messageFormat', label: gt('HTML'), value: 'html'}),
+                                    that.createRadioButton({property: 'messageFormat', label: gt('Plain text'), value: 'plain' }),
+                                    that.createRadioButton({property: 'messageFormat', label: gt('HTML and Plain text'), value: 'both'})
+                                )
+                            ),
+
+                            that.createSectionDelimiter(),
+
+                            that.createInlineControlGroup().append(
+                                that.createControlsWrapper().append(
+
+                                    that.createText({ text: gt('Line wrap when sending text mails after: ') }),
+                                    that.createTextField({ property: 'lineWrapAfter', classes: 'span1', label: false}),
+                                    that.createText({ text: ' characters' })
+                                )
+
+                            ).addClass('expertmode'),
+                            that.createControlGroup().append(
+                                that.createControlGroupLabel({text: gt('Default sender address:'), 'for': 'auto'}),
+                                that.createControlsWrapper().append(
+                                    that.createSelectbox({property: 'defaultSendAddress', id: 'last', classes: 'input-xlarge', items: itemList})
+                                )
+                            ),
+                            that.createControlGroup().addClass('expertmode').append(
+                                that.createControlGroupLabel({text: gt('Auto-save Email drafts?'), 'for': 'auto'}),
+                                that.createControlsWrapper().append(
+                                    that.createSelectbox({property: 'autoSafeDraftsAfter', id: 'last', classes: 'input-xlarge', items: {'Disabled': 'disabled', '1 Minute': '1_minute', '3 Minutes': '3_minutes', '5 Minutes': '5_minutes', '10 Minutes': '10_minutes' }})
+                                )
+                            ),
+                            that.createSectionDelimiter()
+                        )
+
+                );
+                }
+
+                );
+            };
+
+            getAllAccounts();
+
+
         }
     });
 
@@ -311,7 +310,6 @@ function (ext, View, Model, gt, settings) {
 //    });
     var MailSettingsView = View.extend({
         draw: function (data) {
-            console.log(data);
             var self = this;
             self.node.append(this.createSettingsHead(data));
             ext.point('io.ox/mail/settings/detail/section').invoke('draw', self);
@@ -332,9 +330,10 @@ function (ext, View, Model, gt, settings) {
             return myView.node;
         },
         save: function () {
-            settings.save().done(function () {
-                console.log('saved for email');
-            });
+            settings.save();
+//            .done(function () {
+//                console.log('saved for email');
+//            });
         }
     });
 

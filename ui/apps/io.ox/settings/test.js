@@ -11,7 +11,8 @@
  */
 
 define("io.ox/settings/test",
-    ["io.ox/core/extensions", "io.ox/core/api/account"], function (ext, api) {
+    ["io.ox/core/extensions", "io.ox/core/api/account",
+     'settings!io.ox/mail'], function (ext, api, settings) {
 
     "use strict";
 
@@ -90,15 +91,18 @@ define("io.ox/settings/test",
 //        index: 100,
 //        test: function (j) {
 //            j.describe("Tests the update function of the jslob", function () {
-//
+//                // sets a present property to an new value
 //                j.it('tests the update functions', function () {
 //
 //                    j.runs(function () {
 //                        var me = this,
 //                        data = {
-////                                testConfig: {
-////                                    value: true
-////                                }
+//                            mail: {
+//                                testConfig: {
+//                                    value: true
+//                                }
+//                            }
+//
 //
 //                        };
 //                        me.ready = false;
@@ -122,7 +126,7 @@ define("io.ox/settings/test",
 //            });
 //        }
 //    });
-//
+
 //    ext.point('test/suite').extend({
 //        id: 'settings-set-test',
 //        index: 100,
@@ -134,8 +138,10 @@ define("io.ox/settings/test",
 //                    j.runs(function () {
 //                        var me = this,
 //                        data = {
-////                            testConfig: {
-////                                value: false
+////                            mail: {
+////                                testConfig: {
+////                                    value: true
+////                                }
 ////                            }
 //
 //                        };
@@ -155,4 +161,86 @@ define("io.ox/settings/test",
 //            });
 //        }
 //    });
+
+    ext.point('test/suite').extend({
+        id: 'settings-get-function-test',
+        index: 100,
+        test: function (j) {
+            j.describe("Tests the get feature function of the settings.js", function () {
+
+                j.it('tests the get functions of the settings.js', function () {
+                    var response;
+                    j.runs(function () {
+
+                        response = settings.get('removeDeletedPermanently');
+                        console.log(response);
+                        j.expect(response).not.toBeNull();
+
+                    });
+
+                });
+            });
+        }
+    });
+
+
+    ext.point('test/suite').extend({
+        id: 'settings-set-function-test',
+        index: 100,
+        test: function (j) {
+            j.describe("Tests the set feature function of the settings.js", function () {
+
+                j.it('tests the set functions of the settings.js', function () {
+                    var response, currentSetting;
+
+                    j.runs(function () {
+
+                        currentSetting = settings.get('removeDeletedPermanently');
+                        settings.set('removeDeletedPermanently', true);
+
+                        response = settings.get('removeDeletedPermanently');
+                        j.expect(response).toBe(true);
+                    });
+
+                    j.runs(function () {
+
+                        settings.set('removeDeletedPermanently', false);
+                        response = settings.get('removeDeletedPermanently');
+                        j.expect(response).toBe(false);
+
+                    });
+
+                    j.runs(function () {
+
+                        settings.set('removeDeletedPermanently', currentSetting);
+                        response = settings.get('removeDeletedPermanently');
+                        j.expect(response).toEqual(currentSetting);
+
+                    });
+
+
+                });
+            });
+        }
+    });
+
+//    ext.point('test/suite').extend({
+//        id: 'settings-contains-function-test',
+//        index: 100,
+//        test: function (j) {
+//            j.describe("Tests the contains feature function of the settings.js", function () {
+//
+//                j.it('tests the contains functions of the settings.js', function () {
+//                    var response;
+//                    j.runs(function () {
+//                        response = settings.contains('removeDeletedPermanently');
+//                        j.expect(response).toBe(true);
+//
+//                    });
+//
+//                });
+//            });
+//        }
+//    });
+
 });
