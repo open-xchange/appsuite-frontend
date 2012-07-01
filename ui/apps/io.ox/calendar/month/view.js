@@ -14,14 +14,17 @@ define('io.ox/calendar/month/view',
     ['io.ox/calendar/util',
      'dot!io.ox/calendar/month/template.html',
      'io.ox/core/date',
+     'io.ox/core/config',
      'gettext!io.ox/calendar/view',
-     'less!io.ox/calendar/month/style.css'], function (util, tmpl, date, gt) {
+     'less!io.ox/calendar/month/style.css'], function (util, tmpl, date, config, gt) {
 
     'use strict';
 
     function formatDate(d) {
         return d.getUTCFullYear() + '-' + d.getUTCMonth() + '-' + d.getUTCDate();
     }
+
+    var myself = null;
 
     var View = Backbone.View.extend({
 
@@ -59,6 +62,14 @@ define('io.ox/calendar/month/view',
         },
 
         renderAppointment: function (a) {
+
+            myself = myself || config.get('identifier');
+
+            // check confirmations
+            var state = (_(a.participants).find(function (o) {
+                    return o.id === myself;
+                }) || { type: 0 }).type;
+
             return tmpl.render('appointment', {
                 cid: _.cid(a),
                 full_time: a.full_time,
@@ -66,7 +77,8 @@ define('io.ox/calendar/month/view',
                 private_flag: a.private_flag,
                 shownAs: util.getShownAsClass(a),
                 start: util.getTime(a.start_date),
-                title: a.title
+                title: a.title,
+                unconfirmed: state === 0
             });
         },
 

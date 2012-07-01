@@ -110,8 +110,6 @@ define('io.ox/calendar/edit/module-conflicts',
             }
 
             this.isResource = isResource;
-
-
             return this;
         },
         onIgnore: function () {

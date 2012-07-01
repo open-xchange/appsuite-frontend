@@ -16,7 +16,8 @@
 define("io.ox/calendar/api",
     ["io.ox/core/http",
      "io.ox/core/event",
-     "io.ox/core/api/user"], function (http, Events, userAPI) {
+     "io.ox/core/config",
+     "io.ox/core/api/user"], function (http, Events, config, userAPI) {
 
     "use strict";
 
@@ -73,8 +74,9 @@ define("io.ox/calendar/api",
                 params = {
                     action: "all",
                     // id, folder_id, private_flag, recurrence_position, start_date,
-                    // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by
-                    columns: "1,20,101,207,201,200,202,400,401,402,221,224,227,2",
+                    // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by,
+                    // participants
+                    columns: "1,20,101,207,201,200,202,400,401,402,221,224,227,2,220",
                     start: o.start,
                     end: o.end,
                     showPrivate: true,
@@ -239,34 +241,95 @@ define("io.ox/calendar/api",
                 get_cache = {};
                 api.trigger('refresh.all');
             });
+        },
+
+        getUpdates: function (o) {
+            var defaultCalFolder = config.get('folder.calendar');
+            console.log('defaultFolder', defaultCalFolder);
+            o = $.extend({
+                start: _.now(),
+                end: _.now() + 28 * 1 * DAY,
+                timestamp:  _.now() - (2 * DAY),
+                ignore: 'deleted'
+            }, o || {});
+
+            // round start & end date
+            o.start = (o.start / DAY >> 0) * DAY;
+            o.end = (o.end / DAY >> 0) * DAY;
+
+            var key = o.folder + "." + o.start + "." + o.end,
+                params = {
+                    action: "updates",
+                    // id, folder_id, private_flag, recurrence_position, start_date,
+                    // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by, recurrence_type
+                    columns: "1,20,101,207,201,200,202,400,401,402,221,224,227,2,209",
+                    start: o.start,
+                    end: o.end,
+                    showPrivate: true,
+                    recurrence_master: false,
+                    timestamp: o.timestamp,
+                    ignore: o.ignore,
+                    sort: "201",
+                    order: "asc"
+                };
+
+            if (o.folder !== undefined) {
+                params.folder = o.folder;
+            }
+
+            if (!params.folder) {
+                params.folder = defaultCalFolder;
+            }
+
+
+            // do not know if cache is a good idea
+            if (all_cache[key] === undefined) {
+                return http.GET({
+                        module: "calendar",
+                        params: params
+                    })
+                    .done(function (data) {
+                        all_cache[key] = data;
+                    });
+            } else {
+                return $.Deferred().resolve(all_cache[key]);
+            }
         }
     };
 
     Events.extend(api);
 
-    // global refresh
-    api.refresh = function () {
-        userAPI.get().done(function (user) {
-            api.getAll({
-                start: _.now(),
-                end: _.now() + 28 * 4 * DAY //next four month?!?
-            }).done(function (list) {
+    api.getInvites = function () {
 
+        var start = _.now();
+
+        return userAPI.get().pipe(function (user) {
+            api.getUpdates({
+                start: start,
+                end: start + 28 * 5 * DAY, //next four month?!?
+                timestamp: 0
+            })
+            .pipe(function (list) {
                 var invites = _(list).filter(function (item) {
-                    return _(item.users).any(function (item_user) {
+                    return item.end_date > start && _(item.users).any(function (item_user) {
                         return (item_user.id === user.id && (item_user.confirmation === 0));
                     });
                 });
-
                 if (invites.length > 0) {
-                    api.trigger('invites', invites);
+                    api.trigger('new-invites', invites);
                 }
-                // clear caches
-                all_cache = {};
-                // trigger local refresh
-                api.trigger("refresh.all");
-
+                return invites;
             });
+        });
+    };
+
+    // global refresh
+    api.refresh = function () {
+        api.getInvites().done(function () {
+            // clear caches
+            all_cache = {};
+            // trigger local refresh
+            api.trigger("refresh.all");
         });
     };
 

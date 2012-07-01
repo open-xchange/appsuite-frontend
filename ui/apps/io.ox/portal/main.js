@@ -17,10 +17,10 @@ define.async('io.ox/portal/main',
      'io.ox/core/config',
      'io.ox/core/api/user',
      'io.ox/core/date',
+     'io.ox/core/taskQueue',
      'gettext!io.ox/portal/portal',
-     'apps/io.ox/portal/jquery.masonry.min.js',
      'less!io.ox/portal/style.css'],
-function (ext, config, userAPI, date, gt) {
+function (ext, config, userAPI, date, tasks, gt) {
 
     'use strict';
 
@@ -32,8 +32,8 @@ function (ext, config, userAPI, date, gt) {
         var app = ox.ui.createApp({ name: 'io.ox/portal' }),
             // app window
             win,
-            leftSide = $('<div class="io-ox-portal-left">'),
-            rightSide = $('<div class="io-ox-portal-right">'),
+            tileSide = $('<div class="io-ox-portal-tiles">'),
+            contentSide = $('<div class="io-ox-portal-content">'),
             // update window title
             updateTitle = function () {
                 win.setTitle(
@@ -59,56 +59,67 @@ function (ext, config, userAPI, date, gt) {
             }
         }
         
-        var nodes = {};
+        var contentQueue = new tasks.Queue();
+        
+        
+        function createContentTask(extension) {
+            return {
+                id: extension.id,
+                perform: function () {
+                    var def = $.Deferred(),
+                        $node = $("<div/>");
+                    
+                    extension.invoke('load')
+                        .pipe(function () {
+                            return (extension.invoke.apply(extension, ['draw', $node].concat($.makeArray(arguments))) || $.Deferred())
+                                .done(function () {
+                                    extension.invoke('post', $node, extension);
+                                    def.resolve($node);
+                                });
+                        })
+                        .fail(function (e) {
+                            $node.remove();
+                            contentSide.idle();
+                            def.reject(e);
+                        });
+                    
+                    return def;
+                }
+            };
+        }
         
         function drawContent(extension) {
-            if (nodes[extension.id]) {
-                rightSide.append(nodes[extension.id]);
-                rightSide.idle();
-                return;
-            }
-            var $node = $("<div/>").appendTo(rightSide);
-            nodes[extension.id] = $node;
-            return extension.invoke('load')
-                .pipe(function () {
-                    return (extension.invoke.apply(extension, ['draw', $node].concat($.makeArray(arguments))) || $.Deferred())
-                        .done(function () {
-                            rightSide.idle();
-                            extension.invoke('post', $node, extension);
-                        });
-                })
-                .fail(function (e) {
-                    $node.remove();
-                    rightSide.idle();
-                });
+            contentQueue.fasttrack(extension.id).done(function (node) {
+                contentSide.append(node);
+                $('div[widget-id]').removeClass('io-ox-portal-tile-active');
+                $('div[widget-id="' + extension.id + '"]').addClass('io-ox-portal-tile-active');
+                contentSide.idle();
+            });
         }
         
         function makeClickHandler(extension) {
             return function (event) {
-                rightSide.empty();
-                rightSide.busy();
+                contentSide.empty();
+                contentSide.busy();
                 app.active = extension;
-                
                 return drawContent(extension);
             };
         }
         
-        function drawTiles() {
+        function initExtensions() {
             ext.point('io.ox/portal/widget')
                 .each(function (extension) {
+                    
+                    contentQueue.enqueue(createContentTask(extension));
+                    
                     var $node = $('<div>')
                         .addClass('io-ox-portal-widget-tile')
                         .attr('widget-id', extension.id)
-                        .css({
-                            width: "180px",
-                            height: "180px",
-                            margin: "5px"
-                        })
-                        .appendTo(leftSide)
+                        .appendTo(tileSide)
                         .busy();
 
                     $node.on('click', makeClickHandler(extension));
-
+                    
                     if (!extension.loadTile) {
                         extension.loadTile = function () {
                             return $.Deferred().resolve();
@@ -117,7 +128,30 @@ function (ext, config, userAPI, date, gt) {
 
                     if (!extension.drawTile) {
                         extension.drawTile = function () {
-                            this.append($("<div>").text(extension.id));
+                            $(this).append('<img class="tile-image"/><h1 class="tile-heading"/>');
+                            var $node = $(this);
+                            extension.asyncMetadata("title").done(function (title) {
+                                $node.find(".tile-heading").text(title);
+                            });
+                            extension.asyncMetadata("icon").done(function (icon) {
+                                if (icon) {
+                                    $node.find(".tile-image").attr("src", icon);
+                                } else {
+                                    $node.find(".tile-image").remove();
+                                }
+                            });
+                            extension.asyncMetadata("preview").done(function (preview) {
+                                if (preview) {
+                                    $node.append(preview);
+                                }
+                            });
+                            extension.asyncMetadata("background").done(function (bgColor) {
+                                $node.css("background", bgColor);
+                            });
+                            extension.asyncMetadata("color").done(function (color) {
+                                $node.addClass("tile-" + color);
+                            });
+                            
                             return $.Deferred().resolve();
                         };
                     }
@@ -138,6 +172,7 @@ function (ext, config, userAPI, date, gt) {
         
         // launcher
         app.setLauncher(function () {
+            contentQueue.start();
             // get window
             app.setWindow(win = ox.ui.createWindow({
                 toolbar: true,
@@ -147,18 +182,28 @@ function (ext, config, userAPI, date, gt) {
             updateTitle();
             _.every(1, 'hour', updateTitle);
 
-            drawTiles();
+
+            initExtensions();
+
+
+            app.active = _(ext.point('io.ox/portal/widget').all()).first();
+            if (app.active) {
+                contentSide.busy();
+                drawContent(app.active);
+            }
+            
             win.nodes.main
                 .addClass('io-ox-portal')
-                .append(leftSide, rightSide);
+                .append(contentSide, tileSide);
             
             ox.on('refresh^', function () {
-                leftSide.empty();
-                drawTiles();
+                tileSide.empty();
+                contentQueue = new tasks.Queue();
+                contentQueue.start();
+                initExtensions();
                 if (app.active) {
-                    nodes = {};
-                    rightSide.empty();
-                    rightSide.busy();
+                    contentSide.empty();
+                    contentSide.busy();
                     drawContent(app.active);
                 }
             });

@@ -106,16 +106,16 @@ define("plugins/portal/linkedin/register",
         drawTile: function (values) {
             var message = values[0];
             
+            
             $(this).append(
-                $('<img>').attr({src: 'apps/plugins/portal/linkedIn/linkedin175.jpg', alt: 'LinkedIn', width: '175px', height: 'auto', 'class': 'linkedin-logo'}),
-                $('<div class="linkedin-counter">').append(gt("Messages:")).append($('<span class="badge bade-info">').text(values.length))
+                $('<img>').attr({src: 'apps/plugins/portal/linkedIn/linkedin175.jpg', alt: 'LinkedIn', width: '175px', height: 'auto', 'class': 'linkedin-logo'})
             ).addClass('io-ox-portal-tile-linkedin');
             
             if (message) {
                 $('<div class="linkedin-preview">').append(
-                    $('<div class="linkedin-name">').text(strings.shorten(message.from.person.firstName + " " + message.from.person.lastName, 27)),
-                    $('<div class="linkedin-subject">').text(strings.shorten(message.subject, 27)),
-                    $('<div class="linkedin-body">').text(strings.shorten(message.body, 60))
+                    $('<div class="linkedin-name">').text(strings.shorten(message.from.person.firstName + " " + message.from.person.lastName, 50)),
+                    $('<div class="linkedin-subject">').text(strings.shorten(message.subject, 50)),
+                    $('<div class="linkedin-body">').text(strings.shorten(message.body, 50))
                 ).appendTo(this);
                 
             }

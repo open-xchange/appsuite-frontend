@@ -84,17 +84,12 @@ define("io.ox/editor/main",
                         $('<div>').addClass('body')
                         .append(
                             // editor
-                            (textarea = view.createTextArea({ property: 'content', label: false, wrap: false })
-                                .attr({
-                                    tabindex: '2'
-                                })
+                            textarea = $('<textarea data-property="content" tabindex="2">')
                                 .on('keydown', function (e) {
                                     if (e.which === 13 && e.ctrlKey) {
                                         app.save();
                                     }
                                 })
-                                .find('textarea')
-                            )
                         )
                     )
                 )

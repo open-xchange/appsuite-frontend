@@ -75,7 +75,7 @@
 		return code.replace(/\\('|\\)/g, "$1").replace(/[\r\t\n]/g, ' ');
 	}
 
-	doT.template = function(tmpl, c, def) {
+    doT.template = function(tmpl, c, def) {
 		c = c || doT.templateSettings;
 		var cse = c.append ? startend.append : startend.split, str, needhtmlencode, sid=0, indv;
 

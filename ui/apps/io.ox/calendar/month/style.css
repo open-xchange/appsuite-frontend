@@ -59,9 +59,9 @@
         overflow: hidden;
     
         background-color: #fff;
-        -webkit-transition: background-color 0.5s;
-        -moz-transition: background-color 0.5s;
-        transition: background-color 0.5s;
+        -webkit-transition: background-color 0.4s;
+        -moz-transition: background-color 0.4s;
+        transition: background-color 0.4s;
     }
     
     .vertical {
@@ -113,7 +113,9 @@
     }
     
     .appointment {
+        font-family: Arial, Helvetica, sans-serif;
         font-size: 11px;
+        line-height: 13px;
         background-color: #08c;
         color: white;
         margin-bottom: 1px;
@@ -123,20 +125,51 @@
         text-overflow: ellipsis;
         cursor: pointer;
     
-        -webkit-transition: background-color, color 0.5s;
-        -moz-transition: background-color, color 0.5s;
-        transition: background-color, color 0.5s;
+        -webkit-transition: background-color, color 0.1s;
+        -moz-transition: background-color, color 0.1s;
+        transition: background-color, color 0.1s;
     }
     
-    .appointment.reserved { background-color: #08c; } /* blue */
-    .appointment.temporary { background-color: #FFBB00; } /* yellow */
-    .appointment.absent { background-color: #913F3F; } /* red */
-    .appointment.free { background-color: #8EB360; } /* green */
-    .appointment.private { background-color: #555; }
+    @appointment-reserved: #08c; /* blue */
+    @appointment-temporary: #FFBB00; /* yellow */
+    @appointment-absent: #913F3F; /* red */
+    @appointment-free: #8EB360; /* green */
+    @appointment-private: #555; /* dark grey */
+    @appointment-out: #aaa; /* light grey */
     
-    .day.out .appointment { background-color: #aaa; }
+    @appointment-hover-pct: 15%;
+    @appointment-unconfirmed-alpha: 0.4;
     
-    .appointment:hover { background-color: #ccc; color: #333; }
+    .appointment.reserved { background-color: @appointment-reserved; }
+    .appointment.temporary { background-color: @appointment-temporary; }
+    .appointment.absent { background-color: @appointment-absent; }
+    .appointment.free { background-color: @appointment-free; }
+    .appointment.private { background-color: @appointment-private; }
+    
+    .day.out .appointment { background-color: @appointment-out; }
+        
+    /* unconfirmed */
+    .appointment.reserved.unconfirmed {
+        background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved), @appointment-unconfirmed-alpha);
+    }
+    .appointment.temporary.unconfirmed {
+        background-color: hsla(hue(@appointment-temporary), saturation(@appointment-temporary), lightness(@appointment-temporary), @appointment-unconfirmed-alpha);
+    }
+    .appointment.absent.unconfirmed {
+        background-color: hsla(hue(@appointment-absent), saturation(@appointment-absent), lightness(@appointment-absent), @appointment-unconfirmed-alpha);
+    }
+    .appointment.free.unconfirmed {
+        background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free), @appointment-unconfirmed-alpha);
+    }
+
+    /* mouse over */
+    .appointment.reserved:hover { background-color: darken(@appointment-reserved, @appointment-hover-pct); }
+    .appointment.temporary:hover { background-color: darken(@appointment-temporary, @appointment-hover-pct); }
+    .appointment.absent:hover { background-color: darken(@appointment-absent, @appointment-hover-pct); }
+    .appointment.free:hover { background-color: darken(@appointment-free, @appointment-hover-pct); }
+    .appointment.private:hover { background-color: darken(@appointment-private, @appointment-hover-pct); }
+    
+    .day.out .appointment:hover { background-color: darken(@appointment-out, @appointment-hover-pct); }
     
     .appointment .location { color: #ccc; color: rgba(255, 255, 255, 0.6); }
 }

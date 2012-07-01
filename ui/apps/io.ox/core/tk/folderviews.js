@@ -74,13 +74,23 @@ define('io.ox/core/tk/folderviews',
             },
 
             drawChildren = function (reload, method) {
+                // be busy
+                nodes.sub.busy().show();
+                // load
                 return self.loadChildren(reload)
+                    .pipe(function (children) {
+                        var def = $.Deferred();
+                        setTimeout(function () {
+                            def.resolve(children);
+                        }, 1000);
+                        return def;
+                    })
                     .pipe(function (children) {
                         // tricky one liner: we invoke 'paint' for all child nodes.
                         // invoke returns a nice array of all returns values which are deferred objects.
                         // we use this array to feed $.when(). Thus, we get a proper combined deferred object
                         // that will be resolved once all child nodes are resolved.
-                        return $.when.apply(null, _(children).invoke(method, nodes.sub.busy().show()));
+                        return $.when.apply(null, _(children).invoke(method, nodes.sub));
                     });
             },
 
@@ -570,7 +580,14 @@ define('io.ox/core/tk/folderviews',
             // selectable?
             var hasProperType = !options.type || options.type === data.module,
                 isReadable = api.can('read', data),
+                isExpandable = !!data.subfolders,
                 isSelectable = hasProperType && isReadable;
+
+            console.log('check', data.title, data, options, '->', isSelectable);
+
+            if (isExpandable) {
+                this.addClass('expandable');
+            }
 
             if (!isSelectable) {
                 this.removeClass('selectable');
