@@ -18,7 +18,7 @@ define("io.ox/core/main",
      "io.ox/core/api/apps",
      "io.ox/core/extensions",
      "io.ox/core/date",
-     'io.ox/core/notifications/main',
+     'io.ox/core/notifications',
      "gettext!io.ox/core/main",
      "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, date, notifications, gt) {
 
@@ -120,7 +120,11 @@ define("io.ox/core/main",
         }, gt('Sign out'));
 
         // help
-        desktop.addLauncher("right", $('<i class="icon-question-sign icon-white">'), void(0), gt('Help'));
+        desktop.addLauncher("right", $('<i class="icon-question-sign icon-white">'), function () {
+            require(['io.ox/help/center'], function (center) {
+                center.toggle();
+            });
+        }, gt('Help'));
 
         // refresh
         desktop.addLauncher("right", $('<i class="icon-refresh icon-white">'), function () {
@@ -151,12 +155,7 @@ define("io.ox/core/main",
         // notifications
         notifications.attach(desktop, "right");
 
-        // now register default notification handler
-        require(['io.ox/mail/notifications',
-                 'io.ox/calendar/notifications'], function (mailNotifications, calNotifications) {
-            mailNotifications.register();
-            calNotifications.register();
-        });
+
 
 
         // apps

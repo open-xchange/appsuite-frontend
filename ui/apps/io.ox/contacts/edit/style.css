@@ -154,7 +154,7 @@ input#image1 {
 	text-align: right;
 }
 
-.contact-detail.edit div.inlinelabel div.io-ox-label{
+.contact-detail.edit div.inlinelabel label{
 	margin-right: 0px;
 	padding-top: 0px;
 	width: auto;
@@ -162,7 +162,8 @@ input#image1 {
 	float: none;
 }
 
-.contact-detail.edit div.inlinelabel div.io-ox-label:nth-child(1) {
+
+.contact-detail.edit div.inlinelabel label:nth-child(1) {
 	margin-right: 5px;
 }
 

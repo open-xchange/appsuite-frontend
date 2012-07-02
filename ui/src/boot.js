@@ -24,6 +24,7 @@ if (typeof window.console === 'undefined') {
 }
 
 $(document).ready(function () {
+
     "use strict";
 
     if (1 > 2) {

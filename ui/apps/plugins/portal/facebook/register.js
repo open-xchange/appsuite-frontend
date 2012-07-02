@@ -15,14 +15,15 @@
 define('plugins/portal/facebook/register',
     ['io.ox/core/extensions',
      'io.ox/oauth/proxy',
-     'less!plugins/portal/facebook/style.css'], function (ext, proxy) {
+     'gettext!plugins/portal/facebook',
+     'less!plugins/portal/facebook/style.css'], function (ext, proxy, gt) {
 
     'use strict';
 
     var fnToggle = function () {
         var self = $(this);
         self.data('unfolded', !self.data('unfolded'))
-            .text(self.data('unfolded') ? 'Hide comments' : 'Show comments')
+            .text(self.data('unfolded') ? gt('Hide comments') : gt('Show comments'))
             .parent().find('.wall-comment').toggle('fast');
     };
 
@@ -37,16 +38,55 @@ define('plugins/portal/facebook/register',
                 .appendTo($(node));
         };
     };
-    
+
     var getProfile = function (profiles, actor_id) {
         return _.find(profiles, function (profile) { return profile.id === actor_id; });
     };
 
     ext.point('io.ox/portal/widget').extend({
-
         id: 'facebook',
         index: 150,
-
+        title: 'Facebook',
+        icon: 'apps/plugins/portal/facebook/f_logo.png',
+        background: '#3B5998',
+        color: 'bright',
+        preview: function () {
+            var deferred = $.Deferred();
+            
+            proxy.request({
+                api: 'facebook',
+                url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
+                    newsfeed: "SELECT actor_id, message, description , created_time FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0 LIMIT 1",
+                    profiles: "SELECT id, name FROM profile WHERE id IN (SELECT actor_id FROM #newsfeed)"
+                })
+            }).pipe(JSON.parse).done(function (resultsets) {
+                var wall = resultsets.data[0].fql_result_set;
+                var profiles = resultsets.data[1].fql_result_set;
+                var $previewNode = $("<div />");
+               
+                if (!wall) {
+                    return $.Deferred().resolve();
+                }
+                if (wall.length === 0) {
+                    $previewNode.append(
+                        $('<div>').text(gt('No wall posts yet.')));
+                } else {
+                    var post = wall[0];
+                    var message = post.message || post.description || '';
+                    if (message.length > 150) {
+                        message = message.substring(0, 150) + '...';
+                    }
+                    $previewNode.append(
+                        $('<div>').text(gt('Latest wall post:')),
+                        $('<div>').append($('<b>').text(getProfile(profiles, post.actor_id).name + ':')),
+                        $('<div>').text(message));
+                }
+                
+                deferred.resolve($previewNode);
+            });
+            
+            return deferred;
+        },
         load: function () {
             return proxy.request({
                 api: 'facebook',
@@ -72,7 +112,6 @@ define('plugins/portal/facebook/register',
                 var entry_id = 'facebook-' + post.post_id;
                 var wall_content = $('<div class="facebook wall-entry">').attr('id', entry_id);
                 var foundHandler = false;
-
                 // basic wall post skeleton
                 wall_content.append(
                     $('<a class="profile-picture">').attr('href', profile.url).append(
@@ -88,6 +127,7 @@ define('plugins/portal/facebook/register',
                 ext.point('plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
                     if (renderer.accepts(post) && ! foundHandler) {
+                        console.log(profile.name, ' Renderer: ', renderer.id, post);
                         renderer.draw.apply(content_container, [post]);
                         foundHandler = true;
                     }
@@ -101,7 +141,7 @@ define('plugins/portal/facebook/register',
                 if (post.comments && post.comments.data) {
                     //toggle comments on/off
                     $('<a class="comment-toggle">')
-                        .text('Show comments')
+                        .text(gt('Show comments'))
                         .on('click', fnToggle)
                         .data('unfolded', false)
                         .appendTo(wall_content);
@@ -128,33 +168,12 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             var media = post.attachment.media[0];
-            this.text(post.story || post.message).append(
+            this.text(post.story || post.message || post.attachment.name).append(
                 $('<a>', {'class': "posted-image", 'href': media.href})
                     .append($('<img>', {'class': "posted-image", 'src': media.src, alt: media.alt, title: media.alt})));
         }
     });
 
-    ext.point('plugins/portal/facebook/renderer').extend({
-        id: 'youtube',
-        index: 128,
-        accepts: function (post) {
-            return (post.type === 80 && post.attachment.caption === 'www.youtube.com');
-        },
-        draw: function (post) {
-            var vid_id = /[?&]v=(.+)/.exec(post.link);
-            if (!vid_id) {
-                this.text(post.message).append(
-                    $('<br>'),
-                    $('<a class="video">').attr('href', post.link).append(
-                        $('<span class="caption">').text(post.description)));
-            } else {
-                this.text(post.message).append(
-                    $('<a class="video">').attr('href', post.link).append(
-                        $('<img class="video-preview wall-img-left">').attr('src', 'http://img.youtube.com/vi/' + vid_id[1] + '/2.jpg'),
-                        $('<span class="caption">').text(post.description)));
-            }
-        }
-    });
 
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'status',
@@ -171,12 +190,14 @@ define('plugins/portal/facebook/register',
         id: 'link',
         index: 196,
         accepts: function (post) {
-            return (post.type === 80);
+            return post.type === 80 &&
+                post.attachment.caption !== "www.youtube.com" &&
+                post.attachment.media[0];
         },
         draw: function (post) {
             var media = post.attachment.media[0];
             this.append(
-                $('<div>').text(post.description),
+                $('<div>').text(post.description || post.message || ''),
                 $('<a>', {href: media.href}).append(
                     $('<img class="wall-img-left">', {src: media.src}),
                     $('<span class="caption">').text(post.attachment.description)
@@ -186,16 +207,60 @@ define('plugins/portal/facebook/register',
     });
 
     ext.point('plugins/portal/facebook/renderer').extend({
-        id: 'other_video',
+        id: 'video',
         index: 196,
         accepts: function (post) {
-            return (post.type === 128);
+            return (post.type === 128) || (post.type === 80 && post.attachment.caption === "www.youtube.com");
         },
         draw: function (post) {
-            this.text(post.message);
+            var media = post.attachment.media[0];
+
+            $('<div class="message">').text(post.attachment.name || post.message).appendTo($(this));
+            if (media !== undefined) {
+                $('<a>').attr({href: media.href})
+                    .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
+                    .appendTo($(this));
+            }
         }
     });
 
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'app_story',
+        index: 196,
+        accepts: function (post) {
+            return (post.type === 237);
+        },
+        draw: function (post) {
+            var media = post.attachment.media[0];
+
+            $('<div class="message">').text(post.message).appendTo($(this));
+            if (media !== undefined) {
+                $('<a class="app-story">').attr('href', media.href).append(
+                    $('<img class="wall-img-left">').attr('src', media.src),
+                    $('<span class="caption title">').text(post.attachment.name),
+                    $('<br>'),
+                    $('<span class="caption">').text(post.attachment.description)).appendTo($(this));
+            }
+        }
+    });
+
+    ext.point('plugins/portal/facebook/renderer').extend({
+        id: 'new-cover-photo',
+        index: 197,
+        accepts: function (post) {
+            return post.type === 373 && post.attachment.media[0];
+        },
+        draw: function (post) {
+            var media = post.attachment.media[0];
+            this.append(
+                $('<div>').text(post.description || post.message || ''),
+                $('<a>', { href: media.href }).append(
+                    $('<img class="wall-img-left">').attr({ src: media.src })
+                )
+            );
+        }
+    });
 
     ext.point('plugins/portal/facebook/renderer').extend({
         id: 'fallback',
@@ -206,25 +271,6 @@ define('plugins/portal/facebook/register',
         draw: function (post) {
             console.log("Please attach when reporting missing type " + post.type, post);
             this.html('<em style="color: red;">This message is of the type <b>' + post.type + '</b>. We do not know how to render this yet. Please tell us about it!</em>');
-        }
-    });
-    
-    
-    ext.point('plugins/portal/facebook/renderer').extend({
-        id: 'app_story',
-        index: 196,
-        accepts: function (post) {
-            return (post.type === 237);
-        },
-        draw: function (post) {
-            var media = post.attachment.media[0];
-            this.append(
-                $('<div class="message">').text(post.message),
-                $('<a class="app-story">').attr('href', media.href).append(
-                    $('<img class="wall-img-left">').attr('src', media.src),
-                    $('<span class="caption title">').text(post.attachment.name),
-                    $('<br>'),
-                    $('<span class="caption">').text(post.attachment.description)));
         }
     });
 });

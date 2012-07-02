@@ -10,7 +10,6 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-
 define('io.ox/contacts/api',
 
     ['io.ox/core/http',
@@ -42,7 +41,7 @@ define('io.ox/contacts/api',
             },
             search: {
                 action: 'search',
-                columns: '20,1,500,501,502,505,520,555,556,557,569,602,606',
+                columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524',
                 sort: '609', // magic sort field - ignores asc/desc
                 getData: function (query, autoComplete) {
                     return {
