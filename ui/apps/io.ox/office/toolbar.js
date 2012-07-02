@@ -11,16 +11,37 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.css'], function (Events) {
+define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'less!io.ox/office/toolbar.css'], function (Events, KeyCodes) {
 
     'use strict';
 
-    /**
-     * CSS class for active toggle buttons.
-     *
-     * @constant
-     */
-    var ACTIVE_CLASS = 'btn-primary';
+    var /**
+         * CSS class for active toggle buttons.
+         *
+         * @constant
+         */
+        ACTIVE_CLASS = 'btn-primary',
+
+        /**
+         * CSS selector for disabled controls.
+         *
+         * @constant
+         */
+        DISABLED_SELECTOR = ':disabled',
+
+        /**
+         * CSS selector for enabled controls.
+         *
+         * @constant
+         */
+        ENABLED_SELECTOR = ':not(' + DISABLED_SELECTOR + ')',
+
+        /**
+         * CSS selector for focused controls.
+         *
+         * @constant
+         */
+        FOCUSED_SELECTOR = ':focus';
 
     // static functions =======================================================
 
@@ -37,7 +58,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
      *  set).
      */
     function isControlEnabled(control) {
-        return !control.is(':disabled');
+        return control.first().is(ENABLED_SELECTOR);
     }
 
     /**
@@ -62,7 +83,21 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
     }
 
     /**
-     * Creates and returns a new push button element.
+     * Returns whether the first form control in the passed jQuery collection
+     * is focused.
+     *
+     * @param {jQuery} control
+     *  A jQuery collection containing a form control.
+     *
+     * @returns {Boolean}
+     *  True, if the form control is focused.
+     */
+    function isControlFocused(control) {
+        return control.first().is(FOCUSED_SELECTOR);
+    }
+
+    /**
+     * Creates and returns a new button element.
      *
      * @param {String} key
      *  The key associated to this button element. Will be stored in the
@@ -93,7 +128,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             }
             // add text label, separate it from the icon
             if (_.isString(options.label)) {
-                if (button.find('> i').length) {
+                if (button.children('i').length) {
                     button.append($('<span>').addClass('whitespace'));
                 }
                 button.append($('<span>').text(options.label));
@@ -176,7 +211,10 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             // control update handlers, mapped by key
             updateHandlers = {},
 
-            // resize handler objects supporting flexible tool bar sizing
+            // focus handler functions for all button groups in insertion order
+            focusHandlers = [],
+
+            // resize handler functions supporting flexible tool bar sizing
             resizeHandlers = [];
 
         // private methods ----------------------------------------------------
@@ -184,21 +222,26 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         /**
          * Creates and returns a container element used to hold single
          * controls. All controls must be inserted into group containers. The
-         * returned object contains show() and hide() methods that replace the
-         * original version of the jQuery object, and control a special CSS
-         * class instead of modifying the CSS 'display' attribute.
-         * Additionally, the object contains a isVisible() method returning a
+         * returned object contains show(), hide(), and toggle() methods that
+         * replace the original version of the jQuery object, and control a
+         * special CSS class instead of modifying the CSS 'display' attribute.
+         * Additionally, the object contains an isVisible() method returning a
          * boolean value.
          *
          * @returns {jQuery}
          *  A new control container, already inserted into this tool bar.
          */
         function createGroupNode() {
-            var groupNode = $('<div>').addClass('btn-group').appendTo(sizeSpan);
-            // overwrite the show() and hide() methods
+
+            var // create the group container element
+                groupNode = $('<div>').addClass('btn-group').appendTo(sizeSpan);
+
+            // overwrite the show(), hide(), and toggle() methods
             groupNode.show = function () { return this.removeClass('hidden'); };
             groupNode.hide = function () { return this.addClass('hidden'); };
+            groupNode.toggle = function (state) { return this.toggleClass('hidden', state); };
             groupNode.isVisible = function () { return !this.hasClass('hidden'); };
+
             return groupNode;
         }
 
@@ -286,14 +329,37 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
         }
 
         /**
+         * Registers a focus handler function provided by a button group
+         * object. A focus handler focuses another control inside a button
+         * group depending on the specified direction of focus traversal.
+         *
+         * @param {Function} focusHandler
+         *  The focus handler. Will be called in the context of this tool bar.
+         *  On each call, the handler has to determine whether its button group
+         *  contains the control that is currently focused. Receives a boolean
+         *  parameter 'forward' that specifies the direction of focus
+         *  traversal. If set to true, the handler must try to select the next
+         *  enabled control (if the group does not contain the focus, must try
+         *  to select the first enabled control). If set to false, the handler
+         *  must try to select the preceding enabled control (if the group does
+         *  not contain the focus, must try to select the last enabled
+         *  control). The handler must return whether it was able to find and
+         *  focus a new control.
+         */
+        function registerFocusHandler(focusHandler) {
+            focusHandlers.push(focusHandler);
+        }
+
+        /**
          * Registers a resize handler function provided by a button group
          * object.
          *
          * @param {Function} resizeHandler
-         *  The resize handler. Receives a boolean parameter 'enlarge'
-         *  specifying whether to try to increase the width of the button group
-         *  (true), or to try to decrease the width of the button group
-         *  (false).
+         *  The resize handler. Will be called in the context of this tool bar.
+         *  Receives a boolean parameter 'enlarge'. If set to true, the handler
+         *  must try to increase the width of the button group. If set to
+         *  false, the handler must try to decrease the width of the button
+         *  group.
          */
         function registerResizeHandler(resizeHandler) {
             // add window resize listener on first call
@@ -318,11 +384,29 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
 
             // private methods ------------------------------------------------
 
+            /**
+             * Click handler for buttons in this button group. If the clicked
+             * button is a toggle button, will toggle and return its state.
+             *
+             * @param {jQuery} button
+             *  The clicked button, as jQuery object.
+             *
+             * @returns {Boolean|Undefined}
+             *  The state of a toggle button, or undefined for a push button.
+             */
             function clickHandler(button) {
                 if (isToggleButton(button)) {
                     toggleButtons(button);
                     return isButtonActive(button);
                 } // else: push button, return undefined
+            }
+
+            /**
+             * Focus handler, forwards requests to the generic function
+             * ButtonGroupProxy.focusHandler().
+             */
+            function focusHandler(forward) {
+                return ButtonGroupProxy.focusHandler(groupNode, forward);
             }
 
             // methods --------------------------------------------------------
@@ -363,7 +447,55 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
              */
             this.end = function () { return toolbar; };
 
+            // initialization -------------------------------------------------
+
+            registerFocusHandler(focusHandler);
+
         } // class ButtonGroupProxy
+
+        /**
+         * Generic focus handler for button groups containing multiple buttons.
+         *
+         * @param {jQuery} groupNode
+         *  The button group, as jQuery collection.
+         *
+         * @param {Boolean} forward
+         *  The direction of focus traversal. If set to true, focus must move
+         *  forward, otherwise focus must move backward.
+         *
+         * @returns {Boolean}
+         *  If the button group currently has focus, returns true, if focus has
+         *  been set to the next/previous button. Otherwise, returns true, if
+         *  focus has been set to the first/last button.
+         */
+        ButtonGroupProxy.focusHandler = function (groupNode, forward) {
+
+            var // all enabled buttons
+                buttons = groupNode.find('button' + ENABLED_SELECTOR),
+                // focused button
+                button = groupNode.find('button' + FOCUSED_SELECTOR),
+                // index of focused button in all enabled buttons
+                index = buttons.index(button);
+
+            // button group hidden, or no enabled buttons available
+            if (!groupNode.isVisible() || !buttons.length) { return false; }
+
+            // this button group contains focus
+            if (button.length) {
+                // focused button not found in collection of enabled buttons (internal error)
+                if (index < 0) { return false; }
+                // no button available to move focus to
+                if (forward ? (index + 1 === buttons.length) : (index === 0)) { return false; }
+
+                // move focus to next/previous button
+                buttons.eq(forward ? (index + 1) : (index - 1)).focus();
+                return true;
+            }
+
+            // this button group does not contain focus: set focus to first/last button
+            buttons[forward ? 'first' : 'last']().focus();
+            return true;
+        };
 
         // class RadioGroupProxy ----------------------------------------------
 
@@ -394,6 +526,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 // create a new group container for the drop-down group
                 dropDownGroupNode = createGroupNode(),
 
+                // number of rows in the drop-down menu
+                rows = 0,
+
                 // number of columns in the drop-down menu
                 columns = (options && _.isNumber(options.columns) && (options.columns >= 1)) ? options.columns : 3,
 
@@ -413,6 +548,26 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 buttonCount = 0;
 
             // private methods ------------------------------------------------
+
+            /**
+             * Inserts a new option button into the passed container element,
+             * and registers the click handler function for the new button.
+             *
+             * @param {jQuery} node
+             *  The parent container element for the new button.
+             *
+             * @param {String} value
+             *  The unique value for the option button.
+             *
+             * @param {Object} [options]
+             *  A map of options to control the properties of the new button.
+             */
+            function insertButton(node, value, options) {
+                var // create the new button element
+                    button = createButton(key, options).attr('data-value', value).appendTo(node);
+                // add click handler
+                registerActionHandler(button, 'click', clickHandler);
+            }
 
             /**
              * Activates a button in this radio group.
@@ -463,23 +618,94 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
             }
 
             /**
-             * Inserts a new option button into the passed container element,
-             * and registers the click handler function for the new button.
-             *
-             * @param {jQuery} node
-             *  The parent container element for the new button.
-             *
-             * @param {String} value
-             *  The unique value for the option button.
-             *
-             * @param {Object} [options]
-             *  A map of options to control the properties of the new button.
+             * Focus handler, handles focus requests, if the drop-down button
+             * is visible, otherwise forwards requests to the generic function
+             * ButtonGroupProxy.focusHandler().
              */
-            function insertButton(node, value, options) {
-                var // create the new button element
-                    button = createButton(key, options).attr('data-value', value).appendTo(node);
-                // add click handler
-                registerActionHandler(button, 'click', clickHandler);
+            function focusHandler(forward) {
+
+                // handle focus for drop-down mode
+                if (dropDownGroupNode.isVisible()) {
+                    // drop-down button can only receive focus, but cannot move
+                    // it around, if it is already focused
+                    if (isControlFocused(dropDownButton)) {
+                        return false;
+                    }
+                    dropDownButton.focus();
+                    return true;
+                }
+
+                // move focus regularly in the button group (visibility checked internally)
+                return ButtonGroupProxy.focusHandler(buttonGroupNode, forward);
+            }
+
+            function resizeHandler(enlarge) {
+                (enlarge ? dropDownGroupNode : buttonGroupNode).hide();
+                (enlarge ? buttonGroupNode : dropDownGroupNode).show();
+            }
+
+            /**
+             * Handles key events in the focused drop-down button. Adds special
+             * handling for opening the drop-down menu via keyboard.
+             */
+            function dropDownButtonKeyHandler(event) {
+            }
+
+            /**
+             * Handles key events in the open drop-down menu.
+             */
+            function dropDownMenuKeyHandler(event) {
+
+                var // all buttons in the drop-down menu
+                    buttons = dropDownMenu.find('button'),
+                    // index of the focused button
+                    index = buttons.index(event.target),
+                    // row index of the focused button
+                    row = (index >= 0) ? Math.floor(index / columns) : -1,
+                    // column index of the focused button
+                    column = (index >= 0) ? (index % columns) : -1,
+                    // whether the key event has been handled
+                    handled = true;
+
+                function close() {
+                    dropDownButton.focus().click();
+                }
+
+                function focus(newIndex) {
+                    newIndex = Math.min(buttonCount - 1, newIndex);
+                    if ((newIndex >= 0) && (newIndex !== index)) {
+                        buttons.eq(newIndex).focus();
+                    }
+                }
+
+                switch (event.keyCode) {
+                case KeyCodes.LEFT_ARROW:
+                    if (column > 0) { focus(index - 1); }
+                    break;
+                case KeyCodes.UP_ARROW:
+                    if (row > 0) { focus(index - columns); } else { close(); }
+                    break;
+                case KeyCodes.RIGHT_ARROW:
+                    if (column + 1 < columns) { focus(index + 1); }
+                    break;
+                case KeyCodes.DOWN_ARROW:
+                    if (row + 1 < rows) { focus(index + columns); }
+                    break;
+                case KeyCodes.ESCAPE:
+                    close();
+                    break;
+                default:
+                    handled = false;
+                }
+
+                // suppress bubbling and default action for handled key events
+                if (handled) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                }
+
+                // TAB key bubbles up to the tool bar and causes the drop-down
+                // menu to be closed automatically
             }
 
             /**
@@ -536,14 +762,14 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                     _(columns).times(function () {
                         tableRow.append($('<td>').append(dummyButton.clone()));
                     });
+                    rows += 1;
                 } else {
                     // select last table row
                     tableRow = dropDownMenu.find('tr:last-child');
                 }
 
-                // select table cell (the :nth-child selector is 1-based), and
-                // replace the dummy button with a new real button
-                tableCell = tableRow.find('td:nth-child(' + (column + 1) + ')').empty();
+                // select table cell and replace the dummy button with a new real button
+                tableCell = tableRow.children().eq(column).empty();
                 insertButton(tableCell, value, options);
 
                 // copy formatting of first inserted button to drop-down button
@@ -577,10 +803,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 break;
 
             case 'auto':
-                registerResizeHandler(function (enlarge) {
-                    (enlarge ? dropDownGroupNode : buttonGroupNode).hide();
-                    (enlarge ? buttonGroupNode : dropDownGroupNode).show();
-                });
+                registerResizeHandler(resizeHandler);
                 break;
 
             default: // 'dropdown'
@@ -588,8 +811,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'less!io.ox/office/toolbar.c
                 break;
             }
 
-            // single update handler for the entire radio group
+            // register event handlers
             registerUpdateHandler(key, updateHandler);
+            registerFocusHandler(focusHandler);
+            dropDownButton.on('keydown', dropDownButtonKeyHandler);
+            dropDownMenu.on('keydown', dropDownMenuKeyHandler);
 
         } // class RadioGroupProxy
 

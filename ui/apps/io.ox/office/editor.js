@@ -13,12 +13,23 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
+define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], function (Events, KeyCodes) {
 
     'use strict';
 
-    var OP_TEXT_INSERT = 'insertText';
-    var OP_TEXT_DELETE = 'deleteText';
+    var OP_TEXT_INSERT =  'insertText';
+    var OP_TEXT_DELETE =  'deleteText';
+
+    var OP_PARA_INSERT =  'insertParagraph';
+    var OP_PARA_DELETE =  'deleteParagraph';
+    var OP_PARA_SPLIT =   'splitParagraph';
+    var OP_PARA_MERGE =   'mergeParagraph';
+
+    var OP_TABLE_INSERT = 'insertTable';
+    var OP_TABLE_DELETE = 'deleteTable';
+
+    var OP_ATTR_SET =     'setAttribute';   // Should better be insertAttribute?
+//    var OP_ATTR_DELETE =  'deleteAttribute';
 
     function OXOUndoAction(_undoOperation, _redoOperation) {
 
@@ -45,11 +56,23 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         var groupLevel = 0;
         var currentGroupActions = [];
 
+        var enabled = true;
+
         var processingUndoRedo = false;
 
         this.clear = function () {
             actions = [];
             currentAction = 0;
+        };
+
+        this.isEnabled = function () {
+            return enabled;
+        };
+
+        this.enable = function (b) {
+            enabled = b;
+            if (!enabled)
+                this.clear();
         };
 
         this.startGroup = function () {
@@ -335,12 +358,12 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         // key codes of navigation keys that will be passed directly to the browser
         var NAVIGATION_KEYS = _([
-//              16, 17, 18, // Shift, Ctrl, Alt
-//              20, // CapsLock
-                33, 34, 35, 36, // PageUp, PageDown, End, Pos1
-                37, 38, 39, 40, // Cursor Left, Up, Right, Down
-                91, 92, // Left Windows, Right Windows
-                144, 145 // NumLock, ScrollLock
+//              KeyCodes.SHIFT, KeyCodes.CONTROL, KeyCodes.ALT,
+//              KeyCodes.CAPS_LOCK,
+                KeyCodes.PAGE_UP, KeyCodes.PAGE_DOWN, KeyCodes.END, KeyCodes.HOME,
+                KeyCodes.LEFT_ARROW, KeyCodes.UP_ARROW, KeyCodes.RIGHT_ARROW, KeyCodes.DOWN_ARROW,
+                KeyCodes.LEFT_WINDOWS, KeyCodes.RIGHT_WINDOWS,
+                KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
             ]);
 
         var modified = false;
@@ -432,6 +455,9 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
             blockOperations = true;
 
+            // Clone operation now, because undo might manipulate it when merging with previous one...
+            var notifyOperation = _.clone(operation, true);
+
             this.implDbgOutObject({type: 'operation', value: operation});
 
             if (bRecord) {
@@ -442,15 +468,37 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 this.implInitDocument();
             }
             else if (operation.name === OP_TEXT_INSERT) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var endPos = _.clone(operation.start, true);
+                    endPos[endPos.length - 1] += operation.text.length;
+                    var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.start, true), end: endPos };
+                    var undoAction = new OXOUndoAction(undoOperation, _.copy(operation, true));
+                    if (operation.text.length === 1)
+                        undoAction.allowMerge = true;
+                    undomgr.addUndo(undoAction);
+                }
                 this.implInsertText(operation.text, operation.start);
             }
             else if (operation.name === OP_TEXT_DELETE) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var undoOperation = { name: OP_TEXT_INSERT, start: _.copy(operation.start, true), text: this.getParagraphText(operation.start[0], operation.start[1], operation.end[1]) };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
                 this.implDeleteText(operation.start, operation.end);
             }
-            else if (operation.name === "setAttribute") {
+            else if (operation.name === OP_ATTR_SET) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    // Hack - this is not the correct Undo - but the attr toggle from the browser will have the effect we want to see ;)
+                    var undoOperation = {name: OP_ATTR_SET, attr: operation.attr, value: !operation.value, start: _.copy(operation.start, true), end: _.copy(operation.end, true)};
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
                 this.implSetAttribute(operation.attr, operation.value, operation.start, operation.end);
             }
-            else if (operation.name === "insertParagraph") {
+            else if (operation.name === OP_PARA_INSERT) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var undoOperation = { name: OP_PARA_DELETE, start: _.copy(operation.start, true) };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
                 this.implInsertParagraph(operation.start);
                 if (operation.text) {
                     var startPos = _.copy(operation.start, true);
@@ -458,20 +506,47 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                     this.implInsertText(operation.text, startPos);
                 }
             }
-            else if (operation.name === "insertTable") {
+            else if (operation.name === OP_TABLE_INSERT) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var undoOperation = { name: OP_TABLE_DELETE, start: _.copy(operation.start, true) };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
                 this.implInsertTable(operation.start);
             }
-            else if (operation.name === "deleteParagraph") {
+            else if (operation.name === OP_PARA_DELETE) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var undoOperation = { name: OP_PARA_INSERT, start: _.copy(operation.start, true), text: this.getParagraphText(operation.start[0]) }; // HACK: Text is not part of the official operation, but I need it for Undo. Can be changed once we can have multiple undos for one operation.
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+
+                }
                 this.implDeleteParagraph(operation.start);
             }
-            else if (operation.name === "splitParagraph") {
+            else if (operation.name === OP_PARA_SPLIT) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var undoOperation = { name: OP_PARA_MERGE, start: _.copy(operation.start, true) };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
                 this.implSplitParagraph(operation.start);
             }
-            else if (operation.name === "mergeParagraph") {
+            else if (operation.name === OP_PARA_MERGE) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var sel = _.copy(operation.start);
+                    var paraLen = 0;
+                    if (this.getParagraphNodeName(sel[0]) === 'TABLE') {
+                        paraLen = this.getParagraphLenInCell(sel[0], sel[1], sel[2], sel[3]);
+                    } else {
+                        paraLen = this.getParagraphLen(sel[0]);
+                    }
+                    sel.push(paraLen);
+                    var undoOperation = { name: OP_PARA_SPLIT, start: sel };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
                 this.implMergeParagraph(operation.start);
             }
             else if (operation.name === "xxxxxxxxxxxxxx") {
                 // TODO
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                }
             }
 
             // document state
@@ -479,7 +554,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
             if (bNotify && !blockOperationNotifications) {
                 // Will give everybody the same copy - how to give everybody his own copy?
-                this.trigger("operation", _.copy(operation, true));
+                this.trigger("operation", notifyOperation);
             }
 
             blockOperations = false;
@@ -756,6 +831,10 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             undomgr.clear();
         };
 
+        this.enableUndo = function (enable) {
+            undomgr.enable(enable);
+        };
+
         this.undo = function () {
             undomgr.undo(this);
             this.setSelection(new OXOSelection(lastOperationEnd));
@@ -838,7 +917,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
             var selection; // only get when really needed...
 
-            if (event.keyCode === 46) { // DELETE
+            if (event.keyCode === KeyCodes.DELETE) {
                 selection = this.getSelection();
                 selection.adjust();
                 if (selection.hasRange()) {
@@ -869,7 +948,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 event.preventDefault();
                 this.setSelection(selection);
             }
-            else if (event.keyCode === 8) { // BACKSPACE
+            else if (event.keyCode === KeyCodes.BACKSPACE) {
                 selection = this.getSelection();
                 selection.adjust();
                 if (selection.hasRange()) {
@@ -1028,7 +1107,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
             else {
 
-                if (event.keyCode === 13) { // RETURN
+                if (event.keyCode === KeyCodes.ENTER) {
                     this.deleteSelected(selection);
                     var startPosition = _.copy(selection.startPaM.oxoPosition, true);
                     this.splitParagraph(startPosition);
@@ -1128,25 +1207,17 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
         this.deleteText = function (startposition, endposition) {
             if (startposition !== endposition) {
                 var newOperation = { name: OP_TEXT_DELETE, start: startposition, end: endposition };
-                // Hack for now. Might span multiple elements later, and we also need to keep attributes!
-                // Right now, dleteText is only valid for single paragraphs...
-                var undoOperation = { name: OP_TEXT_INSERT, start: _.copy(startposition, true), text: this.getParagraphText(startposition[0], startposition[1], endposition[1]) };
-                undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
                 this.applyOperation(newOperation, true, true);
             }
         };
 
         this.deleteParagraph = function (position) {
-            var newOperation = { name: 'deleteParagraph', start: _.copy(position, true) };
-            var undoOperation = { name: 'insertParagraph', start: _.copy(position, true), text: this.getParagraphText(position[0]) }; // HACK: Text is not part of the official operation, but I need it for Undo. Can be changed once we can have multiple undos for one operation.
-            undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
+            var newOperation = { name: OP_PARA_DELETE, start: _.copy(position, true) };
             this.applyOperation(newOperation, true, true);
         };
 
         this.insertParagraph = function (position) {
-            var newOperation = {name: 'insertParagraph', start: _.copy(position, true)};
-            var undoOperation = { name: 'deleteParagraph', start: _.copy(position, true) };
-            undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
+            var newOperation = {name: OP_PARA_INSERT, start: _.copy(position, true)};
             this.applyOperation(newOperation, true, true);
         };
 
@@ -1154,41 +1225,22 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             var selection = this.getSelection();
             selection.adjust();
             var position = [selection.startPaM.oxoPosition[0]];
-            var newOperation = {name: 'insertTable', start: _.copy(position, true)};
-            var undoOperation = { name: 'deleteTable', start: _.copy(position, true) };
-            undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
+            var newOperation = {name: OP_TABLE_INSERT, start: _.copy(position, true)};
             this.applyOperation(newOperation, true, true);
         };
 
         this.splitParagraph = function (position) {
-            var newOperation = {name: 'splitParagraph', start: _.copy(position, true)};
-            var undoOperation = { name: 'mergeParagraph', start: _.copy(position, true) };
-            undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
+            var newOperation = {name: OP_PARA_SPLIT, start: _.copy(position, true)};
             this.applyOperation(newOperation, true, true);
         };
 
         this.mergeParagraph = function (position) {
-            var newOperation = {name: 'mergeParagraph', start: _.copy(position)};
-            var sel = _.copy(position);
-            var paraLen = 0;
-            if (this.getParagraphNodeName(sel[0]) === 'TABLE') {
-                paraLen = this.getParagraphLenInCell(sel[0], sel[1], sel[2], sel[3]);
-            } else {
-                paraLen = this.getParagraphLen(sel[0]);
-            }
-            sel.push(paraLen);
-            var undoOperation = { name: 'splitParagraph', start: sel };
-            undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
+            var newOperation = {name: OP_PARA_MERGE, start: _.copy(position)};
             this.applyOperation(newOperation, true, true);
         };
 
         this.insertText = function (text, position) {
             var newOperation = { name: OP_TEXT_INSERT, text: text, start: _.copy(position, true) };
-            var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(position, true), end: [position[0], position[1] + text.length] };
-            var undoAction = new OXOUndoAction(undoOperation, _.copy(newOperation, true));
-            if (text.length === 1)
-                undoAction.allowMerge = true;
-            undomgr.addUndo(undoAction);
             this.applyOperation(newOperation, true, true);
         };
 
@@ -1281,10 +1333,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 }
             }
             else {
-                var newOperation = {name: 'setAttribute', attr: attr, value: value, start: _.copy(startPosition, true), end: _.copy(endPosition, true)};
-                // Hack - this is not the correct Undo - but the attr toggle from the browser will have the effect we want to see ;)
-                var undoOperation = {name: 'setAttribute', attr: attr, value: !value, start: _.copy(startPosition, true), end: _.copy(endPosition, true)};
-                undomgr.addUndo(new OXOUndoAction(undoOperation, newOperation));
+                var newOperation = {name: OP_ATTR_SET, attr: attr, value: value, start: _.copy(startPosition, true), end: _.copy(endPosition, true)};
                 this.applyOperation(newOperation, true, true);
             }
         };

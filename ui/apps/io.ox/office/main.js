@@ -51,7 +51,8 @@ define('io.ox/office/main',
                 .addButton('character/font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
                 .addButton('character/font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
             .end()
-            .addRadioGroup('paragraph/alignment', { type: 'auto', columns: 2, tooltip: gt('Paragraph alignment') })
+//            .addRadioGroup('paragraph/alignment', { type: 'auto', columns: 2, tooltip: gt('Paragraph alignment') })
+            .addRadioGroup('paragraph/alignment', { type: 'dropdown', columns: 3, tooltip: gt('Paragraph alignment') })
                 .addButton('left',    { icon: gt('icon-align-left'),    tooltip: gt('Left') })
                 .addButton('center',  { icon: gt('icon-align-center'),  tooltip: gt('Center') })
                 .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
@@ -246,7 +247,7 @@ define('io.ox/office/main',
          */
         function updateDebugMode() {
             editor.getNode().toggleClass('debug-highlight', debugMode);
-            win.nodes.debugPane[debugMode ? 'show' : 'hide']();
+            win.nodes.debugPane.toggle(debugMode);
             // resize editor pane
             windowResizeHandler();
         }
@@ -292,7 +293,11 @@ define('io.ox/office/main',
             $(window).resize(windowResizeHandler);
 
             // trigger all window resize handlers on 'show' events
-            win.on('show', function () { $(window).resize(); });
+            win.on('show', function () {
+                $(window).resize();
+                // disable FF spell checking. TODO: better solution...
+                $('body').attr('spellcheck', false);
+            });
         }
 
         /**
@@ -584,8 +589,8 @@ define('io.ox/office/main',
         _(Editor.TextMode).each(function (textMode) {
             var // class names for the editor
                 classes = 'io-ox-office-editor user-select-text ' + textMode,
-                // the editor root node, TODO: language support (set undefined to prevent spell checking)
-                node = $('<div>', { lang: 'undefined', contenteditable: true }).addClass(classes);
+                // the editor root node
+                node = $('<div>', { contenteditable: true }).addClass(classes);
             editors[textMode] = new Editor(node, textMode);
         });
 
