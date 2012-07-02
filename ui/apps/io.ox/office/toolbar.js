@@ -189,6 +189,31 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
         buttons.toggleClass(ACTIVE_CLASS, state).find('> i').toggleClass('icon-white', state);
     }
 
+    /**
+     * Removes most browser-specific differences from the passed 'keydown',
+     * 'keypress', or 'keyup' event.
+     *
+     * @param {jQuery.Event} event
+     *  The keyboard event passed to a jQuery keyboard listener.
+     */
+    function normalizeKeyEvent(event) {
+        // copy event.which to event.charCode, if charCode is not supported (Opera)
+        if (!('charCode' in event)) {
+            event.charCode = (event.type === 'keypress') ? event.which : 0;
+        }
+
+        // remove Unicode character code from event.keyCode in 'keypress' events (Chrome, IE, Opera)
+        if ((event.type === 'keypress') && (event.charCode !== 0)) {
+            event.keyCode = 0;
+        }
+
+        // drop additional 'keypress' events for control keys (Firefox, Opera)
+        if ((event.type === 'keypress') && (event.charCode === 0)) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+        }
+    }
+
     // public class ToolBar ===================================================
 
     /**
@@ -649,6 +674,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
              * handling for opening the drop-down menu via keyboard.
              */
             function dropDownButtonKeyHandler(event) {
+                normalizeKeyEvent(event);
+                event.stopPropagation();
+                event.preventDefault();
             }
 
             /**
@@ -656,7 +684,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
              */
             function dropDownMenuKeyHandler(event) {
 
-                var // all buttons in the drop-down menu
+                var // distinguish between 'keydown' and 'keypress' events
+                    keypress = event.type === 'keypress',
+                    // all buttons in the drop-down menu
                     buttons = dropDownMenu.find('button'),
                     // index of the focused button
                     index = buttons.index(event.target),
@@ -678,21 +708,22 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
                     }
                 }
 
+                normalizeKeyEvent(event);
                 switch (event.keyCode) {
                 case KeyCodes.LEFT_ARROW:
-                    if (column > 0) { focus(index - 1); }
+                    if (!keypress && (column > 0)) { focus(index - 1); }
                     break;
                 case KeyCodes.UP_ARROW:
-                    if (row > 0) { focus(index - columns); } else { close(); }
+                    if (!keypress && (row > 0)) { focus(index - columns); } else { close(); }
                     break;
                 case KeyCodes.RIGHT_ARROW:
-                    if (column + 1 < columns) { focus(index + 1); }
+                    if (!keypress && (column + 1 < columns)) { focus(index + 1); }
                     break;
                 case KeyCodes.DOWN_ARROW:
-                    if (row + 1 < rows) { focus(index + columns); }
+                    if (!keypress && (row + 1 < rows)) { focus(index + columns); }
                     break;
                 case KeyCodes.ESCAPE:
-                    close();
+                    if (!keypress) { close(); }
                     break;
                 default:
                     handled = false;
@@ -814,8 +845,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
             // register event handlers
             registerUpdateHandler(key, updateHandler);
             registerFocusHandler(focusHandler);
-            dropDownButton.on('keydown', dropDownButtonKeyHandler);
-            dropDownMenu.on('keydown', dropDownMenuKeyHandler);
+            dropDownButton.on('keydown keypress', dropDownButtonKeyHandler);
+            dropDownMenu.on('keydown keypress', dropDownMenuKeyHandler);
 
         } // class RadioGroupProxy
 
