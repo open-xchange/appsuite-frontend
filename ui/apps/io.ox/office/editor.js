@@ -1379,12 +1379,18 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             var paraLen = 0;
             if ((paragraphs[table] !== undefined) && (this.getParagraphNodeName(table) === 'TABLE')) {
                 var row = $('TR', paragraphs[table]).get(row);
-                var cell = $('TH, TD', row).get(column);
-                var len = $('P', cell).length;
-                var paragraph = $('P', cell).get(para);
-                var nodeList = paragraph.childNodes;
-                for (var i = 0; i < nodeList.length; i++) {
-                    paraLen += $(nodeList[i]).text().length;
+                if (row) {
+                    var cell = $('TH, TD', row).get(column);
+                    if (cell) {
+                        var len = $('P', cell).length;
+                        var paragraph = $('P', cell).get(para);
+                        if (paragraph) {
+                            var nodeList = paragraph.childNodes;
+                            for (var i = 0; i < nodeList.length; i++) {
+                                paraLen += $(nodeList[i]).text().length;
+                            }
+                        }
+                    }
                 }
             }
             return paraLen;
