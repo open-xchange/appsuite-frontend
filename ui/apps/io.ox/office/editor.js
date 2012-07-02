@@ -181,6 +181,19 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         return str;
     }
 
+    function getFormattedPositionString(position) {
+        var str = '';
+
+        for (var i = 0; i < position.length; i++) {
+            str += fillstr(position[i].toString(), 2, '0');
+            if (i !== position.length - 1) {
+                str += ',';
+            }
+        }
+
+        return str;
+    }
+
     /**
      * 'Point and mark'. Represents a text position a.k.a. cursor position.
      * Member field 'para' contains the zero-based paragraph index, member
@@ -1366,12 +1379,18 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
             var paraLen = 0;
             if ((paragraphs[table] !== undefined) && (this.getParagraphNodeName(table) === 'TABLE')) {
                 var row = $('TR', paragraphs[table]).get(row);
-                var cell = $('TH, TD', row).get(column);
-                var len = $('P', cell).length;
-                var paragraph = $('P', cell).get(para);
-                var nodeList = paragraph.childNodes;
-                for (var i = 0; i < nodeList.length; i++) {
-                    paraLen += $(nodeList[i]).text().length;
+                if (row) {
+                    var cell = $('TH, TD', row).get(column);
+                    if (cell) {
+                        var len = $('P', cell).length;
+                        var paragraph = $('P', cell).get(para);
+                        if (paragraph) {
+                            var nodeList = paragraph.childNodes;
+                            for (var i = 0; i < nodeList.length; i++) {
+                                paraLen += $(nodeList[i]).text().length;
+                            }
+                        }
+                    }
                 }
             }
             return paraLen;
@@ -1911,7 +1930,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
 
             var selection = this.getSelection();
 
-            var dbg = fillstr(event.type, 10, ' ', true) + ' sel:[' + fillstr(selection.startPaM.oxoPosition[0].toString(), 2, '0') + ',' + fillstr(selection.startPaM.oxoPosition[1].toString(), 2, '0') + '/' + fillstr(selection.endPaM.oxoPosition[0].toString(), 2, '0') + ',' + fillstr(selection.endPaM.oxoPosition[1].toString(), 2, '0') + ']';
+            var dbg = fillstr(event.type, 10, ' ', true) + ' sel:[' + getFormattedPositionString(selection.startPaM.oxoPosition) + '/' + getFormattedPositionString(selection.endPaM.oxoPosition) + ']';
+
             if ((event.type === "keypress") || (event.type === "keydown")) {
                 dbg += ' key:[keyCode=' + fillstr(event.keyCode.toString(), 3, '0') + ' charCode=' + fillstr(event.charCode.toString(), 3, '0') + ' shift=' + event.shiftKey + ' ctrl=' + event.ctrlKey + ' alt=' + event.altKey + ']';
             }
