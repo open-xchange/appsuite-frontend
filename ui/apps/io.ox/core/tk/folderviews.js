@@ -78,13 +78,14 @@ define('io.ox/core/tk/folderviews',
                 nodes.sub.busy().show();
                 // load
                 return self.loadChildren(reload)
-                    .pipe(function (children) {
-                        var def = $.Deferred();
-                        setTimeout(function () {
-                            def.resolve(children);
-                        }, 1000);
-                        return def;
-                    })
+                    // next pipe() makes it slow for debugging
+//                    .pipe(function (children) {
+//                        var def = $.Deferred();
+//                        setTimeout(function () {
+//                            def.resolve(children);
+//                        }, 1000);
+//                        return def;
+//                    })
                     .pipe(function (children) {
                         // tricky one liner: we invoke 'paint' for all child nodes.
                         // invoke returns a nice array of all returns values which are deferred objects.
