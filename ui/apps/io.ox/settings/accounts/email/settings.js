@@ -215,7 +215,8 @@ define('io.ox/settings/accounts/email/settings',
                 autoconfigDialogbox.on('add', function (e) {
                     var newMailaddress = inputFieldMail.val(),
                         newPassword = inputFieldPassword.val();
-                    if (myModel.isMailAddress(newMailaddress) === true) {
+
+                    if (myModel.isMailAddress(newMailaddress) === undefined) {
                         drawBusy(alertPlaceholder);
                         autoconfigApiCall(args, newMailaddress, newPassword, alertPlaceholder);
                     } else {
