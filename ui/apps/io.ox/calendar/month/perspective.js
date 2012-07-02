@@ -107,7 +107,7 @@ define('io.ox/calendar/month/perspective',
         render: function (app) {
 
             var year = 2012,
-                month = 5,
+                month = 6,
                 first = Date.UTC(year, month, 1),
                 start = util.getWeekStart(first) - 10 * util.WEEK,
                 i, tops;
