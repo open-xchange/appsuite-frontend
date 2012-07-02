@@ -13,7 +13,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
+define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], function (Events, KeyCodes) {
 
     'use strict';
 
@@ -322,12 +322,12 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
         // key codes of navigation keys that will be passed directly to the browser
         var NAVIGATION_KEYS = _([
-//              16, 17, 18, // Shift, Ctrl, Alt
-//              20, // CapsLock
-                33, 34, 35, 36, // PageUp, PageDown, End, Pos1
-                37, 38, 39, 40, // Cursor Left, Up, Right, Down
-                91, 92, // Left Windows, Right Windows
-                144, 145 // NumLock, ScrollLock
+//              KeyCodes.SHIFT, KeyCodes.CONTROL, KeyCodes.ALT,
+//              KeyCodes.CAPS_LOCK,
+                KeyCodes.PAGE_UP, KeyCodes.PAGE_DOWN, KeyCodes.END, KeyCodes.HOME,
+                KeyCodes.LEFT_ARROW, KeyCodes.UP_ARROW, KeyCodes.RIGHT_ARROW, KeyCodes.DOWN_ARROW,
+                KeyCodes.LEFT_WINDOWS, KeyCodes.RIGHT_WINDOWS,
+                KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
             ]);
 
         var modified = false;
@@ -825,7 +825,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
 
             var selection; // only get when really needed...
 
-            if (event.keyCode === 46) { // DELETE
+            if (event.keyCode === KeyCodes.DELETE) {
                 selection = this.getSelection();
                 selection.adjust();
                 if (selection.hasRange()) {
@@ -856,7 +856,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
                 event.preventDefault();
                 this.setSelection(selection);
             }
-            else if (event.keyCode === 8) { // BACKSPACE
+            else if (event.keyCode === KeyCodes.BACKSPACE) {
                 selection = this.getSelection();
                 selection.adjust();
                 if (selection.hasRange()) {
@@ -1015,7 +1015,7 @@ define('io.ox/office/editor', ['io.ox/core/event'], function (Events) {
             }
             else {
 
-                if (event.keyCode === 13) { // RETURN
+                if (event.keyCode === KeyCodes.ENTER) {
                     this.deleteSelected(selection);
                     var startPosition = _.copy(selection.startPaM.oxoPosition, true);
                     this.splitParagraph(startPosition);

@@ -136,7 +136,7 @@
         @padding-v: 8px;
         padding: @padding-h @padding-v;
         
-        /* add focus highlighting (but not for clicked buttons) */
+        /* add focus highlighting (not for clicked buttons, not for blocker class) */
         &:focus:not(:active) {
             @focus-padding-h: @padding-h - @focus-border-width + 1px;
             @focus-padding-v: @padding-v - @focus-border-width + 1px;
