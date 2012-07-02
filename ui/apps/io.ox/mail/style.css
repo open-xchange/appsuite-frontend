@@ -167,12 +167,11 @@
 /* Detail view */
 
 .mail-detail-pane {
-    background-color: #fff;
+    background-color: #eee;
 }
 
 .mail-detail {
     position: relative;
-    background-color: #fff;
     overflow-y: visible;
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -184,8 +183,27 @@
     z-index: 0;
 }
 
-.mail-detail.by-myself {
+/* page-based layout */
+
+.mail-detail-pane .scrollable-pane {
+    margin-bottom: 20px;
 }
+
+.mail-detail-pane .mail-detail.view {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 20px 20px 20px 20px;
+    margin: 20px 20px 0px 20px;
+    -webkit-box-shadow: 0px 4px 10px -5px black;
+    -moz-box-shadow: 0px 4px 10px -5px black;
+    box-shadow: 0px 4px 10px -5px black;
+}
+
+.mail-detail-pane .mail-detail.thread-inline-actions {
+    background-color: #eee;
+}
+
+/* --- */
 
 .mail-detail.by-myself .from.list a,
 .mail-detail.by-myself .to-cc.list a,
