@@ -200,7 +200,7 @@ define('io.ox/core/tk/forms',
 
         createDateField: function (options) {
             var f = new Field(options, 'date');
-            f.create('<input type="date">', dateChange);
+            f.create('<input type="text">', dateChange); // changed to text again for validation reasons
             f.applyModel(dateChangeByModel);
             f.wrapLabel();
             return f.node;
@@ -398,10 +398,10 @@ define('io.ox/core/tk/forms',
         createListBox: function (options) {
             var ldiv = $('<div>').addClass('listbox');
             ldiv.append(utils.createListSpacer());
-//            _.each(options.model.get(options.dataid), function (item, k) {
-////                console.log(k + ':' + item.dataid);
-//                ldiv.append(utils.createListItem({ dataid: item.dataid, html: item.html }));
-//            });
+            _.each(options.model.get(options.dataid), function (item, k) {
+//                console.log(k + ':' + item.dataid);
+                ldiv.append(utils.createListItem({ dataid: item.dataid, html: item.html }));
+            });
             ldiv.append(utils.createListSpacer());
             return ldiv;
         },

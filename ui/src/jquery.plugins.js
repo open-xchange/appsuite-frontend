@@ -297,7 +297,7 @@
     $.linkSplit = function(str) {
         var regex = new RegExp("(?:https?:\/\/|ftp:\/\/|mailto:|news\\\\.|www\\\\.)[-A-Za-z0-9+&@#\/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#\/%=~_()|]", "gi");
         var parts = [], match, lastIndex = 0;
-        
+
         while (match = regex.exec(str)) {
             parts.push($( document.createTextNode(str.substring(lastIndex, match.index))));
             parts.push($( document.createTextNode(' ')));
@@ -308,7 +308,7 @@
         if(lastIndex < str.length) {
             parts.push($( document.createTextNode(str.substring(lastIndex, str.length))));
         }
-        
+
     	return parts;
     }
 

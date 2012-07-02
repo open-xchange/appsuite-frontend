@@ -1,0 +1,20 @@
+<part id='plugins/notifications/mail/new-mails'>
+    <extension id="list">
+    <legend class='section-title'>{{=it.strings.NEW_MAILS}}<!--<span class='badge' style="vertical-align:top; margin-left: 10px;" data-property="unread">0</span>--></legend>
+        <div class='notifications'>
+
+        </div>
+        <div class='open-app'>
+            <a data-action='openApp'>{{=it.strings.OPEN_APP}}</a>
+        </div>
+    </extension>
+</part>
+<part id='plugins/notifications/mail/mailitem'>
+    <extension id="item">
+        <div class='item'>
+          <div data-property='title' class='title'></div>
+          <div data-property='subject' class='subject'></div>
+          <div class='content'></div>
+        </div>
+    </extension>
+</part>

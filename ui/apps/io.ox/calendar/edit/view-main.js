@@ -15,11 +15,11 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/calendar/util',
        'io.ox/core/extensions',
        'io.ox/core/date',
-       'io.ox/calendar/edit/view-participants',
        'io.ox/calendar/edit/view-addparticipants',
-       'io.ox/calendar/edit/collection-participants',
+       'io.ox/calendar/edit/module-participants',
+       'io.ox/calendar/edit/module-recurrence',
        'dot!io.ox/calendar/edit/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, ParticipantsView, AddParticipantsView, ParticipantsCollection, tmpl, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, participantsModule, recurrenceModule, tmpl, gt) {
 
     'use strict';
 
@@ -76,22 +76,25 @@ define('io.ox/calendar/edit/view-main',
         STARTS_ON:          gt('Starts on'),
         ENDS_ON:            gt('Ends on'),
         ALL_DAY:            gt('All day'),
+        REPEAT:             gt('Repeat'),
+        EDIT:               gt('edit'),
 
 
         CHANGE_TIMEZONE:    gt('Change timezone'),
         DESCRIPTION:        gt('Description'),
         REMINDER:           gt('Reminder'),
-        NO_REMINDER:        gt('no reminder'),
+        NO_REMINDER:        gt('No reminder'),
 
         DISPLAY_AS:         gt('Display as'),
-        RESERVED:           gt('reserved'),
+        RESERVED:           gt('Reserved'),
         TEMPORARY:          gt('Temporary'),
-        ABSENT:             gt('absent'),
-        FREE:               gt('free'),
+        ABSENT:             gt('Absent'),
+        FREE:               gt('Free'),
         TYPE:               gt('Type'),
         PARTICIPANTS:       gt('Participants'),
         PRIVATE:            gt('Private'),
-        NOTIFY_ALL:         gt('Notify all participants about this change')
+        NOTIFY_ALL:         gt('Notify all participants about this change'),
+        HELP_ADD_PARTICIPANTS_MANUALLY:     gt('To add participants manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)')
 
     };
 
@@ -210,8 +213,8 @@ define('io.ox/calendar/edit/view-main',
             self.$('.endsat-date').datepicker({format: dateAPI.DATE});
 
 
-            var participants = new ParticipantsCollection(self.model.get('participants'));
-            self.subviews.participants = new ParticipantsView({collection: participants, el: $(self.el).find('.participants')});
+            var participants = new participantsModule.Collection(self.model.get('participants'));
+            self.subviews.participants = new participantsModule.CollectionView({collection: participants, el: $(self.el).find('.participants')});
             self.subviews.participants.render();
             participants.on('remove', _.bind(self.onRemoveParticipant, self));
 
@@ -256,22 +259,30 @@ define('io.ox/calendar/edit/view-main',
         },
         onAddParticipant: function (data) {
             var participants = this.model.get('participants'),
-                notIn = true;
-
-            this.subviews.participants.collection.add(data);
+                notIn = true, obj;
 
             notIn = !_(participants).any(function (item) {
-                return (item.id === data.id && item.type === data.type);
+                if (data.type === 5) {
+                    return (item.mail === data.mail && item.type === data.type) || (item.mail === data.email1 && item.type === data.type);
+                } else {
+                    return (item.id === data.id && item.type === data.type);
+                }
             });
 
             if (notIn) {
                 if (data.type !== 5) {
-                    participants.push({id: data.id, type: data.type});
+                    obj = {id: data.id, type: data.type};
+                    this.subviews.participants.collection.add(obj);
+                    participants.push(obj);
                 } else {
-                    participants.push({type: data.type, mail: data.mail, display_name: data.display_name});
+                    obj = {type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || ''};
+                    participants.push(obj);
+                    this.subviews.participants.collection.add(obj);
                 }
             }
-
+            // nasty hack, cause [Array] keeps [Array] and no change event will be fired
+            // since we reset it silently and set this again
+            this.model.set({'participants': undefined}, {silent: true});
             this.model.set('participants', participants);
 
         },

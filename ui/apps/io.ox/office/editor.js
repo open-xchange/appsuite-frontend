@@ -1269,45 +1269,66 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                     // 1) selected part or rest of para in first para (pos to end)
                     var startposLength = selection.startPaM.oxoPosition.length - 1,
                         endposLength = selection.endPaM.oxoPosition.length - 1,
-                        endPosition = selection.endPaM.oxoPosition,
+                        localendPosition = selection.endPaM.oxoPosition,
                         isTable = false;
 
-                    if (this.getParagraphNodeName(endPosition[0]) === 'TABLE') {
+                    if (this.getParagraphNodeName(selection.startPaM.oxoPosition[0]) === 'TABLE') {
                         isTable = true;
                     }
 
                     if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
-                        endPosition = _.copy(selection.endPaM.oxoPosition, true);
-                        endPosition[endposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1];
+                        // TODO: This is not sufficient
+                        localendPosition = _.copy(selection.startPaM.oxoPosition, true);
+                        localendPosition[startposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1];
                         if (isTable) {
-                            endPosition[endposLength] = this.getParagraphLenInCell(endPosition[0], endPosition[1], endPosition[2], endPosition[3]);
+                            localendPosition[startposLength] = this.getParagraphLenInCell(localendPosition[0], localendPosition[1], localendPosition[2], localendPosition[3]);
                         } else {
-                            endPosition[endposLength] = this.getParagraphLen(endPosition[endposLength - 1]);
+                            localendPosition[startposLength] = this.getParagraphLen(localendPosition[startposLength - 1]);
                         }
                     }
-                    this.setAttribute(attr, value, selection.startPaM.oxoPosition, endPosition);
+                    this.setAttribute(attr, value, selection.startPaM.oxoPosition, localendPosition);
 
-                    // 2) completly slected paragraphs
-                    for (var i = selection.startPaM.oxoPosition[startposLength - 1] + 1; i < selection.endPaM.oxoPosition[endposLength - 1]; i++) {
-                        var startPosition = _.copy(selection.startPaM.oxoPosition, true);
-                        startPosition[startposLength - 1] = i;
-                        startPosition[startposLength] = 0;
-                        var endPosition = _.copy(selection.endPaM.oxoPosition, true);
-                        endPosition[endposLength - 1] = i;
-                        if (isTable) {
-                            endPosition[endposLength] = this.getParagraphLenInCell(endPosition[0], endPosition[1], endPosition[2], endPosition[3]);
-                        } else {
-                            endPosition[endposLength] = this.getParagraphLen(endPosition[endposLength - 1]);
+                    // 2) completly selected paragraphs
+                    for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
+                        var localstartPosition = _.copy(selection.startPaM.oxoPosition, true);
+                        localstartPosition[startposLength - 1] = i;
+                        localstartPosition[startposLength] = 0;
+
+                        isTable = false;
+                        if (this.getParagraphNodeName(localstartPosition[0]) === 'TABLE') {
+                            isTable = true;
                         }
-                        this.setAttribute(attr, value, startPosition, endPosition);
+
+                        localendPosition = _.copy(selection.endPaM.oxoPosition, true);
+                        localendPosition[endposLength - 1] = i;
+                        if (isTable) {
+                            this.setAttributeToCompleteTable(attr, value, localstartPosition);
+                        } else {
+                            localendPosition = _.copy(selection.startPaM.oxoPosition, true);
+                            localendPosition[startposLength - 1] = i;
+                            localendPosition[startposLength] = this.getParagraphLen(localendPosition[startposLength - 1]);
+                            this.setAttribute(attr, value, localstartPosition, localendPosition);
+                        }
                     }
 
                     // 3) selected part in last para
                     if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
-                        var startPosition = _.copy(selection.endPaM.oxoPosition, true);
-                        startPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
-                        startPosition[endposLength] = 0;
-                        this.setAttribute(attr, value, startPosition, selection.endPaM.oxoPosition);
+                        var localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
+                        localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
+                        localstartPosition[endposLength] = 0;
+
+                        isTable = false;
+                        if (this.getParagraphNodeName(localstartPosition[0]) === 'TABLE') {
+                            isTable = true;
+                        }
+
+                        if (isTable) {
+                            // Assigning attribute to all previous cells and to all paragraphs in this cell!
+                            this.setAttributeToPreviousCellsInTable(attr, value, selection.endPaM.oxoPosition);
+                            this.setAttributeToPreviousParagraphsInCell(attr, value, selection.endPaM.oxoPosition);
+                        }
+
+                        this.setAttribute(attr, value, localstartPosition, selection.endPaM.oxoPosition);
                     }
                 }
             }
@@ -1406,8 +1427,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.getLastColumnIndexInRow = function (para, row) {
             var columnIndex = null;
             if ((paragraphs[para] !== undefined) && (this.getParagraphNodeName(para) === 'TABLE')) {
-                var row = $('TR', paragraphs[para]).get(row);
-                columnIndex = $('TH, TD', row).length;
+                var localrow = $('TR', paragraphs[para]).get(row);
+                columnIndex = $('TH, TD', localrow).length;
                 columnIndex--;
             }
             return columnIndex;
@@ -1416,8 +1437,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.getLastParaIndexInCell = function (para, column, row) {
             var lastPara = null;
             if ((paragraphs[para] !== undefined) && (this.getParagraphNodeName(para) === 'TABLE')) {
-                var row = $('TR', paragraphs[para]).get(row);
-                var cell = $('TH, TD', row).get(column);
+                var localrow = $('TR', paragraphs[para]).get(row);
+                var cell = $('TH, TD', localrow).get(column);
                 lastPara = $('P', cell).length;
                 lastPara--;
             }
@@ -1427,11 +1448,10 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.getParagraphLenInCell = function (table, column, row, para) {
             var paraLen = 0;
             if ((paragraphs[table] !== undefined) && (this.getParagraphNodeName(table) === 'TABLE')) {
-                var row = $('TR', paragraphs[table]).get(row);
-                if (row) {
-                    var cell = $('TH, TD', row).get(column);
+                var localrow = $('TR', paragraphs[table]).get(row);
+                if (localrow) {
+                    var cell = $('TH, TD', localrow).get(column);
                     if (cell) {
-                        var len = $('P', cell).length;
                         var paragraph = $('P', cell).get(para);
                         if (paragraph) {
                             var nodeList = paragraph.childNodes;
@@ -1448,9 +1468,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.getParagraphFromTable = function (table, column, row, para) {
             var paragraph = null;
             if ((paragraphs[table] !== undefined) && (this.getParagraphNodeName(table) === 'TABLE')) {
-                var row = $('TR', paragraphs[table]).get(row);
-                var cell = $('TH, TD', row).get(column);
-                var len = $('P', cell).length;
+                var localrow = $('TR', paragraphs[table]).get(row);
+                var cell = $('TH, TD', localrow).get(column);
                 paragraph = $('P', cell).get(para);
             }
             return paragraph;
@@ -1459,12 +1478,91 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.getAllParagraphsFromTableCell = function (table, column, row) {
             var allParagraphs = [];
             if ((paragraphs[table] !== undefined) && (this.getParagraphNodeName(table) === 'TABLE')) {
-                var row = $('TR', paragraphs[table]).get(row);
-                var cell = $('TH, TD', row).get(column);
+                var localrow = $('TR', paragraphs[table]).get(row);
+                var cell = $('TH, TD', localrow).get(column);
                 allParagraphs = $(cell).children();
             }
 
             return allParagraphs;
+        };
+
+        this.setAttributeToPreviousCellsInTable = function (attr, value, position) {
+            var localPos = _.copy(position, true),
+                lastIndex = localPos.length - 1,
+                thisColumn = localPos[lastIndex - 3],
+                thisRow = localPos[lastIndex - 2],
+                lastRow = this.getLastRowIndexInTable(localPos[0]),
+                lastColumn = this.getLastColumnIndexInRow(localPos[0], lastRow);
+
+            for (var j = 0; j <= thisRow; j++) {
+                var max = lastColumn;
+                if (j === thisRow) {
+                    max = thisColumn - 1;
+                }
+                for (var i = 0; i <= max; i++) {
+                    localPos[lastIndex - 3] = i;  // column
+                    localPos[lastIndex - 2] = j;  // row
+                    this.setAttributeToCompleteCell(attr, value, localPos);
+                }
+            }
+        };
+
+        this.setAttributeToPreviousParagraphsInCell = function (attr, value, position) {
+            var localPos = _.copy(position, true),
+                lastIndex = localPos.length - 1,
+                lastPara = localPos[lastIndex - 1];
+
+            for (var i = 0; i < lastPara; i++) {
+                localPos[lastIndex - 1] = i;
+                this.setAttributeToParagraphInCell(attr, value, localPos);
+            }
+        };
+
+        this.setAttributeToCompleteTable = function (attr, value, position) {
+            var localPos = [];
+
+            // position is something like [6,0] for standard paragraphs
+            localPos.push(position[0]);
+            localPos.push(0); // column
+            localPos.push(0); // row
+            localPos.push(0); // paragraph
+            localPos.push(0); // position
+
+            var lastRow = this.getLastRowIndexInTable(position[0]),
+                lastColumn = this.getLastColumnIndexInRow(position[0], lastRow),
+                lastIndex = localPos.length - 1;
+
+            for (var j = 0; j <= lastRow; j++) {
+                for (var i = 0; i <= lastColumn; i++) {
+                    localPos[lastIndex - 3] = i;  // column
+                    localPos[lastIndex - 2] = j;  // row
+                    this.setAttributeToCompleteCell(attr, value, localPos);
+                }
+            }
+        };
+
+        this.setAttributeToCompleteCell = function (attr, value, position) {
+            var lastIndex = position.length - 1,
+                lastPara = this.getLastParaIndexInCell(position[0], position[1], position[2]),
+                localPos = _.copy(position, true);
+
+            localPos[lastIndex] = 0;
+
+            for (var i = 0; i <= lastPara; i++) {
+                localPos[lastIndex - 1] = i;
+                this.setAttributeToParagraphInCell(attr, value, localPos);
+            }
+        };
+
+        this.setAttributeToParagraphInCell = function (attr, value, position) {
+            var lastIndex = position.length - 1,
+                startPosition = _.copy(position, true),
+                endPosition = _.copy(position, true);
+
+            startPosition[lastIndex] = 0;
+            endPosition[lastIndex] = this.getParagraphLenInCell(position[0], position[1], position[2], position[3]);
+
+            this.setAttribute(attr, value, startPosition, endPosition);
         };
 
         // ==================================================================

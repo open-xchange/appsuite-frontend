@@ -14,7 +14,8 @@
 define('plugins/portal/twitter/register',
     ['io.ox/core/extensions',
      'io.ox/oauth/proxy',
-     'less!plugins/portal/twitter/style.css'], function (ext, proxy) {
+     'gettext!plugins/portal/twitter',
+     'less!plugins/portal/twitter/style.css'], function (ext, proxy, gt) {
 
     'use strict';
 
@@ -49,26 +50,57 @@ define('plugins/portal/twitter/register',
         var cursor = 0;
         _(keySet).each(function (key) {
             var element = offsets[key];
-            bob.append(text.substring(cursor, element.indices[0])).append(element.elem);
+            bob.append(_.escape(text.substring(cursor, element.indices[0]))).append(element.elem);
             cursor = element.indices[1];
         });
 
         if (cursor < text.length) {
-            bob.append(text.substr(cursor, text.length));
+            bob.append(_.escape(text.substr(cursor, text.length)));
         }
 
         return bob;
     };
-
+    var loadTile = function () {
+        var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: {count: 1, include_entities: true}});
+        return def.pipe(function (response) { return (response) ? JSON.parse(response) : null; });
+    };
+    var drawTile = function (tweets, $node) {
+        if (tweets === null) {
+            return;
+        }
+        if (tweets.length === 0) {
+            $node.append(
+                $('<div class="io-ox-clear">').text(gt('No tweets yet.')));
+        } else {
+            var tweet = tweets[0];
+            var message = $('<div>').html(tweet.text).text();
+            $node.append(
+                $('<div class="io-ox-clear">').append($('<b>').text('@' + tweet.user.name + ':')),
+                $('<div>').text(message));
+        }
+    };
     ext.point('io.ox/portal/widget').extend({
         id: 'twitter',
         index: 140,
-
+        tileHeight: 2,
+        title: "Twitter",
+        icon: 'apps/plugins/portal/twitter/twitter-bird-dark-bgs.png',
+        background: '#49f',
+        color: 'bright',
+        preview: function () {
+            var deferred = $.Deferred();
+            loadTile().done(function (tweets) {
+                var $node = $('<div>');
+                drawTile(tweets, $node);
+                deferred.resolve($node);
+            });
+            return deferred;
+        },
+        
         load: function () {
-            var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: {count: 5, include_entities: true}});
+            var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: {count: 10, include_entities: true}});
             return def.pipe(function (response) { return (response) ? JSON.parse(response) : null; });
         },
-
         draw: function (timeline) {
             if (!timeline) {
                 this.remove();

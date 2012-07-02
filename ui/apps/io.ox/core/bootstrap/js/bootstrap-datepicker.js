@@ -107,6 +107,7 @@
 
 		show: function(e) {
 			this.picker.show();
+            this.update();
 			this.height = this.component ? this.component.outerHeight() : this.element.outerHeight();
 			this.place();
 			$(window).on('resize', $.proxy(this.place, this));
@@ -272,7 +273,8 @@
 				} else if (prevMonth.getFullYear() > year || (prevMonth.getFullYear() == year && prevMonth.getMonth() > month)) {
 					clsName += ' new';
 				}
-				if (prevMonth.valueOf() == currentDate) {
+				if (prevMonth.getMonth() == new Date(currentDate).getMonth() &&
+                    prevMonth.getDate() == new Date(currentDate).getDate()) {
 					clsName += ' active';
 				}
 				if (prevMonth.valueOf() < this.startDate || prevMonth.valueOf() > this.endDate) {
@@ -502,7 +504,7 @@
 					this.hide();
 					e.preventDefault();
 					break;
-				case 37: // left
+				/*case 37: // left
 				case 39: // right
 					dir = e.keyCode == 37 ? -1 : 1;
 					if (e.ctrlKey){
@@ -519,7 +521,7 @@
 					this.update();
 					e.preventDefault();
 					dateChanged = true;
-					break;
+					break;*/
 				case 38: // up
 				case 40: // down
 					dir = e.keyCode == 38 ? -1 : 1;
