@@ -52,7 +52,8 @@ define('io.ox/calendar/edit/model-appointment',
         defaults: {
             start_date: dateAPI.Local.localTime(defStart.getTime()),
             end_date: dateAPI.Local.localTime(defEnd.getTime()),
-            recurrence_type: 0
+            recurrence_type: 0,
+            alarm: 15
         },
         initialize: function () {
             this.toSync = {}; //no proto?

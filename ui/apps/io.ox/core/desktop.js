@@ -1265,7 +1265,6 @@ define("io.ox/core/desktop",
 
     // simple launch
     ox.launch = function (id, data) {
-        console.log('launching', id, data);
         var def = $.Deferred();
         if (_.isString(id)) {
             require([id], function (m) {

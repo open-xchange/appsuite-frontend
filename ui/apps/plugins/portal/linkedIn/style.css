@@ -1,0 +1,33 @@
+.io-ox-portal-tile-linkedin {
+    background: #fff;
+    border: 1px solid #333;
+    padding: .5em 7px;
+}
+
+.io-ox-portal-tile-linkedin.io-ox-portal-tile-active {
+    border-left: 4px solid #B94A48;
+    padding-left: 4px;
+    padding-top: .5em;
+}
+.linkedin-preview {
+    margin-top: .5em;
+}
+
+.linkedin-counter {
+    margin-top: .5em;
+}
+
+.linkedin-subject {
+    font-weight: bold;
+}
+
+.linkedin-content .linkedin-message {
+    padding-bottom: 1em;
+}
+img.linkedin-logo {
+    display: block;
+}
+
+.linkedin-message.odd {
+    background-color: #f4f4f4;
+}

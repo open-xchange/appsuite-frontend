@@ -14,18 +14,13 @@
 define('io.ox/calendar/edit/main',
       ['io.ox/calendar/edit/model-appointment',
        'io.ox/calendar/api',
-       'io.ox/calendar/edit/extensions',
        'io.ox/calendar/edit/view-main',
        'gettext!io.ox/calendar/edit/main',
-       'less!io.ox/calendar/edit/style.less'], function (AppointmentModel, api, editExtensions, MainView, gt) {
+       'less!io.ox/calendar/edit/style.less'], function (AppointmentModel, api, MainView, gt) {
 
     'use strict';
 
     var EditAppointmentController = function () {};
-
-    // register to "compile"-time think is a good idea
-    editExtensions.init();
-    window.AppointmentModel = AppointmentModel;
 
     EditAppointmentController.prototype = {
         start: function () {
@@ -163,12 +158,11 @@ define('io.ox/calendar/edit/main',
                         if (err.conflicts !== null && err.conflicts !== undefined) {
                             errContainer.text(gt('Conflicts detected'));
 
-                            require(['io.ox/calendar/edit/view-conflicts', 'io.ox/calendar/edit/collection-conflicts'], function (ConflictsView, ConflictsCollection) {
-                                console.log('class', ConflictsView);
-                                var conflicts = new ConflictsCollection(err.conflicts);
+                            require(['io.ox/calendar/edit/module-conflicts'], function (conflictsModule) {
+                                var conflicts = new conflictsModule.Collection(err.conflicts);
                                 conflicts.fetch()
                                     .done(function () {
-                                        var conView = new ConflictsView({collection: conflicts});
+                                        var conView = new conflictsModule.CollectionView({collection: conflicts});
                                         window.cview = conView;
                                         $(self.view.el).find('.additional-info').empty().append(
                                             conView.render().el
@@ -178,7 +172,6 @@ define('io.ox/calendar/edit/main',
                                             return self.onSave();
                                         });
                                         conView.on('cancel', function () {
-                                            console.log('cancel was hit, i disappear now');
                                             $(conView.el).remove();
                                             $(self.view.el).find('.error-display').empty();
                                         });

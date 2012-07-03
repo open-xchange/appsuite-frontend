@@ -151,7 +151,6 @@ define('io.ox/calendar/actions',
         requires: 'one create',
         action: function (app) {
             require(['io.ox/calendar/edit/main'], function (editmain) {
-                console.log('create');
                 // FIXME: what a hack > folder_id
                 editmain.getApp().launch().done(function () {
                     this.create({folder_id: app.folder.get(), participants: []});
@@ -159,7 +158,17 @@ define('io.ox/calendar/actions',
             });
 
         }
+    });
 
+    new Action('io.ox/calendar/detail/actions/changestatus', {
+        id: 'change_status',
+        requires: 'one modify',
+        action: function (params) {
+            // load & call
+            require(['io.ox/calendar/acceptdeny']).done(function (acceptdeny) {
+                acceptdeny(params);
+            });
+        }
     });
 
     // Links - toolbar
@@ -212,6 +221,14 @@ define('io.ox/calendar/actions',
         id: 'delete',
         label: gt('Delete'),
         ref: 'io.ox/calendar/detail/actions/delete'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'changestatus',
+        label: gt('Change status'),
+        ref: 'io.ox/calendar/detail/actions/changestatus'
     }));
 
     /*ext.point('io.ox/calendar/links/inline').extend(new links.DropdownLinks({

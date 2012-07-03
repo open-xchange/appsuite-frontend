@@ -509,13 +509,6 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                     this.implInsertText(operation.text, startPos);
                 }
             }
-            else if (operation.name === OP_TABLE_INSERT) {
-                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var undoOperation = { name: OP_TABLE_DELETE, start: _.copy(operation.start, true) };
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
-                }
-                this.implInsertTable(operation.start);
-            }
             else if (operation.name === OP_PARA_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var undoOperation = { name: OP_PARA_INSERT, start: _.copy(operation.start, true), text: this.getParagraphText(operation.start[0]) }; // HACK: Text is not part of the official operation, but I need it for Undo. Can be changed once we can have multiple undos for one operation.
@@ -523,6 +516,20 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
 
                 }
                 this.implDeleteParagraph(operation.start);
+            }
+            else if (operation.name === OP_TABLE_INSERT) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var undoOperation = { name: OP_TABLE_DELETE, start: _.copy(operation.start, true) };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
+                this.implInsertTable(operation.start);
+            }
+            else if (operation.name === OP_TABLE_DELETE) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var undoOperation = { name: OP_TABLE_INSERT, start: _.copy(operation.start, true) };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
+                this.implDeleteTable(operation.start);
             }
             else if (operation.name === OP_PARA_SPLIT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -1196,41 +1203,63 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                     endposLength = selection.endPaM.oxoPosition.length - 1,
                     isTable = false;
 
-                if (this.getParagraphNodeName(endPosition[0]) === 'TABLE') {
-                    isTable = true;
-                }
-
                 // 1) delete selected part or rest of para in first para (pos to end)
-                if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
-                    endPosition[endposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1];
+                if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
+                    isTable = this.getParagraphNodeName(selection.startPaM.oxoPosition[0]) === 'TABLE' ? true : false;
+                    endPosition = _.copy(selection.startPaM.oxoPosition);
                     if (isTable) {
-                        endPosition[endposLength] = this.getParagraphLenInCell(endPosition[0], endPosition[1], endPosition[2], endPosition[3]);
+                        var localEndPosition = _.copy(endPosition);
+                        localEndPosition.pop();
+                        this.deleteFollowingParagraphsInCell(localEndPosition);
+                        localEndPosition.pop();
+                        this.deleteFollowingCellsInTable(localEndPosition);
+                        endPosition[startposLength] = this.getParagraphLenInCell(endPosition[0], endPosition[1], endPosition[2], endPosition[3]);
                     } else {
-                        endPosition[endposLength] = this.getParagraphLen(endPosition[endposLength - 1]);
+                        endPosition[startposLength] = this.getParagraphLen(endPosition[0]);
                     }
                 }
                 this.deleteText(selection.startPaM.oxoPosition, endPosition);
 
+
                 // 2) delete completly slected paragraphs completely
-                for (var i = selection.startPaM.oxoPosition[startposLength - 1] + 1; i < selection.endPaM.oxoPosition[endposLength - 1]; i++) {
+                for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
                     // startPaM.oxoPosition[0]+1 instead of i, because we always remove a paragraph
-                    var startPosition = _.copy(selection.startPaM.oxoPosition, true);
-                    startPosition[startposLength - 1] += 1;
-                    startPosition.pop();    // don't pass char pos
-                    this.deleteParagraph(startPosition);
+                    var startPosition = [];
+                    startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
+                    isTable = this.getParagraphNodeName(startPosition[0]) === 'TABLE' ? true : false;
+                    if (isTable) {
+                        this.deleteTable(startPosition);
+                    } else {
+                        this.deleteParagraph(startPosition);
+                    }
                 }
 
                 // 3) delete selected part in last para (start to pos) and merge first and last para
                 if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
-                    var startPosition = _.copy(selection.startPaM.oxoPosition, true);
-                    startPosition[startposLength - 1] += 1;
-                    startPosition[startposLength] = 0;
-                    var endPosition = _.copy(startPosition, true);
-                    endPosition[startposLength] = selection.endPaM.oxoPosition[endposLength];
+
+                    var startPosition = _.copy(selection.endPaM.oxoPosition, true);
+                    startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
+                    startPosition[endposLength] = 0;
+                    endPosition = _.copy(startPosition, true);
+                    endPosition[endposLength] = selection.endPaM.oxoPosition[endposLength];
+
+                    isTable = this.getParagraphNodeName(endPosition[0]) === 'TABLE' ? true : false;
+
                     this.deleteText(startPosition, endPosition);
-                    var mergeselection = _.copy(selection.startPaM.oxoPosition);
-                    mergeselection.pop();
-                    this.mergeParagraph(mergeselection);
+
+                    if (isTable) {
+                        // delete all previous cells and all previous paragraphs in this cell!
+                        endPosition.pop();
+                        this.deletePreviousParagraphsInCell(endPosition);
+                        endPosition.pop();
+                        this.deletePreviousCellsInTable(endPosition);
+                    }
+
+                    if (! isTable) {
+                        var mergeselection = _.copy(selection.startPaM.oxoPosition);
+                        mergeselection.pop();
+                        this.mergeParagraph(mergeselection);
+                    }
                 }
 
                 undomgr.endGroup();
@@ -1246,6 +1275,11 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
 
         this.deleteParagraph = function (position) {
             var newOperation = { name: OP_PARA_DELETE, start: _.copy(position, true) };
+            this.applyOperation(newOperation, true, true);
+        };
+
+        this.deleteTable = function (position) {
+            var newOperation = { name: OP_TABLE_DELETE, start: _.copy(position, true) };
             this.applyOperation(newOperation, true, true);
         };
 
@@ -1302,45 +1336,55 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                     // 1) selected part or rest of para in first para (pos to end)
                     var startposLength = selection.startPaM.oxoPosition.length - 1,
                         endposLength = selection.endPaM.oxoPosition.length - 1,
-                        endPosition = selection.endPaM.oxoPosition,
-                        isTable = false;
+                        localendPosition = selection.endPaM.oxoPosition,
+                        isTable = this.getParagraphNodeName(selection.startPaM.oxoPosition[0]) === 'TABLE' ? true : false;
 
-                    if (this.getParagraphNodeName(endPosition[0]) === 'TABLE') {
-                        isTable = true;
-                    }
-
-                    if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
-                        endPosition = _.copy(selection.endPaM.oxoPosition, true);
-                        endPosition[endposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1];
+                    if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
+                        // TODO: This is not sufficient
+                        localendPosition = _.copy(selection.startPaM.oxoPosition, true);
+                        // localendPosition[0] = selection.startPaM.oxoPosition[0];
                         if (isTable) {
-                            endPosition[endposLength] = this.getParagraphLenInCell(endPosition[0], endPosition[1], endPosition[2], endPosition[3]);
+                            // Assigning attribute to all following paragraphs in this cell and to all following cells!
+                            this.setAttributeToFollowingCellsInTable(attr, value, localendPosition);
+                            this.setAttributeToFollowingParagraphsInCell(attr, value, localendPosition);
+                            localendPosition[startposLength] = this.getParagraphLenInCell(localendPosition[0], localendPosition[1], localendPosition[2], localendPosition[3]);
                         } else {
-                            endPosition[endposLength] = this.getParagraphLen(endPosition[endposLength - 1]);
+                            localendPosition[startposLength] = this.getParagraphLen(localendPosition[startposLength - 1]);
                         }
                     }
-                    this.setAttribute(attr, value, selection.startPaM.oxoPosition, endPosition);
+                    this.setAttribute(attr, value, selection.startPaM.oxoPosition, localendPosition);
 
-                    // 2) completly slected paragraphs
-                    for (var i = selection.startPaM.oxoPosition[startposLength - 1] + 1; i < selection.endPaM.oxoPosition[endposLength - 1]; i++) {
-                        var startPosition = _.copy(selection.startPaM.oxoPosition, true);
-                        startPosition[startposLength - 1] = i;
-                        startPosition[startposLength] = 0;
-                        var endPosition = _.copy(selection.endPaM.oxoPosition, true);
-                        endPosition[endposLength - 1] = i;
+                    // 2) completly selected paragraphs
+                    for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
+                        var localstartPosition = []; //_.copy(selection.startPaM.oxoPosition, true);
+                        localstartPosition[0] = i;  // Attention: localstartPosition has 5 ints,
+
+                        isTable = this.getParagraphNodeName(localstartPosition[0]) === 'TABLE' ? true : false;
+
                         if (isTable) {
-                            endPosition[endposLength] = this.getParagraphLenInCell(endPosition[0], endPosition[1], endPosition[2], endPosition[3]);
+                            this.setAttributeToCompleteTable(attr, value, localstartPosition);
                         } else {
-                            endPosition[endposLength] = this.getParagraphLen(endPosition[endposLength - 1]);
+                            localstartPosition[1] = 0;
+                            localendPosition = _.copy(localstartPosition, true);
+                            localendPosition[1] = this.getParagraphLen(localendPosition[0]);
+                            this.setAttribute(attr, value, localstartPosition, localendPosition);
                         }
-                        this.setAttribute(attr, value, startPosition, endPosition);
                     }
 
                     // 3) selected part in last para
                     if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
-                        var startPosition = _.copy(selection.endPaM.oxoPosition, true);
-                        startPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
-                        startPosition[endposLength] = 0;
-                        this.setAttribute(attr, value, startPosition, selection.endPaM.oxoPosition);
+                        var localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
+                        localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
+                        localstartPosition[endposLength] = 0;
+
+                        isTable = this.getParagraphNodeName(localstartPosition[0]) === 'TABLE' ? true : false;
+
+                        if (isTable) {
+                            // Assigning attribute to all previous cells and to all previous paragraphs in this cell!
+                            this.setAttributeToPreviousCellsInTable(attr, value, selection.endPaM.oxoPosition);
+                            this.setAttributeToPreviousParagraphsInCell(attr, value, selection.endPaM.oxoPosition);
+                        }
+                        this.setAttribute(attr, value, localstartPosition, selection.endPaM.oxoPosition);
                     }
                 }
             }
@@ -1439,8 +1483,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.getLastColumnIndexInRow = function (para, row) {
             var columnIndex = null;
             if ((paragraphs[para] !== undefined) && (this.getParagraphNodeName(para) === 'TABLE')) {
-                var row = $('TR', paragraphs[para]).get(row);
-                columnIndex = $('TH, TD', row).length;
+                var localrow = $('TR', paragraphs[para]).get(row);
+                columnIndex = $('TH, TD', localrow).length;
                 columnIndex--;
             }
             return columnIndex;
@@ -1449,8 +1493,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.getLastParaIndexInCell = function (para, column, row) {
             var lastPara = null;
             if ((paragraphs[para] !== undefined) && (this.getParagraphNodeName(para) === 'TABLE')) {
-                var row = $('TR', paragraphs[para]).get(row);
-                var cell = $('TH, TD', row).get(column);
+                var localrow = $('TR', paragraphs[para]).get(row);
+                var cell = $('TH, TD', localrow).get(column);
                 lastPara = $('P', cell).length;
                 lastPara--;
             }
@@ -1460,11 +1504,10 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.getParagraphLenInCell = function (table, column, row, para) {
             var paraLen = 0;
             if ((paragraphs[table] !== undefined) && (this.getParagraphNodeName(table) === 'TABLE')) {
-                var row = $('TR', paragraphs[table]).get(row);
-                if (row) {
-                    var cell = $('TH, TD', row).get(column);
+                var localrow = $('TR', paragraphs[table]).get(row);
+                if (localrow) {
+                    var cell = $('TH, TD', localrow).get(column);
                     if (cell) {
-                        var len = $('P', cell).length;
                         var paragraph = $('P', cell).get(para);
                         if (paragraph) {
                             var nodeList = paragraph.childNodes;
@@ -1481,9 +1524,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.getParagraphFromTable = function (table, column, row, para) {
             var paragraph = null;
             if ((paragraphs[table] !== undefined) && (this.getParagraphNodeName(table) === 'TABLE')) {
-                var row = $('TR', paragraphs[table]).get(row);
-                var cell = $('TH, TD', row).get(column);
-                var len = $('P', cell).length;
+                var localrow = $('TR', paragraphs[table]).get(row);
+                var cell = $('TH, TD', localrow).get(column);
                 paragraph = $('P', cell).get(para);
             }
             return paragraph;
@@ -1492,12 +1534,211 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.getAllParagraphsFromTableCell = function (table, column, row) {
             var allParagraphs = [];
             if ((paragraphs[table] !== undefined) && (this.getParagraphNodeName(table) === 'TABLE')) {
-                var row = $('TR', paragraphs[table]).get(row);
-                var cell = $('TH, TD', row).get(column);
+                var localrow = $('TR', paragraphs[table]).get(row);
+                var cell = $('TH, TD', localrow).get(column);
                 allParagraphs = $(cell).children();
             }
 
             return allParagraphs;
+        };
+
+        this.deletePreviousCellsInTable = function (position) {
+            var localPos = _.copy(position, true),
+                lastIndex = localPos.length - 1,
+                thisTable = localPos[lastIndex - 2],
+                thisColumn = localPos[lastIndex - 1],
+                thisRow = localPos[lastIndex],
+                lastRow = this.getLastRowIndexInTable(thisTable),
+                lastColumn = this.getLastColumnIndexInRow(thisTable, lastRow);
+
+            for (var j = 0; j <= thisRow; j++) {
+                var max = lastColumn;
+                if (j === thisRow) {
+                    max = thisColumn - 1;
+                }
+                for (var i = 0; i <= max; i++) {
+                    localPos[lastIndex - 1] = i;  // column
+                    localPos[lastIndex] = j;  // row
+                    this.deleteAllParagraphsInCell(localPos);
+                }
+            }
+        };
+
+        this.deleteAllParagraphsInCell = function (position) {
+            var localPos = _.copy(position, true),
+                lastParaInCell = this.getLastParaIndexInCell(localPos[0], localPos[1], localPos[2]);
+
+            for (var i = 0; i <= lastParaInCell; i++) {
+                localPos.push(0);  // always 0, because the paragraphs will be deleted
+                // this.deleteParagraph(localPos);
+                this.implDeleteParagraph(localPos);
+                localPos.pop();
+            }
+        };
+
+        this.deletePreviousParagraphsInCell = function (position) {
+            var localPos = _.copy(position, true),
+                lastIndex = localPos.length - 1,
+                lastPara =  localPos[lastIndex];
+
+            localPos[lastIndex] = 0; // always 0, because paragraphs are deleted
+
+            for (var i = 0; i < lastPara; i++) {
+                // this.deleteParagraph(localPos);
+                this.implDeleteParagraph(localPos);
+            }
+        };
+
+        this.deleteFollowingCellsInTable = function (position) {
+            var localPos = _.copy(position, true),
+                lastIndex = localPos.length - 1,
+                thisTable = localPos[lastIndex - 2],
+                thisColumn = localPos[lastIndex - 1],
+                thisRow = localPos[lastIndex],
+
+                lastRow = this.getLastRowIndexInTable(thisTable),
+                lastColumn = this.getLastColumnIndexInRow(thisTable, lastRow);
+
+            for (var j = thisRow; j <= lastRow; j++) {
+                var min = 0;
+                if (j === thisRow) {
+                    min = thisColumn + 1;
+                }
+                for (var i = min; i <= lastColumn; i++) {
+                    localPos[lastIndex - 1] = i;  // column
+                    localPos[lastIndex] = j;  // row
+                    this.deleteAllParagraphsInCell(localPos);
+                }
+            }
+        };
+
+        this.deleteFollowingParagraphsInCell = function (position) {
+            var localPos = _.copy(position, true),
+                lastIndex = localPos.length - 1,
+                thisTable = localPos[lastIndex - 3],
+                thisColumn = localPos[lastIndex - 2],
+                thisRow = localPos[lastIndex - 1],
+                startPara = localPos[lastIndex] + 1,
+                lastPara =  this.getLastParaIndexInCell(thisTable, thisColumn, thisRow);
+
+            localPos[lastIndex] = startPara; // always 'startPara', because paragraphs are deleted
+
+            for (var i = startPara; i <= lastPara; i++) {
+                // this.deleteParagraph(localPos);
+                this.implDeleteParagraph(localPos);
+            }
+        };
+
+        this.setAttributeToPreviousCellsInTable = function (attr, value, position) {
+            var localPos = _.copy(position, true),
+                lastIndex = localPos.length - 1,
+                thisColumn = localPos[lastIndex - 3],
+                thisRow = localPos[lastIndex - 2],
+                lastRow = this.getLastRowIndexInTable(localPos[0]),
+                lastColumn = this.getLastColumnIndexInRow(localPos[0], lastRow);
+
+            for (var j = 0; j <= thisRow; j++) {
+                var max = lastColumn;
+                if (j === thisRow) {
+                    max = thisColumn - 1;
+                }
+                for (var i = 0; i <= max; i++) {
+                    localPos[lastIndex - 3] = i;  // column
+                    localPos[lastIndex - 2] = j;  // row
+                    this.setAttributeToCompleteCell(attr, value, localPos);
+                }
+            }
+        };
+
+        this.setAttributeToPreviousParagraphsInCell = function (attr, value, position) {
+            var localPos = _.copy(position, true),
+                lastIndex = localPos.length - 1,
+                lastPara = localPos[lastIndex - 1];
+
+            for (var i = 0; i < lastPara; i++) {
+                localPos[lastIndex - 1] = i;
+                this.setAttributeToParagraphInCell(attr, value, localPos);
+            }
+        };
+
+        this.setAttributeToFollowingCellsInTable = function (attr, value, position) {
+            var localPos = _.copy(position, true),
+                lastIndex = localPos.length - 1,
+                thisColumn = localPos[lastIndex - 3],
+                thisRow = localPos[lastIndex - 2],
+                lastRow = this.getLastRowIndexInTable(localPos[0]),
+                lastColumn = this.getLastColumnIndexInRow(localPos[0], lastRow);
+
+            for (var j = thisRow; j <= lastRow; j++) {
+                var min = 0;
+                if (j === thisRow) {
+                    min = thisColumn + 1;
+                }
+                for (var i = min; i <= lastColumn; i++) {
+                    localPos[lastIndex - 3] = i;  // column
+                    localPos[lastIndex - 2] = j;  // row
+                    this.setAttributeToCompleteCell(attr, value, localPos);
+                }
+            }
+        };
+
+        this.setAttributeToFollowingParagraphsInCell = function (attr, value, position) {
+            var localPos = _.copy(position, true),
+                lastIndex = localPos.length - 1,
+                startPara = localPos[lastIndex - 1] + 1,
+                lastPara =  this.getLastParaIndexInCell(localPos[0], localPos[1], localPos[2]);
+
+            for (var i = startPara; i <= lastPara; i++) {
+                localPos[lastIndex - 1] = i;
+                this.setAttributeToParagraphInCell(attr, value, localPos);
+            }
+        };
+
+        this.setAttributeToCompleteTable = function (attr, value, position) {
+            var localPos = [];
+
+            // position is something like [6,0] for standard paragraphs
+            localPos.push(position[0]);
+            localPos.push(0); // column
+            localPos.push(0); // row
+            localPos.push(0); // paragraph
+            localPos.push(0); // position
+
+            var lastRow = this.getLastRowIndexInTable(position[0]),
+                lastColumn = this.getLastColumnIndexInRow(position[0], lastRow),
+                lastIndex = localPos.length - 1;
+
+            for (var j = 0; j <= lastRow; j++) {
+                for (var i = 0; i <= lastColumn; i++) {
+                    localPos[lastIndex - 3] = i;  // column
+                    localPos[lastIndex - 2] = j;  // row
+                    this.setAttributeToCompleteCell(attr, value, localPos);
+                }
+            }
+        };
+
+        this.setAttributeToCompleteCell = function (attr, value, position) {
+            var lastIndex = position.length - 1,
+                lastPara = this.getLastParaIndexInCell(position[0], position[1], position[2]),
+                localPos = _.copy(position, true);
+
+            localPos[lastIndex] = 0;
+
+            for (var i = 0; i <= lastPara; i++) {
+                localPos[lastIndex - 1] = i;
+                this.setAttributeToParagraphInCell(attr, value, localPos);
+            }
+        };
+
+        this.setAttributeToParagraphInCell = function (attr, value, position) {
+            var lastIndex = position.length - 1,
+                startPosition = _.copy(position, true),
+                endPosition = _.copy(position, true);
+
+            startPosition[lastIndex] = 0;
+            endPosition[lastIndex] = this.getParagraphLenInCell(position[0], position[1], position[2], position[3]);
+
+            this.setAttribute(attr, value, startPosition, endPosition);
         };
 
         // ==================================================================
@@ -1624,11 +1865,9 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
             // -1 not allowed here - but code need to be robust
             var posLength = position.length - 1,
                 para = position[posLength - 1],
-                allParagraphs = null,
-                isTable = false;
+                allParagraphs = null;
 
             if (this.getParagraphNodeName(position[0]) === 'TABLE') {
-                isTable = true;
                 allParagraphs = this.getAllParagraphsFromTableCell(position[0], position[1], position[2]);
             } else {
                 allParagraphs = paragraphs;
@@ -1905,10 +2144,10 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                     this.implDbgOutInfo('implMergeParagraph - para count invalid!');
                 }
             }
-
         };
 
         this.implDeleteParagraph = function (position) {
+
             var posLength = position.length - 1,
                 para = position[posLength],
                 allParagraphs = null,
@@ -1934,6 +2173,37 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
             if (! isTable) {
                 paragraphs = editdiv.children();
             }
+        };
+
+        this.implDeleteTable = function (position) {
+
+            var para = position[0],
+                lastRow = this.getLastRowIndexInTable(para),
+                lastColumn = this.getLastColumnIndexInRow(para, lastRow);
+
+            // iterating over all cells and remove all paragraphs in the cells
+            for (var i = 0; i <= lastColumn; i++) {
+                for (var j = 0; j <= lastRow; j++) {
+                    var localPos = [];
+                    localPos.push(para);
+                    localPos.push(i);
+                    localPos.push(j);
+                    this.deleteAllParagraphsInCell(localPos);
+                }
+            }
+
+            // Finally removing the table itself
+            var paragraph = paragraphs[para];
+            paragraph.parentNode.removeChild(paragraph);
+
+            var localPos = _.copy(position, true);
+            if (para > 0) {
+                para -= 1;
+            }
+            localPos[0] = para;
+            localPos.push(0); // pos not corrct, but doesn't matter. Deleting paragraphs always happens between other operations, never at the last one.
+            lastOperationEnd = new OXOPaM(localPos);
+            paragraphs = editdiv.children();
         };
 
         this.implDeleteText = function (startPosition, endPosition) {

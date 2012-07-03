@@ -107,8 +107,8 @@
     
     .btn-group {
         
-        /* The class 'hidden' is used to hide button groups. */
-	    &.hidden {
+        /* The class 'io-ox-hidden' is used to hide button groups. */
+	    &.io-ox-hidden {
             display: none;
         }
     }
@@ -162,7 +162,7 @@
         }
 
         /* remove hover highlight of drop-down arrow for disabled buttons */
-        &:hover:disabled > span.caret {
+        &:disabled > span.caret {
             .opacity(.3);
         }
     }

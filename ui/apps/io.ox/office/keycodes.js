@@ -39,6 +39,8 @@ define('io.ox/office/keycodes', function () {
         PRINT:          44,
         INSERT:         45,
         DELETE:         46,
+
+/* enable when needed
         '0':            48,
         '1':            49,
         '2':            50,
@@ -49,7 +51,11 @@ define('io.ox/office/keycodes', function () {
         '7':            55,
         '8':            56,
         '9':            57,
+*/
+
         MOZ_SEMICOLON:  59,     // Semicolon in Firefox (otherwise: 186)
+
+/* enable when needed
         A:              65,
         B:              66,
         C:              67,
@@ -76,9 +82,12 @@ define('io.ox/office/keycodes', function () {
         X:              88,
         Y:              89,
         Z:              90,
+*/
         LEFT_WINDOWS:   91,
         RIGHT_WINDOWS:  92,
         SELECT:         93,
+
+/* enable when needed
         NUM_0:          96,     // attention: numpad keys totally broken in Opera
         NUM_1:          97,
         NUM_2:          98,
@@ -94,6 +103,8 @@ define('io.ox/office/keycodes', function () {
         MINUS:          109,
         DECIMAL_POINT:  110,
         DIVIDE:         111,
+*/
+
         F1:             112,
         F2:             113,
         F3:             114,
@@ -106,8 +117,11 @@ define('io.ox/office/keycodes', function () {
         F10:            121,
         F11:            122,
         F12:            123,
+
         NUM_LOCK:       144,
-        SCROLL_LOCK:    145,
+        SCROLL_LOCK:    145
+
+/* enable when needed
         SEMICOLON:      186,
         EQUAL_SIGN:     187,
         COMMA:          188,
@@ -120,6 +134,7 @@ define('io.ox/office/keycodes', function () {
         CLOSE_BRACKET:  221,
         APOSTROPH:      222,
         OPEN_ANGLE:     226     // German keyboard
+*/
     };
 
 });
