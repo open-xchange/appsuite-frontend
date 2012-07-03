@@ -35,21 +35,24 @@ define('io.ox/office/controller', function () {
      *  A map of key/definition pairs. Each attribute in this map defines an
      *  item, keyed by its name. Definitions are maps themselves, supporting
      *  the following attributes:
-     *  - enable: (optional) Predicate function returning true if the item is
-     *      enabled, and false otherwise. Defaults to a function returning
-     *      always true.
-     *  - get: (optional) Getter function returning the current value of the
-     *      item. Can be omitted for one-way action items (actions without a
-     *      return value). May return null to indicate an ambiguous state, or
-     *      undefined to indicate a 'no value' state independent from the type
-     *      of the item. Defaults to a getter returning undefined. Will be
-     *      executed in the context of this controller.
-     *  - set: (optional) Setter function changing the value of an item to the
-     *      first parameter of the setter. Can be omitted for read-only items.
+     *  @param {Function} [definitions.enable]
+     *      Predicate function returning true if the item is enabled, and false
+     *      otherwise. Defaults to a function returning always true.
+     *  @param {Function} [definitions.get]
+     *      Getter function returning the current value of the item. Can be
+     *      omitted for one-way action items (actions without a return value).
+     *      May return null to indicate an ambiguous state, or undefined to
+     *      indicate a 'no value' state independent from the type of the item.
+     *      Defaults to a getter returning undefined. Will be executed in the
+     *      context of this controller.
+     *  @param {Function} [definitions.set]
+     *      Setter function changing the value of an item to the first
+     *      parameter of the setter. Can be omitted for read-only items.
      *      Defaults to a no-op function. Will be executed in the context of
      *      this controller.
-     *  - poll: (optional) If set to true, the controller will constantly poll
-     *      the item value and update its view components.
+     *  @param {Boolean} [definitions.poll]
+     *      If set to true, the controller will constantly poll the item value
+     *      and update its view components.
      */
     function Controller(definitions) {
 
