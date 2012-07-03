@@ -471,7 +471,9 @@ define('io.ox/office/main',
             .done(function (response) {
                 importOperations(response)
                 .done(function (operations) {
+                    editor.enableUndo(false);
                     editor.applyOperations(operations, false, true);
+                    editor.enableUndo(true);
                     def.resolve();
                 })
                 .fail(function (ex) {
