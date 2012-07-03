@@ -51,8 +51,7 @@ define('io.ox/office/main',
                 .addButton('character/font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
                 .addButton('character/font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
             .end()
-//            .addRadioGroup('paragraph/alignment', { type: 'auto', columns: 2, tooltip: gt('Paragraph alignment') })
-            .addRadioGroup('paragraph/alignment', { type: 'dropdown', columns: 3, tooltip: gt('Paragraph alignment') })
+            .addRadioGroup('paragraph/alignment', { type: 'auto', columns: 2, tooltip: gt('Paragraph alignment') })
                 .addButton('left',    { icon: gt('icon-align-left'),    tooltip: gt('Left') })
                 .addButton('center',  { icon: gt('icon-align-center'),  tooltip: gt('Center') })
                 .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
@@ -266,6 +265,7 @@ define('io.ox/office/main',
          * application. Creates and initializes a new application window.
          */
         function launchHandler() {
+
             // create the application window
             win = ox.ui.createWindow({
                 name: MODULE_NAME,
