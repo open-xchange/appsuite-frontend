@@ -95,18 +95,15 @@ define('io.ox/office/main',
 
                 'character/font/bold': {
                     get: function () { return editor.getAttribute('bold'); },
-                    set: function (state) { editor.setAttribute('bold', state); editor.grabFocus(); },
-                    poll: true
+                    set: function (state) { editor.setAttribute('bold', state); editor.grabFocus(); }
                 },
                 'character/font/italic': {
                     get: function () { return editor.getAttribute('italic'); },
-                    set: function (state) { editor.setAttribute('italic', state); editor.grabFocus(); },
-                    poll: true
+                    set: function (state) { editor.setAttribute('italic', state); editor.grabFocus(); }
                 },
                 'character/font/underline': {
                     get: function () { return editor.getAttribute('underline'); },
-                    set: function (state) { editor.setAttribute('underline', state); editor.grabFocus(); },
-                    poll: true
+                    set: function (state) { editor.setAttribute('underline', state); editor.grabFocus(); }
                 },
 
                 'paragraph/alignment': {
@@ -133,7 +130,10 @@ define('io.ox/office/main',
                         }
                     }, this))
                     .on('operation', _.bind(function () {
-                        this.update(['action/undo', 'action/redo']);
+                        this.update(['action/undo', 'action/redo', /^character\//, /^paragraph\//]);
+                    }, this))
+                    .on('selectionChanged', _.bind(function () {
+                        this.update([/^character\//, /^paragraph\//]);
                     }, this));
                 return this;
             };

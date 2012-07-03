@@ -50,20 +50,13 @@ define('io.ox/office/controller', function () {
      *      parameter of the setter. Can be omitted for read-only items.
      *      Defaults to a no-op function. Will be executed in the context of
      *      this controller.
-     *  @param {Boolean} [definitions.poll]
-     *      If set to true, the controller will constantly poll the item value
-     *      and update its view components.
      */
     function Controller(definitions) {
 
         var // definitions for all items, mapped by item key
             allItems = {},
-            // extra map for all polled items, mapped by item key
-            pollItems = {},
             // registered view components
             components = [];
-            // timeout handler for polling
-            // timeout = null;
 
         // private methods ----------------------------------------------------
 
@@ -299,13 +292,7 @@ define('io.ox/office/controller', function () {
             _(components).each(function (component) {
                 component.off('change', componentListener);
             });
-            /*
-            // cancel pending poll cycle
-            if (timeout) {
-                window.clearTimeout(timeout);
-            }
-            */
-            allItems = pollItems = components = /* timeout = */ null;
+            allItems = components = null;
         };
 
         // initialization -----------------------------------------------------
@@ -314,7 +301,7 @@ define('io.ox/office/controller', function () {
         _(definitions).each(function (def, key) {
             if (key && _.isObject(def)) {
                 // build the item object
-                var item = allItems[key] = {
+                allItems[key] = {
                     // bind getters and setters to this controller instance
                     enable: _.isFunction(def.enable) ? _.bind(def.enable, this) : TRUE,
                     get: _.isFunction(def.get) ? _.bind(def.get, this) : $.noop,
@@ -322,27 +309,10 @@ define('io.ox/office/controller', function () {
                     // items are initially disabled
                     enabled: false
                 };
-
-                // collect items whose state will be polled constantly
-                if (def.poll === true) {
-                    pollItems[key] = item;
-                }
             }
         });
 
-        // poll item values
-        /*
-        if (!_.isEmpty(pollItems)) {
-            timeout = window.setTimeout(function timer() {
-                // update all view components
-                updateComponents(components, pollItems);
-                // and restart timer
-                timeout = window.setTimeout(timer, 200);
-            }, 200);
-        }
-        */
-
-    }
+    } // class Controller
 
     // exports ================================================================
 

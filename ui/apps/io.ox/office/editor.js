@@ -354,6 +354,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
      * - 'focus': When the editor container got or lost browser focus.
      * - 'operation': When a new operation has been applied.
      * - 'modified': When the modified flag has been changed.
+     * - 'selectionChanged': When the selection has been changed.
      */
     function OXOEditor(editdiv, textMode) {
 
@@ -417,8 +418,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.setModified = function (state) {
             if (modified !== state) {
                 modified = state;
-                if (modified)   // I guess it's really unusual to notify the other state, as this never happens internally...
-                    this.trigger('modified');
+                this.trigger('modified', state);
             }
         };
 
