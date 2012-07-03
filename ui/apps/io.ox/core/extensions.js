@@ -13,7 +13,7 @@
  */
 
 define("io.ox/core/extensions",
-    ["io.ox/core/event"], function (Events) {
+    ["io.ox/core/event", "io.ox/core/async"], function (Events, async) {
 
     // A naive extension registry.
     "use strict";
@@ -132,6 +132,12 @@ define("io.ox/core/extensions",
                             return this[name];
                         }
                         return undefined;
+                    };
+                }
+                
+                if (!extension.asyncMetadata) {
+                    extension.asyncMetadata = function (name, args) {
+                        return async.defer(extension.metadata(name, args));
                     };
                 }
 

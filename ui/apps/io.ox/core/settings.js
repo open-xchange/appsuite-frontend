@@ -18,12 +18,10 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
 
     var settingsWrapper = function () {
 
-        var globalSubpath = "gui/wurst/";
         var settings = {},
             settingsCache;
 
         var get = function (key) {
-
             var parts = key.split(/\//),
               tmp = settings || {};
 
@@ -33,7 +31,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
                     tmp = tmp[partname];
                 } else {
                     tmp = null;
-                    return null;
+                    return null; // cant return
                 }
             });
             return tmp;
@@ -51,7 +49,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
                     tmp = tmp[partname];
                     if (typeof tmp !== 'object') {
                         console.error('settings.set: ' + tmp + ' is a value');
-                        return false;
+                        return false; // cant return
                     }
                 } else {
                     tmp[partname] = {};
@@ -63,17 +61,24 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
 
         var contains = function (key) {
             var parts = key.split(/\//),
-              tmp = settings || {};
+                tmp = settings || {},
+                falseSwitch;
 
             _.each(parts, function (partname, index) {
+                console.log(tmp);
                 var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
+//                falseSwitch = tmpHasSubNode ? true : false;
                 if (tmpHasSubNode) {
                     tmp = tmp[partname];
+                    falseSwitch = true;
                 } else {
-                    return false;
+                    falseSwitch = false;
                 }
             });
-            return true;
+            return falseSwitch;
+
+
+
         };
 
         var remove = function (key) {
@@ -86,10 +91,10 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
                     tmp = tmp[partname];
                     if (typeof tmp !== 'object') {
                         console.error('settings.remove: ' + tmp + ' is a value');
-                        return false;
+                        return false; // cant return
                     }
                 } else {
-                    return false;
+                    return false; // cant return
                 }
             });
 
@@ -119,16 +124,16 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
             settingsPath: null,
 
             createModel: function (ModelClass) {
-                // create & return model instance
-                return new ModelClass({ data: flatten(this.get()) })
+
+                return new ModelClass({ data: settings.mail })
                     .on('change', $.proxy(fnChange, this));
             },
 
             get: function (path, defaultValue) {
                 if (!path) { // undefined, null, ''
-                    return get(globalSubpath + that.settingsPath);
+                    return get(that.settingsPath);
                 } else {
-                    path = globalSubpath + that.settingsPath + '/' + path;
+                    path = that.settingsPath + '/' + path;
                     console.log('getting: ' + path);
                     if (defaultValue === undefined) {
                         return get(path);
@@ -141,7 +146,8 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
             set: function (path, value, permanent) {
                 if (path) {
                     var orgpath = path;
-                    path = (globalSubpath + that.settingsPath + '/' + path);
+                    path = (that.settingsPath + '/' + path);
+                    console.log(path);
                     set(path, value);
                     if (permanent) {
                         // save settings path on server
@@ -158,26 +164,27 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
 
             remove: function (path) {
                 if (path) {
-                    path = (globalSubpath + that.settingsPath + '/' + path);
+                    path = (that.settingsPath + '/' + path);
                     remove(path);
                 }
             },
 
             contains: function (path) {
-                path = (globalSubpath + that.settingsPath + '/' + path);
+                path = (that.settingsPath + '/' + path);
                 return contains(path);
             },
 
             load: function () {
                 // loader
                 var load = function () {
-                    return http.GET({
-                            module: 'config/gui',
-                            appendColumns: false,
-                            processResponse: false
-                        })
-                        .done(function (data) {
-                            settings = data !== undefined ? data.data : {};
+                    return http.PUT({
+                        module: 'jslob',
+                        params: {
+                            action: 'list'
+                        },
+                        data: ['ui']
+                    }).done(function (data) {
+                            settings = data[0].tree;
                             settingsCache.add('settingsDefault', settings);
                         });
                 };
@@ -199,10 +206,13 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
             },
             save: function () {
                 settingsCache.add('settingsDefault', settings);
+                console.log(settings);
                 return http.PUT({
-                    module: 'config/gui',
-                    appendColumns: false,
-                    processResponse: false,
+                    module: 'jslob',
+                    params: {
+                        action: 'update',
+                        id: 'ui' //id
+                    },
                     data: settings
                 });
             }
@@ -213,7 +223,9 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
     return {
         load: function (name, req, load, config) {
             var mywrapper = settingsWrapper();
-            mywrapper.settingsPath = name; //encodeURIComponent(name);
+
+            name = name.split('/');
+            mywrapper.settingsPath = name[1]; //encodeURIComponent(name);
             mywrapper.load()
                 .done(function () {
                     load(mywrapper);

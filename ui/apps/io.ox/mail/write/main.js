@@ -311,21 +311,19 @@ define.async('io.ox/mail/write/main',
                 if (editorMode === 'html') {
                     // prepare signature for html
                     signature = '<p>' + signature.replace(/\n/g, '<br>') + '</p>';
-                    // html
-                    app.getEditor().setContent('<p></p>' + (pos === 'above' ? signature + content : content + signature));
+                    // text/html
+                    content = '<p></p>' + (pos === 'above' ? signature + content : content + signature);
                 } else {
-                    // plain text
-                    if (pos === 'above') {
-                        app.getEditor().setContent('\n\n' + signature + (content !== '' ? '\n\n' + content : ''));
-                    } else {
-                        app.getEditor().setContent('\n\n' + (content !== '' ? content + '\n\n' : '') + signature);
-                    }
+                    // text/plain
+                    content = pos === 'above' ?
+                        '\n\n' + signature + (content !== '' ? '\n\n' + content : '') :
+                        '\n\n' + (content !== '' ? content + '\n\n' : '') + signature;
                 }
-
             } else {
                 // no signature
-                app.getEditor().setContent(content !== '' ? (editorMode === 'html' ? '<p></p>' : '\n\n') + content : '');
+                content = content !== '' ? (editorMode === 'html' ? '<p></p>' : '\n\n') + content : '';
             }
+            app.getEditor().setContent(content);
         };
 
         app.setTo = function (list) {

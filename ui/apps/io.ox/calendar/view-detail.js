@@ -389,6 +389,7 @@ define("io.ox/calendar/view-detail",
                 node = $();
             } else {
                 node = $("<div>").addClass("calendar-detail");
+                node.attr('data-cid', String(_.cid(data)));
                 ext.point("io.ox/calendar/detail").invoke("draw", node, data);
             }
 
