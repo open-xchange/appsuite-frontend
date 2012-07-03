@@ -146,8 +146,6 @@
     .appointment.free { background-color: @appointment-free; }
     .appointment.private { background-color: @appointment-private; }
     
-    .day.out .appointment { background-color: @appointment-out; }
-        
     /* unconfirmed */
     .appointment.reserved.unconfirmed {
         background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved), @appointment-unconfirmed-alpha);
@@ -161,6 +159,9 @@
     .appointment.free.unconfirmed {
         background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free), @appointment-unconfirmed-alpha);
     }
+    
+    /* out */
+    .day.out .appointment { background-color: @appointment-out; }
 
     /* mouse over */
     .appointment.reserved:hover { background-color: darken(@appointment-reserved, @appointment-hover-pct); }

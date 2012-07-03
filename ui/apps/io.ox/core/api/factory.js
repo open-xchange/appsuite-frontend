@@ -74,7 +74,7 @@ define("io.ox/core/api/factory",
 
         var api = {
 
-            getAll: function (options, useCache, cache) {
+            getAll: function (options, useCache, cache, processResponse) {
 
                 // merge defaults for "all"
                 var opt = $.extend({}, o.requests.all, options || {}),
@@ -88,7 +88,8 @@ define("io.ox/core/api/factory",
                 var getter = function () {
                     return http.GET({
                         module: o.module,
-                        params: opt
+                        params: opt,
+                        processResponse: processResponse === undefined ? true : processResponse
                     })
                     .pipe(function (data) {
                         return (o.pipe.all || _.identity)(data, opt);
