@@ -21,7 +21,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
          *
          * @constant
          */
-        TOOLBAR_CONTROL_CLASS = 'toolbar-control',
+        TOOLBAR_CONTROL_CLASS = 'io-ox-control',
 
        /**
          * CSS class for active toggle buttons.
@@ -35,7 +35,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
          *
          * @constant
          */
-        HIDDEN_GROUP_CLASS = 'hidden',
+        HIDDEN_GROUP_CLASS = 'io-ox-hidden',
 
         /**
          * CSS selector for controls in the tool bar.

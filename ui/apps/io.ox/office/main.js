@@ -265,6 +265,7 @@ define('io.ox/office/main',
          * application. Creates and initializes a new application window.
          */
         function launchHandler() {
+
             // create the application window
             win = ox.ui.createWindow({
                 name: MODULE_NAME,
