@@ -1276,11 +1276,14 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                         isTable = true;
                     }
 
-                    if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
+                    if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
                         // TODO: This is not sufficient
                         localendPosition = _.copy(selection.startPaM.oxoPosition, true);
-                        localendPosition[startposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1];
+                        localendPosition[0] = selection.startPaM.oxoPosition[0];
                         if (isTable) {
+                            // Assigning attribute to all following paragraphs in this cell and to all following cells!
+                            this.setAttributeToFollowingCellsInTable(attr, value, localendPosition);
+                            this.setAttributeToFollowingParagraphsInCell(attr, value, localendPosition);
                             localendPosition[startposLength] = this.getParagraphLenInCell(localendPosition[0], localendPosition[1], localendPosition[2], localendPosition[3]);
                         } else {
                             localendPosition[startposLength] = this.getParagraphLen(localendPosition[startposLength - 1]);
@@ -1290,23 +1293,20 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
 
                     // 2) completly selected paragraphs
                     for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
-                        var localstartPosition = _.copy(selection.startPaM.oxoPosition, true);
-                        localstartPosition[startposLength - 1] = i;
-                        localstartPosition[startposLength] = 0;
+                        var localstartPosition = []; //_.copy(selection.startPaM.oxoPosition, true);
+                        localstartPosition[0] = i;  // Attention: localstartPosition has 5 ints,
 
                         isTable = false;
                         if (this.getParagraphNodeName(localstartPosition[0]) === 'TABLE') {
                             isTable = true;
                         }
 
-                        localendPosition = _.copy(selection.endPaM.oxoPosition, true);
-                        localendPosition[endposLength - 1] = i;
                         if (isTable) {
                             this.setAttributeToCompleteTable(attr, value, localstartPosition);
                         } else {
-                            localendPosition = _.copy(selection.startPaM.oxoPosition, true);
-                            localendPosition[startposLength - 1] = i;
-                            localendPosition[startposLength] = this.getParagraphLen(localendPosition[startposLength - 1]);
+                            localstartPosition[1] = 0;
+                            localendPosition = _.copy(localstartPosition, true);
+                            localendPosition[1] = this.getParagraphLen(localendPosition[0]);
                             this.setAttribute(attr, value, localstartPosition, localendPosition);
                         }
                     }
@@ -1323,11 +1323,10 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                         }
 
                         if (isTable) {
-                            // Assigning attribute to all previous cells and to all paragraphs in this cell!
+                            // Assigning attribute to all previous cells and to all previous paragraphs in this cell!
                             this.setAttributeToPreviousCellsInTable(attr, value, selection.endPaM.oxoPosition);
                             this.setAttributeToPreviousParagraphsInCell(attr, value, selection.endPaM.oxoPosition);
                         }
-
                         this.setAttribute(attr, value, localstartPosition, selection.endPaM.oxoPosition);
                     }
                 }
@@ -1513,6 +1512,39 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                 lastPara = localPos[lastIndex - 1];
 
             for (var i = 0; i < lastPara; i++) {
+                localPos[lastIndex - 1] = i;
+                this.setAttributeToParagraphInCell(attr, value, localPos);
+            }
+        };
+
+        this.setAttributeToFollowingCellsInTable = function (attr, value, position) {
+            var localPos = _.copy(position, true),
+                lastIndex = localPos.length - 1,
+                thisColumn = localPos[lastIndex - 3],
+                thisRow = localPos[lastIndex - 2],
+                lastRow = this.getLastRowIndexInTable(localPos[0]),
+                lastColumn = this.getLastColumnIndexInRow(localPos[0], lastRow);
+
+            for (var j = thisRow; j <= lastRow; j++) {
+                var min = 0;
+                if (j === thisRow) {
+                    min = thisColumn + 1;
+                }
+                for (var i = min; i <= lastColumn; i++) {
+                    localPos[lastIndex - 3] = i;  // column
+                    localPos[lastIndex - 2] = j;  // row
+                    this.setAttributeToCompleteCell(attr, value, localPos);
+                }
+            }
+        };
+
+        this.setAttributeToFollowingParagraphsInCell = function (attr, value, position) {
+            var localPos = _.copy(position, true),
+                lastIndex = localPos.length - 1,
+                startPara = localPos[lastIndex - 1] + 1,
+                lastPara =  this.getLastParaIndexInCell(localPos[0], localPos[1], localPos[2]);
+
+            for (var i = startPara; i <= lastPara; i++) {
                 localPos[lastIndex - 1] = i;
                 this.setAttributeToParagraphInCell(attr, value, localPos);
             }
