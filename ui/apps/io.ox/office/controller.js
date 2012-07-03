@@ -61,9 +61,9 @@ define('io.ox/office/controller', function () {
             // extra map for all polled items, mapped by item key
             pollItems = {},
             // registered view components
-            components = [],
+            components = [];
             // timeout handler for polling
-            timeout = null;
+            // timeout = null;
 
         // private methods ----------------------------------------------------
 
@@ -299,11 +299,13 @@ define('io.ox/office/controller', function () {
             _(components).each(function (component) {
                 component.off('change', componentListener);
             });
+            /*
             // cancel pending poll cycle
             if (timeout) {
                 window.clearTimeout(timeout);
             }
-            allItems = pollItems = components = timeout = null;
+            */
+            allItems = pollItems = components = /* timeout = */ null;
         };
 
         // initialization -----------------------------------------------------
@@ -329,6 +331,7 @@ define('io.ox/office/controller', function () {
         });
 
         // poll item values
+        /*
         if (!_.isEmpty(pollItems)) {
             timeout = window.setTimeout(function timer() {
                 // update all view components
@@ -337,6 +340,7 @@ define('io.ox/office/controller', function () {
                 timeout = window.setTimeout(timer, 200);
             }, 200);
         }
+        */
 
     }
 
