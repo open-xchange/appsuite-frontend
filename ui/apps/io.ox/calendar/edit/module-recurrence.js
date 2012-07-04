@@ -19,7 +19,6 @@ define('io.ox/calendar/edit/recurrence',
     'use strict';
 
     var RecurrenceOptionView = Backbone.View.extend({
-
         RECURRENCE_NONE: 0,
         tagName: 'div',
         events: {
@@ -73,13 +72,13 @@ define('io.ox/calendar/edit/recurrence',
         },
         render: function () {
             var self = this;
-            /*self.$el.empty().append(tmpl('', {
+            self.$el.empty().append(tmpl('repeatoption', {
                 strings: {
                     REPEAT: gt('Repeat'),
                     EDIT: gt('edit')
                 },
                 uid: _.uniqueId('io_ox_calendar_edit_')
-            }));*/
+            }));
 
             self._modelBinder.bind(self.model, self.el, self.bindings);
             return self;
@@ -358,8 +357,8 @@ define('io.ox/calendar/edit/recurrence',
 
 
     return {
-        optionView: RecurrenceOptionView,
-        view: RecurrenceView
+        OptionView: RecurrenceOptionView,
+        View: RecurrenceView
     };
 
 });

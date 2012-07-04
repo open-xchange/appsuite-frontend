@@ -226,8 +226,11 @@ define('io.ox/calendar/edit/view-main',
             //init date picker
             self.$('.startsat-date').datepicker({format: dateAPI.DATE});
             self.$('.endsat-date').datepicker({format: dateAPI.DATE});
-            self.$('.startsat-time').typeahead({ source: hours_typeahead});
-            self.$('.endsat-time').typeahead({ source: hours_typeahead});
+            self.$('.startsat-time').typeahead({ source: hours_typeahead, items: 24});
+            self.$('.endsat-time').typeahead({ source: hours_typeahead, items: 24});
+
+
+            //self.subviews.recurrence_option = new recurrenceModule.OptionView({model: self.model});
 
 
             var participants = new participantsModule.Collection(self.model.get('participants'));
