@@ -198,6 +198,7 @@ define('io.ox/calendar/edit/view-main',
             };
             self.model.on('change:start_date', _.bind(self.onStartDateChange, self));
             self.model.on('change:end_date', _.bind(self.onEndDateChange, self));
+            self.model.on('change:full_time', _.bind(self.onToggleAllDay, self));
             Backbone.Validation.bind(this, {forceUpdate: true, selector: 'data-property'});
         },
         render: function () {
@@ -267,6 +268,16 @@ define('io.ox/calendar/edit/view-main',
                 if (_.isNumber(newStart)) {
                     self.model.set('start_date', newStart);
                 }
+            }
+        },
+        onToggleAllDay: function () {
+            var isFullTime = this.model.get('full_time');
+            if (isFullTime) {
+                this.$('.startsat-time').hide();
+                this.$('.endsat-time').hide();
+            } else {
+                this.$('.startsat-time').show();
+                this.$('.endsat-time').show();
             }
         },
         onSave: function () {

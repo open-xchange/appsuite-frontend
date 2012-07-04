@@ -21,7 +21,6 @@ define('io.ox/calendar/edit/module-participants',
 
     'use strict';
 
-    console.log('participants loaded');
 
     // take util function
     var convertImage = function (dir, value) {
