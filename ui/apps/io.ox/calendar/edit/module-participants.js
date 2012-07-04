@@ -28,7 +28,17 @@ define('io.ox/calendar/edit/module-participants',
         var url = '';
         if (value && _.isString(value) && value.length > 1) {
             url = value.replace(/^\/ajax/, ox.apiRoot);
-            return 'background: url("' + url + '");';
+            return url;
+        } else {
+            return '';
+        }
+    };
+    // take util function
+    var convertImageStyle = function (dir, value) {
+        var url = '';
+        if (value && _.isString(value) && value.length > 1) {
+            url = value.replace(/^\/ajax/, ox.apiRoot);
+            return 'background-image: url("' + url + '");';
         } else {
             return '';
         }
@@ -152,10 +162,14 @@ define('io.ox/calendar/edit/module-participants',
             var self = this;
 
             this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/user', {}));
-            bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-            var bindings = _(bindings).extend({
-                image1_url: [{selector: '.contact-image', elAttribute: 'style', converter: convertImage}]
-            });
+            var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
+
+            if (Modernizr.backgroundsize) {
+                bindings.image1_url =  [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImageStyle}];
+            } else {
+                this.$('[data-property="image1_url"]').append($('<img>').css({width: '100%'/*, height: '100%'*/}));
+                bindings.image1_url =  [{selector: '[data-property="image1_url"] > img', elAttribute: 'src', converter: convertImage}];
+            }
 
             this._modelBinder.bind(self.model, this.el, bindings);
             return self;
@@ -168,9 +182,12 @@ define('io.ox/calendar/edit/module-participants',
             }}));
 
             var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-            bindings = _(bindings).extend({
-                image1_url: [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImage}]
-            });
+            if (Modernizr.backgroundsize) {
+                bindings.image1_url =  [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImageStyle}];
+            } else {
+                this.$('[data-property="image1_url"]').append($('<img>').css({width: '100%'/*, height: '100%'*/}));
+                bindings.image1_url =  [{selector: '[data-property="image1_url"] > img', elAttribute: 'src', converter: convertImage}];
+            }
 
             this._modelBinder.bind(self.model, this.el, bindings);
             return self;
@@ -183,9 +200,12 @@ define('io.ox/calendar/edit/module-participants',
             }}));
 
             var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-            bindings = _(bindings).extend({
-                image1_url: [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImage}]
-            });
+            if (Modernizr.backgroundsize) {
+                bindings.image1_url =  [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImageStyle}];
+            } else {
+                this.$('[data-property="image1_url"]').append($('<img>').css({width: '100%'/*, height: '100%'*/}));
+                bindings.image1_url =  [{selector: '[data-property="image1_url"] > img', elAttribute: 'src', converter: convertImage}];
+            }
 
             this._modelBinder.bind(self.model, this.el, bindings);
             return self;
@@ -195,10 +215,13 @@ define('io.ox/calendar/edit/module-participants',
 
             this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/externaluser', {}));
             var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-            bindings = _(bindings).extend({
-                image1_url: [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImage}]
-            });
 
+            if (Modernizr.backgroundsize) {
+                bindings.image1_url =  [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImageStyle}];
+            } else {
+                this.$('[data-property="image1_url"]').append($('<img>').css({width: '100%'/*, height: '100%'*/}));
+                bindings.image1_url =  [{selector: '[data-property="image1_url"] > img', elAttribute: 'src', converter: convertImage}];
+            }
             this._modelBinder.bind(self.model, this.el, bindings);
             return self;
         },
