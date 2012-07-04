@@ -131,7 +131,9 @@ define("io.ox/mail/api",
             get: function (e, params) {
                 if (e.code === "MSG-0032") {
                     // mail no longer exists, so we remove it locally
-                    api.remove([params], true);
+                    api.remove([params], true).done(function () {
+                        api.trigger('not-found');
+                    });
                 }
             }
         },

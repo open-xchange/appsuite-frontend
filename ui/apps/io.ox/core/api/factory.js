@@ -199,20 +199,23 @@ define("io.ox/core/api/factory",
                     hash[getKey(o)] = folders[o.folder_id] = true;
                 });
                 // loop over each folder and look for items to remove
-                console.log('updateCachesAfterRemove', ids, hash);
                 var defs = _(folders).map(function (value, folder_id) {
                     // grep keys
                     var cache = caches.all;
                     return cache.grepKeys(folder_id + '\t').pipe(function (key) {
                         // now get cache entry
-                        return cache.get(key).pipe(function (items) {
-                            if (items) {
-                                return cache.add(
-                                    key,
-                                    _(items).filter(function (o) {
+                        return cache.get(key).pipe(function (data) {
+                            if (data) {
+                                if ('data' in data) {
+                                    data.data = _(data.data).filter(function (o) {
                                         return hash[getKey(o)] !== true;
-                                    })
-                                );
+                                    });
+                                } else {
+                                    data = _(data).filter(function (o) {
+                                        return hash[getKey(o)] !== true;
+                                    });
+                                }
+                                return cache.add(key, data);
                             } else {
                                 return $.when();
                             }
@@ -247,7 +250,6 @@ define("io.ox/core/api/factory",
                 api.trigger('beforedelete', ids);
                 return api.prepareRemove(ids).pipe(function () {
                     // remove from caches first
-                    console.log('remove -> updateCachesAfterRemove', ids);
                     return api.updateCachesAfterRemove(ids).pipe(function () {
                         // trigger refresh now
                         api.trigger('refresh.all');
