@@ -12,19 +12,18 @@
  */
 
 define("io.ox/help/center", [
+    'io.ox/help/data',
     'less!io.ox/help/style.css'
-], function () {
+], function (ext) {
     
     'use strict';
     
     var center = { active: false },
-        help = {},
         origPopovers = {};
     
     center.toggle = function () {
         this.active = !this.active;
         if (this.active) {
-            loadHelpTexts();
             blockOtherContent();
             enableHelpHandlers();
         } else {
@@ -33,20 +32,19 @@ define("io.ox/help/center", [
         }
     };
     
-    var loadHelpTexts = function () {
-        help = {
-            'io.ox/mail/actions/reply': "Allows you to reply to the sender of a message, not to every recipient. We might change this behaviour randomly to make your life more awkward.",
-            'io.ox/mail/actions/markunread': "Mark an e-mail as unread. Will be displayed as bold, but won't bother you as 'unread' message any more.",
-            'io.ox/mail/actions/move': "Move mail to a different folder. We highly recommend the trash bin to store important data. That's what all the cool kids do (e.g. Outlook) and that's why we actually sync the trash bin!"
-        };
-        console.log("Help texts loaded");
-    };
-    
     var blockOtherContent = function () {
         //TODO overlay funktion rausfinden, wird bei D&D benutzt.
         console.log("Blocked other content");
     };
     
+    var getHelp = function (id) {
+        ext.point('io.ox/help/data').each(function (helper) {
+            if (helper.has(id)) {
+                return helper.get(id);
+            }
+        });
+    };
+
     var enableHelpHandlers = function () {
         var allReferenceElements = $('[data-ref]');
         
@@ -55,7 +53,7 @@ define("io.ox/help/center", [
         _(allReferenceElements).each(function (elem) {
             var $elem = $(elem),
                 datRef = $elem.attr('data-ref'),
-                text = help[datRef];
+                text = getHelp(datRef);
 
             if (text) {
                 origPopovers[datRef] = $elem.popover;
@@ -77,23 +75,14 @@ define("io.ox/help/center", [
     };
     
     var disableHelpHandlers = function () {
-        var refs = _(help).keys(),
-            allReferenceElements = $('[data-ref]');
+        var allReferenceElements = $('[data-ref]');
         
         _(allReferenceElements).each(function (elem) {
             $(elem).popover('disable').popover('hide').removeClass('help-highlight');
         });
         
         console.log("Help handlers disabled");
-        
-        _(refs).each(function (ref) {
-            var $elem = $('[data-ref="' + ref + '"]');
-            $elem.popover = origPopovers[ref];
-            console.log("Disabling " + ref, $elem);
-        });
     };
-    
-    
     
     return center;
     
