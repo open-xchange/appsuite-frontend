@@ -244,8 +244,7 @@ define("io.ox/calendar/api",
         },
 
         getUpdates: function (o) {
-            var defaultCalFolder = config.get('folder.calendar');
-            console.log('defaultFolder', defaultCalFolder);
+
             o = $.extend({
                 start: _.now(),
                 end: _.now() + 28 * 1 * DAY,
@@ -279,9 +278,8 @@ define("io.ox/calendar/api",
             }
 
             if (!params.folder) {
-                params.folder = defaultCalFolder;
+                params.folder = config.get('folder.calendar');
             }
-
 
             // do not know if cache is a good idea
             if (all_cache[key] === undefined) {
