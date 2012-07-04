@@ -27,14 +27,6 @@ $(document).ready(function () {
 
     "use strict";
 
-    if (1 > 2) {
-        $('#io-ox-login-header').text('Yalla ' + _.now());
-        $('#background_loader').hide();
-        $('#io-ox-login-screen').show();
-
-        return;
-    }
-
     // animations
     var DURATION = 250,
         // flags
@@ -481,6 +473,17 @@ $(document).ready(function () {
     $(window).on("blur focus", function (e) {
             ox.windowState = e.type === "blur" ? "background" : "foreground";
         });
+
+    // clear persistent caches due to update?
+    // TODO: add indexedDB once it's getting used
+    if (Modernizr.localstorage) {
+        var ui = JSON.parse(localStorage.getItem('ox7-ui') || '{}');
+        if (ui.version !== ox.version) {
+            console.log('cleared localStorage due to UI update');
+            localStorage.clear();
+            localStorage.setItem('ox7-ui', JSON.stringify({ version: ox.version }));
+        }
+    }
 
     // support for application cache?
     if (Modernizr.applicationcache) {
