@@ -68,14 +68,18 @@ define('io.ox/calendar/month/perspective',
 
         updateWeek: function (start, end) {
             // fetch appointments
-            var self = this;
-            api.getAll({ start: start, end: end }).done(function (list) {
-                self.collections[start].reset(_(list).map(function (obj) {
-                    var m = new Backbone.Model(obj);
-                    m.id = _.cid(obj);
-                    return m;
-                }));
-            });
+            var self = this,
+                collection = self.collections[start];
+            if (collection) {
+                api.getAll({ start: start, end: end }).done(function (list) {
+                    collection.reset(_(list).map(function (obj) {
+                        var m = new Backbone.Model(obj);
+                        m.id = _.cid(obj);
+                        return m;
+                    }));
+                    collection = null;
+                });
+            }
         },
 
         drawWeek: function (day) {
