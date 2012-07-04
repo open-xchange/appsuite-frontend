@@ -80,6 +80,18 @@ define("io.ox/files/actions",
         }
     });
 
+    new Action('io.ox/files/actions/officepreview', {
+        id: 'officepreview',
+        requires: function (e) {
+            return e.collection.has('one') && /\.(odt)$/i.test(e.context.data.filename);
+        },
+        action: function (data) {
+            ox.launch('io.ox/officepreview/main', { file: data }).done(function () {
+                this.load();
+            });
+        }
+    });
+    
     new Action('io.ox/files/actions/download', {
         id: 'download',
         requires: 'some',
@@ -250,6 +262,14 @@ define("io.ox/files/actions",
         ref: "io.ox/files/actions/office"
     }));
 
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: "officepreview",
+        index: 65,
+        prio: 'hi',
+        label: gt("Preview office document"),
+        ref: "io.ox/files/actions/officepreview"
+    }));
+    
     ext.point("io.ox/files/links/inline").extend(new links.Link({
         id: "open",
         index: 100,
