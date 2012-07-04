@@ -98,6 +98,20 @@ define('io.ox/calendar/edit/view-main',
 
     };
 
+
+    // generate source for time-typeahead
+    var hours_typeahead = [];
+    var filldate = new dateAPI.Local();
+    filldate.setHours(0);
+    filldate.setMinutes(0);
+    for (var i = 0; i < 24; i++) {
+        hours_typeahead.push(filldate.format(dateAPI.TIME));
+        filldate.add(1000 * 60 * 30); //half hour
+        hours_typeahead.push(filldate.format(dateAPI.TIME));
+        filldate.add(1000 * 60 * 30); //half hour
+    }
+
+
     /// strings end
 
     //customize datepicker
@@ -211,6 +225,8 @@ define('io.ox/calendar/edit/view-main',
             //init date picker
             self.$('.startsat-date').datepicker({format: dateAPI.DATE});
             self.$('.endsat-date').datepicker({format: dateAPI.DATE});
+            self.$('.startsat-time').typeahead({ source: hours_typeahead});
+            self.$('.endsat-time').typeahead({ source: hours_typeahead});
 
 
             var participants = new participantsModule.Collection(self.model.get('participants'));
