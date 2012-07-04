@@ -57,7 +57,7 @@ define('plugins/portal/mail/register',
         loadTile: function () {
             var folderLoaded = $.Deferred();
             var mailsLoaded = $.Deferred();
-            
+
             require(['io.ox/core/api/folder', 'io.ox/mail/api'], function (folderApi, mailApi) {
                 folderApi.get(
                     {
@@ -104,14 +104,15 @@ define('plugins/portal/mail/register',
                 );
                 deferred.resolve();
             });
-            
+
             return deferred;
         },
         load: function () {
             var loading = new $.Deferred();
             require(['io.ox/mail/api'], function (api) {
                 api.getAllThreads()
-                    .done(function (ids) {
+                    .done(function (response) {
+                        var ids = response.data;
                         api.getThreads(ids.slice(0, 5))
                             .done(loading.resolve)
                             .fail(loading.reject);
