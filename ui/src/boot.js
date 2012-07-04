@@ -479,7 +479,7 @@ $(document).ready(function () {
     if (Modernizr.localstorage) {
         var ui = JSON.parse(localStorage.getItem('ox7-ui') || '{}');
         if (ui.version !== ox.version) {
-            console.log('cleared localStorage due to UI update');
+            console.warn('clearing localStorage due to UI update');
             localStorage.clear();
             localStorage.setItem('ox7-ui', JSON.stringify({ version: ox.version }));
         }
