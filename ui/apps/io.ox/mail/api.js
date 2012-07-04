@@ -224,13 +224,14 @@ define("io.ox/mail/api",
             sortKey: 'threaded-' + (options.sort || '610'),
             order: options.order || 'desc',
             includeSent: false, //!accountAPI.is(options.folder, 'sent')
+            cache: false, // never use server cache
             max: 1000 // apply internal limit to build threads fast enough
         });
         var t1, t2;
         console.log('time.pre', 't1', (t1 = _.now()) - ox.t0, new Date(_.now()));
         // use cache?
         if (useCache === 'auto') {
-            useCache = options.cache = (cacheControl[options.folder] !== false);
+            useCache = (cacheControl[options.folder] !== false);
         }
         return this.getAll(options, useCache, null, false)
             .done(function (response) {
