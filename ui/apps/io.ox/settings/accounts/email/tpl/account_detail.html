@@ -1,8 +1,8 @@
 <div class="settings-detail-pane">
-	<legend class="sectiontitle">Account Settings</legend>
+	<legend class="sectiontitle">{{=it.strings.TITLE_ACCOUNT_SETTINGS}}</legend>
 	<div class="form-horizontal">
 		<div class="control-group">
-			<label for="label_14" class="control-label">Account Name:</label>
+			<label for="label_14" class="control-label">{{=it.strings.ACCOUNT_NAME}}</label>
 			<div class="controls">
 				<label class="text">
 					<input type="text" data-property="name" id="label_14" />
@@ -10,7 +10,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label for="label_15" class="control-label">E-Mail Address:</label>
+			<label for="label_15" class="control-label">{{=it.strings.EMAIL_ADDRESS}}</label>
 			<div class="controls">
 				<label class="text">
 				<input type="text" data-property="primary_address" id="label_15" />
@@ -19,21 +19,20 @@
 		</div>
 		<div class="control-group">
 			<div class="controls">
-				<label class="checkbox">Use Unified Mail for this account
+				<label class="checkbox">{{=it.strings.UNIFIED_MAIL}}
 					<input type="checkbox" data-property="unified_inbox_enabled" />
 				</label>
 			</div>
 		</div>
 	</div>
-	<legend class="sectiontitle">Server Settings</legend>
+	<legend class="sectiontitle">{{=it.strings.SERVER_SETTINGS}}</legend>
 	<div class="form-horizontal">
 		<div class="control-group">
-			<label for="label_16" class="control-label">Server Type:</label>
+			<label for="label_16" class="control-label">{{=it.strings.SERVER_TYPE}}</label>
 			<div class="controls">
 				<label class="select"> 
 					<select data-property="mail_protocol">
-							<option value="imap">imap</option>
-							<option value="pop3">pop3</option>
+						{{~it.optionsServer :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
 					</select>
 				</label>
 			</div>
@@ -41,13 +40,13 @@
 		<div class="control-group">
 			<label class="control-label"></label>
 			<div class="controls">
-				<label class="checkbox">Use SSL connection
+				<label class="checkbox">{{=it.strings.SERVER_SSL}}
 					<input type="checkbox" data-property="mail_secure" />
 				</label>
 			</div>
 		</div>
 		<div class="control-group">
-			<label for="label_17" class="control-label">Server Name:</label>
+			<label for="label_17" class="control-label">{{=it.strings.SERVER_NAME}}</label>
 			<div class="controls">
 				<label class="text">
 					<input type="text" data-property="mail_server" id="label_17" />
@@ -55,7 +54,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label for="label_18" class="control-label">Server Port:</label>
+			<label for="label_18" class="control-label">{{=it.strings.SERVER_PORT}}</label>
 			<div class="controls">
 				<label class="text">
 					<input type="text" data-property="mail_port" id="label_18" />
@@ -63,7 +62,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label for="label_19" class="control-label">Login</label>
+			<label for="label_19" class="control-label">{{=it.strings.LOGIN}}</label>
 			<div class="controls">
 				<label class="text">
 					<input type="text" data-property="login" id="label_19" />
@@ -71,7 +70,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label for="label_20" class="control-label">Password</label>
+			<label for="label_20" class="control-label">{{=it.strings.PASSWORD}}</label>
 			<div class="controls">
 				<label class="text">
 					<input type="password" data-property="password" id="label_20" />
@@ -79,17 +78,11 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label for="label_21" class="control-label">Pop3 refresh rate:</label>
+			<label for="label_21" class="control-label">{{=it.strings.POP_3_REFRESH}}</label>
 			<div class="controls">
 				<label class="select">
 					<select data-property="pop3_refresh_rate">
-						<option value="3">3</option>
-						<option value="5">5</option>
-						<option value="10">10</option>
-						<option value="15">15</option>
-						<option value="30">30</option>
-						<option value="60">60</option>
-						<option value="360">360</option>
+						{{~it.optionsRefreshRate :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
 					</select>
 				</label>
 			</div>
@@ -97,7 +90,7 @@
 		<div class="control-group">
 			<label class="control-label"></label>
 			<div class="controls">
-				<label class="checkbox">Leave messages on server
+				<label class="checkbox">{{=it.strings.LEAVE_MESSAGES}}
 					<input type="checkbox" data-property="pop3_expunge_on_quit" />
 				</label>
 			</div>
@@ -105,25 +98,24 @@
 		<div class="control-group">
 			<label class="control-label"></label>
 			<div class="controls">
-				<label class="checkbox">Deleting messages on local storage
-					also deletes them on server<input type="checkbox"
-					data-property="pop3_delete_write_through">
+				<label class="checkbox">{{=it.strings.DELETING_ON_LOCAL}}
+					<input type="checkbox" data-property="pop3_delete_write_through">
 				</label>
 			</div>
 		</div>
 	</div>
-	<legend class="sectiontitle">Outgoing Server Settings (SMTP)</legend>
+	<legend class="sectiontitle">{{=it.strings.TITLE_SERVER_OUT}}</legend>
 	<div class="form-horizontal">
 		<div class="control-group">
 			<label class="control-label"></label>
 			<div class="controls">
-				<label class="checkbox">Use SSL connection
+				<label class="checkbox">{{=it.strings.SERVER_OUT_SSL}}
 					<input type="checkbox" data-property="transport_secure" />
 				</label>
 			</div>
 		</div>
 		<div class="control-group">
-			<label for="label_22" class="control-label">Server Name:</label>
+			<label for="label_22" class="control-label">{{=it.strings.SERVER_OUT_NAME}}</label>
 			<div class="controls">
 				<label class="text">
 					<input type="text" data-property="transport_server" id="label_22" />
@@ -131,7 +123,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label for="label_23" class="control-label">Server Port:</label>
+			<label for="label_23" class="control-label">{{=it.strings.SERVER_OUT_PORT}}</label>
 			<div class="controls">
 				<label class="text">
 					<input type="text" data-property="transport_port" id="label_23" /> 
@@ -141,13 +133,13 @@
 		<div class="control-group">
 			<label class="control-label"></label>
 			<div class="controls">
-				<label class="checkbox">Use Login and Password
+				<label class="checkbox">{{=it.strings.LOGIN_AND_PASS}}
 					<input type="checkbox" data-property="mail-common-selectfirst" />
 				</label>
 			</div>
 		</div>
 		<div class="control-group">
-			<label for="label_24" class="control-label">Login</label>
+			<label for="label_24" class="control-label">{{=it.strings.LOGIN_OUT}}</label>
 			<div class="controls">
 				<label class="text">
 					<input type="text" data-property="transport_login" id="label_24" />
@@ -155,7 +147,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label for="label_25" class="control-label">Password</label>
+			<label for="label_25" class="control-label">{{=it.strings.PASSWORD_OUT}}</label>
 			<div class="controls">
 				<label class="text">
 					<input type="password" data-property="transport_password" id="label_25"></label>

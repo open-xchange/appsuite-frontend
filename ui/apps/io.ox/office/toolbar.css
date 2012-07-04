@@ -13,19 +13,7 @@
 
 .btn-toolbar.io-ox-toolbar {
 
-    /* definitions ========================================================= */
-
-    /* border radius of regular tool bar buttons or button groups */
-    @button-radius: 4px;
-
-    /* border radius of drop-down areas */
-    @dropdown-radius: 5px;
-
-    /* spacing between elements in a button */
-    @whitespace-width: 4px;
-
-    /* blur radius for hover and focus shadows */
-    @shadow-radius: 5px;
+    /* mixin classes ======================================================= */
 
     .border-radius(@radius) {
         -webkit-border-radius: @radius;
@@ -63,6 +51,12 @@
         box-shadow: @shadow;
     }
 
+    .box-shadow(@outset-shadow, @inset-shadow) {
+        -webkit-box-shadow: @outset-shadow, inset @inset-shadow;
+        -moz-box-shadow: @outset-shadow, inset @inset-shadow;
+        box-shadow: @outset-shadow, inset @inset-shadow;
+    }
+
     .opacity(@opacity) {
         @opacity-percent: @opacity * 100;
         opacity: @opacity;
@@ -71,11 +65,19 @@
 
     /* tool bar formatting ================================================= */
 
+    /* tool bar background color */
+    @background-color: #f5f5f5;
+
+    /* tool bar border color */
+    @border-color: #d5d5d5;
+
+    /* --------------------------------------------------------------------- */
+
     /* redefine margin, padding, formatting for usage in OX */
     margin: 0;
     padding: 6px 13px 2px 13px;
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #d5d5d5;
+    background-color: @background-color;
+    border-bottom: 1px solid @border-color;
 
     /* prevent multi-line layout of button groups */
     white-space: nowrap;
@@ -103,28 +105,49 @@
 
     /* button groups ======================================================= */
     
-    /*
-     * The class 'hidden' is used to hide button groups.
-     */
-    .btn-group.hidden {
-        display: none;
+    .btn-group {
+        
+        /* The class 'io-ox-hidden' is used to hide button groups. */
+	    &.io-ox-hidden {
+            display: none;
+        }
     }
     
     /* buttons ============================================================= */
-    
+
     .btn {
-        .button-shadow(@opacity) {
-            .box-shadow(0 0 @shadow-radius rgba(82, 168, 236, @opacity));
+
+        /* border radius of regular tool bar buttons or button groups */
+        @button-radius: 4px;
+
+        /* spacing between elements in a button */
+        @whitespace-width: 4px;
+
+        /* border width for focused buttons */
+        @focus-border-width: 2px;
+
+        /* border color for focused buttons */
+        @focus-border-color: #ff9933;
+
+        /* ----------------------------------------------------------------- */
+
+        /* adjust button size */
+        @padding-h: 3px;
+        @padding-v: 8px;
+        padding: @padding-h @padding-v;
+        
+        /* add focus highlighting (not for clicked buttons, not for blocker class) */
+        &:focus:not(:active) {
+            @focus-padding-h: @padding-h - @focus-border-width + 1px;
+            @focus-padding-v: @padding-v - @focus-border-width + 1px;
+            padding: @focus-padding-h @focus-padding-v;
+            border: @focus-border-width solid @focus-border-color;
+            .box-shadow(inset 0 0 3px @focus-border-color);
         }
-    
+
         /* prevent dotted focus rectangle around buttons */
         &:focus, &:active {
             outline: none;
-        }
-
-        /* add focus highlighting */
-        &:focus {
-            .button-shadow(.8);
         }
 
         /* class for whitespace between icons, text, and dropdown arrows */
@@ -139,7 +162,7 @@
         }
 
         /* remove hover highlight of drop-down arrow for disabled buttons */
-        &:hover:disabled > span.caret {
+        &:disabled > span.caret {
             .opacity(.3);
         }
     }
@@ -147,6 +170,12 @@
     /* table-style button drop-downs ======================================= */
 
     .btn-group > table.dropdown-menu {
+
+        /* border radius of drop-down areas */
+        @dropdown-radius: 5px;
+
+        /* ----------------------------------------------------------------- */
+
         padding: 0;
         border-collapse: collapse;
         border-spacing: 0;
@@ -163,14 +192,14 @@
                 }
                 
                 /* all buttons but the first in a row: remove left border */
-                &:not(:first-child) > .btn {
-                    border-left: none;
+                &:not(:first-child) > .btn:not(:focus) {
+                    border-left-color: transparent;
                 }
             }
 
             /* all buttons but in the first row: remove top border */
-            &:not(:first-child) > td > .btn {
-                border-top: none;
+            &:not(:first-child) > td > .btn:not(:focus) {
+                border-top-color: transparent;
             }
 
             /* first row: radius for first and last button */

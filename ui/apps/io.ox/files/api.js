@@ -138,7 +138,7 @@ define("io.ox/files/api",
                 // clear folder cache
                 return $.when(
                     api.caches.all.grepRemove(options.json.folder_id + '\t'),
-                    api.caches.get.remove(options.json),
+                    api.caches.get.remove({ folder_id: options.json.folder_id, id: options.id }),
                     api.caches.versions.remove(id)
                 )
                 .pipe(function () {
@@ -158,10 +158,7 @@ define("io.ox/files/api",
             })
             .pipe(function () {
                 // clear all cache since titles and thus the order might have changed
-                return $.when(
-                    api.caches.all.grepRemove(file.folder_id + '\t'),
-                    api.caches.versions.remove(file.id)
-                );
+                api.caches.all.grepRemove(file.folder_id + '\t');
             })
             .pipe(function () {
                 return api.get(obj, false);

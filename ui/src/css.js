@@ -218,6 +218,20 @@ define("gettext", function (gettext) {
 
     'use strict';
 
+    var defaultTemplateSettings = {
+        evaluate:    /\{\{([\s\S]+?)\}\}/g,
+        interpolate: /\{\{=([\s\S]+?)\}\}/g,
+        encode:      /\{\{!([\s\S]+?)\}\}/g,
+        use:         /\{\{#([\s\S]+?)\}\}/g,
+        define:      /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
+        conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
+        iterate:     /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
+        varname: 'it',
+        strip: true,
+        append: true,
+        selfcontained: false
+    };
+
     /*
      * Inner Template Abstraction - offers: render(id, [data, [node]])
      */
@@ -244,13 +258,13 @@ define("gettext", function (gettext) {
                     ext.point(id).extend({
                         id: extensionId,
                         index: (index + 1) * 100,
-                        draw: createDraw(id, extensionId, doT.template(html))
+                        draw: createDraw(id, extensionId, doT.template(html, defaultTemplateSettings))
                     });
                 });
             } else {
                 // just plain template
                 plain[id] = true;
-                parts[id] = doT.template(html);
+                parts[id] = doT.template(html, defaultTemplateSettings);
             }
         };
 
@@ -274,6 +288,7 @@ define("gettext", function (gettext) {
                 var fragment = $(html).filter(function () { return this.nodeType === 1; }),
                     parts = fragment.filter('part'),
                     tmpl = new Template(ext);
+
                 // just consider parts
                 parts.each(function () {
                     var node = $(this), html = node.html(), id = node.attr('id') || 'default';

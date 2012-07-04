@@ -10,8 +10,8 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
-define('io.ox/core/notifications/main',
-      [], function () {
+define('io.ox/core/notifications',
+      ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
@@ -40,14 +40,15 @@ define('io.ox/core/notifications/main',
         },
         render: function (notifications) {
             var self = this;
-            console.log('render notifications', self, notifications);
 
             self.$el.empty();
 
 
             _(notifications).each(function (category) {
-                var v = new category.ListView({ collection: category.collection});
-                self.$el.append(v.render().el);
+                if (category.collection.size() > 0) {
+                    var v = new category.ListView({ collection: category.collection});
+                    self.$el.append(v.render().el);
+                }
             });
             return self;
         }
@@ -58,8 +59,7 @@ define('io.ox/core/notifications/main',
         defaults: {
             'thumbnail': '',
             'title': '',
-            'description': '',
-            render: $.noop()
+            'content': ''
         }
     });
     var NotificationCollection = Backbone.Collection.extend({
@@ -79,14 +79,39 @@ define('io.ox/core/notifications/main',
     NotificationController.prototype = {
         attach: function (desktop, pos) {
             //view
+            var self = this;
             this.badgeView = new BadgeView({model: new Backbone.Model({ count: 0})});
             this.notificationsView = new NotificationsView();
-            desktop.addLauncher("right", this.badgeView.render().$el, _.bind(this.toggleList, this));
-            $('#io-ox-core').prepend($('<div id="io-ox-notifications">').addClass('scrollable'));
+            desktop.addLauncher("right", this.badgeView.render().$el, $.proxy(this.toggleList, this));
+            $('#io-ox-core').prepend(
+                $('<div id="io-ox-notifications" class="scrollable">'),
+                $('<div id="io-ox-notifications-overlay" class="abs notifications-overlay">').click(function (e) {
+                    if (e.target === this) {
+                        self.hideList();
+                    }
+                })
+            );
+
+            // invoke plugins
+            var plugins = ext.getPlugins({name: 'notifications', prefix: 'plugins/notifications/'});
+            console.log('wanna load notification plugins', plugins);
+            require(plugins).done(function () {
+                console.log('loaded notification plugins');
+                ext.point('io.ox/core/notifications/register').invoke('register', self, self);
+
+            });
+            // now register default notification handler
+            /*require(['io.ox/mail/notifications',
+                     'io.ox/calendar/notifications'], function (mailNotifications, calNotifications) {
+                mailNotifications.register();
+                calNotifications.register();
+            });*/
+
+
+
         },
         get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {
-                console.log('created notfication collection', this.notifications);
                 var module = {};
                 module.collection = new NotificationCollection([]);
                 module.ListView = listview;
@@ -94,41 +119,37 @@ define('io.ox/core/notifications/main',
                 module.collection.on('remove', _.bind(this.onRemoveNotification, this));
                 module.collection.on('reset', _.bind(this.onResetNotifications, this));
                 this.notifications[key] = module;
+                $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
             }
 
             return this.notifications[key];
         },
         onAddNotification: function () {
-            console.log('add notification', arguments);
             this.badgeView.$el.addClass('badge-error');
             this.update();
         },
         onRemoveNotification: function () {
-            console.log('remove notification', arguments);
             this.update();
         },
         onResetNotifications: function () {
-            console.log('reset notifications', arguments);
             this.badgeView.$el.addClass('badge-error');
             this.update();
         },
         update: function () {
-            console.log('update', this.notifications);
 
             var count = _.reduce(this.notifications, function (memo, module) {
                 if (module.collection.size() > 0) {
                     return memo + 1;
                 }
+                return memo;
             }, 0);
 
-            window.badge = this.badgeView.model;
-
             this.badgeView.model.set('count', (count || 0));
+            $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
         },
         toggleList: function () {
             //create nice listing view of all notifications grouped by
             //their app
-            console.log('toggle list now');
             if ($('#io-ox-screens').hasClass('beside')) {
                 this.hideList();
             } else {
@@ -138,13 +159,19 @@ define('io.ox/core/notifications/main',
         showList: function () {
             $('#io-ox-screens').addClass('beside');
             $('#io-ox-notifications').addClass('active');
-            $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
+            $('#io-ox-notifications-overlay').addClass('active');
+            $(document).on('keydown.notification', $.proxy(function (e) {
+                if (e.which === 27) {
+                    $(document).off('keydown.notification');
+                    this.hideList();
+                }
+            }, this));
         },
         hideList: function () {
-            console.log('hide list');
             $('#io-ox-screens').removeClass('beside');
             this.badgeView.$el.removeClass('badge-error');
             $('#io-ox-notifications').removeClass('active');
+            $('#io-ox-notifications-overlay').empty().removeClass('active');
         }
 
     };

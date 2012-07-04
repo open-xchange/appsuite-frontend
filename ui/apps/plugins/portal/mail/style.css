@@ -1,0 +1,18 @@
+.unread-mail-count {
+
+}
+
+.last-unread-title {
+    font-weight: bold;
+}
+
+.last-mail-title {
+    display: inline;
+    font-size: 80%;
+}
+.mail-portal-tile {
+    padding: 1em;
+}
+
+.mail-portal-tile h1 {
+}

@@ -14,10 +14,17 @@ define('io.ox/calendar/month/view',
     ['io.ox/calendar/util',
      'dot!io.ox/calendar/month/template.html',
      'io.ox/core/date',
+     'io.ox/core/config',
      'gettext!io.ox/calendar/view',
-     'less!io.ox/calendar/month/style.css'], function (util, tmpl, date, gt) {
+     'less!io.ox/calendar/month/style.css'], function (util, tmpl, date, config, gt) {
 
     'use strict';
+
+    function formatDate(d) {
+        return d.getUTCFullYear() + '-' + d.getUTCMonth() + '-' + d.getUTCDate();
+    }
+
+    var myself = null;
 
     var View = Backbone.View.extend({
 
@@ -55,6 +62,14 @@ define('io.ox/calendar/month/view',
         },
 
         renderAppointment: function (a) {
+
+            myself = myself || config.get('identifier');
+
+            // check confirmations
+            var state = (_(a.participants).find(function (o) {
+                    return o.id === myself;
+                }) || { type: 0 }).type;
+
             return tmpl.render('appointment', {
                 cid: _.cid(a),
                 full_time: a.full_time,
@@ -62,7 +77,8 @@ define('io.ox/calendar/month/view',
                 private_flag: a.private_flag,
                 shownAs: util.getShownAsClass(a),
                 start: util.getTime(a.start_date),
-                title: a.title
+                title: a.title,
+                unconfirmed: state === 0
             });
         },
 
@@ -71,11 +87,35 @@ define('io.ox/calendar/month/view',
             this.$el.find('.appointment').remove();
             // loop over all appointments
             this.collection.each(function (model) {
-                var d = new Date(model.get('start_date')),
-                    selector = '[date="' + d.getUTCFullYear() + '-' + d.getUTCMonth() + '-' + d.getUTCDate() + '"] .list';
-                this.$(selector).append(
-                    this.renderAppointment(model.attributes)
-                );
+                var start = formatDate(new Date(model.get('start_date'))),
+                    end = formatDate(new Date(model.get('end_date') - 1)),
+                    copy = _.copy(model.attributes, true),
+                    selector, d;
+
+                if (model.get('start_date') < 0) {
+                    console.error('FIXME: start_date should not be negative');
+                    throw 'FIXME: start_date should not be negative';
+                }
+
+                // FIXE ME: just to make it work and safe
+                var maxCount = 100;
+                // draw across multiple days
+                while (true && maxCount) {
+                    maxCount--;
+                    //console.log('start/end', start, end);
+                    selector = '[date="' + start + '"] .list';
+                    this.$(selector).append(this.renderAppointment(copy));
+                    // inc date
+                    if (start !== end) {
+                        copy.start_date += date.DAY;
+                        d = new Date(copy.start_date);
+                        d.setUTCHours(0, 0, 0, 0);
+                        copy.start_date = d.getTime();
+                        start = formatDate(d);
+                    } else {
+                        break;
+                    }
+                }
             }, this);
         }
     });

@@ -172,6 +172,8 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "216" : "until",
             "220" : "participants",
             "221" : "users",
+            "224" : "organizer",
+            "227" : "organizerId",
             "400" : "location",
             "401" : "full_time",
             "402" : "shown_as"

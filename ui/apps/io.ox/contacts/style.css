@@ -167,6 +167,26 @@
 	line-height: 15pt;
 }
 
+.create-contact label {
+	display: inline-block;
+	text-align: right;
+	width: 100px;
+	
+}
+
+.create-contact label.text {
+	padding: 0px;
+	margin: 0px;
+	
+}
+
+.create-contact input {
+	display: inline-block;
+	margin-left: 40px;
+	margin-top: 6px
+	
+}
+
 .create-contact #image1 {
 	margin-left: 28px;
 }

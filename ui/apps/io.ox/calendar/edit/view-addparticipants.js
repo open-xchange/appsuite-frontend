@@ -12,14 +12,15 @@
  */
 
 define('io.ox/calendar/edit/view-addparticipants',
-      ['io.ox/calendar/api',
+      ['io.ox/calendar/edit/module-participants',
        'io.ox/core/tk/autocomplete',
-       'io.ox/calendar/edit/view-participant',
-       'io.ox/calendar/edit/model-participant',
+       'io.ox/core/api/autocomplete',
        'io.ox/mail/util',
-       'gettext!io.ox/calendar/edit/main'], function (calendarAPI, autocomplete, ParticipantView, ParticipantModel, mailUtil, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (participants, autocomplete, AutocompleteAPI, mailUtil, gt) {
 
     'use strict';
+
+    var autocompleteAPI = new AutocompleteAPI({id: 'participants', contacts: true, groups: true, resources: true, distributionlists: false});
 
     var AddParticipantView = Backbone.View.extend({
         events: {
@@ -33,65 +34,99 @@ define('io.ox/calendar/edit/view-addparticipants',
             var self = this,
                 renderedContent;
 
-            self.$el.find('.add-participant')
+            function highlight(text, query) {
+                return String(text).replace(/</g, '&lt;')
+                    .replace(new RegExp(query, 'i'), '<b>' + query + '</b>');
+            }
+
+
+            self.autoparticpants = self.$el.find('.add-participant')
                 .attr('autocapitalize', 'off')
                 .attr('autocorrect', 'off')
                 .attr('autocomplete', 'off')
                 .autocomplete({
+                    parentSelector: '.io-ox-calendar-edit',
                     source: function (query) {
-                        var df = new $.Deferred();
-                        //return contactAPI.autocomplete(query);
-                        return calendarAPI.searchParticipants(query); //, {columns: '20,1,500,501,502,505,520,555,556,557,569,602,606'});
+                        return autocompleteAPI.search(query);
                     },
-                    stringify: function (data) {
-                        return data.display_name;
+                    stringify: function (obj) {
+                        return (obj && obj.data && obj.data.display_name) ? obj.data.display_name.replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''): '';
                     },
-                    draw: function (data) {
-                        if (data.constructor.toString().indexOf('Object') !== -1) {
-                            data.image1_url = data.image1_url || '';
-                            var pmodel = new ParticipantModel(data);
-                            var pview = new ParticipantView({model: pmodel});
+                    draw: function (obj) {
+                        if (obj && obj.data.constructor.toString().indexOf('Object') !== -1) {
+                            switch (obj.type) {
+                            case 'contact':
+                                if (obj.data.internal_userid && obj.data.email1 === obj.email) {
+                                    obj.data.type = 1; //user
+                                    obj.data.id = obj.data.internal_userid;
+                                } else {
+                                    obj.data.type = 5;
+                                    // h4ck
+                                    obj.data.email1 = obj.email;
+                                }
+                                break;
+                            case 'resource':
+                                obj.data.type = 3; //resource
+                                break;
+                            case 'group':
+                                obj.data.type = 2; //group
+                                break;
+                            }
+
+                            obj.data.image1_url = obj.data.image1_url || '';
+                            var pmodel = new participants.Model(obj.data);
+                            var pview = new participants.ItemView({model: pmodel, prefetched: true});
                             var markup = pview.render().el;
 
                             // just hack a bit to make it work easely
-                            $(this).css({height: '39px'});
-                            $(markup).css({'list-style': 'none', 'margin-left': '0px'});
+                            $(this).css({height: '47px'});
+                            $(markup).css({'list-style': 'none', 'margin-left': '0px', 'background': 'none'});
                             $(markup).find('.person-link').removeClass('person-link');
 
                             $(markup).find('.remove').remove();
                             this.append(markup);
                         }
+                    },
+                    click: function () {
+                        self.autoparticpants.trigger('selected', self.autoparticpants.getSelectedItem());
                     }
                 })
                 .on('selected', function (e, selected) {
-                    if (_.isString(selected)) {
-                        self.onClickAdd(e);
+                    if (_.isObject(selected)) {
+                        self.$('.add-participant').val('');
+                        self.trigger('select', selected.data);
                     } else {
-                        self.select(selected);
+                        self.onClickAdd();
                     }
                 });
             return self;
         },
         onClickAdd: function (e) {
-            var node = this.$('input.add-participant');
-            var val = node.val();
-            var list = mailUtil.parseRecipients(val);
-            if (list.length) {
-                this.select({
-                    id: Math.random(),
-                    display_name: list[0][0],
-                    mail: list[0][1],
-                    image1_url: '',
-                    type: 5 // TYPE_EXTERNAL_USER
-                });
+            var selectedItem = this.autoparticpants.getSelectedItem();
+
+            if (selectedItem) {
+                return this.autoparticpants.trigger('selected', selectedItem);
             } else {
-                node.attr('disabled', 'disabled')
-                    .css({border: '1px solid #a00', backgroundColor: '#fee'})
-                    .shake()
-                    .done(function () {
-                        node.css({ border: '', backgroundColor: '' })
-                            .removeAttr('disabled').focus();
+                var node = this.$('input.add-participant');
+                var val = node.val();
+                var list = mailUtil.parseRecipients(val);
+                if (list.length) {
+                    this.select({
+                        id: Math.random(),
+                        display_name: list[0][0],
+                        mail: list[0][1],
+                        image1_url: '',
+                        type: 5 // TYPE_EXTERNAL_USER
                     });
+                } else {
+                    node.attr('disabled', 'disabled')
+                        .css({border: '1px solid #a00', backgroundColor: '#fee'})
+                        .shake()
+                        .done(function () {
+                            node.css({ border: '', backgroundColor: '' })
+                                .removeAttr('disabled').focus();
+                        });
+                }
             }
         },
         select: function (obj) {
