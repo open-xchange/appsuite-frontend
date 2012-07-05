@@ -13,109 +13,14 @@
 
 define('io.ox/officepreview/main',
     ['io.ox/files/api',
-     'io.ox/officepreview/toolbar',
-     'io.ox/officepreview/controller',
      'io.ox/officepreview/preview',
      'gettext!io.ox/office/main',
-     'io.ox/office/actions',
-     'less!io.ox/office/main.css'
-    ], function (FilesApi, ToolBar, Controller, Preview, gt) {
+     'less!io.ox/officepreview/style.css'
+    ], function (FilesApi, Preview, gt) {
 
     'use strict';
 
-    var // application identifier
-        MODULE_NAME = 'io.ox/officepreview';
-
-    // class PreviewToolBar ======================================================
-
-    /**
-     * Creates and returns a new instance of the main preview tool bar.
-     *
-     * @constructor
-     */
-    var PreviewToolBar = ToolBar.extend({
-
-        constructor: function () {
-
-            // call base constructor
-            ToolBar.call(this);
-
-            // add all tool bar controls
-            this
-            .addButtonGroup()
-                .addButton('action/first', { icon: gt('icon-officepreview-first'), tooltip: gt('Go to first page') })
-                .addButton('action/previous', { icon: gt('icon-officepreview-previous'), tooltip: gt('Go to previous page') })
-                .addButton('action/next', { icon: gt('icon-officepreview-next'), tooltip: gt('Go to next page') })
-                .addButton('action/last', { icon: gt('icon-officepreview-last'), tooltip: gt('Go to last page') })
-            .end();
-
-        } // end of constructor
-
-    }); // class PreviewToolBar
-
-    // class PreviewController =================================================
-
-    var PreviewController = Controller.extend({
-
-        constructor: function (app) {
-
-            var // current preview having the focus
-                preview = null;
-
-            // base constructor -----------------------------------------------
-
-            Controller.call(this, {
-
-                'action/first': {
-                    enable: function () { return preview.hasFirst(); },
-                    set: function (list) { preview.first(); preview.grabFocus(); }
-                },
-                'action/previous': {
-                    enable: function () { return preview.hasPrevious(); },
-                    set: function (list) { preview.left(); preview.grabFocus(); }
-                },
-                'action/next': {
-                    enable: function () { return preview.hasNext(); },
-                    set: function (list) { preview.right(); preview.grabFocus(); }
-                },
-                'action/last': {
-                    enable: function () { return preview.hasLast(); },
-                    set: function (list) {preview.last(); preview.grabFocus(); }
-                }
-
-            });
-
-            // methods --------------------------------------------------------
-
-            /**
-             * Registers a new preview instance. If the preview has the browser
-             * focus, this controller will use it as target for item actions
-             * triggered by any registered view component.
-             */
-            this.registerPreview = function (newPreview, supportedItems) {
-                newPreview
-                    .on('focus', _.bind(function (event, focused) {
-                        if (focused && (preview !== newPreview)) {
-                            // set as current preview
-                            preview = newPreview;
-                            // update view components
-                            this.enableAndDisable(supportedItems);
-                        }
-                    }, this));
-                    /*
-                    .on('operation', _.bind(function () {
-                        this.update(['action/undo', 'action/redo', /^character\//, /^paragraph\//]);
-                    }, this))
-                    .on('selectionChanged', _.bind(function () {
-                        this.update([/^character\//, /^paragraph\//]);
-                    }, this));
-                    */
-                return this;
-            };
-
-        } // end of constructor
-
-    }); // class PreviewController
+    var MODULE_NAME = 'io.ox/officepreview';
 
     // createApplication() ====================================================
 
@@ -130,12 +35,6 @@ define('io.ox/officepreview/main',
             // connection to infostore file
             file = null,
 
-            // controller as single connection point between preview and view elements
-            controller = new PreviewController(app),
-
-            // main tool bar
-            toolbar = new PreviewToolBar(),
-
             // primary preview used in actions.
             preview = null;
            
@@ -143,21 +42,6 @@ define('io.ox/officepreview/main',
 
         function initializeApp(options) {
             file = _.isObject(options) ? options.file : null;
-        }
-
-        /**
-         * Returns the URL passed to the AJAX calls used to convert a document
-         * file into an HTML document.
-         */
-        function getFilterUrl(action) {
-            return file && (ox.apiRoot +
-                '/oxodocumentfilter' +
-                '?action=' + action +
-                '&id=' + file.id +
-                '&folder_id=' + file.folder_id +
-                '&version=' + file.version +
-                '&filename=' + file.filename +
-                '&session=' + ox.session);
         }
 
         /**
@@ -207,14 +91,6 @@ define('io.ox/officepreview/main',
         }
 
         /**
-         * Recalculates the size of the preview frame according to the current
-         * view port size.
-         */
-        function windowResizeHandler() {
-            win.nodes.appPane.height(window.innerHeight - win.nodes.appPane.offset().top);
-        }
-
-        /**
          * The handler function that will be called while launching the
          * application. Creates and initializes a new application window.
          */
@@ -230,14 +106,14 @@ define('io.ox/officepreview/main',
             app.setWindow(win);
 
             // do not detach when hiding to keep edit selection alive
-            win.detachable = false;
+            win.detachable = true;
 
             // create panes and attach them to the main window
             win.nodes.main.addClass('io-ox-officepreview-main').append(
                 // top pane for tool bars
-                win.nodes.toolPane = $('<div>').addClass('io-ox-officepreview-tool-pane').append(toolbar.getNode()),
+                win.nodes.toolPane = $('<div>').addClass('io-ox-officepreview-page-indicator').append("<div>").text("Toolpane"),
                 // main application container
-                win.nodes.appPane = $('<div>').addClass('container').append(preview.getNode())
+                win.nodes.appPane = $('<div>').addClass('io-ox-officepreview-page').append(preview.getNode())
             );
 
             // update preview 'div' on window size change
@@ -253,7 +129,7 @@ define('io.ox/officepreview/main',
 
         /**
          * The handler function that will be called when the application shuts
-         * down. 
+         * down.
          *
          * @returns {jQuery.Deferred}
          *  A deferred that will be resolved if the application can be closed
@@ -268,6 +144,17 @@ define('io.ox/officepreview/main',
             return def;
         }
 
+        /**
+         * Recalculates the size of the preview frame according to the current
+         * view port size.
+         */
+        function windowResizeHandler() {
+            win.nodes.appPane.height(window.innerHeight - win.nodes.appPane.offset().top);
+        }
+        
+        /**
+         * loading the document from the filestore as HTML
+         */
         function importHTML(response) {
 
             var // the deferred return value
@@ -304,7 +191,7 @@ define('io.ox/officepreview/main',
                 return def.reject(ex);
             }
 
-            // resolve the deferred with the operations list
+            // resolve the deferred with the preview document
             return def.resolve(response.data);
         }
         
@@ -337,7 +224,6 @@ define('io.ox/officepreview/main',
             if (win && preview) {
                 win.show();
                 updateTitles();
-                preview.grabFocus();
                 def.resolve();
             } else {
                 def.reject();
@@ -346,6 +232,22 @@ define('io.ox/officepreview/main',
             return def;
         };
 
+        /**
+         * Returns the URL passed to the AJAX calls used to convert a document
+         * file into an HTML document.
+         */
+        function getFilterUrl(action) {
+            return file && (ox.apiRoot +
+                '/oxodocumentfilter' +
+                '?action=' + action +
+                '&id=' + file.id +
+                '&folder_id=' + file.folder_id +
+                '&version=' + file.version +
+                '&filename=' + file.filename +
+                '&session=' + ox.session) +
+                '&format=html';
+        }
+        
         /**
          * Loads the document described in the file descriptor passed to the
          * constructor of this application, and shows the application window.
@@ -372,8 +274,6 @@ define('io.ox/officepreview/main',
             // initialize the deferred to be returned
             def = $.Deferred().always(function () {
                 win.idle();
-                preview.setModified(false);
-                preview.grabFocus(true);
             });
 
             // load the file
@@ -384,13 +284,13 @@ define('io.ox/officepreview/main',
             })
             .done(function (response) {
                 importHTML(response)
-                .done(function (operations) {
-                    preview.applyOperations(operations, false, true);
+                .done(function (previewDocument) {
+                    preview.setPreviewDocument(previewDocument);
                     def.resolve();
                 })
                 .fail(function (ex) {
                     showExceptionError(ex);
-                    preview.initDocument();
+                    preview.setPreviewDocument(null);
                     def.reject();
                 });
             })
@@ -404,13 +304,11 @@ define('io.ox/officepreview/main',
         };
 
         app.failSave = function () {
-            var point = { file: file, debugMode: debugMode };
-            return { module: MODULE_NAME, point: point };
+            return { module: MODULE_NAME, point: { file: file } };
         };
 
         app.failRestore = function (point) {
             initializeApp(point);
-            updateDebugMode();
             return app.load();
         };
 
@@ -421,32 +319,16 @@ define('io.ox/officepreview/main',
          */
         app.destroy = function () {
             $(window).off('resize', windowResizeHandler);
-            controller.destroy();
-            toolbar.destroy();
-            app = win = toolbar = controller = preview = null;
+            app = win = preview = null;
         };
 
         // initialization -----------------------------------------------------
 
         // create the preview
-        /*
-         
-         _(Editor.TextMode).each(function (textMode) {
-            var // class names for the editor
-                classes = 'io-ox-office-editor user-select-text ' + textMode,
-                // the editor root node
-                node = $('<div>', { contenteditable: true }).addClass(classes);
-            editors[textMode] = new Editor(node, textMode);
-        });
-        */
-        preview = new Preview();
-
-        // register GUI elements and preview at the controller
-        controller
-            .registerViewComponent(toolbar)
-            .registerPreview(preview);
-
-        // configure OX application
+        var classes = 'io-ox-officepreview-main',
+            node = $('<div>').addClass(classes);
+            
+        preview = new Preview(node);
         initializeApp(options);
 
         return app.setLauncher(launchHandler).setQuit(quitHandler);
