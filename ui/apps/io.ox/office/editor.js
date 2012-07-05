@@ -13,9 +13,11 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], function (Events, KeyCodes) {
+define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], function (Events, Utils) {
 
     'use strict';
+
+    var KeyCodes = Utils.KeyCodes;
 
     var OP_TEXT_INSERT =  'insertText';
     var OP_TEXT_DELETE =  'deleteText';
@@ -277,8 +279,9 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                 this.endPaM = tmp;
             }
         };
-        this.toString = function () {
-            return ("Startpoint: " + this.startPaM.toString() + ", Endpoint: " + this.endPaM.toString());
+
+        this.isEqual = function (selection) {
+            return (_.isEqual(this.startPaM.oxoPosition, selection.startPaM.oxoPosition) && _.isEqual(this.endPaM.oxoPosition, selection.endPaM.oxoPosition)) ? true : false;
         };
     }
 
@@ -353,6 +356,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
      * - 'focus': When the editor container got or lost browser focus.
      * - 'operation': When a new operation has been applied.
      * - 'modified': When the modified flag has been changed.
+     * - 'selectionChanged': When the selection has been changed.
      */
     function OXOEditor(editdiv, textMode) {
 
@@ -370,6 +374,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         var focused = false;
 
         var lastKeyDownEvent;
+        var lastEventSelection;
 
         // list of operations
         var operations = [];
@@ -594,7 +599,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
          *  A jQuery keyboard event object.
          */
         this.isNavigationKeyEvent = function (event) {
-            return NAVIGATION_KEYS.contains(event.keyCode);
+            return event && NAVIGATION_KEYS.contains(event.keyCode);
         };
 
         this.getPrintableChar = function (event) {
@@ -908,8 +913,11 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         };
 
         this.setSelection = function (oxosel) {
+            var oldSelection = this.getSelection();
             var aDOMSelection = this.getDOMSelection(oxosel);
             this.implSetDOMSelection(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset, aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
+            // if (TODO: Compare Arrays oldSelection, oxosel)
+            this.trigger('selectionChanged');   // when setSelection() is called, it's very likely that the selection actually did change. If it didn't - that normally shouldn't matter.
         };
 
         this.clearUndo = function () {
@@ -945,6 +953,33 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
             }
         };
 
+        this.processMouseDown = function (event) {
+            lastEventSelection = this.getSelection();
+            // Just give control to the browser so it can update the selection. "Return" ASAP.
+            // I Don't think we need some way to stop the timer, as the user won't be able to close this window "immediatly" after clicking into it.
+            this.implStartCheckEventSelection();
+        };
+
+        this.processMouseUp = function (event) {
+            this.implCheckEventSelection(); // just in case the user was faster then the timer in mousedown...
+            lastEventSelection = this.getSelection();
+            this.implStartCheckEventSelection();
+        };
+
+        this.implStartCheckEventSelection = function () {
+            var _this = this;
+            window.setTimeout(function () { _this.implCheckEventSelection(); }, 10);
+        };
+
+        this.implCheckEventSelection = function () {
+            var currentSelection = this.getSelection();
+            if (!currentSelection || !lastEventSelection || !currentSelection.isEqual(lastEventSelection)) {
+                lastEventSelection = currentSelection;
+                this.trigger('selectionChanged');
+                this.implDbgOutInfo('mouse selection changed');
+            }
+        };
+
         this.processDragOver = function (event) {
             event.preventDefault();
         };
@@ -961,7 +996,6 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.processKeyDown = function (event) {
 
             this.implDbgOutEvent(event);
-            lastKeyDownEvent = event;
             // this.implCheckSelection();
 
             // TODO: How to strip away debug code?
@@ -998,12 +1032,12 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                 }
             }
 
-            // For some keys we only get keyDown, not keyPressed!
+            var selection = this.getSelection();
 
-            var selection; // only get when really needed...
+            lastEventSelection = _.copy(selection, true);
+            lastKeyDownEvent = event;   // For some keys we only get keyDown, not keyPressed!
 
             if (event.keyCode === KeyCodes.DELETE) {
-                selection = this.getSelection();
                 selection.adjust();
                 if (selection.hasRange()) {
                     this.deleteSelected(selection);
@@ -1028,7 +1062,6 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                 this.setSelection(selection);
             }
             else if (event.keyCode === KeyCodes.BACKSPACE) {
-                selection = this.getSelection();
                 selection.adjust();
                 if (selection.hasRange()) {
                     this.deleteSelected(selection);
@@ -1147,6 +1180,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
             }
 
             var selection = this.getSelection();
+
+            lastEventSelection = _.copy(selection, true);
 
             selection.adjust();
 
@@ -2742,6 +2777,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
             .on('blur', _.bind(this.processFocus, this, false))
             .on('keydown', $.proxy(this, 'processKeyDown'))
             .on('keypress', $.proxy(this, 'processKeyPressed'))
+            .on('mousedown', $.proxy(this, 'processMouseDown'))
+            .on('mouseup', $.proxy(this, 'processMouseUp'))
             .on('dragover', $.proxy(this, 'processDragOver'))
             .on('drop', $.proxy(this, 'processDrop'))
             .on('contextmenu', $.proxy(this, 'processContextMenu'));

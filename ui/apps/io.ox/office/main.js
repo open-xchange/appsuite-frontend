@@ -13,8 +13,8 @@
 
 define('io.ox/office/main',
     ['io.ox/files/api',
-     'io.ox/office/toolbar',
-     'io.ox/office/controller',
+     'io.ox/office/tk/toolbar',
+     'io.ox/office/tk/controller',
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
      'io.ox/office/actions',
@@ -33,114 +33,118 @@ define('io.ox/office/main',
      *
      * @constructor
      */
-    var MainToolBar = ToolBar.extend({
+    var MainToolBar = ToolBar.extend({ constructor: function () {
 
-        constructor: function () {
+        // base constructor ---------------------------------------------------
 
-            // call base constructor
-            ToolBar.call(this);
+        ToolBar.call(this);
 
-            // add all tool bar controls
-            this
-            .addButtonGroup()
-                .addButton('action/undo', { icon: gt('icon-io-ox-undo'), tooltip: gt('Revert last operation') })
-                .addButton('action/redo', { icon: gt('icon-io-ox-redo'), tooltip: gt('Restore last operation') })
-            .end()
-            .addButtonGroup()
-                .addButton('character/font/bold',      { icon: gt('icon-io-ox-bold'),      tooltip: gt('Bold'),      toggle: true })
-                .addButton('character/font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
-                .addButton('character/font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
-            .end()
-            .addRadioGroup('paragraph/alignment', { type: 'auto', columns: 2, tooltip: gt('Paragraph alignment') })
-                .addButton('left',    { icon: gt('icon-align-left'),    tooltip: gt('Left') })
-                .addButton('center',  { icon: gt('icon-align-center'),  tooltip: gt('Center') })
-                .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
-                .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
-            .end()
-            .addButton('action/table', { label: gt('Table'), tooltip: gt('Insert new table') })
-            .addButton('action/debug', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
+        // initialization -----------------------------------------------------
 
-        } // end of constructor
+        // add all tool bar controls
+        this
+        .addButtonGroup()
+            .addButton('action/undo', { icon: gt('icon-io-ox-undo'), tooltip: gt('Revert last operation') })
+            .addButton('action/redo', { icon: gt('icon-io-ox-redo'), tooltip: gt('Restore last operation') })
+        .end()
+        .addButtonGroup()
+            .addButton('character/font/bold',      { icon: gt('icon-io-ox-bold'),      tooltip: gt('Bold'),      toggle: true })
+            .addButton('character/font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
+            .addButton('character/font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
+        .end()
+        .addRadioGroup('paragraph/alignment', { type: 'auto', columns: 2, tooltip: gt('Paragraph alignment') })
+            .addButton('left',    { icon: gt('icon-align-left'),    tooltip: gt('Left') })
+            .addButton('center',  { icon: gt('icon-align-center'),  tooltip: gt('Center') })
+            .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
+            .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
+        .end()
+        .addSizeChooser('insert/table', { label: gt('Table'), tooltip: gt('Insert table'), maxWidth: 15, maxHeight: 15 })
+        .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
-    }); // class MainToolBar
+    }}); // class MainToolBar
 
     // class EditorController =================================================
 
-    var EditorController = Controller.extend({
+    var EditorController = Controller.extend({ constructor: function (app) {
 
-        constructor: function (app) {
+        var // current editor having the focus
+            editor = null,
 
-            var // current editor having the focus
-                editor = null;
-
-            // base constructor -----------------------------------------------
-
-            Controller.call(this, {
-
+            // all the little controller items
+            items = {
                 'action/undo': {
                     enable: function () { return editor.hasUndo(); },
-                    set: function (list) { editor.undo(); editor.grabFocus(); }
+                    set: function () { editor.undo(); editor.grabFocus(); }
                 },
                 'action/redo': {
                     enable: function () { return editor.hasRedo(); },
-                    set: function (list) { editor.redo(); editor.grabFocus(); }
+                    set: function () { editor.redo(); editor.grabFocus(); }
                 },
-                'action/table': {
-                    set: function () { editor.insertTable(); editor.grabFocus(); }
-                },
-                'action/debug': {
-                    get: function () { return app.isDebugMode(); },
-                    set: function (state) { app.setDebugMode(state); app.getEditor().grabFocus(); }
+
+                'insert/table': {
+                    set: function (size) { editor.insertTable(size); editor.grabFocus(); }
                 },
 
                 'character/font/bold': {
                     get: function () { return editor.getAttribute('bold'); },
-                    set: function (state) { editor.setAttribute('bold', state); editor.grabFocus(); },
-                    poll: true
+                    set: function (state) { editor.setAttribute('bold', state); editor.grabFocus(); }
                 },
                 'character/font/italic': {
                     get: function () { return editor.getAttribute('italic'); },
-                    set: function (state) { editor.setAttribute('italic', state); editor.grabFocus(); },
-                    poll: true
+                    set: function (state) { editor.setAttribute('italic', state); editor.grabFocus(); }
                 },
                 'character/font/underline': {
                     get: function () { return editor.getAttribute('underline'); },
-                    set: function (state) { editor.setAttribute('underline', state); editor.grabFocus(); },
-                    poll: true
+                    set: function (state) { editor.setAttribute('underline', state); editor.grabFocus(); }
                 },
 
                 'paragraph/alignment': {
                     set: function (value) { editor.grabFocus(); }
+                },
+
+                'debug/toggle': {
+                    get: function () { return app.isDebugMode(); },
+                    set: function (state) { app.setDebugMode(state); app.getEditor().grabFocus(); }
                 }
-
-            });
-
-            // methods --------------------------------------------------------
-
-            /**
-             * Registers a new editor instance. If the editor has the browser
-             * focus, this controller will use it as target for item actions
-             * triggered by any registered view component.
-             */
-            this.registerEditor = function (newEditor, supportedItems) {
-                newEditor
-                    .on('focus', _.bind(function (event, focused) {
-                        if (focused && (editor !== newEditor)) {
-                            // set as current editor
-                            editor = newEditor;
-                            // update view components
-                            this.enableAndDisable(supportedItems);
-                        }
-                    }, this))
-                    .on('operation', _.bind(function () {
-                        this.update(['action/undo', 'action/redo']);
-                    }, this));
-                return this;
             };
 
-        } // end of constructor
+        // private methods ----------------------------------------------------
 
-    }); // class EditorController
+        function cancelAction() {
+            editor.grabFocus();
+        }
+
+        // base constructor ---------------------------------------------------
+
+        Controller.call(this, items, cancelAction);
+
+        // methods ------------------------------------------------------------
+
+        /**
+         * Registers a new editor instance. If the editor has the browser
+         * focus, this controller will use it as target for item actions
+         * triggered by any registered view component.
+         */
+        this.registerEditor = function (newEditor, supportedItems) {
+            newEditor
+                .on('focus', _.bind(function (event, focused) {
+                    if (focused && (editor !== newEditor)) {
+                        // set as current editor
+                        editor = newEditor;
+                        // update view components
+                        this.enableAndDisable(supportedItems);
+                    }
+                }, this))
+                .on('operation', _.bind(function () {
+                    this.update([/^action\//, /^character\//, /^paragraph\//]);
+                }, this))
+                .on('selectionChanged', _.bind(function () {
+                    this.update([/^character\//, /^paragraph\//]);
+                }, this));
+            return this;
+        };
+
+    }}); // class EditorController
 
     // createApplication() ====================================================
 
@@ -471,7 +475,9 @@ define('io.ox/office/main',
             .done(function (response) {
                 importOperations(response)
                 .done(function (operations) {
+                    editor.enableUndo(false);
                     editor.applyOperations(operations, false, true);
+                    editor.enableUndo(true);
                     def.resolve();
                 })
                 .fail(function (ex) {
@@ -598,7 +604,7 @@ define('io.ox/office/main',
         controller
             .registerViewComponent(toolbar)
             .registerEditor(editors[Editor.TextMode.RICH])
-            .registerEditor(editors[Editor.TextMode.PLAIN], /^action\/(undo|redo|debug)$/);
+            .registerEditor(editors[Editor.TextMode.PLAIN], [/^action\//, 'debug/toggle']);
 
         // primary editor for global operations (e.g. save)
         editor = editors[Editor.TextMode.RICH];

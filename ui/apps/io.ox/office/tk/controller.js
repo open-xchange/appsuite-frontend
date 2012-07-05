@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/controller', function () {
+define('io.ox/office/tk/controller', function () {
 
     'use strict';
 
@@ -35,32 +35,32 @@ define('io.ox/office/controller', function () {
      *  A map of key/definition pairs. Each attribute in this map defines an
      *  item, keyed by its name. Definitions are maps themselves, supporting
      *  the following attributes:
-     *  - enable: (optional) Predicate function returning true if the item is
-     *      enabled, and false otherwise. Defaults to a function returning
-     *      always true.
-     *  - get: (optional) Getter function returning the current value of the
-     *      item. Can be omitted for one-way action items (actions without a
-     *      return value). May return null to indicate an ambiguous state, or
-     *      undefined to indicate a 'no value' state independent from the type
-     *      of the item. Defaults to a getter returning undefined. Will be
-     *      executed in the context of this controller.
-     *  - set: (optional) Setter function changing the value of an item to the
-     *      first parameter of the setter. Can be omitted for read-only items.
+     *  @param {Function} [definitions.enable]
+     *      Predicate function returning true if the item is enabled, and false
+     *      otherwise. Defaults to a function returning always true.
+     *  @param {Function} [definitions.get]
+     *      Getter function returning the current value of the item. Can be
+     *      omitted for one-way action items (actions without a return value).
+     *      May return null to indicate an ambiguous state, or undefined to
+     *      indicate a 'no value' state independent from the type of the item.
+     *      Defaults to a getter returning undefined. Will be executed in the
+     *      context of this controller.
+     *  @param {Function} [definitions.set]
+     *      Setter function changing the value of an item to the first
+     *      parameter of the setter. Can be omitted for read-only items.
      *      Defaults to a no-op function. Will be executed in the context of
      *      this controller.
-     *  - poll: (optional) If set to true, the controller will constantly poll
-     *      the item value and update its view components.
+     *
+     * @param {Function} [cancelAction]
+     *  A function that will be executed if a view component triggers a
+     *  'cancel' event.
      */
-    function Controller(definitions) {
+    function Controller(definitions, cancelAction) {
 
         var // definitions for all items, mapped by item key
             allItems = {},
-            // extra map for all polled items, mapped by item key
-            pollItems = {},
             // registered view components
-            components = [],
-            // timeout handler for polling
-            timeout = null;
+            components = [];
 
         // private methods ----------------------------------------------------
 
@@ -131,13 +131,17 @@ define('io.ox/office/controller', function () {
         }
 
         /**
-         * The listener function that will listen to 'change' events in all
-         * registered view components.
+         * The listener function that will listen to 'change' and 'cancel'
+         * events in all registered view components.
          */
         function componentListener(event, key, value) {
-            var item = allItems[key];
-            if (item && item.enabled) {
-                item.set(value);
+            if (event.type === 'change') {
+                var item = allItems[key];
+                if (item && item.enabled) {
+                    item.set(value);
+                }
+            } else if ((event.type === 'cancel') && _.isFunction(cancelAction)) {
+                cancelAction();
             }
         }
 
@@ -150,9 +154,10 @@ define('io.ox/office/controller', function () {
          * @param {Object} component
          *  The view component to be registered. Must trigger 'change' events
          *  passing the item key and value as parameters, if a control has been
-         *  activated in the user interface. Must support the method enable()
-         *  taking an item key and state parameter. Must support the method
-         *  update() taking the key and value of an item.
+         *  activated in the user interface, or 'cancel' events to return to
+         *  the application without doing anything. Must support the method
+         *  enable() taking an item key and state parameter. Must support the
+         *  method update() taking the key and value of an item.
          *
          * @returns {Controller}
          *  A reference to this controller instance.
@@ -161,7 +166,7 @@ define('io.ox/office/controller', function () {
             if (!_(components).contains(component)) {
                 components.push(component);
                 updateComponents([component], allItems);
-                component.on('change', componentListener);
+                component.on('change cancel', componentListener);
             }
             return this;
         };
@@ -179,7 +184,7 @@ define('io.ox/office/controller', function () {
          */
         this.unregisterViewComponent = function (component) {
             if (_(components).contains(component)) {
-                component.off('change', componentListener);
+                component.off('change cancel', componentListener);
                 components = _(components).without(component);
             }
             return this;
@@ -296,11 +301,7 @@ define('io.ox/office/controller', function () {
             _(components).each(function (component) {
                 component.off('change', componentListener);
             });
-            // cancel pending poll cycle
-            if (timeout) {
-                window.clearTimeout(timeout);
-            }
-            allItems = pollItems = components = timeout = null;
+            allItems = components = null;
         };
 
         // initialization -----------------------------------------------------
@@ -309,7 +310,7 @@ define('io.ox/office/controller', function () {
         _(definitions).each(function (def, key) {
             if (key && _.isObject(def)) {
                 // build the item object
-                var item = allItems[key] = {
+                allItems[key] = {
                     // bind getters and setters to this controller instance
                     enable: _.isFunction(def.enable) ? _.bind(def.enable, this) : TRUE,
                     get: _.isFunction(def.get) ? _.bind(def.get, this) : $.noop,
@@ -317,25 +318,10 @@ define('io.ox/office/controller', function () {
                     // items are initially disabled
                     enabled: false
                 };
-
-                // collect items whose state will be polled constantly
-                if (def.poll === true) {
-                    pollItems[key] = item;
-                }
             }
         });
 
-        // poll item values
-        if (!_.isEmpty(pollItems)) {
-            timeout = window.setTimeout(function timer() {
-                // update all view components
-                updateComponents(components, pollItems);
-                // and restart timer
-                timeout = window.setTimeout(timer, 200);
-            }, 200);
-        }
-
-    }
+    } // class Controller
 
     // exports ================================================================
 

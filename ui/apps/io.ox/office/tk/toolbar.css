@@ -103,16 +103,6 @@
     i.icon-io-ox-italic-k       { background-position: -120px    0; }
     i.icon-io-ox-underline      { background-position: -144px    0; }
 
-    /* button groups ======================================================= */
-    
-    .btn-group {
-        
-        /* The class 'io-ox-hidden' is used to hide button groups. */
-	    &.io-ox-hidden {
-            display: none;
-        }
-    }
-    
     /* buttons ============================================================= */
 
     .btn {
@@ -164,6 +154,16 @@
         /* remove hover highlight of drop-down arrow for disabled buttons */
         &:disabled > span.caret {
             .opacity(.3);
+        }
+    }
+    
+    /* button groups ======================================================= */
+    
+    .btn-group {
+        
+        /* The class 'io-ox-hidden' is used to hide button groups. */
+        &.io-ox-hidden {
+            display: none;
         }
     }
     
