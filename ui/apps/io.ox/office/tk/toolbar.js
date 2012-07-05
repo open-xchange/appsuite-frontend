@@ -30,6 +30,14 @@ define('io.ox/office/tk/toolbar',
         // CSS selector for focusable controls in the tool bar
         CONTROL_SELECTOR = '.' + CONTROL_CLASS;
 
+    // static functions =======================================================
+
+    function expandControlOptions(options) {
+        options = options || {};
+        options.classes = _.isString(options.classes) ? (options.classes + ' ' + CONTROL_CLASS) : CONTROL_CLASS;
+        return options;
+    }
+
     // class ToolBar ==========================================================
 
     /**
@@ -88,15 +96,15 @@ define('io.ox/office/tk/toolbar',
 
         /**
          * Moves the focus to the previous or next enabled control in the tool
-         * bar. Triggers a 'keyblur' event at the currently focused control,
-         * and a 'keyfocus' event at the new focused control.
+         * bar. Triggers a 'blur:key' event at the currently focused control,
+         * and a 'focus:key' event at the new focused control.
          *
          * @param {Boolean} forward
          *  If set to true, moves focus forward, otherwise backward.
          */
         function moveFocus(forward) {
 
-            var // all enabled controls in all visible button groups
+            var // all enabled controls in all visible control groups
                 controls = containerNode.find('> div' + ControlGroup.VISIBLE_SELECTOR + ' ' + CONTROL_SELECTOR + Utils.ENABLED_SELECTOR),
                 // focused control
                 control = Utils.getFocusedControl(controls),
@@ -105,13 +113,13 @@ define('io.ox/office/tk/toolbar',
 
             // move focus to next/previous control
             if ((controls.length > 1) && (0 <= index) && (index < controls.length)) {
-                control.trigger('keyblur');
+                control.trigger('blur:key');
                 if (forward) {
                     index = (index + 1) % controls.length;
                 } else {
-                    index = (index + controls.length - 1) % controls.length;
+                    index = (index === 0) ? (controls.length - 1) : (index - 1);
                 }
-                controls.eq(index).focus().trigger('keyfocus');
+                controls.eq(index).focus().trigger('focus:key');
             }
         }
 
@@ -269,6 +277,45 @@ define('io.ox/office/tk/toolbar',
             var // create a new control group
                 group = new ControlGroup();
 
+            // private methods ------------------------------------------------
+
+            /**
+             * Returns whether the first button control in the passed jQuery
+             * collection is a toggle button.
+             *
+             * @param {jQuery} button
+             *  A jQuery collection containing a button element.
+             *
+             * @returns {Boolean}
+             *  True, if the button is a toggle button.
+             */
+            function isToggleButton(button) {
+                return button.first().attr('data-toggle') === 'toggle';
+            }
+
+            /**
+             * A generic update handler for push buttons and toggle buttons.
+             */
+            function updateHandler(button, value) {
+                if (isToggleButton(button)) {
+                    // Translate undefined (special 'no value' state) or null (special
+                    // 'ambiguous' state) to false to prevent toggling the button as
+                    // implemented by the static method toggleButtons().
+                    // TODO: Support for null (tristate). (?)
+                    Utils.toggleButtons(button, (_.isUndefined(value) || _.isNull(value)) ? false : value);
+                }
+            }
+
+            /**
+             * A generic action handler for push buttons and toggle buttons.
+             */
+            function clickHandler(button) {
+                if (isToggleButton(button)) {
+                    Utils.toggleButtons(button);
+                    return Utils.isButtonActive(button);
+                } // else: push button, return undefined
+            }
+
             // methods --------------------------------------------------------
 
             /**
@@ -284,7 +331,7 @@ define('io.ox/office/tk/toolbar',
             this.addButton = function (key, options) {
 
                 var // create the button
-                    button = group.addButton(key, _({ classes: CONTROL_CLASS }).extend(options));
+                    button = group.addButton(key, expandControlOptions(options));
 
                 // add toggle button marker
                 if (options && (options.toggle === true)) {
@@ -292,7 +339,7 @@ define('io.ox/office/tk/toolbar',
                 }
 
                 // add update handler (use the generic update handler)
-                registerUpdateHandler(key, function (value) { return ButtonGroupProxy.buttonUpdateHandler(button, value); });
+                registerUpdateHandler(key, function (value) { updateHandler.call(this, button, value); });
 
                 return this;
             };
@@ -311,46 +358,9 @@ define('io.ox/office/tk/toolbar',
             containerNode.append(group.getNode());
 
             // add an action handler at the group node that handles all button clicks
-            registerActionHandler(group.getNode(), 'click', 'button', ButtonGroupProxy.buttonClickHandler);
+            registerActionHandler(group.getNode(), 'click', 'button', clickHandler);
 
         } // class ButtonGroupProxy
-
-        /**
-         * Returns whether the first button control in the passed jQuery
-         * collection is a toggle button.
-         *
-         * @param {jQuery} button
-         *  A jQuery collection containing a button element.
-         *
-         * @returns {Boolean}
-         *  True, if the button is a toggle button.
-         */
-        ButtonGroupProxy.isToggleButton = function (button) {
-            return button.first().attr('data-toggle') === 'toggle';
-        };
-
-        /**
-         * A generic update handler for push buttons and toggle buttons.
-         */
-        ButtonGroupProxy.buttonUpdateHandler = function (button, value) {
-            if (ButtonGroupProxy.isToggleButton(button)) {
-                // Translate undefined (special 'no value' state) or null (special
-                // 'ambiguous' state) to false to prevent toggling the button as
-                // implemented by the static method toggleButtons().
-                // TODO: Support for null (tristate). (?)
-                Utils.toggleButtons(button, (_.isUndefined(value) || _.isNull(value)) ? false : value);
-            }
-        };
-
-        /**
-         * A generic action handler for push buttons and toggle buttons.
-         */
-        ButtonGroupProxy.buttonClickHandler = function (button) {
-            if (ButtonGroupProxy.isToggleButton(button)) {
-                Utils.toggleButtons(button);
-                return Utils.isButtonActive(button);
-            } // else: push button, return undefined
-        };
 
         // class RadioGroupProxy ----------------------------------------------
 
@@ -382,7 +392,7 @@ define('io.ox/office/tk/toolbar',
                 menuNode = $('<table>'),
 
                 // create a new group container for the drop-down group
-                dropDownGroup = new DropDownGroup(key, _({ classes: CONTROL_CLASS }).extend(options), false, menuNode),
+                dropDownGroup = new DropDownGroup(key, expandControlOptions(options), false, menuNode),
 
                 // prototype for dummy buttons in unused table cells (must contain something to get its correct height)
                 buttonPrototype = Utils.createButton(undefined, { label: '\xa0' }),
@@ -557,9 +567,7 @@ define('io.ox/office/tk/toolbar',
                     column = buttonCount % columns;
 
                 // append a new button to the button group
-                buttonGroup.getNode().append(
-                    Utils.createButton(key, options).addClass(CONTROL_CLASS).attr('data-value', value)
-                );
+                buttonGroup.addButton(key, expandControlOptions(options)).attr('data-value', value);
 
                 // get/create table row with empty cell from drop-down menu
                 if (column === 0) {
@@ -629,10 +637,41 @@ define('io.ox/office/tk/toolbar',
 
             // listen to 'menu:focus' events, and move focus to first control
             dropDownGroup.on('menu:focus', function () {
-                menuNode.find('button').first().focus();
+                if (!Utils.containsFocusedControl(menuNode)) {
+                    menuNode.find('button').first().focus();
+                }
             });
 
         } // class RadioGroupProxy
+
+        // class SizeChooser --------------------------------------------------
+
+        function createSizeChooser(key, options) {
+
+            var // drop-down grid element
+                gridNode = $('<table>').append($('<tr>').append($('<td>').text('test'))),
+
+                // create a new group container for the drop-down group
+                group = new DropDownGroup(key, expandControlOptions(options), true, gridNode),
+
+                // default size, used for direct clicks on the action button
+                defaultSize = (options && _.isObject(options.defaultSize)) ? options.defaultSize : { width: 3, height: 3 };
+
+            // private methods ------------------------------------------------
+
+            function clickHandler(button) {
+                return defaultSize;
+            }
+
+            // initialization -------------------------------------------------
+
+            // insert the group into the tool bar
+            containerNode.append(group.getNode());
+
+            // register event handlers
+            registerActionHandler(group.getActionButton(), 'click', clickHandler);
+
+        } // class SizeChooser
 
         // methods ------------------------------------------------------------
 
@@ -717,17 +756,7 @@ define('io.ox/office/tk/toolbar',
         };
 
         this.addSizeChooser = function (key, options) {
-
-            var // options for the drop-down button
-                dropDownButtonOptions = _({ classes: CONTROL_CLASS }).extend(options),
-                // drop-down menu area
-                menuNode = $('<table>').append($('<tr>').append($('<td>').text('test'))),
-                // create a new group container for the drop-down group
-                group = new DropDownGroup(key, dropDownButtonOptions, true, menuNode);
-
-            // insert the group into the tool bar
-            containerNode.append(group.getNode());
-
+            createSizeChooser(key, options);
             return this;
         };
 

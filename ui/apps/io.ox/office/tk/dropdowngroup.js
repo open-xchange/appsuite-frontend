@@ -154,6 +154,10 @@ define('io.ox/office/tk/dropdowngroup',
             return this;
         };
 
+        this.getActionButton = function () {
+            return actionButton;
+        };
+
         /**
          * Replaces the contents of the drop-down button with the passed
          * elements, and appends a caret sign.
@@ -240,7 +244,7 @@ define('io.ox/office/tk/dropdowngroup',
             .attr('data-toggle', 'dropdown')
             .on('click', menuButtonClickHandler)
             .on('keydown keypress keyup', menuButtonKeyHandler)
-            .on('keyblur', _.bind(this.hideMenu, this));
+            .on('blur:key', _.bind(this.hideMenu, this));
 
         // prepare drop-down menu, and register event handlers
         menuNode

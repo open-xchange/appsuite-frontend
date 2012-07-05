@@ -55,9 +55,9 @@ define('io.ox/office/main',
             .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
             .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
         .end()
-        .addButton('action/table', { label: gt('Table'), tooltip: gt('Insert table') })
-        .addSizeChooser('action/table', { label: gt('Table'), tooltip: gt('Insert table'), maxWidth: 15, maxHeight: 15 })
-        .addButton('action/debug', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
+        .addButton('insert/table', { label: gt('Table'), tooltip: gt('Insert table') })
+        .addSizeChooser('insert/table', { label: gt('Table'), tooltip: gt('Insert table'), maxWidth: 15, maxHeight: 15 })
+        .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
     }}); // class MainToolBar
 
@@ -80,12 +80,9 @@ define('io.ox/office/main',
                 enable: function () { return editor.hasRedo(); },
                 set: function () { editor.redo(); editor.grabFocus(); }
             },
-            'action/table': {
+
+            'insert/table': {
                 set: function (size) { editor.insertTable(size); editor.grabFocus(); }
-            },
-            'action/debug': {
-                get: function () { return app.isDebugMode(); },
-                set: function (state) { app.setDebugMode(state); app.getEditor().grabFocus(); }
             },
 
             'character/font/bold': {
@@ -103,8 +100,12 @@ define('io.ox/office/main',
 
             'paragraph/alignment': {
                 set: function (value) { editor.grabFocus(); }
-            }
+            },
 
+            'debug/toggle': {
+                get: function () { return app.isDebugMode(); },
+                set: function (state) { app.setDebugMode(state); app.getEditor().grabFocus(); }
+            }
         });
 
         // methods --------------------------------------------------------
@@ -125,7 +126,7 @@ define('io.ox/office/main',
                     }
                 }, this))
                 .on('operation', _.bind(function () {
-                    this.update(['action/undo', 'action/redo', /^character\//, /^paragraph\//]);
+                    this.update([/^action\//, /^character\//, /^paragraph\//]);
                 }, this))
                 .on('selectionChanged', _.bind(function () {
                     this.update([/^character\//, /^paragraph\//]);
@@ -593,7 +594,7 @@ define('io.ox/office/main',
         controller
             .registerViewComponent(toolbar)
             .registerEditor(editors[Editor.TextMode.RICH])
-            .registerEditor(editors[Editor.TextMode.PLAIN], /^action\/(undo|redo|debug)$/);
+            .registerEditor(editors[Editor.TextMode.PLAIN], [/^action\//, 'debug/toggle']);
 
         // primary editor for global operations (e.g. save)
         editor = editors[Editor.TextMode.RICH];
