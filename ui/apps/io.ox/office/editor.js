@@ -13,9 +13,11 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], function (Events, KeyCodes) {
+define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], function (Events, Utils) {
 
     'use strict';
+
+    var KeyCodes = Utils.KeyCodes;
 
     var OP_TEXT_INSERT =  'insertText';
     var OP_TEXT_DELETE =  'deleteText';

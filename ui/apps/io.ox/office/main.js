@@ -13,8 +13,8 @@
 
 define('io.ox/office/main',
     ['io.ox/files/api',
-     'io.ox/office/toolbar',
-     'io.ox/office/controller',
+     'io.ox/office/tk/toolbar',
+     'io.ox/office/tk/controller',
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
      'io.ox/office/actions',
