@@ -133,14 +133,11 @@ define('io.ox/office/tk/dropdowngroup',
                 if (keydown) { toggleMenu(true, true); }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (keyup) { toggleMenu(false, true); }
+                if (keydown) { toggleMenu(false, true); }
                 return false;
             case KeyCodes.ESCAPE:
-                // let ESCAPE key bubble up, if drop-down menu is already closed
-                if (self.isMenuVisible()) {
-                    if (keyup) { toggleMenu(false, true); }
-                    return false;
-                }
+                if (keydown) { toggleMenu(false, true); }
+                // let ESCAPE key bubble up
                 break;
             }
 
@@ -159,9 +156,6 @@ define('io.ox/office/tk/dropdowngroup',
                 keydown = event.type === 'keydown';
 
             switch (event.keyCode) {
-            case KeyCodes.ESCAPE:
-                if (keydown) { toggleMenu(false, true); }
-                return false;
             case KeyCodes.TAB:
                 if (!event.ctrlKey && !event.altKey && !event.metaKey) {
                     // move focus to drop-down button, needed for correct
@@ -169,6 +163,10 @@ define('io.ox/office/tk/dropdowngroup',
                     if (keydown) { menuButton.focus(); }
                 }
                 // let the TAB key event bubble up to the tool bar
+                break;
+            case KeyCodes.ESCAPE:
+                if (keydown) { toggleMenu(false, true); }
+                // let ESCAPE key bubble up
                 break;
             }
         }

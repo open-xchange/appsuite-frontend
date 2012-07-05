@@ -603,7 +603,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
          *  A jQuery keyboard event object.
          */
         this.isNavigationKeyEvent = function (event) {
-            return NAVIGATION_KEYS.contains(event.keyCode);
+            return event && NAVIGATION_KEYS.contains(event.keyCode);
         };
 
         this.getPrintableChar = function (event) {

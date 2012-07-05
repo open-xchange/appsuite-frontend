@@ -664,7 +664,7 @@ define('io.ox/office/tk/toolbar',
         function createSizeChooser(key, options) {
 
             var // drop-down grid element
-                gridNode = $('<table>').append($('<tr>').append($('<td>').append(Utils.createButton(undefined, { label: 'A' })))),
+                gridNode = $('<table>').append($('<tr>').append($('<td>').append(Utils.createButton(key, { label: 'A' })))),
 
                 // create a new group container for the drop-down group
                 group = new DropDownGroup(key, expandControlOptions(options), true, gridNode),
@@ -685,6 +685,7 @@ define('io.ox/office/tk/toolbar',
 
             // register event handlers
             registerActionHandler(group.getActionButton(), 'click', clickHandler);
+            registerActionHandler(gridNode, 'click', 'button', clickHandler);
             group
                 .on('menu:focus', function () { /* move focus to grid */ })
                 .on('menu:cancel', function () {
