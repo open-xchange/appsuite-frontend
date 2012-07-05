@@ -58,8 +58,6 @@ define('plugins/notifications/mail/register',
                 sidepopup = overlay.prop('sidepopup'),
                 cid = overlay.find('[data-cid]').data('cid');
 
-            console.log('click', obj, overlay, sidepopup, cid);
-
             // toggle?
             if (sidepopup && cid === _.cid(obj)) {
                 sidepopup.close();
@@ -129,13 +127,12 @@ define('plugins/notifications/mail/register',
         },*/
         onOpenApp: function () {
             var defaultInboxFolderId = config.get('modules.mail.defaultFolder.inbox');
-            console.log('open app now');
             notificationsController.hideList();
             ox.launch('io.ox/mail/main').done(function () {
                 this.folder.set(defaultInboxFolderId); // go to inbox
             })
             .fail(function () {
-                console.log('failed launching app', arguments);
+                console.error('failed launching app', arguments);
             });
 
         }
@@ -145,7 +142,7 @@ define('plugins/notifications/mail/register',
         id: 'mail',
         index: 200,
         register: function (controller) {
-            console.log('register mail notifications');
+
             var notifications = controller.get('io.ox/mail', NotificationsView);
 
             mailApi.on('new-mail', function (e, mails) {

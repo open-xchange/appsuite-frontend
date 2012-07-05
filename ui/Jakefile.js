@@ -241,7 +241,8 @@ utils.concat("bootstrap.js",
         'bootstrap-button.js',
         'bootstrap-alert.js',
         'bootstrap-popover.js',
-        'bootstrap-datepicker.js'
+        'bootstrap-datepicker.js',
+        'bootstrap-typeahead.js'
     ]), { type: "source" }
 );
 

@@ -98,6 +98,33 @@ define('io.ox/calendar/edit/view-main',
 
     };
 
+
+    // generate source for time-typeahead
+    var hours_typeahead = [];
+    var filldate = new dateAPI.Local();
+    filldate.setHours(0);
+    filldate.setMinutes(0);
+    for (var i = 0; i < 24; i++) {
+        hours_typeahead.push(filldate.format(dateAPI.TIME));
+        filldate.add(1000 * 60 * 30); //half hour
+        hours_typeahead.push(filldate.format(dateAPI.TIME));
+        filldate.add(1000 * 60 * 30); //half hour
+    }
+
+    var typeaheadHours = {
+        source: hours_typeahead,
+        items: 48,
+        menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
+        sorter: function (items) {
+            items = _(items).sortBy(function (item) {
+                var pd = dateAPI.Local.parse(item, dateAPI.TIME);
+                return pd.getTime();
+            });
+            return items;
+        }
+    };
+
+
     /// strings end
 
     //customize datepicker
@@ -184,6 +211,7 @@ define('io.ox/calendar/edit/view-main',
             };
             self.model.on('change:start_date', _.bind(self.onStartDateChange, self));
             self.model.on('change:end_date', _.bind(self.onEndDateChange, self));
+            self.model.on('change:full_time', _.bind(self.onToggleAllDay, self));
             Backbone.Validation.bind(this, {forceUpdate: true, selector: 'data-property'});
         },
         render: function () {
@@ -211,6 +239,11 @@ define('io.ox/calendar/edit/view-main',
             //init date picker
             self.$('.startsat-date').datepicker({format: dateAPI.DATE});
             self.$('.endsat-date').datepicker({format: dateAPI.DATE});
+            self.$('.startsat-time').typeahead(typeaheadHours);
+            self.$('.endsat-time').typeahead(typeaheadHours);
+
+
+            //self.subviews.recurrence_option = new recurrenceModule.OptionView({model: self.model});
 
 
             var participants = new participantsModule.Collection(self.model.get('participants'));
@@ -251,6 +284,20 @@ define('io.ox/calendar/edit/view-main',
                 if (_.isNumber(newStart)) {
                     self.model.set('start_date', newStart);
                 }
+            }
+        },
+        onToggleAllDay: function () {
+            var isFullTime = this.model.get('full_time');
+            if (isFullTime) {
+                this.$('.startsat-time').hide();
+                this.$('.endsat-time').hide();
+                this.$('.startsat-timezone').hide();
+                this.$('.endsat-timezone').hide();
+            } else {
+                this.$('.startsat-time').show();
+                this.$('.endsat-time').show();
+                this.$('.startsat-timezone').show();
+                this.$('.endsat-timezone').show();
             }
         },
         onSave: function () {

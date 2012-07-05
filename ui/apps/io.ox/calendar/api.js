@@ -244,13 +244,13 @@ define("io.ox/calendar/api",
         },
 
         getUpdates: function (o) {
-            var defaultCalFolder = config.get('folder.calendar');
-            console.log('defaultFolder', defaultCalFolder);
+
             o = $.extend({
                 start: _.now(),
                 end: _.now() + 28 * 1 * DAY,
                 timestamp:  _.now() - (2 * DAY),
-                ignore: 'deleted'
+                ignore: 'deleted',
+                recurrence_master: false
             }, o || {});
 
             // round start & end date
@@ -266,7 +266,7 @@ define("io.ox/calendar/api",
                     start: o.start,
                     end: o.end,
                     showPrivate: true,
-                    recurrence_master: false,
+                    recurrence_master: o.recurrence_master,
                     timestamp: o.timestamp,
                     ignore: o.ignore,
                     sort: "201",
@@ -278,9 +278,8 @@ define("io.ox/calendar/api",
             }
 
             if (!params.folder) {
-                params.folder = defaultCalFolder;
+                params.folder = config.get('folder.calendar');
             }
-
 
             // do not know if cache is a good idea
             if (all_cache[key] === undefined) {
@@ -307,14 +306,19 @@ define("io.ox/calendar/api",
             api.getUpdates({
                 start: start,
                 end: start + 28 * 5 * DAY, //next four month?!?
-                timestamp: 0
+                timestamp: 0,
+                recurrence_master: true
             })
             .pipe(function (list) {
-                var invites = _(list).filter(function (item) {
-                    return item.end_date > start && _(item.users).any(function (item_user) {
-                        return (item_user.id === user.id && (item_user.confirmation === 0));
-                    });
-                });
+                // sort by start_date & look for unconfirmed appointments
+                var invites = _.chain(list)
+                    .filter(function (item) {
+                        return _(item.users).any(function (item_user) {
+                            return (item_user.id === user.id && (item_user.confirmation === 0));
+                        });
+                    })
+                    .sortBy('start_date')
+                    .value();
                 if (invites.length > 0) {
                     api.trigger('new-invites', invites);
                 }
