@@ -8,14 +8,11 @@ var doc2ox, doc2html;
 /** Merges the maps of gui ids, documentation ids and documentation text so that a gui id points to a documentation text snippet */
 var merge = function (doc2ox, doc2html) {
     var merged = {};
-    console.log("Merging elements, doc2ox: %s, doc2html: %s", _(doc2ox).keys().length, _(doc2html).keys().length)
-    console.log(_(doc2ox).keys());
     _(_(doc2html).keys()).each( function (key) {
         var oxId = doc2ox[key];
         if (oxId) {
             var htmlSnippet = doc2html[key];
             merged[oxId] = htmlSnippet;
-//            console.log(oxId, htmlSnippet);
         }
     });
     return merged;
@@ -51,19 +48,17 @@ var buildExtension = function () {
         '* @author An automatted script by Tobias Prinz <tobias.prinz@open-xchange.com>\n' +
         '*/\n' +
         'define("io.ox/help/data", [], function () {\n' +
-        '   "use strict";\n' +
-        '   var help =\n' + 
-        '       ' + JSON.stringify(nodes, null, 12) + '\n' +
-        '   };\n' +
-        '   var get = function (id) {\n' +
-        '       if (help[id]) {\n' +
-        '           return $("<div>").html(help[id]);\n' +
-        '       }\n' +
-        '       return;\n' +
-        '   };\n' +
-        '   var has = function (id) {\n' +
-        '       return help.hasOwnProperty(id);\n' +
-        '   };\n' +
+        '    "use strict";\n' +
+        '    var help = ' + JSON.stringify(nodes, null, 8).replace(/\}$/,"    }") + ';\n' +
+        '    var get = function (id) {\n' +
+        '        if (help[id]) {\n' +
+        '            return $("<div>").html(help[id]);\n' +
+        '        }\n' +
+        '        return;\n' +
+        '    };\n' +
+        '    var has = function (id) {\n' +
+        '        return help.hasOwnProperty(id);\n' +
+        '    };\n' +
         '});\n';
     console.log(extension);
 };
