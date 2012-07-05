@@ -62,25 +62,56 @@ define('io.ox/office/tk/dropdowngroup',
             // reference to the button that triggers the drop-down menu
             menuButton = split ? caretButton : actionButton,
 
-            // if set to true, the next menu open action will trigger 'menu:focus' event to all listeners
-            triggerFocusOnMenuOpen = false;
+            // if set to true, toggling the drop-down menu was done with keyboard
+            menuWithKeyboard = false;
 
         // private methods ----------------------------------------------------
 
+        function triggerMenuButton(fromKeyEvent) {
+            // remember parameter in local variable, will be reset in click handler
+            menuWithKeyboard = fromKeyEvent === true;
+            // click drop-down button, this triggers the click listeners
+            menuButton.click();
+        }
+
+        function toggleMenu(state, fromKeyEvent) {
+            if (self.isMenuVisible()) {
+                if (state !== true) {
+                    // move focus to drop-down button, if control in drop-down menu is focused
+                    if (Utils.containsFocusedControl(menuNode)) {
+                        menuButton.focus();
+                    }
+                    triggerMenuButton(fromKeyEvent);
+                } else if (fromKeyEvent) {
+                    // menu already open, trigger 'menu:focus' event manually
+                    self.trigger('menu:focus');
+                }
+            } else if (state !== false) {
+                triggerMenuButton(fromKeyEvent);
+            }
+        }
+
         function menuButtonClickHandler() {
-            // After a click on the drop-down button with hidden drop-down
-            // menu, wait for Bootstrap to open the menu, and trigger the
-            // 'menu:open' event afterwards. This ensures that listeners
-            // will be executed with a visible drop-down menu.
             if (!self.isMenuVisible()) {
+                // After a click on the drop-down button with hidden drop-down
+                // menu, wait for Bootstrap to open the menu, and trigger the
+                // 'menu:open' event afterwards. This ensures that listeners
+                // will be executed with a visible drop-down menu.
                 window.setTimeout(function () {
                     self.trigger('menu:open');
-                    if (triggerFocusOnMenuOpen) {
-                        triggerFocusOnMenuOpen = false;
+                    // if menu has been opened by keyboard, trigger a
+                    // 'menu:focus' event requesting clients to move the focus
+                    // into the drop-down menu
+                    if (menuWithKeyboard) {
                         self.trigger('menu:focus');
                     }
                 }, 0);
+            } else if (!menuWithKeyboard) {
+                // if menu has been closed with a mouse click, trigger a
+                // 'menu:cancel' event allowing clients to handle this event
+                self.trigger('menu:cancel');
             }
+            menuWithKeyboard = false;
         }
 
         /**
@@ -91,21 +122,26 @@ define('io.ox/office/tk/dropdowngroup',
 
             var // distinguish between event types (ignore keypress events)
                 keydown = event.type === 'keydown',
-                // wait for keyup for SPACE and ENTER keys
                 keyup = event.type === 'keyup';
 
             switch (event.keyCode) {
             case KeyCodes.SPACE:
             case KeyCodes.ENTER:
-                if (keyup) { self.toggleMenu(true); }
+                if (keyup) { toggleMenu(null, true); }
                 return false;
             case KeyCodes.DOWN_ARROW:
-                if (keydown) { self.showMenu(true); }
+                if (keydown) { toggleMenu(true, true); }
                 return false;
             case KeyCodes.UP_ARROW:
-            case KeyCodes.ESCAPE:
-                if (keydown) { self.hideMenu(); }
+                if (keyup) { toggleMenu(false, true); }
                 return false;
+            case KeyCodes.ESCAPE:
+                // let ESCAPE key bubble up, if drop-down menu is already closed
+                if (self.isMenuVisible()) {
+                    if (keyup) { toggleMenu(false, true); }
+                    return false;
+                }
+                break;
             }
 
             // suppress 'keypress' event for SPACE bar (event.keyCode may be zero in Firefox)
@@ -124,7 +160,7 @@ define('io.ox/office/tk/dropdowngroup',
 
             switch (event.keyCode) {
             case KeyCodes.ESCAPE:
-                if (keydown) { self.hideMenu(); }
+                if (keydown) { toggleMenu(false, true); }
                 return false;
             case KeyCodes.TAB:
                 if (!event.ctrlKey && !event.altKey && !event.metaKey) {
@@ -154,6 +190,10 @@ define('io.ox/office/tk/dropdowngroup',
             return this;
         };
 
+        /**
+         * Returns the button element triggering the default action (in split
+         * mode).
+         */
         this.getActionButton = function () {
             return actionButton;
         };
@@ -176,22 +216,9 @@ define('io.ox/office/tk/dropdowngroup',
 
         /**
          * Shows the drop-down menu unless it is already visible.
-         *
-         * @param {Boolean} [triggerFocus]
-         *  If set to true, a 'menu:focus' event will be triggered after the
-         *  'menu:open' event. This event is dedicated to listeners that want
-         *  to move the focus into the open drop-down menu.
          */
-        this.showMenu = function (triggerFocus) {
-            if (!this.isMenuVisible()) {
-                // remember parameter in local variable, will be reset when 'menu:focus' is triggered
-                triggerFocusOnMenuOpen = triggerFocus === true;
-                // show drop-down menu with a click event, this triggers the click listeners
-                menuButton.click();
-            } else if (triggerFocus) {
-                // menu already open, trigger 'menu:focus' event manually
-                this.trigger('menu:focus');
-            }
+        this.showMenu = function () {
+            toggleMenu(true);
             return this;
         };
 
@@ -199,22 +226,16 @@ define('io.ox/office/tk/dropdowngroup',
          * Hides the drop-down menu unless it is already hidden.
          */
         this.hideMenu = function () {
-            if (this.isMenuVisible()) {
-                // move focus to drop-down button, if control in drop-down menu is focused
-                if (Utils.containsFocusedControl(menuNode)) {
-                    menuButton.focus();
-                }
-                // hide drop-down menu with a click event, this triggers the click listeners
-                menuButton.click();
-            }
+            toggleMenu(false);
             return this;
         };
 
         /**
          * Toggles the visibility of the drop-down menu.
          */
-        this.toggleMenu = function (triggerFocus) {
-            return this.isMenuVisible() ? this.hideMenu() : this.showMenu(triggerFocus);
+        this.toggleMenu = function () {
+            toggleMenu();
+            return this;
         };
 
         // overwrite the hide() method; add hiding the drop-down menu

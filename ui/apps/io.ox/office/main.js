@@ -35,8 +35,11 @@ define('io.ox/office/main',
      */
     var MainToolBar = ToolBar.extend({ constructor: function () {
 
-        // call base constructor
+        // base constructor ---------------------------------------------------
+
         ToolBar.call(this);
+
+        // initialization -----------------------------------------------------
 
         // add all tool bar controls
         this
@@ -55,7 +58,6 @@ define('io.ox/office/main',
             .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
             .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
         .end()
-        .addButton('insert/table', { label: gt('Table'), tooltip: gt('Insert table') })
         .addSizeChooser('insert/table', { label: gt('Table'), tooltip: gt('Insert table'), maxWidth: 15, maxHeight: 15 })
         .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
@@ -66,49 +68,57 @@ define('io.ox/office/main',
     var EditorController = Controller.extend({ constructor: function (app) {
 
         var // current editor having the focus
-            editor = null;
+            editor = null,
 
-        // base constructor -----------------------------------------------
+            // all the little controller items
+            items = {
+                'action/undo': {
+                    enable: function () { return editor.hasUndo(); },
+                    set: function () { editor.undo(); editor.grabFocus(); }
+                },
+                'action/redo': {
+                    enable: function () { return editor.hasRedo(); },
+                    set: function () { editor.redo(); editor.grabFocus(); }
+                },
 
-        Controller.call(this, {
+                'insert/table': {
+                    set: function (size) { editor.insertTable(size); editor.grabFocus(); }
+                },
 
-            'action/undo': {
-                enable: function () { return editor.hasUndo(); },
-                set: function () { editor.undo(); editor.grabFocus(); }
-            },
-            'action/redo': {
-                enable: function () { return editor.hasRedo(); },
-                set: function () { editor.redo(); editor.grabFocus(); }
-            },
+                'character/font/bold': {
+                    get: function () { return editor.getAttribute('bold'); },
+                    set: function (state) { editor.setAttribute('bold', state); editor.grabFocus(); }
+                },
+                'character/font/italic': {
+                    get: function () { return editor.getAttribute('italic'); },
+                    set: function (state) { editor.setAttribute('italic', state); editor.grabFocus(); }
+                },
+                'character/font/underline': {
+                    get: function () { return editor.getAttribute('underline'); },
+                    set: function (state) { editor.setAttribute('underline', state); editor.grabFocus(); }
+                },
 
-            'insert/table': {
-                set: function (size) { editor.insertTable(size); editor.grabFocus(); }
-            },
+                'paragraph/alignment': {
+                    set: function (value) { editor.grabFocus(); }
+                },
 
-            'character/font/bold': {
-                get: function () { return editor.getAttribute('bold'); },
-                set: function (state) { editor.setAttribute('bold', state); editor.grabFocus(); }
-            },
-            'character/font/italic': {
-                get: function () { return editor.getAttribute('italic'); },
-                set: function (state) { editor.setAttribute('italic', state); editor.grabFocus(); }
-            },
-            'character/font/underline': {
-                get: function () { return editor.getAttribute('underline'); },
-                set: function (state) { editor.setAttribute('underline', state); editor.grabFocus(); }
-            },
+                'debug/toggle': {
+                    get: function () { return app.isDebugMode(); },
+                    set: function (state) { app.setDebugMode(state); app.getEditor().grabFocus(); }
+                }
+            };
 
-            'paragraph/alignment': {
-                set: function (value) { editor.grabFocus(); }
-            },
+        // private methods ----------------------------------------------------
 
-            'debug/toggle': {
-                get: function () { return app.isDebugMode(); },
-                set: function (state) { app.setDebugMode(state); app.getEditor().grabFocus(); }
-            }
-        });
+        function cancelAction() {
+            editor.grabFocus();
+        }
 
-        // methods --------------------------------------------------------
+        // base constructor ---------------------------------------------------
+
+        Controller.call(this, items, cancelAction);
+
+        // methods ------------------------------------------------------------
 
         /**
          * Registers a new editor instance. If the editor has the browser

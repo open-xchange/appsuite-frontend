@@ -47,16 +47,24 @@ define('io.ox/office/tk/toolbar',
      * Internally, the tool bar uses a strict hierarchy of elements with
      * specific attributes and classes:
      * 1) The tool bar root node contains another container that serves as
-     * parent for the actual tool bar controls, and is used to measure the
-     * width of the space used by all visible controls.
+     *  parent for the actual tool bar controls, and is used to measure the
+     *  width of the space used by all visible controls.
      * 2) Direct children of this container node are always div elements with
-     * the Bootstrap class 'btn-group', called 'button groups'.
+     *  the Bootstrap class 'btn-group', called 'button groups'.
      * 3) Button groups will be hidden with the special class 'io-ox-hidden'.
      * 4) Ancestors of button groups are control elements with the special
-     * class 'io-ox-toolbar-control', which is used for keyboard focus
-     * navigation. There may be other control elements which do not have this
-     * class, e.g. controls in a drop-down menu.
+     *  class 'io-ox-toolbar-control', which is used for keyboard focus
+     *  navigation. There may be other control elements which do not have this
+     *  class, e.g. controls in a drop-down menu.
      * 5) Tool bar controls are disabled with the 'disabled' attribute.
+     *
+     * Instances of this class trigger various events:
+     * * 'change': If a control has been activated. The event handler receives
+     *  the key and value of the activated control. The value depends on the
+     *  type of the activated control.
+     * * 'cancel': When the focus needs to be returned to the application (e.g.
+     *  when the Escape key is pressed, or when a click on a drop-down button
+     *  closes the opened drop-down menu).
      *
      * @constructor
      */
@@ -174,8 +182,8 @@ define('io.ox/office/tk/toolbar',
          *  node. In the latter case, the parameter 'selector' must be
          *  specified.
          *
-         * @param {String} action
-         *  The name of the action event, e.g. 'click' or 'change'.
+         * @param {String} type
+         *  The type of the action event, e.g. 'click' or 'change'.
          *
          * @param {String} [selector]
          *  If specified, selects the ancestor elements of the specified node,
@@ -187,7 +195,7 @@ define('io.ox/office/tk/toolbar',
          *  the current value of the control (e.g. the boolean state of a
          *  toggle button, or the text of a text field).
          */
-        function registerActionHandler(node, action, selector, actionHandler) {
+        function registerActionHandler(node, type, selector, actionHandler) {
 
             function actionEventHandler(event) {
                 var control = $(event.target), key, value;
@@ -206,9 +214,9 @@ define('io.ox/office/tk/toolbar',
 
             // attach event handler to the node
             if (selector === undefined) {
-                node.on(action, actionEventHandler);
+                node.on(type, actionEventHandler);
             } else {
-                node.on(action, selector, actionEventHandler);
+                node.on(type, selector, actionEventHandler);
             }
         }
 
@@ -244,7 +252,8 @@ define('io.ox/office/tk/toolbar',
         function keyHandler(event) {
 
             var // distinguish between event types (ignore keypress events)
-                keydown = event.type === 'keydown';
+                keydown = event.type === 'keydown',
+                keyup = event.type === 'keyup';
 
             switch (event.keyCode) {
             case KeyCodes.TAB:
@@ -260,7 +269,7 @@ define('io.ox/office/tk/toolbar',
                 if (keydown) { moveFocus(true); }
                 return false;
             case KeyCodes.ESCAPE:
-                // TODO: focus back to application
+                if (keyup) { toolbar.trigger('cancel'); }
                 return false;
             }
         }
@@ -635,12 +644,18 @@ define('io.ox/office/tk/toolbar',
             registerUpdateHandler(key, updateHandler);
             menuNode.on('keydown keypress keyup', menuNodeKeyHandler);
 
-            // listen to 'menu:focus' events, and move focus to first control
-            dropDownGroup.on('menu:focus', function () {
-                if (!Utils.containsFocusedControl(menuNode)) {
-                    menuNode.find('button').first().focus();
-                }
-            });
+            // listen to special 'menu' events
+            dropDownGroup
+                .on('menu:focus', function () {
+                    // move focus to first control
+                    if (!Utils.containsFocusedControl(menuNode)) {
+                        menuNode.find('button').first().focus();
+                    }
+                })
+                .on('menu:cancel', function () {
+                    // drop-down menu closed with mouse click, cancel tool bar
+                    toolbar.trigger('cancel');
+                });
 
         } // class RadioGroupProxy
 
@@ -649,7 +664,7 @@ define('io.ox/office/tk/toolbar',
         function createSizeChooser(key, options) {
 
             var // drop-down grid element
-                gridNode = $('<table>').append($('<tr>').append($('<td>').text('test'))),
+                gridNode = $('<table>').append($('<tr>').append($('<td>').append(Utils.createButton(undefined, { label: 'A' })))),
 
                 // create a new group container for the drop-down group
                 group = new DropDownGroup(key, expandControlOptions(options), true, gridNode),
@@ -670,6 +685,12 @@ define('io.ox/office/tk/toolbar',
 
             // register event handlers
             registerActionHandler(group.getActionButton(), 'click', clickHandler);
+            group
+                .on('menu:focus', function () { /* move focus to grid */ })
+                .on('menu:cancel', function () {
+                    // drop-down menu closed with mouse click, cancel tool bar
+                    toolbar.trigger('cancel');
+                });
 
         } // class SizeChooser
 
