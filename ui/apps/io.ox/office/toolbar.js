@@ -16,6 +16,13 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
     'use strict';
 
     var /**
+         * CSS class for hidden button groups.
+         *
+         * @constant
+         */
+        HIDDEN_CLASS = 'io-ox-hidden',
+
+        /**
          * CSS class for visible controls in the tool bar (used for keyboard
          * focus navigation).
          *
@@ -23,19 +30,26 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
          */
         TOOLBAR_CONTROL_CLASS = 'io-ox-control',
 
-       /**
-         * CSS class for active toggle buttons.
+        /**
+         * CSS class for active toggle buttons (defined by Bootstrap).
          *
          * @constant
          */
         ACTIVE_BUTTON_CLASS = 'btn-primary',
 
         /**
-         * CSS class for hidden button groups.
+         * CSS class for visible drop-down menus (defined by Bootstrap).
          *
          * @constant
          */
-        HIDDEN_GROUP_CLASS = 'io-ox-hidden',
+        DROPDOWN_OPEN_CLASS = 'open',
+
+        /**
+         * CSS selector for visible button groups and drop-down menus.
+         *
+         * @constant
+         */
+        VISIBLE_SELECTOR = ':not(.' + HIDDEN_CLASS + ')',
 
         /**
          * CSS selector for controls in the tool bar.
@@ -63,16 +77,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
          *
          * @constant
          */
-        FOCUSED_SELECTOR = ':focus',
-
-        /**
-         * CSS selector for visible button groups.
-         *
-         * @constant
-         */
-        VISIBLE_GROUP_SELECTOR = ':not(.' + HIDDEN_GROUP_CLASS + ')';
+        FOCUSED_SELECTOR = ':focus';
 
     // static functions =======================================================
+
+    // generic controls -------------------------------------------------------
 
     /**
      * Returns whether the first form control in the passed jQuery collection
@@ -125,6 +134,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
         return control.first().is(FOCUSED_SELECTOR);
     }
 
+    // button elements --------------------------------------------------------
+
     /**
      * Creates and returns a new button element.
      *
@@ -176,6 +187,19 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
     }
 
     /**
+     * Appends a drop-down caret to the contents of the passed button.
+     *
+     * @param {jQuery} button
+     *  A jQuery collection containing a button element.
+     */
+    function appendDropDownCaret(button) {
+        button.append(
+            $('<span>').addClass('whitespace'),
+            $('<span>').addClass('caret')
+        );
+    }
+
+    /**
      * Returns whether the first button control in the passed jQuery collection
      * is a toggle button.
      *
@@ -218,6 +242,199 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
         buttons.toggleClass(ACTIVE_BUTTON_CLASS, state).find('> i').toggleClass('icon-white', state);
     }
 
+    // class ControlGroup =====================================================
+
+    /**
+     * Creates a container element used to hold single controls. All controls
+     * shown in a tool bar must be inserted into such group containers.
+     *
+     * @constructor
+     */
+    function ControlGroup() {
+
+        var // create the group container element
+            groupNode = $('<div>').addClass('btn-group');
+
+        // methods ------------------------------------------------------------
+
+        /**
+         * Returns the DOM container element for this control group as jQuery
+         * object.
+         */
+        this.getNode = function () {
+            return groupNode;
+        };
+
+        this.isVisible = function () {
+            return !groupNode.hasClass(HIDDEN_CLASS);
+        };
+
+        this.show = function () {
+            groupNode.removeClass(HIDDEN_CLASS);
+            return this;
+        };
+
+        this.hide = function () {
+            groupNode.addClass(HIDDEN_CLASS);
+            return this;
+        };
+
+        this.toggle = function (state) {
+            groupNode.toggleClass(HIDDEN_CLASS, state);
+            return this;
+        };
+
+    } // class ControlGroup
+
+    _.makeExtendable(ControlGroup);
+
+    // class DropDownGroup ====================================================
+
+    var // drop-down group which is currently opened
+        activeDropDownGroup = null;
+
+    /**
+     * Creates a container element with a single drop-down button shown on top.
+     * Implements keyboard event handling for the drop-down button (open,
+     * close, automatic close of the drop-down menu on focus navigation).
+     *
+     * @constructor
+     *
+     * @param {jQuery} dropDownButton
+     *  The drop-down button element, as jQuery collection.
+     *
+     * @param {jQuery} dropDownMenu
+     *  The drop-down menu container element, as jQuery collection.
+     */
+    var DropDownGroup = ControlGroup.extend({ constructor: function (dropDownButton, dropDownMenu) {
+
+        var self = this;
+
+        // private methods ----------------------------------------------------
+
+        function dropDownButtonClickHandler() {
+
+            var // remember current state of drop-down menu
+                isVisible = self.isMenuVisible();
+
+            // trigger global click handlers that are hiding any open drop-down
+            // menus. This will also hide the own drop-down menu, if it is open.
+            $('html').click();
+            // open the own menu, if it was not open before
+            if (!isVisible) { self.showMenu(); }
+            // prevent bubbling (especially the global click handlers that
+            // automaticallyclose drop-down menus after this click)
+            return false;
+        }
+
+        /**
+         * Handles key events in the focused drop-down button. Adds special
+         * handling for opening the drop-down menu via keyboard.
+         */
+        function dropDownButtonKeyHandler(event) {
+
+            var // distinguish between event types (ignore keypress events)
+                keydown = event.type === 'keydown',
+                // wait for keyup for SPACE and ENTER keys
+                keyup = event.type === 'keyup';
+
+            switch (event.keyCode) {
+            case KeyCodes.SPACE:
+            case KeyCodes.ENTER:
+                if (keyup) { self.toggleMenu(); }
+                return false;
+            case KeyCodes.DOWN_ARROW:
+                if (keydown) { self.showMenu(); }
+                return false;
+            case KeyCodes.ESCAPE:
+                if (keydown) { self.hideMenu(); }
+                return false;
+            }
+
+            // suppress 'keypress' event for SPACE bar (event.keyCode may be zero in Firefox)
+            if ((event.type === 'keypress') && (event.charCode === KeyCodes.SPACE)) {
+                return false;
+            }
+        }
+
+        /**
+         * Handles key events inside the open drop-down menu.
+         */
+        function dropDownMenuKeyHandler(event) {
+
+            var // distinguish between event types (ignore keypress events)
+                keydown = event.type === 'keydown';
+
+            switch (event.keyCode) {
+            case KeyCodes.ESCAPE:
+                if (keydown) { dropDownButton.focus(); self.hideMenu(); }
+                return false;
+            case KeyCodes.TAB:
+                if (!event.ctrlKey && !event.altKey && !event.metaKey) {
+                    // move focus to drop-down button, needed for correct
+                    // keyboard focus navigation (find next/previous button)
+                    if (keydown) { dropDownButton.focus(); }
+                }
+                // let the TAB key event bubble up to the tool bar
+                break;
+            }
+        }
+
+        // methods ------------------------------------------------------------
+
+        this.isMenuVisible = function () {
+            return this.getNode().hasClass(DROPDOWN_OPEN_CLASS);
+        };
+
+        this.showMenu = function () {
+            if (!this.isMenuVisible()) {
+                this.getNode().addClass(DROPDOWN_OPEN_CLASS);
+                activeDropDownGroup = this;
+            }
+            return this;
+        };
+
+        this.hideMenu = function () {
+            if (this.isMenuVisible()) {
+                this.getNode().removeClass(DROPDOWN_OPEN_CLASS);
+            }
+            return this;
+        };
+
+        this.toggleMenu = function () {
+            return this.isMenuVisible() ? this.hideMenu() : this.showMenu();
+        };
+
+        // initialization -----------------------------------------------------
+
+        // base constructor
+        ControlGroup.call(this);
+
+        // prepare drop-down button, and register event handlers
+        appendDropDownCaret(dropDownButton);
+        dropDownButton
+            .addClass('dropdown-toggle')
+            .on('click', dropDownButtonClickHandler)
+            .on('keydown keypress keyup', dropDownButtonKeyHandler)
+            .on('keyblur', _.bind(this.hideMenu, this));
+
+        // prepare drop-down menu, and register event handlers
+        dropDownMenu
+            .addClass('dropdown-menu ' + HIDDEN_CLASS)
+            .on('keydown keypress keyup', dropDownMenuKeyHandler);
+
+        // append button and menu to the group container
+        this.getNode().append(dropDownButton, dropDownMenu);
+
+    }}); // class DropDownGroup
+
+    // global mouse click handler that closes an open drop-down group
+    $('html').on('click', function () {
+        if (activeDropDownGroup) {
+            activeDropDownGroup.hideMenu();
+        }
+    });
+
     // public class ToolBar ===================================================
 
     /**
@@ -257,32 +474,6 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
         // private methods ----------------------------------------------------
 
         /**
-         * Creates and returns a container element used to hold single
-         * controls. All controls must be inserted into group containers. The
-         * returned object contains show(), hide(), and toggle() methods that
-         * replace the original version of the jQuery object, and control a
-         * special CSS class instead of modifying the CSS 'display' attribute.
-         * Additionally, the object contains an isVisible() method returning a
-         * boolean value.
-         *
-         * @returns {jQuery}
-         *  A new control container, already inserted into this tool bar.
-         */
-        function createGroupNode() {
-
-            var // create the group container element
-                groupNode = $('<div>').addClass('btn-group').appendTo(containerNode);
-
-            // overwrite the show(), hide(), and toggle() methods
-            groupNode.show = function () { return this.removeClass(HIDDEN_GROUP_CLASS); };
-            groupNode.hide = function () { return this.addClass(HIDDEN_GROUP_CLASS); };
-            groupNode.toggle = function (state) { return this.toggleClass(HIDDEN_GROUP_CLASS, state); };
-            groupNode.isVisible = function () { return !this.hasClass(HIDDEN_GROUP_CLASS); };
-
-            return groupNode;
-        }
-
-        /**
          * Returns the control with the specified key as jQuery collection. The
          * returned object may contain multiple elements, e.g. for radio button
          * groups.
@@ -299,8 +490,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
 
         /**
          * Moves the focus to the previous or next enabled control in the tool
-         * bar. Triggers a 'key-blur' event at the currently focused control,
-         * and a 'key-focus' event at the new focused control.
+         * bar. Triggers a 'keyblur' event at the currently focused control,
+         * and a 'keyfocus' event at the new focused control.
          *
          * @param {Boolean} forward
          *  If set to true, moves focus forward, otherwise backward.
@@ -308,7 +499,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
         function moveFocus(forward) {
 
             var // all enabled controls in all visible button groups
-                controls = containerNode.find('> div' + VISIBLE_GROUP_SELECTOR + ' ' + TOOLBAR_CONTROL_SELECTOR + ENABLED_SELECTOR),
+                controls = containerNode.find('> div' + VISIBLE_SELECTOR + ' ' + TOOLBAR_CONTROL_SELECTOR + ENABLED_SELECTOR),
                 // focused control
                 control = controls.filter(FOCUSED_SELECTOR),
                 // index of focused control in all enabled controls
@@ -316,13 +507,13 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
 
             // move focus to next/previous control
             if ((controls.length > 1) && (0 <= index) && (index < controls.length)) {
-                control.trigger('key-blur');
+                control.trigger('keyblur');
                 if (forward) {
                     index = (index + 1) % controls.length;
                 } else {
                     index = (index + controls.length - 1) % controls.length;
                 }
-                controls.eq(index).focus().trigger('key-focus');
+                controls.eq(index).focus().trigger('keyfocus');
             }
         }
 
@@ -331,35 +522,28 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
          *
          * @param {jQuery.Event} event
          *  The jQuery keyboard event object.
+         *
+         * @returns {Boolean}
+         *  True, if the event has been handled and needs to stop propagating.
          */
         function keyHandler(event) {
+
             var // distinguish between event types (ignore keypress events)
-                keydown = event.type === 'keydown',
-                // whether the key event has been handled
-                handled = true;
+                keydown = event.type === 'keydown';
 
             switch (event.keyCode) {
             case KeyCodes.TAB:
                 if (!event.ctrlKey && !event.altKey && !event.metaKey) {
                     if (keydown) { moveFocus(!event.shiftKey); }
-                } else {
-                    handled = false;
+                    return false;
                 }
                 break;
             case KeyCodes.LEFT_ARROW:
                 if (keydown) { moveFocus(false); }
-                break;
+                return false;
             case KeyCodes.RIGHT_ARROW:
                 if (keydown) { moveFocus(true); }
-                break;
-            default:
-                handled = false;
-            }
-
-            // suppress bubbling and default action for handled events
-            if (handled) {
-                event.stopPropagation();
-                event.preventDefault();
+                return false;
             }
         }
 
@@ -408,11 +592,18 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
          * passing the key of the source control, and its current value as
          * returned by the passed action handler.
          *
-         * @param {jQuery} control
-         *  The control which triggers an action event.
+         * @param {jQuery} node
+         *  The DOM node that catches the jQuery action events. May be a single
+         *  control, or a parent element of several controls, e.g. the group
+         *  node. In the latter case, the parameter 'selector' must be
+         *  specified.
          *
          * @param {String} action
          *  The name of the action event, e.g. 'click' or 'change'.
+         *
+         * @param {String} [selector]
+         *  If specified, selects the ancestor elements of the specified node,
+         *  which are actually triggering the events.
          *
          * @param {Function} actionHandler
          *  The action handler function. Will be called in the context of this
@@ -420,15 +611,29 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
          *  the current value of the control (e.g. the boolean state of a
          *  toggle button, or the text of a text field).
          */
-        function registerActionHandler(control, action, actionHandler) {
-            control.on(action, function () {
-                var key, value;
+        function registerActionHandler(node, action, selector, actionHandler) {
+
+            function actionEventHandler(event) {
+                var control = $(event.target), key, value;
                 if (isControlEnabled(control)) {
                     key = control.attr('data-key');
                     value = actionHandler.call(toolbar, control);
                     toolbar.trigger('change', key, value);
                 }
-            });
+            }
+
+            // normalize passed parameters (missing selector)
+            if (actionHandler === undefined) {
+                actionHandler = selector;
+                selector = undefined;
+            }
+
+            // attach event handler to the node
+            if (selector === undefined) {
+                node.on(action, actionEventHandler);
+            } else {
+                node.on(action, selector, actionEventHandler);
+            }
         }
 
         /**
@@ -460,27 +665,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
          */
         function ButtonGroupProxy() {
 
-            var // create a new button group container
-                groupNode = createGroupNode();
-
-            // private methods ------------------------------------------------
-
-            /**
-             * Click handler for buttons in this button group. If the clicked
-             * button is a toggle button, will toggle and return its state.
-             *
-             * @param {jQuery} button
-             *  The clicked button, as jQuery object.
-             *
-             * @returns {Boolean|Undefined}
-             *  The state of a toggle button, or undefined for a push button.
-             */
-            function clickHandler(button) {
-                if (isToggleButton(button)) {
-                    toggleButtons(button);
-                    return isButtonActive(button);
-                } // else: push button, return undefined
-            }
+            var // create a new control group
+                group = new ControlGroup();
 
             // methods --------------------------------------------------------
 
@@ -497,19 +683,18 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
             this.addButton = function (key, options) {
 
                 var // create the button
-                    button = createButton(key, options).addClass(TOOLBAR_CONTROL_CLASS).appendTo(groupNode);
+                    button = createButton(key, options).addClass(TOOLBAR_CONTROL_CLASS).appendTo(group.getNode());
 
-                // add handlers
+                // add update handler
                 registerUpdateHandler(key, function (value) {
                     if (isToggleButton(button)) {
                         // Translate undefined (special 'no value' state) or null (special
                         // 'ambiguous' state) to false to prevent toggling the button as
                         // implemented by the static method toggleButtons().
-                        // TODO: Support for null (tristate).
+                        // TODO: Support for null (tristate). (?)
                         toggleButtons(button, (_.isUndefined(value) || _.isNull(value)) ? false : value);
                     }
                 });
-                registerActionHandler(button, 'click', clickHandler);
 
                 return this;
             };
@@ -518,7 +703,22 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
              * Returns a reference to the tool bar containing this button
              * group. Useful for method chaining.
              */
-            this.end = function () { return toolbar; };
+            this.end = function () {
+                return toolbar;
+            };
+
+            // initialization -------------------------------------------------
+
+            // insert the group into the tool bar
+            containerNode.append(group.getNode());
+
+            // add an action handler at the group node that handles all button clicks
+            registerActionHandler(group.getNode(), 'click', 'button', function (button) {
+                if (isToggleButton(button)) {
+                    toggleButtons(button);
+                    return isButtonActive(button);
+                } // else: push button, return undefined
+            });
 
         } // class ButtonGroupProxy
 
@@ -546,10 +746,22 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
                 type = (options && _.isString(options.type)) ? options.type : 'buttons',
 
                 // create a new group container for the button group
-                buttonGroupNode = createGroupNode(),
+                buttonGroup = new ControlGroup(),
+
+                // options map for the drop-down button (tool tip only)
+                dropDownOptions = (options && _.isString(options.tooltip)) ? { tooltip: options.tooltip } : undefined,
+
+                // drop-down button
+                dropDownButton = createButton(key, dropDownOptions).addClass(TOOLBAR_CONTROL_CLASS),
+
+                // drop-down menu area
+                dropDownMenu = $('<table>'),
 
                 // create a new group container for the drop-down group
-                dropDownGroupNode = createGroupNode(),
+                dropDownGroup = new DropDownGroup(dropDownButton, dropDownMenu),
+
+                // prototype for dummy buttons in unused table cells (must contain something to get its correct height)
+                buttonPrototype = createButton(undefined, { label: '\xa0' }),
 
                 // number of rows in the drop-down menu
                 rows = 0,
@@ -557,46 +769,10 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
                 // number of columns in the drop-down menu
                 columns = (options && _.isNumber(options.columns) && (options.columns >= 1)) ? options.columns : 3,
 
-                // options for the drop-down button
-                dropDownOptions = (options && _.isString(options.tooltip)) ? { tooltip: options.tooltip } : undefined,
-
-                // drop-down button
-                dropDownButton = createButton(key, dropDownOptions).addClass(TOOLBAR_CONTROL_CLASS + ' dropdown-toggle').attr('data-toggle', 'dropdown').appendTo(dropDownGroupNode),
-
-                // drop-down menu area
-                dropDownMenu = $('<table>').addClass('dropdown-menu').appendTo(dropDownGroupNode),
-
-                // prototype for dummy buttons in unused table cells (must contain something to get its correct height)
-                dummyButton = createButton(undefined, { label: '\xa0' }),
-
                 // number of buttons inserted into the group
                 buttonCount = 0;
 
             // private methods ------------------------------------------------
-
-            /**
-             * Inserts a new option button into the passed container element,
-             * and registers the click handler function for the new button.
-             *
-             * @param {jQuery} node
-             *  The parent container element for the new button.
-             *
-             * @param {String} value
-             *  The unique value for the option button.
-             *
-             * @param {Object} options
-             *  A map of options to control the properties of the new button.
-             *
-             * @return {jQuery}
-             *  The new button, as jQuery collection.
-             */
-            function insertButton(node, value, options) {
-                var // create the new button element
-                    button = createButton(key, options).attr('data-value', value).appendTo(node);
-                // add click handler
-                registerActionHandler(button, 'click', clickHandler);
-                return button;
-            }
 
             /**
              * Activates a button in this radio group.
@@ -609,7 +785,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
             function updateHandler(value) {
 
                 var // find all option buttons (in button group and drop-down menu)
-                    buttons = buttonGroupNode.add(dropDownMenu).find('button'),
+                    buttons = buttonGroup.getNode().add(dropDownMenu).find('button'),
                     // ambiguous state indicated by null value
                     inactive = _.isUndefined(value) || _.isNull(value),
                     // find the button to activate
@@ -619,11 +795,8 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
                 toggleButtons(buttons, false);
 
                 // update the contents of the drop-down button (use first button in group if no button is active)
-                dropDownButton.empty().append(
-                    (button.length ? button : buttons).first().contents().clone(),
-                    $('<span>').addClass('whitespace'),
-                    $('<span>').addClass('caret')
-                );
+                dropDownButton.empty().append((button.length ? button : buttons).first().contents().clone());
+                appendDropDownCaret(dropDownButton);
 
                 // highlight active button
                 toggleButtons(button, true);
@@ -657,66 +830,23 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
             function resizeHandler(enlarge) {
 
                 var // restore focused state after exchanging the button groups
-                    hasFocus = buttonGroupNode.add(dropDownGroupNode).find(FOCUSED_SELECTOR).length !== 0;
+                    hasFocus = buttonGroup.getNode().add(dropDownGroup.getNode()).find(FOCUSED_SELECTOR).length !== 0;
 
                 // always hide the drop-down menu when resizing
-                if (dropDownGroupNode.isVisible()) {
-                    dropDownButton.closeMenu();
-                }
+                dropDownGroup.hideMenu();
 
-                if (enlarge && dropDownGroupNode.isVisible()) {
-                    dropDownGroupNode.hide();
-                    buttonGroupNode.show();
+                if (enlarge && dropDownGroup.isVisible()) {
+                    dropDownGroup.hide();
+                    buttonGroup.show();
                     if (hasFocus) {
-                        buttonGroupNode.find('button' + ENABLED_SELECTOR).first().focus();
+                        buttonGroup.getNode().find('button' + ENABLED_SELECTOR).first().focus();
                     }
-                } else if (!enlarge && buttonGroupNode.isVisible()) {
-                    buttonGroupNode.hide();
-                    dropDownGroupNode.show();
+                } else if (!enlarge && buttonGroup.isVisible()) {
+                    buttonGroup.hide();
+                    dropDownGroup.show();
                     if (hasFocus) {
                         dropDownButton.focus();
                     }
-                }
-            }
-
-            /**
-             * Handles key events in the focused drop-down button. Adds special
-             * handling for opening the drop-down menu via keyboard.
-             */
-            function dropDownButtonKeyHandler(event) {
-
-                var // distinguish between event types (ignore keypress events)
-                    keydown = event.type === 'keydown',
-                    // wait for keyup for SPACE and ENTER keys
-                    keyup = event.type === 'keyup',
-                    // whether the key event has been handled
-                    handled = true;
-
-                switch (event.keyCode) {
-                case KeyCodes.SPACE:
-                case KeyCodes.ENTER:
-                    if (keyup) { dropDownButton.toggleMenu(); }
-                    break;
-                case KeyCodes.DOWN_ARROW:
-                case KeyCodes.PAGE_DOWN:
-                    if (keydown) { dropDownButton.openMenu(); }
-                    break;
-                case KeyCodes.ESCAPE:
-                    if (keydown) { dropDownButton.closeMenu(); }
-                    break;
-                default:
-                    handled = false;
-                }
-
-                // suppress 'keypress' event for SPACE bar (event.keyCode may be zero in Firefox)
-                if ((event.type === 'keypress') && (event.charCode === KeyCodes.SPACE)) {
-                    handled = true;
-                }
-
-                // suppress bubbling and default action for handled key events
-                if (handled) {
-                    event.stopPropagation();
-                    event.preventDefault();
                 }
             }
 
@@ -734,13 +864,7 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
                     // row index of the focused button
                     row = (index >= 0) ? Math.floor(index / columns) : -1,
                     // column index of the focused button
-                    column = (index >= 0) ? (index % columns) : -1,
-                    // whether the key event has been handled
-                    handled = true;
-
-                function close() {
-                    dropDownButton.closeMenu().focus();
-                }
+                    column = (index >= 0) ? (index % columns) : -1;
 
                 function focus(newIndex) {
                     newIndex = Math.min(buttonCount - 1, newIndex);
@@ -752,45 +876,29 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
                 switch (event.keyCode) {
                 case KeyCodes.LEFT_ARROW:
                     if (keydown && (column > 0)) { focus(index - 1); }
-                    break;
+                    return false;
                 case KeyCodes.UP_ARROW:
                     if (keydown) {
-                        if (row > 0) { focus(index - columns); } else { close(); }
+                        if (row > 0) {
+                            focus(index - columns);
+                        } else {
+                            dropDownButton.focus();
+                            dropDownGroup.hideMenu();
+                        }
                     }
-                    break;
+                    return false;
                 case KeyCodes.RIGHT_ARROW:
                     if (keydown && (column + 1 < columns)) { focus(index + 1); }
-                    break;
+                    return false;
                 case KeyCodes.DOWN_ARROW:
                     if (keydown && (row + 1 < rows)) { focus(index + columns); }
-                    break;
+                    return false;
                 case KeyCodes.HOME:
                     if (keydown) { focus(0); }
-                    break;
+                    return false;
                 case KeyCodes.END:
                     if (keydown) { focus(buttonCount - 1); }
-                    break;
-                case KeyCodes.PAGE_UP:
-                case KeyCodes.ESCAPE:
-                    if (keydown) { close(); }
-                    break;
-                case KeyCodes.TAB:
-                    if (!event.ctrlKey && !event.altKey && !event.metaKey) {
-                        // move focus to drop-down button, needed for correct
-                        // keyboard focus navigation (find next/previous button)
-                        if (keydown) { dropDownButton.focus(); }
-                    }
-                    // let the TAB key event bubble up to the tool bar
-                    handled = false;
-                    break;
-                default:
-                    handled = false;
-                }
-
-                // suppress bubbling and default action for handled key events
-                if (handled) {
-                    event.stopPropagation();
-                    event.preventDefault();
+                    return false;
                 }
             }
 
@@ -805,9 +913,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
              * then query its calculated width.
              */
             function recalcDropDownMenuWidthHandler() {
-                // wait for the button to really become visible (done by Bootstrap)
+                // wait for the drop-down menu to really become visible
                 window.setTimeout(function timer() {
-                    if (dropDownButton.isMenuOpen()) {
+                    if (dropDownMenu.css('display') !== 'none') {
                         dropDownMenu
                             .css('min-width', '10000px')
                             .css('min-width', dropDownMenu.find('tbody').outerWidth() + 'px');
@@ -833,20 +941,20 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
 
                 var // table row taking the new button
                     tableRow = null,
-                    // table cell taking the new button
-                    tableCell = null,
                     // column index for the new button
                     column = buttonCount % columns;
 
-                // append a button to the button group
-                insertButton(buttonGroupNode, value, options).addClass(TOOLBAR_CONTROL_CLASS);
+                // append a new button to the button group
+                buttonGroup.getNode().append(
+                    createButton(key, options).addClass(TOOLBAR_CONTROL_CLASS).attr('data-value', value)
+                );
 
                 // get/create table row with empty cell from drop-down menu
                 if (column === 0) {
                     // create a new row in the table, and fill it with dummy buttons
                     tableRow = $('<tr>').appendTo(dropDownMenu);
                     _(columns).times(function () {
-                        tableRow.append($('<td>').append(dummyButton.clone()));
+                        tableRow.append($('<td>').append(buttonPrototype.clone()));
                     });
                     rows += 1;
                 } else {
@@ -855,8 +963,9 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
                 }
 
                 // select table cell and replace the dummy button with a new real button
-                tableCell = tableRow.children().eq(column).empty();
-                insertButton(tableCell, value, options);
+                tableRow.children().eq(column).empty().append(
+                    createButton(key, options).attr('data-value', value)
+                );
 
                 // copy formatting of first inserted button to drop-down button
                 if (buttonCount === 0) {
@@ -880,37 +989,16 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
 
             // initialization -------------------------------------------------
 
+            // insert the groups into the tool bar
+            containerNode.append(buttonGroup.getNode(), dropDownGroup.getNode());
+
             // disable the dummy button
-            enableControls(dummyButton, false);
-
-            // add menu specific methods to the drop-down button
-            dropDownButton.openMenu = function () {
-                if (!this.isMenuOpen()) {
-                    this.click();
-                    dropDownMenu.find('button').first().focus();
-                }
-                return this;
-            };
-            dropDownButton.closeMenu = function () {
-                if (this.isMenuOpen()) { this.click(); }
-                return this;
-            };
-            dropDownButton.toggleMenu = function () {
-                return this.isMenuOpen() ? this.closeMenu() : this.openMenu();
-            };
-            dropDownButton.isMenuOpen = function () {
-                return dropDownMenu.css('display') !== 'none';
-            };
-
-            // close the drop-down menu on the 'key-blur' event (lost focus via keyboard)
-            dropDownButton.on('key-blur', function () {
-                dropDownButton.closeMenu();
-            });
+            enableControls(buttonPrototype, false);
 
             // configure according to group type
             switch (type) {
             case 'buttons':
-                dropDownGroupNode.hide();
+                dropDownGroup.hide();
                 break;
 
             case 'auto':
@@ -918,16 +1006,34 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
                 break;
 
             default: // 'dropdown'
-                buttonGroupNode.hide();
+                buttonGroup.hide();
                 break;
             }
 
             // register event handlers
+            registerActionHandler(buttonGroup.getNode().add(dropDownMenu), 'click', 'button', clickHandler);
             registerUpdateHandler(key, updateHandler);
-            dropDownButton.on('keydown keypress keyup', dropDownButtonKeyHandler);
             dropDownMenu.on('keydown keypress keyup', dropDownMenuKeyHandler);
 
         } // class RadioGroupProxy
+
+        // size chooser -------------------------------------------------------
+
+        function createSizeChooserGroupNode(key, options) {
+
+            var // drop-down button
+                dropDownButton = createButton(key, options).addClass(TOOLBAR_CONTROL_CLASS),
+
+                // drop-down menu area
+                dropDownMenu = $('<table>').append($('<tr>').append($('<td>').text('test'))),
+
+                // create a new group container for the drop-down group
+                group = new DropDownGroup(dropDownButton, dropDownMenu);
+
+            containerNode.append(group.getNode());
+
+            return group.getNode();
+        }
 
         // methods ------------------------------------------------------------
 
@@ -1021,6 +1127,11 @@ define('io.ox/office/toolbar', ['io.ox/core/event', 'io.ox/office/keycodes', 'le
          */
         this.addRadioGroup = function (key, options) {
             return new RadioGroupProxy(key, options);
+        };
+
+        this.addSizeChooser = function (key, options) {
+            createSizeChooserGroupNode(key, options);
+            return this;
         };
 
         /**
