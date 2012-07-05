@@ -539,11 +539,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var sel = _.copy(operation.start);
                     var paraLen = 0;
-                    if (this.getParagraphNodeName(sel[0]) === 'TABLE') {
-                        paraLen = this.getParagraphLenInCell(sel[0], sel[1], sel[2], sel[3]);
-                    } else {
-                        paraLen = this.getParagraphLen(sel[0]);
-                    }
+                    this.getParagraphLength(sel);
                     sel.push(paraLen);
                     var undoOperation = { name: OP_PARA_SPLIT, start: sel };
                     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
@@ -619,182 +615,264 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
             function getOXOPositionFromDOMPosition(node, offset) {
 
                 // check input values
-                if (!node || (offset < 0)) {
+                if (! node) {
+                    this.implDbgOutInfo('getOXOPositionFromDOMPosition: Invalid DOM position. Node not defined');
+                    return;
+                }
+
+                if (offset < 0) {
+                    this.implDbgOutInfo('getOXOPositionFromDOMPosition: Invalid DOM position. Offset < 0 : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
                     return;
                 }
 
                 // Check, if the selected node is a descendant of "this.editdiv"
-                // Converting jQuery object to DOMNode using get(0)
-                // Attention: In the future "this.editdiv" is already a jQuery object.
                 var editorDiv = editdiv.has(node).get(0);
 
                 if (!editorDiv) { // range not in text area
+                    this.implDbgOutInfo('getOXOPositionFromDOMPosition: Invalid DOM position. It is not part of the editor DIV!');
                     return;
                 }
 
-                var myParagraph = paragraphs.has(node);
-
-                if (myParagraph.length === 0) {
+                // Checking node in root elements
+                if (paragraphs.has(node).length === 0) {
+                    this.implDbgOutInfo('getOXOPositionFromDOMPosition: Invalid DOM position. It is not included in the top level elements of the editor DIV!');
                     return;
                 }
 
-                // Calculating the position inside the paragraph.
-                // Adding the textNodes from all siblings and parents left of the node.
-                // All siblings and parents can have children.
-                // Finally the offset has to be added.
-                var para = myParagraph.index(),
-                    textLength = 0,
-                    column = null,
-                    row = null,
-                    cellpara = null,
-                    countTextLength = true,
-                    nodeParagraph = myParagraph.get(0);
+                // Calculating the position inside the editdiv.
+                var oxoPosition = [],
+                    evaluateOffset = (node.nodeType === 3) ? true : false,  // Is evaluation of offset required?
+                    offsetEvaluated = false,
+                    columnBuffer = -1,
+                    textLength = 0;
 
-                for (; node && (node !== nodeParagraph); node = node.parentNode) {
-                    if ((node.nodeName === 'TD') || (node.nodeName === 'TH')) {
-                        column = $(node).prevAll().length; // zero based
+                // currently supported elements: 'p', 'table', 'th', 'td', 'tr'
+                // Attention: Column and Row are not in the order in oxoPosition, in which they appear in html.
+                // Column must be integrated after row -> a buffer is required.
+
+                for (; node && (node !== editdiv.get(0)); node = node.parentNode) {
+                    if ((node.nodeName === 'TD') ||
+                        (node.nodeName === 'TH') ||
+                        (node.nodeName === 'TR') ||
+                        (node.nodeName === 'P') ||
+                        (node.nodeName === 'TABLE')) {
+
+                        if ((node.nodeName === 'TH') || (node.nodeName === 'TD')) {  // special handling to change order of column and row.
+                            columnBuffer = $(node).prevAll().length;
+                        } else {
+                            oxoPosition.unshift($(node).prevAll().length);  // zero based
+                            if (columnBuffer !== -1) {
+                                oxoPosition.unshift(columnBuffer);
+                                columnBuffer = -1;
+                            }
+                        }
+
+                        evaluateOffset = false;
                     }
-                    if (node.nodeName === 'TR') {
-                        row = $(node).prevAll().length; // zero based
-                    }
-                    if (node.nodeName === 'P') {
-                        cellpara = $(node).prevAll().length; // zero based
-                        countTextLength = false;
-                    }
-                    if (countTextLength) {
+                    if (evaluateOffset) {
                         for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
                             textLength += $(prevNode).text().length;
                         }
+                        offsetEvaluated = true;
                     }
                 }
 
-                // Filling content into the oxoPosition array
-                var oxoPosition = [];
-                oxoPosition.push(para);
-
-                if ((column !== null) && (row !== null) && (cellpara !== null)) {
-                    // oxoPosition.push([column, row]);  // no more an array for column and row
-                    oxoPosition.push(column);
-                    oxoPosition.push(row);
-                    oxoPosition.push(cellpara);
+                if (offsetEvaluated) {
+                    oxoPosition.push(textLength + offset);
                 }
 
-                oxoPosition.push(textLength + offset);
+                if ((node.nodeType === 3) && (! offsetEvaluated)) {
+                    this.implDbgOutInfo('getOXOPositionFromDOMPosition: Warning: Offset ' + offset + ' was not evaluated, although nodeType is 3! Calculated oxoPosition: ' + oxoPosition);
+                }
+
+                // this.implDbgOutInfo('getOXOPositionFromDOMPosition: Info: Converting node: ' + node.nodeName + ',' + node.nodeType + ' and offset (optionally): ' + offset + ' to oxoPosition: ' + oxoPosition);
 
                 return new OXOPaM(oxoPosition);
             }
 
             // Only supporting single selection at the moment
 
-            var startPaM, endPaM;
+            var startOxoPaM,
+                endOxoPaM;
+
+            if (domSelection.startPaM.node.nodeType === 3) {
+                if (! _.isNumber(domSelection.startPaM.offset)) {
+                    this.implDbgOutInfo('implGetOXOSelection: Invalid start position. NodeType is 3, but offset is not defined!');
+                    return;
+                }
+            } else {
+                if (_.isNumber(domSelection.startPaM.offset)) {
+                    this.implDbgOutInfo('implGetOXOSelection: Invalid start position. NodeType is: ' + domSelection.startPaM.node.nodeType + ', but offset is set: ' + domSelection.startPaM.offset + ' . Offset will be ignored!');
+                }
+            }
+
+            if (domSelection.endPaM.node.nodeType === 3) {
+                if (! _.isNumber(domSelection.endPaM.offset)) {
+                    this.implDbgOutInfo('implGetOXOSelection: Invalid end position. NodeType is 3, but offset is not defined!');
+                    return;
+                }
+            } else {
+                if (_.isNumber(domSelection.endPaM.offset)) {
+                    this.implDbgOutInfo('implGetOXOSelection: Invalid end position. NodeType is: ' + domSelection.endPaM.node.nodeType + ', but offset is set: ' + domSelection.endPaM.offset + ' . Offset will be ignored!');
+                }
+            }
 
             // Checking selection - setting a valid selection doesn't always work on para end, browser is manipulating it....
             // Assume this only happens on para end - seems we are always directly in a p-element when this error occurs.
             if (domSelection.startPaM.node.nodeType === 3) {
-                startPaM = getOXOPositionFromDOMPosition.call(this, domSelection.startPaM.node, domSelection.startPaM.offset);
-            }
-            else {
+                startOxoPaM = getOXOPositionFromDOMPosition.call(this, domSelection.startPaM.node, domSelection.startPaM.offset);
+            } else {
                 // Work around browser selection bugs...
+                // This will be important for the selection of cells in tables!
                 var myParagraph = paragraphs.has(domSelection.startPaM.node.firstChild);
                 var para = myParagraph.index();
                 var nPos = 0;
                 if ((domSelection.startPaM.node === domSelection.endPaM.node) && (domSelection.startPaM.offset === domSelection.endPaM.offset)) {
-                    nPos = this.getParagraphLen(para);
+                    nPos = this.getParagraphLength([para]);
                 }
-                startPaM = new OXOPaM([para, nPos]);
+                startOxoPaM = new OXOPaM([para, nPos]);
                 // this.implDbgOutInfo('info: fixed invalid selection (start): ' + startPaM.toString());
             }
 
             if (domSelection.endPaM.node.nodeType === 3) {
-                endPaM = getOXOPositionFromDOMPosition.call(this, domSelection.endPaM.node, domSelection.endPaM.offset);
-            }
-            else {
+                endOxoPaM = getOXOPositionFromDOMPosition.call(this, domSelection.endPaM.node, domSelection.endPaM.offset);
+            } else {
                 // Work around browser selection bugs...
+                // This will be important for the selection of cells in tables!
                 var myParagraph = paragraphs.has(domSelection.endPaM.node.firstChild);
                 var para = myParagraph.index();
                 // Special handling for triple click in Chrome, that selects the start of the following paragraph as end point
                 if ((domSelection.startPaM.node.nodeType === 3) && (domSelection.endPaM.node.nodeName === 'P') && (domSelection.endPaM.offset === 0)) {
                     para--;
                 }
-                endPaM = new OXOPaM([para, this.getParagraphLen(para)]);
+                endOxoPaM = new OXOPaM([para, this.getParagraphLength([para])]);
                 // this.implDbgOutInfo('info: fixed invalid selection (end):' + endPaM.toString());
             }
 
-            var aOXOSelection = new OXOSelection(startPaM, endPaM);
+            var aOXOSelection = new OXOSelection(startOxoPaM, endOxoPaM);
 
             return aOXOSelection;
         };
 
         this.getDOMPosition = function (oxoPosition) {
 
-            var oxoPos = _.copy(oxoPosition, true);
+            var oxoPos = _.copy(oxoPosition, true),
+                localElements = paragraphs,  // starting with root elements
+                calculateOffset = false,
+                node = null,
+                offset = null;
 
-            // Converting an oxoPosition array to node and offset
-            var maxPara = $(paragraphs).size() - 1;
-            var para = oxoPos.shift();
-            if (para > maxPara) {
-                this.implDbgOutInfo('getDOMPosition: Warning: Paragraph ' + para + ' is out of range. Last paragraph: ' + maxPara);
-                return;
-            }
             if (oxoPos[0] === undefined) {
-                this.implDbgOutInfo('getDOMPosition: position is undefined!');
+                this.implDbgOutInfo('getDOMPosition: Position is undefined!');
                 return;
             }
 
-            var myParagraph = $(paragraphs).get(para);
+            // Converting an oxoPosition array to a node and an offset
+            // Supported html tags: '<p>', '<table>', '<tr>', '<th>', '<td>' and 'nodeType === 3'
 
-            if (myParagraph.nodeName === 'TABLE') {
+            while (oxoPos.length > 0) {
 
-                var column = oxoPos.shift();
-                var row = oxoPos.shift();
-                var cellpara = oxoPos.shift();
+                var currentPos = oxoPos.shift(),
 
-                // In tables it is necessary, to find the correct paragraph inside the table
-                if ((column !== undefined) && (row !== undefined) && (cellpara !== undefined)) {
-                    var tablerow = $('tr', myParagraph).get(row);
-                    var tablecell = $('th, td', tablerow).get(column);
-                    myParagraph = $(tablecell).children().get(cellpara);
-                    // $(myParagraph).css('background-color', 'red');
+                node = localElements.get(currentPos);
+
+                var maxPara = localElements.length - 1;
+                if (currentPos > maxPara) {
+                    this.implDbgOutInfo('getDOMPosition: Warning: Paragraph ' + currentPos + ' is out of range. Last paragraph: ' + maxPara);
+                    return;
+                }
+
+                if (oxoPos.length < 1) {
+                    break;
+                }
+
+                if (node.nodeName === 'P') {
+                    calculateOffset = true;
+                    break;  // leaving the while-iteration
+                } else if (node.nodeName === 'TABLE') {
+                    // At the moment, 'column' and 'row' must be defined (cell). Selection of only one column is difficult in html.
+                    var column = oxoPos.shift();
+                    // How to get html description from 'column' value
+                    if (oxoPos.length < 1) {
+                        this.implDbgOutInfo('getDOMPosition: Illegal position: ' + oxoPosition + ' . Table requires input of column and row.');
+                        return;
+                        // -> In the moment, it is not possible to select one column of a table. But it would be better,
+                        // to be able to select one row of a table, because this is supported by html.
+                    }
+
+                    var row =  oxoPos.shift();
+
+                    // Selecting the correct cell in the table
+                    var tablerow = $('tr', node).get(row);                          // valid for table in table ?
+                    node = $('th, td', tablerow).get(column);  // this is a table cell     // valid for table in table ?
+
+                    if (oxoPos.length < 1) {
+                        break;
+                    }
+
+                    localElements = $(node).children();
+                    continue;  // new iteration, should start with 'p' or 'table'
+
+                } else {
+                    this.implDbgOutInfo('getDOMPosition: Illegal position: ' + oxoPosition + ' . Node must be paragraph or table. NodeName: ' + node.nodeName);
+                    return;
                 }
             }
 
-            // Checking if this paragraph has children
-            if (!myParagraph.hasChildNodes()) {
-                this.implDbgOutInfo('getDOMPosition: Warning: Paragraph is empty');
-                return;
-            }
+            if (calculateOffset) {
 
-            var pos = oxoPos.shift();
-            var textLength = 0;
-            var nodeList = myParagraph.childNodes;
-            var currentNode = nodeList.firstChild;
-            var bFound = false;
+                // Node must be a paragraph
+                if (node.nodeName !== 'P') {
+                    this.implDbgOutInfo('getDOMPosition: Warning: Node must be a paragraph for calculing offset. But it is: ' + node.nodeName);
+                    return;
+                }
 
-            while (myParagraph.hasChildNodes()) {
+                // Checking if this paragraph has children
+                if (! node.hasChildNodes()) {
+                    this.implDbgOutInfo('getDOMPosition: Warning: Paragraph is empty');
+                    return;
+                }
 
-                nodeList = myParagraph.childNodes;
+                var pos = oxoPos.shift();
 
-                for (var i = 0; i < nodeList.length; i++) {
-                    // Searching the children
-                    currentNode = nodeList[i];
-                    var currentLength = $(nodeList[i]).text().length;
-                    if (textLength + currentLength >= pos) {
-                        bFound = true;
-                        myParagraph = currentNode;
-                        break;  // leaving the for-loop
-                    } else {
-                        textLength += currentLength;
+                // now oxoPos should be empty
+                if (oxoPos.length > 0) {
+                    this.implDbgOutInfo('getDOMPosition: Warning: Position has to many values: ' + oxoPosition + ' . Value for position (last required value): ' + pos);
+                    // return;
+                }
+
+                var textLength = 0;
+                var bFound = false;
+
+                while (node.hasChildNodes()) {
+
+                    var nodeList = node.childNodes;
+
+                    for (var i = 0; i < nodeList.length; i++) {
+                        // Searching the children
+                        var currentNode = nodeList[i];
+                        var currentLength = $(nodeList[i]).text().length;
+                        if (textLength + currentLength >= pos) {
+                            bFound = true;
+                            node = currentNode;
+                            break;  // leaving the for-loop
+                        } else {
+                            textLength += currentLength;
+                        }
                     }
                 }
+
+                if (! bFound) {
+                    this.implDbgOutInfo('getDOMPosition: Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + textLength);
+                    return;
+                }
+
+                offset = pos - textLength;
             }
 
-            if (!bFound) {
-                this.implDbgOutInfo('getDOMPosition: Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + textLength);
-                return;
-            }
+            // this.implDbgOutInfo('getDOMPosition: Info: Converting position ' + oxoPosition + ' to node: ' + node.nodeName + ',' + node.nodeType + ' and offset (optionally): ' + offset);
 
-            var offset = pos - textLength;
-            return new DOMPaM(currentNode, offset);
+            return new DOMPaM(node, offset);
         };
 
         this.getDOMSelection = function (oxoSelection) {
@@ -933,13 +1011,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                 else {
                     var lastValue = selection.startPaM.oxoPosition.length - 1;
                     var startPosition = selection.startPaM.oxoPosition;
-                    var paraLen = 0;
-
-                    if (this.getParagraphNodeName(startPosition[0]) === 'TABLE') {
-                        paraLen = this.getParagraphLenInCell(startPosition[0], startPosition[1], startPosition[2], startPosition[3]);
-                    } else {
-                        paraLen = this.getParagraphLen(startPosition[0]);
-                    }
+                    var paraLen = this.getParagraphLength(startPosition);
 
                     if (startPosition[lastValue] < paraLen) {
                         selection.endPaM.oxoPosition[lastValue]++;
@@ -975,13 +1047,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                         startPosition[lastValue - 1] -= 1;
                         startPosition.pop();
 
-                        var length = 0;
-
-                        if (this.getParagraphNodeName(startPosition[0]) === 'TABLE') {
-                            length = this.getParagraphLenInCell(startPosition[0], startPosition[1], startPosition[2], startPosition[3]);
-                        } else {
-                            length = this.getParagraphLen(startPosition[0]);
-                        }
+                        var length = this.getParagraphLength(startPosition);
 
                         this.mergeParagraph(startPosition);
                         selection.startPaM.oxoPosition[lastValue - 1] -= 1;
@@ -997,7 +1063,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                 if (c === 'A') {
                     selection = new OXOSelection(new OXOPaM([0, 0]), new OXOPaM([0, 0]));
 
-                    if (this.getParagraphNodeName(0) === 'TABLE') {
+                    if (this.isPositionInTable([0])) {
                         selection.startPaM.oxoPosition = [];
                         selection.startPaM.oxoPosition.push(0);
                         selection.startPaM.oxoPosition.push(0);
@@ -1008,11 +1074,11 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
 
                     var lastPara = this.getParagraphCount() - 1;
 
-                    if (this.getParagraphNodeName(lastPara) === 'TABLE') {
-                        var lastRow = this.getLastRowIndexInTable(lastPara),
-                            lastColumn = this.getLastColumnIndexInRow(lastPara, lastRow),
-                            lastParaInCell = this.getLastParaIndexInCell(lastPara, lastColumn, lastRow),
-                            paraLen = this.getParagraphLenInCell(lastPara, lastColumn, lastRow, lastParaInCell);
+                    if (this.isPositionInTable([lastPara])) {
+                        var lastRow = this.getLastRowIndexInTable([lastPara]),
+                            lastColumn = this.getLastColumnIndexInTable([lastPara]),
+                            lastParaInCell = this.getLastParaIndexInCell([lastPara, lastColumn, lastRow]),
+                            paraLen = this.getParagraphLength([lastPara, lastColumn, lastRow, lastParaInCell]);
 
                         selection.endPaM.oxoPosition = [];
                         selection.endPaM.oxoPosition.push(lastPara);
@@ -1022,7 +1088,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                         selection.endPaM.oxoPosition.push(paraLen);
                     } else {
                         selection.endPaM.oxoPosition[0] = lastPara;
-                        selection.endPaM.oxoPosition[1] = this.getParagraphLen(lastPara);
+                        selection.endPaM.oxoPosition[1] = this.getParagraphLength([lastPara]);
                     }
                     event.preventDefault();
                     this.setSelection(selection);
@@ -1172,7 +1238,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
 
                 // 1) delete selected part or rest of para in first para (pos to end)
                 if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
-                    isTable = this.getParagraphNodeName(selection.startPaM.oxoPosition[0]) === 'TABLE' ? true : false;
+                    isTable = this.isPositionInTable(selection.startPaM.oxoPosition);
                     endPosition = _.copy(selection.startPaM.oxoPosition);
                     if (isTable) {
                         var localEndPosition = _.copy(endPosition);
@@ -1180,10 +1246,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                         this.deleteFollowingParagraphsInCell(localEndPosition);
                         localEndPosition.pop();
                         this.deleteFollowingCellsInTable(localEndPosition);
-                        endPosition[startposLength] = this.getParagraphLenInCell(endPosition[0], endPosition[1], endPosition[2], endPosition[3]);
-                    } else {
-                        endPosition[startposLength] = this.getParagraphLen(endPosition[0]);
                     }
+                    endPosition[startposLength] = this.getParagraphLength(endPosition);
                 }
                 this.deleteText(selection.startPaM.oxoPosition, endPosition);
 
@@ -1193,7 +1257,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                     // startPaM.oxoPosition[0]+1 instead of i, because we always remove a paragraph
                     var startPosition = [];
                     startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
-                    isTable = this.getParagraphNodeName(startPosition[0]) === 'TABLE' ? true : false;
+                    isTable = this.isPositionInTable(startPosition);
                     if (isTable) {
                         this.deleteTable(startPosition);
                     } else {
@@ -1210,7 +1274,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                     endPosition = _.copy(startPosition, true);
                     endPosition[endposLength] = selection.endPaM.oxoPosition[endposLength];
 
-                    isTable = this.getParagraphNodeName(endPosition[0]) === 'TABLE' ? true : false;
+                    isTable = this.isPositionInTable(endPosition);
 
                     this.deleteText(startPosition, endPosition);
 
@@ -1304,20 +1368,17 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                     var startposLength = selection.startPaM.oxoPosition.length - 1,
                         endposLength = selection.endPaM.oxoPosition.length - 1,
                         localendPosition = selection.endPaM.oxoPosition,
-                        isTable = this.getParagraphNodeName(selection.startPaM.oxoPosition[0]) === 'TABLE' ? true : false;
+                        isTable = this.isPositionInTable(selection.startPaM.oxoPosition);
 
                     if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
                         // TODO: This is not sufficient
                         localendPosition = _.copy(selection.startPaM.oxoPosition, true);
-                        // localendPosition[0] = selection.startPaM.oxoPosition[0];
                         if (isTable) {
                             // Assigning attribute to all following paragraphs in this cell and to all following cells!
                             this.setAttributeToFollowingCellsInTable(attr, value, localendPosition);
                             this.setAttributeToFollowingParagraphsInCell(attr, value, localendPosition);
-                            localendPosition[startposLength] = this.getParagraphLenInCell(localendPosition[0], localendPosition[1], localendPosition[2], localendPosition[3]);
-                        } else {
-                            localendPosition[startposLength] = this.getParagraphLen(localendPosition[startposLength - 1]);
                         }
+                        localendPosition[startposLength] = this.getParagraphLength(localendPosition);
                     }
                     this.setAttribute(attr, value, selection.startPaM.oxoPosition, localendPosition);
 
@@ -1326,14 +1387,14 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                         var localstartPosition = []; //_.copy(selection.startPaM.oxoPosition, true);
                         localstartPosition[0] = i;  // Attention: localstartPosition has 5 ints,
 
-                        isTable = this.getParagraphNodeName(localstartPosition[0]) === 'TABLE' ? true : false;
+                        isTable = this.isPositionInTable(localstartPosition);
 
                         if (isTable) {
                             this.setAttributeToCompleteTable(attr, value, localstartPosition);
                         } else {
                             localstartPosition[1] = 0;
                             localendPosition = _.copy(localstartPosition, true);
-                            localendPosition[1] = this.getParagraphLen(localendPosition[0]);
+                            localendPosition[1] = this.getParagraphLength(localendPosition);
                             this.setAttribute(attr, value, localstartPosition, localendPosition);
                         }
                     }
@@ -1344,7 +1405,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                         localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
                         localstartPosition[endposLength] = 0;
 
-                        isTable = this.getParagraphNodeName(localstartPosition[0]) === 'TABLE' ? true : false;
+                        isTable = this.isPositionInTable(localstartPosition);
 
                         if (isTable) {
                             // Assigning attribute to all previous cells and to all previous paragraphs in this cell!
@@ -1384,23 +1445,35 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
             return paragraphs.size();
         };
 
-        this.getParagraphLen = function (para) {
-            var textLength = 0;
-            if (paragraphs[para] !== undefined) {
-                var nodeList = paragraphs[para].childNodes;
-                for (var i = 0; i < nodeList.length; i++) {
-                    textLength += $(nodeList[i]).text().length;
+        this.getParagraphLength = function (position) {
+
+            var paraLen = 0,
+            localPos = _.copy(position);
+
+            var domPos = this.getDOMPosition(position);
+            if (domPos) {
+                var node = domPos.node;
+                if (node.nodeName !== 'P') {
+                    localPos.pop();
+                    for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
+                        if (node.nodeName === 'P') {
+                            break;
+                        }
+                    }
+                }
+
+                var paraIndex = localPos.pop();
+                var paragraph = $(node.parentNode).children().get(paraIndex);
+
+                if (paragraph) {
+                    var nodeList = paragraph.childNodes;
+                    for (var i = 0; i < nodeList.length; i++) {
+                        paraLen += $(nodeList[i]).text().length;
+                    }
                 }
             }
-            return textLength;
-        };
 
-        this.getParagraphNodeName = function (para) {
-            var nodename = null;
-            if (paragraphs[para] !== undefined) {
-                nodename = paragraphs[para].nodeName;
-            }
-            return nodename;
+            return paraLen;
         };
 
         this.getParagraphText = function (para, start, end) {
@@ -1438,274 +1511,677 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
             return text;
         };
 
-        this.getLastRowIndexInTable = function (para) {
-            var rowIndex = null;
-            if ((paragraphs[para] !== undefined) && (this.getParagraphNodeName(para) === 'TABLE')) {
-                rowIndex = $('TR', paragraphs[para]).length;  // and table in table?  -> TODO
-                rowIndex--;
-            }
-            return rowIndex;
-        };
+        // ==================================================================
+        // TABLE METHODS
+        // ==================================================================
 
-        this.getLastColumnIndexInRow = function (para, row) {
-            var columnIndex = null;
-            if ((paragraphs[para] !== undefined) && (this.getParagraphNodeName(para) === 'TABLE')) {
-                var localrow = $('TR', paragraphs[para]).get(row);
-                columnIndex = $('TH, TD', localrow).length;
-                columnIndex--;
-            }
-            return columnIndex;
-        };
+        this.isPositionInTable = function (position) {
+            var positionInTable = false,
+                domPos = this.getDOMPosition(position);
 
-        this.getLastParaIndexInCell = function (para, column, row) {
-            var lastPara = null;
-            if ((paragraphs[para] !== undefined) && (this.getParagraphNodeName(para) === 'TABLE')) {
-                var localrow = $('TR', paragraphs[para]).get(row);
-                var cell = $('TH, TD', localrow).get(column);
-                lastPara = $('P', cell).length;
-                lastPara--;
-            }
-            return lastPara;
-        };
+            if (domPos) {
+                var node = domPos.node;
 
-        this.getParagraphLenInCell = function (table, column, row, para) {
-            var paraLen = 0;
-            if ((paragraphs[table] !== undefined) && (this.getParagraphNodeName(table) === 'TABLE')) {
-                var localrow = $('TR', paragraphs[table]).get(row);
-                if (localrow) {
-                    var cell = $('TH, TD', localrow).get(column);
-                    if (cell) {
-                        var paragraph = $('P', cell).get(para);
-                        if (paragraph) {
-                            var nodeList = paragraph.childNodes;
-                            for (var i = 0; i < nodeList.length; i++) {
-                                paraLen += $(nodeList[i]).text().length;
-                            }
-                        }
+                for (; node && (node !== editdiv.get(0)); node = node.parentNode) {
+                    if (node.nodeName === 'TABLE') {
+                        positionInTable = true;
+                        break;
                     }
                 }
             }
-            return paraLen;
+
+            return positionInTable;
         };
 
-        this.getParagraphFromTable = function (table, column, row, para) {
-            var paragraph = null;
-            if ((paragraphs[table] !== undefined) && (this.getParagraphNodeName(table) === 'TABLE')) {
-                var localrow = $('TR', paragraphs[table]).get(row);
-                var cell = $('TH, TD', localrow).get(column);
-                paragraph = $('P', cell).get(para);
+        this.getCurrentTable = function (position) {
+            var currentTable = null,
+                domPos = this.getDOMPosition(position);
+
+            if (domPos) {
+                var node = domPos.node;
+
+                for (; node && (node !== editdiv.get(0)); node = node.parentNode) {
+                    if (node.nodeName === 'TABLE') {
+                        currentTable = node;
+                        break;
+                    }
+                }
             }
+
+            return currentTable;
+        };
+
+        this.getAllAdjacentParagraphs = function (position) {
+            // position can be paragraph itself or textnode inside it.
+            var allParagraphs = [];
+            if ((position.length === 1) || (position.length === 2)) {  // only for performance
+                allParagraphs = paragraphs;  // should be "rootElements" instead of "paragraphs"
+            } else {
+                var domPos = this.getDOMPosition(position);
+                if (domPos) {
+                    var node = domPos.node;
+                    if (node.nodeName !== 'P') {
+                        for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
+                            if (node.nodeName === 'P') {
+                                break;
+                            }
+                        }
+                    }
+
+                    allParagraphs = $(node.parentNode).children();
+                }
+            }
+
+            return allParagraphs;
+        };
+
+        this.getLastRowIndexInTable = function (position) {
+            var rowIndex = null,
+                table = this.getCurrentTable(position);
+
+            if (table) {
+                rowIndex = $('TR', table).length;
+                rowIndex--;
+            }
+
+            return rowIndex;
+        };
+
+        this.getLastColumnIndexInTable = function (position) {
+            var columnIndex = null,
+                table = this.getCurrentTable(position);
+
+            if (table) {
+                var localrow = $('TR', table).get(0);  // first row
+                columnIndex = $('TH, TD', localrow).length;
+                columnIndex--;
+            }
+
+            return columnIndex;
+        };
+
+        this.getLastColumnIndexInRow = function (position) {
+            var columnIndex = null,
+                table = this.getCurrentTable(position);
+
+            if (table) {
+                var localPos = _.copy(position, true);
+                var domPos = this.getDOMPosition(position);
+
+                if (domPos) {
+                    var node = domPos.node;
+
+                    for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
+                        if (node.nodeName === 'TR') {
+                            break;
+                        } else {
+                            if ((node.nodeName === 'P') || (node.nodeType === 3)) {
+                                localPos.pop();
+                            }
+                        }
+                    }
+
+                    var row = localPos.pop();  // found the correct row
+                    var localrow = $('TR', table).get(row);
+                    columnIndex = $('TH, TD', localrow).length;
+                    columnIndex--;
+                }
+            }
+
+            return columnIndex;
+        };
+
+        this.getRowIndexInTable = function (position) {
+            var rowIndex = null,
+                isInTable = this.isPositionInTable(position);
+
+            if (isInTable) {
+                var localPos = _.copy(position, true);
+                var domPos = this.getDOMPosition(position);
+
+                if (domPos) {
+                    var node = domPos.node;
+
+                    for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
+                        if (node.nodeName === 'TR') {
+                            break;
+                        } else {
+                            if ((node.nodeName === 'P') || (node.nodeType === 3)) {
+                                localPos.pop();
+                            }
+                        }
+                    }
+
+                    rowIndex = localPos.pop();  // found the correct row
+                }
+            }
+
+            return rowIndex;
+        };
+
+        this.getColumnIndexInRow = function (position) {
+            var columnIndex = null,
+                isInTable = this.isPositionInTable(position);
+
+            if (isInTable) {
+                var localPos = _.copy(position, true);
+                var domPos = this.getDOMPosition(position);
+
+                if (domPos) {
+                    var node = domPos.node;
+
+                    for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
+                        if (node.nodeName === 'TR') {
+                            break;
+                        } else {
+                            if ((node.nodeName === 'P') || (node.nodeType === 3)) {
+                                localPos.pop();
+                            }
+                        }
+                    }
+
+                    localPos.pop();  // found the correct row
+                    columnIndex = localPos.pop();  // found the correct column
+                }
+            }
+
+            return columnIndex;
+        };
+
+        this.getLastParaIndexInCell = function (position) {
+
+            var lastPara = null,
+                isInTable = this.isPositionInTable(position);
+
+            if (isInTable) {
+                var domPos = this.getDOMPosition(position);
+                if (domPos) {
+                    var node = domPos.node;
+                    if (node.nodeName !== 'P') {
+                        for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
+                            if (node.nodeName === 'P') {
+                                break;
+                            }
+                        }
+                    }
+
+                    lastPara = $(node.parentNode).children().length - 1;
+                }
+            }
+
+            return lastPara;
+        };
+
+        this.getIndexOfLastParagraphInTablePosition = function (position) {
+            var indexOfLastParagraph = null,
+                isInTable = this.isPositionInTable(position);
+
+            if (isInTable) {
+                var localPos = _.copy(position, true);
+                var domPos = this.getDOMPosition(position);
+
+                if (domPos) {
+                    var node = domPos.node;
+
+                    for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
+                        if (node.nodeName === 'P') {
+                            break;
+                        } else {
+                            if (node.nodeType === 3) {
+                                localPos.pop();
+                            }
+                        }
+                    }
+
+                    indexOfLastParagraph = localPos.length - 1;  // found the correct paragraph
+                }
+            }
+
+            return indexOfLastParagraph;
+        };
+
+        this.getIndexOfLastRowInPosition = function (position) {
+            var indexOfLastRow = null,
+                isInTable = this.isPositionInTable(position);
+
+            if (isInTable) {
+                var localPos = _.copy(position, true);
+                var domPos = this.getDOMPosition(position);
+
+                if (domPos) {
+                    var node = domPos.node;
+
+                    for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
+                        if (node.nodeName === 'TR') {
+                            break;
+                        } else {
+                            if ((node.nodeName === 'P') || (node.nodeType === 3)) {
+                                localPos.pop();
+                            }
+                        }
+                    }
+
+                    indexOfLastRow = localPos.length - 1;  // found the correct row
+                }
+            }
+
+            return indexOfLastRow;
+        };
+
+        this.getIndexOfLastColumnInPosition = function (position) {
+            var indexOfLastColumn = null,
+                isInTable = this.isPositionInTable(position);
+
+            if (isInTable) {
+                var localPos = _.copy(position, true);
+                var domPos = this.getDOMPosition(position);
+
+                if (domPos) {
+                    var node = domPos.node;
+
+                    for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
+                        if (node.nodeName === 'TR') {
+                            break;
+                        } else {
+                            if ((node.nodeName === 'P') || (node.nodeType === 3)) {
+                                localPos.pop();
+                            }
+                        }
+                    }
+
+                    localPos.pop();  // position of the row
+                    indexOfLastColumn = localPos.length - 1;  // found the correct column
+                }
+            }
+
+            return indexOfLastColumn;
+        };
+
+        this.getIndexOfLastTableInPosition = function (position) {
+            var indexOfLastTable = null,
+                isInTable = this.isPositionInTable(position);
+
+            if (isInTable) {
+                var localPos = _.copy(position, true);
+                var domPos = this.getDOMPosition(position);
+
+                if (domPos) {
+                    var node = domPos.node;
+
+                    for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
+                        if (node.nodeName === 'TR') {
+                            break;
+                        } else {
+                            if ((node.nodeName === 'P') || (node.nodeType === 3)) {
+                                localPos.pop();
+                            }
+                        }
+                    }
+
+                    localPos.pop();  // position of the row
+                    localPos.pop();  // position of the column
+                    indexOfLastTable = localPos.length - 1;  // found the correct table
+                }
+            }
+
+            return indexOfLastTable;
+        };
+
+        this.getParagraphIndexInCell = function (position) {
+
+            var paraIndex = null,
+                isInTable = this.isPositionInTable(position),
+                localPos = _.copy(position);
+
+            if (isInTable) {
+                var domPos = this.getDOMPosition(position);
+                if (domPos) {
+                    var node = domPos.node;
+                    if (node.nodeName !== 'P') {
+                        localPos.pop();
+                        for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
+                            if (node.nodeName === 'P') {
+                                break;
+                            }
+                        }
+                    }
+
+                    paraIndex = localPos.pop();
+                }
+            }
+
+            return paraIndex;
+        };
+
+        this.getParagraphFromTableCell = function (position) {
+
+            var paragraph = null,
+                isInTable = this.isPositionInTable(position),
+                localPos = _.copy(position);
+
+            if (isInTable) {
+                var domPos = this.getDOMPosition(position);
+                if (domPos) {
+                    var node = domPos.node;
+                    if (node.nodeName !== 'P') {
+                        localPos.pop();
+                        for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
+                            if (node.nodeName === 'P') {
+                                break;
+                            }
+                        }
+                    }
+
+                    var paraIndex = localPos.pop();
+                    paragraph = $(node.parentNode).children().get(paraIndex);
+                }
+            }
+
             return paragraph;
         };
 
-        this.getAllParagraphsFromTableCell = function (table, column, row) {
-            var allParagraphs = [];
-            if ((paragraphs[table] !== undefined) && (this.getParagraphNodeName(table) === 'TABLE')) {
-                var localrow = $('TR', paragraphs[table]).get(row);
-                var cell = $('TH, TD', localrow).get(column);
-                allParagraphs = $(cell).children();
+        this.getAllParagraphsFromTableCell = function (position) {
+            var allParagraphs = [],
+                isInTable = this.isPositionInTable(position);
+
+            if (isInTable) {
+                var domPos = this.getDOMPosition(position);
+                if (domPos) {
+                    var node = domPos.node;
+                    if (node.nodeName !== 'P') {
+                        for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
+                            if (node.nodeName === 'P') {
+                                break;
+                            }
+                        }
+                    }
+
+                    allParagraphs = $(node.parentNode).children();
+                }
             }
 
             return allParagraphs;
         };
 
         this.deletePreviousCellsInTable = function (position) {
-            var localPos = _.copy(position, true),
-                lastIndex = localPos.length - 1,
-                thisTable = localPos[lastIndex - 2],
-                thisColumn = localPos[lastIndex - 1],
-                thisRow = localPos[lastIndex],
-                lastRow = this.getLastRowIndexInTable(thisTable),
-                lastColumn = this.getLastColumnIndexInRow(thisTable, lastRow);
 
-            for (var j = 0; j <= thisRow; j++) {
-                var max = lastColumn;
-                if (j === thisRow) {
-                    max = thisColumn - 1;
-                }
-                for (var i = 0; i <= max; i++) {
-                    localPos[lastIndex - 1] = i;  // column
-                    localPos[lastIndex] = j;  // row
-                    this.deleteAllParagraphsInCell(localPos);
+            var localPos = _.copy(position, true),
+                isInTable = this.isPositionInTable(localPos);
+
+            if (isInTable) {
+
+                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
+                    rowIndex = paraIndex - 1,
+                    columnIndex = rowIndex - 1,
+                    thisRow = localPos[rowIndex],
+                    thisColumn = localPos[columnIndex],
+                    lastColumn = this.getLastColumnIndexInTable(localPos);
+
+                for (var j = 0; j <= thisRow; j++) {
+                    var max = lastColumn;
+                    if (j === thisRow) {
+                        max = thisColumn - 1;
+                    }
+                    for (var i = 0; i <= max; i++) {
+                        localPos[columnIndex] = i;  // column
+                        localPos[rowIndex] = j;   // row
+                        localPos[rowIndex + 1] = 0;
+                        localPos[rowIndex + 2] = 0;
+                        this.deleteAllParagraphsInCell(localPos);
+                    }
                 }
             }
         };
 
         this.deleteAllParagraphsInCell = function (position) {
-            var localPos = _.copy(position, true),
-                lastParaInCell = this.getLastParaIndexInCell(localPos[0], localPos[1], localPos[2]);
 
-            for (var i = 0; i <= lastParaInCell; i++) {
-                localPos.push(0);  // always 0, because the paragraphs will be deleted
-                // this.deleteParagraph(localPos);
-                this.implDeleteParagraph(localPos);
-                localPos.pop();
+            var localPos = _.copy(position, true),
+                isInTable = this.isPositionInTable(localPos);
+
+            if (isInTable) {
+
+                var rowIndex = this.getIndexOfLastRowInTablePosition(localPos),
+                    lastParaInCell = this.getLastParaIndexInCell(localPos);
+
+                localPos[rowIndex + 1] = 0;
+                localPos[rowIndex + 2] = 0;
+
+                for (var i = 0; i <= lastParaInCell; i++) {
+                    // this.deleteParagraph(localPos);
+                    this.implDeleteParagraph(localPos);
+                }
             }
         };
 
         this.deletePreviousParagraphsInCell = function (position) {
+
             var localPos = _.copy(position, true),
-                lastIndex = localPos.length - 1,
-                lastPara =  localPos[lastIndex];
+                isInTable = this.isPositionInTable(localPos);
 
-            localPos[lastIndex] = 0; // always 0, because paragraphs are deleted
+            if (isInTable) {
 
-            for (var i = 0; i < lastPara; i++) {
-                // this.deleteParagraph(localPos);
-                this.implDeleteParagraph(localPos);
+                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
+                    lastPara =  localPos[paraIndex];
+
+                localPos[paraIndex] = 0; // always 0, because paragraphs are deleted
+
+                for (var i = 0; i < lastPara; i++) {
+                    // this.deleteParagraph(localPos);
+                    this.implDeleteParagraph(localPos);
+                }
             }
         };
 
         this.deleteFollowingCellsInTable = function (position) {
+
             var localPos = _.copy(position, true),
-                lastIndex = localPos.length - 1,
-                thisTable = localPos[lastIndex - 2],
-                thisColumn = localPos[lastIndex - 1],
-                thisRow = localPos[lastIndex],
+                isInTable = this.isPositionInTable(localPos);
 
-                lastRow = this.getLastRowIndexInTable(thisTable),
-                lastColumn = this.getLastColumnIndexInRow(thisTable, lastRow);
+            if (isInTable) {
 
-            for (var j = thisRow; j <= lastRow; j++) {
-                var min = 0;
-                if (j === thisRow) {
-                    min = thisColumn + 1;
-                }
-                for (var i = min; i <= lastColumn; i++) {
-                    localPos[lastIndex - 1] = i;  // column
-                    localPos[lastIndex] = j;  // row
-                    this.deleteAllParagraphsInCell(localPos);
+                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
+                    rowIndex = paraIndex - 1,
+                    columnIndex = rowIndex - 1,
+                    thisRow = localPos[rowIndex],
+                    thisColumn = localPos[columnIndex],
+                    lastRow = this.getLastRowIndexInTable(position),
+                    lastColumn = this.getLastColumnIndexInTable(position);
+
+                for (var j = thisRow; j <= lastRow; j++) {
+                    var min = 0;
+                    if (j === thisRow) {
+                        min = thisColumn + 1;
+                    }
+
+                    for (var i = min; i <= lastColumn; i++) {
+                        localPos[columnIndex] = i;  // column
+                        localPos[rowIndex] = j;  // row
+                        localPos[rowIndex + 1] = 0;
+                        localPos[rowIndex + 2] = 0;
+                        this.deleteAllParagraphsInCell(localPos);
+                    }
                 }
             }
         };
 
         this.deleteFollowingParagraphsInCell = function (position) {
+
             var localPos = _.copy(position, true),
-                lastIndex = localPos.length - 1,
-                thisTable = localPos[lastIndex - 3],
-                thisColumn = localPos[lastIndex - 2],
-                thisRow = localPos[lastIndex - 1],
-                startPara = localPos[lastIndex] + 1,
-                lastPara =  this.getLastParaIndexInCell(thisTable, thisColumn, thisRow);
+                isInTable = this.isPositionInTable(localPos);
 
-            localPos[lastIndex] = startPara; // always 'startPara', because paragraphs are deleted
+            if (isInTable) {
 
-            for (var i = startPara; i <= lastPara; i++) {
-                // this.deleteParagraph(localPos);
-                this.implDeleteParagraph(localPos);
+                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
+                    startPara = localPos[paraIndex] + 1,
+                    lastPara =  this.getLastParaIndexInCell(localPos);
+
+                localPos[paraIndex] = startPara; // always 'startPara', because paragraphs are deleted
+
+                for (var i = startPara; i <= lastPara; i++) {
+                    // this.deleteParagraph(localPos);
+                    this.implDeleteParagraph(localPos);
+                }
             }
         };
 
         this.setAttributeToPreviousCellsInTable = function (attr, value, position) {
-            var localPos = _.copy(position, true),
-                lastIndex = localPos.length - 1,
-                thisColumn = localPos[lastIndex - 3],
-                thisRow = localPos[lastIndex - 2],
-                lastRow = this.getLastRowIndexInTable(localPos[0]),
-                lastColumn = this.getLastColumnIndexInRow(localPos[0], lastRow);
 
-            for (var j = 0; j <= thisRow; j++) {
-                var max = lastColumn;
-                if (j === thisRow) {
-                    max = thisColumn - 1;
+            var localPos = _.copy(position, true),
+                isInTable = this.isPositionInTable(localPos);
+
+            if (isInTable) {
+
+                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
+                    rowIndex = paraIndex - 1,
+                    columnIndex = rowIndex - 1,
+                    thisRow = localPos[rowIndex],
+                    thisColumn = localPos[columnIndex],
+                    lastColumn = this.getLastColumnIndexInTable(localPos);
+
+                for (var j = 0; j <= thisRow; j++) {
+                    var max = lastColumn;
+                    if (j === thisRow) {
+                        max = thisColumn - 1;
+                    }
+                    for (var i = 0; i <= max; i++) {
+                        localPos[columnIndex] = i;  // column
+                        localPos[rowIndex] = j;   // row
+                        localPos[paraIndex] = 0;
+                        localPos[paraIndex + 1] = 0;
+                        this.setAttributeToCompleteCell(attr, value, localPos);
+                    }
                 }
-                for (var i = 0; i <= max; i++) {
-                    localPos[lastIndex - 3] = i;  // column
-                    localPos[lastIndex - 2] = j;  // row
-                    this.setAttributeToCompleteCell(attr, value, localPos);
+            }
+        };
+
+        this.setAttributeToFollowingCellsInTable = function (attr, value, position) {
+
+            var localPos = _.copy(position, true),
+                isInTable = this.isPositionInTable(localPos);
+
+            if (isInTable) {
+                var rowIndex = this.getIndexOfLastRowInPosition(localPos),
+                columnIndex = rowIndex - 1,
+                thisRow = localPos[rowIndex],
+                thisColumn = localPos[rowIndex - 1],
+                lastRow = this.getLastRowIndexInTable(position),
+                lastColumn = this.getLastColumnIndexInTable(position);
+
+                for (var j = thisRow; j <= lastRow; j++) {
+                    var min = 0;
+                    if (j === thisRow) {
+                        min = thisColumn + 1;
+                    }
+                    for (var i = min; i <= lastColumn; i++) {
+                        localPos[columnIndex] = i;  // column
+                        localPos[rowIndex] = j;  // row
+                        localPos[rowIndex + 1] = 0;
+                        localPos[rowIndex + 2] = 0;
+                        this.setAttributeToCompleteCell(attr, value, localPos);
+                    }
                 }
             }
         };
 
         this.setAttributeToPreviousParagraphsInCell = function (attr, value, position) {
+
             var localPos = _.copy(position, true),
-                lastIndex = localPos.length - 1,
-                lastPara = localPos[lastIndex - 1];
+                isInTable = this.isPositionInTable(localPos);
 
-            for (var i = 0; i < lastPara; i++) {
-                localPos[lastIndex - 1] = i;
-                this.setAttributeToParagraphInCell(attr, value, localPos);
-            }
-        };
+            if (isInTable) {
 
-        this.setAttributeToFollowingCellsInTable = function (attr, value, position) {
-            var localPos = _.copy(position, true),
-                lastIndex = localPos.length - 1,
-                thisColumn = localPos[lastIndex - 3],
-                thisRow = localPos[lastIndex - 2],
-                lastRow = this.getLastRowIndexInTable(localPos[0]),
-                lastColumn = this.getLastColumnIndexInRow(localPos[0], lastRow);
+                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
+                    thisPara = localPos[paraIndex];
 
-            for (var j = thisRow; j <= lastRow; j++) {
-                var min = 0;
-                if (j === thisRow) {
-                    min = thisColumn + 1;
-                }
-                for (var i = min; i <= lastColumn; i++) {
-                    localPos[lastIndex - 3] = i;  // column
-                    localPos[lastIndex - 2] = j;  // row
-                    this.setAttributeToCompleteCell(attr, value, localPos);
+                for (var i = 0; i < thisPara; i++) {
+                    localPos[paraIndex] = i;
+                    this.setAttributeToParagraphInCell(attr, value, localPos);
                 }
             }
         };
 
         this.setAttributeToFollowingParagraphsInCell = function (attr, value, position) {
-            var localPos = _.copy(position, true),
-                lastIndex = localPos.length - 1,
-                startPara = localPos[lastIndex - 1] + 1,
-                lastPara =  this.getLastParaIndexInCell(localPos[0], localPos[1], localPos[2]);
 
-            for (var i = startPara; i <= lastPara; i++) {
-                localPos[lastIndex - 1] = i;
-                this.setAttributeToParagraphInCell(attr, value, localPos);
+            var localPos = _.copy(position, true),
+                isInTable = this.isPositionInTable(localPos);
+
+            if (isInTable) {
+
+                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
+                    startPara = localPos[paraIndex] + 1,
+                    lastPara =  this.getLastParaIndexInCell(position);
+
+                for (var i = startPara; i <= lastPara; i++) {
+                    localPos[paraIndex] = i;
+                    this.setAttributeToParagraphInCell(attr, value, localPos);
+                }
             }
         };
 
         this.setAttributeToCompleteTable = function (attr, value, position) {
-            var localPos = [];
 
-            // position is something like [6,0] for standard paragraphs
-            localPos.push(position[0]);
+            var localPos = _.copy(position),
+                tableIndex = this.getIndexOfLastTableInPosition(localPos),
+                localPos = [];
+
+            for (var i = 0; i <= tableIndex; i++) {
+                localPos[i] = position[i];
+            }
+
             localPos.push(0); // column
+
+            var columnIndex = localPos.length - 1,
+                rowIndex = columnIndex + 1;
+
             localPos.push(0); // row
             localPos.push(0); // paragraph
             localPos.push(0); // position
 
-            var lastRow = this.getLastRowIndexInTable(position[0]),
-                lastColumn = this.getLastColumnIndexInRow(position[0], lastRow),
-                lastIndex = localPos.length - 1;
+            var lastRow = this.getLastRowIndexInTable(position),
+                lastColumn = this.getLastColumnIndexInTable(position);
 
             for (var j = 0; j <= lastRow; j++) {
                 for (var i = 0; i <= lastColumn; i++) {
-                    localPos[lastIndex - 3] = i;  // column
-                    localPos[lastIndex - 2] = j;  // row
+                    localPos[columnIndex] = i;  // column
+                    localPos[rowIndex] = j;  // row
                     this.setAttributeToCompleteCell(attr, value, localPos);
                 }
             }
         };
 
         this.setAttributeToCompleteCell = function (attr, value, position) {
-            var lastIndex = position.length - 1,
-                lastPara = this.getLastParaIndexInCell(position[0], position[1], position[2]),
-                localPos = _.copy(position, true);
 
-            localPos[lastIndex] = 0;
+            var localPos = _.copy(position, true),
+                isInTable = this.isPositionInTable(localPos);
 
-            for (var i = 0; i <= lastPara; i++) {
-                localPos[lastIndex - 1] = i;
-                this.setAttributeToParagraphInCell(attr, value, localPos);
+            if (isInTable) {
+
+                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
+                    lastPara = this.getLastParaIndexInCell(localPos);
+
+                localPos[paraIndex + 1] = 0;
+
+                for (var i = 0; i <= lastPara; i++) {
+                    localPos[paraIndex] = i;
+                    this.setAttributeToParagraphInCell(attr, value, localPos);
+                }
             }
         };
 
         this.setAttributeToParagraphInCell = function (attr, value, position) {
-            var lastIndex = position.length - 1,
-                startPosition = _.copy(position, true),
-                endPosition = _.copy(position, true);
 
-            startPosition[lastIndex] = 0;
-            endPosition[lastIndex] = this.getParagraphLenInCell(position[0], position[1], position[2], position[3]);
+            var startPosition = _.copy(position, true),
+                endPosition = _.copy(position, true),
+                isInTable = this.isPositionInTable(startPosition);
 
-            this.setAttribute(attr, value, startPosition, endPosition);
+            if (isInTable) {
+                var paraIndex = this.getIndexOfLastParagraphInTablePosition(startPosition);
+
+                startPosition[paraIndex + 1] = 0;
+                endPosition[paraIndex + 1] = this.getParagraphLength(position);
+
+                this.setAttribute(attr, value, startPosition, endPosition);
+            }
         };
 
         // ==================================================================
@@ -1715,7 +2191,16 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.implParagraphChanged = function (para) {
 
             // Make sure that a completly empty para has the dummy br element, and that all others don't have it anymore...
-            var paragraph = paragraphs[para];
+
+            var paragraph = null;
+            if (this.isPositionInTable([para])) {
+                return; // do nothing for tables
+                // paragraph = this.getParagraphFromTableCell(para);
+            } else {
+                paragraph = paragraphs[para];
+            }
+
+            // var paragraph = paragraphs[para];
 
             if (!hasTextContent(paragraph)) {
                 // We need an empty text node and a br
@@ -1734,7 +2219,13 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
 
                 // Browser show multiple spaces in a row as single space, and space at paragraph end is problematic for selection...
                 var textNodes = [];
-                collectTextNodes(paragraphs[para], textNodes);
+                var localParagraph = null;
+                if (this.isPositionInTable(para)) {
+                    localParagraph = this.getParagraphFromTableCell(para);
+                } else {
+                    localParagraph = paragraphs[para];
+                }
+                collectTextNodes(localParagraph, textNodes);
                 var nNode, nChar;
                 var currChar = 0, prevChar = 0;
                 var node, nodes = textNodes.length;
@@ -1806,11 +2297,11 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
 
                 if (windowSel.anchorNode.nodeType !== 3) {
                     // Assume this only happens on para end - seems we are always directly in a p-element when this error occurs.
-                    selection.startPaM.oxoPosition[1] = this.getParagraphLen(selection.startPaM.oxoPosition[0]);
+                    selection.startPaM.oxoPosition[1] = this.getParagraphLength(selection.startPaM.oxoPosition);
                 }
 
                 if (windowSel.focusNode.nodeType !== 3) {
-                    selection.endPaM.oxoPosition[1] = this.getParagraphLen(selection.endPaM.oxoPosition[0]);
+                    selection.endPaM.oxoPosition[1] = this.getParagraphLength(selection.endPaM.oxoPosition);
 
                 }
 
@@ -1832,13 +2323,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
             // -1 not allowed here - but code need to be robust
             var posLength = position.length - 1,
                 para = position[posLength - 1],
-                allParagraphs = null;
-
-            if (this.getParagraphNodeName(position[0]) === 'TABLE') {
-                allParagraphs = this.getAllParagraphsFromTableCell(position[0], position[1], position[2]);
-            } else {
-                allParagraphs = paragraphs;
-            }
+                allParagraphs = this.getAllAdjacentParagraphs(position);
 
             if ((para < 0) || (para >= allParagraphs.size())) {
                 this.implDbgOutInfo('error: invalid para pos in implInsertText (' + para + ', maximum: ' + allParagraphs.size() + ')');
@@ -1869,12 +2354,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                 endposLength = endposition.length - 1,
                 para = startposition[startposLength - 1],
                 start = startposition[startposLength],
-                end = endposition[endposLength],
-                isTable = false;
-
-            if (this.getParagraphNodeName(startposition[0]) === 'TABLE') {
-                isTable = true;
-            }
+                end = endposition[endposLength];
 
             if (textMode === OXOEditor.TextMode.PLAIN) {
                 return;
@@ -1883,11 +2363,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                 start = 0;
             }
             if ((end === undefined) || (end === -1)) {
-                if (isTable) {
-                    end = this.getParagraphLenInCell(startposition[0], startposition[1], startposition[2], para);
-                } else {
-                    end = this.getParagraphLen(para);
-                }
+                end = this.getParagraphLength(startposition);
             }
 
             // HACK
@@ -1924,15 +2400,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.implInsertParagraph = function (position) {
             var posLength = position.length - 1,
                 para = position[posLength],
-                allParagraphs = null,
-                isTable = false;
-
-            if (this.getParagraphNodeName(position[0]) === 'TABLE') {
-                isTable = true;
-                allParagraphs = this.getAllParagraphsFromTableCell(position[0], position[1], position[2]);
-            } else {
-                allParagraphs = paragraphs;
-            }
+                allParagraphs = this.getAllAdjacentParagraphs(position),
+                isTable = this.isPositionInTable(position) ? true : false;
 
             var newPara = document.createElement('p');
             newPara = $(newPara);
@@ -1960,28 +2429,33 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
 
         this.implInsertTable = function (position) {
             var para = position[0];
-            var newPara = document.createElement('table');
-            newPara = $(newPara);
+            // var newPara = document.createElement('table');
+            var newPara = $('<table>');
 
-            newPara
-                .append($('<table>').attr('border', '4').attr('cellspacing', '10').attr('cellpadding', '20').attr('width', '80%')
-                    .append('<colgroup><col width="40%"><col width="30%"><col width="30%"></colgroup>')
-                    .append($('<tr>').attr('valign', 'top')
-                        .append('<td><p>&nbsp;</p></td>')
-                        .append('<td><p>&nbsp;</p></td>')
-                        .append('<td><p>&nbsp;</p></td>'))
-                    .append($('<tr>').attr('valign', 'top')
-                        .append('<td><p>&nbsp;</p></td>')
-                        .append('<td><p>&nbsp;</p></td>')
-                        .append('<td><p>&nbsp;</p></td>'))
-                    .append($('<tr>').attr('valign', 'top')
-                        .append('<td><p>&nbsp;</p></td>')
-                        .append('<td><p>&nbsp;</p></td>')
-                        .append('<td><p>&nbsp;</p></td>'))
-                    .append($('<tr>').attr('valign', 'top')
-                        .append('<td><p>&nbsp;</p></td>')
-                        .append('<td><p>&nbsp;</p></td>')
-                        .append('<td><p>&nbsp;</p></td>')));
+            newPara.attr('border', '4').attr('cellspacing', '10').attr('cellpadding', '20').attr('width', '80%')
+            .append($('<tbody>'))
+            // .append($('<colgroup>')
+            //     .append($('<col>').attr('width', '40%'))
+            //     .append($('<col>').attr('width', '30%'))
+            //     .append($('<col>').attr('width', '30%')))
+            // .append('<colgroup><col width="40%"><col width="30%"><col width="30%"></colgroup>')
+
+            .append($('<tr>').attr('valign', 'top')
+                .append($('<td><p>&nbsp;</p></td>'))
+                .append($('<td><p>&nbsp;</p></td>'))
+                .append($('<td><p>&nbsp;</p></td>')))
+            .append($('<tr>').attr('valign', 'top')
+                .append($('<td><p>&nbsp;</p></td>'))
+                .append($('<td><p>&nbsp;</p></td>'))
+                .append($('<td><p>&nbsp;</p></td>')))
+            .append($('<tr>').attr('valign', 'top')
+                .append($('<td><p>&nbsp;</p></td>'))
+                .append($('<td><p>&nbsp;</p></td>'))
+                .append($('<td><p>&nbsp;</p></td>')))
+            .append($('<tr>').attr('valign', 'top')
+                .append($('<td><p>&nbsp;</p></td>'))
+                .append($('<td><p>&nbsp;</p></td>'))
+                .append($('<td><p>&nbsp;</p></td>')));
 
             if (para === -1) {
                 para = paragraphs.size();
@@ -1993,11 +2467,12 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
             else {
                 newPara.insertBefore(paragraphs[0]);
             }
+
             paragraphs = editdiv.children();
             blockOperationNotifications = true;  // test table does not work in second editor.
 
             lastOperationEnd = new OXOPaM([para, 0]);  // table?
-            this.implParagraphChanged(para);
+
         };
 
         this.implSplitParagraph = function (position) {
@@ -2005,26 +2480,19 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
             var posLength = position.length - 1,
                 para = position[posLength - 1],
                 pos = position[posLength],
-                allParagraphs = null,
-                isTable = false;
-
-            if (this.getParagraphNodeName(position[0]) === 'TABLE') {
-                isTable = true;
-                allParagraphs = this.getAllParagraphsFromTableCell(position[0], position[1], position[2]);
-            } else {
-                allParagraphs = paragraphs;
-            }
+                allParagraphs = this.getAllAdjacentParagraphs(position),
+                isTable = this.isPositionInTable(position) ? true : false;
 
             var dbg_oldparacount = allParagraphs.size();
             var paraclone = $(allParagraphs[para]).clone();
             paraclone.insertAfter(allParagraphs[para]);
 
-            if (isTable) {
-                allParagraphs = this.getAllParagraphsFromTableCell(position[0], position[1], position[2]);
-            } else {
+            // refresh
+            if (! isTable) {
                 paragraphs = editdiv.children();
-                allParagraphs = paragraphs;
             }
+
+            allParagraphs = this.getAllAdjacentParagraphs(position);
 
             if (pos !== -1) {
                 var startPos = _.copy(position, true);
@@ -2052,16 +2520,13 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.implMergeParagraph = function (position) {
 
             var posLength = position.length - 1,
-                para = position[posLength],
-                allParagraphs = null,
-                isTable = false;
+                para = position[posLength];
 
-            if (this.getParagraphNodeName(position[0]) === 'TABLE') {
-                isTable = true;
-                allParagraphs = this.getAllParagraphsFromTableCell(position[0], position[1], position[2]);
-            } else {
-                allParagraphs = paragraphs;
-            }
+            position.push(0); // adding pos to position temporarely
+
+            var allParagraphs = this.getAllAdjacentParagraphs(position);
+
+            position.pop();
 
             if (para < (allParagraphs.size() - 1)) {
 
@@ -2071,11 +2536,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                 var nextPara = allParagraphs[para + 1];
 
                 var oldParaLen = 0;
-                if (isTable) {
-                    oldParaLen = this.getParagraphLenInCell(position[0], position[1], position[2], para);
-                } else {
-                    oldParaLen = this.getParagraphLen(para);
-                }
+                oldParaLen = this.getParagraphLength(position);
 
                 var lastCurrentChild = thisPara.lastChild;
                 if (lastCurrentChild && (lastCurrentChild.nodeName === 'BR')) {
@@ -2116,16 +2577,14 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.implDeleteParagraph = function (position) {
 
             var posLength = position.length - 1,
-                para = position[posLength],
-                allParagraphs = null,
-                isTable = false;
+                para = position[posLength];
 
-            if (this.getParagraphNodeName(position[0]) === 'TABLE') {
-                isTable = true;
-                allParagraphs = this.getAllParagraphsFromTableCell(position[0], position[1], position[2]);
-            } else {
-                allParagraphs = paragraphs;
-            }
+            position.push(0); // adding pos to position temporarely
+
+            var allParagraphs = this.getAllAdjacentParagraphs(position),
+                isTable = this.isPositionInTable(position);
+
+            position.pop();
 
             var paragraph = allParagraphs[para];
             paragraph.parentNode.removeChild(paragraph);
@@ -2145,8 +2604,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
         this.implDeleteTable = function (position) {
 
             var para = position[0],
-                lastRow = this.getLastRowIndexInTable(para),
-                lastColumn = this.getLastColumnIndexInRow(para, lastRow);
+                lastRow = this.getLastRowIndexInTable(position),
+                lastColumn = this.getLastColumnIndexInTable(position);
 
             // iterating over all cells and remove all paragraphs in the cells
             for (var i = 0; i <= lastColumn; i++) {
@@ -2155,6 +2614,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
                     localPos.push(para);
                     localPos.push(i);
                     localPos.push(j);
+                    localPos.push(0);
+                    localPos.push(0);
                     this.deleteAllParagraphsInCell(localPos);
                 }
             }
@@ -2180,17 +2641,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
             var start = startPosition[lastValue];
             var end = endPosition[lastValue];
 
-            var isTablePara = false;
-            if (this.getParagraphNodeName(para) === 'TABLE') {
-                isTablePara = true;
-            }
-
             if (end === -1) {
-                if (isTablePara) {
-                    end = this.getParagraphLenInCell(para, startPosition[1], startPosition[2], startPosition[3]);
-                } else {
-                    end = this.getParagraphLen(para);
-                }
+                end = this.getParagraphLength(startPosition);
             }
 
             if (start === end) {
@@ -2199,8 +2651,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/keycodes'], fun
 
             var textNodes = [];
             var oneParagraph = null;
-            if (isTablePara) {
-                oneParagraph = this.getParagraphFromTable(para, startPosition[1], startPosition[2], startPosition[3]);
+            if (this.isPositionInTable(startPosition)) {
+                oneParagraph = this.getParagraphFromTableCell(startPosition);
             } else {
                 oneParagraph = paragraphs[para];
             }
