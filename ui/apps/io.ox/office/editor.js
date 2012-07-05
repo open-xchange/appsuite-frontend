@@ -1501,9 +1501,11 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                 var paragraph = $(node.parentNode).children().get(paraIndex);
 
                 if (paragraph) {
-                    var nodeList = paragraph.childNodes;
-                    for (var i = 0; i < nodeList.length; i++) {
-                        paraLen += $(nodeList[i]).text().length;
+                    if (paragraph.hasChildNodes()) {
+                        var nodeList = paragraph.childNodes;
+                        for (var i = 0; i < nodeList.length; i++) {
+                            paraLen += $(nodeList[i]).text().length;
+                        }
                     }
                 }
             }
@@ -1726,7 +1728,10 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
         this.getLastParaIndexInCell = function (position) {
 
             var lastPara = null,
-                isInTable = this.isPositionInTable(position);
+                isInTable = this.isPositionInTable(position),
+                foundParagraph = false,
+                foundCell = false;
+
 
             if (isInTable) {
                 var domPos = this.getDOMPosition(position);
@@ -1735,12 +1740,35 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                     if (node.nodeName !== 'P') {
                         for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
                             if (node.nodeName === 'P') {
+                                foundParagraph = true;
                                 break;
                             }
                         }
+                    } else {
+                        foundParagraph = true;
                     }
 
-                    lastPara = $(node.parentNode).children().length - 1;
+                    if (foundParagraph) {
+                        lastPara = $(node.parentNode).children().length - 1;
+                    }
+
+                    if (! foundParagraph) {
+                        node = domPos.node;
+                        if ((node.nodeName !== 'TH') || (node.nodeName !== 'TD')) {
+                            for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
+                                if ((node.nodeName !== 'TH') || (node.nodeName !== 'TD')) {
+                                    foundCell = true;
+                                    break;
+                                }
+                            }
+                        } else {
+                            foundCell = true;
+                        }
+                    }
+
+                    if (foundCell) {
+                        lastPara = $(node).children().length - 1;
+                    }
                 }
             }
 
@@ -1749,7 +1777,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
         this.getIndexOfLastParagraphInTablePosition = function (position) {
             var indexOfLastParagraph = null,
-                isInTable = this.isPositionInTable(position);
+                isInTable = this.isPositionInTable(position),
+                foundParagraph = false;
 
             if (isInTable) {
                 var localPos = _.copy(position, true);
@@ -1760,6 +1789,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
                     for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
                         if (node.nodeName === 'P') {
+                            foundParagraph = true;
                             break;
                         } else {
                             if (node.nodeType === 3) {
@@ -1768,7 +1798,9 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                         }
                     }
 
-                    indexOfLastParagraph = localPos.length - 1;  // found the correct paragraph
+                    if (foundParagraph) {
+                        indexOfLastParagraph = localPos.length - 1;  // found the correct paragraph
+                    }
                 }
             }
 
@@ -1777,7 +1809,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
         this.getIndexOfLastRowInPosition = function (position) {
             var indexOfLastRow = null,
-                isInTable = this.isPositionInTable(position);
+                isInTable = this.isPositionInTable(position),
+                foundRow = false;
 
             if (isInTable) {
                 var localPos = _.copy(position, true);
@@ -1788,6 +1821,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
                     for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
                         if (node.nodeName === 'TR') {
+                            foundRow = true;
                             break;
                         } else {
                             if ((node.nodeName === 'P') || (node.nodeType === 3)) {
@@ -1796,7 +1830,9 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                         }
                     }
 
-                    indexOfLastRow = localPos.length - 1;  // found the correct row
+                    if (foundRow) {
+                        indexOfLastRow = localPos.length - 1;  // found the correct row
+                    }
                 }
             }
 
@@ -1805,7 +1841,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
         this.getIndexOfLastColumnInPosition = function (position) {
             var indexOfLastColumn = null,
-                isInTable = this.isPositionInTable(position);
+                isInTable = this.isPositionInTable(position),
+                foundColumn = false;
 
             if (isInTable) {
                 var localPos = _.copy(position, true);
@@ -1816,6 +1853,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
                     for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
                         if (node.nodeName === 'TR') {
+                            foundColumn = true;
                             break;
                         } else {
                             if ((node.nodeName === 'P') || (node.nodeType === 3)) {
@@ -1824,8 +1862,10 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                         }
                     }
 
-                    localPos.pop();  // position of the row
-                    indexOfLastColumn = localPos.length - 1;  // found the correct column
+                    if (foundColumn) {
+                        localPos.pop();  // position of the row
+                        indexOfLastColumn = localPos.length - 1;  // found the correct column
+                    }
                 }
             }
 
@@ -1834,7 +1874,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
         this.getIndexOfLastTableInPosition = function (position) {
             var indexOfLastTable = null,
-                isInTable = this.isPositionInTable(position);
+                isInTable = this.isPositionInTable(position),
+                foundTable = false;
 
             if (isInTable) {
                 var localPos = _.copy(position, true);
@@ -1845,6 +1886,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
                     for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
                         if (node.nodeName === 'TR') {
+                            foundTable = true;
                             break;
                         } else {
                             if ((node.nodeName === 'P') || (node.nodeType === 3)) {
@@ -1853,9 +1895,11 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                         }
                     }
 
-                    localPos.pop();  // position of the row
-                    localPos.pop();  // position of the column
-                    indexOfLastTable = localPos.length - 1;  // found the correct table
+                    if (foundTable) {
+                        localPos.pop();  // position of the row
+                        localPos.pop();  // position of the column
+                        indexOfLastTable = localPos.length - 1;  // found the correct table
+                    }
                 }
             }
 
@@ -1945,8 +1989,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
             if (isInTable) {
 
-                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
-                    rowIndex = paraIndex - 1,
+                var rowIndex = this.getIndexOfLastRowInPosition(localPos),
                     columnIndex = rowIndex - 1,
                     thisRow = localPos[rowIndex],
                     thisColumn = localPos[columnIndex],
@@ -1975,11 +2018,10 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
             if (isInTable) {
 
-                var rowIndex = this.getIndexOfLastRowInTablePosition(localPos),
+                var rowIndex = this.getIndexOfLastRowInPosition(localPos),
                     lastParaInCell = this.getLastParaIndexInCell(localPos);
 
                 localPos[rowIndex + 1] = 0;
-                localPos[rowIndex + 2] = 0;
 
                 for (var i = 0; i <= lastParaInCell; i++) {
                     // this.deleteParagraph(localPos);
@@ -2014,8 +2056,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
             if (isInTable) {
 
-                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
-                    rowIndex = paraIndex - 1,
+                var rowIndex = this.getIndexOfLastRowInPosition(localPos),
                     columnIndex = rowIndex - 1,
                     thisRow = localPos[rowIndex],
                     thisColumn = localPos[columnIndex],
@@ -2031,8 +2072,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                     for (var i = min; i <= lastColumn; i++) {
                         localPos[columnIndex] = i;  // column
                         localPos[rowIndex] = j;  // row
-                        localPos[rowIndex + 1] = 0;
-                        localPos[rowIndex + 2] = 0;
+                        // localPos[rowIndex + 1] = 0;
+                        // localPos[rowIndex + 2] = 0;
                         this.deleteAllParagraphsInCell(localPos);
                     }
                 }
