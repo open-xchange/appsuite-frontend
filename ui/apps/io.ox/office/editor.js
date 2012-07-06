@@ -160,8 +160,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                 return;
 
             processingUndoRedo = true;
-            currentAction--;
-            var action = actions[currentAction];
+            var action = actions[--currentAction];
             if (_.isArray(action)) {
                 for (var i = action.length; i;) {
                     action[--i].undo(editor);
@@ -183,14 +182,13 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                 return;
 
             processingUndoRedo = true;
-            var action = actions[currentAction];
+            var action = actions[currentAction++];
             if (_.isArray(action)) {
                 _.invoke(action, "redo", editor);
             }
             else {
                 action.redo(editor);
             }
-            currentAction++;
             processingUndoRedo = false;
         };
 
@@ -956,20 +954,20 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
         };
 
         this.processMouseDown = function (event) {
+            this.implCheckEventSelection(); // just in case the user was faster than the timer...
             lastEventSelection = this.getSelection();
-            // Just give control to the browser so it can update the selection. "Return" ASAP.
-            // I Don't think we need some way to stop the timer, as the user won't be able to close this window "immediatly" after clicking into it.
             this.implStartCheckEventSelection();
         };
 
         this.processMouseUp = function (event) {
-            this.implCheckEventSelection(); // just in case the user was faster then the timer in mousedown...
+            this.implCheckEventSelection();
             lastEventSelection = this.getSelection();
             this.implStartCheckEventSelection();
         };
 
         this.implStartCheckEventSelection = function () {
             var _this = this;
+            // I Don't think we need some way to stop the timer, as the user won't be able to close this window "immediatly" after a mouse click or key press...
             window.setTimeout(function () { _this.implCheckEventSelection(); }, 10);
         };
 
@@ -978,7 +976,6 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
             if (!currentSelection || !lastEventSelection || !currentSelection.isEqual(lastEventSelection)) {
                 lastEventSelection = currentSelection;
                 this.trigger('selectionChanged');
-                this.implDbgOutInfo('mouse selection changed');
             }
         };
 
@@ -999,6 +996,10 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
             this.implDbgOutEvent(event);
             // this.implCheckSelection();
+
+            this.implCheckEventSelection();
+            lastEventSelection = this.getSelection();
+            this.implStartCheckEventSelection();
 
             // TODO: How to strip away debug code?
             if (event.keyCode && event.shiftKey && event.ctrlKey && event.altKey) {
@@ -1174,6 +1175,10 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
             this.implDbgOutEvent(event);
             // this.implCheckSelection();
+
+            this.implCheckEventSelection();
+            lastEventSelection = this.getSelection();
+            this.implStartCheckEventSelection();
 
             if (this.isNavigationKeyEvent(lastKeyDownEvent)) {
                 // Don't block cursor navigation keys.

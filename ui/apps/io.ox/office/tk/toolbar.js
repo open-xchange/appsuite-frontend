@@ -14,10 +14,11 @@
 define('io.ox/office/tk/toolbar',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
+     'io.ox/office/tk/group',
      'io.ox/office/tk/controlgroup',
      'io.ox/office/tk/dropdowngroup',
      'less!io.ox/office/tk/toolbar.css'
-    ], function (Events, Utils, ControlGroup, DropDownGroup) {
+    ], function (Events, Utils, Group, ControlGroup, DropDownGroup) {
 
     'use strict';
 
@@ -79,28 +80,13 @@ define('io.ox/office/tk/toolbar',
             // DOM child element measuring the total width of the controls
             containerNode = $('<span>').appendTo(node),
 
-            // control update handlers, mapped by key
-            updateHandlers = {},
+            // all control groups
+            groups = [],
 
             // resize handler functions supporting flexible tool bar sizing
             resizeHandlers = [];
 
         // private methods ----------------------------------------------------
-
-        /**
-         * Returns the control with the specified key as jQuery collection. The
-         * returned object may contain multiple elements, e.g. for radio button
-         * groups.
-         *
-         * @param {String} key
-         *  The unique key of the control.
-         *
-         * @returns {jQuery}
-         *  The controls matching the specified key, as jQuery collection.
-         */
-        function selectControl(key) {
-            return $('[data-key="' + key + '"]', node);
-        }
 
         /**
          * Moves the focus to the previous or next enabled control in the tool
@@ -153,71 +139,25 @@ define('io.ox/office/tk/toolbar',
         }
 
         /**
-         * Registers the passed update handler for a specific control. Update
-         * handlers will be executed, when the tool bar receives 'update'
-         * events.
+         * Registers the passed control group, and inserts it into this tool
+         * bar. Calls to the method ToolBar.update() will be forwarded to all
+         * registered groups.
          *
-         * @param {String} key
-         *  The unique key of the control.
-         *
-         * @param {Function} updateHandler
-         *  The update handler function. Will be called in the context of this
-         *  tool bar. Receives the control associated to the passed key, and
-         *  the value passed to the 'update' event.
+         * @param {ControlGroup} group
+         *  The control group. Must provide a method getNode() returning the
+         *  root node of the group. Must provide a method update() taking the
+         *  key and value of the control to be updated.
          */
-        function registerUpdateHandler(key, updateHandler) {
-            updateHandlers[key] = updateHandler;
-        }
+        function registerGroup(group) {
+            // remember the group object
+            groups.push(group);
+            // append its root node to this tool bar
+            containerNode.append(group.getNode());
 
-        /**
-         * Registers the passed action handler for a specific control. Action
-         * handlers will be executed, when the control has been activated in
-         * the user interface. Will trigger a 'change' event at the tool bar,
-         * passing the key of the source control, and its current value as
-         * returned by the passed action handler.
-         *
-         * @param {jQuery} node
-         *  The DOM node that catches the jQuery action events. May be a single
-         *  control, or a parent element of several controls, e.g. the group
-         *  node. In the latter case, the parameter 'selector' must be
-         *  specified.
-         *
-         * @param {String} type
-         *  The type of the action event, e.g. 'click' or 'change'.
-         *
-         * @param {String} [selector]
-         *  If specified, selects the ancestor elements of the specified node,
-         *  which are actually triggering the events.
-         *
-         * @param {Function} actionHandler
-         *  The action handler function. Will be called in the context of this
-         *  tool bar. Receives the control passed to this function. Must return
-         *  the current value of the control (e.g. the boolean state of a
-         *  toggle button, or the text of a text field).
-         */
-        function registerActionHandler(node, type, selector, actionHandler) {
-
-            function actionEventHandler(event) {
-                var control = $(event.target), key, value;
-                if (Utils.isControlEnabled(control)) {
-                    key = control.attr('data-key');
-                    value = actionHandler.call(toolbar, control);
-                    toolbar.trigger('change', key, value);
-                }
-            }
-
-            // normalize passed parameters (missing selector)
-            if (actionHandler === undefined) {
-                actionHandler = selector;
-                selector = undefined;
-            }
-
-            // attach event handler to the node
-            if (selector === undefined) {
-                node.on(type, actionEventHandler);
-            } else {
-                node.on(type, selector, actionEventHandler);
-            }
+            // listen to 'change' and 'cancel' events
+            group.on('change cancel', function (event, key, value) {
+                toolbar.trigger(event.type, key, value);
+            });
         }
 
         /**
@@ -274,56 +214,17 @@ define('io.ox/office/tk/toolbar',
             }
         }
 
-        // class ButtonGroupProxy ---------------------------------------------
+        // class ControlGroupProxy --------------------------------------------
 
         /**
-         * Proxy class returned as inserter for buttons into a button group.
+         * Proxy class returned as inserter for controls into a control group.
          *
          * @constructor
          */
-        function ButtonGroupProxy() {
+        function ControlGroupProxy() {
 
             var // create a new control group
                 group = new ControlGroup();
-
-            // private methods ------------------------------------------------
-
-            /**
-             * Returns whether the first button control in the passed jQuery
-             * collection is a toggle button.
-             *
-             * @param {jQuery} button
-             *  A jQuery collection containing a button element.
-             *
-             * @returns {Boolean}
-             *  True, if the button is a toggle button.
-             */
-            function isToggleButton(button) {
-                return button.first().attr('data-toggle') === 'toggle';
-            }
-
-            /**
-             * A generic update handler for push buttons and toggle buttons.
-             */
-            function updateHandler(button, value) {
-                if (isToggleButton(button)) {
-                    // Translate undefined (special 'no value' state) or null (special
-                    // 'ambiguous' state) to false to prevent toggling the button as
-                    // implemented by the static method toggleButtons().
-                    // TODO: Support for null (tristate). (?)
-                    Utils.toggleButtons(button, (_.isUndefined(value) || _.isNull(value)) ? false : value);
-                }
-            }
-
-            /**
-             * A generic action handler for push buttons and toggle buttons.
-             */
-            function clickHandler(button) {
-                if (isToggleButton(button)) {
-                    Utils.toggleButtons(button);
-                    return Utils.isButtonActive(button);
-                } // else: push button, return undefined
-            }
 
             // methods --------------------------------------------------------
 
@@ -335,21 +236,20 @@ define('io.ox/office/tk/toolbar',
              *
              * @param {Object} [options]
              *  A map of options to control the properties of the new button.
-             *  See method ToolBar.addButton() for details.
+             *  Supports all generic formatting options (see method
+             *  Utils.createButton() for details). Additionally, the following
+             *  options are supported:
+             *  @param {Boolean} [option.toggle=false]
+             *      If set to true, the button toggles its state and passes a
+             *      boolean value to change listeners. Otherwise, the button is
+             *      a simple push button and passes undefined to its change
+             *      listeners.
+             *
+             * @return {ControlGroupProxy}
+             *  A reference to this proxy object.
              */
             this.addButton = function (key, options) {
-
-                var // create the button
-                    button = group.addButton(key, expandControlOptions(options));
-
-                // add toggle button marker
-                if (options && (options.toggle === true)) {
-                    button.attr('data-toggle', 'toggle');
-                }
-
-                // add update handler (use the generic update handler)
-                registerUpdateHandler(key, function (value) { updateHandler.call(this, button, value); });
-
+                group.addButton(key, expandControlOptions(options));
                 return this;
             };
 
@@ -363,13 +263,10 @@ define('io.ox/office/tk/toolbar',
 
             // initialization -------------------------------------------------
 
-            // insert the group into the tool bar
-            containerNode.append(group.getNode());
+            // register the group object at this tool bar
+            registerGroup(group);
 
-            // add an action handler at the group node that handles all button clicks
-            registerActionHandler(group.getNode(), 'click', 'button', clickHandler);
-
-        } // class ButtonGroupProxy
+        } // class ControlGroupProxy
 
         // class RadioGroupProxy ----------------------------------------------
 
@@ -395,13 +292,13 @@ define('io.ox/office/tk/toolbar',
                 type = (options && _.isString(options.type)) ? options.type : 'buttons',
 
                 // create a new group container for the button group
-                buttonGroup = new ControlGroup(),
+                buttonGroup = new Group(),
 
                 // drop-down menu area
                 menuNode = $('<table>'),
 
                 // create a new group container for the drop-down group
-                dropDownGroup = new DropDownGroup(key, expandControlOptions(options), false, menuNode),
+                dropDownGroup = new DropDownGroup(key, expandControlOptions(options), menuNode),
 
                 // prototype for dummy buttons in unused table cells (must contain something to get its correct height)
                 buttonPrototype = Utils.createButton(undefined, { label: '\xa0' }),
@@ -566,17 +463,19 @@ define('io.ox/office/tk/toolbar',
              *
              * @param {Object} [options]
              *  A map of options to control the properties of the new button.
-             *  See method ToolBar.addButton() for details.
+             *  See method Utils.createButton() for details.
              */
             this.addButton = function (value, options) {
 
-                var // table row taking the new button
+                var // button for the button group
+                    button = Utils.createButton(key, expandControlOptions(options)).attr('data-value', value),
+                    // table row taking the new button
                     tableRow = null,
                     // column index for the new button
                     column = buttonCount % columns;
 
                 // append a new button to the button group
-                buttonGroup.addButton(key, expandControlOptions(options)).attr('data-value', value);
+                buttonGroup.getNode().append(button);
 
                 // get/create table row with empty cell from drop-down menu
                 if (column === 0) {
@@ -618,8 +517,9 @@ define('io.ox/office/tk/toolbar',
 
             // initialization -------------------------------------------------
 
-            // insert the groups into the tool bar
-            containerNode.append(buttonGroup.getNode(), dropDownGroup.getNode());
+            // register the group objects at this tool bar
+            registerGroup(buttonGroup);
+            registerGroup(dropDownGroup);
 
             // disable the dummy button
             Utils.enableControls(buttonPrototype, false);
@@ -640,8 +540,12 @@ define('io.ox/office/tk/toolbar',
             }
 
             // register event handlers
-            registerActionHandler(buttonGroup.getNode().add(menuNode), 'click', 'button', clickHandler);
-            registerUpdateHandler(key, updateHandler);
+            buttonGroup
+                .registerActionHandler('click', 'button', clickHandler)
+                .registerUpdateHandler(key, updateHandler);
+            dropDownGroup
+                .registerActionHandler(menuNode, 'click', 'button', clickHandler)
+                .registerUpdateHandler(key, updateHandler);
             menuNode.on('keydown keypress keyup', menuNodeKeyHandler);
 
             // listen to special 'menu' events
@@ -667,7 +571,7 @@ define('io.ox/office/tk/toolbar',
                 gridNode = $('<table>').append($('<tr>').append($('<td>').append(Utils.createButton(key, { label: 'A' })))),
 
                 // create a new group container for the drop-down group
-                group = new DropDownGroup(key, expandControlOptions(options), true, gridNode),
+                group = new DropDownGroup(key, _(expandControlOptions(options)).extend({ split: true }), gridNode),
 
                 // default size, used for direct clicks on the action button
                 defaultSize = (options && _.isObject(options.defaultSize)) ? options.defaultSize : { width: 3, height: 3 };
@@ -680,13 +584,13 @@ define('io.ox/office/tk/toolbar',
 
             // initialization -------------------------------------------------
 
-            // insert the group into the tool bar
-            containerNode.append(group.getNode());
+            // register the group object at this tool bar
+            registerGroup(group);
 
             // register event handlers
-            registerActionHandler(group.getActionButton(), 'click', clickHandler);
-            registerActionHandler(gridNode, 'click', 'button', clickHandler);
             group
+                .registerDefaultHandler(function () { return defaultSize; })
+                .registerActionHandler(gridNode, 'click', 'button', clickHandler)
                 .on('menu:focus', function () { /* move focus to grid */ })
                 .on('menu:cancel', function () {
                     // drop-down menu closed with mouse click, cancel tool bar
@@ -727,7 +631,7 @@ define('io.ox/office/tk/toolbar',
          *  A reference to this tool bar.
          */
         this.addButton = function (key, options) {
-            return this.addButtonGroup().addButton(key, options).end();
+            return this.addControlGroup().addButton(key, options).end();
         };
 
         /**
@@ -735,12 +639,12 @@ define('io.ox/office/tk/toolbar',
          * groups contain several independent buttons (push buttons, and/or
          * toggle buttons).
          *
-         * @returns {ButtonGroupProxy}
+         * @returns {ControlGroupProxy}
          *  A proxy object that implements methods to add controls to the
          *  group.
          */
-        this.addButtonGroup = function () {
-            return new ButtonGroupProxy();
+        this.addControlGroup = function () {
+            return new ControlGroupProxy();
         };
 
         /**
@@ -789,14 +693,14 @@ define('io.ox/office/tk/toolbar',
          *  The keys of the control to be enabled or disabled.
          *
          * @param {Boolean} [state=true]
-         *  If omitted or set to true, all controls will be enabled. Otherwise,
-         *  all controls will be disabled.
+         *  If omitted or set to true, the control will be enabled. Otherwise,
+         *  the control will be disabled.
          *
          * @returns {ToolBar}
          *  A reference to this tool bar.
          */
         this.enable = function (key, state) {
-            Utils.enableControls(selectControl(key), state);
+            _(groups).invoke('enable', key, state);
             return this;
         };
 
@@ -827,9 +731,7 @@ define('io.ox/office/tk/toolbar',
          *  A reference to this tool bar.
          */
         this.update = function (key, value) {
-            if (key in updateHandlers) {
-                updateHandlers[key].call(this, value);
-            }
+            _(groups).invoke('update', key, value);
             return this;
         };
 
@@ -841,7 +743,7 @@ define('io.ox/office/tk/toolbar',
             this.events.destroy();
             $(window).off('resize', updateGroupSizes);
             node.off().remove();
-            toolbar = node = containerNode = updateHandlers = resizeHandlers = null;
+            toolbar = node = containerNode = groups = resizeHandlers = null;
         };
 
         // initialization -----------------------------------------------------
