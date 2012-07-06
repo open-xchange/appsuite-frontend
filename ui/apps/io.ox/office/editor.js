@@ -1384,6 +1384,47 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
             this.applyOperation(newOperation, true, true);
         };
 
+        this.isSameParagraph = function (posA, posB) {
+            // Assuming that the position is complete, only the last parameter
+            // is allowed to be different.
+
+            var isSamePara = true;
+
+            if (posA.length === posB.length) {
+                var max = posA.length - 1;  // excluding position
+                for (var i = 0; i < max; i++) {
+                    if (posA[i] !== posB[i]) {
+                        isSamePara = false;
+                        break;
+                    }
+                }
+            } else {
+                isSamePara = false;
+            }
+
+            return isSamePara;
+        };
+
+        this.isSameParagraphLevel = function (posA, posB) {
+            // Assuming that the position is complete, only the two last parameters
+            // are allowed to be different.
+            var isSameLevel = true;
+
+            if (posA.length === posB.length) {
+                var max = posA.length - 2;  // excluding position and paragraph
+                for (var i = 0; i < max; i++) {
+                    if (posA[i] !== posB[i]) {
+                        isSameLevel = false;
+                        break;
+                    }
+                }
+            } else {
+                isSameLevel = false;
+            }
+
+            return isSameLevel;
+        };
+
         this.setAttribute = function (attr, value, startPosition, endPosition) {
 
             var para,
@@ -1406,55 +1447,108 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
                     selection.adjust();
 
-                    // 1) selected part or rest of para in first para (pos to end)
-                    var startposLength = selection.startPaM.oxoPosition.length - 1,
-                        endposLength = selection.endPaM.oxoPosition.length - 1,
-                        localendPosition = selection.endPaM.oxoPosition,
-                        isTable = this.isPositionInTable(selection.startPaM.oxoPosition);
+                    if (this.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                        // Only one paragraph concerned from attribute changes.
+                        this.setAttribute(attr, value, selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
 
-                    if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
-                        // TODO: This is not sufficient
-                        localendPosition = _.copy(selection.startPaM.oxoPosition, true);
-                        if (isTable) {
-                            // Assigning attribute to all following paragraphs in this cell and to all following cells!
-                            this.setAttributeToFollowingCellsInTable(attr, value, localendPosition);
-                            this.setAttributeToFollowingParagraphsInCell(attr, value, localendPosition);
-                        }
+                    } else if (this.isSameParagraphLevel(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                        // The included paragraphs are neighbours.
+
+                        // 1) selected part or rest of para in first para (pos to end)
+                        var startposLength = selection.startPaM.oxoPosition.length - 1,
+                            endposLength = selection.endPaM.oxoPosition.length - 1,
+                            localendPosition = _.copy(selection.startPaM.oxoPosition, true);
+
                         localendPosition[startposLength] = this.getParagraphLength(localendPosition);
-                    }
-                    this.setAttribute(attr, value, selection.startPaM.oxoPosition, localendPosition);
+                        this.setAttribute(attr, value, selection.startPaM.oxoPosition, localendPosition);
 
-                    // 2) completly selected paragraphs
-                    for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
-                        var localstartPosition = []; //_.copy(selection.startPaM.oxoPosition, true);
-                        localstartPosition[0] = i;  // Attention: localstartPosition has 5 ints,
+                        // 2) completly selected paragraphs
+                        for (var i = selection.startPaM.oxoPosition[startposLength - 1] + 1; i < selection.endPaM.oxoPosition[endposLength - 1]; i++) {
+                            var localstartPosition = _.copy(selection.startPaM.oxoPosition, true);
+                            localstartPosition[startposLength - 1] = i;
+                            localstartPosition[startposLength] = 0;
 
-                        isTable = this.isPositionInTable(localstartPosition);
+                            // Is the new dom position a table or a paragraph or whatever? Special handling for tables required
+                            // Removing position temporarely
+                            var pos = localstartPosition.pop();
+                            var stringHelper = this.getDOMPosition(localstartPosition).node.nodeName;
+                            var isTable = this.getDOMPosition(localstartPosition).node.nodeName === 'TABLE' ? true : false;
 
-                        if (isTable) {
-                            this.setAttributeToCompleteTable(attr, value, localstartPosition);
-                        } else {
+                            if (isTable) {
+                                this.setAttributeToCompleteTable(attr, value, localstartPosition);
+                            } else {
+                                localstartPosition.push(pos);
+                                localendPosition = _.copy(localstartPosition, true);
+                                localendPosition[startposLength] = this.getParagraphLength(localendPosition);
+                                this.setAttribute(attr, value, localstartPosition, localendPosition);
+                            }
+                        }
+
+                        // 3) selected part in last para
+                        if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
+                            var localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
+                            localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
+                            localstartPosition[endposLength] = 0;
+
+                            this.setAttribute(attr, value, localstartPosition, selection.endPaM.oxoPosition);
+                        }
+
+                    } else {
+
+                        // The included paragraphs are not neighbours. For example one top level and one in table.
+                        // should this be supported? How about tables in tables?
+                        // This probably works not reliable
+
+                        // 1) selected part or rest of para in first para (pos to end)
+                        var startposLength = selection.startPaM.oxoPosition.length - 1,
+                            endposLength = selection.endPaM.oxoPosition.length - 1,
+                            localendPosition = selection.endPaM.oxoPosition,
+                            isTable = this.isPositionInTable(selection.startPaM.oxoPosition);
+
+                        if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
+                            // TODO: This is not sufficient
+                            localendPosition = _.copy(selection.startPaM.oxoPosition, true);
+                            if (isTable) {
+                                // Assigning attribute to all following paragraphs in this cell and to all following cells!
+                                this.setAttributeToFollowingCellsInTable(attr, value, localendPosition);
+                                this.setAttributeToFollowingParagraphsInCell(attr, value, localendPosition);
+                            }
+                            localendPosition[startposLength] = this.getParagraphLength(localendPosition);
+                        }
+                        this.setAttribute(attr, value, selection.startPaM.oxoPosition, localendPosition);
+
+                        // 2) completly selected paragraphs
+                        for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
+                            var localstartPosition = []; //_.copy(selection.startPaM.oxoPosition, true);
+                            localstartPosition[0] = i;
                             localstartPosition[1] = 0;
-                            localendPosition = _.copy(localstartPosition, true);
-                            localendPosition[1] = this.getParagraphLength(localendPosition);
-                            this.setAttribute(attr, value, localstartPosition, localendPosition);
+
+                            isTable = this.isPositionInTable(localstartPosition);
+
+                            if (isTable) {
+                                this.setAttributeToCompleteTable(attr, value, localstartPosition);
+                            } else {
+                                localendPosition = _.copy(localstartPosition, true);
+                                localendPosition[1] = this.getParagraphLength(localendPosition);
+                                this.setAttribute(attr, value, localstartPosition, localendPosition);
+                            }
                         }
-                    }
 
-                    // 3) selected part in last para
-                    if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
-                        var localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
-                        localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
-                        localstartPosition[endposLength] = 0;
+                        // 3) selected part in last para
+                        if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
+                            var localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
+                            localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
+                            localstartPosition[endposLength] = 0;
 
-                        isTable = this.isPositionInTable(localstartPosition);
+                            isTable = this.isPositionInTable(localstartPosition);
 
-                        if (isTable) {
-                            // Assigning attribute to all previous cells and to all previous paragraphs in this cell!
-                            this.setAttributeToPreviousCellsInTable(attr, value, selection.endPaM.oxoPosition);
-                            this.setAttributeToPreviousParagraphsInCell(attr, value, selection.endPaM.oxoPosition);
+                            if (isTable) {
+                                // Assigning attribute to all previous cells and to all previous paragraphs in this cell!
+                                this.setAttributeToPreviousCellsInTable(attr, value, selection.endPaM.oxoPosition);
+                                this.setAttributeToPreviousParagraphsInCell(attr, value, selection.endPaM.oxoPosition);
+                            }
+                            this.setAttribute(attr, value, localstartPosition, selection.endPaM.oxoPosition);
                         }
-                        this.setAttribute(attr, value, localstartPosition, selection.endPaM.oxoPosition);
                     }
                 }
             }
@@ -1916,20 +2010,22 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                 if (domPos) {
                     var node = domPos.node;
 
-                    for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
-                        if (node.nodeName === 'TR') {
+                    for (; node && (node !== editdiv.get(0)); node = node.parentNode) {
+                        if (node.nodeName === 'TABLE') {
                             foundTable = true;
                             break;
                         } else {
-                            if ((node.nodeName === 'P') || (node.nodeType === 3)) {
+                            if ((node.nodeName === 'P') ||
+                                (node.nodeName === 'TD') ||
+                                (node.nodeName === 'TH') ||
+                                (node.nodeName === 'TR') ||
+                                (node.nodeType === 3)) {
                                 localPos.pop();
                             }
                         }
                     }
 
                     if (foundTable) {
-                        localPos.pop();  // position of the row
-                        localPos.pop();  // position of the column
                         indexOfLastTable = localPos.length - 1;  // found the correct table
                     }
                 }
