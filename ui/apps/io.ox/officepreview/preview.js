@@ -11,9 +11,9 @@
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  */
 
-define("io.ox/officePreview/main",
+define("io.ox/officepreview/preview",
     ["io.ox/core/tk/keys",
-     "less!io.ox/officePreview/style.css"], function (tkKeys) {
+     "less!io.ox/officepreview/style.css"], function (tkKeys) {
 
     'use strict';
     
@@ -25,27 +25,18 @@ define("io.ox/officePreview/main",
      * The preview.
      */
     function Preview(previewNode) {
+        
+        previewNode.addClass('io-ox-officepreview-page');
 
         // previewDocument as jQuery object
-        var childs = previewNode.children;
         
         // setting the preview document
         this.setPreviewDocument = function (previewDocument) {
             if (previewDocument) {
-                
-                previewNode[0].innerHTML = '<html><p>Success inner HTML</p></html>';
-                
-                childs
-                .append("<div>").text("Success children append 1")
-                .append("<div>").text("Success children append 2");
+                previewNode.append("<h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1><h1>Success setting HTML to app pane</h1>");
             }
             else {
-                
-                previewNode[0].innerHTML = '<html><p>Failure inner HTML</p></html>';
-
-                childs
-                .append("<div>").text("Failure children append 1")
-                .append("<div>").text("Failure children append 2");
+                previewNode.append('<p>Failure setting HTML to app pane</p>');
             }
         };
         

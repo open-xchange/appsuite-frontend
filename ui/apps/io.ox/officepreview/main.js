@@ -11,12 +11,11 @@
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  */
 
-define('io.ox/officepreview/main',
-    ['io.ox/files/api',
-     'io.ox/officepreview/preview',
-     'gettext!io.ox/office/main',
-     'less!io.ox/officepreview/style.css'
-    ], function (FilesApi, Preview, gt) {
+define("io.ox/officepreview/main",
+    ["io.ox/officepreview/preview",
+     "gettext!io.ox/office/main",
+     "less!io.ox/officepreview/style.css"
+    ], function (OfficePreview, gt) {
 
     'use strict';
 
@@ -35,14 +34,10 @@ define('io.ox/officepreview/main',
             // connection to infostore file
             file = null,
 
-            // primary preview used in actions.
+            // preview
             preview = null;
            
         // private functions --------------------------------------------------
-
-        function initializeApp(options) {
-            file = _.isObject(options) ? options.file : null;
-        }
 
         /**
          * Shows a closable error message above the preview.
@@ -103,17 +98,15 @@ define('io.ox/officepreview/main',
                 search: false,
                 toolbar: true
             });
+            
             app.setWindow(win);
-
-            // do not detach when hiding to keep edit selection alive
-            win.detachable = true;
 
             // create panes and attach them to the main window
             win.nodes.main.addClass('io-ox-officepreview-main').append(
                 // top pane for tool bars
-                win.nodes.toolPane = $('<div>').addClass('io-ox-officepreview-page-indicator').append("<div>").text("Toolpane"),
+                win.nodes.toolPane = $('<div>').addClass('io-ox-officepreview-page-indicator'),
                 // main application container
-                win.nodes.appPane = $('<div>').addClass('io-ox-officepreview-page').append(preview.getNode())
+                win.nodes.appPane = $('<div>').addClass('io-ox-officepreview-main').append(preview.getNode())
             );
 
             // update preview 'div' on window size change
@@ -157,8 +150,7 @@ define('io.ox/officepreview/main',
          */
         function importHTML(response) {
 
-            var // the deferred return value
-                def = $.Deferred();
+            var def = $.Deferred();
 
             // big try/catch, exception handler will reject the deferred with the exception
             try {
@@ -177,15 +169,6 @@ define('io.ox/officepreview/main',
                 if (!_.isObject(response.data) || !_.isArray(response.data.operations)) {
                     throw 'Missing AJAX result data.';
                 }
-
-                // check all operation objects in the array
-                /*_(response.data.operations).each(function (operation) {
-                    if (!_.isObject(operation) || !_.isString(operation.name)) {
-                        throw 'Invalid element in operations list.';
-                    }
-                });
-                */
-
             } catch (ex) {
                 // reject deferred on error
                 return def.reject(ex);
@@ -245,7 +228,7 @@ define('io.ox/officepreview/main',
                 '&version=' + file.version +
                 '&filename=' + file.filename +
                 '&session=' + ox.session) +
-                '&format=html';
+                '&filter_format=html';
         }
         
         /**
@@ -308,7 +291,7 @@ define('io.ox/officepreview/main',
         };
 
         app.failRestore = function (point) {
-            initializeApp(point);
+            file = _.isObject(point) ? point.file : null;
             return app.load();
         };
 
@@ -322,17 +305,15 @@ define('io.ox/officepreview/main',
             app = win = preview = null;
         };
 
-        // initialization -----------------------------------------------------
+        // ------------------------------------------------
+        // - initialization of createApplication function -
+        // ------------------------------------------------
 
-        // create the preview
-        var classes = 'io-ox-officepreview-main',
-            node = $('<div>').addClass(classes);
-            
-        preview = new Preview(node);
-        initializeApp(options);
+        preview = new OfficePreview($('<div>'));
+        file = _.isObject(options) ? options.file : null;
 
         return app.setLauncher(launchHandler).setQuit(quitHandler);
-
+    
     } // createApplication()
 
     // exports ================================================================
