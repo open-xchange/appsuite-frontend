@@ -95,6 +95,10 @@ define('io.ox/office/tk/dropdowngroup',
         }
 
         function menuButtonClickHandler() {
+
+            var // remember global variable (will be reset before the timer callback is executed)
+                withKeyboard = menuWithKeyboard;
+
             if (!self.isMenuVisible()) {
                 // After a click on the drop-down button with hidden drop-down
                 // menu, wait for Bootstrap to open the menu, and trigger the
@@ -105,11 +109,11 @@ define('io.ox/office/tk/dropdowngroup',
                     // if menu has been opened by keyboard, trigger a
                     // 'menu:enter' event requesting clients to move the focus
                     // into the drop-down menu
-                    if (menuWithKeyboard) {
+                    if (withKeyboard) {
                         self.trigger('menu:enter');
                     }
                 }, 0);
-            } else if (!menuWithKeyboard) {
+            } else if (!withKeyboard) {
                 // if menu has been closed with a mouse click, trigger a
                 // 'cancel' event allowing clients to handle this
                 self.trigger('cancel');
