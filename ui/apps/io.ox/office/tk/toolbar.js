@@ -17,8 +17,9 @@ define('io.ox/office/tk/toolbar',
      'io.ox/office/tk/group',
      'io.ox/office/tk/controlgroup',
      'io.ox/office/tk/dropdowngroup',
+     'io.ox/office/tk/buttongridgroup',
      'less!io.ox/office/tk/toolbar.css'
-    ], function (Events, Utils, Group, ControlGroup, DropDownGroup) {
+    ], function (Events, Utils, Group, ControlGroup, DropDownGroup, ButtonGridGroup) {
 
     'use strict';
 
@@ -72,8 +73,8 @@ define('io.ox/office/tk/toolbar',
 
             var // all visible group objects
                 visibleGroups = _(groups).filter(function (group) { return group.isVisible(); }),
-                // all enabled controls in all visible control groups
-                controls = _(visibleGroups).reduce(function (controls, group) { return controls.add(group.getNode().children(Utils.ENABLED_SELECTOR)); }, $()),
+                // extract all focusable controls from all visible groups
+                controls = _(visibleGroups).reduce(function (controls, group) { return controls.add(group.getFocusableControls()); }, $()),
                 // focused control
                 control = Utils.getFocusedControl(controls),
                 // index of focused control in all enabled controls
@@ -268,23 +269,8 @@ define('io.ox/office/tk/toolbar',
                 // create a new group container for the button group
                 buttonGroup = new Group(),
 
-                // drop-down menu area
-                menuNode = $('<table>'),
-
                 // create a new group container for the drop-down group
-                dropDownGroup = new DropDownGroup(key, _(options || {}).extend({ split: false }), menuNode),
-
-                // prototype for dummy buttons in unused table cells (must contain something to get its correct height)
-                buttonPrototype = Utils.createButton(undefined, { label: '\xa0' }),
-
-                // number of rows in the drop-down menu
-                rows = 0,
-
-                // number of columns in the drop-down menu
-                columns = (options && _.isNumber(options.columns) && (options.columns >= 1)) ? options.columns : 3,
-
-                // number of buttons inserted into the group
-                buttonCount = 0;
+                dropDownGroup = new ButtonGridGroup(key, _(options || {}).extend({ split: false }));
 
             // private methods ------------------------------------------------
 
@@ -299,7 +285,7 @@ define('io.ox/office/tk/toolbar',
             function updateHandler(value) {
 
                 var // find all option buttons (in button group and drop-down menu)
-                    buttons = buttonGroup.getNode().add(menuNode).find('button'),
+                    buttons = buttonGroup.getNode().children().add(dropDownGroup.getGridButtons()),
                     // ambiguous state indicated by null value
                     inactive = _.isUndefined(value) || _.isNull(value),
                     // find the button to activate
@@ -364,69 +350,6 @@ define('io.ox/office/tk/toolbar',
                 }
             }
 
-            /**
-             * Handles key events in the open drop-down menu.
-             */
-            function menuNodeKeyHandler(event) {
-
-                var // distinguish between event types (ignore keypress events)
-                    keydown = event.type === 'keydown',
-                    // all buttons in the drop-down menu
-                    buttons = menuNode.find('button'),
-                    // index of the focused button
-                    index = buttons.index(event.target),
-                    // row index of the focused button
-                    row = (index >= 0) ? Math.floor(index / columns) : -1,
-                    // column index of the focused button
-                    column = (index >= 0) ? (index % columns) : -1;
-
-                function focus(newIndex) {
-                    newIndex = Math.min(buttonCount - 1, newIndex);
-                    if ((newIndex >= 0) && (newIndex !== index)) {
-                        buttons.eq(newIndex).focus();
-                    }
-                }
-
-                switch (event.keyCode) {
-                case KeyCodes.LEFT_ARROW:
-                    if (keydown && (column > 0)) { focus(index - 1); }
-                    return false;
-                case KeyCodes.UP_ARROW:
-                    if (keydown) {
-                        if (row > 0) { focus(index - columns); } else { dropDownGroup.hideMenu(); }
-                    }
-                    return false;
-                case KeyCodes.RIGHT_ARROW:
-                    if (keydown && (column + 1 < columns)) { focus(index + 1); }
-                    return false;
-                case KeyCodes.DOWN_ARROW:
-                    if (keydown && (row + 1 < rows)) { focus(index + columns); }
-                    return false;
-                case KeyCodes.HOME:
-                    if (keydown) { focus(0); }
-                    return false;
-                case KeyCodes.END:
-                    if (keydown) { focus(buttonCount - 1); }
-                    return false;
-                }
-            }
-
-            /**
-             * Recalculates the width of the drop-down menu table element. The
-             * width of the drop-down menu is restricted to the parent button
-             * group element, thus the table shrinks its buttons way too much.
-             * The only way (?) to expand the table to the correct width is to
-             * set its CSS 'min-width' property to the calculated width of the
-             * tbody element. To do this, it is required to expand the
-             * 'min-width' of the table to a large value to give the tbody
-             * enough space, and then query its calculated width.
-             */
-            function recalcDropDownMenuWidthHandler() {
-                menuNode
-                    .css('min-width', '10000px')
-                    .css('min-width', menuNode.find('tbody').outerWidth() + 'px');
-            }
-
             // methods --------------------------------------------------------
 
             /**
@@ -440,46 +363,8 @@ define('io.ox/office/tk/toolbar',
              *  See method Utils.createButton() for details.
              */
             this.addButton = function (value, options) {
-
-                var // button for the button group
-                    button = Utils.createButton(key, options).attr('data-value', value),
-                    // table row taking the new button
-                    tableRow = null,
-                    // column index for the new button
-                    column = buttonCount % columns;
-
-                // append a new button to the button group
-                buttonGroup.getNode().append(button);
-
-                // get/create table row with empty cell from drop-down menu
-                if (column === 0) {
-                    // create a new row in the table, and fill it with dummy buttons
-                    tableRow = $('<tr>').appendTo(menuNode);
-                    _(columns).times(function () {
-                        tableRow.append($('<td>').append(buttonPrototype.clone()));
-                    });
-                    rows += 1;
-                } else {
-                    // select last table row
-                    tableRow = menuNode.find('tr:last-child');
-                }
-
-                // select table cell and replace the dummy button with a new real button
-                tableRow.children().eq(column).empty().append(
-                    Utils.createButton(key, options).attr('data-value', value)
-                );
-
-                // copy formatting of first inserted button to drop-down button
-                if (buttonCount === 0) {
-                    updateHandler();    // pass undefined (do not activate the button)
-                }
-
-                // wait for next drop-down click and update drop-down menu width
-                dropDownGroup
-                    .off('menu:open', recalcDropDownMenuWidthHandler)   // remove pending handler
-                    .one('menu:open', recalcDropDownMenuWidthHandler);
-
-                buttonCount += 1;
+                buttonGroup.getNode().append(Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS).attr('data-value', value));
+                dropDownGroup.addButton(options).attr('data-value', value);
                 return this;
             };
 
@@ -494,9 +379,6 @@ define('io.ox/office/tk/toolbar',
             // register the group objects at this tool bar
             registerGroup(buttonGroup);
             registerGroup(dropDownGroup);
-
-            // disable the dummy button
-            Utils.enableControls(buttonPrototype, false);
 
             // configure according to group type
             switch (type) {
@@ -518,15 +400,8 @@ define('io.ox/office/tk/toolbar',
                 .registerActionHandler('click', 'button', clickHandler)
                 .registerUpdateHandler(key, updateHandler);
             dropDownGroup
-                .registerActionHandler(menuNode, 'click', 'button', clickHandler)
-                .registerUpdateHandler(key, updateHandler)
-                .on('menu:focus', function () {
-                    // move focus to first control
-                    if (!Utils.containsFocusedControl(menuNode)) {
-                        menuNode.find('button').first().focus();
-                    }
-                });
-            menuNode.on('keydown keypress keyup', menuNodeKeyHandler);
+                .registerActionHandler('click', 'button', clickHandler)
+                .registerUpdateHandler(key, updateHandler);
 
         } // class RadioGroupProxy
 
@@ -534,11 +409,8 @@ define('io.ox/office/tk/toolbar',
 
         function createSizeChooser(key, options) {
 
-            var // drop-down grid element
-                gridNode = $('<table>').append($('<tr>').append($('<td>').append(Utils.createButton(key, { label: 'A' })))),
-
-                // create a new group container for the drop-down group
-                group = new DropDownGroup(key, _(options || {}).extend({ split: true }), gridNode);
+            var // create a new group container for the drop-down group
+                group = new ButtonGridGroup(key, options);
 
             // private methods ------------------------------------------------
 
@@ -551,10 +423,9 @@ define('io.ox/office/tk/toolbar',
             // register the group object at this tool bar
             registerGroup(group);
 
+            //group.setGridSize(10, 10);
+
             // register event handlers
-            group
-                .registerActionHandler(gridNode, 'click', 'button', clickHandler)
-                .on('menu:focus', function () { /* move focus to grid */ });
 
         } // class SizeChooser
 
