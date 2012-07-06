@@ -60,7 +60,7 @@ define('io.ox/office/main',
             .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
             .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
         .end()
-        .addSizeChooser('insert/table', { label: gt('Table'), tooltip: gt('Insert table'), maxWidth: 15, maxHeight: 15 })
+        .addSizeChooser('insert/table', { label: gt('Table'), tooltip: gt('Insert table'), split: true, maxWidth: 15, maxHeight: 15 })
         .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
     }}); // class MainToolBar
@@ -484,8 +484,7 @@ define('io.ox/office/main',
                 importOperations(response)
                 .done(function (operations) {
                     editor.enableUndo(false);
-                    editor.applyOperations(operations, false, true);
-                    operationsBuffer = [];  // TODO: Apply with notify=false, and apply to other editor(s) directly, instead of filling up the array in the notifications!
+                    app.applyOperations(operations);
                     editor.enableUndo(true);
                     def.resolve();
                 })
@@ -709,7 +708,7 @@ define('io.ox/office/main',
         controller
             .registerViewComponent(toolbar)
             .registerEditor(editors[Editor.TextMode.RICH])
-            .registerEditor(editors[Editor.TextMode.PLAIN], [/^action\//, 'debug/toggle']);
+            .registerEditor(editors[Editor.TextMode.PLAIN], /^(action|debug)\//);
 
         // primary editor for global operations (e.g. save)
         editor = editors[Editor.TextMode.RICH];
@@ -722,7 +721,13 @@ define('io.ox/office/main',
                 this.node.append($('<p>').text(JSON.stringify(operation)));
                 this.node.scrollTop(this.node.get(0).scrollHeight);
             },
-            applyOperations: $.noop
+            applyOperations: function (operations) {
+                if (_.isArray(operations)) {
+                    _(operations).each(_.bind(this.applyOperation, this));
+                } else {
+                    this.applyOperation(operations);
+                }
+            }
         };
 
         // build debug table for plain-text editor and operations output console

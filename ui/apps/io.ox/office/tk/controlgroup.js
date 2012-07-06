@@ -76,16 +76,6 @@ define('io.ox/office/tk/controlgroup',
         // methods ------------------------------------------------------------
 
         /**
-         * Sets the focus to the first enabled control in this group.
-         */
-        this.grabFocus = function () {
-            if (!this.hasFocus()) {
-                this.getNode().children(Utils.ENABLED_SELECTOR).first().focus();
-            }
-            return this;
-        };
-
-        /**
          * Adds a new push button or toggle button to this button group.
          *
          * @param {String} key
@@ -99,11 +89,14 @@ define('io.ox/office/tk/controlgroup',
          *  @param {Boolean} [option.toggle=false]
          *      If set to true, the button represents a boolean value and
          *      toggles its state when clicked.
+         *
+         * @returns {jQuery}
+         *  The new button, as jQuery collection.
          */
         this.addButton = function (key, options) {
 
             var // create the button
-                button = Utils.createButton(key, options).appendTo(this.getNode());
+                button = Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS).appendTo(this.getNode());
 
             // add toggle button marker
             if (options && (options.toggle === true)) {

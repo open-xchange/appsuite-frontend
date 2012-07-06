@@ -57,10 +57,10 @@ define('io.ox/office/tk/dropdowngroup',
             split = options && (options.split === true),
 
             // the action button (either triggering a default action, or toggling the drop-down menu)
-            actionButton = Utils.createButton(key, options),
+            actionButton = Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS),
 
             // the drop-down button in split mode (pass 'options' for formatting, but drop any contents)
-            caretButton = split ? Utils.createButton(key, options).empty() : $(),
+            caretButton = split ? Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS).empty() : $(),
 
             // reference to the button that triggers the drop-down menu
             menuButton = split ? caretButton : actionButton,
@@ -86,8 +86,8 @@ define('io.ox/office/tk/dropdowngroup',
                     }
                     triggerMenuButton(fromKeyEvent);
                 } else if (fromKeyEvent) {
-                    // menu already open, trigger 'menu:focus' event manually
-                    self.trigger('menu:focus');
+                    // menu already open, trigger 'menu:enter' event manually
+                    self.trigger('menu:enter');
                 }
             } else if (state !== false) {
                 triggerMenuButton(fromKeyEvent);
@@ -103,16 +103,16 @@ define('io.ox/office/tk/dropdowngroup',
                 window.setTimeout(function () {
                     self.trigger('menu:open');
                     // if menu has been opened by keyboard, trigger a
-                    // 'menu:focus' event requesting clients to move the focus
+                    // 'menu:enter' event requesting clients to move the focus
                     // into the drop-down menu
                     if (menuWithKeyboard) {
-                        self.trigger('menu:focus');
+                        self.trigger('menu:enter');
                     }
                 }, 0);
             } else if (!menuWithKeyboard) {
                 // if menu has been closed with a mouse click, trigger a
-                // 'menu:cancel' event allowing clients to handle this event
-                self.trigger('menu:cancel');
+                // 'cancel' event allowing clients to handle this
+                self.trigger('cancel');
             }
             menuWithKeyboard = false;
         }
@@ -181,25 +181,6 @@ define('io.ox/office/tk/dropdowngroup',
         // methods ------------------------------------------------------------
 
         /**
-         * Registers the specified action handler function for the action
-         * button shown left of the drop-down button in split mode.
-         */
-        this.registerDefaultHandler = function (actionHandler) {
-            return this.registerActionHandler(actionButton, 'click', actionHandler);
-        };
-
-        /**
-         * Focuses the drop-down button that toggles the drop-down menu, unless
-         * this group already contains the control that is currently focused.
-         */
-        this.grabFocus = function () {
-            if (!this.hasFocus()) {
-                menuButton.focus();
-            }
-            return this;
-        };
-
-        /**
          * Replaces the contents of the drop-down button with the passed
          * elements, and appends a caret sign.
          */
@@ -248,6 +229,16 @@ define('io.ox/office/tk/dropdowngroup',
             };
         }());
 
+        // overwrite the registerActionHandler() method; use drop-down menu as default root node
+        (function () {
+            var baseMethod = self.registerActionHandler;
+            self.registerActionHandler = function (node, type, selector, actionHandler) {
+                return _.isString(node) ?
+                    baseMethod.call(this, menuNode, node, type, selector) :
+                    baseMethod.call(this, node, type, selector, actionHandler);
+            };
+        }());
+
         // initialization -----------------------------------------------------
 
         // helper function appending a caret sign to the contents of the drop-down button
@@ -258,6 +249,11 @@ define('io.ox/office/tk/dropdowngroup',
             }
             return this.append($('<span>').addClass('caret'));
         };
+
+        // in split mode, register a dummy action handler for the action button
+        if (split) {
+            this.registerActionHandler(actionButton, 'click', $.noop);
+        }
 
         // prepare drop-down button, and register event handlers
         menuButton
