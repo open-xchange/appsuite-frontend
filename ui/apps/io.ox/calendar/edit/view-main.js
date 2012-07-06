@@ -23,6 +23,181 @@ define('io.ox/calendar/edit/view-main',
 
     'use strict';
 
+
+
+    // just a brand new combobox
+    // notice extends typeahead
+
+    var Combobox = function (element, options) {
+        this.$element = $(element);
+        this.options = $.extend({}, $.fn.combobox.defaults, options);
+        this.matcher = this.options.matcher || this.matcher;
+        this.sorter = this.options.sorter || this.sorter;
+        this.highlighter = this.options.highlighter || this.highlighter;
+        this.$menu = $(this.options.menu).appendTo('body');
+        this.source = this.options.source;
+        this.shown = false;
+        this.listen();
+    };
+
+    Combobox.prototype = $.extend({}, $.fn.typeahead.Constructor.prototype, {
+        constructor: Combobox,
+        listen: function () {
+            this.$element
+                .on('blur',     $.proxy(this.blur, this))
+                .on('focus',    $.proxy(this.focus, this))
+                .on('keypress', $.proxy(this.keypress, this))
+                .on('keyup',    $.proxy(this.keyup, this));
+
+            if ($.browser.webkit || $.browser.msie) {
+                this.$element.on('keydown', $.proxy(this.keypress, this));
+            }
+
+            this.$menu
+                .on('click', $.proxy(this.click, this)) // better than click
+                .on('mouseenter', 'li', $.proxy(this.mouseenter, this));
+        },
+        focus: function (e) {
+            this.lookup();
+        },
+        blur: function (e) {
+            var self = this;
+            console.log('blur', e);
+            e.stopPropagation();
+            e.preventDefault();
+            setTimeout(function () {
+                self.select();
+            }, 0);
+        },
+        keyup: function (e) {
+
+            if (!this.shown) return;
+
+            switch (e.keyCode) {
+            case 40: // down arrow
+            case 38: // up arrow
+                if (!this.shown) {
+                    this.lookup();
+                }
+                e.stopPropagation();
+                break;
+
+            case 9: // tab
+                break;
+            case 13: // enter
+                e.stopPropagation();
+                if (!this.shown) {
+                    return;
+                }
+                this.select();
+                break;
+
+            case 27: // escape
+                e.stopPropagation();
+                this.hide();
+                break;
+
+            default:
+                e.stopPropagation();
+                this.lookup();
+            }
+
+        },
+        select: function () {
+            var val = this.$menu.find('.active').attr('data-value');
+            if (val) {
+                this.$element.val(val);
+                this.$element.trigger('change');
+            }
+            return this.hide();
+        },
+        render: function (items) {
+            var self = this;
+
+            items = $(items).map(function (i, item) {
+                i = $(self.options.item).attr('data-value', item);
+                i.find('a').html(self.highlighter(item));
+                return i[0];
+            });
+
+            var selected = _(items).find(function (item) {
+                return ($(item).attr('data-value') === self.query);
+            });
+
+            if (selected) {
+                $(selected).addClass('active');
+            } else {
+                //items.first().addClass('active');
+            }
+
+            this.$menu.html(items);
+            return this;
+        },
+        show: function () {
+            var pos = $.extend({}, this.$element.offset(), {
+                height: this.$element[0].offsetHeight
+            });
+
+            this.$menu.css({
+                top: pos.top + pos.height,
+                left: pos.left
+            });
+
+            this.$menu.show();
+            var selected = this.$menu.find('.active');
+            if (selected.length > 0) {
+                this.$menu.scrollTop(selected.offset().top - selected.offsetParent().offset().top);
+            }
+            this.shown = true;
+            return this;
+        }
+
+    });
+
+    $.fn.combobox = function (option) {
+        return this.each(function () {
+            var $this = $(this),
+                data = $this.data('combobox'),
+                options = typeof option === 'object' && option;
+            if (!data) {
+                $this.data('combobox', (data = new Combobox(this, options)));
+            }
+
+            if (typeof option === 'string') {
+                data[option]();
+            }
+        });
+    };
+
+
+    $.fn.combobox.defaults = {
+        source: [],
+        items: 8,
+        menu: '<ul class="typeahead dropdown-menu"></ul>',
+        item: '<li><a href="#"></a></li>'
+    };
+
+    $.fn.combobox.Constructor = Combobox;
+
+    $(function () {
+        $('body').on('focus.combobox.data-api', '[data-provide="combobox"]', function (e) {
+            var $this = $(this);
+            if ($this.data('combobox')) {
+                return;
+            }
+            e.preventDefault();
+            $this.typeahead($this.data());
+        });
+    });
+
+
+
+
+
+
+
+
+
     //strings
     var reminderListValues = [
         {value: 0, format: 'minutes'},
@@ -111,7 +286,7 @@ define('io.ox/calendar/edit/view-main',
         filldate.add(1000 * 60 * 30); //half hour
     }
 
-    var typeaheadHours = {
+    var comboboxHours = {
         source: hours_typeahead,
         items: 48,
         menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
@@ -121,6 +296,9 @@ define('io.ox/calendar/edit/view-main',
                 return pd.getTime();
             });
             return items;
+        },
+        matcher: function () {
+            return true;
         }
     };
 
@@ -238,8 +416,8 @@ define('io.ox/calendar/edit/view-main',
             //init date picker
             self.$('.startsat-date').datepicker({format: dateAPI.DATE});
             self.$('.endsat-date').datepicker({format: dateAPI.DATE});
-            self.$('.startsat-time').typeahead(typeaheadHours);
-            self.$('.endsat-time').typeahead(typeaheadHours);
+            self.$('.startsat-time').combobox(comboboxHours);
+            self.$('.endsat-time').combobox(comboboxHours);
 
 
             //self.subviews.recurrence_option = new recurrenceModule.OptionView({model: self.model});
