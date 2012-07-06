@@ -160,8 +160,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                 return;
 
             processingUndoRedo = true;
-            currentAction--;
-            var action = actions[currentAction];
+            var action = actions[--currentAction];
             if (_.isArray(action)) {
                 for (var i = action.length; i;) {
                     action[--i].undo(editor);
@@ -183,14 +182,13 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                 return;
 
             processingUndoRedo = true;
-            var action = actions[currentAction];
+            var action = actions[currentAction++];
             if (_.isArray(action)) {
                 _.invoke(action, "redo", editor);
             }
             else {
                 action.redo(editor);
             }
-            currentAction++;
             processingUndoRedo = false;
         };
 
