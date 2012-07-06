@@ -566,7 +566,6 @@ define('io.ox/office/main',
                     var operations = JSON.parse(response.data);
                     if (operations.length) {
                         // We might need to do some "T" here!
-                        window.console.log('received operations');
                         // TODO: Apply to all editors, as we can't use the notify parameter here!
                         // TODO: Don't record operations anymore - save will simply make the already transfered operations persistent
                         editor.applyOperations(operations, true, false);
@@ -584,8 +583,6 @@ define('io.ox/office/main',
         };
 
         app.sendOperations = function () {
-
-            window.console.log('sending operations');
 
             var sendOps = _.copy(operationsBuffer, true);
 
@@ -606,7 +603,6 @@ define('io.ox/office/main',
                 }
             })
             .done(function (response) {
-                window.console.log('done - WHY?!');
                 app.startOperationsTimer();
             })
             .fail(function (response) {

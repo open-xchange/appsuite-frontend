@@ -974,7 +974,6 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
             if (!currentSelection || !lastEventSelection || !currentSelection.isEqual(lastEventSelection)) {
                 lastEventSelection = currentSelection;
                 this.trigger('selectionChanged');
-                this.implDbgOutInfo('mouse selection changed');
             }
         };
 
