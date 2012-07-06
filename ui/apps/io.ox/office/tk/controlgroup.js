@@ -12,108 +12,122 @@
  */
 
 define('io.ox/office/tk/controlgroup',
-    ['io.ox/core/event',
-     'io.ox/office/tk/utils'
-    ], function (Events, Utils) {
+    ['io.ox/office/tk/utils',
+     'io.ox/office/tk/group'
+    ], function (Utils, Group) {
 
     'use strict';
 
     // class ControlGroup =====================================================
 
     /**
-     * Creates a container element used to hold single controls. All controls
-     * shown in a tool bar must be inserted into such group containers.
+     * Creates a container element used to hold simple control elements. All
+     * controls shown in a tool bar must be inserted into such group
+     * containers. Registers update handlers and action handlers for all types
+     * of controls supported by this group.
      *
      * @constructor
      */
     function ControlGroup() {
 
-        // private fields -----------------------------------------------------
+        // private methods ------------------------------------------------
 
-        var // create the group container element
-            groupNode = $('<div>').addClass('btn-group');
+        /**
+         * Returns whether the first button control in the passed jQuery
+         * collection is a toggle button.
+         *
+         * @param {jQuery} button
+         *  A jQuery collection containing a button element.
+         *
+         * @returns {Boolean}
+         *  True, if the button is a toggle button.
+         */
+        function isToggleButton(button) {
+            return button.first().attr('data-toggle') === 'toggle';
+        }
+
+        /**
+         * A generic update handler for push buttons and toggle buttons.
+         */
+        function buttonUpdateHandler(button, value) {
+            if (isToggleButton(button)) {
+                // Translate undefined (special 'no value' state) or null (special
+                // 'ambiguous' state) to false to prevent toggling the button as
+                // implemented by the static method toggleButtons().
+                // TODO: Support for null (tristate). (?)
+                Utils.toggleButtons(button, (_.isUndefined(value) || _.isNull(value)) ? false : value);
+            }
+        }
+
+        /**
+         * A generic action handler for push buttons and toggle buttons.
+         */
+        function buttonClickHandler(button) {
+            if (isToggleButton(button)) {
+                Utils.toggleButtons(button);
+                return Utils.isButtonActive(button);
+            } // else: push button, return undefined
+        }
+
+        // base constructor ---------------------------------------------------
+
+        Group.call(this);
 
         // methods ------------------------------------------------------------
-
-        /**
-         * Returns the DOM container element for this control group as jQuery
-         * object.
-         */
-        this.getNode = function () {
-            return groupNode;
-        };
-
-        /**
-         * Creates a new button element and appends it to this control group.
-         */
-        this.addButton = function (key, options) {
-            return Utils.createButton(key, options).appendTo(groupNode);
-        };
-
-        /**
-         * Returns whether this group contains the control that is currently
-         * focused.
-         */
-        this.hasFocus = function () {
-            return Utils.containsFocusedControl(groupNode);
-        };
 
         /**
          * Sets the focus to the first enabled control in this group.
          */
         this.grabFocus = function () {
             if (!this.hasFocus()) {
-                groupNode.children(Utils.ENABLED_SELECTOR).first().focus();
+                this.getNode().children(Utils.ENABLED_SELECTOR).first().focus();
             }
             return this;
         };
 
-        this.isVisible = function () {
-            return !groupNode.hasClass(ControlGroup.HIDDEN_CLASS);
-        };
+        /**
+         * Adds a new push button or toggle button to this button group.
+         *
+         * @param {String} key
+         *  The unique key of the button.
+         *
+         * @param {Object} [options]
+         *  A map of options to control the properties of the new button.
+         *  Supports all generic formatting options (see method
+         *  Utils.createButton() for details). Additionally, the following
+         *  options are supported:
+         *  @param {Boolean} [option.toggle=false]
+         *      If set to true, the button represents a boolean value and
+         *      toggles its state when clicked.
+         */
+        this.addButton = function (key, options) {
 
-        this.show = function () {
-            groupNode.removeClass(ControlGroup.HIDDEN_CLASS);
-            return this;
-        };
+            var // create the button
+                button = Utils.createButton(key, options).appendTo(this.getNode());
 
-        this.hide = function () {
-            groupNode.addClass(ControlGroup.HIDDEN_CLASS);
-            return this;
-        };
+            // add toggle button marker
+            if (options && (options.toggle === true)) {
+                button.attr('data-toggle', 'toggle');
+            }
 
-        this.toggle = function () {
-            groupNode.toggleClass(ControlGroup.HIDDEN_CLASS);
-            return this;
+            // register update handler (use the generic update handler)
+            this.registerUpdateHandler(key, function (value) {
+                buttonUpdateHandler.call(this, button, value);
+            });
+
+            return button;
         };
 
         // initialization -----------------------------------------------------
 
-        // add event hub
-        Events.extend(this);
+        // add action handlers for buttons
+        this.registerActionHandler('click', 'button', buttonClickHandler);
 
     } // class ControlGroup
 
-    // constants --------------------------------------------------------------
-
-    /**
-     * CSS class for hidden button groups.
-     *
-     * @constant
-     */
-    ControlGroup.HIDDEN_CLASS = 'io-ox-hidden';
-
-    /**
-     * CSS selector for visible button groups and drop-down menus.
-     *
-     * @constant
-     */
-    ControlGroup.VISIBLE_SELECTOR = ':not(.' + ControlGroup.HIDDEN_CLASS + ')';
-
     // exports ================================================================
 
-    _.makeExtendable(ControlGroup);
-
-    return ControlGroup;
+    // derive this class from class Group
+    return Group.extend({ constructor: ControlGroup });
 
 });

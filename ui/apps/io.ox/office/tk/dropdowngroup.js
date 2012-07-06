@@ -13,8 +13,8 @@
 
 define('io.ox/office/tk/dropdowngroup',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/controlgroup'
-    ], function (Utils, ControlGroup) {
+     'io.ox/office/tk/group'
+    ], function (Utils, Group) {
 
     'use strict';
 
@@ -24,7 +24,7 @@ define('io.ox/office/tk/dropdowngroup',
     // class DropDownGroup ====================================================
 
     /**
-     * Creates a container element with a single drop-down button shown on top.
+     * Creates a container element with a drop-down button shown on top.
      * Implements keyboard event handling for the drop-down button (open,
      * close, automatic close of the drop-down menu on focus navigation).
      *
@@ -37,21 +37,24 @@ define('io.ox/office/tk/dropdowngroup',
      * @param {Object} options
      *  A map of options to control the properties of the drop-down button.
      *  Supports all generic formatting options for the drop-down button (see
-     *  method Utils.createButton() for details).
-     *
-     * @param {Boolean} split
-     *  If set to true, will separate the drop-down button and the drop-down
-     *  caret, allowing to trigger a default action with the button, and to
-     *  optionally show the drop-down menu. If set to false, the entire
-     *  drop-down button will toggle the drop-down menu.
+     *  method Utils.createButton() for details. Additionally, the following
+     *  options are supported:
+     *  @param {Boolean} [options.split]
+     *      If set to true, will separate the drop-down button and the
+     *      drop-down caret, allowing to trigger a default action with the
+     *      button, and to optionally show the drop-down menu. If set to false,
+     *      the entire drop-down button will toggle the drop-down menu.
      *
      * @param {jQuery} dropDownMenu
      *  The drop-down menu container element, as jQuery collection.
      */
-    function DropDownGroup(key, options, split, menuNode) {
+    function DropDownGroup(key, options, menuNode) {
 
         var // self reference to be used in event handlers
             self = this,
+
+            // split button mode, or simple drop-down mode
+            split = options && (options.split === true),
 
             // the action button (either triggering a default action, or toggling the drop-down menu)
             actionButton = Utils.createButton(key, options),
@@ -173,9 +176,17 @@ define('io.ox/office/tk/dropdowngroup',
 
         // base constructor ---------------------------------------------------
 
-        ControlGroup.call(this);
+        Group.call(this);
 
         // methods ------------------------------------------------------------
+
+        /**
+         * Registers the specified action handler function for the action
+         * button shown left of the drop-down button in split mode.
+         */
+        this.registerDefaultHandler = function (actionHandler) {
+            return this.registerActionHandler(actionButton, 'click', actionHandler);
+        };
 
         /**
          * Focuses the drop-down button that toggles the drop-down menu, unless
@@ -186,14 +197,6 @@ define('io.ox/office/tk/dropdowngroup',
                 menuButton.focus();
             }
             return this;
-        };
-
-        /**
-         * Returns the button element triggering the default action (in split
-         * mode).
-         */
-        this.getActionButton = function () {
-            return actionButton;
         };
 
         /**
@@ -267,7 +270,7 @@ define('io.ox/office/tk/dropdowngroup',
 
         // prepare drop-down menu, and register event handlers
         menuNode
-            .addClass('dropdown-menu ' + ControlGroup.HIDDEN_CLASS)
+            .addClass('dropdown-menu ' + Group.HIDDEN_CLASS)
             .on('keydown keypress keyup', menuKeyHandler);
 
         // append buttons and menu to the group container
@@ -277,7 +280,7 @@ define('io.ox/office/tk/dropdowngroup',
 
     // exports ================================================================
 
-    // derive this class from class ControlGroup
-    return ControlGroup.extend({ constructor: DropDownGroup });
+    // derive this class from class Group
+    return Group.extend({ constructor: DropDownGroup });
 
 });
