@@ -556,6 +556,33 @@ define('io.ox/office/main',
         };
 
         /**
+         * Applies the passed operations at all known editor objects but the
+         * editor specified as event source.
+         *
+         * @param {Object|Object[]} operations
+         *  An operation or an array of operations to be applied.
+         *
+         * @param {Editor} [eventSource]
+         *  The editor that has called the function. This editor will not
+         *  receive the passed operations again. May be omitted to apply the
+         *  operations to all editors.
+         */
+        app.applyOperations = function (operations, eventSource) {
+
+            // normalize operations parameter
+            if (!_.isArray(operations)) {
+                operations = [operations];
+            }
+
+            // apply operations to all editors
+            _(editors).each(function (editor) {
+                if (editor !== eventSource) {
+                    editor.applyOperations(operations, true);
+                }
+            });
+        };
+
+        /**
          * Returns whether the application is in debug mode. See method
          * setDebugMode() for details.
          */
