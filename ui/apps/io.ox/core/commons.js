@@ -104,6 +104,10 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             grid.setListRequest(function (ids) {
                 return api[getList || 'getList'](ids);
             });
+            // handle 'not-found'
+            api.on('not-found', function () {
+                grid.selection.selectFirst();
+            });
         },
 
         /**

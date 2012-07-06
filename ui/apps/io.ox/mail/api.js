@@ -131,7 +131,9 @@ define("io.ox/mail/api",
             get: function (e, params) {
                 if (e.code === "MSG-0032") {
                     // mail no longer exists, so we remove it locally
-                    api.remove([params], true);
+                    api.remove([params], true).done(function () {
+                        api.trigger('not-found');
+                    });
                 }
             }
         },
@@ -230,9 +232,9 @@ define("io.ox/mail/api",
         if (useCache === 'auto') {
             useCache = options.cache = (cacheControl[options.folder] !== false);
         }
-        return this.getAll(options, useCache)
-            .done(function (data) {
-                _(data).each(function (obj) {
+        return this.getAll(options, useCache, null, false)
+            .done(function (response) {
+                _(response.data).each(function (obj) {
                     // build thread hash
                     var key = obj.folder_id + '.' + obj.id;
                     threads[key] = [options.order]
@@ -243,7 +245,7 @@ define("io.ox/mail/api",
                         threadHash[o] = key;
                     });
                 });
-                console.log('time.post', '#', data.length, 't2', (t2 = _.now()) - ox.t0, 'took', t2 - t1);
+                console.log('time.post', '#', response.data.length, 't2', (t2 = _.now()) - ox.t0, 'took', t2 - t1);
                 cacheControl[options.folder] = true;
             });
     };

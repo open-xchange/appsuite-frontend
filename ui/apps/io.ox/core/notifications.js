@@ -94,11 +94,8 @@ define('io.ox/core/notifications',
 
             // invoke plugins
             var plugins = ext.getPlugins({name: 'notifications', prefix: 'plugins/notifications/'});
-            console.log('wanna load notification plugins', plugins);
             require(plugins).done(function () {
-                console.log('loaded notification plugins');
                 ext.point('io.ox/core/notifications/register').invoke('register', self, self);
-
             });
             // now register default notification handler
             /*require(['io.ox/mail/notifications',

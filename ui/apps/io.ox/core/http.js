@@ -512,6 +512,9 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                     }
                 })
                 .done(function (data) {
+                    // trigger event first since HTTP layer finishes work
+                    that.trigger("stop done", r.xhr);
+                    // process response
                     if (r.o.processData) {
                         processResponse(r.def, data, r.o, r.o.type);
                     } else {
@@ -522,12 +525,11 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                             r.def.resolve(data);
                         }
                     }
-                    that.trigger("stop done", r.xhr);
                     r = null;
                 })
                 .fail(function (xhr, textStatus, errorThrown) {
-                    r.def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
                     that.trigger("stop fail", r.xhr);
+                    r.def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
                     r = null;
                 });
         }

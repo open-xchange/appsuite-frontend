@@ -47,7 +47,7 @@ define("io.ox/calendar/util",
         FRIDAY = 32,
         SATURDAY = 64,
         // week starts with (0=Sunday, 1=Monday, ..., 6=Saturday)
-        firstWeekDay = date.locale.weekStart;
+        firstWeekDay = 1; /* date.locale.weekStart; */
 
     var zones;
     $.when.apply($, _.map(
