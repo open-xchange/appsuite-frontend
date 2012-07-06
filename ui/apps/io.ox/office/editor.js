@@ -705,7 +705,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                 }
             } else {
                 if (_.isNumber(domSelection.startPaM.offset)) {
-                    this.implDbgOutInfo('implGetOXOSelection: Invalid start position. NodeType is: ' + domSelection.startPaM.node.nodeType + ', but offset is set: ' + domSelection.startPaM.offset + ' . Offset will be ignored!');
+                    this.implDbgOutInfo('implGetOXOSelection: Invalid start position. NodeType is: ' + domSelection.startPaM.node.nodeType + "(" + domSelection.startPaM.node.nodeName + ")" + ', but offset is set: ' + domSelection.startPaM.offset + ' . Offset will be ignored!');
                 }
             }
 
@@ -716,13 +716,13 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                 }
             } else {
                 if (_.isNumber(domSelection.endPaM.offset)) {
-                    this.implDbgOutInfo('implGetOXOSelection: Invalid end position. NodeType is: ' + domSelection.endPaM.node.nodeType + ', but offset is set: ' + domSelection.endPaM.offset + ' . Offset will be ignored!');
+                    this.implDbgOutInfo('implGetOXOSelection: Invalid end position. NodeType is: ' + domSelection.endPaM.node.nodeType + "(" + domSelection.startPaM.node.nodeName + ")" + ', but offset is set: ' + domSelection.endPaM.offset + ' . Offset will be ignored!');
                 }
             }
 
             // Checking selection - setting a valid selection doesn't always work on para end, browser is manipulating it....
             // Assume this only happens on para end - seems we are always directly in a p-element when this error occurs.
-            if (domSelection.startPaM.node.nodeType === 3) {
+            if ((domSelection.startPaM.node.nodeType === 3) || (domSelection.startPaM.node.nodeName === 'TR')) {
                 startOxoPaM = getOXOPositionFromDOMPosition.call(this, domSelection.startPaM.node, domSelection.startPaM.offset);
             } else {
                 this.implDbgOutInfo("INFO: Ignoring getOXOPositionFromDOMPosition: " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType);
@@ -738,7 +738,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                 // this.implDbgOutInfo('info: fixed invalid selection (start): ' + startPaM.toString());
             }
 
-            if (domSelection.endPaM.node.nodeType === 3) {
+            if ((domSelection.endPaM.node.nodeType === 3)  || (domSelection.endPaM.node.nodeName === 'TR')) {
                 endOxoPaM = getOXOPositionFromDOMPosition.call(this, domSelection.endPaM.node, domSelection.endPaM.offset);
             } else {
                 this.implDbgOutInfo("INFO: Ignoring getOXOPositionFromDOMPosition: " + domSelection.endPaM.node.nodeName + " : " + domSelection.endPaM.node.nodeType);
