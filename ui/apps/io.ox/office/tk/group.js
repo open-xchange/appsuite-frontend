@@ -57,11 +57,12 @@ define('io.ox/office/tk/group',
         };
 
         /**
-         * Sets the focus to a specific control contained in this group. MUST
-         * be overwritten by derived classes.
-         *
+         * Sets the focus to the first enabled control in this group.
          */
         this.grabFocus = function () {
+            if (!this.hasFocus()) {
+                groupNode.children(Utils.ENABLED_SELECTOR).first().focus();
+            }
             return this;
         };
 

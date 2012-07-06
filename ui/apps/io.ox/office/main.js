@@ -708,7 +708,7 @@ define('io.ox/office/main',
         controller
             .registerViewComponent(toolbar)
             .registerEditor(editors[Editor.TextMode.RICH])
-            .registerEditor(editors[Editor.TextMode.PLAIN], [/^action\//, 'debug/toggle']);
+            .registerEditor(editors[Editor.TextMode.PLAIN], /^(action|debug)\//);
 
         // primary editor for global operations (e.g. save)
         editor = editors[Editor.TextMode.RICH];
@@ -721,7 +721,13 @@ define('io.ox/office/main',
                 this.node.append($('<p>').text(JSON.stringify(operation)));
                 this.node.scrollTop(this.node.get(0).scrollHeight);
             },
-            applyOperations: $.noop
+            applyOperations: function (operations) {
+                if (_.isArray(operations)) {
+                    _(operations).each(_.bind(this.applyOperation, this));
+                } else {
+                    this.applyOperation(operations);
+                }
+            }
         };
 
         // build debug table for plain-text editor and operations output console
