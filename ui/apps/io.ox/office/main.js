@@ -9,12 +9,14 @@
  * Mail: info@open-xchange.com
  *
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
+ * @author Malte Timmermann <malte.timmermann@open-xchange.com>
+ * @author Ingo Schmidt-Rosbiegal <ingo.schmidt-rosbiegal@open-xchange.com>
  */
 
 define('io.ox/office/main',
     ['io.ox/files/api',
-     'io.ox/office/toolbar',
-     'io.ox/office/controller',
+     'io.ox/office/tk/toolbar',
+     'io.ox/office/tk/controller',
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
      'io.ox/office/actions',
@@ -33,64 +35,56 @@ define('io.ox/office/main',
      *
      * @constructor
      */
-    var MainToolBar = ToolBar.extend({
+    var MainToolBar = ToolBar.extend({ constructor: function () {
 
-        constructor: function () {
+        // base constructor ---------------------------------------------------
 
-            // call base constructor
-            ToolBar.call(this);
+        ToolBar.call(this);
 
-            // add all tool bar controls
-            this
-            .addButtonGroup()
-                .addButton('action/undo', { icon: gt('icon-io-ox-undo'), tooltip: gt('Revert last operation') })
-                .addButton('action/redo', { icon: gt('icon-io-ox-redo'), tooltip: gt('Restore last operation') })
-            .end()
-            .addButtonGroup()
-                .addButton('character/font/bold',      { icon: gt('icon-io-ox-bold'),      tooltip: gt('Bold'),      toggle: true })
-                .addButton('character/font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
-                .addButton('character/font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
-            .end()
-            .addRadioGroup('paragraph/alignment', { type: 'auto', columns: 2, tooltip: gt('Paragraph alignment') })
-                .addButton('left',    { icon: gt('icon-align-left'),    tooltip: gt('Left') })
-                .addButton('center',  { icon: gt('icon-align-center'),  tooltip: gt('Center') })
-                .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
-                .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
-            .end()
-            .addButton('action/table', { label: gt('Table'), tooltip: gt('Insert new table') })
-            .addButton('action/debug', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
+        // initialization -----------------------------------------------------
 
-        } // end of constructor
+        // add all tool bar controls
+        this
+        .addControlGroup()
+            .addButton('action/undo', { icon: gt('icon-io-ox-undo'), tooltip: gt('Revert last operation') })
+            .addButton('action/redo', { icon: gt('icon-io-ox-redo'), tooltip: gt('Restore last operation') })
+        .end()
+        .addControlGroup()
+            .addButton('character/font/bold',      { icon: gt('icon-io-ox-bold'),      tooltip: gt('Bold'),      toggle: true })
+            .addButton('character/font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
+            .addButton('character/font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
+        .end()
+        .addRadioGroup('paragraph/alignment', { type: 'auto', columns: 2, tooltip: gt('Paragraph alignment') })
+            .addButton('left',    { icon: gt('icon-align-left'),    tooltip: gt('Left') })
+            .addButton('center',  { icon: gt('icon-align-center'),  tooltip: gt('Center') })
+            .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
+            .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
+        .end()
+        .addSizeChooser('insert/table', { label: gt('Table'), tooltip: gt('Insert table'), maxWidth: 15, maxHeight: 15 })
+        .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
-    }); // class MainToolBar
+    }}); // class MainToolBar
 
     // class EditorController =================================================
 
-    var EditorController = Controller.extend({
+    var EditorController = Controller.extend({ constructor: function (app) {
 
-        constructor: function (app) {
+        var // current editor having the focus
+            editor = null,
 
-            var // current editor having the focus
-                editor = null;
-
-            // base constructor -----------------------------------------------
-
-            Controller.call(this, {
-
+            // all the little controller items
+            items = {
                 'action/undo': {
                     enable: function () { return editor.hasUndo(); },
-                    set: function (list) { editor.undo(); editor.grabFocus(); }
+                    set: function () { editor.undo(); editor.grabFocus(); }
                 },
                 'action/redo': {
                     enable: function () { return editor.hasRedo(); },
-                    set: function (list) { editor.redo(); editor.grabFocus(); }
+                    set: function () { editor.redo(); editor.grabFocus(); }
                 },
-                'action/table': {
-                    set: function () { editor.insertTable(); editor.grabFocus(); }
-                },
-                'action/debug': {
-                    get: function () { return app.isDebugMode(); },
-                    set: function (state) { app.setDebugMode(state); app.getEditor().grabFocus(); }
+
+                'insert/table': {
+                    set: function (size) { editor.insertTable(size); editor.grabFocus(); }
                 },
 
                 'character/font/bold': {
@@ -108,39 +102,51 @@ define('io.ox/office/main',
 
                 'paragraph/alignment': {
                     set: function (value) { editor.grabFocus(); }
+                },
+
+                'debug/toggle': {
+                    get: function () { return app.isDebugMode(); },
+                    set: function (state) { app.setDebugMode(state); app.getEditor().grabFocus(); }
                 }
-
-            });
-
-            // methods --------------------------------------------------------
-
-            /**
-             * Registers a new editor instance. If the editor has the browser
-             * focus, this controller will use it as target for item actions
-             * triggered by any registered view component.
-             */
-            this.registerEditor = function (newEditor, supportedItems) {
-                newEditor
-                    .on('focus', _.bind(function (event, focused) {
-                        if (focused && (editor !== newEditor)) {
-                            // set as current editor
-                            editor = newEditor;
-                            // update view components
-                            this.enableAndDisable(supportedItems);
-                        }
-                    }, this))
-                    .on('operation', _.bind(function () {
-                        this.update(['action/undo', 'action/redo', /^character\//, /^paragraph\//]);
-                    }, this))
-                    .on('selectionChanged', _.bind(function () {
-                        this.update([/^character\//, /^paragraph\//]);
-                    }, this));
-                return this;
             };
 
-        } // end of constructor
+        // private methods ----------------------------------------------------
 
-    }); // class EditorController
+        function cancelAction() {
+            editor.grabFocus();
+        }
+
+        // base constructor ---------------------------------------------------
+
+        Controller.call(this, items, cancelAction);
+
+        // methods ------------------------------------------------------------
+
+        /**
+         * Registers a new editor instance. If the editor has the browser
+         * focus, this controller will use it as target for item actions
+         * triggered by any registered view component.
+         */
+        this.registerEditor = function (newEditor, supportedItems) {
+            newEditor
+                .on('focus', _.bind(function (event, focused) {
+                    if (focused && (editor !== newEditor)) {
+                        // set as current editor
+                        editor = newEditor;
+                        // update view components
+                        this.enableAndDisable(supportedItems);
+                    }
+                }, this))
+                .on('operation', _.bind(function () {
+                    this.update([/^action\//, /^character\//, /^paragraph\//]);
+                }, this))
+                .on('selectionChanged', _.bind(function () {
+                    this.update([/^character\//, /^paragraph\//]);
+                }, this));
+            return this;
+        };
+
+    }}); // class EditorController
 
     // createApplication() ====================================================
 
@@ -163,6 +169,12 @@ define('io.ox/office/main',
 
             // editors mapped by text mode
             editors = {},
+
+            // buffer for user operations. One should be enough, as the editors here are always in sync
+            operationsBuffer = [],
+
+            // timer for operations
+            operationsTimer = null,
 
             // primary editor used in save, quit, etc.
             editor = null,
@@ -473,6 +485,7 @@ define('io.ox/office/main',
                 .done(function (operations) {
                     editor.enableUndo(false);
                     editor.applyOperations(operations, false, true);
+                    operationsBuffer = [];  // TODO: Apply with notify=false, and apply to other editor(s) directly, instead of filling up the array in the notifications!
                     editor.enableUndo(true);
                     def.resolve();
                 })
@@ -540,6 +553,73 @@ define('io.ox/office/main',
             return def;
         };
 
+        app.sendReceiveOperations = function () {
+
+            // First, check if the server has new ops for me
+            $.ajax({
+                type: 'GET',
+                url: getFilterUrl('pulloperationupdates'),
+                dataType: 'json'
+            })
+            .done(function (response) {
+                if (response && response.data) {
+                    var operations = JSON.parse(response.data);
+                    if (operations.length) {
+                        // We might need to do some "T" here!
+                        // TODO: Apply to all editors, as we can't use the notify parameter here!
+                        // TODO: Don't record operations anymore - save will simply make the already transfered operations persistent
+                        editor.applyOperations(operations, true, false);
+                    }
+                }
+                // Then, send our operations in case we have some...
+                if (operationsBuffer.length) {
+
+                    // We might first need to do some "T" here!
+                    app.sendOperations();   // will also restart the timer
+                }
+                else
+                    app.startOperationsTimer();
+            });
+        };
+
+        app.sendOperations = function () {
+
+            var sendOps = _.copy(operationsBuffer, true);
+
+            // We might receive new Ops while sending the current ones...
+            operationsBuffer = [];
+
+            var dataObject = { operations: JSON.stringify(sendOps) };
+
+            $.ajax({
+                type: 'POST',
+                url: getFilterUrl('pushoperationupdates'),
+                dataType: 'json',
+                data: dataObject,
+                beforeSend: function (xhr) {
+                    if (xhr && xhr.overrideMimeType) {
+                        xhr.overrideMimeType('application/j-son;charset=UTF-8');
+                    }
+                }
+            })
+            .done(function (response) {
+                app.startOperationsTimer();
+            })
+            .fail(function (response) {
+                // showAjaxError(response);
+                operationsBuffer = $.extend(true, operationsBuffer, sendOps); // Try again later. NOT TESTED YET!
+                app.startOperationsTimer();
+            });
+        };
+
+        app.startOperationsTimer = function (timeout) {
+            var _this = this;
+            var to = timeout || 100; // default - be fast for the demo ;)
+            operationsTimer = window.setTimeout(function () { _this.sendReceiveOperations(); }, to);
+
+
+        };
+
         app.failSave = function () {
             var point = { file: file, debugMode: debugMode };
             return { module: MODULE_NAME, point: point };
@@ -549,6 +629,33 @@ define('io.ox/office/main',
             initializeApp(point);
             updateDebugMode();
             return app.load();
+        };
+
+        /**
+         * Applies the passed operations at all known editor objects but the
+         * editor specified as event source.
+         *
+         * @param {Object|Object[]} operations
+         *  An operation or an array of operations to be applied.
+         *
+         * @param {Editor} [eventSource]
+         *  The editor that has called the function. This editor will not
+         *  receive the passed operations again. May be omitted to apply the
+         *  operations to all editors.
+         */
+        app.applyOperations = function (operations, eventSource) {
+
+            // normalize operations parameter
+            if (!_.isArray(operations)) {
+                operations = [operations];
+            }
+
+            // apply operations to all editors
+            _(editors).each(function (editor) {
+                if (editor !== eventSource) {
+                    editor.applyOperations(operations, true);
+                }
+            });
         };
 
         /**
@@ -579,6 +686,8 @@ define('io.ox/office/main',
          * window close button).
          */
         app.destroy = function () {
+            if (operationsTimer)
+                window.clearTimeout(operationsTimer);
             $(window).off('resize', windowResizeHandler);
             controller.destroy();
             toolbar.destroy();
@@ -600,7 +709,7 @@ define('io.ox/office/main',
         controller
             .registerViewComponent(toolbar)
             .registerEditor(editors[Editor.TextMode.RICH])
-            .registerEditor(editors[Editor.TextMode.PLAIN], /^action\/(undo|redo|debug)$/);
+            .registerEditor(editors[Editor.TextMode.PLAIN], [/^action\//, 'debug/toggle']);
 
         // primary editor for global operations (e.g. save)
         editor = editors[Editor.TextMode.RICH];
@@ -630,6 +739,8 @@ define('io.ox/office/main',
         // listen to operations and deliver them to editors and output console
         _(editors).each(function (editor) {
             editor.on('operation', function (event, operation) {
+                // buffer operations for sending them later on...
+                operationsBuffer.push(operation);
                 _(editors).each(function (targetEditor) {
                     if (editor !== targetEditor) {
                         targetEditor.applyOperation(operation);
@@ -640,6 +751,7 @@ define('io.ox/office/main',
 
         // configure OX application
         initializeApp(options);
+        app.startOperationsTimer(1000); // TODO: If doc operations and updated operations are already merged on the server, the pulling can start later (5000)
         return app.setLauncher(launchHandler).setQuit(quitHandler);
 
     } // createApplication()

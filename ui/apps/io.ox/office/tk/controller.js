@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/controller', function () {
+define('io.ox/office/tk/controller', function () {
 
     'use strict';
 
@@ -50,8 +50,12 @@ define('io.ox/office/controller', function () {
      *      parameter of the setter. Can be omitted for read-only items.
      *      Defaults to a no-op function. Will be executed in the context of
      *      this controller.
+     *
+     * @param {Function} [cancelAction]
+     *  A function that will be executed if a view component triggers a
+     *  'cancel' event.
      */
-    function Controller(definitions) {
+    function Controller(definitions, cancelAction) {
 
         var // definitions for all items, mapped by item key
             allItems = {},
@@ -127,13 +131,17 @@ define('io.ox/office/controller', function () {
         }
 
         /**
-         * The listener function that will listen to 'change' events in all
-         * registered view components.
+         * The listener function that will listen to 'change' and 'cancel'
+         * events in all registered view components.
          */
         function componentListener(event, key, value) {
-            var item = allItems[key];
-            if (item && item.enabled) {
-                item.set(value);
+            if (event.type === 'change') {
+                var item = allItems[key];
+                if (item && item.enabled) {
+                    item.set(value);
+                }
+            } else if ((event.type === 'cancel') && _.isFunction(cancelAction)) {
+                cancelAction();
             }
         }
 
@@ -146,9 +154,10 @@ define('io.ox/office/controller', function () {
          * @param {Object} component
          *  The view component to be registered. Must trigger 'change' events
          *  passing the item key and value as parameters, if a control has been
-         *  activated in the user interface. Must support the method enable()
-         *  taking an item key and state parameter. Must support the method
-         *  update() taking the key and value of an item.
+         *  activated in the user interface, or 'cancel' events to return to
+         *  the application without doing anything. Must support the method
+         *  enable() taking an item key and state parameter. Must support the
+         *  method update() taking the key and value of an item.
          *
          * @returns {Controller}
          *  A reference to this controller instance.
@@ -157,7 +166,7 @@ define('io.ox/office/controller', function () {
             if (!_(components).contains(component)) {
                 components.push(component);
                 updateComponents([component], allItems);
-                component.on('change', componentListener);
+                component.on('change cancel', componentListener);
             }
             return this;
         };
@@ -175,7 +184,7 @@ define('io.ox/office/controller', function () {
          */
         this.unregisterViewComponent = function (component) {
             if (_(components).contains(component)) {
-                component.off('change', componentListener);
+                component.off('change cancel', componentListener);
                 components = _(components).without(component);
             }
             return this;
