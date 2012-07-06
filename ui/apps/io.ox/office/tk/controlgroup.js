@@ -76,16 +76,6 @@ define('io.ox/office/tk/controlgroup',
         // methods ------------------------------------------------------------
 
         /**
-         * Sets the focus to the first enabled control in this group.
-         */
-        this.grabFocus = function () {
-            if (!this.hasFocus()) {
-                this.getNode().children(Utils.ENABLED_SELECTOR).first().focus();
-            }
-            return this;
-        };
-
-        /**
          * Adds a new push button or toggle button to this button group.
          *
          * @param {String} key

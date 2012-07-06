@@ -23,41 +23,13 @@ define('io.ox/office/tk/toolbar',
     'use strict';
 
     var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes,
-
-        // CSS class for visible controls in the tool bar (used for keyboard focus navigation)
-        CONTROL_CLASS = 'io-ox-toolbar-control',
-
-        // CSS selector for focusable controls in the tool bar
-        CONTROL_SELECTOR = '.' + CONTROL_CLASS;
-
-    // static functions =======================================================
-
-    function expandControlOptions(options) {
-        options = options || {};
-        options.classes = _.isString(options.classes) ? (options.classes + ' ' + CONTROL_CLASS) : CONTROL_CLASS;
-        return options;
-    }
+        KeyCodes = Utils.KeyCodes;
 
     // class ToolBar ==========================================================
 
     /**
      * A tool bar is a container of form controls which are organized and
      * displayed as a horizontal bar.
-     *
-     * Internally, the tool bar uses a strict hierarchy of elements with
-     * specific attributes and classes:
-     * 1) The tool bar root node contains another container that serves as
-     *  parent for the actual tool bar controls, and is used to measure the
-     *  width of the space used by all visible controls.
-     * 2) Direct children of this container node are always div elements with
-     *  the Bootstrap class 'btn-group', called 'button groups'.
-     * 3) Button groups will be hidden with the special class 'io-ox-hidden'.
-     * 4) Ancestors of button groups are control elements with the special
-     *  class 'io-ox-toolbar-control', which is used for keyboard focus
-     *  navigation. There may be other control elements which do not have this
-     *  class, e.g. controls in a drop-down menu.
-     * 5) Tool bar controls are disabled with the 'disabled' attribute.
      *
      * Instances of this class trigger various events:
      * * 'change': If a control has been activated. The event handler receives
@@ -98,8 +70,10 @@ define('io.ox/office/tk/toolbar',
          */
         function moveFocus(forward) {
 
-            var // all enabled controls in all visible control groups
-                controls = containerNode.find('> div' + ControlGroup.VISIBLE_SELECTOR + ' ' + CONTROL_SELECTOR + Utils.ENABLED_SELECTOR),
+            var // all visible group objects
+                visibleGroups = _(groups).filter(function (group) { return group.isVisible(); }),
+                // all enabled controls in all visible control groups
+                controls = _(visibleGroups).reduce(function (controls, group) { return controls.add(group.getNode().children(Utils.ENABLED_SELECTOR)); }, $()),
                 // focused control
                 control = Utils.getFocusedControl(controls),
                 // index of focused control in all enabled controls
@@ -143,8 +117,8 @@ define('io.ox/office/tk/toolbar',
          * bar. Calls to the method ToolBar.update() will be forwarded to all
          * registered groups.
          *
-         * @param {ControlGroup} group
-         *  The control group. Must provide a method getNode() returning the
+         * @param {Group} group
+         *  The group object. Must provide a method getNode() returning the
          *  root node of the group. Must provide a method update() taking the
          *  key and value of the control to be updated.
          */
@@ -154,7 +128,7 @@ define('io.ox/office/tk/toolbar',
             // append its root node to this tool bar
             containerNode.append(group.getNode());
 
-            // listen to 'change' and 'cancel' events
+            // forward 'change' and 'cancel' events to the tool bar
             group.on('change cancel', function (event, key, value) {
                 toolbar.trigger(event.type, key, value);
             });
@@ -249,7 +223,7 @@ define('io.ox/office/tk/toolbar',
              *  A reference to this proxy object.
              */
             this.addButton = function (key, options) {
-                group.addButton(key, expandControlOptions(options));
+                group.addButton(key, options);
                 return this;
             };
 
@@ -298,7 +272,7 @@ define('io.ox/office/tk/toolbar',
                 menuNode = $('<table>'),
 
                 // create a new group container for the drop-down group
-                dropDownGroup = new DropDownGroup(key, expandControlOptions(options), menuNode),
+                dropDownGroup = new DropDownGroup(key, _(options || {}).extend({ split: false }), menuNode),
 
                 // prototype for dummy buttons in unused table cells (must contain something to get its correct height)
                 buttonPrototype = Utils.createButton(undefined, { label: '\xa0' }),
@@ -468,7 +442,7 @@ define('io.ox/office/tk/toolbar',
             this.addButton = function (value, options) {
 
                 var // button for the button group
-                    button = Utils.createButton(key, expandControlOptions(options)).attr('data-value', value),
+                    button = Utils.createButton(key, options).attr('data-value', value),
                     // table row taking the new button
                     tableRow = null,
                     // column index for the new button
@@ -545,21 +519,14 @@ define('io.ox/office/tk/toolbar',
                 .registerUpdateHandler(key, updateHandler);
             dropDownGroup
                 .registerActionHandler(menuNode, 'click', 'button', clickHandler)
-                .registerUpdateHandler(key, updateHandler);
-            menuNode.on('keydown keypress keyup', menuNodeKeyHandler);
-
-            // listen to special 'menu' events
-            dropDownGroup
+                .registerUpdateHandler(key, updateHandler)
                 .on('menu:focus', function () {
                     // move focus to first control
                     if (!Utils.containsFocusedControl(menuNode)) {
                         menuNode.find('button').first().focus();
                     }
-                })
-                .on('menu:cancel', function () {
-                    // drop-down menu closed with mouse click, cancel tool bar
-                    toolbar.trigger('cancel');
                 });
+            menuNode.on('keydown keypress keyup', menuNodeKeyHandler);
 
         } // class RadioGroupProxy
 
@@ -571,15 +538,12 @@ define('io.ox/office/tk/toolbar',
                 gridNode = $('<table>').append($('<tr>').append($('<td>').append(Utils.createButton(key, { label: 'A' })))),
 
                 // create a new group container for the drop-down group
-                group = new DropDownGroup(key, _(expandControlOptions(options)).extend({ split: true }), gridNode),
-
-                // default size, used for direct clicks on the action button
-                defaultSize = (options && _.isObject(options.defaultSize)) ? options.defaultSize : { width: 3, height: 3 };
+                group = new DropDownGroup(key, _(options || {}).extend({ split: true }), gridNode);
 
             // private methods ------------------------------------------------
 
             function clickHandler(button) {
-                return defaultSize;
+                return { width: 3, height: 3 };
             }
 
             // initialization -------------------------------------------------
@@ -589,13 +553,8 @@ define('io.ox/office/tk/toolbar',
 
             // register event handlers
             group
-                .registerDefaultHandler(function () { return defaultSize; })
                 .registerActionHandler(gridNode, 'click', 'button', clickHandler)
-                .on('menu:focus', function () { /* move focus to grid */ })
-                .on('menu:cancel', function () {
-                    // drop-down menu closed with mouse click, cancel tool bar
-                    toolbar.trigger('cancel');
-                });
+                .on('menu:focus', function () { /* move focus to grid */ });
 
         } // class SizeChooser
 
