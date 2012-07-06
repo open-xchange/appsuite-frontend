@@ -204,7 +204,8 @@ define('io.ox/office/main',
                 '&folder_id=' + file.folder_id +
                 '&version=' + file.version +
                 '&filename=' + file.filename +
-                '&session=' + ox.session);
+                '&session=' + ox.session +
+                '&uid=' + app.getUniqueId());
         }
 
         /**
@@ -261,6 +262,17 @@ define('io.ox/office/main',
             win.nodes.debugPane.toggle(debugMode);
             // resize editor pane
             windowResizeHandler();
+            if (debugMode) {
+                // In debug mode, stop polling.
+                // Advantage 1: Less debug output in FireBug (http-get)
+                // Advantage 2: Simpulate a slow/lost connection
+                if (operationsTimer)
+                    window.clearTimeout(operationsTimer);
+            }
+            else {
+                app.startOperationsTimer();
+            }
+
         }
 
         /**
@@ -553,7 +565,7 @@ define('io.ox/office/main',
         };
 
         app.sendReceiveOperations = function () {
-
+            var dbgtest = getFilterUrl('xxx');
             // First, check if the server has new ops for me
             $.ajax({
                 type: 'GET',
@@ -612,10 +624,12 @@ define('io.ox/office/main',
         };
 
         app.startOperationsTimer = function (timeout) {
-            var _this = this;
-            var to = timeout || 100; // default - be fast for the demo ;)
-            operationsTimer = window.setTimeout(function () { _this.sendReceiveOperations(); }, to);
 
+            if (!debugMode) {
+                var _this = this;
+                var to = timeout || 1000;
+                operationsTimer = window.setTimeout(function () { _this.sendReceiveOperations(); }, to);
+            }
 
         };
 
@@ -759,7 +773,7 @@ define('io.ox/office/main',
 
         // configure OX application
         initializeApp(options);
-        app.startOperationsTimer(1000); // TODO: If doc operations and updated operations are already merged on the server, the pulling can start later (5000)
+        app.startOperationsTimer();
         return app.setLauncher(launchHandler).setQuit(quitHandler);
 
     } // createApplication()
