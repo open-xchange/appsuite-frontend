@@ -89,11 +89,14 @@ define('io.ox/office/tk/controlgroup',
          *  @param {Boolean} [option.toggle=false]
          *      If set to true, the button represents a boolean value and
          *      toggles its state when clicked.
+         *
+         * @returns {jQuery}
+         *  The new button, as jQuery collection.
          */
         this.addButton = function (key, options) {
 
             var // create the button
-                button = Utils.createButton(key, options).appendTo(this.getNode());
+                button = Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS).appendTo(this.getNode());
 
             // add toggle button marker
             if (options && (options.toggle === true)) {

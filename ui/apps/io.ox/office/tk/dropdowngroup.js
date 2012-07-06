@@ -57,10 +57,10 @@ define('io.ox/office/tk/dropdowngroup',
             split = options && (options.split === true),
 
             // the action button (either triggering a default action, or toggling the drop-down menu)
-            actionButton = Utils.createButton(key, options),
+            actionButton = Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS),
 
             // the drop-down button in split mode (pass 'options' for formatting, but drop any contents)
-            caretButton = split ? Utils.createButton(key, options).empty() : $(),
+            caretButton = split ? Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS).empty() : $(),
 
             // reference to the button that triggers the drop-down menu
             menuButton = split ? caretButton : actionButton,
@@ -86,8 +86,8 @@ define('io.ox/office/tk/dropdowngroup',
                     }
                     triggerMenuButton(fromKeyEvent);
                 } else if (fromKeyEvent) {
-                    // menu already open, trigger 'menu:focus' event manually
-                    self.trigger('menu:focus');
+                    // menu already open, trigger 'menu:enter' event manually
+                    self.trigger('menu:enter');
                 }
             } else if (state !== false) {
                 triggerMenuButton(fromKeyEvent);
@@ -103,10 +103,10 @@ define('io.ox/office/tk/dropdowngroup',
                 window.setTimeout(function () {
                     self.trigger('menu:open');
                     // if menu has been opened by keyboard, trigger a
-                    // 'menu:focus' event requesting clients to move the focus
+                    // 'menu:enter' event requesting clients to move the focus
                     // into the drop-down menu
                     if (menuWithKeyboard) {
-                        self.trigger('menu:focus');
+                        self.trigger('menu:enter');
                     }
                 }, 0);
             } else if (!menuWithKeyboard) {
@@ -226,6 +226,16 @@ define('io.ox/office/tk/dropdowngroup',
             self.hide = function () {
                 this.hideMenu();
                 return baseMethod.call(this);
+            };
+        }());
+
+        // overwrite the registerActionHandler() method; use drop-down menu as default root node
+        (function () {
+            var baseMethod = self.registerActionHandler;
+            self.registerActionHandler = function (node, type, selector, actionHandler) {
+                return _.isString(node) ?
+                    baseMethod.call(this, menuNode, node, type, selector) :
+                    baseMethod.call(this, node, type, selector, actionHandler);
             };
         }());
 

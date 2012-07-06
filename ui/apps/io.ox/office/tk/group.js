@@ -49,8 +49,16 @@ define('io.ox/office/tk/group',
         };
 
         /**
+         * Returns all controls from this group that need to be included into
+         * keyboard focus navigation.
+         */
+        this.getFocusableControls = function () {
+            return groupNode.find(Group.FOCUSABLE_SELECTOR + Utils.ENABLED_SELECTOR);
+        };
+
+        /**
          * Returns whether this group contains the control that is currently
-         * focused.
+         * focused. Searches in all ancestor elements of this group.
          */
         this.hasFocus = function () {
             return Utils.containsFocusedControl(groupNode);
@@ -61,7 +69,7 @@ define('io.ox/office/tk/group',
          */
         this.grabFocus = function () {
             if (!this.hasFocus()) {
-                groupNode.children(Utils.ENABLED_SELECTOR).first().focus();
+                this.getFocusableControls().first().focus();
             }
             return this;
         };
@@ -237,6 +245,20 @@ define('io.ox/office/tk/group',
      * @constant
      */
     Group.VISIBLE_SELECTOR = ':not(.' + Group.HIDDEN_CLASS + ')';
+
+    /**
+     * CSS class for focusable controls.
+     *
+     * @constant
+     */
+    Group.FOCUSABLE_CLASS = 'io-ox-focusable';
+
+    /**
+     * CSS selector for focusable controls.
+     *
+     * @constant
+     */
+    Group.FOCUSABLE_SELECTOR = '.' + Group.FOCUSABLE_CLASS;
 
     // exports ================================================================
 
