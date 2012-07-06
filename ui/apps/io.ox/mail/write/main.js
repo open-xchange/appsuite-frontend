@@ -23,9 +23,10 @@ define.async('io.ox/mail/write/main',
      'io.ox/core/tk/upload',
      'io.ox/mail/model',
      'io.ox/mail/write/view-main',
+     'settings!io.ox/mail',
      'gettext!io.ox/mail/mail',
      'less!io.ox/mail/style.css',
-     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, upload, MailModel, WriteView, gt) {
+     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, upload, MailModel, WriteView, settings, gt) {
 
     'use strict';
 
@@ -76,7 +77,7 @@ define.async('io.ox/mail/write/main',
             editorHash = {},
             currentSignature = '',
             editorMode,
-            defaultEditorMode = config.get('gui.mail.formatmessage', 'TEXT/PLAIN') === 'TEXT/PLAIN' ? 'text' : 'html',
+            defaultEditorMode = settings.get('messageFormat'),
             mailState,
             composeMode,
             view,
@@ -117,7 +118,7 @@ define.async('io.ox/mail/write/main',
             mailState = app.STATES.CLEAN;
         };
 
-        view.signatures = config.get('gui.mail.signatures', []);
+        view.signatures = config.get('gui.mail.signatures', []); // removed from mail setting
 
         app.setSignature = function (e) {
 
@@ -442,6 +443,10 @@ define.async('io.ox/mail/write/main',
             mail.mode = mail.mode || 'compose';
             mail.format = mail.format || defaultEditorMode || 'text';
             mail.initial = mail.initial || false;
+
+            //config settings
+            mail.data.vcard = settings.get('appendVcard');
+
             // call setters
             var data = mail.data;
             this.setSubject(data.subject);

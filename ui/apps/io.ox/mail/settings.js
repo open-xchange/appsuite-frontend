@@ -108,8 +108,8 @@ function (ext, View, Model, gt, settings, api) {
                                 that.createControlGroupLabel({text: gt('Format E-Mails as:')}),
                                 that.createControlsWrapper().append(
                                     that.createRadioButton({property: 'messageFormat', label: gt('HTML'), value: 'html'}),
-                                    that.createRadioButton({property: 'messageFormat', label: gt('Plain text'), value: 'plain' }),
-                                    that.createRadioButton({property: 'messageFormat', label: gt('HTML and Plain text'), value: 'both'})
+                                    that.createRadioButton({property: 'messageFormat', label: gt('Plain text'), value: 'text' }),
+                                    that.createRadioButton({property: 'messageFormat', label: gt('HTML and Plain text'), value: 'TEXT/PLAIN'})
                                 )
                             ),
 
@@ -164,8 +164,8 @@ function (ext, View, Model, gt, settings, api) {
                                      this.createCheckbox({property: 'allowHtmlMessages', label: gt('Allow html formatted E-Mails')}),
                                      this.createCheckbox({property: 'allowHtmlImages', label: gt('Block pre-loading of externally linked images')}),
                                      this.createCheckbox({property: 'displayEmomticons', label: gt('Display emoticons as graphics in text E-Mails')}),
-                                     this.createCheckbox({property: 'isColorQuoted', label: gt('Color quoted lines')}),
-                                     this.createCheckbox({property: 'showName', label: gt('Show name instead of E-Mail address in To and Cc fields')})
+                                     this.createCheckbox({property: 'isColorQuoted', label: gt('Color quoted lines')})
+                                     //this.createCheckbox({property: 'showName', label: gt('Show name instead of E-Mail address in To and Cc fields')})
                                  )
                             ),
 
