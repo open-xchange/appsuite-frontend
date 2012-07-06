@@ -111,6 +111,18 @@ define('io.ox/calendar/edit/view-main',
         filldate.add(1000 * 60 * 30); //half hour
     }
 
+    var typeaheadHours = {
+        source: hours_typeahead,
+        items: 48,
+        menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
+        sorter: function (items) {
+            items = _(items).sortBy(function (item) {
+                var pd = dateAPI.Local.parse(item, dateAPI.TIME);
+                return pd.getTime();
+            });
+            return items;
+        }
+    };
 
     /// strings end
 
@@ -226,8 +238,11 @@ define('io.ox/calendar/edit/view-main',
             //init date picker
             self.$('.startsat-date').datepicker({format: dateAPI.DATE});
             self.$('.endsat-date').datepicker({format: dateAPI.DATE});
-            self.$('.startsat-time').typeahead({ source: hours_typeahead, items: 24 });
-            self.$('.endsat-time').typeahead({ source: hours_typeahead, items: 24 });
+            self.$('.startsat-time').typeahead(typeaheadHours);
+            self.$('.endsat-time').typeahead(typeaheadHours);
+
+
+            //self.subviews.recurrence_option = new recurrenceModule.OptionView({model: self.model});
 
 
             var participants = new participantsModule.Collection(self.model.get('participants'));
@@ -275,9 +290,13 @@ define('io.ox/calendar/edit/view-main',
             if (isFullTime) {
                 this.$('.startsat-time').hide();
                 this.$('.endsat-time').hide();
+                this.$('.startsat-timezone').hide();
+                this.$('.endsat-timezone').hide();
             } else {
                 this.$('.startsat-time').show();
                 this.$('.endsat-time').show();
+                this.$('.startsat-timezone').show();
+                this.$('.endsat-timezone').show();
             }
         },
         onSave: function () {
