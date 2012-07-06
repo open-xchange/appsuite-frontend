@@ -721,7 +721,8 @@ define('io.ox/office/main',
             applyOperation: function (operation) {
                 this.node.append($('<p>').text(JSON.stringify(operation)));
                 this.node.scrollTop(this.node.get(0).scrollHeight);
-            }
+            },
+            applyOperations: $.noop
         };
 
         // build debug table for plain-text editor and operations output console
@@ -741,11 +742,13 @@ define('io.ox/office/main',
             editor.on('operation', function (event, operation) {
                 // buffer operations for sending them later on...
                 operationsBuffer.push(operation);
+                app.applyOperations(operation, editor);
+                /*
                 _(editors).each(function (targetEditor) {
                     if (editor !== targetEditor) {
                         targetEditor.applyOperation(operation);
                     }
-                });
+                });*/
             });
         });
 
