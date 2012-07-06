@@ -484,8 +484,7 @@ define('io.ox/office/main',
                 importOperations(response)
                 .done(function (operations) {
                     editor.enableUndo(false);
-                    editor.applyOperations(operations, false, true);
-                    operationsBuffer = [];  // TODO: Apply with notify=false, and apply to other editor(s) directly, instead of filling up the array in the notifications!
+                    app.applyOperations(operations);
                     editor.enableUndo(true);
                     def.resolve();
                 })
