@@ -1273,65 +1273,116 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
                 selection.adjust();
 
-                var endPosition = _.copy(selection.endPaM.oxoPosition, true),
-                    startposLength = selection.startPaM.oxoPosition.length - 1,
-                    endposLength = selection.endPaM.oxoPosition.length - 1,
-                    isTable = false;
+                if (this.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                    // Only one paragraph concerned from deletion.
+                    this.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
 
-                // 1) delete selected part or rest of para in first para (pos to end)
-                if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
-                    isTable = this.isPositionInTable(selection.startPaM.oxoPosition);
-                    endPosition = _.copy(selection.startPaM.oxoPosition);
-                    if (isTable) {
-                        var localEndPosition = _.copy(endPosition);
-                        localEndPosition.pop();
-                        this.deleteFollowingParagraphsInCell(localEndPosition);
-                        localEndPosition.pop();
-                        this.deleteFollowingCellsInTable(localEndPosition);
-                    }
-                    endPosition[startposLength] = this.getParagraphLength(endPosition);
-                }
-                this.deleteText(selection.startPaM.oxoPosition, endPosition);
+                } else if (this.isSameParagraphLevel(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                    // The included paragraphs are neighbours.
 
+                    var endPosition = _.copy(selection.startPaM.oxoPosition, true),
+                        startposLength = selection.startPaM.oxoPosition.length - 1,
+                        endposLength = selection.endPaM.oxoPosition.length - 1;
 
-                // 2) delete completly slected paragraphs completely
-                for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
-                    // startPaM.oxoPosition[0]+1 instead of i, because we always remove a paragraph
-                    var startPosition = [];
-                    startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
-                    isTable = this.isPositionInTable(startPosition);
-                    if (isTable) {
-                        this.deleteTable(startPosition);
-                    } else {
-                        this.deleteParagraph(startPosition);
-                    }
-                }
+                    // 1) delete selected part or rest of para in first para (pos to end)
+                    endPosition[endposLength] = this.getParagraphLength(endPosition);
+                    this.deleteText(selection.startPaM.oxoPosition, endPosition);
 
-                // 3) delete selected part in last para (start to pos) and merge first and last para
-                if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
+                    // 2) delete completly slected paragraphs completely
+                    for (var i = selection.startPaM.oxoPosition[startposLength - 1] + 1; i < selection.endPaM.oxoPosition[endposLength - 1]; i++) {
+                        var startPosition = _.copy(selection.startPaM.oxoPosition, true);
+                        startPosition[startposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1] + 1;
 
-                    var startPosition = _.copy(selection.endPaM.oxoPosition, true);
-                    startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
-                    startPosition[endposLength] = 0;
-                    endPosition = _.copy(startPosition, true);
-                    endPosition[endposLength] = selection.endPaM.oxoPosition[endposLength];
+                        // Is the new dom position a table or a paragraph or whatever? Special handling for tables required
+                        startPosition.pop();
+                        var isTable = this.getDOMPosition(startPosition).node.nodeName === 'TABLE' ? true : false;
 
-                    isTable = this.isPositionInTable(endPosition);
-
-                    this.deleteText(startPosition, endPosition);
-
-                    if (isTable) {
-                        // delete all previous cells and all previous paragraphs in this cell!
-                        endPosition.pop();
-                        this.deletePreviousParagraphsInCell(endPosition);
-                        endPosition.pop();
-                        this.deletePreviousCellsInTable(endPosition);
+                        if (isTable) {
+                            this.deleteTable(startPosition);
+                        } else {
+                            this.deleteParagraph(startPosition);
+                        }
                     }
 
-                    if (! isTable) {
+                    // 3) delete selected part in last para (start to pos) and merge first and last para
+                    if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
+                        var startPosition = _.copy(selection.endPaM.oxoPosition, true);
+                        startPosition[endposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1] + 1;
+                        startPosition[endposLength] = 0;
+                        endPosition = _.copy(startPosition, true);
+                        endPosition[startposLength] = selection.endPaM.oxoPosition[endposLength];
+                        this.deleteText(startPosition, endPosition);
+
                         var mergeselection = _.copy(selection.startPaM.oxoPosition);
                         mergeselection.pop();
                         this.mergeParagraph(mergeselection);
+                    }
+
+                } else {
+
+                    // The included paragraphs are not neighbours. For example one paragraph top level and one in table.
+                    // Should this be supported? How about tables in tables?
+                    // This probably works not reliable for tables in tables.
+
+                    var endPosition = _.copy(selection.endPaM.oxoPosition, true),
+                        startposLength = selection.startPaM.oxoPosition.length - 1,
+                        endposLength = selection.endPaM.oxoPosition.length - 1,
+                        isTable = false;
+
+                    // 1) delete selected part or rest of para in first para (pos to end)
+                    if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
+                        isTable = this.isPositionInTable(selection.startPaM.oxoPosition);
+                        endPosition = _.copy(selection.startPaM.oxoPosition);
+                        if (isTable) {
+                            var localEndPosition = _.copy(endPosition);
+                            localEndPosition.pop();
+                            this.deleteFollowingParagraphsInCell(localEndPosition);
+                            localEndPosition.pop();
+                            this.deleteFollowingCellsInTable(localEndPosition);
+                        }
+                        endPosition[startposLength] = this.getParagraphLength(endPosition);
+                    }
+                    this.deleteText(selection.startPaM.oxoPosition, endPosition);
+
+                    // 2) delete completly slected paragraphs completely
+                    for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
+                        // startPaM.oxoPosition[0]+1 instead of i, because we always remove a paragraph
+                        var startPosition = [];
+                        startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
+                        isTable = this.isPositionInTable(startPosition);
+                        if (isTable) {
+                            this.deleteTable(startPosition);
+                        } else {
+                            this.deleteParagraph(startPosition);
+                        }
+                    }
+
+                    // 3) delete selected part in last para (start to pos) and merge first and last para
+                    if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
+
+                        var startPosition = _.copy(selection.endPaM.oxoPosition, true);
+                        startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
+                        startPosition[endposLength] = 0;
+                        endPosition = _.copy(startPosition, true);
+                        endPosition[endposLength] = selection.endPaM.oxoPosition[endposLength];
+
+                        isTable = this.isPositionInTable(endPosition);
+
+                        this.deleteText(startPosition, endPosition);
+
+                        if (isTable) {
+                            // delete all previous cells and all previous paragraphs in this cell!
+                            endPosition.pop();
+                            this.deletePreviousParagraphsInCell(endPosition);
+                            endPosition.pop();
+                            this.deletePreviousCellsInTable(endPosition);
+                        }
+
+                        if (! isTable) {
+                            var mergeselection = _.copy(selection.startPaM.oxoPosition);
+                            mergeselection.pop();
+                            this.mergeParagraph(mergeselection);
+                        }
                     }
                 }
 
@@ -1385,47 +1436,6 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
             this.applyOperation(newOperation, true, true);
         };
 
-        this.isSameParagraph = function (posA, posB) {
-            // Assuming that the position is complete, only the last parameter
-            // is allowed to be different.
-
-            var isSamePara = true;
-
-            if (posA.length === posB.length) {
-                var max = posA.length - 1;  // excluding position
-                for (var i = 0; i < max; i++) {
-                    if (posA[i] !== posB[i]) {
-                        isSamePara = false;
-                        break;
-                    }
-                }
-            } else {
-                isSamePara = false;
-            }
-
-            return isSamePara;
-        };
-
-        this.isSameParagraphLevel = function (posA, posB) {
-            // Assuming that the position is complete, only the two last parameters
-            // are allowed to be different.
-            var isSameLevel = true;
-
-            if (posA.length === posB.length) {
-                var max = posA.length - 2;  // excluding position and paragraph
-                for (var i = 0; i < max; i++) {
-                    if (posA[i] !== posB[i]) {
-                        isSameLevel = false;
-                        break;
-                    }
-                }
-            } else {
-                isSameLevel = false;
-            }
-
-            return isSameLevel;
-        };
-
         this.setAttribute = function (attr, value, startPosition, endPosition) {
 
             var para,
@@ -1472,7 +1482,6 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                             // Is the new dom position a table or a paragraph or whatever? Special handling for tables required
                             // Removing position temporarely
                             var pos = localstartPosition.pop();
-                            var stringHelper = this.getDOMPosition(localstartPosition).node.nodeName;
                             var isTable = this.getDOMPosition(localstartPosition).node.nodeName === 'TABLE' ? true : false;
 
                             if (isTable) {
@@ -1496,9 +1505,9 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
 
                     } else {
 
-                        // The included paragraphs are not neighbours. For example one top level and one in table.
-                        // should this be supported? How about tables in tables?
-                        // This probably works not reliable
+                        // The included paragraphs are not neighbours. For example one paragraph top level and one in table.
+                        // Should this be supported? How about tables in tables?
+                        // This probably works not reliable for tables in tables.
 
                         // 1) selected part or rest of para in first para (pos to end)
                         var startposLength = selection.startPaM.oxoPosition.length - 1,
@@ -1654,6 +1663,47 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
                     break;
             }
             return text;
+        };
+
+        this.isSameParagraph = function (posA, posB) {
+            // Assuming that the position is complete, only the last parameter
+            // is allowed to be different.
+
+            var isSamePara = true;
+
+            if (posA.length === posB.length) {
+                var max = posA.length - 1;  // excluding position
+                for (var i = 0; i < max; i++) {
+                    if (posA[i] !== posB[i]) {
+                        isSamePara = false;
+                        break;
+                    }
+                }
+            } else {
+                isSamePara = false;
+            }
+
+            return isSamePara;
+        };
+
+        this.isSameParagraphLevel = function (posA, posB) {
+            // Assuming that the position is complete, only the two last parameters
+            // are allowed to be different.
+            var isSameLevel = true;
+
+            if (posA.length === posB.length) {
+                var max = posA.length - 2;  // excluding position and paragraph
+                for (var i = 0; i < max; i++) {
+                    if (posA[i] !== posB[i]) {
+                        isSameLevel = false;
+                        break;
+                    }
+                }
+            } else {
+                isSameLevel = false;
+            }
+
+            return isSameLevel;
         };
 
         // ==================================================================
