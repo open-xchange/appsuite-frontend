@@ -16,10 +16,10 @@ define('io.ox/office/tk/toolbar',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/group',
      'io.ox/office/tk/controlgroup',
-     'io.ox/office/tk/dropdowngroup',
      'io.ox/office/tk/buttongridgroup',
+     'io.ox/office/tk/sizechooser',
      'less!io.ox/office/tk/toolbar.css'
-    ], function (Events, Utils, Group, ControlGroup, DropDownGroup, ButtonGridGroup) {
+    ], function (Events, Utils, Group, ControlGroup, ButtonGridGroup, SizeChooser) {
 
     'use strict';
 
@@ -405,30 +405,6 @@ define('io.ox/office/tk/toolbar',
 
         } // class RadioGroupProxy
 
-        // class SizeChooser --------------------------------------------------
-
-        function createSizeChooser(key, options) {
-
-            var // create a new group container for the drop-down group
-                group = new ButtonGridGroup(key, options);
-
-            // private methods ------------------------------------------------
-
-            function clickHandler(button) {
-                return { width: 3, height: 3 };
-            }
-
-            // initialization -------------------------------------------------
-
-            // register the group object at this tool bar
-            registerGroup(group);
-
-            //group.setGridSize(10, 10);
-
-            // register event handlers
-
-        } // class SizeChooser
-
         // methods ------------------------------------------------------------
 
         /**
@@ -512,7 +488,7 @@ define('io.ox/office/tk/toolbar',
         };
 
         this.addSizeChooser = function (key, options) {
-            createSizeChooser(key, options);
+            registerGroup(new SizeChooser(key, options));
             return this;
         };
 
