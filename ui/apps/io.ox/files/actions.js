@@ -71,7 +71,7 @@ define("io.ox/files/actions",
     new Action('io.ox/files/actions/office', {
         id: 'office',
         requires: function (e) {
-            return e.collection.has('one') && /\.(odt)$/i.test(e.context.data.filename);
+            return e.collection.has('one') && /\.(odt|docx)$/i.test(e.context.data.filename);
         },
         action: function (data) {
             ox.launch('io.ox/office/main', { file: data }).done(function () {
