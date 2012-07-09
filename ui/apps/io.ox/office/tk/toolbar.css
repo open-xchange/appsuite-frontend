@@ -288,4 +288,21 @@
             }
         }
     }
+
+    /* ===================================================================== */
+    /* BORDERLESS MODE                                                       */
+    /* ===================================================================== */
+
+    &.no-borders {
+
+        /* buttons ========================================================= */
+
+        .btn {
+            /* reserve space for border, needed for focus display */
+            border: 1px solid transparent;
+            background: none;
+            .border-radius(0);
+            .box-shadow(none);
+        }
+    }
 }
