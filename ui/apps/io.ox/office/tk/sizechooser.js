@@ -40,17 +40,25 @@ define('io.ox/office/tk/sizechooser',
      *  @param {Number} [options.minWidth=1]
      *      Minimum number of columns allowed to choose. Must be a positive
      *      integer. If omitted, will be set to 1.
+     *  @param {Number} [options.minHeight=1]
+     *      Minimum number of rows allowed to choose. Must be a positive
+     *      integer. If omitted, will be set to 1.
      *  @param {Number} [options.maxWidth]
      *      Maximum number of columns allowed to choose. Must be a positive
      *      integer, must be greater than or equal to options.minWidth. If
      *      omitted, the maximum is only limited by available screen space.
-     *  @param {Number} [options.minHeight=1]
-     *      Minimum number of rows allowed to choose. Must be a positive
-     *      integer. If omitted, will be set to 1.
      *  @param {Number} [options.maxHeight]
      *      Maximum number of rows allowed to choose. Must be a positive
      *      integer, must be greater than or equal to options.minHeight. If
      *      omitted, the maximum is only limited by available screen space.
+     *  @param {Number} [options.initialWidth]
+     *      Number of rows that will be shown initially, when the drop-down
+     *      grid will be opened. Must be a positive integer. If omitted, will
+     *      be set to options.minWidth.
+     *  @param {Number} [options.initialHeight]
+     *      Number of columns that will be shown initially, when the drop-down
+     *      grid will be opened. Must be a positive integer. If omitted, will
+     *      be set to options.minHeight.
      */
     function SizeChooser(key, options) {
 
@@ -73,9 +81,11 @@ define('io.ox/office/tk/sizechooser',
 
             // grid size limits
             minWidth = (options && _.isNumber(options.minWidth) && (options.minWidth >= 1)) ? options.minWidth : 1,
-            maxWidth = (options && _.isNumber(options.maxWidth) && (options.maxWidth >= minWidth)) ? options.maxWidth : undefined,
             minHeight = (options && _.isNumber(options.minHeight) && (options.minHeight >= 1)) ? options.minHeight : 1,
-            maxHeight = (options && _.isNumber(options.maxHeight) && (options.maxHeight >= minHeight)) ? options.maxHeight : undefined;
+            maxWidth = (options && _.isNumber(options.maxWidth) && (options.maxWidth >= minWidth)) ? options.maxWidth : undefined,
+            maxHeight = (options && _.isNumber(options.maxHeight) && (options.maxHeight >= minHeight)) ? options.maxHeight : undefined,
+            initWidth = (options && _.isNumber(options.initialWidth) && (options.initialWidth >= minWidth)) ? options.initialWidth : minWidth,
+            initHeight = (options && _.isNumber(options.initialHeight) && (options.initialHeight >= minHeight)) ? options.initialHeight : minHeight;
 
         // private methods ----------------------------------------------------
 
@@ -98,8 +108,8 @@ define('io.ox/office/tk/sizechooser',
                 // all row elements in the grid
                 rows = gridNode.children();
 
-            if (width < minWidth) { width = minWidth; } else if (width > maxWidth) { width = maxWidth; }
-            if (height < minHeight) { height = minHeight; } else if (height > maxHeight) { height = maxHeight; }
+            if (width < minWidth) { width = minWidth; } else if (_.isNumber(maxWidth) && (width > maxWidth)) { width = maxWidth; }
+            if (height < minHeight) { height = minHeight; } else if (_.isNumber(maxHeight) && (height > maxHeight)) { height = maxHeight; }
 
             // add/remove columns
             if (width < gridSize.width) {
@@ -222,7 +232,7 @@ define('io.ox/office/tk/sizechooser',
         // register event handlers
         this.registerActionHandler(gridButton, 'click', getGridSize)
             .on('menu:open', function () {
-                setGridSize(minWidth, minHeight);
+                setGridSize(initWidth, initHeight);
                 enableGridMouseMoveHandling(true);
             })
             .on('menu:enter', function () { gridButton.focus(); });
