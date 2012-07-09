@@ -1,609 +1,559 @@
-# translation of de_DE.po to deutsch
+# translation of ox.de_DE.po to deutsch
 # translation of ox.de_DE.po to
-# Antje Faber <antje.faber@open-xchange.com>, 2008, 2009, 2010, 2011.
+# Antje Faber <antje.faber@open-xchange.com>, 2008, 2009, 2010, 2011, 2012.
 # Viktor Pracht <Viktor.Pracht@open-xchange.org>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: de_DE\n"
-"POT-Creation-Date: Mon Jan 16 2012 14:30:29 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2011-12-05 09:45+0100\n"
+"Project-Id-Version: ox.de_DE\n"
+"POT-Creation-Date: Mon Jul 09 2012 14:46:26 GMT+0200 (CEST)\n"
+"PO-Revision-Date: 2012-07-09 15:13+0200\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: Japanese <kde-i18n-de@kde.org>\n"
-"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 1.0\n"
 
-#: apps/io.ox/calendar/util.js:37
-msgid "Absent"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:602
-msgid "Anniversary"
-msgstr ""
-
-#: apps/io.ox/core/main.js:93
-msgid "Applications"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:27 apps/io.ox/core/i18n.js:28
-msgid "April"
-msgstr "April"
-
-#: apps/io.ox/contacts/edit/view-form.js:561
-msgid "Assistant name"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:28 apps/io.ox/core/i18n.js:29
-msgid "August"
-msgstr "August"
-
-#: apps/io.ox/contacts/edit/view-form.js:183
-#: apps/io.ox/contacts/view-detail.js:283
-msgid "Birthday"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:537
-msgid "Branches"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:543
-#, fuzzy
-msgid "Business category"
-msgstr "Geschäftlich"
-
-#: apps/io.ox/contacts/edit/view-form.js:257
-msgid "Cellphone"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:263
-msgid "Cellphone (2nd)"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:372
-#: apps/io.ox/contacts/edit/view-form.js:412
-#: apps/io.ox/contacts/edit/view-form.js:458
-msgid "City"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:531
-msgid "Commercial register"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:495
-msgid "Company"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:386
-#: apps/io.ox/contacts/edit/view-form.js:426
-#: apps/io.ox/contacts/edit/view-form.js:472
-msgid "Country"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:213
-#, fuzzy
-msgid "Day"
-msgstr "Mai"
-
-#: apps/io.ox/calendar/util.js:29 apps/io.ox/core/i18n.js:30
-msgid "December"
-msgstr "Dezember"
-
-#: apps/io.ox/contacts/edit/view-form.js:501
-#: apps/io.ox/contacts/view-detail.js:220
-#, fuzzy
-msgid "Department"
-msgstr "Anlage"
-
-#: apps/io.ox/contacts/edit/view-form.js:156
-msgid "Display name"
-msgstr ""
-
-#: apps/io.ox/contacts/view-detail.js:152
-msgid "Distribution list"
-msgstr ""
-
-#: apps/io.ox/contacts/view-detail.js:260
-#: apps/io.ox/contacts/view-detail.js:263
-#: apps/io.ox/contacts/view-detail.js:267
-msgid "E-Mail"
-msgstr "E-Mail"
-
-#: apps/io.ox/contacts/edit/view-form.js:113
-#, fuzzy
-msgid "E-Mail 1"
-msgstr "E-Mail 2"
-
-#: apps/io.ox/calendar/util.js:253
-msgid "Each %s Day"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:258
-msgid "Each %s weeks on %s"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:273
-msgid "Each %s. %s"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:507
-msgid "Employee type"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:208
-#, fuzzy
-msgid "Fax business"
-msgstr "Geschäftlich"
-
-#: apps/io.ox/contacts/edit/view-form.js:250
-msgid "Fax home"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:277
-msgid "Fax other"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:26 apps/io.ox/core/i18n.js:27
-msgid "February"
-msgstr "Februar"
-
-#: apps/io.ox/contacts/edit/view-form.js:144
-msgid "First name"
-msgstr ""
-
-#: html/core_body.html:64
-msgid "Forgot your password?"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:37
-msgid "Free"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:22 apps/io.ox/calendar/util.js:232
-#: apps/io.ox/core/i18n.js:21
-msgid "Friday"
-msgstr "Freitag"
-
-#: apps/io.ox/core/i18n.js:121
-msgid "Good evening"
-msgstr ""
-
-#: apps/io.ox/core/i18n.js:119
-msgid "Good morning"
-msgstr ""
-
-#: apps/io.ox/core/i18n.js:123
-msgid "Hello"
-msgstr ""
-
-#: apps/io.ox/core/main.js:79
-msgid "Help"
-msgstr ""
-
-#: apps/io.ox/contacts/view-detail.js:230
-msgid "Home"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:549
-msgid "Info"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:326
-msgid "Instant messenger 1"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:333
-msgid "Instant messenger 2"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:26 apps/io.ox/core/i18n.js:27
-msgid "January"
-msgstr "Januar"
-
-#: apps/io.ox/calendar/util.js:28 apps/io.ox/core/i18n.js:29
-msgid "July"
-msgstr "Juli"
-
-#: apps/io.ox/calendar/util.js:27 apps/io.ox/core/i18n.js:28
-msgid "June"
-msgstr "Juni"
-
-#: html/core_body.html:78
-msgid "Languages"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:150
-msgid "Last name"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:555
-msgid "Manager name"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:26 apps/io.ox/core/i18n.js:27
-msgid "March"
-msgstr "März"
-
-#: apps/io.ox/contacts/edit/view-form.js:572
-msgid "Marital status"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:27 apps/io.ox/core/i18n.js:28
-msgid "May"
-msgstr "Mai"
-
-#: apps/io.ox/contacts/view-detail.js:247
-#: apps/io.ox/contacts/view-detail.js:248
-msgid "Mobile"
-msgstr "Mobiltelefon"
-
-#: apps/io.ox/calendar/util.js:21 apps/io.ox/calendar/util.js:220
-#: apps/io.ox/core/i18n.js:20
-msgid "Monday"
-msgstr "Montag"
-
-#: apps/io.ox/contacts/edit/view-form.js:176
-msgid "Nickname"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:590
-msgid "Note"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:29 apps/io.ox/core/i18n.js:30
-msgid "November"
-msgstr "November"
-
-#: apps/io.ox/contacts/edit/view-form.js:578
-msgid "Number of children"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:513
-msgid "Number of employees"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:29 apps/io.ox/core/i18n.js:30
-msgid "October"
-msgstr "Oktober"
-
-#: apps/io.ox/calendar/util.js:268
-msgid "On %s %s each %s. months"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:267
-msgid "On %s %s every month"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:275
-msgid "On %s %s in %s"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:264
-msgid "On %s. day every %s. month"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:263
-msgid "On %s. day every month"
-msgstr ""
-
-#: html/core_body.html:45
+#: html/core_body.html:43
+msgid "User name"
+msgstr "Benutzername"
+
+#: html/core_body.html:49
 msgid "Password"
 msgstr "Passwort"
 
-#: apps/io.ox/contacts/edit/view-form.js:229
-msgid "Phone (Company)"
-msgstr ""
-
-#: apps/io.ox/contacts/view-detail.js:243
-#: apps/io.ox/contacts/view-detail.js:244
-msgid "Phone (business)"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:243
-msgid "Phone (home 2nd)"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:236
-msgid "Phone (home)"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:270
-msgid "Phone (other)"
-msgstr ""
-
-#: apps/io.ox/contacts/view-detail.js:245
-#: apps/io.ox/contacts/view-detail.js:246
-#, fuzzy
-msgid "Phone (private)"
-msgstr "Privat"
-
-#: apps/io.ox/contacts/edit/view-form.js:489
-#: apps/io.ox/contacts/view-detail.js:221
-msgid "Position"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:365
-#: apps/io.ox/contacts/edit/view-form.js:405
-#: apps/io.ox/contacts/edit/view-form.js:451
-msgid "Postal code"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:483
-#: apps/io.ox/contacts/view-detail.js:222
-msgid "Profession"
-msgstr ""
-
-#: apps/io.ox/core/main.js:81
-msgid "Refresh"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:36
-msgid "Reserved"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:437
-msgid "Room number"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:519
-msgid "Sales volume"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:23 apps/io.ox/calendar/util.js:235
-#: apps/io.ox/core/i18n.js:22
-msgid "Saturday"
-msgstr "Samstag"
-
-#: apps/io.ox/contacts/edit/view-form.js:162
-msgid "Second name"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:28 apps/io.ox/core/i18n.js:29
-msgid "September"
-msgstr "September"
-
-#: html/core_body.html:52
+#: html/core_body.html:56
 msgid "Sign in"
-msgstr ""
+msgstr "Anmelden"
 
-#: apps/io.ox/core/main.js:75
-msgid "Sign out"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:584
-msgid "Spouse name"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:379
-#: apps/io.ox/contacts/edit/view-form.js:419
-#: apps/io.ox/contacts/edit/view-form.js:465
-msgid "State"
-msgstr ""
-
-#: html/core_body.html:60
-#, fuzzy
+#: html/core_body.html:64
 msgid "Stay signed in"
 msgstr "Angemeldet bleiben"
 
-#: apps/io.ox/contacts/edit/view-form.js:358
-#: apps/io.ox/contacts/edit/view-form.js:398
-#: apps/io.ox/contacts/edit/view-form.js:444
-msgid "Street"
-msgstr ""
+#: html/core_body.html:68
+msgid "Forgot your password?"
+msgstr "Passwort vergessen?"
 
-#: apps/io.ox/contacts/edit/view-form.js:169
-msgid "Suffix"
-msgstr ""
+#: html/core_body.html:82
+msgid "Languages"
+msgstr "Sprachen"
 
-#: apps/io.ox/calendar/util.js:21 apps/io.ox/calendar/util.js:217
-#: apps/io.ox/core/i18n.js:20
+#: apps/io.ox/mail/write/main.js:744
+msgid "Do you really want to cancel editing this mail?"
+msgstr "Wollen Sie die Bearbeitung der E-Mail wirklich abbrechen?"
+
+#: apps/io.ox/contacts/distrib/main.js:112
+#: apps/io.ox/contacts/edit/main.js:125 apps/io.ox/mail/write/main.js:745
+msgid "Lose changes"
+msgstr "Änderungen verwerfen"
+
+#: apps/io.ox/mail/write/main.js:746
+msgid "Save as draft"
+msgstr "Als Entwurf speichern"
+
+#: apps/io.ox/contacts/distrib/main.js:111
+#: apps/io.ox/contacts/edit/main.js:124 apps/io.ox/files/actions.js:231
+#: apps/io.ox/mail/write/main.js:747
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: apps/io.ox/mail/settings.js:40
+msgid "Common"
+msgstr "Allgemein"
+
+#: apps/io.ox/mail/settings.js:64
+msgid "Compose"
+msgstr "Verfassen"
+
+#: apps/io.ox/mail/settings.js:129
+msgid "Display"
+msgstr "Anzeigen"
+
+#: apps/io.ox/mail/settings.js:170
+msgid "Signatures"
+msgstr "Signaturen"
+
+#: apps/io.ox/mail/settings.js:220
+msgid "Filter"
+msgstr "Filter"
+
+#: apps/io.ox/mail/settings.js:254
+msgid "Vacation Notice"
+msgstr "Abwesenheit"
+
+#: apps/io.ox/files/main.js:49
+msgid "Files"
+msgstr "Dateien"
+
+#: apps/io.ox/files/main.js:165 apps/io.ox/files/main.js:184
+msgid "Uploading ..."
+msgstr "Hochladen..."
+
+#: apps/io.ox/files/main.js:230
+msgid "This folder has publications"
+msgstr "Dieser Ordner enthält Veröffentlichungen"
+
+#: apps/io.ox/files/actions.js:100 apps/io.ox/files/actions.js:153
+msgid ""
+"Are you really sure about your decision? Are you aware of all consequences "
+"you have to live with?"
+msgstr ""
+"Sind Sie sich wirklich sicher? Sie sollten diese Entscheidung nur treffen, "
+"wenn Sie "
+"sich über die Folgen im Klaren sind. "
+
+#: apps/io.ox/files/actions.js:101 apps/io.ox/files/actions.js:154
+msgid "Shut up and delete it!"
+msgstr "Nicht mehr nachfragen. Löschen. "
+
+#: apps/io.ox/files/actions.js:102 apps/io.ox/files/actions.js:155
+msgid "No, rather not"
+msgstr "Nein, lieber nicht"
+
+#: apps/io.ox/files/actions.js:172
+msgid "Upload"
+msgstr "Hochladen"
+
+#: apps/io.ox/files/actions.js:179
+msgid "Share"
+msgstr "Freigeben"
+
+#: apps/io.ox/files/actions.js:186
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: apps/io.ox/files/actions.js:193 apps/io.ox/files/actions.js:242
+msgid "Open"
+msgstr "Öffnen"
+
+#: apps/io.ox/files/actions.js:200 apps/io.ox/files/actions.js:249
+msgid "Download"
+msgstr "Download"
+
+#: apps/io.ox/files/actions.js:207
+msgid "Send by E-Mail"
+msgstr "Per E-Mail versenden"
+
+#: apps/io.ox/files/actions.js:214
+msgid "Delete"
+msgstr "Löschen"
+
+#: apps/io.ox/contacts/create-view.js:30
+#: apps/io.ox/contacts/distrib/create-dist-view.js:37
+#: apps/io.ox/files/actions.js:223 apps/io.ox/files/views/create.js:190
+msgid "Save"
+msgstr "Speichern"
+
+#: apps/io.ox/files/actions.js:256
+msgid "Make this the current version"
+msgstr "Diese zur aktuellen Version machen"
+
+#: apps/io.ox/files/actions.js:266
+msgid "Delete version"
+msgstr "Version löschen"
+
+#: apps/io.ox/files/actions.js:276
+msgid "Drop here to upload a new file"
+msgstr "Zum Hochladen einer neuen Datei hier fallenlassen"
+
+#: apps/io.ox/files/actions.js:298
+msgid "Drop here to upload a new version"
+msgstr "Zum Hochladen einer neuen Version hier fallenlassen "
+
+#: apps/io.ox/files/view-detail.js:162
+msgid "Upload a new version"
+msgstr "Neue Version hochladen"
+
+#: apps/io.ox/files/view-detail.js:169
+msgid "Versions"
+msgstr "Versionen"
+
+#: apps/io.ox/files/view-detail.js:192
+msgid "Title:"
+msgstr "Beschreibung:"
+
+#: apps/io.ox/files/view-detail.js:259
+msgid "Size"
+msgstr "Größe"
+
+#: apps/io.ox/files/view-detail.js:271
+msgid "Version"
+msgstr "Version"
+
+#: apps/io.ox/files/view-detail.js:283
+msgid "Last Modified"
+msgstr "Letzte Änderung"
+
+#: apps/io.ox/files/view-detail.js:374
+msgid "Click to open. Drag on your desktop to download."
+msgstr "Zum Öffnen klicken. Zum Herunterladen auf Ihren Desktop ziehen. "
+
+#: apps/io.ox/files/view-detail.js:411
+msgid "Description:"
+msgstr "Beschreibung"
+
+#: apps/io.ox/files/view-detail.js:445 apps/io.ox/files/views/create.js:101
+msgid "Uploading..."
+msgstr "Hochladen..."
+
+#: apps/io.ox/files/view-detail.js:455
+msgid "Upload new version"
+msgstr "Neue Version hochladen"
+
+#: apps/io.ox/files/view-detail.js:469
+msgid "Version Comment:"
+msgstr "Anmerkungen zur Version"
+
+#. Show more fields in the file creation dialog
+#: apps/io.ox/files/views/create.js:55
+msgid "Show more..."
+msgstr "Weitere anzeigen"
+
+#: apps/io.ox/files/views/create.js:58
+msgid "Add new file"
+msgstr "Neue Datei hinzufügen"
+
+#: apps/io.ox/files/views/create.js:128
+msgid "Title"
+msgstr "Beschreibung"
+
+#: apps/io.ox/files/views/create.js:146
+msgid "Link / URL"
+msgstr "Link/URL"
+
+#: apps/io.ox/files/views/create.js:174
+msgid "Comment"
+msgstr "Anmerkungen"
+
+#: apps/io.ox/core/main.js:103
+msgid "Sign out"
+msgstr "Abmelden"
+
+#: apps/io.ox/core/main.js:107
+msgid "Help"
+msgstr "Hilfe"
+
+#: apps/io.ox/core/main.js:109
+msgid "Refresh"
+msgstr "Aktualisieren"
+
+#: apps/io.ox/core/main.js:132
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: apps/io.ox/core/main.js:134
+msgid "Apps"
+msgstr "Apps"
+
+#: apps/io.ox/core/date.js:148 apps/io.ox/core/date.js:262
+msgid "BC"
+msgstr "BC"
+
+#: apps/io.ox/core/date.js:148
+msgid "AD"
+msgstr "v. Chr."
+
+#: apps/io.ox/core/date.js:260
+msgid "PM"
+msgstr "pm"
+
+#: apps/io.ox/calendar/util.js:21 apps/io.ox/calendar/util.js:232
+#: apps/io.ox/core/i18n.js:184
 msgid "Sunday"
 msgstr "Sonntag"
 
-#: apps/io.ox/contacts/edit/view-form.js:525
-msgid "Tax id"
-msgstr ""
+#: apps/io.ox/calendar/util.js:21 apps/io.ox/calendar/util.js:235
+#: apps/io.ox/core/i18n.js:184
+msgid "Monday"
+msgstr "Montag"
 
-#: apps/io.ox/contacts/edit/view-form.js:194
-msgid "Telephone business 1"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:201
-msgid "Telephone business 2"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:215
-msgid "Telephone callback"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:222
-msgid "Telephone car"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:340
-msgid "Telephone ip"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:284
-msgid "Telephone isdn"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:291
-msgid "Telephone pager"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:298
-msgid "Telephone primary"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:305
-msgid "Telephone radio"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:312
-msgid "Telephone telex"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:319
-msgid "Telephone ttytdd"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:347
-msgid "Telephone_assistant"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:36
-msgid "Temporary"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:22 apps/io.ox/calendar/util.js:229
-#: apps/io.ox/core/i18n.js:21
-msgid "Thursday"
-msgstr "Donnerstag"
-
-#: apps/io.ox/contacts/edit/view-form.js:137
-msgid "Title"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:21 apps/io.ox/calendar/util.js:223
-#: apps/io.ox/core/i18n.js:20
+#: apps/io.ox/calendar/util.js:21 apps/io.ox/calendar/util.js:238
+#: apps/io.ox/core/i18n.js:184
 msgid "Tuesday"
 msgstr "Dienstag"
 
-#: apps/io.ox/contacts/edit/view-form.js:596
-msgid "Url"
-msgstr ""
-
-#: html/core_body.html:39
-msgid "User name"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:608
-msgid "Userfield 01"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:614
-msgid "Userfield 02"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:620
-msgid "Userfield 03"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:626
-msgid "Userfield 04"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:632
-msgid "Userfield 05"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:638
-msgid "Userfield 06"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:644
-msgid "Userfield 07"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:650
-msgid "Userfield 08"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:656
-msgid "Userfield 09"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:662
-msgid "Userfield 10"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:668
-msgid "Userfield 11"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:674
-msgid "Userfield 12"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:680
-msgid "Userfield 13"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:686
-msgid "Userfield 14"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:692
-msgid "Userfield 15"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:698
-msgid "Userfield 16"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:704
-msgid "Userfield 17"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:710
-msgid "Userfield 18"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:716
-msgid "Userfield 19"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/view-form.js:722
-msgid "Userfield 20"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:22 apps/io.ox/calendar/util.js:226
-#: apps/io.ox/core/i18n.js:21
+#: apps/io.ox/calendar/util.js:22 apps/io.ox/calendar/util.js:241
+#: apps/io.ox/core/i18n.js:185
 msgid "Wednesday"
 msgstr "Mittwoch"
 
-#: apps/io.ox/calendar/util.js:210
-msgid "Weekend Day"
-msgstr ""
+#: apps/io.ox/calendar/util.js:22 apps/io.ox/calendar/util.js:244
+#: apps/io.ox/core/i18n.js:185
+msgid "Thursday"
+msgstr "Donnerstag"
 
-#: apps/io.ox/calendar/util.js:257
-msgid "Weekly on %s"
-msgstr ""
+#: apps/io.ox/calendar/util.js:22 apps/io.ox/calendar/util.js:247
+#: apps/io.ox/core/i18n.js:185
+msgid "Friday"
+msgstr "Freitag"
 
-#: apps/io.ox/contacts/view-detail.js:227
-msgid "Work"
-msgstr ""
+#: apps/io.ox/calendar/util.js:23 apps/io.ox/calendar/util.js:250
+#: apps/io.ox/core/i18n.js:186
+msgid "Saturday"
+msgstr "Samstag"
 
-#: apps/io.ox/calendar/util.js:207
-msgid "Work Day"
-msgstr ""
+#: apps/io.ox/calendar/util.js:26 apps/io.ox/core/i18n.js:191
+msgid "January"
+msgstr "Januar"
 
-#: apps/io.ox/calendar/util.js:32
-msgid "first"
-msgstr ""
+#: apps/io.ox/calendar/util.js:26 apps/io.ox/core/i18n.js:191
+msgid "February"
+msgstr "Februar"
 
-#: apps/io.ox/calendar/util.js:33
-msgid "fourth"
-msgstr ""
+#: apps/io.ox/calendar/util.js:26 apps/io.ox/core/i18n.js:191
+msgid "March"
+msgstr "März"
+
+#: apps/io.ox/calendar/util.js:27 apps/io.ox/core/i18n.js:192
+msgid "April"
+msgstr "April"
+
+#: apps/io.ox/calendar/util.js:27 apps/io.ox/core/i18n.js:192
+msgid "May"
+msgstr "Mai"
+
+#: apps/io.ox/calendar/util.js:27 apps/io.ox/core/i18n.js:192
+msgid "June"
+msgstr "Juni"
+
+#: apps/io.ox/calendar/util.js:28 apps/io.ox/core/i18n.js:193
+msgid "July"
+msgstr "Juli"
+
+#: apps/io.ox/calendar/util.js:28 apps/io.ox/core/i18n.js:193
+msgid "August"
+msgstr "August"
+
+#: apps/io.ox/calendar/util.js:28 apps/io.ox/core/i18n.js:193
+msgid "September"
+msgstr "September"
+
+#: apps/io.ox/calendar/util.js:29 apps/io.ox/core/i18n.js:194
+msgid "October"
+msgstr "Oktober"
+
+#: apps/io.ox/calendar/util.js:29 apps/io.ox/core/i18n.js:194
+msgid "November"
+msgstr "November"
+
+#: apps/io.ox/calendar/util.js:29 apps/io.ox/core/i18n.js:194
+msgid "December"
+msgstr "Dezember"
+
+#: apps/io.ox/core/i18n.js:283
+msgid "Good morning"
+msgstr "Guten Morgen"
+
+#: apps/io.ox/core/i18n.js:285
+msgid "Good evening"
+msgstr "Guten Abend"
+
+#: apps/io.ox/core/i18n.js:287
+msgid "Hello"
+msgstr "Hallo"
 
 #: apps/io.ox/calendar/util.js:32 apps/io.ox/calendar/util.js:33
 msgid "last"
-msgstr ""
+msgstr "letzten"
 
-#: apps/io.ox/settings/view-detail.js:22
-msgid "nothing"
-msgstr ""
+#: apps/io.ox/calendar/util.js:32
+msgid "first"
+msgstr "ersten"
 
 #: apps/io.ox/calendar/util.js:32
 msgid "second"
-msgstr ""
+msgstr "zweiten"
 
 #: apps/io.ox/calendar/util.js:33
 msgid "third"
-msgstr ""
+msgstr "dritten"
+
+#: apps/io.ox/calendar/util.js:33
+msgid "fourth"
+msgstr "vierten"
+
+#: apps/io.ox/calendar/util.js:36
+msgid "Reserved"
+msgstr "Gebucht"
+
+#: apps/io.ox/calendar/util.js:36
+msgid "Temporary"
+msgstr "Mit Vorbehalt"
+
+#: apps/io.ox/calendar/util.js:37
+msgid "Absent"
+msgstr "Abwesend"
+
+#: apps/io.ox/calendar/util.js:37
+msgid "Free"
+msgstr "Frei"
+
+#: apps/io.ox/calendar/util.js:222
+msgid "Work Day"
+msgstr "Wochentag"
+
+#: apps/io.ox/calendar/util.js:225
+msgid "Weekend Day"
+msgstr "Wochenendtag"
+
+#: apps/io.ox/calendar/util.js:228
+msgid "Day"
+msgstr "Tag"
+
+#: apps/io.ox/calendar/util.js:268
+msgid "Each %s Day"
+msgstr "Jeden %s Tag"
+
+#: apps/io.ox/calendar/util.js:272
+msgid "Weekly on %s"
+msgstr "Wöchentlich am %s"
+
+#: apps/io.ox/calendar/util.js:273
+msgid "Each %s weeks on %s"
+msgstr "Alle %s Wochen am %s"
+
+#: apps/io.ox/calendar/util.js:278
+msgid "On %s. day every month"
+msgstr "Am %s. Tag jeden Monats"
+
+#: apps/io.ox/calendar/util.js:279
+msgid "On %s. day every %s. month"
+msgstr "Am %s. Tag jeden %s. Monat"
+
+#: apps/io.ox/calendar/util.js:282
+msgid "On %s %s every month"
+msgstr "Am %s %s jeden Monat"
+
+#: apps/io.ox/calendar/util.js:283
+msgid "On %s %s each %s. months"
+msgstr "Am %s %s jeden %s. Monat"
+
+#: apps/io.ox/calendar/util.js:288
+msgid "Each %s. %s"
+msgstr "Jeden %s. %s"
+
+#: apps/io.ox/calendar/util.js:290
+msgid "On %s %s in %s"
+msgstr "Am %s %s im %s"
+
+#: apps/io.ox/contacts/view-detail.js:168
+msgid "Distribution list"
+msgstr "Verteilerliste"
+
+#: apps/io.ox/contacts/view-detail.js:236
+msgid "Department"
+msgstr "Abteilung"
+
+#: apps/io.ox/contacts/view-detail.js:237
+msgid "Position"
+msgstr "Position"
+
+#: apps/io.ox/contacts/view-detail.js:238
+msgid "Profession"
+msgstr "Beruf"
+
+#: apps/io.ox/contacts/view-detail.js:243
+msgid "Work"
+msgstr "Arbeit"
+
+#: apps/io.ox/contacts/view-detail.js:246
+msgid "Home"
+msgstr "Zuhause"
+
+#: apps/io.ox/contacts/view-detail.js:259
+#: apps/io.ox/contacts/view-detail.js:260
+msgid "Phone (business)"
+msgstr "Telefon (geschäftlich)"
+
+#: apps/io.ox/contacts/view-detail.js:261
+#: apps/io.ox/contacts/view-detail.js:262
+msgid "Phone (private)"
+msgstr "Telefon (privat)"
+
+#: apps/io.ox/contacts/view-detail.js:263
+#: apps/io.ox/contacts/view-detail.js:264
+msgid "Mobile"
+msgstr "Mobiltelefon"
+
+#: apps/io.ox/contacts/view-detail.js:290
+#: apps/io.ox/contacts/view-detail.js:293
+#: apps/io.ox/contacts/view-detail.js:297
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: apps/io.ox/contacts/view-detail.js:317
+msgid "Birthday"
+msgstr "Geburtsdatum"
+
+#: apps/io.ox/contacts/create-view.js:91
+msgid "Add new contact"
+msgstr "Neuen Kontakt hinzufügen"
+
+#: apps/io.ox/contacts/create-view.js:126
+#: apps/io.ox/contacts/distrib/create-dist-view.js:260
+#: apps/io.ox/contacts/edit/view-form.js:187
+msgid "label"
+msgstr "Label"
+
+#: apps/io.ox/contacts/distrib/main.js:110
+#: apps/io.ox/contacts/edit/main.js:123
+msgid "Do you really want to lose your changes?"
+msgstr "Wollen Sie Ihre Änderungen wirklich löschen?"
+
+#: apps/io.ox/contacts/edit/view-form.js:133
+msgid "pointName"
+msgstr "Termin"
+
+#: apps/io.ox/contacts/distrib/main.js:41
+msgid " Edit distribution list"
+msgstr "Verteilerliste bearbeiten"
+
+#: apps/io.ox/contacts/distrib/main.js:41
+msgid "Create distribution list"
+msgstr "Verteilerliste anlegen"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:39
+msgid "Create list"
+msgstr "Liste anlegen"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:51
+msgid "+"
+msgstr "+"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:100
+msgid "This list has no entries"
+msgstr "Diese Liste enthält keine Einträge"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:130
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:364
+msgid "List name"
+msgstr "Name der Liste"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:369
+msgid "Members"
+msgstr "Mitglieder"
+
+#~ msgid " %1$s (%2$s) "
+#~ msgstr " %1$s (%2$s) "
+
+#~ msgid " %1$s (%2$s); "
+#~ msgstr " %1$s (%2$s); "
+
+#~ msgid " %1$s; "
+#~ msgstr " %1$s; "
+
+#~ msgid "% completed"
+#~ msgstr "% abgeschlossen"
+
+#~ msgid "% done:"
+#~ msgstr "% abgeschlossen"
+
+#~ msgid "% finished"
+#~ msgstr "% abgeschlossen"
 
 #~ msgid "%1$d day, %2$s"
 #~ msgid_plural "%1$d days, %2$s"
@@ -626,6 +576,47 @@ msgstr ""
 #~ msgid_plural "%1$d hours and %2$s"
 #~ msgstr[0] "%1$d Stunde und %2$s"
 #~ msgstr[1] "%1$d Stunden und %2$s"
+
+#~ msgctxt "bytes"
+#~ msgid "%1$s %2$s"
+#~ msgstr "%1$s %2$s"
+
+#~ msgctxt "datetime"
+#~ msgid "%1$s %2$s"
+#~ msgstr "%1$s %2$s"
+
+#~ msgid "%1$s of %2$s"
+#~ msgstr "%1$s von %2$s"
+
+#~ msgid "%1$s of %2$s unread"
+#~ msgstr "%1$s von %2$s ungelesen"
+
+#~ msgid "%1$s on behalf of"
+#~ msgstr "%1$s im Auftrag von"
+
+#~ msgid "%1$s: %2$s"
+#~ msgstr "%1$s: %2$s"
+
+#~ msgid "%2$s (%1$s, %3$s)"
+#~ msgstr "%2$s (%1$s, %3$s)"
+
+#~ msgid "%2$s, %1$s"
+#~ msgstr "%2$s, %1$s"
+
+#~ msgid "%d E-Mail"
+#~ msgid_plural "%d E-Mails"
+#~ msgstr[0] "%d E-Mail"
+#~ msgstr[1] "%d E-Mails"
+
+#~ msgid "%d appointment"
+#~ msgid_plural "%d appointments"
+#~ msgstr[0] "%d Termine"
+#~ msgstr[1] "%d Termine"
+
+#~ msgid "%d contact"
+#~ msgid_plural "%d contacts"
+#~ msgstr[0] "%d Kontakt"
+#~ msgstr[1] "%d Kontakte"
 
 #~ msgid "%d day"
 #~ msgid_plural "%d days"
@@ -638,6 +629,11 @@ msgstr ""
 #~ msgstr[0] "%d Tag"
 #~ msgstr[1] "%d Tagen"
 
+#~ msgid "%d day ago"
+#~ msgid_plural "%d days ago"
+#~ msgstr[0] "Vor %d Tag"
+#~ msgstr[1] "Vor %d Tagen"
+
 #~ msgid "%d hour"
 #~ msgid_plural "%d hours"
 #~ msgstr[0] "%d Stunde"
@@ -648,6 +644,16 @@ msgstr ""
 #~ msgid_plural "%d hours"
 #~ msgstr[0] "%d Stunde"
 #~ msgstr[1] "%d Stunden"
+
+#~ msgid "%d hour ago"
+#~ msgid_plural "%d hours ago"
+#~ msgstr[0] "Vor %d Stunde"
+#~ msgstr[1] "Vor %d Stunden"
+
+#~ msgid "%d info item"
+#~ msgid_plural "%d info items"
+#~ msgstr[0] "%d Info-Eintrag"
+#~ msgstr[1] "%d Info-Einträge"
 
 #~ msgid "%d minute"
 #~ msgid_plural "%d minutes"
@@ -660,6 +666,16 @@ msgstr ""
 #~ msgstr[0] "%d Minute"
 #~ msgstr[1] "%d Minuten"
 
+#~ msgid "%d minute ago"
+#~ msgid_plural "%d minutes ago"
+#~ msgstr[0] "Vor %d Minute"
+#~ msgstr[1] "Vor %d Minuten"
+
+#~ msgid "%d task"
+#~ msgid_plural "%d tasks"
+#~ msgstr[0] "%d Aufgabe"
+#~ msgstr[1] "%d Aufgaben"
+
 #~ msgid "%d week"
 #~ msgid_plural "%d weeks"
 #~ msgstr[0] "%d Woche"
@@ -670,102 +686,1079 @@ msgstr ""
 #~ msgid_plural "%d weeks"
 #~ msgstr[0] "%d Woche"
 #~ msgstr[1] "%d Wochen"
-
-#~ msgid "%n of %n"
-#~ msgstr "%n von %n"
 
 #~ msgid "%s, EEE"
 #~ msgstr "%s, EEE"
 
-#~ msgid "1 month"
-#~ msgstr "1 Monat"
+#~ msgid "&Attachment"
+#~ msgstr "&Anlage"
 
-#~ msgid "1 week"
-#~ msgstr "1 Woche"
+#~ msgid "&Distributionlist"
+#~ msgstr "&Verteilerliste"
 
-#~ msgid "2 months"
-#~ msgstr "2 Monate"
+#~ msgid "&E-Mail"
+#~ msgstr "&E-Mail"
 
-#~ msgid "2 weeks"
-#~ msgstr "2 Wochen"
+#~ msgid "&Edit"
+#~ msgstr "&Bearbeiten"
 
-#~ msgid "AD"
-#~ msgstr "v. Chr."
+#~ msgid "&Flags"
+#~ msgstr "&Flags"
+
+#~ msgid "&Folder permissions"
+#~ msgstr "&Ordner-Berechtigungen"
+
+#~ msgid "&Messaging"
+#~ msgstr "&Messaging"
+
+#~ msgid "&New"
+#~ msgstr "&Neu"
+
+#~ msgid "&New Task"
+#~ msgstr "&Neue Aufgabe"
+
+#~ msgid "&Object permissions"
+#~ msgstr "&Objekt-Berechtigungen"
+
+#~ msgid "&Save"
+#~ msgstr "&Speichern"
+
+#~ msgid "&Search"
+#~ msgstr "&Suchen"
+
+#~ msgid "&Social"
+#~ msgstr "&Social"
+
+#~ msgid "&View"
+#~ msgstr "&Ansicht"
+
+#~ msgid "(may be slow on old machines)"
+#~ msgstr "(evtl. langsam auf alten Rechnern)"
+
+#~ msgid ", "
+#~ msgstr ", "
+
+#~ msgid "--"
+#~ msgstr "--"
+
+#~ msgid "--:--"
+#~ msgstr "--:--"
+
+#~ msgid "... or create a fresh one for your profile"
+#~ msgstr "... oder erstellen Sie ein neues für Ihr Profil"
+
+#~ msgid "12 hours"
+#~ msgstr "12 Stunden"
+
+#~ msgid "24 hours"
+#~ msgstr "24 Stunden"
+
+#~ msgid ""
+#~ "<b>Approximate Duration for Subscriptions</b><br/><br/>Subscribing to "
+#~ "items that are not delivered by another Open-Xchange Server (i.e. OXMF) "
+#~ "may take some time.<br/>Example: Importing 100 contacts from Xing takes "
+#~ "about 5 minutes.<br/><br/>We are continually improving this "
+#~ "functionality. Future releases will work significantly faster."
+#~ msgstr ""
+#~ "<b>Geschätzte Dauer für Abonnements</b><br/><br/>Das Abonnieren von "
+#~ "Objekten, die nicht vom Open-Xchange Server bereitgestellt werden (z.B. "
+#~ "OXMF), kann einige Zeit in Anspruch nehmen. <br/>Das Importieren von 100 "
+#~ "Kontakten aus Xing benötigt beispielsweise circa 5 Minuten.<br/><br/>Wir "
+#~ "arbeiten beständig an einer Verbesserung dieser Funktionalität. "
+#~ "Zukünftige Releases werden signifikant schneller sein."
 
 #~ msgid "AM"
 #~ msgstr "am"
 
-#~ msgid "About 1&1 Webmail"
-#~ msgstr "Über 1&1 Webmail"
+#~ msgid "About"
+#~ msgstr "Über"
+
+#~ msgid "Above the text"
+#~ msgstr "Oberhalb des Textes"
 
 #~ msgid "Accept"
 #~ msgstr "Akzeptieren"
 
-#~ msgid "An error occurred"
-#~ msgstr "Es trat ein Fehler auf"
+#~ msgid "Accept and ignore conflicts"
+#~ msgstr "Akzeptieren und Konflikte ignorieren"
 
-#~ msgid "An error occurred."
-#~ msgstr "Es trat ein Fehler auf."
+#~ msgid "Accept and replace exception"
+#~ msgstr "Akzeptieren und Ausnahme ersetzen"
 
-#~ msgid "An error occurred. Please try again."
-#~ msgstr "Ein Fehler ist aufgetreten. Bitte versuchen Sie es noch einmal."
+#~ msgid "Accept extra participant"
+#~ msgstr "Extra Teilnehmer akzeptieren"
 
-#~ msgid "Answer"
-#~ msgstr "Antworten"
+#~ msgid "Account"
+#~ msgstr "Account"
 
-#~ msgid "Appointment Limit"
-#~ msgstr "Termin-Limit"
+#~ msgid "Account Name"
+#~ msgstr "Account-Name"
+
+#~ msgid "Account Settings"
+#~ msgstr "Account-Einstellungen"
+
+#~ msgid "Account name"
+#~ msgstr "Account-Name"
+
+#~ msgid "Account upgrade"
+#~ msgstr "Account-Upgrade"
+
+#~ msgid "Account:"
+#~ msgstr "Account:"
+
+#~ msgid "Accounts"
+#~ msgstr "Accounts"
+
+#~ msgid "Actions"
+#~ msgstr "Aktionen"
+
+#~ msgid "Activate or deactivate the start page hovers."
+#~ msgstr "Schalten Sie die Hover der Startseite ein oder aus."
+
+#~ msgid "Active"
+#~ msgstr "Aktiv"
+
+#~ msgid "Add ->"
+#~ msgstr "Hinzufügen ->"
+
+#~ msgid "Add Bcc →"
+#~ msgstr "BCC hinzufügen ->"
+
+#~ msgid "Add Cc →"
+#~ msgstr "CC hinzufügen ->"
+
+#~ msgid "Add E-Mail account ..."
+#~ msgstr "E-Mail-Account hinzufügen..."
+
+#~ msgid "Add E-mail account ..."
+#~ msgstr "E-Mail-Account hinzufügen..."
+
+#~ msgid "Add Facebook/Twitter ..."
+#~ msgstr "Facebook/Twitter hinzufügen..."
+
+#~ msgid "Add Member..."
+#~ msgstr "Mitglied hinzufügen..."
+
+#~ msgid "Add To →"
+#~ msgstr "An hinzufügen ->"
+
+#~ msgid "Add a new account"
+#~ msgstr "Neuen Account hinzufügen"
+
+#~ msgid "Add a new account..."
+#~ msgstr "Neuen Account hinzufügen..."
+
+#~ msgid "Add action"
+#~ msgstr "Aktion hinzufügen"
+
+#~ msgid "Add attachment"
+#~ msgstr "Anlage hinzufügen"
+
+#~ msgid "Add condition"
+#~ msgstr "Bedingung hinzufügen"
+
+#~ msgid "Add external participant"
+#~ msgstr "Externen Teilnehmer hinzufügen"
+
+#~ msgid "Add from adressbook"
+#~ msgstr "Aus Adressbuch hinzufügen"
+
+#~ msgid "Add participant"
+#~ msgstr "Teilnehmer hinzufügen"
+
+#~ msgid "Add picture"
+#~ msgstr "Bild hinzufügen"
+
+#~ msgid "Add sender and recipients to \"To\", Cc to \"Cc\""
+#~ msgstr "Sender und alle Empfänger zu \"An:\", Cc zu \"Cc\""
+
+#~ msgid "Add sender to \"To\", recipients to \"Cc\""
+#~ msgstr "Sender zu \"An\", alle Empfänger zu \"Cc.\""
+
+#~ msgid "Add to address book"
+#~ msgstr "Zum Adressbuch hinzufügen"
+
+#~ msgid "Add user"
+#~ msgstr "Benutzer hinzufügen"
+
+#~ msgid "Additional"
+#~ msgstr "Zusätzlich"
+
+#~ msgid "Additional:"
+#~ msgstr "Zusätzlich"
+
+#~ msgid "Address"
+#~ msgstr "Anschrift"
+
+#~ msgid "Address (other)"
+#~ msgstr "Anschrift (weitere)"
+
+#~ msgid "Address (private)"
+#~ msgstr "Anschrift (privat)"
+
+#~ msgid "Addresses"
+#~ msgstr "Anschriften"
+
+#~ msgid "Admin"
+#~ msgstr "Administrator"
+
+#~ msgid "Administration"
+#~ msgstr "Administration"
+
+#~ msgid "Administrator"
+#~ msgstr "Administrator"
+
+#~ msgid "Afghanistan"
+#~ msgstr "Afghanistan"
+
+#~ msgid ""
+#~ "After pressing OK, a new window will open where you can authorize %s to "
+#~ "access your account data."
+#~ msgstr ""
+#~ "Wenn Sie OK klicken, öffnet sich ein neues Fenster, in dem Sie %s für den "
+#~ "Zugriff auf Ihre Account-Daten autorisieren können."
+
+#~ msgid "Albania"
+#~ msgstr "Albanien"
+
+#~ msgid "Algeria"
+#~ msgstr "Algerien"
+
+#~ msgid "All"
+#~ msgstr "Alle"
+
+#~ msgid "All Categories..."
+#~ msgstr "Alle Kategorien..."
+
+#~ msgid "All appointments"
+#~ msgstr "Alle Termine"
+
+#~ msgid "All day"
+#~ msgstr "Ganztägig"
+
+#~ msgid "All folders"
+#~ msgstr "Alle Ordner"
+
+#~ msgid "All messages"
+#~ msgstr "Alle Nachrichten"
+
+#~ msgid "All users"
+#~ msgstr "Alle Benutzer"
+
+#~ msgid "Allow html formatted E-Mails?"
+#~ msgstr "Anzeige von HTML-formatierten Nachrichten zulassen?"
+
+#~ msgid "American Samoa"
+#~ msgstr "Amerikanisch-Samoa"
+
+#~ msgid "An error occurred. (%1$s, %3$s)"
+#~ msgstr "Ein Fehler ist aufgetreten. (%1$s, %3$s)"
+
+#~ msgid "An error occurred. Please try again later. (%1$s, %3$s)"
+#~ msgstr ""
+#~ "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später noch einmal. (%1"
+#~ "$s, %3$s)"
+
+#~ msgid "Andorra"
+#~ msgstr "Andorra"
+
+#~ msgid "Angola"
+#~ msgstr "Angola"
+
+#~ msgid "Anguilla"
+#~ msgstr "Anguilla"
+
+#~ msgid "Anniversary"
+#~ msgstr "Jahrestag"
+
+#~ msgid "Anniversary:"
+#~ msgstr "Jahrestag"
+
+#~ msgid "Answered"
+#~ msgstr "Beantwortet"
+
+#~ msgid "Antarctica"
+#~ msgstr "Antarktik"
+
+#~ msgid "Antigua and Barbuda"
+#~ msgstr "Antigua und Barbuda"
+
+#~ msgid "Any recipient"
+#~ msgstr "Irgendein Empfänger"
+
+#~ msgid "Append vcard?"
+#~ msgstr "Visitenkarte anhängen?"
+
+#~ msgid "Appointment View"
+#~ msgstr "Terminansicht"
 
 #~ msgid "Appointments"
 #~ msgstr "Termine"
 
-#~ msgid "Appointments: %s"
-#~ msgstr "Termine: %s"
+#~ msgid "Appointments in personal calendars: set status to"
+#~ msgstr "Termine in persönlichen Kalendern: Status setzen auf"
+
+#~ msgid "Appointments in public calendars: set status to"
+#~ msgstr "Termine in öffentlichen Kalendern: Status setzen auf"
 
 #~ msgid "Apr"
 #~ msgstr "Apr"
 
+#~ msgid ""
+#~ "Are you sure you want to delete all E-Mails from this folder? The deleted "
+#~ "E-Mails will be moved to the Trash folder."
+#~ msgstr ""
+#~ "Wollen Sie wirklich alle E-Mails aus diesem Ordner löschen? Die "
+#~ "gelöschten E-Mails werden in den Papierkorb-Ordner verschoben."
+
+#~ msgid "Are you sure you want to delete selected item?"
+#~ msgstr "Wollen Sie den gewählten Eintrag wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete selected items?"
+#~ msgstr "Wollen Sie die gewählten Einträge wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete the contact?"
+#~ msgstr "Wollen Sie den Kontakt wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete the item?"
+#~ msgstr "Wollen Sie den Eintrag wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete the selected E-Mails?"
+#~ msgstr "Wollen Sie die gewählten E-Mails wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete the selected account?"
+#~ msgid_plural "Are you sure you want to delete the selected accounts?"
+#~ msgstr[0] "Wollen Sie den gewählten Account wirklich löschen?"
+#~ msgstr[1] "Wollen Sie die gewählten Accounts wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete the selected attachment?"
+#~ msgstr "Wollen Sie die gewählte Anlage wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete the selected folder?"
+#~ msgstr "Wollen Sie den gewählten Ordner wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete the selected group?"
+#~ msgid_plural "Are you sure you want to delete the selected groups?"
+#~ msgstr[0] "Wollen Sie die gewählte Gruppe wirklich löschen?"
+#~ msgstr[1] "Wollen Sie die gewählten Gruppen wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete the selected item?"
+#~ msgstr "Wollen Sie das gewählte Objekt wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete the selected items?"
+#~ msgstr "Wollen Sie die gewählten Objekte wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete the selected publication?"
+#~ msgid_plural "Are you sure you want to delete the selected publications?"
+#~ msgstr[0] "Wollen Sie die gewählte Veröffentlichung wirklich löschen?"
+#~ msgstr[1] "Wollen Sie die gewählten Veröffentlichungen wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete the selected resource?"
+#~ msgid_plural "Are you sure you want to delete the selected resources?"
+#~ msgstr[0] "Wollen Sie die gewählte Ressource wirklich löschen?"
+#~ msgstr[1] "Wollen Sie die gewählten Ressourcen wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete the selected rule?"
+#~ msgid_plural "Are you sure you want to delete the selected rules?"
+#~ msgstr[0] "Wollen Sie die gewählte Regel wirklich löschen?"
+#~ msgstr[1] "Wollen Sie die gewählten Regeln wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete the selected subscription?"
+#~ msgid_plural "Are you sure you want to delete the selected subscriptions?"
+#~ msgstr[0] "Wollen Sie das gewählte Abonnement wirklich löschen?"
+#~ msgstr[1] "Wollen Sie die gewählten Abonnements wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete the selected version?"
+#~ msgstr "Wollen Sie die gewählte Version wirklich löschen?"
+
+#~ msgid "Are you sure you want to delete the task?"
+#~ msgstr "Wollen Sie die Aufgabe wirklich löschen?"
+
+#~ msgid ""
+#~ "Are you sure you want to detach the file from current Info Item?\n"
+#~ " (all versions of the file will be removed)"
+#~ msgstr ""
+#~ "Wollen Sie die Datei wirklich vom aktuellen InfoEintrag lösen?\n"
+#~ " (Alle Versionen dieser Datei werden entfernt)"
+
+#~ msgid ""
+#~ "Are you sure you want to permanently delete all E-Mails from this folder? "
+#~ "The deleted E-Mails will be irrevocably lost."
+#~ msgstr ""
+#~ "Wollen Sie wirklich alle E-Mails aus diesem Ordner unwiderruflich "
+#~ "löschen? Die gelöschten E-Mails können nicht wiederhergestellt werden."
+
+#~ msgid "Argentina"
+#~ msgstr "Argentinien"
+
+#~ msgid "Armenia"
+#~ msgstr "Armenien"
+
+#~ msgid "Aruba"
+#~ msgstr "Aruba"
+
+#~ msgid "Ask for new invitation"
+#~ msgstr "Nach neuer Einladung fragen"
+
+#~ msgid "Assistant"
+#~ msgstr "Assistent"
+
+#~ msgid "Assistant:"
+#~ msgstr "Assistent"
+
+#~ msgid "Attach InfoItem"
+#~ msgstr "InfoEintrag anhängen"
+
+#~ msgid "Attach local file"
+#~ msgstr "Lokale Datei anhängen"
+
+#~ msgid "Attach vCard"
+#~ msgstr "Visitenkarte anhängen"
+
+#~ msgid "Attachment"
+#~ msgstr "Anlage"
+
+#~ msgid "Attachments"
+#~ msgstr "Anlagen"
+
+#~ msgid "Attention"
+#~ msgstr "Warnung"
+
 #~ msgid "Aug"
 #~ msgstr "Aug"
 
-#~ msgid "BC"
-#~ msgstr "BC"
+#~ msgid "Australia"
+#~ msgstr "Australien"
+
+#~ msgid "Austria"
+#~ msgstr "Österreich"
+
+#~ msgid "Authorize"
+#~ msgstr "Autorisieren"
+
+#~ msgid "Auto"
+#~ msgstr "Automatisch"
+
+#~ msgid "Auto-save E-Mail drafts?"
+#~ msgstr "E-Mail-Entwürfe automatisch speichern?"
+
+#~ msgid "Automatically collect contacts"
+#~ msgstr "Kontakte automatisch sammeln"
+
+#~ msgid "Automatically collect contacts in the folder \"%s\""
+#~ msgstr "Kontakte automatisch im Ordner \"%s\" sammeln"
+
+#~ msgid "Automatically select first E-Mail?"
+#~ msgstr "Erste E-Mail automatisch selektieren?"
+
+#~ msgid "Autorefresh:"
+#~ msgstr "Automatisch aktualisieren:"
+
+#~ msgid "Availability"
+#~ msgstr "Verfügbarkeit"
+
+#~ msgid "Available Categories:"
+#~ msgstr "Verfügbare Kategorien:"
+
+#~ msgid "Available Teams:"
+#~ msgstr "Verfügbare Teams "
+
+#~ msgid "Available UWA modules:"
+#~ msgstr "Verfügbare UWA-Module:"
+
+#~ msgid "Azerbaijan"
+#~ msgstr "Aserbaidschan"
+
+#~ msgid "BCC"
+#~ msgstr "BCC"
 
 #~ msgid "Back"
 #~ msgstr "Zurück"
 
+#~ msgid "Bahamas"
+#~ msgstr "Bahamas"
+
+#~ msgid "Bahrain"
+#~ msgstr "Bahrain"
+
+#~ msgid "Bangladesh"
+#~ msgstr "Bangladesch"
+
+#~ msgid "Barbados"
+#~ msgstr "Barbados"
+
+#~ msgid "Bars"
+#~ msgstr "Balken"
+
+#~ msgid "Based on mailing list"
+#~ msgstr "Basierend auf Mailingliste"
+
+#~ msgid "Based on recipients"
+#~ msgstr "Basierend auf Empfänger"
+
+#~ msgid "Based on sender"
+#~ msgstr "Basierend auf Sender"
+
+#~ msgid "Based on subject"
+#~ msgstr "Basierend auf Betreff"
+
+#~ msgid "Bcc"
+#~ msgstr "BCC"
+
+#~ msgid "Bcc..."
+#~ msgstr "BCC..."
+
 #~ msgid "Bcc:"
 #~ msgstr "BCC"
 
-#~ msgid "Cancel"
-#~ msgstr "Abbrechen"
+#~ msgid "Be a participant when creating appointments?"
+#~ msgstr "Beim Anlegen von Terminen Teilnehmer werden?"
 
-#~ msgid "Cc/Bcc:"
-#~ msgstr "CC/BCC"
+#~ msgid "Begins at"
+#~ msgstr "Beginnt um"
+
+#~ msgid "Belarus"
+#~ msgstr "Belarus"
+
+#~ msgid "Belgium"
+#~ msgstr "Belgien"
+
+#~ msgid "Belize"
+#~ msgstr "Belize"
+
+#~ msgid "Below the text"
+#~ msgstr "Unterhalb des Textes"
+
+#~ msgid "Benin"
+#~ msgstr "Benin"
+
+#~ msgid "Bermuda"
+#~ msgstr "Bermudas"
+
+#~ msgid "Bhutan"
+#~ msgstr "Bhutan"
+
+#~ msgid "Billing information:"
+#~ msgstr "Rechnungsinformation"
+
+#~ msgid "Birthday Appointment"
+#~ msgstr "Geburtstagstermin"
+
+#~ msgid "Birthday appointment has been changed."
+#~ msgstr "Der Geburtstagstermin wurde geändert."
+
+#~ msgid "Birthday appointment has been created."
+#~ msgstr "Ein Geburtstagstermin wurde angelegt."
+
+#~ msgid "Birthday of %s."
+#~ msgstr "Geburtstag von %s"
+
+#~ msgid "Block pre-loading of externally linked images?"
+#~ msgstr "Laden extern verlinkter Bilder sperren?"
+
+#~ msgid "Bolivia"
+#~ msgstr "Bolivien"
+
+#~ msgid "Bosnia and Herzegovina"
+#~ msgstr "Bosnien und Herzegowina"
+
+#~ msgid "Botswana"
+#~ msgstr "Botsuana"
+
+#~ msgid "Bouvet Island"
+#~ msgstr "Bouvetinsel"
+
+#~ msgid "Branches"
+#~ msgstr "Branchen"
+
+#~ msgid "Branches:"
+#~ msgstr "Branchen"
+
+#~ msgid "Brazil"
+#~ msgstr "Brasilien"
+
+#~ msgid "British Indian Ocean Territory"
+#~ msgstr "Britisches Territorium im Indischen Ozean"
+
+#~ msgid "Brunei Darussalam"
+#~ msgstr "Brunei Darussalam"
+
+#~ msgid "Bulgaria"
+#~ msgstr "Bulgarien"
+
+#~ msgid "Burkina Faso"
+#~ msgstr "Burkina Faso"
+
+#~ msgid "Burundi"
+#~ msgstr "Burundi"
+
+#~ msgid "Business"
+#~ msgstr "Geschäftlich"
+
+#~ msgid ""
+#~ "By changing the date of this appointment you are creating an appointment "
+#~ "exception to the series. Do you want to continue?"
+#~ msgstr ""
+#~ "Wenn Sie das Datum dieses Termins ändern, erstellen Sie einen "
+#~ "Ausnahmetermin zur Terminserie. Möchten Sie den Vorgang fortsetzen?"
+
+#~ msgid "CAD"
+#~ msgstr "CAD"
+
+#~ msgid "CC"
+#~ msgstr "CC"
+
+#~ msgid "CHF"
+#~ msgstr "CHF"
+
+#~ msgid "CSV"
+#~ msgstr "CSV"
+
+#~ msgid "CSV (Contacts)"
+#~ msgstr "CSV (Kontakte)"
+
+#~ msgid "CW"
+#~ msgstr "KW"
+
+#~ msgid "Calendar"
+#~ msgstr "Kalender"
+
+#~ msgid "Calendar custom view"
+#~ msgstr "Benutzerdefinierte Kalenderansicht"
+
+#~ msgid "Calendar day view"
+#~ msgstr "Tagesansicht für Kalender"
+
+#~ msgid "Calendar workweek view"
+#~ msgstr "Arbeitswochenansicht für Kalender"
+
+#~ msgid "Cambodia"
+#~ msgstr "Kambodscha"
+
+#~ msgid "Cameroon"
+#~ msgstr "Kamerun"
+
+#~ msgid "Can not create appointment in a folder other than appointment folder"
+#~ msgstr ""
+#~ "Das Anlegen von Terminen ist lediglich in einem Terminordner möglich."
+
+#~ msgid "Canada"
+#~ msgstr "Kanada"
+
+#~ msgid "Canadian dollar"
+#~ msgstr "Kanadischer Dollar"
+
+#~ msgid "Cape Verde"
+#~ msgstr "Kapverden"
+
+#~ msgid "Cards"
+#~ msgstr "Adresskarten"
+
+#~ msgid "Categories"
+#~ msgstr "Kategorien"
+
+#~ msgid "Categories must have a name"
+#~ msgstr "Kategorien benötigen einen Namen"
+
+#~ msgid "Categories..."
+#~ msgstr "Kategorien..."
+
+#~ msgid "Categories:"
+#~ msgstr "Kategorien:"
+
+#~ msgid "Category"
+#~ msgstr "Kategorie"
+
+#~ msgid "Category names must be unique"
+#~ msgstr "Kategorienamen dürfen nicht mehrmals vorkommen."
+
+#~ msgid "Cayman Islands"
+#~ msgstr "Kaiman-Inseln"
+
+#~ msgid "Cc"
+#~ msgstr "CC"
+
+#~ msgid "Cc..."
+#~ msgstr "CC..."
 
 #~ msgid "Cc:"
 #~ msgstr "CC"
 
+#~ msgid "Cell phone"
+#~ msgstr "Mobiltelefon"
+
+#~ msgid "Cell phone (private)"
+#~ msgstr "Mobiltelefon (privat)"
+
+#~ msgid "Cell phone (private):"
+#~ msgstr "Mobiltelefon (privat):"
+
+#~ msgid "Cell phone:"
+#~ msgstr "Mobiltelefon:"
+
+#~ msgid "Central African Republic"
+#~ msgstr "Zentralafrikanische Republik"
+
+#~ msgid "Chad"
+#~ msgstr "Tschad"
+
+#~ msgid "Change Password"
+#~ msgstr "Passwort ändern"
+
+#~ msgid "Change Personal Contact Information"
+#~ msgstr "Persönliche Kontaktdaten ändern"
+
+#~ msgid "Change confirmation"
+#~ msgstr "Bestätigung ändern"
+
+#~ msgid "Change layout"
+#~ msgstr "Layout ändern"
+
+#~ msgid "Change view"
+#~ msgstr "Ansicht ändern"
+
+#~ msgid "Changed by"
+#~ msgstr "Geändert von"
+
+#~ msgid "Changed on"
+#~ msgstr "Geändert zu"
+
+#~ msgid "Check"
+#~ msgstr "Prüfen"
+
+#~ msgid "Check connection"
+#~ msgstr "Verbindung prüfen"
+
+#~ msgid "Check for new messages every 'n' minutes"
+#~ msgstr "Alle 'n' Minuten neue Nachrichten abrufen"
+
+#~ msgid "Check for:"
+#~ msgstr "Prüfen"
+
+#~ msgid "Children"
+#~ msgstr "Kinder"
+
+#~ msgid "Children:"
+#~ msgstr "Kinder"
+
+#~ msgid "Chile"
+#~ msgstr "Chile"
+
+#~ msgid "China"
+#~ msgstr "China"
+
+#~ msgid "Choose Team"
+#~ msgstr "Team wählen"
+
+#~ msgid "Choose a new password for your account."
+#~ msgstr "Wählen Sie ein neues Passwort für Ihren Account."
+
+#~ msgid "Christmas Island"
+#~ msgstr "Weihnachtsinsel"
+
+#~ msgid "City"
+#~ msgstr "Stadt"
+
+#~ msgid "City (business)"
+#~ msgstr "Stadt (geschäftlich)"
+
+#~ msgid "City (private)"
+#~ msgstr "Stadt (privat)"
+
+#~ msgid "City:"
+#~ msgstr "Stadt"
+
+#~ msgid "Classic"
+#~ msgstr "Klassisch"
+
+#~ msgid "Clear"
+#~ msgstr "Zurücksetzen"
+
+#~ msgid "Click here for further appointments"
+#~ msgstr "Klicken Sie hier für weitere Termine"
+
+#~ msgid "Client PC operating system: Windows XP, Windows Vista, Windows 7"
+#~ msgstr "Betriebssystem des Client-PC: Windows XP, Windows Vista, Windows 7"
+
 #~ msgid "Close"
 #~ msgstr "Schließen"
 
-#~ msgid "Contact folder"
-#~ msgstr "Kontakte-Ordner"
+#~ msgid "Close Window"
+#~ msgstr "Fenster schließen"
 
-#~ msgid "Contact list is empty."
-#~ msgstr "Die Kontaktliste enthält keine Einträge."
+#~ msgid "Close configuration"
+#~ msgstr "Konfiguration schließen"
+
+#~ msgid "Close quick config"
+#~ msgstr "Schnelleinstellung schließen"
+
+#~ msgid "Cocos (Keeling) Islands"
+#~ msgstr "Kokosinseln"
+
+#~ msgid "Collapse sidepanel"
+#~ msgstr "Seiten-Panel zusammenklappen"
+
+#~ msgid "Collect while reading E-Mails?"
+#~ msgstr "Sammeln beim Lesen von E-Mails?"
+
+#~ msgid "Collect while sending E-Mails?"
+#~ msgstr "Sammeln beim Senden von E-Mails?"
+
+#~ msgid "Colombia"
+#~ msgstr "Kolumbien"
+
+#~ msgid "Color"
+#~ msgstr "Farbe"
+
+#~ msgid "Color quoted lines:"
+#~ msgstr "Zitierte Zeilen farbig hervorheben "
+
+#~ msgid "Color:"
+#~ msgstr "Farbe:"
+
+#~ msgid "Comma Separated"
+#~ msgstr "Durch Kommata getrennt"
+
+#~ msgid "Comment:"
+#~ msgstr "Anmerkung"
+
+#~ msgid "Comments"
+#~ msgstr "Anmerkungen"
+
+#~ msgid "Comments:"
+#~ msgstr "Anmerkungen"
+
+#~ msgid "Commercial Register"
+#~ msgstr "Handelsregister"
+
+#~ msgid "Commercial Register:"
+#~ msgstr "Handelsregister"
+
+#~ msgid "Comoros"
+#~ msgstr "Komoren"
+
+#~ msgid "Compact panel"
+#~ msgstr "Kompaktes Panel"
+
+#~ msgid "Companies:"
+#~ msgstr "Firmen"
+
+#~ msgid "Company"
+#~ msgstr "Firma"
+
+#~ msgid "Company:"
+#~ msgstr "Firma"
+
+#~ msgid "Configuration"
+#~ msgstr "Einstellungen"
+
+#~ msgid "Configuration changed"
+#~ msgstr "Konfiguration geändert"
+
+#~ msgid "Configuration damaged, please inform the administrator."
+#~ msgstr "Konfigurationsfehler. Bitte wenden Sie sich an den Administrator."
+
+#~ msgid "Confirm new password"
+#~ msgstr "Neues Passwort bestätigen"
+
+#~ msgid "Confirmation"
+#~ msgstr "Bestätigung"
+
+#~ msgid "Confirmation status for appointment invitations"
+#~ msgstr "Bestätigungsstatus für Termineinladungen"
+
+#~ msgid "Confirmation status has been saved."
+#~ msgstr "Der Bestätigungsstatus wurde gespeichert."
+
+#~ msgid "Conflicts detected"
+#~ msgstr "Konflikte aufgetreten"
+
+#~ msgid "Congo"
+#~ msgstr "Kongo"
+
+#~ msgid "Connection failed! Please check your settings."
+#~ msgstr ""
+#~ "Die Verbindung ist fehlgeschlagen. Bitte überprüfen Sie Ihre "
+#~ "Einstellungen."
+
+#~ msgid "Connection failed! Please check your settings: "
+#~ msgstr ""
+#~ "Die Verbindung ist fehlgeschlagen. Bitte überprüfen Sie Ihre "
+#~ "Einstellungen: "
+
+#~ msgid "Connector for Microsoft Outlook"
+#~ msgstr "Konnektor für Microsoft Outlook"
+
+#~ msgid "Contact"
+#~ msgstr "Kontakt"
+
+#~ msgid "Contact folder..."
+#~ msgstr "Kontaktordner..."
+
+#~ msgid "Contact overview"
+#~ msgstr "Kontaktübersicht"
+
+#~ msgid "Contact:"
+#~ msgstr "Kontakt:"
 
 #~ msgid "Contacts"
 #~ msgstr "Kontakte"
 
-#~ msgid "Contacts Folder"
-#~ msgstr "Kontakte-Ordner"
+#~ msgid "Contacts:"
+#~ msgstr "Kontakte:"
+
+#~ msgid "Contains"
+#~ msgstr "enthält"
+
+#~ msgid "Content"
+#~ msgstr "Inhalt"
+
+#~ msgid "Content-Type:"
+#~ msgstr "Datentyp:"
+
+#~ msgid "Continue"
+#~ msgstr "Fortfahren"
+
+#~ msgid "Cook Islands"
+#~ msgstr "Cookinseln"
+
+#~ msgid "Copy"
+#~ msgstr "Kopieren"
+
+#~ msgid "Costa Rica"
+#~ msgstr "Costa Rica"
+
+#~ msgid "Cote d'Ivoire"
+#~ msgstr "Elfenbeinküste"
+
+#~ msgid "Country"
+#~ msgstr "Land"
+
+#~ msgid "Country (other)"
+#~ msgstr "Land (weiteres)"
+
+#~ msgid "Country (other):"
+#~ msgstr "Land (weiteres)"
+
+#~ msgid "Country:"
+#~ msgstr "Land"
+
+#~ msgid "Create Team"
+#~ msgstr "Team erstellen"
+
+#~ msgid "Create a filter"
+#~ msgstr "Filter anlegen"
+
+#~ msgid "Create a recurring appointment"
+#~ msgstr "Wiederkehrenden Termin anlegen?"
 
 #~ msgid "Create objects"
 #~ msgstr "Objekte anlegen"
 
+#~ msgid "Create public appointments"
+#~ msgstr "Öffentliche Termine anlegen"
+
 #~ msgid "Create subfolders"
 #~ msgstr "Unterordner anlegen"
+
+#~ msgid "Created"
+#~ msgstr "Angelegt"
+
+#~ msgid "Created By:"
+#~ msgstr "Erstellt von:"
+
+#~ msgid "Created by"
+#~ msgstr "Erstellt von"
+
+#~ msgid "Created by %s"
+#~ msgstr "Erstellt von %s"
+
+#~ msgid "Created by the vacation notice"
+#~ msgstr "Durch Abwesenheitsnotiz erstellt"
+
+#~ msgid "Created by:"
+#~ msgstr "Erstellt von"
+
+#~ msgid "Created on"
+#~ msgstr "Angelegt am"
+
+#~ msgid "Created on %1$s by %2$s"
+#~ msgstr "Erstellt am %1$s von %2$s"
+
+#~ msgid "Created on %1$s by %2$s, last changed on %3$s by %4$s"
+#~ msgstr "Erstellt am %1$s von %2$s, zuletzt geändert am %3$s von %4$s"
+
+#~ msgid "Created on:"
+#~ msgstr "Angelegt am:"
+
+#~ msgid "Creation date:"
+#~ msgstr "Erstellt am"
+
+#~ msgid "Croatia"
+#~ msgstr "Kroatien"
+
+#~ msgid "Cuba"
+#~ msgstr "Kuba"
+
+#~ msgid "Current"
+#~ msgstr "Aktuell"
+
+#~ msgid "Current Costs:"
+#~ msgstr "Aktuelle Kosten"
+
+#~ msgid "Current Duration:"
+#~ msgstr "Aktuelle Dauer"
+
+#~ msgid "Current costs:"
+#~ msgstr "Aktuelle Kosten"
+
+#~ msgid "Current date"
+#~ msgstr "Aktuelles Datum"
+
+#~ msgid "Current duration:"
+#~ msgstr "Aktuelle Dauer"
+
+#~ msgid "Custom"
+#~ msgstr "Benutzerdefiniert"
+
+#~ msgid "Custom Widget"
+#~ msgstr "Benutzerdefiniertes Widget"
+
+#~ msgid "Custom form"
+#~ msgstr "Benutzerdefinierter Eintrag"
+
+#~ msgid "Cut"
+#~ msgstr "Ausschneiden"
+
+#~ msgid "Cyprus"
+#~ msgstr "Zypern"
+
+#~ msgid "Czech Republic"
+#~ msgstr "Tschechische Republik"
+
+#~ msgid "DKK"
+#~ msgstr "DKK"
+
+#~ msgid "Daily"
+#~ msgstr "Täglich"
+
+#~ msgid "Danish krone"
+#~ msgstr "Dänische Kronen"
+
+#~ msgid "Date"
+#~ msgstr "Datum"
+
+#~ msgid "Date format:"
+#~ msgstr "Datumsformat:"
+
+#~ msgid "Date of birth"
+#~ msgstr "Geburtstag"
+
+#~ msgid "Date of birth:"
+#~ msgstr "Geburtstag"
+
+#~ msgid "Date:"
+#~ msgstr "Datum"
 
 #~ msgid "Dec"
 #~ msgstr "Dez"
@@ -773,32 +1766,395 @@ msgstr ""
 #~ msgid "Decline"
 #~ msgstr "Ablehnen"
 
-#~ msgid "Delete"
-#~ msgstr "Löschen"
+#~ msgid "Decline counter proposal"
+#~ msgstr "Gegenvorschlag ablehnen"
+
+#~ msgid "Default"
+#~ msgstr "Standard"
+
+#~ msgid "Default E-Mail font size?"
+#~ msgstr "Standard-E-Mail-Schriftgröße?"
+
+#~ msgid "Default E-Mail font?"
+#~ msgstr "Standard-E-Mail-Schriftart?"
+
+#~ msgid "Default Signature:"
+#~ msgstr "Standard-Signatur "
+
+#~ msgid "Default Team:"
+#~ msgstr "Standard-Team "
+
+#~ msgid "Default calendar view"
+#~ msgstr "Standard-Kalenderansicht"
+
+#~ msgid "Default module after login?"
+#~ msgstr "Standardmodul nach dem Anmelden?"
+
+#~ msgid "Default sender address:"
+#~ msgstr "Standard-Absender-Adresse:"
+
+#~ msgid "Default time for reminder"
+#~ msgstr "Standardzeit für Erinnerung"
+
+#~ msgid "Default view for Spam folder:"
+#~ msgstr "Standardansicht für Spam-Ordner:"
+
+#~ msgid "Default view:"
+#~ msgstr "Standardansicht"
+
+#~ msgid "Deferred"
+#~ msgstr "Verschoben"
+
+#~ msgid "Delay before a hover is displayed"
+#~ msgstr "Zeitverzögerung für Hover-Anzeige"
+
+#~ msgid "Delete Account"
+#~ msgid_plural "Delete Accounts"
+#~ msgstr[0] "Account löschen"
+#~ msgstr[1] "Accounts löschen"
+
+#~ msgid "Delete Appointment"
+#~ msgstr "Termin löschen"
+
+#~ msgid "Delete Attachment"
+#~ msgstr "Anlage löschen"
+
+#~ msgid "Delete Contact"
+#~ msgstr "Kontakt löschen"
+
+#~ msgid "Delete E-Mail"
+#~ msgstr "E-Mail löschen"
+
+#~ msgid "Delete E-Mails"
+#~ msgstr "E-Mails löschen"
+
+#~ msgid "Delete Folder"
+#~ msgstr "Ordner löschen"
+
+#~ msgid "Delete Group"
+#~ msgid_plural "Delete Groups"
+#~ msgstr[0] "Gruppe löschen"
+#~ msgstr[1] "Gruppen löschen"
+
+#~ msgid "Delete Items"
+#~ msgstr "Objekte löschen"
+
+#~ msgid "Delete Publication"
+#~ msgid_plural "Delete Publications"
+#~ msgstr[0] "Veröffentlichung löschen"
+#~ msgstr[1] "Veröffentlichungen löschen"
+
+#~ msgid "Delete Resource"
+#~ msgid_plural "Delete Resources"
+#~ msgstr[0] "Ressource löschen"
+#~ msgstr[1] "Ressourcen löschen"
+
+#~ msgid "Delete Rule"
+#~ msgid_plural "Delete Rules"
+#~ msgstr[0] "Regel löschen"
+#~ msgstr[1] "Regeln löschen"
+
+#~ msgid "Delete Subscription"
+#~ msgid_plural "Delete Subscriptions"
+#~ msgstr[0] "Abonnement löschen"
+#~ msgstr[1] "Abonnements löschen"
+
+#~ msgid "Delete Task"
+#~ msgstr "Aufgabe löschen"
+
+#~ msgid "Delete account"
+#~ msgid_plural "Delete accounts"
+#~ msgstr[0] "Account löschen"
+#~ msgstr[1] "Accounts löschen"
 
 #~ msgid "Delete all"
 #~ msgstr "Alle löschen"
 
+#~ msgid "Delete all Categories"
+#~ msgstr "Alle Kategorien löschen"
+
+#~ msgid "Delete objects"
+#~ msgstr "Objekte löschen"
+
 #~ msgid "Delete own"
 #~ msgstr "Eigene löschen"
+
+#~ msgid "Delete this action"
+#~ msgstr "Diese Aktion löschen"
+
+#~ msgid "Delete this condition"
+#~ msgstr "Diese Bedingung löschen"
+
+#~ msgid "Deleted"
+#~ msgstr "Gelöscht"
+
+#~ msgid "Deleting messages on local storage also deletes them on server"
+#~ msgstr ""
+#~ "Beim Löschen von Nachrichten aus dem lokalen Speicher werden diese auch "
+#~ "auf dem Server gelöscht"
+
+#~ msgid "Delivery receipt"
+#~ msgstr "Empfangsbestätigung"
+
+#~ msgid "Denmark"
+#~ msgstr "Dänemark"
+
+#~ msgid "Department:"
+#~ msgstr "Abteilung"
+
+#~ msgid "Description"
+#~ msgstr "Beschreibung"
+
+#~ msgid "Destination"
+#~ msgstr "Ziel"
+
+#~ msgid "Destination folder:"
+#~ msgstr "Zielordner:"
+
+#~ msgid "Detach file"
+#~ msgstr "Datei entfernen"
+
+#~ msgid "Detail"
+#~ msgstr "Detail"
+
+#~ msgid "Detail Information for Publication"
+#~ msgstr "Veröffentlichung - Details"
+
+#~ msgid "Detail Information for Subscription"
+#~ msgstr "Abonnement - Details"
+
+#~ msgid "Detail information for publication"
+#~ msgstr "Veröffentlichung - Details"
+
+#~ msgid "Detail information for subscription"
+#~ msgstr "Abonnement - Details"
+
+#~ msgid ""
+#~ "Detailed information can be found in the Import section of the online "
+#~ "help or the user manual."
+#~ msgstr ""
+#~ "Detaillierte Informationen finden Sie in der Online-Hilfe oder im "
+#~ "Benutzerhandbuch im Abschnitt Import."
 
 #~ msgid "Details"
 #~ msgstr "Details"
 
-#~ msgid "Display future appointments for the timeframe specified."
-#~ msgstr "Wie weit in die Zukunft soll auf Termine geprüft werden?"
+#~ msgid "Details:"
+#~ msgstr "Details"
 
-#~ msgid "Drafts"
-#~ msgstr "Entwürfe"
+#~ msgid "Direct link"
+#~ msgstr "Direkte Verknüpfung"
 
-#~ msgid "E-Mail 3"
-#~ msgstr "E-Mail 3"
+#~ msgid "Direct link:"
+#~ msgstr "Direkte Verknüpfung:"
 
-#~ msgid "E-Mail Folder"
-#~ msgstr "E-Mail-Ordner"
+#~ msgid "Direct message"
+#~ msgstr "Direkte Nachricht"
 
-#~ msgid "E-Mail folder"
-#~ msgstr "E-Mail-Ordner"
+#~ msgid "Disable"
+#~ msgstr "Deaktivieren"
+
+#~ msgid "Disable all"
+#~ msgstr "Alle deaktivieren"
+
+#~ msgid "Disabled"
+#~ msgstr "Deaktiviert"
+
+#~ msgid "Discard"
+#~ msgstr "Verwerfen"
+
+#~ msgid "Display as"
+#~ msgstr "Anzeigen als"
+
+#~ msgid "Display as:"
+#~ msgstr "Anzeigen als"
+
+#~ msgid "Display emoticons as graphics in text E-Mails?"
+#~ msgstr "In Text-E-Mails Emoticons als Bilder darstellen?"
+
+#~ msgid "Display name"
+#~ msgstr "Angezeigter Name"
+
+#~ msgid "Displayed name"
+#~ msgstr "Angezeigter Name"
+
+#~ msgid "Distance:"
+#~ msgstr "Entfernung"
+
+#~ msgid "Distribution List"
+#~ msgstr "Verteilerliste"
+
+#~ msgid "Djibouti"
+#~ msgstr "Dschibuti"
+
+#~ msgid "Do the following:"
+#~ msgstr "folgende Aktion ausführen:"
+
+#~ msgid ""
+#~ "Do you want to delete the whole recurrence or a single instance of the "
+#~ "recurrence?"
+#~ msgstr ""
+#~ "Wollen Sie die komplette Serie oder einen einzelnen Termin aus der Serie "
+#~ "löschen?"
+
+#~ msgid ""
+#~ "Do you want to delete the whole recurrence or single instances of the "
+#~ "recurrence?"
+#~ msgstr ""
+#~ "Wollen Sie die komplette Serie oder einen einzelnen Termin aus der Serie "
+#~ "löschen?"
+
+#~ msgid ""
+#~ "Do you want to edit the whole recurrence or a single recurrence "
+#~ "appointment? Please note when changing a serial appointment, exceptions "
+#~ "to the recurrence are reset."
+#~ msgstr ""
+#~ "Wollen Sie die komplette Serie oder einen einzelnen Termin aus der Serie "
+#~ "bearbeiten? Bitte beachten Sie, dass beim Ändern eines Serientermins "
+#~ "Ausnahmen der Serie zurückgesetzt werden."
+
+#~ msgid ""
+#~ "Do you want to edit the whole recurrence or single instances of the "
+#~ "recurrence? Please note when changing a serial appointment, exceptions to "
+#~ "the recurrence are reset."
+#~ msgstr ""
+#~ "Wollen Sie die komplette Serie oder einzelne Termine aus der Serie "
+#~ "bearbeiten? Bitte beachten Sie, dass beim Ändern eines Serientermins "
+#~ "Ausnahmen der Serie zurückgesetzt werden."
+
+#~ msgid ""
+#~ "Do you want to edit the whole series or a single series appointment? "
+#~ "Please note when changing a serial appointment, exceptions to the series "
+#~ "are reset."
+#~ msgstr ""
+#~ "Wollen Sie die komplette Serie oder einen einzelnen Termin aus der Serie "
+#~ "bearbeiten? Bitte beachten Sie, dass beim Ändern eines Serientermins "
+#~ "Ausnahmen der Serie zurückgesetzt werden."
+
+#~ msgid "Do you want to save your configuration?"
+#~ msgstr "Wollen Sie Ihre Einstellungen speichern?"
+
+#~ msgid "Do you want to send a delivery receipt?"
+#~ msgstr "Wollen Sie eine Empfangsbestätigung senden?"
+
+#~ msgid "Document Details"
+#~ msgstr "Dokument-Details"
+
+#~ msgid "Document:"
+#~ msgstr "Dokument"
+
+#~ msgid "Does not contain"
+#~ msgstr "enthält nicht"
+
+#~ msgid "Does not match"
+#~ msgstr "trifft nicht zu"
+
+#~ msgid "Does not match regex"
+#~ msgstr "trifft auf Regex nicht zu"
+
+#~ msgid "Dominica"
+#~ msgstr "Dominica"
+
+#~ msgid "Dominican Republic"
+#~ msgstr "Dominikanische Republik"
+
+#~ msgid "Don't show again"
+#~ msgstr "Nicht mehr anzeigen"
+
+#~ msgid "Done"
+#~ msgstr "Erledigt"
+
+#~ msgid "Down"
+#~ msgstr "Nach unten"
+
+#~ msgid "Download Updater"
+#~ msgstr "Updater herunterladen"
+
+#~ msgid "Download updater for the Connector for Microsoft Outlook"
+#~ msgstr "Updater für den Konnektor für Microsoft Outlook herunterladen"
+
+#~ msgid "Drafts folder"
+#~ msgstr "Ordner Entwürfe"
+
+#~ msgid "Dropdown"
+#~ msgstr "Dropdown"
+
+#~ msgid "Due date"
+#~ msgstr "Fälligkeitstermin"
+
+#~ msgid "Due date:"
+#~ msgstr "Fälligkeitstermin"
+
+#~ msgid "Due in %d day."
+#~ msgid_plural "Due in %d days."
+#~ msgstr[0] "Fällig in %d Tag."
+#~ msgstr[1] "Fällig in %d Tagen."
+
+#~ msgid "Due on %s."
+#~ msgstr "Fällig am %s"
+
+#~ msgid "Due today!"
+#~ msgstr "Heute fällig!"
+
+#~ msgid "Due tomorrow."
+#~ msgstr "Morgen fällig."
+
+#~ msgid "Dynamic resizing..."
+#~ msgstr "Fenstergrößen werden berechnet..."
+
+#~ msgid "E-Mail (business):"
+#~ msgstr "E-Mail (geschäftlich)"
+
+#~ msgid "E-Mail (other)"
+#~ msgstr "E-Mail (weitere)"
+
+#~ msgid "E-Mail (other):"
+#~ msgstr "E-Mail (weitere)"
+
+#~ msgid "E-Mail (private)"
+#~ msgstr "E-Mail (privat)"
+
+#~ msgid "E-Mail (private):"
+#~ msgstr "E-Mail (privat)"
+
+#~ msgid "E-Mail Accounts"
+#~ msgstr "E-Mail-Accounts"
+
+#~ msgid "E-Mail Address"
+#~ msgstr "E-Mail-Adresse"
+
+#~ msgid "E-Mail notification for Accept/Declined"
+#~ msgstr "E-Mail-Benachrichtigung bei Bestätigen/Ablehnen"
+
+#~ msgid "E-Mail notification for New, Changed, Deleted?"
+#~ msgstr "E-Mail-Benachrichtigung bei Neu, Geändert, Gelöscht?"
+
+#~ msgid "E-Mail notification for appointment"
+#~ msgstr "E-Mail-Benachrichtigung für Termine"
+
+#~ msgid "E-Mail notification for appointment creator?"
+#~ msgstr "E-Mail-Benachrichtigung für Anleger des Termins?"
+
+#~ msgid "E-Mail notification for appointment participant?"
+#~ msgstr "E-Mail-Benachrichtigung als Teilnehmer des Termins?"
+
+#~ msgid "E-Mail notification for task"
+#~ msgstr "E-Mail-Benachrichtigung für Aufgaben"
+
+#~ msgid "E-Mail notification for task creator?"
+#~ msgstr "E-Mail-Benachrichtigung als Anleger der Aufgabe?"
+
+#~ msgid "E-Mail notification for task participant?"
+#~ msgstr "E-Mail-Benachrichtigung als Teilnehmer der Aufgabe?"
+
+#~ msgid "E-Mail:"
+#~ msgstr "E-Mail "
+
+#~ msgid "E-mail addresses"
+#~ msgstr "E-Mail-Adressen"
+
+#~ msgid "EB"
+#~ msgstr "EB"
 
 #~ msgid "EEE, %s"
 #~ msgstr "EEE, %s"
@@ -806,39 +2162,823 @@ msgstr ""
 #~ msgid "EEEE, %s"
 #~ msgstr "EEEE, %s"
 
-#~ msgid "Edit"
-#~ msgstr "Bearbeiten"
+#~ msgid "EUR"
+#~ msgstr "EUR"
 
-#~ msgid "Error: %2$s (%1$s, %3$s)"
-#~ msgstr "Fehlermeldung: %2$s (%1$s, %3$s)"
+#~ msgid "Each"
+#~ msgstr "jeden"
+
+#~ msgid "Ecuador"
+#~ msgstr "Ecuador"
+
+#~ msgid "Edit Appointment"
+#~ msgstr "Termin bearbeiten"
+
+#~ msgid "Edit Contact"
+#~ msgstr "Kontakt bearbeiten"
+
+#~ msgid "Edit Furigana"
+#~ msgstr "Furigana bearbeiten"
+
+#~ msgid "Edit InfoItem"
+#~ msgstr "InfoEintrag bearbeiten"
+
+#~ msgid "Edit Task"
+#~ msgstr "Aufgabe bearbeiten"
+
+#~ msgid "Edit draft"
+#~ msgstr "Entwurf bearbeiten"
+
+#~ msgid "Editor feature set:"
+#~ msgstr "Funktionsumfang des Editors:"
+
+#~ msgid "Editor toolbar"
+#~ msgstr "Toolbar des Editors"
+
+#~ msgid "Egypt"
+#~ msgstr "Ägypten"
+
+#~ msgid "El Salvador"
+#~ msgstr "El Salvador"
+
+#~ msgid "Elements of this week only"
+#~ msgstr "Nur Elemente dieser Woche"
+
+#~ msgid "Email"
+#~ msgstr "E-Mail"
+
+#~ msgid "Embedded windows"
+#~ msgstr "Eingebettete Fenster"
+
+#~ msgid "Employee ID"
+#~ msgstr "Mitarbeiter-ID"
+
+#~ msgid "Employee ID:"
+#~ msgstr "Mitarbeiter-ID"
+
+#~ msgid "Empty folder"
+#~ msgstr "Ordner leeren"
+
+#~ msgid "Enable"
+#~ msgstr "Aktivieren"
+
+#~ msgid "Enable Calendar Hover"
+#~ msgstr "Kalender-Hover aktivieren"
+
+#~ msgid "Enable Contacts Hover"
+#~ msgstr "Kontakte-Hover aktivieren"
+
+#~ msgid "Enable E-Mail Hover"
+#~ msgstr "E-Mail-Hover aktivieren"
+
+#~ msgid "Enable E-Mail Hover?"
+#~ msgstr "E-Mail-Hover aktivieren?"
+
+#~ msgid "Enable Infostore Hover"
+#~ msgstr "InfoStore-Hover aktivieren"
+
+#~ msgid "Enable Portal Hover"
+#~ msgstr "Portal-Hover aktivieren"
+
+#~ msgid "Enable Tasks Hover"
+#~ msgstr "Aufgaben-Hover aktivieren"
+
+#~ msgid "Enable all"
+#~ msgstr "Alle aktivieren"
+
+#~ msgid "Enable auto completion of E-Mail addresses?"
+#~ msgstr "Autovervollständigen für E-Mail-Adressen aktivieren?"
+
+#~ msgid "Enable calendar hovers"
+#~ msgstr "Kalender-Hover aktivieren"
+
+#~ msgid "Enable start page hovers"
+#~ msgstr "Hover der Startseite aktivieren"
+
+#~ msgid "Enable visual effects"
+#~ msgstr "Visuelle Effekte aktivieren"
+
+#~ msgid "Enabled"
+#~ msgstr "Aktiviert"
+
+#~ msgid ""
+#~ "Enables offline access to e-mail, calendar, tasks, and contacts folders. "
+#~ "Any changes that are made using Microsoft Outlook offline will be "
+#~ "automatically synchronized the next time you go online:"
+#~ msgstr ""
+#~ "Aktiviert offline-Zugriff auf E-Mail-, Kalender-, Aufgaben- und "
+#~ "Kontaktordner. Änderungen in Microsoft Outlook, die offline vorgenommen "
+#~ "werden, werden automatisch synchronisiert, sobald Sie wieder online gehen."
+
+#~ msgid "End"
+#~ msgstr "Ende"
+
+#~ msgid "End date"
+#~ msgstr "Endet am"
+
+#~ msgid "End date is before start date"
+#~ msgstr "Enddatum liegt vor Startdatum"
+
+#~ msgid "End date is before start date."
+#~ msgstr "Enddatum liegt vor Startdatum"
+
+#~ msgid "End date:"
+#~ msgstr "Endet am"
+
+#~ msgid "End of working time"
+#~ msgstr "Arbeitszeit endet um"
+
+#~ msgid "End time is before start time"
+#~ msgstr "Endzeitpunkt liegt vor Beginn"
+
+#~ msgid "End:"
+#~ msgstr "Ende"
+
+#~ msgid "Ends"
+#~ msgstr "Endet"
+
+#~ msgid "Ends at"
+#~ msgstr "Endet um"
+
+#~ msgid "Ends at:"
+#~ msgstr "Endet um"
+
+#~ msgid "Enhanced"
+#~ msgstr "Erweitert"
+
+#~ msgid "Enter a comment"
+#~ msgstr "Anmerkung eingeben"
+
+#~ msgid "Enter a name"
+#~ msgstr "Geben Sie einen Namen ein"
+
+#~ msgid "Enter additional data"
+#~ msgstr "Zusätzliche Daten eingeben"
+
+#~ msgid "Enter general data"
+#~ msgstr "Allgemeine Daten eingeben"
+
+#~ msgid "Enter personal data"
+#~ msgstr "Persönliche Daten eingeben"
+
+#~ msgid "Enter your version comment:"
+#~ msgstr "Geben Sie Ihre Anmerkungen zur Version ein:"
+
+#~ msgid "Envelope-To"
+#~ msgstr "Envelope-To"
+
+#~ msgid "Equatorial Guinea"
+#~ msgstr "Äquatorialguinea"
+
+#~ msgid "Eritrea"
+#~ msgstr "Eritrea"
+
+#~ msgid "Error"
+#~ msgstr "Fehler"
+
+#~ msgid "Error messages"
+#~ msgstr "Fehlermeldungen"
+
+#~ msgid "Error-ID: %1$s"
+#~ msgstr "Fehler-ID: %1$s"
+
+#~ msgid "Error: %1$s - %2$s"
+#~ msgstr "Fehlermeldung: %1$s - %2$s"
+
+#~ msgid "Error: %1$s doesn't support routing from %2$s"
+#~ msgstr "Fehler: %1$s unterstützt kein Routing von %2$s"
+
+#~ msgid "Error: %1$s doesn't support routing to %2$s"
+#~ msgstr "Fehler: %1$s unterstützt kein Routing zu %2$s"
+
+#~ msgid "Error: %2$s"
+#~ msgstr "Fehler: %2$s"
+
+#~ msgid "Estimated Costs:"
+#~ msgstr "Geschätzte Kosten"
+
+#~ msgid "Estimated Duration:"
+#~ msgstr "Geschätzte Dauer"
+
+#~ msgid "Estimated costs:"
+#~ msgstr "Geschätzte Kosten"
+
+#~ msgid "Estimated duration:"
+#~ msgstr "Geschätzte Dauer"
+
+#~ msgid "Estonia"
+#~ msgstr "Estland"
+
+#~ msgid "Ethiopia"
+#~ msgstr "Äthiopien"
+
+#~ msgid "Euro"
+#~ msgstr "Euro"
+
+#~ msgid "Every"
+#~ msgstr "Alle"
+
+#~ msgid "Exception"
+#~ msgstr "Ausnahme"
+
+#~ msgid "Expert mode"
+#~ msgstr "Expertenmodus"
+
+#~ msgid "Export"
+#~ msgstr "Exportieren"
+
+#~ msgid "Extended"
+#~ msgstr "Erweitert"
+
+#~ msgid "External Addresses"
+#~ msgstr "Externe Adressen"
+
+#~ msgid "External E-Mail"
+#~ msgstr "Externe E-Mail"
+
+#
+#~ msgctxt "friday"
+#~ msgid "F"
+#~ msgstr "Fr"
+
+#~ msgid "FAQ"
+#~ msgstr "FAQ"
+
+#~ msgid "Facebook"
+#~ msgstr "Facebook"
+
+#~ msgid "Falkland Islands (Malvinas)"
+#~ msgstr "Falklandinseln"
+
+#~ msgid "Faroe Islands"
+#~ msgstr "Färöer"
+
+#~ msgid "Fax"
+#~ msgstr "Fax"
+
+#~ msgid "Fax (business)"
+#~ msgstr "Fax (geschäftlich)"
+
+#~ msgid "Fax (business):"
+#~ msgstr "Fax (geschäftlich)"
+
+#~ msgid "Fax (other)"
+#~ msgstr "Fax (weiteres)"
+
+#~ msgid "Fax (other):"
+#~ msgstr "Fax (weiteres)"
+
+#~ msgid "Fax (private)"
+#~ msgstr "Fax (privat)"
+
+#~ msgid "Fax (private):"
+#~ msgstr "Fax (privat)"
+
+#~ msgid "Fax:"
+#~ msgstr "Fax:"
+
+#~ msgid "Feature not available!"
+#~ msgstr "Funktion nicht verfügbar!"
 
 #~ msgid "Feb"
 #~ msgstr "Feb"
 
+#~ msgid "Feed has been added"
+#~ msgstr "Feed wurde hinzugefügt"
+
+#~ msgid "Field may not be empty"
+#~ msgstr "Feld darf nicht leer sein"
+
+#~ msgid "Fiji"
+#~ msgstr "Fidschi"
+
+#~ msgid "File name"
+#~ msgstr "Dateiname"
+
+#~ msgid "File name:"
+#~ msgstr "Dateiname"
+
+#~ msgid "File size:"
+#~ msgstr "Dateigröße"
+
+#~ msgid "File type:"
+#~ msgstr "Dateityp:"
+
+#~ msgid "File..."
+#~ msgstr "Datei..."
+
+#~ msgid "File:"
+#~ msgstr "Datei"
+
+#~ msgid "Filter contacts"
+#~ msgstr "Kontakte filtern"
+
+#~ msgid "Fine grid"
+#~ msgstr "Feinraster"
+
+#~ msgid "Finland"
+#~ msgstr "Finnland"
+
+#~ msgid "First name"
+#~ msgstr "Vorname"
+
+#~ msgid "First name:"
+#~ msgstr "Vorname"
+
+#~ msgid "Flag"
+#~ msgstr "Flag"
+
+#~ msgid "Flag #%d"
+#~ msgstr "Flag #%d"
+
+#~ msgid "Flag mail with"
+#~ msgstr "E-Mail-Flag"
+
+#~ msgid "Flags"
+#~ msgstr "Flags"
+
 #~ msgid "Folder"
 #~ msgstr "Ordner"
 
-#~ msgid "Folder is empty"
-#~ msgstr "Der Ordner ist leer."
+#~ msgid "Folder Name"
+#~ msgstr "Ordner-Name"
+
+#~ msgid "Folder Properties"
+#~ msgstr "Ordner-Eigenschaften"
+
+#~ msgid "Folder Properties: %s"
+#~ msgstr "Ordner-Eigenschaften: %s"
+
+#~ msgid "Folder Type"
+#~ msgstr "Ordner-Typ"
+
+#~ msgid "Folder admin"
+#~ msgstr "Ordner-Administrator"
+
+#~ msgid "Folder name"
+#~ msgstr "Ordner-Name"
+
+#~ msgid "Folder path"
+#~ msgstr "Ordnerpfad"
+
+#~ msgid "Folder permissions"
+#~ msgstr "Ordner-Berechtigungen"
+
+#~ msgid "Folder tree"
+#~ msgstr "Ordnerbaum"
+
+#~ msgid "Folder..."
+#~ msgstr "Ordner..."
+
+#~ msgid "Folder:"
+#~ msgstr "Ordner"
+
+#~ msgid "Folders"
+#~ msgstr "Ordner"
+
+#~ msgid "Follow Link..."
+#~ msgstr "Link folgen..."
+
+#~ msgid "Follow the instructions and install the updater."
+#~ msgstr "Folgen Sie den Anweisungen und installieren Sie den Updater."
+
+#~ msgid "For an incoming message that matches:"
+#~ msgstr "Für eine eingehende Nachricht auf die Folgendes zutrifft: "
+
+#~ msgid "Format"
+#~ msgstr "Format"
+
+#~ msgid "Format E-Mails as:"
+#~ msgstr "Nachrichten formatieren als "
 
 #~ msgid "Forward"
 #~ msgstr "Weiterleiten"
 
+#~ msgid "Forward E-Mails as:"
+#~ msgstr "Nachrichten weiterleiten als "
+
+#~ msgid "France"
+#~ msgstr "Frankreich"
+
+#~ msgid "Free trial..."
+#~ msgstr "Kostenlos testen..."
+
+#~ msgid "French Guiana"
+#~ msgstr "Französisch-Guayana"
+
+#~ msgid "French Polynesia"
+#~ msgstr "Französisch-Polynesien"
+
+#~ msgid "French Southern Territories"
+#~ msgstr "Französische Südterritorien"
+
 #~ msgid "Fri"
 #~ msgstr "Fr"
 
+#~ msgctxt "who"
+#~ msgid "From"
+#~ msgstr "Von"
+
+#~ msgid "From %s"
+#~ msgstr "Von %s"
+
+#~ msgctxt "when"
 #~ msgid "From:"
 #~ msgstr "Von:"
+
+#
+#~ msgctxt "who"
+#~ msgid "From:"
+#~ msgstr "Von:"
+
+#~ msgid "Furigana..."
+#~ msgstr "Furigana..."
+
+#~ msgid "GB"
+#~ msgstr "GB"
+
+#~ msgid "GBP"
+#~ msgstr "GBP"
+
+#~ msgid "Gabon"
+#~ msgstr "Gabun"
+
+#~ msgid "Gambia"
+#~ msgstr "Gambia"
+
+#~ msgid "General"
+#~ msgstr "Allgemein"
+
+#~ msgid "Georgia"
+#~ msgstr "Georgien"
+
+#~ msgid "Germany"
+#~ msgstr "Deutschland"
+
+#~ msgid "Get directions"
+#~ msgstr "Wegbeschreibung"
+
+#~ msgid "Ghana"
+#~ msgstr "Ghana"
+
+#~ msgid "Gibraltar"
+#~ msgstr "Gibraltar"
+
+#~ msgid "Go"
+#~ msgstr "Suchen"
+
+#~ msgid "Good"
+#~ msgstr "Gut"
+
+#~ msgid "Greece"
+#~ msgstr "Griechenland"
+
+#~ msgid "Greenland"
+#~ msgstr "Grönland"
+
+#~ msgid "Grenada"
+#~ msgstr "Grenada"
+
+#~ msgid "Grid"
+#~ msgstr "Raster"
+
+#~ msgid "Group"
+#~ msgstr "Gruppe"
+
+#~ msgid "Group Administration"
+#~ msgstr "Gruppen-Administration"
+
+#~ msgid "Group Member"
+#~ msgstr "Gruppen-Mitglied"
+
+#~ msgid "Group Members"
+#~ msgstr "Gruppen-Mitglieder"
+
+#~ msgid "Group appointment"
+#~ msgstr "Gruppentermin"
+
+#~ msgid "Group name"
+#~ msgstr "Gruppen-Name"
+
+#~ msgid "Groups"
+#~ msgstr "Gruppen"
+
+#~ msgid "Guadeloupe"
+#~ msgstr "Guadeloupe"
+
+#~ msgid "Guam"
+#~ msgstr "Guam"
+
+#~ msgid "Guatemala"
+#~ msgstr "Guatemala"
+
+#~ msgid "Guernsey"
+#~ msgstr "Guernsey"
+
+#~ msgid "Guinea"
+#~ msgstr "Guinea"
+
+#~ msgid "Guinea-Bissau"
+#~ msgstr "Guinea-Bissau"
+
+#~ msgid "Guyana"
+#~ msgstr "Guyana"
+
+#~ msgctxt "teamview"
+#~ msgid "H"
+#~ msgstr "H"
+
+#~ msgid "H-Split"
+#~ msgstr "H-Split"
+
+#~ msgid "H-split view"
+#~ msgstr "H-Split-Ansicht"
+
+#~ msgctxt "dayview"
+#~ msgid "HH"
+#~ msgstr "HH"
 
 # default time format
 #~ msgid "HH:mm"
 #~ msgstr "HH:mm"
 
+# default time format
+#~ msgctxt "dayview"
+#~ msgid "HH:mm"
+#~ msgstr "HH:mm"
+
+#~ msgid "HTML"
+#~ msgstr "HTML"
+
+#~ msgid "HTML and plain text"
+#~ msgstr "HTML und Text"
+
+#~ msgid "HTML-only mail"
+#~ msgstr "Reine HTML-Mail"
+
+#~ msgid "Haiti"
+#~ msgstr "Haiti"
+
+#~ msgid "Header"
+#~ msgstr "Header"
+
+#~ msgid "Heard Island and McDonald Islands"
+#~ msgstr "Heard und McDonaldinseln"
+
+#~ msgid ""
+#~ "Here you can import tasks, appointments or contacts from iCal, vCard or "
+#~ "CSV files."
+#~ msgstr ""
+#~ "Importieren Sie Termine, Aufgaben oder Kontakte aus iCal-, vCard- oder "
+#~ "CSV-Dateien."
+
+#~ msgid "Hide"
+#~ msgstr "Nicht anzeigen"
+
+#~ msgid "Hide description"
+#~ msgstr "Beschreibung verstecken"
+
+#~ msgid "Hide later elements"
+#~ msgstr "Spätere Elemente nicht anzeigen"
+
+#~ msgid "Hide non-working time"
+#~ msgstr "Nicht-Arbeitszeit verbergen"
+
+#~ msgid "Hide non-working time in teamview"
+#~ msgstr "Nicht-Arbeitszeit in Teamansicht verbergen"
+
+#~ msgid "High"
+#~ msgstr "Hoch"
+
+#~ msgid "History of error messages"
+#~ msgstr "Historie der Fehlermeldungen"
+
+#~ msgid "Holy See (Vatican City State)"
+#~ msgstr "Heiliger Stuhl (Staat der Vatikanstadt)"
+
+#~ msgid "Honduras"
+#~ msgstr "Honduras"
+
+#~ msgid "Hong Kong"
+#~ msgstr "Hongkong"
+
+#~ msgid "Hungary"
+#~ msgstr "Ungarn"
+
+#~ msgid "IM"
+#~ msgstr "IM"
+
+#~ msgid "IM (private)"
+#~ msgstr "IM (privat)"
+
+#~ msgid "IM (private):"
+#~ msgstr "IM (privat)"
+
+#~ msgid "IMAP Mail Server"
+#~ msgstr "IMAP-Mail-Server"
+
+#~ msgid "IP phone"
+#~ msgstr "IP-Telefon"
+
+#~ msgid "IP phone (private)"
+#~ msgstr "IP-Telefon (privat)"
+
+#~ msgid "IP phone (private):"
+#~ msgstr "IP-Telefon (privat)"
+
+#~ msgid "Iceland"
+#~ msgstr "Island"
+
+#~ msgid ""
+#~ "If the authorization expired or was revoked, you can repeat the "
+#~ "authorization process by clicking on the button below. The authorization "
+#~ "will proceed in a separate window."
+#~ msgstr ""
+#~ "Ist die Autorisierung abgelaufen oder wurde sie zurückgezogen, können Sie "
+#~ "den Autorisierungsvorgang wiederholen, indem Sie auf die Schaltfläche "
+#~ "unten klicken. Die Autorisierung wird in einem separaten Fenster "
+#~ "fortgeführt."
+
+#~ msgid "Ignore"
+#~ msgstr "Ignorieren"
+
+#~ msgid "Illegal Date in remind date"
+#~ msgstr "Ungültiges Datum für Erinnerung"
+
+#~ msgid "Illegal Date in start date"
+#~ msgstr "Ungültiges Startdatum"
+
+#~ msgid "Illegal date in due date"
+#~ msgstr "Ungültiges Fälligkeitsdatum"
+
+#~ msgid "Illegal entry in reminder hour field"
+#~ msgstr "Ungültige Stundenangabe für Erinnerung"
+
+#~ msgid "Import"
+#~ msgstr "Importieren"
+
+#~ msgid "Import Status"
+#~ msgstr "Import-Status"
+
+#~ msgid ""
+#~ "In order to assign categories to the objects selected, use the control "
+#~ "fields on the left of the categories. In order to edit a category select "
+#~ "it and use the buttons on the right side."
+#~ msgstr ""
+#~ "Um den aktuell gewählten Objekten Kategorien zuzuordnen, verwenden Sie "
+#~ "die Kontrollfelder links neben den Kategorien. Um eine Kategorie zu "
+#~ "bearbeiten, wählen Sie sie aus und verwenden die Schaltflächen auf der "
+#~ "rechten Seite."
+
+#~ msgid "In progress"
+#~ msgstr "In Bearbeitung"
+
 #~ msgid "Inbox"
-#~ msgstr "Eingang"
+#~ msgstr "Posteingang"
+
+#~ msgid "Incorrect input, only numbers are allowed."
+#~ msgstr "Falsche Eingabe. Nur Zahlen sind erlaubt."
+
+#~ msgid "Incorrect input."
+#~ msgstr "Inkorrekte Eingabe"
+
+#~ msgid "India"
+#~ msgstr "Indien"
+
+#~ msgid "Indonesia"
+#~ msgstr "Indonesien"
+
+#~ msgid "Info"
+#~ msgstr "Info"
+
+#~ msgid "InfoItem"
+#~ msgstr "InfoEintrag"
+
+#~ msgid "InfoStore"
+#~ msgstr "InfoStore"
+
+#~ msgid "InfoStore:"
+#~ msgstr "InfoStore"
+
+#~ msgid "Infoitem"
+#~ msgstr "InfoEintrag"
+
+#~ msgid "Infostore"
+#~ msgstr "InfoStore"
+
+#~ msgid "Initialization ..."
+#~ msgstr "Initialisiere..."
+
+#~ msgid "Inline"
+#~ msgstr "Inliegend"
+
+#~ msgid "Insert the original E-Mail text to a reply?"
+#~ msgstr "Ursprünglichen Mailtext in Antwort zitieren?"
+
+#~ msgid "Instant Messenger"
+#~ msgstr "Instant Messenger"
+
+#~ msgid "Instant Messenger:"
+#~ msgstr "Instant Messenger:"
+
+#~ msgid "Internal Error: The server didn't provide any data."
+#~ msgstr "Interner Fehler: Der Server hat keine Daten zur Verfügung gestellt."
+
+#~ msgid "Internal Error: Unable to open the Attachment (%s)."
+#~ msgstr "Interner Fehler: Der Anhang (%s) kann nicht geöffnet werden."
+
+#~ msgid "Interval in minutes"
+#~ msgstr "Intervall in Minuten"
+
+#~ msgid "Interval of the reminder in minutes"
+#~ msgstr "Intervall der Erinnnerung in Minuten"
+
+#~ msgid "Invalid Signature"
+#~ msgstr "Ungültige Signatur"
+
+#~ msgid "Invalid Team"
+#~ msgstr "Ungültiges Team"
+
+#~ msgid "Invalid date"
+#~ msgstr "Ungültiges Datum"
+
+#~ msgid "Invalid date format for birthday."
+#~ msgstr "Ungültiges Datumsformat für Geburtstag."
+
+#~ msgid "Invalid date format. The valid format is %s"
+#~ msgstr "Ungültiges Datumsformat. Das korrekte Datumsformat ist %s"
+
+#~ msgid "Invalid date."
+#~ msgstr "Ungültiges Datum."
+
+#~ msgid "Invalid tag name. Tags may not contain the character '%s'."
+#~ msgstr "Ungültiger Tag-Name. Tags dürfen nicht das Zeichen '%s' enthalten."
+
+#~ msgid "Invalid time."
+#~ msgstr "Ungültige Zeit."
+
+#~ msgid "Invite again"
+#~ msgstr "Erneut einladen"
+
+#~ msgid "Iran"
+#~ msgstr "Iran"
+
+#~ msgid "Iraq"
+#~ msgstr "Irak"
+
+#~ msgid "Ireland"
+#~ msgstr "Irland"
+
+#~ msgid "Is at least"
+#~ msgstr "ist mindestens"
+
+#~ msgid "Is at most"
+#~ msgstr "ist höchstens"
+
+#~ msgid "Is bigger than"
+#~ msgstr "ist größer als"
+
+#~ msgid "Is exactly"
+#~ msgstr "stimmt exakt überein mit"
+
+#~ msgid "Is not exactly"
+#~ msgstr "trifft nicht genau zu"
+
+#~ msgid "Is smaller than"
+#~ msgstr "ist kleiner als"
+
+#~ msgid "Isle of Man"
+#~ msgstr "Isle of Man"
+
+#~ msgid "Israel"
+#~ msgstr "Israel"
+
+#~ msgid "Italy"
+#~ msgstr "Italien"
+
+#~ msgid "JPY"
+#~ msgstr "JPY"
+
+#~ msgid "Jamaica"
+#~ msgstr "Jamaika"
 
 #~ msgid "Jan"
 #~ msgstr "Jan"
+
+#~ msgid "Japan"
+#~ msgstr "Japan"
+
+#~ msgid "Japanese Yen"
+#~ msgstr "Japanischer Yen"
+
+#~ msgid "Jersey"
+#~ msgstr "Jersey"
+
+#~ msgid "Job position:"
+#~ msgstr "Position"
+
+#~ msgid "Jordan"
+#~ msgstr "Jordanien"
 
 #~ msgid "Jul"
 #~ msgstr "Jul"
@@ -846,131 +2986,2254 @@ msgstr ""
 #~ msgid "Jun"
 #~ msgstr "Jun"
 
-#~ msgid "Legal Information"
-#~ msgstr "Rechtliche Hinweise"
+#~ msgid "KB"
+#~ msgstr "KB"
 
-#~ msgid "Loading..."
-#~ msgstr "Laden..."
+#~ msgid "Kazakhstan"
+#~ msgstr "Kasachstan"
+
+#~ msgid "Keep"
+#~ msgstr "Behalten"
+
+#~ msgid "Kenya"
+#~ msgstr "Kenia"
+
+#~ msgid "Kiribati"
+#~ msgstr "Kiribati"
+
+#~ msgid "Korea, Democratic People's Republic of"
+#~ msgstr "Korea, Demokratische Volksrepublik"
+
+#~ msgid "Korea, Republic of"
+#~ msgstr "Korea, Republik"
+
+#~ msgid "Kuwait"
+#~ msgstr "Kuwait"
+
+#~ msgid "Kyrgyzstan"
+#~ msgstr "Kirgisistan"
+
+#~ msgid "Language and region"
+#~ msgstr "Sprache und Region"
+
+#~ msgid "Lao People's Democratic Republic"
+#~ msgstr "Laos, Demokratische Volksrepublik"
+
+#~ msgid "Last changed on %1$s by %2$s"
+#~ msgstr "Zuletzt geändert am %1$s von %2$s"
+
+#~ msgid "Last day"
+#~ msgstr "Letzter Tag"
+
+#~ msgid "Last modified:"
+#~ msgstr "Letzte Änderung:"
+
+#~ msgid "Last name:"
+#~ msgstr "Nachname"
+
+#~ msgid "Later"
+#~ msgstr "Später"
+
+#~ msgid "Later appointments:"
+#~ msgstr "Kalender-Termine, die später stattfinden: "
+
+#~ msgid "Later tasks:"
+#~ msgstr "Aufgaben, die später stattfinden: "
+
+#~ msgid "Latvia"
+#~ msgstr "Lettland"
+
+#~ msgid "Layout"
+#~ msgstr "Layout"
+
+#~ msgid "Leave messages on server"
+#~ msgstr "Nachrichten auf Server behalten"
+
+#~ msgid "Lebanon"
+#~ msgstr "Libanon"
+
+#~ msgid "Lesotho"
+#~ msgstr "Lesotho"
+
+#~ msgid "Liberia"
+#~ msgstr "Liberia"
+
+#~ msgid "Libyan Arab Jamahiriya"
+#~ msgstr "Libysch-Arabische Volks-Dschamhirija"
+
+#~ msgid "Liechtenstein"
+#~ msgstr "Liechtenstein"
+
+#~ msgid "Line wrap when sending text mails after:"
+#~ msgstr "Beim Senden von Text-E-Mails Zeilenumbruch nach:"
+
+#~ msgid "Link/Url"
+#~ msgstr "Link/URL"
+
+#~ msgid "List"
+#~ msgstr "Liste"
+
+#~ msgid "List view"
+#~ msgstr "Listenansicht"
+
+#~ msgid "Lithuania"
+#~ msgstr "Litauen"
+
+#~ msgid "Load Contents..."
+#~ msgstr "Inhalte werden geladen..."
+
+#~ msgid "Loading"
+#~ msgstr "Laden"
+
+#~ msgid "Location"
+#~ msgstr "Ort"
+
+#~ msgid "Location:"
+#~ msgstr "Ort"
+
+#~ msgid "Lock"
+#~ msgstr "Sperren"
+
+#~ msgid "Locked:"
+#~ msgstr "Gesperrt"
 
 #~ msgid "Login"
 #~ msgstr "Login"
 
+#
+#~ msgctxt "username"
+#~ msgid "Login"
+#~ msgstr "Login"
+
+#~ msgctxt "verb"
+#~ msgid "Login"
+#~ msgstr "Anmelden"
+
+#~ msgid ""
+#~ "Login failed. Please check your user name and password and try again."
+#~ msgstr ""
+#~ "Anmeldevorgang ist fehlgeschlagen. Überprüfen Sie Ihren Benutzernamen und "
+#~ "das Passwort und versuchen Sie es erneut."
+
+#~ msgid "Login not possible at the moment, please try again later."
+#~ msgstr ""
+#~ "Eine  Anmeldung ist derzeit nicht möglich. Bitte versuchen Sie es später "
+#~ "noch einmal."
+
 #~ msgid "Logout"
 #~ msgstr "Abmelden"
+
+#~ msgid "Long"
+#~ msgstr "Lang"
+
+#~ msgid "Low"
+#~ msgstr "Niedrig"
+
+#~ msgid "Luxembourg"
+#~ msgstr "Luxemburg"
+
+#
+#~ msgctxt "monday"
+#~ msgid "M"
+#~ msgstr "Mo"
+
+#~ msgid "M/d/yy"
+#~ msgstr "M/t/jj"
+
+# lable for date format in dropdown menu for regional configuration
+#~ msgid "M/d/yyyy"
+#~ msgstr "M/t/jjjj"
+
+#~ msgid "MB"
+#~ msgstr "MB"
 
 #~ msgid "MM/dd"
 #~ msgstr "dd.MM."
 
+#~ msgid "MM/dd/yy"
+#~ msgstr "MM/tt/jj"
+
+#~ msgid "MM/dd/yyyy"
+#~ msgstr "MM/tt/jjjj"
+
+#~ msgid "Macao"
+#~ msgstr "Macao"
+
+#~ msgid "Macedonia"
+#~ msgstr "Mazedonien"
+
+#~ msgid "Madagascar"
+#~ msgstr "Madagaskar"
+
+#~ msgid "Mail"
+#~ msgstr "Mail"
+
+#~ msgid "Mail filter"
+#~ msgstr "Mailfilter"
+
+#~ msgid "Mailing list"
+#~ msgstr "Mailingliste"
+
+#~ msgid "Mailing list %s"
+#~ msgstr "Mailingliste %s"
+
+#~ msgid "Mailtext"
+#~ msgstr "E-Mail-Text"
+
+#~ msgid "Main window"
+#~ msgstr "Hauptfenster"
+
+#~ msgid "Malawi"
+#~ msgstr "Malawi"
+
+#~ msgid "Malaysia"
+#~ msgstr "Malaysia"
+
+#~ msgid "Maldives"
+#~ msgstr "Malediven"
+
+#~ msgid "Mali"
+#~ msgstr "Mali"
+
+#~ msgid "Malta"
+#~ msgstr "Malta"
+
+#~ msgid "Manager"
+#~ msgstr "Manager"
+
+#~ msgid "Manager:"
+#~ msgstr "Manager"
+
+#~ msgid "Mandatory Field(s) missing!"
+#~ msgstr "Einträge für ein oder mehrere Pflichtfelder fehlen."
+
 #~ msgid "Mar"
 #~ msgstr "Mär"
+
+#~ msgid "Marital status"
+#~ msgstr "Familienstand"
+
+#~ msgid "Marital status:"
+#~ msgstr "Familienstand "
+
+#~ msgid "Mark as"
+#~ msgstr "Markieren als"
+
+#~ msgid "Mark as Done"
+#~ msgstr "Als erledigt markieren"
+
+#~ msgid "Mark as read"
+#~ msgstr "Als gelesen markieren"
+
+#~ msgid "Mark folder read"
+#~ msgstr "Ordner als gelesen markieren"
+
+#~ msgid "Mark mail as"
+#~ msgstr "E-Mail markieren als"
+
+#~ msgid "Marshall Islands"
+#~ msgstr "Marshall-Inseln"
+
+#~ msgid "Martinique"
+#~ msgstr "Martinique"
+
+#~ msgid "Matches (wildcards allowed)"
+#~ msgstr "stimmt überein mit (Platzhalter erlaubt)"
+
+#~ msgid "Matches regex"
+#~ msgstr "stimmt überein mit Regex"
+
+#~ msgid "Mauritania"
+#~ msgstr "Mauretanien"
+
+#~ msgid "Mauritius"
+#~ msgstr "Mauritius"
 
 #~ msgid "Maximum"
 #~ msgstr "Maximum"
 
-#~ msgid "Mobile 2"
-#~ msgstr "Mobiltelefon 2"
+#~ msgid "Mayotte"
+#~ msgstr "Mayotte"
+
+#~ msgid "Members of %s"
+#~ msgstr "Mitglieder von %s"
+
+#~ msgid "Members of group"
+#~ msgstr "Mitglieder der Gruppe"
+
+#~ msgid "Members:"
+#~ msgstr "Mitglieder "
+
+#~ msgid "Message"
+#~ msgstr "Nachricht"
+
+#~ msgid "Messaging"
+#~ msgstr "Messaging"
+
+#~ msgid "Mexico"
+#~ msgstr "Mexiko"
+
+#~ msgid "Micronesia"
+#~ msgstr "Mikronesien"
+
+#~ msgid "Microsoft Outlook"
+#~ msgstr "Microsoft Outlook"
+
+#~ msgid "Middle name"
+#~ msgstr "Zweiter Vorname"
+
+#~ msgid "Middle name:"
+#~ msgstr "Zweiter Vorname"
+
+#~ msgid "Mime Type"
+#~ msgstr "Mime-Typ"
+
+#~ msgid "Mime type"
+#~ msgstr "Mime-Typ"
+
+#~ msgid "Minimized"
+#~ msgstr "Minimiert"
+
+#~ msgid "Minimum password length is %1$s."
+#~ msgstr "Minimale Passwortlänge ist %1$s."
+
+#~ msgid "Mobile (private):"
+#~ msgstr "Mobiltelefon (privat)"
+
+#~ msgid "Mobile:"
+#~ msgstr "Mobiltelefon"
+
+#~ msgid "Mode"
+#~ msgstr "Modus"
+
+#~ msgid "Modified By:"
+#~ msgstr "Geändert von:"
+
+#~ msgid "Modified by:"
+#~ msgstr "Geändert von"
+
+#~ msgid "Modify"
+#~ msgstr "Ändern"
 
 #~ msgid "Modify all"
 #~ msgstr "Alle ändern"
 
+#~ msgid "Modify objects"
+#~ msgstr "Objekte ändern"
+
 #~ msgid "Modify own"
 #~ msgstr "Eigene ändern"
+
+#~ msgid "Modify your account information."
+#~ msgstr "Ändern Sie Ihre Account-Daten"
+
+#~ msgid "Module"
+#~ msgstr "Modul"
+
+#~ msgid "Moldova"
+#~ msgstr "Moldau"
 
 #~ msgid "Mon"
 #~ msgstr "Mo"
 
+#~ msgid "Monaco"
+#~ msgstr "Monaco"
+
+#~ msgid "Mongolia"
+#~ msgstr "Mongolei"
+
+#~ msgid "Montenegro"
+#~ msgstr "Montenegro"
+
+#~ msgid "Month"
+#~ msgstr "Monat"
+
+#~ msgid "Monthly"
+#~ msgstr "Monatlich"
+
+#~ msgid "Montserrat"
+#~ msgstr "Montserrat"
+
+#~ msgid "Morocco"
+#~ msgstr "Marokko"
+
 #~ msgid "Move"
 #~ msgstr "Verschieben"
+
+#~ msgid "Move to folder"
+#~ msgstr "In Ordner verschieben"
+
+#~ msgid "Mozambique"
+#~ msgstr "Mozambique"
+
+#~ msgid "My Infostore"
+#~ msgstr "Mein InfoStore"
+
+#~ msgid "My OX Social"
+#~ msgstr "Mein OX Social"
+
+#~ msgid "My Social Configuration"
+#~ msgstr "Meine Social-Einstellungen"
+
+#~ msgid "Myanmar"
+#~ msgstr "Myanmar"
+
+#~ msgid "Name"
+#~ msgstr "Name"
+
+#~ msgid "Name of the Distribution List:"
+#~ msgstr "Name der Verteilerliste"
+
+#~ msgid "Name:"
+#~ msgstr "Name"
+
+#~ msgid "Namibia"
+#~ msgstr "Namibia"
+
+#~ msgid "Nauru"
+#~ msgstr "Nauru"
+
+#~ msgid "Nepal"
+#~ msgstr "Nepal"
+
+#~ msgid "Netherlands"
+#~ msgstr "Niederlande"
+
+#~ msgid "Netherlands Antilles"
+#~ msgstr "Niederländische Antillen"
+
+#~ msgid "Never"
+#~ msgstr "nie"
+
+#~ msgid "New"
+#~ msgstr "Neu"
+
+#~ msgid "New Appointment"
+#~ msgstr "Neuer Termin"
+
+#~ msgid "New Caledonia"
+#~ msgstr "Neukaledonien"
+
+#~ msgid "New Contact"
+#~ msgstr "Neuer Kontakt"
+
+#~ msgid "New Distribution List"
+#~ msgstr "Neue Verteilerliste"
 
 #~ msgid "New E-Mail"
 #~ msgstr "Neue E-Mail"
 
+#~ msgid "New InfoItem"
+#~ msgstr "Neuer InfoEintrag"
+
+#~ msgid "New Infoitem"
+#~ msgstr "Neuer InfoEintrag"
+
+#~ msgid "New Signature"
+#~ msgstr "Neue Signatur"
+
+#~ msgid "New Task"
+#~ msgstr "Aufgabe"
+
+#~ msgid "New Team"
+#~ msgstr "Neues Team"
+
+#~ msgid "New Zealand"
+#~ msgstr "Neuseeland"
+
+#~ msgid "New account"
+#~ msgstr "Neuer Account"
+
+#~ msgid "New appointment"
+#~ msgstr "Neuer Termin"
+
+#~ msgid "New folder"
+#~ msgstr "Neuer Ordner"
+
+#~ msgid "New group"
+#~ msgstr "Neue Gruppe"
+
+#~ msgid "New message"
+#~ msgstr "Neue Nachricht"
+
+#~ msgid "New messaging service"
+#~ msgstr "Neuer Messaging-Dienst"
+
+#~ msgid "New resource"
+#~ msgstr "Neue Ressource"
+
+#~ msgid "New rule"
+#~ msgstr "Neue Regel"
+
+#~ msgid "New task"
+#~ msgstr "Neue Aufgabe"
+
+#~ msgid "New..."
+#~ msgstr "Neu..."
+
+#~ msgid "Next"
+#~ msgstr "Weiter"
+
+#~ msgid "Next Week"
+#~ msgstr "Folgende Woche"
+
+#~ msgid "Nicaragua"
+#~ msgstr "Nicaragua"
+
+#~ msgid "Nickname"
+#~ msgstr "Spitzname"
+
+#~ msgid "Nickname:"
+#~ msgstr "Spitzname"
+
+#~ msgid "Niger"
+#~ msgstr "Niger"
+
+#~ msgid "Nigeria"
+#~ msgstr "Nigeria"
+
+#~ msgid "Niue"
+#~ msgstr "Niue"
+
 #~ msgid "No"
 #~ msgstr "Nein"
+
+#~ msgid "No Appointment selected."
+#~ msgstr "Es wurde kein Termin ausgewählt."
+
+#~ msgid "No Attachments available"
+#~ msgstr "Keine Anlage verfügbar"
+
+#~ msgid "No Info Items in this folder"
+#~ msgstr "Dieser Ordner enthält keine Info-Einträge."
+
+#~ msgid "No Members"
+#~ msgstr "Keine Mitglieder"
+
+#~ msgid "No Messaging accounts configured."
+#~ msgstr "Keine Messaging Accounts konfiguriert."
+
+#~ msgid "No Publication selected"
+#~ msgstr "Keine Veröffentlichung gewählt"
+
+#~ msgid "No accounts available"
+#~ msgstr "Keine Accounts verfügbar"
+
+#~ msgid "No accounts created"
+#~ msgstr "Keine Accounts angelegt"
+
+#~ msgid "No activity"
+#~ msgstr "Keine Aktivität"
+
+#~ msgid "No addresses available"
+#~ msgstr "Keine Adressen verfügbar"
+
+#~ msgid "No appointments today"
+#~ msgstr "Sie haben heute keine Termine"
+
+#~ msgid "No attachments available"
+#~ msgstr "Keine Anlagen verfügbar"
+
+#~ msgid "No comment"
+#~ msgstr "Kein Kommentar"
+
+#~ msgid "No contacts in this folder"
+#~ msgstr "Dieser Ordner enthält keine Kontakte"
+
+#~ msgid "No error occured"
+#~ msgstr "Es trat kein Fehler auf"
+
+#~ msgid "No groups available"
+#~ msgstr "Keine Gruppen verfügbar"
+
+#~ msgid "No new E-Mails in this folder"
+#~ msgstr "Dieser Ordner enthält keine neuen E-Mails"
+
+#~ msgid "No participants available"
+#~ msgstr "Keine Teilnehmer verfügbar"
+
+#~ msgid "No publications added"
+#~ msgstr "Keine Veröffentlichungen hinzugefügt"
+
+#~ msgid "No recurrence"
+#~ msgstr "Keine Serie"
+
+#~ msgid "No resources available"
+#~ msgstr "Keine Ressourcen verfügbar"
+
+#~ msgid "No route planner registered."
+#~ msgstr "Kein Routenplaner eingetragen"
+
+#~ msgid "No routing data available"
+#~ msgstr "Keine Routendaten verfügbar"
+
+#~ msgid "No rules available"
+#~ msgstr "Keine Regeln verfügbar"
+
+#~ msgid "No search result found for the string provided"
+#~ msgstr "Der eingegebene Suchbegriff wurde nicht gefunden"
+
+#~ msgid "No server connection"
+#~ msgstr "Keine Serververbindung"
 
 #~ msgid "No subject"
 #~ msgstr "Kein Betreff"
 
+#~ msgid "No subscription added"
+#~ msgstr "Kein Abonnement hinzugefügt"
+
+#~ msgid "No subscription selected"
+#~ msgstr "Kein Abonnement gewählt"
+
+#~ msgid "No subscriptions configured"
+#~ msgstr "Keine Abonnements konfiguriert"
+
+#~ msgid "No tasks today"
+#~ msgstr "Sie haben heute keine Aufgaben"
+
+#~ msgid "No text"
+#~ msgstr "Kein Text"
+
+#~ msgid "No title"
+#~ msgstr "Kein Titel"
+
+#~ msgid "No versions available"
+#~ msgstr "Keine Versionen verfügbar"
+
 #~ msgid "None"
 #~ msgstr "Keine"
+
+#~ msgid "Norfolk Island"
+#~ msgstr "Norfolkinsel"
+
+#~ msgid "Normal"
+#~ msgstr "Normal"
+
+#~ msgid "Northern Mariana Islands"
+#~ msgstr "Nördliche Marianen"
+
+#~ msgid "Norway"
+#~ msgstr "Norwegen"
+
+#~ msgid "Not Spam"
+#~ msgstr "Kein Spam"
+
+#~ msgid "Not enough rights"
+#~ msgstr "Unzureichende Rechte"
+
+#~ msgid "Not set"
+#~ msgstr "Unbestimmt"
+
+#~ msgid "Not started"
+#~ msgstr "Nicht begonnen"
+
+#~ msgid "Note: Attachments are not viewable when composing a new message"
+#~ msgstr ""
+#~ "Hinweis: Anhänge sind beim Erstellen einer neuen Nachricht nicht sichtbar"
+
+#~ msgid "Notify all participants by E-Mail"
+#~ msgstr "Alle Teilnehmer per E-Mail benachrichtigen"
+
+#~ msgid "Notify on delivery receipt?"
+#~ msgstr "Empfangsbestätigung?"
+
+#~ msgid "Notify participants by E-Mail"
+#~ msgstr "Teilnehmer per E-Mail benachrichtigen"
 
 #~ msgid "Nov"
 #~ msgstr "Nov"
 
+#~ msgid "Nr:"
+#~ msgstr "Nr:"
+
+#~ msgid "Number of concurrent appointments shown in custom view"
+#~ msgstr ""
+#~ "Anzahl angezeigter zeitgleicher Termine in benutzerdefinierter Ansicht"
+
+#~ msgid "Number of concurrent appointments shown in day view"
+#~ msgstr "Anzahl angezeigter zeitgleicher Termine in der Tagesansicht"
+
+#~ msgid "Number of concurrent appointments shown in workweek view"
+#~ msgstr "Anzahl angezeigter zeitgleicher Termine in der Arbeitswochenansicht"
+
+#~ msgid "Number of days between vacation notices to the same sender"
+#~ msgstr ""
+#~ "Anzahl Tage zwischen dem Versenden einer Abwesenheitsbenachrichtigung an "
+#~ "den gleichen Absender."
+
+#~ msgid "Number of days in custom view"
+#~ msgstr "Anzahl Tage in benutzerdefinierter Ansicht"
+
+#~ msgid "Number of days in work week"
+#~ msgstr "Anzahl Tage in Arbeitswoche"
+
+#~ msgid "Number of rows to be displayed in card view:"
+#~ msgstr "Anzuzeigende Zeilenanzahl in der Kartenansicht "
+
+#~ msgid "OK"
+#~ msgstr "OK"
+
 #~ msgid "Oct"
 #~ msgstr "Okt"
 
-#~ msgid "Ok"
-#~ msgstr "OK"
+#~ msgid "Of the following conditions:"
+#~ msgstr "der folgenden Bedingungen:"
+
+#~ msgid "Old Password is wrong."
+#~ msgstr "Altes Passwort ist nicht korrekt"
+
+#~ msgid "Oman"
+#~ msgstr "Oman"
+
+#~ msgid "Once"
+#~ msgstr "Einmal"
+
+#~ msgid ""
+#~ "Only use this option if this computer is used solely by you. Your "
+#~ "credentials are locally saved for the current working day. You can use "
+#~ "several browser windows for working with the groupware. Do not use this "
+#~ "option when working on a 3rd party computer (e.g., in an Internet cafe)"
+#~ msgstr ""
+#~ "Verwenden Sie diese Option nur dann, wenn dieser Computer nur von Ihnen "
+#~ "verwendet wird. Ihre Anmeldedaten werden für den aktuellen Arbeitstag "
+#~ "lokal gespeichert. Sie können mehrere Browserfenster für die Arbeit mit "
+#~ "der Groupware verwenden. Verwenden Sie diese Option nicht, wenn Sie auf "
+#~ "einem Fremdrechner arbeiten (z.B. in einem Internetcafe)"
+
+#~ msgid "Open attachment"
+#~ msgstr "Anlage öffnen"
+
+#~ msgid "Open error report"
+#~ msgstr "Fehlerbericht öffnen"
+
+#~ msgid "Open-Xchange Server"
+#~ msgstr "Open-Xchange Server"
+
+#~ msgid "Optional %d"
+#~ msgstr "Optional %d"
+
+#~ msgid "Optional 1"
+#~ msgstr "Optional 1"
+
+#~ msgid "Optional 10"
+#~ msgstr "Optional 10"
+
+#~ msgid "Optional 11"
+#~ msgstr "Optional 11"
+
+#~ msgid "Optional 12"
+#~ msgstr "Optional 12"
+
+#~ msgid "Optional 13"
+#~ msgstr "Optional 13"
+
+#~ msgid "Optional 14"
+#~ msgstr "Optional 14"
+
+#~ msgid "Optional 15"
+#~ msgstr "Optional 15"
+
+#~ msgid "Optional 16"
+#~ msgstr "Optional 16"
+
+#~ msgid "Optional 17"
+#~ msgstr "Optional 17"
+
+#~ msgid "Optional 18"
+#~ msgstr "Optional 18"
+
+#~ msgid "Optional 19"
+#~ msgstr "Optional 19"
+
+#~ msgid "Optional 2"
+#~ msgstr "Optional 2"
+
+#~ msgid "Optional 20"
+#~ msgstr "Optional 20"
+
+#~ msgid "Optional 3"
+#~ msgstr "Optional 3"
+
+#~ msgid "Optional 4"
+#~ msgstr "Optional 4"
+
+#~ msgid "Optional 5"
+#~ msgstr "Optional 5"
+
+#~ msgid "Optional 6"
+#~ msgstr "Optional 6"
+
+#~ msgid "Optional 7"
+#~ msgstr "Optional 7"
+
+#~ msgid "Optional 8"
+#~ msgstr "Optional 8"
+
+#~ msgid "Optional 9"
+#~ msgstr "Optional 9"
+
+#~ msgid "Optional Fields:"
+#~ msgstr "Dynamische Felder:"
+
+#~ msgid "Options"
+#~ msgstr "Optionen"
+
+#~ msgid "Order by:"
+#~ msgstr "Sortieren nach: "
+
+#~ msgid "Organization"
+#~ msgstr "Unternehmen"
+
+#~ msgid "Organizer"
+#~ msgstr "Organisator"
+
+#~ msgid "Organizer:"
+#~ msgstr "Organisator:"
+
+#~ msgid "Original Message"
+#~ msgstr "Originalnachricht"
+
+#~ msgid "Others"
+#~ msgstr "Weitere"
+
+#~ msgid "Outgoing Server Settings (SMTP)"
+#~ msgstr "Einstellungen für ausgehenden Server (SMTP)"
+
+#~ msgid "Outlook file"
+#~ msgstr "Outlook-Datei"
+
+#~ msgid "Overdue by %d day."
+#~ msgid_plural "Overdue by %d days."
+#~ msgstr[0] "Fälligkeit seit %d Tag überschritten."
+#~ msgstr[1] "Fälligkeit seit %d Tagen überschritten."
+
+#~ msgid "Overdue by yesterday."
+#~ msgstr "Fälligkeit seit gestern überschritten."
 
 #~ msgid "Overview"
 #~ msgstr "Übersicht"
 
-#~ msgid "Own Folders"
-#~ msgstr "Eigene Ordner"
+#~ msgid "Overview Publications"
+#~ msgstr "Veröffentlichungen - Überblick"
 
-#~ msgid "Own folders"
-#~ msgstr "Eigene Ordner"
+#~ msgid "Overview Subscriptions"
+#~ msgstr "Abonnements - Überblick"
 
-#~ msgid "PM"
-#~ msgstr "pm"
+#~ msgid "PB"
+#~ msgstr "PB"
 
-#~ msgid "Permanently delete E-Mails?"
-#~ msgstr "E-Mails endgültig löschen?"
+#~ msgid "PLN"
+#~ msgstr "PLN"
 
-#~ msgid "Please select a target folder."
-#~ msgstr "Bitte wählen sie einen Zielordner aus."
+#~ msgid "POP3 Mail Server"
+#~ msgstr "POP3-Mail-Server"
 
-#~ msgid "Please select the folders you want to access."
-#~ msgstr "Bitte wählen Sie die Ordner aus, auf die sie zugreifen möchten."
+#~ msgid "Pager"
+#~ msgstr "Pager"
 
-#~ msgid "Postbox"
-#~ msgstr "Postfach"
+#~ msgid "Pager:"
+#~ msgstr "Pager"
 
-#~ msgid "Privat"
+#~ msgid "Pakistan"
+#~ msgstr "Pakistan"
+
+#~ msgid "Palau"
+#~ msgstr "Palau"
+
+#~ msgid "Palestinian Territory, Occupied"
+#~ msgstr "Palästinensische Autonomiegebiete"
+
+#~ msgid "Panama"
+#~ msgstr "Panama"
+
+#~ msgid "Panel is shown as"
+#~ msgstr "Panel anzeigen als"
+
+#~ msgid "Papua New Guinea"
+#~ msgstr "Papua-Neuguinea"
+
+#~ msgid "Paraguay"
+#~ msgstr "Paraguay"
+
+#~ msgid "Parameter:"
+#~ msgstr "Parameter:"
+
+#~ msgid "Participant"
+#~ msgstr "Teilnehmer"
+
+#~ msgid "Participant:"
+#~ msgstr "Teilnehmer"
+
+#~ msgid "Participants"
+#~ msgstr "Teilnehmer"
+
+#~ msgid "Participants/Resources"
+#~ msgstr "Teilnehmer/Ressourcen"
+
+#~ msgid "Participants:"
+#~ msgstr "Teilnehmer"
+
+#~ msgid "Password has changed"
+#~ msgstr "Passwort wurde geändert"
+
+#~ msgid "Password length must be between %1$s and %2$s characters."
+#~ msgstr "Das Passwort muss zwischen %1$s und %2$s Zeichen lang sein."
+
+#~ msgid "Password strength"
+#~ msgstr "Passwortstärke"
+
+#~ msgid "Password:"
+#~ msgstr "Passwort"
+
+#~ msgid "Paste"
+#~ msgstr "Einfügen"
+
+#~ msgid "Permanently remove deleted E-Mails?"
+#~ msgstr "Gelöschte E-Mails unwiderruflich entfernen?"
+
+#~ msgid "Permanently remove your deleted E-Mails?"
+#~ msgstr "Gelöschte E-Mails unwiderruflich entfernen?"
+
+#~ msgid "Permissions"
+#~ msgstr "Berechtigungen"
+
+#~ msgid "Personal Data"
+#~ msgstr "Persönliche Daten"
+
+#~ msgid "Peru"
+#~ msgstr "Peru"
+
+#~ msgid "Philippines"
+#~ msgstr "Philippinen"
+
+#~ msgid "Phone"
+#~ msgstr "Telefon"
+
+#~ msgid "Phone (assistant)"
+#~ msgstr "Telefon (Assistent)"
+
+#~ msgid "Phone (business):"
+#~ msgstr "Telefon (geschäftlich)"
+
+#~ msgid "Phone (car)"
+#~ msgstr "Autotelefon"
+
+#~ msgid "Phone (car):"
+#~ msgstr "Autotelefon"
+
+#~ msgid "Phone (company)"
+#~ msgstr "Telefon (Zentrale)"
+
+#~ msgid "Phone (company):"
+#~ msgstr "Telefon (Zentrale)"
+
+#~ msgid "Phone (other)"
+#~ msgstr "Telefon (weiteres)"
+
+#~ msgid "Phone (other):"
+#~ msgstr "Telefon (weiteres)"
+
+#~ msgid "Phone (private 2)"
+#~ msgstr "Telefon (privat 2)"
+
+#~ msgid "Phone (private 2):"
+#~ msgstr "Telefon (privat 2)"
+
+#~ msgid "Phone (private):"
+#~ msgstr "Telefon (privat)"
+
+#~ msgid "Phone 2"
+#~ msgstr "Telefon 2"
+
+#~ msgid "Phone 2:"
+#~ msgstr "Telefon 2:"
+
+#~ msgid "Phone list"
+#~ msgstr "Telefonliste"
+
+#~ msgid "Phone:"
+#~ msgstr "Telefon:"
+
+#~ msgid "Picture"
+#~ msgstr "Bild"
+
+#~ msgid "Pitcairn"
+#~ msgstr "Pitcairn"
+
+#~ msgid "Place of Signature:"
+#~ msgstr "Signatur einfügen "
+
+#~ msgid "Plain text"
+#~ msgstr "Nur Text"
+
+#~ msgid "Please choose"
+#~ msgstr "Bitte wählen"
+
+#~ msgid "Please choose a file!"
+#~ msgstr "Wählen Sie eine Datei."
+
+#~ msgid "Please enter a name"
+#~ msgstr "Geben Sie einen Namen ein."
+
+#~ msgid "Please enter a valid E-Mail address!"
+#~ msgstr "Geben Sie eine gültige E-Mail-Adresse ein."
+
+#~ msgid "Please enter a valid value in the marked field."
+#~ msgid_plural "Please enter valid values in the marked fields."
+#~ msgstr[0] "Geben Sie im markierten Feld einen gültigen Wert ein. "
+#~ msgstr[1] "Geben Sie im markierten Feld gültige Werte ein."
+
+#~ msgid "Please enter your old password and twice the new password."
+#~ msgstr "Geben Sie Ihr altes und zweimal das neue Passwort ein."
+
+#~ msgid "Please enter your search"
+#~ msgstr "Suchbegriff eingeben"
+
+#~ msgid ""
+#~ "Please have a look at the %sInteresting UWA modules%s page. It shows a "
+#~ "list of widgets and their associated data."
+#~ msgstr ""
+#~ "Gehen Sie zur Seite %sInteressante UWA-Module%s. Dort sehen Sie eine "
+#~ "Liste von Widgets und deren zugehörige Daten."
+
+#~ msgid ""
+#~ "Please note: All messages received from the POP3 account will be stored "
+#~ "to a folder on your local IMAP account."
+#~ msgstr ""
+#~ "Bitte beachten Sie: Nachrichten, die in den POP3-Account eingehen, werden "
+#~ "in einem Ordner Ihres lokalen IMAP-Accounts gespeichert. "
+
+#~ msgid ""
+#~ "Please note: You are the creator of this appointment. If you delete this "
+#~ "appointment it will be removed for all participants."
+#~ msgstr ""
+#~ "Bitte beachten: Sie sind der Ersteller dieses Termins. Wenn Sie diesen "
+#~ "Termin löschen, wird er für alle Teilnehmer entfernt."
+
+#~ msgid "Please provide a site name."
+#~ msgstr "Bitte geben Sie einen Namen für die Site an."
+
+#~ msgid "Please select a country for the destination address"
+#~ msgstr "Wählen Sie ein Land für die Zieladresse"
+
+#~ msgid "Please select a country for the start address"
+#~ msgstr "Wählen Sie ein Land für die Startadresse"
+
+#~ msgid "Please select a file to import"
+#~ msgstr "Wählen Sie eine zu importierende Datei"
+
+#~ msgid "Please select at least one E-Mail address."
+#~ msgstr "Wählen Sie mindestens eine E-Mail-Adresse."
+
+#~ msgid "Please select at least one task!"
+#~ msgstr "Wählen Sie mindestens eine Aufgabe."
+
+#~ msgid "Please select only one Publication"
+#~ msgstr "Wählen Sie bitte nur eine Veröffentlichung"
+
+#~ msgid "Please select only one subscription"
+#~ msgstr "Wählen Sie bitte nur ein Abonnement"
+
+#~ msgid "Please set valid folder!"
+#~ msgstr "Legen Sie einen gültigen Ordner fest."
+
+#~ msgid "Please wait ..."
+#~ msgstr "Bitte warten..."
+
+#~ msgid ""
+#~ "Please wait while checking the connection ... This may take a while ..."
+#~ msgstr ""
+#~ "Bitte warten Sie, während die Verbindung überprüft wird. Dies kann einige "
+#~ "Minuten in Anspruch nehmen..."
+
+#~ msgid "Please wait while you are being redirected to the start page ..."
+#~ msgstr "Bitte warten. Sie werden zur Startseite weitergeleitet ..."
+
+#~ msgid "Poland"
+#~ msgstr "Polen"
+
+#~ msgid "Portal"
+#~ msgstr "Portal"
+
+#~ msgid "Portugal"
+#~ msgstr "Portugal"
+
+#~ msgid "Position:"
+#~ msgstr "Position"
+
+#~ msgid "Post"
+#~ msgstr "Post"
+
+#~ msgid "Pound sterling"
+#~ msgstr "Pfund Sterling"
+
+#~ msgid ""
+#~ "Pre-loading of externally linked images has been blocked to protect your "
+#~ "privacy!"
+#~ msgstr ""
+#~ "Das Laden extern verlinkter Bilder wurde zum Schutz Ihrer Privatsphäre "
+#~ "gesperrt."
+
+#~ msgid "Preferences"
+#~ msgstr "Einstellungen"
+
+#~ msgid "Premium features"
+#~ msgstr "Premium-Funktionen"
+
+#~ msgid "Preview"
+#~ msgstr "Vorschau"
+
+#~ msgid "Previous"
+#~ msgstr "Zurück"
+
+#~ msgid "Principal:"
+#~ msgstr "Leiter"
+
+#~ msgid "Print"
+#~ msgstr "Drucken"
+
+#~ msgid "Priority"
+#~ msgstr "Wichtigkeit"
+
+#~ msgid "Priority:"
+#~ msgstr "Wichtigkeit"
+
+#~ msgid "Privacy Notice"
+#~ msgstr "Datenschutzhinweis"
+
+#~ msgid "Private"
 #~ msgstr "Privat"
+
+#~ msgid "Private appointment"
+#~ msgstr "Privater Termin"
+
+#~ msgid "Private calendars"
+#~ msgstr "Private Kalender"
+
+#~ msgid "Private computer"
+#~ msgstr "Privater Computer"
+
+#~ msgid "Private contact"
+#~ msgstr "Privater Kontakt"
+
+#~ msgid "Private contacts"
+#~ msgstr "Private Kontakte"
+
+#~ msgid "Private folders"
+#~ msgstr "Private Ordner"
+
+#~ msgid "Private task"
+#~ msgstr "Private Aufgabe"
+
+#~ msgid "Private tasks"
+#~ msgstr "Private Aufgaben"
+
+#~ msgid "Private:"
+#~ msgstr "Privat:"
+
+#~ msgid "Process subsequent rules even when this rule matches"
+#~ msgstr "Gegen nachfolgende Regeln prüfen, auch wenn diese Regel zutrifft"
+
+#~ msgid "Profession:"
+#~ msgstr "Beruf"
+
+#~ msgid "Properties"
+#~ msgstr "Eigenschaften"
+
+#~ msgid "Public calendars"
+#~ msgstr "Öffentliche Kalender"
+
+#~ msgid "Public contacts"
+#~ msgstr "Öffentliche Kontakte"
+
+#~ msgid "Public folder %s"
+#~ msgstr "Öffentlicher Ordner %s"
+
+#~ msgid "Public folders"
+#~ msgstr "Öffentliche Ordner"
+
+#~ msgid "Public or shared computer"
+#~ msgstr "Öffentlicher oder gemeinsam genutzter Computer"
+
+#~ msgid "Public tasks"
+#~ msgstr "Öffentliche Aufgaben"
+
+#~ msgid "Publication"
+#~ msgstr "Veröffentlichung"
+
+#~ msgid "Publication status"
+#~ msgstr "Veröffentlichung - Status"
+
+#~ msgid "Publications"
+#~ msgstr "Veröffentlichungen"
+
+#~ msgid "Publish"
+#~ msgstr "Veröffentlichen"
+
+#~ msgid "Puerto Rico"
+#~ msgstr "Puerto Rico"
+
+#~ msgid "Qatar"
+#~ msgstr "Katar"
+
+#~ msgid "Quick config"
+#~ msgstr "Schnelleinstellung"
+
+#~ msgid "Quota Exceed"
+#~ msgstr "Quota überschritten"
+
+#~ msgid "RMB"
+#~ msgstr "RMB"
+
+#~ msgid "RSS Feed"
+#~ msgstr "RSS Feed"
+
+#~ msgid "RSS Feed URL:"
+#~ msgstr "RSS Feed URL:"
+
+#~ msgid "RUB"
+#~ msgstr "RUB"
+
+#~ msgid "Read"
+#~ msgstr "Gelesen"
+
+#
+#~ msgctxt "to"
+#~ msgid "Read"
+#~ msgstr "Lesen"
 
 #~ msgid "Read all"
 #~ msgstr "Alle lesen"
 
+#~ msgid "Read objects"
+#~ msgstr "Objekte lesen"
+
 #~ msgid "Read own"
 #~ msgstr "Eigene lesen"
 
-#~ msgid "Reconnecting to server"
-#~ msgstr "Erneuter Verbindungsaufbau zum Server"
+#~ msgid "Read/Unread"
+#~ msgstr "Gelesen/Ungelesen"
+
+#~ msgid "Rebuild Tree..."
+#~ msgstr "Seitenstruktur wird erzeugt..."
+
+#~ msgid "Received"
+#~ msgstr "Erhalten"
+
+#~ msgid "Received:"
+#~ msgstr "Erhalten:"
+
+#~ msgid "Recurrence"
+#~ msgstr "Serie"
+
+#~ msgid "Recurrence Duration"
+#~ msgstr "Serien-Dauer"
+
+#~ msgid "Recurrence Pattern"
+#~ msgstr "Serienoptionen"
+
+#~ msgid "Recurrence Settings"
+#~ msgstr "Serienoptionen"
+
+#~ msgctxt "calendar"
+#~ msgid "Recurrence..."
+#~ msgstr "Serie..."
+
+#~ msgctxt "tasks"
+#~ msgid "Recurrence..."
+#~ msgstr "Serie..."
+
+#~ msgid "Recurrence:"
+#~ msgstr "Serie:"
+
+#~ msgid "Recurring appointment"
+#~ msgstr "Wiederkehrender Termin"
+
+#~ msgid "Recurring task"
+#~ msgstr "Wiederkehrende Aufgabe"
+
+#~ msgid "Redirect to"
+#~ msgstr "Umleiten nach"
+
+#~ msgid "Reject with reason"
+#~ msgstr "Ablehnen mit Begründung"
+
+#~ msgid "Reload current view every:"
+#~ msgstr "Intervall für die Aktualisierung der Ansicht "
+
+#~ msgid "Remind me again"
+#~ msgstr "Erneut erinnern"
+
+#~ msgid "Remind me:"
+#~ msgstr "Mich erinnern"
+
+#~ msgid "Reminder"
+#~ msgstr "Erinnerung"
+
+#~ msgid "Reminder:"
+#~ msgstr "Erinnerung"
+
+#~ msgid "Remove"
+#~ msgstr "Entfernen"
+
+#~ msgid "Remove Member"
+#~ msgstr "Mitglied entfernen"
+
+#~ msgid "Remove attachment"
+#~ msgstr "Anlage entfernen"
+
+#~ msgid "Remove flag"
+#~ msgstr "Flag entfernen"
+
+#~ msgid "Remove participant"
+#~ msgstr "Teilnehmer entfernen"
+
+#~ msgid "Remove picture"
+#~ msgstr "Bild entfernen"
+
+#~ msgid "Remove user"
+#~ msgstr "Benutzer entfernen"
+
+#~ msgid "Rename"
+#~ msgstr "Umbenennen"
+
+#~ msgid "Renminbi"
+#~ msgstr "Renminbi"
+
+#~ msgid "Reply"
+#~ msgstr "Antworten"
+
+#~ msgid "Reply all"
+#~ msgstr "Allen antworten"
+
+#~ msgid "Reply-to"
+#~ msgstr "Antworten an"
+
+#~ msgid "Reply-to Address"
+#~ msgstr "Antworten senden an"
+
+#~ msgid "Resource Administration"
+#~ msgstr "Ressourcen-Administration"
+
+#~ msgid "Resource email"
+#~ msgstr "Ressourcen-E-Mail"
+
+#~ msgid "Resource name"
+#~ msgstr "Ressourcen-Name"
+
+#~ msgid "Resources"
+#~ msgstr "Ressourcen"
+
+#~ msgid "Resources:"
+#~ msgstr "Ressourcen"
+
+#~ msgid "Results for \"%s\""
+#~ msgstr "Ergebnisse für \"%s\""
+
+#~ msgid "Retweet"
+#~ msgstr "Retweet"
+
+#~ msgid "Retweet new"
+#~ msgstr "Retweet neu"
+
+#~ msgid "Retweet sent successfully"
+#~ msgstr "Retweet erfolgreich gesendet"
+
+#~ msgid "Reunion"
+#~ msgstr "Reunion"
+
+#~ msgid "Romania"
+#~ msgstr "Rumänien"
+
+#~ msgid "Room number"
+#~ msgstr "Raumnummer"
+
+#~ msgid "Room number:"
+#~ msgstr "Raumnummer"
+
+#~ msgid "Route Planning"
+#~ msgstr "Routenplanung"
+
+#~ msgid "Rule Details"
+#~ msgstr "Regel-Details"
+
+#~ msgid "Rule Name"
+#~ msgstr "Regel-Name"
+
+#~ msgid "Rules"
+#~ msgstr "Regeln"
+
+#~ msgid "Russian Federation"
+#~ msgstr "Russische Föderation"
+
+#~ msgid "Russian rouble"
+#~ msgstr "Russischer Rubel"
+
+#~ msgid "Rwanda"
+#~ msgstr "Ruanda"
+
+#
+#~ msgctxt "saturday"
+#~ msgid "S"
+#~ msgstr "Sa"
+
+#
+#~ msgctxt "sunday"
+#~ msgid "S"
+#~ msgstr "So"
+
+#~ msgid "SEK"
+#~ msgstr "SEK"
+
+#~ msgid "Saint Barthélemy"
+#~ msgstr "Saint-Barthélemy"
+
+#~ msgid "Saint Helena"
+#~ msgstr "St. Helena"
+
+#~ msgid "Saint Kitts and Nevis"
+#~ msgstr "St. Kitts und Nevis"
+
+#~ msgid "Saint Lucia"
+#~ msgstr "St. Lucia"
+
+#~ msgid "Saint Martin (French part)"
+#~ msgstr "Saint-Martin (französischer Teil)"
+
+#~ msgid "Saint Pierre and Miquelon"
+#~ msgstr "Saint-Pierre und Miquelon"
+
+#~ msgid "Saint Vincent and the Grenadines"
+#~ msgstr "St. Vincent und die Grenadinen"
+
+#~ msgid "Sales Volume"
+#~ msgstr "Umsatz"
+
+#~ msgid "Sales Volume:"
+#~ msgstr "Umsatz"
+
+#~ msgid "Samoa"
+#~ msgstr "Samoa"
+
+#~ msgid "Sample:"
+#~ msgstr "Beispiel:"
+
+#~ msgid "San Marino"
+#~ msgstr "San Marino"
+
+#~ msgid "Sao Tome and Principe"
+#~ msgstr "São Tomé und Príncipe"
 
 #~ msgid "Sat"
 #~ msgstr "Sa"
 
-#~ msgid "Search for contacts..."
-#~ msgstr "Nach Kontakten suchen..."
+#~ msgid "Saudi Arabia"
+#~ msgstr "Saudi-Arabien"
+
+#~ msgid "Save as"
+#~ msgstr "Speichern unter"
+
+#~ msgid "Save attachment"
+#~ msgstr "Anlage speichern"
+
+#~ msgid "Save configuration before every logout?"
+#~ msgstr "Konfiguration vor jedem Abmeldevorgang sichern?"
+
+#~ msgid "Save in InfoStore"
+#~ msgstr "Im InfoStore speichern"
+
+#~ msgid "Save version"
+#~ msgstr "Version speichern"
+
+#~ msgid "Schedule an all-day event"
+#~ msgstr "Ganztagestermin anlegen"
+
+#~ msgid "Search"
+#~ msgstr "Suchen"
+
+#~ msgid "Search all contact folders"
+#~ msgstr "Alle Kontaktordner durchsuchen"
+
+#~ msgid "Search:"
+#~ msgstr "Suchen"
+
+#~ msgid "Security"
+#~ msgstr "Sicherheit"
+
+#~ msgid "Select Address Book:"
+#~ msgstr "Adressbuch auswählen:"
+
+#~ msgid "Select Attachments"
+#~ msgstr "Anlagen wählen"
+
+#~ msgid "Select Contacts"
+#~ msgstr "Kontakte wählen"
+
+#~ msgid "Select Date"
+#~ msgstr "Datum wählen"
+
+#~ msgid "Select Folder"
+#~ msgstr "Ordner wählen"
+
+#~ msgid "Select Members"
+#~ msgstr "Teilnehmer wählen"
+
+#~ msgid "Select Participants"
+#~ msgstr "Teilnehmer wählen"
+
+#~ msgid "Select Participants and Resources"
+#~ msgstr "Teilnehmer und Ressourcen wählen"
+
+#~ msgid "Select Recipients"
+#~ msgstr "Empfänger wählen"
+
+#~ msgid "Select Users"
+#~ msgstr "Benutzer wählen"
+
+#~ msgid "Select a File:"
+#~ msgstr "Wählen Sie eine Datei:"
+
+#~ msgid "Select a contact category"
+#~ msgstr "Wählen Sie eine Kontaktkategorie"
+
+#~ msgid "Select a folder for import"
+#~ msgstr "Wählen Sie einen Ordner für den Import"
+
+#~ msgid "Select a task category"
+#~ msgstr "Wählen Sie eine Aufgabenkategorie"
+
+#~ msgid "Select a type"
+#~ msgstr "Wählen Sie einen Typ"
+
+#~ msgid "Select an appointment category"
+#~ msgstr "Wählen Sie eine Terminkategorie"
+
+#~ msgid "Select an infostore category"
+#~ msgstr "Wählen Sie eine InfoStore-Kategorie"
+
+#~ msgid "Select appointment display type"
+#~ msgstr "Wählen Sie einen Anzeigetyp für den Termin"
+
+#~ msgid "Select confirmation"
+#~ msgstr "Bestätigung wählen"
+
+#~ msgid "Select from the list and add selected as members"
+#~ msgstr ""
+#~ "Treffen Sie eine Auswahl aus der Liste und fügen Sie sie als Mitglieder "
+#~ "hinzu"
+
+#~ msgid "Select from the list and add selected as participants"
+#~ msgstr ""
+#~ "Treffen Sie eine Auswahl aus der Liste und fügen Sie sie als Teilnehmer "
+#~ "hinzu"
+
+#~ msgid "Select from the list and add selected as participants or resources"
+#~ msgstr ""
+#~ "Treffen Sie eine Auswahl aus der Liste und fügen Sie sie als Teilnehmer "
+#~ "oder Ressourcen hinzu"
+
+#~ msgid "Select from the list and add selected as recipients"
+#~ msgstr ""
+#~ "Treffen Sie eine Auswahl aus der Liste und fügen Sie sie als Teilnehmer "
+#~ "hinzu"
+
+#~ msgid "Select from the list and add selected as users"
+#~ msgstr ""
+#~ "Treffen Sie eine Auswahl aus der Liste und fügen Sie sie als Benutzer "
+#~ "hinzu"
+
+#~ msgid "Select the appointment path"
+#~ msgstr "Wählen Sie einen Terminpfad"
+
+#~ msgid "Select the number of items to be displayed in the module panes."
+#~ msgstr ""
+#~ "Ändern Sie die Anzahl der angezeigten Elemente in den Modulfenstern."
 
 #~ msgid "Send"
 #~ msgstr "Senden"
 
-#~ msgid "Sent Items"
-#~ msgstr "Gesendete Objekte"
+#~ msgid "Send Attachment"
+#~ msgstr "Anlage versenden"
+
+#~ msgid "Send E-Mail about this publication"
+#~ msgstr "E-Mail-Benachrichtigung zu dieser Veröffentlichung senden"
+
+#~ msgid "Send E-Mail to all"
+#~ msgstr "E-Mail senden an alle"
+
+#~ msgid "Send as E-Mail"
+#~ msgstr "Als E-Mail versenden"
+
+#~ msgid "Send as attachment"
+#~ msgstr "Als Anlage versenden"
+
+#~ msgid "Send as link"
+#~ msgstr "Als Link versenden"
+
+#~ msgid "Send as vCard"
+#~ msgstr "Als vCard versenden"
+
+#~ msgid "Sender/From"
+#~ msgstr "Absender / Von"
+
+#~ msgid "Senegal"
+#~ msgstr "Senegal"
+
+#~ msgid "Sent"
+#~ msgstr "Gesendet"
+
+#~ msgid "Sent folder"
+#~ msgstr "Ordner Gesendet"
 
 #~ msgid "Sep"
 #~ msgstr "Sep"
 
-#~ msgid "Settings"
-#~ msgstr "Einstellungen"
+#~ msgid "Separator"
+#~ msgstr "Trennzeichen"
+
+#~ msgid "Serbia"
+#~ msgstr "Serbien"
+
+#~ msgid "Server Name"
+#~ msgstr "Server-Name"
+
+#~ msgid "Server Port"
+#~ msgstr "Server-Port"
+
+#~ msgid "Server Settings"
+#~ msgstr "Server-Einstellungen"
+
+#~ msgid "Server Type"
+#~ msgstr "Server-Typ"
+
+#~ msgid "Service"
+#~ msgstr "Dienst"
+
+#~ msgid "Session has expired"
+#~ msgstr "Session ist abgelaufen"
+
+#~ msgid "Seychelles"
+#~ msgstr "Seychellen"
+
+#~ msgid "Share calendar"
+#~ msgstr "Kalender freigeben"
+
+#~ msgid "Share tasks"
+#~ msgstr "Aufgaben freigeben"
+
+#~ msgid "Share your contacts"
+#~ msgstr "Geben Sie Ihre Kontakte frei"
+
+#~ msgid "Shared calendars"
+#~ msgstr "Freigegebene Kalender"
+
+#~ msgid "Shared contacts"
+#~ msgstr "Freigegebene Kontakte"
+
+#~ msgid "Shared folders"
+#~ msgstr "Freigegebene Ordner"
+
+#~ msgid "Shared tasks"
+#~ msgstr "Freigegebene Aufgaben"
+
+#~ msgid "Short"
+#~ msgstr "Kurz"
+
+#~ msgid "Show"
+#~ msgstr "Zeigen"
+
+#~ msgid "Show 10 elements"
+#~ msgstr "10 Elemente anzeigen"
+
+#~ msgid "Show 15 elements"
+#~ msgstr "15 Elemente anzeigen"
+
+#~ msgid "Show 20 elements"
+#~ msgstr "20 Elemente anzeigen"
+
+#~ msgid "Show 5 elements"
+#~ msgstr "5 Elemente anzeigen"
+
+#~ msgid "Show External Participants"
+#~ msgstr "Externe Teilnehmer zeigen"
+
+#~ msgid "Show Group Members"
+#~ msgstr "Gruppen-Mitglieder zeigen"
+
+#~ msgid "Show all my appointments from all calendars"
+#~ msgstr "Alle meine Termine aus allen Kalendern anzeigen"
+
+#~ msgid "Show appointments"
+#~ msgstr "Termine anzeigen"
+
+#~ msgid "Show as"
+#~ msgstr "Anzeigen als"
+
+#~ msgid "Show confirmation popup for new appointments?"
+#~ msgstr "Bestätigungsfenster für neue Termine anzeigen?"
+
+#~ msgid "Show contacts"
+#~ msgstr "Kontakte anzeigen"
+
+#~ msgid "Show files"
+#~ msgstr "Dateien anzeigen"
+
+#~ msgid "Show in Calendar"
+#~ msgstr "In Kalender anzeigen"
+
+#~ msgid "Show in calendar"
+#~ msgstr "In Kalender anzeigen"
+
+#~ msgid "Show in task"
+#~ msgstr "In Aufgabe anzeigen"
+
+#~ msgid "Show mails"
+#~ msgstr "E-Mails anzeigen"
+
+#~ msgid "Show name instead of E-Mail address in To and Cc fields:"
+#~ msgstr "Name anstelle der E-Mail-Adresse in den Feldern An und Cc anzeigen:"
+
+#~ msgid "Show sender image?"
+#~ msgstr "Bild des Senders anzeigen?"
+
+#~ msgid "Show tasks"
+#~ msgstr "Aufgaben anzeigen"
+
+#~ msgid "Sierra Leone"
+#~ msgstr "Sierra Leone"
+
+#~ msgid "Signature:"
+#~ msgstr "Signatur"
+
+#~ msgid "Since the appointment is recurring, it may cause further conflicts."
+#~ msgstr ""
+#~ "Da es sich um einen Serientermin handelt, können weitere Konflikte "
+#~ "auftreten."
+
+#~ msgid "Singapore"
+#~ msgstr "Singapur"
+
+#~ msgid "Size (bytes)"
+#~ msgstr "Größe (Bytes)"
+
+#~ msgid "Size:"
+#~ msgstr "Größe"
+
+#~ msgid "Slovakia"
+#~ msgstr "Slowakien"
+
+#~ msgid "Slovenia"
+#~ msgstr "Slowenien"
+
+#~ msgid "Social"
+#~ msgstr "Social"
+
+#~ msgid "Social Messaging accounts"
+#~ msgstr "Social Messaging Accounts"
+
+#~ msgid "Solomon Islands"
+#~ msgstr "Salomonen"
+
+#~ msgid "Somalia"
+#~ msgstr "Somalia"
+
+#~ msgid "Source"
+#~ msgstr "Quelle"
+
+#~ msgid "South Africa"
+#~ msgstr "Südafrika"
+
+#~ msgid "South Georgia and the South Sandwich Islands"
+#~ msgstr "Südgeorgien und die südlichen Sandwich-Inseln"
+
+#~ msgid "Spain"
+#~ msgstr "Spanien"
 
 #~ msgid "Spam"
 #~ msgstr "Spam"
 
+#~ msgid "Spam folder"
+#~ msgstr "Ordner Spam"
+
+#~ msgid "Spouse's name"
+#~ msgstr "Ehepartner"
+
+#~ msgid "Spouse's name:"
+#~ msgstr "Ehepartner"
+
+#~ msgid "Sri Lanka"
+#~ msgstr "Sri Lanka"
+
+#~ msgid "Start"
+#~ msgstr "Start"
+
+#~ msgid "Start Page"
+#~ msgstr "Startseite"
+
+#~ msgid "Start date"
+#~ msgstr "Beginnt am"
+
+#~ msgid "Start date:"
+#~ msgstr "Beginnt am"
+
+#~ msgid "Start of working time"
+#~ msgstr "Arbeitszeit beginnt um"
+
+#~ msgid "Start page"
+#~ msgstr "Startseite"
+
+#~ msgid "Start time"
+#~ msgstr "Beginnt um"
+
+#~ msgid "Start:"
+#~ msgstr "Beginn"
+
+#~ msgid "Starts at"
+#~ msgstr "Beginnt um"
+
+#~ msgid "Starts at:"
+#~ msgstr "Beginnt um"
+
+#~ msgid "Starts on %1$s, due on %2$s."
+#~ msgstr "Beginnt am %1$s, fällig am %2$s."
+
+#~ msgid "Starts on %s."
+#~ msgstr "Beginnt am %s"
+
+#~ msgid "State"
+#~ msgstr "Bundesland"
+
+#~ msgid "State (business)"
+#~ msgstr "Bundesland (geschäftlich)"
+
+#~ msgid "State (other)"
+#~ msgstr "Bundesland (weiteres)"
+
+#~ msgid "State (other):"
+#~ msgstr "Bundesland (weiteres)"
+
+#~ msgid "State (private)"
+#~ msgstr "Bundesland (privat)"
+
+#~ msgid "State:"
+#~ msgstr "Bundesland"
+
+#~ msgid "Static resizing..."
+#~ msgstr "Statische Größenanpassung..."
+
+#~ msgid "Status"
+#~ msgstr "Status"
+
+#~ msgid "Status:"
+#~ msgstr "Status"
+
+#~ msgid "Step %d. Download Updater"
+#~ msgstr "Schritt %d. Updater herunterladen"
+
+#~ msgid "Street"
+#~ msgstr "Straße"
+
+#~ msgid "Street (business)"
+#~ msgstr "Straße (geschäftlich)"
+
+#~ msgid "Street (other)"
+#~ msgstr "Straße (weitere)"
+
+#~ msgid "Street (other):"
+#~ msgstr "Straße (weitere)"
+
+#~ msgid "Street (private)"
+#~ msgstr "Straße (privat)"
+
+#~ msgid "Street:"
+#~ msgstr "Straße"
+
+#~ msgid "Strong"
+#~ msgstr "Stark"
+
+#~ msgid "Subject"
+#~ msgstr "Betreff"
+
+#~ msgid "Subject:"
+#~ msgstr "Betreff"
+
+#~ msgid "Subscribe"
+#~ msgstr "Abonnieren"
+
+#~ msgid "Subscribe Folder"
+#~ msgstr "Ordner abonnieren"
+
+#~ msgid "Subscribe contacts from LinkedIn, Facebook, Google..."
+#~ msgstr "Kontakte abonnieren aus LinkedIn, Facebook, Google..."
+
+#~ msgid "Subscribe folder"
+#~ msgstr "Ordner abonnieren"
+
+#~ msgid "Subscribe into:"
+#~ msgstr "Abonnieren nach:"
+
+#~ msgid "Subscribed"
+#~ msgstr "Abonniert"
+
+#~ msgid "Subscription status"
+#~ msgstr "Abonnement-Status"
+
+#~ msgid "Subscriptions"
+#~ msgstr "Abonnements"
+
+#~ msgid "Subscriptions successfully migrated"
+#~ msgstr "Abonnements erfolgreich migriert"
+
+#~ msgid "Successfully imported: %d"
+#~ msgstr "Erfolgreich importiert: %d"
+
+#~ msgid "Sudan"
+#~ msgstr "Sudan"
+
+#~ msgid "Suffix"
+#~ msgstr "Namenszusatz"
+
+#~ msgid "Suffix:"
+#~ msgstr "Namenszusatz"
+
 #~ msgid "Sun"
 #~ msgstr "So"
 
-#~ msgid "Synchronizing data."
-#~ msgstr "Daten synchronisieren"
+#~ msgid ""
+#~ "Supported Outlook versions (Connector 2 for Microsoft Outlook): Latest "
+#~ "versions of Microsoft Outlook 2003, Microsoft Outlook 2007, Outlook 2010"
+#~ msgstr ""
+#~ "Unterstützte Outlook-Versionen (Konnektor 2 für Microsoft Outlook): "
+#~ "Neueste Versionen von Microsoft Outlook 2003, Microsoft Outlook 2007, "
+#~ "Outlook 2010"
 
-#~ msgid "System messages"
-#~ msgstr "System-Meldungen"
+#~ msgid ""
+#~ "Supported Outlook versions (Connector for Microsoft Outlook): Microsoft "
+#~ "Outlook 2003, Microsoft Outlook 2007"
+#~ msgstr ""
+#~ "Unterstützte Outlook-Versionen (Konnektor für Microsoft Outlook): "
+#~ "Microsoft Outlook 2003, Microsoft Outlook 2007"
+
+#~ msgid "Suriname"
+#~ msgstr "Suriname"
+
+#~ msgid "Svalbard and Jan Mayen"
+#~ msgstr "Svalbard und Jan Mayen"
+
+#~ msgid "Swaziland"
+#~ msgstr "Swasiland"
+
+#~ msgid "Sweden"
+#~ msgstr "Schweden"
+
+#~ msgid "Swedish krona"
+#~ msgstr "Schwedische Kronen"
+
+#~ msgid "Swiss franc"
+#~ msgstr "Schweizer Franken"
+
+#~ msgid "Switch to folder"
+#~ msgstr "Zu Ordner wechseln"
+
+#~ msgid "Switzerland"
+#~ msgstr "Schweiz"
+
+#~ msgid "Sync with mobile phone"
+#~ msgstr "Mit Mobilgerät synchronisieren"
+
+#~ msgid "Synchronization"
+#~ msgstr "Synchronisation"
+
+#~ msgid "Synchronize with Outlook"
+#~ msgstr "Mit Outlook synchronisieren"
+
+#~ msgid ""
+#~ "Syntax error in config: \n"
+#~ "%s"
+#~ msgstr ""
+#~ "Syntax-Fehler in config: \n"
+#~ "%s"
+
+#~ msgid ""
+#~ "Syntax error in server response (%s): \"%s\"\n"
+#~ "\n"
+#~ "URL: %s\n"
+#~ "\n"
+#~ "Data: %s\n"
+#~ "\n"
+#~ "Response: %s"
+#~ msgstr ""
+#~ "Syntax-Fehler in Server-Antwort (%s): \"%s\"\n"
+#~ "\n"
+#~ "URL: %s\n"
+#~ "\n"
+#~ "Daten: %s\n"
+#~ "\n"
+#~ "Antwort: %s"
+
+#~ msgid "Syrian Arab Republic"
+#~ msgstr "Arabische Republik Syrien"
+
+#~ msgid "System"
+#~ msgstr "System"
+
+#
+#~ msgctxt "thursday"
+#~ msgid "T"
+#~ msgstr "Do"
+
+#
+#~ msgctxt "tuesday"
+#~ msgid "T"
+#~ msgstr "Di"
+
+#~ msgid "TAX ID"
+#~ msgstr "Steuernummer"
+
+#~ msgid "TAX ID:"
+#~ msgstr "Steuernummer"
+
+#~ msgid "TB"
+#~ msgstr "TB"
+
+#~ msgid "TTY/TDD"
+#~ msgstr "Texttelefon"
+
+#~ msgid "TTY/TDD:"
+#~ msgstr "Texttelefon"
+
+#~ msgid "Tab-based panel"
+#~ msgstr "Tab-basiertes Panel"
+
+#~ msgid "Tag mail with"
+#~ msgstr "E-Mail-Tag"
+
+#~ msgid "Taiwan"
+#~ msgstr "Taiwan"
+
+#~ msgid "Tajikistan"
+#~ msgstr "Tadschikistan"
+
+#~ msgid "Tanzania"
+#~ msgstr "Tansania"
+
+#~ msgid "Target"
+#~ msgstr "Ziel"
+
+#~ msgid "Task"
+#~ msgstr "Aufgabe"
+
+#~ msgid "Tasks"
+#~ msgstr "Aufgaben"
+
+#~ msgid "Team"
+#~ msgstr "Team"
+
+#~ msgid "Team Members"
+#~ msgstr "Team-Mitglieder"
+
+#~ msgid "Team view"
+#~ msgstr "Team-Ansicht"
+
+#~ msgid "Teams"
+#~ msgstr "Teams"
+
+#~ msgid "Telex"
+#~ msgstr "Telex"
+
+#~ msgid "Telex:"
+#~ msgstr "Telex"
+
+#~ msgid "Tell me more..."
+#~ msgstr "Weitere Infos..."
+
+#~ msgid "Tentative"
+#~ msgstr "Vorläufig"
+
+#~ msgid "Test"
+#~ msgstr "Test"
+
+#~ msgid "Text"
+#~ msgstr "Text"
+
+#~ msgid "Thailand"
+#~ msgstr "Thailand"
+
+#~ msgid "The E-Mail address \"%s\" is not valid."
+#~ msgstr "Die E-Mail-Adresse \"%s\" ist ungültig."
+
+#~ msgid ""
+#~ "The E-Mail address you have entered seems not to be valid. Would you like "
+#~ "to add it anyway?"
+#~ msgstr ""
+#~ "Die eingegebene E-Mail-Adresse scheint ungültig zu sein. Wollen Sie sie "
+#~ "dennoch hinzufügen?"
+
+#~ msgid "The E-Mail module is not available"
+#~ msgstr "Das E-Mail-Modul ist nicht verfügbar"
+
+#~ msgid ""
+#~ "The configuration could not be saved, because of the following error:"
+#~ msgstr ""
+#~ "Aufgrund folgenden Fehlers konnte die Konfiguration nicht gespeichert "
+#~ "werden:"
+
+#~ msgid "The connection was successful."
+#~ msgstr "Die Verbindung wurde erfolgreich durchgeführt."
+
+#~ msgid ""
+#~ "The entered value for %s is not within the allowed range. Please use a "
+#~ "value from -130000 to 130000."
+#~ msgstr ""
+#~ "Der eingegebene Wert für %s liegt nicht im erlaubten Rahmen. Bitte "
+#~ "verwenden Sie einen Wert zwischen -130000 und 130000."
+
+#~ msgid ""
+#~ "The following addresses are already on the list of participants and "
+#~ "therefore not been added: %s"
+#~ msgstr ""
+#~ "Folgende Adressen sind bereits in der Liste der Teilnehmer und werden "
+#~ "deshalb nicht hinzugefügt: %s"
+
+#~ msgid "The following appointment already started:"
+#~ msgstr "Folgender Termin hat bereits begonnen"
+
+#~ msgid "The following task is already past due:"
+#~ msgstr "Fälligkeitstermin für folgende Aufgabe überschritten: "
+
+#~ msgid "The following task is due in %s:"
+#~ msgstr "Folgende Aufgabe ist fällig in %s "
+
+#~ msgid "The mandatory field %1$s is not defined."
+#~ msgstr "Das Pflichtfeld %1$s ist nicht definiert."
+
+#~ msgid "The new folder tree setting will take effect after a new login."
+#~ msgstr ""
+#~ "Zum Übernehmen der neuen Einstellung für den Ordnerbaum müssen Sie sich "
+#~ "erneut anmelden."
+
+#~ msgid "The new password"
+#~ msgstr "Das neue Passwort"
+
+#~ msgid "The panel setting will take effect after a new login."
+#~ msgstr ""
+#~ "Zum Übernehmen der Panel-Einstellung müssen Sie sich erneut anmelden."
+
+#~ msgid "The publication %s is now disabled"
+#~ msgstr "Die Veröffentlichung %s ist nun deaktiviert"
+
+#~ msgid "The publication %s is now enabled"
+#~ msgstr "Die Veröffentlichung %s ist nun aktiviert"
+
+#~ msgid ""
+#~ "The published data will be accessible to everyone on the Internet. Please "
+#~ "consider, which data you want to publish."
+#~ msgstr ""
+#~ "Die veröffentlichten Daten sind für jedermann im Internet sichtbar. Bitte "
+#~ "bedenken Sie, welche Daten sie veröffentlichen möchten."
+
+#~ msgid "The repeat interval must be an integer number"
+#~ msgstr "Das Wiederholungsintervall muss eine Ganzzahl sein"
+
+#~ msgid "The search pattern requires at least %s characters."
+#~ msgstr "Der Suchbegriff muss mindestens %s Zeichen enthalten."
+
+#~ msgid "The selected filter rule refers to an unknown folder '%s'."
+#~ msgstr "Die gewählte Filterregel zeigt auf einen unbekannten Ordner '%s'."
+
+#~ msgid "The server didn't respond!"
+#~ msgstr "Der Server antwortet nicht."
+
+#~ msgid "The subscription %s is now disabled"
+#~ msgstr "Das Abonnement %s ist nun deaktiviert"
+
+#~ msgid "The subscription %s is now enabled"
+#~ msgstr "Das Abonnement %s ist nun aktiviert"
+
+#~ msgid "The two newly entered passwords do not match."
+#~ msgstr "Die zwei neu eingegebenen Passwörter stimmen nicht überein."
+
+#~ msgid ""
+#~ "The updater will inform you of any updates for the Connector for "
+#~ "Microsoft Outlook."
+#~ msgstr ""
+#~ "Der Updater informiert Sie über alle Konnektor für Microsoft Outlook-"
+#~ "Updates."
+
+#~ msgid ""
+#~ "The window could not be opened. Most likely it has been blocked by a pop-"
+#~ "up or advertisement blocker. Please check your browser settings and make "
+#~ "sure pop-ups are allowed for this domain."
+#~ msgstr ""
+#~ "Das Fenster konnte nicht geöffnet werden. Es wurde wahrscheinlich durch "
+#~ "ein Pop-up oder einen Werbeblocker gesperrt. Bitte prüfen Sie Ihre "
+#~ "Browser-Einstellungen und stellen Sie sicher, dass Pop-ups für diese "
+#~ "Domain zugelassen werden."
+
+#~ msgid "Theme"
+#~ msgstr "Theme"
+
+#~ msgid "Theme will be applied after a new login."
+#~ msgstr ""
+#~ "Zum Übernehmen der Theme-Einstellung müssen Sie sich erneut anmelden."
+
+#~ msgid "This Signature name already exists"
+#~ msgstr "Der Name der Signatur besteht bereits"
+
+#~ msgid "This Team name already exists"
+#~ msgstr "Der Name des Teams besteht bereits"
+
+#~ msgid "This feature is not available"
+#~ msgstr "Diese Funktion ist nicht verfügbar"
+
+#~ msgid "This mail contains an URL to a publication."
+#~ msgstr "Diese E-Mail enthält eine URL zu einer Veröffentlichung."
+
+#~ msgid ""
+#~ "This object does not contain a file, would you like to send the link?"
+#~ msgstr "Dieses Objekt enthält keine Datei. Möchten Sie den Link versenden?"
 
 #~ msgid "Thu"
 #~ msgstr "Do"
+
+#~ msgid "Time Range"
+#~ msgstr "Zeitraum"
+
+#~ msgid "Time format:"
+#~ msgstr "Zeitformat:"
+
+#~ msgid "Time range for the calender view"
+#~ msgstr "Termine in einer der Kalenderansichten anzeigen"
+
+#~ msgid "Time range for the list view"
+#~ msgstr "Zeitraum für die Listenansicht"
+
+#~ msgid "Time range for the team view"
+#~ msgstr "Zeitraum für die Teamansicht"
+
+#~ msgid "Time zone:"
+#~ msgstr "Zeitzone"
+
+#~ msgid "Timor-Leste"
+#~ msgstr "Timor-Leste"
+
+#~ msgctxt "salutation"
+#~ msgid "Title"
+#~ msgstr "Anrede"
+
+#
+#~ msgctxt "salutation"
+#~ msgid "Title:"
+#~ msgstr "Anrede"
+
+#~ msgid "To"
+#~ msgstr "An"
+
+#~ msgid "To %s"
+#~ msgstr "An %s"
+
+#~ msgid "To..."
+#~ msgstr "An..."
 
 #~ msgid "To:"
 #~ msgstr "An"
@@ -978,46 +5241,776 @@ msgstr ""
 #~ msgid "Today"
 #~ msgstr "Heute"
 
-#~ msgid "Trash"
-#~ msgstr "Papierkorb"
+#~ msgid "Togo"
+#~ msgstr "Togo"
+
+#~ msgid "Tokelau"
+#~ msgstr "Tokelau"
+
+#~ msgid "Tonga"
+#~ msgstr "Tonga"
+
+#~ msgid "Too short"
+#~ msgstr "Zu kurz"
+
+#~ msgid "Trash folder"
+#~ msgstr "Ordner Papierkorb"
+
+#~ msgid "Trinidad and Tobago"
+#~ msgstr "Trinidad und Tobago"
 
 #~ msgid "Tue"
 #~ msgstr "Di"
 
+#~ msgid "Tunisia"
+#~ msgstr "Tunesien"
+
+#~ msgid "Turkey"
+#~ msgstr "Türkei"
+
+#~ msgid "Turkmenistan"
+#~ msgstr "Turkmenistan"
+
+#~ msgid "Turks and Caicos Islands"
+#~ msgstr "Turks- und Caicosinseln"
+
+#~ msgid "Tuvalu"
+#~ msgstr "Tuvalu"
+
+#~ msgid "Twitter"
+#~ msgstr "Twitter"
+
+#~ msgid "Type"
+#~ msgstr "Typ"
+
+#~ msgid "Type:"
+#~ msgstr "Typ"
+
+#~ msgid "URI"
+#~ msgstr "URI"
+
+#~ msgid "URI:"
+#~ msgstr "URI:"
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid "URL:"
+#~ msgstr "URL"
+
+#~ msgid "US dollar"
+#~ msgstr "US Dollar"
+
+#~ msgid "USD"
+#~ msgstr "USD"
+
+#~ msgid "UWA Modules"
+#~ msgstr "UWA-Module"
+
+#~ msgid "UWA Widgets..."
+#~ msgstr "UWA Widgets..."
+
+#~ msgid "Uganda"
+#~ msgstr "Uganda"
+
+#~ msgid "Ukraine"
+#~ msgstr "Ukraine"
+
+#~ msgid "Unable to create a new subscription folder."
+#~ msgstr "Der neue Abonnement-Ordner konnte nicht erstellt werden."
+
+#~ msgid "Unable to display E-Mail source."
+#~ msgstr "Mail-Quelldaten können nicht angezeigt werden"
+
+#~ msgid ""
+#~ "Unable to establish a connection to the E-Mail server. Possible reasons: "
+#~ "the mail server is (temporarily) down or there are network connection "
+#~ "problems. To prevent further errors the module has been disabled. Please "
+#~ "contact your administrator."
+#~ msgstr ""
+#~ "Es konnte keine Verbindung zum E-Mail-Server aufgebaut werden. Mögliche "
+#~ "Gründe: der Mailserver ist (vorübergehend) ausgefallen oder es traten "
+#~ "Netzwerkprobleme auf. Um weitere Fehler zu vermeiden, wurde das Modul "
+#~ "deaktiviert. Bitte wenden Sie sich an Ihren Administrator."
+
+#~ msgid "Unanswered"
+#~ msgstr "Unbeantwortet"
+
+#~ msgid "Undeleted"
+#~ msgstr "Nicht gelöscht"
+
+#~ msgid ""
+#~ "Unexpected: Unable to load data because the server response was empty! "
+#~ "Please try again later or contact the system administrator!"
+#~ msgstr ""
+#~ "Unerwarteter Fehler: Daten konnten wegen fehlerhafter Serverantwort nicht "
+#~ "geladen werden. Bitte versuchen Sie es später erneut oder wenden Sie sich "
+#~ "an Ihren Systemadministratoren."
+
+#~ msgid "Unified Mail"
+#~ msgstr "Unified Mail"
+
+#~ msgid "United Arab Emirates"
+#~ msgstr "Vereinigte Arabische Emirate"
+
+#~ msgid "United Kingdom"
+#~ msgstr "Vereinigtes Königreich"
+
+#~ msgid "United States"
+#~ msgstr "Vereinigte Staaten"
+
+#~ msgid "United States Minor Outlying Islands"
+#~ msgstr "United States Minor Outlying Islands"
+
+#~ msgid "Unknown"
+#~ msgstr "Unbekannt"
+
+#~ msgid "Unlock"
+#~ msgstr "Sperre aufheben"
+
+#~ msgid "Unnamed signature"
+#~ msgstr "Unbenannte Signatur"
+
 #~ msgid "Unread"
 #~ msgstr "Ungelesen"
 
-#~ msgid "Version"
-#~ msgstr "Version"
+#~ msgid "Until:"
+#~ msgstr "Bis"
+
+#~ msgid "Up"
+#~ msgstr "Nach oben"
+
+#~ msgid "Update"
+#~ msgstr "Aktualisierung"
+
+#~ msgid "Upload a picture"
+#~ msgstr "Bild hochladen"
+
+#~ msgid "Uruguay"
+#~ msgstr "Uruguay"
+
+#~ msgid "Use \"Standalone\" Mode:"
+#~ msgstr "\"Standalone\"-Modus verwenden:"
+
+#~ msgid "Use SSL connection"
+#~ msgstr "SSL-Verbindung verwenden"
+
+#~ msgid "Use Unified Mail for this account"
+#~ msgstr "Unified Mail für diesen Account verwenden"
+
+#~ msgid "Use as template"
+#~ msgstr "Als Vorlage verwenden"
+
+#~ msgid "Use for appointment"
+#~ msgstr "Für Termin verwenden"
+
+#~ msgid "Use the expert mode?"
+#~ msgstr "Expertenmodus verwenden?"
+
+#~ msgid ""
+#~ "Use this option when logging in to the server from a public or shared "
+#~ "computer. Your credentials are not saved locally. You can only use one "
+#~ "browser window for working with the groupware. You can not re-load the "
+#~ "browser window. In order to finish working with the groupware, first log "
+#~ "out from the server. Close the browser window. This prevents unauthorized "
+#~ "access to your groupware data."
+#~ msgstr ""
+#~ "Verwenden Sie diese Option, wenn Sie sich von einem öffentlichen oder "
+#~ "gemeinsam genutzten Computer am Server anmelden. Ihre Anmeldedaten werden "
+#~ "nicht lokal gespeichert. Sie können nur ein Browserfenster für Ihre "
+#~ "Arbeit mit der Groupware verwenden. Sie können das Browser-Fenster nicht "
+#~ "neu laden. Um Ihre Arbeit mit der Groupware zu beenden, melden Sie sich "
+#~ "zuerst vom Server ab. Schließen Sie dann das Browserfenster. Damit "
+#~ "verhindern Sie, dass unbefugte Personen an Ihre Groupware-Daten gelangen "
+#~ "können."
+
+#~ msgid "Use username and password"
+#~ msgstr "Benutzername und Passwort verwenden"
+
+#~ msgid "User"
+#~ msgstr "Benutzer"
+
+#~ msgid "Users"
+#~ msgstr "Benutzer"
+
+#~ msgid "Uzbekistan"
+#~ msgstr "Usbekistan"
+
+#~ msgid "V-Split"
+#~ msgstr "V-Split"
+
+#~ msgid "V-split view"
+#~ msgstr "V-Split-Ansicht"
+
+#~ msgid "Vacation notice is active"
+#~ msgstr "Abwesenheitsbenachrichtigung ist aktiviert"
+
+#~ msgid "Vanuatu"
+#~ msgstr "Vanuatu"
+
+#~ msgid "Venezuela"
+#~ msgstr "Venezuela"
+
+#~ msgid "Version comment"
+#~ msgstr "Anmerkungen zur Version"
+
+#~ msgid "Very high"
+#~ msgstr "Sehr hoch"
+
+#~ msgid "Very low"
+#~ msgstr "Sehr niedrig"
+
+#~ msgid "Very strong"
+#~ msgstr "Sehr stark"
+
+#~ msgid "Very weak"
+#~ msgstr "Sehr schwach"
+
+#~ msgid "Viet Nam"
+#~ msgstr "Vietnam"
+
+#~ msgid "View"
+#~ msgstr "Ansicht"
+
+#~ msgid "View all appointments from all available calendars"
+#~ msgstr "Alle Termine aus allen verfügbaren Kalendern anzeigen"
+
+#~ msgid "View all attachments"
+#~ msgstr "Alle Anlagen anzeigen"
+
+#~ msgid "View the next week"
+#~ msgstr "Folgende Woche anzeigen"
+
+#~ msgid "View the previous week"
+#~ msgstr "Vorherige Woche anzeigen"
+
+#~ msgid "Virgin Islands, British"
+#~ msgstr "Jungferninseln, Britisch"
+
+#~ msgid "Virgin Islands, U.S."
+#~ msgstr "Jungferninseln, US"
+
+#~ msgid "Visibility"
+#~ msgstr "Sichtbarkeit"
 
 #~ msgid "Visible folder"
 #~ msgstr "Sichtbarer Ordner"
 
+#~ msgid "Visual effects"
+#~ msgstr "Visuelle Effekte"
+
+#
+#~ msgctxt "wednesday"
+#~ msgid "W"
+#~ msgstr "Mi"
+
+#~ msgid "Waiting"
+#~ msgstr "Wartestatus"
+
+#~ msgid "Wallis and Futuna"
+#~ msgstr "Wallis und Futuna"
+
+#~ msgid "Warning"
+#~ msgstr "Warnung"
+
+#~ msgid "Warning: %2$s"
+#~ msgstr "Achtung: %2$s"
+
+#~ msgid "Warning: This message might be an E-Mail scam!"
+#~ msgstr ""
+#~ "Warnung: Bei dieser Nachricht könnte es sich um ein E-Mail Scam handeln."
+
+#~ msgid "Warnings:"
+#~ msgstr "Warnhinweise:"
+
+#~ msgid "Weak"
+#~ msgstr "Schwach"
+
 #~ msgid "Wed"
 #~ msgstr "Mi"
+
+#~ msgid "Week"
+#~ msgstr "Woche"
+
+#~ msgid "Week(s) on"
+#~ msgstr "Woche(n) am"
+
+#~ msgid "Western Sahara"
+#~ msgstr "Westliche Sahara"
+
+#~ msgid "When \"Reply all\":"
+#~ msgstr "Bei \"Allen antworten\":"
+
+#~ msgid "When activating this option an installation wizard will be launched."
+#~ msgstr ""
+#~ "Nach Aktivieren dieser Option wird ein Installationsassistent gestartet."
+
+#~ msgid "When switching to another view"
+#~ msgstr "Beim Wechseln in eine andere Ansicht"
+
+#~ msgid ""
+#~ "When using this publish feature, you as the current owner of the data are "
+#~ "responsible for being careful with privacy rules and for complying with "
+#~ "legal obligations (Copyright, Privacy Laws).\n"
+#~ "\n"
+#~ "Especially when publishing personal data you are the responsible party "
+#~ "according to the Federal Data Protection Act (BDSG, Germany) or other "
+#~ "Privacy Acts of your country.\n"
+#~ "\n"
+#~ "According to European and other national regulations you as the "
+#~ "responsible party are in charge of data economy, and must not publish or "
+#~ "forward personal data without the person's consent.\n"
+#~ "\n"
+#~ "Beyond legal obligations, we would like to encourage extreme care when "
+#~ "dealing with personal data. Please consider carefully where you store and "
+#~ "to whom you forward personal data. Please ensure appropriate access "
+#~ "protection, e.g. by proper password protection."
+#~ msgstr ""
+#~ "Wenn Sie diese Publish-Funktion einsetzen, sind Sie als Inhaber der Daten "
+#~ "für den sorgfältigen Umgang und die Einhaltung einschlägiger Gesetze "
+#~ "(Datenschutz, Urheberrecht) verantwortlich.\n"
+#~ "\n"
+#~ " Insbesondere gelten Sie bei der Bereitstellung personenbezogener Daten "
+#~ "als verantwortliche Stelle im Sinne des Bundesdatenschutzgesetzes. \n"
+#~ "\n"
+#~ "Nach den derzeit in Deutschland und in der EU geltenden Gesetzen sind Sie "
+#~ "als verantwortliche Stelle unter anderem verpflichtet, so sparsam wie "
+#~ "möglich mit personenbezogenen Daten umzugehen und die Zustimmung der "
+#~ "Betroffenen einzuholen, bevor Sie deren personenbezogene Daten "
+#~ "veröffentlichen oder weitergeben. \n"
+#~ "\n"
+#~ "Unabhängig von gesetzlichen Regelungen rät Open-Xchange zu großer "
+#~ "Sorgfalt beim Umgang mit personenbezogenen Daten. Bedenken Sie genau, wem "
+#~ "Sie derartige Daten weitergeben und sorgen Sie unbedingt für angemessenen "
+#~ "Zugriffsschutz, z. B. durch eine gute Passwort-Absicherung."
+
+#~ msgid "Whole-day"
+#~ msgstr "Ganzer Tag"
+
+#~ msgid "Windows are shown as"
+#~ msgstr "Fenster werden angezeigt als"
+
+#~ msgid "Work Week"
+#~ msgstr "Arbeitswoche"
+
+#~ msgid "Work week starts on"
+#~ msgstr "Arbeitswoche beginnt am"
+
+#~ msgid "Would you like to create the following birthday series appointment?"
+#~ msgstr "Wollen Sie für diesen Geburtstag eine Terminserie anlegen?"
+
+#~ msgid "YB"
+#~ msgstr "YB"
+
+#~ msgid "Yearly"
+#~ msgstr "Jährlich"
+
+#~ msgid "Yemen"
+#~ msgstr "Jemen"
 
 #~ msgid "Yes"
 #~ msgstr "Ja"
 
-#~ msgid "Yesterday"
-#~ msgstr "Gestern"
+#~ msgid "Yes, upgrade my account"
+#~ msgstr "Ja, meinen Account aktualisieren"
+
+#~ msgid "You can download the updates from within the updater."
+#~ msgstr "Sie können die Updates aus dem Updater heraus herunterladen."
+
+#~ msgid "You can't create a new recurrence in a modified appointment."
+#~ msgstr ""
+#~ "Sie können keine neue Serie erzeugen, wenn Sie einen einzelnen Termin aus "
+#~ "einer Terminserie bearbeiten."
+
+#~ msgid "You did not enter a subject. Would you like to enter a subject now?"
+#~ msgstr ""
+#~ "Sie haben keinen Betreff eingegeben. Wollen Sie nun einen Betreff "
+#~ "eingeben?"
 
 #~ msgid ""
-#~ "You have chosen a large number of contacts. This can significantly affect "
-#~ "the response time."
+#~ "You do not have write permission for this folder. The new contact will be "
+#~ "saved in your personal contacts folder. "
 #~ msgstr ""
-#~ "Sie haben eine hohe Anzahl von Kontakten ausgewählt. Dies kann die "
-#~ "Reaktionszeit erheblich beeinträchtigen"
+#~ "Sie haben keine Schreibrechte für diesen Ordner. Der neue Kontakt wird in "
+#~ "Ihrem persönlichen Kontakteordner gespeichert."
 
-#~ msgid "Your E-Mail address or password is wrong."
-#~ msgstr "Ihre E-Mail-Adresse oder Ihr Passwort ist falsch."
+#~ msgid "You do not have write permission for this object."
+#~ msgstr "Sie haben keine Schreibrechte für dieses Objekt."
 
-#~ msgid "Your E-Mails have been moved."
-#~ msgstr "Ihre E-Mails wurden verschoben."
+#~ msgid ""
+#~ "You don't have enough rights to create objects in this folder. Do you "
+#~ "want to create the object in your default folder?"
+#~ msgstr ""
+#~ "Unzureichende Rechte zum Anlegen von Objekten in diesem Ordner. Wollen "
+#~ "Sie das Objekt in Ihrem Standardordner anlegen?"
 
-#~ msgid "Your mail was sent"
-#~ msgstr "Ihre E-Mail wurde gesendet"
+#~ msgid ""
+#~ "You entered an E-Mail address with IDN domain. In some environments IDN "
+#~ "domains will not work as expected. Would you like to add it nevertheless?"
+#~ msgstr ""
+#~ "Sie haben eine E-Mail-Adresse mit IDN-Domain eingegeben. In einigen "
+#~ "Umgebungen werden IDN-Domains nicht wie erwartet funktionieren. Wollen "
+#~ "Sie sie dennoch hinzufügen?"
+
+#~ msgid ""
+#~ "You have set up an external E-Mail account. The sole responsibility for "
+#~ "the availability of the external E-Mail account lies with the service "
+#~ "provider."
+#~ msgstr ""
+#~ "Sie haben einen externen E-Mail-Account eingerichtet. Die alleinige "
+#~ "Verantwortung für die Verfügbarkeit des externen E-Mail-Accounts liegt "
+#~ "beim Service Provider."
+
+#~ msgid "You have the following appointment in %s:"
+#~ msgstr "Sie haben folgenden Termin in %s "
+
+#~ msgid "You have to enable cookies to use this application."
+#~ msgstr ""
+#~ "Der Einsatz dieser Applikation benötigt die Aktivierung von Cookies."
+
+#~ msgid "You have unconfirmed appointments"
+#~ msgstr "Sie haben unbestätigte Termine"
+
+#~ msgid "You have unconfirmed tasks"
+#~ msgstr "Sie haben unbestätigte Aufgaben"
+
+#~ msgid "You must specify an E-Mail address for redirection."
+#~ msgstr "Sie müssen eine E-Mail-Adresse für die Umleitung eingeben."
+
+#~ msgid ""
+#~ "You need to authorize %1$s to use your account. Please click on the "
+#~ "button below and the authorization will proceed in a separate window."
+#~ msgstr ""
+#~ "Sie müssen %1$s zur Verwendung Ihres Accounts autorisieren . Klicken Sie "
+#~ "bitte auf die Schaltfläche unten. Die Autorisierung wird in einem "
+#~ "separaten Fenster fortgeführt."
+
+#~ msgid "You wanted to be reminded about the following InfoItem:"
+#~ msgstr "Sie wollten an folgenden InfoEintrag erinnert werden: "
+
+#~ msgid "You're not allowed to delete this attachment!"
+#~ msgstr "Sie haben nicht die Berechtigung, diese Anlage zu löschen."
+
+#~ msgid "Your browser does not support AJAX."
+#~ msgstr "Ihr Browser unterstützt kein AJAX."
+
+#~ msgid "Your contact information have been saved."
+#~ msgstr "Ihre Kontaktdaten wurden gespeichert."
+
+#~ msgid "Your name"
+#~ msgstr "Ihr Name"
+
+#~ msgid "Your new password has been saved."
+#~ msgstr "Ihr neues Passwort wurde gespeichert."
+
+#~ msgid ""
+#~ "Your password changed. For a future use of your subscriptions and "
+#~ "additional E-Mail accounts enter your old password. This only has to be "
+#~ "done once. If you now cancel the action you have to newly set up all "
+#~ "subscriptions and additional E-Mail accounts."
+#~ msgstr ""
+#~ "Ihr Passwort hat sich geändert. Geben Sie für eine zukünftige Nutzung "
+#~ "Ihrer Abonnements und zusätzlichen E-Mail-Accounts Ihr altes Passwort "
+#~ "ein. Dies muss nur einmal geschehen. Wenn Sie die Aktion nun abbrechen, "
+#~ "müssen Sie alle Ihre Abonnements und zusätzlichen E-Mail-Accounts neu "
+#~ "einrichten. "
+
+#~ msgid ""
+#~ "Your password is more secure if it also contains capital letters, "
+#~ "numbers, and special characters like %1$s."
+#~ msgstr ""
+#~ "Die Sicherheit Ihres Passworts erhöht sich durch das Verwenden von "
+#~ "Großbuchstaben, Zahlen und Sonderzeichen wie %1$s."
+
+#~ msgid "Your personal data cannot be saved!"
+#~ msgstr "Ihre persönlichen Daten konnten nicht gespeichert werden."
+
+#~ msgid ""
+#~ "Your scheduled appointment conflicts with one or more previously "
+#~ "scheduled appointments."
+#~ msgstr ""
+#~ "Für Ihren angesetzten Termin gibt es einen Terminkonflikt mit mindestens "
+#~ "einem bereits angelegten Termin."
+
+#~ msgid "Your selected picture will be displayed after saving"
+#~ msgstr "Ihr ausgewähltes Bild wird nach dem Speichern angezeigt"
+
+#~ msgid "Your session has expired. Please log in again."
+#~ msgstr "Ihre Sitzung ist abgelaufen. Melden Sie sich neu an."
+
+#~ msgid "Your session has expired. You have to close this window."
+#~ msgstr "Ihre Sitzung ist abgelaufen. Schließen Sie das Fenster."
+
+#~ msgid "Your settings have been saved"
+#~ msgstr "Ihre Einstellungen wurden gespeichert"
+
+#~ msgid "Your settings have been saved."
+#~ msgstr "Ihre Einstellungen wurden gespeichert."
+
+#~ msgid "ZB"
+#~ msgstr "ZB"
+
+#~ msgid "ZIP"
+#~ msgstr "PLZ"
+
+#~ msgid "ZIP (business)"
+#~ msgstr "PLZ (geschäftlich)"
+
+#~ msgid "ZIP (private)"
+#~ msgstr "PLZ (privat)"
+
+#~ msgid "ZIP / City"
+#~ msgstr "PLZ/Stadt"
+
+#~ msgid "ZIP / City (other)"
+#~ msgstr "PLZ/Stadt (weitere)"
+
+#~ msgid "ZIP:"
+#~ msgstr "PLZ"
+
+#~ msgid "Zambia"
+#~ msgstr "Sambia"
+
+#~ msgid "Zimbabwe"
+#~ msgstr "Simbabwe"
+
+#~ msgid "Zloty"
+#~ msgstr "Zloty"
+
+#~ msgid "Zoom"
+#~ msgstr "Zoom"
+
+#~ msgid "above"
+#~ msgstr "oberhalb"
+
+#~ msgid "absent on business"
+#~ msgstr "Geschäftlich unterwegs"
+
+#~ msgid "accepted"
+#~ msgstr "Bestätigt"
+
+#~ msgid "after"
+#~ msgstr "nach"
+
+#~ msgid "all"
+#~ msgstr "Alle"
+
+#~ msgid "any"
+#~ msgstr "Irgendeine"
+
+#~ msgid "appointments"
+#~ msgstr "Terminen"
+
+#~ msgid "ascending"
+#~ msgstr "aufsteigend"
+
+#~ msgid "attachment"
+#~ msgstr "Anlage"
+
+#~ msgid "auto"
+#~ msgstr "automatisch"
+
+#~ msgid "back"
+#~ msgstr "zurück"
+
+#~ msgid "below"
+#~ msgstr "unterhalb"
+
+#~ msgid "by %1$s until %2$s"
+#~ msgstr "von %1$s bis %2$s"
+
+#~ msgid "bytes"
+#~ msgstr "Bytes"
+
+#~ msgid "characters"
+#~ msgstr "Zeichen"
+
+#~ msgid "created by %s"
+#~ msgstr "Erstellt von %s"
+
+#~ msgid "current costs"
+#~ msgstr "aktuelle Kosten"
+
+#~ msgid "d.M.yy"
+#~ msgstr "t.M.jj"
+
+#~ msgid "d.M.yyyy"
+#~ msgstr "t.M.jjjj"
+
+#~ msgid "d.MM.yy"
+#~ msgstr "t.MM.jj"
+
+#~ msgid "day every"
+#~ msgstr "Tag jeden"
+
+#~ msgid "dd-MMM-yy"
+#~ msgstr "tt-MMM-jj"
+
+#~ msgid "dd.MM.yy"
+#~ msgstr "tt.MM.jj"
+
+#~ msgid "dd.MM.yyyy"
+#~ msgstr "tt.MM.jjjj"
+
+#~ msgid "dd/MM/yy"
+#~ msgstr "tt/MM/jj"
+
+#~ msgid "dd/MM/yyyy"
+#~ msgstr "tt/MM/jjjj"
+
+#~ msgid "declined"
+#~ msgstr "Abgelehnt"
+
+#~ msgid "default"
+#~ msgstr "Standard"
+
+#~ msgid "descending"
+#~ msgstr "absteigend"
+
+#~ msgid "disabled"
+#~ msgstr "deaktiviert"
+
+#~ msgid "each"
+#~ msgstr "jeden"
+
+#~ msgid "enabled"
+#~ msgstr "aktiviert"
+
+#~ msgid "ends on"
+#~ msgstr "endet am"
+
+#~ msgid "estimated costs"
+#~ msgstr "geschätzte Kosten"
+
+#~ msgid "forward"
+#~ msgstr "vor"
+
+#~ msgid "free"
+#~ msgstr "Frei"
+
+#~ msgid "iCal"
+#~ msgstr "iCal"
+
+#~ msgid "iCalendar"
+#~ msgstr "iCalendar"
+
+#~ msgid "in"
+#~ msgstr "im"
+
+#~ msgid "is on"
+#~ msgstr "ist am"
+
+#~ msgid "locked by"
+#~ msgstr "gesperrt von"
+
+#~ msgid "minutes"
+#~ msgstr "Minuten"
+
+#~ msgctxt "dayview"
+#~ msgid "mm"
+#~ msgstr "mm"
+
+#~ msgid "month"
+#~ msgstr "Monat"
+
+#~ msgid "more"
+#~ msgstr "weitere"
+
+#~ msgid "never"
+#~ msgstr "nie"
+
+#~ msgid "no reminder"
+#~ msgstr "Keine Erinnerung"
+
+#~ msgid "not sent"
+#~ msgstr "Nicht gesendet"
+
+#~ msgid "on"
+#~ msgstr "am"
+
+#~ msgid "organized by %s"
+#~ msgstr "Organisiert von %s"
+
+#~ msgid "please select"
+#~ msgstr "bitte wählen Sie"
+
+#~ msgid "predefined"
+#~ msgstr "vordefiniert"
+
+#~ msgid "reserved"
+#~ msgstr "Gebucht"
+
+#~ msgid "route planner"
+#~ msgstr "Routenplaner"
+
+#~ msgid "set the last used time range of the new view"
+#~ msgstr "zuletzt verwendeten Zeitraum der neuen Ansicht einstellen"
+
+#~ msgid "starts on"
+#~ msgstr "beginnt am"
+
+#~ msgid ""
+#~ "street\n"
+#~ "postal_code city"
+#~ msgstr ""
+#~ "street\n"
+#~ "postal_code city"
+
+#~ msgid ""
+#~ "street\n"
+#~ "postal_code city\n"
+#~ "state\n"
+#~ "country"
+#~ msgstr ""
+#~ "street\n"
+#~ "postal_code city\n"
+#~ "state\n"
+#~ "country"
+
+#~ msgid "street,postal_code/city,country,state"
+#~ msgstr "street,postal_code/city,country,state"
+
+#~ msgid "tasks"
+#~ msgstr "Aufgaben"
+
+#~ msgid "temporary"
+#~ msgstr "Mit Vorbehalt"
+
+#~ msgid "tentative"
+#~ msgstr "Vorläufig"
+
+#~ msgid "to"
+#~ msgstr "bis"
+
+#~ msgid "unknown"
+#~ msgstr "unbekannt"
+
+#~ msgid "unkown"
+#~ msgstr "unbekannt"
+
+#~ msgid "user defined"
+#~ msgstr "benutzerdefiniert"
+
+#~ msgid "vCard"
+#~ msgstr "vCard"
+
+#~ msgid "waiting"
+#~ msgstr "Wartestatus"
+
+#~ msgid "yy/MM/dd"
+#~ msgstr "jj/MM/tt"
 
 # default date format
 #~ msgid "yyyy-MM-dd"
 #~ msgstr "dd.MM.yyyy"
+
+# default date format
+#~ msgctxt "label"
+#~ msgid "yyyy-MM-dd"
+#~ msgstr "jjjj-MM-tt"
+
+#~ msgid "Åland Islands"
+#~ msgstr "Åland-Inseln"
+
+#~ msgid "Invitation"
+#~ msgstr "Einladung"
