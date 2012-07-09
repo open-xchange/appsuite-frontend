@@ -498,6 +498,7 @@ define('io.ox/office/main',
                     editor.enableUndo(false);
                     app.applyOperations(operations);
                     editor.enableUndo(true);
+                    app.startOperationsTimer();
                     def.resolve();
                 })
                 .fail(function (ex) {
@@ -773,7 +774,6 @@ define('io.ox/office/main',
 
         // configure OX application
         initializeApp(options);
-        app.startOperationsTimer();
         return app.setLauncher(launchHandler).setQuit(quitHandler);
 
     } // createApplication()
