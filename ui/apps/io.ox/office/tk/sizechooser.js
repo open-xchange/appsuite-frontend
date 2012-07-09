@@ -63,15 +63,15 @@ define('io.ox/office/tk/sizechooser',
             // the table embedded in the drop-down button used to show the grid
             gridNode = $('<table>').append($('<tr>').append(gridCell.clone())),
 
-            // the drop-down button filling up the entire drop-down menu
-            gridButton = Utils.createButton(key).append(gridNode),
-
             // the badge labels showing the current grid size
             widthLabel = $('<span>').addClass('width-label'),
             heightLabel = $('<span>').addClass('height-label'),
 
+            // the drop-down button filling up the entire drop-down menu
+            gridButton = Utils.createButton(key).append(gridNode, widthLabel, heightLabel),
+
             // the drop-down menu element
-            menuNode = $('<div>').addClass('io-ox-size-chooser').append(gridButton, widthLabel, heightLabel),
+            menuNode = $('<div>').addClass('io-ox-size-chooser').append(gridButton),
 
             // grid size limits
             minWidth = (options && _.isNumber(options.minWidth) && (options.minWidth >= 1)) ? options.minWidth : 1,
@@ -191,6 +191,7 @@ define('io.ox/office/tk/sizechooser',
          * Handles keyboard events in the open drop-down menu element.
          */
         function gridKeyHandler(event) {
+
             var // distinguish between event types (ignore keypress events)
                 keydown = event.type === 'keydown',
                 // current and new size of the grid
@@ -201,10 +202,11 @@ define('io.ox/office/tk/sizechooser',
                 if (keydown) { setGridSize(gridSize.width - 1, gridSize.height); }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (keydown) {
-                    if (gridSize.height > 1) { setGridSize(gridSize.width, gridSize.height - 1); } else { self.hideMenu(); }
+                if (gridSize.height > 1) {
+                    if (keydown) { setGridSize(gridSize.width, gridSize.height - 1); }
+                    return false;
                 }
-                return false;
+                break; // let event bubble up to silently close the menu
             case KeyCodes.RIGHT_ARROW:
                 if (keydown) { setGridSize(gridSize.width + 1, gridSize.height); }
                 return false;

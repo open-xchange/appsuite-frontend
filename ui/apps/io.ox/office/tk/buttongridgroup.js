@@ -90,10 +90,11 @@ define('io.ox/office/tk/buttongridgroup',
                 if (keydown && (column > 0)) { focus(index - 1); }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (keydown) {
-                    if (row > 0) { focus(index - columns); } else { self.hideMenu(); }
+                if (row > 0) {
+                    if (keydown) { focus(index - columns); }
+                    return false;
                 }
-                return false;
+                break; // let event bubble up to silently close the menu
             case KeyCodes.RIGHT_ARROW:
                 if (keydown && (column + 1 < columns)) { focus(index + 1); }
                 return false;

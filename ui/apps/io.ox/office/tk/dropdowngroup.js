@@ -201,6 +201,9 @@ define('io.ox/office/tk/dropdowngroup',
                 keydown = event.type === 'keydown';
 
             switch (event.keyCode) {
+            case KeyCodes.UP_ARROW:
+                if (keydown) { toggleMenu(false, true); }
+                return false;
             case KeyCodes.TAB:
                 if (!event.ctrlKey && !event.altKey && !event.metaKey) {
                     // move focus to drop-down button, needed for correct
@@ -312,7 +315,7 @@ define('io.ox/office/tk/dropdowngroup',
 
         // prepare drop-down menu, and register event handlers
         menuNode
-            .addClass('dropdown-menu ' + Group.HIDDEN_CLASS)
+            .addClass('dropdown-menu')
             .on('keydown keypress keyup', menuKeyHandler);
 
         // append buttons and menu to the group container
