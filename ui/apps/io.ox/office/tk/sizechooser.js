@@ -57,11 +57,9 @@ define('io.ox/office/tk/sizechooser',
         var // self reference to be used in event handlers
             self = this,
 
-            // prototype of a grid cell element
-            gridCell = $('<td>').append('\xa0'),
-
-            // the table embedded in the drop-down button used to show the grid
-            gridNode = $('<table>').append($('<tr>').append(gridCell.clone())),
+            // build a table of embedded div elements used to show the grid
+            // (not using a table element since the grid flickers in different browsers...)
+            gridNode = $('<div>').append($('<div>').append($('<div>'))),
 
             // the badge labels showing the current grid size
             widthLabel = $('<span>').addClass('width-label'),
@@ -86,7 +84,7 @@ define('io.ox/office/tk/sizechooser',
          * 'height' attributes.
          */
         function getGridSize() {
-            var rows = gridNode.find('tr');
+            var rows = gridNode.children();
             return { width: rows.first().children().length, height: rows.length };
         }
 
@@ -98,7 +96,7 @@ define('io.ox/office/tk/sizechooser',
             var // current size of the grid
                 gridSize = getGridSize(),
                 // all row elements in the grid
-                rows = gridNode.find('tr');
+                rows = gridNode.children();
 
             if (width < minWidth) { width = minWidth; } else if (width > maxWidth) { width = maxWidth; }
             if (height < minHeight) { height = minHeight; } else if (height > maxHeight) { height = maxHeight; }
@@ -114,7 +112,7 @@ define('io.ox/office/tk/sizechooser',
                 rows.each(function () {
                     var row = $(this);
                     _(width - gridSize.width).times(function () {
-                        row.append(gridCell.clone());
+                        row.append($('<div>'));
                     });
                 });
             }
@@ -143,9 +141,6 @@ define('io.ox/office/tk/sizechooser',
                 gt.ngettext('%1$d row', '%1$d rows', height),
                 gt.noI18n(height)
             ));
-
-            // update grid size
-            gridNode.css('width', (20 * width) + 'px');
         }
 
         /**
@@ -167,8 +162,8 @@ define('io.ox/office/tk/sizechooser',
             var // current and new size of the grid
                 gridSize = getGridSize(),
                 // width and height of one cell
-                cellWidth = menuNode.outerWidth() / gridSize.width,
-                cellHeight = menuNode.outerHeight() / gridSize.height,
+                cellWidth = gridNode.outerWidth() / gridSize.width,
+                cellHeight = gridNode.outerHeight() / gridSize.height,
                 // mouse position relative to grid
                 mouseX = event.pageX - menuNode.offset().left,
                 mouseY = event.pageY - menuNode.offset().top;

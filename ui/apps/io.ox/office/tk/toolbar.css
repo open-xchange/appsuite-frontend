@@ -15,6 +15,12 @@
 
     /* mixin classes ======================================================= */
 
+    .box-sizing(@sizing-mode) {
+        -webkit-box-sizing: @sizing-mode;
+        -moz-box-sizing: @sizing-mode;
+        box-sizing: @sizing-mode;
+    }
+
     .border-radius(@radius) {
         -webkit-border-radius: @radius;
         -moz-border-radius: @radius;
@@ -215,29 +221,33 @@
                 padding: 0;
                 border: none;
                 min-width: 0;
-                max-width: 10000px;
+                max-width: none;
 
                 > .btn {
                     padding: 0;
                     .border-radius(@dropdown-radius);
 
-                    /* grid layout */
-                    > table {
-                        table-layout: fixed;
-                        border-collapse: collapse;
+                    /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
+                    > div {
+                        > div {
+                            /* need to set height explicitly for Firefox */
+                            height: 19px;
+                            /* font size may affect box sizing, shrink it */
+                            font-size: 1px;
+                            line-height: 100%;
 
-                        tr {
-                            > td {
-                                padding: 0;
+                            > div {
+                                display: inline-block;
+                                width: 18px;
+                                height: 18px;
                                 border: 1px solid #ccc;
-                                font-size: 10px;
+                                border-left: none;
+                                border-top: none;
 
-                                &:first-child { border-left: none; }
                                 &:last-child { border-right: none; }
                             }
                         
-                            &:first-child > td { border-top: none; }
-                            &:last-child > td { border-bottom: none; }
+                            &:last-child > div { border-bottom: none; }
                         }
                     }
 
@@ -253,6 +263,7 @@
                         font-size: 10px;
                         line-height: 100%;
                         color: white;
+                        text-shadow: none;
                         z-index: 10;
 
                         &.width-label {

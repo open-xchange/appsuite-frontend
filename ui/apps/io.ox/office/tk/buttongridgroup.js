@@ -105,13 +105,14 @@ define('io.ox/office/tk/buttongridgroup',
         }
 
         /**
-         * Recalculates the width of the grid element. The width of the table
-         * is restricted to the parent button group element, thus the table
-         * shrinks its buttons way too much. The only way (?) to expand the
-         * table to the correct width is to set its CSS 'min-width' property to
-         * the calculated width of the tbody element. To do this, it is
-         * required to expand the 'min-width' of the table to a large value to
-         * give the tbody enough space, and then query its calculated width.
+         * Recalculates the width of the grid element. Firefox restricts the
+         * width of the table to the parent button group element, thus the
+         * table shrinks its buttons way too much. The only way (?) to expand
+         * the table to the correct width is to set its CSS 'min-width'
+         * property to the calculated width of the tbody element. To do this,
+         * it is required to expand the 'min-width' of the table to a large
+         * value to give the tbody enough space, and then query its calculated
+         * width.
          */
         function recalcGridWidthHandler() {
             // handler may be called directly, check if grid is visible

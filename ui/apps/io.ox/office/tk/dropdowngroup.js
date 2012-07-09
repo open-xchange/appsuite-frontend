@@ -126,6 +126,12 @@ define('io.ox/office/tk/dropdowngroup',
             var // remember global variable (will be reset before the timer callback is executed)
                 withKeyboard = menuWithKeyboard;
 
+            // WebKit does not set focus to clicked button, which is needed to get
+            // keyboard control in the drop-down menu
+            if (!Utils.isControlFocused(menuButton)) {
+                menuButton.focus();
+            }
+
             if (!self.isMenuVisible()) {
                 // After a click on the drop-down button with hidden drop-down
                 // menu, wait for Bootstrap to open the menu, and trigger the
