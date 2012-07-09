@@ -347,7 +347,8 @@ define('io.ox/office/main',
                 );
             }
 
-            if (editor && editor.isModified()) {
+            // TODO: push ops now, delay closing this window...
+            if (operationsBuffer.length) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to cancel editing this document?'))
@@ -536,25 +537,25 @@ define('io.ox/office/main',
             }
 
             win.busy();
-            var allOperations = editor.getOperations();
-            var dataObject = { operations: JSON.stringify(allOperations) };
+            // var allOperations = editor.getOperations();
+            // var dataObject = { operations: JSON.stringify(allOperations) };
 
             $.ajax({
-                type: 'POST',
+                type: 'GET',
                 url: getFilterUrl('exportdocument'),
-                dataType: 'json',
-                data: dataObject,
+                dataType: 'json'
+                /* data: dataObject,
                 beforeSend: function (xhr) {
                     if (xhr && xhr.overrideMimeType) {
                         xhr.overrideMimeType('application/j-son;charset=UTF-8');
                     }
-                }
+                }*/
             })
             .done(function (response) {
                 filesApi.caches.get.clear(); // TODO
                 filesApi.caches.versions.clear();
                 filesApi.trigger('refresh.all');
-                editor.setModified(false);
+                // editor.setModified(false);
                 def.resolve();
             })
             .fail(function (response) {
@@ -578,9 +579,7 @@ define('io.ox/office/main',
                     var operations = JSON.parse(response.data);
                     if (operations.length) {
                         // We might need to do some "T" here!
-                        // TODO: Apply to all editors, as we can't use the notify parameter here!
-                        // TODO: Don't record operations anymore - save will simply make the already transfered operations persistent
-                        editor.applyOperations(operations, true, false);
+                        app.applyOperations(operations);
                     }
                 }
                 // Then, send our operations in case we have some...
@@ -667,7 +666,7 @@ define('io.ox/office/main',
             // apply operations to all editors
             _(editors).each(function (editor) {
                 if (editor !== eventSource) {
-                    editor.applyOperations(operations, true);
+                    editor.applyOperations(operations, false, false);
                 }
             });
         };
@@ -763,12 +762,6 @@ define('io.ox/office/main',
                 // buffer operations for sending them later on...
                 operationsBuffer.push(operation);
                 app.applyOperations(operation, editor);
-                /*
-                _(editors).each(function (targetEditor) {
-                    if (editor !== targetEditor) {
-                        targetEditor.applyOperation(operation);
-                    }
-                });*/
             });
         });
 
