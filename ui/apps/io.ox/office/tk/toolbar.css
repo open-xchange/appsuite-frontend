@@ -76,8 +76,8 @@
         
         /* add focus highlighting (not for clicked buttons, not for blocker class) */
         &:focus:not(:active) {
-            @focus-padding-h: @padding-h - @focus-border-width + 1px;
-            @focus-padding-v: @padding-v - @focus-border-width + 1px;
+            @focus-padding-h: @padding-h + 1px - @focus-border-width;
+            @focus-padding-v: @padding-v + 1px - @focus-border-width;
             padding: @focus-padding-h @focus-padding-v;
             border: @focus-border-width solid @focus-border-color;
             .box-shadow(inset 0 0 3px @focus-border-color);
@@ -228,10 +228,12 @@
             padding: 0;
             border: none;
             min-width: 0;
+            max-width: 10000px;
 
             > .btn {
                 .button-padding-and-focus(1px, 1px);
-                
+                .border-radius(@dropdown-radius);
+
                 > table {
                     table-layout: fixed;
                     border-collapse: collapse;
@@ -257,6 +259,30 @@
                             border-bottom: none;
                         }
                     }
+                }
+            }
+            
+            > span {
+                position: absolute;
+                margin: 0;
+                padding: 2px 4px;
+                .border-radius(8px);
+                .box-shadow(2px 2px 3px #ccc);
+                background-color: #888;
+                .opacity(0.75);
+                font-size: 10px;
+                line-height: 100%;
+                color: white;
+                z-index: 10;
+
+                &.width-label {
+                    top: 3px;
+                    right: 4px;
+                }
+
+                &.height-label {
+                    bottom: 3px;
+                    left: 4px;
                 }
             }
         }
