@@ -244,7 +244,7 @@
                                 display: inline-block;
                                 width: @cell-size;
                                 height: @cell-size;
-                                border: 1px solid #ccc;
+                                border: 1px solid @border-color;
                                 border-left: none;
                                 border-top: none;
 
@@ -303,6 +303,35 @@
             background: none;
             .border-radius(0);
             .box-shadow(none);
+            
+            &:hover:not(:focus) {
+                border-color: @border-color;
+            }
+        }
+
+        /* button groups and drop-down menus =============================== */
+
+        .btn-group {
+
+            > .dropdown-menu {
+
+                .border-radius(0);
+                background-color: @background-color;
+
+                /* table-style button drop-downs --------------------------- */
+
+                &.io-ox-button-grid {
+                }
+
+                /* size chooser drop-downs --------------------------------- */
+
+                &.io-ox-size-chooser {
+                    > .btn {
+                        border: 1px solid @border-color;
+                        .border-radius(0);
+                    }
+                }
+            }
         }
     }
 }
