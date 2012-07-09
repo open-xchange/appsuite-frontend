@@ -224,13 +224,14 @@ define("io.ox/mail/api",
             sortKey: 'threaded-' + (options.sort || '610'),
             order: options.order || 'desc',
             includeSent: false, //!accountAPI.is(options.folder, 'sent')
+            cache: false, // never use server cache
             max: 1000 // apply internal limit to build threads fast enough
         });
         var t1, t2;
         console.log('time.pre', 't1', (t1 = _.now()) - ox.t0, new Date(_.now()));
         // use cache?
         if (useCache === 'auto') {
-            useCache = options.cache = (cacheControl[options.folder] !== false);
+            useCache = (cacheControl[options.folder] !== false);
         }
         return this.getAll(options, useCache, null, false)
             .done(function (response) {
@@ -912,6 +913,31 @@ define("io.ox/mail/api",
         return $.trim(str);
     };
 
+    // import mail as EML
+    api.importEML = function (options) {
+
+        options.folder = options.folder || api.getDefaultFolder();
+
+        var form = new FormData();
+        form.append('file', options.file);
+
+        return http.UPLOAD({
+                module: 'mail',
+                params: {
+                    action: 'import',
+                    folder: options.folder,
+                    force: true // don't check from address!
+                },
+                data: form,
+                fixPost: true
+            })
+            .pipe(function (data) {
+                return api.caches.all.grepRemove(options.folder + '\t').pipe(function () {
+                    api.trigger('refresh.all');
+                    return data;
+                });
+            });
+    };
 
     return api;
 });

@@ -221,7 +221,6 @@
     }
 
   , click: function (e) {
-      console.log('click', e);
       e.stopPropagation()
       e.preventDefault()
       this.select()
