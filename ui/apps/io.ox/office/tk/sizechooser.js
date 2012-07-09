@@ -63,17 +63,17 @@ define('io.ox/office/tk/sizechooser',
             // the table embedded in the drop-down button used to show the grid
             gridNode = $('<table>').append($('<tr>').append(gridCell.clone())),
 
-            // the drop-down button filling up the entire drop-down menu
-            gridButton = Utils.createButton(key).append(gridNode),
-
             // the badge labels showing the current grid size
             widthLabel = $('<span>').addClass('width-label'),
             heightLabel = $('<span>').addClass('height-label'),
 
-            // the drop-down menu element
-            menuNode = $('<div>').addClass('io-ox-size-chooser').append(gridButton, widthLabel, heightLabel),
+            // the drop-down button filling up the entire drop-down menu
+            gridButton = Utils.createButton(key).append(gridNode, widthLabel, heightLabel),
 
-            // size limits
+            // the drop-down menu element
+            menuNode = $('<div>').addClass('io-ox-size-chooser').append(gridButton),
+
+            // grid size limits
             minWidth = (options && _.isNumber(options.minWidth) && (options.minWidth >= 1)) ? options.minWidth : 1,
             maxWidth = (options && _.isNumber(options.maxWidth) && (options.maxWidth >= minWidth)) ? options.maxWidth : undefined,
             minHeight = (options && _.isNumber(options.minHeight) && (options.minHeight >= 1)) ? options.minHeight : 1,
@@ -82,7 +82,8 @@ define('io.ox/office/tk/sizechooser',
         // private methods ----------------------------------------------------
 
         /**
-         * Returns the current size of the grid.
+         * Returns the current size of the grid, as object with 'width' and
+         * 'height' attributes.
          */
         function getGridSize() {
             var rows = gridNode.find('tr');
@@ -90,7 +91,7 @@ define('io.ox/office/tk/sizechooser',
         }
 
         /**
-         * Changes the current size of the grid.
+         * Changes the current size of the grid, and updates the badge labels.
          */
         function setGridSize(width, height) {
 
@@ -103,7 +104,6 @@ define('io.ox/office/tk/sizechooser',
             if (height < minHeight) { height = minHeight; } else if (height > maxHeight) { height = maxHeight; }
 
             // add/remove columns
-
             if (width < gridSize.width) {
                 // remove cell elements from all rows
                 rows.each(function () {
@@ -120,7 +120,6 @@ define('io.ox/office/tk/sizechooser',
             }
 
             // add/remove rows
-
             if (height < gridSize.height) {
                 // remove row elements
                 rows.slice(height).remove();
@@ -132,13 +131,13 @@ define('io.ox/office/tk/sizechooser',
             }
 
             // update badge labels
-            widthLabel.toggle(width > 2).text(gt.format(
+            widthLabel.toggle(width > 1).text(gt.format(
                 //#. %1$d is the number of columns in the drop-down grid of a size-chooser control (table size selector)
                 //#, c-format
                 gt.ngettext('%1$d column', '%1$d columns', width),
                 gt.noI18n(width)
             ));
-            heightLabel.toggle(height > 2).text(gt.format(
+            heightLabel.toggle(height > 1).text(gt.format(
                 //#. %1$d is the number of rows in the drop-down grid of a size-chooser control (table size selector)
                 //#, c-format
                 gt.ngettext('%1$d row', '%1$d rows', height),
@@ -160,6 +159,9 @@ define('io.ox/office/tk/sizechooser',
             $('body')[state ? 'on' : 'off']('mousemove', gridMouseMoveHandler);
         }
 
+        /**
+         * Handles 'mousemove' events in the open drop-down menu element.
+         */
         function gridMouseMoveHandler(event) {
 
             var // current and new size of the grid
@@ -173,57 +175,45 @@ define('io.ox/office/tk/sizechooser',
 
             // unbind ourselves, if the drop-down menu has been closed
             if (!self.isMenuVisible()) {
-                window.console.log('SizeChooser: unbinding global mouse handler');
+                enableGridMouseMoveHandling(false);
                 return;
             }
 
-            // calculate new grid size
+            // Calculate new grid size. Enlarge width/height of the grid area, if
+            // the last column/row is covered more than 75% of its width/height.
             setGridSize(
-                (cellWidth > 0) ? (Math.floor(mouseX / cellWidth) + 1) : 1,
-                (cellHeight > 0) ? (Math.floor(mouseY / cellHeight) + 1) : 1
+                (cellWidth > 0) ? Math.floor(mouseX / cellWidth + 1.25) : 1,
+                (cellHeight > 0) ? Math.floor(mouseY / cellHeight + 1.25) : 1
             );
         }
 
         /**
-         * Handles key events in the open drop-down menu element.
+         * Handles keyboard events in the open drop-down menu element.
          */
         function gridKeyHandler(event) {
-/*
+
             var // distinguish between event types (ignore keypress events)
                 keydown = event.type === 'keydown',
-                // all buttons in the drop-down grid
-                buttons = self.getGridButtons(),
-                // index of the focused button
-                index = buttons.index(event.target),
-                // row index of the focused button
-                row = (index >= 0) ? Math.floor(index / columns) : -1,
-                // column index of the focused button
-                column = (index >= 0) ? (index % columns) : -1;
-
-            function focus(newIndex) {
-                newIndex = Math.min(buttonCount - 1, newIndex);
-                if ((newIndex >= 0) && (newIndex !== index)) {
-                    buttons.eq(newIndex).focus();
-                }
-            }
+                // current and new size of the grid
+                gridSize = getGridSize();
 
             switch (event.keyCode) {
             case KeyCodes.LEFT_ARROW:
-                if (keydown && (column > 0)) { focus(index - 1); }
+                if (keydown) { setGridSize(gridSize.width - 1, gridSize.height); }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (keydown) {
-                    if (row > 0) { focus(index - columns); } else { self.hideMenu(); }
+                if (gridSize.height > 1) {
+                    if (keydown) { setGridSize(gridSize.width, gridSize.height - 1); }
+                    return false;
                 }
-                return false;
+                break; // let event bubble up to silently close the menu
             case KeyCodes.RIGHT_ARROW:
-                if (keydown && (column + 1 < columns)) { focus(index + 1); }
+                if (keydown) { setGridSize(gridSize.width + 1, gridSize.height); }
                 return false;
             case KeyCodes.DOWN_ARROW:
-                if (keydown && (row + 1 < rows)) { focus(index + columns); }
+                if (keydown) { setGridSize(gridSize.width, gridSize.height + 1); }
                 return false;
             }
-*/
         }
 
         // base constructor ---------------------------------------------------
@@ -234,13 +224,12 @@ define('io.ox/office/tk/sizechooser',
 
         // initialization -----------------------------------------------------
 
-        // initial foramtting
-        setGridSize(minWidth, minHeight);
-        setGridSize(10, 10);
-
         // register event handlers
         this.registerActionHandler(gridButton, 'click', getGridSize)
-            .on('menu:open', function () { enableGridMouseMoveHandling(true); })
+            .on('menu:open', function () {
+                setGridSize(minWidth, minHeight);
+                enableGridMouseMoveHandling(true);
+            })
             .on('menu:enter', function () { gridButton.focus(); });
         gridButton.on('keydown keypress keyup', gridKeyHandler);
 
