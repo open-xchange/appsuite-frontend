@@ -35,7 +35,7 @@ define("io.ox/office/actions",
     ext.point('io.ox/office/links/toolbar').extend(new Link({
         index: 100,
         id: "save",
-        label: gt("Save"),
+        label: gt("Export Document"),
         ref: "io.ox/office/actions/save"
     }));
 
