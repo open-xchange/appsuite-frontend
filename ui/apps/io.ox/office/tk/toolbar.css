@@ -246,8 +246,12 @@
 
                                 &:last-child { border-right: none; }
                             }
-                        
-                            &:last-child > div { border-bottom: none; }
+
+                            &:last-child {
+                                /* height for last row (again, especially for Firefox) */
+                                height: 18px;
+                                > div { border-bottom: none; }
+                            }
                         }
                     }
 
