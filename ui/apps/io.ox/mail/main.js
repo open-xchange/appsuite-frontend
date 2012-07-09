@@ -21,9 +21,11 @@ define("io.ox/mail/main",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
      "gettext!io.ox/mail/main",
+     "io.ox/core/tk/upload",
+     "io.ox/core/extPatterns/dnd",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt) {
+    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd) {
 
     'use strict';
 
@@ -380,6 +382,24 @@ define("io.ox/mail/main",
                 gt('No mails found for "%s"', win.search.query) :
                 gt('No mails in this folder');
         });
+
+        // Uploads
+        app.queues = {
+            'importEML': upload.createQueue({
+                processFile: function (file) {
+                    win.busy();
+                    return api.importEML({ file: file, folder: app.folder.get() })
+                        .done(function (data) {
+                            grid.selection.set(data.data);
+                        })
+                        .always(win.idle);
+                }
+            })
+        };
+
+        // drop zone
+        var dropZone = new dnd.UploadZone({ ref: "io.ox/mail/dnd/actions" }, app);
+        win.on("show", dropZone.include).on('hide', dropZone.remove);
 
         // go!
         commons.addFolderSupport(app, grid, 'mail')

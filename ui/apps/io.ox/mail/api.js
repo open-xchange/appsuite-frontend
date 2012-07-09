@@ -913,6 +913,31 @@ define("io.ox/mail/api",
         return $.trim(str);
     };
 
+    // import mail as EML
+    api.importEML = function (options) {
+
+        options.folder = options.folder || api.getDefaultFolder();
+
+        var form = new FormData();
+        form.append('file', options.file);
+
+        return http.UPLOAD({
+                module: 'mail',
+                params: {
+                    action: 'import',
+                    folder: options.folder,
+                    force: true // don't check from address!
+                },
+                data: form,
+                fixPost: true
+            })
+            .pipe(function (data) {
+                return api.caches.all.grepRemove(options.folder + '\t').pipe(function () {
+                    api.trigger('refresh.all');
+                    return data;
+                });
+            });
+    };
 
     return api;
 });
