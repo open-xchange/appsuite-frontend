@@ -49,7 +49,7 @@ define('io.ox/office/tk/buttongridgroup',
             self = this,
 
             // the drop-down grid element
-            gridNode = $('<table>'),
+            gridNode = $('<table>').addClass('io-ox-button-grid'),
 
             // number of rows in the grid
             rows = 0,
@@ -72,7 +72,7 @@ define('io.ox/office/tk/buttongridgroup',
                 // all buttons in the drop-down grid
                 buttons = self.getGridButtons(),
                 // index of the focused button
-                index = buttons.index(event.target),
+                index = buttons.index(this),
                 // row index of the focused button
                 row = (index >= 0) ? Math.floor(index / columns) : -1,
                 // column index of the focused button

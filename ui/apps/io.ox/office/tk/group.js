@@ -151,10 +151,11 @@ define('io.ox/office/tk/group',
         this.registerActionHandler = function (node, type, selector, actionHandler) {
 
             function actionEventHandler(event) {
-                var control = $(event.target), key, value;
+                var control = $(this), key, value;
                 if (Utils.isControlEnabled(control)) {
                     key = control.attr('data-key');
                     value = actionHandler.call(self, control);
+                    window.console.log('triggering action: key="' + key + '", value=' + JSON.stringify(value));
                     self.trigger('change', key, value);
                 }
             }
