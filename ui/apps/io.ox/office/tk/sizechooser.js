@@ -165,6 +165,19 @@ define('io.ox/office/tk/sizechooser',
         }
 
         /**
+         * Handles 'menu:open' events and initializes the drop-down grid.
+         * Registers a 'mouseenter' handler at the drop-down menu that starts
+         * a 'mousemove' listener when the mouse first hovers the grid element.
+         */
+        function menuOpenHandler() {
+            enableGridMouseMoveHandling(false);
+            setGridSize(initWidth, initHeight);
+            menuNode.off('mouseenter').one('mouseenter', function () {
+                enableGridMouseMoveHandling(true);
+            });
+        }
+
+        /**
          * Handles 'mousemove' events in the open drop-down menu element.
          */
         function gridMouseMoveHandler(event) {
@@ -231,10 +244,7 @@ define('io.ox/office/tk/sizechooser',
 
         // register event handlers
         this.registerActionHandler(gridButton, 'click', getGridSize)
-            .on('menu:open', function () {
-                setGridSize(initWidth, initHeight);
-                enableGridMouseMoveHandling(true);
-            })
+            .on('menu:open', menuOpenHandler)
             .on('menu:enter', function () { gridButton.focus(); });
         gridButton.on('keydown keypress keyup', gridKeyHandler);
 
