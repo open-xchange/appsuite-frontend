@@ -218,6 +218,9 @@
 
             &.io-ox-size-chooser {
 
+                /* inner size of one cell in the size chooser */
+                @cell-size: 18px;
+
                 padding: 0;
                 border: none;
                 min-width: 0;
@@ -231,15 +234,16 @@
                     > div {
                         > div {
                             /* need to set height explicitly for Firefox */
-                            height: 19px;
+                            @row-height: @cell-size + 1;
+                            height: @row-height;
                             /* font size may affect box sizing, shrink it */
                             font-size: 1px;
                             line-height: 100%;
 
                             > div {
                                 display: inline-block;
-                                width: 18px;
-                                height: 18px;
+                                width: @cell-size;
+                                height: @cell-size;
                                 border: 1px solid #ccc;
                                 border-left: none;
                                 border-top: none;
@@ -249,7 +253,7 @@
 
                             &:last-child {
                                 /* height for last row (again, especially for Firefox) */
-                                height: 18px;
+                                height: @cell-size;
                                 > div { border-bottom: none; }
                             }
                         }
