@@ -149,127 +149,121 @@
         }
     }
     
-    /* button groups ======================================================= */
+    /* button groups and drop-down menus =================================== */
     
     .btn-group {
         
+        /* border radius of drop-down areas */
+        @dropdown-radius: 5px;
+
+        /* general button groups ------------------------------------------- */
+
         /* The class 'io-ox-hidden' is used to hide button groups. */
         &.io-ox-hidden {
             display: none;
         }
-    }
     
-    /* drop-down menus ===================================================== */
-    
-    .btn-group {
+        > .dropdown-menu {
 
-        /* border radius of drop-down areas */
-        @dropdown-radius: 5px;
+            /* table-style button drop-downs ------------------------------- */
 
-	    /* table-style button drop-downs ----------------------------------- */
+            &.io-ox-button-grid {
 
-        > table.dropdown-menu {
+                padding: 0;
+                border-collapse: collapse;
+                border: none;
 
-            padding: 0;
-            border-collapse: collapse;
-            border: none;
+                > tbody > tr {
+                    > td {
+                        padding: 0;
 
-            > tbody > tr {
-                > td {
-                    padding: 0;
+                        /* all buttons: adjust for table view */
+                        > .btn {
+                            width: 100%;
+                            .border-radius(0);
+                        }
 
-                    /* all buttons: adjust for table view */
-                    > .btn {
-                        width: 100%;
-                        .border-radius(0);
+                        /* all buttons but the first in a row: remove left border */
+                        &:not(:first-child) > .btn:not(:focus) {
+                            border-left-color: transparent;
+                        }
                     }
 
-                    /* all buttons but the first in a row: remove left border */
-                    &:not(:first-child) > .btn:not(:focus) {
-                        border-left-color: transparent;
+                    /* all buttons but in the first row: remove top border */
+                    &:not(:first-child) > td > .btn:not(:focus) {
+                        border-top-color: transparent;
                     }
-                }
 
-                /* all buttons but in the first row: remove top border */
-                &:not(:first-child) > td > .btn:not(:focus) {
-                    border-top-color: transparent;
-                }
+                    /* first row: radius for first and last button */
+                    &:first-child > td {
+                        &:first-child > .btn { .border-top-left-radius(@dropdown-radius); }
+                        &:last-child > .btn { .border-top-right-radius(@dropdown-radius); }
+                    }
 
-                /* first row: radius for first and last button */
-                &:first-child > td {
-                    &:first-child > .btn { .border-top-left-radius(@dropdown-radius); }
-                    &:last-child > .btn { .border-top-right-radius(@dropdown-radius); }
-                }
-
-                /* last row: radius for first and last button */
-                &:last-child > td {
-                    &:first-child > .btn { .border-bottom-left-radius(@dropdown-radius); }
-                    &:last-child > .btn { .border-bottom-right-radius(@dropdown-radius); }
+                    /* last row: radius for first and last button */
+                    &:last-child > td {
+                        &:first-child > .btn { .border-bottom-left-radius(@dropdown-radius); }
+                        &:last-child > .btn { .border-bottom-right-radius(@dropdown-radius); }
+                    }
                 }
             }
-        }
 
-        /* size chooser drop-downs ----------------------------------------- */
+            /* size chooser drop-downs ------------------------------------- */
 
-        > div.dropdown-menu.io-ox-size-chooser {
+            &.io-ox-size-chooser {
 
-            padding: 0;
-            border: none;
-            min-width: 0;
-            max-width: 10000px;
-
-            > .btn {
                 padding: 0;
-                .border-radius(@dropdown-radius);
+                border: none;
+                min-width: 0;
+                max-width: 10000px;
 
-                > table {
-                    table-layout: fixed;
-                    border-collapse: collapse;
+                > .btn {
+                    padding: 0;
+                    .border-radius(@dropdown-radius);
 
-                    tr {
-                        > td {
-                            padding: 0;
-                            border: 1px solid #ccc;
-                            font-size: 10px;
+                    /* grid layout */
+                    > table {
+                        table-layout: fixed;
+                        border-collapse: collapse;
 
-                            &:first-child {
-                                border-left: none;
+                        tr {
+                            > td {
+                                padding: 0;
+                                border: 1px solid #ccc;
+                                font-size: 10px;
+
+                                &:first-child { border-left: none; }
+                                &:last-child { border-right: none; }
                             }
-                            &:last-child {
-                                border-right: none;
-                            }
-                        }
                         
-                        &:first-child > td {
-                            border-top: none;
-                        }
-                        &:last-child > td {
-                            border-bottom: none;
+                            &:first-child > td { border-top: none; }
+                            &:last-child > td { border-bottom: none; }
                         }
                     }
-                }
-            
-                > span {
-                    position: absolute;
-                    margin: 0;
-                    padding: 2px 4px;
-                    .border-radius(8px);
-                    .box-shadow(2px 2px 3px #ccc);
-                    background-color: #888;
-                    .opacity(0.75);
-                    font-size: 10px;
-                    line-height: 100%;
-                    color: white;
-                    z-index: 10;
 
-                    &.width-label {
-                        top: 2px;
-                        right: 4px;
-                    }
+                    /* the badge labels showing the width and height of the grid */
+                    > span {
+                        position: absolute;
+                        margin: 0;
+                        padding: 2px 4px;
+                        .border-radius(8px);
+                        .box-shadow(2px 2px 3px #ccc);
+                        background-color: #888;
+                        .opacity(0.75);
+                        font-size: 10px;
+                        line-height: 100%;
+                        color: white;
+                        z-index: 10;
 
-                    &.height-label {
-                        bottom: 2px;
-                        left: 4px;
+                        &.width-label {
+                            top: 2px;
+                            right: 4px;
+                        }
+
+                        &.height-label {
+                            bottom: 2px;
+                            left: 4px;
+                        }
                     }
                 }
             }
