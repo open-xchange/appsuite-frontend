@@ -3024,6 +3024,8 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
             .on('drop', $.proxy(this, 'processDrop'))
             .on('contextmenu', $.proxy(this, 'processContextMenu'));
 
+        this.implInitDocument();
+
     } // end of OXOEditor()
 
     // static constants, used as map keys, and as CSS class names
