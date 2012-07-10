@@ -325,7 +325,6 @@ define('io.ox/office/tk/controller', function () {
 
     // exports ================================================================
 
-    _.makeExtendable(Controller);
+    return _.makeExtendable(Controller);
 
-    return Controller;
 });

@@ -108,9 +108,9 @@
     i.icon-io-ox-undo           { background-position:      0    0; }
     i.icon-io-ox-redo           { background-position:  -24px    0; }
     i.icon-io-ox-bold           { background-position:  -48px    0; }
-    i.icon-io-ox-bold.de-de     { background-position:  -72px    0; }
+    i.icon-io-ox-bold.de_DE     { background-position:  -72px    0; }
     i.icon-io-ox-italic         { background-position:  -96px    0; }
-    i.icon-io-ox-italic.de-de   { background-position: -120px    0; }
+    i.icon-io-ox-italic.de_DE   { background-position: -120px    0; }
     i.icon-io-ox-underline      { background-position: -144px    0; }
 
     /* buttons ============================================================= */

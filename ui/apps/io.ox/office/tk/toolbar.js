@@ -579,8 +579,6 @@ define('io.ox/office/tk/toolbar',
 
     // exports ================================================================
 
-    _.makeExtendable(ToolBar);
-
-    return ToolBar;
+    return _.makeExtendable(ToolBar);
 
 });

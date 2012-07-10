@@ -11,9 +11,11 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/utils', function () {
+define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
     'use strict';
+
+    var language = null;
 
     // static class Utils =====================================================
 
@@ -229,7 +231,7 @@ define('io.ox/office/tk/utils', function () {
         }
         // add icon in an i element
         if (icon) {
-            button.append($('<i>').addClass(icon));
+            button.append($('<i>').addClass(icon + ' ' + language));
         }
         // add text label, separate it from the icon
         if (label) {
@@ -398,6 +400,11 @@ define('io.ox/office/tk/utils', function () {
         OPEN_ANGLE:     226     // German keyboard
 */
     };
+
+    // global initialization ==================================================
+
+    // get current language: TODO review
+    gettext.language.done(function (lang) { language = lang; });
 
     // exports ================================================================
 

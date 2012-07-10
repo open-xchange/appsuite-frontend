@@ -268,8 +268,6 @@ define('io.ox/office/tk/group',
 
     // exports ================================================================
 
-    _.makeExtendable(Group);
-
-    return Group;
+    return _.makeExtendable(Group);
 
 });
