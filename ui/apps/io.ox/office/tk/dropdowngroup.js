@@ -60,7 +60,7 @@ define('io.ox/office/tk/dropdowngroup',
             actionButton = Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS),
 
             // the drop-down button in split mode (pass 'options' for formatting, but drop any contents)
-            caretButton = split ? Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS).empty() : $(),
+            caretButton = split ? Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS + ' io-ox-caret-button').empty() : $(),
 
             // reference to the button that triggers the drop-down menu
             menuButton = split ? caretButton : actionButton,
@@ -125,6 +125,12 @@ define('io.ox/office/tk/dropdowngroup',
 
             var // remember global variable (will be reset before the timer callback is executed)
                 withKeyboard = menuWithKeyboard;
+
+            // WebKit does not set focus to clicked button, which is needed to get
+            // keyboard control in the drop-down menu
+            if (!Utils.isControlFocused(menuButton)) {
+                menuButton.focus();
+            }
 
             if (!self.isMenuVisible()) {
                 // After a click on the drop-down button with hidden drop-down
@@ -201,9 +207,6 @@ define('io.ox/office/tk/dropdowngroup',
                 keydown = event.type === 'keydown';
 
             switch (event.keyCode) {
-            case KeyCodes.UP_ARROW:
-                if (keydown) { toggleMenu(false, true); }
-                return false;
             case KeyCodes.TAB:
                 if (!event.ctrlKey && !event.altKey && !event.metaKey) {
                     // move focus to drop-down button, needed for correct
@@ -244,24 +247,24 @@ define('io.ox/office/tk/dropdowngroup',
         /**
          * Shows the drop-down menu unless it is already visible.
          */
-        this.showMenu = function () {
-            toggleMenu(true);
+        this.showMenu = function (fromKeyEvent) {
+            toggleMenu(true, fromKeyEvent);
             return this;
         };
 
         /**
          * Hides the drop-down menu unless it is already hidden.
          */
-        this.hideMenu = function () {
-            toggleMenu(false);
+        this.hideMenu = function (fromKeyEvent) {
+            toggleMenu(false, fromKeyEvent);
             return this;
         };
 
         /**
          * Toggles the visibility of the drop-down menu.
          */
-        this.toggleMenu = function () {
-            toggleMenu();
+        this.toggleMenu = function (fromKeyEvent) {
+            toggleMenu(null, fromKeyEvent);
             return this;
         };
 

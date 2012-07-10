@@ -40,28 +40,34 @@ define('io.ox/office/tk/sizechooser',
      *  @param {Number} [options.minWidth=1]
      *      Minimum number of columns allowed to choose. Must be a positive
      *      integer. If omitted, will be set to 1.
+     *  @param {Number} [options.minHeight=1]
+     *      Minimum number of rows allowed to choose. Must be a positive
+     *      integer. If omitted, will be set to 1.
      *  @param {Number} [options.maxWidth]
      *      Maximum number of columns allowed to choose. Must be a positive
      *      integer, must be greater than or equal to options.minWidth. If
      *      omitted, the maximum is only limited by available screen space.
-     *  @param {Number} [options.minHeight=1]
-     *      Minimum number of rows allowed to choose. Must be a positive
-     *      integer. If omitted, will be set to 1.
      *  @param {Number} [options.maxHeight]
      *      Maximum number of rows allowed to choose. Must be a positive
      *      integer, must be greater than or equal to options.minHeight. If
      *      omitted, the maximum is only limited by available screen space.
+     *  @param {Number} [options.initialWidth]
+     *      Number of rows that will be shown initially, when the drop-down
+     *      grid will be opened. Must be a positive integer. If omitted, will
+     *      be set to options.minWidth.
+     *  @param {Number} [options.initialHeight]
+     *      Number of columns that will be shown initially, when the drop-down
+     *      grid will be opened. Must be a positive integer. If omitted, will
+     *      be set to options.minHeight.
      */
     function SizeChooser(key, options) {
 
         var // self reference to be used in event handlers
             self = this,
 
-            // prototype of a grid cell element
-            gridCell = $('<td>').append('\xa0'),
-
-            // the table embedded in the drop-down button used to show the grid
-            gridNode = $('<table>').append($('<tr>').append(gridCell.clone())),
+            // build a table of embedded div elements used to show the grid
+            // (do not use a table element because grid flickers in different browsers...)
+            gridNode = $('<div>').append($('<div>').append($('<div>'))),
 
             // the badge labels showing the current grid size
             widthLabel = $('<span>').addClass('width-label'),
@@ -75,9 +81,11 @@ define('io.ox/office/tk/sizechooser',
 
             // grid size limits
             minWidth = (options && _.isNumber(options.minWidth) && (options.minWidth >= 1)) ? options.minWidth : 1,
-            maxWidth = (options && _.isNumber(options.maxWidth) && (options.maxWidth >= minWidth)) ? options.maxWidth : undefined,
             minHeight = (options && _.isNumber(options.minHeight) && (options.minHeight >= 1)) ? options.minHeight : 1,
-            maxHeight = (options && _.isNumber(options.maxHeight) && (options.maxHeight >= minHeight)) ? options.maxHeight : undefined;
+            maxWidth = (options && _.isNumber(options.maxWidth) && (options.maxWidth >= minWidth)) ? options.maxWidth : undefined,
+            maxHeight = (options && _.isNumber(options.maxHeight) && (options.maxHeight >= minHeight)) ? options.maxHeight : undefined,
+            initWidth = (options && _.isNumber(options.initialWidth) && (options.initialWidth >= minWidth)) ? options.initialWidth : minWidth,
+            initHeight = (options && _.isNumber(options.initialHeight) && (options.initialHeight >= minHeight)) ? options.initialHeight : minHeight;
 
         // private methods ----------------------------------------------------
 
@@ -86,7 +94,7 @@ define('io.ox/office/tk/sizechooser',
          * 'height' attributes.
          */
         function getGridSize() {
-            var rows = gridNode.find('tr');
+            var rows = gridNode.children();
             return { width: rows.first().children().length, height: rows.length };
         }
 
@@ -98,10 +106,10 @@ define('io.ox/office/tk/sizechooser',
             var // current size of the grid
                 gridSize = getGridSize(),
                 // all row elements in the grid
-                rows = gridNode.find('tr');
+                rows = gridNode.children();
 
-            if (width < minWidth) { width = minWidth; } else if (width > maxWidth) { width = maxWidth; }
-            if (height < minHeight) { height = minHeight; } else if (height > maxHeight) { height = maxHeight; }
+            if (width < minWidth) { width = minWidth; } else if (_.isNumber(maxWidth) && (width > maxWidth)) { width = maxWidth; }
+            if (height < minHeight) { height = minHeight; } else if (_.isNumber(maxHeight) && (height > maxHeight)) { height = maxHeight; }
 
             // add/remove columns
             if (width < gridSize.width) {
@@ -114,7 +122,7 @@ define('io.ox/office/tk/sizechooser',
                 rows.each(function () {
                     var row = $(this);
                     _(width - gridSize.width).times(function () {
-                        row.append(gridCell.clone());
+                        row.append($('<div>'));
                     });
                 });
             }
@@ -143,9 +151,6 @@ define('io.ox/office/tk/sizechooser',
                 gt.ngettext('%1$d row', '%1$d rows', height),
                 gt.noI18n(height)
             ));
-
-            // update grid size
-            gridNode.css('width', (20 * width) + 'px');
         }
 
         /**
@@ -160,6 +165,19 @@ define('io.ox/office/tk/sizechooser',
         }
 
         /**
+         * Handles 'menu:open' events and initializes the drop-down grid.
+         * Registers a 'mouseenter' handler at the drop-down menu that starts
+         * a 'mousemove' listener when the mouse first hovers the grid element.
+         */
+        function menuOpenHandler() {
+            enableGridMouseMoveHandling(false);
+            setGridSize(initWidth, initHeight);
+            menuNode.off('mouseenter').one('mouseenter', function () {
+                enableGridMouseMoveHandling(true);
+            });
+        }
+
+        /**
          * Handles 'mousemove' events in the open drop-down menu element.
          */
         function gridMouseMoveHandler(event) {
@@ -167,8 +185,8 @@ define('io.ox/office/tk/sizechooser',
             var // current and new size of the grid
                 gridSize = getGridSize(),
                 // width and height of one cell
-                cellWidth = menuNode.outerWidth() / gridSize.width,
-                cellHeight = menuNode.outerHeight() / gridSize.height,
+                cellWidth = gridNode.outerWidth() / gridSize.width,
+                cellHeight = gridNode.outerHeight() / gridSize.height,
                 // mouse position relative to grid
                 mouseX = event.pageX - menuNode.offset().left,
                 mouseY = event.pageY - menuNode.offset().top;
@@ -202,11 +220,10 @@ define('io.ox/office/tk/sizechooser',
                 if (keydown) { setGridSize(gridSize.width - 1, gridSize.height); }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (gridSize.height > 1) {
-                    if (keydown) { setGridSize(gridSize.width, gridSize.height - 1); }
-                    return false;
+                if (keydown) {
+                    if (gridSize.height > 1) { setGridSize(gridSize.width, gridSize.height - 1); } else { self.hideMenu(true); }
                 }
-                break; // let event bubble up to silently close the menu
+                return false;
             case KeyCodes.RIGHT_ARROW:
                 if (keydown) { setGridSize(gridSize.width + 1, gridSize.height); }
                 return false;
@@ -226,10 +243,7 @@ define('io.ox/office/tk/sizechooser',
 
         // register event handlers
         this.registerActionHandler(gridButton, 'click', getGridSize)
-            .on('menu:open', function () {
-                setGridSize(minWidth, minHeight);
-                enableGridMouseMoveHandling(true);
-            })
+            .on('menu:open', menuOpenHandler)
             .on('menu:enter', function () { gridButton.focus(); });
         gridButton.on('keydown keypress keyup', gridKeyHandler);
 

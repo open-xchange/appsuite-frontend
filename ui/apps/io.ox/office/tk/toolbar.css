@@ -13,7 +13,13 @@
 
 .btn-toolbar.io-ox-toolbar {
 
-    /* mixin classes ======================================================= */
+    /* generic mixin classes =============================================== */
+
+    .box-sizing(@sizing-mode) {
+        -webkit-box-sizing: @sizing-mode;
+        -moz-box-sizing: @sizing-mode;
+        box-sizing: @sizing-mode;
+    }
 
     .border-radius(@radius) {
         -webkit-border-radius: @radius;
@@ -98,33 +104,63 @@
     i.icon-io-ox-undo           { background-position:      0    0; }
     i.icon-io-ox-redo           { background-position:  -24px    0; }
     i.icon-io-ox-bold           { background-position:  -48px    0; }
-    i.icon-io-ox-bold-f         { background-position:  -72px    0; }
+    i.icon-io-ox-bold.de-de     { background-position:  -72px    0; }
     i.icon-io-ox-italic         { background-position:  -96px    0; }
-    i.icon-io-ox-italic-k       { background-position: -120px    0; }
+    i.icon-io-ox-italic.de-de   { background-position: -120px    0; }
     i.icon-io-ox-underline      { background-position: -144px    0; }
 
     /* buttons ============================================================= */
 
+    /*
+     * Adjust the default formatting of buttons defined by Bootstrap.
+     */
     .btn {
 
-        /* border radius of regular tool bar buttons or button groups */
-        @button-radius: 4px;
+        /* background color for selected toggle buttons */
+        @selected-color: #d5d5ff;
 
         /* spacing between elements in a button */
-        @whitespace-width: 4px;
+        @whitespace-width: 5px;
 
-        /* border color for focused buttons */
-        @focus-border-color: #ff9933;
+        /* mixin that adds a border and inset shadow in the same color to a box */
+        .accented-border(@color) {
+            border: 1px solid @color;
+            .box-shadow(inset 0 0 4px @color);
+        }
 
         /* ----------------------------------------------------------------- */
 
         /* adjust button size */
-        padding: 3px 8px;
-        
-        /* add focus highlighting (but not for clicked buttons) */
+        padding: 3px 6px;
+        /* remove Bootstrap gradients, set solid color */
+        background: none;
+        background-color: @background-color;
+        /* reserve space for border, needed for focus display */
+        border: 1px solid transparent;
+        .border-radius(0);
+        .box-shadow(none);
+        text-shadow: none;
+
+        /* mouse and keyboard effects -------------------------------------- */
+
+        /* mouse hover effect (not for disabled nor focused buttons) */
+        &:hover:not(:disabled):not(.disabled):not(:focus) {
+            z-index: 1;
+            border-color: @border-color;
+        }
+
+        /* add focus highlighting (but not for active buttons) */
         &:focus:not(:active) {
-            border-color: @focus-border-color;
-            .box-shadow(inset 0 0 4px @focus-border-color);
+            z-index: 2;
+            .accented-border(@border-color);
+        }
+
+        /* active effect (button currently clicked) */
+        &:active {
+            z-index: 3;
+            .accented-border(darken(@border-color, 5%));
+            /* remove Bootstrap's gray text color */
+            color: black;
         }
 
         /* prevent dotted focus rectangle around buttons */
@@ -132,141 +168,178 @@
             outline: none;
         }
 
+        /* selected toggle buttons ----------------------------------------- */
+
+        &.selected {
+            z-index: 5;
+            background-color: @selected-color;
+            border-color: darken(@selected-color, 5%);
+
+            /* mouse hover effect (not for disabled nor focused buttons) */
+            &:hover:not(:disabled):not(.disabled):not(:focus) {
+                z-index: 6;
+                border-color: darken(@selected-color, 10%);
+            }
+
+            /* add focus highlighting (but not for active buttons) */
+            &:focus:not(:active) {
+                z-index: 7;
+                .accented-border(darken(@selected-color, 10%));
+            }
+
+            /* active effect (button currently clicked) */
+            &:active {
+                z-index: 8;
+                .accented-border(darken(@selected-color, 15%));
+            }
+        }
+
+        /* disabled buttons ------------------------------------------------ */
+
+        &:disabled, &.disabled {
+            .opacity(0.5);
+        }
+
         /* class for whitespace between icons, text, and dropdown arrows */
         > span.whitespace {
             display: inline-block;
             width: @whitespace-width;
         }
-        
+
         /* move drop-down arrow down to the center of the button */
         > span.caret {
             margin-top: 6px;
         }
 
         /* remove hover highlight of drop-down arrow for disabled buttons */
-        &:disabled > span.caret {
-            .opacity(.3);
+        &:disabled, &.disabled {
+            > span.caret {
+                .opacity(.3);
+            }
         }
     }
-    
-    /* button groups and drop-down menus =================================== */
-    
-    .btn-group {
-        
-        /* border radius of drop-down areas */
-        @dropdown-radius: 5px;
 
-        /* general button groups ------------------------------------------- */
+    /* button groups ======================================================= */
+
+    .btn-group {
 
         /* The class 'io-ox-hidden' is used to hide button groups. */
         &.io-ox-hidden {
             display: none;
         }
-    
-        > .dropdown-menu {
+    }
 
-            /* table-style button drop-downs ------------------------------- */
+    /* drop-down menus ===================================================== */
 
-            &.io-ox-button-grid {
+    .btn-group > .dropdown-menu {
 
+        border: 1px solid @border-color;
+        .border-radius(0);
+
+        /* table-style button drop-downs ----------------------------------- */
+
+        &.io-ox-button-grid {
+
+            padding: 0;
+            border-collapse: collapse;
+
+            td {
                 padding: 0;
-                border-collapse: collapse;
-                border: none;
 
-                > tbody > tr {
-                    > td {
-                        padding: 0;
-
-                        /* all buttons: adjust for table view */
-                        > .btn {
-                            width: 100%;
-                            .border-radius(0);
-                        }
-
-                        /* all buttons but the first in a row: remove left border */
-                        &:not(:first-child) > .btn:not(:focus) {
-                            border-left-color: transparent;
-                        }
-                    }
-
-                    /* all buttons but in the first row: remove top border */
-                    &:not(:first-child) > td > .btn:not(:focus) {
-                        border-top-color: transparent;
-                    }
-
-                    /* first row: radius for first and last button */
-                    &:first-child > td {
-                        &:first-child > .btn { .border-top-left-radius(@dropdown-radius); }
-                        &:last-child > .btn { .border-top-right-radius(@dropdown-radius); }
-                    }
-
-                    /* last row: radius for first and last button */
-                    &:last-child > td {
-                        &:first-child > .btn { .border-bottom-left-radius(@dropdown-radius); }
-                        &:last-child > .btn { .border-bottom-right-radius(@dropdown-radius); }
-                    }
+                /* all buttons: adjust for table view */
+                > .btn {
+                    width: 100%;
                 }
             }
+        }
 
-            /* size chooser drop-downs ------------------------------------- */
+        /* size chooser drop-downs ----------------------------------------- */
 
-            &.io-ox-size-chooser {
+        &.io-ox-size-chooser {
 
+            /* inner size of one cell in the size chooser */
+            @cell-size: 18px;
+
+            /* reset Bootstrap's formatting */
+            padding: 0;
+            min-width: 0;
+            max-width: none;
+
+            > .btn {
                 padding: 0;
                 border: none;
-                min-width: 0;
-                max-width: 10000px;
 
-                > .btn {
-                    padding: 0;
-                    .border-radius(@dropdown-radius);
+                /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
+                > div {
 
-                    /* grid layout */
-                    > table {
-                        table-layout: fixed;
-                        border-collapse: collapse;
+                    /* a row in the grid */
+                    > div {
+                        /* need to set height explicitly for Firefox */
+                        height: @cell-size + 1;
+                        /* font size may affect box sizing, shrink it */
+                        font-size: 1px;
+                        line-height: 100%;
 
-                        tr {
-                            > td {
-                                padding: 0;
-                                border: 1px solid #ccc;
-                                font-size: 10px;
+                        /* a cell in the grid */
+                        > div {
+                            display: inline-block;
+                            width: @cell-size;
+                            height: @cell-size;
+                            border-bottom: 1px solid @border-color;
 
-                                &:first-child { border-left: none; }
-                                &:last-child { border-right: none; }
+                            &:not(:last-child) {
+                                border-right: 1px solid @border-color;
                             }
-                        
-                            &:first-child > td { border-top: none; }
-                            &:last-child > td { border-bottom: none; }
+                        }
+
+                        &:not(:last-child) > div {
+                            border-bottom: 1px solid @border-color;
+                        }
+
+                        /* height for last row (again, especially for Firefox) */
+                        &:last-child {
+                            height: @cell-size;
                         }
                     }
+                }
 
-                    /* the badge labels showing the width and height of the grid */
-                    > span {
-                        position: absolute;
-                        margin: 0;
-                        padding: 2px 4px;
-                        .border-radius(8px);
-                        .box-shadow(2px 2px 3px #ccc);
-                        background-color: #888;
-                        .opacity(0.75);
-                        font-size: 10px;
-                        line-height: 100%;
-                        color: white;
-                        z-index: 10;
+                /* the badge labels showing the width and height of the grid */
+                > span {
+                    position: absolute;
+                    margin: 0;
+                    padding: 2px 4px;
+                    background-color: #888;
+                    .opacity(0.75);
+                    .border-radius(8px);
+                    .box-shadow(2px 2px 3px #ccc);
+                    font-size: 10px;
+                    line-height: 100%;
+                    color: white;
+                    text-shadow: none;
+                    z-index: 10;
 
-                        &.width-label {
-                            top: 2px;
-                            right: 4px;
-                        }
+                    &.width-label {
+                        top: 2px;
+                        right: 4px;
+                    }
 
-                        &.height-label {
-                            bottom: 2px;
-                            left: 4px;
-                        }
+                    &.height-label {
+                        bottom: 2px;
+                        left: 4px;
                     }
                 }
             }
         }
+    }
+    
+    /* adjust margins for caret buttons in split mode */
+    .btn-group > .btn.io-ox-caret-button {
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+    
+    /* set border to drop-down buttons with visible drop-down menu */
+    .btn-group.open > .btn:not(:focus):not(:active) {
+        border-color: @border-color;
     }
 }
