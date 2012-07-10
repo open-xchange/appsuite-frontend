@@ -46,22 +46,22 @@ define('io.ox/office/main',
         // add all tool bar controls
         this
         .addControlGroup()
-            .addButton('action/undo', { icon: gt('icon-io-ox-undo'), tooltip: gt('Revert last operation') })
-            .addButton('action/redo', { icon: gt('icon-io-ox-redo'), tooltip: gt('Restore last operation') })
+            .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert last operation') })
+            .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation') })
         .end()
         .addControlGroup()
-            .addButton('character/font/bold',      { icon: gt('icon-io-ox-bold'),      tooltip: gt('Bold'),      toggle: true })
-            .addButton('character/font/italic',    { icon: gt('icon-io-ox-italic'),    tooltip: gt('Italic'),    toggle: true })
-            .addButton('character/font/underline', { icon: gt('icon-io-ox-underline'), tooltip: gt('Underline'), toggle: true })
+            .addButton('character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
+            .addButton('character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
+            .addButton('character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
         .end()
         .addRadioGroup('paragraph/alignment', { type: 'auto', columns: 2, tooltip: gt('Paragraph alignment') })
-            .addButton('left',    { icon: gt('icon-align-left'),    tooltip: gt('Left') })
-            .addButton('center',  { icon: gt('icon-align-center'),  tooltip: gt('Center') })
-            .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
-            .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
+            .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
+            .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
+            .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
+            .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
         .end()
         .addSizeChooser('insert/table', {
-            label: gt('Table'),
+            icon: 'icon-io-ox-table',
             tooltip: gt('Insert table'),
             split: true,
             caretTooltip: gt('Select table size'),

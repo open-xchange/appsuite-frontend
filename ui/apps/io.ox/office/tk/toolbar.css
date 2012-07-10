@@ -95,23 +95,36 @@
     /* icons =============================================================== */
 
     /*
-     * Replace images for icon classes starting with "icon-io-ox-".
+     * Replace images for icon classes starting with "icon-io-ox-". Icons are
+     * 14x14px with a 6px grid spacing.
      */
     i[class^="icon-io-ox-"] {
         background-image: url(img/ox-icons-black.png);
-        &.icon-white { background-image: url(img/ox-icons-white.png); }
+        width: 14px;
+        height: 14px;
+        
+        &.icon-white {
+            background-image: url(img/ox-icons-white.png);
+        }
     }
 
     /*
      * Define class names for all icons.
      */
-    i.icon-io-ox-undo           { background-position:      0    0; }
-    i.icon-io-ox-redo           { background-position:  -24px    0; }
-    i.icon-io-ox-bold           { background-position:  -48px    0; }
-    i.icon-io-ox-bold.de_DE     { background-position:  -72px    0; }
-    i.icon-io-ox-italic         { background-position:  -96px    0; }
+    i.icon-io-ox-undo           { background-position:  -20px    0; }
+    i.icon-io-ox-redo           { background-position:  -40px    0; }
+    i.icon-io-ox-bold           { background-position:  -60px    0; }
+    i.icon-io-ox-bold.de_DE     { background-position:  -80px    0; }
+    i.icon-io-ox-italic         { background-position: -100px    0; }
     i.icon-io-ox-italic.de_DE   { background-position: -120px    0; }
-    i.icon-io-ox-underline      { background-position: -144px    0; }
+    i.icon-io-ox-underline      { background-position: -140px    0; }
+    i.icon-io-ox-table          { background-position: -160px    0; }
+
+    /* special icon for the drop-down caret */
+    i.icon-io-ox-caret {
+        background-position: 0 0;
+        width: 7px;
+    }
 
     /* buttons ============================================================= */
 
@@ -325,6 +338,7 @@
                     margin: 5px 0 0 0;
                     padding: 4px 6px;
                     background-color: black;
+                    .opacity(0.8);
                     .border-radius(9px);
                     .box-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
                     font-size: 11px;
