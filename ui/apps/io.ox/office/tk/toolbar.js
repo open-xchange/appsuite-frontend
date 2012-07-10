@@ -14,12 +14,11 @@
 define('io.ox/office/tk/toolbar',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
-     'io.ox/office/tk/group',
-     'io.ox/office/tk/controlgroup',
-     'io.ox/office/tk/buttongridgroup',
+     'io.ox/office/tk/buttongroup',
+     'io.ox/office/tk/buttonchooser',
      'io.ox/office/tk/sizechooser',
      'less!io.ox/office/tk/toolbar.css'
-    ], function (Events, Utils, Group, ControlGroup, ButtonGridGroup, SizeChooser) {
+    ], function (Events, Utils, ButtonGroup, ButtonChooser, SizeChooser) {
 
     'use strict';
 
@@ -189,17 +188,17 @@ define('io.ox/office/tk/toolbar',
             }
         }
 
-        // class ControlGroupProxy --------------------------------------------
+        // class ButtonGroupProxy ---------------------------------------------
 
         /**
-         * Proxy class returned as inserter for controls into a control group.
+         * Proxy class returned as inserter for buttons into a button group.
          *
          * @constructor
          */
-        function ControlGroupProxy() {
+        function ButtonGroupProxy() {
 
-            var // create a new control group
-                group = new ControlGroup();
+            var // create a new group object
+                group = new ButtonGroup();
 
             // methods --------------------------------------------------------
 
@@ -220,7 +219,7 @@ define('io.ox/office/tk/toolbar',
              *      a simple push button and passes undefined to its change
              *      listeners.
              *
-             * @return {ControlGroupProxy}
+             * @return {ButtonGroupProxy}
              *  A reference to this proxy object.
              */
             this.addButton = function (key, options) {
@@ -241,7 +240,7 @@ define('io.ox/office/tk/toolbar',
             // register the group object at this tool bar
             registerGroup(group);
 
-        } // class ControlGroupProxy
+        } // class ButtonGroupProxy
 
         // class RadioGroupProxy ----------------------------------------------
 
@@ -270,7 +269,7 @@ define('io.ox/office/tk/toolbar',
                 buttonGroup = new Group(),
 
                 // create a new group container for the drop-down group
-                dropDownGroup = new ButtonGridGroup(key, Utils.extendOptions(options, { split: false }));
+                dropDownGroup = new ButtonChooser(key, Utils.extendOptions(options, { split: false }));
 
             // private methods ------------------------------------------------
 
@@ -439,7 +438,7 @@ define('io.ox/office/tk/toolbar',
          *  A reference to this tool bar.
          */
         this.addButton = function (key, options) {
-            return this.addControlGroup().addButton(key, options).end();
+            return this.addButtonGroup().addButton(key, options).end();
         };
 
         /**
@@ -447,12 +446,12 @@ define('io.ox/office/tk/toolbar',
          * groups contain several independent buttons (push buttons, and/or
          * toggle buttons).
          *
-         * @returns {ControlGroupProxy}
+         * @returns {ButtonGroupProxy}
          *  A proxy object that implements methods to add controls to the
          *  group.
          */
-        this.addControlGroup = function () {
-            return new ControlGroupProxy();
+        this.addButtonGroup = function () {
+            return new ButtonGroupProxy();
         };
 
         /**

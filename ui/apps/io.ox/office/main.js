@@ -45,11 +45,11 @@ define('io.ox/office/main',
 
         // add all tool bar controls
         this
-        .addControlGroup()
+        .addButtonGroup()
             .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert last operation') })
             .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation') })
         .end()
-        .addControlGroup()
+        .addButtonGroup()
             .addButton('character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
             .addButton('character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
             .addButton('character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })

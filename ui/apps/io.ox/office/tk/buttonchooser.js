@@ -11,10 +11,10 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/buttongridgroup',
+define('io.ox/office/tk/buttonchooser',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/dropdowngroup'
-    ], function (Utils, DropDownGroup) {
+     'io.ox/office/tk/dropdown'
+    ], function (Utils, DropDown) {
 
     'use strict';
 
@@ -24,11 +24,11 @@ define('io.ox/office/tk/buttongridgroup',
         // placeholder button for new cells (must contain something to get its correct height)
         placeholderButton = Utils.createButton(undefined, { label: '\xa0' });
 
-    // class ButtonGridGroup ==================================================
+    // class ButtonChooser ====================================================
 
     /**
      * Creates a container element with a drop-down button shown on top, and a
-     * tabular drop-down menu.
+     * tabular drop-down menu containing button controls.
      *
      * @constructor
      *
@@ -38,12 +38,12 @@ define('io.ox/office/tk/buttongridgroup',
      *
      * @param {Object} options
      *  A map of options to control the properties of the drop-down button.
-     *  Supports all options of the base class (see DropDownGroup() for
+     *  Supports all options of the base class (see DropDown() constructor for
      *  details). Additionally, the following options are supported:
      *  @param {Number} [options.columns=3]
      *      Number of columns used to build the drop-down grid.
      */
-    function ButtonGridGroup(key, options) {
+    function ButtonChooser(key, options) {
 
         var // self reference to be used in event handlers
             self = this,
@@ -134,7 +134,7 @@ define('io.ox/office/tk/buttongridgroup',
 
         // base constructor ---------------------------------------------------
 
-        DropDownGroup.call(this, key, options, gridNode);
+        DropDown.call(this, key, options, gridNode);
 
         // methods ------------------------------------------------------------
 
@@ -192,7 +192,7 @@ define('io.ox/office/tk/buttongridgroup',
             .on('menu:enter', menuOpenHandler);
         gridNode.on('keydown keypress keyup', gridKeyHandler);
 
-    } // class ButtonGridGroup
+    } // class ButtonChooser
 
     // global initialization ==================================================
 
@@ -201,7 +201,7 @@ define('io.ox/office/tk/buttongridgroup',
 
     // exports ================================================================
 
-    // derive this class from class DropDownGroup
-    return DropDownGroup.extend({ constructor: ButtonGridGroup });
+    // derive this class from class DropDown
+    return DropDown.extend({ constructor: ButtonChooser });
 
 });

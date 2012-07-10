@@ -13,9 +13,9 @@
 
 define('io.ox/office/tk/sizechooser',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/dropdowngroup',
+     'io.ox/office/tk/dropdown',
      'gettext!io.ox/office/tk/main'
-    ], function (Utils, DropDownGroup, gt) {
+    ], function (Utils, DropDown, gt) {
 
     'use strict';
 
@@ -44,8 +44,8 @@ define('io.ox/office/tk/sizechooser',
      *
      * @param {Object} options
      *  A map of options to control the properties of the size chooser.
-     *  Supports all options of the DropDownGroup() base class. Additionally,
-     *  the following options are supported:
+     *  Supports all options of the DropDown() base class constructor.
+     *  Additionally, the following options are supported:
      *  @param {Object} [options.minSize={width: 1, height: 1}]
      *      Minimum size allowed to choose. Either width or height may be
      *      omitted. Values but must be positive integers if specified.
@@ -241,7 +241,7 @@ define('io.ox/office/tk/sizechooser',
         // base constructor ---------------------------------------------------
 
         // insert validated default size for action button into the options
-        DropDownGroup.call(this, key, Utils.extendOptions(options, { defaultValue: defSize }), menuNode);
+        DropDown.call(this, key, Utils.extendOptions(options, { defaultValue: defSize }), menuNode);
 
         // initialization -----------------------------------------------------
 
@@ -255,7 +255,7 @@ define('io.ox/office/tk/sizechooser',
 
     // exports ================================================================
 
-    // derive this class from class DropDownGroup
-    return DropDownGroup.extend({ constructor: SizeChooser });
+    // derive this class from class DropDown
+    return DropDown.extend({ constructor: SizeChooser });
 
 });

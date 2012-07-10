@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/dropdowngroup',
+define('io.ox/office/tk/dropdown',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/group'
     ], function (Utils, Group) {
@@ -21,7 +21,7 @@ define('io.ox/office/tk/dropdowngroup',
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes;
 
-    // class DropDownGroup ====================================================
+    // class DropDown =========================================================
 
     /**
      * Creates a container element with a drop-down button shown on top.
@@ -57,7 +57,7 @@ define('io.ox/office/tk/dropdowngroup',
      * @param {jQuery} dropDownMenu
      *  The drop-down menu container element, as jQuery collection.
      */
-    function DropDownGroup(key, options, menuNode) {
+    function DropDown(key, options, menuNode) {
 
         var // self reference to be used in event handlers
             self = this,
@@ -330,11 +330,11 @@ define('io.ox/office/tk/dropdowngroup',
         // append buttons and menu to the group container
         this.getNode().append(actionButton, caretButton, menuNode);
 
-    } // class DropDownGroup
+    } // class DropDown
 
     // exports ================================================================
 
     // derive this class from class Group
-    return Group.extend({ constructor: DropDownGroup });
+    return Group.extend({ constructor: DropDown });
 
 });

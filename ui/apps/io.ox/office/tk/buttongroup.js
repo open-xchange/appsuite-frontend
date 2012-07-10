@@ -11,24 +11,22 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/controlgroup',
+define('io.ox/office/tk/buttongroup',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/group'
     ], function (Utils, Group) {
 
     'use strict';
 
-    // class ControlGroup =====================================================
+    // class ButtonGroup ======================================================
 
     /**
-     * Creates a container element used to hold simple control elements. All
-     * controls shown in a tool bar must be inserted into such group
-     * containers. Registers update handlers and action handlers for all types
-     * of controls supported by this group.
+     * Creates a container element used to hold push buttons and toggle
+     * buttons.
      *
      * @constructor
      */
-    function ControlGroup() {
+    function ButtonGroup() {
 
         // private methods ------------------------------------------------
 
@@ -116,11 +114,11 @@ define('io.ox/office/tk/controlgroup',
         // add action handlers for buttons
         this.registerActionHandler('click', 'button', buttonClickHandler);
 
-    } // class ControlGroup
+    } // class ButtonGroup
 
     // exports ================================================================
 
     // derive this class from class Group
-    return Group.extend({ constructor: ControlGroup });
+    return Group.extend({ constructor: ButtonGroup });
 
 });
