@@ -11,10 +11,7 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define("io.ox/help/center", [
-    'io.ox/help/data',
-    'less!io.ox/help/style.css'
-], function (ext) {
+define("io.ox/help/center", ['io.ox/core/extensions', 'io.ox/help/core_doc', 'less!io.ox/help/style.css'], function (ext, core_doc) {
     
     'use strict';
     
@@ -38,28 +35,29 @@ define("io.ox/help/center", [
     };
     
     var getHelp = function (id) {
-        ext.point('io.ox/help/data').each(function (helper) {
+        var help;
+        ext.point('io.ox/help/helper').each(function (helper) {
             if (helper.has(id)) {
-                return helper.get(id);
+                help = helper.get(id);
+                return;
             }
         });
+        return help;
     };
-
+    
     var enableHelpHandlers = function () {
         var allReferenceElements = $('[data-ref]');
-        
-        console.log("Help handlers enabled");
 
         _(allReferenceElements).each(function (elem) {
             var $elem = $(elem),
                 datRef = $elem.attr('data-ref'),
-                text = getHelp(datRef);
-
-            if (text) {
+                helpText = "<div>" + getHelp(datRef) + "</div>";
+            if (helpText) {
                 origPopovers[datRef] = $elem.popover;
                 $elem.popover({
                     title: datRef,
-                    content: text,
+                    content: helpText,
+                    html: true,
                     placement: function (tip, element) {
                         var off = $(element).offset(),
                             width = $('body').width() / 2;
