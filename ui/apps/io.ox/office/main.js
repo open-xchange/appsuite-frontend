@@ -60,7 +60,14 @@ define('io.ox/office/main',
             .addButton('right',   { icon: gt('icon-align-right'),   tooltip: gt('Right') })
             .addButton('justify', { icon: gt('icon-align-justify'), tooltip: gt('Justify') })
         .end()
-        .addSizeChooser('insert/table', { label: gt('Table'), tooltip: gt('Insert table'), split: true, maxWidth: 15, maxHeight: 15, initialWidth: 5, initialHeight: 3 })
+        .addSizeChooser('insert/table', {
+            label: gt('Table'),
+            tooltip: gt('Insert table'),
+            split: true,
+            caretTooltip: gt('Select table size'),
+            maxSize: { width: 15, height: 15 },
+            defaultValue: { width: 5, height: 3 }
+        })
         .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
     }}); // class MainToolBar

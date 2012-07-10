@@ -264,13 +264,13 @@ define('io.ox/office/tk/toolbar',
         function RadioGroupProxy(key, options) {
 
             var // type of the group
-                type = (options && _.isString(options.type)) ? options.type : 'buttons',
+                type = Utils.getStringOption(options, 'type', 'buttons'),
 
                 // create a new group container for the button group
                 buttonGroup = new Group(),
 
                 // create a new group container for the drop-down group
-                dropDownGroup = new ButtonGridGroup(key, _(options || {}).extend({ split: false }));
+                dropDownGroup = new ButtonGridGroup(key, Utils.extendOptions(options, { split: false }));
 
             // private methods ------------------------------------------------
 
@@ -363,7 +363,9 @@ define('io.ox/office/tk/toolbar',
              *  See method Utils.createButton() for details.
              */
             this.addButton = function (value, options) {
-                buttonGroup.getNode().append(Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS).attr('data-value', value));
+                buttonGroup.getNode().append(
+                    Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS).attr('data-value', value)
+                );
                 dropDownGroup.addButton(options).attr('data-value', value);
                 return this;
             };
@@ -487,6 +489,19 @@ define('io.ox/office/tk/toolbar',
             return new RadioGroupProxy(key, options);
         };
 
+        /**
+         * Creates a size-chooser control with a drop-down button shown on top,
+         * and a drop-down grid area used to select a specific size.
+         *
+         * @constructor
+         *
+         * @param {String} key
+         *  The unique key of the size chooser.
+         *
+         * @param {Object} options
+         *  A map of options to control the properties of the size chooser. See
+         *  the SizeChooser() constructor function for details.
+         */
         this.addSizeChooser = function (key, options) {
             registerGroup(new SizeChooser(key, options));
             return this;

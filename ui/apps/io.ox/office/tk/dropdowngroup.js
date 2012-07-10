@@ -44,6 +44,15 @@ define('io.ox/office/tk/dropdowngroup',
      *      drop-down caret, allowing to trigger a default action with the
      *      button, and to optionally show the drop-down menu. If set to false,
      *      the entire drop-down button will toggle the drop-down menu.
+     *  @param {String} [options.caretTooltip]
+     *      If specified, will set a different tool tip to the drop-down caret
+     *      button. Will be used in split mode (options.split set to true)
+     *      only. If omitted, the standard tool tip (options.tooltip) will be
+     *      used for both buttons.
+     *  @param {Any} [options.defaultValue]
+     *      If specified, the click handler of the action button will return
+     *      this value. Will be used in split mode (options.split set to true)
+     *      only.
      *
      * @param {jQuery} dropDownMenu
      *  The drop-down menu container element, as jQuery collection.
@@ -54,13 +63,18 @@ define('io.ox/office/tk/dropdowngroup',
             self = this,
 
             // split button mode, or simple drop-down mode
-            split = options && (options.split === true),
+            split = Utils.getBooleanOption(options, 'split'),
+
+            // split button mode, or simple drop-down mode
+            defaultValue = Utils.getOption(options, 'defaultValue'),
 
             // the action button (either triggering a default action, or toggling the drop-down menu)
             actionButton = Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS),
 
             // the drop-down button in split mode (pass 'options' for formatting, but drop any contents)
-            caretButton = split ? Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS + ' io-ox-caret-button').empty() : $(),
+            caretTooltip = Utils.getStringOption(options, 'caretTooltip'),
+            caretOptions = caretTooltip ? Utils.extendOptions(options, { tooltip: caretTooltip }) : options,
+            caretButton = split ? Utils.createButton(key, caretOptions).addClass(Group.FOCUSABLE_CLASS + ' io-ox-caret-button').empty() : $(),
 
             // reference to the button that triggers the drop-down menu
             menuButton = split ? caretButton : actionButton,
@@ -224,13 +238,15 @@ define('io.ox/office/tk/dropdowngroup',
 
         // base constructor ---------------------------------------------------
 
-        Group.call(this);
+        // pass the drop-down menu node as action root node
+        Group.call(this, menuNode);
 
         // methods ------------------------------------------------------------
 
         /**
          * Replaces the contents of the drop-down button with the passed
-         * elements, and appends a caret sign.
+         * elements, and appends a caret sign (unless this group is in split
+         * mode).
          */
         this.replaceButtonContents = function (nodes) {
             actionButton.empty().append(nodes).appendCaret();
@@ -277,16 +293,6 @@ define('io.ox/office/tk/dropdowngroup',
             };
         }());
 
-        // overwrite the registerActionHandler() method; use drop-down menu as default root node
-        (function () {
-            var baseMethod = self.registerActionHandler;
-            self.registerActionHandler = function (node, type, selector, actionHandler) {
-                return _.isString(node) ?
-                    baseMethod.call(this, menuNode, node, type, selector) :
-                    baseMethod.call(this, node, type, selector, actionHandler);
-            };
-        }());
-
         // initialization -----------------------------------------------------
 
         // helper function appending a caret sign to the contents of the drop-down button
@@ -298,9 +304,9 @@ define('io.ox/office/tk/dropdowngroup',
             return this.append($('<span>').addClass('caret'));
         };
 
-        // in split mode, register a dummy action handler for the action button
+        // in split mode, register a action handler for the action button
         if (split) {
-            this.registerActionHandler(actionButton, 'click', $.noop);
+            this.registerActionHandler(actionButton, 'click', function () { return defaultValue; });
         }
 
         // register event handlers for both buttons
@@ -314,7 +320,7 @@ define('io.ox/office/tk/dropdowngroup',
             .attr('data-toggle', 'dropdown')
             .on('click', menuButtonClickHandler)
             .on('keydown keypress keyup', menuButtonKeyHandler)
-            .on('blur:key', _.bind(this.hideMenu, this));
+            .on('blur:key', function () { self.hideMenu(); });
 
         // prepare drop-down menu, and register event handlers
         menuNode

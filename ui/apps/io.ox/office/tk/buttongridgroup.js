@@ -55,7 +55,7 @@ define('io.ox/office/tk/buttongridgroup',
             rows = 0,
 
             // number of columns in the grid
-            columns = (options && _.isNumber(options.columns) && (options.columns >= 1)) ? options.columns : 3,
+            columns = Utils.getIntegerOption(options, 'columns', 3, 1),
 
             // number of buttons inserted into the group
             buttonCount = 0;

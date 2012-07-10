@@ -26,9 +26,14 @@ define('io.ox/office/tk/group',
      * the base class for specialized groups and does not add any specific
      * functionality to the inserted controls.
      *
+     * @param {jQuery} [actionRootNode]
+     *  The default node where action handlers will be attached to, collecting
+     *  action events of embedded control elements embedded. If omitted, uses
+     *  the root node of this group.
+     *
      * @constructor
      */
-    function Group() {
+    function Group(actionRootNode) {
 
         var // self reference
             self = this,
@@ -132,8 +137,9 @@ define('io.ox/office/tk/group',
          * @param {jQuery} [node]
          *  The DOM node that catches the jQuery action events. May be a single
          *  control, or a parent element of several controls. If omitted, uses
-         *  the root container node of this group. In case a container element
-         *  is used, the parameter 'selector' must be specified.
+         *  the action root node of this group, as specified in the
+         *  constructor. In case a container element is used, the parameter
+         *  'selector' must be specified.
          *
          * @param {String} type
          *  The type of the action event, e.g. 'click' or 'change'.
@@ -165,7 +171,7 @@ define('io.ox/office/tk/group',
                 actionHandler = selector;
                 selector = type;
                 type = node;
-                node = groupNode;
+                node = actionRootNode || groupNode;
             }
 
             // normalize passed parameters, if selector parameter is missing

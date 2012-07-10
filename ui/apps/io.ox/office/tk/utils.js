@@ -43,18 +43,44 @@ define('io.ox/office/tk/utils', function () {
     Utils.FOCUSED_SELECTOR = ':focus';
 
     /**
-     * CSS class for active toggle buttons (defined by Bootstrap).
-     *
-     * @constant
-     */
-    Utils.ACTIVE_BUTTON_CLASS = 'btn-primary';
-
-    /**
      * CSS class for selected (active) toggle buttons.
      *
      * @constant
      */
     Utils.SELECTED_BUTTON_CLASS = 'selected';
+
+    // options object ---------------------------------------------------------
+
+    Utils.getOption = function (options, name, def) {
+        return (_.isObject(options) && (name in options)) ? options[name] : def;
+    };
+
+    Utils.getStringOption = function (options, name, def) {
+        var value = Utils.getOption(options, name);
+        return _.isString(value) ? value : def;
+    };
+
+    Utils.getBooleanOption = function (options, name, def) {
+        var value = Utils.getOption(options, name);
+        return _.isBoolean(value) ? value : def;
+    };
+
+    Utils.getIntegerOption = function (options, name, def, min, max) {
+        var value = Utils.getOption(options, name);
+        value = _.isNumber(value) ? value : def;
+        if (_.isNumber(min) && (value < min)) { value = min; }
+        if (_.isNumber(max) && (value > max)) { value = max; }
+        return Math.floor(value);
+    };
+
+    Utils.getObjectOption = function (options, name, def) {
+        var value = Utils.getOption(options, name);
+        return _.isObject(value) ? value : def;
+    };
+
+    Utils.extendOptions = function (options, extensions) {
+        return _(_.isObject(options) ? options : {}).extend(extensions);
+    };
 
     // form control elements --------------------------------------------------
 
@@ -184,34 +210,35 @@ define('io.ox/office/tk/utils', function () {
     Utils.createButton = function (key, options) {
 
         var // create the DOM button element
-            button = $('<button>').addClass('btn');
+            button = $('<button>').addClass('btn'),
+
+            // option values
+            classes = Utils.getStringOption(options, 'classes'),
+            icon = Utils.getStringOption(options, 'icon'),
+            label = Utils.getStringOption(options, 'label'),
+            tooltip = Utils.getStringOption(options, 'tooltip');
 
         // add the key as data attribute
         if (_.isString(key)) {
             button.attr('data-key', key);
         }
 
-        // button attributes
-        if (_.isObject(options)) {
-            // add CSS classes
-            if (_.isString(options.classes)) {
-                button.addClass(options.classes);
-            }
-            // add icon in an i element
-            if (_.isString(options.icon)) {
-                button.append($('<i>').addClass(options.icon));
-            }
-            // add text label, separate it from the icon
-            if (_.isString(options.label)) {
-                if (button.children('i').length) {
-                    button.append($('<span>').addClass('whitespace'));
-                }
-                button.append($('<span>').text(options.label));
-            }
-            // add tool tip text
-            if (_.isString(options.tooltip)) {
-                button.attr('title', options.tooltip);
-            }
+        // add CSS classes
+        if (classes) {
+            button.addClass(classes);
+        }
+        // add icon in an i element
+        if (icon) {
+            button.append($('<i>').addClass(icon));
+        }
+        // add text label, separate it from the icon
+        if (label) {
+            if (icon) { button.append($('<span>').addClass('whitespace')); }
+            button.append($('<span>').text(label));
+        }
+        // add tool tip text
+        if (tooltip) {
+            button.tooltip({ title: tooltip, placement: 'top', animation: false });
         }
 
         return button;
@@ -219,32 +246,31 @@ define('io.ox/office/tk/utils', function () {
 
     /**
      * Returns whether the first button control in the passed jQuery collection
-     * is active.
+     * is in selected state.
      *
      * @param {jQuery} button
      *  A jQuery collection containing a button element.
      *
      * @returns {Boolean}
-     *  True, if the button is active.
+     *  True, if the button is selected.
      */
-    Utils.isButtonActive = function (button) {
+    Utils.isButtonSelected = function (button) {
         return button.first().hasClass(Utils.SELECTED_BUTTON_CLASS);
     };
 
     /**
-     * Activates, deactivates, or toggles the passed button or collection of
+     * Selects, deselects, or toggles the passed button or collection of
      * buttons.
      *
      * @param {jQuery} buttons
      *  A jQuery collection containing one or more button elements.
      *
      * @param {Boolean} [state]
-     *  If omitted, toggles the state of all buttons. Otherwise, activates or
-     *  deactivates all buttons.
+     *  If omitted, toggles the selection state of all buttons. Otherwise,
+     *  selects or deselects all buttons.
      */
     Utils.toggleButtons = function (buttons, state) {
-        buttons.toggleClass(Utils.ACTIVE_BUTTON_CLASS + ' ' + Utils.SELECTED_BUTTON_CLASS, state);
-//            .children('i').toggleClass('icon-white', state);
+        buttons.toggleClass(Utils.SELECTED_BUTTON_CLASS, state);
     };
 
     // key codes --------------------------------------------------------------

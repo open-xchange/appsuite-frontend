@@ -65,7 +65,7 @@ define('io.ox/office/tk/controlgroup',
         function buttonClickHandler(button) {
             if (isToggleButton(button)) {
                 Utils.toggleButtons(button);
-                return Utils.isButtonActive(button);
+                return Utils.isButtonSelected(button);
             } // else: push button, return undefined
         }
 
@@ -99,7 +99,7 @@ define('io.ox/office/tk/controlgroup',
                 button = Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS).appendTo(this.getNode());
 
             // add toggle button marker
-            if (options && (options.toggle === true)) {
+            if (Utils.getBooleanOption(options, 'toggle')) {
                 button.attr('data-toggle', 'toggle');
             }
 

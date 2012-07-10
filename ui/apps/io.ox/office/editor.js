@@ -1416,7 +1416,6 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
             var selection = this.getSelection();
             selection.adjust();
             var position = [selection.startPaM.oxoPosition[0]];
-            size = size || { width: 3, height: 3 };
             var newOperation = {name: OP_TABLE_INSERT, start: _.copy(position, true)};
             this.applyOperation(newOperation, true, true);
         };
