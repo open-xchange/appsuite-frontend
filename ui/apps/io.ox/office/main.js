@@ -523,7 +523,7 @@ define('io.ox/office/main',
          * @returns {jQuery.Deferred}
          *  A deferred that reflects the result of the save operation.
          */
-        app.save = function () {
+        app.saveOrFlush = function (action) {
 
             var // initialize the deferred to be returned
                 def = $.Deferred().always(function () {
@@ -542,7 +542,7 @@ define('io.ox/office/main',
 
             $.ajax({
                 type: 'GET',
-                url: getFilterUrl('exportdocument'),
+                url: getFilterUrl(action),
                 dataType: 'json'
                 /* data: dataObject,
                 beforeSend: function (xhr) {
@@ -565,6 +565,15 @@ define('io.ox/office/main',
 
             return def;
         };
+
+        app.save = function () {
+            return app.saveOrFlush('exportdocument');
+        };
+
+        app.flush = function () {
+            return app.saveOrFlush('savedocument');
+        };
+
 
         app.sendReceiveOperations = function () {
             var dbgtest = getFilterUrl('xxx');
