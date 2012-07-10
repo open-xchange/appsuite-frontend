@@ -30,6 +30,11 @@ define("io.ox/office/actions",
         action: function (app) { app.save(); }
     });
 
+    new Action('io.ox/office/actions/flush', {
+        id: 'flush',
+        action: function (app) { app.flush(); }
+    });
+
     // links
 
     ext.point('io.ox/office/links/toolbar').extend(new Link({
@@ -37,6 +42,13 @@ define("io.ox/office/actions",
         id: "save",
         label: gt("Export Document"),
         ref: "io.ox/office/actions/save"
+    }));
+
+    ext.point('io.ox/office/links/toolbar').extend(new Link({
+        index: 101,
+        id: "flush",
+        label: gt("Flush"),
+        ref: "io.ox/office/actions/flush"
     }));
 
 });
