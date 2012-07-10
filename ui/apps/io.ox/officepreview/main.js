@@ -25,19 +25,58 @@ define("io.ox/officepreview/main",
 
     function createApplication(options) {
 
-        var // OX application object
-            app = ox.ui.createApp({ name: MODULE_NAME }),
-
-            // application window
+        var app = ox.ui.createApp({ name: MODULE_NAME }),
+            
             win = null,
-
-            // connection to infostore file
+            
             file = null,
+        
+            preview = null,
+            
+            pageIndicator = $("<span>").addClass("io-ox-office-preview-page-indicator").text("1"),
 
-            // preview
-            preview = null;
-           
-        // private functions --------------------------------------------------
+            firstButton = $("<button>").addClass("btn btn-primary")
+            .append("<i class='icon-white icon-fast-backward'>")
+            .attr("id", "firstButton")
+            .on("click", function (e) {
+                e.preventDefault();
+                preview.firstPage();
+                updateButtons();
+            }),
+            
+            previousButton = $("<button>").addClass("btn btn-primary")
+            .append("<i class='icon-white icon-step-backward'>")
+            .attr("id", "previousButton")
+            .on("click", function (e) {
+                e.preventDefault();
+                preview.previousPage();
+                updateButtons();
+            }),
+
+            nextButton = $("<button>").addClass("btn btn-primary")
+                .append("<i class='icon-white icon-step-forward'>")
+                .attr("id", "nextButton")
+                .on("click", function (e) {
+                    e.preventDefault();
+                    preview.nextPage();
+                    updateButtons();
+                }),
+
+            lastButton = $("<button>").addClass("btn btn-primary")
+            .append("<i class='icon-white icon-fast-forward'>")
+                .attr("id", "lastButton")
+                .on("click", function (e) {
+                e.preventDefault();
+                preview.lastPage();
+                updateButtons();
+            }),
+                
+            previewContainer = $('<div>').addClass('abs')
+                .css({ overflow: "auto", zIndex: 2 });
+        
+        // ---------------------
+        // - private functions -
+        // ---------------------
 
         /**
          * Shows a closable error message above the preview.
@@ -49,9 +88,7 @@ define("io.ox/officepreview/main",
          *  The title of the error message. Defaults to 'Error'.
          */
         function showError(message, title) {
-            win.nodes.appPane
-                .find('.alert').remove().end()
-                .prepend($.alert(title || gt('Error'), message));
+            alert(title || gt('Error'), message);
         }
 
         /**
@@ -86,6 +123,40 @@ define("io.ox/officepreview/main",
         }
 
         /**
+         * Sets the application button status according to the current status
+         * of the preview
+         */
+        function updateButtons() {
+            if (preview.firstAvail()) {
+                $("#firstButton").removeAttr("disabled");
+            }
+            else {
+                $("#firstButton").attr("disabled", "disabled");
+            }
+
+            if (preview.previousAvail()) {
+                $("#previousButton").removeAttr("disabled");
+            }
+            else {
+                $("#previousButton").attr("disabled", "disabled");
+            }
+
+            if (preview.nextAvail()) {
+                $("#nextButton").removeAttr("disabled");
+            }
+            else {
+                $("#nextButton").attr("disabled", "disabled");
+            }
+
+            if (preview.lastAvail()) {
+                $("#lastButton").removeAttr("disabled");
+            }
+            else {
+                $("#lastButton").attr("disabled", "disabled");
+            }
+        }
+
+        /**
          * The handler function that will be called while launching the
          * application. Creates and initializes a new application window.
          */
@@ -101,21 +172,23 @@ define("io.ox/officepreview/main",
             
             app.setWindow(win);
 
-            // create panes and attach them to the main window
-            win.nodes.main.addClass('io-ox-officepreview-main').append(
-                // top pane for tool bars
-                win.nodes.toolPane = $('<div>').addClass('io-ox-officepreview-page-indicator'),
-                // main application container
-                win.nodes.appPane = $('<div>').addClass('io-ox-officepreview-main').append(preview.getNode())
-            );
+            win.nodes.main
+                .append(preview.getNode());
 
-            // update preview 'div' on window size change
-            $(window).resize(windowResizeHandler);
+            win.nodes.main
+                .addClass("io-ox-office-preview-background")
+                .append(pageIndicator);
 
             // trigger all window resize handlers on 'show' events
             win.on('show', function () {
+                win.nodes.toolbar
+                    .append($("<div>")
+                    .append(firstButton, $.txt(' '), previousButton, $.txt(' '), nextButton, $.txt(' '), lastButton))
+                    .css({ left: "45%" });
+                
                 $(window).resize();
-                // disable FF spell checking. TODO: better solution...
+
+                // disable FF spell checking
                 $('body').attr('spellcheck', false);
             });
         }
@@ -142,7 +215,22 @@ define("io.ox/officepreview/main",
          * view port size.
          */
         function windowResizeHandler() {
-            win.nodes.appPane.height(window.innerHeight - win.nodes.appPane.offset().top);
+        }
+
+        /**
+         * Returns the URL passed to the AJAX calls used to convert a document
+         * file into an HTML document.
+         */
+        function getFilterUrl(action) {
+            return file && (ox.apiRoot +
+                '/oxodocumentfilter' +
+                '?action=' + action +
+                '&id=' + file.id +
+                '&folder_id=' + file.folder_id +
+                '&version=' + file.version +
+                '&filename=' + file.filename +
+                '&session=' + ox.session) +
+                '&filter_format=html';
         }
         
         /**
@@ -166,14 +254,14 @@ define("io.ox/officepreview/main",
                 }
 
                 // check that a result object exists and contains an operations array
-                if (!_.isObject(response.data) || !_.isArray(response.data.operations)) {
+                if (!_.isObject(response.data) || !_.isString(response.data.HTMLPages)) {
                     throw 'Missing AJAX result data.';
                 }
             } catch (ex) {
                 // reject deferred on error
                 return def.reject(ex);
             }
-
+            
             // resolve the deferred with the preview document
             return def.resolve(response.data);
         }
@@ -216,22 +304,6 @@ define("io.ox/officepreview/main",
         };
 
         /**
-         * Returns the URL passed to the AJAX calls used to convert a document
-         * file into an HTML document.
-         */
-        function getFilterUrl(action) {
-            return file && (ox.apiRoot +
-                '/oxodocumentfilter' +
-                '?action=' + action +
-                '&id=' + file.id +
-                '&folder_id=' + file.folder_id +
-                '&version=' + file.version +
-                '&filename=' + file.filename +
-                '&session=' + ox.session) +
-                '&filter_format=html';
-        }
-        
-        /**
          * Loads the document described in the file descriptor passed to the
          * constructor of this application, and shows the application window.
          *
@@ -258,7 +330,7 @@ define("io.ox/officepreview/main",
             def = $.Deferred().always(function () {
                 win.idle();
             });
-
+            
             // load the file
             $.ajax({
                 type: 'GET',
@@ -268,7 +340,8 @@ define("io.ox/officepreview/main",
             .done(function (response) {
                 importHTML(response)
                 .done(function (previewDocument) {
-                    preview.setPreviewDocument(previewDocument);
+                    preview.setPreviewDocument(previewDocument.HTMLPages);
+                    updateButtons();
                     def.resolve();
                 })
                 .fail(function (ex) {
@@ -279,7 +352,7 @@ define("io.ox/officepreview/main",
             })
             .fail(function (response) {
                 showAjaxError(response);
-                preview.initDocument();
+                preview.setPreviewDocument(null);
                 def.reject();
             });
 
@@ -309,7 +382,7 @@ define("io.ox/officepreview/main",
         // - initialization of createApplication function -
         // ------------------------------------------------
 
-        preview = new OfficePreview($('<div>'));
+        preview = new OfficePreview(previewContainer);
         file = _.isObject(options) ? options.file : null;
 
         return app.setLauncher(launchHandler).setQuit(quitHandler);

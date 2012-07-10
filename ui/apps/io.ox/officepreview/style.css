@@ -15,6 +15,7 @@
 .io-ox-officepreview-main {
     margin: 0;
     padding: 0;
+    background-color: #ddd;
 
     .container {
         width: 100%;

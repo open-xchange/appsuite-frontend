@@ -83,7 +83,7 @@ define("io.ox/files/actions",
     new Action('io.ox/files/actions/officepreview', {
         id: 'officepreview',
         requires: function (e) {
-            return e.collection.has('one') && /\.(odt)$/i.test(e.context.data.filename);
+            return e.collection.has('one') && /\.(doc|docx|odt|xls|xlsx|sdc|ppt|pptx|sdp|sdg)$/i.test(e.context.data.filename);
         },
         action: function (data) {
             ox.launch('io.ox/officepreview/main', { file: data }).done(function () {
