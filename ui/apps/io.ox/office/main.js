@@ -176,6 +176,9 @@ define('io.ox/office/main',
             // timer for operations
             operationsTimer = null,
 
+            // true while sending or receiving operation updates via the deferred object
+            processingOperations = null,
+
             // primary editor used in save, quit, etc.
             editor = null,
 
@@ -262,17 +265,6 @@ define('io.ox/office/main',
             win.nodes.debugPane.toggle(debugMode);
             // resize editor pane
             windowResizeHandler();
-            if (debugMode) {
-                // In debug mode, stop polling.
-                // Advantage 1: Less debug output in FireBug (http-get)
-                // Advantage 2: Simpulate a slow/lost connection
-                if (operationsTimer)
-                    window.clearTimeout(operationsTimer);
-            }
-            else {
-                app.startOperationsTimer();
-            }
-
         }
 
         /**
@@ -347,20 +339,12 @@ define('io.ox/office/main',
                 );
             }
 
-            // TODO: push ops now, delay closing this window...
-            if (operationsBuffer.length) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog()
-                        .text(gt('Do you really want to cancel editing this document?'))
-                        .addPrimaryButton('delete', gt('Lose changes'))
-                        .on('delete', function () { def.resolve(); })
-                        .addAlternativeButton('save', gt('Save'))
-                        .on('save', saveChanges)
-                        .addButton('cancel', gt('Cancel'))
-                        .on('cancel', function () { def.reject(); })
-                        .show();
-                });
-            } else {
+            if (operationsBuffer.length || processingOperations) {
+                // TODO: push ops now, delay closing this window...
+                // Do not close while processingOperations === true
+                def.reject();
+            }
+            else {
                 def.resolve();
             }
 
@@ -480,6 +464,10 @@ define('io.ox/office/main',
             $(window).resize();
             updateTitles();
 
+            editor.initDocument();
+            operationsBuffer = []; // initDocument will result in an operation
+
+
             // initialize the deferred to be returned
             def = $.Deferred().always(function () {
                 win.idle();
@@ -504,13 +492,11 @@ define('io.ox/office/main',
                 })
                 .fail(function (ex) {
                     showExceptionError(ex);
-                    editor.initDocument();
                     def.reject();
                 });
             })
             .fail(function (response) {
                 showAjaxError(response);
-                editor.initDocument();
                 def.reject();
             });
 
@@ -576,7 +562,14 @@ define('io.ox/office/main',
 
 
         app.sendReceiveOperations = function () {
-            var dbgtest = getFilterUrl('xxx');
+
+            operationsTimer = null; // Because this is the timeout function
+
+            if (processingOperations)
+                return;
+
+            processingOperations = true;
+
             // First, check if the server has new ops for me
             $.ajax({
                 type: 'GET',
@@ -584,6 +577,7 @@ define('io.ox/office/main',
                 dataType: 'json'
             })
             .done(function (response) {
+                processingOperations = false;
                 if (response && response.data) {
                     var operations = JSON.parse(response.data);
                     if (operations.length) {
@@ -599,10 +593,18 @@ define('io.ox/office/main',
                 }
                 else
                     app.startOperationsTimer();
+            })
+            .fail(function (response) {
+                processingOperations = false;
             });
         };
 
         app.sendOperations = function () {
+
+            if (processingOperations)
+                return;
+
+            processingOperations = true;
 
             var sendOps = _.copy(operationsBuffer, true);
 
@@ -623,20 +625,29 @@ define('io.ox/office/main',
                 }
             })
             .done(function (response) {
+                processingOperations = false;
                 app.startOperationsTimer();
             })
             .fail(function (response) {
                 // showAjaxError(response);
                 operationsBuffer = $.extend(true, operationsBuffer, sendOps); // Try again later. NOT TESTED YET!
+                processingOperations = false;
                 app.startOperationsTimer();
             });
         };
 
         app.startOperationsTimer = function (timeout) {
 
+            // In debug mode, stop polling.
+            // Advantage 1: Less debug output in FireBug (http-get)
+            // Advantage 2: Simpulate a slow/lost connection
             if (!debugMode) {
                 var _this = this;
                 var to = timeout || 1000;
+
+                if (operationsTimer)                        // If it running, restart - don't send too many updates while the user is typing.
+                    window.clearTimeout(operationsTimer);   // If we change this, and decide to not restart, then make sure that we don't start twice
+
                 operationsTimer = window.setTimeout(function () { _this.sendReceiveOperations(); }, to);
             }
 

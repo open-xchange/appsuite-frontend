@@ -3024,7 +3024,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
             .on('drop', $.proxy(this, 'processDrop'))
             .on('contextmenu', $.proxy(this, 'processContextMenu'));
 
-        this.implInitDocument();
+        // this.implInitDocument(); Done in main.js - to early here for IE, div not in DOM yet.
 
     } // end of OXOEditor()
 
