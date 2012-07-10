@@ -13,8 +13,9 @@
 
 define('io.ox/office/tk/sizechooser',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/dropdowngroup'
-    ], function (Utils, DropDownGroup) {
+     'io.ox/office/tk/dropdowngroup',
+     'gettext!io.ox/office/tk/main'
+    ], function (Utils, DropDownGroup, gt) {
 
     'use strict';
 
@@ -39,80 +40,198 @@ define('io.ox/office/tk/sizechooser',
      *  @param {Number} [options.minWidth=1]
      *      Minimum number of columns allowed to choose. Must be a positive
      *      integer. If omitted, will be set to 1.
+     *  @param {Number} [options.minHeight=1]
+     *      Minimum number of rows allowed to choose. Must be a positive
+     *      integer. If omitted, will be set to 1.
      *  @param {Number} [options.maxWidth]
      *      Maximum number of columns allowed to choose. Must be a positive
      *      integer, must be greater than or equal to options.minWidth. If
      *      omitted, the maximum is only limited by available screen space.
-     *  @param {Number} [options.minHeight=1]
-     *      Minimum number of rows allowed to choose. Must be a positive
-     *      integer. If omitted, will be set to 1.
      *  @param {Number} [options.maxHeight]
      *      Maximum number of rows allowed to choose. Must be a positive
      *      integer, must be greater than or equal to options.minHeight. If
      *      omitted, the maximum is only limited by available screen space.
+     *  @param {Number} [options.initialWidth]
+     *      Number of rows that will be shown initially, when the drop-down
+     *      grid will be opened. Must be a positive integer. If omitted, will
+     *      be set to options.minWidth.
+     *  @param {Number} [options.initialHeight]
+     *      Number of columns that will be shown initially, when the drop-down
+     *      grid will be opened. Must be a positive integer. If omitted, will
+     *      be set to options.minHeight.
      */
     function SizeChooser(key, options) {
 
         var // self reference to be used in event handlers
             self = this,
 
-            // the table embedded in the drop-down button used to show the grid
-            menuTable = $('<table>').append('<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>'),
+            // build a table of embedded div elements used to show the grid
+            // (not using a table element since the grid flickers in different browsers...)
+            gridNode = $('<div>').append($('<div>').append($('<div>'))),
+
+            // the badge labels showing the current grid size
+            widthLabel = $('<span>').addClass('width-label'),
+            heightLabel = $('<span>').addClass('height-label'),
 
             // the drop-down button filling up the entire drop-down menu
-            menuButton = Utils.createButton(key).append(menuTable),
+            gridButton = Utils.createButton(key).append(gridNode, widthLabel, heightLabel),
 
             // the drop-down menu element
-            menuNode = $('<div>').addClass('io-ox-size-chooser').append(menuButton),
+            menuNode = $('<div>').addClass('io-ox-size-chooser').append(gridButton),
 
-            // size limits
+            // grid size limits
             minWidth = (options && _.isNumber(options.minWidth) && (options.minWidth >= 1)) ? options.minWidth : 1,
-            maxWidth = (options && _.isNumber(options.maxWidth) && (options.maxWidth >= minWidth)) ? options.maxWidth : undefined,
             minHeight = (options && _.isNumber(options.minHeight) && (options.minHeight >= 1)) ? options.minHeight : 1,
-            maxHeight = (options && _.isNumber(options.maxHeight) && (options.maxHeight >= minHeight)) ? options.maxHeight : undefined;
+            maxWidth = (options && _.isNumber(options.maxWidth) && (options.maxWidth >= minWidth)) ? options.maxWidth : undefined,
+            maxHeight = (options && _.isNumber(options.maxHeight) && (options.maxHeight >= minHeight)) ? options.maxHeight : undefined,
+            initWidth = (options && _.isNumber(options.initialWidth) && (options.initialWidth >= minWidth)) ? options.initialWidth : minWidth,
+            initHeight = (options && _.isNumber(options.initialHeight) && (options.initialHeight >= minHeight)) ? options.initialHeight : minHeight;
 
         // private methods ----------------------------------------------------
 
         /**
-         * Handles key events in the open drop-down menu element.
+         * Returns the current size of the grid, as object with 'width' and
+         * 'height' attributes.
          */
-        function menuKeyHandler(event) {
-/*
+        function getGridSize() {
+            var rows = gridNode.children();
+            return { width: rows.first().children().length, height: rows.length };
+        }
+
+        /**
+         * Changes the current size of the grid, and updates the badge labels.
+         */
+        function setGridSize(width, height) {
+
+            var // current size of the grid
+                gridSize = getGridSize(),
+                // all row elements in the grid
+                rows = gridNode.children();
+
+            if (width < minWidth) { width = minWidth; } else if (_.isNumber(maxWidth) && (width > maxWidth)) { width = maxWidth; }
+            if (height < minHeight) { height = minHeight; } else if (_.isNumber(maxHeight) && (height > maxHeight)) { height = maxHeight; }
+
+            // add/remove columns
+            if (width < gridSize.width) {
+                // remove cell elements from all rows
+                rows.each(function () {
+                    $(this).children().slice(width).remove();
+                });
+            } else if (width > gridSize.width) {
+                // add cell elements to all rows
+                rows.each(function () {
+                    var row = $(this);
+                    _(width - gridSize.width).times(function () {
+                        row.append($('<div>'));
+                    });
+                });
+            }
+
+            // add/remove rows
+            if (height < gridSize.height) {
+                // remove row elements
+                rows.slice(height).remove();
+            } else if (height > gridSize.height) {
+                // add row elements (clone the entire row instead of single cells)
+                _(height - gridSize.height).times(function () {
+                    gridNode.append(rows.first().clone());
+                });
+            }
+
+            // update badge labels
+            widthLabel.toggle(width > 1).text(gt.format(
+                //#. %1$d is the number of columns in the drop-down grid of a size-chooser control (table size selector)
+                //#, c-format
+                gt.ngettext('%1$d column', '%1$d columns', width),
+                gt.noI18n(width)
+            ));
+            heightLabel.toggle(height > 1).text(gt.format(
+                //#. %1$d is the number of rows in the drop-down grid of a size-chooser control (table size selector)
+                //#, c-format
+                gt.ngettext('%1$d row', '%1$d rows', height),
+                gt.noI18n(height)
+            ));
+        }
+
+        /**
+         * Enables or disables the global 'mousemove' handler that updates the
+         * grid size according to the position of the mouse pointer.
+         *
+         * @param {Boolean} state
+         *  Specifies whether to enable or disable the 'mousemove' handler.
+         */
+        function enableGridMouseMoveHandling(state) {
+            $('body')[state ? 'on' : 'off']('mousemove', gridMouseMoveHandler);
+        }
+
+        /**
+         * Handles 'menu:open' events and initializes the drop-down grid.
+         * Registers a 'mouseenter' handler at the drop-down menu that starts
+         * a 'mousemove' listener when the mouse first hovers the grid element.
+         */
+        function menuOpenHandler() {
+            enableGridMouseMoveHandling(false);
+            setGridSize(initWidth, initHeight);
+            menuNode.off('mouseenter').one('mouseenter', function () {
+                enableGridMouseMoveHandling(true);
+            });
+        }
+
+        /**
+         * Handles 'mousemove' events in the open drop-down menu element.
+         */
+        function gridMouseMoveHandler(event) {
+
+            var // current and new size of the grid
+                gridSize = getGridSize(),
+                // width and height of one cell
+                cellWidth = gridNode.outerWidth() / gridSize.width,
+                cellHeight = gridNode.outerHeight() / gridSize.height,
+                // mouse position relative to grid
+                mouseX = event.pageX - menuNode.offset().left,
+                mouseY = event.pageY - menuNode.offset().top;
+
+            // unbind ourselves, if the drop-down menu has been closed
+            if (!self.isMenuVisible()) {
+                enableGridMouseMoveHandling(false);
+                return;
+            }
+
+            // Calculate new grid size. Enlarge width/height of the grid area, if
+            // the last column/row is covered more than 75% of its width/height.
+            setGridSize(
+                (cellWidth > 0) ? Math.floor(mouseX / cellWidth + 1.25) : 1,
+                (cellHeight > 0) ? Math.floor(mouseY / cellHeight + 1.25) : 1
+            );
+        }
+
+        /**
+         * Handles keyboard events in the open drop-down menu element.
+         */
+        function gridKeyHandler(event) {
+
             var // distinguish between event types (ignore keypress events)
                 keydown = event.type === 'keydown',
-                // all buttons in the drop-down grid
-                buttons = self.getGridButtons(),
-                // index of the focused button
-                index = buttons.index(event.target),
-                // row index of the focused button
-                row = (index >= 0) ? Math.floor(index / columns) : -1,
-                // column index of the focused button
-                column = (index >= 0) ? (index % columns) : -1;
-
-            function focus(newIndex) {
-                newIndex = Math.min(buttonCount - 1, newIndex);
-                if ((newIndex >= 0) && (newIndex !== index)) {
-                    buttons.eq(newIndex).focus();
-                }
-            }
+                // current and new size of the grid
+                gridSize = getGridSize();
 
             switch (event.keyCode) {
             case KeyCodes.LEFT_ARROW:
-                if (keydown && (column > 0)) { focus(index - 1); }
+                if (keydown) { setGridSize(gridSize.width - 1, gridSize.height); }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (keydown) {
-                    if (row > 0) { focus(index - columns); } else { self.hideMenu(); }
+                if (gridSize.height > 1) {
+                    if (keydown) { setGridSize(gridSize.width, gridSize.height - 1); }
+                    return false;
                 }
-                return false;
+                break; // let event bubble up to silently close the menu
             case KeyCodes.RIGHT_ARROW:
-                if (keydown && (column + 1 < columns)) { focus(index + 1); }
+                if (keydown) { setGridSize(gridSize.width + 1, gridSize.height); }
                 return false;
             case KeyCodes.DOWN_ARROW:
-                if (keydown && (row + 1 < rows)) { focus(index + columns); }
+                if (keydown) { setGridSize(gridSize.width, gridSize.height + 1); }
                 return false;
             }
-*/
         }
 
         // base constructor ---------------------------------------------------
@@ -123,12 +242,11 @@ define('io.ox/office/tk/sizechooser',
 
         // initialization -----------------------------------------------------
 
-        menuTable.css('width', '60px');
-
         // register event handlers
-        this.registerActionHandler(menuButton, 'click', $.noop)
-            .on('menu:enter', function () { menuButton.focus(); });
-        menuButton.on('keydown keypress keyup', menuKeyHandler);
+        this.registerActionHandler(gridButton, 'click', getGridSize)
+            .on('menu:open', menuOpenHandler)
+            .on('menu:enter', function () { gridButton.focus(); });
+        gridButton.on('keydown keypress keyup', gridKeyHandler);
 
     } // class SizeChooser
 

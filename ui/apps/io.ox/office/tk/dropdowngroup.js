@@ -70,6 +70,15 @@ define('io.ox/office/tk/dropdowngroup',
 
         // private methods ----------------------------------------------------
 
+        /**
+         * Triggers a click event on the drop-down button. In split mode, this
+         * is the separated caret button.
+         *
+         * @param {Boolean} [fromKeyEvent]
+         *  If set to true, the call originates from a keyboard event. This
+         *  will cause to trigger the 'menu:enter' event if the menu has been
+         *  actually opened by this function call.
+         */
         function triggerMenuButton(fromKeyEvent) {
             // remember parameter in local variable, will be reset in click handler
             menuWithKeyboard = fromKeyEvent === true;
@@ -77,6 +86,20 @@ define('io.ox/office/tk/dropdowngroup',
             menuButton.click();
         }
 
+        /**
+         * Changes the visibility of the drop-down menu.
+         *
+         * @param {Boolean} [state]
+         *  If set to true, the drop-down menu will be displayed. If set to
+         *  false, the drop-down menu will be hidden. If omitted (or set to
+         *  undefined or null), the drop-down menu will be toggled according to
+         *  its current visibility.
+         *
+         * @param {Boolean} [fromKeyEvent]
+         *  If set to true, the call originates from a keyboard event. This
+         *  will cause to trigger the 'menu:enter' event if the menu has been
+         *  actually opened by this function call.
+         */
         function toggleMenu(state, fromKeyEvent) {
             if (self.isMenuVisible()) {
                 if (state !== true) {
@@ -94,10 +117,20 @@ define('io.ox/office/tk/dropdowngroup',
             }
         }
 
+        /**
+         * Handles click events from the drop-down button that opens the
+         * drop-down menu. In split mode, this is the separated caret button.
+         */
         function menuButtonClickHandler() {
 
             var // remember global variable (will be reset before the timer callback is executed)
                 withKeyboard = menuWithKeyboard;
+
+            // WebKit does not set focus to clicked button, which is needed to get
+            // keyboard control in the drop-down menu
+            if (!Utils.isControlFocused(menuButton)) {
+                menuButton.focus();
+            }
 
             if (!self.isMenuVisible()) {
                 // After a click on the drop-down button with hidden drop-down
@@ -122,20 +155,16 @@ define('io.ox/office/tk/dropdowngroup',
         }
 
         /**
-         * Handles key events in the focused drop-down button. Adds special
+         * Handles keyboard events in one of the focused buttons. In split
+         * mode, the handler will be executed for both buttons. Adds special
          * handling for opening the drop-down menu via keyboard.
          */
-        function menuButtonKeyHandler(event) {
+        function buttonKeyHandler(event) {
 
             var // distinguish between event types (ignore keypress events)
-                keydown = event.type === 'keydown',
-                keyup = event.type === 'keyup';
+                keydown = event.type === 'keydown';
 
             switch (event.keyCode) {
-            case KeyCodes.SPACE:
-            case KeyCodes.ENTER:
-                if (keyup) { toggleMenu(null, true); }
-                return false;
             case KeyCodes.DOWN_ARROW:
                 if (keydown) { toggleMenu(true, true); }
                 return false;
@@ -144,8 +173,23 @@ define('io.ox/office/tk/dropdowngroup',
                 return false;
             case KeyCodes.ESCAPE:
                 if (keydown) { toggleMenu(false, true); }
-                // let ESCAPE key bubble up
-                break;
+                break; // let ESCAPE key bubble up
+            }
+        }
+
+        /**
+         * Handles keyboard events in the focused drop-down button.
+         */
+        function menuButtonKeyHandler(event) {
+
+            var // distinguish between event types (ignore keypress events)
+                keyup = event.type === 'keyup';
+
+            switch (event.keyCode) {
+            case KeyCodes.SPACE:
+            case KeyCodes.ENTER:
+                if (keyup) { toggleMenu(null, true); }
+                return false;
             }
 
             // suppress 'keypress' event for SPACE bar (event.keyCode may be zero in Firefox)
@@ -155,7 +199,7 @@ define('io.ox/office/tk/dropdowngroup',
         }
 
         /**
-         * Handles key events inside the open drop-down menu.
+         * Handles keyboard events inside the open drop-down menu.
          */
         function menuKeyHandler(event) {
 
@@ -163,6 +207,9 @@ define('io.ox/office/tk/dropdowngroup',
                 keydown = event.type === 'keydown';
 
             switch (event.keyCode) {
+            case KeyCodes.UP_ARROW:
+                if (keydown) { toggleMenu(false, true); }
+                return false;
             case KeyCodes.TAB:
                 if (!event.ctrlKey && !event.altKey && !event.metaKey) {
                     // move focus to drop-down button, needed for correct
@@ -259,6 +306,10 @@ define('io.ox/office/tk/dropdowngroup',
             this.registerActionHandler(actionButton, 'click', $.noop);
         }
 
+        // register event handlers for both buttons
+        actionButton.add(caretButton)
+            .on('keydown keypress keyup', buttonKeyHandler);
+
         // prepare drop-down button, and register event handlers
         menuButton
             .appendCaret()
@@ -270,7 +321,7 @@ define('io.ox/office/tk/dropdowngroup',
 
         // prepare drop-down menu, and register event handlers
         menuNode
-            .addClass('dropdown-menu ' + Group.HIDDEN_CLASS)
+            .addClass('dropdown-menu')
             .on('keydown keypress keyup', menuKeyHandler);
 
         // append buttons and menu to the group container

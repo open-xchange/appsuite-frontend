@@ -89,6 +89,20 @@ define('io.ox/office/tk/utils', function () {
     };
 
     /**
+     * Returns whether the first form control in the passed jQuery collection
+     * is currently focused.
+     *
+     * @param {jQuery} control
+     *  A jQuery collection containing a form control.
+     *
+     * @returns {Boolean}
+     *  True, if the form control is focused.
+     */
+    Utils.isControlFocused = function (control) {
+        return control.first().is(Utils.FOCUSED_SELECTOR);
+    };
+
+    /**
      * Returns the form control from the passed jQuery collection, if it is
      * currently focused.
      *

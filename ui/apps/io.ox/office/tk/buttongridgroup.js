@@ -49,7 +49,7 @@ define('io.ox/office/tk/buttongridgroup',
             self = this,
 
             // the drop-down grid element
-            gridNode = $('<table>'),
+            gridNode = $('<table>').addClass('io-ox-button-grid'),
 
             // number of rows in the grid
             rows = 0,
@@ -72,7 +72,7 @@ define('io.ox/office/tk/buttongridgroup',
                 // all buttons in the drop-down grid
                 buttons = self.getGridButtons(),
                 // index of the focused button
-                index = buttons.index(event.target),
+                index = buttons.index(this),
                 // row index of the focused button
                 row = (index >= 0) ? Math.floor(index / columns) : -1,
                 // column index of the focused button
@@ -90,10 +90,11 @@ define('io.ox/office/tk/buttongridgroup',
                 if (keydown && (column > 0)) { focus(index - 1); }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (keydown) {
-                    if (row > 0) { focus(index - columns); } else { self.hideMenu(); }
+                if (row > 0) {
+                    if (keydown) { focus(index - columns); }
+                    return false;
                 }
-                return false;
+                break; // let event bubble up to silently close the menu
             case KeyCodes.RIGHT_ARROW:
                 if (keydown && (column + 1 < columns)) { focus(index + 1); }
                 return false;
@@ -104,13 +105,14 @@ define('io.ox/office/tk/buttongridgroup',
         }
 
         /**
-         * Recalculates the width of the grid element. The width of the table
-         * is restricted to the parent button group element, thus the table
-         * shrinks its buttons way too much. The only way (?) to expand the
-         * table to the correct width is to set its CSS 'min-width' property to
-         * the calculated width of the tbody element. To do this, it is
-         * required to expand the 'min-width' of the table to a large value to
-         * give the tbody enough space, and then query its calculated width.
+         * Recalculates the width of the grid element. Firefox restricts the
+         * width of the table to the parent button group element, thus the
+         * table shrinks its buttons way too much. The only way (?) to expand
+         * the table to the correct width is to set its CSS 'min-width'
+         * property to the calculated width of the tbody element. To do this,
+         * it is required to expand the 'min-width' of the table to a large
+         * value to give the tbody enough space, and then query its calculated
+         * width.
          */
         function recalcGridWidthHandler() {
             // handler may be called directly, check if grid is visible
