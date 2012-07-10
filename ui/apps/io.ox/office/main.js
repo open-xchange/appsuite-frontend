@@ -312,15 +312,18 @@ define('io.ox/office/main',
             );
             updateDebugMode();
 
-            // update editor 'div' on window size change
-            $(window).resize(windowResizeHandler);
-
-            // trigger all window resize handlers on 'show' events
+            // register window event handlers
             win.on('show', function () {
-                $(window).resize();
-                // disable FF spell checking. TODO: better solution...
-                $('body').attr('spellcheck', false);
-            });
+                    // listen to resize events, initially execute all listeners
+                    $(window).on('resize', windowResizeHandler).resize();
+                })
+                .on('hide', function () {
+                    // unbind resize handler when window is hidden
+                    $(window).off('resize', windowResizeHandler);
+                });
+
+            // disable Firfox spell checking. TODO: better solution...
+            $('body').attr('spellcheck', false);
         }
 
         /**
@@ -726,9 +729,9 @@ define('io.ox/office/main',
          * window close button).
          */
         app.destroy = function () {
-            if (operationsTimer)
+            if (operationsTimer) {
                 window.clearTimeout(operationsTimer);
-            $(window).off('resize', windowResizeHandler);
+            }
             controller.destroy();
             toolbar.destroy();
             app = win = toolbar = controller = editors = editor = null;
