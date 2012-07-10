@@ -63,6 +63,16 @@ define('io.ox/office/tk/buttongridgroup',
         // private methods ----------------------------------------------------
 
         /**
+         * Handles 'menu:open' events and initializes the drop-down menu.
+         */
+        function menuOpenHandler() {
+            // move focus to first enabled control
+            if (!Utils.containsFocusedControl(gridNode)) {
+                self.getGridButtons().first().focus();
+            }
+        }
+
+        /**
          * Handles key events in the open grid element.
          */
         function gridKeyHandler(event) {
@@ -72,7 +82,7 @@ define('io.ox/office/tk/buttongridgroup',
                 // all buttons in the drop-down grid
                 buttons = self.getGridButtons(),
                 // index of the focused button
-                index = buttons.index(this),
+                index = buttons.index(event.target),
                 // row index of the focused button
                 row = (index >= 0) ? Math.floor(index / columns) : -1,
                 // column index of the focused button
@@ -90,11 +100,10 @@ define('io.ox/office/tk/buttongridgroup',
                 if (keydown && (column > 0)) { focus(index - 1); }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (row > 0) {
-                    if (keydown) { focus(index - columns); }
-                    return false;
+                if (keydown) {
+                    if (row > 0) { focus(index - columns); } else { self.hideMenu(true); }
                 }
-                break; // let event bubble up to silently close the menu
+                return false;
             case KeyCodes.RIGHT_ARROW:
                 if (keydown && (column + 1 < columns)) { focus(index + 1); }
                 return false;
@@ -180,12 +189,7 @@ define('io.ox/office/tk/buttongridgroup',
 
         // register event handlers
         this.on('menu:open', recalcGridWidthHandler)
-            .on('menu:enter', function () {
-            // move focus to first enabled control
-            if (!Utils.containsFocusedControl(gridNode)) {
-                self.getGridButtons().first().focus();
-            }
-        });
+            .on('menu:enter', menuOpenHandler);
         gridNode.on('keydown keypress keyup', gridKeyHandler);
 
     } // class ButtonGridGroup

@@ -22,13 +22,6 @@ define('io.ox/office/tk/utils', function () {
     // constants --------------------------------------------------------------
 
     /**
-     * CSS class for active toggle buttons (defined by Bootstrap).
-     *
-     * @constant
-     */
-    Utils.ACTIVE_BUTTON_CLASS = 'btn-primary';
-
-    /**
      * CSS selector for disabled controls.
      *
      * @constant
@@ -48,6 +41,20 @@ define('io.ox/office/tk/utils', function () {
      * @constant
      */
     Utils.FOCUSED_SELECTOR = ':focus';
+
+    /**
+     * CSS class for active toggle buttons (defined by Bootstrap).
+     *
+     * @constant
+     */
+    Utils.ACTIVE_BUTTON_CLASS = 'btn-primary';
+
+    /**
+     * CSS class for selected (active) toggle buttons.
+     *
+     * @constant
+     */
+    Utils.SELECTED_BUTTON_CLASS = 'selected';
 
     // form control elements --------------------------------------------------
 
@@ -221,7 +228,7 @@ define('io.ox/office/tk/utils', function () {
      *  True, if the button is active.
      */
     Utils.isButtonActive = function (button) {
-        return button.first().hasClass(Utils.ACTIVE_BUTTON_CLASS);
+        return button.first().hasClass(Utils.SELECTED_BUTTON_CLASS);
     };
 
     /**
@@ -236,7 +243,8 @@ define('io.ox/office/tk/utils', function () {
      *  deactivates all buttons.
      */
     Utils.toggleButtons = function (buttons, state) {
-        buttons.toggleClass(Utils.ACTIVE_BUTTON_CLASS, state).find('> i').toggleClass('icon-white', state);
+        buttons.toggleClass(Utils.ACTIVE_BUTTON_CLASS + ' ' + Utils.SELECTED_BUTTON_CLASS, state);
+//            .children('i').toggleClass('icon-white', state);
     };
 
     // key codes --------------------------------------------------------------

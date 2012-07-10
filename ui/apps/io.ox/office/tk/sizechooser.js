@@ -66,7 +66,7 @@ define('io.ox/office/tk/sizechooser',
             self = this,
 
             // build a table of embedded div elements used to show the grid
-            // (not using a table element since the grid flickers in different browsers...)
+            // (do not use a table element because grid flickers in different browsers...)
             gridNode = $('<div>').append($('<div>').append($('<div>'))),
 
             // the badge labels showing the current grid size
@@ -220,11 +220,10 @@ define('io.ox/office/tk/sizechooser',
                 if (keydown) { setGridSize(gridSize.width - 1, gridSize.height); }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (gridSize.height > 1) {
-                    if (keydown) { setGridSize(gridSize.width, gridSize.height - 1); }
-                    return false;
+                if (keydown) {
+                    if (gridSize.height > 1) { setGridSize(gridSize.width, gridSize.height - 1); } else { self.hideMenu(true); }
                 }
-                break; // let event bubble up to silently close the menu
+                return false;
             case KeyCodes.RIGHT_ARROW:
                 if (keydown) { setGridSize(gridSize.width + 1, gridSize.height); }
                 return false;
