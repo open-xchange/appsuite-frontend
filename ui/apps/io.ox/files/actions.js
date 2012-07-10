@@ -266,7 +266,8 @@ define("io.ox/files/actions",
         id: "officepreview",
         index: 65,
         prio: 'hi',
-        label: gt("Preview office document"),
+        // TODO (KA): finalize menu entry
+        label: gt("Preview (OXO)"),
         ref: "io.ox/files/actions/officepreview"
     }));
     
